@@ -432,6 +432,8 @@ namespace System.Windows.Forms
 
                 owner.ApplyUpdateCachedItems();
                 int itemID = DisplayIndexToID(index);
+
+                this[index].Focused = false;
                 this[index].UnHost(true);
 
                 if (owner.IsHandleCreated)

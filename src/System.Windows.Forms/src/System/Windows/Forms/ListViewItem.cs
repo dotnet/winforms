@@ -235,7 +235,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                ListView owningListView = listView ?? Group.ListView ?? throw new InvalidOperationException(nameof(listView));
+                ListView owningListView = listView ?? Group?.ListView;
+                if (owningListView is null)
+                {
+                    _accessibilityObject = null;
+                    return _accessibilityObject;
+                }
+
                 if (_accessibilityObject is null || owningListView.View != _accessibilityObjectView)
                 {
                     _accessibilityObjectView = owningListView.View;

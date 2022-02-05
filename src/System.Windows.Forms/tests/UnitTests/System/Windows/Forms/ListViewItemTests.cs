@@ -852,15 +852,16 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Red, Color.Red };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BackColor_Set_TestData))]
         public void ListViewItem_BackColor_GetWithOwner_ReturnsExpected(Color value, Color expected)
         {
-            var listView = new ListView
+            using ListView listView = new()
             {
                 BackColor = value
             };
-            var item = new ListViewItem();
+
+            ListViewItem item = new();
             listView.Items.Add(item);
             Assert.Equal(expected, item.BackColor);
 
@@ -884,12 +885,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, item.BackColor);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BackColor_Set_TestData))]
         public void ListViewItem_BackColor_SetWithOwner_GetReturnsExpected(Color value, Color expected)
         {
-            var listView = new ListView();
-            var item = new ListViewItem();
+            using ListView listView = new();
+            ListViewItem item = new();
             listView.Items.Add(item);
 
             item.BackColor = value;
@@ -908,15 +909,16 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Red, Color.Red };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ForeColor_Set_TestData))]
         public void ListViewItem_ForeColor_GetWithOwner_ReturnsExpected(Color value, Color expected)
         {
-            var listView = new ListView
+            using ListView listView = new()
             {
                 ForeColor = value
             };
-            var item = new ListViewItem();
+
+            ListViewItem item = new();
             listView.Items.Add(item);
             Assert.Equal(expected, item.ForeColor);
 
@@ -929,10 +931,11 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ForeColor_Set_TestData))]
         public void ListViewItem_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
-            var item = new ListViewItem
+            ListViewItem item = new()
             {
                 ForeColor = value
             };
+
             Assert.Equal(expected, item.ForeColor);
 
             // Set same.
@@ -940,12 +943,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, item.ForeColor);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ForeColor_Set_TestData))]
         public void ListViewItem_ForeColor_SetWithOwner_GetReturnsExpected(Color value, Color expected)
         {
-            var listView = new ListView();
-            var item = new ListViewItem();
+            using ListView listView = new();
+            ListViewItem item = new();
             listView.Items.Add(item);
 
             item.ForeColor = value;
@@ -956,15 +959,16 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, item.ForeColor);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ListViewItem_Font_GetWithOwner_ReturnsExpected(Font value)
         {
-            var listView = new ListView
+            using ListView listView = new()
             {
                 Font = value
             };
-            var item = new ListViewItem();
+
+            ListViewItem item = new();
             listView.Items.Add(item);
             Assert.Equal(value ?? Control.DefaultFont, item.Font);
 
@@ -981,6 +985,7 @@ namespace System.Windows.Forms.Tests
             {
                 Font = value
             };
+
             Assert.Equal(value ?? Control.DefaultFont, item.Font);
 
             // Set same.
@@ -988,15 +993,16 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value ?? Control.DefaultFont, item.Font);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ListViewItem_Font_SetWithOwner_GetReturnsExpected(Font value)
         {
-            var listView = new ListView
+            using ListView listView = new()
             {
                 Font = SystemFonts.CaptionFont
             };
-            var item = new ListViewItem();
+
+            ListViewItem item = new();
             listView.Items.Add(item);
 
             item.Font = value;
@@ -1007,11 +1013,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value ?? SystemFonts.CaptionFont, item.Font);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ListViewItem_EnsureVisible_HasListViewWithoutHandle_Nop()
         {
-            var listView = new ListView();
-            var item = new ListViewItem();
+            using ListView listView = new();
+            ListViewItem item = new();
             listView.Items.Add(item);
             item.EnsureVisible();
         }
@@ -1023,11 +1029,11 @@ namespace System.Windows.Forms.Tests
             item.EnsureVisible();
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ListViewItem_Remove_HasListView_Success()
         {
-            var listView = new ListView();
-            var item = new ListViewItem();
+            using ListView listView = new();
+            ListViewItem item = new();
             listView.Items.Add(item);
             item.Remove();
             Assert.Empty(listView.Items);
@@ -1062,6 +1068,24 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expected[i].Text, actual[i].Text);
                 Assert.Equal(expected[i].Tag, actual[i].Tag);
             }
+        }
+
+        [Fact]
+        public void ListViewItem_AccessibilityObject_ReturnsNull_IfListViewNotExists()
+        {
+            ListViewItem item = new();
+
+            Assert.Null(item.AccessibilityObject);
+        }
+
+        [WinFormsFact]
+        public void ListViewItem_AccessibilityObject_ReturnsExpected_IfListViewExists()
+        {
+            using ListView listView = new();
+            ListViewItem item = new();
+            listView.Items.Add(item);
+
+            Assert.NotNull(item.AccessibilityObject);
         }
     }
 }
