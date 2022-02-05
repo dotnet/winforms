@@ -227,7 +227,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static unsafe bool GetDropDescription(IComDataObject dataObject, out DropIconType dropIcon, out string message, out string insert)
         {
-            dropIcon = DropIconType.Invalid;
+            dropIcon = DropIconType.Default;
             message = string.Empty;
             insert = string.Empty;
 
@@ -303,7 +303,7 @@ namespace System.Windows.Forms
         public static unsafe void SetDropDescription(IComDataObject dataObject, DropIconType dropIcon, string message, string insert)
         {
             if (dataObject is null
-                || (dropIcon is < DropIconType.Invalid or > DropIconType.NoImage)
+                || (dropIcon is < DropIconType.Default or > DropIconType.NoDropIcon)
                 || (message is not null && message.Length >= Kernel32.MAX_PATH)
                 || (insert is not null && insert.Length >= Kernel32.MAX_PATH))
                 return;

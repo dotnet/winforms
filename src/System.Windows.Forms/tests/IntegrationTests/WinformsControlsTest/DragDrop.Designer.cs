@@ -37,8 +37,10 @@ namespace WinformsControlsTest
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
-            this.buttonClearCats = new System.Windows.Forms.Button();
+            this.buttonClear = new System.Windows.Forms.Button();
             this.buttonOpenCats = new System.Windows.Forms.Button();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -92,29 +94,49 @@ namespace WinformsControlsTest
             this.pictureBox5.TabIndex = 16;
             this.pictureBox5.TabStop = false;
             // 
-            // buttonClearCats
+            // buttonClear
             // 
-            this.buttonClearCats.Location = new System.Drawing.Point(757, 630);
-            this.buttonClearCats.Name = "buttonClearCats";
-            this.buttonClearCats.Size = new System.Drawing.Size(82, 31);
-            this.buttonClearCats.TabIndex = 19;
-            this.buttonClearCats.Text = "Clear Cats";
-            this.buttonClearCats.UseVisualStyleBackColor = true;
+            this.buttonClear.Location = new System.Drawing.Point(938, 665);
+            this.buttonClear.Name = "buttonClear";
+            this.buttonClear.Size = new System.Drawing.Size(82, 31);
+            this.buttonClear.TabIndex = 19;
+            this.buttonClear.Text = "Clear";
+            this.buttonClear.UseVisualStyleBackColor = true;
             // 
             // buttonOpenCats
             // 
-            this.buttonOpenCats.Location = new System.Drawing.Point(669, 630);
+            this.buttonOpenCats.Location = new System.Drawing.Point(850, 665);
             this.buttonOpenCats.Name = "buttonOpenCats";
             this.buttonOpenCats.Size = new System.Drawing.Size(82, 31);
             this.buttonOpenCats.TabIndex = 20;
             this.buttonOpenCats.Text = "Open Cats";
             this.buttonOpenCats.UseVisualStyleBackColor = true;
             // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.richTextBox1.Location = new System.Drawing.Point(180, 12);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(436, 650);
+            this.richTextBox1.TabIndex = 21;
+            this.richTextBox1.Text = "";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.textBox1.Location = new System.Drawing.Point(636, 12);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(383, 649);
+            this.textBox1.TabIndex = 18;
+            // 
             // DragDrop
             // 
-            this.ClientSize = new System.Drawing.Size(851, 674);
+            this.ClientSize = new System.Drawing.Size(1031, 700);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.buttonOpenCats);
-            this.Controls.Add(this.buttonClearCats);
+            this.Controls.Add(this.buttonClear);
             this.Controls.Add(this.pictureBox5);
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.pictureBox3);
@@ -138,7 +160,9 @@ namespace WinformsControlsTest
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.PictureBox pictureBox5;
-        private System.Windows.Forms.Button buttonClearCats;
+        private System.Windows.Forms.Button buttonClear;
         private System.Windows.Forms.Button buttonOpenCats;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }

@@ -12,7 +12,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// No drop icon preference; use the default icon.
         /// </summary>
-        Invalid = -1,
+        Default = -1,
 
         /// <summary>
         /// A red bisected circle such as that found on a "no smoking" sign.
@@ -45,8 +45,8 @@ namespace System.Windows.Forms
         Warning = 7,
 
         /// <summary>
-        /// Windows 7 and later. Use no drop image.
+        /// Windows 7 and later. Use no drop icon.
         /// </summary>
-        NoImage = 8
+        NoDropIcon = 8
     }
 }

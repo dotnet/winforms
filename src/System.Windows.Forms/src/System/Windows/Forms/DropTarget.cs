@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     {
         private IDataObject? _lastDataObject;
         private DragDropEffects _lastEffect = DragDropEffects.None;
-        private DropIconType _lastDropIcon = DropIconType.Invalid;
+        private DropIconType _lastDropIcon = DropIconType.Default;
         private readonly IDropTarget _owner;
 
         public DropTarget(IDropTarget owner)
@@ -73,17 +73,11 @@ namespace System.Windows.Forms
                 _lastEffect = drgevent.Effect;
                 _lastDropIcon = drgevent.DropIcon;
 
-                if (drgevent.DropIcon is > DropIconType.Invalid
-                    && _owner is Control control
-                    && drgevent.Data is not null
-                    && drgevent.Data is IComDataObject comDataObject)
+                if (drgevent.DropIcon is > DropIconType.Default
+                    && drgevent.Data is IComDataObject comDataObject
+                    && _owner is Control control)
                 {
-                    DragDropHelper.SetDropDescription(
-                        comDataObject,
-                        drgevent.DropIcon,
-                        drgevent.Message,
-                        drgevent.Insert);
-
+                    DragDropHelper.SetDropDescription(comDataObject, drgevent.DropIcon, drgevent.Message, drgevent.Insert);
                     DragDropHelper.DragEnter(control.Handle, comDataObject, ref pt, pdwEffect);
                 }
             }
@@ -106,7 +100,7 @@ namespace System.Windows.Forms
                 pdwEffect = (uint)drgevent.Effect;
                 _lastEffect = drgevent.Effect;
 
-                if (_lastDropIcon is > DropIconType.Invalid)
+                if (_lastDropIcon is > DropIconType.Default)
                 {
                     DragDropHelper.DragOver(ref pt, pdwEffect);
                 }
@@ -124,7 +118,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragLeave received");
             _owner.OnDragLeave(EventArgs.Empty);
 
-            if (_lastDropIcon is > DropIconType.Invalid)
+            if (_lastDropIcon is > DropIconType.Default)
             {
                 DragDropHelper.DragLeave();
             }
@@ -143,8 +137,7 @@ namespace System.Windows.Forms
                 _owner.OnDragDrop(drgevent);
                 pdwEffect = (uint)drgevent.Effect;
 
-                if (_lastDropIcon is > DropIconType.Invalid
-                    && drgevent.Data is not null
+                if (_lastDropIcon is > DropIconType.Default
                     && drgevent.Data is IComDataObject comDataObject)
                 {
                     DragDropHelper.Drop(comDataObject, ref pt, pdwEffect);
@@ -155,7 +148,7 @@ namespace System.Windows.Forms
                 pdwEffect = (uint)DragDropEffects.None;
             }
 
-            _lastDropIcon = DropIconType.Invalid;
+            _lastDropIcon = DropIconType.Default;
             _lastEffect = DragDropEffects.None;
             _lastDataObject = null;
             return HRESULT.S_OK;

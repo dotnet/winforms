@@ -28,7 +28,6 @@ namespace WinformsControlsTest
                 pictureBox5
             };
 
-            AllowDrop = true;
             DragEnter += DragDrop_DragEnter;
 
             pictureBox1.AllowDrop = true;
@@ -52,22 +51,27 @@ namespace WinformsControlsTest
             pictureBox5.DragDrop += PictureBox_DragDrop;
 
             buttonOpenCats.Click += new EventHandler(ButtonOpenCats_Click);
-            buttonClearCats.Click += new EventHandler(ButtonClearCats_Click);
+            buttonClear.Click += new EventHandler(ButtonClear_Click);
         }
 
-        private void ButtonClearCats_Click(object? sender, EventArgs e)
-            => ClearCats();
+        private void ButtonClear_Click(object? sender, EventArgs e)
+        {
+            ClearCats();
+            richTextBox1.Clear();
+            textBox1.Clear();
+        }
 
         private void ButtonOpenCats_Click(object? sender, EventArgs e)
             => OpenCats();
 
         private void DragDrop_DragEnter(object? sender, DragEventArgs e)
-            => e.Effect = e.AllowedEffect;
+        {
+            e.DropIcon = DropIconType.None;
+            e.Effect = DragDropEffects.None;
+        }
 
         private void PictureBox_DragEnter(object? sender, DragEventArgs e)
         {
-            e.Effect = DragDropEffects.None;
-
             if (sender is PictureBox pb
                 && e.Data is not null
                 && e.Data.GetDataPresent(DataFormats.FileDrop)
@@ -76,24 +80,26 @@ namespace WinformsControlsTest
             {
                 if (files.All(file => file.Contains("NyanCat") && file.EndsWith(".bmp")))
                 {
-                    // Set the drop icon to a plus sign (+).
+                    // Set the target drop icon to a plus sign (+).
                     e.DropIcon = DropIconType.Copy;
 
-                    // Set the drop description text.
+                    // Set the target drop text.
                     e.Message = $"{e.DropIcon} %1 from Explorer";
-                    e.Insert = $"{(files.Length > 1 ? "cats" : "Cat")}";
+                    e.Insert = $"{(files.Length > 1 ? "Cats" : "Cat")}";
 
+                    // Set the target drop effect.
                     e.Effect = DragDropEffects.Copy;
                 }
                 else if (files.Length == 1 && files.Any(file => file.Contains("DragAccept") && file.EndsWith(".rtf")))
                 {
-                    // Set the drop icon to a red bisected circle.
+                    // Set the target drop icon to a red bisected circle.
                     e.DropIcon = DropIconType.None;
 
-                    // Set the drop description text.
+                    // Set the target drop text.
                     e.Message = $"{Path.GetFileNameWithoutExtension(files[0])}%1";
                     e.Insert = Path.GetExtension(files[0]);
 
+                    // Set the target drop effect.
                     e.Effect = DragDropEffects.None;
                 }
             }
@@ -101,8 +107,6 @@ namespace WinformsControlsTest
 
         private void PictureBox_DragDrop(object? sender, DragEventArgs e)
         {
-            e.Effect = DragDropEffects.None;
-
             if (sender is PictureBox pb
                 && e.Data is not null
                 && e.Data.GetDataPresent(DataFormats.FileDrop)
@@ -111,7 +115,6 @@ namespace WinformsControlsTest
                 && files.All(file => file.Contains("NyanCat") && file.EndsWith(".bmp")))
             {
                 LoadCats(pb, files);
-                e.Effect = DragDropEffects.Copy;
             }
         }
 

@@ -27,7 +27,7 @@ namespace System.Windows.Forms
             Y = y;
             AllowedEffect = allowedEffect;
             Effect = effect;
-            DropIcon = DropIconType.Invalid;
+            DropIcon = DropIconType.Default;
             Message = string.Empty;
             Insert = string.Empty;
         }
