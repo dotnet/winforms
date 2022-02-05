@@ -1158,7 +1158,10 @@ namespace System.Windows.Forms
             if (GetStyle(ControlStyles.UserPaint))
             {
                 Animate();
-                ImageAnimator.UpdateFrames(Image!);
+                if (Image is not null)
+                {
+                    ImageAnimator.UpdateFrames(Image);
+                }
 
                 PaintControl(pevent);
             }
