@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
@@ -33,7 +31,7 @@ namespace System.Windows.Forms
 
         private ProgressBarStyle _style = ProgressBarStyle.Blocks;
 
-        private EventHandler _onRightToLeftLayoutChanged;
+        private EventHandler? _onRightToLeftLayoutChanged;
         private bool _rightToLeftLayout;
 
         /// <summary>
@@ -82,7 +80,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -121,7 +119,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler BackgroundImageChanged
+        public new event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -137,7 +135,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -153,7 +151,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler CausesValidationChanged
+        public new event EventHandler? CausesValidationChanged
         {
             add => base.CausesValidationChanged += value;
             remove => base.CausesValidationChanged -= value;
@@ -180,7 +178,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler FontChanged
+        public new event EventHandler? FontChanged
         {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
@@ -196,7 +194,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged
+        public new event EventHandler? ImeModeChanged
         {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
@@ -357,7 +355,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler PaddingChanged
+        public new event EventHandler? PaddingChanged
         {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
@@ -390,7 +388,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
-        public event EventHandler RightToLeftLayoutChanged
+        public event EventHandler? RightToLeftLayoutChanged
         {
             add => _onRightToLeftLayoutChanged += value;
             remove => _onRightToLeftLayoutChanged -= value;
@@ -426,7 +424,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler TabStopChanged
+        public new event EventHandler? TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
@@ -443,7 +441,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler TextChanged
+        public new event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -476,7 +474,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler DoubleClick
+        public new event EventHandler? DoubleClick
         {
             add => base.DoubleClick += value;
             remove => base.DoubleClick -= value;
@@ -484,7 +482,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseDoubleClick
+        public new event MouseEventHandler? MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
             remove => base.MouseDoubleClick -= value;
@@ -492,7 +490,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler KeyUp
+        public new event KeyEventHandler? KeyUp
         {
             add => base.KeyUp += value;
             remove => base.KeyUp -= value;
@@ -500,7 +498,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler KeyDown
+        public new event KeyEventHandler? KeyDown
         {
             add => base.KeyDown += value;
             remove => base.KeyDown -= value;
@@ -508,7 +506,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyPressEventHandler KeyPress
+        public new event KeyPressEventHandler? KeyPress
         {
             add => base.KeyPress += value;
             remove => base.KeyPress -= value;
@@ -516,7 +514,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler Enter
+        public new event EventHandler? Enter
         {
             add => base.Enter += value;
             remove => base.Enter -= value;
@@ -524,7 +522,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler Leave
+        public new event EventHandler? Leave
         {
             add => base.Leave += value;
             remove => base.Leave -= value;
@@ -532,7 +530,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event PaintEventHandler Paint
+        public new event PaintEventHandler? Paint
         {
             add => base.Paint += value;
             remove => base.Paint -= value;
