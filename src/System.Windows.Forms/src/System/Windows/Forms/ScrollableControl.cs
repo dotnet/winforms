@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -21,7 +19,7 @@ namespace System.Windows.Forms
 #if DEBUG
         internal static readonly TraceSwitch s_autoScrolling = new TraceSwitch("AutoScrolling", "Debug autoscrolling logic");
 #else
-        internal static readonly TraceSwitch s_autoScrolling;
+        internal static readonly TraceSwitch? s_autoScrolling;
 #endif
 
         protected const int ScrollStateAutoScrolling = 0x0001;
@@ -56,13 +54,13 @@ namespace System.Windows.Forms
         /// </summary>
         private Point _scrollPosition = Point.Empty;
 
-        private DockPaddingEdges dockPadding;
+        private DockPaddingEdges? _dockPadding;
 
         private int _scrollState;
 
-        private VScrollProperties _verticalScroll;
+        private VScrollProperties? _verticalScroll;
 
-        private HScrollProperties _horizontalScroll;
+        private HScrollProperties? _horizontalScroll;
 
         private static readonly object s_scrollEvent = new object();
 
@@ -70,7 +68,7 @@ namespace System.Windows.Forms
         ///  Used to figure out what the horizontal scroll value should be set to when the horizontal
         ///  scrollbar is first shown.
         /// </summary>
-        private bool resetRTLHScrollValue;
+        private bool _resetRTLHScrollValue;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="ScrollableControl"/> class.
@@ -288,7 +286,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public DockPaddingEdges DockPadding => dockPadding ??= new DockPaddingEdges(this);
+        public DockPaddingEdges DockPadding => _dockPadding ??= new DockPaddingEdges(this);
 
         /// <summary>
         ///  Adjusts the auto-scroll bars on the container based on the current control
@@ -359,7 +357,7 @@ namespace System.Windows.Forms
                 // things.)
                 _scrollMargin = _requestedScrollMargin;
 
-                if (dockPadding is not null)
+                if (_dockPadding is not null)
                 {
                     _scrollMargin.Height += Padding.Bottom;
                     _scrollMargin.Width += Padding.Right;
@@ -434,7 +432,7 @@ namespace System.Windows.Forms
                     {
                         if (defaultLayoutEngine)
                         {
-                            Control richCurrent = (Control)current;
+                            Control richCurrent = current;
 
                             switch (richCurrent.Dock)
                             {
@@ -681,7 +679,7 @@ namespace System.Windows.Forms
         protected override void OnRightToLeftChanged(EventArgs e)
         {
             base.OnRightToLeftChanged(e);
-            resetRTLHScrollValue = true;
+            _resetRTLHScrollValue = true;
             // When the page becomes visible, we need to call OnLayout to adjust the scrollbars.
             LayoutTransaction.DoLayout(this, this, PropertyNames.RightToLeft);
         }
@@ -711,7 +709,7 @@ namespace System.Windows.Forms
         {
             // Don't call base in this instance - for App compat we should not fire Invalidate
             // when  the padding has changed.
-            ((EventHandler)Events[s_paddingChangedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_paddingChangedEvent])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -728,7 +726,7 @@ namespace System.Windows.Forms
 
         internal void ScaleDockPadding(float dx, float dy)
         {
-            dockPadding?.Scale(dx, dy);
+            _dockPadding?.Scale(dx, dy);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -847,7 +845,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            Debug.WriteLineIf(s_autoScrolling.TraceVerbose, "ScrollControlIntoView(" + activeControl.GetType().FullName + ")");
+            Debug.WriteLineIf(s_autoScrolling!.TraceVerbose, "ScrollControlIntoView(" + activeControl.GetType().FullName + ")");
             Debug.Indent();
 
             Rectangle client = ClientRectangle;
@@ -886,11 +884,11 @@ namespace System.Windows.Forms
             Rectangle bounds = activeControl.Bounds;
             if (activeControl.ParentInternal != this)
             {
-                Debug.WriteLineIf(s_autoScrolling.TraceVerbose, "not direct child, original bounds: " + bounds);
+                Debug.WriteLineIf(s_autoScrolling!.TraceVerbose, "not direct child, original bounds: " + bounds);
                 bounds = RectangleToClient(activeControl.ParentInternal.RectangleToScreen(bounds));
             }
 
-            Debug.WriteLineIf(s_autoScrolling.TraceVerbose, "adjusted bounds: " + bounds);
+            Debug.WriteLineIf(s_autoScrolling!.TraceVerbose, "adjusted bounds: " + bounds);
 
             if (bounds.X < xMargin)
             {
@@ -942,7 +940,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ScrollBarOnScrollDescr))]
-        public event ScrollEventHandler Scroll
+        public event ScrollEventHandler? Scroll
         {
             add => Events.AddHandler(s_scrollEvent, value);
             remove => Events.RemoveHandler(s_scrollEvent, value);
@@ -953,7 +951,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnScroll(ScrollEventArgs se)
         {
-            ((ScrollEventHandler)Events[s_scrollEvent])?.Invoke(this, se);
+            ((ScrollEventHandler?)Events[s_scrollEvent])?.Invoke(this, se);
         }
 
         private void ResetAutoScrollMargin() => AutoScrollMargin = Size.Empty;
@@ -1015,7 +1013,7 @@ namespace System.Windows.Forms
             // based on whether we are right to left.
             if (horiz && !HScroll && (RightToLeft == RightToLeft.Yes))
             {
-                resetRTLHScrollValue = true;
+                _resetRTLHScrollValue = true;
             }
 
             if (needLayout)
@@ -1192,9 +1190,9 @@ namespace System.Windows.Forms
                         HorizontalScroll._smallChange = 5;
                     }
 
-                    if (resetRTLHScrollValue && !IsMirrored)
+                    if (_resetRTLHScrollValue && !IsMirrored)
                     {
-                        resetRTLHScrollValue = false;
+                        _resetRTLHScrollValue = false;
                         BeginInvoke(new EventHandler(OnSetScrollPosition));
                     }
                     else if (-displayRect.X >= HorizontalScroll._minimum && -displayRect.X < HorizontalScroll._maximum)
@@ -1252,7 +1250,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void OnSetScrollPosition(object sender, EventArgs e)
+        private void OnSetScrollPosition(object? sender, EventArgs e)
         {
             if (!IsMirrored)
             {
