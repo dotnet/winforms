@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
@@ -29,9 +27,9 @@ namespace System.Windows.Forms.PropertyGridInternal
     /// </remarks>
     internal partial class CommandsPane : PropertyGrid.SnappableControl
     {
-        private object _component;
-        private DesignerVerb[] _verbs;
-        private LinkLabel _label;
+        private object? _component;
+        private DesignerVerb[]? _verbs;
+        private LinkLabel? _label;
         private bool _allowVisible = true;
         private int _optimalHeight = -1;
 
@@ -113,11 +111,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <inheritdoc />
         internal override bool SupportsUiaProviders => true;
 
-        private void LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             try
             {
-                if (!e.Link.Enabled)
+                if (!e.Link!.Enabled)
                 {
                     return;
                 }
@@ -137,7 +135,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private void OnCommandChanged(object sender, EventArgs e) => InitializeLabelLinks();
+        private void OnCommandChanged(object? sender, EventArgs e) => InitializeLabelLinks();
 
         protected override void OnGotFocus(EventArgs e)
         {
@@ -207,7 +205,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             Label.Links.Clear();
             StringBuilder sb = new();
-            Point[] links = new Point[_verbs.Length];
+            Point[] links = new Point[_verbs!.Length];
             int index = 0;
             bool firstVerb = true;
 
