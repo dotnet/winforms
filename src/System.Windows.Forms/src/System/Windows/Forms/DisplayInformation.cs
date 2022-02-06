@@ -28,7 +28,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_bitsPerPixel == 0)
+                if (s_bitsPerPixel == 0 && Screen.PrimaryScreen is not null)
                 {
                     // we used to iterate through all screens, but
                     // for some reason unused screens can temporarily appear
