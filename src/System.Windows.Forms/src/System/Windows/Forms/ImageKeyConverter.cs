@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
@@ -16,7 +14,7 @@ namespace System.Windows.Forms
     /// </summary>
     public class ImageKeyConverter : StringConverter
     {
-        private string parentImageListProperty = "Parent";
+        private string _parentImageListProperty = "Parent";
 
         protected virtual bool IncludeNoneAsStandardValue
         {
@@ -36,11 +34,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return parentImageListProperty;
+                return _parentImageListProperty;
             }
             set
             {
-                parentImageListProperty = value;
+                _parentImageListProperty = value;
             }
         }
 
@@ -48,7 +46,7 @@ namespace System.Windows.Forms
         ///  Gets a value indicating whether this converter can convert an object in the
         ///  given source type to a string using the specified context.
         /// </summary>
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
             if (sourceType == typeof(string))
             {
@@ -61,16 +59,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Converts the specified value object to a string object.
         /// </summary>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
-            if (value is string)
+            if (value is string s)
             {
-                return (string)value;
+                return s;
             }
 
             if (value is null)
             {
-                return "";
+                return string.Empty;
             }
 
             return base.ConvertFrom(context, culture, value);
@@ -83,7 +81,7 @@ namespace System.Windows.Forms
         ///  type is string.  If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
             ArgumentNullException.ThrowIfNull(destinationType);
 
@@ -105,12 +103,12 @@ namespace System.Windows.Forms
         ///  will return null if the data type does not support a
         ///  standard set of values.
         /// </summary>
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
             if (context is not null && context.Instance is not null)
             {
-                object instance = context.Instance;
-                PropertyDescriptor imageListProp = ImageListUtils.GetImageListProperty(context.PropertyDescriptor, ref instance);
+                object? instance = context.Instance;
+                PropertyDescriptor? imageListProp = ImageListUtils.GetImageListProperty(context.PropertyDescriptor, ref instance);
 
                 while (instance is not null && imageListProp is null)
                 {
@@ -129,8 +127,7 @@ namespace System.Windows.Forms
                     {
                         // We didn't find the image list in this component.  See if the
                         // component has a "parent" property.  If so, walk the tree...
-                        //
-                        PropertyDescriptor parentProp = props[ParentImageListProperty];
+                        PropertyDescriptor? parentProp = props[ParentImageListProperty];
                         if (parentProp is not null)
                         {
                             instance = parentProp.GetValue(instance);
@@ -138,7 +135,6 @@ namespace System.Windows.Forms
                         else
                         {
                             // Stick a fork in us, we're done.
-                            //
                             instance = null;
                         }
                     }
@@ -146,12 +142,11 @@ namespace System.Windows.Forms
 
                 if (imageListProp is not null)
                 {
-                    ImageList imageList = (ImageList)imageListProp.GetValue(instance);
+                    ImageList? imageList = (ImageList?)imageListProp.GetValue(instance);
 
                     if (imageList is not null)
                     {
                         // Create array to contain standard values
-                        //
                         object[] values;
                         int nImages = imageList.Images.Count;
                         if (IncludeNoneAsStandardValue)
@@ -165,13 +160,12 @@ namespace System.Windows.Forms
                         }
 
                         // Fill in the array
-                        //
                         StringCollection imageKeys = imageList.Images.Keys;
                         for (int i = 0; i < imageKeys.Count; i++)
                         {
-                            if ((imageKeys[i] is not null) && (imageKeys[i].Length != 0))
+                            if (imageKeys[i] is not null && imageKeys[i]!.Length != 0)
                             {
-                                values[i] = imageKeys[i];
+                                values[i] = imageKeys[i]!;
                             }
                         }
 
@@ -198,7 +192,7 @@ namespace System.Windows.Forms
         ///  then there are other valid values besides the list of
         ///  standard values GetStandardValues provides.
         /// </summary>
-        public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
+        public override bool GetStandardValuesExclusive(ITypeDescriptorContext? context)
         {
             return true;
         }
@@ -207,7 +201,7 @@ namespace System.Windows.Forms
         ///  Determines if this object supports a standard set of values
         ///  that can be picked from a list.
         /// </summary>
-        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext? context)
         {
             return true;
         }
