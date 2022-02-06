@@ -1997,22 +1997,22 @@ static System.Windows.Forms.Screen.PrimaryScreen.get -> System.Windows.Forms.Scr
 ~System.Windows.Forms.ListBox.FindStringExact(string s) -> int
 ~System.Windows.Forms.ListBox.FindStringExact(string s, int startIndex) -> int
 ~System.Windows.Forms.ListBox.Items.get -> System.Windows.Forms.ListBox.ObjectCollection
-~System.Windows.Forms.ListBox.SelectedIndexCollection.CopyTo(System.Array destination, int index) -> void
-~System.Windows.Forms.ListBox.SelectedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ListBox.SelectedIndexCollection.SelectedIndexCollection(System.Windows.Forms.ListBox owner) -> void
+System.Windows.Forms.ListBox.SelectedIndexCollection.CopyTo(System.Array! destination, int index) -> void
+System.Windows.Forms.ListBox.SelectedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ListBox.SelectedIndexCollection.SelectedIndexCollection(System.Windows.Forms.ListBox! owner) -> void
 ~System.Windows.Forms.ListBox.SelectedIndices.get -> System.Windows.Forms.ListBox.SelectedIndexCollection
 ~System.Windows.Forms.ListBox.SelectedItem.get -> object
 ~System.Windows.Forms.ListBox.SelectedItem.set -> void
 ~System.Windows.Forms.ListBox.SelectedItems.get -> System.Windows.Forms.ListBox.SelectedObjectCollection
-~System.Windows.Forms.ListBox.SelectedObjectCollection.Add(object value) -> void
-~System.Windows.Forms.ListBox.SelectedObjectCollection.Contains(object selectedObject) -> bool
-~System.Windows.Forms.ListBox.SelectedObjectCollection.CopyTo(System.Array destination, int index) -> void
-~System.Windows.Forms.ListBox.SelectedObjectCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ListBox.SelectedObjectCollection.IndexOf(object selectedObject) -> int
-~System.Windows.Forms.ListBox.SelectedObjectCollection.Remove(object value) -> void
-~System.Windows.Forms.ListBox.SelectedObjectCollection.SelectedObjectCollection(System.Windows.Forms.ListBox owner) -> void
-~System.Windows.Forms.ListBox.SelectedObjectCollection.this[int index].get -> object
-~System.Windows.Forms.ListBox.SelectedObjectCollection.this[int index].set -> void
+System.Windows.Forms.ListBox.SelectedObjectCollection.Add(object! value) -> void
+System.Windows.Forms.ListBox.SelectedObjectCollection.Contains(object? selectedObject) -> bool
+System.Windows.Forms.ListBox.SelectedObjectCollection.CopyTo(System.Array! destination, int index) -> void
+System.Windows.Forms.ListBox.SelectedObjectCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ListBox.SelectedObjectCollection.IndexOf(object? selectedObject) -> int
+System.Windows.Forms.ListBox.SelectedObjectCollection.Remove(object! value) -> void
+System.Windows.Forms.ListBox.SelectedObjectCollection.SelectedObjectCollection(System.Windows.Forms.ListBox! owner) -> void
+System.Windows.Forms.ListBox.SelectedObjectCollection.this[int index].get -> object?
+System.Windows.Forms.ListBox.SelectedObjectCollection.this[int index].set -> void
 System.Windows.Forms.ListControl.DataManager.get -> System.Windows.Forms.CurrencyManager?
 System.Windows.Forms.ListControl.DataSource.get -> object?
 System.Windows.Forms.ListControl.DataSource.set -> void

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -69,11 +67,11 @@ namespace System.Windows.Forms
                 return IndexOf(selectedIndex) != -1;
             }
 
-            bool IList.Contains(object selectedIndex)
+            bool IList.Contains(object? selectedIndex)
             {
-                if (selectedIndex is int)
+                if (selectedIndex is int selectedIndexAsInt)
                 {
-                    return Contains((int)selectedIndex);
+                    return Contains(selectedIndexAsInt);
                 }
                 else
                 {
@@ -97,11 +95,11 @@ namespace System.Windows.Forms
                 return -1;
             }
 
-            int IList.IndexOf(object selectedIndex)
+            int IList.IndexOf(object? selectedIndex)
             {
-                if (selectedIndex is int)
+                if (selectedIndex is int selectedIndexAsInt)
                 {
-                    return IndexOf((int)selectedIndex);
+                    return IndexOf(selectedIndexAsInt);
                 }
                 else
                 {
@@ -109,7 +107,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            int IList.Add(object value)
+            int IList.Add(object? value)
             {
                 throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
@@ -119,12 +117,12 @@ namespace System.Windows.Forms
                 throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
-            void IList.Insert(int index, object value)
+            void IList.Insert(int index, object? value)
             {
                 throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
-            void IList.Remove(object value)
+            void IList.Remove(object? value)
             {
                 throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
@@ -146,7 +144,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            object IList.this[int index]
+            object? IList.this[int index]
             {
                 get
                 {
