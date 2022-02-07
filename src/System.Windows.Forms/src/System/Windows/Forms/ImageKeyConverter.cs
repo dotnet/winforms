@@ -163,9 +163,10 @@ namespace System.Windows.Forms
                         StringCollection imageKeys = imageList.Images.Keys;
                         for (int i = 0; i < imageKeys.Count; i++)
                         {
-                            if (imageKeys[i] is not null && imageKeys[i]!.Length != 0)
+                            var key = imageKeys[i];
+                            if (!string.IsNullOrEmpty(key))
                             {
-                                values[i] = imageKeys[i]!;
+                                values[i] = key;
                             }
                         }
 
