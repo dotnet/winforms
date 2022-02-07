@@ -24,13 +24,18 @@ namespace WinformsControlsTest
         {
             InitializeComponent();
 
+            dataGridView1.Rows.Add(new DataGridViewRow() { Visible = false });
             dataGridView1.Rows.Add("DefaultCellStyle", dataGridView1.DefaultCellStyle.Font.ToString());
             dataGridView1.Rows.Add("ColumnHeadersDefaultCellStyle", dataGridView1.ColumnHeadersDefaultCellStyle.Font.ToString());
             dataGridView1.Rows.Add("RowHeadersDefaultCellStyle", dataGridView1.RowHeadersDefaultCellStyle.Font.ToString());
 
-            for (int i = 0; i < dataGridView1.Rows.Count; i++)
+            int i = 1;
+            foreach (DataGridViewRow row in dataGridView1.Rows)
             {
-                dataGridView1.Rows[i].HeaderCell.Value = $"Row {i + 1}";
+                if (row.Visible)
+                {
+                    row.HeaderCell.Value = $"Row {i++}";
+                }
             }
         }
 
