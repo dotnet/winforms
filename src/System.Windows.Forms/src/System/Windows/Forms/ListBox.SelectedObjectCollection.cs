@@ -279,7 +279,7 @@ namespace System.Windows.Forms
                     ObjectCollection items = _owner.Items;
                     if (items is not null && value is not null)
                     {
-                        int index = items!.IndexOf(value!);
+                        int index = items.IndexOf(value);
                         if (index != -1 && GetSelected(index))
                         {
                             _owner.SetSelected(index, false);
