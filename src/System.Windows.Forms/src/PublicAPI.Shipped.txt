@@ -638,19 +638,19 @@ override System.Windows.Forms.ListControl.OnBindingContextChanged(System.EventAr
 ~override System.Windows.Forms.PrintPreviewDialog.OnClosing(System.ComponentModel.CancelEventArgs e) -> void
 ~override System.Windows.Forms.PrintPreviewDialog.Text.get -> string
 ~override System.Windows.Forms.PrintPreviewDialog.Text.set -> void
-~override System.Windows.Forms.ProgressBar.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.ProgressBar.BackgroundImage.set -> void
-~override System.Windows.Forms.ProgressBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ProgressBar.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.ProgressBar.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.ProgressBar.Font.set -> void
-~override System.Windows.Forms.ProgressBar.OnBackColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ProgressBar.OnForeColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ProgressBar.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.ProgressBar.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.ProgressBar.Text.get -> string
-~override System.Windows.Forms.ProgressBar.Text.set -> void
-~override System.Windows.Forms.ProgressBar.ToString() -> string
+override System.Windows.Forms.ProgressBar.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.ProgressBar.BackgroundImage.set -> void
+override System.Windows.Forms.ProgressBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ProgressBar.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.ProgressBar.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.ProgressBar.Font.set -> void
+override System.Windows.Forms.ProgressBar.OnBackColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ProgressBar.OnForeColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ProgressBar.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.ProgressBar.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.ProgressBar.Text.get -> string!
+override System.Windows.Forms.ProgressBar.Text.set -> void
+override System.Windows.Forms.ProgressBar.ToString() -> string!
 ~override System.Windows.Forms.PropertyGrid.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.PropertyGrid.BackgroundImage.set -> void
 ~override System.Windows.Forms.PropertyGrid.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -3287,7 +3287,7 @@ virtual System.Windows.Forms.NativeWindow.OnThreadException(System.Exception! e)
 ~virtual System.Windows.Forms.PictureBox.OnLoadProgressChanged(System.ComponentModel.ProgressChangedEventArgs e) -> void
 ~virtual System.Windows.Forms.PictureBox.OnSizeModeChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.PrintPreviewControl.OnStartPageChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ProgressBar.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ProgressBar.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.PropertyGrid.CreatePropertyTab(System.Type tabType) -> System.Windows.Forms.Design.PropertyTab
 ~virtual System.Windows.Forms.PropertyGrid.DefaultTabType.get -> System.Type
 ~virtual System.Windows.Forms.PropertyGrid.OnPropertySortChanged(System.EventArgs e) -> void
@@ -9809,44 +9809,44 @@ System.Windows.Forms.ProfessionalColorTable.ProfessionalColorTable() -> void
 System.Windows.Forms.ProfessionalColorTable.UseSystemColors.get -> bool
 System.Windows.Forms.ProfessionalColorTable.UseSystemColors.set -> void
 System.Windows.Forms.ProgressBar
-System.Windows.Forms.ProgressBar.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.ProgressBar.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.ProgressBar.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.ProgressBar.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.ProgressBar.CausesValidation.get -> bool
 System.Windows.Forms.ProgressBar.CausesValidation.set -> void
-System.Windows.Forms.ProgressBar.CausesValidationChanged -> System.EventHandler
-System.Windows.Forms.ProgressBar.DoubleClick -> System.EventHandler
-System.Windows.Forms.ProgressBar.Enter -> System.EventHandler
-System.Windows.Forms.ProgressBar.FontChanged -> System.EventHandler
+System.Windows.Forms.ProgressBar.CausesValidationChanged -> System.EventHandler?
+System.Windows.Forms.ProgressBar.DoubleClick -> System.EventHandler?
+System.Windows.Forms.ProgressBar.Enter -> System.EventHandler?
+System.Windows.Forms.ProgressBar.FontChanged -> System.EventHandler?
 System.Windows.Forms.ProgressBar.ImeMode.get -> System.Windows.Forms.ImeMode
 System.Windows.Forms.ProgressBar.ImeMode.set -> void
-System.Windows.Forms.ProgressBar.ImeModeChanged -> System.EventHandler
+System.Windows.Forms.ProgressBar.ImeModeChanged -> System.EventHandler?
 System.Windows.Forms.ProgressBar.Increment(int value) -> void
-System.Windows.Forms.ProgressBar.KeyDown -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.ProgressBar.KeyPress -> System.Windows.Forms.KeyPressEventHandler
-System.Windows.Forms.ProgressBar.KeyUp -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.ProgressBar.Leave -> System.EventHandler
+System.Windows.Forms.ProgressBar.KeyDown -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.ProgressBar.KeyPress -> System.Windows.Forms.KeyPressEventHandler?
+System.Windows.Forms.ProgressBar.KeyUp -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.ProgressBar.Leave -> System.EventHandler?
 System.Windows.Forms.ProgressBar.MarqueeAnimationSpeed.get -> int
 System.Windows.Forms.ProgressBar.MarqueeAnimationSpeed.set -> void
 System.Windows.Forms.ProgressBar.Maximum.get -> int
 System.Windows.Forms.ProgressBar.Maximum.set -> void
 System.Windows.Forms.ProgressBar.Minimum.get -> int
 System.Windows.Forms.ProgressBar.Minimum.set -> void
-System.Windows.Forms.ProgressBar.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.ProgressBar.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.ProgressBar.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.ProgressBar.Padding.set -> void
-System.Windows.Forms.ProgressBar.PaddingChanged -> System.EventHandler
-System.Windows.Forms.ProgressBar.Paint -> System.Windows.Forms.PaintEventHandler
+System.Windows.Forms.ProgressBar.PaddingChanged -> System.EventHandler?
+System.Windows.Forms.ProgressBar.Paint -> System.Windows.Forms.PaintEventHandler?
 System.Windows.Forms.ProgressBar.PerformStep() -> void
 System.Windows.Forms.ProgressBar.ProgressBar() -> void
-System.Windows.Forms.ProgressBar.RightToLeftLayoutChanged -> System.EventHandler
+System.Windows.Forms.ProgressBar.RightToLeftLayoutChanged -> System.EventHandler?
 System.Windows.Forms.ProgressBar.Step.get -> int
 System.Windows.Forms.ProgressBar.Step.set -> void
 System.Windows.Forms.ProgressBar.Style.get -> System.Windows.Forms.ProgressBarStyle
 System.Windows.Forms.ProgressBar.Style.set -> void
 System.Windows.Forms.ProgressBar.TabStop.get -> bool
 System.Windows.Forms.ProgressBar.TabStop.set -> void
-System.Windows.Forms.ProgressBar.TabStopChanged -> System.EventHandler
-System.Windows.Forms.ProgressBar.TextChanged -> System.EventHandler
+System.Windows.Forms.ProgressBar.TabStopChanged -> System.EventHandler?
+System.Windows.Forms.ProgressBar.TextChanged -> System.EventHandler?
 System.Windows.Forms.ProgressBar.Value.get -> int
 System.Windows.Forms.ProgressBar.Value.set -> void
 System.Windows.Forms.ProgressBarRenderer
