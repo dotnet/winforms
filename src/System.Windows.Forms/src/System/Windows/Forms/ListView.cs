@@ -5381,14 +5381,10 @@ namespace System.Windows.Forms
         /// </summary>
         internal void UpdateSavedCheckedItems(ListViewItem item, bool addItem)
         {
-            if (addItem && _savedCheckedItems is null)
-            {
-                _savedCheckedItems = new List<ListViewItem>();
-            }
-
             if (addItem)
             {
-                _savedCheckedItems!.Add(item);
+                _savedCheckedItems ??= new List<ListViewItem>();
+                _savedCheckedItems.Add(item);
             }
             else if (_savedCheckedItems is not null)
             {
