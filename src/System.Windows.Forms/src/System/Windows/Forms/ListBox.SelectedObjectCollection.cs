@@ -277,7 +277,7 @@ namespace System.Windows.Forms
                 if (_owner is not null)
                 {
                     ObjectCollection items = _owner.Items;
-                    if (items is not null & value is not null)
+                    if (items is not null && value is not null)
                     {
                         int index = items!.IndexOf(value!);
                         if (index != -1 && GetSelected(index))
