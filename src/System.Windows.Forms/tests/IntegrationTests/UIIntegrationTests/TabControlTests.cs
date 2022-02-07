@@ -56,7 +56,7 @@ namespace System.Windows.Forms.UITests
         {
             await RunTestAsync(async (form, tabControl) =>
             {
-                TestOutputHelper.WriteLine($"Primary screen: {Screen.PrimaryScreen.WorkingArea}");
+                TestOutputHelper.WriteLine($"Primary screen: {Screen.PrimaryScreen?.WorkingArea}");
 
                 // We can't physically move the mouse outside the desktop area,
                 // so the mouse cursor will be stuck at the bottom right corner of the desktop.

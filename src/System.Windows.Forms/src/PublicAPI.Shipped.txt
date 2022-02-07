@@ -701,8 +701,8 @@ override System.Windows.Forms.ProgressBar.ToString() -> string!
 ~override System.Windows.Forms.RichTextBox.SelectedText.set -> void
 ~override System.Windows.Forms.RichTextBox.Text.get -> string
 ~override System.Windows.Forms.RichTextBox.Text.set -> void
-~override System.Windows.Forms.Screen.Equals(object obj) -> bool
-~override System.Windows.Forms.Screen.ToString() -> string
+override System.Windows.Forms.Screen.Equals(object? obj) -> bool
+override System.Windows.Forms.Screen.ToString() -> string!
 ~override System.Windows.Forms.ScrollableControl.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.ScrollableControl.DockPaddingEdges.Equals(object other) -> bool
 ~override System.Windows.Forms.ScrollableControl.DockPaddingEdges.ToString() -> string
@@ -1188,14 +1188,14 @@ override System.Windows.Forms.ToolStripSystemRenderer.OnRenderToolStripStatusLab
 ~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath, System.Windows.Forms.HelpNavigator navigator) -> System.Windows.Forms.DialogResult
 ~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath, System.Windows.Forms.HelpNavigator navigator, object param) -> System.Windows.Forms.DialogResult
 static System.Windows.Forms.NativeWindow.FromHandle(System.IntPtr handle) -> System.Windows.Forms.NativeWindow?
-~static System.Windows.Forms.Screen.AllScreens.get -> System.Windows.Forms.Screen[]
-~static System.Windows.Forms.Screen.FromControl(System.Windows.Forms.Control control) -> System.Windows.Forms.Screen
-~static System.Windows.Forms.Screen.FromHandle(System.IntPtr hwnd) -> System.Windows.Forms.Screen
-~static System.Windows.Forms.Screen.FromPoint(System.Drawing.Point point) -> System.Windows.Forms.Screen
-~static System.Windows.Forms.Screen.FromRectangle(System.Drawing.Rectangle rect) -> System.Windows.Forms.Screen
-~static System.Windows.Forms.Screen.GetBounds(System.Windows.Forms.Control ctl) -> System.Drawing.Rectangle
-~static System.Windows.Forms.Screen.GetWorkingArea(System.Windows.Forms.Control ctl) -> System.Drawing.Rectangle
-~static System.Windows.Forms.Screen.PrimaryScreen.get -> System.Windows.Forms.Screen
+static System.Windows.Forms.Screen.AllScreens.get -> System.Windows.Forms.Screen![]!
+static System.Windows.Forms.Screen.FromControl(System.Windows.Forms.Control! control) -> System.Windows.Forms.Screen!
+static System.Windows.Forms.Screen.FromHandle(System.IntPtr hwnd) -> System.Windows.Forms.Screen!
+static System.Windows.Forms.Screen.FromPoint(System.Drawing.Point point) -> System.Windows.Forms.Screen!
+static System.Windows.Forms.Screen.FromRectangle(System.Drawing.Rectangle rect) -> System.Windows.Forms.Screen!
+static System.Windows.Forms.Screen.GetBounds(System.Windows.Forms.Control! ctl) -> System.Drawing.Rectangle
+static System.Windows.Forms.Screen.GetWorkingArea(System.Windows.Forms.Control! ctl) -> System.Drawing.Rectangle
+static System.Windows.Forms.Screen.PrimaryScreen.get -> System.Windows.Forms.Screen?
 ~static System.Windows.Forms.TabPage.GetTabPageOfComponent(object comp) -> System.Windows.Forms.TabPage
 ~static System.Windows.Forms.TextBoxRenderer.DrawTextBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string textBoxText, System.Drawing.Font font, System.Drawing.Rectangle textBounds, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.TextBoxState state) -> void
 ~static System.Windows.Forms.TextBoxRenderer.DrawTextBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string textBoxText, System.Drawing.Font font, System.Drawing.Rectangle textBounds, System.Windows.Forms.VisualStyles.TextBoxState state) -> void
@@ -2319,7 +2319,7 @@ System.Windows.Forms.PrintDialog.PrinterSettings.set -> void
 ~System.Windows.Forms.RichTextBox.SelectionTabs.set -> void
 ~System.Windows.Forms.RichTextBox.UndoActionName.get -> string
 ~System.Windows.Forms.SaveFileDialog.OpenFile() -> System.IO.Stream
-~System.Windows.Forms.Screen.DeviceName.get -> string
+System.Windows.Forms.Screen.DeviceName.get -> string!
 ~System.Windows.Forms.ScrollableControl.DockPadding.get -> System.Windows.Forms.ScrollableControl.DockPaddingEdges
 ~System.Windows.Forms.ScrollableControl.HorizontalScroll.get -> System.Windows.Forms.HScrollProperties
 ~System.Windows.Forms.ScrollableControl.ScrollControlIntoView(System.Windows.Forms.Control activeControl) -> void
