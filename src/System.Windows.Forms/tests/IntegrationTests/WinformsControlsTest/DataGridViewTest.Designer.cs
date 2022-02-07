@@ -39,6 +39,7 @@ namespace WinformsControlsTest
             this.column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.column3 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.column4 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.column5 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.currentDPILabel1 = new WinformsControlsTest.CurrentDPILabel();
             this.changeFontButton = new System.Windows.Forms.Button();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
@@ -62,6 +63,7 @@ namespace WinformsControlsTest
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.column1,
             this.column2,
+            this.column5,
             this.column3,
             this.column4});
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -98,6 +100,12 @@ namespace WinformsControlsTest
             // 
             this.column4.HeaderText = "Column4";
             this.column4.Name = "column4";
+            // 
+            // column5
+            // 
+            this.column5.HeaderText = "Hidden Column";
+            this.column5.Name = "column5";
+            this.column5.Visible = false;
             // 
             // currentDPILabel1
             // 
@@ -197,6 +205,7 @@ namespace WinformsControlsTest
         private System.Windows.Forms.DataGridViewTextBoxColumn column2;
         private System.Windows.Forms.DataGridViewCheckBoxColumn column3;
         private System.Windows.Forms.DataGridViewComboBoxColumn column4;
+        private System.Windows.Forms.DataGridViewComboBoxColumn column5;
         private WinformsControlsTest.CurrentDPILabel currentDPILabel1;
         private System.Windows.Forms.Button changeFontButton;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
