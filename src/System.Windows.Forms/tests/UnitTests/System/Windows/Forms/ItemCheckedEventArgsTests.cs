@@ -9,18 +9,18 @@ namespace System.Windows.Forms.Tests
     // NB: doesn't require thread affinity
     public class ItemCheckedEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
-        public static IEnumerable<object[]> Ctor_ListViewItem_TestData()
+        [WinFormsFact]
+        public void ItemCheckedEventArgs_Ctor_NullListViewItem_ThrowsArgumentNullException()
         {
-            yield return new object[] { null };
-            yield return new object[] { new ListViewItem() };
+            Assert.Throws<ArgumentNullException>(() => new ItemCheckedEventArgs(null));
         }
 
-        [Theory]
-        [MemberData(nameof(Ctor_ListViewItem_TestData))]
-        public void Ctor_ListViewItem(ListViewItem item)
+        [WinFormsFact]
+        public void Ctor_ListViewItem()
         {
-            var e = new ItemCheckedEventArgs(item);
-            Assert.Equal(item, e.Item);
+            ListViewItem listViewItem = new();
+            var e = new ItemCheckedEventArgs(listViewItem);
+            Assert.Equal(listViewItem, e.Item);
         }
     }
 }

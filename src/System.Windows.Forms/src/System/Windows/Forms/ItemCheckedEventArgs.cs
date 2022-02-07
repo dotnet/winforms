@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     {
         public ItemCheckedEventArgs(ListViewItem item)
         {
-            Item = item;
+            Item = item.OrThrowIfNull();
         }
 
         /// <summary>
