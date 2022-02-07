@@ -1289,6 +1289,23 @@ namespace System.Windows.Forms
             return rowCount;
         }
 
+        /// <summary>
+        ///  Returns the index of the row, taking into account the invisibility of other rows
+        /// </summary>
+        internal int GetVisibleIndex(DataGridViewRow row)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                int index = DisplayIndexToRowIndex(i);
+                if (index != -1 && items[index] == row)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
         internal int GetRowCount(DataGridViewElementStates includeFilter, int fromRowIndex, int toRowIndex)
         {
             Debug.Assert(toRowIndex >= fromRowIndex);

@@ -193,7 +193,7 @@ namespace System.Windows.Forms
                 dataGridViewColumn = GetNextColumn(dataGridViewColumn, includeFilter, DataGridViewElementStates.None);
             }
 
-            return dataGridViewColumn.Index;
+            return dataGridViewColumn?.Index ?? -1;
         }
 
         /// <summary>
@@ -457,6 +457,24 @@ namespace System.Windows.Forms
 
             Debug.Fail("no column found in GetColumnAtDisplayIndex");
             return null;
+        }
+
+        /// <summary>
+        ///  Returns the index of a column, taking into account DisplayIndex properties
+        ///  and the invisibility of other columns
+        /// </summary>
+        internal int GetVisibleIndex(DataGridViewColumn column)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                int index = ActualDisplayIndexToColumnIndex(i, DataGridViewElementStates.Visible);
+                if (index != -1 && _items[index] == column)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
         }
 
         public int GetColumnCount(DataGridViewElementStates includeFilter)
