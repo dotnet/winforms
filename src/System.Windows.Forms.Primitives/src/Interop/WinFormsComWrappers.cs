@@ -17,13 +17,14 @@ internal partial class Interop
     internal unsafe partial class WinFormsComWrappers : ComWrappers
     {
         private const int S_OK = (int)Interop.HRESULT.S_OK;
-        private static readonly ComInterfaceEntry* s_wrapperEntry = InitializeComInterfaceEntry();
+        private static readonly ComInterfaceEntry* s_streamEntry = InitializeIStreamEntry();
+        private static readonly ComInterfaceEntry* s_fileDialogEventsEntry = InitializeIFileDialogEventsEntry();
 
         internal static WinFormsComWrappers Instance { get; } = new WinFormsComWrappers();
 
         private WinFormsComWrappers() { }
 
-        private static ComInterfaceEntry* InitializeComInterfaceEntry()
+        private static ComInterfaceEntry* InitializeIStreamEntry()
         {
             GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
 
@@ -35,14 +36,33 @@ internal partial class Interop
             return wrapperEntry;
         }
 
+        private static ComInterfaceEntry* InitializeIFileDialogEventsEntry()
+        {
+            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
+
+            IntPtr iFileDialogEventsVtbl = IFileDialogEventsVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+
+            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
+            wrapperEntry->IID = IID.IFileDialogEvents;
+            wrapperEntry->Vtable = iFileDialogEventsVtbl;
+            return wrapperEntry;
+        }
+
         protected override unsafe ComInterfaceEntry* ComputeVtables(object obj, CreateComInterfaceFlags flags, out int count)
         {
-            Debug.Assert(obj is Interop.Ole32.IStream);
-            Debug.Assert(s_wrapperEntry is not null);
+            if (obj is Interop.Ole32.IStream)
+            {
+                count = 1;
+                return s_streamEntry;
+            }
 
-            // Always return the same table mappings.
-            count = 1;
-            return s_wrapperEntry;
+            if (obj is Interop.Shell32.IFileDialogEvents)
+            {
+                count = 1;
+                return s_fileDialogEventsEntry;
+            }
+
+            throw new NotImplementedException($"ComWrappers for type {obj.GetType()} not implemented.");
         }
 
         protected override object CreateObject(IntPtr externalComObject, CreateObjectFlags flags)

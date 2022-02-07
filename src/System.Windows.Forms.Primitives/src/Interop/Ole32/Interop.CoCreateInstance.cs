@@ -18,10 +18,10 @@ internal partial class Interop
 
         [DllImport(Libraries.Ole32, ExactSpelling = true)]
         public static extern HRESULT CoCreateInstance(
-            ref Guid rclsid,
+            in Guid rclsid,
             IntPtr punkOuter,
             CLSCTX dwClsContext,
-            ref Guid riid,
+            in Guid riid,
             out IntPtr ppv);
     }
 }
