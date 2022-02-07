@@ -2459,22 +2459,25 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IO.FileInfo fi;
+            FileInfo fi;
             for (int i = 0; i <= _bkImgFileNamesCount; i++)
             {
-                fi = new IO.FileInfo(_bkImgFileNames[i]!);
-                if (fi.Exists)
+                var bkImgFileName = _bkImgFileNames[i];
+                if (bkImgFileName is not null)
                 {
-                    //
-                    // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
-                    // I could not find any resources which explain in detail when the IImgCtx objects
-                    // release the temporary file. So if we get a FileIO when we delete the temporary file
-                    // we don't do anything about it ( because we don't know what is a good time to try to delete the file again ).
-                    try
+                    fi = new FileInfo(bkImgFileName);
+                    if (fi.Exists)
                     {
-                        fi.Delete();
+                        // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
+                        // I could not find any resources which explain in detail when the IImgCtx objects
+                        // release the temporary file. So if we get a FileIO when we delete the temporary file
+                        // we don't do anything about it ( because we don't know what is a good time to try to delete the file again ).
+                        try
+                        {
+                            fi.Delete();
+                        }
+                        catch (IOException) { }
                     }
-                    catch (IO.IOException) { }
                 }
             }
 
@@ -2759,7 +2762,10 @@ namespace System.Windows.Forms
                                 if (nmcd->iSubItem == 0 && Items[itemIndex].SubItems.Count > 1)
                                 {
                                     // Use the width for the first column header.
-                                    subItemBounds.Width = _columnHeaders![0].Width;
+                                    if (_columnHeaders is not null)
+                                    {
+                                        subItemBounds.Width = _columnHeaders[0].Width;
+                                    }
                                 }
 
                                 if (ClientRectangle.IntersectsWith(subItemBounds))
@@ -3144,10 +3150,10 @@ namespace System.Windows.Forms
 
                 if (!string.IsNullOrEmpty(_backgroundImageFileName) || _bkImgFileNames is not null)
                 {
-                    IO.FileInfo fi;
+                    FileInfo fi;
                     if (!string.IsNullOrEmpty(_backgroundImageFileName))
                     {
-                        fi = new IO.FileInfo(_backgroundImageFileName);
+                        fi = new FileInfo(_backgroundImageFileName);
                         Debug.Assert(fi.Exists, "who deleted our temp file?");
 
                         // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
@@ -3158,24 +3164,31 @@ namespace System.Windows.Forms
                         {
                             fi.Delete();
                         }
-                        catch (IO.IOException) { }
+                        catch (IOException) { }
                         _backgroundImageFileName = string.Empty;
                     }
 
                     for (int i = 0; i <= _bkImgFileNamesCount; i++)
                     {
-                        fi = new IO.FileInfo(_bkImgFileNames![i]!);
-                        Debug.Assert(fi.Exists, "who deleted our temp file?");
-
-                        // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
-                        // I could not find any resources which explain in detail when the IImgCtx objects
-                        // release the temporary file. So if we get a FileIO when we delete the temporary file
-                        // we don't do anything about it ( because we don't know what is a good time to try to delete the file again ).
-                        try
+                        if (_bkImgFileNames is not null)
                         {
-                            fi.Delete();
+                            var bkImgFileName = _bkImgFileNames[i];
+                            if (bkImgFileName is not null)
+                            {
+                                fi = new FileInfo(bkImgFileName);
+                                Debug.Assert(fi.Exists, "who deleted our temp file?");
+
+                                // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
+                                // I could not find any resources which explain in detail when the IImgCtx objects
+                                // release the temporary file. So if we get a FileIO when we delete the temporary file
+                                // we don't do anything about it ( because we don't know what is a good time to try to delete the file again ).
+                                try
+                                {
+                                    fi.Delete();
+                                }
+                                catch (IOException) { }
+                            }
                         }
-                        catch (IO.IOException) { }
                     }
 
                     _bkImgFileNames = null;
