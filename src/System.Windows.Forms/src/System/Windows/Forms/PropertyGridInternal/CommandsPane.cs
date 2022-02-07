@@ -115,7 +115,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             try
             {
-                if (!e.Link!.Enabled)
+                if (e.Link is null || !e.Link.Enabled)
                 {
                     return;
                 }
