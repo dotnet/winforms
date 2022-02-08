@@ -13,16 +13,19 @@ namespace System.ComponentModel.Design
     ///  Tasks typically walk the user through some multi-step process, such as configuring a data source for a component.
     ///  Designer tasks are shown in a custom piece of UI (Chrome).
     /// </summary>
-    public abstract class DesignerActionItem
+    public abstract partial class DesignerActionItem
     {
         private IDictionary _properties;
 
         public DesignerActionItem(string displayName, string category, string description)
         {
-            DisplayName = displayName is null ? null : Regex.Replace(displayName, @"\(\&.\)", "");
+            DisplayName = displayName is null ? null : SanitizeNameRegex().Replace(displayName, "");
             Category = category;
             Description = description;
         }
+
+        [RegexGenerator(@"\(\&.\)")]
+        private static partial Regex SanitizeNameRegex();
 
         public bool AllowAssociate { get; set; }
 
