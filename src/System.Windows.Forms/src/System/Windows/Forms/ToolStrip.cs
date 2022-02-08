@@ -4738,12 +4738,7 @@ namespace System.Windows.Forms
         private void SnapFocus(IntPtr otherHwnd)
         {
 #if DEBUG
-            if (s_snapFocusDebug.TraceVerbose)
-            {
-                string stackTrace = new StackTrace().ToString();
-                Regex regex = new Regex("FocusInternal");
-                Debug.WriteLine(!regex.IsMatch(stackTrace), "who is setting focus to us?");
-            }
+            Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, !Regex.IsMatch(Environment.StackTrace, "FocusInternal"), "who is setting focus to us?");
 #endif
             // we need to know who sent us focus so we know who to send it back to later.
 
