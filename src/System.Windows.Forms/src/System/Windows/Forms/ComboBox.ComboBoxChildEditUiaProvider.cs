@@ -33,6 +33,8 @@ namespace System.Windows.Forms
                 _textProvider = new ComboBoxUiaTextProvider(owner);
             }
 
+            private protected override string AutomationId => COMBO_BOX_EDIT_AUTOMATION_ID;
+
             /// <summary>
             ///  Returns the element in the specified direction.
             /// </summary>
@@ -88,8 +90,6 @@ namespace System.Windows.Forms
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
                     case UiaCore.UIA.IsEnabledPropertyId:
                         return _owningComboBox.Enabled;
-                    case UiaCore.UIA.AutomationIdPropertyId:
-                        return COMBO_BOX_EDIT_AUTOMATION_ID;
                     case UiaCore.UIA.NativeWindowHandlePropertyId:
                         return _handle;
                     case UiaCore.UIA.IsOffscreenPropertyId:

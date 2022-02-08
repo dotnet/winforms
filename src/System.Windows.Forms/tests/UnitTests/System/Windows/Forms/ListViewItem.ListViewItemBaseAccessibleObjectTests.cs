@@ -336,5 +336,18 @@ namespace System.Windows.Forms.Tests
             Assert.Equal((UiaCore.ToggleState)expected, accessibleObject.ToggleState);
             Assert.False(control.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void ListViewItemBaseAccessibleObject_GetPropertyValue_AutomationId_ReturnsExpected()
+        {
+            using ListView listView = new();
+            ListViewItem item = new();
+            listView.Items.Add(item);
+            var accessibleObject = (ListViewItemBaseAccessibleObject)item.AccessibilityObject;
+
+            var expected = string.Format("{0}-{1}", typeof(ListViewItem).Name, accessibleObject.CurrentIndex);
+            Assert.Equal(expected, accessibleObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId));
+            Assert.False(listView.IsHandleCreated);
+        }
     }
 }

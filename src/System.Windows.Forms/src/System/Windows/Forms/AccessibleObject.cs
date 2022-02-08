@@ -94,6 +94,8 @@ namespace System.Windows.Forms
             _systemWrapper = true;
         }
 
+        private protected virtual string? AutomationId => null;
+
         /// <summary>
         ///  Gets the bounds of the accessible object, in screen coordinates.
         /// </summary>
@@ -448,6 +450,7 @@ namespace System.Windows.Forms
                 UiaCore.UIA.IsPasswordPropertyId => false,
                 UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
                 UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
+                UiaCore.UIA.AutomationIdPropertyId => AutomationId,
                 _ => null
             };
 

@@ -102,8 +102,7 @@ namespace System.Windows.Forms.Tests
                 AccessibleName = "TestName"
             };
 
-            Assert.False(pictureBox.IsHandleCreated);
-            var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
+            PictureBox.PictureBoxAccessibleObject pictureBoxAccessibleObject = new(pictureBox);
             object value = pictureBoxAccessibleObject.GetPropertyValue((UIA)propertyID);
 
             Assert.Equal(expected, value);

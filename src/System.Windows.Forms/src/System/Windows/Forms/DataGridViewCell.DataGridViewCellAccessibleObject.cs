@@ -609,7 +609,7 @@ namespace System.Windows.Forms
                     GetHashCode()
                 };
 
-            private string AutomationId
+            private protected override string AutomationId
             {
                 get
                 {
@@ -683,7 +683,6 @@ namespace System.Windows.Forms
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.DataItemControlTypeId,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused, // Announce the cell when focusing.
                     UiaCore.UIA.IsEnabledPropertyId => _owner?.DataGridView?.Enabled ?? false,
-                    UiaCore.UIA.AutomationIdPropertyId => AutomationId,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     UiaCore.UIA.GridItemContainingGridPropertyId => _owner?.DataGridView?.AccessibilityObject,
                     _ => base.GetPropertyValue(propertyID),
