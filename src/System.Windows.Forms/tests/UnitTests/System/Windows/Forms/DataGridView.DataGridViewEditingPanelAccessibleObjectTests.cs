@@ -118,6 +118,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SR.DataGridView_AccEditingPanelAccName, editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
             Assert.Equal(SR.DataGridView_AccEditingPanelAccName, editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
             Assert.Null(editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+            Assert.False((bool)editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsPasswordPropertyId));
             Assert.False(editingPanel.IsHandleCreated);
         }
     }

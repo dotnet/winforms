@@ -1245,7 +1245,7 @@ namespace System.Windows.Forms.Tests
 
             control.Text = "&Name";
             AccessibleObject controlAccessibleObject = control.AccessibilityObject;
-            string expectedValue = s_controlsNotUseTextForAccessibility.Contains(type) ? null : "Alt+n";
+            string expectedValue = s_controlsNotUseTextForAccessibility.Contains(type) ? string.Empty : "Alt+n";
 
             Assert.Equal(expectedValue, controlAccessibleObject.GetPropertyValue(UiaCore.UIA.AccessKeyPropertyId));
         }
