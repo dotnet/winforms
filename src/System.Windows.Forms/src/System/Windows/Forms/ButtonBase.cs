@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -25,9 +23,9 @@ namespace System.Windows.Forms
         private ContentAlignment _textAlign = ContentAlignment.MiddleCenter;
         private TextImageRelation _textImageRelation = TextImageRelation.Overlay;
         private readonly ImageList.Indexer _imageIndex = new ImageList.Indexer();
-        private FlatButtonAppearance _flatAppearance;
-        private ImageList _imageList;
-        private Image _image;
+        private FlatButtonAppearance? _flatAppearance;
+        private ImageList? _imageList;
+        private Image? _image;
 
         private const int FlagMouseOver = 0x0001;
         private const int FlagMouseDown = 0x0002;
@@ -40,12 +38,15 @@ namespace System.Windows.Forms
         private const int FlagShowToolTip = 0x0100;
         private int _state;
 
-        private ToolTip _textToolTip;
+        private ToolTip? _textToolTip;
 
         // This allows the user to disable visual styles for the button so that it inherits its background color
         private bool _enableVisualStyleBackground = true;
 
         private bool _isEnableVisualStyleBackgroundSet;
+
+        private ButtonBaseAdapter? _adapter;
+        private FlatStyle _cachedAdapterType;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="ButtonBase"/> class.
@@ -131,7 +132,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler AutoSizeChanged
+        public new event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -152,7 +153,7 @@ namespace System.Windows.Forms
                 {
                     if (value != Color.Empty)
                     {
-                        PropertyDescriptor pd = TypeDescriptor.GetProperties(this)["UseVisualStyleBackColor"];
+                        PropertyDescriptor? pd = TypeDescriptor.GetProperties(this)["UseVisualStyleBackColor"];
                         pd?.SetValue(this, false);
                     }
                 }
@@ -317,7 +318,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ButtonImageDescr))]
         [Localizable(true)]
         [SRCategory(nameof(SR.CatAppearance))]
-        public Image Image
+        public Image? Image
         {
             get
             {
@@ -482,7 +483,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ButtonImageListDescr))]
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRCategory(nameof(SR.CatAppearance))]
-        public ImageList ImageList
+        public ImageList? ImageList
         {
             get
             {
@@ -499,7 +500,6 @@ namespace System.Windows.Forms
                 EventHandler disposedHandler = new EventHandler(DetachImageList);
 
                 // Detach old event handlers
-                //
                 if (_imageList is not null)
                 {
                     _imageList.RecreateHandle -= recreateHandler;
@@ -507,7 +507,6 @@ namespace System.Windows.Forms
                 }
 
                 // Make sure we don't have an Image as well as an ImageList
-                //
                 if (value is not null)
                 {
                     _image = null; // Image.set calls ImageList = null
@@ -517,7 +516,6 @@ namespace System.Windows.Forms
                 _imageIndex.ImageList = value;
 
                 // Wire up new event handlers
-                //
                 if (value is not null)
                 {
                     value.RecreateHandle += recreateHandler;
@@ -530,7 +528,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public ImeMode ImeMode
+        public new ImeMode ImeMode
         {
             get => base.ImeMode;
             set => base.ImeMode = value;
@@ -538,7 +536,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged
+        public new event EventHandler? ImeModeChanged
         {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
@@ -775,7 +773,7 @@ namespace System.Windows.Forms
             return new ButtonBaseAccessibleObject(this);
         }
 
-        private void DetachImageList(object sender, EventArgs e)
+        private void DetachImageList(object? sender, EventArgs e)
         {
             ImageList = null;
         }
@@ -806,7 +804,7 @@ namespace System.Windows.Forms
             return ((_state & flag) == flag);
         }
 
-        private void ImageListRecreateHandle(object sender, EventArgs e)
+        private void ImageListRecreateHandle(object? sender, EventArgs e)
         {
             if (IsHandleCreated)
             {
@@ -972,9 +970,6 @@ namespace System.Windows.Forms
             return LayoutUtils.UnionSizes(prefSize + Padding.Size, MinimumSize);
         }
 
-        private ButtonBaseAdapter _adapter;
-        private FlatStyle _cachedAdapterType;
-
         internal ButtonBaseAdapter Adapter
         {
             get
@@ -1045,7 +1040,7 @@ namespace System.Windows.Forms
             return Adapter.CreateTextFormatFlags();
         }
 
-        private void OnFrameChanged(object o, EventArgs e)
+        private void OnFrameChanged(object? o, EventArgs e)
         {
             if (Disposing || IsDisposed)
             {
@@ -1054,7 +1049,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated && InvokeRequired)
             {
-                BeginInvoke(new EventHandler(OnFrameChanged), new object[] { o, e });
+                BeginInvoke(new EventHandler(OnFrameChanged), new object?[] { o, e });
                 return;
             }
 
@@ -1096,7 +1091,6 @@ namespace System.Windows.Forms
                     // It looks like none of the "SPACE" key downs generate the BM_SETSTATE.
                     // This causes to not draw the focus rectangle inside the button and also
                     // not paint the button as "un-depressed".
-                    //
                     if (!OwnerDraw)
                     {
                         User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, (nint)BOOL.TRUE);
@@ -1164,7 +1158,10 @@ namespace System.Windows.Forms
             if (GetStyle(ControlStyles.UserPaint))
             {
                 Animate();
-                ImageAnimator.UpdateFrames(Image);
+                if (Image is not null)
+                {
+                    ImageAnimator.UpdateFrames(Image);
+                }
 
                 PaintControl(pevent);
             }

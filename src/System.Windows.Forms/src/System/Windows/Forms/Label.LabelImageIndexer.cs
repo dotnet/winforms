@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
@@ -28,6 +29,7 @@ namespace System.Windows.Forms
                 set { Debug.Assert(false, "Setting the image list in this class is not supported"); }
             }
 
+            [AllowNull]
             public override string Key
             {
                 get => base.Key;
