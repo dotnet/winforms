@@ -143,15 +143,22 @@ namespace System.Windows.Forms
             if (Multiselect)
             {
                 openDialog.GetResults(out IShellItemArray results);
-                results.GetCount(out uint count);
-                string[] files = new string[count];
-                for (uint i = 0; i < count; ++i)
+                try
                 {
-                    results.GetItemAt(i, out IShellItem item);
-                    files[unchecked((int)i)] = GetFilePathFromShellItem(item);
-                }
+                    results.GetCount(out uint count);
+                    string[] files = new string[count];
+                    for (uint i = 0; i < count; ++i)
+                    {
+                        results.GetItemAt(i, out IShellItem item);
+                        files[unchecked((int)i)] = GetFilePathFromShellItem(item);
+                    }
 
-                return files;
+                    return files;
+                }
+                finally
+                {
+                    ((IDisposable)results).Dispose();
+                }
             }
             else
             {

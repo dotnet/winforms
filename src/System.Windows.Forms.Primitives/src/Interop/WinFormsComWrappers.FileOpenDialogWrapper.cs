@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal unsafe partial class WinFormsComWrappers
     {
-        private sealed class FileOpenDialogWrapper : FileDialogWrapper, Shell32.IFileOpenDialog
+        internal sealed class FileOpenDialogWrapper : FileDialogWrapper, Shell32.IFileOpenDialog
         {
             public FileOpenDialogWrapper(IntPtr wrappedInstance)
                 : base(wrappedInstance)
@@ -140,7 +140,7 @@ internal partial class Interop
                 IntPtr ppenum_local;
                 ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 27)))
                     (_wrappedInstance, &ppenum_local).ThrowIfFailed();
-                ppenum = ppenum_local == IntPtr.Zero ? null : (Shell32.IShellItemArray)Marshal.GetObjectForIUnknown(ppenum_local);
+                ppenum = ppenum_local == IntPtr.Zero ? null : (Shell32.IShellItemArray)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppenum_local, CreateObjectFlags.UniqueInstance);
             }
 
             HRESULT Shell32.IFileOpenDialog.GetSelectedItems(out Shell32.IShellItemArray? ppsai)
@@ -148,8 +148,31 @@ internal partial class Interop
                 IntPtr ppsai_local;
                 HRESULT result = ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 28)))
                     (_wrappedInstance, &ppsai_local);
-                ppsai = ppsai_local == IntPtr.Zero ? null : (Shell32.IShellItemArray)Marshal.GetObjectForIUnknown(ppsai_local);
+                ppsai = ppsai_local == IntPtr.Zero ? null : (Shell32.IShellItemArray)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppsai_local, CreateObjectFlags.Unwrap);
                 return result;
+            }
+
+            public void AddText(uint dwIDCtl, string pszText)
+            {
+                var targetInterface = IID.IFileDialogCustomize;
+                var result = Marshal.QueryInterface(_wrappedInstance, ref targetInterface, out var thisPtr);
+                if (result != 0)
+                {
+                    throw new System.InvalidCastException();
+                }
+
+                IntPtr pszText_local = IntPtr.Zero;
+                try
+                {
+                    pszText_local = Marshal.StringToCoTaskMemUni(pszText);
+                    ((delegate* unmanaged<IntPtr, uint, IntPtr, HRESULT>)(*(*(void***)thisPtr + 11 /* IFileDialogCustomize.AddText */)))
+                        (thisPtr, dwIDCtl, pszText_local).ThrowIfFailed();
+                }
+                finally
+                {
+                    Marshal.FreeCoTaskMem(pszText_local);
+                    Marshal.Release(thisPtr);
+                }
             }
         }
     }

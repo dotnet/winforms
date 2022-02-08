@@ -332,7 +332,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    IFileDialogCustomize customize = (IFileDialogCustomize)dialog;
+                    var customize = (WinFormsComWrappers.FileOpenDialogWrapper)dialog;
                     customize.AddText(0, _descriptionText);
                 }
             }

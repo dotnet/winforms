@@ -9,7 +9,7 @@ internal partial class Interop
 {
     internal unsafe partial class WinFormsComWrappers
     {
-        private abstract class FileDialogWrapper : Shell32.IFileDialog, IDisposable
+        internal abstract class FileDialogWrapper : Shell32.IFileDialog, IDisposable
         {
             protected IntPtr _wrappedInstance;
 
