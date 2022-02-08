@@ -156,7 +156,6 @@ namespace System.Windows.Forms
                     UiaCore.UIA.ControlTypePropertyId => _owningTrackBar.AccessibleRole == AccessibleRole.Default
                                                             ? UiaCore.UIA.SliderControlTypeId
                                                             : base.GetPropertyValue(propertyID),
-                    UiaCore.UIA.AutomationIdPropertyId => _owningTrackBar.Name,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => _owningTrackBar.Focused,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
                         // This is necessary for compatibility with MSAA proxy:

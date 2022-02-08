@@ -37,7 +37,7 @@ namespace System.Windows.Forms
                 ? _owningItem.Group ?? _owningListView.DefaultGroup
                 : null;
 
-            private string AutomationId
+            private protected override string AutomationId
                 => string.Format("{0}-{1}", typeof(ListViewItem).Name, CurrentIndex);
 
             public override Rectangle Bounds
@@ -167,7 +167,6 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.AutomationIdPropertyId => AutomationId,
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ListItemControlTypeId,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => OwningListItemFocused,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,

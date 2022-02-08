@@ -24,8 +24,6 @@ namespace System.Windows.Forms
                         => Owner.AccessibleRole == AccessibleRole.Default
                            ? UiaCore.UIA.PaneControlTypeId
                            : base.GetPropertyValue(propertyID),
-                    UiaCore.UIA.AutomationIdPropertyId
-                        => Owner.Name,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
                         => true,
                     _ => base.GetPropertyValue(propertyID)

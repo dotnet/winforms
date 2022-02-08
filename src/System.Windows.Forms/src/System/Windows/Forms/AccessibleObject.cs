@@ -391,6 +391,8 @@ namespace System.Windows.Forms
 
         internal virtual UiaCore.IRawElementProviderSimple? HostRawElementProvider => null;
 
+        private protected virtual string? AutomationId => null;
+
         /// <summary>
         ///  Returns the value of the specified <paramref name="propertyID"/> from the element.
         /// </summary>
@@ -428,6 +430,7 @@ namespace System.Windows.Forms
                 UiaCore.UIA.IsPasswordPropertyId => false,
                 UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
                 UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
+                UiaCore.UIA.AutomationIdPropertyId => AutomationId,
                 _ => null
             };
 

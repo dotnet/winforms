@@ -34,6 +34,8 @@ namespace System.Windows.Forms
                 InitHandle(ownerControl);
             }
 
+            private protected override string AutomationId => Owner.Name;
+
             // If the control is used as an item of a ToolStrip via ToolStripControlHost,
             // its accessible object should provide info about the owning ToolStrip and items-siblings
             // to build a correct ToolStrip accessibility tree.

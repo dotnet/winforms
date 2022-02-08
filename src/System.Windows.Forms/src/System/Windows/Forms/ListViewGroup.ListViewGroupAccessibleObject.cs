@@ -35,7 +35,7 @@ namespace System.Windows.Forms
                 _owningGroupIsDefault = owningGroupIsDefault;
             }
 
-            private string AutomationId
+            private protected override string AutomationId
                 => string.Format("{0}-{1}", typeof(ListViewGroup).Name, CurrentIndex);
 
             public override Rectangle Bounds
@@ -182,7 +182,6 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.AutomationIdPropertyId => AutomationId,
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.GroupControlTypeId,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => _owningListView.Focused && Focused,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,

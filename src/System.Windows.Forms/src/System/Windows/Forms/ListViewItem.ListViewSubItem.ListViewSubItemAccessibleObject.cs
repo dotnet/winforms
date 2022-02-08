@@ -125,7 +125,6 @@ namespace System.Windows.Forms
                         // object has the "text" control type, because it is just a container for the edit field.
                         UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TextControlTypeId,
                         UiaCore.UIA.ProcessIdPropertyId => Environment.ProcessId,
-                        UiaCore.UIA.AutomationIdPropertyId => AutomationId,
                         UiaCore.UIA.HasKeyboardFocusPropertyId => _owningListView.Focused && _owningListView.FocusedItem == _owningItem,
                         UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                         UiaCore.UIA.IsEnabledPropertyId => _owningListView.Enabled,
@@ -157,7 +156,7 @@ namespace System.Windows.Forms
                     return base.IsPatternSupported(patternId);
                 }
 
-                private string AutomationId
+                private protected override string AutomationId
                     => string.Format("{0}-{1}", typeof(ListViewItem.ListViewSubItem).Name, ParentInternal.GetChildIndex(this));
             }
         }
