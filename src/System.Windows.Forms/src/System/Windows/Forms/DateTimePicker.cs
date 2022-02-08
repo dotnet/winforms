@@ -830,7 +830,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text
         {
-            get => base.Text;
+            get => Value.ToString(CustomFormat);
             set
             {
                 // Clause to check length

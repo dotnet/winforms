@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(200, control.PreferredHeight), control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
-            Assert.Empty(control.Text);
+            Assert.Equal(DateTime.Now.ToString(), control.Text);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
             Assert.False(control.UseWaitCursor);
@@ -216,6 +216,65 @@ namespace System.Windows.Forms.Tests
                 DateTime dateTime = systemTime;
                 Assert.Equal(DateTime.MinValue, dateTime);
             }
+        }
+
+        [WinFormsFact]
+        public void DateTimePicker_CustomFormat_Null_Text_ReturnsExpected()
+        {
+            using DateTimePicker dateTimePicker = new();
+            DateTime dt = new(2000, 1, 2, 3, 4, 5);
+            dateTimePicker.Value = dt;
+
+            Assert.Null(dateTimePicker.CustomFormat);
+            Assert.Equal(dt.ToString(), dateTimePicker.Text);
+        }
+
+        [WinFormsFact]
+        public void DateTimePicker_CustomFormat_LongDatePattern_Text_ReturnsExpected()
+        {
+            using DateTimePicker dateTimePicker = new();
+            DateTime dt = new(2000, 1, 2, 3, 4, 5);
+            dateTimePicker.Value = dt;
+            Globalization.DateTimeFormatInfo dateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat;
+            dateTimePicker.CustomFormat = dateTimeFormat.LongDatePattern;
+
+            Assert.Equal(dt.ToLongDateString(), dateTimePicker.Text);
+        }
+
+        [WinFormsFact]
+        public void DateTimePicker_CustomFormat_ShortDatePattern_Text_ReturnsExpected()
+        {
+            using DateTimePicker dateTimePicker = new();
+            DateTime dt = new(2000, 1, 2, 3, 4, 5);
+            dateTimePicker.Value = dt;
+            Globalization.DateTimeFormatInfo dateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat;
+            dateTimePicker.CustomFormat = dateTimeFormat.ShortDatePattern;
+
+            Assert.Equal(dt.ToShortDateString(), dateTimePicker.Text);
+        }
+
+        [WinFormsFact]
+        public void DateTimePicker_CustomFormat_LongTimePattern_Text_ReturnsExpected()
+        {
+            using DateTimePicker dateTimePicker = new();
+            DateTime dt = new(2000, 1, 2, 3, 4, 5);
+            dateTimePicker.Value = dt;
+            Globalization.DateTimeFormatInfo dateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat;
+            dateTimePicker.CustomFormat = dateTimeFormat.LongTimePattern;
+
+            Assert.Equal(dt.ToLongTimeString(), dateTimePicker.Text);
+        }
+
+        [WinFormsFact]
+        public void DateTimePicker_CustomFormat_ShortTimePattern_Text_ReturnsExpected()
+        {
+            using DateTimePicker dateTimePicker = new();
+            DateTime dt = new(2000, 1, 2, 3, 4, 5);
+            dateTimePicker.Value = dt;
+            Globalization.DateTimeFormatInfo dateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat;
+            dateTimePicker.CustomFormat = dateTimeFormat.ShortTimePattern;
+
+            Assert.Equal(dt.ToShortTimeString(), dateTimePicker.Text);
         }
 
         public class SubDateTimePicker : DateTimePicker

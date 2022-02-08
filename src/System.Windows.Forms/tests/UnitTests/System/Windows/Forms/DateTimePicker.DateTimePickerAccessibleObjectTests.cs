@@ -104,11 +104,11 @@ namespace System.Windows.Forms.Tests
         public void DateTimePickerAccessibleObject_GetPropertyValue_ReturnsExpected()
         {
             using DateTimePicker dateTimePicker = new();
-            DateTime dt = new DateTime(2000, 1, 1);
-            dateTimePicker.TestAccessor().Dynamic._text = dt.ToLongDateString();
+            DateTime dt = new(2000, 1, 1);
+            dateTimePicker.Value = dt;
             AccessibleObject accessibleObject = dateTimePicker.AccessibilityObject;
 
-            Assert.Equal(dt.ToLongDateString(), accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+            Assert.Equal(dt.ToString(), accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
             Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId));
             Assert.False(dateTimePicker.IsHandleCreated);
         }
