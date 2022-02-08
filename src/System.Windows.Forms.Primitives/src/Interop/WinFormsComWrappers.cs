@@ -86,7 +86,7 @@ internal partial class Interop
             }
 
             Guid fileSaveDialogIID = IID.IFileSaveDialog;
-            hr = Marshal.QueryInterface(externalComObject, ref fileOpenDialogIID, out IntPtr fileSaveDialogComObject);
+            hr = Marshal.QueryInterface(externalComObject, ref fileSaveDialogIID, out IntPtr fileSaveDialogComObject);
             if (hr == S_OK)
             {
                 Marshal.Release(externalComObject);
