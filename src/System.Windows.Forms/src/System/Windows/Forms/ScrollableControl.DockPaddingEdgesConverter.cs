@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
@@ -16,7 +14,7 @@ namespace System.Windows.Forms
         [TypeConverter(typeof(DockPaddingEdgesConverter))]
         public class DockPaddingEdges : ICloneable
         {
-            private readonly ScrollableControl _owner;
+            private readonly ScrollableControl? _owner;
             private int _left;
             private int _right;
             private int _top;
@@ -185,7 +183,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override bool Equals(object other)
+            public override bool Equals(object? other)
             {
                 return other is DockPaddingEdges dpeOther &&
                     Left == dpeOther.Left &&
@@ -206,7 +204,13 @@ namespace System.Windows.Forms
 
             private void ResetTop() => Top = 0;
 
-            internal void Scale(float dx, float dy) => _owner.Padding.Scale(dx, dy);
+            internal void Scale(float dx, float dy)
+            {
+                if (_owner is not null)
+                {
+                    _owner.Padding.Scale(dx, dy);
+                }
+            }
 
             public override string ToString() => $"{{Left={Left},Top={Top},Right={Right},Bottom={Bottom}}}";
 

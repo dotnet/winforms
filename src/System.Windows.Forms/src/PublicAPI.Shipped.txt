@@ -703,17 +703,17 @@ override System.Windows.Forms.ProgressBar.ToString() -> string!
 ~override System.Windows.Forms.RichTextBox.Text.set -> void
 override System.Windows.Forms.Screen.Equals(object? obj) -> bool
 override System.Windows.Forms.Screen.ToString() -> string!
-~override System.Windows.Forms.ScrollableControl.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.ScrollableControl.DockPaddingEdges.Equals(object other) -> bool
-~override System.Windows.Forms.ScrollableControl.DockPaddingEdges.ToString() -> string
-~override System.Windows.Forms.ScrollableControl.DockPaddingEdgesConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext context, object value, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
-~override System.Windows.Forms.ScrollableControl.DockPaddingEdgesConverter.GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
-~override System.Windows.Forms.ScrollableControl.OnLayout(System.Windows.Forms.LayoutEventArgs levent) -> void
-~override System.Windows.Forms.ScrollableControl.OnMouseWheel(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.ScrollableControl.OnPaddingChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ScrollableControl.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.ScrollableControl.OnRightToLeftChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ScrollableControl.OnVisibleChanged(System.EventArgs e) -> void
+override System.Windows.Forms.ScrollableControl.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.ScrollableControl.DockPaddingEdges.Equals(object? other) -> bool
+override System.Windows.Forms.ScrollableControl.DockPaddingEdges.ToString() -> string!
+override System.Windows.Forms.ScrollableControl.DockPaddingEdgesConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext? context, object! value, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection!
+override System.Windows.Forms.ScrollableControl.DockPaddingEdgesConverter.GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
+override System.Windows.Forms.ScrollableControl.OnLayout(System.Windows.Forms.LayoutEventArgs! levent) -> void
+override System.Windows.Forms.ScrollableControl.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.ScrollableControl.OnPaddingChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ScrollableControl.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.ScrollableControl.OnRightToLeftChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ScrollableControl.OnVisibleChanged(System.EventArgs! e) -> void
 ~override System.Windows.Forms.SplitContainer.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.SplitContainer.BackgroundImage.set -> void
 ~override System.Windows.Forms.SplitContainer.BindingContext.get -> System.Windows.Forms.BindingContext
@@ -2320,10 +2320,10 @@ System.Windows.Forms.PrintDialog.PrinterSettings.set -> void
 ~System.Windows.Forms.RichTextBox.UndoActionName.get -> string
 ~System.Windows.Forms.SaveFileDialog.OpenFile() -> System.IO.Stream
 System.Windows.Forms.Screen.DeviceName.get -> string!
-~System.Windows.Forms.ScrollableControl.DockPadding.get -> System.Windows.Forms.ScrollableControl.DockPaddingEdges
-~System.Windows.Forms.ScrollableControl.HorizontalScroll.get -> System.Windows.Forms.HScrollProperties
-~System.Windows.Forms.ScrollableControl.ScrollControlIntoView(System.Windows.Forms.Control activeControl) -> void
-~System.Windows.Forms.ScrollableControl.VerticalScroll.get -> System.Windows.Forms.VScrollProperties
+System.Windows.Forms.ScrollableControl.DockPadding.get -> System.Windows.Forms.ScrollableControl.DockPaddingEdges!
+System.Windows.Forms.ScrollableControl.HorizontalScroll.get -> System.Windows.Forms.HScrollProperties!
+System.Windows.Forms.ScrollableControl.ScrollControlIntoView(System.Windows.Forms.Control! activeControl) -> void
+System.Windows.Forms.ScrollableControl.VerticalScroll.get -> System.Windows.Forms.VScrollProperties!
 ~System.Windows.Forms.SplitContainer.Controls.get -> System.Windows.Forms.Control.ControlCollection
 ~System.Windows.Forms.SplitContainer.OnSplitterMoved(System.Windows.Forms.SplitterEventArgs e) -> void
 ~System.Windows.Forms.SplitContainer.OnSplitterMoving(System.Windows.Forms.SplitterCancelEventArgs e) -> void
@@ -3307,8 +3307,8 @@ virtual System.Windows.Forms.ProgressBar.OnRightToLeftLayoutChanged(System.Event
 ~virtual System.Windows.Forms.RichTextBox.OnProtected(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.RichTextBox.OnSelectionChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.RichTextBox.OnVScroll(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ScrollableControl.OnScroll(System.Windows.Forms.ScrollEventArgs se) -> void
-~virtual System.Windows.Forms.ScrollableControl.ScrollToControl(System.Windows.Forms.Control activeControl) -> System.Drawing.Point
+virtual System.Windows.Forms.ScrollableControl.OnScroll(System.Windows.Forms.ScrollEventArgs! se) -> void
+virtual System.Windows.Forms.ScrollableControl.ScrollToControl(System.Windows.Forms.Control! activeControl) -> System.Drawing.Point
 ~virtual System.Windows.Forms.Splitter.OnSplitterMoved(System.Windows.Forms.SplitterEventArgs sevent) -> void
 ~virtual System.Windows.Forms.Splitter.OnSplitterMoving(System.Windows.Forms.SplitterEventArgs sevent) -> void
 ~virtual System.Windows.Forms.TabControl.GetItems() -> object[]
@@ -10156,7 +10156,7 @@ System.Windows.Forms.ScrollableControl.DockPaddingEdgesConverter.DockPaddingEdge
 System.Windows.Forms.ScrollableControl.GetScrollState(int bit) -> bool
 System.Windows.Forms.ScrollableControl.HScroll.get -> bool
 System.Windows.Forms.ScrollableControl.HScroll.set -> void
-System.Windows.Forms.ScrollableControl.Scroll -> System.Windows.Forms.ScrollEventHandler
+System.Windows.Forms.ScrollableControl.Scroll -> System.Windows.Forms.ScrollEventHandler?
 System.Windows.Forms.ScrollableControl.ScrollableControl() -> void
 System.Windows.Forms.ScrollableControl.SetAutoScrollMargin(int x, int y) -> void
 System.Windows.Forms.ScrollableControl.SetDisplayRectLocation(int x, int y) -> void
