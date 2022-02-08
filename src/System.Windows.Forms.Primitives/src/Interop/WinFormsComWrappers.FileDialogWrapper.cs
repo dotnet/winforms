@@ -122,6 +122,7 @@ internal partial class Interop
 
             void Shell32.IFileDialog.SetFileName(string pszName)
             {
+                ArgumentNullException.ThrowIfNull(pszName);
                 fixed (char* pszName_local = pszName)
                 {
                     ((delegate* unmanaged<IntPtr, char*, HRESULT>)(*(*(void***)_wrappedInstance + 15)))
@@ -145,6 +146,7 @@ internal partial class Interop
 
             void Shell32.IFileDialog.SetTitle(string pszTitle)
             {
+                ArgumentNullException.ThrowIfNull(pszTitle);
                 fixed (char* pszTitle_local = pszTitle)
                 {
                     ((delegate* unmanaged<IntPtr, char*, HRESULT>)(*(*(void***)_wrappedInstance + 17)))
@@ -154,6 +156,7 @@ internal partial class Interop
 
             HRESULT Shell32.IFileDialog.SetOkButtonLabel(string pszText)
             {
+                ArgumentNullException.ThrowIfNull(pszText);
                 fixed (char* pszText_local = pszText)
                 {
                     return ((delegate* unmanaged<IntPtr, char*, HRESULT>)(*(*(void***)_wrappedInstance + 18)))
@@ -163,6 +166,7 @@ internal partial class Interop
 
             HRESULT Shell32.IFileDialog.SetFileNameLabel(string pszLabel)
             {
+                ArgumentNullException.ThrowIfNull(pszLabel);
                 fixed (char* pszLabel_local = pszLabel)
                 {
                     return ((delegate* unmanaged<IntPtr, char*, HRESULT>)(*(*(void***)_wrappedInstance + 19)))
@@ -187,6 +191,7 @@ internal partial class Interop
 
             void Shell32.IFileDialog.SetDefaultExtension(string pszDefaultExtension)
             {
+                ArgumentNullException.ThrowIfNull(pszDefaultExtension);
                 fixed (char* pszDefaultExtension_local = pszDefaultExtension)
                 {
                     ((delegate* unmanaged<IntPtr, char*, HRESULT>)(*(*(void***)_wrappedInstance + 22)))
