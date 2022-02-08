@@ -135,52 +135,40 @@ internal partial class Interop
 
             HRESULT Shell32.IFileSaveDialog.SetSaveAsItem(Shell32.IShellItem psi)
             {
-                HRESULT result;
                 IntPtr psi_local = WinFormsComWrappers.Instance.GetComPointer(psi, IID.IShellItem);
-                result = ((delegate* unmanaged<IntPtr, IntPtr, HRESULT>)(*(*(void***)_wrappedInstance + 27)))
+                return ((delegate* unmanaged<IntPtr, IntPtr, HRESULT>)(*(*(void***)_wrappedInstance + 27)))
                     (_wrappedInstance, psi_local);
-                return result;
             }
 
             HRESULT Shell32.IFileSaveDialog.SetProperties(IntPtr pStore)
             {
-                HRESULT result;
-                result = ((delegate* unmanaged<IntPtr, IntPtr, HRESULT>)(*(*(void***)_wrappedInstance + 28)))
+                return ((delegate* unmanaged<IntPtr, IntPtr, HRESULT>)(*(*(void***)_wrappedInstance + 28)))
                     (_wrappedInstance, pStore);
-                return result;
             }
 
             HRESULT Shell32.IFileSaveDialog.SetCollectedProperties(IntPtr pList, BOOL fAppendDefault)
             {
-                HRESULT result;
-                result = ((delegate* unmanaged<IntPtr, IntPtr, BOOL, HRESULT>)(*(*(void***)_wrappedInstance + 29)))
+                return ((delegate* unmanaged<IntPtr, IntPtr, BOOL, HRESULT>)(*(*(void***)_wrappedInstance + 29)))
                     (_wrappedInstance, pList, fAppendDefault);
-                return result;
             }
 
             HRESULT Shell32.IFileSaveDialog.GetProperties(out IntPtr ppStore)
             {
-                HRESULT result;
                 fixed (IntPtr* ppStore_local = &ppStore)
                 {
-                    result = ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 30)))
+                    return ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 30)))
                         (_wrappedInstance, ppStore_local);
                 }
-
-                return result;
             }
 
             HRESULT Shell32.IFileSaveDialog.ApplyProperties(Shell32.IShellItem psi, IntPtr pStore, ref IntPtr hwnd, IntPtr pSink)
             {
-                HRESULT result;
                 IntPtr psi_local = WinFormsComWrappers.Instance.GetComPointer(psi, IID.IShellItem);
                 fixed (IntPtr* hwnd_local = &hwnd)
                 {
-                    result = ((delegate* unmanaged<IntPtr, IntPtr, IntPtr, IntPtr*, IntPtr, HRESULT>)(*(*(void***)_wrappedInstance + 31)))
+                    return ((delegate* unmanaged<IntPtr, IntPtr, IntPtr, IntPtr*, IntPtr, HRESULT>)(*(*(void***)_wrappedInstance + 31)))
                         (_wrappedInstance, psi_local, pStore, hwnd_local, pSink);
                 }
-
-                return result;
             }
         }
     }

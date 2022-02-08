@@ -137,25 +137,19 @@ internal partial class Interop
 
             void Shell32.IFileOpenDialog.GetResults(out Shell32.IShellItemArray? ppenum)
             {
-                HRESULT result;
                 IntPtr ppenum_local;
-                result = ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 27)))
-                    (_wrappedInstance, &ppenum_local);
+                ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 27)))
+                    (_wrappedInstance, &ppenum_local).ThrowIfFailed();
                 ppenum = ppenum_local == IntPtr.Zero ? null : (Shell32.IShellItemArray)Marshal.GetObjectForIUnknown(ppenum_local);
-                if (result.Failed())
-                {
-                    Marshal.ThrowExceptionForHR((int)result);
-                }
             }
 
             HRESULT Shell32.IFileOpenDialog.GetSelectedItems(out Shell32.IShellItemArray? ppsai)
             {
                 IntPtr ppsai_local;
-                HRESULT retVal;
-                retVal = ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 28)))
+                HRESULT result = ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 28)))
                     (_wrappedInstance, &ppsai_local);
                 ppsai = ppsai_local == IntPtr.Zero ? null : (Shell32.IShellItemArray)Marshal.GetObjectForIUnknown(ppsai_local);
-                return retVal;
+                return result;
             }
         }
     }
