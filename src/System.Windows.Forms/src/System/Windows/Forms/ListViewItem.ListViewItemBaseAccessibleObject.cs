@@ -168,7 +168,6 @@ namespace System.Windows.Forms
                 => propertyID switch
                 {
                     UiaCore.UIA.AutomationIdPropertyId => AutomationId,
-                    UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ListItemControlTypeId,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => OwningListItemFocused,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,

@@ -216,11 +216,9 @@ namespace System.Windows.Forms
                  => propertyID switch
                  {
                      UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ListItemControlTypeId,
-                     UiaCore.UIA.AccessKeyPropertyId => string.Empty,
                      UiaCore.UIA.HasKeyboardFocusPropertyId => _owningListBox.Focused && _owningListBox.FocusedIndex == CurrentIndex,
                      UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                      UiaCore.UIA.IsEnabledPropertyId => _owningListBox.Enabled,
-                     UiaCore.UIA.IsPasswordPropertyId => false,
                      UiaCore.UIA.NativeWindowHandlePropertyId => _owningListBox.IsHandleCreated ? _owningListBox.Handle : IntPtr.Zero,
                      _ => base.GetPropertyValue(propertyID)
                  };

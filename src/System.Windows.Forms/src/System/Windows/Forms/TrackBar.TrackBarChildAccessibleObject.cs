@@ -73,10 +73,8 @@ namespace System.Windows.Forms
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
                     UiaCore.UIA.IsEnabledPropertyId => OwningTrackBar.Enabled,
-                    UiaCore.UIA.IsPasswordPropertyId => false,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => false,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => false,
-                    UiaCore.UIA.AccessKeyPropertyId => string.Empty,
                     _ => base.GetPropertyValue(propertyID)
                 };
 

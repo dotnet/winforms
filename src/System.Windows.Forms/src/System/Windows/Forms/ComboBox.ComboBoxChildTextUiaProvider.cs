@@ -115,15 +115,12 @@ namespace System.Windows.Forms
                 {
                     case UiaCore.UIA.ControlTypePropertyId:
                         return UiaCore.UIA.TextControlTypeId;
-                    case UiaCore.UIA.AccessKeyPropertyId:
-                        return string.Empty;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return _owner.Focused;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
                     case UiaCore.UIA.IsEnabledPropertyId:
                         return _owner.Enabled;
-                    case UiaCore.UIA.IsPasswordPropertyId:
                     case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
                     default:

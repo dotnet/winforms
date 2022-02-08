@@ -121,8 +121,6 @@ namespace System.Windows.Forms
                         return BoundingRectangle;
                     case UiaCore.UIA.ControlTypePropertyId:
                         return UiaCore.UIA.ListItemControlTypeId;
-                    case UiaCore.UIA.AccessKeyPropertyId:
-                        return KeyboardShortcut ?? string.Empty;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return _owningComboBox.Focused && _owningComboBox.SelectedIndex == GetCurrentIndex();
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
@@ -133,8 +131,6 @@ namespace System.Windows.Forms
                         return true;
                     case UiaCore.UIA.IsContentElementPropertyId:
                         return true;
-                    case UiaCore.UIA.IsPasswordPropertyId:
-                        return false;
                     case UiaCore.UIA.SelectionItemIsSelectedPropertyId:
                         return (State & AccessibleStates.Selected) != 0;
                     case UiaCore.UIA.SelectionItemSelectionContainerPropertyId:

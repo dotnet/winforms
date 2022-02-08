@@ -286,10 +286,6 @@ namespace System.Windows.Forms
                         return false;
                     case UiaCore.UIA.IsContentElementPropertyId:
                         return true;
-                    case UiaCore.UIA.IsPasswordPropertyId:
-                        return false;
-                    case UiaCore.UIA.AccessKeyPropertyId:
-                        return string.Empty;
                 }
 
                 return base.GetPropertyValue(propertyId);

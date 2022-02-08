@@ -87,7 +87,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
                     UiaCore.UIA.IsEnabledPropertyId => !IsReadOnly,
                     UiaCore.UIA.ClassNamePropertyId => Owner.GetType().ToString(),
-                    UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
                     _ => base.GetPropertyValue(propertyID),
                 };
 

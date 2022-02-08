@@ -425,6 +425,9 @@ namespace System.Windows.Forms
                 UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId => !string.IsNullOrEmpty(DefaultAction) ? DefaultAction : null,
                 UiaCore.UIA.LegacyIAccessibleNamePropertyId => !string.IsNullOrEmpty(Name) ? Name : null,
                 UiaCore.UIA.ValueValuePropertyId => !string.IsNullOrEmpty(Value) ? Value : null,
+                UiaCore.UIA.IsPasswordPropertyId => false,
+                UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
+                UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
                 _ => null
             };
 
