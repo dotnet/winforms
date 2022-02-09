@@ -110,7 +110,7 @@ stages:
       name: Windows_x86
       targetArchitecture: x86
       skipTests: $(SkipTests)
-      helixPublicTargetQueues: Windows.10.Arm64.Client21H1.Open # W7 / W8.1 / W11 ?
+      helixPublicTargetQueues: Windows.10.Amd64.Client21H1.Open # W7 / W8.1 / W11 ?
       helixInternalTargetQueues: Windows.10.Amd64.Client21H1 # W7 / W8.1 / W11 ?
 
   # Windows arm64
