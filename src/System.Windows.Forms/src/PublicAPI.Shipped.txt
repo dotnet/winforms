@@ -598,12 +598,12 @@ override System.Windows.Forms.ListControl.OnBindingContextChanged(System.EventAr
 ~override System.Windows.Forms.NumericUpDown.Text.get -> string
 ~override System.Windows.Forms.NumericUpDown.Text.set -> void
 ~override System.Windows.Forms.NumericUpDown.ToString() -> string
-~override System.Windows.Forms.Panel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.Panel.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.Panel.OnResize(System.EventArgs eventargs) -> void
-~override System.Windows.Forms.Panel.Text.get -> string
-~override System.Windows.Forms.Panel.Text.set -> void
-~override System.Windows.Forms.Panel.ToString() -> string
+override System.Windows.Forms.Panel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.Panel.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.Panel.OnResize(System.EventArgs! eventargs) -> void
+override System.Windows.Forms.Panel.Text.get -> string!
+override System.Windows.Forms.Panel.Text.set -> void
+override System.Windows.Forms.Panel.ToString() -> string!
 ~override System.Windows.Forms.PictureBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.PictureBox.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.PictureBox.Font.get -> System.Drawing.Font
@@ -9591,16 +9591,16 @@ System.Windows.Forms.PaintEventArgs.Graphics.get -> System.Drawing.Graphics!
 System.Windows.Forms.PaintEventArgs.PaintEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipRect) -> void
 System.Windows.Forms.PaintEventHandler
 System.Windows.Forms.Panel
-System.Windows.Forms.Panel.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.Panel.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.Panel.BorderStyle.get -> System.Windows.Forms.BorderStyle
 System.Windows.Forms.Panel.BorderStyle.set -> void
-System.Windows.Forms.Panel.KeyDown -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.Panel.KeyPress -> System.Windows.Forms.KeyPressEventHandler
-System.Windows.Forms.Panel.KeyUp -> System.Windows.Forms.KeyEventHandler
+System.Windows.Forms.Panel.KeyDown -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.Panel.KeyPress -> System.Windows.Forms.KeyPressEventHandler?
+System.Windows.Forms.Panel.KeyUp -> System.Windows.Forms.KeyEventHandler?
 System.Windows.Forms.Panel.Panel() -> void
 System.Windows.Forms.Panel.TabStop.get -> bool
 System.Windows.Forms.Panel.TabStop.set -> void
-System.Windows.Forms.Panel.TextChanged -> System.EventHandler
+System.Windows.Forms.Panel.TextChanged -> System.EventHandler?
 System.Windows.Forms.PictureBox
 System.Windows.Forms.PictureBox.BorderStyle.get -> System.Windows.Forms.BorderStyle
 System.Windows.Forms.PictureBox.BorderStyle.set -> void
