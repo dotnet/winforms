@@ -158,7 +158,7 @@ internal partial class Interop
                 var result = Marshal.QueryInterface(_wrappedInstance, ref targetInterface, out var thisPtr);
                 if (result != 0)
                 {
-                    throw new System.InvalidCastException();
+                    throw new InvalidCastException();
                 }
 
                 IntPtr pszText_local = IntPtr.Zero;
