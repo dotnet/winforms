@@ -16,7 +16,7 @@ namespace System.Windows.Forms
 
             internal ControlNativeWindow(Control control)
             {
-                _control = control;
+                _control = control.OrThrowIfNull();
                 WindowTarget = this;
             }
 
