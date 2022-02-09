@@ -115,7 +115,7 @@ internal partial class Interop
             {
                 IntPtr ppsi_local;
                 HRESULT result = ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 14)))
-                    (_wrappedInstance, &ppsi_local).ThrowIfFailed();
+                    (_wrappedInstance, &ppsi_local);
                 ppsi = ppsi_local == IntPtr.Zero ? null : (Shell32.IShellItem)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppsi_local, CreateObjectFlags.Unwrap);
                 return result;
             }
@@ -133,7 +133,7 @@ internal partial class Interop
             void Shell32.IFileDialog.GetFileName(out string? pszName)
             {
                 IntPtr pszName_local;
-                HRESULT result = ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 16)))
+                ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 16)))
                     (_wrappedInstance, &pszName_local).ThrowIfFailed();
                 pszName = Marshal.PtrToStringUni(pszName_local);
                 Marshal.FreeCoTaskMem(pszName_local);
