@@ -13,9 +13,6 @@ using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
-#if DEBUG
-using System.Text.RegularExpressions;
-#endif
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using static Interop;
@@ -4738,7 +4735,7 @@ namespace System.Windows.Forms
         private void SnapFocus(IntPtr otherHwnd)
         {
 #if DEBUG
-            Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, !Regex.IsMatch(Environment.StackTrace, "FocusInternal"), "who is setting focus to us?");
+            Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, $"{!Environment.StackTrace.Contains("FocusInternal")}", "who is setting focus to us?");
 #endif
             // we need to know who sent us focus so we know who to send it back to later.
 
