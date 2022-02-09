@@ -36,6 +36,7 @@ variables:
     - group: DotNet-Winforms-SDLValidation-Params
     - group: DotNet-Blob-Feed
     - group: DotNet-Symbol-Server-Pats
+    - group: DotNet-HelixApi-Access
   - ${{ if ne(variables['System.TeamProject'], 'internal') }}:
     - name: _InternalRuntimeDownloadArgs
       value: ''
@@ -61,6 +62,16 @@ variables:
       value: ''
     - name: _Sign
       value: false
+    # needed for helix
+    - name: _HelixSource
+      value: official/winforms
+    - ${{ if eq(variables['isPR'], 'true') }}:
+      - name: _HelixSource
+        value: pr/winforms
+    - name: _HelixCreator
+      value: winforms                     # public helix jobs must have a creator
+    - name: _HelixAccessToken
+      value: ''                           # public helix jobs can't use an access token
 
   # Set up non-PR build from internal project
   - ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
@@ -90,6 +101,8 @@ stages:
       name: Windows_x64
       targetArchitecture: x64
       skipTests: $(SkipTests)
+      helixPublicTargetQueues: Windows.10.Amd64.Client21H1.Open # W7 / W8.1 / W11 ?
+      helixInternalTargetQueues: Windows.10.Amd64.Client21H1 # W7 / W8.1 / W11 ?
 
   # Windows x86
   - template: /eng/pipelines/build.yml
@@ -97,6 +110,8 @@ stages:
       name: Windows_x86
       targetArchitecture: x86
       skipTests: $(SkipTests)
+      helixPublicTargetQueues: Windows.10.Arm64.Client21H1.Open # W7 / W8.1 / W11 ?
+      helixInternalTargetQueues: Windows.10.Amd64.Client21H1 # W7 / W8.1 / W11 ?
 
   # Windows arm64
   - template: /eng/pipelines/build.yml
@@ -104,6 +119,8 @@ stages:
       name: Windows_arm64
       targetArchitecture: arm64
       skipTests: $(SkipTests)
+      helixPublicTargetQueues: Windows.10.Arm64.Open # W11 ?
+      helixInternalTargetQueues: Windows.10.Arm64 # W11 ?
 
 
 - ${{ if and(eq(variables['EnableLoc'], 'true'), ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
