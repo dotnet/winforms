@@ -6,6 +6,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 
 internal partial class Interop
 {
@@ -19,6 +20,7 @@ internal partial class Interop
         private const int S_OK = (int)Interop.HRESULT.S_OK;
         private static readonly ComInterfaceEntry* s_streamEntry = InitializeIStreamEntry();
         private static readonly ComInterfaceEntry* s_fileDialogEventsEntry = InitializeIFileDialogEventsEntry();
+        private static readonly ComInterfaceEntry* s_enumStringEntry = InitializeIEnumStringEntry();
 
         internal static WinFormsComWrappers Instance { get; } = new WinFormsComWrappers();
 
@@ -48,6 +50,18 @@ internal partial class Interop
             return wrapperEntry;
         }
 
+        private static ComInterfaceEntry* InitializeIEnumStringEntry()
+        {
+            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
+
+            IntPtr iEnumStringVtbl = IEnumStringVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+
+            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
+            wrapperEntry->IID = IID.IEnumString;
+            wrapperEntry->Vtable = iEnumStringVtbl;
+            return wrapperEntry;
+        }
+
         protected override unsafe ComInterfaceEntry* ComputeVtables(object obj, CreateComInterfaceFlags flags, out int count)
         {
             if (obj is Interop.Ole32.IStream)
@@ -60,6 +74,12 @@ internal partial class Interop
             {
                 count = 1;
                 return s_fileDialogEventsEntry;
+            }
+
+            if (obj is IEnumString)
+            {
+                count = 1;
+                return s_enumStringEntry;
             }
 
             throw new NotImplementedException($"ComWrappers for type {obj.GetType()} not implemented.");
@@ -109,6 +129,14 @@ internal partial class Interop
                 return new ShellItemArrayWrapper(shellItemArrayComObject);
             }
 
+            Guid autoCompleteIID = IID.IAutoComplete2;
+            hr = Marshal.QueryInterface(externalComObject, ref autoCompleteIID, out IntPtr autoCompleteComObject);
+            if (hr == S_OK)
+            {
+                Marshal.Release(externalComObject);
+                return new AutoCompleteWrapper(autoCompleteComObject);
+            }
+
             throw new NotImplementedException();
         }
 
@@ -143,6 +171,7 @@ internal partial class Interop
             {
                 ShellItemWrapper siw => siw.Instance,
                 FileOpenDialogWrapper fodw => fodw.Instance,
+                FileSaveDialogWrapper fsdw => fsdw.Instance,
                 _ => GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None),
             };
         }
