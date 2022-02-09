@@ -35,7 +35,7 @@ namespace System.Windows.Forms
                     // Special case: If an explicit name has been set in the AccessibleName property, use that.
                     // Note: Any non-null value in AccessibleName overrides the default accessible name logic,
                     // even an empty string (this is the only way to *force* the accessible name to be blank).
-                    string name = _owner.AccessibleName;
+                    string? name = _owner.AccessibleName;
                     if (name is not null)
                     {
                         return name;
