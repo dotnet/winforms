@@ -41,12 +41,7 @@ namespace System.Windows.Forms
                         return name;
                     }
 
-                    if (_owner.OwnerItem is not null && _owner.OwnerItem.AccessibilityObject.Name is not null)
-                    {
-                        name = _owner.OwnerItem.AccessibilityObject.Name;
-                    }
-
-                    return name;
+                    return _owner.OwnerItem?.AccessibilityObject.Name;
                 }
 
                 set
