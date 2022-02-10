@@ -26,6 +26,8 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionPictureBox))]
     public partial class PictureBox : Control, ISupportInitialize
     {
+        private static readonly bool s_useWebRequest = AppContext.TryGetSwitch("System.Resources.UseWebRequest", out bool useWebRequest) ? useWebRequest : true;
+
         /// <summary>
         ///  The type of border this control will have.
         /// </summary>
@@ -480,12 +482,19 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-#pragma warning disable SYSLIB0014 // Type or member is obsolete
-                    using (WebClient wc = new WebClient())
-#pragma warning restore SYSLIB0014 // Type or member is obsolete
+                    if (UseWebRequest())
                     {
-                        _uriImageStream = wc.OpenRead(uri.ToString());
-                        img = Image.FromStream(_uriImageStream);
+#pragma warning disable SYSLIB0014 // Type or member is obsolete
+                        using (WebClient wc = new WebClient())
+#pragma warning restore SYSLIB0014 // Type or member is obsolete
+                        {
+                            _uriImageStream = wc.OpenRead(uri.ToString());
+                            img = Image.FromStream(_uriImageStream);
+                        }
+                    }
+                    else
+                    {
+                        throw new NotSupportedException("Loading from remove location disabled.");
                     }
                 }
             }
@@ -549,7 +558,75 @@ namespace System.Windows.Forms
             _pictureBoxState[CancellationPendingState] = false;
             _contentLength = -1;
             _tempDownloadStream = new MemoryStream();
+            if (UseWebRequest())
+            {
+                StartLoadViaWebRequest();
+            }
+            else
+            {
+                var uri = CalculateUri(_imageLocation);
+                if (uri.IsFile)
+                {
+                    LoadFromFileAsync();
+                }
+                else
+                {
+                    throw new NotSupportedException("Loading from remove location disabled.");
+                }
+            }
+        }
 
+        private async void LoadFromFileAsync()
+        {
+            try
+            {
+                using var stream = File.OpenRead(_imageLocation);
+                int bytesRead = -1;
+                do
+                {
+                    var memory = new Memory<byte>(_readBuffer);
+                    bytesRead = await stream.ReadAsync(memory, CancellationToken.None);
+                    if (bytesRead > 0)
+                    {
+                        _totalBytesRead += bytesRead;
+                        _tempDownloadStream.Write(_readBuffer, 0, bytesRead);
+
+                        // Report progress thus far, but only if we know total length.
+                        if (_contentLength != -1)
+                        {
+                            int progress = (int)(100 * (((float)_totalBytesRead) / ((float)_contentLength)));
+                            if (_currentAsyncLoadOperation is not null)
+                            {
+                                _currentAsyncLoadOperation.Post(_loadProgressDelegate,
+                                        new ProgressChangedEventArgs(progress, null));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        _tempDownloadStream.Seek(0, SeekOrigin.Begin);
+                        if (_currentAsyncLoadOperation is not null)
+                        {
+                            _currentAsyncLoadOperation.Post(_loadProgressDelegate,
+                                        new ProgressChangedEventArgs(100, null));
+                        }
+
+                        PostCompleted(null, false);
+                    }
+                }
+                while (bytesRead != 0);
+                PostCompleted(null, false);
+            }
+            catch (Exception error)
+            {
+                // Since this is on a non-UI thread, we catch any exceptions and
+                // pass them back as data to the UI-thread.
+                PostCompleted(error, false);
+            }
+        }
+
+        private void StartLoadViaWebRequest()
+        {
 #pragma warning disable SYSLIB0014 // Type or member is obsolete
             WebRequest req = WebRequest.Create(CalculateUri(_imageLocation));
 #pragma warning restore SYSLIB0014 // Type or member is obsolete
@@ -1193,5 +1270,8 @@ namespace System.Windows.Forms
 
             _pictureBoxState[InInitializationState] = false;
         }
+
+        // The Linker is also capable of replacing the value of this method when the application is being trimmed.
+        private static bool UseWebRequest() => s_useWebRequest;
     }
 }
