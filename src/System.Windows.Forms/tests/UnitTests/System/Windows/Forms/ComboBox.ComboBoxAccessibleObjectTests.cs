@@ -110,11 +110,15 @@ namespace System.Windows.Forms.Tests
         {
             const string name = "Test text";
             using ComboBox comboBox = new();
+
+            Assert.Null(comboBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
+            Assert.Null(comboBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
+
             comboBox.AccessibleName = name;
             comboBox.CreateControl(false);
-            object actual = comboBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
 
-            Assert.Equal(name, actual);
+            Assert.Equal(name, comboBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
+            Assert.Equal(name, comboBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
             Assert.True(comboBox.IsHandleCreated);
         }
 
@@ -345,6 +349,18 @@ namespace System.Windows.Forms.Tests
 
             Assert.True(comboBox.IsHandleCreated);
             Assert.Equal(expectedAction, comboBox.AccessibilityObject.DefaultAction);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ComboBoxAccessibleObject_DefaultAction_IfHandleIsCreated_ReturnsExpected_TestData))]
+        public void ComboBoxAccessibleObject_GetPropertyValue_IfHandleIsCreated_ReturnsExpected(ComboBoxStyle style, bool droppedDown, string expectedAction)
+        {
+            using ComboBox comboBox = new() { DropDownStyle = style };
+            comboBox.CreateControl();
+            comboBox.DroppedDown = droppedDown;
+
+            Assert.Equal(expectedAction, comboBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+            Assert.True(comboBox.IsHandleCreated);
         }
 
         [WinFormsFact]

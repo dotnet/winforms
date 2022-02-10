@@ -64,7 +64,6 @@ namespace System.Windows.Forms
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ImageControlTypeId,
-                    UiaCore.UIA.IsInvokePatternAvailablePropertyId => true,
                     _ => base.GetPropertyValue(propertyID)
                 };
 

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms
 {
     public partial class ToolStripLabel
@@ -38,16 +36,6 @@ namespace System.Windows.Forms
                 {
                     base.DoDefaultAction();
                 }
-            }
-
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.LegacyIAccessibleStatePropertyId)
-                {
-                    return State;
-                }
-
-                return base.GetPropertyValue(propertyID);
             }
 
             public override AccessibleRole Role

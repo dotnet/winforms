@@ -40,6 +40,7 @@ namespace WinformsControlsTest
             this.column3 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.column4 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.column5 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.column6 = new System.Windows.Forms.DataGridViewImageColumn();
             this.currentDPILabel1 = new WinformsControlsTest.CurrentDPILabel();
             this.changeFontButton = new System.Windows.Forms.Button();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
@@ -65,7 +66,8 @@ namespace WinformsControlsTest
             this.column2,
             this.column5,
             this.column3,
-            this.column4});
+            this.column4,
+            this.column6});
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Info;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -106,6 +108,11 @@ namespace WinformsControlsTest
             this.column5.HeaderText = "Hidden Column";
             this.column5.Name = "column5";
             this.column5.Visible = false;
+            // 
+            // column6
+            // 
+            this.column6.HeaderText = "Column6";
+            this.column6.Name = "column6";
             // 
             // currentDPILabel1
             // 
@@ -206,6 +213,7 @@ namespace WinformsControlsTest
         private System.Windows.Forms.DataGridViewCheckBoxColumn column3;
         private System.Windows.Forms.DataGridViewComboBoxColumn column4;
         private System.Windows.Forms.DataGridViewComboBoxColumn column5;
+        private System.Windows.Forms.DataGridViewImageColumn column6;
         private WinformsControlsTest.CurrentDPILabel currentDPILabel1;
         private System.Windows.Forms.Button changeFontButton;
         private System.Windows.Forms.NumericUpDown numericUpDown1;

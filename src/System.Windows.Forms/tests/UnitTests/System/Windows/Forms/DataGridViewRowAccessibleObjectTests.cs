@@ -2366,6 +2366,21 @@ namespace System.Windows.Forms.Tests
             Assert.False(dataGridView.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetPropertyValue_ValueValuePropertyId_ReturnsExpected()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.AutoGenerateColumns = false;
+            DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "col1";
+            dataGridView.Columns.Add(column);
+            dataGridView.Rows.Add(new DataGridViewRow());
+            dataGridView.Rows[0].Cells[0].Value = "test1";
+
+            Assert.Equal("test1", dataGridView.Rows[0].AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
         private class SubDataGridViewCell : DataGridViewCell
         {
         }

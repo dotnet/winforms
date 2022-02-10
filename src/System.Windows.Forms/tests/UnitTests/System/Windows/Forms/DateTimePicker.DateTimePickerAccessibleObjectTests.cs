@@ -101,13 +101,15 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void DateTimePickerAccessibleObject_IsExpandCollapsePatternSupported_Supported()
+        public void DateTimePickerAccessibleObject_GetPropertyValue_ReturnsExpected()
         {
             using DateTimePicker dateTimePicker = new();
+            DateTime dt = new DateTime(2000, 1, 1);
+            dateTimePicker.TestAccessor().Dynamic._text = dt.ToLongDateString();
+            AccessibleObject accessibleObject = dateTimePicker.AccessibilityObject;
 
-            var actual = (bool)dateTimePicker.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId);
-
-            Assert.True(actual);
+            Assert.Equal(dt.ToLongDateString(), accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+            Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId));
             Assert.False(dateTimePicker.IsHandleCreated);
         }
 

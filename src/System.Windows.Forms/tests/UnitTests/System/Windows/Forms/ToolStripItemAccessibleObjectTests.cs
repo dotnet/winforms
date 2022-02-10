@@ -166,6 +166,15 @@ namespace System.Windows.Forms.Tests
             Assert.True(actual >= UIA.ButtonControlTypeId && actual <= UIA.AppBarControlTypeId);
         }
 
+        [WinFormsFact]
+        public void ToolStripItemAccessibleObject_GetPropertyValue_ReturnsExpected()
+        {
+            using ToolStripItem toolStripItem = new SubToolStripItem();
+
+            Assert.False((bool)toolStripItem.AccessibilityObject.GetPropertyValue(UIA.IsExpandCollapsePatternAvailablePropertyId));
+            Assert.Null(toolStripItem.AccessibilityObject.GetPropertyValue(UIA.ValueValuePropertyId));
+        }
+
         private class SubToolStripItem : ToolStripItem
         {
             public SubToolStripItem() : base()

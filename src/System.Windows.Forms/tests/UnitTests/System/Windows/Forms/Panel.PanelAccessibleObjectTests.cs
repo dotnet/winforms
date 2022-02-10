@@ -63,6 +63,7 @@ namespace System.Windows.Forms.Tests
         [InlineData((int)UIA.AutomationIdPropertyId, "Panel1")]
         [InlineData((int)UIA.ControlTypePropertyId, UIA.PaneControlTypeId)] // If AccessibleRole is Default
         [InlineData((int)UIA.IsKeyboardFocusablePropertyId, false)]
+        [InlineData((int)UIA.LegacyIAccessibleDefaultActionPropertyId, null)]
         public void PanelAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
         {
             using Panel panel = new()

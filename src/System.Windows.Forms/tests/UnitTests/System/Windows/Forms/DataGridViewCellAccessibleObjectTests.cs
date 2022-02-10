@@ -149,6 +149,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [MemberData(nameof(DefaultAction_TestData))]
+        public void DataGridViewCellAccessibleObject_GetPropertyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected(AccessibleObject accessibleObject, string expected)
+        {
+            Assert.Equal(expected, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId) ?? string.Empty);
+        }
+
+        [WinFormsTheory]
         [MemberData(nameof(NoOwner_TestData))]
         public void DataGridViewCellAccessibleObject_DefaultAction_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
@@ -642,10 +649,9 @@ namespace System.Windows.Forms.Tests
 
             DataGridViewCellAccessibleObject accessibleObject = new(dataGridView.Rows[0].Cells[0]);
 
-            object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
-
             //DataGridViewCellAccessibleObject name couldn't be set, it's gathered dynamically in the Name property accessor
-            Assert.Equal(accessibleObject.Name, actual);
+            Assert.Equal(accessibleObject.Name, accessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
+            Assert.Equal(accessibleObject.Name, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
             Assert.False(dataGridView.IsHandleCreated);
         }
 

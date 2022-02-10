@@ -74,6 +74,8 @@ namespace System.Windows.Forms
                 }
             }
 
+            public override string Name => base.Name ?? SR.ComboBoxEditDefaultAccessibleName;
+
             /// <summary>
             ///  Gets the accessible property value.
             /// </summary>
@@ -85,8 +87,6 @@ namespace System.Windows.Forms
                 {
                     case UiaCore.UIA.ControlTypePropertyId:
                         return UiaCore.UIA.EditControlTypeId;
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name ?? SR.ComboBoxEditDefaultAccessibleName;
                     case UiaCore.UIA.AccessKeyPropertyId:
                         return string.Empty;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:

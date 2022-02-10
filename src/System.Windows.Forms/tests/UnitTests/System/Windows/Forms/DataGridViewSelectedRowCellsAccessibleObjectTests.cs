@@ -4,6 +4,7 @@
 
 using System.Reflection;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -195,6 +196,24 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, accessibleObject.GetChildCount());
             Assert.Equal(selecetedCell1.AccessibilityObject, accessibleObject.Navigate(AccessibleNavigation.FirstChild));
             Assert.Equal(selecetedCell1.AccessibilityObject, accessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewSelectedRowCellsAccessibleObject_GetPropertyValue_ValueValuePropertyId_ReturnsExpected()
+        {
+            using DataGridView control = new();
+            control.Columns.Add("Column 1", "Header text 1");
+            control.Columns.Add("Column 2", "Header text 2");
+            control.Rows.Add("Row1");
+            DataGridViewRow row = control.Rows[0];
+            DataGridViewCell selecetedCell1 = row.Cells[0];
+            selecetedCell1.Selected = true;
+            Type type = typeof(DataGridViewRow)
+                .GetNestedType("DataGridViewSelectedRowCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
+            var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { row }, null);
+
+            Assert.Equal("Selected Row Cells", accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
             Assert.False(control.IsHandleCreated);
         }
     }

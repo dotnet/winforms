@@ -265,6 +265,19 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void ListViewItemBaseAccessibleObject_GetPropertyValue_ReturnsExpected()
+        {
+            using ListView control = new();
+            ListViewItem item = new();
+            control.Items.Add(item);
+
+            Assert.Equal(SR.AccessibleActionDoubleClick, item.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+            Assert.Null(item.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+            Assert.True((bool)item.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsInvokePatternAvailablePropertyId));
+            Assert.False(control.IsHandleCreated);
+        }
+
         [WinFormsTheory]
         [InlineData((int)UiaCore.UIA.ScrollItemPatternId)]
         [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]

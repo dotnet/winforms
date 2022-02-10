@@ -105,8 +105,6 @@ namespace System.Windows.Forms
                             return UiaCore.UIA.ImageControlTypeId;
                         case UiaCore.UIA.BoundingRectanglePropertyId:
                             return BoundingRectangle;
-                        case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
-                            return State;
                         case UiaCore.UIA.NativeWindowHandlePropertyId:
                             return _window.Handle;
                         default:

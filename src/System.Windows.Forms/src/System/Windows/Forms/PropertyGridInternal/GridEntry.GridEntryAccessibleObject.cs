@@ -340,9 +340,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     UiaCore.UIA.IsEnabledPropertyId => true,
                     UiaCore.UIA.AutomationIdPropertyId => GetHashCode().ToString(),
                     UiaCore.UIA.IsPasswordPropertyId => false,
-                    UiaCore.UIA.IsGridItemPatternAvailablePropertyId or UiaCore.UIA.IsTableItemPatternAvailablePropertyId => true,
-                    UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
-                    UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId => DefaultAction,
                     _ => base.GetPropertyValue(propertyID),
                 };
             }

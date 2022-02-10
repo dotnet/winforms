@@ -27,9 +27,8 @@ namespace System.Windows.Forms.Tests
             using ToolStripNumericUpDown toolStripNumericUpDown = new ToolStripNumericUpDown();
             // AccessibleRole is not set = Default
 
-            object actual = toolStripNumericUpDown.Control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-
-            Assert.Equal(UiaCore.UIA.SpinnerControlTypeId, actual);
+            Assert.Equal(UiaCore.UIA.SpinnerControlTypeId, toolStripNumericUpDown.Control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+            Assert.Null(toolStripNumericUpDown.Control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
         }
 
         [WinFormsTheory]

@@ -92,5 +92,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
             Assert.False(listBox.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void ListBoxItemAccessibleObject_GetPropertyValue_ValueValuePropertyId_ReturnsExpected()
+        {
+            using ListBox listBox = new ListBox();
+            AccessibleObject accessibleObject = listBox.AccessibilityObject;
+
+            Assert.Null(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+            Assert.False(listBox.IsHandleCreated);
+        }
     }
 }

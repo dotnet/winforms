@@ -43,6 +43,20 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void RadioButtonAccessibleObject_GetProperyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected()
+        {
+            using var radioButton = new RadioButton
+            {
+                AccessibleDefaultActionDescription = "TestActionDescription"
+            };
+
+            var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
+
+            Assert.Equal("TestActionDescription", radioButtonAccessibleObject.GetPropertyValue(UIA.LegacyIAccessibleDefaultActionPropertyId));
+            Assert.False(radioButton.IsHandleCreated);
+        }
+
+        [WinFormsFact]
         public void RadioButtonAccessibleObject_Description_ReturnsExpected()
         {
             using var radioButton = new RadioButton

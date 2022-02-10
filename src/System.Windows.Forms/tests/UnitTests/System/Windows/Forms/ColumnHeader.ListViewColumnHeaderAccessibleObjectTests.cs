@@ -35,6 +35,8 @@ namespace System.Windows.Forms.Tests
             ListViewColumnHeaderAccessibleObject accessibleObject = new(columnHeader);
 
             Assert.Equal(testText, accessibleObject.GetPropertyValue(UIA.NamePropertyId));
+            Assert.Equal(testText, accessibleObject.GetPropertyValue(UIA.LegacyIAccessibleNamePropertyId));
+            Assert.Null(accessibleObject.GetPropertyValue(UIA.LegacyIAccessibleDefaultActionPropertyId));
         }
     }
 }

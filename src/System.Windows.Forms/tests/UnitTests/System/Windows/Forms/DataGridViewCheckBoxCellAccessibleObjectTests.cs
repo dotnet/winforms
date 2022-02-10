@@ -61,6 +61,31 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(UiaCore.UIA.CheckBoxControlTypeId, accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
         }
 
+        [WinFormsFact]
+        public void DataGridViewCheckBoxCellAccessibleObject_IsTogglePatternAvailablePropertyId_ReturnsExpected()
+        {
+            var accessibleObject = new DataGridViewCheckBoxCellAccessibleObject(null);
+
+            Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsTogglePatternAvailablePropertyId));
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCheckBoxCellAccessibleObject_GetPropertyValue_ValueValuePropertyId_ReturnsExpected()
+        {
+            using DataGridView control = new();
+            control.Columns.Add(new DataGridViewCheckBoxColumn());
+            var cell = control.Rows[0].Cells[0];
+            control.CreateControl();
+            var accessibleObject = (DataGridViewCheckBoxCellAccessibleObject)cell.AccessibilityObject;
+
+            Assert.False(bool.Parse(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId).ToString()));
+
+            accessibleObject.DoDefaultAction();
+
+            Assert.True(bool.Parse(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId).ToString()));
+            Assert.True(control.IsHandleCreated);
+        }
+
         [WinFormsTheory]
         [InlineData((int)UiaCore.UIA.TogglePatternId)]
         public void DataGridViewCheckBoxCellAccessibleObject_IsPatternSupported_ReturnsExpected(int patternId)
@@ -122,6 +147,30 @@ namespace System.Windows.Forms.Tests
             }
 
             Assert.Equal(expected, accessibleObject.DefaultAction);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DataGridViewCheckBoxCellAccessibleObject_DefaultAction_TestData))]
+        public void DataGridViewCheckBoxCellAccessibleObject_GetPropertyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected(bool isChecked, string expected)
+        {
+            using DataGridView control = new();
+            control.Columns.Add(new DataGridViewCheckBoxColumn());
+            control.Rows.Add(new DataGridViewRow());
+            var cell = control.Rows[0].Cells[0];
+            // Create control to check cell if it is needed.
+            control.CreateControl();
+
+            var accessibleObject = (DataGridViewCheckBoxCellAccessibleObject)cell.AccessibilityObject;
+            if (isChecked)
+            {
+                // Make sure that default action is check as a default case.
+                Assert.Equal(SR.DataGridView_AccCheckBoxCellDefaultActionCheck, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+                // Check it.
+                accessibleObject.DoDefaultAction();
+            }
+
+            Assert.Equal(expected, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
             Assert.True(control.IsHandleCreated);
         }
 

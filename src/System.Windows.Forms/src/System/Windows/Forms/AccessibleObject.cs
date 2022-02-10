@@ -401,6 +401,11 @@ namespace System.Windows.Forms
                 UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
                 UiaCore.UIA.HelpTextPropertyId => Help ?? string.Empty,
                 UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
+                UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
+                UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
+                UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId => !string.IsNullOrEmpty(DefaultAction) ? DefaultAction : null,
+                UiaCore.UIA.LegacyIAccessibleNamePropertyId => !string.IsNullOrEmpty(Name) ? Name : null,
+                UiaCore.UIA.ValueValuePropertyId => !string.IsNullOrEmpty(Value) ? Value : null,
                 _ => null
             };
 
@@ -421,6 +426,9 @@ namespace System.Windows.Forms
                     case AccessibleRole.ButtonDropDownGrid:
                     case AccessibleRole.Clock:
                     case AccessibleRole.SplitButton:
+                    case AccessibleRole.CheckButton:
+                    case AccessibleRole.Cell:
+                    case AccessibleRole.ListItem:
                         return true;
 
                     case AccessibleRole.Default:
