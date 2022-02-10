@@ -68,7 +68,7 @@ override System.Windows.Forms.ButtonBase.Text.set -> void
 ~override System.Windows.Forms.CheckedListBox.OnKeyPress(System.Windows.Forms.KeyPressEventArgs e) -> void
 ~override System.Windows.Forms.CheckedListBox.OnMeasureItem(System.Windows.Forms.MeasureItemEventArgs e) -> void
 ~override System.Windows.Forms.CheckedListBox.OnSelectedIndexChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ColorDialog.ToString() -> string
+override System.Windows.Forms.ColorDialog.ToString() -> string!
 ~override System.Windows.Forms.ColumnHeaderConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
 ~override System.Windows.Forms.ColumnHeaderConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
 ~override System.Windows.Forms.ComboBox.BackgroundImage.get -> System.Drawing.Image
@@ -1391,8 +1391,8 @@ System.Windows.Forms.ButtonBase.ImageList.set -> void
 ~System.Windows.Forms.CheckedListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.CheckedListBox owner) -> void
 ~System.Windows.Forms.CheckedListBox.ValueMember.get -> string
 ~System.Windows.Forms.CheckedListBox.ValueMember.set -> void
-~System.Windows.Forms.ColorDialog.CustomColors.get -> int[]
-~System.Windows.Forms.ColorDialog.CustomColors.set -> void
+System.Windows.Forms.ColorDialog.CustomColors.get -> int[]!
+System.Windows.Forms.ColorDialog.CustomColors.set -> void
 ~System.Windows.Forms.ComboBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection
 ~System.Windows.Forms.ComboBox.AutoCompleteCustomSource.set -> void
 ~System.Windows.Forms.ComboBox.DataSource.get -> object
