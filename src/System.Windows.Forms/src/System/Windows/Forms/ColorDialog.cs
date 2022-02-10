@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -76,6 +75,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.CDcustomColorsDescr))]
+        [AllowNull]
         public int[] CustomColors
         {
             get => (int[])_customColors.Clone();
@@ -84,7 +84,7 @@ namespace System.Windows.Forms
                 int length = value is null ? 0 : Math.Min(value.Length, 16);
                 if (length > 0)
                 {
-                    Array.Copy(value, 0, _customColors, 0, length);
+                    Array.Copy(value!, 0, _customColors, 0, length);
                 }
 
                 for (int i = length; i < 16; i++)
