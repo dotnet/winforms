@@ -3,10 +3,12 @@
   <Import Project="..\..\Directory.Build.targets" />
 
   <PropertyGroup>
-    <_PowerShellExe Condition="'$(_PowerShellExe)' == ''">C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</_PowerShellExe>
+    <_PowerShellExe Condition="'$(_PowerShellExe)' == ''">%WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe</_PowerShellExe>
     <_ScriptLocation Condition="'$(_ScriptLocation)' == ''">$(MSBuildProjectDirectory)\sdk\dotnet-windowsdesktop\UpdateFileClassification.ps1</_ScriptLocation>
     <_ManifestFile>$(MSBuildProjectDirectory)\sdk\dotnet-windowsdesktop\System.Windows.Forms.FileClassification.props</_ManifestFile>
     <GenerateManifest>false</GenerateManifest>
+    <_IsServicingRelease>false</_IsServicingRelease>
+    <_IsServicingRelease Condition="'$(PreReleaseVersionLabel)' == 'servicing'">true</_IsServicingRelease>
   </PropertyGroup>
 
   <!-- 
@@ -23,7 +25,7 @@
     <Error Text="'$(_ManifestFile)' is missing." Condition="!Exists('$(_ManifestFile)')" />
 
     <Exec
-        Command="$(_PowerShellExe) -NonInteractive -ExecutionPolicy Unrestricted -Command &quot;&amp; { &amp;&apos;$(_ScriptLocation)&apos; &apos;@(_NuspecFile)&apos; &apos;$(_ManifestFile)&apos; $(GenerateManifest) } &quot;"
+        Command="$(_PowerShellExe) -NonInteractive -ExecutionPolicy Unrestricted -Command &quot;&amp; { &amp;&apos;$(_ScriptLocation)&apos; &apos;@(_NuspecFile)&apos; &apos;$(_ManifestFile)&apos; $(GenerateManifest) &apos;$(AssemblyVersion)&apos; $(_IsServicingRelease) } &quot;"
         ContinueOnError="False" />
 
   </Target>
