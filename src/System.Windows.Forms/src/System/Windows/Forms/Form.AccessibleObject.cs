@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using static Interop;
 
@@ -29,7 +27,7 @@ namespace System.Windows.Forms
 
             internal override Rectangle BoundingRectangle => _owner.IsHandleCreated ? _owner.Bounds : Rectangle.Empty;
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 return propertyID switch
                 {
@@ -43,15 +41,7 @@ namespace System.Windows.Forms
                 };
             }
 
-            internal override bool IsIAccessibleExSupported()
-            {
-                if (_owner is not null)
-                {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             public override AccessibleRole Role
             {
@@ -62,11 +52,6 @@ namespace System.Windows.Forms
                         ? role
                         : AccessibleRole.Client;
                 }
-            }
-
-            internal override void SetValue(string newValue)
-            {
-                Value = newValue;
             }
         }
     }
