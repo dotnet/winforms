@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -15,41 +13,41 @@ namespace System.Windows.Forms
         ///  Retrieves the data associated with the specified data format, using
         ///  autoConvert to determine whether to convert the data to the  format.
         /// </summary>
-        object GetData(string format, bool autoConvert);
+        object? GetData(string format, bool autoConvert);
 
         /// <summary>
         ///  Retrieves the data associated with the specified data format.
         /// </summary>
-        object GetData(string format);
+        object? GetData(string format);
 
         /// <summary>
         ///  Retrieves the data associated with the specified class type format.
         /// </summary>
-        object GetData(Type format);
+        object? GetData(Type format);
 
         /// <summary>
         ///  Stores the specified data and its associated format in  this instance,
         ///  using autoConvert to specify whether the data can be converted to
         ///  another format.
         /// </summary>
-        void SetData(string format, bool autoConvert, object data);
+        void SetData(string format, bool autoConvert, object? data);
 
         /// <summary>
         ///  Stores the specified data and its associated format in this instance.
         /// </summary>
-        void SetData(string format, object data);
+        void SetData(string format, object? data);
 
         /// <summary>
         ///  Stores the specified data and its associated class type in this
         ///  instance.
         /// </summary>
-        void SetData(Type format, object data);
+        void SetData(Type format, object? data);
 
         /// <summary>
         ///  Stores the specified data in this instance, using the class of the
         ///  data for the format.
         /// </summary>
-        void SetData(object data);
+        void SetData(object? data);
 
         /// <summary>
         ///  Determines whether data stored in this instance is  associated with the

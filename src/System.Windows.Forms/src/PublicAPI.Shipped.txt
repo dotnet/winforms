@@ -1695,8 +1695,8 @@ System.Windows.Forms.ButtonBase.ImageList.set -> void
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue2.get -> object
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.DataGridViewSortCompareEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, object cellValue1, object cellValue2, int rowIndex1, int rowIndex2) -> void
-~System.Windows.Forms.DataObject.DataObject(object data) -> void
-~System.Windows.Forms.DataObject.DataObject(string format, object data) -> void
+System.Windows.Forms.DataObject.DataObject(object! data) -> void
+System.Windows.Forms.DataObject.DataObject(string! format, object! data) -> void
 ~System.Windows.Forms.DateTimePicker.CalendarFont.get -> System.Drawing.Font
 ~System.Windows.Forms.DateTimePicker.CalendarFont.set -> void
 ~System.Windows.Forms.DateTimePicker.CustomFormat.get -> string
@@ -1910,18 +1910,18 @@ System.Windows.Forms.ButtonBase.ImageList.set -> void
 ~System.Windows.Forms.IDataGridViewEditingControl.EditingControlFormattedValue.set -> void
 ~System.Windows.Forms.IDataGridViewEditingControl.EditingPanelCursor.get -> System.Windows.Forms.Cursor
 ~System.Windows.Forms.IDataGridViewEditingControl.GetEditingControlFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
-~System.Windows.Forms.IDataObject.GetData(string format) -> object
-~System.Windows.Forms.IDataObject.GetData(string format, bool autoConvert) -> object
-~System.Windows.Forms.IDataObject.GetData(System.Type format) -> object
-~System.Windows.Forms.IDataObject.GetDataPresent(string format) -> bool
-~System.Windows.Forms.IDataObject.GetDataPresent(string format, bool autoConvert) -> bool
-~System.Windows.Forms.IDataObject.GetDataPresent(System.Type format) -> bool
-~System.Windows.Forms.IDataObject.GetFormats() -> string[]
-~System.Windows.Forms.IDataObject.GetFormats(bool autoConvert) -> string[]
-~System.Windows.Forms.IDataObject.SetData(object data) -> void
-~System.Windows.Forms.IDataObject.SetData(string format, bool autoConvert, object data) -> void
-~System.Windows.Forms.IDataObject.SetData(string format, object data) -> void
-~System.Windows.Forms.IDataObject.SetData(System.Type format, object data) -> void
+System.Windows.Forms.IDataObject.GetData(string! format) -> object?
+System.Windows.Forms.IDataObject.GetData(string! format, bool autoConvert) -> object?
+System.Windows.Forms.IDataObject.GetData(System.Type! format) -> object?
+System.Windows.Forms.IDataObject.GetDataPresent(string! format) -> bool
+System.Windows.Forms.IDataObject.GetDataPresent(string! format, bool autoConvert) -> bool
+System.Windows.Forms.IDataObject.GetDataPresent(System.Type! format) -> bool
+System.Windows.Forms.IDataObject.GetFormats() -> string![]!
+System.Windows.Forms.IDataObject.GetFormats(bool autoConvert) -> string![]!
+System.Windows.Forms.IDataObject.SetData(object? data) -> void
+System.Windows.Forms.IDataObject.SetData(string! format, bool autoConvert, object? data) -> void
+System.Windows.Forms.IDataObject.SetData(string! format, object? data) -> void
+System.Windows.Forms.IDataObject.SetData(System.Type! format, object? data) -> void
 ~System.Windows.Forms.IDropTarget.OnDragDrop(System.Windows.Forms.DragEventArgs e) -> void
 ~System.Windows.Forms.IDropTarget.OnDragEnter(System.Windows.Forms.DragEventArgs e) -> void
 ~System.Windows.Forms.IDropTarget.OnDragLeave(System.EventArgs e) -> void
@@ -3107,29 +3107,29 @@ System.Windows.Forms.ScrollableControl.VerticalScroll.get -> System.Windows.Form
 ~virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlFormattedValue.set -> void
 ~virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingPanelCursor.get -> System.Windows.Forms.Cursor
 ~virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.GetEditingControlFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
-~virtual System.Windows.Forms.DataObject.GetAudioStream() -> System.IO.Stream
-~virtual System.Windows.Forms.DataObject.GetData(string format) -> object
-~virtual System.Windows.Forms.DataObject.GetData(string format, bool autoConvert) -> object
-~virtual System.Windows.Forms.DataObject.GetData(System.Type format) -> object
-~virtual System.Windows.Forms.DataObject.GetDataPresent(string format) -> bool
-~virtual System.Windows.Forms.DataObject.GetDataPresent(string format, bool autoConvert) -> bool
-~virtual System.Windows.Forms.DataObject.GetDataPresent(System.Type format) -> bool
-~virtual System.Windows.Forms.DataObject.GetFileDropList() -> System.Collections.Specialized.StringCollection
-~virtual System.Windows.Forms.DataObject.GetFormats() -> string[]
-~virtual System.Windows.Forms.DataObject.GetFormats(bool autoConvert) -> string[]
-~virtual System.Windows.Forms.DataObject.GetImage() -> System.Drawing.Image
-~virtual System.Windows.Forms.DataObject.GetText() -> string
-~virtual System.Windows.Forms.DataObject.GetText(System.Windows.Forms.TextDataFormat format) -> string
-~virtual System.Windows.Forms.DataObject.SetAudio(byte[] audioBytes) -> void
-~virtual System.Windows.Forms.DataObject.SetAudio(System.IO.Stream audioStream) -> void
-~virtual System.Windows.Forms.DataObject.SetData(object data) -> void
-~virtual System.Windows.Forms.DataObject.SetData(string format, bool autoConvert, object data) -> void
-~virtual System.Windows.Forms.DataObject.SetData(string format, object data) -> void
-~virtual System.Windows.Forms.DataObject.SetData(System.Type format, object data) -> void
-~virtual System.Windows.Forms.DataObject.SetFileDropList(System.Collections.Specialized.StringCollection filePaths) -> void
-~virtual System.Windows.Forms.DataObject.SetImage(System.Drawing.Image image) -> void
-~virtual System.Windows.Forms.DataObject.SetText(string textData) -> void
-~virtual System.Windows.Forms.DataObject.SetText(string textData, System.Windows.Forms.TextDataFormat format) -> void
+virtual System.Windows.Forms.DataObject.GetAudioStream() -> System.IO.Stream?
+virtual System.Windows.Forms.DataObject.GetData(string! format) -> object?
+virtual System.Windows.Forms.DataObject.GetData(string! format, bool autoConvert) -> object?
+virtual System.Windows.Forms.DataObject.GetData(System.Type! format) -> object?
+virtual System.Windows.Forms.DataObject.GetDataPresent(string! format) -> bool
+virtual System.Windows.Forms.DataObject.GetDataPresent(string! format, bool autoConvert) -> bool
+virtual System.Windows.Forms.DataObject.GetDataPresent(System.Type! format) -> bool
+virtual System.Windows.Forms.DataObject.GetFileDropList() -> System.Collections.Specialized.StringCollection!
+virtual System.Windows.Forms.DataObject.GetFormats() -> string![]!
+virtual System.Windows.Forms.DataObject.GetFormats(bool autoConvert) -> string![]!
+virtual System.Windows.Forms.DataObject.GetImage() -> System.Drawing.Image?
+virtual System.Windows.Forms.DataObject.GetText() -> string!
+virtual System.Windows.Forms.DataObject.GetText(System.Windows.Forms.TextDataFormat format) -> string!
+virtual System.Windows.Forms.DataObject.SetAudio(byte[]! audioBytes) -> void
+virtual System.Windows.Forms.DataObject.SetAudio(System.IO.Stream! audioStream) -> void
+virtual System.Windows.Forms.DataObject.SetData(object? data) -> void
+virtual System.Windows.Forms.DataObject.SetData(string! format, bool autoConvert, object? data) -> void
+virtual System.Windows.Forms.DataObject.SetData(string! format, object? data) -> void
+virtual System.Windows.Forms.DataObject.SetData(System.Type! format, object? data) -> void
+virtual System.Windows.Forms.DataObject.SetFileDropList(System.Collections.Specialized.StringCollection! filePaths) -> void
+virtual System.Windows.Forms.DataObject.SetImage(System.Drawing.Image! image) -> void
+virtual System.Windows.Forms.DataObject.SetText(string! textData) -> void
+virtual System.Windows.Forms.DataObject.SetText(string! textData, System.Windows.Forms.TextDataFormat format) -> void
 ~virtual System.Windows.Forms.DateTimePicker.OnCloseUp(System.EventArgs eventargs) -> void
 ~virtual System.Windows.Forms.DateTimePicker.OnDropDown(System.EventArgs eventargs) -> void
 ~virtual System.Windows.Forms.DateTimePicker.OnFormatChanged(System.EventArgs e) -> void
