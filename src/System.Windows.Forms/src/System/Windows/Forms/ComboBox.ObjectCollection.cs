@@ -400,6 +400,11 @@ namespace System.Windows.Forms
                         _owner.UpdateText();
                     }
                 }
+                else if (InnerList.Count == 0)
+                {
+                    // Text is not cleared when the last item is removed. This is native behavior that must be compensated
+                    _owner.UpdateText();
+                }
 
                 if (_owner.AutoCompleteSource == AutoCompleteSource.ListItems)
                 {

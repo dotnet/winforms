@@ -1933,7 +1933,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(2)]
-        public void Combox_SelectedItem_HandlesItemRemoval(int selectedIndex)
+        public void ComboBox_SelectedItem_HandlesItemRemoval(int selectedIndex)
         {
             using ComboBox comboBox = new();
             for (int i = 0; i < 3; i++)
@@ -1951,6 +1951,66 @@ namespace System.Windows.Forms.Tests
             Assert.Null(comboBox.SelectedItem);
             Assert.Empty(comboBox.Text);
             Assert.False(comboBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ComboBox_SelectedItem_HandlesLastItemRemoval(bool createHandle)
+        {
+            using ComboBox comboBox = new();
+            if (createHandle)
+            {
+                Assert.True(comboBox.Handle != IntPtr.Zero);
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                comboBox.Items.Add(i.ToString());
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                comboBox.SelectedItem = comboBox.Items[0];
+                Assert.Equal(0, comboBox.SelectedIndex);
+                Assert.Equal(i.ToString(), comboBox.SelectedItem);
+                Assert.Equal(i.ToString(), comboBox.Text);
+
+                comboBox.Items.Remove(comboBox.SelectedItem);
+                Assert.Equal(-1, comboBox.SelectedIndex);
+                Assert.Null(comboBox.SelectedItem);
+                Assert.Empty(comboBox.Text);
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ComboBox_SelectedItem_TextDoesNotChangeOnRemoveOther(bool createHandle)
+        {
+            using ComboBox comboBox = new();
+            if (createHandle)
+            {
+                Assert.True(comboBox.Handle != IntPtr.Zero);
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                comboBox.Items.Add(i.ToString());
+            }
+
+            comboBox.SelectedItem = comboBox.Items[1];
+            Assert.Equal(1, comboBox.SelectedIndex);
+            Assert.Equal("1", comboBox.SelectedItem);
+            Assert.Equal("1", comboBox.Text);
+
+            comboBox.Items.RemoveAt(2);
+            Assert.Equal(1, comboBox.SelectedIndex);
+            Assert.Equal("1", comboBox.SelectedItem);
+            Assert.Equal("1", comboBox.Text);
+
+            comboBox.Items.RemoveAt(0);
+            Assert.Equal(0, comboBox.SelectedIndex);
+            Assert.Equal("1", comboBox.SelectedItem);
+            Assert.Equal("1", comboBox.Text);
         }
 
         [WinFormsFact]
