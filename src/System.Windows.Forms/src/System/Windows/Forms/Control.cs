@@ -12041,7 +12041,7 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"In WmGetObject, this = {GetType().FullName}, lParam = {m.LParamInternal}");
 
-            if (m.MsgInternal == User32.WM.GETOBJECT && m.LParamInternal == NativeMethods.UiaRootObjectId && SupportsUiaProviders)
+            if (m.LParamInternal == NativeMethods.UiaRootObjectId && SupportsUiaProviders)
             {
                 // If the requested object identifier is UiaRootObjectId,
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
