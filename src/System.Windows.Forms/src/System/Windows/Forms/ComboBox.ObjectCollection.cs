@@ -383,6 +383,11 @@ namespace System.Windows.Forms
                 if (_owner.IsHandleCreated)
                 {
                     _owner.NativeRemoveAt(index);
+                    if (InnerList.Count == 1)
+                    {
+                        // Text is not cleared when the last item is removed. This is native behavior that must be compensated
+                        _owner.UpdateText();
+                    }
                 }
 
                 OwnerComboBoxAccessibleObject?.ItemAccessibleObjects.Remove(InnerList[index]);
@@ -399,11 +404,6 @@ namespace System.Windows.Forms
                         _owner._selectedIndex = -1;
                         _owner.UpdateText();
                     }
-                }
-                else if (InnerList.Count == 0)
-                {
-                    // Text is not cleared when the last item is removed. This is native behavior that must be compensated
-                    _owner.UpdateText();
                 }
 
                 if (_owner.AutoCompleteSource == AutoCompleteSource.ListItems)
