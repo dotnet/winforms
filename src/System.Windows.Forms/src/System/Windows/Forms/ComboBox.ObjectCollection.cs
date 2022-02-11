@@ -380,29 +380,44 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                if (_owner.IsHandleCreated)
-                {
-                    _owner.NativeRemoveAt(index);
-                    if (InnerList.Count == 1)
-                    {
-                        // Text is not cleared when the last item is removed. This is native behavior that must be compensated
-                        _owner.UpdateText();
-                    }
-                }
+                // Must get this before InnerList.RemoveAt
+                string text = _owner.Text;
 
                 OwnerComboBoxAccessibleObject?.ItemAccessibleObjects.Remove(InnerList[index]);
                 InnerList.RemoveAt(index);
 
-                if (!_owner.IsHandleCreated)
+                if (_owner.IsHandleCreated)
+                {
+                    int selectedIndex = _owner.SelectedIndex;
+                    _owner.NativeRemoveAt(index);
+
+                    if (index == selectedIndex)
+                    {
+                        if (InnerList.Count == 0)
+                        {
+                            // Text is not cleared when the last item is removed. This is native behavior that must be compensated
+                            _owner.UpdateText();
+                        }
+                        else if (!string.IsNullOrEmpty(text))
+                        {
+                            _owner.OnTextChanged(EventArgs.Empty);
+                        }
+
+                        _owner.OnSelectedItemChanged(EventArgs.Empty);
+                        _owner.OnSelectedIndexChanged(EventArgs.Empty);
+                    }
+                }
+                else
                 {
                     if (index < _owner._selectedIndex)
                     {
+                        // Don't raise events: the selected item merely changed position in the collection
                         _owner._selectedIndex--;
                     }
                     else if (index == _owner._selectedIndex)
                     {
-                        _owner._selectedIndex = -1;
-                        _owner.UpdateText();
+                        // Raise events
+                        _owner.SelectedIndex = -1;
                     }
                 }
 

@@ -1285,8 +1285,7 @@ namespace System.Windows.Forms
                     {
                         SelectedIndex = -1;
                     }
-                    else if (value is not null &&
-                        (selectedItem is null || (string.Compare(value, GetItemText(selectedItem), false, CultureInfo.CurrentCulture) != 0)))
+                    else if (selectedItem is null || (string.Compare(value, GetItemText(selectedItem), false, CultureInfo.CurrentCulture) != 0))
                     {
                         int index = FindStringIgnoreCase(value);
 
