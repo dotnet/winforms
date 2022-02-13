@@ -6749,11 +6749,7 @@ namespace System.Windows.Forms
 
                             RetrieveVirtualItemEventArgs rVI = new RetrieveVirtualItemEventArgs(dispInfo->item.iItem);
                             OnRetrieveVirtualItem(rVI);
-                            ListViewItem? lvItem = rVI.Item;
-                            if (lvItem is null)
-                            {
-                                throw new InvalidOperationException(SR.ListViewVirtualItemRequired);
-                            }
+                            ListViewItem lvItem = rVI.Item ?? throw new InvalidOperationException(SR.ListViewVirtualItemRequired);
 
                             lvItem.SetItemIndex(this, dispInfo->item.iItem);
                             if ((dispInfo->item.mask & LVIF.TEXT) != 0)
