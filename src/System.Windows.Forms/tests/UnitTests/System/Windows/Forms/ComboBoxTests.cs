@@ -1974,6 +1974,111 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ComboBox_SelectedItem_HandlesItemsClear(bool createHandle)
+        {
+            using ComboBox comboBox = new();
+            if (createHandle)
+            {
+                Assert.True(comboBox.Handle != IntPtr.Zero);
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                comboBox.Items.Add(i.ToString());
+            }
+
+            comboBox.SelectedItem = comboBox.Items[1];
+            Assert.Equal(1, comboBox.SelectedIndex);
+            Assert.Equal("1", comboBox.SelectedItem);
+            Assert.Equal("1", comboBox.Text);
+
+            int eventCount = 0;
+            int textChangedOrder = 0;
+            int selectedValueChangedOrder = 0;
+            int selectedIndexChangedOrder = 0;
+
+            comboBox.TextChanged += (_, _) => textChangedOrder = ++eventCount;
+            comboBox.SelectedValueChanged += (_, _) => selectedValueChangedOrder = ++eventCount;
+            comboBox.SelectedIndexChanged += (_, _) => selectedIndexChangedOrder = ++eventCount;
+
+            comboBox.Items.Clear();
+            Assert.Equal(-1, comboBox.SelectedIndex);
+            Assert.Null(comboBox.SelectedItem);
+            Assert.Empty(comboBox.Text);
+            Assert.Equal(1, textChangedOrder);
+            Assert.Equal(2, selectedValueChangedOrder);
+            Assert.Equal(3, selectedIndexChangedOrder);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ComboBox_SelectedItem_HandlesItemsClear_NoEventsIfNoItemSelected(bool createHandle)
+        {
+            using ComboBox comboBox = new();
+            if (createHandle)
+            {
+                Assert.True(comboBox.Handle != IntPtr.Zero);
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                comboBox.Items.Add(i.ToString());
+            }
+
+            Assert.Equal(-1, comboBox.SelectedIndex);
+            Assert.Null(comboBox.SelectedItem);
+            Assert.Empty(comboBox.Text);
+
+            int eventCount = 0;
+            int textChangedOrder = 0;
+            int selectedValueChangedOrder = 0;
+            int selectedIndexChangedOrder = 0;
+
+            comboBox.TextChanged += (_, _) => textChangedOrder = ++eventCount;
+            comboBox.SelectedValueChanged += (_, _) => selectedValueChangedOrder = ++eventCount;
+            comboBox.SelectedIndexChanged += (_, _) => selectedIndexChangedOrder = ++eventCount;
+
+            comboBox.Items.Clear();
+            Assert.Equal(0, textChangedOrder);
+            Assert.Equal(0, selectedValueChangedOrder);
+            Assert.Equal(0, selectedIndexChangedOrder);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ComboBox_SelectedItem_HandlesItemsClear_TextChangedDoesNotFireEmpty(bool createHandle)
+        {
+            using ComboBox comboBox = new();
+            if (createHandle)
+            {
+                Assert.True(comboBox.Handle != IntPtr.Zero);
+            }
+
+            comboBox.Items.Add(string.Empty);
+
+            comboBox.SelectedItem = comboBox.Items[0];
+            Assert.Equal(0, comboBox.SelectedIndex);
+
+            int eventCount = 0;
+            int textChangedOrder = 0;
+            int selectedValueChangedOrder = 0;
+            int selectedIndexChangedOrder = 0;
+
+            comboBox.TextChanged += (_, _) => textChangedOrder = ++eventCount;
+            comboBox.SelectedValueChanged += (_, _) => selectedValueChangedOrder = ++eventCount;
+            comboBox.SelectedIndexChanged += (_, _) => selectedIndexChangedOrder = ++eventCount;
+
+            comboBox.Items.Clear();
+            Assert.Equal(-1, comboBox.SelectedIndex);
+            Assert.Null(comboBox.SelectedItem);
+            Assert.Empty(comboBox.Text);
+            Assert.Equal(0, textChangedOrder);
+            Assert.Equal(1, selectedValueChangedOrder);
+            Assert.Equal(2, selectedIndexChangedOrder);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComboBox_SelectedItem_HandlesItemRemoval(bool createHandle)
         {
             using ComboBox comboBox = new();

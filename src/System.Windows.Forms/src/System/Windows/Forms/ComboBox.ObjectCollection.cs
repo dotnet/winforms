@@ -247,19 +247,33 @@ namespace System.Windows.Forms
 
             internal void ClearInternal()
             {
+                bool itemWasSelected = _owner.SelectedIndex > -1;
+                string text = _owner.Text;
+
                 if (_owner.IsHandleCreated)
                 {
                     _owner.NativeClear();
                 }
 
                 InnerList.Clear();
-
                 OwnerComboBoxAccessibleObject?.ItemAccessibleObjects.Clear();
 
                 _owner._selectedIndex = -1;
                 if (_owner.AutoCompleteSource == AutoCompleteSource.ListItems)
                 {
                     _owner.SetAutoComplete(false, true /*recreateHandle*/);
+                }
+
+                // Raise events after internal state of control is consistent
+                if (itemWasSelected)
+                {
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        _owner.UpdateText();
+                    }
+
+                    _owner.OnSelectedItemChanged(EventArgs.Empty);
+                    _owner.OnSelectedIndexChanged(EventArgs.Empty);
                 }
             }
 
