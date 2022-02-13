@@ -459,24 +459,24 @@ override System.Windows.Forms.ImageKeyConverter.GetStandardValuesSupported(Syste
 ~override System.Windows.Forms.KeysConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext context) -> System.ComponentModel.TypeConverter.StandardValuesCollection
 ~override System.Windows.Forms.KeysConverter.GetStandardValuesExclusive(System.ComponentModel.ITypeDescriptorContext context) -> bool
 ~override System.Windows.Forms.KeysConverter.GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
-~override System.Windows.Forms.Label.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.Label.BackgroundImage.set -> void
-~override System.Windows.Forms.Label.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.Label.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.Label.OnEnabledChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Label.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Label.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.Label.OnMouseEnter(System.EventArgs e) -> void
-~override System.Windows.Forms.Label.OnMouseLeave(System.EventArgs e) -> void
-~override System.Windows.Forms.Label.OnPaddingChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Label.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.Label.OnParentChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Label.OnRightToLeftChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Label.OnTextChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Label.OnVisibleChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Label.Text.get -> string
-~override System.Windows.Forms.Label.Text.set -> void
-~override System.Windows.Forms.Label.ToString() -> string
+override System.Windows.Forms.Label.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.Label.BackgroundImage.set -> void
+override System.Windows.Forms.Label.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.Label.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.Label.OnEnabledChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Label.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Label.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.Label.OnMouseEnter(System.EventArgs! e) -> void
+override System.Windows.Forms.Label.OnMouseLeave(System.EventArgs! e) -> void
+override System.Windows.Forms.Label.OnPaddingChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Label.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.Label.OnParentChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Label.OnRightToLeftChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Label.OnTextChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Label.OnVisibleChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Label.Text.get -> string!
+override System.Windows.Forms.Label.Text.set -> void
+override System.Windows.Forms.Label.ToString() -> string!
 ~override System.Windows.Forms.Layout.TableLayoutSettingsTypeConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
 ~override System.Windows.Forms.Layout.TableLayoutSettingsTypeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
 ~override System.Windows.Forms.Layout.TableLayoutSettingsTypeConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
@@ -1957,14 +1957,14 @@ System.Windows.Forms.IDataObject.SetData(System.Type! format, object? data) -> v
 ~System.Windows.Forms.ImageList.Tag.set -> void
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
 ~System.Windows.Forms.KeysConverter.Compare(object a, object b) -> int
-~System.Windows.Forms.Label.CalcImageRenderBounds(System.Drawing.Image image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> System.Drawing.Rectangle
-~System.Windows.Forms.Label.DrawImage(System.Drawing.Graphics g, System.Drawing.Image image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> void
-~System.Windows.Forms.Label.Image.get -> System.Drawing.Image
-~System.Windows.Forms.Label.Image.set -> void
-~System.Windows.Forms.Label.ImageKey.get -> string
-~System.Windows.Forms.Label.ImageKey.set -> void
-~System.Windows.Forms.Label.ImageList.get -> System.Windows.Forms.ImageList
-~System.Windows.Forms.Label.ImageList.set -> void
+System.Windows.Forms.Label.CalcImageRenderBounds(System.Drawing.Image! image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> System.Drawing.Rectangle
+System.Windows.Forms.Label.DrawImage(System.Drawing.Graphics! g, System.Drawing.Image! image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> void
+System.Windows.Forms.Label.Image.get -> System.Drawing.Image?
+System.Windows.Forms.Label.Image.set -> void
+System.Windows.Forms.Label.ImageKey.get -> string?
+System.Windows.Forms.Label.ImageKey.set -> void
+System.Windows.Forms.Label.ImageList.get -> System.Windows.Forms.ImageList?
+System.Windows.Forms.Label.ImageList.set -> void
 ~System.Windows.Forms.LayoutEventArgs.AffectedComponent.get -> System.ComponentModel.IComponent
 ~System.Windows.Forms.LayoutEventArgs.AffectedControl.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.LayoutEventArgs.AffectedProperty.get -> string
@@ -3181,7 +3181,7 @@ virtual System.Windows.Forms.DataObject.SetText(string! textData, System.Windows
 ~virtual System.Windows.Forms.HelpProvider.SetHelpNavigator(System.Windows.Forms.Control ctl, System.Windows.Forms.HelpNavigator navigator) -> void
 ~virtual System.Windows.Forms.HelpProvider.SetHelpString(System.Windows.Forms.Control ctl, string helpString) -> void
 ~virtual System.Windows.Forms.HelpProvider.SetShowHelp(System.Windows.Forms.Control ctl, bool value) -> void
-~virtual System.Windows.Forms.Label.OnTextAlignChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.Label.OnTextAlignChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Layout.LayoutEngine.InitLayout(object! child, System.Windows.Forms.BoundsSpecified specified) -> void
 virtual System.Windows.Forms.Layout.LayoutEngine.Layout(object! container, System.Windows.Forms.LayoutEventArgs! layoutEventArgs) -> bool
 ~virtual System.Windows.Forms.LayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
@@ -8735,9 +8735,9 @@ System.Windows.Forms.KeysConverter.KeysConverter() -> void
 System.Windows.Forms.Label
 System.Windows.Forms.Label.AutoEllipsis.get -> bool
 System.Windows.Forms.Label.AutoEllipsis.set -> void
-System.Windows.Forms.Label.AutoSizeChanged -> System.EventHandler
-System.Windows.Forms.Label.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.Label.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.Label.AutoSizeChanged -> System.EventHandler?
+System.Windows.Forms.Label.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.Label.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.Label.FlatStyle.get -> System.Windows.Forms.FlatStyle
 System.Windows.Forms.Label.FlatStyle.set -> void
 System.Windows.Forms.Label.ImageAlign.get -> System.Drawing.ContentAlignment
@@ -8746,17 +8746,17 @@ System.Windows.Forms.Label.ImageIndex.get -> int
 System.Windows.Forms.Label.ImageIndex.set -> void
 System.Windows.Forms.Label.ImeMode.get -> System.Windows.Forms.ImeMode
 System.Windows.Forms.Label.ImeMode.set -> void
-System.Windows.Forms.Label.ImeModeChanged -> System.EventHandler
-System.Windows.Forms.Label.KeyDown -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.Label.KeyPress -> System.Windows.Forms.KeyPressEventHandler
-System.Windows.Forms.Label.KeyUp -> System.Windows.Forms.KeyEventHandler
+System.Windows.Forms.Label.ImeModeChanged -> System.EventHandler?
+System.Windows.Forms.Label.KeyDown -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.Label.KeyPress -> System.Windows.Forms.KeyPressEventHandler?
+System.Windows.Forms.Label.KeyUp -> System.Windows.Forms.KeyEventHandler?
 System.Windows.Forms.Label.Label() -> void
 System.Windows.Forms.Label.LiveSetting.get -> System.Windows.Forms.Automation.AutomationLiveSetting
 System.Windows.Forms.Label.LiveSetting.set -> void
 System.Windows.Forms.Label.TabStop.get -> bool
 System.Windows.Forms.Label.TabStop.set -> void
-System.Windows.Forms.Label.TabStopChanged -> System.EventHandler
-System.Windows.Forms.Label.TextAlignChanged -> System.EventHandler
+System.Windows.Forms.Label.TabStopChanged -> System.EventHandler?
+System.Windows.Forms.Label.TextAlignChanged -> System.EventHandler?
 System.Windows.Forms.Label.UseCompatibleTextRendering.get -> bool
 System.Windows.Forms.Label.UseCompatibleTextRendering.set -> void
 System.Windows.Forms.Label.UseMnemonic.get -> bool
