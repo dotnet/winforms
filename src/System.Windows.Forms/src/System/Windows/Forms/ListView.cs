@@ -2993,11 +2993,11 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DeleteFileName(string fileName)
+        private void DeleteFileName(string? fileName)
         {
             if (!string.IsNullOrEmpty(fileName))
             {
-                IO.FileInfo fi = new IO.FileInfo(fileName);
+                FileInfo fi = new FileInfo(fileName);
                 if (fi.Exists)
                 {
                     // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
@@ -3008,7 +3008,7 @@ namespace System.Windows.Forms
                     {
                         fi.Delete();
                     }
-                    catch (IO.IOException) { }
+                    catch (IOException) { }
                 }
             }
         }
@@ -5216,7 +5216,7 @@ namespace System.Windows.Forms
             {
                 // it should be fine to delete the file name that was added first.
                 // if it's not fine, then increase BKIMGARRAYSIZE
-                DeleteFileName(_bkImgFileNames[0]!);
+                DeleteFileName(_bkImgFileNames[0]);
                 _bkImgFileNames[0] = _bkImgFileNames[1];
                 _bkImgFileNames[1] = _bkImgFileNames[2];
                 _bkImgFileNames[2] = _bkImgFileNames[3];
