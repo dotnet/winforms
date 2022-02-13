@@ -4748,17 +4748,11 @@ namespace System.Windows.Forms
                 ListViewItem[]? items = null;
                 ListViewItemCollection tempItems = Items;
 
-                if (tempItems is not null)
-                {
-                    items = new ListViewItem[tempItems.Count];
-                    tempItems.CopyTo(items, 0);
-                }
+                items = new ListViewItem[tempItems.Count];
+                tempItems.CopyTo(items, 0);
 
-                if (items is not null)
-                {
-                    _listViewItems = new List<ListViewItem>(items.Length);
-                    _listViewItems.AddRange(items);
-                }
+                _listViewItems = new List<ListViewItem>(items.Length);
+                _listViewItems.AddRange(items);
 
                 ListViewHandleDestroyed = true;
             }
