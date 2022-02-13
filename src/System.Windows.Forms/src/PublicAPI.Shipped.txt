@@ -434,13 +434,13 @@ override System.Windows.Forms.ColorDialog.ToString() -> string!
 ~override System.Windows.Forms.Form.Text.get -> string
 ~override System.Windows.Forms.Form.Text.set -> void
 ~override System.Windows.Forms.Form.ToString() -> string
-~override System.Windows.Forms.GroupBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.GroupBox.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.GroupBox.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.GroupBox.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.GroupBox.Text.get -> string
-~override System.Windows.Forms.GroupBox.Text.set -> void
-~override System.Windows.Forms.GroupBox.ToString() -> string
+override System.Windows.Forms.GroupBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.GroupBox.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.GroupBox.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.GroupBox.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.GroupBox.Text.get -> string!
+override System.Windows.Forms.GroupBox.Text.set -> void
+override System.Windows.Forms.GroupBox.ToString() -> string!
 ~override System.Windows.Forms.HelpProvider.ToString() -> string
 ~override System.Windows.Forms.HtmlDocument.Equals(object obj) -> bool
 ~override System.Windows.Forms.HtmlElement.Equals(object obj) -> bool
@@ -8199,27 +8199,27 @@ System.Windows.Forms.GridItemType.Category = 1 -> System.Windows.Forms.GridItemT
 System.Windows.Forms.GridItemType.Property = 0 -> System.Windows.Forms.GridItemType
 System.Windows.Forms.GridItemType.Root = 3 -> System.Windows.Forms.GridItemType
 System.Windows.Forms.GroupBox
-System.Windows.Forms.GroupBox.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.GroupBox.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.GroupBox.AutoSizeMode.get -> System.Windows.Forms.AutoSizeMode
 System.Windows.Forms.GroupBox.AutoSizeMode.set -> void
-System.Windows.Forms.GroupBox.Click -> System.EventHandler
-System.Windows.Forms.GroupBox.DoubleClick -> System.EventHandler
+System.Windows.Forms.GroupBox.Click -> System.EventHandler?
+System.Windows.Forms.GroupBox.DoubleClick -> System.EventHandler?
 System.Windows.Forms.GroupBox.FlatStyle.get -> System.Windows.Forms.FlatStyle
 System.Windows.Forms.GroupBox.FlatStyle.set -> void
 System.Windows.Forms.GroupBox.GroupBox() -> void
-System.Windows.Forms.GroupBox.KeyDown -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.GroupBox.KeyPress -> System.Windows.Forms.KeyPressEventHandler
-System.Windows.Forms.GroupBox.KeyUp -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.GroupBox.MouseClick -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.GroupBox.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.GroupBox.MouseDown -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.GroupBox.MouseEnter -> System.EventHandler
-System.Windows.Forms.GroupBox.MouseLeave -> System.EventHandler
-System.Windows.Forms.GroupBox.MouseMove -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.GroupBox.MouseUp -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.GroupBox.KeyDown -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.GroupBox.KeyPress -> System.Windows.Forms.KeyPressEventHandler?
+System.Windows.Forms.GroupBox.KeyUp -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.GroupBox.MouseClick -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.GroupBox.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.GroupBox.MouseDown -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.GroupBox.MouseEnter -> System.EventHandler?
+System.Windows.Forms.GroupBox.MouseLeave -> System.EventHandler?
+System.Windows.Forms.GroupBox.MouseMove -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.GroupBox.MouseUp -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.GroupBox.TabStop.get -> bool
 System.Windows.Forms.GroupBox.TabStop.set -> void
-System.Windows.Forms.GroupBox.TabStopChanged -> System.EventHandler
+System.Windows.Forms.GroupBox.TabStopChanged -> System.EventHandler?
 System.Windows.Forms.GroupBox.UseCompatibleTextRendering.get -> bool
 System.Windows.Forms.GroupBox.UseCompatibleTextRendering.set -> void
 System.Windows.Forms.GroupBoxRenderer
