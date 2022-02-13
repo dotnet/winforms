@@ -4664,9 +4664,9 @@ namespace System.Windows.Forms
             int columnCount = _columnHeaders is null ? 0 : _columnHeaders.Length;
             if (columnCount > 0)
             {
-                int[] indices = new int[_columnHeaders!.Length];
+                int[] indices = new int[columnCount];
                 int index = 0;
-                foreach (ColumnHeader column in _columnHeaders)
+                foreach (ColumnHeader column in _columnHeaders!)
                 {
                     indices[index] = column.DisplayIndex;
                     InsertColumnNative(index++, column);
