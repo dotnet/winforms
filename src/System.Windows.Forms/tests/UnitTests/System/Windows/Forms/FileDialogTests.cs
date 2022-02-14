@@ -810,9 +810,9 @@ namespace System.Windows.Forms.Tests
                 return RunFileDialogAction(ofn);
             }
 
-            private protected override IFileDialog CreateVistaDialog() => null;
+            private protected override Interop.WinFormsComWrappers.FileDialogWrapper CreateVistaDialog() => null;
 
-            private protected override string[] ProcessVistaFiles(IFileDialog dialog) => null;
+            private protected override string[] ProcessVistaFiles(Interop.WinFormsComWrappers.FileDialogWrapper dialog) => null;
 
             public new void OnFileOk(CancelEventArgs e) => base.OnFileOk(e);
 

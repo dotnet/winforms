@@ -6,7 +6,7 @@ internal partial class Interop
 {
     internal unsafe partial class WinFormsComWrappers
     {
-        private sealed class FileSaveDialogWrapper : FileDialogWrapper, Shell32.IFileSaveDialog
+        internal sealed class FileSaveDialogWrapper : FileDialogWrapper, Shell32.IFileSaveDialog
         {
             public FileSaveDialogWrapper(IntPtr wrappedInstance)
                 : base(wrappedInstance)

@@ -20,7 +20,7 @@ namespace System.Windows.Forms
 
             public HRESULT OnFileOk(IFileDialog pfd)
             {
-                return _ownerDialog.HandleVistaFileOk(pfd) ? HRESULT.S_OK : HRESULT.S_FALSE;
+                return _ownerDialog.HandleVistaFileOk((Interop.WinFormsComWrappers.FileDialogWrapper)pfd) ? HRESULT.S_OK : HRESULT.S_FALSE;
             }
 
             public HRESULT OnFolderChanging(IFileDialog pfd, IShellItem psiFolder)
