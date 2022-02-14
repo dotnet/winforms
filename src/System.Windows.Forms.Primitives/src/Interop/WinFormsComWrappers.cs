@@ -85,12 +85,28 @@ internal partial class Interop
                 return new FileOpenDialogWrapper(fileOpenDialogComObject);
             }
 
+            Guid fileSaveDialogIID = IID.IFileSaveDialog;
+            hr = Marshal.QueryInterface(externalComObject, ref fileSaveDialogIID, out IntPtr fileSaveDialogComObject);
+            if (hr == S_OK)
+            {
+                Marshal.Release(externalComObject);
+                return new FileSaveDialogWrapper(fileSaveDialogComObject);
+            }
+
             Guid shellItemIID = IID.IShellItem;
             hr = Marshal.QueryInterface(externalComObject, ref shellItemIID, out IntPtr shellItemComObject);
             if (hr == S_OK)
             {
                 Marshal.Release(externalComObject);
                 return new ShellItemWrapper(shellItemComObject);
+            }
+
+            Guid shellItemArrayIID = IID.IShellItemArray;
+            hr = Marshal.QueryInterface(externalComObject, ref shellItemArrayIID, out IntPtr shellItemArrayComObject);
+            if (hr == S_OK)
+            {
+                Marshal.Release(externalComObject);
+                return new ShellItemArrayWrapper(shellItemArrayComObject);
             }
 
             throw new NotImplementedException();
