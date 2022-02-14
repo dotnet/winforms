@@ -1806,7 +1806,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (value.Index == topItem!.Index)
+                if (topItem is null || value.Index == topItem.Index)
                 {
                     return;
                 }
