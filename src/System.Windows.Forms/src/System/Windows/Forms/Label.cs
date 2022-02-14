@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -47,11 +45,11 @@ namespace System.Windows.Forms
         private BitVector32 _labelState;
         private int _requestedHeight;
         private int _requestedWidth;
-        private LayoutUtils.MeasureTextCache _textMeasurementCache;
+        private LayoutUtils.MeasureTextCache? _textMeasurementCache;
 
         // Tooltip is shown only if the Text in the Label is cut.
         internal bool _showToolTip;
-        private ToolTip _textToolTip;
+        private ToolTip? _textToolTip;
 
         // This bool suggests that the User has added a toolTip to this label. In such a case we should not show the
         // AutoEllipsis tooltip.
@@ -115,7 +113,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler AutoSizeChanged
+        public new event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -168,7 +166,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.LabelBackgroundImageDescr))]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -176,7 +174,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        public new event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -195,7 +193,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -362,11 +360,11 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [SRDescription(nameof(SR.ButtonImageDescr))]
         [SRCategory(nameof(SR.CatAppearance))]
-        public Image Image
+        public Image? Image
         {
             get
             {
-                Image image = (Image)Properties.GetObject(s_propImage);
+                Image? image = (Image?)Properties.GetObject(s_propImage);
 
                 if (image is null && ImageList is not null && ImageIndexer.ActualIndex >= 0)
                 {
@@ -462,7 +460,7 @@ namespace System.Windows.Forms
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRDescription(nameof(SR.ButtonImageIndexDescr))]
         [SRCategory(nameof(SR.CatAppearance))]
-        public string ImageKey
+        public string? ImageKey
         {
             get => ImageIndexer?.Key;
             set
@@ -506,9 +504,9 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ButtonImageListDescr))]
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRCategory(nameof(SR.CatAppearance))]
-        public ImageList ImageList
+        public ImageList? ImageList
         {
-            get => (ImageList)Properties.GetObject(s_propImageList);
+            get => (ImageList?)Properties.GetObject(s_propImageList);
             set
             {
                 if (ImageList != value)
@@ -517,7 +515,7 @@ namespace System.Windows.Forms
                     EventHandler disposedHandler = new EventHandler(DetachImageList);
 
                     // Remove the previous imagelist handle recreate handler
-                    ImageList imageList = ImageList;
+                    ImageList? imageList = ImageList;
                     if (imageList is not null)
                     {
                         imageList.RecreateHandle -= recreateHandler;
@@ -597,7 +595,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public ImeMode ImeMode
+        public new ImeMode ImeMode
         {
             get => base.ImeMode;
             set => base.ImeMode = value;
@@ -605,7 +603,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged
+        public new event EventHandler? ImeModeChanged
         {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
@@ -614,7 +612,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler KeyUp
+        public new event KeyEventHandler? KeyUp
         {
             add => base.KeyUp += value;
             remove => base.KeyUp -= value;
@@ -623,7 +621,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler KeyDown
+        public new event KeyEventHandler? KeyDown
         {
             add => base.KeyDown += value;
             remove => base.KeyDown -= value;
@@ -632,7 +630,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyPressEventHandler KeyPress
+        public new event KeyPressEventHandler? KeyPress
         {
             add => base.KeyPress += value;
             remove => base.KeyPress -= value;
@@ -685,7 +683,7 @@ namespace System.Windows.Forms
         [DefaultValue(false)]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public bool TabStop
+        public new bool TabStop
         {
             get => base.TabStop;
             set => base.TabStop = value;
@@ -693,7 +691,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TabStopChanged
+        public new event EventHandler? TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
@@ -753,7 +751,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.LabelOnTextAlignChangedDescr))]
-        public event EventHandler TextAlignChanged
+        public event EventHandler? TextAlignChanged
         {
             add => Events.AddHandler(s_eventTextAlignChanged, value);
 
@@ -886,7 +884,7 @@ namespace System.Windows.Forms
             bool currentlyAnimating = _labelState[s_stateAnimating] != 0;
             if (animate != currentlyAnimating)
             {
-                Image image = (Image)Properties.GetObject(s_propImage);
+                Image? image = (Image?)Properties.GetObject(s_propImage);
                 if (animate)
                 {
                     if (image is not null)
@@ -974,7 +972,7 @@ namespace System.Windows.Forms
             return flags;
         }
 
-        private void DetachImageList(object sender, EventArgs e) => ImageList = null;
+        private void DetachImageList(object? sender, EventArgs e) => ImageList = null;
 
         protected override void Dispose(bool disposing)
         {
@@ -1171,7 +1169,7 @@ namespace System.Windows.Forms
             return dtParams.iLeftMargin;
         }
 
-        private void ImageListRecreateHandle(object sender, EventArgs e)
+        private void ImageListRecreateHandle(object? sender, EventArgs e)
         {
             if (IsHandleCreated)
             {
@@ -1228,7 +1226,7 @@ namespace System.Windows.Forms
             base.OnMouseLeave(e);
         }
 
-        private void OnFrameChanged(object o, EventArgs e)
+        private void OnFrameChanged(object? o, EventArgs e)
         {
             if (Disposing || IsDisposed)
             {
@@ -1294,10 +1292,13 @@ namespace System.Windows.Forms
         protected override void OnPaint(PaintEventArgs e)
         {
             Animate();
-            ImageAnimator.UpdateFrames(Image);
+            if (Image is not null)
+            {
+                ImageAnimator.UpdateFrames(Image);
+            }
 
             Rectangle face = LayoutUtils.DeflateRect(ClientRectangle, Padding);
-            Image i = Image;
+            Image? i = Image;
             if (i is not null)
             {
                 DrawImage(e, i, face, RtlTranslateAlignment(ImageAlign));
