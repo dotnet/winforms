@@ -597,8 +597,7 @@ namespace System.Windows.Forms
                             int progress = (int)(100 * (((float)_totalBytesRead) / ((float)_contentLength)));
                             if (_currentAsyncLoadOperation is not null)
                             {
-                                _currentAsyncLoadOperation.Post(_loadProgressDelegate,
-                                        new ProgressChangedEventArgs(progress, null));
+                                _currentAsyncLoadOperation.Post(_loadProgressDelegate, new ProgressChangedEventArgs(progress, null));
                             }
                         }
                     }
