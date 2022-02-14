@@ -606,8 +606,7 @@ namespace System.Windows.Forms
                         _tempDownloadStream.Seek(0, SeekOrigin.Begin);
                         if (_currentAsyncLoadOperation is not null)
                         {
-                            _currentAsyncLoadOperation.Post(_loadProgressDelegate,
-                                        new ProgressChangedEventArgs(100, null));
+                            _currentAsyncLoadOperation.Post(_loadProgressDelegate, new ProgressChangedEventArgs(100, null));
                         }
 
                         PostCompleted(null, false);
