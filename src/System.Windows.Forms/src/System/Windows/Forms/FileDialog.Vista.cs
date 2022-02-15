@@ -144,7 +144,7 @@ namespace System.Windows.Forms
         {
             int saveOptions = _options;
             int saveFilterIndex = FilterIndex;
-            string[] saveFileNames = _fileNames;
+            string[]? saveFileNames = _fileNames;
             bool ok = false;
 
             try
@@ -224,7 +224,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private static COMDLG_FILTERSPEC[] GetFilterItems(string filter)
+        private static COMDLG_FILTERSPEC[] GetFilterItems(string? filter)
         {
             // Expected input types
             // "Text files (*.txt)|*.txt|All files (*.*)|*.*"

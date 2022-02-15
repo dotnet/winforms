@@ -409,7 +409,7 @@ override System.Windows.Forms.ColorDialog.ToString() -> string!
 ~override System.Windows.Forms.DomainUpDown.OnTextBoxKeyPress(object source, System.Windows.Forms.KeyPressEventArgs e) -> void
 ~override System.Windows.Forms.DomainUpDown.ToString() -> string
 ~override System.Windows.Forms.ErrorProvider.Site.set -> void
-~override System.Windows.Forms.FileDialog.ToString() -> string
+override System.Windows.Forms.FileDialog.ToString() -> string!
 ~override System.Windows.Forms.FlowLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
 ~override System.Windows.Forms.FlowLayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
 ~override System.Windows.Forms.FontDialog.ToString() -> string
@@ -1746,17 +1746,17 @@ System.Windows.Forms.DataObject.DataObject(string! format, object! data) -> void
 ~System.Windows.Forms.ErrorProvider.SetIconPadding(System.Windows.Forms.Control control, int padding) -> void
 ~System.Windows.Forms.ErrorProvider.Tag.get -> object
 ~System.Windows.Forms.ErrorProvider.Tag.set -> void
-~System.Windows.Forms.FileDialog.DefaultExt.get -> string
-~System.Windows.Forms.FileDialog.DefaultExt.set -> void
-~System.Windows.Forms.FileDialog.FileName.get -> string
-~System.Windows.Forms.FileDialog.FileName.set -> void
-~System.Windows.Forms.FileDialog.FileNames.get -> string[]
-~System.Windows.Forms.FileDialog.Filter.get -> string
-~System.Windows.Forms.FileDialog.Filter.set -> void
-~System.Windows.Forms.FileDialog.InitialDirectory.get -> string
-~System.Windows.Forms.FileDialog.InitialDirectory.set -> void
-~System.Windows.Forms.FileDialog.Title.get -> string
-~System.Windows.Forms.FileDialog.Title.set -> void
+System.Windows.Forms.FileDialog.DefaultExt.get -> string!
+System.Windows.Forms.FileDialog.DefaultExt.set -> void
+System.Windows.Forms.FileDialog.FileName.get -> string!
+System.Windows.Forms.FileDialog.FileName.set -> void
+System.Windows.Forms.FileDialog.FileNames.get -> string![]!
+System.Windows.Forms.FileDialog.Filter.get -> string!
+System.Windows.Forms.FileDialog.Filter.set -> void
+System.Windows.Forms.FileDialog.InitialDirectory.get -> string!
+System.Windows.Forms.FileDialog.InitialDirectory.set -> void
+System.Windows.Forms.FileDialog.Title.get -> string!
+System.Windows.Forms.FileDialog.Title.set -> void
 ~System.Windows.Forms.FlowLayoutPanel.GetFlowBreak(System.Windows.Forms.Control control) -> bool
 ~System.Windows.Forms.FlowLayoutPanel.SetFlowBreak(System.Windows.Forms.Control control, bool value) -> void
 ~System.Windows.Forms.FlowLayoutSettings.GetFlowBreak(object child) -> bool
@@ -7934,7 +7934,7 @@ System.Windows.Forms.FileDialog.ClientGuid.set -> void
 System.Windows.Forms.FileDialog.CustomPlaces.get -> System.Windows.Forms.FileDialogCustomPlacesCollection!
 System.Windows.Forms.FileDialog.DereferenceLinks.get -> bool
 System.Windows.Forms.FileDialog.DereferenceLinks.set -> void
-System.Windows.Forms.FileDialog.FileOk -> System.ComponentModel.CancelEventHandler
+System.Windows.Forms.FileDialog.FileOk -> System.ComponentModel.CancelEventHandler!
 System.Windows.Forms.FileDialog.FilterIndex.get -> int
 System.Windows.Forms.FileDialog.FilterIndex.set -> void
 System.Windows.Forms.FileDialog.OkRequiresInteraction.get -> bool
