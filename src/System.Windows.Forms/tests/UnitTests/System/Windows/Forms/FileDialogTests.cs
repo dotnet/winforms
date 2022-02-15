@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop.Shell32;
 
 namespace System.Windows.Forms.Tests
 {
