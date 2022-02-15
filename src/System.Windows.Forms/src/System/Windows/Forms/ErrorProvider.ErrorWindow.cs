@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -30,8 +28,8 @@ namespace System.Windows.Forms
             private readonly Control _parent;
             private readonly ErrorProvider _provider;
             private Rectangle _windowBounds;
-            private Timer _timer;
-            private NativeWindow _tipWindow;
+            private Timer? _timer;
+            private NativeWindow? _tipWindow;
 
             /// <summary>
             ///  Construct an error window for this provider and control parent.
@@ -50,7 +48,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(s_accessibilityProperty);
+                    AccessibleObject? accessibleObject = (AccessibleObject?)Properties.GetObject(s_accessibilityProperty);
 
                     if (accessibleObject is null)
                     {
@@ -73,8 +71,11 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, ComCtl32.TTF.SUBCLASS, item.Error);
-                toolInfo.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.ADDTOOLW);
+                if (_tipWindow is not null)
+                {
+                    var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, ComCtl32.TTF.SUBCLASS, item.Error);
+                    toolInfo.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.ADDTOOLW);
+                }
 
                 Update(timerCaused: false);
             }
@@ -223,7 +224,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  This is called when an error icon is flashing, and the view needs to be updated.
             /// </summary>
-            private void OnTimer(object sender, EventArgs e)
+            private void OnTimer(object? sender, EventArgs e)
             {
                 int blinkPhase = 0;
                 for (int i = 0; i < _items.Count; i++)

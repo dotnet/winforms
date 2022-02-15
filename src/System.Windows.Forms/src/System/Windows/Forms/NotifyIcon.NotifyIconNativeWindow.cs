@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -17,22 +15,21 @@ namespace System.Windows.Forms
         /// </summary>
         private class NotifyIconNativeWindow : NativeWindow
         {
-            internal NotifyIcon reference;
-            private GCHandle rootRef;   // We will root the control when we do not want to be eligible for garbage collection.
+            internal NotifyIcon _reference;
+            private GCHandle _rootRef;   // We will root the control when we do not want to be eligible for garbage collection.
 
             /// <summary>
             ///  Create a new NotifyIcon, and bind the window to the NotifyIcon component.
             /// </summary>
             internal NotifyIconNativeWindow(NotifyIcon component)
             {
-                reference = component;
+                _reference = component;
             }
 
             ~NotifyIconNativeWindow()
             {
                 // This same post is done in Control's Dispose method, so if you change
                 // it, change it there too.
-                //
                 if (Handle != IntPtr.Zero)
                 {
                     User32.PostMessageW(this, User32.WM.CLOSE);
@@ -46,16 +43,16 @@ namespace System.Windows.Forms
             {
                 if (locked)
                 {
-                    if (!rootRef.IsAllocated)
+                    if (!_rootRef.IsAllocated)
                     {
-                        rootRef = GCHandle.Alloc(reference, GCHandleType.Normal);
+                        _rootRef = GCHandle.Alloc(_reference, GCHandleType.Normal);
                     }
                 }
                 else
                 {
-                    if (rootRef.IsAllocated)
+                    if (_rootRef.IsAllocated)
                     {
-                        rootRef.Free();
+                        _rootRef.Free();
                     }
                 }
             }
@@ -70,8 +67,8 @@ namespace System.Windows.Forms
             /// </summary>
             protected override void WndProc(ref Message m)
             {
-                Debug.Assert(reference is not null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
-                reference.WndProc(ref m);
+                Debug.Assert(_reference is not null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
+                _reference.WndProc(ref m);
             }
         }
     }
