@@ -77,7 +77,7 @@ namespace System.Windows.Forms
         {
             strings = newSource;
             current = 0;
-            size = (strings is null) ? 0 : strings.Length;
+            size = strings.Length;
         }
 
         #region IEnumString Members
