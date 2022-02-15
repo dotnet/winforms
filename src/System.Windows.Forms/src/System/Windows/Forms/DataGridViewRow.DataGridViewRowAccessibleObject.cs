@@ -499,9 +499,6 @@ namespace System.Windows.Forms
                         return Owner?.DataGridView?.Enabled ?? false;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                    case UiaCore.UIA.IsPasswordPropertyId:
-                        return false;
-                    case UiaCore.UIA.AccessKeyPropertyId:
                         return string.Empty;
                 }
 

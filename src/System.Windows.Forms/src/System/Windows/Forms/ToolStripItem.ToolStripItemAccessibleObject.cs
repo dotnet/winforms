@@ -119,10 +119,6 @@ namespace System.Windows.Forms
                         return _ownerItem.CanSelect;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return _ownerItem.Selected;
-                    case UiaCore.UIA.AccessKeyPropertyId:
-                        return KeyboardShortcut;
-                    case UiaCore.UIA.IsPasswordPropertyId:
-                        return false;
                 }
 
                 return base.GetPropertyValue(propertyID);

@@ -106,6 +106,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AccessibleRole.Grouping, defaultGroupAccessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleRolePropertyId));
             Assert.Equal(AccessibleRole.Grouping, groupAccessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleRolePropertyId));
             Assert.Null(groupAccessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+            Assert.Equal(NativeMethods.WinFormFrameworkId, groupAccessibleObject.GetPropertyValue(UiaCore.UIA.FrameworkIdPropertyId));
             Assert.False(list.IsHandleCreated);
         }
 

@@ -484,10 +484,6 @@ namespace System.Windows.Forms
                     {
                         case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                             return Owner.CanSelect;
-                        case UiaCore.UIA.IsPasswordPropertyId:
-                            return false;
-                        case UiaCore.UIA.AccessKeyPropertyId:
-                            return KeyboardShortcut;
                     }
                 }
 

@@ -94,8 +94,6 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.IsControlElementPropertyId:
                     case UiaCore.UIA.IsContentElementPropertyId:
                         return true;
-                    case UiaCore.UIA.IsPasswordPropertyId:
-                        return false;
                     case UiaCore.UIA.AccessKeyPropertyId:
                         return _panel.AccessibilityObject.KeyboardShortcut;
                     case UiaCore.UIA.ProviderDescriptionPropertyId:

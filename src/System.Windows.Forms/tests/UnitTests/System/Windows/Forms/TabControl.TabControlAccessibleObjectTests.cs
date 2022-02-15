@@ -700,8 +700,8 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true, "&Name", "Alt+n")]
         [InlineData(false, "&Name", "Alt+n")]
-        [InlineData(true, "Name", null)]
-        [InlineData(false, "Name", null)]
+        [InlineData(true, "Name", "")]
+        [InlineData(false, "Name", "")]
         public void TabControlAccessibleObject_GetPropertyValue_AccessKey_ReturnExpected(bool createControl, string text, string expectedKeyboardShortcut)
         {
             using TabControl tabControl = new() { Text = text };

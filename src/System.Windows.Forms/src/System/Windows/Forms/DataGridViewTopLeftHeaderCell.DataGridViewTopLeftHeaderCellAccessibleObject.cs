@@ -300,11 +300,8 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.IsEnabledPropertyId:
                         return Owner?.DataGridView?.Enabled ?? false;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                    case UiaCore.UIA.IsPasswordPropertyId:
                     case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
-                    case UiaCore.UIA.AccessKeyPropertyId:
-                        return string.Empty;
                 }
 
                 return base.GetPropertyValue(propertyId);
