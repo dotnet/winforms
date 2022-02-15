@@ -841,6 +841,7 @@ override System.Windows.Forms.ToolStrip.ToolStripAccessibleObject.HitTest(int x,
 ~override System.Windows.Forms.ToolStripComboBox.OnSubscribeControlEvents(System.Windows.Forms.Control control) -> void
 ~override System.Windows.Forms.ToolStripComboBox.OnUnsubscribeControlEvents(System.Windows.Forms.Control control) -> void
 ~override System.Windows.Forms.ToolStripComboBox.ToString() -> string
+~override System.Windows.Forms.ToolStripContainer.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.ToolStripContainer.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
 ~override System.Windows.Forms.ToolStripContainer.Cursor.get -> System.Windows.Forms.Cursor
 ~override System.Windows.Forms.ToolStripContainer.Cursor.set -> void
