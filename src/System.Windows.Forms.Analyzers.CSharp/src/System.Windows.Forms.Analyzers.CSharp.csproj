@@ -6,12 +6,6 @@
     <LangVersion>Preview</LangVersion>
     <Nullable>enable</Nullable>
     <NoWarn>$(NoWarn);RS2007</NoWarn>
-
-    <IsRoslynComponent>true</IsRoslynComponent>
-
-    <!-- Mark it so eng/packageContent.targets knows how to correctly package it -->
-    <IsAnalyzerProject>true</IsAnalyzerProject>
-    <DefineConstants>WINFORMS_ANALYZERS</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
