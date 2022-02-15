@@ -21,7 +21,7 @@ namespace System.Windows.Forms
                 _owningToolStripDropDownButton = ownerItem;
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 // ToolStripDropDownItemAccessibleObject implements a default Role as MenuItem
                 // because of this, ToolStripItemAccessibleObject will return the unexpected result for this.

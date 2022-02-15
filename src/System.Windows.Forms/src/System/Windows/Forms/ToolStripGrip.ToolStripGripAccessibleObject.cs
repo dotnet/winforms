@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -16,6 +15,7 @@ namespace System.Windows.Forms
             {
             }
 
+            [AllowNull]
             public override string Name
             {
                 get => Owner.AccessibleName ?? SR.ToolStripGripAccessibleName;
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {

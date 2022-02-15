@@ -11,7 +11,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Represents the PropertyGridToolStrip control accessibility object.
         /// </summary>
-        internal class PropertyGridToolStripAccessibleObject : ToolStrip.ToolStripAccessibleObject
+        internal class PropertyGridToolStripAccessibleObject : ToolStripAccessibleObject
         {
             private readonly PropertyGrid _parentPropertyGrid;
 
@@ -30,7 +30,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (_parentPropertyGrid.IsHandleCreated &&
                     _parentPropertyGrid.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)

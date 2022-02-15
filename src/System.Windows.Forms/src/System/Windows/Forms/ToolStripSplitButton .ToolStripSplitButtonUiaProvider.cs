@@ -22,7 +22,7 @@ namespace System.Windows.Forms
                 _accessibleObject.DoDefaultAction();
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 return _accessibleObject.GetPropertyValue(propertyID);
             }
@@ -52,7 +52,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 return _accessibleObject.FragmentNavigate(direction);
             }

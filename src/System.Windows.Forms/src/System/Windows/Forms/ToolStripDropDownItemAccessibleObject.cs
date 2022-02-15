@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -12,10 +10,11 @@ namespace System.Windows.Forms
 {
     public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItemAccessibleObject
     {
-        private readonly ToolStripDropDownItem owner;
+        private readonly ToolStripDropDownItem _owner;
+
         public ToolStripDropDownItemAccessibleObject(ToolStripDropDownItem item) : base(item)
         {
-            owner = item;
+            _owner = item;
         }
 
         public override AccessibleRole Role
@@ -46,19 +45,12 @@ namespace System.Windows.Forms
 
         internal override bool IsIAccessibleExSupported()
         {
-            if (owner is not null)
-            {
-                return true;
-            }
-            else
-            {
-                return base.IsIAccessibleExSupported();
-            }
+            return true;
         }
 
         internal override bool IsPatternSupported(UiaCore.UIA patternId)
         {
-            if (patternId == UiaCore.UIA.ExpandCollapsePatternId && owner.HasDropDownItems)
+            if (patternId == UiaCore.UIA.ExpandCollapsePatternId && _owner.HasDropDownItems)
             {
                 return true;
             }
@@ -68,11 +60,11 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override object GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
         {
-            if (propertyID == UiaCore.UIA.IsOffscreenPropertyId && owner is not null && owner.Owner is ToolStripDropDown)
+            if (propertyID == UiaCore.UIA.IsOffscreenPropertyId && _owner.Owner is ToolStripDropDown)
             {
-                return !((ToolStripDropDown)owner.Owner).Visible;
+                return !((ToolStripDropDown)_owner.Owner).Visible;
             }
 
             return base.GetPropertyValue(propertyID);
@@ -83,9 +75,9 @@ namespace System.Windows.Forms
 
         internal override void Collapse()
         {
-            if (owner is not null && owner.DropDown is not null && owner.DropDown.Visible)
+            if (_owner.DropDown.Visible)
             {
-                owner.DropDown.Close();
+                _owner.DropDown.Close();
             }
         }
 
@@ -93,23 +85,23 @@ namespace System.Windows.Forms
         {
             get
             {
-                return owner.DropDown.Visible ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+                return _owner.DropDown.Visible ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
             }
         }
 
-        public override AccessibleObject GetChild(int index)
+        public override AccessibleObject? GetChild(int index)
         {
-            if ((owner is null) || !owner.HasDropDownItems)
+            if (!_owner.HasDropDownItems)
             {
                 return null;
             }
 
-            return owner.DropDown.AccessibilityObject.GetChild(index);
+            return _owner.DropDown.AccessibilityObject.GetChild(index);
         }
 
         public override int GetChildCount()
         {
-            if ((owner is null) || !owner.HasDropDownItems)
+            if (!_owner.HasDropDownItems)
             {
                 return -1;
             }
@@ -122,24 +114,24 @@ namespace System.Windows.Forms
                 return 0;
             }
 
-            if (owner.DropDown.LayoutRequired)
+            if (_owner.DropDown.LayoutRequired)
             {
-                LayoutTransaction.DoLayout(owner.DropDown, owner.DropDown, PropertyNames.Items);
+                LayoutTransaction.DoLayout(_owner.DropDown, _owner.DropDown, PropertyNames.Items);
             }
 
-            return owner.DropDown.AccessibilityObject.GetChildCount();
+            return _owner.DropDown.AccessibilityObject.GetChildCount();
         }
 
         internal int GetChildFragmentIndex(ToolStripItem.ToolStripItemAccessibleObject child)
         {
-            if ((owner is null) || (owner.DropDownItems is null))
+            if (_owner.DropDownItems is null)
             {
                 return -1;
             }
 
-            for (int i = 0; i < owner.DropDownItems.Count; i++)
+            for (int i = 0; i < _owner.DropDownItems.Count; i++)
             {
-                if (owner.DropDownItems[i].Available && child.Owner == owner.DropDownItems[i])
+                if (_owner.DropDownItems[i].Available && child.Owner == _owner.DropDownItems[i])
                 {
                     return i;
                 }
@@ -154,15 +146,15 @@ namespace System.Windows.Forms
         /// <returns>The number of children.</returns>
         internal int GetChildFragmentCount()
         {
-            if ((owner is null) || (owner.DropDownItems is null))
+            if (_owner.DropDownItems is null)
             {
                 return -1;
             }
 
             int count = 0;
-            for (int i = 0; i < owner.DropDownItems.Count; i++)
+            for (int i = 0; i < _owner.DropDownItems.Count; i++)
             {
-                if (owner.DropDownItems[i].Available)
+                if (_owner.DropDownItems[i].Available)
                 {
                     count++;
                 }
@@ -171,9 +163,9 @@ namespace System.Windows.Forms
             return count;
         }
 
-        internal AccessibleObject GetChildFragment(int index, UiaCore.NavigateDirection direction)
+        internal AccessibleObject? GetChildFragment(int index, UiaCore.NavigateDirection direction)
         {
-            if (owner.DropDown.AccessibilityObject is ToolStrip.ToolStripAccessibleObject toolStripAccessibleObject)
+            if (_owner.DropDown.AccessibilityObject is ToolStrip.ToolStripAccessibleObject toolStripAccessibleObject)
             {
                 return toolStripAccessibleObject.GetChildFragment(index, direction);
             }
@@ -181,23 +173,18 @@ namespace System.Windows.Forms
             return null;
         }
 
-        internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (owner is null || owner.DropDown is null)
-            {
-                return null;
-            }
-
             switch (direction)
             {
                 case UiaCore.NavigateDirection.NextSibling:
                 case UiaCore.NavigateDirection.PreviousSibling:
-                    if (!(owner.Owner is ToolStripDropDown dropDown))
+                    if (_owner.Owner is not ToolStripDropDown dropDown)
                     {
                         break;
                     }
 
-                    int index = dropDown.Items.IndexOf(owner);
+                    int index = dropDown.Items.IndexOf(_owner);
 
                     if (index == -1)
                     {
