@@ -413,6 +413,11 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(nameof(ListView));
             }
 
+            if (!ListView.GroupsEnabled)
+            {
+                return ListViewGroupCollapsedState.Default;
+            }
+
             LVGS state = (LVGS)User32.SendMessageW(ListView, (User32.WM)LVM.GETGROUPSTATE, ID, (nint)(LVGS.COLLAPSIBLE | LVGS.COLLAPSED));
             if (!state.HasFlag(LVGS.COLLAPSIBLE))
             {
