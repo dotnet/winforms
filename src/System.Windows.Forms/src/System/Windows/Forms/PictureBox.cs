@@ -26,7 +26,7 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionPictureBox))]
     public partial class PictureBox : Control, ISupportInitialize
     {
-        private static readonly bool s_useWebRequest = AppContext.TryGetSwitch("System.Resources.UseWebRequest", out bool useWebRequest) ? useWebRequest : true;
+        private static readonly bool s_useWebRequest = AppContext.TryGetSwitch("System.Windows.Forms.PictureBox.UseWebRequest", out bool useWebRequest) ? useWebRequest : true;
 
         /// <summary>
         ///  The type of border this control will have.
@@ -468,29 +468,21 @@ namespace System.Windows.Forms
             // false to prevent subsequent attempts.
             _pictureBoxState[NeedToLoadImageLocationState] = false;
 
-            Image img;
-            ImageInstallationType installType = ImageInstallationType.FromUrl;
             try
             {
                 DisposeImageStream();
-
-                Uri uri = CalculateUri(_imageLocation);
-                if (uri.IsFile)
+                if (UseWebRequest())
                 {
-                    _localImageStreamReader = new StreamReader(uri.LocalPath);
-                    img = Image.FromStream(_localImageStreamReader.BaseStream);
+                    LoadImageViaWebClient();
                 }
                 else
                 {
-                    if (UseWebRequest())
+                    Uri uri = CalculateUri(_imageLocation);
+                    if (uri.IsFile)
                     {
-#pragma warning disable SYSLIB0014 // Type or member is obsolete
-                        using (WebClient wc = new WebClient())
-#pragma warning restore SYSLIB0014 // Type or member is obsolete
-                        {
-                            _uriImageStream = wc.OpenRead(uri.ToString());
-                            img = Image.FromStream(_uriImageStream);
-                        }
+                        _localImageStreamReader = new StreamReader(uri.LocalPath);
+                        Image img = Image.FromStream(_localImageStreamReader.BaseStream);
+                        InstallNewImage(img, ImageInstallationType.FromUrl);
                     }
                     else
                     {
@@ -507,12 +499,32 @@ namespace System.Windows.Forms
                 else
                 {
                     // In design mode, just replace with Error bitmap.
-                    img = ErrorImage;
-                    installType = ImageInstallationType.ErrorOrInitial;
+                    InstallNewImage(ErrorImage, ImageInstallationType.ErrorOrInitial);
+                }
+            }
+        }
+
+        private void LoadImageViaWebClient()
+        {
+            Image img;
+            Uri uri = CalculateUri(_imageLocation);
+            if (uri.IsFile)
+            {
+                _localImageStreamReader = new StreamReader(uri.LocalPath);
+                img = Image.FromStream(_localImageStreamReader.BaseStream);
+            }
+            else
+            {
+#pragma warning disable SYSLIB0014 // Type or member is obsolete
+                using (WebClient wc = new WebClient())
+#pragma warning restore SYSLIB0014 // Type or member is obsolete
+                {
+                    _uriImageStream = wc.OpenRead(uri.ToString());
+                    img = Image.FromStream(_uriImageStream);
                 }
             }
 
-            InstallNewImage(img, installType);
+            InstallNewImage(img, ImageInstallationType.FromUrl);
         }
 
         [SRCategory(nameof(SR.CatAsynchronous))]
