@@ -160,7 +160,7 @@ namespace System.Windows.Forms
                 }
 
                 AddMsgsForVK(vk & 0xff, repeat, haveKeys.HaveAlt > 0 && haveKeys.HaveCtrl == 0, hwnd);
-                CancelMods(haveKeys, UnknownGrouping, hwnd);
+                CancelMods(ref haveKeys, UnknownGrouping, hwnd);
             }
             else
             {
@@ -195,7 +195,7 @@ namespace System.Windows.Forms
         ///  Called whenever there is a closing parenthesis, or the end of a character. This generates events for the
         ///  end of a modifier.
         /// </summary>
-        private static void CancelMods((int HaveShift, int HaveCtrl, int HaveAlt) haveKeys, int level, IntPtr hwnd)
+        private static void CancelMods(ref (int HaveShift, int HaveCtrl, int HaveAlt) haveKeys, int level, IntPtr hwnd)
         {
             if (haveKeys.HaveShift == level)
             {
@@ -506,7 +506,7 @@ namespace System.Windows.Forms
                             }
 
                             AddMsgsForVK(vk, repeat, haveKeys.HaveAlt > 0 && haveKeys.HaveCtrl == 0, hwnd);
-                            CancelMods(haveKeys, UnknownGrouping, hwnd);
+                            CancelMods(ref haveKeys, UnknownGrouping, hwnd);
                         }
                         else if (keyName.Length == 1)
                         {
@@ -591,7 +591,7 @@ namespace System.Windows.Forms
                             throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
                         }
 
-                        CancelMods(haveKeys, cGrp, hwnd);
+                        CancelMods(ref haveKeys, cGrp, hwnd);
                         cGrp--;
                         if (cGrp == 0)
                         {
@@ -619,7 +619,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(SR.SendKeysGroupDelimError);
             }
 
-            CancelMods(haveKeys, UnknownGrouping, hwnd);
+            CancelMods(ref haveKeys, UnknownGrouping, hwnd);
         }
 
         /// <summary>
