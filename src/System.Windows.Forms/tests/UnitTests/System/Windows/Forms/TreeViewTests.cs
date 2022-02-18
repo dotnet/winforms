@@ -6807,6 +6807,290 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(text, actual);
         }
 
+        [WinFormsFact]
+        public void TreeView_Remove_NotSelectedNode()
+        {
+            using TreeView treeView = new();
+            treeView.CreateControl();
+            treeView.Nodes.AddRange(new TreeNode[] { new("Test 1"), new("Test 2"), new("Test 3") });
+
+            treeView.SelectedNode = treeView.Nodes[0];
+
+            Assert.True(treeView.Nodes[0].IsSelected);
+            Assert.Equal(3, treeView.Nodes.Count);
+            Assert.Equal(treeView.Nodes[0], treeView.SelectedNode);
+
+            treeView.Nodes.Remove(treeView.Nodes[2]);
+
+            Assert.True(treeView.Nodes[0].IsSelected);
+            Assert.Equal(2, treeView.Nodes.Count);
+            Assert.Equal(treeView.Nodes[0], treeView.SelectedNode);
+
+            treeView.Nodes.Remove(treeView.Nodes[1]);
+
+            Assert.True(treeView.Nodes[0].IsSelected);
+            Assert.Equal(1, treeView.Nodes.Count);
+            Assert.Equal(treeView.Nodes[0], treeView.SelectedNode);
+        }
+
+        [WinFormsFact]
+        public void TreeView_Remove_SelectedNode()
+        {
+            using TreeView treeView = new();
+            treeView.CreateControl();
+            treeView.Nodes.AddRange(new TreeNode[] { new("Test 1"), new("Test 2"), new("Test 3") });
+
+            treeView.SelectedNode = treeView.Nodes[0];
+
+            for (int count = treeView.Nodes.Count; count > 1; count -= 1)
+            {
+                TreeNode node = treeView.Nodes[0];
+
+                Assert.True(node.IsSelected);
+                Assert.Equal(count, treeView.Nodes.Count);
+                Assert.Equal(node, treeView.SelectedNode);
+
+                treeView.Nodes.Remove(node);
+                count -= 1;
+
+                Assert.False(node.IsSelected);
+                Assert.Equal(count, treeView.Nodes.Count);
+
+                if (count == 0)
+                {
+                    Assert.Null(treeView.SelectedNode);
+                }
+                else
+                {
+                    Assert.Equal(treeView.Nodes[0], treeView.SelectedNode);
+                }
+            }
+        }
+
+        [WinFormsFact]
+        public void TreeView_Remove_NotSelectedSubNode()
+        {
+            using TreeView treeView = new();
+            treeView.CreateControl();
+
+            treeView.Nodes.Add("Test");
+            TreeNode treeNode = treeView.Nodes[0];
+            treeNode.Nodes.AddRange(new TreeNode[] { new("Test 1"), new("Test 2"), new("Test 3") });
+
+            treeView.SelectedNode = treeNode.Nodes[0];
+
+            Assert.True(treeNode.Nodes[0].IsSelected);
+            Assert.Equal(3, treeNode.Nodes.Count);
+            Assert.Equal(treeNode.Nodes[0], treeView.SelectedNode);
+
+            treeNode.Nodes.Remove(treeNode.Nodes[2]);
+
+            Assert.True(treeNode.Nodes[0].IsSelected);
+            Assert.Equal(2, treeNode.Nodes.Count);
+            Assert.Equal(treeNode.Nodes[0], treeView.SelectedNode);
+
+            treeNode.Nodes.Remove(treeNode.Nodes[1]);
+
+            Assert.True(treeNode.Nodes[0].IsSelected);
+            Assert.Equal(1, treeNode.Nodes.Count);
+            Assert.Equal(treeNode.Nodes[0], treeView.SelectedNode);
+        }
+
+        [WinFormsFact]
+        public void TreeView_Remove_SelectedSubNode()
+        {
+            using TreeView treeView = new();
+            treeView.CreateControl();
+
+            treeView.Nodes.Add("Test");
+            TreeNode treeNode = treeView.Nodes[0];
+            treeNode.Nodes.AddRange(new TreeNode[] { new("Test 1"), new("Test 2"), new("Test 3") });
+
+            treeView.SelectedNode = treeNode.Nodes[0];
+
+            for (int count = treeNode.Nodes.Count; count > 1; count -= 1)
+            {
+                TreeNode node = treeNode.Nodes[0];
+
+                Assert.True(node.IsSelected);
+                Assert.Equal(count, treeNode.Nodes.Count);
+                Assert.Equal(node, treeView.SelectedNode);
+
+                treeView.Nodes.Remove(node);
+                count -= 1;
+
+                Assert.False(node.IsSelected);
+                Assert.Equal(count, treeNode.Nodes.Count);
+
+                if (count == 0)
+                {
+                    Assert.Equal(treeView.Nodes[0], treeView.SelectedNode);
+                }
+                else
+                {
+                    Assert.Equal(treeNode.Nodes[0], treeView.SelectedNode);
+                }
+            }
+        }
+
+        [WinFormsFact]
+        public void TreeView_Remove_ParentSelectedNode()
+        {
+            using TreeView treeView = new();
+            treeView.CreateControl();
+
+            treeView.Nodes.Add("Test");
+            TreeNode treeNode = treeView.Nodes[0];
+            treeNode.Nodes.Add("Test 1");
+
+            treeView.SelectedNode = treeNode.Nodes[0];
+
+            Assert.True(treeNode.Nodes[0].IsSelected);
+            Assert.Equal(treeNode.Nodes[0], treeView.SelectedNode);
+            Assert.Equal(1, treeNode.Nodes.Count);
+            Assert.Equal(1, treeView.Nodes.Count);
+
+            treeView.Nodes.Remove(treeNode);
+
+            Assert.False(treeNode.Nodes[0].IsSelected);
+            Assert.Null(treeView.SelectedNode);
+            Assert.Equal(0, treeView.Nodes.Count);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeView_Remove_NotCheckedNode(bool checkBoxes)
+        {
+            using TreeView treeView = new() { CheckBoxes = checkBoxes };
+            treeView.CreateControl();
+            treeView.Nodes.AddRange(new TreeNode[] { new("Test 1"), new("Test 2"), new("Test 3") });
+
+            treeView.Nodes[0].Checked = true;
+
+            Assert.True(treeView.Nodes[0].Checked);
+            Assert.Equal(3, treeView.Nodes.Count);
+
+            treeView.Nodes.Remove(treeView.Nodes[2]);
+
+            Assert.True(treeView.Nodes[0].Checked);
+            Assert.Equal(2, treeView.Nodes.Count);
+
+            treeView.Nodes.Remove(treeView.Nodes[1]);
+
+            Assert.True(treeView.Nodes[0].Checked);
+            Assert.Equal(1, treeView.Nodes.Count);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeView_Remove_CheckedNode(bool checkBoxes)
+        {
+            using TreeView treeView = new() { CheckBoxes = checkBoxes };
+            treeView.CreateControl();
+            treeView.Nodes.AddRange(new TreeNode[] { new("Test 1"), new("Test 2"), new("Test 3") });
+
+            for (int count = treeView.Nodes.Count; count > 1; count -= 1)
+            {
+                TreeNode node = treeView.Nodes[0];
+                node.Checked = true;
+
+                Assert.True(node.Checked);
+                Assert.Equal(count, treeView.Nodes.Count);
+
+                treeView.Nodes.Remove(node);
+                count -= 1;
+
+                Assert.True(node.Checked);
+                Assert.Equal(count, treeView.Nodes.Count);
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeView_Remove_NotCheckedSubNode(bool checkBoxes)
+        {
+            using TreeView treeView = new() { CheckBoxes = checkBoxes };
+            treeView.CreateControl();
+
+            treeView.Nodes.Add("Test");
+            TreeNode treeNode = treeView.Nodes[0];
+            treeNode.Nodes.AddRange(new TreeNode[] { new("Test 1"), new("Test 2"), new("Test 3") });
+
+            treeNode.Nodes[0].Checked = true;
+
+            Assert.True(treeNode.Nodes[0].Checked);
+            Assert.Equal(3, treeNode.Nodes.Count);
+
+            treeNode.Nodes.Remove(treeNode.Nodes[2]);
+
+            Assert.True(treeNode.Nodes[0].Checked);
+            Assert.Equal(2, treeNode.Nodes.Count);
+
+            treeNode.Nodes.Remove(treeNode.Nodes[1]);
+
+            Assert.True(treeNode.Nodes[0].Checked);
+            Assert.Equal(1, treeNode.Nodes.Count);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeView_Remove_CheckedSubNode(bool checkBoxes)
+        {
+            using TreeView treeView = new() { CheckBoxes = checkBoxes };
+            treeView.CreateControl();
+
+            treeView.Nodes.Add("Test");
+            TreeNode treeNode = treeView.Nodes[0];
+            treeNode.Nodes.AddRange(new TreeNode[] { new("Test 1"), new("Test 2"), new("Test 3") });
+
+            for (int count = treeNode.Nodes.Count; count > 1; count -= 1)
+            {
+                TreeNode node = treeNode.Nodes[0];
+                node.Checked = true;
+
+                Assert.True(node.Checked);
+                Assert.Equal(count, treeNode.Nodes.Count);
+
+                treeView.Nodes.Remove(node);
+                count -= 1;
+
+                Assert.True(node.Checked);
+                Assert.Equal(count, treeNode.Nodes.Count);
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeView_Remove_ParentCheckedNode(bool checkBoxes)
+        {
+            using TreeView treeView = new() { CheckBoxes = checkBoxes };
+            treeView.CreateControl();
+
+            treeView.Nodes.Add("Test");
+            TreeNode treeNode = treeView.Nodes[0];
+            treeNode.Nodes.Add("Test 1");
+
+            treeView.Nodes[0].Checked = true;
+            treeNode.Nodes[0].Checked = true;
+
+            Assert.True(treeNode.Checked);
+            Assert.True(treeNode.Nodes[0].Checked);
+            Assert.Equal(1, treeNode.Nodes.Count);
+            Assert.Equal(1, treeView.Nodes.Count);
+
+            treeView.Nodes.Remove(treeNode);
+
+            Assert.True(treeNode.Checked);
+            Assert.True(treeNode.Nodes[0].Checked);
+            Assert.Equal(1, treeNode.Nodes.Count);
+            Assert.Equal(0, treeView.Nodes.Count);
+        }
+
         private class SubTreeView : TreeView
         {
             public new bool CanEnableIme => base.CanEnableIme;
