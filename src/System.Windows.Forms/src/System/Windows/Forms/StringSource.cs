@@ -25,6 +25,7 @@ namespace System.Windows.Forms
         /// </summary>
         public StringSource(string[] strings)
         {
+            Array.Clear(strings, 0, size);
             this.strings = strings;
 
             current = 0;
@@ -75,6 +76,7 @@ namespace System.Windows.Forms
 
         public void RefreshList(string[] newSource)
         {
+            Array.Clear(strings, 0, size);
             strings = newSource;
             current = 0;
             size = strings.Length;
