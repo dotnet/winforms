@@ -115,12 +115,12 @@ override System.Windows.Forms.ColorDialog.ToString() -> string!
 ~override System.Windows.Forms.ControlBindingsCollection.RemoveCore(System.Windows.Forms.Binding dataBinding) -> void
 ~override System.Windows.Forms.CurrencyManager.Current.get -> object
 ~override System.Windows.Forms.CurrencyManager.GetItemProperties() -> System.ComponentModel.PropertyDescriptorCollection
-~override System.Windows.Forms.CursorConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-~override System.Windows.Forms.CursorConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Windows.Forms.CursorConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Windows.Forms.CursorConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Windows.Forms.CursorConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext context) -> System.ComponentModel.TypeConverter.StandardValuesCollection
-~override System.Windows.Forms.CursorConverter.GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.Windows.Forms.CursorConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
+override System.Windows.Forms.CursorConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Windows.Forms.CursorConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
+override System.Windows.Forms.CursorConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
+override System.Windows.Forms.CursorConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext? context) -> System.ComponentModel.TypeConverter.StandardValuesCollection!
+override System.Windows.Forms.CursorConverter.GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
 ~override System.Windows.Forms.DataGridView.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.DataGridView.BackgroundImage.set -> void
 ~override System.Windows.Forms.DataGridView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -4777,8 +4777,8 @@ static System.Windows.Forms.Cursor.Clip.set -> void
 static System.Windows.Forms.Cursor.Current.get -> System.Windows.Forms.Cursor?
 static System.Windows.Forms.Cursor.Current.set -> void
 static System.Windows.Forms.Cursor.Hide() -> void
-static System.Windows.Forms.Cursor.operator !=(System.Windows.Forms.Cursor! left, System.Windows.Forms.Cursor! right) -> bool
-static System.Windows.Forms.Cursor.operator ==(System.Windows.Forms.Cursor! left, System.Windows.Forms.Cursor! right) -> bool
+static System.Windows.Forms.Cursor.operator !=(System.Windows.Forms.Cursor? left, System.Windows.Forms.Cursor? right) -> bool
+static System.Windows.Forms.Cursor.operator ==(System.Windows.Forms.Cursor? left, System.Windows.Forms.Cursor? right) -> bool
 static System.Windows.Forms.Cursor.Position.get -> System.Drawing.Point
 static System.Windows.Forms.Cursor.Position.set -> void
 static System.Windows.Forms.Cursor.Show() -> void
