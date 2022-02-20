@@ -62,6 +62,15 @@ Note that this does **not** build using your machine-wide installed version of t
 
 To create the Microsoft.Private.Winforms package, run `.\build -pack`
 
+## Localization
+
+If you need create localization string do the following steps
+
+- Modify `Resource\SR.resx` file by adding nescessary strings
+- Update localization files by running command `.dotnet/dotnet build /t:UpdateXlf src/System.Windows.Forms/src/`
+
+In case you want to redo localization, and nothing seems to be not updated you may want to cleanup temporary files. Please delete `artifacts/obj/System.Windows.Forms` folder.
+
 [comment]: <> (URI Links)
 
 [corefx-windows-instructions]: https://github.com/dotnet/corefx/blob/master/Documentation/building/windows-instructions.md
