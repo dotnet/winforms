@@ -411,7 +411,7 @@ override System.Windows.Forms.CursorConverter.GetStandardValuesSupported(System.
 ~override System.Windows.Forms.ErrorProvider.Site.set -> void
 override System.Windows.Forms.FileDialog.ToString() -> string!
 ~override System.Windows.Forms.FlowLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
-~override System.Windows.Forms.FlowLayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
+override System.Windows.Forms.FlowLayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
 ~override System.Windows.Forms.FontDialog.ToString() -> string
 ~override System.Windows.Forms.Form.ControlCollection.Add(System.Windows.Forms.Control value) -> void
 ~override System.Windows.Forms.Form.ControlCollection.Remove(System.Windows.Forms.Control value) -> void
@@ -778,7 +778,7 @@ override System.Windows.Forms.ScrollableControl.OnVisibleChanged(System.EventArg
 ~override System.Windows.Forms.TableLayoutPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
 ~override System.Windows.Forms.TableLayoutPanelCellPosition.Equals(object other) -> bool
 ~override System.Windows.Forms.TableLayoutPanelCellPosition.ToString() -> string
-~override System.Windows.Forms.TableLayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
+override System.Windows.Forms.TableLayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
 ~override System.Windows.Forms.TabPage.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.TabPage.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
 ~override System.Windows.Forms.TabPage.OnEnter(System.EventArgs e) -> void
@@ -1760,8 +1760,8 @@ System.Windows.Forms.FileDialog.Title.get -> string!
 System.Windows.Forms.FileDialog.Title.set -> void
 ~System.Windows.Forms.FlowLayoutPanel.GetFlowBreak(System.Windows.Forms.Control control) -> bool
 ~System.Windows.Forms.FlowLayoutPanel.SetFlowBreak(System.Windows.Forms.Control control, bool value) -> void
-~System.Windows.Forms.FlowLayoutSettings.GetFlowBreak(object child) -> bool
-~System.Windows.Forms.FlowLayoutSettings.SetFlowBreak(object child, bool value) -> void
+System.Windows.Forms.FlowLayoutSettings.GetFlowBreak(object! child) -> bool
+System.Windows.Forms.FlowLayoutSettings.SetFlowBreak(object! child, bool value) -> void
 ~System.Windows.Forms.FolderBrowserDialog.Description.get -> string
 ~System.Windows.Forms.FolderBrowserDialog.Description.set -> void
 ~System.Windows.Forms.FolderBrowserDialog.InitialDirectory.get -> string
@@ -2399,18 +2399,18 @@ System.Windows.Forms.ScrollableControl.VerticalScroll.get -> System.Windows.Form
 ~System.Windows.Forms.TableLayoutRowStyleCollection.Remove(System.Windows.Forms.RowStyle rowStyle) -> void
 ~System.Windows.Forms.TableLayoutRowStyleCollection.this[int index].get -> System.Windows.Forms.RowStyle
 ~System.Windows.Forms.TableLayoutRowStyleCollection.this[int index].set -> void
-~System.Windows.Forms.TableLayoutSettings.ColumnStyles.get -> System.Windows.Forms.TableLayoutColumnStyleCollection
-~System.Windows.Forms.TableLayoutSettings.GetCellPosition(object control) -> System.Windows.Forms.TableLayoutPanelCellPosition
-~System.Windows.Forms.TableLayoutSettings.GetColumn(object control) -> int
-~System.Windows.Forms.TableLayoutSettings.GetColumnSpan(object control) -> int
-~System.Windows.Forms.TableLayoutSettings.GetRow(object control) -> int
-~System.Windows.Forms.TableLayoutSettings.GetRowSpan(object control) -> int
-~System.Windows.Forms.TableLayoutSettings.RowStyles.get -> System.Windows.Forms.TableLayoutRowStyleCollection
-~System.Windows.Forms.TableLayoutSettings.SetCellPosition(object control, System.Windows.Forms.TableLayoutPanelCellPosition cellPosition) -> void
-~System.Windows.Forms.TableLayoutSettings.SetColumn(object control, int column) -> void
-~System.Windows.Forms.TableLayoutSettings.SetColumnSpan(object control, int value) -> void
-~System.Windows.Forms.TableLayoutSettings.SetRow(object control, int row) -> void
-~System.Windows.Forms.TableLayoutSettings.SetRowSpan(object control, int value) -> void
+System.Windows.Forms.TableLayoutSettings.ColumnStyles.get -> System.Windows.Forms.TableLayoutColumnStyleCollection!
+System.Windows.Forms.TableLayoutSettings.GetCellPosition(object! control) -> System.Windows.Forms.TableLayoutPanelCellPosition
+System.Windows.Forms.TableLayoutSettings.GetColumn(object! control) -> int
+System.Windows.Forms.TableLayoutSettings.GetColumnSpan(object! control) -> int
+System.Windows.Forms.TableLayoutSettings.GetRow(object! control) -> int
+System.Windows.Forms.TableLayoutSettings.GetRowSpan(object! control) -> int
+System.Windows.Forms.TableLayoutSettings.RowStyles.get -> System.Windows.Forms.TableLayoutRowStyleCollection!
+System.Windows.Forms.TableLayoutSettings.SetCellPosition(object! control, System.Windows.Forms.TableLayoutPanelCellPosition cellPosition) -> void
+System.Windows.Forms.TableLayoutSettings.SetColumn(object! control, int column) -> void
+System.Windows.Forms.TableLayoutSettings.SetColumnSpan(object! control, int value) -> void
+System.Windows.Forms.TableLayoutSettings.SetRow(object! control, int row) -> void
+System.Windows.Forms.TableLayoutSettings.SetRowSpan(object! control, int value) -> void
 ~System.Windows.Forms.TableLayoutStyleCollection.Add(System.Windows.Forms.TableLayoutStyle style) -> int
 ~System.Windows.Forms.TableLayoutStyleCollection.this[int index].get -> System.Windows.Forms.TableLayoutStyle
 ~System.Windows.Forms.TableLayoutStyleCollection.this[int index].set -> void
@@ -3185,7 +3185,7 @@ virtual System.Windows.Forms.DataObject.SetText(string! textData, System.Windows
 virtual System.Windows.Forms.Label.OnTextAlignChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Layout.LayoutEngine.InitLayout(object! child, System.Windows.Forms.BoundsSpecified specified) -> void
 virtual System.Windows.Forms.Layout.LayoutEngine.Layout(object! container, System.Windows.Forms.LayoutEventArgs! layoutEventArgs) -> bool
-~virtual System.Windows.Forms.LayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
+virtual System.Windows.Forms.LayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine?
 ~virtual System.Windows.Forms.LinkLabel.LinkCollection.ContainsKey(string key) -> bool
 ~virtual System.Windows.Forms.LinkLabel.LinkCollection.IndexOfKey(string key) -> int
 ~virtual System.Windows.Forms.LinkLabel.LinkCollection.RemoveByKey(string key) -> void
