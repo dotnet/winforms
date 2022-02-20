@@ -7697,6 +7697,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Событие, возникающее при изменении свойства SizeMode в элементе PictureBox.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PictureBoxRemoteLocationNotSupported">
+        <source>Loading from remote location not supported.</source>
+        <target state="new">Loading from remote location not supported.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
         <source>Controls how the PictureBox will handle image placement and control sizing.</source>
         <target state="translated">Определяет, как будет обрабатываться размещение рисунка в данной области рисунка и изменение размеров элемента управления.</target>
