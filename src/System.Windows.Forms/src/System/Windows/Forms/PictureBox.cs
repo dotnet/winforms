@@ -620,11 +620,9 @@ namespace System.Windows.Forms
                         {
                             _currentAsyncLoadOperation.Post(_loadProgressDelegate, new ProgressChangedEventArgs(100, null));
                         }
-
-                        PostCompleted(null, false);
                     }
                 }
-                while (bytesRead != 0);
+                while (bytesRead > 0);
                 PostCompleted(null, false);
             }
             catch (Exception error)
