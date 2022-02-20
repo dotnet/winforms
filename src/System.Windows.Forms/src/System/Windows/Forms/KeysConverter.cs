@@ -146,9 +146,9 @@ namespace System.Windows.Forms
         /// </summary>
         public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
-            if (value is string)
+            if (value is string valueAsString)
             {
-                string text = ((string)value).Trim();
+                string text = valueAsString.Trim();
 
                 if (text.Length == 0)
                 {
