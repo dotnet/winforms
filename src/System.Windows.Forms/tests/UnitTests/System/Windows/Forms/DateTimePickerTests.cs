@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(200, control.PreferredHeight), control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
-            Assert.Equal(DateTime.Now.ToString(), control.Text);
+            Assert.Equal(control.TestAccessor().Dynamic._creationTime.ToString(), control.Text);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
             Assert.False(control.UseWaitCursor);

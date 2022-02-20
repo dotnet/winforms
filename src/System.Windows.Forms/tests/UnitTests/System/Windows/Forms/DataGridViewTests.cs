@@ -1177,7 +1177,8 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [WinFormsTheory]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/6597")]
+        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6597")]
         [MemberData(nameof(RowHeadersWidth_SetWithParentWithHandle_TestData))]
         public void DataGridView_RowHeadersWidth_SetWithParentWithHandle_GetReturnsExpected(DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode, bool rowHeadersVisible, bool autoSize, int value, int expectedValue, int expectedInvalidatedCallCount, int expectedLayoutCallCount, int expectedParentLayoutCallCount)
         {
