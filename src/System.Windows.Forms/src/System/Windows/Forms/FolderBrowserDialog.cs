@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Buffers;
 using System.ComponentModel;
 using System.Drawing.Design;
@@ -28,13 +26,13 @@ namespace System.Windows.Forms
         private Environment.SpecialFolder _rootFolder;
 
         // Description text to show.
-        private string _descriptionText;
+        private string? _descriptionText;
 
         // Folder picked by the user.
-        private string _selectedPath;
+        private string? _selectedPath;
 
         // Initial folder.
-        private string _initialDirectory;
+        private string? _initialDirectory;
 
         // Win32 file dialog FOS_* option flags.
         private int _options;
@@ -67,7 +65,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler HelpRequest
+        public new event EventHandler? HelpRequest
         {
             add => base.HelpRequest += value;
             remove => base.HelpRequest -= value;
@@ -155,7 +153,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [SRCategory(nameof(SR.CatFolderBrowsing))]
         [SRDescription(nameof(SR.FolderBrowserDialogSelectedPath))]
-        public string SelectedPath
+        public string? SelectedPath
         {
             get => _selectedPath;
             set => _selectedPath = value ?? string.Empty;
@@ -168,7 +166,7 @@ namespace System.Windows.Forms
         [DefaultValue("")]
         [Editor("System.Windows.Forms.Design.InitialDirectoryEditor, System.Windows.Forms.Design, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", typeof(UITypeEditor))]
         [SRDescription(nameof(SR.FDinitialDirDescr))]
-        public string InitialDirectory
+        public string? InitialDirectory
         {
             get => _initialDirectory;
             set => _initialDirectory = value ?? string.Empty;
@@ -206,7 +204,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [SRCategory(nameof(SR.CatFolderBrowsing))]
         [SRDescription(nameof(SR.FolderBrowserDialogDescription))]
-        public string Description
+        public string? Description
         {
             get => _descriptionText;
             set => _descriptionText = value ?? string.Empty;
@@ -301,7 +299,7 @@ namespace System.Windows.Forms
                         return true;
                     }
 
-                    throw Marshal.GetExceptionForHR((int)hr);
+                    throw Marshal.GetExceptionForHR((int)hr)!;
                 }
 
                 GetResult(dialog);
@@ -355,7 +353,7 @@ namespace System.Windows.Forms
 
             if (!string.IsNullOrEmpty(_selectedPath))
             {
-                string parent = Path.GetDirectoryName(_selectedPath);
+                string? parent = Path.GetDirectoryName(_selectedPath);
                 if (parent is null || !string.IsNullOrEmpty(_initialDirectory) || !Directory.Exists(parent))
                 {
                     dialog.SetFileName(_selectedPath);
@@ -400,11 +398,11 @@ namespace System.Windows.Forms
 
         private void GetResult(IFileDialog dialog)
         {
-            dialog.GetResult(out IShellItem item);
-            HRESULT hr = item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath);
-            if (!hr.Succeeded())
+            dialog.GetResult(out IShellItem? item);
+            if (item is not null)
             {
-                throw Marshal.GetExceptionForHR((int)hr);
+                HRESULT hr = item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath);
+                hr.ThrowIfFailed();
             }
         }
 
@@ -434,7 +432,7 @@ namespace System.Windows.Forms
                 // under the MTA threading model (...dialog does appear under MTA, but is totally non-functional).
                 if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != System.Threading.ApartmentState.STA)
                 {
-                    throw new Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
+                    throw new ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
                 }
 
                 var callback = new BrowseCallbackProc(FolderBrowserDialog_BrowseCallbackProc);
@@ -488,13 +486,13 @@ namespace System.Windows.Forms
                 case BFFM.INITIALIZED:
                     // Indicates the browse dialog box has finished initializing. The lpData value is zero.
 
-                    if (_initialDirectory.Length != 0)
+                    if (_initialDirectory is not null && _initialDirectory.Length != 0)
                     {
                         // Try to expand the folder specified by initialDir
                         User32.SendMessageW(hwnd, (User32.WM)BFFM.SETEXPANDED, (nint)BOOL.TRUE, _initialDirectory);
                     }
 
-                    if (_selectedPath.Length != 0)
+                    if (_selectedPath is not null && _selectedPath.Length != 0)
                     {
                         // Try to select the folder specified by selectedPath
                         User32.SendMessageW(hwnd, (User32.WM)BFFM.SETSELECTIONW, (nint)BOOL.TRUE, _selectedPath);

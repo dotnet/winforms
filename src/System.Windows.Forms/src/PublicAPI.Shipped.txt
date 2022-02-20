@@ -7996,7 +7996,7 @@ System.Windows.Forms.FolderBrowserDialog.AutoUpgradeEnabled.set -> void
 System.Windows.Forms.FolderBrowserDialog.ClientGuid.get -> System.Guid?
 System.Windows.Forms.FolderBrowserDialog.ClientGuid.set -> void
 System.Windows.Forms.FolderBrowserDialog.FolderBrowserDialog() -> void
-System.Windows.Forms.FolderBrowserDialog.HelpRequest -> System.EventHandler
+System.Windows.Forms.FolderBrowserDialog.HelpRequest -> System.EventHandler?
 System.Windows.Forms.FolderBrowserDialog.OkRequiresInteraction.get -> bool
 System.Windows.Forms.FolderBrowserDialog.OkRequiresInteraction.set -> void
 System.Windows.Forms.FolderBrowserDialog.RootFolder.get -> System.Environment.SpecialFolder
