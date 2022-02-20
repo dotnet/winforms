@@ -486,7 +486,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        throw new NotSupportedException("Loading from remove location disabled.");
+                        throw new NotSupportedException(SR.PictureBoxRemoteLocationNotSupported);
                     }
                 }
             }
@@ -583,7 +583,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    throw new NotSupportedException("Loading from remove location disabled.");
+                    throw new NotSupportedException(SR.PictureBoxRemoteLocationNotSupported);
                 }
             }
         }
