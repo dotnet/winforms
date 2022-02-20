@@ -169,7 +169,8 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
             });
         }
 
-        [WinFormsFact]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/6609")]
+        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6609")]
         public async Task RichTextBox_Click_On_Custom_Link_Followed_By_Hidden_Text_Provides_Displayed_Link_SpanAsync()
         {
             await RunTestAsync(async (form, richTextBox) =>
