@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     /// </summary>
     public class KeysConverter : TypeConverter, IComparer
     {
-        private IDictionary? _keyNames;
+        private IDictionary<string, Keys>? _keyNames;
         private List<string>? _displayOrder;
         private StandardValuesCollection? _values;
 
@@ -31,7 +31,7 @@ namespace System.Windows.Forms
         [MemberNotNull(nameof(_displayOrder))]
         private void Initialize()
         {
-            _keyNames = new Hashtable(34);
+            _keyNames = new Dictionary<string, Keys>(34);
             _displayOrder = new List<string>(34);
 
             AddKey(SR.toStringEnter, Keys.Return);
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
         ///  Access to a lookup table of name/value pairs for keys.  These are localized
         ///  names.
         /// </summary>
-        private IDictionary KeyNames
+        private IDictionary<string, Keys> KeyNames
         {
             get
             {
@@ -252,12 +252,11 @@ namespace System.Windows.Forms
 
                     // First, iterate through and do the modifiers. These are
                     // additive, so we support things like Ctrl + Alt
-                    //
                     for (int i = 0; i < DisplayOrder.Count; i++)
                     {
                         string keyString = DisplayOrder[i];
-                        Keys keyValue = (Keys)_keyNames![keyString]!;
-                        if (((int)(keyValue) & (int)modifiers) != 0)
+                        Keys keyValue = _keyNames![keyString];
+                        if (((int)keyValue & (int)modifiers) != 0)
                         {
                             if (asString)
                             {
@@ -290,7 +289,7 @@ namespace System.Windows.Forms
                     for (int i = 0; i < DisplayOrder.Count; i++)
                     {
                         string keyString = DisplayOrder[i];
-                        Keys keyValue = (Keys)_keyNames![keyString]!;
+                        Keys keyValue = _keyNames![keyString];
                         if (keyValue.Equals(keyOnly))
                         {
                             if (asString)
@@ -355,7 +354,7 @@ namespace System.Windows.Forms
             {
                 ArrayList list = new ArrayList();
 
-                ICollection keys = KeyNames.Values;
+                ICollection<Keys> keys = KeyNames.Values;
 
                 foreach (object o in keys)
                 {
