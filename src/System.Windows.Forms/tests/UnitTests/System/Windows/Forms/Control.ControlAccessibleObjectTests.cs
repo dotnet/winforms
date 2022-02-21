@@ -18,24 +18,32 @@ namespace System.Windows.Forms.Tests
         // This behavior is consistent with .NET Framework 4.7.2
         private static Type[] s_controlsNotUseTextForAccessibility = new Type[]
         {
-                typeof(CheckedListBox),
-                typeof(ComboBox),
-                typeof(DataGridViewComboBoxEditingControl),
-                typeof(DataGridViewTextBoxEditingControl),
-                typeof(DateTimePicker),
-                typeof(DomainUpDown),
-                typeof(HScrollBar),
-                typeof(ListBox),
-                typeof(ListView),
-                typeof(MaskedTextBox),
-                typeof(NumericUpDown),
-                typeof(ProgressBar),
-                typeof(RichTextBox),
-                typeof(TextBox),
-                typeof(TrackBar),
-                typeof(TreeView),
-                typeof(VScrollBar),
-                typeof(WebBrowser),
+            typeof(CheckedListBox),
+            typeof(ComboBox),
+            typeof(DataGridViewComboBoxEditingControl),
+            typeof(DataGridViewTextBoxEditingControl),
+            typeof(DateTimePicker),
+            typeof(DomainUpDown),
+            typeof(HScrollBar),
+            typeof(ListBox),
+            typeof(ListView),
+            typeof(MaskedTextBox),
+            typeof(NumericUpDown),
+            typeof(ProgressBar),
+            typeof(RichTextBox),
+            typeof(TextBox),
+            typeof(TrackBar),
+            typeof(TreeView),
+            typeof(VScrollBar),
+            typeof(WebBrowser),
+        };
+
+        // These controls have special conditions for setting the Text property.
+        // Please check if the control type isn't contained here in cases where text change is needed
+        // otherwise an error can be thrown.
+        private static Type[] s_controlsIgnoringTextChangesForTests = new Type[]
+        {
+            typeof(DateTimePicker),
         };
 
         [WinFormsFact]
@@ -1243,7 +1251,11 @@ namespace System.Windows.Forms.Tests
                 return;
             }
 
-            control.Text = "&Name";
+            if (!s_controlsIgnoringTextChangesForTests.Contains(type))
+            {
+                control.Text = "&Name";
+            }
+
             AccessibleObject controlAccessibleObject = control.AccessibilityObject;
             string expectedValue = s_controlsNotUseTextForAccessibility.Contains(type) ? string.Empty : "Alt+n";
 
@@ -1313,7 +1325,8 @@ namespace System.Windows.Forms.Tests
             var typeDefaultValues = new Dictionary<Type, string>
             {
                 { typeof(DataGridViewTextBoxEditingControl), SR.DataGridView_AccEditingControlAccName },
-                { typeof(PrintPreviewDialog), SR.PrintPreviewDialog_PrintPreview }
+                { typeof(PrintPreviewDialog), SR.PrintPreviewDialog_PrintPreview },
+                { typeof(DateTimePicker), string.Empty },
             };
 
             foreach (Type type in ReflectionHelper.GetPublicNotAbstractClasses<Control>())

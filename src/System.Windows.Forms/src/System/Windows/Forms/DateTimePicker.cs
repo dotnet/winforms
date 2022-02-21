@@ -820,6 +820,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         /// <summary>
         ///  Overrides Text to allow for setting of the value via a string.  Also, returns
         ///  a formatted Value when getting the text.  The DateTime class will throw
@@ -1071,9 +1073,13 @@ namespace System.Windows.Forms
             _onCloseUp?.Invoke(this, eventargs);
             _expandCollapseState = UiaCore.ExpandCollapseState.Collapsed;
 
+            // Raise automation event to annouce new state.
             if (IsAccessibilityObjectCreated)
             {
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                    oldValue: UiaCore.ExpandCollapseState.Expanded,
+                    newValue: UiaCore.ExpandCollapseState.Collapsed);
             }
         }
 
@@ -1084,6 +1090,15 @@ namespace System.Windows.Forms
         {
             _onDropDown?.Invoke(this, eventargs);
             _expandCollapseState = UiaCore.ExpandCollapseState.Expanded;
+
+            // Raise automation event to annouce new state.
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                    oldValue: UiaCore.ExpandCollapseState.Collapsed,
+                    newValue: UiaCore.ExpandCollapseState.Expanded);
+            }
         }
 
         protected virtual void OnFormatChanged(EventArgs e)
@@ -1091,6 +1106,18 @@ namespace System.Windows.Forms
             if (Events[s_formatChangedEvent] is EventHandler eh)
             {
                 eh(this, e);
+            }
+        }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+
+            // Raise automation event to annouce the control.
+            if (IsAccessibilityObjectCreated)
+            {
+                _expandCollapseState = UiaCore.ExpandCollapseState.Collapsed;
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
         }
 
@@ -1132,6 +1159,20 @@ namespace System.Windows.Forms
         protected virtual void OnValueChanged(EventArgs eventargs)
         {
             _onValueChanged?.Invoke(this, eventargs);
+
+            // Raise automation event to annouce changed value.
+            if (IsAccessibilityObjectCreated)
+            {
+                // If date is changed so dtp value is changed too.
+                // But I can't receive the previous value here,
+                // so I have to use current value twice.
+                // Anyway it doesn't matter because the Narrator pronounces actual AO state.
+                string value = AccessibilityObject.Value;
+                AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                    UiaCore.UIA.ValueValuePropertyId,
+                    oldValue: value,
+                    newValue: value);
+            }
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]

@@ -51,6 +51,10 @@ namespace System.Windows.Forms
                 }
             }
 
+            // Note: returns empty string instead of null, because the date value replaces null,
+            // so name is not empty in this case even if AccessibleName is not set.
+            public override string Name => Owner.AccessibleName ?? string.Empty;
+
             public override string Value
             {
                 get
@@ -114,6 +118,7 @@ namespace System.Windows.Forms
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 => (patternId == UiaCore.UIA.TogglePatternId && ((DateTimePicker)Owner).ShowCheckBox) ||
                     patternId == UiaCore.UIA.ExpandCollapsePatternId ||
+                    patternId == UiaCore.UIA.ValuePatternId ||
                     base.IsPatternSupported(patternId);
 
             #region Toggle Pattern

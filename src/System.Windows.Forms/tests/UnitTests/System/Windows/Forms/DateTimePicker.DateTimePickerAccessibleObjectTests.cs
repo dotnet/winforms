@@ -242,5 +242,53 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(UiaCore.ExpandCollapseState.Collapsed, accessibleObject.ExpandCollapseState);
             Assert.True(dateTimePicker.IsHandleCreated);
         }
+
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.UIA.ExpandCollapsePatternId)]
+        [InlineData((int)UiaCore.UIA.ValuePatternId)]
+        [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
+        public void DateTimePickerAccessibleObject_IsPatternSupported_ReturnsExpected_IfDoNotShowCheckbox(int patternId)
+        {
+            using DateTimePicker dateTimePicker = new() { ShowCheckBox = false };
+
+            AccessibleObject accessibleObject = dateTimePicker.AccessibilityObject;
+
+            Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+            Assert.False(dateTimePicker.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.UIA.TogglePatternId)]
+        [InlineData((int)UiaCore.UIA.ExpandCollapsePatternId)]
+        [InlineData((int)UiaCore.UIA.ValuePatternId)]
+        [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
+        public void DateTimePickerAccessibleObject_IsPatternSupported_ReturnsExpected_IfShowCheckbox(int patternId)
+        {
+            using DateTimePicker dateTimePicker = new() { ShowCheckBox = true };
+
+            AccessibleObject accessibleObject = dateTimePicker.AccessibilityObject;
+
+            Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+            Assert.False(dateTimePicker.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DateTimePickerAccessibleObject_Name_ReturnsEmptyString_IfControlAccessibleNameIsNotNull()
+        {
+            using DateTimePicker dateTimePicker = new();
+
+            Assert.Equal(string.Empty, dateTimePicker.AccessibilityObject.Name);
+            Assert.False(dateTimePicker.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DateTimePickerAccessibleObject_Name_ReturnsExpected_IfControlAccessibleNameIsNotNull()
+        {
+            string testAccessibleName = "TestDateTimePicker";
+            using DateTimePicker dateTimePicker = new() { AccessibleName = testAccessibleName };
+
+            Assert.Equal(testAccessibleName, dateTimePicker.AccessibilityObject.Name);
+            Assert.False(dateTimePicker.IsHandleCreated);
+        }
     }
 }
