@@ -171,32 +171,24 @@ namespace System.Windows.Forms
                     {
                         object obj = KeyNames[tokens[i]];
 
-                        if (obj is not null)
+                        Keys currentKey = (Keys)obj;
+
+                        if ((currentKey & Keys.KeyCode) != 0)
                         {
-                            Keys currentKey = (Keys)obj;
-
-                            if ((currentKey & Keys.KeyCode) != 0)
+                            // We found a match.  If we have previously found a
+                            // key code, then check to see that this guy
+                            // isn't a key code (it is illegal to have, say,
+                            // "A + B"
+                            if (foundKeyCode)
                             {
-                                // We found a match.  If we have previously found a
-                                // key code, then check to see that this guy
-                                // isn't a key code (it is illegal to have, say,
-                                // "A + B"
-                                if (foundKeyCode)
-                                {
-                                    throw new FormatException(SR.KeysConverterInvalidKeyCombination);
-                                }
-
-                                foundKeyCode = true;
+                                throw new FormatException(SR.KeysConverterInvalidKeyCombination);
                             }
 
-                            // Now OR the key into our current key
-                            key |= currentKey;
+                            foundKeyCode = true;
                         }
-                        else
-                        {
-                            // We did not match this key.  Report this as an error too.
-                            throw new FormatException(string.Format(SR.KeysConverterInvalidKeyName, tokens[i]));
-                        }
+
+                        // Now OR the key into our current key
+                        key |= currentKey;
                     }
 
                     return (object)key;

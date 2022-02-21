@@ -5911,11 +5911,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">La combinaison de touches n'est pas valide.</target>
         <note />
       </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">Le nom de la touche n'est pas valide.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
         <source>Enables the automatic handling of text that extends beyond the width of the label control.</source>
         <target state="translated">Active la gestion automatique du texte qui dépasse les limites de largeur du contrôle label.</target>

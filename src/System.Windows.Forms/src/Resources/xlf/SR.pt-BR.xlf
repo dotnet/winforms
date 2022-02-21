@@ -5911,11 +5911,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">A combinação de chave não é válida.</target>
         <note />
       </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">Nome de chave inválido.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
         <source>Enables the automatic handling of text that extends beyond the width of the label control.</source>
         <target state="translated">Permite a manipulação automática de texto que ultrapassa a largura do controle de rótulo.</target>

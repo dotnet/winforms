@@ -5911,11 +5911,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">La combinación de teclas no es válida.</target>
         <note />
       </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">El nombre clave no es válido.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
         <source>Enables the automatic handling of text that extends beyond the width of the label control.</source>
         <target state="translated">Permite el control automático del texto que se extiende más allá del ancho del control de la etiqueta.</target>

@@ -5911,11 +5911,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Kombinacja kluczy jest nieprawidłowa.</target>
         <note />
       </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">Nazwa klucza jest nieprawidłowa.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
         <source>Enables the automatic handling of text that extends beyond the width of the label control.</source>
         <target state="translated">Włącza automatyczną obsługę tekstu, który mieści się w szerokości formantu etykiety.</target>

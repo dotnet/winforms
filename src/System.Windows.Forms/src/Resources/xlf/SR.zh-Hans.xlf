@@ -5911,11 +5911,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">组合键无效。</target>
         <note />
       </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">键名无效。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
         <source>Enables the automatic handling of text that extends beyond the width of the label control.</source>
         <target state="translated">启用对扩展到标签控件宽度以外的文本的自动处理。</target>
