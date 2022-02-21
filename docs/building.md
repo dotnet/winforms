@@ -64,7 +64,7 @@ To create the Microsoft.Private.Winforms package, run `.\build -pack`
 
 ## Localization
 
-If you need to create a new or updated an existing localization string, follow these steps:
+If you need to add a new localization string or update an existing one, follow these steps:
 
 - Modify `Resource\SR.resx` file adding or updating necessary strings in the project that contains the said strings. (It is often faster/easier to open SR.resx in an XML editor).
 - Regenerate the localization files by rebuilding the solution/project from Visual Studio, or by executing `.\build.cmd` command. You can also build just the modified project by running  `dotnet build` from the project's root.
