@@ -1762,12 +1762,12 @@ System.Windows.Forms.FileDialog.Title.set -> void
 ~System.Windows.Forms.FlowLayoutPanel.SetFlowBreak(System.Windows.Forms.Control control, bool value) -> void
 System.Windows.Forms.FlowLayoutSettings.GetFlowBreak(object! child) -> bool
 System.Windows.Forms.FlowLayoutSettings.SetFlowBreak(object! child, bool value) -> void
-~System.Windows.Forms.FolderBrowserDialog.Description.get -> string
-~System.Windows.Forms.FolderBrowserDialog.Description.set -> void
-~System.Windows.Forms.FolderBrowserDialog.InitialDirectory.get -> string
-~System.Windows.Forms.FolderBrowserDialog.InitialDirectory.set -> void
-~System.Windows.Forms.FolderBrowserDialog.SelectedPath.get -> string
-~System.Windows.Forms.FolderBrowserDialog.SelectedPath.set -> void
+System.Windows.Forms.FolderBrowserDialog.Description.get -> string!
+System.Windows.Forms.FolderBrowserDialog.Description.set -> void
+System.Windows.Forms.FolderBrowserDialog.InitialDirectory.get -> string!
+System.Windows.Forms.FolderBrowserDialog.InitialDirectory.set -> void
+System.Windows.Forms.FolderBrowserDialog.SelectedPath.get -> string!
+System.Windows.Forms.FolderBrowserDialog.SelectedPath.set -> void
 ~System.Windows.Forms.FontDialog.Font.get -> System.Drawing.Font
 ~System.Windows.Forms.FontDialog.Font.set -> void
 ~System.Windows.Forms.Form.AcceptButton.get -> System.Windows.Forms.IButtonControl

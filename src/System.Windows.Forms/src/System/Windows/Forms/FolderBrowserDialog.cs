@@ -4,6 +4,7 @@
 
 using System.Buffers;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
@@ -26,13 +27,13 @@ namespace System.Windows.Forms
         private Environment.SpecialFolder _rootFolder;
 
         // Description text to show.
-        private string? _descriptionText;
+        private string _descriptionText;
 
         // Folder picked by the user.
-        private string? _selectedPath;
+        private string _selectedPath;
 
         // Initial folder.
-        private string? _initialDirectory;
+        private string _initialDirectory;
 
         // Win32 file dialog FOS_* option flags.
         private int _options;
@@ -153,7 +154,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [SRCategory(nameof(SR.CatFolderBrowsing))]
         [SRDescription(nameof(SR.FolderBrowserDialogSelectedPath))]
-        public string? SelectedPath
+        public string SelectedPath
         {
             get => _selectedPath;
             set => _selectedPath = value ?? string.Empty;
@@ -166,7 +167,7 @@ namespace System.Windows.Forms
         [DefaultValue("")]
         [Editor("System.Windows.Forms.Design.InitialDirectoryEditor, System.Windows.Forms.Design, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", typeof(UITypeEditor))]
         [SRDescription(nameof(SR.FDinitialDirDescr))]
-        public string? InitialDirectory
+        public string InitialDirectory
         {
             get => _initialDirectory;
             set => _initialDirectory = value ?? string.Empty;
@@ -204,7 +205,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [SRCategory(nameof(SR.CatFolderBrowsing))]
         [SRDescription(nameof(SR.FolderBrowserDialogDescription))]
-        public string? Description
+        public string Description
         {
             get => _descriptionText;
             set => _descriptionText = value ?? string.Empty;
@@ -231,6 +232,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Resets all properties to their default values.
         /// </summary>
+        [MemberNotNull(nameof(_descriptionText))]
+        [MemberNotNull(nameof(_selectedPath))]
+        [MemberNotNull(nameof(_initialDirectory))]
         public override void Reset()
         {
             _options = (int)(FOS.PICKFOLDERS | FOS.FORCEFILESYSTEM | FOS.FILEMUSTEXIST);
@@ -401,7 +405,7 @@ namespace System.Windows.Forms
             dialog.GetResult(out IShellItem? item);
             if (item is not null)
             {
-                HRESULT hr = item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath);
+                HRESULT hr = item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath!);
                 hr.ThrowIfFailed();
             }
         }
@@ -462,7 +466,7 @@ namespace System.Windows.Forms
                             }
 
                             // Retrieve the path from the IDList.
-                            SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath);
+                            SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath!);
                             GC.KeepAlive(callback);
                             return true;
                         }
