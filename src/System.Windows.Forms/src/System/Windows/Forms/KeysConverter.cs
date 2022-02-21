@@ -169,14 +169,7 @@ namespace System.Windows.Forms
 
                     for (int i = 0; i < tokens.Length; i++)
                     {
-                        object obj = KeyNames[tokens[i]]!;
-
-                        if (obj is null)
-                        {
-                            // Key was not found in our table.  See if it is a valid value in
-                            // the Keys enum.
-                            obj = Enum.Parse(typeof(Keys), tokens[i]);
-                        }
+                        object obj = KeyNames[tokens[i]];
 
                         if (obj is not null)
                         {
