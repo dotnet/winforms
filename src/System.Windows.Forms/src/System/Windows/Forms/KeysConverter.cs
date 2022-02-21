@@ -21,12 +21,6 @@ namespace System.Windows.Forms
         private List<string>? _displayOrder;
         private StandardValuesCollection? _values;
 
-        private void AddKey(string key, Keys value)
-        {
-            _keyNames![key] = value;
-            _displayOrder!.Add(key);
-        }
-
         [MemberNotNull(nameof(_keyNames))]
         [MemberNotNull(nameof(_displayOrder))]
         private void Initialize()
@@ -71,12 +65,20 @@ namespace System.Windows.Forms
             AddKey("7", Keys.D7);
             AddKey("8", Keys.D8);
             AddKey("9", Keys.D9);
+
+            void AddKey(string key, Keys value)
+            {
+                _keyNames[key] = value;
+                _displayOrder!.Add(key);
+            }
         }
 
         /// <summary>
         ///  Access to a lookup table of name/value pairs for keys.  These are localized
         ///  names.
         /// </summary>
+        [MemberNotNull(nameof(_keyNames))]
+        [MemberNotNull(nameof(_displayOrder))]
         private IDictionary<string, Keys> KeyNames
         {
             get
@@ -87,10 +89,14 @@ namespace System.Windows.Forms
                     Initialize();
                 }
 
+#pragma warning disable CS8774 // Member must have a non-null value when exiting.
                 return _keyNames;
+#pragma warning restore CS8774 // Member must have a non-null value when exiting.
             }
         }
 
+        [MemberNotNull(nameof(_keyNames))]
+        [MemberNotNull(nameof(_displayOrder))]
         private List<string> DisplayOrder
         {
             get
@@ -101,7 +107,9 @@ namespace System.Windows.Forms
                     Initialize();
                 }
 
-                return _displayOrder;
+#pragma warning disable CS8774 // Member must have a non-null value when exiting.
+                return _displayOrder!;
+#pragma warning restore CS8774 // Member must have a non-null value when exiting.
             }
         }
 
@@ -240,7 +248,7 @@ namespace System.Windows.Forms
                     for (int i = 0; i < DisplayOrder.Count; i++)
                     {
                         string keyString = DisplayOrder[i];
-                        Keys keyValue = _keyNames![keyString];
+                        Keys keyValue = _keyNames[keyString];
                         if (((int)keyValue & (int)modifiers) != 0)
                         {
                             if (asString)
@@ -263,7 +271,7 @@ namespace System.Windows.Forms
 
                     // Now reset and do the key values.  Here, we quit if
                     // we find a match.
-                    Keys keyOnly = (key & Keys.KeyCode);
+                    Keys keyOnly = key & Keys.KeyCode;
                     bool foundKey = false;
 
                     if (added && asString)
@@ -274,7 +282,7 @@ namespace System.Windows.Forms
                     for (int i = 0; i < DisplayOrder.Count; i++)
                     {
                         string keyString = DisplayOrder[i];
-                        Keys keyValue = _keyNames![keyString];
+                        Keys keyValue = _keyNames[keyString];
                         if (keyValue.Equals(keyOnly))
                         {
                             if (asString)
