@@ -4501,7 +4501,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void AccessibilityNotifyClients(AccessibleEvents accEvent, int objectID, int childID)
         {
-            if (IsHandleCreated)
+            if (IsHandleCreated && AccessibleObject.CanNotifyClients())
             {
                 User32.NotifyWinEvent((uint)accEvent, new HandleRef(this, Handle), objectID, childID + 1);
             }
