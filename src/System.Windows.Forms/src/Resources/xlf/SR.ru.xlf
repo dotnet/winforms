@@ -4862,6 +4862,11 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">Исключение при попытке создания экземпляра {0}. Исключение: "{1}".</target>
         <note />
       </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ExternalException">
         <source>External exception</source>
         <target state="translated">Внешнее исключение</target>
