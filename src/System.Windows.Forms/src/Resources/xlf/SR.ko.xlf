@@ -4594,11 +4594,6 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">DragDrop을 등록하지 못했습니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="EditDefaultAccessibleName">
-        <source>Spinner</source>
-        <target state="new">Spinner</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ErrorBadInputLanguage">
         <source>inputLanguage is not recognized by the system.</source>
         <target state="translated">시스템에서 inputLanguage를 인식할 수 없습니다.</target>
