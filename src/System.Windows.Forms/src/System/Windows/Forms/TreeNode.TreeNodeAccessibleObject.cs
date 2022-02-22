@@ -91,8 +91,10 @@ namespace System.Windows.Forms
                         => _owningTreeNode.IsExpanded
                             ? _owningTreeNode.LastNode?.AccessibilityObject
                             : null,
-                    UiaCore.NavigateDirection.NextSibling => _owningTreeNode.NextNode?.AccessibilityObject,
-                    UiaCore.NavigateDirection.PreviousSibling => _owningTreeNode.PrevNode?.AccessibilityObject,
+                    UiaCore.NavigateDirection.NextSibling
+                        => _owningTreeNode.NextNode?.AccessibilityObject,
+                    UiaCore.NavigateDirection.PreviousSibling
+                        => _owningTreeNode.PrevNode?.AccessibilityObject,
                     _ => base.FragmentNavigate(direction),
                 };
 
@@ -103,9 +105,12 @@ namespace System.Windows.Forms
                         => _owningTreeView.CheckBoxes
                             ? UiaCore.UIA.CheckBoxControlTypeId
                             : UiaCore.UIA.TreeItemControlTypeId,
-                    UiaCore.UIA.IsEnabledPropertyId => _owningTreeView.Enabled,
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                    UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
+                    UiaCore.UIA.IsEnabledPropertyId
+                        => _owningTreeView.Enabled,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId
+                        => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                    UiaCore.UIA.HasKeyboardFocusPropertyId
+                        => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
                     _ => base.GetPropertyValue(propertyID)
                 };
 
@@ -126,11 +131,7 @@ namespace System.Windows.Forms
                     _ => base.IsPatternSupported(patternId),
                 };
 
-            public override string? Name
-            {
-                get => _owningTreeNode.Text;
-                set => _owningTreeNode.Text = value;
-            }
+            public override string? Name => _owningTreeNode.Text;
 
             public override AccessibleObject? Parent => _owningTreeNode.Parent?.AccessibilityObject;
 
@@ -170,6 +171,11 @@ namespace System.Windows.Forms
                     if (_owningTreeNode.IsSelected)
                     {
                         state |= AccessibleStates.Focused | AccessibleStates.Selected;
+                    }
+
+                    if (!_owningTreeView.Enabled)
+                    {
+                        state |= AccessibleStates.Unavailable;
                     }
 
                     return state;
@@ -224,6 +230,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
+                // We don't need to scroll if the item is visible.
                 if (_owningTreeNode.IsVisible)
                 {
                     return;
@@ -254,11 +261,7 @@ namespace System.Windows.Forms
 
             #region Value Pattern
 
-            public override string? Value
-            {
-                get => _owningTreeNode.Text;
-                set => _owningTreeNode.Text = value;
-            }
+            public override string? Value => _owningTreeNode.Text;
 
             #endregion
         }

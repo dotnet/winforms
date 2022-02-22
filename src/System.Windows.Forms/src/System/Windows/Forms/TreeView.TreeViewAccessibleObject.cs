@@ -49,7 +49,7 @@ namespace System.Windows.Forms
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TreeControlTypeId,
                     UiaCore.UIA.IsEnabledPropertyId => _owningTreeView.Enabled,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                    UiaCore.UIA.HasKeyboardFocusPropertyId => _owningTreeView.Nodes.Count == 0,
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => _owningTreeView.Enabled && _owningTreeView.Nodes.Count == 0,
                     _ => base.GetPropertyValue(propertyID)
                 };
 
@@ -95,6 +95,11 @@ namespace System.Windows.Forms
                         state |= AccessibleStates.Focused;
                     }
 
+                    if (!_owningTreeView.Enabled)
+                    {
+                        state |= AccessibleStates.Unavailable;
+                    }
+
                     return state;
                 }
             }
@@ -109,13 +114,13 @@ namespace System.Windows.Forms
 
             #region Selection Pattern
 
-            internal override bool IsSelectionRequired => true;
+            internal override bool IsSelectionRequired => _owningTreeView.Nodes.Count != 0;
 
             internal override UiaCore.IRawElementProviderSimple[]? GetSelection()
             {
                 if (_owningTreeView.IsHandleCreated && GetSelected() is UiaCore.IRawElementProviderSimple selected)
                 {
-                    return new[] {  selected };
+                    return new[] { selected };
                 }
 
                 return Array.Empty<UiaCore.IRawElementProviderSimple>();

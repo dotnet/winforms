@@ -225,7 +225,7 @@ namespace System.Windows.Forms.Tests
             using TreeView control = new() { CheckBoxes = true };
             TreeNode node = new(control);
 
-            var expected = UiaCore.UIA.CheckBoxControlTypeId;
+            UiaCore.UIA expected = UiaCore.UIA.CheckBoxControlTypeId;
 
             Assert.Equal(expected, node.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
             Assert.False(control.IsHandleCreated);
@@ -237,7 +237,7 @@ namespace System.Windows.Forms.Tests
             using TreeView control = new() { CheckBoxes = false };
             TreeNode node = new(control);
 
-            var expected = UiaCore.UIA.TreeItemControlTypeId;
+            UiaCore.UIA expected = UiaCore.UIA.TreeItemControlTypeId;
 
             Assert.Equal(expected, node.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
             Assert.False(control.IsHandleCreated);
@@ -469,7 +469,7 @@ namespace System.Windows.Forms.Tests
             using TreeView control = new() { CheckBoxes = true };
             TreeNode node = new(control) { Checked = isChecked };
 
-            var expected = isChecked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
+            UiaCore.ToggleState expected = isChecked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
 
             Assert.Equal(expected, node.AccessibilityObject.ToggleState);
             Assert.False(control.IsHandleCreated);

@@ -137,7 +137,18 @@ namespace System.Windows.Forms.Tests
         {
             using TreeView control = new();
 
+            Assert.True(control.Enabled);
             Assert.True((bool)control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TreeViewAccessibleObject_GetPropertyValue_HasKeyboardFocus_ReturnsFalse_IfIsDisabled()
+        {
+            using TreeView control = new() { Enabled = false };
+
+            Assert.False(control.Enabled);
+            Assert.False((bool)control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId));
             Assert.False(control.IsHandleCreated);
         }
 
@@ -147,6 +158,7 @@ namespace System.Windows.Forms.Tests
             using TreeView control = new();
             control.Nodes.Add("Node 1");
 
+            Assert.True(control.Enabled);
             Assert.False((bool)control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId));
             Assert.False(control.IsHandleCreated);
         }
@@ -163,11 +175,21 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TreeViewAccessibleObject_IsSelectionRequired_ReturnsExpected()
+        public void TreeViewAccessibleObject_IsSelectionRequired_ReturnsTrue_IfControlHasItem()
+        {
+            using TreeView control = new();
+            control.Nodes.Add("Item1");
+
+            Assert.True(control.AccessibilityObject.IsSelectionRequired);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TreeViewAccessibleObject_IsSelectionRequired_ReturnsFalse_IfControlHasNoItem()
         {
             using TreeView control = new();
 
-            Assert.True(control.AccessibilityObject.IsSelectionRequired);
+            Assert.False(control.AccessibilityObject.IsSelectionRequired);
             Assert.False(control.IsHandleCreated);
         }
 
