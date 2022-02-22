@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -14,10 +12,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  Represents the accessibility object for the PropertyGrid DropDown button.
         ///  This DropDownButtonAccessibleObject is available in Level3 only.
         /// </summary>
-        internal class DropDownButtonAccessibleObject : Control.ControlAccessibleObject
+        internal class DropDownButtonAccessibleObject : ControlAccessibleObject
         {
             private readonly DropDownButton _owningDropDownButton;
-            private readonly PropertyGridView _owningPropertyGrid;
+            private readonly PropertyGridView? _owningPropertyGrid;
 
             /// <summary>
             ///  Constructs the new instance of DropDownButtonAccessibleObject.
@@ -47,7 +45,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (direction == UiaCore.NavigateDirection.Parent &&
                     _owningPropertyGrid?.SelectedGridEntry is not null &&
@@ -57,7 +55,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else if (direction == UiaCore.NavigateDirection.PreviousSibling)
                 {
-                    return _owningPropertyGrid.EditAccessibleObject;
+                    return _owningPropertyGrid?.EditAccessibleObject;
                 }
 
                 return base.FragmentNavigate(direction);
@@ -66,15 +64,15 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <summary>
             ///  Returns the element that is the root node of this fragment of UI.
             /// </summary>
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-                => _owningPropertyGrid.AccessibilityObject;
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
+                => _owningPropertyGrid?.AccessibilityObject;
 
             /// <summary>
             ///  Request value of specified property from an element.
             /// </summary>
             /// <param name="propertyID">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-            internal override object GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
             {
                 UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
                 _ => base.GetPropertyValue(propertyID),
