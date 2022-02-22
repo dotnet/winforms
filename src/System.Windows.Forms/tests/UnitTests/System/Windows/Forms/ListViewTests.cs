@@ -5395,6 +5395,304 @@ namespace System.Windows.Forms.Tests
             Assert.True(listView.IsHandleCreated);
         }
 
+        public static IEnumerable<object[]> ListView_View_ShowGroup_TestData()
+        {
+            foreach (View view in Enum.GetValues(typeof(View)))
+            {
+                foreach (bool showGroups in new[] { true, false })
+                {
+                    yield return new object[] { view, showGroups };
+                }
+            }
+        }
+
+        public static IEnumerable<object[]> ListView_View_ShowGroup_Checked_TestData()
+        {
+            foreach (View view in Enum.GetValues(typeof(View)))
+            {
+                // CheckBoxes are not supported in Tile view.
+                if (view == View.Tile)
+                {
+                    continue;
+                }
+
+                foreach (bool showGroups in new[] { true, false })
+                {
+                    yield return new object[] { view, showGroups };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListView_View_ShowGroup_TestData))]
+        public void ListView_Remove_NotSelectedItems(View view, bool showGroups)
+        {
+            using ListView listView = new ListView() { View = view, ShowGroups = showGroups };
+            listView.CreateControl();
+            listView.Items.AddRange(new ListViewItem[] { new("test 1"), new("test 2"), new("test 3") });
+
+            listView.Items[0].Selected = true;
+
+            Assert.True(listView.Items[0].Selected);
+            Assert.Equal(3, listView.Items.Count);
+            Assert.Equal(1, listView.SelectedItems.Count);
+            Assert.Equal(1, listView.SelectedIndices.Count);
+
+            listView.Items.Remove(listView.Items[1]);
+
+            Assert.True(listView.Items[0].Selected);
+            Assert.Equal(2, listView.Items.Count);
+            Assert.Equal(1, listView.SelectedItems.Count);
+            Assert.Equal(1, listView.SelectedIndices.Count);
+            Assert.True(listView.Items[0].Selected);
+
+            listView.Items.Remove(listView.Items[1]);
+
+            Assert.True(listView.Items[0].Selected);
+            Assert.Equal(1, listView.Items.Count);
+            Assert.Equal(1, listView.SelectedItems.Count);
+            Assert.Equal(1, listView.SelectedIndices.Count);
+            Assert.True(listView.Items[0].Selected);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListView_View_ShowGroup_TestData))]
+        public void ListView_Remove_SelectedItems(View view, bool showGroups)
+        {
+            using ListView listView = new ListView() { View = view, ShowGroups = showGroups };
+            listView.CreateControl();
+            listView.Items.AddRange(new ListViewItem[] { new("test 1"), new("test 2"), new("test 3") });
+
+            for (int count = listView.Items.Count; count > 1; count -= 1)
+            {
+                ListViewItem item = listView.Items[0];
+                item.Selected = true;
+
+                Assert.True(item.Selected);
+                Assert.Equal(count, listView.Items.Count);
+                Assert.Equal(listView, item.ListView);
+                Assert.Equal(1, listView.SelectedItems.Count);
+                Assert.Equal(1, listView.SelectedIndices.Count);
+
+                listView.Items.Remove(item);
+                count -= 1;
+
+                Assert.True(item.Selected);
+                Assert.Equal(count, listView.Items.Count);
+                Assert.Null(item.ListView);
+                Assert.Equal(0, listView.SelectedItems.Count);
+                Assert.Equal(0, listView.SelectedIndices.Count);
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListView_View_ShowGroup_Checked_TestData))]
+        public void ListView_Remove_NotCheckedItems(View view, bool showGroups)
+        {
+            using ListView listView = new ListView() { View = view, ShowGroups = showGroups, CheckBoxes = true };
+            listView.CreateControl();
+            listView.Items.AddRange(new ListViewItem[] { new("test 1"), new("test 2"), new("test 3") });
+
+            listView.Items[0].Checked = true;
+
+            Assert.True(listView.Items[0].Checked);
+            Assert.Equal(3, listView.Items.Count);
+            Assert.Equal(1, listView.CheckedItems.Count);
+            Assert.Equal(1, listView.CheckedIndices.Count);
+
+            listView.Items.Remove(listView.Items[1]);
+
+            Assert.True(listView.Items[0].Checked);
+            Assert.Equal(2, listView.Items.Count);
+            Assert.Equal(1, listView.CheckedItems.Count);
+            Assert.Equal(1, listView.CheckedIndices.Count);
+
+            listView.Items.Remove(listView.Items[1]);
+
+            Assert.True(listView.Items[0].Checked);
+            Assert.Equal(1, listView.Items.Count);
+            Assert.Equal(1, listView.CheckedItems.Count);
+            Assert.Equal(1, listView.CheckedIndices.Count);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListView_View_ShowGroup_Checked_TestData))]
+        public void ListView_Remove_CheckedItems(View view, bool showGroups)
+        {
+            using ListView listView = new ListView() { View = view, ShowGroups = showGroups, CheckBoxes = true };
+            listView.CreateControl();
+            listView.Items.AddRange(new ListViewItem[] { new("test 1"), new("test 2"), new("test 3") });
+
+            for (int count = listView.Items.Count; count > 1; count -= 1)
+            {
+                ListViewItem item = listView.Items[0];
+                item.Checked = true;
+
+                Assert.True(item.Checked);
+                Assert.Equal(count, listView.Items.Count);
+                Assert.Equal(listView, item.ListView);
+                Assert.Equal(1, listView.CheckedItems.Count);
+                Assert.Equal(1, listView.CheckedIndices.Count);
+
+                listView.Items.Remove(item);
+                count -= 1;
+
+                Assert.True(item.Checked);
+                Assert.Equal(count, listView.Items.Count);
+                Assert.Null(item.ListView);
+                Assert.Equal(0, listView.CheckedItems.Count);
+                Assert.Equal(0, listView.CheckedIndices.Count);
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListView_View_ShowGroup_TestData))]
+        public void ListView_Remove_Group_WithNotSelectedItems(View view, bool showGroups)
+        {
+            using ListView listView = new ListView() { View = view, ShowGroups = showGroups };
+            listView.CreateControl();
+
+            var groups = new ListViewGroup[] { new("Group 1"), new("Group 2"), new("Group 3") };
+            listView.Groups.AddRange(groups);
+            listView.Items.AddRange(new ListViewItem[] { new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2]) });
+
+            listView.Items[0].Selected = true;
+
+            Assert.True(listView.Items[0].Selected);
+            Assert.Equal(3, listView.Items.Count);
+            Assert.Equal(3, listView.Groups.Count);
+            Assert.Equal(1, listView.SelectedItems.Count);
+            Assert.Equal(1, listView.SelectedIndices.Count);
+
+            listView.Groups.Remove(listView.Groups[2]);
+
+            Assert.True(listView.Items[0].Selected);
+            Assert.Equal(3, listView.Items.Count);
+            Assert.Equal(2, listView.Groups.Count);
+            Assert.Equal(1, listView.SelectedItems.Count);
+            Assert.Equal(1, listView.SelectedIndices.Count);
+            Assert.True(listView.Items[0].Selected);
+
+            listView.Groups.Remove(listView.Groups[1]);
+
+            Assert.True(listView.Items[0].Selected);
+            Assert.Equal(3, listView.Items.Count);
+            Assert.Equal(1, listView.Groups.Count);
+            Assert.Equal(1, listView.SelectedItems.Count);
+            Assert.Equal(1, listView.SelectedIndices.Count);
+            Assert.True(listView.Items[0].Selected);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListView_View_ShowGroup_TestData))]
+        public void ListView_Remove_Group_WithSelectedItems(View view, bool showGroups)
+        {
+            using ListView listView = new ListView() { View = view, ShowGroups = showGroups };
+            listView.CreateControl();
+
+            var groups = new ListViewGroup[] { new("Group 1"), new("Group 2"), new("Group 3") };
+            listView.Groups.AddRange(groups);
+            listView.Items.AddRange(new ListViewItem[] { new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2]) });
+
+            int count = 3;
+            for (int i = 0; i < 2; i++)
+            {
+                ListViewItem item = listView.Items[i];
+                item.Selected = true;
+                int selectedCount = i + 1;
+
+                Assert.True(item.Selected);
+                Assert.Equal(3, listView.Items.Count);
+                Assert.Equal(count, listView.Groups.Count);
+                Assert.Equal(listView, item.ListView);
+                Assert.Equal(selectedCount, listView.SelectedItems.Count);
+                Assert.Equal(selectedCount, listView.SelectedIndices.Count);
+
+                listView.Groups.Remove(listView.Groups[0]);
+                count -= 1;
+
+                Assert.True(item.Selected);
+                Assert.Equal(3, listView.Items.Count);
+                Assert.Equal(count, listView.Groups.Count);
+                Assert.Equal(listView, item.ListView);
+                Assert.Equal(selectedCount, listView.SelectedItems.Count);
+                Assert.Equal(selectedCount, listView.SelectedIndices.Count);
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListView_View_ShowGroup_Checked_TestData))]
+        public void ListView_Remove_Group_WithNotCheckedItems(View view, bool showGroups)
+        {
+            using ListView listView = new ListView() { View = view, ShowGroups = showGroups, CheckBoxes = true };
+            listView.CreateControl();
+
+            var groups = new ListViewGroup[] { new("Group 1"), new("Group 2"), new("Group 3") };
+            listView.Groups.AddRange(groups);
+            listView.Items.AddRange(new ListViewItem[] { new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2]) });
+
+            listView.Items[0].Checked = true;
+
+            Assert.True(listView.Items[0].Checked);
+            Assert.Equal(3, listView.Items.Count);
+            Assert.Equal(3, listView.Items.Count);
+            Assert.Equal(1, listView.CheckedItems.Count);
+            Assert.Equal(1, listView.CheckedIndices.Count);
+
+            listView.Groups.Remove(listView.Groups[2]);
+
+            Assert.True(listView.Items[0].Checked);
+            Assert.Equal(3, listView.Items.Count);
+            Assert.Equal(2, listView.Groups.Count);
+            Assert.Equal(1, listView.CheckedItems.Count);
+            Assert.Equal(1, listView.CheckedIndices.Count);
+
+            listView.Groups.Remove(listView.Groups[1]);
+
+            Assert.True(listView.Items[0].Checked);
+            Assert.Equal(3, listView.Items.Count);
+            Assert.Equal(1, listView.Groups.Count);
+            Assert.Equal(1, listView.CheckedItems.Count);
+            Assert.Equal(1, listView.CheckedIndices.Count);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListView_View_ShowGroup_Checked_TestData))]
+        public void ListView_Remove_Group_WithCheckedItems(View view, bool showGroups)
+        {
+            using ListView listView = new ListView() { View = view, ShowGroups = showGroups, CheckBoxes = true };
+            listView.CreateControl();
+
+            var groups = new ListViewGroup[] { new("Group 1"), new("Group 2"), new("Group 3") };
+            listView.Groups.AddRange(groups);
+            listView.Items.AddRange(new ListViewItem[] { new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2]) });
+
+            int count = 3;
+            for (int i = 0; i < 2; i++)
+            {
+                ListViewItem item = listView.Items[i];
+                item.Checked = true;
+                int selectedCount = i + 1;
+
+                Assert.True(item.Checked);
+                Assert.Equal(3, listView.Items.Count);
+                Assert.Equal(count, listView.Groups.Count);
+                Assert.Equal(listView, item.ListView);
+                Assert.Equal(selectedCount, listView.CheckedItems.Count);
+                Assert.Equal(selectedCount, listView.CheckedIndices.Count);
+
+                listView.Groups.Remove(listView.Groups[0]);
+                count -= 1;
+
+                Assert.True(item.Checked);
+                Assert.Equal(3, listView.Items.Count);
+                Assert.Equal(count, listView.Groups.Count);
+                Assert.Equal(listView, item.ListView);
+                Assert.Equal(selectedCount, listView.CheckedItems.Count);
+                Assert.Equal(selectedCount, listView.CheckedIndices.Count);
+            }
+        }
+
         private class SubListViewItem : ListViewItem
         {
             public AccessibleObject CustomAccessibleObject { get; set; }
