@@ -103,6 +103,22 @@ namespace System.Windows.Forms
             }
         }
 
+        internal static bool CanNotifyClients()
+        {
+            // While handling accessibility events, accessibility clients (JAWS, Inspect),
+            // can access AccessibleObject associated with the event. In the designer scenario, controls are not
+            // receiving messages directly and might not respond to messages while in the notification call.
+            // This will make the server process unresponsive and will cause VisualStudio to become unresponsive.
+            //
+            // The following compat switch is set in the designer server process to prevent controls from sending notification.
+            if (AppContext.TryGetSwitch("Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications", out bool isEnabled))
+            {
+                return !isEnabled;
+            }
+
+            return true;
+        }
+
         /// <summary>
         ///  Gets a description of the default action for an object.
         /// </summary>
@@ -2385,7 +2401,7 @@ namespace System.Windows.Forms
         /// </returns>
         public bool RaiseAutomationNotification(AutomationNotificationKind notificationKind, AutomationNotificationProcessing notificationProcessing, string notificationText)
         {
-            if (!notificationEventAvailable)
+            if (!notificationEventAvailable || !CanNotifyClients())
             {
                 return false;
             }
@@ -2422,7 +2438,7 @@ namespace System.Windows.Forms
 
         internal bool RaiseAutomationEvent(int eventId)
         {
-            if (UnsafeNativeMethods.UiaClientsAreListening())
+            if (UnsafeNativeMethods.UiaClientsAreListening() && CanNotifyClients())
             {
                 int result = UnsafeNativeMethods.UiaRaiseAutomationEvent(this, eventId);
                 return result == NativeMethods.S_OK;
@@ -2433,7 +2449,7 @@ namespace System.Windows.Forms
 
         internal bool RaiseAutomationPropertyChangedEvent(int propertyId, object oldValue, object newValue)
         {
-            if (UnsafeNativeMethods.UiaClientsAreListening())
+            if (UnsafeNativeMethods.UiaClientsAreListening() && CanNotifyClients())
             {
                 int result = UnsafeNativeMethods.UiaRaiseAutomationPropertyChangedEvent(this, propertyId, oldValue, newValue);
                 return result == NativeMethods.S_OK;
@@ -2444,7 +2460,7 @@ namespace System.Windows.Forms
 
         internal bool RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType structureChangeType, int[] runtimeId)
         {
-            if (UnsafeNativeMethods.UiaClientsAreListening())
+            if (UnsafeNativeMethods.UiaClientsAreListening() && CanNotifyClients())
             {
                 int result = UnsafeNativeMethods.UiaRaiseStructureChangedEvent(this, structureChangeType, runtimeId, runtimeId == null ? 0 : runtimeId.Length);
                 return result == NativeMethods.S_OK;
