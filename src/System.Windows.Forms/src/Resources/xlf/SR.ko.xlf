@@ -4856,6 +4856,11 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">{0}의 인스턴스를 만드는 동안 예외가 발생했습니다. 예외는 "{1}"입니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ExternalException">
         <source>External exception</source>
         <target state="translated">외부 예외</target>

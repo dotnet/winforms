@@ -1494,10 +1494,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (gridEntry is not null && IsAccessibilityObjectCreated)
             {
                 gridEntry.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-                gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                    UiaCore.ExpandCollapseState.Collapsed,
-                    UiaCore.ExpandCollapseState.Expanded);
+                gridEntry.AccessibilityObject.RaiseAutomationNotification(
+                    Automation.AutomationNotificationKind.Other,
+                    Automation.AutomationNotificationProcessing.ImportantMostRecent,
+                    SR.ExpandedStateName);
             }
 
             // Control is a top level window. Standard way of setting parent on the control is prohibited for top-level controls.

@@ -4856,6 +4856,11 @@ Se si sceglie Continua, l'errore verrà ignorato e l'applicazione proverà a con
         <target state="translated">Durante la creazione di un'istanza di {0} si è verificata la seguente eccezione: "{1}".</target>
         <note />
       </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ExternalException">
         <source>External exception</source>
         <target state="translated">Eccezione esterna</target>

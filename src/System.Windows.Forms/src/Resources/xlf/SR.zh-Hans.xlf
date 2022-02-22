@@ -4856,6 +4856,11 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">尝试创建 {0} 的实例时发生异常。异常为“{1}”。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ExternalException">
         <source>External exception</source>
         <target state="translated">外部异常</target>
