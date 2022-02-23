@@ -399,15 +399,15 @@ override System.Windows.Forms.CursorConverter.GetStandardValuesSupported(System.
 ~override System.Windows.Forms.Design.ComponentEditorPage.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Equals(object obj) -> bool
 ~override System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(System.ComponentModel.ITypeDescriptorContext context, object component) -> bool
-~override System.Windows.Forms.DomainUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Add(object item) -> int
-~override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Insert(int index, object item) -> void
-~override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Remove(object item) -> void
-~override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.this[int index].get -> object
-~override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.this[int index].set -> void
-~override System.Windows.Forms.DomainUpDown.OnChanged(object source, System.EventArgs e) -> void
-~override System.Windows.Forms.DomainUpDown.OnTextBoxKeyPress(object source, System.Windows.Forms.KeyPressEventArgs e) -> void
-~override System.Windows.Forms.DomainUpDown.ToString() -> string
+override System.Windows.Forms.DomainUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Add(object? item) -> int
+override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Insert(int index, object? item) -> void
+override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Remove(object? item) -> void
+override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.this[int index].get -> object?
+override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.this[int index].set -> void
+override System.Windows.Forms.DomainUpDown.OnChanged(object? source, System.EventArgs! e) -> void
+override System.Windows.Forms.DomainUpDown.OnTextBoxKeyPress(object? source, System.Windows.Forms.KeyPressEventArgs! e) -> void
+override System.Windows.Forms.DomainUpDown.ToString() -> string!
 ~override System.Windows.Forms.ErrorProvider.Site.set -> void
 override System.Windows.Forms.FileDialog.ToString() -> string!
 ~override System.Windows.Forms.FlowLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
@@ -1723,10 +1723,10 @@ System.Windows.Forms.DataObject.DataObject(string! format, object! data) -> void
 ~System.Windows.Forms.Design.IUIService.ShowMessage(string message, string caption, System.Windows.Forms.MessageBoxButtons buttons) -> System.Windows.Forms.DialogResult
 ~System.Windows.Forms.Design.IUIService.Styles.get -> System.Collections.IDictionary
 ~System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(object component, System.Windows.Forms.IWin32Window owner) -> bool
-~System.Windows.Forms.DomainUpDown.Items.get -> System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection
-~System.Windows.Forms.DomainUpDown.OnSelectedItemChanged(object source, System.EventArgs e) -> void
-~System.Windows.Forms.DomainUpDown.SelectedItem.get -> object
-~System.Windows.Forms.DomainUpDown.SelectedItem.set -> void
+System.Windows.Forms.DomainUpDown.Items.get -> System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection!
+System.Windows.Forms.DomainUpDown.OnSelectedItemChanged(object? source, System.EventArgs! e) -> void
+System.Windows.Forms.DomainUpDown.SelectedItem.get -> object?
+System.Windows.Forms.DomainUpDown.SelectedItem.set -> void
 ~System.Windows.Forms.ErrorProvider.BindToDataAndErrors(object newDataSource, string newDataMember) -> void
 ~System.Windows.Forms.ErrorProvider.CanExtend(object extendee) -> bool
 ~System.Windows.Forms.ErrorProvider.ContainerControl.get -> System.Windows.Forms.ContainerControl
@@ -7766,10 +7766,10 @@ System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.DomainUpDownAcces
 System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection
 System.Windows.Forms.DomainUpDown.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.DomainUpDown.Padding.set -> void
-System.Windows.Forms.DomainUpDown.PaddingChanged -> System.EventHandler
+System.Windows.Forms.DomainUpDown.PaddingChanged -> System.EventHandler?
 System.Windows.Forms.DomainUpDown.SelectedIndex.get -> int
 System.Windows.Forms.DomainUpDown.SelectedIndex.set -> void
-System.Windows.Forms.DomainUpDown.SelectedItemChanged -> System.EventHandler
+System.Windows.Forms.DomainUpDown.SelectedItemChanged -> System.EventHandler?
 System.Windows.Forms.DomainUpDown.Sorted.get -> bool
 System.Windows.Forms.DomainUpDown.Sorted.set -> void
 System.Windows.Forms.DomainUpDown.Wrap.get -> bool

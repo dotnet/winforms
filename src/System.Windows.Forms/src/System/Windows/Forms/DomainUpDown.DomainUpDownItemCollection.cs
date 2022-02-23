@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -27,7 +25,7 @@ namespace System.Windows.Forms
 
             [Browsable(false)]
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public override object this[int index]
+            public override object? this[int index]
             {
                 get
                 {
@@ -52,7 +50,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             /// </summary>
-            public override int Add(object item)
+            public override int Add(object? item)
             {
                 // Overridden to perform sorting after adding an item
 
@@ -67,7 +65,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             /// </summary>
-            public override void Remove(object item)
+            public override void Remove(object? item)
             {
                 int index = IndexOf(item);
 
@@ -96,14 +94,13 @@ namespace System.Windows.Forms
                 else if (item == owner._domainIndex)
                 {
                     // The currently selected item was removed
-                    //
                     owner.SelectIndex(-1);
                 }
             }
 
             /// <summary>
             /// </summary>
-            public override void Insert(int index, object item)
+            public override void Insert(int index, object? item)
             {
                 base.Insert(index, item);
                 if (owner.Sorted)
