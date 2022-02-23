@@ -12,8 +12,18 @@ internal static partial class Interop
         [DllImport(Libraries.Ole32, ExactSpelling = true)]
         public static extern HRESULT DoDragDrop(
             IDataObject pDataObj,
-            IDropSource pDropSource,
+            IntPtr pDropSource,
             DROPEFFECT dwOKEffects,
             out DROPEFFECT pdwEffect);
+
+        public static HRESULT DoDragDrop(
+            IDataObject pDataObj,
+            IDropSource pDropSource,
+            DROPEFFECT dwOKEffects,
+            out DROPEFFECT pdwEffect)
+        {
+            var dropSourcePtr = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(pDropSource, CreateComInterfaceFlags.None);
+            return DoDragDrop(pDataObj, dropSourcePtr, dwOKEffects, out pdwEffect);
+        }
     }
 }
