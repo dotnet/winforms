@@ -15,12 +15,12 @@ namespace System.Windows.Forms
         /// </summary>
         public class DomainUpDownItemCollection : ArrayList
         {
-            readonly DomainUpDown owner;
+            private readonly DomainUpDown _owner;
 
             internal DomainUpDownItemCollection(DomainUpDown owner)
-            : base()
+                : base()
             {
-                this.owner = owner;
+                _owner = owner;
             }
 
             [Browsable(false)]
@@ -36,14 +36,14 @@ namespace System.Windows.Forms
                 {
                     base[index] = value;
 
-                    if (owner.SelectedIndex == index)
+                    if (_owner.SelectedIndex == index)
                     {
-                        owner.SelectIndex(index);
+                        _owner.SelectIndex(index);
                     }
 
-                    if (owner.Sorted)
+                    if (_owner.Sorted)
                     {
-                        owner.SortDomainItems();
+                        _owner.SortDomainItems();
                     }
                 }
             }
@@ -55,9 +55,9 @@ namespace System.Windows.Forms
                 // Overridden to perform sorting after adding an item
 
                 int ret = base.Add(item);
-                if (owner.Sorted)
+                if (_owner.Sorted)
                 {
-                    owner.SortDomainItems();
+                    _owner.SortDomainItems();
                 }
 
                 return ret;
@@ -86,15 +86,15 @@ namespace System.Windows.Forms
                 // Overridden to update the domain index if necessary
                 base.RemoveAt(item);
 
-                if (item < owner._domainIndex)
+                if (item < _owner._domainIndex)
                 {
                     // The item removed was before the currently selected item
-                    owner.SelectIndex(owner._domainIndex - 1);
+                    _owner.SelectIndex(_owner._domainIndex - 1);
                 }
-                else if (item == owner._domainIndex)
+                else if (item == _owner._domainIndex)
                 {
                     // The currently selected item was removed
-                    owner.SelectIndex(-1);
+                    _owner.SelectIndex(-1);
                 }
             }
 
@@ -103,9 +103,9 @@ namespace System.Windows.Forms
             public override void Insert(int index, object? item)
             {
                 base.Insert(index, item);
-                if (owner.Sorted)
+                if (_owner.Sorted)
                 {
-                    owner.SortDomainItems();
+                    _owner.SortDomainItems();
                 }
             }
         }
