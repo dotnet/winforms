@@ -203,5 +203,15 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
 
             Assert.NotNull(editFieldAccessibleObject.RuntimeId);
         }
+
+        [WinFormsFact]
+        public void GridViewTextBoxAccessibleObject_FragmentRoot_ReturnsExpected()
+        {
+            using PropertyGrid propertyGrid = new PropertyGrid();
+            PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
+            AccessibleObject accessibleObject = gridView.EditAccessibleObject;
+
+            Assert.Equal(propertyGrid.AccessibilityObject, accessibleObject.FragmentRoot);
+        }
     }
 }
