@@ -5093,14 +5093,14 @@ namespace System.Windows.Forms.Tests
             listView.CreateControl();
 
             dynamic listViewDynamic = listView.TestAccessor().Dynamic;
-            string actual = listViewDynamic.toolTipCaption;
+            string actual = listViewDynamic._toolTipCaption;
 
             Assert.Empty(actual);
             Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaround to create the toolTip native window Handle
 
             string text = "Some test text";
             toolTip.SetToolTip(listView, text); // Invokes ListView's SetToolTip inside
-            actual = listViewDynamic.toolTipCaption;
+            actual = listViewDynamic._toolTipCaption;
 
             Assert.Equal(text, actual);
         }

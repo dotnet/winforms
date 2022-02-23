@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using static Interop;
 using static Interop.ComCtl32;
@@ -303,7 +304,8 @@ namespace System.Windows.Forms
         /// </summary>
         [Localizable(true)]
         [SRDescription(nameof(SR.ColumnCaption))]
-        public string? Text
+        [AllowNull]
+        public string Text
         {
             get
             {
