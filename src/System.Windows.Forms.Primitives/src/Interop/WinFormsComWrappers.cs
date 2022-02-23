@@ -135,6 +135,14 @@ internal partial class Interop
                 return new PictureWrapper(pictureComObject);
             }
 
+            Guid errorInfoIID = IID.IErrorInfo;
+            hr = Marshal.QueryInterface(externalComObject, ref errorInfoIID, out IntPtr errorInfoComObject);
+            if (hr == S_OK)
+            {
+                Marshal.Release(externalComObject);
+                return new ErrorInfoWrapper(errorInfoComObject);
+            }
+
             Guid fileOpenDialogIID = IID.IFileOpenDialog;
             hr = Marshal.QueryInterface(externalComObject, ref fileOpenDialogIID, out IntPtr fileOpenDialogComObject);
             if (hr == S_OK)
