@@ -69,7 +69,7 @@ namespace System.Windows.Forms
             void AddKey(string key, Keys value)
             {
                 _keyNames[key] = value;
-                _displayOrder!.Add(key);
+                _displayOrder.Add(key);
             }
         }
 
