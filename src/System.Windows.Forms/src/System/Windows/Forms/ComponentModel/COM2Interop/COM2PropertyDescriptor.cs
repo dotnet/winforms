@@ -1316,7 +1316,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 {
                                     errorInfo = info;
                                 }
-                                
+
                                 pErrorInfo.Dispose();
                             }
                         }
