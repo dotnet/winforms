@@ -1309,10 +1309,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             WinFormsComWrappers.ErrorInfoWrapper pErrorInfo;
                             Oleaut32.GetErrorInfo(out pErrorInfo);
 
-                            string info;
-                            if (pErrorInfo is not null && pErrorInfo.GetDescription(out info))
+                            if (pErrorInfo is not null)
                             {
-                                errorInfo = info;
+                                string info;
+                                if (pErrorInfo.GetDescription(out info))
+                                {
+                                    errorInfo = info;
+                                }
+                                
+                                pErrorInfo.Dispose();
                             }
                         }
                     }
