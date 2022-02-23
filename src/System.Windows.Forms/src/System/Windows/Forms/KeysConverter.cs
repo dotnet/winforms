@@ -89,9 +89,9 @@ namespace System.Windows.Forms
                     Initialize();
                 }
 
-#pragma warning disable CS8774 // Member must have a non-null value when exiting.
+#pragma warning disable CS8774 // Member must have a non-null value when exiting: Initialize() inits both _keyNames and _displayOrder.
                 return _keyNames;
-#pragma warning restore CS8774 // Member must have a non-null value when exiting.
+#pragma warning restore CS8774 // Member must have a non-null value when exiting: Initialize() inits both _keyNames and _displayOrder.
             }
         }
 
@@ -107,9 +107,9 @@ namespace System.Windows.Forms
                     Initialize();
                 }
 
-#pragma warning disable CS8774 // Member must have a non-null value when exiting.
-                return _displayOrder!;
-#pragma warning restore CS8774 // Member must have a non-null value when exiting.
+#pragma warning disable CS8774 // Member must have a non-null value when exiting: Initialize() inits both _keyNames and _displayOrder.
+                return _displayOrder;
+#pragma warning restore CS8774 // Member must have a non-null value when exiting: Initialize() inits both _keyNames and _displayOrder.
             }
         }
 
