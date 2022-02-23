@@ -177,7 +177,7 @@ namespace System.Windows.Forms
 
                     for (int i = 0; i < tokens.Length; i++)
                     {
-                        object obj = KeyNames[tokens[i]];
+                        Keys obj = KeyNames[tokens[i]];
 
                         Keys currentKey = (Keys)obj;
 
