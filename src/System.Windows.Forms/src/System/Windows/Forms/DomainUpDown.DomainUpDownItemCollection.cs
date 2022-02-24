@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -17,17 +15,17 @@ namespace System.Windows.Forms
         /// </summary>
         public class DomainUpDownItemCollection : ArrayList
         {
-            readonly DomainUpDown owner;
+            private readonly DomainUpDown _owner;
 
             internal DomainUpDownItemCollection(DomainUpDown owner)
-            : base()
+                : base()
             {
-                this.owner = owner;
+                _owner = owner;
             }
 
             [Browsable(false)]
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public override object this[int index]
+            public override object? this[int index]
             {
                 get
                 {
@@ -38,28 +36,28 @@ namespace System.Windows.Forms
                 {
                     base[index] = value;
 
-                    if (owner.SelectedIndex == index)
+                    if (_owner.SelectedIndex == index)
                     {
-                        owner.SelectIndex(index);
+                        _owner.SelectIndex(index);
                     }
 
-                    if (owner.Sorted)
+                    if (_owner.Sorted)
                     {
-                        owner.SortDomainItems();
+                        _owner.SortDomainItems();
                     }
                 }
             }
 
             /// <summary>
             /// </summary>
-            public override int Add(object item)
+            public override int Add(object? item)
             {
                 // Overridden to perform sorting after adding an item
 
                 int ret = base.Add(item);
-                if (owner.Sorted)
+                if (_owner.Sorted)
                 {
-                    owner.SortDomainItems();
+                    _owner.SortDomainItems();
                 }
 
                 return ret;
@@ -67,7 +65,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             /// </summary>
-            public override void Remove(object item)
+            public override void Remove(object? item)
             {
                 int index = IndexOf(item);
 
@@ -88,27 +86,26 @@ namespace System.Windows.Forms
                 // Overridden to update the domain index if necessary
                 base.RemoveAt(item);
 
-                if (item < owner._domainIndex)
+                if (item < _owner._domainIndex)
                 {
                     // The item removed was before the currently selected item
-                    owner.SelectIndex(owner._domainIndex - 1);
+                    _owner.SelectIndex(_owner._domainIndex - 1);
                 }
-                else if (item == owner._domainIndex)
+                else if (item == _owner._domainIndex)
                 {
                     // The currently selected item was removed
-                    //
-                    owner.SelectIndex(-1);
+                    _owner.SelectIndex(-1);
                 }
             }
 
             /// <summary>
             /// </summary>
-            public override void Insert(int index, object item)
+            public override void Insert(int index, object? item)
             {
                 base.Insert(index, item);
-                if (owner.Sorted)
+                if (_owner.Sorted)
                 {
-                    owner.SortDomainItems();
+                    _owner.SortDomainItems();
                 }
             }
         }

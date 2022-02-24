@@ -61,7 +61,7 @@ namespace System.Windows.Forms
             {
                 if (index >= 0 && index < GetChildCount())
                 {
-                    return new DomainItemAccessibleObject(((DomainUpDown)_parent.Owner).Items[index].ToString(), this);
+                    return new DomainItemAccessibleObject(((DomainUpDown)_parent.Owner).Items[index]!.ToString(), this);
                 }
 
                 return null;
