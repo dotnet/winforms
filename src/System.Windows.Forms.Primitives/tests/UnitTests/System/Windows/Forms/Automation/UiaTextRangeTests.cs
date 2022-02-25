@@ -649,11 +649,6 @@ and numbers 12345";
             providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(57, testText)).Returns(new Point(95, 52));
             providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(62, testText)).Returns(new Point(45, 69));
 
-            providerMock.Setup(m => m.GetCharIndexFromPosition(new(123, 2))).Returns(14);
-            providerMock.Setup(m => m.GetCharIndexFromPosition(new(123, 19))).Returns(31);
-            providerMock.Setup(m => m.GetCharIndexFromPosition(new(123, 36))).Returns(44);
-            providerMock.Setup(m => m.GetCharIndexFromPosition(new(123, 53))).Returns(58);
-
             providerMock.Setup(m => m.GetLineIndex(1)).Returns(16);
             providerMock.Setup(m => m.GetLineIndex(2)).Returns(31);
             providerMock.Setup(m => m.GetLineIndex(3)).Returns(46);
@@ -716,11 +711,6 @@ and numbers 12345";
             providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(52, testText)).Returns(new Point(93, 52));
             providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(57, testText)).Returns(new Point(127, 52));
             providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(62, testText)).Returns(new Point(123, 69));
-
-            providerMock.Setup(m => m.GetCharIndexFromPosition(new(123, 2))).Returns(14);
-            providerMock.Setup(m => m.GetCharIndexFromPosition(new(123, 19))).Returns(31);
-            providerMock.Setup(m => m.GetCharIndexFromPosition(new(123, 36))).Returns(44);
-            providerMock.Setup(m => m.GetCharIndexFromPosition(new(123, 53))).Returns(58);
 
             providerMock.Setup(m => m.GetLineIndex(1)).Returns(16);
             providerMock.Setup(m => m.GetLineIndex(2)).Returns(31);
