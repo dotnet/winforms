@@ -4596,7 +4596,7 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
       </trans-unit>
       <trans-unit id="EditDefaultAccessibleName">
         <source>Spinner</source>
-        <target state="new">Spinner</target>
+        <target state="translated">Değer Değiştirici</target>
         <note />
       </trans-unit>
       <trans-unit id="ErrorBadInputLanguage">
