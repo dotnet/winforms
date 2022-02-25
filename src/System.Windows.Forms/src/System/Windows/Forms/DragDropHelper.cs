@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -23,20 +24,16 @@ namespace System.Windows.Forms
         ///  to IDropTargetHelper. Exposes methods that allow drop targets to display a drag image
         ///  while the image is over the target window.
         /// </summary>
-        private static bool TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper)
+        private static bool TryGetDropTargetHelper([NotNullWhen(true)] out IDropTargetHelper? dropTargetHelper)
         {
             try
             {
-                HRESULT hr = Ole32.CoCreateInstance(
+                Ole32.CoCreateInstance(
                     ref CLSID.DragDropHelper,
                     IntPtr.Zero,
                     Ole32.CLSCTX.INPROC_SERVER,
                     ref NativeMethods.ActiveX.IID_IUnknown,
-                    out object obj);
-                if (!hr.Succeeded())
-                {
-                    Marshal.ThrowExceptionForHR((int)hr);
-                }
+                    out object obj).ThrowIfFailed();
 
                 Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "TryGetDropTargetHelper IDropTargetHelper created");
                 dropTargetHelper = (IDropTargetHelper)obj;
@@ -56,19 +53,14 @@ namespace System.Windows.Forms
         /// </summary>
         public static HRESULT DragEnter(IntPtr hwndTarget, IComDataObject dataObject, ref Point ppt, uint dwEffect)
         {
-            if (TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper) is false
-                || dropTargetHelper is null)
+            if (!TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper))
             {
                 return HRESULT.S_FALSE;
             }
 
             try
             {
-                HRESULT hr = dropTargetHelper.DragEnter(hwndTarget, dataObject, ref ppt, dwEffect);
-                if (!hr.Succeeded())
-                {
-                    Marshal.ThrowExceptionForHR((int)hr);
-                }
+                dropTargetHelper.DragEnter(hwndTarget, dataObject, ref ppt, dwEffect).ThrowIfFailed();
             }
             catch (COMException comEx)
             {
@@ -77,10 +69,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (dropTargetHelper is not null)
-                {
-                    Marshal.FinalReleaseComObject(dropTargetHelper);
-                }
+                Marshal.FinalReleaseComObject(dropTargetHelper);
             }
 
             return HRESULT.S_OK;
@@ -92,19 +81,14 @@ namespace System.Windows.Forms
         /// </summary>
         public static HRESULT DragOver(ref Point ppt, uint dwEffect)
         {
-            if (TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper) is false
-                || dropTargetHelper is null)
+            if (!TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper))
             {
                 return HRESULT.S_FALSE;
             }
 
             try
             {
-                HRESULT hr = dropTargetHelper.DragOver(ref ppt, dwEffect);
-                if (!hr.Succeeded())
-                {
-                    Marshal.ThrowExceptionForHR((int)hr);
-                }
+                dropTargetHelper.DragOver(ref ppt, dwEffect).ThrowIfFailed();
             }
             catch (COMException comEx)
             {
@@ -113,10 +97,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (dropTargetHelper is not null)
-                {
-                    Marshal.FinalReleaseComObject(dropTargetHelper);
-                }
+                Marshal.FinalReleaseComObject(dropTargetHelper);
             }
 
             return HRESULT.S_OK;
@@ -127,19 +108,14 @@ namespace System.Windows.Forms
         /// </summary>
         public static HRESULT DragLeave()
         {
-            if (TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper) is false
-                || dropTargetHelper is null)
+            if (!TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper))
             {
                 return HRESULT.S_FALSE;
             }
 
             try
             {
-                HRESULT hr = dropTargetHelper.DragLeave();
-                if (!hr.Succeeded())
-                {
-                    Marshal.ThrowExceptionForHR((int)hr);
-                }
+                dropTargetHelper.DragLeave().ThrowIfFailed();
             }
             catch (COMException comEx)
             {
@@ -148,10 +124,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (dropTargetHelper is not null)
-                {
-                    Marshal.FinalReleaseComObject(dropTargetHelper);
-                }
+                Marshal.FinalReleaseComObject(dropTargetHelper);
             }
 
             return HRESULT.S_OK;
@@ -163,19 +136,14 @@ namespace System.Windows.Forms
         /// </summary>
         public static HRESULT Drop(IComDataObject dataObject, ref Point ppt, uint dwEffect)
         {
-            if (TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper) is false
-                || dropTargetHelper is null)
+            if (!TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper))
             {
                 return HRESULT.S_FALSE;
             }
 
             try
             {
-                HRESULT hr = dropTargetHelper.Drop(dataObject, ref ppt, dwEffect);
-                if (!hr.Succeeded())
-                {
-                    Marshal.ThrowExceptionForHR((int)hr);
-                }
+                dropTargetHelper.Drop(dataObject, ref ppt, dwEffect).ThrowIfFailed();
             }
             catch (COMException comEx)
             {
@@ -184,10 +152,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (dropTargetHelper is not null)
-                {
-                    Marshal.FinalReleaseComObject(dropTargetHelper);
-                }
+                Marshal.FinalReleaseComObject(dropTargetHelper);
             }
 
             return HRESULT.S_OK;
@@ -196,10 +161,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines whether a drop description is present in a data object.
         /// </summary>
-        public static bool GetDropDescriptionPresent(IComDataObject dataObject)
+        public static bool GetDropDescriptionPresent(IComDataObject? dataObject)
         {
             if (dataObject is null)
+            {
                 return false;
+            }
 
             try
             {
@@ -232,7 +199,9 @@ namespace System.Windows.Forms
             insert = string.Empty;
 
             if (dataObject is null)
+            {
                 return false;
+            }
 
             STGMEDIUM medium = default;
 
@@ -248,8 +217,8 @@ namespace System.Windows.Forms
                     tymed = TYMED.TYMED_HGLOBAL
                 };
 
-                // Check if the data object contains a drop description.
-                if (dataObject.QueryGetData(ref formatEtc) != (int)HRESULT.S_OK)
+                // Check if the data object contains a drop description format.
+                if (!GetDropDescriptionPresent(dataObject))
                 {
                     return false;
                 }
@@ -283,13 +252,13 @@ namespace System.Windows.Forms
                 message = pDropDescription->Message.ToString();
                 insert = pDropDescription->Insert.ToString();
 
-                // Unlock the global memory object.
-                Kernel32.GlobalUnlock(medium.unionmember);
-
                 return true;
             }
             finally
             {
+                // Unlock the global memory object.
+                Kernel32.GlobalUnlock(medium.unionmember);
+
                 if (medium.unionmember != IntPtr.Zero)
                     Kernel32.GlobalFree(medium.unionmember);
 
