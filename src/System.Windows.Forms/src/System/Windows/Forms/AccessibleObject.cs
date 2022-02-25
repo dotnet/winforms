@@ -427,7 +427,7 @@ namespace System.Windows.Forms
                 UiaCore.UIA.ValueValuePropertyId => !string.IsNullOrEmpty(Value) ? Value : null,
                 UiaCore.UIA.IsPasswordPropertyId => false,
                 UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
-                UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
+                UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut,
                 _ => null
             };
 

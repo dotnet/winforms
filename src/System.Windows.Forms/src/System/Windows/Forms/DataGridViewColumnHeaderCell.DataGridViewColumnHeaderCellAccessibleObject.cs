@@ -274,6 +274,7 @@ namespace System.Windows.Forms
                     UiaCore.UIA.IsEnabledPropertyId => Owner?.DataGridView?.Enabled ?? false,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     var x when x == UiaCore.UIA.HasKeyboardFocusPropertyId || x == UiaCore.UIA.IsPasswordPropertyId => false,
+                    UiaCore.UIA.AccessKeyPropertyId => string.Empty,
                     _ => base.GetPropertyValue(propertyId)
                 };
 

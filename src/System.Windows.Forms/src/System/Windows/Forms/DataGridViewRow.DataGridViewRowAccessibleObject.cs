@@ -500,6 +500,8 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return string.Empty;
+                    case UiaCore.UIA.AccessKeyPropertyId:
+                        return string.Empty;
                 }
 
                 return base.GetPropertyValue(propertyId);

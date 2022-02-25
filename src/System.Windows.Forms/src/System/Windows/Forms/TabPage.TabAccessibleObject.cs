@@ -117,6 +117,7 @@ namespace System.Windows.Forms
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TabItemControlTypeId,
                     UiaCore.UIA.AutomationIdPropertyId => _owningTabPage.Name,
+                    UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
                     UiaCore.UIA.IsEnabledPropertyId => OwningTabControl?.Enabled ?? false,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId

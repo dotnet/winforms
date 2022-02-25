@@ -87,6 +87,8 @@ namespace System.Windows.Forms
                 {
                     case UiaCore.UIA.ControlTypePropertyId:
                         return UiaCore.UIA.EditControlTypeId;
+                    case UiaCore.UIA.AccessKeyPropertyId:
+                        return string.Empty;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return _owner.Focused;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:

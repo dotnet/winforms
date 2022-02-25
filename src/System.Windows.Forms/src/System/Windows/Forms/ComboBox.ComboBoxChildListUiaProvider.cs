@@ -138,6 +138,8 @@ namespace System.Windows.Forms
                 {
                     case UiaCore.UIA.ControlTypePropertyId:
                         return UiaCore.UIA.ListControlTypeId;
+                    case UiaCore.UIA.AccessKeyPropertyId:
+                        return string.Empty;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return false; // Narrator should keep the keyboard focus on th ComboBox itself but not on the DropDown.
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:

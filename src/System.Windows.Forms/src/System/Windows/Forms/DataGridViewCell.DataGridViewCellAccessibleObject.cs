@@ -685,6 +685,7 @@ namespace System.Windows.Forms
                     UiaCore.UIA.IsEnabledPropertyId => _owner?.DataGridView?.Enabled ?? false,
                     UiaCore.UIA.AutomationIdPropertyId => AutomationId,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                    UiaCore.UIA.AccessKeyPropertyId => string.Empty,
                     UiaCore.UIA.GridItemContainingGridPropertyId => _owner?.DataGridView?.AccessibilityObject,
                     _ => base.GetPropertyValue(propertyID),
                 };

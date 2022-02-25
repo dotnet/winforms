@@ -78,6 +78,7 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
+                    UiaCore.UIA.AccessKeyPropertyId => string.Empty,
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
                     UiaCore.UIA.IsEnabledPropertyId => OwningScrollBar.Enabled,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => false,
