@@ -659,26 +659,55 @@ namespace System.Windows.Forms.Automation
                     lineStartPoint.X -= UiaTextProvider.EndOfLineWidth;
                 }
 
-                if (_provider.IsReadingRTL && lineEndPoint.X - lineStartPoint.X < 0)
+                if (_provider.IsReadingRTL && lineEndPoint.X <= lineStartPoint.X && lineTextLength > 0)
                 {
-                    // TextBox in RTL mode may have incorrect character display order,
-                    // in this case the caret "jumps" between characters in the line
-                    // instead of direct moving through them. In this case Windows provides
-                    // incorrect characters indexes and their positions in the line.
-                    // This is a bug or the native control, because the caret "jums"
-                    // when selecting and the selected text is torn. Moreover, the caret position
-                    // is incorrect for some whitespaces, thereby Windows provides incorrect text range endpoints.
-                    // There are 2 ways to get rectangles:
-                    //    1) Go through all characters in the line and get min and max positions.
-                    //       (Low performance and will be useless when the native RTL TextBox is fixed)
-                    //    2) Take the owning control rectangle width for the line text range.
-                    //       (Fast and simple, won't be used when the native RTL TextBox is fixed)
-                    lineStartPoint.X = clippingRectangle.Left;
-                    lineEndPoint.X = clippingRectangle.Right;
+                    if (string.IsNullOrWhiteSpace(text.Substring(lineStartIndex, lineTextLength)))
+                    {
+                        // If the line contains whitespaces only, they are in RTL order,
+                        // so just swap start and end points, taken from Windows.
+                        (lineStartPoint, lineEndPoint) = (lineEndPoint, lineStartPoint);
+                    }
+                    else
+                    {
+                        // TextBox in RTL mode may have incorrect character display order,
+                        // in this case the caret "jumps" between characters in the line
+                        // instead of direct moving through them. In this case Windows provides
+                        // incorrect characters indexes and their positions in the line.
+                        // This is a bug or the native control, because the caret "jums"
+                        // when selecting and the selected text is torn. Moreover, the caret position
+                        // is incorrect for some whitespaces, thereby Windows provides incorrect text range endpoints.
+                        // There are 2 ways to get rectangles:
+                        //    1) Go through all characters in the line and get min and max positions.
+                        //       (Used now)
+                        //    2) Take the owning control rectangle width for the line text range.
+                        //       (Fast and simple)
+                        //       lineStartPoint.X = clippingRectangle.Left;
+                        //       lineEndPoint.X = clippingRectangle.Right;
+                        int minX = lineEndPoint.X;
+                        int maxX = minX;
+
+                        for (int i = lineStartIndex; i <= lineEndIndex; i++)
+                        {
+                            Point pt = _provider.GetPositionFromChar(i);
+                            if (pt.X < minX)
+                            {
+                                minX = pt.X;
+                            }
+                            else if (pt.X > maxX)
+                            {
+                                maxX = pt.X;
+                            }
+                        }
+
+                        lineStartPoint.X = minX;
+                        lineEndPoint.X = maxX;
+                    }
                 }
 
                 // Add a bounding rectangle for a line, if it's nonempty.
                 // Increase Y by 2 to Y to get a correct size of the rectangle around a text range.
+                // Adding 2px constant to Y doesn't affect rectangles in a high DPI mode,
+                // because it just moves the rectangle down a TextBox border, that is 1 px in all DPI modes.
                 Rectangle rect = new(lineStartPoint.X, lineStartPoint.Y + 2, lineEndPoint.X - lineStartPoint.X, lineHeight);
                 rect.Intersect(clippingRectangle);
                 if (rect.Width > 0 && rect.Height > 0)
