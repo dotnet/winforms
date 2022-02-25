@@ -28,7 +28,13 @@ namespace System.Windows.Forms
 
                 public override string? Name
                 {
-                    get => _parent.AccessibilityObject.Name;
+                    get => _parent.AccessibilityObject.Name
+                        ?? _parent switch
+                        {
+                            NumericUpDown _ => SR.EditDefaultAccessibleName,
+                            DomainUpDown _ => SR.EditDefaultAccessibleName,
+                            _ => null
+                        };
                     set => _parent.AccessibilityObject.Name = value;
                 }
 

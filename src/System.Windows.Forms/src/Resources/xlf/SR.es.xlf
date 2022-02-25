@@ -4594,6 +4594,11 @@ Para reemplazar este cuadro de diálogo predeterminado controle el evento DataEr
         <target state="translated">Error al registrar DragDrop.</target>
         <note />
       </trans-unit>
+      <trans-unit id="EditDefaultAccessibleName">
+        <source>Spinner</source>
+        <target state="new">Spinner</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorBadInputLanguage">
         <source>inputLanguage is not recognized by the system.</source>
         <target state="translated">El sistema no reconoce este inputLanguage.</target>

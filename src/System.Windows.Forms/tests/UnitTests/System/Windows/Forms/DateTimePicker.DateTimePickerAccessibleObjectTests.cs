@@ -242,5 +242,103 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(UiaCore.ExpandCollapseState.Collapsed, accessibleObject.ExpandCollapseState);
             Assert.True(dateTimePicker.IsHandleCreated);
         }
+
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.UIA.ExpandCollapsePatternId)]
+        [InlineData((int)UiaCore.UIA.ValuePatternId)]
+        [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
+        public void DateTimePickerAccessibleObject_IsPatternSupported_ReturnsExpected_IfDoNotShowCheckbox(int patternId)
+        {
+            using DateTimePicker dateTimePicker = new() { ShowCheckBox = false };
+
+            AccessibleObject accessibleObject = dateTimePicker.AccessibilityObject;
+
+            Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+            Assert.False(dateTimePicker.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.UIA.TogglePatternId)]
+        [InlineData((int)UiaCore.UIA.ExpandCollapsePatternId)]
+        [InlineData((int)UiaCore.UIA.ValuePatternId)]
+        [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
+        public void DateTimePickerAccessibleObject_IsPatternSupported_ReturnsExpected_IfShowCheckbox(int patternId)
+        {
+            using DateTimePicker dateTimePicker = new() { ShowCheckBox = true };
+
+            AccessibleObject accessibleObject = dateTimePicker.AccessibilityObject;
+
+            Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+            Assert.False(dateTimePicker.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DateTimePickerAccessibleObject_Name_ReturnsEmptyString_IfControlAccessibleNameIsNotNull()
+        {
+            using DateTimePicker dateTimePicker = new();
+
+            Assert.Equal(string.Empty, dateTimePicker.AccessibilityObject.Name);
+            Assert.False(dateTimePicker.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DateTimePickerAccessibleObject_Name_ReturnsExpected_IfControlAccessibleNameIsNotNull()
+        {
+            string testAccessibleName = "TestDateTimePicker";
+            using DateTimePicker dateTimePicker = new() { AccessibleName = testAccessibleName };
+
+            Assert.Equal(testAccessibleName, dateTimePicker.AccessibilityObject.Name);
+            Assert.False(dateTimePicker.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> DateTimePickerAccessibleObject_DefaultAction_ReturnsExpected_TestData()
+        {
+            // Expanded dtp control has "Collapse" as a default action, else "Expand".
+            yield return new object[] { true, SR.AccessibleActionCollapse };
+            yield return new object[] { false, SR.AccessibleActionExpand };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DateTimePickerAccessibleObject_DefaultAction_ReturnsExpected_TestData))]
+        public void DateTimePickerAccessibleObject_DefaultAction_ReturnsExpected(bool isExpanded, string expected)
+        {
+            using DateTimePicker dateTimePicker = new();
+            dateTimePicker.CreateControl();
+
+            AccessibleObject accessibleObject = dateTimePicker.AccessibilityObject;
+
+            if (isExpanded)
+            {
+                accessibleObject.Expand();
+            }
+
+            Assert.Equal(expected, accessibleObject.DefaultAction);
+            Assert.True(dateTimePicker.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, (int)UiaCore.ExpandCollapseState.Collapsed)]
+        [InlineData(false, (int)UiaCore.ExpandCollapseState.Expanded)]
+        public void DateTimePickerAccessibleObject_DoDefaultAction_IfHandleIsCreated_ReturnsExpected(bool isExpanded, int expected)
+        {
+            using DateTimePicker dateTimePicker = new();
+            dateTimePicker.CreateControl();
+
+            AccessibleObject accessibleObject = dateTimePicker.AccessibilityObject;
+
+            Assert.Equal(UiaCore.ExpandCollapseState.Collapsed, accessibleObject.ExpandCollapseState);
+
+            if (isExpanded)
+            {
+                accessibleObject.Expand();
+
+                Assert.Equal(UiaCore.ExpandCollapseState.Expanded, accessibleObject.ExpandCollapseState);
+            }
+
+            accessibleObject.DoDefaultAction();
+
+            Assert.Equal((UiaCore.ExpandCollapseState)expected, accessibleObject.ExpandCollapseState);
+            Assert.True(dateTimePicker.IsHandleCreated);
+        }
     }
 }

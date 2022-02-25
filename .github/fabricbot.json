@@ -693,7 +693,7 @@
         {
           "name": "addMilestone",
           "parameters": {
-            "milestoneName": "7.0 Preview2"
+            "milestoneName": "7.0 Preview3"
           }
         }
       ],
@@ -1290,6 +1290,17 @@
                 "parameters": {}
               }
             ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "name": "activitySenderHasPermissions",
+                "parameters": {
+                  "permissions": "write"
+                }
+              }
+            ]
           }
         ]
       },
@@ -1338,6 +1349,17 @@
               {
                 "name": "isCloseAndComment",
                 "parameters": {}
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "name": "activitySenderHasPermissions",
+                "parameters": {
+                  "permissions": "write"
+                }
               }
             ]
           }

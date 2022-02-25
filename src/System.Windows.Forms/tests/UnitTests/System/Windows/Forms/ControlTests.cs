@@ -860,7 +860,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(button1, previousControl6);
         }
 
-        [WinFormsTheory]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/6730")]
+        [ConditionalWinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6730",
+            UnsupportedArchitecture = Runtime.InteropServices.Architecture.X64)]
         [InlineData(RightToLeft.No)]
         [InlineData(RightToLeft.Yes)]
         public void Control_SelectNextControl_ToolStrips_CycleForwardExpected(RightToLeft rightToLeft)

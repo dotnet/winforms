@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     /// </summary>
     [DefaultProperty(nameof(Document))]
     [SRDescription(nameof(SR.DescriptionPrintPreviewControl))]
-    public class PrintPreviewControl : Control
+    public partial class PrintPreviewControl : Control
     {
         Size virtualSize = new Size(1, 1);
         Point position = new Point(0, 0);
@@ -203,6 +203,8 @@ namespace System.Windows.Forms
                 InvalidatePreview();
             }
         }
+
+        internal override bool SupportsUiaProviders => true;
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -443,6 +445,9 @@ namespace System.Windows.Forms
                 OnStartPageChanged(EventArgs.Empty);
             }
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new PrintPreviewControlAccessibleObject(this);
 
         // Recomputes the sizes and positions of pages without forcing a new "preview print"
         private void InvalidateLayout()

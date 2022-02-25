@@ -268,7 +268,8 @@ namespace System.Windows.Forms.Tests
             Assert.True(Clipboard.ContainsData(data.GetType().FullName));
         }
 
-        [WinFormsTheory]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/6729")]
+        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6729")]
         [InlineData(1, true)]
         [InlineData(1, false)]
         [InlineData("data", true)]

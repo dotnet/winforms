@@ -42,14 +42,14 @@ namespace System.Windows.Forms.ButtonInternal
                 state != CheckState.Indeterminate && IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.WindowText,
                 drawFocus: true);
 
-            DrawDefaultBorder(e, r, colors.Options.HighContrast ? colors.WindowText : colors.ButtonShadow, Control.IsDefault);
+            Color borderColor = colors.Options.HighContrast
+                ? colors.WindowText
+                : GetContrastingBorderColor(colors.ButtonShadow);
+
+            DrawDefaultBorder(e, r, borderColor, Control.IsDefault);
 
             if (state == CheckState.Unchecked)
             {
-                Color borderColor = colors.Options.HighContrast
-                    ? colors.WindowText
-                    : ControlPaint.Darker(colors.ButtonShadow, ButtonBorderDarkerOffset);
-
                 ControlPaint.DrawBorderSimple(e, r, borderColor);
             }
             else
@@ -135,7 +135,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             r.Inflate(1, 1);
             DrawDefaultBorder(e, r, colors.Options.HighContrast ? colors.WindowText : colors.WindowFrame, Control.IsDefault);
-            ControlPaint.DrawBorderSimple(e, r, colors.Options.HighContrast ? colors.WindowText : colors.ButtonShadow);
+            ControlPaint.DrawBorderSimple(e, r, colors.Options.HighContrast ? colors.WindowText : GetContrastingBorderColor(colors.ButtonShadow));
         }
 
         #region Layout

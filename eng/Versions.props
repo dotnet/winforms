@@ -13,34 +13,34 @@
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
-    <VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion>7.0.0-preview.3.22118.9</VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion>
-    <SystemDiagnosticsEventLogPackageVersion>7.0.0-preview.3.22118.9</SystemDiagnosticsEventLogPackageVersion>
-    <SystemDirectoryServicesPackageVersion>7.0.0-preview.3.22118.9</SystemDirectoryServicesPackageVersion>
-    <SystemReflectionMetadataLoadContextPackageVersion>7.0.0-preview.3.22118.9</SystemReflectionMetadataLoadContextPackageVersion>
-    <SystemSecurityCryptographyXmlPackageVersion>7.0.0-preview.3.22118.9</SystemSecurityCryptographyXmlPackageVersion>
-    <SystemIOPackagingPackageVersion>7.0.0-preview.3.22118.9</SystemIOPackagingPackageVersion>
+    <VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion>7.0.0-preview.3.22123.2</VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion>
+    <SystemDiagnosticsEventLogPackageVersion>7.0.0-preview.3.22123.2</SystemDiagnosticsEventLogPackageVersion>
+    <SystemDirectoryServicesPackageVersion>7.0.0-preview.3.22123.2</SystemDirectoryServicesPackageVersion>
+    <SystemReflectionMetadataLoadContextPackageVersion>7.0.0-preview.3.22123.2</SystemReflectionMetadataLoadContextPackageVersion>
+    <SystemSecurityCryptographyXmlPackageVersion>7.0.0-preview.3.22123.2</SystemSecurityCryptographyXmlPackageVersion>
+    <SystemIOPackagingPackageVersion>7.0.0-preview.3.22123.2</SystemIOPackagingPackageVersion>
     <MicrosoftNETCoreRuntimeCoreCLRPackageVersion>5.0.0-preview.7.20320.5</MicrosoftNETCoreRuntimeCoreCLRPackageVersion>
-    <MicrosoftNETCoreILDAsmPackageVersion>7.0.0-preview.3.22118.9</MicrosoftNETCoreILDAsmPackageVersion>
-    <SystemDiagnosticsPerformanceCounterPackageVersion>7.0.0-preview.3.22118.9</SystemDiagnosticsPerformanceCounterPackageVersion>
-    <SystemSecurityCryptographyPkcsPackageVersion>7.0.0-preview.3.22118.9</SystemSecurityCryptographyPkcsPackageVersion>
-    <SystemSecurityCryptographyProtectedDataPackageVersion>7.0.0-preview.3.22118.9</SystemSecurityCryptographyProtectedDataPackageVersion>
-    <SystemTextEncodingsWebPackageVersion>7.0.0-preview.3.22118.9</SystemTextEncodingsWebPackageVersion>
-    <SystemTextJsonPackageVersion>7.0.0-preview.3.22118.9</SystemTextJsonPackageVersion>
-    <SystemThreadingAccessControlPackageVersion>7.0.0-preview.3.22118.9</SystemThreadingAccessControlPackageVersion>
-    <MicrosoftWin32RegistryAccessControlPackageVersion>7.0.0-preview.3.22118.9</MicrosoftWin32RegistryAccessControlPackageVersion>
-    <MicrosoftNETCoreAppRefPackageVersion>7.0.0-preview.3.22118.9</MicrosoftNETCoreAppRefPackageVersion>
-    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>7.0.0-preview.3.22118.9</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>7.0.0-preview.3.22118.9</MicrosoftNETCorePlatformsPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>7.0.0-preview.3.22118.9</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemCodeDomPackageVersion>7.0.0-preview.3.22118.9</SystemCodeDomPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>7.0.0-preview.3.22118.9</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemDrawingCommonPackageVersion>7.0.0-preview.3.22118.9</SystemDrawingCommonPackageVersion>
-    <SystemResourcesExtensionsPackageVersion>7.0.0-preview.3.22118.9</SystemResourcesExtensionsPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>7.0.0-preview.3.22118.9</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>7.0.0-preview.3.22118.9</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>7.0.0-preview.3.22118.9</MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>7.0.0-preview.3.22118.9</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>7.0.0-preview.3.22118.9</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftNETCoreILDAsmPackageVersion>7.0.0-preview.3.22123.2</MicrosoftNETCoreILDAsmPackageVersion>
+    <SystemDiagnosticsPerformanceCounterPackageVersion>7.0.0-preview.3.22123.2</SystemDiagnosticsPerformanceCounterPackageVersion>
+    <SystemSecurityCryptographyPkcsPackageVersion>7.0.0-preview.3.22123.2</SystemSecurityCryptographyPkcsPackageVersion>
+    <SystemSecurityCryptographyProtectedDataPackageVersion>7.0.0-preview.3.22123.2</SystemSecurityCryptographyProtectedDataPackageVersion>
+    <SystemTextEncodingsWebPackageVersion>7.0.0-preview.3.22123.2</SystemTextEncodingsWebPackageVersion>
+    <SystemTextJsonPackageVersion>7.0.0-preview.3.22123.2</SystemTextJsonPackageVersion>
+    <SystemThreadingAccessControlPackageVersion>7.0.0-preview.3.22123.2</SystemThreadingAccessControlPackageVersion>
+    <MicrosoftWin32RegistryAccessControlPackageVersion>7.0.0-preview.3.22123.2</MicrosoftWin32RegistryAccessControlPackageVersion>
+    <MicrosoftNETCoreAppRefPackageVersion>7.0.0-preview.3.22123.2</MicrosoftNETCoreAppRefPackageVersion>
+    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>7.0.0-preview.3.22123.2</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>7.0.0-preview.3.22123.2</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>7.0.0-preview.3.22123.2</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemCodeDomPackageVersion>7.0.0-preview.3.22123.2</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>7.0.0-preview.3.22123.2</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDrawingCommonPackageVersion>7.0.0-preview.3.22123.2</SystemDrawingCommonPackageVersion>
+    <SystemResourcesExtensionsPackageVersion>7.0.0-preview.3.22123.2</SystemResourcesExtensionsPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>7.0.0-preview.3.22123.2</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>7.0.0-preview.3.22123.2</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>7.0.0-preview.3.22123.2</MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>7.0.0-preview.3.22123.2</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>7.0.0-preview.3.22123.2</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
     <!-- 
       Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
     -->
@@ -52,9 +52,9 @@
   </PropertyGroup>
   <!-- Arcade -->
   <PropertyGroup>
-    <MicrosoftDotNetGenFacadesPackageVersion>7.0.0-beta.22117.2</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetRemoteExecutorVersion>7.0.0-beta.22117.2</MicrosoftDotNetRemoteExecutorVersion>
-    <MicrosoftDotNetXUnitExtensionsPackageVersion>7.0.0-beta.22117.2</MicrosoftDotNetXUnitExtensionsPackageVersion>
+    <MicrosoftDotNetGenFacadesPackageVersion>7.0.0-beta.22123.1</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetRemoteExecutorVersion>7.0.0-beta.22123.1</MicrosoftDotNetRemoteExecutorVersion>
+    <MicrosoftDotNetXUnitExtensionsPackageVersion>7.0.0-beta.22123.1</MicrosoftDotNetXUnitExtensionsPackageVersion>
     <MicrosoftNETTestSdkVersion>16.5.0</MicrosoftNETTestSdkVersion>
   </PropertyGroup>
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
@@ -72,7 +72,7 @@
     <InputSimulatorPlusVersion>1.0.7</InputSimulatorPlusVersion>
     <MicrosoftVisualStudioThreadingVersion>17.0.15-alpha</MicrosoftVisualStudioThreadingVersion>
     <!-- This is needed for Verify.Xunit to pull correct version of System.Speech -->
-    <MicrosoftWindowsCompatibilityVersion>7.0.0-preview.3.22118.9</MicrosoftWindowsCompatibilityVersion>
+    <MicrosoftWindowsCompatibilityVersion>7.0.0-preview.3.22123.2</MicrosoftWindowsCompatibilityVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
     <VerifyXunitVersion>14.2.0</VerifyXunitVersion>
   </PropertyGroup>

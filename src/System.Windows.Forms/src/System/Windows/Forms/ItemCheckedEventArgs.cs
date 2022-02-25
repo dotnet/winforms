@@ -9,14 +9,14 @@ namespace System.Windows.Forms
     /// </summary>
     public class ItemCheckedEventArgs : EventArgs
     {
-        public ItemCheckedEventArgs(ListViewItem? item)
+        public ItemCheckedEventArgs(ListViewItem item)
         {
-            Item = item;
+            Item = item.OrThrowIfNull();
         }
 
         /// <summary>
         ///  The index of the item that is about to change.
         /// </summary>
-        public ListViewItem? Item { get; }
+        public ListViewItem Item { get; }
     }
 }

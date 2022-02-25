@@ -6112,6 +6112,158 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.ToString());
         }
 
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListBox_Remove_NotSelectedItems_IfOneItemSelected(bool createControl)
+        {
+            using ListBox listBox = new();
+
+            if (createControl)
+            {
+                listBox.CreateControl();
+            }
+
+            listBox.Items.AddRange(new object[] { "1", "2", "3" });
+            listBox.SelectedItem = listBox.Items[0];
+
+            Assert.Equal(3, listBox.Items.Count);
+            Assert.Equal(listBox.Items[0], listBox.SelectedItem);
+            Assert.Equal(0, listBox.SelectedIndex);
+            Assert.Equal(1, listBox.SelectedIndices.Count);
+            Assert.Equal(1, listBox.SelectedItems.Count);
+
+            listBox.Items.Remove(listBox.Items[2]);
+
+            Assert.Equal(2, listBox.Items.Count);
+            Assert.Equal(listBox.Items[0], listBox.SelectedItem);
+            Assert.Equal(0, listBox.SelectedIndex);
+            Assert.Equal(1, listBox.SelectedIndices.Count);
+            Assert.Equal(1, listBox.SelectedItems.Count);
+
+            listBox.Items.Remove(listBox.Items[1]);
+
+            Assert.Equal(1, listBox.Items.Count);
+            Assert.Equal(listBox.Items[0], listBox.SelectedItem);
+            Assert.Equal(0, listBox.SelectedIndex);
+            Assert.Equal(1, listBox.SelectedIndices.Count);
+            Assert.Equal(1, listBox.SelectedItems.Count);
+            Assert.Equal(createControl, listBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(SelectionMode.MultiSimple, true)]
+        [InlineData(SelectionMode.MultiSimple, false)]
+        [InlineData(SelectionMode.MultiExtended, true)]
+        [InlineData(SelectionMode.MultiExtended, false)]
+        public void ListBox_Remove_NotSelectedItems_IfSeveralItemsSelected(SelectionMode mode, bool createControl)
+        {
+            using ListBox listBox = new() { SelectionMode = mode };
+
+            if (createControl)
+            {
+                listBox.CreateControl();
+            }
+
+            listBox.Items.AddRange(new object[] { "1", "2", "3", "4" });
+            listBox.SelectedItems.Add(listBox.Items[0]);
+            listBox.SelectedItems.Add(listBox.Items[1]);
+
+            Assert.Equal(4, listBox.Items.Count);
+            Assert.Equal(listBox.Items[0], listBox.SelectedItem);
+            Assert.Equal(0, listBox.SelectedIndex);
+            Assert.Equal(2, listBox.SelectedIndices.Count);
+            Assert.Equal(2, listBox.SelectedItems.Count);
+
+            listBox.Items.Remove(listBox.Items[3]);
+
+            Assert.Equal(3, listBox.Items.Count);
+            Assert.Equal(listBox.Items[0], listBox.SelectedItem);
+            Assert.Equal(0, listBox.SelectedIndex);
+            Assert.Equal(2, listBox.SelectedIndices.Count);
+            Assert.Equal(2, listBox.SelectedItems.Count);
+
+            listBox.Items.Remove(listBox.Items[2]);
+
+            Assert.Equal(2, listBox.Items.Count);
+            Assert.Equal(listBox.Items[0], listBox.SelectedItem);
+            Assert.Equal(0, listBox.SelectedIndex);
+            Assert.Equal(2, listBox.SelectedIndices.Count);
+            Assert.Equal(2, listBox.SelectedItems.Count);
+            Assert.Equal(createControl, listBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListBox_Remove_SelectedItem(bool createControl)
+        {
+            using ListBox listBox = new();
+
+            if (createControl)
+            {
+                listBox.CreateControl();
+            }
+
+            listBox.Items.AddRange(new object[] { "1", "2", "3" });
+
+            for (int count = listBox.Items.Count; count > 1; count -= 1)
+            {
+                listBox.SelectedItem = listBox.Items[0];
+
+                Assert.Equal(listBox.Items[0], listBox.SelectedItem);
+                Assert.Equal(0, listBox.SelectedIndex);
+                Assert.Equal(1, listBox.SelectedIndices.Count);
+                Assert.Equal(1, listBox.SelectedItems.Count);
+
+                listBox.Items.Remove(listBox.Items[0]);
+                count -= 1;
+
+                Assert.Equal(count, listBox.Items.Count);
+                Assert.Null(listBox.SelectedItem);
+                Assert.Equal(-1, listBox.SelectedIndex);
+                Assert.Equal(0, listBox.SelectedIndices.Count);
+                Assert.Equal(0, listBox.SelectedItems.Count);
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(SelectionMode.MultiSimple, true)]
+        [InlineData(SelectionMode.MultiSimple, false)]
+        [InlineData(SelectionMode.MultiExtended, true)]
+        [InlineData(SelectionMode.MultiExtended, false)]
+        public void ListBox_Remove_SelectedItems(SelectionMode mode, bool createControl)
+        {
+            using ListBox listBox = new() { SelectionMode = mode };
+
+            if (createControl)
+            {
+                listBox.CreateControl();
+            }
+
+            listBox.Items.AddRange(new object[] { "1", "2", "3" });
+
+            for (int count = listBox.Items.Count; count > 1; count -= 1)
+            {
+                listBox.SelectedItems.Add(listBox.Items[0]);
+
+                Assert.Equal(listBox.Items[0], listBox.SelectedItem);
+                Assert.Equal(0, listBox.SelectedIndex);
+                Assert.Equal(1, listBox.SelectedIndices.Count);
+                Assert.Equal(1, listBox.SelectedItems.Count);
+
+                listBox.Items.Remove(listBox.Items[0]);
+
+                count -= 1;
+
+                Assert.Equal(count, listBox.Items.Count);
+                Assert.Null(listBox.SelectedItem);
+                Assert.Equal(-1, listBox.SelectedIndex);
+                Assert.Equal(0, listBox.SelectedIndices.Count);
+                Assert.Equal(0, listBox.SelectedItems.Count);
+            }
+        }
+
         private class SubListBox : ListBox
         {
             public new bool AllowSelection => base.AllowSelection;

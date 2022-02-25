@@ -39,9 +39,9 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        if (owner.savedSelectedItems is not null)
+                        if (owner._savedSelectedItems is not null)
                         {
-                            return owner.savedSelectedItems.Count;
+                            return owner._savedSelectedItems.Count;
                         }
 
                         return 0;
@@ -75,10 +75,10 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        Debug.Assert(owner.savedSelectedItems is not null || count == 0, "if the count of selectedItems is greater than 0 then the selectedItems should have been saved by now");
+                        Debug.Assert(owner._savedSelectedItems is not null || count == 0, "if the count of selectedItems is greater than 0 then the selectedItems should have been saved by now");
                         for (int i = 0; i < count; i++)
                         {
-                            indices[i] = owner.savedSelectedItems[i].Index;
+                            indices[i] = owner._savedSelectedItems[i].Index;
                         }
                     }
 
@@ -112,8 +112,8 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        Debug.Assert(owner.savedSelectedItems is not null, "Null selected items collection");
-                        return owner.savedSelectedItems[index].Index;
+                        Debug.Assert(owner._savedSelectedItems is not null, "Null selected items collection");
+                        return owner._savedSelectedItems[index].Index;
                     }
                 }
             }
@@ -284,7 +284,7 @@ namespace System.Windows.Forms
             {
                 if (!owner.VirtualMode)
                 {
-                    owner.savedSelectedItems = null;
+                    owner._savedSelectedItems = null;
                 }
 
                 if (owner.IsHandleCreated)
