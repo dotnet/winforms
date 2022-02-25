@@ -128,7 +128,7 @@ jobs:
       condition: and(succeeded(), eq(variables._Coverage, 'true'))
 
     # Generate SBOM for the internal leg only
-    - ${{ if and(eq(parameters.runAsPublic, 'false'), ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+    - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
       - template: ..\common\templates\steps\generate-sbom.yml
         parameters:
           name: Generate_SBOM_${{ parameters.name }}
