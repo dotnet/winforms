@@ -490,13 +490,13 @@ namespace System.Windows.Forms
                 case BFFM.INITIALIZED:
                     // Indicates the browse dialog box has finished initializing. The lpData value is zero.
 
-                    if (_initialDirectory is not null && _initialDirectory.Length != 0)
+                    if (_initialDirectory.Length != 0)
                     {
                         // Try to expand the folder specified by initialDir
                         User32.SendMessageW(hwnd, (User32.WM)BFFM.SETEXPANDED, (nint)BOOL.TRUE, _initialDirectory);
                     }
 
-                    if (_selectedPath is not null && _selectedPath.Length != 0)
+                    if (_selectedPath.Length != 0)
                     {
                         // Try to select the folder specified by selectedPath
                         User32.SendMessageW(hwnd, (User32.WM)BFFM.SETSELECTIONW, (nint)BOOL.TRUE, _selectedPath);
