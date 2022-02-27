@@ -184,7 +184,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             // try to construct a default one
                             try
                             {
-                                attr = (Attribute?)Activator.CreateInstance(t, new object[] { varParams[i]! });
+                                attr = (Attribute?)Activator.CreateInstance(t, new object?[] { varParams[i] });
                                 attrs.Add(attr);
                             }
                             catch
