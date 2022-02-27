@@ -283,15 +283,18 @@ namespace System.Windows.Forms.Automation
 
             // We accumulate rectangles onto a list.
             List<Rectangle> rectangles = new List<Rectangle>();
+            string text = _provider.Text;
 
-            if (_provider.TextLength == 0)
+            if (text.Length == 0)
             {
                 rectangles.Add(ownerBounds);
                 return UiaTextProvider.RectListToDoubleArray(rectangles);
             }
 
-            // if this is an end of line
-            if (Start == _provider.TextLength)
+            // If this is an end of a line.
+            if (Start == _provider.TextLength
+                || (_provider.IsMultiline && End < _provider.TextLength
+                    && End - Start == 1 && text[End] == '\n'))
             {
                 Point endlinePoint;
                 User32.GetCaretPos(out endlinePoint);
@@ -307,7 +310,6 @@ namespace System.Windows.Forms.Automation
                 return Array.Empty<double>();
             }
 
-            string text = _provider.Text;
             ValidateEndpoints();
 
             // Get the mapping from client coordinates to screen coordinates.
@@ -318,7 +320,7 @@ namespace System.Windows.Forms.Automation
 
             if (_provider.IsMultiline)
             {
-                rectangles = GetMultilineBoundingRectangles(text, mapClientToScreen, clippingRectangle);
+                rectangles = GetMultilineBoundingRectangles(clippingRectangle);
                 return UiaTextProvider.RectListToDoubleArray(rectangles);
             }
 
@@ -593,7 +595,7 @@ namespace System.Windows.Forms.Automation
         /// <summary>
         ///  Helper function to accumulate a list of bounding rectangles for a potentially mult-line range.
         /// </summary>
-        private List<Rectangle> GetMultilineBoundingRectangles(string text, Point mapClientToScreen, Rectangle clippingRectangle)
+        private List<Rectangle> GetMultilineBoundingRectangles(Rectangle clippingRectangle)
         {
             // Get the starting and ending lines for the range.
             int start = Start;
@@ -615,12 +617,13 @@ namespace System.Windows.Forms.Automation
             if (lastVisibleLine < endLine)
             {
                 endLine = lastVisibleLine;
-                end = _provider.GetLineIndex(endLine) - 1;
+                end = _provider.GetLineIndex(endLine + 1); // Index of the next line is the end caret position of the previous line.
             }
 
             // Remember the line height.
             int lineHeight = Math.Abs(_provider.Logfont.lfHeight);
 
+            string text = _provider.Text;
             // Adding a rectangle for each line.
             List<Rectangle> rects = new List<Rectangle>();
 
@@ -640,84 +643,113 @@ namespace System.Windows.Forms.Automation
                     // This is a workaround to get the last index of the line,
                     // because Windows doesn't provide API for it.
                     : _provider.GetLineIndex(lineIndex + 1) - 1;
+
                 Point lineEndPoint = _provider.GetPositionFromCharForUpperRightCorner(lineEndIndex, text);
 
-                int lineTextLength = lineEndIndex - lineStartIndex + 1;
-
-                // If the line is long and takes up all the space,
-                // there is no space for the end of line rectangle. Adjust it.
-                if (lineEndPoint.X > clippingRectangle.Right
-                    // Or if the line is empty (just contains transition to the next line),
-                    // we need to offset the start point on end of line width (equals 2 px)
-                    // to show its rectangle in RTL mode. For LTR mode
-                    // `GetPositionFromCharForUpperRightCorner` do it for us.
-                    // Also, we have to check the line text length, because Windows may provide
-                    // incorrect endpoints for RTL TextBox, in this case we will catch an exception.
-                    || (_provider.IsReadingRTL && lineTextLength > 0
-                        && text.Substring(lineStartIndex, lineTextLength) == Environment.NewLine))
+                if (!_provider.IsReadingRTL)
                 {
-                    lineStartPoint.X -= UiaTextProvider.EndOfLineWidth;
+                    // Don't need additional calculations for LeftToRight edit field.
+                    AddLineRectangle(lineStartPoint, lineEndPoint);
+                    continue;
                 }
 
-                if (_provider.IsReadingRTL && lineEndPoint.X <= lineStartPoint.X && lineTextLength > 0)
+                // Windows provides incorrect coordinates in several cases
+                // for RightToLeft edit fields. So adjust it.
+
+                // This value can be negative for a RTL edit field, because Windows
+                // may provide incorrect start and end point for some broken lines.
+                int lineTextLength = lineEndIndex - lineStartIndex + 1;
+
+                // If the line is empty (just contains transition to the next line),
+                // we need to offset the start point on end of line width (equals 2 px)
+                // to show its rectangle in RTL mode. For LTR mode
+                // `GetPositionFromCharForUpperRightCorner` do it for us.
+                // Also, we have to check the line text length, because Windows may provide
+                // incorrect endpoints for RTL TextBox, in this case we will catch an exception.
+                if (lineTextLength > 0
+                    && (text.Substring(lineStartIndex, lineTextLength) == Environment.NewLine
+                        // Or if the range takes more space, than owning control rectangle.
+                        // One of the case is when there is a RTL line divided by space (not '\n').
+                        || lineEndPoint.X > clippingRectangle.Right))
+                {
+                    lineStartPoint.X -= UiaTextProvider.EndOfLineWidth;
+                    AddLineRectangle(lineStartPoint, lineEndPoint);
+
+                    continue;
+                }
+
+                // If Windows provided incorrect coordinates for endpoints in RTL mode.
+                if (lineEndPoint.X <= lineStartPoint.X && lineTextLength > 0)
                 {
                     if (string.IsNullOrWhiteSpace(text.Substring(lineStartIndex, lineTextLength)))
                     {
                         // If the line contains whitespaces only, they are in RTL order,
                         // so just swap start and end points, taken from Windows.
                         (lineStartPoint, lineEndPoint) = (lineEndPoint, lineStartPoint);
-                    }
-                    else
-                    {
-                        // TextBox in RTL mode may have incorrect character display order,
-                        // in this case the caret "jumps" between characters in the line
-                        // instead of direct moving through them. In this case Windows provides
-                        // incorrect characters indexes and their positions in the line.
-                        // This is a bug or the native control, because the caret "jums"
-                        // when selecting and the selected text is torn. Moreover, the caret position
-                        // is incorrect for some whitespaces, thereby Windows provides incorrect text range endpoints.
-                        // There are 2 ways to get rectangles:
-                        //    1) Go through all characters in the line and get min and max positions.
-                        //       (Used now)
-                        //    2) Take the owning control rectangle width for the line text range.
-                        //       (Fast and simple)
-                        //       lineStartPoint.X = clippingRectangle.Left;
-                        //       lineEndPoint.X = clippingRectangle.Right;
-                        int minX = lineEndPoint.X;
-                        int maxX = minX;
+                        AddLineRectangle(lineStartPoint, lineEndPoint);
 
-                        for (int i = lineStartIndex; i <= lineEndIndex; i++)
+                        continue;
+                    }
+
+                    // TextBox in RTL mode may have incorrect character display order,
+                    // in this case the caret "jumps" between characters in the line
+                    // instead of direct moving through them. In this case Windows provides
+                    // incorrect characters indexes and their positions in the line.
+                    // This is a bug or the native control, because the caret "jums"
+                    // when selecting and the selected text is torn. Moreover, the caret position
+                    // is incorrect for some whitespaces, thereby Windows provides incorrect text range endpoints.
+                    // There are 2 ways to get rectangles:
+                    //    1) Go through all characters in the line and get min and max positions.
+                    //       (Used now)
+                    //    2) Take the owning control rectangle width for the line text range.
+                    //       (Fast and simple)
+                    //       lineStartPoint.X = clippingRectangle.Left;
+                    //       lineEndPoint.X = clippingRectangle.Right;
+
+                    // Use the "end" point as min, because it is less than the "start" point for this case.
+                    int minX = lineEndPoint.X;
+                    int maxX = minX;
+
+                    // Go through all characters in the line and get min and max positions.
+                    for (int i = lineStartIndex; i <= lineEndIndex; i++)
+                    {
+                        Point pt = _provider.GetPositionFromChar(i);
+                        if (pt.X < minX)
                         {
-                            Point pt = _provider.GetPositionFromChar(i);
-                            if (pt.X < minX)
-                            {
-                                minX = pt.X;
-                            }
-                            else if (pt.X > maxX)
-                            {
-                                maxX = pt.X;
-                            }
+                            minX = pt.X;
+                            continue;
                         }
 
-                        lineStartPoint.X = minX;
-                        lineEndPoint.X = maxX;
+                        pt = _provider.GetPositionFromCharForUpperRightCorner(i, text);
+                        if (pt.X > maxX)
+                        {
+                            maxX = pt.X;
+                        }
                     }
+
+                    lineStartPoint.X = minX;
+                    lineEndPoint.X = maxX;
                 }
 
+                AddLineRectangle(lineStartPoint, lineEndPoint);
+            }
+
+            return rects;
+
+            void AddLineRectangle(Point startPoint, Point endPoint)
+            {
                 // Add a bounding rectangle for a line, if it's nonempty.
                 // Increase Y by 2 to Y to get a correct size of the rectangle around a text range.
                 // Adding 2px constant to Y doesn't affect rectangles in a high DPI mode,
                 // because it just moves the rectangle down a TextBox border, that is 1 px in all DPI modes.
-                Rectangle rect = new(lineStartPoint.X, lineStartPoint.Y + 2, lineEndPoint.X - lineStartPoint.X, lineHeight);
+                Rectangle rect = new(startPoint.X, startPoint.Y + 2, endPoint.X - startPoint.X, lineHeight);
                 rect.Intersect(clippingRectangle);
                 if (rect.Width > 0 && rect.Height > 0)
                 {
-                    rect.Offset(mapClientToScreen.X, mapClientToScreen.Y);
+                    rect = _provider.RectangleToScreen(rect);
                     rects.Add(rect);
                 }
             }
-
-            return rects;
         }
 
         private static HorizontalTextAlignment GetHorizontalTextAlignment(ES editStyle)

@@ -69,6 +69,8 @@ namespace System.Windows.Forms.Automation
 
         public abstract Point PointToScreen(Point pt);
 
+        public abstract Rectangle RectangleToScreen(Rectangle rect);
+
         public abstract void SetSelection(int start, int end);
 
         public static ES GetEditStyle(IHandle hWnd) => (ES)GetWindowLong(hWnd, GWL.STYLE);
