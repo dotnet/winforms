@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
@@ -52,7 +50,7 @@ namespace System.Windows.Forms
                 if (_borderSize != value)
                 {
                     _borderSize = value;
-                    if (_owner is not null && _owner.ParentInternal is not null)
+                    if (_owner.ParentInternal is not null)
                     {
                         LayoutTransaction.DoLayoutIf(_owner.AutoSize, _owner.ParentInternal, _owner, PropertyNames.FlatAppearanceBorderSize);
                     }
