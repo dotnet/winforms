@@ -13,17 +13,17 @@ namespace System.Windows.Forms
     [TypeConverter(typeof(FlatButtonAppearanceConverter))]
     public class FlatButtonAppearance
     {
-        private readonly ButtonBase owner;
+        private readonly ButtonBase _owner;
 
-        private int borderSize = 1;
-        private Color borderColor = Color.Empty;
-        private Color checkedBackColor = Color.Empty;
-        private Color mouseDownBackColor = Color.Empty;
-        private Color mouseOverBackColor = Color.Empty;
+        private int _borderSize = 1;
+        private Color _borderColor = Color.Empty;
+        private Color _checkedBackColor = Color.Empty;
+        private Color _mouseDownBackColor = Color.Empty;
+        private Color _mouseOverBackColor = Color.Empty;
 
         internal FlatButtonAppearance(ButtonBase owner)
         {
-            this.owner = owner;
+            _owner = owner;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return borderSize;
+                return _borderSize;
             }
             set
             {
@@ -49,15 +49,15 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(BorderSize), value, 0));
                 }
 
-                if (borderSize != value)
+                if (_borderSize != value)
                 {
-                    borderSize = value;
-                    if (owner is not null && owner.ParentInternal is not null)
+                    _borderSize = value;
+                    if (_owner is not null && _owner.ParentInternal is not null)
                     {
-                        LayoutTransaction.DoLayoutIf(owner.AutoSize, owner.ParentInternal, owner, PropertyNames.FlatAppearanceBorderSize);
+                        LayoutTransaction.DoLayoutIf(_owner.AutoSize, _owner.ParentInternal, _owner, PropertyNames.FlatAppearanceBorderSize);
                     }
 
-                    owner.Invalidate();
+                    _owner.Invalidate();
                 }
             }
         }
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return borderColor;
+                return _borderColor;
             }
             set
             {
@@ -85,10 +85,10 @@ namespace System.Windows.Forms
                     throw new NotSupportedException(SR.ButtonFlatAppearanceInvalidBorderColor);
                 }
 
-                if (borderColor != value)
+                if (_borderColor != value)
                 {
-                    borderColor = value;
-                    owner.Invalidate();
+                    _borderColor = value;
+                    _owner.Invalidate();
                 }
             }
         }
@@ -107,14 +107,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return checkedBackColor;
+                return _checkedBackColor;
             }
             set
             {
-                if (checkedBackColor != value)
+                if (_checkedBackColor != value)
                 {
-                    checkedBackColor = value;
-                    owner.Invalidate();
+                    _checkedBackColor = value;
+                    _owner.Invalidate();
                 }
             }
         }
@@ -134,14 +134,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return mouseDownBackColor;
+                return _mouseDownBackColor;
             }
             set
             {
-                if (mouseDownBackColor != value)
+                if (_mouseDownBackColor != value)
                 {
-                    mouseDownBackColor = value;
-                    owner.Invalidate();
+                    _mouseDownBackColor = value;
+                    _owner.Invalidate();
                 }
             }
         }
@@ -161,14 +161,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return mouseOverBackColor;
+                return _mouseOverBackColor;
             }
             set
             {
-                if (mouseOverBackColor != value)
+                if (_mouseOverBackColor != value)
                 {
-                    mouseOverBackColor = value;
-                    owner.Invalidate();
+                    _mouseOverBackColor = value;
+                    _owner.Invalidate();
                 }
             }
         }
