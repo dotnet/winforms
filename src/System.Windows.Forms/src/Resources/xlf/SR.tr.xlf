@@ -5911,11 +5911,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Anahtar birleşimi geçerli değil.</target>
         <note />
       </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">Anahtar adı geçerli değil.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
         <source>Enables the automatic handling of text that extends beyond the width of the label control.</source>
         <target state="translated">Etiket denetimi genişliğini aşan metnin otomatik işlenmesini sağlar.</target>

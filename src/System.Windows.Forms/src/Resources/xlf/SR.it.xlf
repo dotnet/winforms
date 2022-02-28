@@ -5911,11 +5911,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Combinazione di tasti non valida.</target>
         <note />
       </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">Nome di tasto non valido.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
         <source>Enables the automatic handling of text that extends beyond the width of the label control.</source>
         <target state="translated">Consente la gestione automatica del testo che non è contenuto all'interno della larghezza del controllo etichetta.</target>

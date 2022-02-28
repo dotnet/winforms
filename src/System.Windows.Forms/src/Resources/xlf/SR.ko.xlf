@@ -5911,11 +5911,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">키 조합이 잘못되었습니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">키 이름이 잘못되었습니다.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
         <source>Enables the automatic handling of text that extends beyond the width of the label control.</source>
         <target state="translated">레이블 컨트롤의 너비보다 큰 텍스트를 자동으로 처리합니다.</target>

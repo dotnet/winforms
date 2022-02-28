@@ -5911,11 +5911,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Kombinace klíčů je neplatná.</target>
         <note />
       </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">Název klíče je neplatný.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
         <source>Enables the automatic handling of text that extends beyond the width of the label control.</source>
         <target state="translated">Umožňuje automatické zpracování textu, který je delší než šířka ovládacího prvku popisku.</target>
