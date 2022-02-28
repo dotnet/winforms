@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Buffers;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
@@ -67,7 +66,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler HelpRequest
+        public new event EventHandler? HelpRequest
         {
             add => base.HelpRequest += value;
             remove => base.HelpRequest -= value;
@@ -233,6 +232,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Resets all properties to their default values.
         /// </summary>
+        [MemberNotNull(nameof(_descriptionText))]
+        [MemberNotNull(nameof(_selectedPath))]
+        [MemberNotNull(nameof(_initialDirectory))]
         public override void Reset()
         {
             _options = (int)(FOS.PICKFOLDERS | FOS.FORCEFILESYSTEM | FOS.FILEMUSTEXIST);
@@ -301,7 +303,7 @@ namespace System.Windows.Forms
                         return true;
                     }
 
-                    throw Marshal.GetExceptionForHR((int)hr);
+                    throw Marshal.GetExceptionForHR((int)hr)!;
                 }
 
                 GetResult(dialog);
@@ -355,7 +357,7 @@ namespace System.Windows.Forms
 
             if (!string.IsNullOrEmpty(_selectedPath))
             {
-                string parent = Path.GetDirectoryName(_selectedPath);
+                string? parent = Path.GetDirectoryName(_selectedPath);
                 if (parent is null || !string.IsNullOrEmpty(_initialDirectory) || !Directory.Exists(parent))
                 {
                     dialog.SetFileName(_selectedPath);
@@ -400,11 +402,11 @@ namespace System.Windows.Forms
 
         private void GetResult(IFileDialog dialog)
         {
-            dialog.GetResult(out IShellItem item);
-            HRESULT hr = item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath);
-            if (!hr.Succeeded())
+            dialog.GetResult(out IShellItem? item);
+            if (item is not null)
             {
-                throw Marshal.GetExceptionForHR((int)hr);
+                HRESULT hr = item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath!);
+                hr.ThrowIfFailed();
             }
         }
 
@@ -434,7 +436,7 @@ namespace System.Windows.Forms
                 // under the MTA threading model (...dialog does appear under MTA, but is totally non-functional).
                 if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != System.Threading.ApartmentState.STA)
                 {
-                    throw new Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
+                    throw new ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
                 }
 
                 var callback = new BrowseCallbackProc(FolderBrowserDialog_BrowseCallbackProc);
@@ -464,7 +466,7 @@ namespace System.Windows.Forms
                             }
 
                             // Retrieve the path from the IDList.
-                            SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath);
+                            SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath!);
                             GC.KeepAlive(callback);
                             return true;
                         }
