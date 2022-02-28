@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms
@@ -20,7 +18,7 @@ namespace System.Windows.Forms
         ///  Gets a form specified by name, if present, else returns null. If there are multiple
         ///  forms with matching names, the first form found is returned.
         /// </summary>
-        public virtual Form this[string name]
+        public virtual Form? this[string? name]
         {
             get
             {
@@ -45,15 +43,15 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets a form specified by index.
         /// </summary>
-        public virtual Form this[int index]
+        public virtual Form? this[int index]
         {
             get
             {
-                Form f = null;
+                Form? f = null;
 
                 lock (CollectionSyncRoot)
                 {
-                    f = (Form)InnerList[index];
+                    f = (Form?)InnerList[index];
                 }
 
                 return f;

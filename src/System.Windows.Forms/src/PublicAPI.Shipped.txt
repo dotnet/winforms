@@ -3168,8 +3168,8 @@ virtual System.Windows.Forms.DataObject.SetText(string! textData, System.Windows
 ~virtual System.Windows.Forms.Form.OnResizeEnd(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Form.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Form.OnShown(System.EventArgs e) -> void
-~virtual System.Windows.Forms.FormCollection.this[int index].get -> System.Windows.Forms.Form
-~virtual System.Windows.Forms.FormCollection.this[string name].get -> System.Windows.Forms.Form
+virtual System.Windows.Forms.FormCollection.this[int index].get -> System.Windows.Forms.Form?
+virtual System.Windows.Forms.FormCollection.this[string? name].get -> System.Windows.Forms.Form?
 ~virtual System.Windows.Forms.HelpProvider.CanExtend(object target) -> bool
 ~virtual System.Windows.Forms.HelpProvider.GetHelpKeyword(System.Windows.Forms.Control ctl) -> string
 ~virtual System.Windows.Forms.HelpProvider.GetHelpNavigator(System.Windows.Forms.Control ctl) -> System.Windows.Forms.HelpNavigator
