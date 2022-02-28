@@ -164,14 +164,14 @@ namespace System.Windows.Forms
             return result;
         }
 
-        private protected override string[] ProcessVistaFiles(IFileDialog dialog)
+        private protected override string[] ProcessVistaFiles(Interop.WinFormsComWrappers.FileDialogWrapper dialog)
         {
-            IFileSaveDialog saveDialog = (IFileSaveDialog)dialog;
+            var saveDialog = (Interop.WinFormsComWrappers.FileSaveDialogWrapper)dialog;
             dialog.GetResult(out IShellItem item);
             return new string[] { GetFilePathFromShellItem(item) };
         }
 
-        private protected override IFileDialog CreateVistaDialog()
+        private protected override Interop.WinFormsComWrappers.FileDialogWrapper CreateVistaDialog()
         {
             HRESULT hr = Ole32.CoCreateInstance(
                 in CLSID.FileSaveDialog,
@@ -186,7 +186,7 @@ namespace System.Windows.Forms
 
             var obj = WinFormsComWrappers.Instance
                 .GetOrCreateObjectForComInstance(lpDialogUnknownPtr, CreateObjectFlags.None);
-            return (IFileSaveDialog)obj;
+            return (Interop.WinFormsComWrappers.FileDialogWrapper)obj;
         }
     }
 }

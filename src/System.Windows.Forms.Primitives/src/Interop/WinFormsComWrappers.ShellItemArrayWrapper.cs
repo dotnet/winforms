@@ -9,7 +9,7 @@ internal partial class Interop
 {
     internal unsafe partial class WinFormsComWrappers
     {
-        private class ShellItemArrayWrapper : Shell32.IShellItemArray, IDisposable
+        internal class ShellItemArrayWrapper : Shell32.IShellItemArray, IDisposable
         {
             private IntPtr _wrappedInstance;
 
@@ -67,7 +67,7 @@ internal partial class Interop
                 }
             }
 
-            void Shell32.IShellItemArray.GetCount(out uint pdwNumItems)
+            public void GetCount(out uint pdwNumItems)
             {
                 fixed (uint* pdwNumItems_local = &pdwNumItems)
                 {
@@ -76,7 +76,7 @@ internal partial class Interop
                 }
             }
 
-            void Shell32.IShellItemArray.GetItemAt(uint dwIndex, out Shell32.IShellItem ppsi)
+            public void GetItemAt(uint dwIndex, out Shell32.IShellItem ppsi)
             {
                 IntPtr ppsi_local;
                 ((delegate* unmanaged<IntPtr, uint, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 8)))

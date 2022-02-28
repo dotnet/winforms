@@ -265,7 +265,7 @@ namespace System.Windows.Forms
 
         private bool TryRunDialogVista(IntPtr owner, out bool returnValue)
         {
-            IFileOpenDialog dialog;
+            Interop.WinFormsComWrappers.FileOpenDialogWrapper dialog;
             try
             {
                 // Creating the Vista dialog can fail on Windows Server Core, even if the
@@ -283,7 +283,7 @@ namespace System.Windows.Forms
 
                 var obj = WinFormsComWrappers.Instance
                     .GetOrCreateObjectForComInstance(lpDialogUnknownPtr, CreateObjectFlags.UniqueInstance);
-                dialog = (IFileOpenDialog)obj;
+                dialog = (Interop.WinFormsComWrappers.FileOpenDialogWrapper)obj;
             }
             catch (COMException)
             {
@@ -312,7 +312,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                ((IDisposable)dialog).Dispose();
+                dialog.Dispose();
             }
         }
 

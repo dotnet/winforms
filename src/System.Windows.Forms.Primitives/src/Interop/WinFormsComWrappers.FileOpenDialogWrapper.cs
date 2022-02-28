@@ -17,7 +17,7 @@ internal partial class Interop
 
             HRESULT Shell32.IFileOpenDialog.Show(IntPtr parent)
             {
-                return ((Shell32.IFileDialog)this).Show(parent);
+                return this.Show(parent);
             }
 
             HRESULT Shell32.IFileOpenDialog.SetFileTypes(uint cFileTypes, Shell32.COMDLG_FILTERSPEC[] rgFilterSpec)
@@ -137,10 +137,16 @@ internal partial class Interop
 
             void Shell32.IFileOpenDialog.GetResults(out Shell32.IShellItemArray? ppenum)
             {
+                GetResults(out Interop.WinFormsComWrappers.ShellItemArrayWrapper? wrapper);
+                ppenum = wrapper;
+            }
+
+            public void GetResults(out Interop.WinFormsComWrappers.ShellItemArrayWrapper? ppenum)
+            {
                 IntPtr ppenum_local;
                 ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 27)))
                     (_wrappedInstance, &ppenum_local).ThrowIfFailed();
-                ppenum = ppenum_local == IntPtr.Zero ? null : (Shell32.IShellItemArray)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppenum_local, CreateObjectFlags.UniqueInstance);
+                ppenum = ppenum_local == IntPtr.Zero ? null : (Interop.WinFormsComWrappers.ShellItemArrayWrapper)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppenum_local, CreateObjectFlags.UniqueInstance);
             }
 
             HRESULT Shell32.IFileOpenDialog.GetSelectedItems(out Shell32.IShellItemArray? ppsai)

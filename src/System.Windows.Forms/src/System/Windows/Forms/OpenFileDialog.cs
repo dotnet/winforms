@@ -137,12 +137,12 @@ namespace System.Windows.Forms
             return result;
         }
 
-        private protected override string[] ProcessVistaFiles(IFileDialog dialog)
+        private protected override string[] ProcessVistaFiles(Interop.WinFormsComWrappers.FileDialogWrapper dialog)
         {
-            IFileOpenDialog openDialog = (IFileOpenDialog)dialog;
+            var openDialog = (Interop.WinFormsComWrappers.FileOpenDialogWrapper)dialog;
             if (Multiselect)
             {
-                openDialog.GetResults(out IShellItemArray results);
+                openDialog.GetResults(out Interop.WinFormsComWrappers.ShellItemArrayWrapper results);
                 try
                 {
                     results.GetCount(out uint count);
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    ((IDisposable)results).Dispose();
+                    results.Dispose();
                 }
             }
             else
@@ -167,7 +167,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private protected override IFileDialog CreateVistaDialog()
+        private protected override Interop.WinFormsComWrappers.FileDialogWrapper CreateVistaDialog()
         {
             HRESULT hr = Ole32.CoCreateInstance(
                 in CLSID.FileOpenDialog,
@@ -182,7 +182,7 @@ namespace System.Windows.Forms
 
             var obj = WinFormsComWrappers.Instance
                 .GetOrCreateObjectForComInstance(lpDialogUnknownPtr, CreateObjectFlags.None);
-            return (IFileOpenDialog)obj;
+            return (Interop.WinFormsComWrappers.FileDialogWrapper)obj;
         }
 
         [Browsable(false)]

@@ -26,7 +26,7 @@ internal partial class Interop
                 _wrappedInstance = IntPtr.Zero;
             }
 
-            HRESULT Shell32.IFileDialog.Show(IntPtr parent)
+            public HRESULT Show(IntPtr parent)
             {
                 return ((delegate* unmanaged<IntPtr, IntPtr, HRESULT>)(*(*(void***)_wrappedInstance + 3)))
                     (_wrappedInstance, parent);
@@ -50,7 +50,7 @@ internal partial class Interop
                     (_wrappedInstance, iFileType);
             }
 
-            void Shell32.IFileDialog.GetFileTypeIndex(out uint piFileType)
+            public void GetFileTypeIndex(out uint piFileType)
             {
                 fixed (uint* piFileType_local = &piFileType)
                 {
@@ -169,7 +169,7 @@ internal partial class Interop
                 }
             }
 
-            void Shell32.IFileDialog.GetResult(out Shell32.IShellItem? ppsi)
+            public void GetResult(out Shell32.IShellItem? ppsi)
             {
                 IntPtr ppsi_local;
                 ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 20)))
