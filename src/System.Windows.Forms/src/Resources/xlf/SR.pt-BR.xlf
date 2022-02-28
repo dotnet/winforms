@@ -4596,7 +4596,7 @@ Para substituir a caixa de diálogo padrão, manipule o evento DataError.</targe
       </trans-unit>
       <trans-unit id="EditDefaultAccessibleName">
         <source>Spinner</source>
-        <target state="new">Spinner</target>
+        <target state="translated">Controle giratório</target>
         <note />
       </trans-unit>
       <trans-unit id="ErrorBadInputLanguage">
