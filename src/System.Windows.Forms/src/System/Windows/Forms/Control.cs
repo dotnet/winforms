@@ -10854,7 +10854,7 @@ namespace System.Windows.Forms
                             // NOTE: SetWindowPos causes a WM_WINDOWPOSCHANGED which is processed
                             // synchonously so we effectively end up in UpdateBounds immediately following
                             // SetWindowPos.
-                            // In case of MDI child windows, UpdateBOund() is made a no-op with respect
+                            // In case of MDI child windows, UpdateBounds() is made no-op with respect
                             // to bounds due to incorrect size returned by GetClientRect() method when
                             // UpdateBounds() is triggered as a result of DPI_CHNAGED event. As a workaround,
                             // we would be explicitly calling UpdateBounds(x, y, width, height).
@@ -11539,13 +11539,13 @@ namespace System.Windows.Forms
                 User32.MapWindowPoints(IntPtr.Zero, User32.GetParent(new HandleRef(_window, InternalHandle)), ref rect);
 
                 // When moving the Form to a new monitor with different DPI settings, Windows changing the Dpi
-                // on the handle and sendign DPI changed message to the Form are not in sync. Due to this,
-                // methods User32.GetClientRect are returnign the incorrect value.  This method is not
-                // accurate with respect to adornments metrics and their Dpi. Hence this work around.
+                // on the handle and sending DPI changed message to the Form are not in sync. Due to this,
+                // methods User32.GetClientRect are returning the incorrect value. User32.GetClientRect method is not
+                // accurate with respect to adornments metrics, their Dpi and current layout transaction. Hence this work around.
 
-                // This method is expected to be called whenever there is WINDOWSPOSITION_CHANGED message is triggered.
-                // We will be calling UpdateBounds(x, y, width, height) explicitly, instead, for MDI child windows
-                // if we had to chnage the size. for every other control, bounds are changed here.
+                // UpdateBounds() is expected to be called whenever there is WINDOWSPOSITION_CHANGED message is triggered.
+                // We will be calling UpdateBounds(x, y, width, height) explicitly, instead, for MDI child windows if we
+                // had to change the size. For every other control, bounds are changed here.
                 if (this is Form form && form.IsMdiChild)
                 {
                     clientWidth = form.ClientRectangle.Width;
