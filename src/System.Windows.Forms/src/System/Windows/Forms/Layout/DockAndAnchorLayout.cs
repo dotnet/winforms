@@ -1023,5 +1023,16 @@ namespace System.Windows.Forms.Layout
         {
             return (anchor & desiredAnchor) == desiredAnchor;
         }
+<<<<<<< HEAD
+=======
+
+        internal sealed class AnchorInfo
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
+>>>>>>> Fixing AnchorInfo calculations.
     }
 }
