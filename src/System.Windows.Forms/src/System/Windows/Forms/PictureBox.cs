@@ -579,7 +579,7 @@ namespace System.Windows.Forms
                 var uri = CalculateUri(_imageLocation);
                 if (uri.IsFile)
                 {
-                    LoadFromFileAsync();
+                    Task.Run(() => LoadFromFileAsync());
                 }
                 else
                 {
@@ -588,7 +588,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private async void LoadFromFileAsync()
+        private async Task LoadFromFileAsync()
         {
             try
             {
