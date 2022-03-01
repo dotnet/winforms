@@ -183,5 +183,15 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             Assert.Equal(expectedRole, actual);
             Assert.False(propertyGrid.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void GridViewTextBoxAccessibleObject_FragmentRoot_ReturnsExpected()
+        {
+            using PropertyGrid propertyGrid = new PropertyGrid();
+            PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
+            AccessibleObject accessibleObject = gridView.EditAccessibleObject;
+
+            Assert.Equal(propertyGrid.AccessibilityObject, accessibleObject.FragmentRoot);
+        }
     }
 }
