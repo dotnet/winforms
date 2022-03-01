@@ -451,7 +451,7 @@ override System.Windows.Forms.ImageKeyConverter.ConvertTo(System.ComponentModel.
 override System.Windows.Forms.ImageKeyConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext? context) -> System.ComponentModel.TypeConverter.StandardValuesCollection!
 override System.Windows.Forms.ImageKeyConverter.GetStandardValuesExclusive(System.ComponentModel.ITypeDescriptorContext? context) -> bool
 override System.Windows.Forms.ImageKeyConverter.GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
-~override System.Windows.Forms.ImageList.ToString() -> string
+override System.Windows.Forms.ImageList.ToString() -> string!
 override System.Windows.Forms.KeysConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
 override System.Windows.Forms.KeysConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
 override System.Windows.Forms.KeysConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
@@ -1928,34 +1928,34 @@ System.Windows.Forms.IDataObject.SetData(System.Type! format, object? data) -> v
 ~System.Windows.Forms.IDropTarget.OnDragLeave(System.EventArgs e) -> void
 ~System.Windows.Forms.IDropTarget.OnDragOver(System.Windows.Forms.DragEventArgs e) -> void
 ~System.Windows.Forms.IFileReaderService.OpenFileFromSource(string relativePath) -> System.IO.Stream
-~System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics g, int x, int y, int index) -> void
-~System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics g, int x, int y, int width, int height, int index) -> void
-~System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics g, System.Drawing.Point pt, int index) -> void
-~System.Windows.Forms.ImageList.ImageCollection.Add(string key, System.Drawing.Icon icon) -> void
-~System.Windows.Forms.ImageList.ImageCollection.Add(string key, System.Drawing.Image image) -> void
-~System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Icon value) -> void
-~System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Image value) -> void
-~System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Image value, System.Drawing.Color transparentColor) -> int
-~System.Windows.Forms.ImageList.ImageCollection.AddRange(System.Drawing.Image[] images) -> void
-~System.Windows.Forms.ImageList.ImageCollection.AddStrip(System.Drawing.Image value) -> int
-~System.Windows.Forms.ImageList.ImageCollection.Contains(System.Drawing.Image image) -> bool
-~System.Windows.Forms.ImageList.ImageCollection.ContainsKey(string key) -> bool
-~System.Windows.Forms.ImageList.ImageCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ImageList.ImageCollection.IndexOf(System.Drawing.Image image) -> int
-~System.Windows.Forms.ImageList.ImageCollection.IndexOfKey(string key) -> int
-~System.Windows.Forms.ImageList.ImageCollection.Keys.get -> System.Collections.Specialized.StringCollection
-~System.Windows.Forms.ImageList.ImageCollection.Remove(System.Drawing.Image image) -> void
-~System.Windows.Forms.ImageList.ImageCollection.RemoveByKey(string key) -> void
-~System.Windows.Forms.ImageList.ImageCollection.SetKeyName(int index, string name) -> void
-~System.Windows.Forms.ImageList.ImageCollection.this[int index].get -> System.Drawing.Image
-~System.Windows.Forms.ImageList.ImageCollection.this[int index].set -> void
-~System.Windows.Forms.ImageList.ImageCollection.this[string key].get -> System.Drawing.Image
-~System.Windows.Forms.ImageList.ImageList(System.ComponentModel.IContainer container) -> void
-~System.Windows.Forms.ImageList.Images.get -> System.Windows.Forms.ImageList.ImageCollection
-~System.Windows.Forms.ImageList.ImageStream.get -> System.Windows.Forms.ImageListStreamer
-~System.Windows.Forms.ImageList.ImageStream.set -> void
-~System.Windows.Forms.ImageList.Tag.get -> object
-~System.Windows.Forms.ImageList.Tag.set -> void
+System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics! g, int x, int y, int index) -> void
+System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics! g, int x, int y, int width, int height, int index) -> void
+System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics! g, System.Drawing.Point pt, int index) -> void
+System.Windows.Forms.ImageList.ImageCollection.Add(string! key, System.Drawing.Icon! icon) -> void
+System.Windows.Forms.ImageList.ImageCollection.Add(string! key, System.Drawing.Image! image) -> void
+System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Icon! value) -> void
+System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Image! value) -> void
+System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Image! value, System.Drawing.Color transparentColor) -> int
+System.Windows.Forms.ImageList.ImageCollection.AddRange(System.Drawing.Image![]! images) -> void
+System.Windows.Forms.ImageList.ImageCollection.AddStrip(System.Drawing.Image! value) -> int
+System.Windows.Forms.ImageList.ImageCollection.Contains(System.Drawing.Image! image) -> bool
+System.Windows.Forms.ImageList.ImageCollection.ContainsKey(string! key) -> bool
+System.Windows.Forms.ImageList.ImageCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ImageList.ImageCollection.IndexOf(System.Drawing.Image! image) -> int
+System.Windows.Forms.ImageList.ImageCollection.IndexOfKey(string! key) -> int
+System.Windows.Forms.ImageList.ImageCollection.Keys.get -> System.Collections.Specialized.StringCollection!
+System.Windows.Forms.ImageList.ImageCollection.Remove(System.Drawing.Image! image) -> void
+System.Windows.Forms.ImageList.ImageCollection.RemoveByKey(string! key) -> void
+System.Windows.Forms.ImageList.ImageCollection.SetKeyName(int index, string! name) -> void
+System.Windows.Forms.ImageList.ImageCollection.this[int index].get -> System.Drawing.Image!
+System.Windows.Forms.ImageList.ImageCollection.this[int index].set -> void
+System.Windows.Forms.ImageList.ImageCollection.this[string! key].get -> System.Drawing.Image?
+System.Windows.Forms.ImageList.ImageList(System.ComponentModel.IContainer! container) -> void
+System.Windows.Forms.ImageList.Images.get -> System.Windows.Forms.ImageList.ImageCollection!
+System.Windows.Forms.ImageList.ImageStream.get -> System.Windows.Forms.ImageListStreamer?
+System.Windows.Forms.ImageList.ImageStream.set -> void
+System.Windows.Forms.ImageList.Tag.get -> object?
+System.Windows.Forms.ImageList.Tag.set -> void
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
 System.Windows.Forms.KeysConverter.Compare(object? a, object? b) -> int
 System.Windows.Forms.Label.CalcImageRenderBounds(System.Drawing.Image! image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> System.Drawing.Rectangle
@@ -8427,7 +8427,7 @@ System.Windows.Forms.ImageList.ImageCollection.RemoveAt(int index) -> void
 System.Windows.Forms.ImageList.ImageList() -> void
 System.Windows.Forms.ImageList.ImageSize.get -> System.Drawing.Size
 System.Windows.Forms.ImageList.ImageSize.set -> void
-System.Windows.Forms.ImageList.RecreateHandle -> System.EventHandler
+System.Windows.Forms.ImageList.RecreateHandle -> System.EventHandler?
 System.Windows.Forms.ImageList.TransparentColor.get -> System.Drawing.Color
 System.Windows.Forms.ImageList.TransparentColor.set -> void
 System.Windows.Forms.ImageListStreamer
