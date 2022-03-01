@@ -163,7 +163,7 @@ namespace System.Windows.Forms
                 else if (item.Selected)
                 {
                     g.FillRectangle(SystemBrushes.Highlight, bounds);
-                    g.DrawRectangle(SystemPens.ButtonHighlight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+                    DrawHightContrastDashedBorder(g, e.Item);
                     g.DrawRectangle(SystemPens.ButtonHighlight, dropDownRect);
                 }
 
@@ -440,7 +440,7 @@ namespace System.Windows.Forms
 
                     if (button.Selected)
                     {
-                        g.DrawRectangle(SystemPens.Highlight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+                        DrawHightContrastDashedBorder(g, button);
                     }
                     else
                     {
@@ -482,8 +482,29 @@ namespace System.Windows.Forms
             else if (e.Item.Selected)
             {
                 g.FillRectangle(SystemBrushes.Highlight, bounds);
-                g.DrawRectangle(SystemPens.ControlLight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+                DrawHightContrastDashedBorder(g, e.Item);
             }
+        }
+
+        private void DrawHightContrastDashedBorder(Graphics graphics, ToolStripItem item)
+        {
+            var bounds = item.ClientBounds;
+            float[] dashValues = { 2, 2 };
+            int penWidth = 2;
+
+            var focusPen1 = new Pen(SystemColors.ControlText, penWidth)
+            {
+                DashPattern = dashValues
+            };
+
+            var focusPen2 = new Pen(SystemColors.Control, penWidth)
+            {
+                DashPattern = dashValues,
+                DashOffset = 2
+            };
+
+            graphics.DrawRectangle(focusPen1, bounds);
+            graphics.DrawRectangle(focusPen2, bounds);
         }
     }
 }
