@@ -3430,7 +3430,7 @@ namespace System.Windows.Forms
             get => new Size(_width, _height);
             set
             {
-                if (Anchor != CommonProperties.DefaultAnchor)
+                if (CommonProperties.GetNeedsAnchorLayout(this))
                 {
                     // Reset AnchorInfo that may have calculated based on default Size of the control or
                     // with the previous size of the control.  Especially in the designer scenario.                  .
