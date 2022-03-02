@@ -498,14 +498,6 @@ namespace System.Windows.Forms
                 {
                     accessibleObject = CreateAccessibilityInstance();
 
-                    // This is a security check. We want to enforce that we only return
-                    // ControlAccessibleObject and not some other derived class.
-                    if (accessibleObject is not ControlAccessibleObject)
-                    {
-                        Debug.Fail("Accessible objects for controls must be derived from ControlAccessibleObject.");
-                        return null;
-                    }
-
                     Properties.SetObject(s_accessibilityProperty, accessibleObject);
                 }
 
