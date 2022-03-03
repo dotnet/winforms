@@ -81,14 +81,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     t = Type.GetType(attrName);
                 }
 
-                Assembly? a = null;
+                Assembly? a = t?.Assembly;
 
-                if (t is not null)
-                {
-                    a = t.Assembly;
-                }
-
-                if (t is null && attrName is not null)
+                if (t is null)
                 {
                     // check for an assembly name.
                     string assemblyName = string.Empty;

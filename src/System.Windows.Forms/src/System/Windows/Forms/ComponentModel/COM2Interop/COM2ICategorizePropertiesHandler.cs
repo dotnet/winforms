@@ -75,7 +75,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             string? cat = GetCategoryFromObject(sender.TargetObject, sender.DISPID);
 
-            if (cat is not null && cat.Length > 0)
+            if (cat?.Length > 0)
             {
                 attrEvent.Add(new CategoryAttribute(cat));
             }
