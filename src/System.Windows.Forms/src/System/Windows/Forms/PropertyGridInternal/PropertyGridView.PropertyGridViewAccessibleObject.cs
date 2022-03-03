@@ -153,10 +153,16 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <param name="gridEntryCollection">The grid entry collection.</param>
             /// <param name="currentGridEntryFound">Indicates whether the current grid entry is found.</param>
             /// <returns>The previous grid entry.</returns>
-            internal AccessibleObject? GetPreviousGridEntry(GridEntry currentGridEntry, GridEntryCollection gridEntryCollection, out bool currentGridEntryFound)
+            internal AccessibleObject? GetPreviousGridEntry(GridEntry currentGridEntry, GridEntryCollection? gridEntryCollection, out bool currentGridEntryFound)
             {
-                GridEntry? previousGridEntry = null;
                 currentGridEntryFound = false;
+
+                if (gridEntryCollection is null)
+                {
+                    return null;
+                }
+
+                GridEntry? previousGridEntry = null;
 
                 foreach (GridEntry gridEntry in gridEntryCollection)
                 {
@@ -204,9 +210,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <param name="gridEntryCollection">The grid entry collection.</param>
             /// <param name="currentGridEntryFound">Indicates whether the current grid entry is found.</param>
             /// <returns>The next grid entry.</returns>
-            internal AccessibleObject? GetNextGridEntry(GridEntry currentGridEntry, GridEntryCollection gridEntryCollection, out bool currentGridEntryFound)
+            internal AccessibleObject? GetNextGridEntry(GridEntry currentGridEntry, GridEntryCollection? gridEntryCollection, out bool currentGridEntryFound)
             {
                 currentGridEntryFound = false;
+
+                if (gridEntryCollection is null)
+                {
+                    return null;
+                }
 
                 foreach (GridEntry gridEntry in gridEntryCollection)
                 {
