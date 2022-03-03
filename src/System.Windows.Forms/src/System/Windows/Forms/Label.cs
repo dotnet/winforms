@@ -1292,10 +1292,7 @@ namespace System.Windows.Forms
         protected override void OnPaint(PaintEventArgs e)
         {
             Animate();
-            if (Image is not null)
-            {
-                ImageAnimator.UpdateFrames(Image);
-            }
+            ImageAnimator.UpdateFrames(Image);
 
             Rectangle face = LayoutUtils.DeflateRect(ClientRectangle, Padding);
             Image? i = Image;
