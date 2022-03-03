@@ -91,15 +91,17 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        int count = 0;
-                        if (_owner._originals is not null)
+                        if (_owner._originals is null)
                         {
-                            foreach (Original original in _owner._originals)
+                            return 0;
+                        }
+
+                        int count = 0;
+                        foreach (Original original in _owner._originals)
+                        {
+                            if (original is not null)
                             {
-                                if (original is not null)
-                                {
-                                    count += original._nImages;
-                                }
+                                count += original._nImages;
                             }
                         }
 
