@@ -39,12 +39,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (target is VSSDK.IVSMDPerPropertyBrowsing browsing)
             {
                 Attribute[] attrs = GetComponentAttributes(browsing, sender.DISPID);
-                if (attrs is not null)
+                for (int i = 0; i < attrs.Length; i++)
                 {
-                    for (int i = 0; i < attrs.Length; i++)
-                    {
-                        attrEvent.Add(attrs[i]);
-                    }
+                    attrEvent.Add(attrs[i]);
                 }
             }
         }
