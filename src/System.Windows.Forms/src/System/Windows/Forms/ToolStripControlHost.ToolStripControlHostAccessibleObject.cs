@@ -53,7 +53,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    AccessibleObject controlAccessibleObject = _ownerItem.ControlAccessibilityObject;
+                    AccessibleObject? controlAccessibleObject = _ownerItem.ControlAccessibilityObject;
                     if (controlAccessibleObject is not null)
                     {
                         return controlAccessibleObject.Role;

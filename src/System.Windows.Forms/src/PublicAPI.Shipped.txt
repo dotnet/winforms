@@ -382,20 +382,20 @@ override System.Windows.Forms.ToolStrip.OnScroll(System.Windows.Forms.ScrollEven
 override System.Windows.Forms.ToolStrip.OnTabStopChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStrip.OnVisibleChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStrip.ToString() -> string!
-~override System.Windows.Forms.ToolStripControlHost.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.ToolStripControlHost.BackgroundImage.set -> void
-~override System.Windows.Forms.ToolStripControlHost.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripControlHost.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.ToolStripControlHost.Font.set -> void
-~override System.Windows.Forms.ToolStripControlHost.Image.get -> System.Drawing.Image
-~override System.Windows.Forms.ToolStripControlHost.Image.set -> void
-~override System.Windows.Forms.ToolStripControlHost.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~override System.Windows.Forms.ToolStripControlHost.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.ToolStripControlHost.OnParentChanged(System.Windows.Forms.ToolStrip oldParent, System.Windows.Forms.ToolStrip newParent) -> void
-~override System.Windows.Forms.ToolStripControlHost.Site.get -> System.ComponentModel.ISite
-~override System.Windows.Forms.ToolStripControlHost.Site.set -> void
-~override System.Windows.Forms.ToolStripControlHost.Text.get -> string
-~override System.Windows.Forms.ToolStripControlHost.Text.set -> void
+override System.Windows.Forms.ToolStripControlHost.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.ToolStripControlHost.BackgroundImage.set -> void
+override System.Windows.Forms.ToolStripControlHost.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripControlHost.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.ToolStripControlHost.Font.set -> void
+override System.Windows.Forms.ToolStripControlHost.Image.get -> System.Drawing.Image?
+override System.Windows.Forms.ToolStripControlHost.Image.set -> void
+override System.Windows.Forms.ToolStripControlHost.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
+override System.Windows.Forms.ToolStripControlHost.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.ToolStripControlHost.OnParentChanged(System.Windows.Forms.ToolStrip? oldParent, System.Windows.Forms.ToolStrip? newParent) -> void
+override System.Windows.Forms.ToolStripControlHost.Site.get -> System.ComponentModel.ISite?
+override System.Windows.Forms.ToolStripControlHost.Site.set -> void
+override System.Windows.Forms.ToolStripControlHost.Text.get -> string!
+override System.Windows.Forms.ToolStripControlHost.Text.set -> void
 ~override System.Windows.Forms.ToolTip.ToString() -> string
 ~override System.Windows.Forms.TreeNode.ToString() -> string
 ~override System.Windows.Forms.TreeView.BackgroundImage.get -> System.Drawing.Image
@@ -957,9 +957,9 @@ System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point pt, System.W
 System.Windows.Forms.ToolStrip.GetItemAt(int x, int y) -> System.Windows.Forms.ToolStripItem?
 System.Windows.Forms.ToolStrip.GetItemAt(System.Drawing.Point point) -> System.Windows.Forms.ToolStripItem?
 System.Windows.Forms.ToolStrip.SetItemLocation(System.Windows.Forms.ToolStripItem! item, System.Drawing.Point location) -> void
-~System.Windows.Forms.ToolStripControlHost.Control.get -> System.Windows.Forms.Control
-~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c) -> void
-~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c, string name) -> void
+System.Windows.Forms.ToolStripControlHost.Control.get -> System.Windows.Forms.Control!
+System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control! c) -> void
+System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control! c, string! name) -> void
 ~System.Windows.Forms.ToolStripItemCollection.Add(string text) -> System.Windows.Forms.ToolStripItem
 ~System.Windows.Forms.ToolStripItemCollection.Add(string text, System.Drawing.Image image) -> System.Windows.Forms.ToolStripItem
 ~System.Windows.Forms.ToolStripItemCollection.Add(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
@@ -1416,18 +1416,18 @@ virtual System.Windows.Forms.ToolStrip.OnLayoutCompleted(System.EventArgs! e) ->
 virtual System.Windows.Forms.ToolStrip.OnLayoutStyleChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStrip.OnPaintGrip(System.Windows.Forms.PaintEventArgs! e) -> void
 virtual System.Windows.Forms.ToolStrip.OnRendererChanged(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.ToolStripControlHost.OnEnter(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripControlHost.OnGotFocus(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripControlHost.OnHostedControlResize(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripControlHost.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripControlHost.OnKeyPress(System.Windows.Forms.KeyPressEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripControlHost.OnKeyUp(System.Windows.Forms.KeyEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripControlHost.OnLeave(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripControlHost.OnLostFocus(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripControlHost.OnSubscribeControlEvents(System.Windows.Forms.Control control) -> void
-~virtual System.Windows.Forms.ToolStripControlHost.OnUnsubscribeControlEvents(System.Windows.Forms.Control control) -> void
-~virtual System.Windows.Forms.ToolStripControlHost.OnValidated(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripControlHost.OnValidating(System.ComponentModel.CancelEventArgs e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnEnter(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnGotFocus(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnHostedControlResize(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnKeyPress(System.Windows.Forms.KeyPressEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnKeyUp(System.Windows.Forms.KeyEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnLeave(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnLostFocus(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnSubscribeControlEvents(System.Windows.Forms.Control? control) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnUnsubscribeControlEvents(System.Windows.Forms.Control? control) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnValidated(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnValidating(System.ComponentModel.CancelEventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripItemCollection.ContainsKey(string key) -> bool
 ~virtual System.Windows.Forms.ToolStripItemCollection.IndexOfKey(string key) -> int
 ~virtual System.Windows.Forms.ToolStripItemCollection.RemoveByKey(string key) -> void
@@ -10813,23 +10813,23 @@ System.Windows.Forms.ToolStripControlHost.ControlAlign.get -> System.Drawing.Con
 System.Windows.Forms.ToolStripControlHost.ControlAlign.set -> void
 System.Windows.Forms.ToolStripControlHost.DisplayStyle.get -> System.Windows.Forms.ToolStripItemDisplayStyle
 System.Windows.Forms.ToolStripControlHost.DisplayStyle.set -> void
-System.Windows.Forms.ToolStripControlHost.DisplayStyleChanged -> System.EventHandler
+System.Windows.Forms.ToolStripControlHost.DisplayStyleChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripControlHost.DoubleClickEnabled.get -> bool
 System.Windows.Forms.ToolStripControlHost.DoubleClickEnabled.set -> void
-System.Windows.Forms.ToolStripControlHost.Enter -> System.EventHandler
+System.Windows.Forms.ToolStripControlHost.Enter -> System.EventHandler?
 System.Windows.Forms.ToolStripControlHost.Focus() -> void
-System.Windows.Forms.ToolStripControlHost.GotFocus -> System.EventHandler
+System.Windows.Forms.ToolStripControlHost.GotFocus -> System.EventHandler?
 System.Windows.Forms.ToolStripControlHost.ImageAlign.get -> System.Drawing.ContentAlignment
 System.Windows.Forms.ToolStripControlHost.ImageAlign.set -> void
 System.Windows.Forms.ToolStripControlHost.ImageScaling.get -> System.Windows.Forms.ToolStripItemImageScaling
 System.Windows.Forms.ToolStripControlHost.ImageScaling.set -> void
 System.Windows.Forms.ToolStripControlHost.ImageTransparentColor.get -> System.Drawing.Color
 System.Windows.Forms.ToolStripControlHost.ImageTransparentColor.set -> void
-System.Windows.Forms.ToolStripControlHost.KeyDown -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.ToolStripControlHost.KeyPress -> System.Windows.Forms.KeyPressEventHandler
-System.Windows.Forms.ToolStripControlHost.KeyUp -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.ToolStripControlHost.Leave -> System.EventHandler
-System.Windows.Forms.ToolStripControlHost.LostFocus -> System.EventHandler
+System.Windows.Forms.ToolStripControlHost.KeyDown -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.ToolStripControlHost.KeyPress -> System.Windows.Forms.KeyPressEventHandler?
+System.Windows.Forms.ToolStripControlHost.KeyUp -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.ToolStripControlHost.Leave -> System.EventHandler?
+System.Windows.Forms.ToolStripControlHost.LostFocus -> System.EventHandler?
 System.Windows.Forms.ToolStripControlHost.RightToLeftAutoMirrorImage.get -> bool
 System.Windows.Forms.ToolStripControlHost.RightToLeftAutoMirrorImage.set -> void
 System.Windows.Forms.ToolStripControlHost.TextAlign.get -> System.Drawing.ContentAlignment
@@ -10838,8 +10838,8 @@ System.Windows.Forms.ToolStripControlHost.TextImageRelation.get -> System.Window
 System.Windows.Forms.ToolStripControlHost.TextImageRelation.set -> void
 System.Windows.Forms.ToolStripControlHost.ToolStripHostedControlAccessibleObject
 System.Windows.Forms.ToolStripControlHost.ToolStripHostedControlAccessibleObject.ToolStripHostedControlAccessibleObject(System.Windows.Forms.Control! toolStripHostedControl, System.Windows.Forms.ToolStripControlHost? toolStripControlHost) -> void
-System.Windows.Forms.ToolStripControlHost.Validated -> System.EventHandler
-System.Windows.Forms.ToolStripControlHost.Validating -> System.ComponentModel.CancelEventHandler
+System.Windows.Forms.ToolStripControlHost.Validated -> System.EventHandler?
+System.Windows.Forms.ToolStripControlHost.Validating -> System.ComponentModel.CancelEventHandler?
 System.Windows.Forms.ToolStripDropDown
 System.Windows.Forms.ToolStripDropDown.AllowItemReorder.get -> bool
 System.Windows.Forms.ToolStripDropDown.AllowItemReorder.set -> void
