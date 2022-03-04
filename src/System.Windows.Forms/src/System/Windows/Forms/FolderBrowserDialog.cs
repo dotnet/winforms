@@ -345,7 +345,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    IShellItem initialDirectory = GetShellItemForPathViaComWrappers(_initialDirectory);
+                    IShellItem initialDirectory = GetShellItemForPath(_initialDirectory);
 
                     dialog.SetDefaultFolder(initialDirectory);
                     dialog.SetFolder(initialDirectory);
@@ -369,18 +369,6 @@ namespace System.Windows.Forms
                     dialog.SetFileName(folder);
                 }
             }
-        }
-
-        private static IShellItem CreateItemFromParsingName(string path)
-        {
-            Guid guid = typeof(IShellItem).GUID;
-            HRESULT hr = SHCreateItemFromParsingName(path, IntPtr.Zero, ref guid, out object item);
-            if (hr != HRESULT.S_OK)
-            {
-                throw new Win32Exception((int)hr);
-            }
-
-            return (IShellItem)item;
         }
 
         private bool GetOption(int option) => (_options & option) != 0;
