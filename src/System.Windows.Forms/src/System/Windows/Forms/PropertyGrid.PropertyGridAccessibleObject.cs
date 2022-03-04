@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using static Interop;
 
@@ -15,7 +13,7 @@ namespace System.Windows.Forms
         ///  Represents the PropertyGrid accessibility object.
         ///  Is used only in Accessibility Improvements of level3 to show correct accessible hierarchy.
         /// </summary>
-        internal class PropertyGridAccessibleObject : Control.ControlAccessibleObject
+        internal class PropertyGridAccessibleObject : ControlAccessibleObject
         {
             private readonly PropertyGrid _owningPropertyGrid;
 
@@ -39,7 +37,7 @@ namespace System.Windows.Forms
             ///  otherwise return this element if the point is on this element,
             ///  otherwise return null.
             /// </returns>
-            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
             {
                 if (!_owningPropertyGrid.IsHandleCreated)
                 {
@@ -48,7 +46,7 @@ namespace System.Windows.Forms
 
                 Point clientPoint = _owningPropertyGrid.PointToClient(new Point((int)x, (int)y));
 
-                Control element = _owningPropertyGrid.GetElementFromPoint(clientPoint);
+                Control? element = _owningPropertyGrid.GetElementFromPoint(clientPoint);
                 if (element is not null)
                 {
                     return element.AccessibilityObject;
@@ -62,7 +60,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
@@ -87,7 +85,7 @@ namespace System.Windows.Forms
             /// <param name="childFragment">The child element regarding which the target element is searched.</param>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal UiaCore.IRawElementProviderFragment ChildFragmentNavigate(AccessibleObject childFragment, UiaCore.NavigateDirection direction)
+            internal UiaCore.IRawElementProviderFragment? ChildFragmentNavigate(AccessibleObject childFragment, UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
@@ -127,7 +125,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="index">The child index.</param>
             /// <returns>The accessible child.</returns>
-            internal AccessibleObject GetChildFragment(int index)
+            internal AccessibleObject? GetChildFragment(int index)
             {
                 if (index < 0)
                 {
@@ -211,7 +209,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <returns>Return the element in this fragment which has the keyboard focus,
             ///  if any; otherwise return null.</returns>
-            internal override UiaCore.IRawElementProviderFragment GetFocus()
+            internal override UiaCore.IRawElementProviderFragment? GetFocus()
             {
                 return GetFocused();
             }
@@ -226,7 +224,7 @@ namespace System.Windows.Forms
                 int childFragmentCount = GetChildFragmentCount();
                 for (int i = 0; i < childFragmentCount; i++)
                 {
-                    AccessibleObject childFragment = GetChildFragment(i);
+                    AccessibleObject? childFragment = GetChildFragment(i);
                     if (childFragment == controlAccessibleObject)
                     {
                         return i;

@@ -9,7 +9,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal partial class DetailsButton
     {
-        internal class DetailsButtonAccessibleObject : Control.ControlAccessibleObject
+        internal class DetailsButtonAccessibleObject : ControlAccessibleObject
         {
             private readonly DetailsButton _ownerItem;
 
