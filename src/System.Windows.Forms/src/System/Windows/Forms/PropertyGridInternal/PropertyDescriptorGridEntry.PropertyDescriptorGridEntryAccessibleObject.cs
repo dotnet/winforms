@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -23,7 +21,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    PropertyGridView propertyGridView = GetPropertyGridView();
+                    PropertyGridView? propertyGridView = GetPropertyGridView();
                     if (propertyGridView is null)
                     {
                         return UiaCore.ExpandCollapseState.Collapsed;
@@ -61,18 +59,18 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.NextSibling:
-                        var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
-                        var propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
-                        return propertyGridViewAccessibleObject.GetNextGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out _);
+                        var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject?)Parent;
+                        var propertyGridView = propertyGridViewAccessibleObject?.Owner as PropertyGridView;
+                        return propertyGridViewAccessibleObject?.GetNextGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView?.TopLevelGridEntries, out _);
                     case UiaCore.NavigateDirection.PreviousSibling:
-                        propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
-                        propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
-                        return propertyGridViewAccessibleObject.GetPreviousGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out _);
+                        propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject?)Parent;
+                        propertyGridView = propertyGridViewAccessibleObject?.Owner as PropertyGridView;
+                        return propertyGridViewAccessibleObject?.GetPreviousGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView?.TopLevelGridEntries, out _);
                     case UiaCore.NavigateDirection.FirstChild:
                         return GetFirstChild();
                     case UiaCore.NavigateDirection.LastChild:
@@ -82,7 +80,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.FragmentNavigate(direction);
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 if (propertyID == UiaCore.UIA.IsEnabledPropertyId)
                 {
@@ -113,13 +111,13 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private void ExpandOrCollapse()
             {
-                if (!GetPropertyGridView().IsHandleCreated)
+                PropertyGridView? propertyGridView = GetPropertyGridView();
+                if (propertyGridView is null)
                 {
                     return;
                 }
 
-                PropertyGridView propertyGridView = GetPropertyGridView();
-                if (propertyGridView is null)
+                if (!propertyGridView.IsHandleCreated)
                 {
                     return;
                 }
@@ -132,7 +130,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            private UiaCore.IRawElementProviderFragment GetFirstChild()
+            private UiaCore.IRawElementProviderFragment? GetFirstChild()
             {
                 if (_owningPropertyDescriptorGridEntry is null)
                 {
@@ -144,7 +142,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return _owningPropertyDescriptorGridEntry.Children[0].AccessibilityObject;
                 }
 
-                PropertyGridView propertyGridView = GetPropertyGridView();
+                PropertyGridView? propertyGridView = GetPropertyGridView();
                 if (propertyGridView is null)
                 {
                     return null;
@@ -174,7 +172,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return null;
             }
 
-            private UiaCore.IRawElementProviderFragment GetLastChild()
+            private UiaCore.IRawElementProviderFragment? GetLastChild()
             {
                 if (_owningPropertyDescriptorGridEntry is null)
                 {
@@ -186,7 +184,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return _owningPropertyDescriptorGridEntry.Children[_owningPropertyDescriptorGridEntry.ChildCount - 1].AccessibilityObject;
                 }
 
-                PropertyGridView propertyGridView = GetPropertyGridView();
+                PropertyGridView? propertyGridView = GetPropertyGridView();
                 if (propertyGridView is null)
                 {
                     return null;
@@ -209,7 +207,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return null;
             }
 
-            private PropertyGridView GetPropertyGridView()
+            private PropertyGridView? GetPropertyGridView()
             {
                 if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject propertyGridViewAccessibleObject)
                 {
