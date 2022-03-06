@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
@@ -28,9 +26,9 @@ namespace System.Windows.Forms
             private ButtonID _captured = ButtonID.None;
             private ButtonID _mouseOver = ButtonID.None;
 
-            private UpDownEventHandler _upDownEventHandler;
+            private UpDownEventHandler? _upDownEventHandler;
 
-            private Timer _timer; // generates UpDown events
+            private Timer? _timer; // generates UpDown events
             private int _timerInterval; // milliseconds between events
 
             private bool _doubleClickFired;
@@ -46,7 +44,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Adds a handler for the updown button event.
             /// </summary>
-            public event UpDownEventHandler UpDown
+            public event UpDownEventHandler? UpDown
             {
                 add => _upDownEventHandler += value;
                 remove => _upDownEventHandler -= value;
@@ -155,7 +153,6 @@ namespace System.Windows.Forms
                     if (rect.Contains(e.X, e.Y))
                     {
                         // Inside button, repush the button if necessary
-
                         if (_pushed != _captured)
                         {
                             // Restart the timer
@@ -323,7 +320,6 @@ namespace System.Windows.Forms
                 if (half_height != (ClientSize.Height + 1) / 2)
                 {
                     // When control has odd height, a line needs to be drawn below the buttons with the backcolor.
-
                     Color color = _parent.BackColor;
 
                     Rectangle clientRect = ClientRectangle;
@@ -355,6 +351,7 @@ namespace System.Windows.Forms
                 {
                     // Generates UpDown events
                     _timer = new Timer();
+
                     // Add the timer handler
                     _timer.Tick += new EventHandler(TimerHandler);
                 }
@@ -385,7 +382,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Generates updown events when the timer calls this function.
             /// </summary>
-            private void TimerHandler(object source, EventArgs args)
+            private void TimerHandler(object? source, EventArgs args)
             {
                 // Make sure we've got mouse capture
                 if (!Capture)
