@@ -579,7 +579,7 @@ namespace System.Windows.Forms
                 var uri = CalculateUri(_imageLocation);
                 if (uri.IsFile)
                 {
-                    Task.Run(() => LoadFromFileAsync());
+                    LoadFromFileAsync();
                 }
                 else
                 {
@@ -588,49 +588,52 @@ namespace System.Windows.Forms
             }
         }
 
-        private async Task LoadFromFileAsync()
+        private void LoadFromFileAsync()
         {
-            try
+            Task.Run(() =>
             {
-                using var stream = File.OpenRead(_imageLocation);
-                int bytesRead = -1;
-                do
+                try
                 {
-                    var memory = new Memory<byte>(_readBuffer);
-                    bytesRead = await stream.ReadAsync(memory, CancellationToken.None);
-                    if (bytesRead > 0)
+                    using var stream = File.OpenRead(_imageLocation);
+                    int bytesRead = -1;
+                    do
                     {
-                        _totalBytesRead += bytesRead;
-                        _tempDownloadStream.Write(_readBuffer, 0, bytesRead);
-
-                        // Report progress thus far, but only if we know total length.
-                        if (_contentLength != -1)
+                        var memory = new Memory<byte>(_readBuffer);
+                        bytesRead = await stream.ReadAsync(memory, CancellationToken.None);
+                        if (bytesRead > 0)
                         {
-                            int progress = (int)(100 * (((float)_totalBytesRead) / ((float)_contentLength)));
+                            _totalBytesRead += bytesRead;
+                            _tempDownloadStream.Write(_readBuffer, 0, bytesRead);
+
+                            // Report progress thus far, but only if we know total length.
+                            if (_contentLength != -1)
+                            {
+                                int progress = (int)(100 * (((float)_totalBytesRead) / ((float)_contentLength)));
+                                if (_currentAsyncLoadOperation is not null)
+                                {
+                                    _currentAsyncLoadOperation.Post(_loadProgressDelegate, new ProgressChangedEventArgs(progress, null));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            _tempDownloadStream.Seek(0, SeekOrigin.Begin);
                             if (_currentAsyncLoadOperation is not null)
                             {
-                                _currentAsyncLoadOperation.Post(_loadProgressDelegate, new ProgressChangedEventArgs(progress, null));
+                                _currentAsyncLoadOperation.Post(_loadProgressDelegate, new ProgressChangedEventArgs(100, null));
                             }
                         }
                     }
-                    else
-                    {
-                        _tempDownloadStream.Seek(0, SeekOrigin.Begin);
-                        if (_currentAsyncLoadOperation is not null)
-                        {
-                            _currentAsyncLoadOperation.Post(_loadProgressDelegate, new ProgressChangedEventArgs(100, null));
-                        }
-                    }
+                    while (bytesRead > 0);
+                    PostCompleted(null, false);
                 }
-                while (bytesRead > 0);
-                PostCompleted(null, false);
-            }
-            catch (Exception error)
-            {
-                // Since this is on a non-UI thread, we catch any exceptions and
-                // pass them back as data to the UI-thread.
-                PostCompleted(error, false);
-            }
+                catch (Exception error)
+                {
+                    // Since this is on a non-UI thread, we catch any exceptions and
+                    // pass them back as data to the UI-thread.
+                    PostCompleted(error, false);
+                }
+            });
         }
 
         private void StartLoadViaWebRequest()
