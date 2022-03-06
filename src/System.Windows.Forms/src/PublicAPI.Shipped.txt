@@ -413,8 +413,8 @@ override System.Windows.Forms.FileDialog.ToString() -> string!
 ~override System.Windows.Forms.FlowLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
 override System.Windows.Forms.FlowLayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
 ~override System.Windows.Forms.FontDialog.ToString() -> string
-~override System.Windows.Forms.Form.ControlCollection.Add(System.Windows.Forms.Control value) -> void
-~override System.Windows.Forms.Form.ControlCollection.Remove(System.Windows.Forms.Control value) -> void
+override System.Windows.Forms.Form.ControlCollection.Add(System.Windows.Forms.Control? value) -> void
+override System.Windows.Forms.Form.ControlCollection.Remove(System.Windows.Forms.Control? value) -> void
 ~override System.Windows.Forms.Form.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.Form.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
 ~override System.Windows.Forms.Form.CreateParams.get -> System.Windows.Forms.CreateParams
@@ -1777,7 +1777,7 @@ System.Windows.Forms.FolderBrowserDialog.SelectedPath.set -> void
 ~System.Windows.Forms.Form.AddOwnedForm(System.Windows.Forms.Form ownedForm) -> void
 ~System.Windows.Forms.Form.CancelButton.get -> System.Windows.Forms.IButtonControl
 ~System.Windows.Forms.Form.CancelButton.set -> void
-~System.Windows.Forms.Form.ControlCollection.ControlCollection(System.Windows.Forms.Form owner) -> void
+System.Windows.Forms.Form.ControlCollection.ControlCollection(System.Windows.Forms.Form! owner) -> void
 ~System.Windows.Forms.Form.Icon.get -> System.Drawing.Icon
 ~System.Windows.Forms.Form.Icon.set -> void
 ~System.Windows.Forms.Form.MainMenuStrip.get -> System.Windows.Forms.MenuStrip

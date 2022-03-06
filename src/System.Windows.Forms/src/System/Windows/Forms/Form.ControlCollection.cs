@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public partial class Form
@@ -30,7 +28,7 @@ namespace System.Windows.Forms
             ///  Adds a control
             ///  to the form.
             /// </summary>
-            public override void Add(Control value)
+            public override void Add(Control? value)
             {
                 if (value is MdiClient && owner.ctlClient is null)
                 {
@@ -66,7 +64,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Removes a control from the form.
             /// </summary>
-            public override void Remove(Control value)
+            public override void Remove(Control? value)
             {
                 if (value == owner.ctlClient)
                 {
