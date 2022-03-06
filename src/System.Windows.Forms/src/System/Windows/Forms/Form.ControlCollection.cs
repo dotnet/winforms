@@ -11,7 +11,7 @@ namespace System.Windows.Forms
         /// </summary>
         public new class ControlCollection : Control.ControlCollection
         {
-            private readonly Form owner;
+            private readonly Form _owner;
 
             /*C#r:protected*/
 
@@ -19,9 +19,9 @@ namespace System.Windows.Forms
             ///  Initializes a new instance of the ControlCollection class.
             /// </summary>
             public ControlCollection(Form owner)
-            : base(owner)
+                : base(owner)
             {
-                this.owner = owner;
+                _owner = owner;
             }
 
             /// <summary>
@@ -30,24 +30,23 @@ namespace System.Windows.Forms
             /// </summary>
             public override void Add(Control? value)
             {
-                if (value is MdiClient && owner.ctlClient is null)
+                if (value is MdiClient && _owner.ctlClient is null)
                 {
-                    if (!owner.TopLevel && !owner.DesignMode)
+                    if (!_owner.TopLevel && !_owner.DesignMode)
                     {
                         throw new ArgumentException(SR.MDIContainerMustBeTopLevel, nameof(value));
                     }
 
-                    owner.AutoScroll = false;
-                    if (owner.IsMdiChild)
+                    _owner.AutoScroll = false;
+                    if (_owner.IsMdiChild)
                     {
                         throw new ArgumentException(SR.FormMDIParentAndChild, nameof(value));
                     }
 
-                    owner.ctlClient = (MdiClient)value;
+                    _owner.ctlClient = (MdiClient)value;
                 }
 
                 // make sure we don't add a form that has a valid mdi parent
-                //
                 if (value is Form && ((Form)value).MdiParentInternal is not null)
                 {
                     throw new ArgumentException(SR.FormMDIParentCannotAdd, nameof(value));
@@ -55,9 +54,9 @@ namespace System.Windows.Forms
 
                 base.Add(value);
 
-                if (owner.ctlClient is not null)
+                if (_owner.ctlClient is not null)
                 {
-                    owner.ctlClient.SendToBack();
+                    _owner.ctlClient.SendToBack();
                 }
             }
 
@@ -66,9 +65,9 @@ namespace System.Windows.Forms
             /// </summary>
             public override void Remove(Control? value)
             {
-                if (value == owner.ctlClient)
+                if (value == _owner.ctlClient)
                 {
-                    owner.ctlClient = null;
+                    _owner.ctlClient = null;
                 }
 
                 base.Remove(value);
