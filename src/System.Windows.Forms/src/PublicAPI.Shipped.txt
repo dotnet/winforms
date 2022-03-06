@@ -988,19 +988,19 @@ override System.Windows.Forms.ToolStripSystemRenderer.OnRenderToolStripStatusLab
 ~override System.Windows.Forms.ToolStripTextBox.OnSubscribeControlEvents(System.Windows.Forms.Control control) -> void
 ~override System.Windows.Forms.ToolStripTextBox.OnUnsubscribeControlEvents(System.Windows.Forms.Control control) -> void
 ~override System.Windows.Forms.ToolTip.ToString() -> string
-~override System.Windows.Forms.TrackBar.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.TrackBar.BackgroundImage.set -> void
-~override System.Windows.Forms.TrackBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.TrackBar.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.TrackBar.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.TrackBar.Font.set -> void
-~override System.Windows.Forms.TrackBar.OnBackColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.TrackBar.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.TrackBar.OnMouseWheel(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.TrackBar.OnSystemColorsChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.TrackBar.Text.get -> string
-~override System.Windows.Forms.TrackBar.Text.set -> void
-~override System.Windows.Forms.TrackBar.ToString() -> string
+override System.Windows.Forms.TrackBar.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.TrackBar.BackgroundImage.set -> void
+override System.Windows.Forms.TrackBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.TrackBar.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.TrackBar.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.TrackBar.Font.set -> void
+override System.Windows.Forms.TrackBar.OnBackColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.TrackBar.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.TrackBar.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.TrackBar.OnSystemColorsChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.TrackBar.Text.get -> string!
+override System.Windows.Forms.TrackBar.Text.set -> void
+override System.Windows.Forms.TrackBar.ToString() -> string!
 ~override System.Windows.Forms.TreeNode.ToString() -> string
 ~override System.Windows.Forms.TreeView.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.TreeView.BackgroundImage.set -> void
@@ -3445,9 +3445,9 @@ virtual System.Windows.Forms.ScrollableControl.ScrollToControl(System.Windows.Fo
 ~virtual System.Windows.Forms.ToolStripTextBox.OnMultilineChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripTextBox.OnReadOnlyChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolTip.CreateParams.get -> System.Windows.Forms.CreateParams
-~virtual System.Windows.Forms.TrackBar.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.TrackBar.OnScroll(System.EventArgs e) -> void
-~virtual System.Windows.Forms.TrackBar.OnValueChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.TrackBar.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.TrackBar.OnScroll(System.EventArgs! e) -> void
+virtual System.Windows.Forms.TrackBar.OnValueChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.TreeNode.Clone() -> object
 ~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
 ~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.set -> void
@@ -11891,38 +11891,38 @@ System.Windows.Forms.ToolTipIcon.Info = 1 -> System.Windows.Forms.ToolTipIcon
 System.Windows.Forms.ToolTipIcon.None = 0 -> System.Windows.Forms.ToolTipIcon
 System.Windows.Forms.ToolTipIcon.Warning = 2 -> System.Windows.Forms.ToolTipIcon
 System.Windows.Forms.TrackBar
-System.Windows.Forms.TrackBar.AutoSizeChanged -> System.EventHandler
-System.Windows.Forms.TrackBar.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.TrackBar.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.TrackBar.AutoSizeChanged -> System.EventHandler?
+System.Windows.Forms.TrackBar.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.TrackBar.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.TrackBar.BeginInit() -> void
-System.Windows.Forms.TrackBar.Click -> System.EventHandler
-System.Windows.Forms.TrackBar.DoubleClick -> System.EventHandler
+System.Windows.Forms.TrackBar.Click -> System.EventHandler?
+System.Windows.Forms.TrackBar.DoubleClick -> System.EventHandler?
 System.Windows.Forms.TrackBar.EndInit() -> void
-System.Windows.Forms.TrackBar.FontChanged -> System.EventHandler
-System.Windows.Forms.TrackBar.ForeColorChanged -> System.EventHandler
+System.Windows.Forms.TrackBar.FontChanged -> System.EventHandler?
+System.Windows.Forms.TrackBar.ForeColorChanged -> System.EventHandler?
 System.Windows.Forms.TrackBar.ImeMode.get -> System.Windows.Forms.ImeMode
 System.Windows.Forms.TrackBar.ImeMode.set -> void
-System.Windows.Forms.TrackBar.ImeModeChanged -> System.EventHandler
+System.Windows.Forms.TrackBar.ImeModeChanged -> System.EventHandler?
 System.Windows.Forms.TrackBar.LargeChange.get -> int
 System.Windows.Forms.TrackBar.LargeChange.set -> void
 System.Windows.Forms.TrackBar.Maximum.get -> int
 System.Windows.Forms.TrackBar.Maximum.set -> void
 System.Windows.Forms.TrackBar.Minimum.get -> int
 System.Windows.Forms.TrackBar.Minimum.set -> void
-System.Windows.Forms.TrackBar.MouseClick -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.TrackBar.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.TrackBar.MouseClick -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.TrackBar.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.TrackBar.Orientation.get -> System.Windows.Forms.Orientation
 System.Windows.Forms.TrackBar.Orientation.set -> void
 System.Windows.Forms.TrackBar.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.TrackBar.Padding.set -> void
-System.Windows.Forms.TrackBar.PaddingChanged -> System.EventHandler
-System.Windows.Forms.TrackBar.Paint -> System.Windows.Forms.PaintEventHandler
-System.Windows.Forms.TrackBar.RightToLeftLayoutChanged -> System.EventHandler
-System.Windows.Forms.TrackBar.Scroll -> System.EventHandler
+System.Windows.Forms.TrackBar.PaddingChanged -> System.EventHandler?
+System.Windows.Forms.TrackBar.Paint -> System.Windows.Forms.PaintEventHandler?
+System.Windows.Forms.TrackBar.RightToLeftLayoutChanged -> System.EventHandler?
+System.Windows.Forms.TrackBar.Scroll -> System.EventHandler?
 System.Windows.Forms.TrackBar.SetRange(int minValue, int maxValue) -> void
 System.Windows.Forms.TrackBar.SmallChange.get -> int
 System.Windows.Forms.TrackBar.SmallChange.set -> void
-System.Windows.Forms.TrackBar.TextChanged -> System.EventHandler
+System.Windows.Forms.TrackBar.TextChanged -> System.EventHandler?
 System.Windows.Forms.TrackBar.TickFrequency.get -> int
 System.Windows.Forms.TrackBar.TickFrequency.set -> void
 System.Windows.Forms.TrackBar.TickStyle.get -> System.Windows.Forms.TickStyle
@@ -11930,7 +11930,7 @@ System.Windows.Forms.TrackBar.TickStyle.set -> void
 System.Windows.Forms.TrackBar.TrackBar() -> void
 System.Windows.Forms.TrackBar.Value.get -> int
 System.Windows.Forms.TrackBar.Value.set -> void
-System.Windows.Forms.TrackBar.ValueChanged -> System.EventHandler
+System.Windows.Forms.TrackBar.ValueChanged -> System.EventHandler?
 System.Windows.Forms.TrackBarRenderer
 System.Windows.Forms.TreeNode
 System.Windows.Forms.TreeNode.BackColor.get -> System.Drawing.Color
