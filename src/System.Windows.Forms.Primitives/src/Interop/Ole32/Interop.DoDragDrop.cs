@@ -10,7 +10,7 @@ internal static partial class Interop
     internal static partial class Ole32
     {
         [DllImport(Libraries.Ole32, ExactSpelling = true)]
-        public static extern HRESULT DoDragDrop(
+        private static extern HRESULT DoDragDrop(
             IDataObject pDataObj,
             IntPtr pDropSource,
             DROPEFFECT dwOKEffects,
