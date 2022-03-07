@@ -618,10 +618,10 @@ override System.Windows.Forms.Panel.ToString() -> string!
 ~override System.Windows.Forms.PictureBox.Text.get -> string
 ~override System.Windows.Forms.PictureBox.Text.set -> void
 ~override System.Windows.Forms.PictureBox.ToString() -> string
-~override System.Windows.Forms.PrintControllerWithStatusDialog.OnEndPage(System.Drawing.Printing.PrintDocument document, System.Drawing.Printing.PrintPageEventArgs e) -> void
-~override System.Windows.Forms.PrintControllerWithStatusDialog.OnEndPrint(System.Drawing.Printing.PrintDocument document, System.Drawing.Printing.PrintEventArgs e) -> void
-~override System.Windows.Forms.PrintControllerWithStatusDialog.OnStartPage(System.Drawing.Printing.PrintDocument document, System.Drawing.Printing.PrintPageEventArgs e) -> System.Drawing.Graphics
-~override System.Windows.Forms.PrintControllerWithStatusDialog.OnStartPrint(System.Drawing.Printing.PrintDocument document, System.Drawing.Printing.PrintEventArgs e) -> void
+override System.Windows.Forms.PrintControllerWithStatusDialog.OnEndPage(System.Drawing.Printing.PrintDocument! document, System.Drawing.Printing.PrintPageEventArgs! e) -> void
+override System.Windows.Forms.PrintControllerWithStatusDialog.OnEndPrint(System.Drawing.Printing.PrintDocument! document, System.Drawing.Printing.PrintEventArgs! e) -> void
+override System.Windows.Forms.PrintControllerWithStatusDialog.OnStartPage(System.Drawing.Printing.PrintDocument! document, System.Drawing.Printing.PrintPageEventArgs! e) -> System.Drawing.Graphics?
+override System.Windows.Forms.PrintControllerWithStatusDialog.OnStartPrint(System.Drawing.Printing.PrintDocument! document, System.Drawing.Printing.PrintEventArgs! e) -> void
 override System.Windows.Forms.PrintPreviewControl.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.PrintPreviewControl.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
 override System.Windows.Forms.PrintPreviewControl.OnResize(System.EventArgs! eventargs) -> void
@@ -2246,8 +2246,8 @@ System.Windows.Forms.ListView.TopItem.set -> void
 ~System.Windows.Forms.PictureBox.InitialImage.set -> void
 ~System.Windows.Forms.PictureBox.Load(string url) -> void
 ~System.Windows.Forms.PictureBox.LoadAsync(string url) -> void
-~System.Windows.Forms.PrintControllerWithStatusDialog.PrintControllerWithStatusDialog(System.Drawing.Printing.PrintController underlyingController) -> void
-~System.Windows.Forms.PrintControllerWithStatusDialog.PrintControllerWithStatusDialog(System.Drawing.Printing.PrintController underlyingController, string dialogTitle) -> void
+System.Windows.Forms.PrintControllerWithStatusDialog.PrintControllerWithStatusDialog(System.Drawing.Printing.PrintController! underlyingController) -> void
+System.Windows.Forms.PrintControllerWithStatusDialog.PrintControllerWithStatusDialog(System.Drawing.Printing.PrintController! underlyingController, string! dialogTitle) -> void
 System.Windows.Forms.PrintDialog.Document.get -> System.Drawing.Printing.PrintDocument?
 System.Windows.Forms.PrintDialog.Document.set -> void
 System.Windows.Forms.PrintDialog.PrinterSettings.get -> System.Drawing.Printing.PrinterSettings!

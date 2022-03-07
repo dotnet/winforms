@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public partial class PrintControllerWithStatusDialog
@@ -14,7 +12,7 @@ namespace System.Windows.Forms
             private readonly PrintControllerWithStatusDialog _parent;
             private readonly Thread _thread;
             private bool _alreadyStopped;
-            private StatusDialog _dialog;
+            private StatusDialog? _dialog;
 
             // Called from any thread
             internal BackgroundThread(PrintControllerWithStatusDialog parent)
@@ -56,8 +54,6 @@ namespace System.Windows.Forms
             // on correct thread
             private void Run()
             {
-                //
-
                 try
                 {
                     lock (this)
@@ -94,8 +90,10 @@ namespace System.Windows.Forms
             private void ThreadUnsafeUpdateLabel()
             {
                 // "page {0} of {1}"
-                _dialog._label1.Text = string.Format(SR.PrintControllerWithStatusDialog_NowPrinting,
-                                                   _parent._pageNumber, _parent._document.DocumentName);
+                _dialog!._label1.Text = string.Format(
+                    SR.PrintControllerWithStatusDialog_NowPrinting,
+                    _parent._pageNumber,
+                    _parent._document?.DocumentName);
             }
         }
     }
