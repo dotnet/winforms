@@ -170,7 +170,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     for (int c = 0; c < ctors.Length; c++)
                     {
                         ParameterInfo[] pis = ctors[c].GetParameters();
-                        if (pis.Length == 1 && pis[0].ParameterType.IsAssignableFrom(varParams[i]!.GetType()))
+                        if (pis.Length == 1 && pis[0].ParameterType.IsAssignableFrom(varParams[i].GetType()))
                         {
                             // found a one-parameter ctor, use it
                             // try to construct a default one
