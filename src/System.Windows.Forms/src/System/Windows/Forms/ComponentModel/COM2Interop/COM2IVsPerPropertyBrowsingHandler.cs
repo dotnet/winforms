@@ -98,11 +98,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // we want to avoid allowing clients to force a bad property to be browsable,
                 // so we don't allow things that are marked as non browsable to become browsable,
                 // only the other way around.
-                //
                 if (sender.CanShow)
                 {
                     // should we hide this?
-                    BOOL pfHide = sender.Attributes[typeof(BrowsableAttribute)]!.Equals(BrowsableAttribute.No) ? BOOL.TRUE : BOOL.FALSE;
+                    BOOL pfHide = sender.Attributes[typeof(BrowsableAttribute)] is Attribute browsableAttribute
+                                && browsableAttribute.Equals(BrowsableAttribute.No) ? BOOL.TRUE : BOOL.FALSE;
                     hr = vsObj.HideProperty(sender.DISPID, &pfHide);
                     if (hr == HRESULT.S_OK)
                     {
