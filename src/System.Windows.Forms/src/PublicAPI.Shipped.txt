@@ -622,11 +622,11 @@ override System.Windows.Forms.Panel.ToString() -> string!
 ~override System.Windows.Forms.PrintControllerWithStatusDialog.OnEndPrint(System.Drawing.Printing.PrintDocument document, System.Drawing.Printing.PrintEventArgs e) -> void
 ~override System.Windows.Forms.PrintControllerWithStatusDialog.OnStartPage(System.Drawing.Printing.PrintDocument document, System.Drawing.Printing.PrintPageEventArgs e) -> System.Drawing.Graphics
 ~override System.Windows.Forms.PrintControllerWithStatusDialog.OnStartPrint(System.Drawing.Printing.PrintDocument document, System.Drawing.Printing.PrintEventArgs e) -> void
-~override System.Windows.Forms.PrintPreviewControl.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.PrintPreviewControl.OnPaint(System.Windows.Forms.PaintEventArgs pevent) -> void
-~override System.Windows.Forms.PrintPreviewControl.OnResize(System.EventArgs eventargs) -> void
-~override System.Windows.Forms.PrintPreviewControl.Text.get -> string
-~override System.Windows.Forms.PrintPreviewControl.Text.set -> void
+override System.Windows.Forms.PrintPreviewControl.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.PrintPreviewControl.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
+override System.Windows.Forms.PrintPreviewControl.OnResize(System.EventArgs! eventargs) -> void
+override System.Windows.Forms.PrintPreviewControl.Text.get -> string!
+override System.Windows.Forms.PrintPreviewControl.Text.set -> void
 ~override System.Windows.Forms.PrintPreviewDialog.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.PrintPreviewDialog.BackgroundImage.set -> void
 ~override System.Windows.Forms.PrintPreviewDialog.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
@@ -2252,8 +2252,8 @@ System.Windows.Forms.PrintDialog.Document.get -> System.Drawing.Printing.PrintDo
 System.Windows.Forms.PrintDialog.Document.set -> void
 System.Windows.Forms.PrintDialog.PrinterSettings.get -> System.Drawing.Printing.PrinterSettings!
 System.Windows.Forms.PrintDialog.PrinterSettings.set -> void
-~System.Windows.Forms.PrintPreviewControl.Document.get -> System.Drawing.Printing.PrintDocument
-~System.Windows.Forms.PrintPreviewControl.Document.set -> void
+System.Windows.Forms.PrintPreviewControl.Document.get -> System.Drawing.Printing.PrintDocument?
+System.Windows.Forms.PrintPreviewControl.Document.set -> void
 ~System.Windows.Forms.PrintPreviewDialog.AcceptButton.get -> System.Windows.Forms.IButtonControl
 ~System.Windows.Forms.PrintPreviewDialog.AcceptButton.set -> void
 ~System.Windows.Forms.PrintPreviewDialog.AccessibleDescription.get -> string
@@ -3287,7 +3287,7 @@ virtual System.Windows.Forms.NativeWindow.OnThreadException(System.Exception! e)
 ~virtual System.Windows.Forms.PictureBox.OnLoadCompleted(System.ComponentModel.AsyncCompletedEventArgs e) -> void
 ~virtual System.Windows.Forms.PictureBox.OnLoadProgressChanged(System.ComponentModel.ProgressChangedEventArgs e) -> void
 ~virtual System.Windows.Forms.PictureBox.OnSizeModeChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.PrintPreviewControl.OnStartPageChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.PrintPreviewControl.OnStartPageChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ProgressBar.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.PropertyGrid.CreatePropertyTab(System.Type tabType) -> System.Windows.Forms.Design.PropertyTab
 ~virtual System.Windows.Forms.PropertyGrid.DefaultTabType.get -> System.Type
@@ -9710,8 +9710,8 @@ System.Windows.Forms.PrintPreviewControl.Rows.get -> int
 System.Windows.Forms.PrintPreviewControl.Rows.set -> void
 System.Windows.Forms.PrintPreviewControl.StartPage.get -> int
 System.Windows.Forms.PrintPreviewControl.StartPage.set -> void
-System.Windows.Forms.PrintPreviewControl.StartPageChanged -> System.EventHandler
-System.Windows.Forms.PrintPreviewControl.TextChanged -> System.EventHandler
+System.Windows.Forms.PrintPreviewControl.StartPageChanged -> System.EventHandler?
+System.Windows.Forms.PrintPreviewControl.TextChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewControl.UseAntiAlias.get -> bool
 System.Windows.Forms.PrintPreviewControl.UseAntiAlias.set -> void
 System.Windows.Forms.PrintPreviewControl.Zoom.get -> double

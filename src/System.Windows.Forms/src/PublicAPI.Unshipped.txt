@@ -1,5 +1,5 @@
 ~override System.Windows.Forms.SplitContainer.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.PrintPreviewControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.PrintPreviewControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 ~override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.Name.get -> string
 ~override System.Windows.Forms.DateTimePicker.OnGotFocus(System.EventArgs e) -> void
 override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DoDefaultAction() -> void
