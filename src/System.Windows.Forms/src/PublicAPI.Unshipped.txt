@@ -4,3 +4,4 @@ override System.Windows.Forms.PrintPreviewControl.CreateAccessibilityInstance() 
 ~override System.Windows.Forms.DateTimePicker.OnGotFocus(System.EventArgs e) -> void
 override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DoDefaultAction() -> void
 ~override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DefaultAction.get -> string
+~override System.Windows.Forms.TreeView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
