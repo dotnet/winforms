@@ -164,19 +164,20 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // okay, if we got here, we need to build the attribute...
                 // get the initializer value if we've got a one item ctor
 
-                if (!Convert.IsDBNull(varParams[i]) && varParams[i] is not null)
+                var varParam = varParams[i];
+                if (!Convert.IsDBNull(varParam) && varParam is not null)
                 {
                     ConstructorInfo[] ctors = t.GetConstructors();
                     for (int c = 0; c < ctors.Length; c++)
                     {
                         ParameterInfo[] pis = ctors[c].GetParameters();
-                        if (pis.Length == 1 && pis[0].ParameterType.IsAssignableFrom(varParams[i]!.GetType()))
+                        if (pis.Length == 1 && pis[0].ParameterType.IsAssignableFrom(varParam.GetType()))
                         {
                             // found a one-parameter ctor, use it
                             // try to construct a default one
                             try
                             {
-                                attr = (Attribute?)Activator.CreateInstance(t, new object?[] { varParams[i] });
+                                attr = (Attribute?)Activator.CreateInstance(t, new object[] { varParam });
                                 attrs.Add(attr);
                             }
                             catch
