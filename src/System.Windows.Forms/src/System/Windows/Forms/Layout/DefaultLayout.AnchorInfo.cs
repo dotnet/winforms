@@ -4,7 +4,6 @@
 
 #nullable disable
 
-
 namespace System.Windows.Forms.Layout
 {
     internal partial class DefaultLayout
