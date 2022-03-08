@@ -1024,6 +1024,7 @@ namespace System.Windows.Forms.Layout
             return (anchor & desiredAnchor) == desiredAnchor;
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
         internal sealed class AnchorInfo
@@ -1034,5 +1035,7 @@ namespace System.Windows.Forms.Layout
             public int Bottom;
         }
 >>>>>>> Fixing AnchorInfo calculations.
+=======
+>>>>>>> Adding integration test for Ancho and Dock layouts.
     }
 }
