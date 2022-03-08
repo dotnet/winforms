@@ -12,24 +12,24 @@
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
-    <VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion>6.0.2-servicing.22064.6</VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion>
+    <VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion>6.0.3-servicing.22123.9</VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion>
     <SystemDiagnosticsEventLogPackageVersion>6.0.0</SystemDiagnosticsEventLogPackageVersion>
     <SystemDirectoryServicesPackageVersion>6.0.0</SystemDirectoryServicesPackageVersion>
     <SystemReflectionMetadataLoadContextPackageVersion>6.0.0</SystemReflectionMetadataLoadContextPackageVersion>
     <SystemSecurityCryptographyXmlPackageVersion>6.0.0</SystemSecurityCryptographyXmlPackageVersion>
     <SystemIOPackagingPackageVersion>6.0.0</SystemIOPackagingPackageVersion>
     <MicrosoftNETCoreRuntimeCoreCLRPackageVersion>5.0.0-preview.7.20320.5</MicrosoftNETCoreRuntimeCoreCLRPackageVersion>
-    <MicrosoftNETCoreILDAsmPackageVersion>6.0.2-servicing.22064.6</MicrosoftNETCoreILDAsmPackageVersion>
+    <MicrosoftNETCoreILDAsmPackageVersion>6.0.3-servicing.22123.9</MicrosoftNETCoreILDAsmPackageVersion>
     <SystemDiagnosticsPerformanceCounterPackageVersion>6.0.0</SystemDiagnosticsPerformanceCounterPackageVersion>
     <SystemSecurityCryptographyPkcsPackageVersion>6.0.0</SystemSecurityCryptographyPkcsPackageVersion>
     <SystemSecurityCryptographyProtectedDataPackageVersion>6.0.0</SystemSecurityCryptographyProtectedDataPackageVersion>
     <SystemTextEncodingsWebPackageVersion>6.0.0</SystemTextEncodingsWebPackageVersion>
-    <SystemTextJsonPackageVersion>6.0.2</SystemTextJsonPackageVersion>
+    <SystemTextJsonPackageVersion>6.0.1</SystemTextJsonPackageVersion>
     <SystemThreadingAccessControlPackageVersion>6.0.0</SystemThreadingAccessControlPackageVersion>
     <MicrosoftWin32RegistryAccessControlPackageVersion>6.0.0</MicrosoftWin32RegistryAccessControlPackageVersion>
-    <MicrosoftNETCoreAppRefPackageVersion>6.0.2</MicrosoftNETCoreAppRefPackageVersion>
-    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>6.0.2</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>6.0.1</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftNETCoreAppRefPackageVersion>6.0.3</MicrosoftNETCoreAppRefPackageVersion>
+    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>6.0.3</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>6.0.2</MicrosoftNETCorePlatformsPackageVersion>
     <MicrosoftWin32SystemEventsPackageVersion>6.0.0</MicrosoftWin32SystemEventsPackageVersion>
     <SystemCodeDomPackageVersion>6.0.0</SystemCodeDomPackageVersion>
     <SystemConfigurationConfigurationManagerPackageVersion>6.0.0</SystemConfigurationConfigurationManagerPackageVersion>
@@ -37,9 +37,9 @@
     <SystemResourcesExtensionsPackageVersion>6.0.0</SystemResourcesExtensionsPackageVersion>
     <SystemSecurityPermissionsPackageVersion>6.0.0</SystemSecurityPermissionsPackageVersion>
     <SystemWindowsExtensionsPackageVersion>6.0.0</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>6.0.2-servicing.22064.6</MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>6.0.2-servicing.22064.6</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>6.0.2-servicing.22064.6</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>6.0.3-servicing.22123.9</MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>6.0.3-servicing.22123.9</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>6.0.3-servicing.22123.9</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
     <!-- 
       Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
     -->
