@@ -179,6 +179,15 @@ namespace WinformsControlsTest
                 MainFormControlsTabOrder.ToolTipsButton,
                 new InitInfo("ToolTips", (obj, e) => new ToolTipTests().Show(this))
             },
+            {
+                MainFormControlsTabOrder.AnchorLayoutButton,
+                new InitInfo("AnchorLayout", (obj, e) => new AnchorLayoutTests().Show(this))
+            },
+            {
+                MainFormControlsTabOrder.DockLayoutButton,
+                new InitInfo("DockLayout", (obj, e) => new DockLayoutTests().Show(this))
+            }
+
         };
 
         protected override void OnShown(EventArgs e)

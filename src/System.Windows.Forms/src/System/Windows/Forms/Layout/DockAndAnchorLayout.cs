@@ -748,9 +748,9 @@ namespace System.Windows.Forms.Layout
 
                 CommonProperties.xSetAnchor(element, value);
 
-                // Updating AnchoriInfo is only needed when control is ready for layout. InitLayoutCore() does call UpdateAnchorInfo().
-                // At the least, we are checking if control is parented before updating AnchorInfo. This helps avoid calculating
-                // AnchorInfo with default initial values of the Control. They are always overriden when layout happen.
+                // Updating AnchoriInfo is only needed when control is ready for layout. Oneway to check this precondition is to
+                // check if the control is parented. This helps avoid calculating AnchorInfo with default initial values of the Control.
+                // AnchorInfo is recalculated everytime there is a layout change.
                 if (CommonProperties.GetNeedsAnchorLayout(element) && element is Control control && control.Parent is not null)
                 {
                     UpdateAnchorInfo(element);
@@ -1022,14 +1022,6 @@ namespace System.Windows.Forms.Layout
         public static bool IsAnchored(AnchorStyles anchor, AnchorStyles desiredAnchor)
         {
             return (anchor & desiredAnchor) == desiredAnchor;
-        }
-
-        internal sealed class AnchorInfo
-        {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
         }
     }
 }
