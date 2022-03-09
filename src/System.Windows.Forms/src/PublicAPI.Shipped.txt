@@ -1062,27 +1062,27 @@ override System.Windows.Forms.TrackBar.ToString() -> string!
 ~static readonly System.Resources.ResXResourceWriter.ResourceSchema -> string
 ~static readonly System.Resources.ResXResourceWriter.SoapSerializedObjectMimeType -> string
 ~static readonly System.Resources.ResXResourceWriter.Version -> string
-~static readonly System.Windows.Forms.DataFormats.Bitmap -> string
-~static readonly System.Windows.Forms.DataFormats.CommaSeparatedValue -> string
-~static readonly System.Windows.Forms.DataFormats.Dib -> string
-~static readonly System.Windows.Forms.DataFormats.Dif -> string
-~static readonly System.Windows.Forms.DataFormats.EnhancedMetafile -> string
-~static readonly System.Windows.Forms.DataFormats.FileDrop -> string
-~static readonly System.Windows.Forms.DataFormats.Html -> string
-~static readonly System.Windows.Forms.DataFormats.Locale -> string
-~static readonly System.Windows.Forms.DataFormats.MetafilePict -> string
-~static readonly System.Windows.Forms.DataFormats.OemText -> string
-~static readonly System.Windows.Forms.DataFormats.Palette -> string
-~static readonly System.Windows.Forms.DataFormats.PenData -> string
-~static readonly System.Windows.Forms.DataFormats.Riff -> string
-~static readonly System.Windows.Forms.DataFormats.Rtf -> string
-~static readonly System.Windows.Forms.DataFormats.Serializable -> string
-~static readonly System.Windows.Forms.DataFormats.StringFormat -> string
-~static readonly System.Windows.Forms.DataFormats.SymbolicLink -> string
-~static readonly System.Windows.Forms.DataFormats.Text -> string
-~static readonly System.Windows.Forms.DataFormats.Tiff -> string
-~static readonly System.Windows.Forms.DataFormats.UnicodeText -> string
-~static readonly System.Windows.Forms.DataFormats.WaveAudio -> string
+static readonly System.Windows.Forms.DataFormats.Bitmap -> string!
+static readonly System.Windows.Forms.DataFormats.CommaSeparatedValue -> string!
+static readonly System.Windows.Forms.DataFormats.Dib -> string!
+static readonly System.Windows.Forms.DataFormats.Dif -> string!
+static readonly System.Windows.Forms.DataFormats.EnhancedMetafile -> string!
+static readonly System.Windows.Forms.DataFormats.FileDrop -> string!
+static readonly System.Windows.Forms.DataFormats.Html -> string!
+static readonly System.Windows.Forms.DataFormats.Locale -> string!
+static readonly System.Windows.Forms.DataFormats.MetafilePict -> string!
+static readonly System.Windows.Forms.DataFormats.OemText -> string!
+static readonly System.Windows.Forms.DataFormats.Palette -> string!
+static readonly System.Windows.Forms.DataFormats.PenData -> string!
+static readonly System.Windows.Forms.DataFormats.Riff -> string!
+static readonly System.Windows.Forms.DataFormats.Rtf -> string!
+static readonly System.Windows.Forms.DataFormats.Serializable -> string!
+static readonly System.Windows.Forms.DataFormats.StringFormat -> string!
+static readonly System.Windows.Forms.DataFormats.SymbolicLink -> string!
+static readonly System.Windows.Forms.DataFormats.Text -> string!
+static readonly System.Windows.Forms.DataFormats.Tiff -> string!
+static readonly System.Windows.Forms.DataFormats.UnicodeText -> string!
+static readonly System.Windows.Forms.DataFormats.WaveAudio -> string!
 ~static readonly System.Windows.Forms.DataGridView.HitTestInfo.Nowhere -> System.Windows.Forms.DataGridView.HitTestInfo
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Default -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.No -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
@@ -1132,8 +1132,8 @@ override System.Windows.Forms.TrackBar.ToString() -> string!
 ~static System.Windows.Forms.Control.FromChildHandle(System.IntPtr handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.Control.FromHandle(System.IntPtr handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.Control.IsMnemonic(char charCode, string text) -> bool
-~static System.Windows.Forms.DataFormats.GetFormat(int id) -> System.Windows.Forms.DataFormats.Format
-~static System.Windows.Forms.DataFormats.GetFormat(string format) -> System.Windows.Forms.DataFormats.Format
+static System.Windows.Forms.DataFormats.GetFormat(int id) -> System.Windows.Forms.DataFormats.Format!
+static System.Windows.Forms.DataFormats.GetFormat(string! format) -> System.Windows.Forms.DataFormats.Format!
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags) -> int
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags, out bool widthTruncated) -> int
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
@@ -1495,8 +1495,8 @@ System.Windows.Forms.ColorDialog.CustomColors.set -> void
 ~System.Windows.Forms.ControlBindingsCollection.Remove(System.Windows.Forms.Binding binding) -> void
 ~System.Windows.Forms.ControlBindingsCollection.this[string propertyName].get -> System.Windows.Forms.Binding
 ~System.Windows.Forms.CurrencyManager.List.get -> System.Collections.IList
-~System.Windows.Forms.DataFormats.Format.Format(string name, int id) -> void
-~System.Windows.Forms.DataFormats.Format.Name.get -> string
+System.Windows.Forms.DataFormats.Format.Format(string! name, int id) -> void
+System.Windows.Forms.DataFormats.Format.Name.get -> string!
 ~System.Windows.Forms.DataGridView.AdvancedCellBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 ~System.Windows.Forms.DataGridView.AdvancedColumnHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 ~System.Windows.Forms.DataGridView.AdvancedRowHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
