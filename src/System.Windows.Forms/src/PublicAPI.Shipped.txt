@@ -384,8 +384,8 @@ override System.Windows.Forms.CursorConverter.GetStandardValuesSupported(System.
 ~override System.Windows.Forms.DateTimePicker.BackgroundImage.set -> void
 ~override System.Windows.Forms.DateTimePicker.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DateTimePicker.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.KeyboardShortcut.get -> string
-~override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.Value.get -> string
+override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.KeyboardShortcut.get -> string?
+override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.Value.get -> string!
 ~override System.Windows.Forms.DateTimePicker.OnEnabledChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DateTimePicker.OnFontChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DateTimePicker.OnHandleCreated(System.EventArgs e) -> void
@@ -1702,7 +1702,7 @@ System.Windows.Forms.DataObject.DataObject(string! format, object! data) -> void
 ~System.Windows.Forms.DateTimePicker.CalendarFont.set -> void
 ~System.Windows.Forms.DateTimePicker.CustomFormat.get -> string
 ~System.Windows.Forms.DateTimePicker.CustomFormat.set -> void
-~System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DateTimePickerAccessibleObject(System.Windows.Forms.DateTimePicker owner) -> void
+System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DateTimePickerAccessibleObject(System.Windows.Forms.DateTimePicker! owner) -> void
 ~System.Windows.Forms.Design.ComponentEditorForm.ComponentEditorForm(object component, System.Type[] pageTypes) -> void
 ~System.Windows.Forms.Design.ComponentEditorPage.Component.get -> System.ComponentModel.IComponent
 ~System.Windows.Forms.Design.ComponentEditorPage.Component.set -> void
