@@ -187,7 +187,6 @@ namespace WinformsControlsTest
                 MainFormControlsTabOrder.DockLayoutButton,
                 new InitInfo("DockLayout", (obj, e) => new DockLayoutTests().Show(this))
             }
-
         };
 
         protected override void OnShown(EventArgs e)
