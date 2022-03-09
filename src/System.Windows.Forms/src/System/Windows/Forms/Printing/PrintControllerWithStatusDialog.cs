@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Drawing.Printing;
 
@@ -12,13 +10,13 @@ namespace System.Windows.Forms
     public partial class PrintControllerWithStatusDialog : PrintController
     {
         private readonly PrintController _underlyingController;
-        private PrintDocument _document;
-        private BackgroundThread _backgroundThread;
+        private PrintDocument? _document;
+        private BackgroundThread? _backgroundThread;
         private int _pageNumber;
         private readonly string _dialogTitle;
 
         public PrintControllerWithStatusDialog(PrintController underlyingController)
-        : this(underlyingController, SR.PrintControllerWithStatusDialog_DialogTitlePrint)
+            : this(underlyingController, SR.PrintControllerWithStatusDialog_DialogTitlePrint)
         {
         }
 
@@ -52,7 +50,7 @@ namespace System.Windows.Forms
         {
             base.OnStartPrint(document, e);
 
-            this._document = document;
+            _document = document;
             _pageNumber = 1;
 
             if (SystemInformation.UserInteractive)
@@ -63,7 +61,6 @@ namespace System.Windows.Forms
             // OnStartPrint does the security check... lots of
             // extra setup to make sure that we tear down
             // correctly...
-            //
             try
             {
                 _underlyingController.OnStartPrint(document, e);
@@ -89,7 +86,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Implements StartPage by delegating to the underlying controller.
         /// </summary>
-        public override Graphics OnStartPage(PrintDocument document, PrintPageEventArgs e)
+        public override Graphics? OnStartPage(PrintDocument document, PrintPageEventArgs e)
         {
             base.OnStartPage(document, e);
 
@@ -98,7 +95,7 @@ namespace System.Windows.Forms
                 _backgroundThread.UpdateLabel();
             }
 
-            Graphics result = _underlyingController.OnStartPage(document, e);
+            Graphics? result = _underlyingController.OnStartPage(document, e);
             if (_backgroundThread is not null && _backgroundThread._canceled)
             {
                 e.Cancel = true;

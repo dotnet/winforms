@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -14,7 +13,7 @@ namespace System.Windows.Forms
         {
             internal Label _label1;
             private Button _button1;
-            private TableLayoutPanel _tableLayoutPanel1;
+            private TableLayoutPanel? _tableLayoutPanel1;
             private readonly BackgroundThread _backgroundThread;
 
             internal StatusDialog(BackgroundThread backgroundThread, string dialogTitle)
@@ -37,6 +36,8 @@ namespace System.Windows.Forms
                 }
             }
 
+            [MemberNotNull(nameof(_label1))]
+            [MemberNotNull(nameof(_button1))]
             private void InitializeComponent()
             {
                 if (IsRTLResources)
@@ -95,7 +96,7 @@ namespace System.Windows.Forms
                 Controls.Add(_tableLayoutPanel1);
             }
 
-            private void button1_Click(object sender, EventArgs e)
+            private void button1_Click(object? sender, EventArgs e)
             {
                 _button1.Enabled = false;
                 _label1.Text = SR.PrintControllerWithStatusDialog_Canceling;
