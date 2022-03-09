@@ -106,5 +106,20 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
             Assert.False(editingPanel.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void DataGridViewEditingPanelAccessibleObject_GetPropertyValue_ReturnsExpected()
+        {
+            using DataGridView dataGridView = new();
+            Panel editingPanel = dataGridView.EditingPanel;
+
+            Assert.True((bool)editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId));
+            Assert.Equal(string.Empty, editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HelpTextPropertyId));
+            Assert.Equal(SR.DataGridView_AccEditingPanelAccName, editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
+            Assert.Equal(SR.DataGridView_AccEditingPanelAccName, editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
+            Assert.Null(editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+            Assert.False((bool)editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsPasswordPropertyId));
+            Assert.False(editingPanel.IsHandleCreated);
+        }
     }
 }

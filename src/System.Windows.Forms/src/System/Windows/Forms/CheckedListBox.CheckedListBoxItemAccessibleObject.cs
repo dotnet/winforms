@@ -44,8 +44,6 @@ namespace System.Windows.Forms
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.CheckBoxControlTypeId,
-                    UiaCore.UIA.IsInvokePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.InvokePatternId),
-                    UiaCore.UIA.ValueValuePropertyId => Value,
                     _ => base.GetPropertyValue(propertyID)
                 };
 

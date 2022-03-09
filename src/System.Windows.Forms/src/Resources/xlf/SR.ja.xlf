@@ -4594,6 +4594,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">DragDrop 登録は成功しませんでした。</target>
         <note />
       </trans-unit>
+      <trans-unit id="EditDefaultAccessibleName">
+        <source>Spinner</source>
+        <target state="translated">スピナー</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorBadInputLanguage">
         <source>inputLanguage is not recognized by the system.</source>
         <target state="translated">システムは inputLanguage を認識できません。</target>
@@ -5904,11 +5909,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">キーの組み合わせが有効ではありません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">キー名が有効ではありません。</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">

@@ -25,7 +25,7 @@ namespace System.Windows.Forms
     [Docking(DockingBehavior.AutoDock)]
     [Designer("System.Windows.Forms.Design.SplitContainerDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionSplitContainer))]
-    public class SplitContainer : ContainerControl, ISupportInitialize
+    public partial class SplitContainer : ContainerControl, ISupportInitialize
     {
         // Constants used during split container movement
         private const int DrawStart = 1;
@@ -830,6 +830,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         /// <summary>
         ///  Indicates whether the user can give the focus to this control using the TAB
         ///  key. This property is read-only.
@@ -1474,6 +1476,9 @@ namespace System.Windows.Forms
 
             return r;
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new SplitContainerAccessibleObject(this);
 
         /// <summary>
         ///  Draws the splitter bar at the current location. Will automatically

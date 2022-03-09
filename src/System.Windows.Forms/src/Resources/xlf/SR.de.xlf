@@ -4594,6 +4594,11 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
         <target state="translated">Fehler bei der DragDrop-Registrierung</target>
         <note />
       </trans-unit>
+      <trans-unit id="EditDefaultAccessibleName">
+        <source>Spinner</source>
+        <target state="translated">Spinner</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorBadInputLanguage">
         <source>inputLanguage is not recognized by the system.</source>
         <target state="translated">Die inputLanguage wird vom System nicht erkannt.</target>
@@ -5904,11 +5909,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">Ungültige Schlüsselkombination.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">Ungültiger Schlüsselname.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">

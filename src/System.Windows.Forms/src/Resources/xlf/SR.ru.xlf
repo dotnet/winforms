@@ -4594,6 +4594,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">Регистрация DragDrop невозможна.</target>
         <note />
       </trans-unit>
+      <trans-unit id="EditDefaultAccessibleName">
+        <source>Spinner</source>
+        <target state="translated">Вертушка</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorBadInputLanguage">
         <source>inputLanguage is not recognized by the system.</source>
         <target state="translated">inputLanguage не распознан системой.</target>
@@ -5905,11 +5910,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">Недопустимая комбинация ключа.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">Недопустимое имя ключа.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -28,13 +26,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Allowable strings for the domain updown.
         /// </summary>
-        private DomainUpDownItemCollection _domainItems;
+        private DomainUpDownItemCollection? _domainItems;
 
         private string _stringValue = s_defaultValue;      // Current string value
         private int _domainIndex = -1;                    // Index in the domain list
         private bool _sorted;                 // Sort the domain values
 
-        private EventHandler _onSelectedItemChanged;
+        private EventHandler? _onSelectedItemChanged;
 
         private bool _inSort;
 
@@ -83,7 +81,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler PaddingChanged
+        public new event EventHandler? PaddingChanged
         {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
@@ -132,7 +130,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.DomainUpDownSelectedItemDescr))]
-        public object SelectedItem
+        public object? SelectedItem
         {
             get
             {
@@ -142,7 +140,6 @@ namespace System.Windows.Forms
             set
             {
                 // Treat null as selecting no item
-                //
                 if (value is null)
                 {
                     SelectedIndex = -1;
@@ -150,7 +147,6 @@ namespace System.Windows.Forms
                 else
                 {
                     // Attempt to find the given item in the list of items
-                    //
                     for (int i = 0; i < Items.Count; i++)
                     {
                         if (value.Equals(Items[i]))
@@ -208,7 +204,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.DomainUpDownOnSelectedItemChangedDescr))]
-        public event EventHandler SelectedItemChanged
+        public event EventHandler? SelectedItemChanged
         {
             add => _onSelectedItemChanged += value;
             remove => _onSelectedItemChanged -= value;
@@ -229,7 +225,6 @@ namespace System.Windows.Forms
         public override void DownButton()
         {
             // Make sure domain values exist, and there are >0 items
-            //
             if (_domainItems is null)
             {
                 return;
@@ -326,11 +321,11 @@ namespace System.Windows.Forms
             {
                 if (complete)
                 {
-                    found = Items[index].ToString().Equals(text);
+                    found = Items[index]!.ToString()!.Equals(text);
                 }
                 else
                 {
-                    found = Items[index].ToString().ToUpper(CultureInfo.InvariantCulture).StartsWith(text);
+                    found = Items[index]!.ToString()!.ToUpper(CultureInfo.InvariantCulture).StartsWith(text);
                 }
 
                 if (found)
@@ -355,7 +350,7 @@ namespace System.Windows.Forms
         ///  values is called OnSelectedItemChanged - so just forward it to that
         ///  function.
         /// </summary>
-        protected override void OnChanged(object source, EventArgs e)
+        protected override void OnChanged(object? source, EventArgs e)
         {
             OnSelectedItemChanged(source, e);
         }
@@ -365,7 +360,7 @@ namespace System.Windows.Forms
         ///  event, using the input character to find the next matching item in our
         ///  item collection.
         /// </summary>
-        protected override void OnTextBoxKeyPress(object source, KeyPressEventArgs e)
+        protected override void OnTextBoxKeyPress(object? source, KeyPressEventArgs e)
         {
             if (ReadOnly)
             {
@@ -398,7 +393,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Raises the <see cref="SelectedItemChanged"/> event.
         /// </summary>
-        protected void OnSelectedItemChanged(object source, EventArgs e)
+        protected void OnSelectedItemChanged(object? source, EventArgs e)
         {
             // Call the event handler
             _onSelectedItemChanged?.Invoke(this, e);
@@ -421,11 +416,10 @@ namespace System.Windows.Forms
             }
 
             // If the selected index has changed, update the text
-            //
             _domainIndex = index;
             if (_domainIndex >= 0)
             {
-                _stringValue = _domainItems[_domainIndex].ToString();
+                _stringValue = _domainItems[_domainIndex]!.ToString()!;
                 UserEdit = false;
                 UpdateEditText();
             }

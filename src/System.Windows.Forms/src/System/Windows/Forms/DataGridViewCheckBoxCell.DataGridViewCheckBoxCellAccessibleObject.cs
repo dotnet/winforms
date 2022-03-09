@@ -141,7 +141,6 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.IsTogglePatternAvailablePropertyId => (object)IsPatternSupported(UiaCore.UIA.TogglePatternId),
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.CheckBoxControlTypeId,
                     _ => base.GetPropertyValue(propertyID)
                 };

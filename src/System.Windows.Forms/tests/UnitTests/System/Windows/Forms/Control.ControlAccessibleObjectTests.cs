@@ -18,24 +18,32 @@ namespace System.Windows.Forms.Tests
         // This behavior is consistent with .NET Framework 4.7.2
         private static Type[] s_controlsNotUseTextForAccessibility = new Type[]
         {
-                typeof(CheckedListBox),
-                typeof(ComboBox),
-                typeof(DataGridViewComboBoxEditingControl),
-                typeof(DataGridViewTextBoxEditingControl),
-                typeof(DateTimePicker),
-                typeof(DomainUpDown),
-                typeof(HScrollBar),
-                typeof(ListBox),
-                typeof(ListView),
-                typeof(MaskedTextBox),
-                typeof(NumericUpDown),
-                typeof(ProgressBar),
-                typeof(RichTextBox),
-                typeof(TextBox),
-                typeof(TrackBar),
-                typeof(TreeView),
-                typeof(VScrollBar),
-                typeof(WebBrowser),
+            typeof(CheckedListBox),
+            typeof(ComboBox),
+            typeof(DataGridViewComboBoxEditingControl),
+            typeof(DataGridViewTextBoxEditingControl),
+            typeof(DateTimePicker),
+            typeof(DomainUpDown),
+            typeof(HScrollBar),
+            typeof(ListBox),
+            typeof(ListView),
+            typeof(MaskedTextBox),
+            typeof(NumericUpDown),
+            typeof(ProgressBar),
+            typeof(RichTextBox),
+            typeof(TextBox),
+            typeof(TrackBar),
+            typeof(TreeView),
+            typeof(VScrollBar),
+            typeof(WebBrowser),
+        };
+
+        // These controls have special conditions for setting the Text property.
+        // Please check if the control type isn't contained here in cases where text change is needed
+        // otherwise an error can be thrown.
+        private static Type[] s_controlsIgnoringTextChangesForTests = new Type[]
+        {
+            typeof(DateTimePicker),
         };
 
         [WinFormsFact]
@@ -184,6 +192,19 @@ namespace System.Windows.Forms.Tests
             };
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
             Assert.Equal(accessibleDefaultActionDescription, accessibleObject.DefaultAction);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void ControlAccessibleObject_GetPropertyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected(string accessibleDefaultActionDescription)
+        {
+            using var ownerControl = new Control
+            {
+                AccessibleDefaultActionDescription = accessibleDefaultActionDescription
+            };
+            var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+            Assert.Equal(!string.IsNullOrEmpty(accessibleDefaultActionDescription) ? accessibleDefaultActionDescription :
+                null, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
         }
 
         [WinFormsTheory]
@@ -1230,9 +1251,13 @@ namespace System.Windows.Forms.Tests
                 return;
             }
 
-            control.Text = "&Name";
+            if (!s_controlsIgnoringTextChangesForTests.Contains(type))
+            {
+                control.Text = "&Name";
+            }
+
             AccessibleObject controlAccessibleObject = control.AccessibilityObject;
-            string expectedValue = s_controlsNotUseTextForAccessibility.Contains(type) ? null : "Alt+n";
+            string expectedValue = s_controlsNotUseTextForAccessibility.Contains(type) ? string.Empty : "Alt+n";
 
             Assert.Equal(expectedValue, controlAccessibleObject.GetPropertyValue(UiaCore.UIA.AccessKeyPropertyId));
         }
@@ -1289,9 +1314,8 @@ namespace System.Windows.Forms.Tests
             control.Name = "Name1";
             control.AccessibleName = "Test Name";
 
-            var accessibleName = controlAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
-
-            Assert.Equal("Test Name", accessibleName);
+            Assert.Equal("Test Name", controlAccessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
+            Assert.Equal("Test Name", controlAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
         }
 
         public static IEnumerable<object[]> ControlAccessibleObject_DefaultName_TestData()
@@ -1301,7 +1325,8 @@ namespace System.Windows.Forms.Tests
             var typeDefaultValues = new Dictionary<Type, string>
             {
                 { typeof(DataGridViewTextBoxEditingControl), SR.DataGridView_AccEditingControlAccName },
-                { typeof(PrintPreviewDialog), SR.PrintPreviewDialog_PrintPreview }
+                { typeof(PrintPreviewDialog), SR.PrintPreviewDialog_PrintPreview },
+                { typeof(DateTimePicker), string.Empty },
             };
 
             foreach (Type type in ReflectionHelper.GetPublicNotAbstractClasses<Control>())

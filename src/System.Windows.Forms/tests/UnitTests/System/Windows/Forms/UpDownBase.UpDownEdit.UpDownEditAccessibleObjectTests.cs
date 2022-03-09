@@ -71,6 +71,28 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void UpDownEditAccessibleObject_Default_Name_ReturnsExpected_NumericUpDown()
+        {
+            using NumericUpDown upDown = new();
+            using UpDownBase.UpDownEdit upDownEdit = new UpDownBase.UpDownEdit(upDown);
+            AccessibleObject accessibleObject = upDownEdit.AccessibilityObject;
+            Assert.Equal(SR.EditDefaultAccessibleName, accessibleObject.Name);
+            Assert.False(upDown.IsHandleCreated);
+            Assert.False(upDownEdit.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void UpDownEditAccessibleObject_Default_Name_ReturnsExpected_DomainUpDown()
+        {
+            using DomainUpDown upDown = new();
+            using UpDownBase.UpDownEdit upDownEdit = new UpDownBase.UpDownEdit(upDown);
+            AccessibleObject accessibleObject = upDownEdit.AccessibilityObject;
+            Assert.Equal(SR.EditDefaultAccessibleName, accessibleObject.Name);
+            Assert.False(upDown.IsHandleCreated);
+            Assert.False(upDownEdit.IsHandleCreated);
+        }
+
+        [WinFormsFact]
         public void UpDownEditAccessibleObject_KeyboardShortcut_ReturnsParentsKeyboardShortcut()
         {
             using UpDownBase upDown = new SubUpDownBase();

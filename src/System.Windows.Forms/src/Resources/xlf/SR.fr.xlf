@@ -4594,6 +4594,11 @@ Pour remplacer cette boîte de dialogue par défaut, traitez l'événement DataE
         <target state="translated">Échec de l'inscription DragDrop.</target>
         <note />
       </trans-unit>
+      <trans-unit id="EditDefaultAccessibleName">
+        <source>Spinner</source>
+        <target state="translated">Compteur</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorBadInputLanguage">
         <source>inputLanguage is not recognized by the system.</source>
         <target state="translated">inputLanguage n'est pas reconnu par le système.</target>
@@ -5904,11 +5909,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">La combinaison de touches n'est pas valide.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">Le nom de la touche n'est pas valide.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">

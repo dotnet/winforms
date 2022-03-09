@@ -4594,6 +4594,11 @@ Para substituir a caixa de diálogo padrão, manipule o evento DataError.</targe
         <target state="translated">O registro de DragDrop não teve êxito.</target>
         <note />
       </trans-unit>
+      <trans-unit id="EditDefaultAccessibleName">
+        <source>Spinner</source>
+        <target state="translated">Controle giratório</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorBadInputLanguage">
         <source>inputLanguage is not recognized by the system.</source>
         <target state="translated">inputLanguage não é reconhecido pelo sistema.</target>
@@ -5904,11 +5909,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">A combinação de chave não é válida.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">Nome de chave inválido.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">

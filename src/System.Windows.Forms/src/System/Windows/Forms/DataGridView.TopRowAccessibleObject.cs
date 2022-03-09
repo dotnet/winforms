@@ -277,8 +277,6 @@ namespace System.Windows.Forms
             {
                 switch (propertyId)
                 {
-                    case UiaCore.UIA.NamePropertyId:
-                        return SR.DataGridView_AccTopRow;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return false;
@@ -287,13 +285,6 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
                     case UiaCore.UIA.IsContentElementPropertyId:
-                        return true;
-                    case UiaCore.UIA.IsPasswordPropertyId:
-                        return false;
-                    case UiaCore.UIA.AccessKeyPropertyId:
-                    case UiaCore.UIA.HelpTextPropertyId:
-                        return string.Empty;
-                    case UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId:
                         return true;
                 }
 

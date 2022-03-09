@@ -60,6 +60,8 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
+            public override string? Name => SR.DataGridView_AccEditingPanelAccName;
+
             internal override void SetFocus()
             {
                 if (_panel.IsHandleCreated && _panel.CanFocus)
@@ -83,8 +85,6 @@ namespace System.Windows.Forms
                         return Owner.AccessibleRole == AccessibleRole.Default
                                ? UiaCore.UIA.PaneControlTypeId
                                : base.GetPropertyValue(propertyId);
-                    case UiaCore.UIA.NamePropertyId:
-                        return SR.DataGridView_AccEditingPanelAccName;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return true;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
@@ -94,14 +94,8 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.IsControlElementPropertyId:
                     case UiaCore.UIA.IsContentElementPropertyId:
                         return true;
-                    case UiaCore.UIA.IsPasswordPropertyId:
-                        return false;
                     case UiaCore.UIA.AccessKeyPropertyId:
                         return _panel.AccessibilityObject.KeyboardShortcut;
-                    case UiaCore.UIA.HelpTextPropertyId:
-                        return string.Empty;
-                    case UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId:
-                        return true;
                     case UiaCore.UIA.ProviderDescriptionPropertyId:
                         return SR.DataGridViewEditingPanelUiaProviderDescription;
                 }

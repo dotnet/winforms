@@ -152,6 +152,17 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             Assert.False(propertyGrid.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void GridViewTextBoxAccessibleObject_GetPropertyValue_FrameworkIdPropertyId_ReturnsExpected()
+        {
+            using PropertyGrid propertyGrid = new PropertyGrid();
+            PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
+            AccessibleObject accessibleObject = gridView.EditAccessibleObject;
+
+            Assert.Equal(NativeMethods.WinFormFrameworkId, accessibleObject.GetPropertyValue(UiaCore.UIA.FrameworkIdPropertyId));
+            Assert.False(propertyGrid.IsHandleCreated);
+        }
+
         [WinFormsTheory]
         [InlineData(true, AccessibleRole.Text)]
         [InlineData(false, AccessibleRole.None)]
@@ -191,6 +202,16 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             propertyGridView.TestAccessor().Dynamic._selectedGridEntry = null;
 
             Assert.NotNull(editFieldAccessibleObject.RuntimeId);
+        }
+
+        [WinFormsFact]
+        public void GridViewTextBoxAccessibleObject_FragmentRoot_ReturnsExpected()
+        {
+            using PropertyGrid propertyGrid = new PropertyGrid();
+            PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
+            AccessibleObject accessibleObject = gridView.EditAccessibleObject;
+
+            Assert.Equal(propertyGrid.AccessibilityObject, accessibleObject.FragmentRoot);
         }
     }
 }

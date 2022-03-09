@@ -500,7 +500,7 @@ namespace System.Windows.Forms
             return $"[Cursor: {s}]";
         }
 
-        public static bool operator ==(Cursor left, Cursor right)
+        public static bool operator ==(Cursor? left, Cursor? right)
         {
             if (right is null)
             {
@@ -515,7 +515,7 @@ namespace System.Windows.Forms
             return left._handle == right._handle;
         }
 
-        public static bool operator !=(Cursor left, Cursor right)
+        public static bool operator !=(Cursor? left, Cursor? right)
         {
             return !(left == right);
         }
@@ -528,12 +528,12 @@ namespace System.Windows.Forms
 
         public override bool Equals(object? obj)
         {
-            if (!(obj is Cursor))
+            if (obj is not Cursor)
             {
                 return false;
             }
 
-            return (this == (Cursor)obj);
+            return this == (Cursor)obj;
         }
     }
 }

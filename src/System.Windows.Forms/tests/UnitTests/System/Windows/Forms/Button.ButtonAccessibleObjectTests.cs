@@ -65,6 +65,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [InlineData((int)UIA.NamePropertyId, "TestName")]
+        [InlineData((int)UIA.LegacyIAccessibleNamePropertyId, "TestName")]
         [InlineData((int)UIA.ControlTypePropertyId, UIA.ButtonControlTypeId)] // If AccessibleRole is Default
         [InlineData((int)UIA.IsKeyboardFocusablePropertyId, true)]
         [InlineData((int)UIA.AutomationIdPropertyId, "Button1")]

@@ -58,6 +58,8 @@ namespace System.Windows.Forms
         private ContextMenuStrip _contextMenuStrip;
         internal bool nodesCleared;
 
+        private TreeNodeAccessibleObject _accessibleObject;
+
         internal TreeNodeImageIndexer ImageIndexer
         {
             get
@@ -1181,6 +1183,9 @@ namespace System.Windows.Forms
                 return treeView;
             }
         }
+
+        internal TreeNodeAccessibleObject AccessibilityObject
+            => _accessibleObject ??= new TreeNodeAccessibleObject(this, TreeView);
 
         /// <summary>
         ///  Adds a new child node at the appropriate sorted position

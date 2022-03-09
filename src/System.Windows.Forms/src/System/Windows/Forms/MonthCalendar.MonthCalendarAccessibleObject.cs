@@ -402,7 +402,6 @@ namespace System.Windows.Forms
                         ? UiaCore.UIA.CalendarControlTypeId
                         : base.GetPropertyValue(propertyID),
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => IsEnabled,
-                    UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
                     _ => base.GetPropertyValue(propertyID)
                 };
 

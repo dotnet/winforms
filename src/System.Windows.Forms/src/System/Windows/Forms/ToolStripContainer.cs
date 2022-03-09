@@ -309,6 +309,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ToolStripContainerTopToolStripPanelDescr))]
         [Localizable(false)]
@@ -346,6 +348,9 @@ namespace System.Windows.Forms
         {
             get => base.Controls;
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new ToolStripContainerAccessibleObject(this);
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override ControlCollection CreateControlsInstance()

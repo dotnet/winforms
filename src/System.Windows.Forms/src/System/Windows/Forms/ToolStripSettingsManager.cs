@@ -190,13 +190,13 @@ namespace System.Windows.Forms
                 if (!string.IsNullOrEmpty(itemNames))
                 {
                     string[] keys = itemNames.Split(',');
-                    Regex r = new Regex("(\\S+)");
+                    Regex r = ContiguousNonWhitespace();
 
                     // Shuffle items according to string.
                     for (int i = 0; ((i < toolStrip.Items.Count) && (i < keys.Length)); i++)
                     {
                         Match match = r.Match(keys[i]);
-                        if (match is not null && match.Success)
+                        if (match.Success)
                         {
                             string key = match.Value;
                             if (!string.IsNullOrEmpty(key) && itemLocationHash.ContainsKey(key))
@@ -208,6 +208,9 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+        [RegexGenerator("\\S+")]
+        private static partial Regex ContiguousNonWhitespace();
 
         private Dictionary<string, ToolStrip> BuildItemOriginationHash()
         {

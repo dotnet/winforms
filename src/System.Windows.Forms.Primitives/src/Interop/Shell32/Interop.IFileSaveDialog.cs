@@ -50,17 +50,17 @@ internal static partial class Interop
                 IShellItem psi);
 
             void GetFolder(
-                out IShellItem ppsi);
+                out IShellItem? ppsi);
 
             [PreserveSig]
             HRESULT GetCurrentSelection(
-                out IShellItem ppsi);
+                out IShellItem? ppsi);
 
             void SetFileName(
                 [MarshalAs(UnmanagedType.LPWStr)] string pszName);
 
             void GetFileName(
-                [MarshalAs(UnmanagedType.LPWStr)] out string pszName);
+                [MarshalAs(UnmanagedType.LPWStr)] out string? pszName);
 
             void SetTitle(
                 [MarshalAs(UnmanagedType.LPWStr)] string pszTitle);
@@ -74,7 +74,7 @@ internal static partial class Interop
                 [MarshalAs(UnmanagedType.LPWStr)] string pszLabel);
 
             void GetResult(
-                out IShellItem ppsi);
+                out IShellItem? ppsi);
 
             [PreserveSig]
             HRESULT AddPlace(

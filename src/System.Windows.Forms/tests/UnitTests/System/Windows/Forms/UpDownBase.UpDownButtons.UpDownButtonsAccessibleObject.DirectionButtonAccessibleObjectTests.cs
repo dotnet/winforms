@@ -28,6 +28,23 @@ namespace System.Windows.Forms.Tests
             Assert.False(upDownBase.IsHandleCreated);
         }
 
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.UIA.LegacyIAccessibleRolePropertyId, AccessibleRole.PushButton)]
+        [InlineData((int)UiaCore.UIA.LegacyIAccessibleStatePropertyId, AccessibleStates.None)]
+        [InlineData((int)UiaCore.UIA.ValueValuePropertyId, null)]
+        public void NumericUpDownAccessibleObject_DirectionButtonAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
+        {
+            using SubUpDownBase upDownBase = new();
+            using UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
+            UpDownButtonsAccessibleObject accessibleObject = new(upDownButtons);
+            // UpButton has 0 index
+            AccessibleObject upButton = accessibleObject.GetChild(index: 0);
+            object actual = upButton.GetPropertyValue((UiaCore.UIA)property);
+
+            Assert.Equal(expected, actual);
+            Assert.False(upDownBase.IsHandleCreated);
+        }
+
         private class SubUpDownBase : UpDownBase
         {
             protected override void UpdateEditText() => throw new NotImplementedException();

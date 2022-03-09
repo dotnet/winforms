@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using static Interop;
@@ -21,13 +19,13 @@ namespace System.Windows.Forms
                 _owningToolStrip = owner;
             }
 
-            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
                 => _owningToolStrip.IsHandleCreated ? HitTest((int)x, (int)y) : null;
 
             /// <summary>
             ///  Return the child object at the given screen coordinates.
             /// </summary>
-            public override AccessibleObject HitTest(int x, int y)
+            public override AccessibleObject? HitTest(int x, int y)
             {
                 if (!_owningToolStrip.IsHandleCreated)
                 {
@@ -45,8 +43,7 @@ namespace System.Windows.Forms
             ///  When overridden in a derived class, gets the accessible child corresponding to the specified
             ///  index.
             /// </summary>
-            //
-            public override AccessibleObject GetChild(int index)
+            public override AccessibleObject? GetChild(int index)
             {
                 if ((_owningToolStrip is null) || (_owningToolStrip.Items is null))
                 {
@@ -64,7 +61,7 @@ namespace System.Windows.Forms
 
                 if (index < _owningToolStrip.Items.Count)
                 {
-                    ToolStripItem item = null;
+                    ToolStripItem? item = null;
                     int myIndex = 0;
 
                     // First we walk through the head aligned items.
@@ -155,7 +152,7 @@ namespace System.Windows.Forms
                 return count;
             }
 
-            internal AccessibleObject GetChildFragment(int fragmentIndex, UiaCore.NavigateDirection direction, bool getOverflowItem = false)
+            internal AccessibleObject? GetChildFragment(int fragmentIndex, UiaCore.NavigateDirection direction, bool getOverflowItem = false)
             {
                 if (fragmentIndex < 0)
                 {
@@ -205,7 +202,7 @@ namespace System.Windows.Forms
 
                 return null;
 
-                AccessibleObject GetItemAccessibleObject(ToolStripItem item)
+                AccessibleObject? GetItemAccessibleObject(ToolStripItem item)
                 {
                     if (item is ToolStripControlHost controlHostItem)
                     {
@@ -238,7 +235,7 @@ namespace System.Windows.Forms
             ///  from the accessibility tree. It's necessary, because hosted native controls internally add accessible objects
             ///  to the accessibility tree, and thus create duplicated. To avoid duplicates, remove hosted items with native accessibility objects from the tree.
             /// </summary>
-            private AccessibleObject GetFollowingChildFragment(int index, ToolStripItemCollection items, UiaCore.NavigateDirection direction)
+            private AccessibleObject? GetFollowingChildFragment(int index, ToolStripItemCollection items, UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
@@ -434,7 +431,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {

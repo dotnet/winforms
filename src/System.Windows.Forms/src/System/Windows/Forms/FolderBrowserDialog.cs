@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Buffers;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
@@ -67,7 +66,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler HelpRequest
+        public new event EventHandler? HelpRequest
         {
             add => base.HelpRequest += value;
             remove => base.HelpRequest -= value;
@@ -233,6 +232,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Resets all properties to their default values.
         /// </summary>
+        [MemberNotNull(nameof(_descriptionText))]
+        [MemberNotNull(nameof(_selectedPath))]
+        [MemberNotNull(nameof(_initialDirectory))]
         public override void Reset()
         {
             _options = (int)(FOS.PICKFOLDERS | FOS.FORCEFILESYSTEM | FOS.FILEMUSTEXIST);
@@ -263,7 +265,7 @@ namespace System.Windows.Forms
 
         private bool TryRunDialogVista(IntPtr owner, out bool returnValue)
         {
-            IFileOpenDialog dialog;
+            Interop.WinFormsComWrappers.FileOpenDialogWrapper dialog;
             try
             {
                 // Creating the Vista dialog can fail on Windows Server Core, even if the
@@ -281,7 +283,7 @@ namespace System.Windows.Forms
 
                 var obj = WinFormsComWrappers.Instance
                     .GetOrCreateObjectForComInstance(lpDialogUnknownPtr, CreateObjectFlags.UniqueInstance);
-                dialog = (IFileOpenDialog)obj;
+                dialog = (Interop.WinFormsComWrappers.FileOpenDialogWrapper)obj;
             }
             catch (COMException)
             {
@@ -301,7 +303,7 @@ namespace System.Windows.Forms
                         return true;
                     }
 
-                    throw Marshal.GetExceptionForHR((int)hr);
+                    throw Marshal.GetExceptionForHR((int)hr)!;
                 }
 
                 GetResult(dialog);
@@ -310,7 +312,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                ((IDisposable)dialog).Dispose();
+                dialog.Dispose();
             }
         }
 
@@ -332,7 +334,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    IFileDialogCustomize customize = (IFileDialogCustomize)dialog;
+                    var customize = (WinFormsComWrappers.FileOpenDialogWrapper)dialog;
                     customize.AddText(0, _descriptionText);
                 }
             }
@@ -343,7 +345,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    IShellItem initialDirectory = GetShellItemForPathViaComWrappers(_initialDirectory);
+                    IShellItem initialDirectory = GetShellItemForPath(_initialDirectory);
 
                     dialog.SetDefaultFolder(initialDirectory);
                     dialog.SetFolder(initialDirectory);
@@ -355,7 +357,7 @@ namespace System.Windows.Forms
 
             if (!string.IsNullOrEmpty(_selectedPath))
             {
-                string parent = Path.GetDirectoryName(_selectedPath);
+                string? parent = Path.GetDirectoryName(_selectedPath);
                 if (parent is null || !string.IsNullOrEmpty(_initialDirectory) || !Directory.Exists(parent))
                 {
                     dialog.SetFileName(_selectedPath);
@@ -367,18 +369,6 @@ namespace System.Windows.Forms
                     dialog.SetFileName(folder);
                 }
             }
-        }
-
-        private static IShellItem CreateItemFromParsingName(string path)
-        {
-            Guid guid = typeof(IShellItem).GUID;
-            HRESULT hr = SHCreateItemFromParsingName(path, IntPtr.Zero, ref guid, out object item);
-            if (hr != HRESULT.S_OK)
-            {
-                throw new Win32Exception((int)hr);
-            }
-
-            return (IShellItem)item;
         }
 
         private bool GetOption(int option) => (_options & option) != 0;
@@ -400,11 +390,11 @@ namespace System.Windows.Forms
 
         private void GetResult(IFileDialog dialog)
         {
-            dialog.GetResult(out IShellItem item);
-            HRESULT hr = item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath);
-            if (!hr.Succeeded())
+            dialog.GetResult(out IShellItem? item);
+            if (item is not null)
             {
-                throw Marshal.GetExceptionForHR((int)hr);
+                HRESULT hr = item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath!);
+                hr.ThrowIfFailed();
             }
         }
 
@@ -434,7 +424,7 @@ namespace System.Windows.Forms
                 // under the MTA threading model (...dialog does appear under MTA, but is totally non-functional).
                 if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != System.Threading.ApartmentState.STA)
                 {
-                    throw new Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
+                    throw new ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
                 }
 
                 var callback = new BrowseCallbackProc(FolderBrowserDialog_BrowseCallbackProc);
@@ -464,7 +454,7 @@ namespace System.Windows.Forms
                             }
 
                             // Retrieve the path from the IDList.
-                            SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath);
+                            SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath!);
                             GC.KeepAlive(callback);
                             return true;
                         }

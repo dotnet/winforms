@@ -3544,9 +3544,6 @@ Stack trace where the illegal operation occurred was:
   <data name="KeysConverterInvalidKeyCombination" xml:space="preserve">
     <value>Key combination is not valid.</value>
   </data>
-  <data name="KeysConverterInvalidKeyName" xml:space="preserve">
-    <value>Key name is not valid.</value>
-  </data>
   <data name="LabelAutoEllipsisDescr" xml:space="preserve">
     <value>Enables the automatic handling of text that extends beyond the width of the label control.</value>
   </data>
@@ -6897,5 +6894,8 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="FolderBrowserDialogShowPinnedPlaces" xml:space="preserve">
     <value>Controls whether the items shown by default in the view's navigation pane are shown.</value>
+  </data>
+  <data name="EditDefaultAccessibleName" xml:space="preserve">
+    <value>Spinner</value>
   </data>
 </root>

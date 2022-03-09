@@ -153,5 +153,23 @@ namespace System.Windows.Forms.Tests
 
             Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsValuePatternAvailablePropertyId));
         }
+
+        [WinFormsFact]
+        public void ComboBoxChildEditUiaProvider_GetPropertyValue_ReturnsExpected()
+        {
+            using ComboBox comboBox = new ComboBox();
+            comboBox.CreateControl();
+            AccessibleObject accessibleObject = comboBox.ChildEditAccessibleObject;
+
+            Assert.Equal(SR.ComboBoxEditDefaultAccessibleName, accessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId).ToString());
+            Assert.Equal(SR.ComboBoxEditDefaultAccessibleName, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId).ToString());
+            Assert.Null(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+
+            comboBox.AccessibleName = "Combo AO name";
+
+            Assert.Equal(comboBox.AccessibleName, accessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId).ToString());
+            Assert.Equal(comboBox.AccessibleName, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId).ToString());
+            Assert.Null(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+        }
     }
 }

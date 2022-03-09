@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms
@@ -19,7 +17,7 @@ namespace System.Windows.Forms
                 _owningNumericUpDown = owner;
             }
 
-            public override AccessibleObject GetChild(int index)
+            public override AccessibleObject? GetChild(int index)
             {
                 // TextBox child
                 if (index == 0)
@@ -39,19 +37,6 @@ namespace System.Windows.Forms
             public override int GetChildCount()
             {
                 return 2;
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
-                        return State;
-                    case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
-                        return Role;
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
             }
 
             public override AccessibleRole Role

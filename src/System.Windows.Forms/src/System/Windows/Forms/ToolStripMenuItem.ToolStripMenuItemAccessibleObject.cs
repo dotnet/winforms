@@ -46,7 +46,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 if (propertyID == UiaCore.UIA.AcceleratorKeyPropertyId)
                 {

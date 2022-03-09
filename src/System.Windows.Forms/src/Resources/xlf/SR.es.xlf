@@ -4594,6 +4594,11 @@ Para reemplazar este cuadro de diálogo predeterminado controle el evento DataEr
         <target state="translated">Error al registrar DragDrop.</target>
         <note />
       </trans-unit>
+      <trans-unit id="EditDefaultAccessibleName">
+        <source>Spinner</source>
+        <target state="translated">Indicador giratorio</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorBadInputLanguage">
         <source>inputLanguage is not recognized by the system.</source>
         <target state="translated">El sistema no reconoce este inputLanguage.</target>
@@ -5904,11 +5909,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">La combinación de teclas no es válida.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">El nombre clave no es válido.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">

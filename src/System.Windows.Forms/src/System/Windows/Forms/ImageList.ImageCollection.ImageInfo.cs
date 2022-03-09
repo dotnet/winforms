@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public sealed partial class ImageList
@@ -12,7 +10,7 @@ namespace System.Windows.Forms
         {
             internal class ImageInfo
             {
-                public string Name { get; set; }
+                public string? Name { get; set; }
             }
         }
     }

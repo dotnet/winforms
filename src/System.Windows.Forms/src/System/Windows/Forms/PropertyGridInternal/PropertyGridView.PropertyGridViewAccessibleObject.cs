@@ -53,7 +53,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (_parentPropertyGrid.IsHandleCreated &&
                     _parentPropertyGrid.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
                 {
-                    UiaCore.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                    UiaCore.IRawElementProviderFragment? navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                     if (navigationTarget is not null)
                     {
                         return navigationTarget;
@@ -89,8 +89,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TableControlTypeId,
-                    UiaCore.UIA.IsTablePatternAvailablePropertyId => true,
-                    UiaCore.UIA.IsGridPatternAvailablePropertyId => true,
                     _ => base.GetPropertyValue(propertyID)
                 };
 
@@ -155,10 +153,16 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <param name="gridEntryCollection">The grid entry collection.</param>
             /// <param name="currentGridEntryFound">Indicates whether the current grid entry is found.</param>
             /// <returns>The previous grid entry.</returns>
-            internal AccessibleObject? GetPreviousGridEntry(GridEntry currentGridEntry, GridEntryCollection gridEntryCollection, out bool currentGridEntryFound)
+            internal AccessibleObject? GetPreviousGridEntry(GridEntry currentGridEntry, GridEntryCollection? gridEntryCollection, out bool currentGridEntryFound)
             {
-                GridEntry? previousGridEntry = null;
                 currentGridEntryFound = false;
+
+                if (gridEntryCollection is null)
+                {
+                    return null;
+                }
+
+                GridEntry? previousGridEntry = null;
 
                 foreach (GridEntry gridEntry in gridEntryCollection)
                 {
@@ -206,9 +210,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <param name="gridEntryCollection">The grid entry collection.</param>
             /// <param name="currentGridEntryFound">Indicates whether the current grid entry is found.</param>
             /// <returns>The next grid entry.</returns>
-            internal AccessibleObject? GetNextGridEntry(GridEntry currentGridEntry, GridEntryCollection gridEntryCollection, out bool currentGridEntryFound)
+            internal AccessibleObject? GetNextGridEntry(GridEntry currentGridEntry, GridEntryCollection? gridEntryCollection, out bool currentGridEntryFound)
             {
                 currentGridEntryFound = false;
+
+                if (gridEntryCollection is null)
+                {
+                    return null;
+                }
 
                 foreach (GridEntry gridEntry in gridEntryCollection)
                 {

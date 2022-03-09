@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using static Interop;
@@ -49,7 +47,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  In this method, the handler will add listeners to the events that
         ///  the Com2PropertyDescriptor surfaces that it cares about.
         /// </summary>
-        public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc)
+        public override void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc)
         {
             if (propDesc is null)
             {
@@ -100,11 +98,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // we want to avoid allowing clients to force a bad property to be browsable,
                 // so we don't allow things that are marked as non browsable to become browsable,
                 // only the other way around.
-                //
                 if (sender.CanShow)
                 {
                     // should we hide this?
-                    BOOL pfHide = sender.Attributes[typeof(BrowsableAttribute)].Equals(BrowsableAttribute.No) ? BOOL.TRUE : BOOL.FALSE;
+                    BOOL pfHide = sender.Attributes[typeof(BrowsableAttribute)] is Attribute browsableAttribute
+                                && browsableAttribute.Equals(BrowsableAttribute.No) ? BOOL.TRUE : BOOL.FALSE;
                     hr = vsObj.HideProperty(sender.DISPID, &pfHide);
                     if (hr == HRESULT.S_OK)
                     {

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace System.Windows.Forms
 {
     public sealed partial class ImageList
@@ -26,6 +28,7 @@ namespace System.Windows.Forms
 
             public virtual ImageList? ImageList { get; set; }
 
+            [AllowNull]
             public virtual string Key
             {
                 get => _key;

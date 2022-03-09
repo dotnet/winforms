@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     /// <summary>
@@ -43,6 +41,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  In this method, the handler will add listeners to the events that
         ///  the Com2PropertyDescriptor surfaces that it cares about.
         /// </summary>
-        public abstract void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc);
+        public abstract void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc);
     }
 }

@@ -24,12 +24,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
                 => _owningGridViewListBox.AccessibilityObject;
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
-            {
-                UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut,
-                _ => base.GetPropertyValue(propertyID),
-            };
-
             /// <inheritdoc />
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 => patternId == UiaCore.UIA.InvokePatternId || base.IsPatternSupported(patternId);

@@ -25,6 +25,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void DataGridViewButtonCellAccessibleObject_GetPropertyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected()
+        {
+            var accessibleObject = new DataGridViewButtonCellAccessibleObject(null);
+            Assert.Equal(SR.DataGridView_AccButtonCellDefaultAction, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+        }
+
+        [WinFormsFact]
         public void DataGridViewButtonCellAccessibleObject_GetChildCount_ReturnsExpected()
         {
             var accessibleObject = new DataGridViewButtonCellAccessibleObject(null);

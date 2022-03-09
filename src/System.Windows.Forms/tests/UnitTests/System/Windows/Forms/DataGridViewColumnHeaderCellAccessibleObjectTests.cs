@@ -108,6 +108,19 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void DataGridViewColumnHeaderCellAccessibleObject_GetPropertyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected()
+        {
+            using DataGridView control = new();
+            control.Columns.Add("Column 1", "Header text 1");
+            DataGridViewColumn column = control.Columns[0];
+            column.SortMode = DataGridViewColumnSortMode.Automatic;
+            var accessibleObject = (DataGridViewColumnHeaderCellAccessibleObject)column.HeaderCell.AccessibilityObject;
+
+            Assert.Equal(SR.DataGridView_AccColumnHeaderCellDefaultAction, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+            Assert.False(control.IsHandleCreated);
+        }
+
         [WinFormsTheory]
         [InlineData((int)UiaCore.UIA.InvokePatternId)]
         [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
@@ -124,6 +137,18 @@ namespace System.Windows.Forms.Tests
             var accessibleObject = new DataGridViewColumnHeaderCellAccessibleObject(null);
 
             Assert.Equal(UiaCore.UIA.HeaderControlTypeId, accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+        }
+
+        [WinFormsFact]
+        public void DataGridViewColumnHeaderCellAccessibleObject_ValueValuepropertyId_ReturnsExpected()
+        {
+            using DataGridView control = new();
+            control.Columns.Add("Column 1", "Header text 1");
+            DataGridViewColumn column = control.Columns[0];
+            column.SortMode = DataGridViewColumnSortMode.Automatic;
+
+            var accessibleObject = (DataGridViewColumnHeaderCellAccessibleObject)column.HeaderCell.AccessibilityObject;
+            Assert.Equal("Header text 1", accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
         }
 
         [WinFormsFact]

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -37,11 +35,11 @@ namespace System.Windows.Forms
             /// <param name="assemblyName"></param>
             /// <param name="typeName"></param>
             /// <returns>null - continue with the default binder.</returns>
-            public override Type BindToType(string assemblyName, string typeName)
+            public override Type? BindToType(string assemblyName, string typeName)
             {
                 if (string.CompareOrdinal(typeName, AllowedTypeName) == 0)
                 {
-                    AssemblyName nameToBind = null;
+                    AssemblyName? nameToBind = null;
                     try
                     {
                         nameToBind = new AssemblyName(assemblyName);
@@ -54,7 +52,7 @@ namespace System.Windows.Forms
                     {
                         if (string.CompareOrdinal(nameToBind.Name, AllowedAssemblyName) == 0)
                         {
-                            byte[] tokenToBind = nameToBind.GetPublicKeyToken();
+                            byte[]? tokenToBind = nameToBind.GetPublicKeyToken();
                             if ((tokenToBind is not null) &&
                                 (s_allowedToken is not null) &&
                                 (tokenToBind.Length == s_allowedToken.Length))
@@ -87,7 +85,7 @@ namespace System.Windows.Forms
             /// <param name="serializedType"></param>
             /// <param name="assemblyName"></param>
             /// <param name="typeName"></param>
-            public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
+            public override void BindToName(Type serializedType, out string? assemblyName, out string? typeName)
             {
                 // null strings will follow the default codepath in BinaryFormatter
                 assemblyName = null;

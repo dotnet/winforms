@@ -7104,7 +7104,9 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<NotSupportedException>(() => control.SetItemLocation(item, Point.Empty));
         }
 
-        [WinFormsFact]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/6610")]
+        [ConditionalWinFormsFact(UnsupportedArchitecture = Architecture.X86,
+            Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6610")]
         public void ToolStrip_WndProc_InvokeMouseActivate_Success()
         {
             using var control = new SubToolStrip();

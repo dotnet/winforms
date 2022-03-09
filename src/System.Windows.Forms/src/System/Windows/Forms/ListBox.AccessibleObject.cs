@@ -200,11 +200,6 @@ namespace System.Windows.Forms
                 focusedItem?.SetFocus();
             }
 
-            internal override void SetValue(string? newValue)
-            {
-                Value = newValue;
-            }
-
             public override AccessibleObject? GetChild(int index)
             {
                 if (index < 0 || index >= _owningListBox.Items.Count)

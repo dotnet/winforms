@@ -593,6 +593,21 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData("Test")]
+        [InlineData("")]
+        [InlineData(null)]
+        public void TabControlAccessibleObject_GetProperyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected(string accessibleDefaultActionDescription)
+        {
+            using TabControl tabControl = new();
+            tabControl.AccessibleDefaultActionDescription = accessibleDefaultActionDescription;
+            TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
+
+            Assert.Equal(!string.IsNullOrEmpty(accessibleDefaultActionDescription) ? accessibleDefaultActionDescription : null,
+                accessibleObject.GetPropertyValue(UIA.LegacyIAccessibleDefaultActionPropertyId));
+            Assert.False(tabControl.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]
         public void TabControlAccessibleObject_RuntimeId_ReturnsExpected(bool createControl)
@@ -685,8 +700,8 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true, "&Name", "Alt+n")]
         [InlineData(false, "&Name", "Alt+n")]
-        [InlineData(true, "Name", null)]
-        [InlineData(false, "Name", null)]
+        [InlineData(true, "Name", "")]
+        [InlineData(false, "Name", "")]
         public void TabControlAccessibleObject_GetPropertyValue_AccessKey_ReturnExpected(bool createControl, string text, string expectedKeyboardShortcut)
         {
             using TabControl tabControl = new() { Text = text };

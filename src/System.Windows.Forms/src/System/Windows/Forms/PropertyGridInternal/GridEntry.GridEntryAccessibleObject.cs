@@ -334,15 +334,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // button is one of the first children of PropertyGridView.
 
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TreeItemControlTypeId,
-                    UiaCore.UIA.AccessKeyPropertyId => string.Empty,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => _owningGridEntry.HasFocus,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     UiaCore.UIA.IsEnabledPropertyId => true,
                     UiaCore.UIA.AutomationIdPropertyId => GetHashCode().ToString(),
-                    UiaCore.UIA.IsPasswordPropertyId => false,
-                    UiaCore.UIA.IsGridItemPatternAvailablePropertyId or UiaCore.UIA.IsTableItemPatternAvailablePropertyId => true,
-                    UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
-                    UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId => DefaultAction,
                     _ => base.GetPropertyValue(propertyID),
                 };
             }

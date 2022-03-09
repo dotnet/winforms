@@ -11,7 +11,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Defines the DataGridView TextBox EditingControl accessible object.
         /// </summary>
-        internal class DataGridViewTextBoxEditingControlAccessibleObject : Control.ControlAccessibleObject
+        internal class DataGridViewTextBoxEditingControlAccessibleObject : ControlAccessibleObject
         {
             /// <summary>
             ///  The parent is changed when the editing control is attached to another editing cell.

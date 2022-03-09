@@ -74,6 +74,7 @@ namespace System.Windows.Forms
         // If we learn that the UIA Notification event is not available,
         // controls should not attempt to raise it.
         private static bool s_notificationEventAvailable = true;
+        private static bool? s_canNotifyClients;
 
         internal const int RuntimeIDFirstItem = 0x2a;
 
@@ -99,6 +100,24 @@ namespace System.Windows.Forms
                 _systemIAccessible.accLocation(out int left, out int top, out int width, out int height, NativeMethods.CHILDID_SELF);
                 return new Rectangle(left, top, width, height);
             }
+        }
+
+        internal static bool CanNotifyClients => s_canNotifyClients ??= InitializeCanNotifyClients();
+
+        private static bool InitializeCanNotifyClients()
+        {
+            // While handling accessibility events, accessibility clients (JAWS, Inspect),
+            // can access AccessibleObject associated with the event. In the designer scenario, controls are not
+            // receiving messages directly and might not respond to messages while in the notification call.
+            // This will make the server process unresponsive and will cause VisualStudio to become unresponsive.
+            //
+            // The following compat switch is set in the designer server process to prevent controls from sending notification.
+            if (AppContext.TryGetSwitch("Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications", out bool isEnabled))
+            {
+                return !isEnabled;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -401,6 +420,14 @@ namespace System.Windows.Forms
                 UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
                 UiaCore.UIA.HelpTextPropertyId => Help ?? string.Empty,
                 UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
+                UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
+                UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
+                UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId => !string.IsNullOrEmpty(DefaultAction) ? DefaultAction : null,
+                UiaCore.UIA.LegacyIAccessibleNamePropertyId => !string.IsNullOrEmpty(Name) ? Name : null,
+                UiaCore.UIA.ValueValuePropertyId => !string.IsNullOrEmpty(Value) ? Value : null,
+                UiaCore.UIA.IsPasswordPropertyId => false,
+                UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
+                UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
                 _ => null
             };
 
@@ -421,6 +448,9 @@ namespace System.Windows.Forms
                     case AccessibleRole.ButtonDropDownGrid:
                     case AccessibleRole.Clock:
                     case AccessibleRole.SplitButton:
+                    case AccessibleRole.CheckButton:
+                    case AccessibleRole.Cell:
+                    case AccessibleRole.ListItem:
                         return true;
 
                     case AccessibleRole.Default:
@@ -1987,7 +2017,7 @@ namespace System.Windows.Forms
             AutomationNotificationProcessing notificationProcessing,
             string notificationText)
         {
-            if (!s_notificationEventAvailable)
+            if (!s_notificationEventAvailable || !CanNotifyClients)
             {
                 return false;
             }
@@ -2023,7 +2053,7 @@ namespace System.Windows.Forms
 
         internal virtual bool RaiseAutomationEvent(UiaCore.UIA eventId)
         {
-            if (UiaCore.UiaClientsAreListening().IsTrue())
+            if (UiaCore.UiaClientsAreListening().IsTrue() && CanNotifyClients)
             {
                 HRESULT result = UiaCore.UiaRaiseAutomationEvent(this, eventId);
                 return result == HRESULT.S_OK;
@@ -2034,7 +2064,7 @@ namespace System.Windows.Forms
 
         internal virtual bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object oldValue, object newValue)
         {
-            if (UiaCore.UiaClientsAreListening().IsTrue())
+            if (UiaCore.UiaClientsAreListening().IsTrue() && CanNotifyClients)
             {
                 HRESULT result = UiaCore.UiaRaiseAutomationPropertyChangedEvent(this, propertyId, oldValue, newValue);
                 return result == HRESULT.S_OK;
@@ -2058,7 +2088,7 @@ namespace System.Windows.Forms
 
         internal bool RaiseStructureChangedEvent(UiaCore.StructureChangeType structureChangeType, int[] runtimeId)
         {
-            if (UiaCore.UiaClientsAreListening().IsTrue())
+            if (UiaCore.UiaClientsAreListening().IsTrue() && CanNotifyClients)
             {
                 HRESULT result = UiaCore.UiaRaiseStructureChangedEvent(this, structureChangeType, runtimeId, runtimeId is null ? 0 : runtimeId.Length);
                 return result == HRESULT.S_OK;

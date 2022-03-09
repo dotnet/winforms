@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 using static Interop.ComCtl32;
 using static Interop.User32;
@@ -18,14 +16,14 @@ namespace System.Windows.Forms
             {
             }
 
-            public override string KeyboardShortcut
+            public override string? KeyboardShortcut
             {
                 get
                 {
                     // APP COMPAT. When computing DateTimePickerAccessibleObject::get_KeyboardShortcut the previous label
                     // takes precedence over DTP::Text.
                     // This code was copied from the Everett sources.
-                    Label previousLabel = PreviousLabel;
+                    Label? previousLabel = PreviousLabel;
 
                     if (previousLabel is not null)
                     {
@@ -36,7 +34,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    string baseShortcut = base.KeyboardShortcut;
+                    string? baseShortcut = base.KeyboardShortcut;
 
                     if ((baseShortcut is null || baseShortcut.Length == 0))
                     {
@@ -51,11 +49,15 @@ namespace System.Windows.Forms
                 }
             }
 
+            // Note: returns empty string instead of null, because the date value replaces null,
+            // so name is not empty in this case even if AccessibleName is not set.
+            public override string Name => Owner.AccessibleName ?? string.Empty;
+
             public override string Value
             {
                 get
                 {
-                    string baseValue = base.Value;
+                    string? baseValue = base.Value;
                     if (baseValue is null || baseValue.Length == 0)
                     {
                         return Owner.Text;
@@ -97,7 +99,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
                     UiaCore.UIA.LocalizedControlTypePropertyId =>
@@ -112,9 +114,34 @@ namespace System.Windows.Forms
                 };
 
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
-                => (patternId == UiaCore.UIA.TogglePatternId && ((DateTimePicker)Owner).ShowCheckBox) ||
-                    patternId == UiaCore.UIA.ExpandCollapsePatternId ||
-                    base.IsPatternSupported(patternId);
+                => patternId switch
+                {
+                    UiaCore.UIA.TogglePatternId when ((DateTimePicker)Owner).ShowCheckBox => true,
+                    UiaCore.UIA.ExpandCollapsePatternId => true,
+                    UiaCore.UIA.ValuePatternId => true,
+                    _ => base.IsPatternSupported(patternId)
+                };
+
+            public override string DefaultAction
+                => ExpandCollapseState switch
+                {
+                    UiaCore.ExpandCollapseState.Collapsed => SR.AccessibleActionExpand,
+                    UiaCore.ExpandCollapseState.Expanded => SR.AccessibleActionCollapse,
+                    _ => string.Empty
+                };
+
+            public override void DoDefaultAction()
+            {
+                switch (ExpandCollapseState)
+                {
+                    case UiaCore.ExpandCollapseState.Collapsed:
+                        Expand();
+                        break;
+                    case UiaCore.ExpandCollapseState.Expanded:
+                        Collapse();
+                        break;
+                }
+            }
 
             #region Toggle Pattern
 

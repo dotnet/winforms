@@ -78,8 +78,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 /// <summary>
                 ///  Gets the top level element.
                 /// </summary>
-                internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-                    => _owningPropertyGridView.AccessibilityObject;
+                internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
+                    => _owningPropertyGridView.OwnerGrid?.AccessibilityObject;
 
                 internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
                 {
@@ -87,7 +87,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
                     UiaCore.UIA.IsEnabledPropertyId => !IsReadOnly,
                     UiaCore.UIA.ClassNamePropertyId => Owner.GetType().ToString(),
-                    UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
                     _ => base.GetPropertyValue(propertyID),
                 };
 

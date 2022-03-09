@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using static Interop;
 
@@ -16,11 +14,11 @@ namespace System.Windows.Forms
         /// </summary>
         private class WebBrowserBaseNativeWindow : NativeWindow
         {
-            private readonly WebBrowserBase WebBrowserBase;
+            private readonly WebBrowserBase _webBrowserBase;
 
             public WebBrowserBaseNativeWindow(WebBrowserBase ax)
             {
-                WebBrowserBase = ax;
+                _webBrowserBase = ax;
             }
 
             /// <summary>
@@ -44,11 +42,11 @@ namespace System.Windows.Forms
                 User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParamInternal;
                 wp->x = 0;
                 wp->y = 0;
-                Size s = WebBrowserBase.webBrowserBaseChangingSize;
+                Size s = _webBrowserBase.webBrowserBaseChangingSize;
                 if (s.Width == -1)
                 {   // Invalid value. Use WebBrowserBase.Bounds instead, when this is the case.
-                    wp->cx = WebBrowserBase.Width;
-                    wp->cy = WebBrowserBase.Height;
+                    wp->cx = _webBrowserBase.Width;
+                    wp->cy = _webBrowserBase.Height;
                 }
                 else
                 {

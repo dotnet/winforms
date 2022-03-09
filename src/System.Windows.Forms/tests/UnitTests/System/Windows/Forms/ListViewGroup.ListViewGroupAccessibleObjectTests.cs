@@ -70,6 +70,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, controlType);
 
             Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId));
+            Assert.Equal(AccessibleRole.Grouping, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleRolePropertyId));
             Assert.False(list.IsHandleCreated);
         }
 
@@ -92,6 +93,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(list.DefaultGroup.Header, defaultGroupAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
             Assert.Equal("Group1", groupAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
+            Assert.Equal("Group1", groupAccessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
 
             Assert.Equal("ListViewGroup-0", defaultGroupAccessibleObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId));
             Assert.Equal("ListViewGroup-1", groupAccessibleObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId));
@@ -101,7 +103,10 @@ namespace System.Windows.Forms.Tests
 
             Assert.True((bool)defaultGroupAccessibleObject.GetPropertyValue(UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId));
             Assert.True((bool)groupAccessibleObject.GetPropertyValue(UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId));
-
+            Assert.Equal(AccessibleRole.Grouping, defaultGroupAccessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleRolePropertyId));
+            Assert.Equal(AccessibleRole.Grouping, groupAccessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleRolePropertyId));
+            Assert.Null(groupAccessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+            Assert.Equal(NativeMethods.WinFormFrameworkId, groupAccessibleObject.GetPropertyValue(UiaCore.UIA.FrameworkIdPropertyId));
             Assert.False(list.IsHandleCreated);
         }
 

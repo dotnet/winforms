@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using System.Windows.Forms.Layout;
 
@@ -29,7 +28,7 @@ namespace System.Windows.Forms
             /*OutsetPartial = */ 3
         };
         private TableLayoutPanelCellBorderStyle _borderStyle;
-        private TableLayoutSettingsStub _stub;
+        private TableLayoutSettingsStub? _stub;
 
         // used by TableLayoutSettingsTypeConverter
         internal TableLayoutSettings() : base(null)
@@ -42,7 +41,7 @@ namespace System.Windows.Forms
         private TableLayoutSettings(SerializationInfo serializationInfo, StreamingContext context) : this()
         {
             TypeConverter converter = TypeDescriptor.GetConverter(this);
-            string stringVal = serializationInfo.GetString("SerializedString");
+            string? stringVal = serializationInfo.GetString("SerializedString");
 
             if (!string.IsNullOrEmpty(stringVal))
             {
@@ -214,6 +213,7 @@ namespace System.Windows.Forms
             }
         }
 
+        [MemberNotNullWhen(true, nameof(_stub))]
         internal bool IsStub
         {
             get
@@ -498,7 +498,7 @@ namespace System.Windows.Forms
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
         {
             TypeConverter converter = TypeDescriptor.GetConverter(this);
-            string stringVal = converter.ConvertToInvariantString(this);
+            string? stringVal = converter.ConvertToInvariantString(this);
 
             if (!string.IsNullOrEmpty(stringVal))
             {
@@ -514,7 +514,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                List<ControlInformation> controlsInfo = new List<ControlInformation>(Owner.Children.Count);
+                List<ControlInformation> controlsInfo = new List<ControlInformation>(Owner!.Children.Count);
 
                 foreach (IArrangedElement element in Owner.Children)
                 {
@@ -524,7 +524,7 @@ namespace System.Windows.Forms
 
                         // We need to go through the PropertyDescriptor for the Name property
                         // since it is shadowed.
-                        PropertyDescriptor prop = TypeDescriptor.GetProperties(c)["Name"];
+                        PropertyDescriptor? prop = TypeDescriptor.GetProperties(c)["Name"];
                         if (prop is not null && prop.PropertyType == typeof(string))
                         {
                             controlInfo.Name = prop.GetValue(c);

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Windows.Forms.ComponentModel.Com2Interop;
 
@@ -19,12 +17,13 @@ namespace System.Windows.Forms
         {
             private readonly AxPropertyDescriptor _target;
 
-            public AxEnumConverter(AxPropertyDescriptor target, Com2Enum com2Enum) : base(com2Enum)
+            public AxEnumConverter(AxPropertyDescriptor target, Com2Enum com2Enum)
+                : base(com2Enum)
             {
                 _target = target;
             }
 
-            public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+            public override StandardValuesCollection? GetStandardValues(ITypeDescriptorContext? context)
             {
                 // Make sure the converter has been properly refreshed by calling the Converter property.
                 _ = _target.Converter;

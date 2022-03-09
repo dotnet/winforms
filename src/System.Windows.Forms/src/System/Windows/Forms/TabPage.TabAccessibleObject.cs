@@ -117,11 +117,8 @@ namespace System.Windows.Forms
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TabItemControlTypeId,
                     UiaCore.UIA.AutomationIdPropertyId => _owningTabPage.Name,
-                    UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
-                    UiaCore.UIA.IsPasswordPropertyId => false,
                     UiaCore.UIA.IsEnabledPropertyId => OwningTabControl?.Enabled ?? false,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
-                    UiaCore.UIA.IsInvokePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.InvokePatternId),
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
                         // This is necessary for compatibility with MSAA proxy:
                         // IsKeyboardFocusable = true regardless the control is enabled/disabled.

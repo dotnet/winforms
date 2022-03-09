@@ -116,17 +116,6 @@ namespace System.Windows.Forms.Tests
             Assert.False(list.IsHandleCreated);
         }
 
-        public static IEnumerable<object[]> ListViewItemAccessibleObject_FragmentNavigate_ListGroupWithItems_TestData()
-        {
-            foreach (View view in Enum.GetValues(typeof(View)))
-            {
-                foreach (bool showGroups in new[] { true, false })
-                {
-                    yield return new object[] { view, showGroups };
-                }
-            }
-        }
-
         public static IEnumerable<object[]> ListViewItemAccessibleObject_FragmentNavigate_Parent_TestData()
         {
             foreach (View view in Enum.GetValues(typeof(View)))

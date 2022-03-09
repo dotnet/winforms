@@ -14,15 +14,18 @@ namespace System.Windows.Forms.Tests
         {
             string testAccName = "Test group name";
             using var groupBox = new GroupBox();
+            AccessibleObject groupBoxAccessibleObject = groupBox.AccessibilityObject;
+
+            Assert.Null(groupBoxAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.NamePropertyId));
+            Assert.Null(groupBoxAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.LegacyIAccessibleNamePropertyId));
+
             groupBox.Text = "Some test groupBox text";
             groupBox.Name = "Group1";
             groupBox.AccessibleName = testAccName;
-            AccessibleObject groupBoxAccessibleObject = groupBox.AccessibilityObject;
 
+            Assert.Equal(testAccName, groupBoxAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.NamePropertyId));
+            Assert.Equal(testAccName, groupBoxAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.LegacyIAccessibleNamePropertyId));
             Assert.False(groupBox.IsHandleCreated);
-
-            var accessibleName = groupBoxAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.NamePropertyId);
-            Assert.Equal(testAccName, accessibleName);
         }
 
         [WinFormsFact]

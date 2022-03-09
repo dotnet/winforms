@@ -396,7 +396,7 @@ namespace System.Windows.Forms
 
             public void NotifyClients(AccessibleEvents accEvent)
             {
-                if (HandleInternal == IntPtr.Zero)
+                if (HandleInternal == IntPtr.Zero || !CanNotifyClients)
                 {
                     return;
                 }
@@ -409,7 +409,7 @@ namespace System.Windows.Forms
 
             public void NotifyClients(AccessibleEvents accEvent, int childID)
             {
-                if (HandleInternal == IntPtr.Zero)
+                if (HandleInternal == IntPtr.Zero || !CanNotifyClients)
                 {
                     return;
                 }
@@ -422,7 +422,7 @@ namespace System.Windows.Forms
 
             public void NotifyClients(AccessibleEvents accEvent, int objectID, int childID)
             {
-                if (HandleInternal == IntPtr.Zero)
+                if (HandleInternal == IntPtr.Zero || !CanNotifyClients)
                 {
                     return;
                 }
@@ -484,10 +484,6 @@ namespace System.Windows.Forms
                     {
                         case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                             return Owner.CanSelect;
-                        case UiaCore.UIA.IsPasswordPropertyId:
-                            return false;
-                        case UiaCore.UIA.AccessKeyPropertyId:
-                            return KeyboardShortcut;
                     }
                 }
 
