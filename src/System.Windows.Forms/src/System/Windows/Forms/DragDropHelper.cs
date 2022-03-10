@@ -17,7 +17,37 @@ namespace System.Windows.Forms
 {
     internal static class DragDropHelper
     {
+        private const int DSH_ALLOWDROPDESCRIPTIONTEXT = 0x0001;
         private const string CF_DROPDESCRIPTION = "DropDescription";
+        private const string CF_DRAGIMAGEBITS = "DragImageBits";
+
+        /// <summary>
+        ///  Creates an in-process server drag-image manager object and returns an interface pointer
+        ///  to IDragSourceHelper2. Exposes methods that allow the application to specify the image
+        ///  that will be displayed during a Shell drag-and-drop operation.
+        /// </summary>
+        private static bool TryGetDragSourceHelper([NotNullWhen(true)] out IDragSourceHelper2? dragSourceHelper)
+        {
+            try
+            {
+                Ole32.CoCreateInstance(
+                    ref CLSID.DragDropHelper,
+                    IntPtr.Zero,
+                    Ole32.CLSCTX.INPROC_SERVER,
+                    ref NativeMethods.ActiveX.IID_IUnknown,
+                    out object obj).ThrowIfFailed();
+
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "TryGetDragSourceHelper IDragSourceHelper2 created");
+                dragSourceHelper = (IDragSourceHelper2)obj;
+                return true;
+            }
+            catch (COMException comEx)
+            {
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"TryGetDragSourceHelper COMException {comEx}");
+                dragSourceHelper = null;
+                return false;
+            }
+        }
 
         /// <summary>
         ///  Creates an in-process server drag-image manager object and returns an interface pointer
@@ -159,9 +189,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines whether a drop description is present in a data object.
+        ///  Determines whether a drop description format is present in a data object.
         /// </summary>
-        public static bool GetDropDescriptionPresent(IComDataObject? dataObject)
+        /// <returns><see langword="true"/> if a drop description format is present in <paramref name="dataObject"/>; otherwise <see langword="false"/>.</returns>
+        private static bool GetDropDescriptionPresent(IComDataObject dataObject)
         {
             if (dataObject is null)
             {
@@ -192,6 +223,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the drop description from a data object.
         /// </summary>
+        /// <returns><see langword="true"/> if the drop description was successfully obtained from <paramref name="dataObject"/>; otherwise <see langword="false"/>.</returns>
         public static unsafe bool GetDropDescription(IComDataObject dataObject, out DropIconType dropIcon, out string message, out string insert)
         {
             dropIcon = DropIconType.Default;
@@ -207,6 +239,12 @@ namespace System.Windows.Forms
 
             try
             {
+                // Check if the data object contains a drop description format.
+                if (!GetDropDescriptionPresent(dataObject))
+                {
+                    return false;
+                }
+
                 // Create the drop description clipboard format.
                 FORMATETC formatEtc = new()
                 {
@@ -216,12 +254,6 @@ namespace System.Windows.Forms
                     ptd = IntPtr.Zero,
                     tymed = TYMED.TYMED_HGLOBAL
                 };
-
-                // Check if the data object contains a drop description format.
-                if (!GetDropDescriptionPresent(dataObject))
-                {
-                    return false;
-                }
 
                 // Create the storage medium used for data transfer.
                 medium = new();
@@ -241,8 +273,8 @@ namespace System.Windows.Forms
 
                 // Check if we have a valid drop description.
                 if (pDropDescription->Message.IsEmpty
-                    || pDropDescription->Type is < DROPIMAGETYPE.DROPIMAGE_INVALID
-                    || pDropDescription->Type is > DROPIMAGETYPE.DROPIMAGE_NOIMAGE)
+                    || pDropDescription->Type < DROPIMAGETYPE.DROPIMAGE_INVALID
+                    || pDropDescription->Type > DROPIMAGETYPE.DROPIMAGE_NOIMAGE)
                 {
                     return false;
                 }
@@ -272,10 +304,13 @@ namespace System.Windows.Forms
         public static unsafe void SetDropDescription(IComDataObject dataObject, DropIconType dropIcon, string message, string insert)
         {
             if (dataObject is null
-                || (dropIcon is < DropIconType.Default or > DropIconType.NoDropIcon)
+                || dropIcon < DropIconType.Default
+                || dropIcon > DropIconType.NoDropIcon
                 || (message is not null && message.Length >= Kernel32.MAX_PATH)
                 || (insert is not null && insert.Length >= Kernel32.MAX_PATH))
+            {
                 return;
+            }
 
             STGMEDIUM medium = default;
 
@@ -333,6 +368,77 @@ namespace System.Windows.Forms
                 Kernel32.GlobalFree(medium.unionmember);
                 medium.unionmember = IntPtr.Zero;
             }
+        }
+
+        /// <summary>
+        /// Determines whether a drag image format is present in a data object.
+        /// </summary>
+        /// <param name="dataObject"></param>
+        /// <returns><see langword="true"/> if a drag image format is present in <paramref name="dataObject"/>; otherwise <see langword="false"/>.</returns>
+        public static bool GetDragImagePresent(IComDataObject dataObject)
+        {
+            if (dataObject is null)
+            {
+                return false;
+            }
+
+            try
+            {
+                // Create the drag image clipboard format.
+                FORMATETC formatEtc = new()
+                {
+                    cfFormat = (short)RegisterClipboardFormatW(CF_DRAGIMAGEBITS),
+                    dwAspect = DVASPECT.DVASPECT_CONTENT,
+                    lindex = -1,
+                    ptd = IntPtr.Zero,
+                    tymed = TYMED.TYMED_HGLOBAL
+                };
+
+                // Check if the data object contains a drag image.
+                return dataObject.QueryGetData(ref formatEtc) == (int)HRESULT.S_OK;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Sets the drag image into a data object.
+        /// </summary>
+        public static HRESULT SetDragImage(IComDataObject dataObject, Bitmap dragImage)
+        {
+            if (dataObject is null
+                || dragImage is null
+                || !TryGetDragSourceHelper(out IDragSourceHelper2? dragSourceHelper))
+            {
+                return HRESULT.S_FALSE;
+            }
+
+            try
+            {
+                SHDRAGIMAGE shDragImage = new()
+                {
+                    hbmpDragImage = dragImage.GetHBITMAP(),
+                    sizeDragImage = dragImage.Size,
+                    ptOffset = new Point(0, 0),
+                    crColorKey = GetSysColor(COLOR.WINDOW)
+                };
+
+                dragSourceHelper.SetFlags(DSH_ALLOWDROPDESCRIPTIONTEXT).ThrowIfFailed();
+                dragSourceHelper.InitializeFromBitmap(shDragImage, dataObject).ThrowIfFailed();
+            }
+            catch (COMException comEx)
+            {
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropHelper SetDragImage COM error {comEx}");
+                return HRESULT.S_FALSE;
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(dragSourceHelper);
+            }
+
+            return HRESULT.S_OK;
         }
     }
 }
