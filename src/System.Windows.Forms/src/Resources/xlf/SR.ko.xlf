@@ -7696,11 +7696,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">SizeMode 속성 값이 PictureBox에서 변경되면 이벤트가 발생합니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PictureBoxRemoteLocationNotSupported">
-        <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
         <source>Controls how the PictureBox will handle image placement and control sizing.</source>
         <target state="translated">PictureBox에서 이미지 배치와 컨트롤 크기 조정을 처리하는 방법을 제어합니다.</target>

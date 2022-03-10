@@ -7696,11 +7696,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Événement déclenché lorsque la valeur de la propriété SizeMode du PictureBox est modifiée.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PictureBoxRemoteLocationNotSupported">
-        <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
         <source>Controls how the PictureBox will handle image placement and control sizing.</source>
         <target state="translated">Contrôle la façon dont le PictureBox gère le placement de l'image et le dimensionnement du contrôle.</target>

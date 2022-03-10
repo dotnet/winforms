@@ -7696,11 +7696,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Evento que se desencadena cuando se cambia el valor de la propiedad SizeMode de PictureBox.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PictureBoxRemoteLocationNotSupported">
-        <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
         <source>Controls how the PictureBox will handle image placement and control sizing.</source>
         <target state="translated">Controla cómo tratará PictureBox la ubicación de las imágenes y el tamaño del control.</target>

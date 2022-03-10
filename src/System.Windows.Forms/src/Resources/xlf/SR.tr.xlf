@@ -7696,11 +7696,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">PictureBox'da SizeMode özelliğinin değeri değiştiğinde harekete geçirilen olay.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PictureBoxRemoteLocationNotSupported">
-        <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
         <source>Controls how the PictureBox will handle image placement and control sizing.</source>
         <target state="translated">PictureBox'ın resim yerleşimini ve denetim boyutlandırmayı nasıl işleyeceğini denetler.</target>

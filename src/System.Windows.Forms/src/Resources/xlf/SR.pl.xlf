@@ -7696,11 +7696,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Zdarzenie wywoływane, gdy wartość właściwości SizeMode zostanie zmieniona w elemencie PictureBox.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PictureBoxRemoteLocationNotSupported">
-        <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
         <source>Controls how the PictureBox will handle image placement and control sizing.</source>
         <target state="translated">Określa, w jaki sposób element PictureBox będzie obsługiwać umieszczanie obrazu i zmianę rozmiaru formantu.</target>

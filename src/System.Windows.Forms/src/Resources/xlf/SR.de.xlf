@@ -7696,11 +7696,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Das ausgelöste Ereignis, wenn der Wert der SizeMode-Eigenschaft für PictureBox geändert wird.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PictureBoxRemoteLocationNotSupported">
-        <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
         <source>Controls how the PictureBox will handle image placement and control sizing.</source>
         <target state="translated">Steuert, wie die PictureBox die Bildplatzierung und die Größenanpassung für das Steuerelement behandelt.</target>

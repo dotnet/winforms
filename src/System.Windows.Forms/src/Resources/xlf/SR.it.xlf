@@ -7696,11 +7696,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Evento generato quando il valore della proprietà SizeMode di PictureBox viene modificato.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PictureBoxRemoteLocationNotSupported">
-        <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
         <source>Controls how the PictureBox will handle image placement and control sizing.</source>
         <target state="translated">Determina in che modo il controllo PictureBox gestirà la posizione e il dimensionamento dell'immagine.</target>

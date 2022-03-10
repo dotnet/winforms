@@ -7696,11 +7696,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">在 PictureBox 的 SizeMode 属性值更改时引发的事件。</target>
         <note />
       </trans-unit>
-      <trans-unit id="PictureBoxRemoteLocationNotSupported">
-        <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
         <source>Controls how the PictureBox will handle image placement and control sizing.</source>
         <target state="translated">控制 PictureBox 将如何处理图像位置和控件大小。</target>
