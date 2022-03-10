@@ -4531,6 +4531,9 @@ Stack trace where the illegal operation occurred was:
   <data name="PictureBoxWaitOnLoadDescr" xml:space="preserve">
     <value>Controls whether processing will stop until the image is loaded.</value>
   </data>
+  <data name="PictureBoxRemoteLocationNotSupported" xml:space="preserve">
+    <value>Loading from remote location not supported.</value>
+  </data>
   <data name="PopupControlBadParentArgument" xml:space="preserve">
     <value>Cannot set the ParentPopup to be yourself.</value>
   </data>
