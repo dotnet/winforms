@@ -14,9 +14,4 @@
     <ProjectReference Include="..\..\..\src\System.Windows.Forms.csproj" />
   </ItemGroup>
 
-  <PropertyGroup>
-    <!-- workaround for https://github.com/dotnet/sdk/pull/19764 -->
-    <EnableDynamicLoading>true</EnableDynamicLoading>
-  </PropertyGroup>
-
 </Project>
