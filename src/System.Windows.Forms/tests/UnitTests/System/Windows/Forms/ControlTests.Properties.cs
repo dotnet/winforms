@@ -58,7 +58,9 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> AccessibilityObject_CustomCreateAccessibilityInstance_TestData()
         {
             yield return new object[] { null, null };
-            yield return new object[] { new AccessibleObject(), null };
+
+            var accessibleObject = new AccessibleObject();
+            yield return new object[] { accessibleObject, accessibleObject };
 
             var controlAccessibleObject = new Control.ControlAccessibleObject(new Control());
             yield return new object[] { controlAccessibleObject, controlAccessibleObject };

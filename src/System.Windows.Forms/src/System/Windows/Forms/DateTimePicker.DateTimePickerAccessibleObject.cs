@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 using static Interop.ComCtl32;
 using static Interop.User32;
@@ -18,14 +16,14 @@ namespace System.Windows.Forms
             {
             }
 
-            public override string KeyboardShortcut
+            public override string? KeyboardShortcut
             {
                 get
                 {
                     // APP COMPAT. When computing DateTimePickerAccessibleObject::get_KeyboardShortcut the previous label
                     // takes precedence over DTP::Text.
                     // This code was copied from the Everett sources.
-                    Label previousLabel = PreviousLabel;
+                    Label? previousLabel = PreviousLabel;
 
                     if (previousLabel is not null)
                     {
@@ -36,7 +34,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    string baseShortcut = base.KeyboardShortcut;
+                    string? baseShortcut = base.KeyboardShortcut;
 
                     if ((baseShortcut is null || baseShortcut.Length == 0))
                     {
@@ -59,7 +57,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    string baseValue = base.Value;
+                    string? baseValue = base.Value;
                     if (baseValue is null || baseValue.Length == 0)
                     {
                         return Owner.Text;
@@ -101,7 +99,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
                     UiaCore.UIA.LocalizedControlTypePropertyId =>

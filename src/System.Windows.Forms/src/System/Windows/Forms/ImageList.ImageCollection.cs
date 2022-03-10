@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -65,7 +63,7 @@ namespace System.Windows.Forms
 
             internal void ResetKeys()
             {
-                _imageInfoCollection?.Clear();
+                _imageInfoCollection.Clear();
 
                 for (int i = 0; i < Count; i++)
                 {
@@ -93,6 +91,11 @@ namespace System.Windows.Forms
                     }
                     else
                     {
+                        if (_owner._originals is null)
+                        {
+                            return 0;
+                        }
+
                         int count = 0;
                         foreach (Original original in _owner._originals)
                         {
@@ -142,7 +145,7 @@ namespace System.Windows.Forms
 
                     ArgumentNullException.ThrowIfNull(value);
 
-                    if (!(value is Bitmap bitmap))
+                    if (value is not Bitmap bitmap)
                     {
                         throw new ArgumentException(SR.ImageListBitmap);
                     }
@@ -188,12 +191,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            object IList.this[int index]
+            object? IList.this[int index]
             {
                 get => this[index];
                 set
                 {
-                    if (!(value is Image image))
+                    if (value is not Image image)
                     {
                         throw new ArgumentException(SR.ImageListBadImage, nameof(value));
                     }
@@ -205,7 +208,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the child control with the specified key.
             /// </summary>
-            public Image this[string key]
+            public Image? this[string key]
             {
                 get
                 {
@@ -262,7 +265,7 @@ namespace System.Windows.Forms
                 Add(original, imageInfo);
             }
 
-            int IList.Add(object value)
+            int IList.Add(object? value)
             {
                 if (!(value is Image image))
                 {
@@ -305,7 +308,7 @@ namespace System.Windows.Forms
                 return Add(original, null);
             }
 
-            private int Add(Original original, ImageInfo imageInfo)
+            private int Add(Original original, ImageInfo? imageInfo)
             {
                 ArgumentNullException.ThrowIfNull(original);
                 ArgumentNullException.ThrowIfNull(original._image, nameof(original));
@@ -439,7 +442,7 @@ namespace System.Windows.Forms
             [EditorBrowsable(EditorBrowsableState.Never)]
             public bool Contains(Image image) => throw new NotSupportedException();
 
-            bool IList.Contains(object value)
+            bool IList.Contains(object? value)
             {
                 if (!(value is Image image))
                 {
@@ -457,9 +460,9 @@ namespace System.Windows.Forms
             [EditorBrowsable(EditorBrowsableState.Never)]
             public int IndexOf(Image image) => throw new NotSupportedException();
 
-            int IList.IndexOf(object value)
+            int IList.IndexOf(object? value)
             {
-                if (!(value is Image image))
+                if (value is not Image image)
                 {
                     return -1;
                 }
@@ -505,7 +508,7 @@ namespace System.Windows.Forms
                 return -1;
             }
 
-            void IList.Insert(int index, object value) => throw new NotSupportedException();
+            void IList.Insert(int index, object? value) => throw new NotSupportedException();
 
             /// <summary>
             ///  Determines if the index is valid for the collection.
@@ -538,7 +541,7 @@ namespace System.Windows.Forms
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void Remove(Image image) => throw new NotSupportedException();
 
-            void IList.Remove(object value)
+            void IList.Remove(object? value)
             {
                 if (value is Image image)
                 {

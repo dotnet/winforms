@@ -4596,7 +4596,7 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
       </trans-unit>
       <trans-unit id="EditDefaultAccessibleName">
         <source>Spinner</source>
-        <target state="new">Spinner</target>
+        <target state="translated">Değer Değiştirici</target>
         <note />
       </trans-unit>
       <trans-unit id="ErrorBadInputLanguage">
@@ -5909,11 +5909,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">Anahtar birleşimi geçerli değil.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">Anahtar adı geçerli değil.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">

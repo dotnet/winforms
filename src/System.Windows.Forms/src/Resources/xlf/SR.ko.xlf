@@ -4596,7 +4596,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="EditDefaultAccessibleName">
         <source>Spinner</source>
-        <target state="new">Spinner</target>
+        <target state="translated">회전자</target>
         <note />
       </trans-unit>
       <trans-unit id="ErrorBadInputLanguage">
@@ -5909,11 +5909,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">키 조합이 잘못되었습니다.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">키 이름이 잘못되었습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">

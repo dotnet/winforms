@@ -166,17 +166,14 @@ namespace System.Windows.Forms
                 return LVGS.FOCUSED == (LVGS)User32.SendMessageW(_owningListView, (User32.WM)LVM.GETGROUPSTATE, nativeGroupId, (nint)LVGS.FOCUSED);
             }
 
-            private unsafe int GetNativeGroupId()
+            private int GetNativeGroupId()
             {
-                LVGROUPW lvgroup = new LVGROUPW
+                if (User32.SendMessageW(_owningListView, (User32.WM)LVM.HASGROUP, _owningGroup.ID) == 0)
                 {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.GROUPID,
-                };
+                    return -1;
+                }
 
-                return User32.SendMessageW(_owningListView, (User32.WM)LVM.GETGROUPINFOBYINDEX, CurrentIndex, ref lvgroup) == 0
-                    ? -1
-                    : lvgroup.iGroupId;
+                return _owningGroup.ID;
             }
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)

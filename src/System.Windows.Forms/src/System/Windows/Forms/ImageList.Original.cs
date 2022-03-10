@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 
@@ -33,7 +31,7 @@ namespace System.Windows.Forms
 
             internal Original(object image, OriginalOptions options, Color customTransparentColor)
             {
-                if (!(image is Icon) && !(image is Image))
+                if (image is not Icon && image is not Image)
                 {
                     throw new InvalidOperationException(SR.ImageListEntryType);
                 }

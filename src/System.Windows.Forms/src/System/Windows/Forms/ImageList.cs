@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
@@ -37,20 +36,20 @@ namespace System.Windows.Forms
         private static int s_maxImageHeight = MaxDimension;
         private static bool s_isScalingInitialized;
 
-        private NativeImageList _nativeImageList;
+        private NativeImageList? _nativeImageList;
 
         private ColorDepth _colorDepth = ColorDepth.Depth8Bit;
         private Size _imageSize = s_defaultImageSize;
 
-        private ImageCollection _imageCollection;
+        private ImageCollection? _imageCollection;
 
         // The usual handle virtualization problem, with a new twist: image
         // lists are lossy. At runtime, we delay handle creation as long as possible, and store
         // away the original images until handle creation (and hope no one disposes of the images!). At design time, we keep the originals around indefinitely.
         // This variable will become null when the original images are lost.
-        private List<Original> _originals = new List<Original>();
-        private EventHandler _recreateHandler;
-        private EventHandler _changeHandler;
+        private List<Original>? _originals = new List<Original>();
+        private EventHandler? _recreateHandler;
+        private EventHandler? _changeHandler;
 
         /// <summary>
         ///  Creates a new ImageList Control with a default image size of 16x16
@@ -135,6 +134,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ImageListHandleCreatedDescr))]
+        [MemberNotNullWhen(true, nameof(_nativeImageList))]
         public bool HandleCreated => _nativeImageList is not null;
 
         [SRCategory(nameof(SR.CatAppearance))]
@@ -190,7 +190,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DefaultValue(null)]
         [SRDescription(nameof(SR.ImageListImageStreamDescr))]
-        public ImageListStreamer ImageStream
+        public ImageListStreamer? ImageStream
         {
             get
             {
@@ -259,7 +259,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         /// <summary>
         ///  The color to treat as transparent.
@@ -273,13 +273,13 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SRDescription(nameof(SR.ImageListOnRecreateHandleDescr))]
-        public event EventHandler RecreateHandle
+        public event EventHandler? RecreateHandle
         {
             add => _recreateHandler += value;
             remove => _recreateHandler -= value;
         }
 
-        internal event EventHandler ChangeHandle
+        internal event EventHandler? ChangeHandle
         {
             add => _changeHandler += value;
             remove => _changeHandler -= value;
@@ -414,6 +414,7 @@ namespace System.Windows.Forms
         ///  appropriate values with it. Inheriting classes overriding this method
         ///  should not forget to call base.createHandle();
         /// </summary>
+        [MemberNotNull(nameof(_nativeImageList))]
         private void CreateHandle()
         {
             Debug.Assert(_nativeImageList is null, "Handle already created, this may be a source of temporary GDI leaks");
@@ -645,7 +646,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            Bitmap result = null;
+            Bitmap? result = null;
 
             // if the imagelist is 32bpp, if the image slot at index
             // has valid alpha information (not all zero... which is cause by windows just painting RGB values
@@ -659,9 +660,9 @@ namespace System.Windows.Forms
                 var imageInfo = new ComCtl32.IMAGEINFO();
                 if (ComCtl32.ImageList.GetImageInfo(new HandleRef(this, Handle), index, ref imageInfo).IsTrue())
                 {
-                    Bitmap tmpBitmap = null;
-                    BitmapData bmpData = null;
-                    BitmapData targetData = null;
+                    Bitmap? tmpBitmap = null;
+                    BitmapData? bmpData = null;
+                    BitmapData? targetData = null;
                     try
                     {
                         tmpBitmap = Bitmap.FromHbitmap((IntPtr)imageInfo.hbmImage);

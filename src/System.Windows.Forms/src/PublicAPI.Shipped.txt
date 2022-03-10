@@ -384,8 +384,8 @@ override System.Windows.Forms.CursorConverter.GetStandardValuesSupported(System.
 ~override System.Windows.Forms.DateTimePicker.BackgroundImage.set -> void
 ~override System.Windows.Forms.DateTimePicker.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DateTimePicker.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.KeyboardShortcut.get -> string
-~override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.Value.get -> string
+override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.KeyboardShortcut.get -> string?
+override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.Value.get -> string!
 ~override System.Windows.Forms.DateTimePicker.OnEnabledChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DateTimePicker.OnFontChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DateTimePicker.OnHandleCreated(System.EventArgs e) -> void
@@ -413,8 +413,8 @@ override System.Windows.Forms.FileDialog.ToString() -> string!
 ~override System.Windows.Forms.FlowLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
 override System.Windows.Forms.FlowLayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
 ~override System.Windows.Forms.FontDialog.ToString() -> string
-~override System.Windows.Forms.Form.ControlCollection.Add(System.Windows.Forms.Control value) -> void
-~override System.Windows.Forms.Form.ControlCollection.Remove(System.Windows.Forms.Control value) -> void
+override System.Windows.Forms.Form.ControlCollection.Add(System.Windows.Forms.Control? value) -> void
+override System.Windows.Forms.Form.ControlCollection.Remove(System.Windows.Forms.Control? value) -> void
 ~override System.Windows.Forms.Form.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.Form.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
 ~override System.Windows.Forms.Form.CreateParams.get -> System.Windows.Forms.CreateParams
@@ -451,14 +451,14 @@ override System.Windows.Forms.ImageKeyConverter.ConvertTo(System.ComponentModel.
 override System.Windows.Forms.ImageKeyConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext? context) -> System.ComponentModel.TypeConverter.StandardValuesCollection!
 override System.Windows.Forms.ImageKeyConverter.GetStandardValuesExclusive(System.ComponentModel.ITypeDescriptorContext? context) -> bool
 override System.Windows.Forms.ImageKeyConverter.GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
-~override System.Windows.Forms.ImageList.ToString() -> string
-~override System.Windows.Forms.KeysConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-~override System.Windows.Forms.KeysConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Windows.Forms.KeysConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Windows.Forms.KeysConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Windows.Forms.KeysConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext context) -> System.ComponentModel.TypeConverter.StandardValuesCollection
-~override System.Windows.Forms.KeysConverter.GetStandardValuesExclusive(System.ComponentModel.ITypeDescriptorContext context) -> bool
-~override System.Windows.Forms.KeysConverter.GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.Windows.Forms.ImageList.ToString() -> string!
+override System.Windows.Forms.KeysConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
+override System.Windows.Forms.KeysConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Windows.Forms.KeysConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
+override System.Windows.Forms.KeysConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
+override System.Windows.Forms.KeysConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext? context) -> System.ComponentModel.TypeConverter.StandardValuesCollection!
+override System.Windows.Forms.KeysConverter.GetStandardValuesExclusive(System.ComponentModel.ITypeDescriptorContext? context) -> bool
+override System.Windows.Forms.KeysConverter.GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
 override System.Windows.Forms.Label.BackgroundImage.get -> System.Drawing.Image?
 override System.Windows.Forms.Label.BackgroundImage.set -> void
 override System.Windows.Forms.Label.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
@@ -618,15 +618,15 @@ override System.Windows.Forms.Panel.ToString() -> string!
 ~override System.Windows.Forms.PictureBox.Text.get -> string
 ~override System.Windows.Forms.PictureBox.Text.set -> void
 ~override System.Windows.Forms.PictureBox.ToString() -> string
-~override System.Windows.Forms.PrintControllerWithStatusDialog.OnEndPage(System.Drawing.Printing.PrintDocument document, System.Drawing.Printing.PrintPageEventArgs e) -> void
-~override System.Windows.Forms.PrintControllerWithStatusDialog.OnEndPrint(System.Drawing.Printing.PrintDocument document, System.Drawing.Printing.PrintEventArgs e) -> void
-~override System.Windows.Forms.PrintControllerWithStatusDialog.OnStartPage(System.Drawing.Printing.PrintDocument document, System.Drawing.Printing.PrintPageEventArgs e) -> System.Drawing.Graphics
-~override System.Windows.Forms.PrintControllerWithStatusDialog.OnStartPrint(System.Drawing.Printing.PrintDocument document, System.Drawing.Printing.PrintEventArgs e) -> void
-~override System.Windows.Forms.PrintPreviewControl.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.PrintPreviewControl.OnPaint(System.Windows.Forms.PaintEventArgs pevent) -> void
-~override System.Windows.Forms.PrintPreviewControl.OnResize(System.EventArgs eventargs) -> void
-~override System.Windows.Forms.PrintPreviewControl.Text.get -> string
-~override System.Windows.Forms.PrintPreviewControl.Text.set -> void
+override System.Windows.Forms.PrintControllerWithStatusDialog.OnEndPage(System.Drawing.Printing.PrintDocument! document, System.Drawing.Printing.PrintPageEventArgs! e) -> void
+override System.Windows.Forms.PrintControllerWithStatusDialog.OnEndPrint(System.Drawing.Printing.PrintDocument! document, System.Drawing.Printing.PrintEventArgs! e) -> void
+override System.Windows.Forms.PrintControllerWithStatusDialog.OnStartPage(System.Drawing.Printing.PrintDocument! document, System.Drawing.Printing.PrintPageEventArgs! e) -> System.Drawing.Graphics?
+override System.Windows.Forms.PrintControllerWithStatusDialog.OnStartPrint(System.Drawing.Printing.PrintDocument! document, System.Drawing.Printing.PrintEventArgs! e) -> void
+override System.Windows.Forms.PrintPreviewControl.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.PrintPreviewControl.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
+override System.Windows.Forms.PrintPreviewControl.OnResize(System.EventArgs! eventargs) -> void
+override System.Windows.Forms.PrintPreviewControl.Text.get -> string!
+override System.Windows.Forms.PrintPreviewControl.Text.set -> void
 ~override System.Windows.Forms.PrintPreviewDialog.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.PrintPreviewDialog.BackgroundImage.set -> void
 ~override System.Windows.Forms.PrintPreviewDialog.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
@@ -988,19 +988,19 @@ override System.Windows.Forms.ToolStripSystemRenderer.OnRenderToolStripStatusLab
 ~override System.Windows.Forms.ToolStripTextBox.OnSubscribeControlEvents(System.Windows.Forms.Control control) -> void
 ~override System.Windows.Forms.ToolStripTextBox.OnUnsubscribeControlEvents(System.Windows.Forms.Control control) -> void
 ~override System.Windows.Forms.ToolTip.ToString() -> string
-~override System.Windows.Forms.TrackBar.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.TrackBar.BackgroundImage.set -> void
-~override System.Windows.Forms.TrackBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.TrackBar.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.TrackBar.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.TrackBar.Font.set -> void
-~override System.Windows.Forms.TrackBar.OnBackColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.TrackBar.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.TrackBar.OnMouseWheel(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.TrackBar.OnSystemColorsChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.TrackBar.Text.get -> string
-~override System.Windows.Forms.TrackBar.Text.set -> void
-~override System.Windows.Forms.TrackBar.ToString() -> string
+override System.Windows.Forms.TrackBar.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.TrackBar.BackgroundImage.set -> void
+override System.Windows.Forms.TrackBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.TrackBar.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.TrackBar.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.TrackBar.Font.set -> void
+override System.Windows.Forms.TrackBar.OnBackColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.TrackBar.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.TrackBar.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.TrackBar.OnSystemColorsChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.TrackBar.Text.get -> string!
+override System.Windows.Forms.TrackBar.Text.set -> void
+override System.Windows.Forms.TrackBar.ToString() -> string!
 ~override System.Windows.Forms.TreeNode.ToString() -> string
 ~override System.Windows.Forms.TreeView.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.TreeView.BackgroundImage.set -> void
@@ -1062,27 +1062,27 @@ override System.Windows.Forms.ToolStripSystemRenderer.OnRenderToolStripStatusLab
 ~static readonly System.Resources.ResXResourceWriter.ResourceSchema -> string
 ~static readonly System.Resources.ResXResourceWriter.SoapSerializedObjectMimeType -> string
 ~static readonly System.Resources.ResXResourceWriter.Version -> string
-~static readonly System.Windows.Forms.DataFormats.Bitmap -> string
-~static readonly System.Windows.Forms.DataFormats.CommaSeparatedValue -> string
-~static readonly System.Windows.Forms.DataFormats.Dib -> string
-~static readonly System.Windows.Forms.DataFormats.Dif -> string
-~static readonly System.Windows.Forms.DataFormats.EnhancedMetafile -> string
-~static readonly System.Windows.Forms.DataFormats.FileDrop -> string
-~static readonly System.Windows.Forms.DataFormats.Html -> string
-~static readonly System.Windows.Forms.DataFormats.Locale -> string
-~static readonly System.Windows.Forms.DataFormats.MetafilePict -> string
-~static readonly System.Windows.Forms.DataFormats.OemText -> string
-~static readonly System.Windows.Forms.DataFormats.Palette -> string
-~static readonly System.Windows.Forms.DataFormats.PenData -> string
-~static readonly System.Windows.Forms.DataFormats.Riff -> string
-~static readonly System.Windows.Forms.DataFormats.Rtf -> string
-~static readonly System.Windows.Forms.DataFormats.Serializable -> string
-~static readonly System.Windows.Forms.DataFormats.StringFormat -> string
-~static readonly System.Windows.Forms.DataFormats.SymbolicLink -> string
-~static readonly System.Windows.Forms.DataFormats.Text -> string
-~static readonly System.Windows.Forms.DataFormats.Tiff -> string
-~static readonly System.Windows.Forms.DataFormats.UnicodeText -> string
-~static readonly System.Windows.Forms.DataFormats.WaveAudio -> string
+static readonly System.Windows.Forms.DataFormats.Bitmap -> string!
+static readonly System.Windows.Forms.DataFormats.CommaSeparatedValue -> string!
+static readonly System.Windows.Forms.DataFormats.Dib -> string!
+static readonly System.Windows.Forms.DataFormats.Dif -> string!
+static readonly System.Windows.Forms.DataFormats.EnhancedMetafile -> string!
+static readonly System.Windows.Forms.DataFormats.FileDrop -> string!
+static readonly System.Windows.Forms.DataFormats.Html -> string!
+static readonly System.Windows.Forms.DataFormats.Locale -> string!
+static readonly System.Windows.Forms.DataFormats.MetafilePict -> string!
+static readonly System.Windows.Forms.DataFormats.OemText -> string!
+static readonly System.Windows.Forms.DataFormats.Palette -> string!
+static readonly System.Windows.Forms.DataFormats.PenData -> string!
+static readonly System.Windows.Forms.DataFormats.Riff -> string!
+static readonly System.Windows.Forms.DataFormats.Rtf -> string!
+static readonly System.Windows.Forms.DataFormats.Serializable -> string!
+static readonly System.Windows.Forms.DataFormats.StringFormat -> string!
+static readonly System.Windows.Forms.DataFormats.SymbolicLink -> string!
+static readonly System.Windows.Forms.DataFormats.Text -> string!
+static readonly System.Windows.Forms.DataFormats.Tiff -> string!
+static readonly System.Windows.Forms.DataFormats.UnicodeText -> string!
+static readonly System.Windows.Forms.DataFormats.WaveAudio -> string!
 ~static readonly System.Windows.Forms.DataGridView.HitTestInfo.Nowhere -> System.Windows.Forms.DataGridView.HitTestInfo
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Default -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.No -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
@@ -1132,8 +1132,8 @@ override System.Windows.Forms.ToolStripSystemRenderer.OnRenderToolStripStatusLab
 ~static System.Windows.Forms.Control.FromChildHandle(System.IntPtr handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.Control.FromHandle(System.IntPtr handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.Control.IsMnemonic(char charCode, string text) -> bool
-~static System.Windows.Forms.DataFormats.GetFormat(int id) -> System.Windows.Forms.DataFormats.Format
-~static System.Windows.Forms.DataFormats.GetFormat(string format) -> System.Windows.Forms.DataFormats.Format
+static System.Windows.Forms.DataFormats.GetFormat(int id) -> System.Windows.Forms.DataFormats.Format!
+static System.Windows.Forms.DataFormats.GetFormat(string! format) -> System.Windows.Forms.DataFormats.Format!
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags) -> int
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags, out bool widthTruncated) -> int
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
@@ -1495,8 +1495,8 @@ System.Windows.Forms.ColorDialog.CustomColors.set -> void
 ~System.Windows.Forms.ControlBindingsCollection.Remove(System.Windows.Forms.Binding binding) -> void
 ~System.Windows.Forms.ControlBindingsCollection.this[string propertyName].get -> System.Windows.Forms.Binding
 ~System.Windows.Forms.CurrencyManager.List.get -> System.Collections.IList
-~System.Windows.Forms.DataFormats.Format.Format(string name, int id) -> void
-~System.Windows.Forms.DataFormats.Format.Name.get -> string
+System.Windows.Forms.DataFormats.Format.Format(string! name, int id) -> void
+System.Windows.Forms.DataFormats.Format.Name.get -> string!
 ~System.Windows.Forms.DataGridView.AdvancedCellBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 ~System.Windows.Forms.DataGridView.AdvancedColumnHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 ~System.Windows.Forms.DataGridView.AdvancedRowHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
@@ -1702,7 +1702,7 @@ System.Windows.Forms.DataObject.DataObject(string! format, object! data) -> void
 ~System.Windows.Forms.DateTimePicker.CalendarFont.set -> void
 ~System.Windows.Forms.DateTimePicker.CustomFormat.get -> string
 ~System.Windows.Forms.DateTimePicker.CustomFormat.set -> void
-~System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DateTimePickerAccessibleObject(System.Windows.Forms.DateTimePicker owner) -> void
+System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DateTimePickerAccessibleObject(System.Windows.Forms.DateTimePicker! owner) -> void
 ~System.Windows.Forms.Design.ComponentEditorForm.ComponentEditorForm(object component, System.Type[] pageTypes) -> void
 ~System.Windows.Forms.Design.ComponentEditorPage.Component.get -> System.ComponentModel.IComponent
 ~System.Windows.Forms.Design.ComponentEditorPage.Component.set -> void
@@ -1762,12 +1762,12 @@ System.Windows.Forms.FileDialog.Title.set -> void
 ~System.Windows.Forms.FlowLayoutPanel.SetFlowBreak(System.Windows.Forms.Control control, bool value) -> void
 System.Windows.Forms.FlowLayoutSettings.GetFlowBreak(object! child) -> bool
 System.Windows.Forms.FlowLayoutSettings.SetFlowBreak(object! child, bool value) -> void
-~System.Windows.Forms.FolderBrowserDialog.Description.get -> string
-~System.Windows.Forms.FolderBrowserDialog.Description.set -> void
-~System.Windows.Forms.FolderBrowserDialog.InitialDirectory.get -> string
-~System.Windows.Forms.FolderBrowserDialog.InitialDirectory.set -> void
-~System.Windows.Forms.FolderBrowserDialog.SelectedPath.get -> string
-~System.Windows.Forms.FolderBrowserDialog.SelectedPath.set -> void
+System.Windows.Forms.FolderBrowserDialog.Description.get -> string!
+System.Windows.Forms.FolderBrowserDialog.Description.set -> void
+System.Windows.Forms.FolderBrowserDialog.InitialDirectory.get -> string!
+System.Windows.Forms.FolderBrowserDialog.InitialDirectory.set -> void
+System.Windows.Forms.FolderBrowserDialog.SelectedPath.get -> string!
+System.Windows.Forms.FolderBrowserDialog.SelectedPath.set -> void
 ~System.Windows.Forms.FontDialog.Font.get -> System.Drawing.Font
 ~System.Windows.Forms.FontDialog.Font.set -> void
 ~System.Windows.Forms.Form.AcceptButton.get -> System.Windows.Forms.IButtonControl
@@ -1777,7 +1777,7 @@ System.Windows.Forms.FlowLayoutSettings.SetFlowBreak(object! child, bool value) 
 ~System.Windows.Forms.Form.AddOwnedForm(System.Windows.Forms.Form ownedForm) -> void
 ~System.Windows.Forms.Form.CancelButton.get -> System.Windows.Forms.IButtonControl
 ~System.Windows.Forms.Form.CancelButton.set -> void
-~System.Windows.Forms.Form.ControlCollection.ControlCollection(System.Windows.Forms.Form owner) -> void
+System.Windows.Forms.Form.ControlCollection.ControlCollection(System.Windows.Forms.Form! owner) -> void
 ~System.Windows.Forms.Form.Icon.get -> System.Drawing.Icon
 ~System.Windows.Forms.Form.Icon.set -> void
 ~System.Windows.Forms.Form.MainMenuStrip.get -> System.Windows.Forms.MenuStrip
@@ -1928,36 +1928,36 @@ System.Windows.Forms.IDataObject.SetData(System.Type! format, object? data) -> v
 ~System.Windows.Forms.IDropTarget.OnDragLeave(System.EventArgs e) -> void
 ~System.Windows.Forms.IDropTarget.OnDragOver(System.Windows.Forms.DragEventArgs e) -> void
 ~System.Windows.Forms.IFileReaderService.OpenFileFromSource(string relativePath) -> System.IO.Stream
-~System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics g, int x, int y, int index) -> void
-~System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics g, int x, int y, int width, int height, int index) -> void
-~System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics g, System.Drawing.Point pt, int index) -> void
-~System.Windows.Forms.ImageList.ImageCollection.Add(string key, System.Drawing.Icon icon) -> void
-~System.Windows.Forms.ImageList.ImageCollection.Add(string key, System.Drawing.Image image) -> void
-~System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Icon value) -> void
-~System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Image value) -> void
-~System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Image value, System.Drawing.Color transparentColor) -> int
-~System.Windows.Forms.ImageList.ImageCollection.AddRange(System.Drawing.Image[] images) -> void
-~System.Windows.Forms.ImageList.ImageCollection.AddStrip(System.Drawing.Image value) -> int
-~System.Windows.Forms.ImageList.ImageCollection.Contains(System.Drawing.Image image) -> bool
-~System.Windows.Forms.ImageList.ImageCollection.ContainsKey(string key) -> bool
-~System.Windows.Forms.ImageList.ImageCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ImageList.ImageCollection.IndexOf(System.Drawing.Image image) -> int
-~System.Windows.Forms.ImageList.ImageCollection.IndexOfKey(string key) -> int
-~System.Windows.Forms.ImageList.ImageCollection.Keys.get -> System.Collections.Specialized.StringCollection
-~System.Windows.Forms.ImageList.ImageCollection.Remove(System.Drawing.Image image) -> void
-~System.Windows.Forms.ImageList.ImageCollection.RemoveByKey(string key) -> void
-~System.Windows.Forms.ImageList.ImageCollection.SetKeyName(int index, string name) -> void
-~System.Windows.Forms.ImageList.ImageCollection.this[int index].get -> System.Drawing.Image
-~System.Windows.Forms.ImageList.ImageCollection.this[int index].set -> void
-~System.Windows.Forms.ImageList.ImageCollection.this[string key].get -> System.Drawing.Image
-~System.Windows.Forms.ImageList.ImageList(System.ComponentModel.IContainer container) -> void
-~System.Windows.Forms.ImageList.Images.get -> System.Windows.Forms.ImageList.ImageCollection
-~System.Windows.Forms.ImageList.ImageStream.get -> System.Windows.Forms.ImageListStreamer
-~System.Windows.Forms.ImageList.ImageStream.set -> void
-~System.Windows.Forms.ImageList.Tag.get -> object
-~System.Windows.Forms.ImageList.Tag.set -> void
+System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics! g, int x, int y, int index) -> void
+System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics! g, int x, int y, int width, int height, int index) -> void
+System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics! g, System.Drawing.Point pt, int index) -> void
+System.Windows.Forms.ImageList.ImageCollection.Add(string! key, System.Drawing.Icon! icon) -> void
+System.Windows.Forms.ImageList.ImageCollection.Add(string! key, System.Drawing.Image! image) -> void
+System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Icon! value) -> void
+System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Image! value) -> void
+System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Image! value, System.Drawing.Color transparentColor) -> int
+System.Windows.Forms.ImageList.ImageCollection.AddRange(System.Drawing.Image![]! images) -> void
+System.Windows.Forms.ImageList.ImageCollection.AddStrip(System.Drawing.Image! value) -> int
+System.Windows.Forms.ImageList.ImageCollection.Contains(System.Drawing.Image! image) -> bool
+System.Windows.Forms.ImageList.ImageCollection.ContainsKey(string! key) -> bool
+System.Windows.Forms.ImageList.ImageCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ImageList.ImageCollection.IndexOf(System.Drawing.Image! image) -> int
+System.Windows.Forms.ImageList.ImageCollection.IndexOfKey(string! key) -> int
+System.Windows.Forms.ImageList.ImageCollection.Keys.get -> System.Collections.Specialized.StringCollection!
+System.Windows.Forms.ImageList.ImageCollection.Remove(System.Drawing.Image! image) -> void
+System.Windows.Forms.ImageList.ImageCollection.RemoveByKey(string! key) -> void
+System.Windows.Forms.ImageList.ImageCollection.SetKeyName(int index, string! name) -> void
+System.Windows.Forms.ImageList.ImageCollection.this[int index].get -> System.Drawing.Image!
+System.Windows.Forms.ImageList.ImageCollection.this[int index].set -> void
+System.Windows.Forms.ImageList.ImageCollection.this[string! key].get -> System.Drawing.Image?
+System.Windows.Forms.ImageList.ImageList(System.ComponentModel.IContainer! container) -> void
+System.Windows.Forms.ImageList.Images.get -> System.Windows.Forms.ImageList.ImageCollection!
+System.Windows.Forms.ImageList.ImageStream.get -> System.Windows.Forms.ImageListStreamer?
+System.Windows.Forms.ImageList.ImageStream.set -> void
+System.Windows.Forms.ImageList.Tag.get -> object?
+System.Windows.Forms.ImageList.Tag.set -> void
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
-~System.Windows.Forms.KeysConverter.Compare(object a, object b) -> int
+System.Windows.Forms.KeysConverter.Compare(object? a, object? b) -> int
 System.Windows.Forms.Label.CalcImageRenderBounds(System.Drawing.Image! image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> System.Drawing.Rectangle
 System.Windows.Forms.Label.DrawImage(System.Drawing.Graphics! g, System.Drawing.Image! image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> void
 System.Windows.Forms.Label.Image.get -> System.Drawing.Image?
@@ -2246,14 +2246,14 @@ System.Windows.Forms.ListView.TopItem.set -> void
 ~System.Windows.Forms.PictureBox.InitialImage.set -> void
 ~System.Windows.Forms.PictureBox.Load(string url) -> void
 ~System.Windows.Forms.PictureBox.LoadAsync(string url) -> void
-~System.Windows.Forms.PrintControllerWithStatusDialog.PrintControllerWithStatusDialog(System.Drawing.Printing.PrintController underlyingController) -> void
-~System.Windows.Forms.PrintControllerWithStatusDialog.PrintControllerWithStatusDialog(System.Drawing.Printing.PrintController underlyingController, string dialogTitle) -> void
+System.Windows.Forms.PrintControllerWithStatusDialog.PrintControllerWithStatusDialog(System.Drawing.Printing.PrintController! underlyingController) -> void
+System.Windows.Forms.PrintControllerWithStatusDialog.PrintControllerWithStatusDialog(System.Drawing.Printing.PrintController! underlyingController, string! dialogTitle) -> void
 System.Windows.Forms.PrintDialog.Document.get -> System.Drawing.Printing.PrintDocument?
 System.Windows.Forms.PrintDialog.Document.set -> void
 System.Windows.Forms.PrintDialog.PrinterSettings.get -> System.Drawing.Printing.PrinterSettings!
 System.Windows.Forms.PrintDialog.PrinterSettings.set -> void
-~System.Windows.Forms.PrintPreviewControl.Document.get -> System.Drawing.Printing.PrintDocument
-~System.Windows.Forms.PrintPreviewControl.Document.set -> void
+System.Windows.Forms.PrintPreviewControl.Document.get -> System.Drawing.Printing.PrintDocument?
+System.Windows.Forms.PrintPreviewControl.Document.set -> void
 ~System.Windows.Forms.PrintPreviewDialog.AcceptButton.get -> System.Windows.Forms.IButtonControl
 ~System.Windows.Forms.PrintPreviewDialog.AcceptButton.set -> void
 ~System.Windows.Forms.PrintPreviewDialog.AccessibleDescription.get -> string
@@ -3168,8 +3168,8 @@ virtual System.Windows.Forms.DataObject.SetText(string! textData, System.Windows
 ~virtual System.Windows.Forms.Form.OnResizeEnd(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Form.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Form.OnShown(System.EventArgs e) -> void
-~virtual System.Windows.Forms.FormCollection.this[int index].get -> System.Windows.Forms.Form
-~virtual System.Windows.Forms.FormCollection.this[string name].get -> System.Windows.Forms.Form
+virtual System.Windows.Forms.FormCollection.this[int index].get -> System.Windows.Forms.Form?
+virtual System.Windows.Forms.FormCollection.this[string? name].get -> System.Windows.Forms.Form?
 ~virtual System.Windows.Forms.HelpProvider.CanExtend(object target) -> bool
 ~virtual System.Windows.Forms.HelpProvider.GetHelpKeyword(System.Windows.Forms.Control ctl) -> string
 ~virtual System.Windows.Forms.HelpProvider.GetHelpNavigator(System.Windows.Forms.Control ctl) -> System.Windows.Forms.HelpNavigator
@@ -3287,7 +3287,7 @@ virtual System.Windows.Forms.NativeWindow.OnThreadException(System.Exception! e)
 ~virtual System.Windows.Forms.PictureBox.OnLoadCompleted(System.ComponentModel.AsyncCompletedEventArgs e) -> void
 ~virtual System.Windows.Forms.PictureBox.OnLoadProgressChanged(System.ComponentModel.ProgressChangedEventArgs e) -> void
 ~virtual System.Windows.Forms.PictureBox.OnSizeModeChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.PrintPreviewControl.OnStartPageChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.PrintPreviewControl.OnStartPageChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ProgressBar.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.PropertyGrid.CreatePropertyTab(System.Type tabType) -> System.Windows.Forms.Design.PropertyTab
 ~virtual System.Windows.Forms.PropertyGrid.DefaultTabType.get -> System.Type
@@ -3445,9 +3445,9 @@ virtual System.Windows.Forms.ScrollableControl.ScrollToControl(System.Windows.Fo
 ~virtual System.Windows.Forms.ToolStripTextBox.OnMultilineChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripTextBox.OnReadOnlyChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolTip.CreateParams.get -> System.Windows.Forms.CreateParams
-~virtual System.Windows.Forms.TrackBar.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.TrackBar.OnScroll(System.EventArgs e) -> void
-~virtual System.Windows.Forms.TrackBar.OnValueChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.TrackBar.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.TrackBar.OnScroll(System.EventArgs! e) -> void
+virtual System.Windows.Forms.TrackBar.OnValueChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.TreeNode.Clone() -> object
 ~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
 ~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.set -> void
@@ -7996,7 +7996,7 @@ System.Windows.Forms.FolderBrowserDialog.AutoUpgradeEnabled.set -> void
 System.Windows.Forms.FolderBrowserDialog.ClientGuid.get -> System.Guid?
 System.Windows.Forms.FolderBrowserDialog.ClientGuid.set -> void
 System.Windows.Forms.FolderBrowserDialog.FolderBrowserDialog() -> void
-System.Windows.Forms.FolderBrowserDialog.HelpRequest -> System.EventHandler
+System.Windows.Forms.FolderBrowserDialog.HelpRequest -> System.EventHandler?
 System.Windows.Forms.FolderBrowserDialog.OkRequiresInteraction.get -> bool
 System.Windows.Forms.FolderBrowserDialog.OkRequiresInteraction.set -> void
 System.Windows.Forms.FolderBrowserDialog.RootFolder.get -> System.Environment.SpecialFolder
@@ -8427,7 +8427,7 @@ System.Windows.Forms.ImageList.ImageCollection.RemoveAt(int index) -> void
 System.Windows.Forms.ImageList.ImageList() -> void
 System.Windows.Forms.ImageList.ImageSize.get -> System.Drawing.Size
 System.Windows.Forms.ImageList.ImageSize.set -> void
-System.Windows.Forms.ImageList.RecreateHandle -> System.EventHandler
+System.Windows.Forms.ImageList.RecreateHandle -> System.EventHandler?
 System.Windows.Forms.ImageList.TransparentColor.get -> System.Drawing.Color
 System.Windows.Forms.ImageList.TransparentColor.set -> void
 System.Windows.Forms.ImageListStreamer
@@ -9710,8 +9710,8 @@ System.Windows.Forms.PrintPreviewControl.Rows.get -> int
 System.Windows.Forms.PrintPreviewControl.Rows.set -> void
 System.Windows.Forms.PrintPreviewControl.StartPage.get -> int
 System.Windows.Forms.PrintPreviewControl.StartPage.set -> void
-System.Windows.Forms.PrintPreviewControl.StartPageChanged -> System.EventHandler
-System.Windows.Forms.PrintPreviewControl.TextChanged -> System.EventHandler
+System.Windows.Forms.PrintPreviewControl.StartPageChanged -> System.EventHandler?
+System.Windows.Forms.PrintPreviewControl.TextChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewControl.UseAntiAlias.get -> bool
 System.Windows.Forms.PrintPreviewControl.UseAntiAlias.set -> void
 System.Windows.Forms.PrintPreviewControl.Zoom.get -> double
@@ -11891,38 +11891,38 @@ System.Windows.Forms.ToolTipIcon.Info = 1 -> System.Windows.Forms.ToolTipIcon
 System.Windows.Forms.ToolTipIcon.None = 0 -> System.Windows.Forms.ToolTipIcon
 System.Windows.Forms.ToolTipIcon.Warning = 2 -> System.Windows.Forms.ToolTipIcon
 System.Windows.Forms.TrackBar
-System.Windows.Forms.TrackBar.AutoSizeChanged -> System.EventHandler
-System.Windows.Forms.TrackBar.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.TrackBar.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.TrackBar.AutoSizeChanged -> System.EventHandler?
+System.Windows.Forms.TrackBar.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.TrackBar.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.TrackBar.BeginInit() -> void
-System.Windows.Forms.TrackBar.Click -> System.EventHandler
-System.Windows.Forms.TrackBar.DoubleClick -> System.EventHandler
+System.Windows.Forms.TrackBar.Click -> System.EventHandler?
+System.Windows.Forms.TrackBar.DoubleClick -> System.EventHandler?
 System.Windows.Forms.TrackBar.EndInit() -> void
-System.Windows.Forms.TrackBar.FontChanged -> System.EventHandler
-System.Windows.Forms.TrackBar.ForeColorChanged -> System.EventHandler
+System.Windows.Forms.TrackBar.FontChanged -> System.EventHandler?
+System.Windows.Forms.TrackBar.ForeColorChanged -> System.EventHandler?
 System.Windows.Forms.TrackBar.ImeMode.get -> System.Windows.Forms.ImeMode
 System.Windows.Forms.TrackBar.ImeMode.set -> void
-System.Windows.Forms.TrackBar.ImeModeChanged -> System.EventHandler
+System.Windows.Forms.TrackBar.ImeModeChanged -> System.EventHandler?
 System.Windows.Forms.TrackBar.LargeChange.get -> int
 System.Windows.Forms.TrackBar.LargeChange.set -> void
 System.Windows.Forms.TrackBar.Maximum.get -> int
 System.Windows.Forms.TrackBar.Maximum.set -> void
 System.Windows.Forms.TrackBar.Minimum.get -> int
 System.Windows.Forms.TrackBar.Minimum.set -> void
-System.Windows.Forms.TrackBar.MouseClick -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.TrackBar.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.TrackBar.MouseClick -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.TrackBar.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.TrackBar.Orientation.get -> System.Windows.Forms.Orientation
 System.Windows.Forms.TrackBar.Orientation.set -> void
 System.Windows.Forms.TrackBar.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.TrackBar.Padding.set -> void
-System.Windows.Forms.TrackBar.PaddingChanged -> System.EventHandler
-System.Windows.Forms.TrackBar.Paint -> System.Windows.Forms.PaintEventHandler
-System.Windows.Forms.TrackBar.RightToLeftLayoutChanged -> System.EventHandler
-System.Windows.Forms.TrackBar.Scroll -> System.EventHandler
+System.Windows.Forms.TrackBar.PaddingChanged -> System.EventHandler?
+System.Windows.Forms.TrackBar.Paint -> System.Windows.Forms.PaintEventHandler?
+System.Windows.Forms.TrackBar.RightToLeftLayoutChanged -> System.EventHandler?
+System.Windows.Forms.TrackBar.Scroll -> System.EventHandler?
 System.Windows.Forms.TrackBar.SetRange(int minValue, int maxValue) -> void
 System.Windows.Forms.TrackBar.SmallChange.get -> int
 System.Windows.Forms.TrackBar.SmallChange.set -> void
-System.Windows.Forms.TrackBar.TextChanged -> System.EventHandler
+System.Windows.Forms.TrackBar.TextChanged -> System.EventHandler?
 System.Windows.Forms.TrackBar.TickFrequency.get -> int
 System.Windows.Forms.TrackBar.TickFrequency.set -> void
 System.Windows.Forms.TrackBar.TickStyle.get -> System.Windows.Forms.TickStyle
@@ -11930,7 +11930,7 @@ System.Windows.Forms.TrackBar.TickStyle.set -> void
 System.Windows.Forms.TrackBar.TrackBar() -> void
 System.Windows.Forms.TrackBar.Value.get -> int
 System.Windows.Forms.TrackBar.Value.set -> void
-System.Windows.Forms.TrackBar.ValueChanged -> System.EventHandler
+System.Windows.Forms.TrackBar.ValueChanged -> System.EventHandler?
 System.Windows.Forms.TrackBarRenderer
 System.Windows.Forms.TreeNode
 System.Windows.Forms.TreeNode.BackColor.get -> System.Drawing.Color

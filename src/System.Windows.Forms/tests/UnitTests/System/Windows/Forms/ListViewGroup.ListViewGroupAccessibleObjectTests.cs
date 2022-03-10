@@ -275,7 +275,7 @@ namespace System.Windows.Forms.Tests
                 Assert.True(list.IsHandleCreated);
 
                 RECT groupRect = new RECT();
-                User32.SendMessageW(list, (User32.WM)ComCtl32.LVM.GETGROUPRECT, list.Groups.IndexOf(listGroup), ref groupRect);
+                User32.SendMessageW(list, (User32.WM)ComCtl32.LVM.GETGROUPRECT, listGroup.ID, ref groupRect);
 
                 int actualWidth = group1AccObj.Bounds.Width;
                 int expectedWidth = groupRect.Width;
@@ -293,6 +293,40 @@ namespace System.Windows.Forms.Tests
 
             // verify the remote process succeeded
             Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
+        }
+
+        [WinFormsFact]
+        public void ListViewGroupAccessibleObject_Bounds_ReturnsCorrectValue_PostHandle()
+        {
+            using Form form = new();
+            using ListView listView = new();
+
+            form.Controls.Add(listView);
+            form.Show();
+
+            Assert.True(listView.IsHandleCreated);
+
+            ListViewGroup group = new();
+            listView.Groups.Add(group);
+            listView.Items.Add(new ListViewItem("a", group));
+
+            RECT groupRect = new RECT();
+            User32.SendMessageW(listView, (User32.WM)ComCtl32.LVM.GETGROUPRECT, group.ID, ref groupRect);
+
+            AccessibleObject groupAccObj = group.AccessibilityObject;
+
+            int actualWidth = groupAccObj.Bounds.Width;
+            int expectedWidth = groupRect.Width;
+            Assert.Equal(expectedWidth, actualWidth);
+
+            int actualHeight = groupAccObj.Bounds.Height;
+            int expectedHeight = groupRect.Height;
+            Assert.Equal(expectedHeight, actualHeight);
+
+            Rectangle actualBounds = groupAccObj.Bounds;
+            actualBounds.Location = new Point(0, 0);
+            Rectangle expectedBounds = groupRect;
+            Assert.Equal(expectedBounds, actualBounds);
         }
 
         public static IEnumerable<object[]> ListViewGroupAccessibleObject_TestData()

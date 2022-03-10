@@ -1317,7 +1317,8 @@
         }
       ],
       "taskName": "Respond to a comment on closed issue"
-    }
+    },
+    "disabled": true
   },
   {
     "taskType": "trigger",
@@ -1378,7 +1379,8 @@
           }
         }
       ]
-    }
+    },
+    "disabled": true
   },
   {
     "taskType": "scheduled",

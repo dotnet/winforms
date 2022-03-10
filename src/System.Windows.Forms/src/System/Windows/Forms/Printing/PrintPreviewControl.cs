@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -32,8 +30,8 @@ namespace System.Windows.Forms
 
         private const int border = 10; // spacing per page, in mm
 
-        private PrintDocument document;
-        private PreviewPageInfo[] pageInfo; // null if needs refreshing
+        private PrintDocument? document;
+        private PreviewPageInfo[]? pageInfo; // null if needs refreshing
         private int startPage;  // 0-based
         private int rows = 1;
         private int columns = 1;
@@ -100,7 +98,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(null)]
         [SRDescription(nameof(SR.PrintPreviewDocumentDescr))]
-        public PrintDocument Document
+        public PrintDocument? Document
         {
             get { return document; }
             set
@@ -218,7 +216,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        new public event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -265,7 +263,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.RadioButtonOnStartPageChangedDescr))]
-        public event EventHandler StartPageChanged
+        public event EventHandler? StartPageChanged
         {
             add => Events.AddHandler(EVENT_STARTPAGECHANGED, value);
             remove => Events.RemoveHandler(EVENT_STARTPAGECHANGED, value);
@@ -844,7 +842,7 @@ namespace System.Windows.Forms
                         locPos.X = pos;
                         Position = locPos;
                     }
-                    else if (StartPage < pageInfo.Length)
+                    else if (pageInfo is not null && StartPage < pageInfo.Length)
                     {
                         StartPage++;
                     }
@@ -858,7 +856,7 @@ namespace System.Windows.Forms
 
                     break;
                 case Keys.End:
-                    if ((keyData & Keys.Modifiers) == Keys.Control)
+                    if (pageInfo is not null && (keyData & Keys.Modifiers) == Keys.Control)
                     {
                         StartPage = pageInfo.Length;
                     }

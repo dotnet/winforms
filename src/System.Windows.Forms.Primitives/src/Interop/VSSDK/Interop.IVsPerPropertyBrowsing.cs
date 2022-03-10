@@ -40,8 +40,8 @@ internal partial class Interop
             HRESULT GetLocalizedPropertyInfo(
                 Ole32.DispatchID dispid,
                 Kernel32.LCID localeID,
-                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pbstrLocalizedName,
-                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pbstrLocalizeDescription);
+                [Out, MarshalAs(UnmanagedType.LPArray)] string[]? pbstrLocalizedName,
+                [Out, MarshalAs(UnmanagedType.LPArray)] string[]? pbstrLocalizeDescription);
 
             /// <summary>
             ///  Determines if the given (usually current) value for a property is the default.  If it is not default,
