@@ -30,7 +30,7 @@ namespace System.Windows.Forms
             /// </summary>
             public override void Add(Control? value)
             {
-                if (value is MdiClient && _owner.ctlClient is null)
+                if (value is MdiClient && _owner._ctlClient is null)
                 {
                     if (!_owner.TopLevel && !_owner.DesignMode)
                     {
@@ -43,7 +43,7 @@ namespace System.Windows.Forms
                         throw new ArgumentException(SR.FormMDIParentAndChild, nameof(value));
                     }
 
-                    _owner.ctlClient = (MdiClient)value;
+                    _owner._ctlClient = (MdiClient)value;
                 }
 
                 // make sure we don't add a form that has a valid mdi parent
@@ -54,9 +54,9 @@ namespace System.Windows.Forms
 
                 base.Add(value);
 
-                if (_owner.ctlClient is not null)
+                if (_owner._ctlClient is not null)
                 {
-                    _owner.ctlClient.SendToBack();
+                    _owner._ctlClient.SendToBack();
                 }
             }
 
@@ -65,9 +65,9 @@ namespace System.Windows.Forms
             /// </summary>
             public override void Remove(Control? value)
             {
-                if (value == _owner.ctlClient)
+                if (value == _owner._ctlClient)
                 {
-                    _owner.ctlClient = null;
+                    _owner._ctlClient = null;
                 }
 
                 base.Remove(value);
