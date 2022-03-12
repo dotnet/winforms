@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
@@ -72,7 +70,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            object IList.this[int index]
+            object? IList.this[int index]
             {
                 get => this[index];
                 set
@@ -89,7 +87,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the child control with the specified key.
             /// </summary>
-            public virtual ListViewSubItem this[string key]
+            public virtual ListViewSubItem? this[string key]
             {
                 get
                 {
@@ -121,14 +119,14 @@ namespace System.Windows.Forms
                 return item;
             }
 
-            public ListViewSubItem Add(string text)
+            public ListViewSubItem Add(string? text)
             {
                 ListViewSubItem item = new ListViewSubItem(_owner, text);
                 Add(item);
                 return item;
             }
 
-            public ListViewSubItem Add(string text, Color foreColor, Color backColor, Font font)
+            public ListViewSubItem Add(string? text, Color foreColor, Color backColor, Font font)
             {
                 ListViewSubItem item = new ListViewSubItem(_owner, text, foreColor, backColor, font);
                 Add(item);
@@ -184,7 +182,7 @@ namespace System.Windows.Forms
                 _owner.UpdateSubItems(-1);
             }
 
-            int IList.Add(object item)
+            int IList.Add(object? item)
             {
                 if (item is not ListViewSubItem itemValue)
                 {
@@ -209,9 +207,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            public bool Contains(ListViewSubItem subItem) => IndexOf(subItem) != -1;
+            public bool Contains(ListViewSubItem? subItem) => IndexOf(subItem) != -1;
 
-            bool IList.Contains(object item)
+            bool IList.Contains(object? item)
             {
                 if (item is not ListViewSubItem itemValue)
                 {
@@ -224,7 +222,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns true if the collection contains an item with the specified key, false otherwise.
             /// </summary>
-            public virtual bool ContainsKey(string key) => IsValidIndex(IndexOfKey(key));
+            public virtual bool ContainsKey(string? key) => IsValidIndex(IndexOfKey(key));
 
             /// <summary>
             ///  Ensures that the sub item array has the given capacity. If it doesn't, it enlarges the
@@ -284,7 +282,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public int IndexOf(ListViewSubItem subItem)
+            public int IndexOf(ListViewSubItem? subItem)
             {
                 for (int index = 0; index < Count; ++index)
                 {
@@ -297,7 +295,7 @@ namespace System.Windows.Forms
                 return -1;
             }
 
-            int IList.IndexOf(object subItem)
+            int IList.IndexOf(object? subItem)
             {
                 if (subItem is not ListViewSubItem subItemValue)
                 {
@@ -310,7 +308,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
             /// </summary>
-            public virtual int IndexOfKey(string key)
+            public virtual int IndexOfKey(string? key)
             {
                 if (string.IsNullOrEmpty(key))
                 {
@@ -362,7 +360,7 @@ namespace System.Windows.Forms
                 _owner.UpdateSubItems(-1);
             }
 
-            void IList.Insert(int index, object item)
+            void IList.Insert(int index, object? item)
             {
                 if (item is not ListViewSubItem subItem)
                 {
@@ -372,7 +370,7 @@ namespace System.Windows.Forms
                 Insert(index, subItem);
             }
 
-            public void Remove(ListViewSubItem item)
+            public void Remove(ListViewSubItem? item)
             {
                 int index = IndexOf(item);
                 if (index != -1)
@@ -381,7 +379,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            void IList.Remove(object item)
+            void IList.Remove(object? item)
             {
                 if (item is ListViewSubItem itemValue)
                 {
@@ -414,7 +412,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Removes the child control with the specified key.
             /// </summary>
-            public virtual void RemoveByKey(string key)
+            public virtual void RemoveByKey(string? key)
             {
                 int index = IndexOfKey(key);
                 if (IsValidIndex(index))

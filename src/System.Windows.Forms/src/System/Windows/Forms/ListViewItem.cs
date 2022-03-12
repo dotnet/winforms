@@ -766,7 +766,7 @@ namespace System.Windows.Forms
                     SubItemCount = 1;
                 }
 
-                return listViewSubItemCollection ?? (listViewSubItemCollection = new ListViewSubItemCollection(this));
+                return listViewSubItemCollection ??= new ListViewSubItemCollection(this);
             }
         }
 
