@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Buffers;
 using System.Collections;
 using System.ComponentModel;
@@ -59,9 +57,9 @@ namespace System.Windows.Forms
         private static readonly object EVENT_DRAWITEM = new object();
         private static readonly object EVENT_MEASUREITEM = new object();
 
-        SelectedObjectCollection selectedItems;
-        SelectedIndexCollection selectedIndices;
-        ObjectCollection itemsCollection;
+        SelectedObjectCollection? selectedItems;
+        SelectedIndexCollection? selectedIndices;
+        ObjectCollection? itemsCollection;
 
         int itemHeight = DefaultItemHeight;
         int columnWidth;
@@ -98,7 +96,7 @@ namespace System.Windows.Forms
         ///  This field stores focused ListBox item Accessible object before focus changing.
         ///  Used in FocusedItemIsChanged method.
         /// </summary>
-        private AccessibleObject focusedItem;
+        private AccessibleObject? focusedItem;
 
         /// <summary>
         ///  This field stores current items count.
@@ -110,7 +108,7 @@ namespace System.Windows.Forms
         ///  This value stores the array of custom tabstops in the listbox. the array should be populated by
         ///  integers in a ascending order.
         /// </summary>
-        private IntegerCollection customTabOffsets;
+        private IntegerCollection? customTabOffsets;
 
         /// <summary>
         ///  Default start position of items in the checked list box
@@ -188,7 +186,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -196,7 +194,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        new public event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -212,7 +210,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        new public event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -682,14 +680,12 @@ namespace System.Windows.Forms
                 }
 
                 // Return cached maxWidth if available
-                //
                 if (maxWidth > -1)
                 {
                     return maxWidth;
                 }
 
                 // Compute maximum width
-                //
                 maxWidth = ComputeMaxItemWidth(maxWidth);
 
                 return maxWidth;
@@ -967,7 +963,7 @@ namespace System.Windows.Forms
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ListBoxSelectedItemDescr))]
-        public object SelectedItem
+        public object? SelectedItem
         {
             get
             {
@@ -1090,7 +1086,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Bindable(false)]
-        public override string Text
+        public override string? Text
         {
             get
             {
@@ -1102,7 +1098,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return FilterItemOnProperty(SelectedItem).ToString();
+                        return FilterItemOnProperty(SelectedItem)?.ToString();
                     }
                 }
                 else
@@ -1116,7 +1112,6 @@ namespace System.Windows.Forms
 
                 // Scan through the list items looking for the supplied text string.  If we find it,
                 // select it.
-                //
                 if (SelectionMode != SelectionMode.None && value is not null && (SelectedItem is null || !value.Equals(GetItemText(SelectedItem))))
                 {
                     int cnt = Items.Count;
@@ -1134,7 +1129,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public event EventHandler TextChanged
+        new public event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -1214,8 +1209,7 @@ namespace System.Windows.Forms
         [Obsolete("This method has been deprecated.  There is no replacement.  https://go.microsoft.com/fwlink/?linkid=14202")]
         protected virtual void AddItemsCore(object[] value)
         {
-            int count = value is null ? 0 : value.Length;
-            if (count == 0)
+            if (value is null || value.Length == 0)
             {
                 return;
             }
@@ -1225,7 +1219,7 @@ namespace System.Windows.Forms
 
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public new event EventHandler Click
+        public new event EventHandler? Click
         {
             add => base.Click += value;
             remove => base.Click -= value;
@@ -1233,7 +1227,7 @@ namespace System.Windows.Forms
 
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public new event MouseEventHandler MouseClick
+        public new event MouseEventHandler? MouseClick
         {
             add => base.MouseClick += value;
             remove => base.MouseClick -= value;
@@ -1250,7 +1244,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler PaddingChanged
+        public new event EventHandler? PaddingChanged
         {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
@@ -1261,7 +1255,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event PaintEventHandler Paint
+        public new event PaintEventHandler? Paint
         {
             add => base.Paint += value;
             remove => base.Paint -= value;
@@ -1269,7 +1263,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.drawItemEventDescr))]
-        public event DrawItemEventHandler DrawItem
+        public event DrawItemEventHandler? DrawItem
         {
             add => Events.AddHandler(EVENT_DRAWITEM, value);
             remove => Events.RemoveHandler(EVENT_DRAWITEM, value);
@@ -1277,7 +1271,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.measureItemEventDescr))]
-        public event MeasureItemEventHandler MeasureItem
+        public event MeasureItemEventHandler? MeasureItem
         {
             add => Events.AddHandler(EVENT_MEASUREITEM, value);
             remove => Events.RemoveHandler(EVENT_MEASUREITEM, value);
@@ -1285,7 +1279,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
-        public event EventHandler SelectedIndexChanged
+        public event EventHandler? SelectedIndexChanged
         {
             add => Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
             remove => Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
@@ -1339,7 +1333,7 @@ namespace System.Windows.Forms
         internal virtual int ComputeMaxItemWidth(int oldMax)
         {
             // pass LayoutUtils the collection of strings
-            string[] strings = new string[Items.Count];
+            string?[] strings = new string[Items.Count];
 
             for (int i = 0; i < Items.Count; i++)
             {
@@ -1742,7 +1736,6 @@ namespace System.Windows.Forms
             // time - it draws the focus rect when it shouldn't and vice-versa. So when
             // the UI cues change, we just do an extra invalidate to get it into the
             // right state.
-            //
             Invalidate();
 
             base.OnChangeUICues(e);
@@ -1754,7 +1747,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated && IsAccessibilityObjectCreated)
             {
-                AccessibleObject item = AccessibilityObject.GetFocused();
+                AccessibleObject? item = AccessibilityObject.GetFocused();
 
                 if (item is not null)
                 {
@@ -1780,7 +1773,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDrawItem(DrawItemEventArgs e)
         {
-            ((DrawItemEventHandler)Events[EVENT_DRAWITEM])?.Invoke(this, e);
+            ((DrawItemEventHandler?)Events[EVENT_DRAWITEM])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1871,7 +1864,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnMeasureItem(MeasureItemEventArgs e)
         {
-            ((MeasureItemEventHandler)Events[EVENT_MEASUREITEM])?.Invoke(this, e);
+            ((MeasureItemEventHandler?)Events[EVENT_MEASUREITEM])?.Invoke(this, e);
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -1882,7 +1875,6 @@ namespace System.Windows.Forms
             // Make sure we do this after base.OnPropertyChanged, which sends the WM_SETFONT message
 
             // Avoid the listbox and textbox behaviour in Collection editors
-            //
             UpdateFontCache();
         }
 
@@ -1905,7 +1897,6 @@ namespace System.Windows.Forms
             base.OnResize(e);
 
             // There are some repainting issues for RightToLeft - so invalidate when we resize.
-            //
             if (RightToLeft == RightToLeft.Yes || HorizontalScrollbar)
             {
                 Invalidate();
@@ -1946,7 +1937,6 @@ namespace System.Windows.Forms
             // from the SelectedIndex. Setting CurrencyManager::Position (even w/o changing it)
             // calls CurrencyManager::EndCurrentEdit, and that will pull the dataFrom the controls
             // into the backEnd. We do not need to do that.
-            //
             if (DataManager is not null && DataManager.Position != SelectedIndex)
             {
                 //read this as "if everett or   (whidbey and selindex is valid)"
@@ -1960,7 +1950,7 @@ namespace System.Windows.Forms
 
             // Call the handler after updating the DataManager's position so that
             // the DataManager's selected index will be correct in an event handler.
-            ((EventHandler)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
+            ((EventHandler?)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
         }
 
         protected override void OnSelectedValueChanged(EventArgs e)
@@ -2031,11 +2021,9 @@ namespace System.Windows.Forms
         protected override void RefreshItems()
         {
             // Store the currently selected object collection.
-            //
-            ObjectCollection savedItems = itemsCollection;
+            ObjectCollection? savedItems = itemsCollection;
 
             // Clear the items.
-            //
             itemsCollection = null;
             selectedIndices = null;
 
@@ -2044,11 +2032,10 @@ namespace System.Windows.Forms
                 NativeClear();
             }
 
-            object[] newItems = null;
+            object[]? newItems = null;
 
             // If we have a DataSource and a DisplayMember, then use it
             // to populate the Items collection
-            //
             if (DataManager is not null && DataManager.Count != -1)
             {
                 newItems = new object[DataManager.Count];
@@ -2064,14 +2051,12 @@ namespace System.Windows.Forms
             }
 
             // Store the current list of items
-            //
             if (newItems is not null)
             {
                 Items.AddRangeInternal(newItems);
             }
 
             // Restore the selected indices if SelectionMode allows it.
-            //
             if (SelectionMode != SelectionMode.None)
             {
                 if (DataManager is not null)
@@ -2135,8 +2120,6 @@ namespace System.Windows.Forms
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             // Avoid the listbox and textbox behaviour in Collection editors
-            //
-
             if (!integralHeightAdjust && height != Height)
             {
                 requestedHeight = height;
@@ -2225,7 +2208,6 @@ namespace System.Windows.Forms
             // This will force the collection to add each item back to itself
             // if sorted is now true, then the add method will insert the item
             // into the correct position
-            //
             CheckNoDataSource();
 
             SelectedObjectCollection currentSelections = SelectedItems;
@@ -2264,9 +2246,12 @@ namespace System.Windows.Forms
                 s += ", Items.Count: " + Items.Count.ToString(CultureInfo.CurrentCulture);
                 if (Items.Count > 0)
                 {
-                    string z = GetItemText(Items[0]);
-                    string txt = (z.Length > 40) ? z.Substring(0, 40) : z;
-                    s += ", Items[0]: " + txt;
+                    string? z = GetItemText(Items[0]);
+                    if (z is not null)
+                    {
+                        string txt = (z.Length > 40) ? z.Substring(0, 40) : z;
+                        s += ", Items[0]: " + txt;
+                    }
                 }
             }
 
@@ -2312,7 +2297,6 @@ namespace System.Windows.Forms
         {
             // We shouldn't be caching maxWidth if we don't have horizontal scrollbars,
             // or horizontal extent has been set
-            //
             if (!horizontalScrollbar || horizontalExtent > 0)
             {
                 maxWidth = -1;
@@ -2335,7 +2319,6 @@ namespace System.Windows.Forms
                 {
                     // We're removing this item, so if it's the longest
                     // in the list, reset the cache
-                    //
                     if (width >= maxWidth)
                     {
                         maxWidth = -1;
@@ -2344,7 +2327,6 @@ namespace System.Windows.Forms
                 else
                 {
                     // We're adding or inserting this item - update the cache
-                    //
                     if (width > maxWidth)
                     {
                         maxWidth = width;

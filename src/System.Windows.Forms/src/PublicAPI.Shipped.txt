@@ -513,28 +513,28 @@ override System.Windows.Forms.ListBindingConverter.CanConvertTo(System.Component
 override System.Windows.Forms.ListBindingConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
 override System.Windows.Forms.ListBindingConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext? context, System.Collections.IDictionary! propertyValues) -> object!
 override System.Windows.Forms.ListBindingConverter.GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
-~override System.Windows.Forms.ListBox.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.ListBox.BackgroundImage.set -> void
-~override System.Windows.Forms.ListBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ListBox.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.ListBox.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.ListBox.Font.set -> void
-~override System.Windows.Forms.ListBox.OnChangeUICues(System.Windows.Forms.UICuesEventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnDataSourceChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnDisplayMemberChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnGotFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnParentChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnResize(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnSelectedIndexChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnSelectedValueChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.SetItemCore(int index, object value) -> void
-~override System.Windows.Forms.ListBox.SetItemsCore(System.Collections.IList value) -> void
-~override System.Windows.Forms.ListBox.Text.get -> string
-~override System.Windows.Forms.ListBox.Text.set -> void
-~override System.Windows.Forms.ListBox.ToString() -> string
+override System.Windows.Forms.ListBox.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.ListBox.BackgroundImage.set -> void
+override System.Windows.Forms.ListBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ListBox.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.ListBox.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.ListBox.Font.set -> void
+override System.Windows.Forms.ListBox.OnChangeUICues(System.Windows.Forms.UICuesEventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnDataSourceChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnDisplayMemberChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnParentChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnResize(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnSelectedIndexChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnSelectedValueChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.SetItemCore(int index, object! value) -> void
+override System.Windows.Forms.ListBox.SetItemsCore(System.Collections.IList! value) -> void
+override System.Windows.Forms.ListBox.Text.get -> string?
+override System.Windows.Forms.ListBox.Text.set -> void
+override System.Windows.Forms.ListBox.ToString() -> string!
 override System.Windows.Forms.ListControl.OnBindingContextChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ListView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ListView.CreateParams.get -> System.Windows.Forms.CreateParams!
@@ -1992,19 +1992,19 @@ System.Windows.Forms.Label.ImageList.set -> void
 ~System.Windows.Forms.LinkLabel.OverrideCursor.get -> System.Windows.Forms.Cursor
 ~System.Windows.Forms.LinkLabel.OverrideCursor.set -> void
 ~System.Windows.Forms.LinkLabel.PointInLink(int x, int y) -> System.Windows.Forms.LinkLabel.Link
-~System.Windows.Forms.ListBox.CustomTabOffsets.get -> System.Windows.Forms.ListBox.IntegerCollection
-~System.Windows.Forms.ListBox.FindString(string s) -> int
-~System.Windows.Forms.ListBox.FindString(string s, int startIndex) -> int
-~System.Windows.Forms.ListBox.FindStringExact(string s) -> int
-~System.Windows.Forms.ListBox.FindStringExact(string s, int startIndex) -> int
-~System.Windows.Forms.ListBox.Items.get -> System.Windows.Forms.ListBox.ObjectCollection
+System.Windows.Forms.ListBox.CustomTabOffsets.get -> System.Windows.Forms.ListBox.IntegerCollection!
+System.Windows.Forms.ListBox.FindString(string! s) -> int
+System.Windows.Forms.ListBox.FindString(string! s, int startIndex) -> int
+System.Windows.Forms.ListBox.FindStringExact(string! s) -> int
+System.Windows.Forms.ListBox.FindStringExact(string! s, int startIndex) -> int
+System.Windows.Forms.ListBox.Items.get -> System.Windows.Forms.ListBox.ObjectCollection!
 System.Windows.Forms.ListBox.SelectedIndexCollection.CopyTo(System.Array! destination, int index) -> void
 System.Windows.Forms.ListBox.SelectedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator!
 System.Windows.Forms.ListBox.SelectedIndexCollection.SelectedIndexCollection(System.Windows.Forms.ListBox! owner) -> void
-~System.Windows.Forms.ListBox.SelectedIndices.get -> System.Windows.Forms.ListBox.SelectedIndexCollection
-~System.Windows.Forms.ListBox.SelectedItem.get -> object
-~System.Windows.Forms.ListBox.SelectedItem.set -> void
-~System.Windows.Forms.ListBox.SelectedItems.get -> System.Windows.Forms.ListBox.SelectedObjectCollection
+System.Windows.Forms.ListBox.SelectedIndices.get -> System.Windows.Forms.ListBox.SelectedIndexCollection!
+System.Windows.Forms.ListBox.SelectedItem.get -> object?
+System.Windows.Forms.ListBox.SelectedItem.set -> void
+System.Windows.Forms.ListBox.SelectedItems.get -> System.Windows.Forms.ListBox.SelectedObjectCollection!
 System.Windows.Forms.ListBox.SelectedObjectCollection.Add(object! value) -> void
 System.Windows.Forms.ListBox.SelectedObjectCollection.Contains(object? selectedObject) -> bool
 System.Windows.Forms.ListBox.SelectedObjectCollection.CopyTo(System.Array! destination, int index) -> void
@@ -3193,10 +3193,10 @@ virtual System.Windows.Forms.LayoutSettings.LayoutEngine.get -> System.Windows.F
 ~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[int index].set -> void
 ~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[string key].get -> System.Windows.Forms.LinkLabel.Link
 ~virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLabelLinkClickedEventArgs e) -> void
-~virtual System.Windows.Forms.ListBox.AddItemsCore(object[] value) -> void
-~virtual System.Windows.Forms.ListBox.CreateItemCollection() -> System.Windows.Forms.ListBox.ObjectCollection
-~virtual System.Windows.Forms.ListBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs e) -> void
-~virtual System.Windows.Forms.ListBox.OnMeasureItem(System.Windows.Forms.MeasureItemEventArgs e) -> void
+virtual System.Windows.Forms.ListBox.AddItemsCore(object![]! value) -> void
+virtual System.Windows.Forms.ListBox.CreateItemCollection() -> System.Windows.Forms.ListBox.ObjectCollection!
+virtual System.Windows.Forms.ListBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs! e) -> void
+virtual System.Windows.Forms.ListBox.OnMeasureItem(System.Windows.Forms.MeasureItemEventArgs! e) -> void
 virtual System.Windows.Forms.ListControl.OnDataSourceChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ListControl.OnDisplayMemberChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ListControl.OnFormat(System.Windows.Forms.ListControlConvertEventArgs! e) -> void
@@ -8863,16 +8863,16 @@ System.Windows.Forms.ListBindingConverter
 System.Windows.Forms.ListBindingConverter.ListBindingConverter() -> void
 System.Windows.Forms.ListBindingHelper
 System.Windows.Forms.ListBox
-System.Windows.Forms.ListBox.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.ListBox.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.ListBox.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.ListBox.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.ListBox.BeginUpdate() -> void
 System.Windows.Forms.ListBox.BorderStyle.get -> System.Windows.Forms.BorderStyle
 System.Windows.Forms.ListBox.BorderStyle.set -> void
 System.Windows.Forms.ListBox.ClearSelected() -> void
-System.Windows.Forms.ListBox.Click -> System.EventHandler
+System.Windows.Forms.ListBox.Click -> System.EventHandler?
 System.Windows.Forms.ListBox.ColumnWidth.get -> int
 System.Windows.Forms.ListBox.ColumnWidth.set -> void
-System.Windows.Forms.ListBox.DrawItem -> System.Windows.Forms.DrawItemEventHandler
+System.Windows.Forms.ListBox.DrawItem -> System.Windows.Forms.DrawItemEventHandler?
 System.Windows.Forms.ListBox.EndUpdate() -> void
 System.Windows.Forms.ListBox.GetItemHeight(int index) -> int
 System.Windows.Forms.ListBox.GetItemRectangle(int index) -> System.Drawing.Rectangle
@@ -8900,8 +8900,8 @@ System.Windows.Forms.ListBox.IntegerCollection.this[int index].set -> void
 System.Windows.Forms.ListBox.IntegralHeight.get -> bool
 System.Windows.Forms.ListBox.IntegralHeight.set -> void
 System.Windows.Forms.ListBox.ListBox() -> void
-System.Windows.Forms.ListBox.MeasureItem -> System.Windows.Forms.MeasureItemEventHandler
-System.Windows.Forms.ListBox.MouseClick -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.ListBox.MeasureItem -> System.Windows.Forms.MeasureItemEventHandler?
+System.Windows.Forms.ListBox.MouseClick -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.ListBox.MultiColumn.get -> bool
 System.Windows.Forms.ListBox.MultiColumn.set -> void
 System.Windows.Forms.ListBox.ObjectCollection
@@ -8922,12 +8922,12 @@ System.Windows.Forms.ListBox.ObjectCollection.Remove(object! value) -> void
 System.Windows.Forms.ListBox.ObjectCollection.RemoveAt(int index) -> void
 System.Windows.Forms.ListBox.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.ListBox.Padding.set -> void
-System.Windows.Forms.ListBox.PaddingChanged -> System.EventHandler
-System.Windows.Forms.ListBox.Paint -> System.Windows.Forms.PaintEventHandler
+System.Windows.Forms.ListBox.PaddingChanged -> System.EventHandler?
+System.Windows.Forms.ListBox.Paint -> System.Windows.Forms.PaintEventHandler?
 System.Windows.Forms.ListBox.PreferredHeight.get -> int
 System.Windows.Forms.ListBox.ScrollAlwaysVisible.get -> bool
 System.Windows.Forms.ListBox.ScrollAlwaysVisible.set -> void
-System.Windows.Forms.ListBox.SelectedIndexChanged -> System.EventHandler
+System.Windows.Forms.ListBox.SelectedIndexChanged -> System.EventHandler?
 System.Windows.Forms.ListBox.SelectedIndexCollection
 System.Windows.Forms.ListBox.SelectedIndexCollection.Add(int index) -> void
 System.Windows.Forms.ListBox.SelectedIndexCollection.Clear() -> void
@@ -8944,7 +8944,7 @@ System.Windows.Forms.ListBox.SelectedObjectCollection.IsReadOnly.get -> bool
 System.Windows.Forms.ListBox.SetSelected(int index, bool value) -> void
 System.Windows.Forms.ListBox.Sorted.get -> bool
 System.Windows.Forms.ListBox.Sorted.set -> void
-System.Windows.Forms.ListBox.TextChanged -> System.EventHandler
+System.Windows.Forms.ListBox.TextChanged -> System.EventHandler?
 System.Windows.Forms.ListBox.TopIndex.get -> int
 System.Windows.Forms.ListBox.TopIndex.set -> void
 System.Windows.Forms.ListBox.UseCustomTabOffsets.get -> bool
