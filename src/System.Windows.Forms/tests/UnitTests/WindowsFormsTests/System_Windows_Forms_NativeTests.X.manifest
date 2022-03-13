@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
+<assemblyIdentity
+  type="win32"
+  name="System_Windows_Forms_NativeTests.X"
+  version="1.0.0.0" />
+
+<file name = "System_Windows_Forms_NativeTests.dll">
+  <!-- Basic Test -->
+  <comClass
+    clsid="{ED349A5B-257B-4349-8CB8-2C30B0C05FC3}"
+    threadingModel="Both" />
+</file>
+
+</assembly>

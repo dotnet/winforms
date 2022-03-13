@@ -7,46 +7,64 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PropertyGrid_IErrorInfoSupportTests : IClassFixture<ThreadExceptionFixture>
+    [Collection("Sequential")]
+    public class PropertyGrid_IErrorInfoSupportTests
     {
         public const int DISP_E_MEMBERNOTFOUND = unchecked((int)0x80020003);
+        public const string System_Windows_Forms_NativeTests = "System_Windows_Forms_NativeTests";
 
         [WinFormsFact]
         public void ISupportErrorInfo_Supported_ButNoIErrorInfoGiven()
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
-            propertyGrid.SelectedObject = CreateComObjectWithIErrorInfo();
+            Create_Standard_IErrorInfo_UsageObject(out var target);
+            propertyGrid.SelectedObject = target;
             var entries = propertyGrid.GetCurrentEntries();
-            var encodingEntry = entries[0].Children.First(_ => _.PropertyName == "encoding");
+            var encodingEntry = entries[0].Children.First(_ => _.PropertyName == "Int_Property");
             try
             {
-                encodingEntry.SetPropertyTextValue("nonexisting");
+                encodingEntry.SetPropertyTextValue("333");
                 Assert.False(true);
             }
             catch (ExternalException ex)
             {
                 Assert.Equal(DISP_E_MEMBERNOTFOUND, ex.HResult);
             }
+            finally
+            {
+                propertyGrid.SelectedObject = null;
+                Marshal.ReleaseComObject(target);
+            }
         }
 
-        private object CreateComObjectWithIErrorInfo()
+        [WinFormsFact]
+        public void ISupportErrorInfo_Supported_WithIErrorInfoGiven()
         {
-            var CLSID_MXXMLWriter60 = new Guid("88d96a0f-f192-11d4-a65f-0040963251e5");
-            var IID_IUnknown = new Guid("{00000000-0000-0000-C000-000000000046}");
-            CoCreateInstance(ref CLSID_MXXMLWriter60,
-                IntPtr.Zero,
-                1,
-                ref IID_IUnknown,
-                out object result);
-            return result;
+            using PropertyGrid propertyGrid = new PropertyGrid();
+            Create_Raw_IErrorInfo_UsageObject(out var target);
+            propertyGrid.SelectedObject = target;
+            var entries = propertyGrid.GetCurrentEntries();
+            var encodingEntry = entries[0].Children.First(_ => _.PropertyName == "Int_Property");
+            try
+            {
+                encodingEntry.SetPropertyTextValue("123");
+                Assert.False(true);
+            }
+            catch (ExternalException ex)
+            {
+                Assert.Equal("Error From IErrorInfo", ex.Message);
+            }
+            finally
+            {
+                propertyGrid.SelectedObject = null;
+                Marshal.ReleaseComObject(target);
+            }
         }
 
-        [DllImport("ole32.dll", ExactSpelling = true, PreserveSig = false)]
-        private static extern void CoCreateInstance(
-            ref Guid rclsid,
-            IntPtr punkOuter,
-            int dwClsContext,
-            ref Guid riid,
-            [MarshalAs(UnmanagedType.Interface)] out object ppv);
+        [DllImport(System_Windows_Forms_NativeTests, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        private static extern void Create_Raw_IErrorInfo_UsageObject([MarshalAs(UnmanagedType.Interface)] out object pDisp);
+
+        [DllImport(System_Windows_Forms_NativeTests, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        private static extern void Create_Standard_IErrorInfo_UsageObject([MarshalAs(UnmanagedType.IUnknown)] out object pDisp);
     }
 }

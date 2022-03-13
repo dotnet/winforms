@@ -2,12 +2,15 @@
 
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Tests</AssemblyName>
+    <Platforms>x86;x64</Platforms>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup>
     <NoWarn>$(NoWarn),1573,1591,1712,WFDEV001</NoWarn>
   </PropertyGroup>
+
+  <Import Project="ProjectReference.targets" Sdk="Microsoft.DotNet.CMake.Sdk" />
 
   <ItemGroup>
     <PackageReference Include="Moq" Version="$(MoqPackageVersion)" />
@@ -22,6 +25,10 @@
     <ProjectReference Include="..\..\..\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
     <ProjectReference Include="..\IntegrationTests\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj" />
     <ProjectReference Include="..\TestUtilities\System.Windows.Forms.TestUtilities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <NativeProjectReference Include="WindowsFormsTests\CMakeLists.txt" CMakeProject="WindowsFormsTests\WindowsFormsTests.proj" BuildNative="true" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,5 +53,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
+
+  <Target Name="CopyTlbProjectFiles" BeforeTargets="CopyNativeProjectBinaries">
+    <ItemGroup>
+      <NativeProjectBinaries Include="$(NativeProjectOutputFolder)\*.tlb" />
+    </ItemGroup>
+  </Target>
 
 </Project>
