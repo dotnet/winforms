@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Printing;
 
@@ -70,7 +69,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public IButtonControl AcceptButton
+        new public IButtonControl? AcceptButton
         {
             get => base.AcceptButton;
             set => base.AcceptButton = value;
@@ -121,7 +120,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler AutoSizeChanged
+        new public event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -140,7 +139,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler AutoValidateChanged
+        public new event EventHandler? AutoValidateChanged
         {
             add => base.AutoValidateChanged += value;
             remove => base.AutoValidateChanged -= value;
@@ -160,7 +159,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackColorChanged
+        new public event EventHandler? BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
@@ -174,7 +173,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public IButtonControl CancelButton
+        new public IButtonControl? CancelButton
         {
             get => base.CancelButton;
             set => base.CancelButton = value;
@@ -197,7 +196,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override ContextMenuStrip ContextMenuStrip
+        public override ContextMenuStrip? ContextMenuStrip
         {
             get => base.ContextMenuStrip;
             set => base.ContextMenuStrip = value;
@@ -205,7 +204,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ContextMenuStripChanged
+        public new event EventHandler? ContextMenuStripChanged
         {
             add => base.ContextMenuStripChanged += value;
             remove => base.ContextMenuStripChanged -= value;
@@ -239,7 +238,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public Icon Icon
+        new public Icon? Icon
         {
             get => base.Icon;
             set => base.Icon = value;
@@ -283,7 +282,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler MaximumSizeChanged
+        new public event EventHandler? MaximumSizeChanged
         {
             add => base.MaximumSizeChanged += value;
             remove => base.MaximumSizeChanged -= value;
@@ -314,7 +313,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler MarginChanged
+        public new event EventHandler? MarginChanged
         {
             add => base.MarginChanged += value;
             remove => base.MarginChanged -= value;
@@ -334,7 +333,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler MinimumSizeChanged
+        new public event EventHandler? MinimumSizeChanged
         {
             add => base.MinimumSizeChanged += value;
             remove => base.MinimumSizeChanged -= value;
@@ -353,7 +352,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler PaddingChanged
+        public new event EventHandler? PaddingChanged
         {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
@@ -372,7 +371,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler SizeChanged
+        new public event EventHandler? SizeChanged
         {
             add => base.SizeChanged += value;
             remove => base.SizeChanged -= value;
@@ -451,7 +450,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public string AccessibleDescription
+        new public string? AccessibleDescription
         {
             get => base.AccessibleDescription;
             set => base.AccessibleDescription = value;
@@ -462,7 +461,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public string AccessibleName
+        new public string? AccessibleName
         {
             get => base.AccessibleName;
             set => base.AccessibleName = value;
@@ -482,7 +481,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler CausesValidationChanged
+        new public event EventHandler? CausesValidationChanged
         {
             add => base.CausesValidationChanged += value;
             remove => base.CausesValidationChanged -= value;
@@ -516,7 +515,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler EnabledChanged
+        new public event EventHandler? EnabledChanged
         {
             add => base.EnabledChanged += value;
             remove => base.EnabledChanged -= value;
@@ -536,7 +535,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler LocationChanged
+        new public event EventHandler? LocationChanged
         {
             add => base.LocationChanged += value;
             remove => base.LocationChanged -= value;
@@ -544,7 +543,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public object Tag
+        new public object? Tag
         {
             get => base.Tag;
             set => base.Tag = value;
@@ -576,7 +575,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler CursorChanged
+        new public event EventHandler? CursorChanged
         {
             add => base.CursorChanged += value;
             remove => base.CursorChanged -= value;
@@ -587,7 +586,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -595,7 +594,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        new public event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -614,7 +613,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        new public event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -634,7 +633,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged
+        public new event EventHandler? ImeModeChanged
         {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
@@ -690,7 +689,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler VisibleChanged
+        new public event EventHandler? VisibleChanged
         {
             add => base.VisibleChanged += value;
             remove => base.VisibleChanged -= value;
@@ -709,7 +708,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged
+        new public event EventHandler? ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -743,7 +742,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler RightToLeftChanged
+        public new event EventHandler? RightToLeftChanged
         {
             add => base.RightToLeftChanged += value;
             remove => base.RightToLeftChanged -= value;
@@ -751,7 +750,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler RightToLeftLayoutChanged
+        public new event EventHandler? RightToLeftLayoutChanged
         {
             add => base.RightToLeftLayoutChanged += value;
             remove => base.RightToLeftLayoutChanged -= value;
@@ -771,7 +770,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TabStopChanged
+        new public event EventHandler? TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
@@ -782,6 +781,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;
@@ -790,7 +790,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        new public event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -812,7 +812,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler DockChanged
+        new public event EventHandler? DockChanged
         {
             add => base.DockChanged += value;
             remove => base.DockChanged -= value;
@@ -832,7 +832,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler FontChanged
+        new public event EventHandler? FontChanged
         {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
@@ -890,7 +890,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(null)]
         [SRDescription(nameof(SR.PrintPreviewDocumentDescr))]
-        public PrintDocument Document
+        public PrintDocument? Document
         {
             get
             {
@@ -952,6 +952,29 @@ namespace System.Windows.Forms
             set => base.SizeGripStyle = value;
         }
 
+        [MemberNotNull(nameof(toolStrip1))]
+        [MemberNotNull(nameof(printToolStripButton))]
+        [MemberNotNull(nameof(zoomToolStripSplitButton))]
+        [MemberNotNull(nameof(autoToolStripMenuItem))]
+        [MemberNotNull(nameof(toolStripMenuItem1))]
+        [MemberNotNull(nameof(toolStripMenuItem2))]
+        [MemberNotNull(nameof(toolStripMenuItem3))]
+        [MemberNotNull(nameof(toolStripMenuItem4))]
+        [MemberNotNull(nameof(toolStripMenuItem5))]
+        [MemberNotNull(nameof(toolStripMenuItem6))]
+        [MemberNotNull(nameof(toolStripMenuItem7))]
+        [MemberNotNull(nameof(toolStripMenuItem8))]
+        [MemberNotNull(nameof(separatorToolStripSeparator))]
+        [MemberNotNull(nameof(onepageToolStripButton))]
+        [MemberNotNull(nameof(twopagesToolStripButton))]
+        [MemberNotNull(nameof(threepagesToolStripButton))]
+        [MemberNotNull(nameof(fourpagesToolStripButton))]
+        [MemberNotNull(nameof(sixpagesToolStripButton))]
+        [MemberNotNull(nameof(separatorToolStripSeparator1))]
+        [MemberNotNull(nameof(closeToolStripButton))]
+        [MemberNotNull(nameof(pageCounterItem))]
+        [MemberNotNull(nameof(pageCounter))]
+        [MemberNotNull(nameof(pageToolStripLabel))]
         void InitForm()
         {
             ComponentResourceManager resources = new ComponentResourceManager(typeof(PrintPreviewDialog));
@@ -1347,17 +1370,17 @@ namespace System.Windows.Forms
             return !Text.Equals(SR.PrintPreviewDialog_PrintPreview);
         }
 
-        void OncloseToolStripButtonClick(object sender, EventArgs e)
+        void OncloseToolStripButtonClick(object? sender, EventArgs e)
         {
             Close();
         }
 
-        void previewControl_StartPageChanged(object sender, EventArgs e)
+        void previewControl_StartPageChanged(object? sender, EventArgs e)
         {
             pageCounter.Value = previewControl.StartPage + 1;
         }
 
-        void CheckZoomMenu(ToolStripMenuItem toChecked)
+        void CheckZoomMenu(ToolStripMenuItem? toChecked)
         {
             foreach (ToolStripMenuItem item in zoomToolStripSplitButton.DropDownItems)
             {
@@ -1365,70 +1388,70 @@ namespace System.Windows.Forms
             }
         }
 
-        void ZoomAuto(object sender, EventArgs eventargs)
+        void ZoomAuto(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             previewControl.AutoZoom = true;
         }
 
-        void Zoom500(object sender, EventArgs eventargs)
+        void Zoom500(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             previewControl.Zoom = 5.00;
         }
 
-        void Zoom250(object sender, EventArgs eventargs)
+        void Zoom250(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             previewControl.Zoom = 2.50;
         }
 
-        void Zoom150(object sender, EventArgs eventargs)
+        void Zoom150(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             previewControl.Zoom = 1.50;
         }
 
-        void Zoom100(object sender, EventArgs eventargs)
+        void Zoom100(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             previewControl.Zoom = 1.00;
         }
 
-        void Zoom75(object sender, EventArgs eventargs)
+        void Zoom75(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             previewControl.Zoom = .75;
         }
 
-        void Zoom50(object sender, EventArgs eventargs)
+        void Zoom50(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             previewControl.Zoom = .50;
         }
 
-        void Zoom25(object sender, EventArgs eventargs)
+        void Zoom25(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             previewControl.Zoom = .25;
         }
 
-        void Zoom10(object sender, EventArgs eventargs)
+        void Zoom10(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             previewControl.Zoom = .10;
         }
 
-        void OncloseToolStripButtonPaint(object sender, PaintEventArgs e)
+        void OncloseToolStripButtonPaint(object? sender, PaintEventArgs e)
         {
             if (sender is ToolStripItem item && !item.Selected)
             {
@@ -1437,7 +1460,7 @@ namespace System.Windows.Forms
             }
         }
 
-        void OnprintToolStripButtonClick(object sender, EventArgs e)
+        void OnprintToolStripButtonClick(object? sender, EventArgs e)
         {
             if (previewControl.Document is not null)
             {
@@ -1445,37 +1468,37 @@ namespace System.Windows.Forms
             }
         }
 
-        void OnzoomToolStripSplitButtonClick(object sender, EventArgs e)
+        void OnzoomToolStripSplitButtonClick(object? sender, EventArgs e)
         {
             ZoomAuto(null, EventArgs.Empty);
         }
 
         //--------
-        void OnonepageToolStripButtonClick(object sender, EventArgs e)
+        void OnonepageToolStripButtonClick(object? sender, EventArgs e)
         {
             previewControl.Rows = 1;
             previewControl.Columns = 1;
         }
 
-        void OntwopagesToolStripButtonClick(object sender, EventArgs e)
+        void OntwopagesToolStripButtonClick(object? sender, EventArgs e)
         {
             previewControl.Rows = 1;
             previewControl.Columns = 2;
         }
 
-        void OnthreepagesToolStripButtonClick(object sender, EventArgs e)
+        void OnthreepagesToolStripButtonClick(object? sender, EventArgs e)
         {
             previewControl.Rows = 1;
             previewControl.Columns = 3;
         }
 
-        void OnfourpagesToolStripButtonClick(object sender, EventArgs e)
+        void OnfourpagesToolStripButtonClick(object? sender, EventArgs e)
         {
             previewControl.Rows = 2;
             previewControl.Columns = 2;
         }
 
-        void OnsixpagesToolStripButtonClick(object sender, EventArgs e)
+        void OnsixpagesToolStripButtonClick(object? sender, EventArgs e)
         {
             previewControl.Rows = 2;
             previewControl.Columns = 3;
@@ -1483,7 +1506,7 @@ namespace System.Windows.Forms
 
         //----------------------
 
-        void UpdownMove(object sender, EventArgs eventargs)
+        void UpdownMove(object? sender, EventArgs eventargs)
         {
             int pageNum = ((int)pageCounter.Value) - 1;
             if (pageNum >= 0)
