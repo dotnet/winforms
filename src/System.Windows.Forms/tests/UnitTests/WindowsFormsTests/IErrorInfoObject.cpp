@@ -15,7 +15,9 @@ extern "C" __declspec(dllexport) HRESULT WINAPI Create_Raw_IErrorInfo_UsageObjec
     IClassFactory* classFactory;
     HRESULT hr;
     RETURN_IF_FAILED(ClassFactoryBasic<RawErrorInfoUsageTest>::Create(IID_IClassFactory, (LPVOID*)&classFactory));
-    return classFactory->CreateInstance(nullptr, IID_IBasicTest, ppDispatchPtr);
+    RETURN_IF_FAILED(classFactory->CreateInstance(nullptr, IID_IBasicTest, ppDispatchPtr));
+    ((IUnknown*)ppDispatchPtr)->AddRef();
+    return S_OK;
 }
 
 extern "C" __declspec(dllexport) HRESULT WINAPI Create_Standard_IErrorInfo_UsageObject(_Out_ LPVOID FAR * ppDispatchPtr)
@@ -23,5 +25,7 @@ extern "C" __declspec(dllexport) HRESULT WINAPI Create_Standard_IErrorInfo_Usage
     IClassFactory* classFactory;
     HRESULT hr;
     RETURN_IF_FAILED(ClassFactoryBasic<StandardErrorInfoUsageTest>::Create(IID_IClassFactory, (LPVOID*)&classFactory));
-    return classFactory->CreateInstance(nullptr, IID_IBasicTest, ppDispatchPtr);
+    RETURN_IF_FAILED(classFactory->CreateInstance(nullptr, IID_IBasicTest, ppDispatchPtr));
+    ((IUnknown*)ppDispatchPtr)->AddRef();
+    return S_OK;
 }
