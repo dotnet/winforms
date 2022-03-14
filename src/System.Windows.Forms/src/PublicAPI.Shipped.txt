@@ -627,17 +627,17 @@ override System.Windows.Forms.PrintPreviewControl.OnPaint(System.Windows.Forms.P
 override System.Windows.Forms.PrintPreviewControl.OnResize(System.EventArgs! eventargs) -> void
 override System.Windows.Forms.PrintPreviewControl.Text.get -> string!
 override System.Windows.Forms.PrintPreviewControl.Text.set -> void
-~override System.Windows.Forms.PrintPreviewDialog.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.PrintPreviewDialog.BackgroundImage.set -> void
-~override System.Windows.Forms.PrintPreviewDialog.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
-~override System.Windows.Forms.PrintPreviewDialog.ContextMenuStrip.set -> void
-~override System.Windows.Forms.PrintPreviewDialog.Cursor.get -> System.Windows.Forms.Cursor
-~override System.Windows.Forms.PrintPreviewDialog.Cursor.set -> void
-~override System.Windows.Forms.PrintPreviewDialog.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.PrintPreviewDialog.Font.set -> void
-~override System.Windows.Forms.PrintPreviewDialog.OnClosing(System.ComponentModel.CancelEventArgs e) -> void
-~override System.Windows.Forms.PrintPreviewDialog.Text.get -> string
-~override System.Windows.Forms.PrintPreviewDialog.Text.set -> void
+override System.Windows.Forms.PrintPreviewDialog.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.PrintPreviewDialog.BackgroundImage.set -> void
+override System.Windows.Forms.PrintPreviewDialog.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
+override System.Windows.Forms.PrintPreviewDialog.ContextMenuStrip.set -> void
+override System.Windows.Forms.PrintPreviewDialog.Cursor.get -> System.Windows.Forms.Cursor!
+override System.Windows.Forms.PrintPreviewDialog.Cursor.set -> void
+override System.Windows.Forms.PrintPreviewDialog.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.PrintPreviewDialog.Font.set -> void
+override System.Windows.Forms.PrintPreviewDialog.OnClosing(System.ComponentModel.CancelEventArgs! e) -> void
+override System.Windows.Forms.PrintPreviewDialog.Text.get -> string!
+override System.Windows.Forms.PrintPreviewDialog.Text.set -> void
 override System.Windows.Forms.ProgressBar.BackgroundImage.get -> System.Drawing.Image?
 override System.Windows.Forms.ProgressBar.BackgroundImage.set -> void
 override System.Windows.Forms.ProgressBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
@@ -2254,23 +2254,23 @@ System.Windows.Forms.PrintDialog.PrinterSettings.get -> System.Drawing.Printing.
 System.Windows.Forms.PrintDialog.PrinterSettings.set -> void
 System.Windows.Forms.PrintPreviewControl.Document.get -> System.Drawing.Printing.PrintDocument?
 System.Windows.Forms.PrintPreviewControl.Document.set -> void
-~System.Windows.Forms.PrintPreviewDialog.AcceptButton.get -> System.Windows.Forms.IButtonControl
-~System.Windows.Forms.PrintPreviewDialog.AcceptButton.set -> void
-~System.Windows.Forms.PrintPreviewDialog.AccessibleDescription.get -> string
-~System.Windows.Forms.PrintPreviewDialog.AccessibleDescription.set -> void
-~System.Windows.Forms.PrintPreviewDialog.AccessibleName.get -> string
-~System.Windows.Forms.PrintPreviewDialog.AccessibleName.set -> void
-~System.Windows.Forms.PrintPreviewDialog.CancelButton.get -> System.Windows.Forms.IButtonControl
-~System.Windows.Forms.PrintPreviewDialog.CancelButton.set -> void
-~System.Windows.Forms.PrintPreviewDialog.DataBindings.get -> System.Windows.Forms.ControlBindingsCollection
-~System.Windows.Forms.PrintPreviewDialog.DockPadding.get -> System.Windows.Forms.ScrollableControl.DockPaddingEdges
-~System.Windows.Forms.PrintPreviewDialog.Document.get -> System.Drawing.Printing.PrintDocument
-~System.Windows.Forms.PrintPreviewDialog.Document.set -> void
-~System.Windows.Forms.PrintPreviewDialog.Icon.get -> System.Drawing.Icon
-~System.Windows.Forms.PrintPreviewDialog.Icon.set -> void
-~System.Windows.Forms.PrintPreviewDialog.PrintPreviewControl.get -> System.Windows.Forms.PrintPreviewControl
-~System.Windows.Forms.PrintPreviewDialog.Tag.get -> object
-~System.Windows.Forms.PrintPreviewDialog.Tag.set -> void
+System.Windows.Forms.PrintPreviewDialog.AcceptButton.get -> System.Windows.Forms.IButtonControl?
+System.Windows.Forms.PrintPreviewDialog.AcceptButton.set -> void
+System.Windows.Forms.PrintPreviewDialog.AccessibleDescription.get -> string?
+System.Windows.Forms.PrintPreviewDialog.AccessibleDescription.set -> void
+System.Windows.Forms.PrintPreviewDialog.AccessibleName.get -> string?
+System.Windows.Forms.PrintPreviewDialog.AccessibleName.set -> void
+System.Windows.Forms.PrintPreviewDialog.CancelButton.get -> System.Windows.Forms.IButtonControl?
+System.Windows.Forms.PrintPreviewDialog.CancelButton.set -> void
+System.Windows.Forms.PrintPreviewDialog.DataBindings.get -> System.Windows.Forms.ControlBindingsCollection!
+System.Windows.Forms.PrintPreviewDialog.DockPadding.get -> System.Windows.Forms.ScrollableControl.DockPaddingEdges!
+System.Windows.Forms.PrintPreviewDialog.Document.get -> System.Drawing.Printing.PrintDocument?
+System.Windows.Forms.PrintPreviewDialog.Document.set -> void
+System.Windows.Forms.PrintPreviewDialog.Icon.get -> System.Drawing.Icon?
+System.Windows.Forms.PrintPreviewDialog.Icon.set -> void
+System.Windows.Forms.PrintPreviewDialog.PrintPreviewControl.get -> System.Windows.Forms.PrintPreviewControl!
+System.Windows.Forms.PrintPreviewDialog.Tag.get -> object?
+System.Windows.Forms.PrintPreviewDialog.Tag.set -> void
 ~System.Windows.Forms.PropertyGrid.BrowsableAttributes.get -> System.ComponentModel.AttributeCollection
 ~System.Windows.Forms.PropertyGrid.BrowsableAttributes.set -> void
 ~System.Windows.Forms.PropertyGrid.Controls.get -> System.Windows.Forms.Control.ControlCollection
@@ -9725,72 +9725,72 @@ System.Windows.Forms.PrintPreviewDialog.AutoScrollMargin.get -> System.Drawing.S
 System.Windows.Forms.PrintPreviewDialog.AutoScrollMargin.set -> void
 System.Windows.Forms.PrintPreviewDialog.AutoScrollMinSize.get -> System.Drawing.Size
 System.Windows.Forms.PrintPreviewDialog.AutoScrollMinSize.set -> void
-System.Windows.Forms.PrintPreviewDialog.AutoSizeChanged -> System.EventHandler
-System.Windows.Forms.PrintPreviewDialog.AutoValidateChanged -> System.EventHandler
-System.Windows.Forms.PrintPreviewDialog.BackColorChanged -> System.EventHandler
-System.Windows.Forms.PrintPreviewDialog.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.PrintPreviewDialog.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.PrintPreviewDialog.AutoSizeChanged -> System.EventHandler?
+System.Windows.Forms.PrintPreviewDialog.AutoValidateChanged -> System.EventHandler?
+System.Windows.Forms.PrintPreviewDialog.BackColorChanged -> System.EventHandler?
+System.Windows.Forms.PrintPreviewDialog.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.PrintPreviewDialog.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewDialog.CausesValidation.get -> bool
 System.Windows.Forms.PrintPreviewDialog.CausesValidation.set -> void
-System.Windows.Forms.PrintPreviewDialog.CausesValidationChanged -> System.EventHandler
-System.Windows.Forms.PrintPreviewDialog.ContextMenuStripChanged -> System.EventHandler
+System.Windows.Forms.PrintPreviewDialog.CausesValidationChanged -> System.EventHandler?
+System.Windows.Forms.PrintPreviewDialog.ContextMenuStripChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewDialog.ControlBox.get -> bool
 System.Windows.Forms.PrintPreviewDialog.ControlBox.set -> void
-System.Windows.Forms.PrintPreviewDialog.CursorChanged -> System.EventHandler
-System.Windows.Forms.PrintPreviewDialog.DockChanged -> System.EventHandler
+System.Windows.Forms.PrintPreviewDialog.CursorChanged -> System.EventHandler?
+System.Windows.Forms.PrintPreviewDialog.DockChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewDialog.Enabled.get -> bool
 System.Windows.Forms.PrintPreviewDialog.Enabled.set -> void
-System.Windows.Forms.PrintPreviewDialog.EnabledChanged -> System.EventHandler
-System.Windows.Forms.PrintPreviewDialog.FontChanged -> System.EventHandler
-System.Windows.Forms.PrintPreviewDialog.ForeColorChanged -> System.EventHandler
+System.Windows.Forms.PrintPreviewDialog.EnabledChanged -> System.EventHandler?
+System.Windows.Forms.PrintPreviewDialog.FontChanged -> System.EventHandler?
+System.Windows.Forms.PrintPreviewDialog.ForeColorChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewDialog.FormBorderStyle.get -> System.Windows.Forms.FormBorderStyle
 System.Windows.Forms.PrintPreviewDialog.FormBorderStyle.set -> void
 System.Windows.Forms.PrintPreviewDialog.HelpButton.get -> bool
 System.Windows.Forms.PrintPreviewDialog.HelpButton.set -> void
 System.Windows.Forms.PrintPreviewDialog.ImeMode.get -> System.Windows.Forms.ImeMode
 System.Windows.Forms.PrintPreviewDialog.ImeMode.set -> void
-System.Windows.Forms.PrintPreviewDialog.ImeModeChanged -> System.EventHandler
+System.Windows.Forms.PrintPreviewDialog.ImeModeChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewDialog.IsMdiContainer.get -> bool
 System.Windows.Forms.PrintPreviewDialog.IsMdiContainer.set -> void
 System.Windows.Forms.PrintPreviewDialog.KeyPreview.get -> bool
 System.Windows.Forms.PrintPreviewDialog.KeyPreview.set -> void
 System.Windows.Forms.PrintPreviewDialog.Location.get -> System.Drawing.Point
 System.Windows.Forms.PrintPreviewDialog.Location.set -> void
-System.Windows.Forms.PrintPreviewDialog.LocationChanged -> System.EventHandler
+System.Windows.Forms.PrintPreviewDialog.LocationChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewDialog.Margin.get -> System.Windows.Forms.Padding
 System.Windows.Forms.PrintPreviewDialog.Margin.set -> void
-System.Windows.Forms.PrintPreviewDialog.MarginChanged -> System.EventHandler
+System.Windows.Forms.PrintPreviewDialog.MarginChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewDialog.MaximizeBox.get -> bool
 System.Windows.Forms.PrintPreviewDialog.MaximizeBox.set -> void
 System.Windows.Forms.PrintPreviewDialog.MaximumSize.get -> System.Drawing.Size
 System.Windows.Forms.PrintPreviewDialog.MaximumSize.set -> void
-System.Windows.Forms.PrintPreviewDialog.MaximumSizeChanged -> System.EventHandler
+System.Windows.Forms.PrintPreviewDialog.MaximumSizeChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewDialog.MinimizeBox.get -> bool
 System.Windows.Forms.PrintPreviewDialog.MinimizeBox.set -> void
 System.Windows.Forms.PrintPreviewDialog.MinimumSize.get -> System.Drawing.Size
 System.Windows.Forms.PrintPreviewDialog.MinimumSize.set -> void
-System.Windows.Forms.PrintPreviewDialog.MinimumSizeChanged -> System.EventHandler
+System.Windows.Forms.PrintPreviewDialog.MinimumSizeChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewDialog.Opacity.get -> double
 System.Windows.Forms.PrintPreviewDialog.Opacity.set -> void
 System.Windows.Forms.PrintPreviewDialog.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.PrintPreviewDialog.Padding.set -> void
-System.Windows.Forms.PrintPreviewDialog.PaddingChanged -> System.EventHandler
+System.Windows.Forms.PrintPreviewDialog.PaddingChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewDialog.PrintPreviewDialog() -> void
-System.Windows.Forms.PrintPreviewDialog.RightToLeftChanged -> System.EventHandler
-System.Windows.Forms.PrintPreviewDialog.RightToLeftLayoutChanged -> System.EventHandler
+System.Windows.Forms.PrintPreviewDialog.RightToLeftChanged -> System.EventHandler?
+System.Windows.Forms.PrintPreviewDialog.RightToLeftLayoutChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewDialog.ShowInTaskbar.get -> bool
 System.Windows.Forms.PrintPreviewDialog.ShowInTaskbar.set -> void
 System.Windows.Forms.PrintPreviewDialog.Size.get -> System.Drawing.Size
 System.Windows.Forms.PrintPreviewDialog.Size.set -> void
-System.Windows.Forms.PrintPreviewDialog.SizeChanged -> System.EventHandler
+System.Windows.Forms.PrintPreviewDialog.SizeChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewDialog.SizeGripStyle.get -> System.Windows.Forms.SizeGripStyle
 System.Windows.Forms.PrintPreviewDialog.SizeGripStyle.set -> void
 System.Windows.Forms.PrintPreviewDialog.StartPosition.get -> System.Windows.Forms.FormStartPosition
 System.Windows.Forms.PrintPreviewDialog.StartPosition.set -> void
 System.Windows.Forms.PrintPreviewDialog.TabStop.get -> bool
 System.Windows.Forms.PrintPreviewDialog.TabStop.set -> void
-System.Windows.Forms.PrintPreviewDialog.TabStopChanged -> System.EventHandler
-System.Windows.Forms.PrintPreviewDialog.TextChanged -> System.EventHandler
+System.Windows.Forms.PrintPreviewDialog.TabStopChanged -> System.EventHandler?
+System.Windows.Forms.PrintPreviewDialog.TextChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewDialog.TopMost.get -> bool
 System.Windows.Forms.PrintPreviewDialog.TopMost.set -> void
 System.Windows.Forms.PrintPreviewDialog.TransparencyKey.get -> System.Drawing.Color
@@ -9801,7 +9801,7 @@ System.Windows.Forms.PrintPreviewDialog.UseWaitCursor.get -> bool
 System.Windows.Forms.PrintPreviewDialog.UseWaitCursor.set -> void
 System.Windows.Forms.PrintPreviewDialog.Visible.get -> bool
 System.Windows.Forms.PrintPreviewDialog.Visible.set -> void
-System.Windows.Forms.PrintPreviewDialog.VisibleChanged -> System.EventHandler
+System.Windows.Forms.PrintPreviewDialog.VisibleChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewDialog.WindowState.get -> System.Windows.Forms.FormWindowState
 System.Windows.Forms.PrintPreviewDialog.WindowState.set -> void
 System.Windows.Forms.ProfessionalColors

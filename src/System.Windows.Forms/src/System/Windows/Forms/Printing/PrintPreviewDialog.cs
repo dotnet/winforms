@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Printing;
 
@@ -22,32 +21,32 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionPrintPreviewDialog))]
     public partial class PrintPreviewDialog : Form
     {
-        readonly PrintPreviewControl previewControl;
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private ToolStripNumericUpDown pageCounterItem;
-        private NumericUpDown pageCounter;
-        private ToolStripButton printToolStripButton;
-        private ToolStripSplitButton zoomToolStripSplitButton;
-        private ToolStripMenuItem autoToolStripMenuItem;
-        private ToolStripMenuItem toolStripMenuItem1;
-        private ToolStripMenuItem toolStripMenuItem2;
-        private ToolStripMenuItem toolStripMenuItem3;
-        private ToolStripMenuItem toolStripMenuItem4;
-        private ToolStripMenuItem toolStripMenuItem5;
-        private ToolStripMenuItem toolStripMenuItem6;
-        private ToolStripMenuItem toolStripMenuItem7;
-        private ToolStripMenuItem toolStripMenuItem8;
-        private ToolStripSeparator separatorToolStripSeparator;
-        private PrintPreviewDialogToolStripButton onepageToolStripButton;
-        private PrintPreviewDialogToolStripButton twopagesToolStripButton;
-        private PrintPreviewDialogToolStripButton threepagesToolStripButton;
-        private PrintPreviewDialogToolStripButton fourpagesToolStripButton;
-        private PrintPreviewDialogToolStripButton sixpagesToolStripButton;
-        private ToolStripSeparator separatorToolStripSeparator1;
-        private ToolStripButton closeToolStripButton;
-        private ToolStripLabel pageToolStripLabel;
+        private readonly PrintPreviewControl _previewControl;
+        private ToolStrip _toolStrip1;
+        private ToolStripNumericUpDown _pageCounterItem;
+        private NumericUpDown _pageCounter;
+        private ToolStripButton _printToolStripButton;
+        private ToolStripSplitButton _zoomToolStripSplitButton;
+        private ToolStripMenuItem _autoToolStripMenuItem;
+        private ToolStripMenuItem _toolStripMenuItem1;
+        private ToolStripMenuItem _toolStripMenuItem2;
+        private ToolStripMenuItem _toolStripMenuItem3;
+        private ToolStripMenuItem _toolStripMenuItem4;
+        private ToolStripMenuItem _toolStripMenuItem5;
+        private ToolStripMenuItem _toolStripMenuItem6;
+        private ToolStripMenuItem _toolStripMenuItem7;
+        private ToolStripMenuItem _toolStripMenuItem8;
+        private ToolStripSeparator _separatorToolStripSeparator;
+        private PrintPreviewDialogToolStripButton _onePageToolStripButton;
+        private PrintPreviewDialogToolStripButton _twoPagesToolStripButton;
+        private PrintPreviewDialogToolStripButton _threePagesToolStripButton;
+        private PrintPreviewDialogToolStripButton _fourPagesToolStripButton;
+        private PrintPreviewDialogToolStripButton _sixPagesToolStripButton;
+        private ToolStripSeparator _separatorToolStripSeparator1;
+        private ToolStripButton _closeToolStripButton;
+        private ToolStripLabel _pageToolStripLabel;
 
-        readonly ImageList imageList;
+        private readonly ImageList _imageList;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="PrintPreviewDialog"/> class.
@@ -56,9 +55,9 @@ namespace System.Windows.Forms
         {
             base.AutoScaleBaseSize = new Size(5, 13);
 
-            previewControl = new PrintPreviewControl();
-            imageList = new ImageList();
-            imageList.Images.AddStrip(DpiHelper.GetBitmapFromIcon(typeof(PrintPreviewDialog), "PrintPreviewStrip"));
+            _previewControl = new PrintPreviewControl();
+            _imageList = new ImageList();
+            _imageList.Images.AddStrip(DpiHelper.GetBitmapFromIcon(typeof(PrintPreviewDialog), "PrintPreviewStrip"));
             InitForm();
         }
 
@@ -70,7 +69,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public IButtonControl AcceptButton
+        new public IButtonControl? AcceptButton
         {
             get => base.AcceptButton;
             set => base.AcceptButton = value;
@@ -121,7 +120,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler AutoSizeChanged
+        new public event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -140,7 +139,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler AutoValidateChanged
+        public new event EventHandler? AutoValidateChanged
         {
             add => base.AutoValidateChanged += value;
             remove => base.AutoValidateChanged -= value;
@@ -160,7 +159,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackColorChanged
+        new public event EventHandler? BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
@@ -174,7 +173,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public IButtonControl CancelButton
+        new public IButtonControl? CancelButton
         {
             get => base.CancelButton;
             set => base.CancelButton = value;
@@ -197,7 +196,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override ContextMenuStrip ContextMenuStrip
+        public override ContextMenuStrip? ContextMenuStrip
         {
             get => base.ContextMenuStrip;
             set => base.ContextMenuStrip = value;
@@ -205,7 +204,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ContextMenuStripChanged
+        public new event EventHandler? ContextMenuStripChanged
         {
             add => base.ContextMenuStripChanged += value;
             remove => base.ContextMenuStripChanged -= value;
@@ -239,7 +238,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public Icon Icon
+        new public Icon? Icon
         {
             get => base.Icon;
             set => base.Icon = value;
@@ -283,7 +282,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler MaximumSizeChanged
+        new public event EventHandler? MaximumSizeChanged
         {
             add => base.MaximumSizeChanged += value;
             remove => base.MaximumSizeChanged -= value;
@@ -314,7 +313,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler MarginChanged
+        public new event EventHandler? MarginChanged
         {
             add => base.MarginChanged += value;
             remove => base.MarginChanged -= value;
@@ -334,7 +333,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler MinimumSizeChanged
+        new public event EventHandler? MinimumSizeChanged
         {
             add => base.MinimumSizeChanged += value;
             remove => base.MinimumSizeChanged -= value;
@@ -353,7 +352,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler PaddingChanged
+        public new event EventHandler? PaddingChanged
         {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
@@ -372,7 +371,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler SizeChanged
+        new public event EventHandler? SizeChanged
         {
             add => base.SizeChanged += value;
             remove => base.SizeChanged -= value;
@@ -451,7 +450,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public string AccessibleDescription
+        new public string? AccessibleDescription
         {
             get => base.AccessibleDescription;
             set => base.AccessibleDescription = value;
@@ -462,7 +461,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public string AccessibleName
+        new public string? AccessibleName
         {
             get => base.AccessibleName;
             set => base.AccessibleName = value;
@@ -482,7 +481,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler CausesValidationChanged
+        new public event EventHandler? CausesValidationChanged
         {
             add => base.CausesValidationChanged += value;
             remove => base.CausesValidationChanged -= value;
@@ -516,7 +515,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler EnabledChanged
+        new public event EventHandler? EnabledChanged
         {
             add => base.EnabledChanged += value;
             remove => base.EnabledChanged -= value;
@@ -536,7 +535,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler LocationChanged
+        new public event EventHandler? LocationChanged
         {
             add => base.LocationChanged += value;
             remove => base.LocationChanged -= value;
@@ -544,7 +543,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public object Tag
+        new public object? Tag
         {
             get => base.Tag;
             set => base.Tag = value;
@@ -576,7 +575,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler CursorChanged
+        new public event EventHandler? CursorChanged
         {
             add => base.CursorChanged += value;
             remove => base.CursorChanged -= value;
@@ -587,7 +586,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -595,7 +594,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        new public event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -614,7 +613,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        new public event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -634,7 +633,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged
+        public new event EventHandler? ImeModeChanged
         {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
@@ -690,7 +689,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler VisibleChanged
+        new public event EventHandler? VisibleChanged
         {
             add => base.VisibleChanged += value;
             remove => base.VisibleChanged -= value;
@@ -709,7 +708,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged
+        new public event EventHandler? ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -743,7 +742,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler RightToLeftChanged
+        public new event EventHandler? RightToLeftChanged
         {
             add => base.RightToLeftChanged += value;
             remove => base.RightToLeftChanged -= value;
@@ -751,7 +750,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler RightToLeftLayoutChanged
+        public new event EventHandler? RightToLeftLayoutChanged
         {
             add => base.RightToLeftLayoutChanged += value;
             remove => base.RightToLeftLayoutChanged -= value;
@@ -771,7 +770,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TabStopChanged
+        new public event EventHandler? TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
@@ -782,6 +781,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;
@@ -790,7 +790,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        new public event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -812,7 +812,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler DockChanged
+        new public event EventHandler? DockChanged
         {
             add => base.DockChanged += value;
             remove => base.DockChanged -= value;
@@ -832,7 +832,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler FontChanged
+        new public event EventHandler? FontChanged
         {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
@@ -890,15 +890,15 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(null)]
         [SRDescription(nameof(SR.PrintPreviewDocumentDescr))]
-        public PrintDocument Document
+        public PrintDocument? Document
         {
             get
             {
-                return previewControl.Document;
+                return _previewControl.Document;
             }
             set
             {
-                previewControl.Document = value;
+                _previewControl.Document = value;
             }
         }
 
@@ -920,7 +920,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         public PrintPreviewControl PrintPreviewControl
         {
-            get { return previewControl; }
+            get { return _previewControl; }
         }
 
         /// <summary>
@@ -952,277 +952,300 @@ namespace System.Windows.Forms
             set => base.SizeGripStyle = value;
         }
 
+        [MemberNotNull(nameof(_toolStrip1))]
+        [MemberNotNull(nameof(_printToolStripButton))]
+        [MemberNotNull(nameof(_zoomToolStripSplitButton))]
+        [MemberNotNull(nameof(_autoToolStripMenuItem))]
+        [MemberNotNull(nameof(_toolStripMenuItem1))]
+        [MemberNotNull(nameof(_toolStripMenuItem2))]
+        [MemberNotNull(nameof(_toolStripMenuItem3))]
+        [MemberNotNull(nameof(_toolStripMenuItem4))]
+        [MemberNotNull(nameof(_toolStripMenuItem5))]
+        [MemberNotNull(nameof(_toolStripMenuItem6))]
+        [MemberNotNull(nameof(_toolStripMenuItem7))]
+        [MemberNotNull(nameof(_toolStripMenuItem8))]
+        [MemberNotNull(nameof(_separatorToolStripSeparator))]
+        [MemberNotNull(nameof(_onePageToolStripButton))]
+        [MemberNotNull(nameof(_twoPagesToolStripButton))]
+        [MemberNotNull(nameof(_threePagesToolStripButton))]
+        [MemberNotNull(nameof(_fourPagesToolStripButton))]
+        [MemberNotNull(nameof(_sixPagesToolStripButton))]
+        [MemberNotNull(nameof(_separatorToolStripSeparator1))]
+        [MemberNotNull(nameof(_closeToolStripButton))]
+        [MemberNotNull(nameof(_pageCounterItem))]
+        [MemberNotNull(nameof(_pageCounter))]
+        [MemberNotNull(nameof(_pageToolStripLabel))]
         void InitForm()
         {
             ComponentResourceManager resources = new ComponentResourceManager(typeof(PrintPreviewDialog));
-            toolStrip1 = new ToolStrip();
-            printToolStripButton = new ToolStripButton();
-            zoomToolStripSplitButton = new ToolStripSplitButton();
-            autoToolStripMenuItem = new ToolStripMenuItem();
-            toolStripMenuItem1 = new ToolStripMenuItem();
-            toolStripMenuItem2 = new ToolStripMenuItem();
-            toolStripMenuItem3 = new ToolStripMenuItem();
-            toolStripMenuItem4 = new ToolStripMenuItem();
-            toolStripMenuItem5 = new ToolStripMenuItem();
-            toolStripMenuItem6 = new ToolStripMenuItem();
-            toolStripMenuItem7 = new ToolStripMenuItem();
-            toolStripMenuItem8 = new ToolStripMenuItem();
-            separatorToolStripSeparator = new ToolStripSeparator();
-            onepageToolStripButton = new PrintPreviewDialogToolStripButton();
-            twopagesToolStripButton = new PrintPreviewDialogToolStripButton();
-            threepagesToolStripButton = new PrintPreviewDialogToolStripButton();
-            fourpagesToolStripButton = new PrintPreviewDialogToolStripButton();
-            sixpagesToolStripButton = new PrintPreviewDialogToolStripButton();
-            separatorToolStripSeparator1 = new ToolStripSeparator();
-            closeToolStripButton = new ToolStripButton();
-            pageCounterItem = new ToolStripNumericUpDown();
-            pageCounter = pageCounterItem.NumericUpDownControl;
-            pageToolStripLabel = new System.Windows.Forms.ToolStripLabel();
-            toolStrip1.SuspendLayout();
+            _toolStrip1 = new ToolStrip();
+            _printToolStripButton = new ToolStripButton();
+            _zoomToolStripSplitButton = new ToolStripSplitButton();
+            _autoToolStripMenuItem = new ToolStripMenuItem();
+            _toolStripMenuItem1 = new ToolStripMenuItem();
+            _toolStripMenuItem2 = new ToolStripMenuItem();
+            _toolStripMenuItem3 = new ToolStripMenuItem();
+            _toolStripMenuItem4 = new ToolStripMenuItem();
+            _toolStripMenuItem5 = new ToolStripMenuItem();
+            _toolStripMenuItem6 = new ToolStripMenuItem();
+            _toolStripMenuItem7 = new ToolStripMenuItem();
+            _toolStripMenuItem8 = new ToolStripMenuItem();
+            _separatorToolStripSeparator = new ToolStripSeparator();
+            _onePageToolStripButton = new PrintPreviewDialogToolStripButton();
+            _twoPagesToolStripButton = new PrintPreviewDialogToolStripButton();
+            _threePagesToolStripButton = new PrintPreviewDialogToolStripButton();
+            _fourPagesToolStripButton = new PrintPreviewDialogToolStripButton();
+            _sixPagesToolStripButton = new PrintPreviewDialogToolStripButton();
+            _separatorToolStripSeparator1 = new ToolStripSeparator();
+            _closeToolStripButton = new ToolStripButton();
+            _pageCounterItem = new ToolStripNumericUpDown();
+            _pageCounter = _pageCounterItem.NumericUpDownControl;
+            _pageToolStripLabel = new System.Windows.Forms.ToolStripLabel();
+            _toolStrip1.SuspendLayout();
             SuspendLayout();
 
             //
             // toolStrip1
             //
-            resources.ApplyResources(toolStrip1, "toolStrip1");
-            toolStrip1.Items.AddRange(new ToolStripItem[]
+            resources.ApplyResources(_toolStrip1, "toolStrip1");
+            _toolStrip1.Items.AddRange(new ToolStripItem[]
             {
-            printToolStripButton,
-            zoomToolStripSplitButton,
-            separatorToolStripSeparator,
-            onepageToolStripButton,
-            twopagesToolStripButton,
-            threepagesToolStripButton,
-            fourpagesToolStripButton,
-            sixpagesToolStripButton,
-            separatorToolStripSeparator1,
-            closeToolStripButton
+            _printToolStripButton,
+            _zoomToolStripSplitButton,
+            _separatorToolStripSeparator,
+            _onePageToolStripButton,
+            _twoPagesToolStripButton,
+            _threePagesToolStripButton,
+            _fourPagesToolStripButton,
+            _sixPagesToolStripButton,
+            _separatorToolStripSeparator1,
+            _closeToolStripButton
             });
-            toolStrip1.Name = "toolStrip1";
+            _toolStrip1.Name = "toolStrip1";
 
             // in High Contrast mode the color scheme provided by ToolStripSystemRenderer
             // is not sufficiently contrast; so disable it in High Contrast mode.
             if (!SystemInformation.HighContrast)
             {
-                toolStrip1.RenderMode = ToolStripRenderMode.System;
+                _toolStrip1.RenderMode = ToolStripRenderMode.System;
             }
 
-            toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
+            _toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
 
             //
             // printToolStripButton
             //
-            printToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            printToolStripButton.Name = "printToolStripButton";
-            resources.ApplyResources(printToolStripButton, "printToolStripButton");
+            _printToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            _printToolStripButton.Name = "printToolStripButton";
+            resources.ApplyResources(_printToolStripButton, "printToolStripButton");
 
             //
             // zoomToolStripSplitButton
             //
-            zoomToolStripSplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            zoomToolStripSplitButton.DoubleClickEnabled = true;
-            zoomToolStripSplitButton.DropDownItems.AddRange(new ToolStripItem[]
+            _zoomToolStripSplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            _zoomToolStripSplitButton.DoubleClickEnabled = true;
+            _zoomToolStripSplitButton.DropDownItems.AddRange(new ToolStripItem[]
             {
-            autoToolStripMenuItem,
-            toolStripMenuItem1,
-            toolStripMenuItem2,
-            toolStripMenuItem3,
-            toolStripMenuItem4,
-            toolStripMenuItem5,
-            toolStripMenuItem6,
-            toolStripMenuItem7,
-            toolStripMenuItem8
+            _autoToolStripMenuItem,
+            _toolStripMenuItem1,
+            _toolStripMenuItem2,
+            _toolStripMenuItem3,
+            _toolStripMenuItem4,
+            _toolStripMenuItem5,
+            _toolStripMenuItem6,
+            _toolStripMenuItem7,
+            _toolStripMenuItem8
             });
-            zoomToolStripSplitButton.Name = "zoomToolStripSplitButton";
-            zoomToolStripSplitButton.SplitterWidth = 1;
-            resources.ApplyResources(zoomToolStripSplitButton, "zoomToolStripSplitButton");
+            _zoomToolStripSplitButton.Name = "zoomToolStripSplitButton";
+            _zoomToolStripSplitButton.SplitterWidth = 1;
+            resources.ApplyResources(_zoomToolStripSplitButton, "zoomToolStripSplitButton");
 
             //
             // autoToolStripMenuItem
             //
-            autoToolStripMenuItem.CheckOnClick = true;
-            autoToolStripMenuItem.DoubleClickEnabled = true;
-            autoToolStripMenuItem.Checked = true;
-            autoToolStripMenuItem.Name = "autoToolStripMenuItem";
-            resources.ApplyResources(autoToolStripMenuItem, "autoToolStripMenuItem");
+            _autoToolStripMenuItem.CheckOnClick = true;
+            _autoToolStripMenuItem.DoubleClickEnabled = true;
+            _autoToolStripMenuItem.Checked = true;
+            _autoToolStripMenuItem.Name = "autoToolStripMenuItem";
+            resources.ApplyResources(_autoToolStripMenuItem, "autoToolStripMenuItem");
 
             //
             // toolStripMenuItem1
             //
-            toolStripMenuItem1.CheckOnClick = true;
-            toolStripMenuItem1.DoubleClickEnabled = true;
-            toolStripMenuItem1.Name = "toolStripMenuItem1";
-            resources.ApplyResources(toolStripMenuItem1, "toolStripMenuItem1");
+            _toolStripMenuItem1.CheckOnClick = true;
+            _toolStripMenuItem1.DoubleClickEnabled = true;
+            _toolStripMenuItem1.Name = "toolStripMenuItem1";
+            resources.ApplyResources(_toolStripMenuItem1, "toolStripMenuItem1");
 
             //
             // toolStripMenuItem2
             //
-            toolStripMenuItem2.CheckOnClick = true;
-            toolStripMenuItem2.DoubleClickEnabled = true;
-            toolStripMenuItem2.Name = "toolStripMenuItem2";
-            resources.ApplyResources(toolStripMenuItem2, "toolStripMenuItem2");
+            _toolStripMenuItem2.CheckOnClick = true;
+            _toolStripMenuItem2.DoubleClickEnabled = true;
+            _toolStripMenuItem2.Name = "toolStripMenuItem2";
+            resources.ApplyResources(_toolStripMenuItem2, "toolStripMenuItem2");
 
             //
             // toolStripMenuItem3
             //
-            toolStripMenuItem3.CheckOnClick = true;
-            toolStripMenuItem3.DoubleClickEnabled = true;
-            toolStripMenuItem3.Name = "toolStripMenuItem3";
-            resources.ApplyResources(toolStripMenuItem3, "toolStripMenuItem3");
+            _toolStripMenuItem3.CheckOnClick = true;
+            _toolStripMenuItem3.DoubleClickEnabled = true;
+            _toolStripMenuItem3.Name = "toolStripMenuItem3";
+            resources.ApplyResources(_toolStripMenuItem3, "toolStripMenuItem3");
 
             //
             // toolStripMenuItem4
             //
-            toolStripMenuItem4.CheckOnClick = true;
-            toolStripMenuItem4.DoubleClickEnabled = true;
-            toolStripMenuItem4.Name = "toolStripMenuItem4";
-            resources.ApplyResources(toolStripMenuItem4, "toolStripMenuItem4");
+            _toolStripMenuItem4.CheckOnClick = true;
+            _toolStripMenuItem4.DoubleClickEnabled = true;
+            _toolStripMenuItem4.Name = "toolStripMenuItem4";
+            resources.ApplyResources(_toolStripMenuItem4, "toolStripMenuItem4");
 
             //
             // toolStripMenuItem5
             //
-            toolStripMenuItem5.CheckOnClick = true;
-            toolStripMenuItem5.DoubleClickEnabled = true;
-            toolStripMenuItem5.Name = "toolStripMenuItem5";
-            resources.ApplyResources(toolStripMenuItem5, "toolStripMenuItem5");
+            _toolStripMenuItem5.CheckOnClick = true;
+            _toolStripMenuItem5.DoubleClickEnabled = true;
+            _toolStripMenuItem5.Name = "toolStripMenuItem5";
+            resources.ApplyResources(_toolStripMenuItem5, "toolStripMenuItem5");
 
             //
             // toolStripMenuItem6
             //
-            toolStripMenuItem6.CheckOnClick = true;
-            toolStripMenuItem6.DoubleClickEnabled = true;
-            toolStripMenuItem6.Name = "toolStripMenuItem6";
-            resources.ApplyResources(toolStripMenuItem6, "toolStripMenuItem6");
+            _toolStripMenuItem6.CheckOnClick = true;
+            _toolStripMenuItem6.DoubleClickEnabled = true;
+            _toolStripMenuItem6.Name = "toolStripMenuItem6";
+            resources.ApplyResources(_toolStripMenuItem6, "toolStripMenuItem6");
 
             //
             // toolStripMenuItem7
             //
-            toolStripMenuItem7.CheckOnClick = true;
-            toolStripMenuItem7.DoubleClickEnabled = true;
-            toolStripMenuItem7.Name = "toolStripMenuItem7";
-            resources.ApplyResources(toolStripMenuItem7, "toolStripMenuItem7");
+            _toolStripMenuItem7.CheckOnClick = true;
+            _toolStripMenuItem7.DoubleClickEnabled = true;
+            _toolStripMenuItem7.Name = "toolStripMenuItem7";
+            resources.ApplyResources(_toolStripMenuItem7, "toolStripMenuItem7");
 
             //
             // toolStripMenuItem8
             //
-            toolStripMenuItem8.CheckOnClick = true;
-            toolStripMenuItem8.DoubleClickEnabled = true;
-            toolStripMenuItem8.Name = "toolStripMenuItem8";
-            resources.ApplyResources(toolStripMenuItem8, "toolStripMenuItem8");
+            _toolStripMenuItem8.CheckOnClick = true;
+            _toolStripMenuItem8.DoubleClickEnabled = true;
+            _toolStripMenuItem8.Name = "toolStripMenuItem8";
+            resources.ApplyResources(_toolStripMenuItem8, "toolStripMenuItem8");
 
             //
             // separatorToolStripSeparator
             //
-            separatorToolStripSeparator.Name = "separatorToolStripSeparator";
+            _separatorToolStripSeparator.Name = "separatorToolStripSeparator";
 
             //
             // onepageToolStripButton
             //
-            onepageToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            onepageToolStripButton.Name = "onepageToolStripButton";
-            resources.ApplyResources(onepageToolStripButton, "onepageToolStripButton");
+            _onePageToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            _onePageToolStripButton.Name = "onepageToolStripButton";
+            resources.ApplyResources(_onePageToolStripButton, "onepageToolStripButton");
 
             //
             // twopagesToolStripButton
             //
-            twopagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            twopagesToolStripButton.Name = "twopagesToolStripButton";
-            resources.ApplyResources(twopagesToolStripButton, "twopagesToolStripButton");
+            _twoPagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            _twoPagesToolStripButton.Name = "twopagesToolStripButton";
+            resources.ApplyResources(_twoPagesToolStripButton, "twopagesToolStripButton");
 
             //
             // threepagesToolStripButton
             //
-            threepagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            threepagesToolStripButton.Name = "threepagesToolStripButton";
-            resources.ApplyResources(threepagesToolStripButton, "threepagesToolStripButton");
+            _threePagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            _threePagesToolStripButton.Name = "threepagesToolStripButton";
+            resources.ApplyResources(_threePagesToolStripButton, "threepagesToolStripButton");
 
             //
             // fourpagesToolStripButton
             //
-            fourpagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            fourpagesToolStripButton.Name = "fourpagesToolStripButton";
-            resources.ApplyResources(fourpagesToolStripButton, "fourpagesToolStripButton");
+            _fourPagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            _fourPagesToolStripButton.Name = "fourpagesToolStripButton";
+            resources.ApplyResources(_fourPagesToolStripButton, "fourpagesToolStripButton");
 
             //
             // sixpagesToolStripButton
             //
-            sixpagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            sixpagesToolStripButton.Name = "sixpagesToolStripButton";
-            resources.ApplyResources(sixpagesToolStripButton, "sixpagesToolStripButton");
+            _sixPagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            _sixPagesToolStripButton.Name = "sixpagesToolStripButton";
+            resources.ApplyResources(_sixPagesToolStripButton, "sixpagesToolStripButton");
 
             //
             // separatorToolStripSeparator1
             //
-            separatorToolStripSeparator1.Name = "separatorToolStripSeparator1";
+            _separatorToolStripSeparator1.Name = "separatorToolStripSeparator1";
 
             //
             // closeToolStripButton
             //
-            closeToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            closeToolStripButton.Name = "closeToolStripButton";
-            resources.ApplyResources(closeToolStripButton, "closeToolStripButton");
+            _closeToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            _closeToolStripButton.Name = "closeToolStripButton";
+            resources.ApplyResources(_closeToolStripButton, "closeToolStripButton");
 
             //
             // pageCounter
             //
-            resources.ApplyResources(pageCounter, "pageCounter");
-            pageCounter.Text = "1";
-            pageCounter.TextAlign = HorizontalAlignment.Right;
-            pageCounter.DecimalPlaces = 0;
-            pageCounter.Minimum = new decimal(0d);
-            pageCounter.Maximum = new decimal(1000d);
-            pageCounter.ValueChanged += new EventHandler(UpdownMove);
-            pageCounter.Name = "pageCounter";
+            resources.ApplyResources(_pageCounter, "pageCounter");
+            _pageCounter.Text = "1";
+            _pageCounter.TextAlign = HorizontalAlignment.Right;
+            _pageCounter.DecimalPlaces = 0;
+            _pageCounter.Minimum = new decimal(0d);
+            _pageCounter.Maximum = new decimal(1000d);
+            _pageCounter.ValueChanged += new EventHandler(UpdownMove);
+            _pageCounter.Name = "pageCounter";
 
             //
             // pageToolStripLabel
             //
-            pageToolStripLabel.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            pageToolStripLabel.Name = "pageToolStripLabel";
-            resources.ApplyResources(pageToolStripLabel, "pageToolStripLabel");
+            _pageToolStripLabel.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            _pageToolStripLabel.Name = "pageToolStripLabel";
+            resources.ApplyResources(_pageToolStripLabel, "pageToolStripLabel");
 
-            previewControl.Size = new Size(792, 610);
-            previewControl.Location = new Point(0, 43);
-            previewControl.Dock = DockStyle.Fill;
-            previewControl.StartPageChanged += new EventHandler(previewControl_StartPageChanged);
+            _previewControl.Size = new Size(792, 610);
+            _previewControl.Location = new Point(0, 43);
+            _previewControl.Dock = DockStyle.Fill;
+            _previewControl.StartPageChanged += new EventHandler(previewControl_StartPageChanged);
 
             //EVENTS and Images ...
-            printToolStripButton.Click += new EventHandler(OnprintToolStripButtonClick);
-            autoToolStripMenuItem.Click += new EventHandler(ZoomAuto);
-            toolStripMenuItem1.Click += new EventHandler(Zoom500);
-            toolStripMenuItem2.Click += new EventHandler(Zoom250);
-            toolStripMenuItem3.Click += new EventHandler(Zoom150);
-            toolStripMenuItem4.Click += new EventHandler(Zoom100);
-            toolStripMenuItem5.Click += new EventHandler(Zoom75);
-            toolStripMenuItem6.Click += new EventHandler(Zoom50);
-            toolStripMenuItem7.Click += new EventHandler(Zoom25);
-            toolStripMenuItem8.Click += new EventHandler(Zoom10);
-            onepageToolStripButton.Click += new EventHandler(OnonepageToolStripButtonClick);
-            twopagesToolStripButton.Click += new EventHandler(OntwopagesToolStripButtonClick);
-            threepagesToolStripButton.Click += new EventHandler(OnthreepagesToolStripButtonClick);
-            fourpagesToolStripButton.Click += new EventHandler(OnfourpagesToolStripButtonClick);
-            sixpagesToolStripButton.Click += new EventHandler(OnsixpagesToolStripButtonClick);
-            closeToolStripButton.Click += new EventHandler(OncloseToolStripButtonClick);
-            closeToolStripButton.Paint += new PaintEventHandler(OncloseToolStripButtonPaint);
+            _printToolStripButton.Click += new EventHandler(OnprintToolStripButtonClick);
+            _autoToolStripMenuItem.Click += new EventHandler(ZoomAuto);
+            _toolStripMenuItem1.Click += new EventHandler(Zoom500);
+            _toolStripMenuItem2.Click += new EventHandler(Zoom250);
+            _toolStripMenuItem3.Click += new EventHandler(Zoom150);
+            _toolStripMenuItem4.Click += new EventHandler(Zoom100);
+            _toolStripMenuItem5.Click += new EventHandler(Zoom75);
+            _toolStripMenuItem6.Click += new EventHandler(Zoom50);
+            _toolStripMenuItem7.Click += new EventHandler(Zoom25);
+            _toolStripMenuItem8.Click += new EventHandler(Zoom10);
+            _onePageToolStripButton.Click += new EventHandler(OnonepageToolStripButtonClick);
+            _twoPagesToolStripButton.Click += new EventHandler(OntwopagesToolStripButtonClick);
+            _threePagesToolStripButton.Click += new EventHandler(OnthreepagesToolStripButtonClick);
+            _fourPagesToolStripButton.Click += new EventHandler(OnfourpagesToolStripButtonClick);
+            _sixPagesToolStripButton.Click += new EventHandler(OnsixpagesToolStripButtonClick);
+            _closeToolStripButton.Click += new EventHandler(OncloseToolStripButtonClick);
+            _closeToolStripButton.Paint += new PaintEventHandler(OncloseToolStripButtonPaint);
             //Images
-            toolStrip1.ImageList = imageList;
-            printToolStripButton.ImageIndex = 0;
-            zoomToolStripSplitButton.ImageIndex = 1;
-            onepageToolStripButton.ImageIndex = 2;
-            twopagesToolStripButton.ImageIndex = 3;
-            threepagesToolStripButton.ImageIndex = 4;
-            fourpagesToolStripButton.ImageIndex = 5;
-            sixpagesToolStripButton.ImageIndex = 6;
+            _toolStrip1.ImageList = _imageList;
+            _printToolStripButton.ImageIndex = 0;
+            _zoomToolStripSplitButton.ImageIndex = 1;
+            _onePageToolStripButton.ImageIndex = 2;
+            _twoPagesToolStripButton.ImageIndex = 3;
+            _threePagesToolStripButton.ImageIndex = 4;
+            _fourPagesToolStripButton.ImageIndex = 5;
+            _sixPagesToolStripButton.ImageIndex = 6;
 
             //tabIndex
-            previewControl.TabIndex = 0;
-            toolStrip1.TabIndex = 1;
+            _previewControl.TabIndex = 0;
+            _toolStrip1.TabIndex = 1;
 
             //DefaultItem on the Zoom SplitButton
-            zoomToolStripSplitButton.DefaultItem = autoToolStripMenuItem;
+            _zoomToolStripSplitButton.DefaultItem = _autoToolStripMenuItem;
 
             //ShowCheckMargin
-            if (zoomToolStripSplitButton.DropDown is ToolStripDropDownMenu menu)
+            if (_zoomToolStripSplitButton.DropDown is ToolStripDropDownMenu menu)
             {
                 menu.ShowCheckMargin = true;
                 menu.ShowImageMargin = false;
@@ -1230,24 +1253,24 @@ namespace System.Windows.Forms
             }
 
             //Create the ToolStripControlHost
-            pageCounterItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            _pageCounterItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
 
-            toolStrip1.Items.Add(pageCounterItem);
-            toolStrip1.Items.Add(pageToolStripLabel);
+            _toolStrip1.Items.Add(_pageCounterItem);
+            _toolStrip1.Items.Add(_pageToolStripLabel);
 
             //
             // Form1
             //
             resources.ApplyResources(this, "$this");
 
-            Controls.Add(previewControl);
-            Controls.Add(toolStrip1);
+            Controls.Add(_previewControl);
+            Controls.Add(_toolStrip1);
 
             ClientSize = new Size(400, 300);
             MinimizeBox = false;
             ShowInTaskbar = false;
             SizeGripStyle = SizeGripStyle.Hide;
-            toolStrip1.ResumeLayout(false);
+            _toolStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1258,7 +1281,7 @@ namespace System.Windows.Forms
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
-            previewControl.InvalidatePreview();
+            _previewControl.InvalidatePreview();
         }
 
         /// <summary>
@@ -1297,19 +1320,19 @@ namespace System.Windows.Forms
             {
                 return keyCode switch
                 {
-                    Keys.D1 => PerformPageToolStripButtonClick(onepageToolStripButton),
-                    Keys.D2 => PerformPageToolStripButtonClick(twopagesToolStripButton),
-                    Keys.D3 => PerformPageToolStripButtonClick(threepagesToolStripButton),
-                    Keys.D4 => PerformPageToolStripButtonClick(fourpagesToolStripButton),
-                    Keys.D5 => PerformPageToolStripButtonClick(sixpagesToolStripButton),
+                    Keys.D1 => PerformPageToolStripButtonClick(_onePageToolStripButton),
+                    Keys.D2 => PerformPageToolStripButtonClick(_twoPagesToolStripButton),
+                    Keys.D3 => PerformPageToolStripButtonClick(_threePagesToolStripButton),
+                    Keys.D4 => PerformPageToolStripButtonClick(_fourPagesToolStripButton),
+                    Keys.D5 => PerformPageToolStripButtonClick(_sixPagesToolStripButton),
                     _ => base.ProcessDialogKey(keyData)
                 };
 
                 bool PerformPageToolStripButtonClick(PrintPreviewDialogToolStripButton pageToolStripButton)
                 {
                     pageToolStripButton.PerformClick();
-                    toolStrip1.Focus();
-                    toolStrip1.ChangeSelection(pageToolStripButton);
+                    _toolStrip1.Focus();
+                    _toolStrip1.ChangeSelection(pageToolStripButton);
                     return true;
                 }
             }
@@ -1323,9 +1346,9 @@ namespace System.Windows.Forms
         /// </summary>
         protected override bool ProcessTabKey(bool forward)
         {
-            if (ActiveControl == previewControl)
+            if (ActiveControl == _previewControl)
             {
-                pageCounter.Focus();
+                _pageCounter.Focus();
                 return true;
             }
 
@@ -1347,88 +1370,88 @@ namespace System.Windows.Forms
             return !Text.Equals(SR.PrintPreviewDialog_PrintPreview);
         }
 
-        void OncloseToolStripButtonClick(object sender, EventArgs e)
+        void OncloseToolStripButtonClick(object? sender, EventArgs e)
         {
             Close();
         }
 
-        void previewControl_StartPageChanged(object sender, EventArgs e)
+        void previewControl_StartPageChanged(object? sender, EventArgs e)
         {
-            pageCounter.Value = previewControl.StartPage + 1;
+            _pageCounter.Value = _previewControl.StartPage + 1;
         }
 
-        void CheckZoomMenu(ToolStripMenuItem toChecked)
+        void CheckZoomMenu(ToolStripMenuItem? toChecked)
         {
-            foreach (ToolStripMenuItem item in zoomToolStripSplitButton.DropDownItems)
+            foreach (ToolStripMenuItem item in _zoomToolStripSplitButton.DropDownItems)
             {
                 item.Checked = toChecked == item;
             }
         }
 
-        void ZoomAuto(object sender, EventArgs eventargs)
+        void ZoomAuto(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
-            previewControl.AutoZoom = true;
+            _previewControl.AutoZoom = true;
         }
 
-        void Zoom500(object sender, EventArgs eventargs)
+        void Zoom500(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
-            previewControl.Zoom = 5.00;
+            _previewControl.Zoom = 5.00;
         }
 
-        void Zoom250(object sender, EventArgs eventargs)
+        void Zoom250(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
-            previewControl.Zoom = 2.50;
+            _previewControl.Zoom = 2.50;
         }
 
-        void Zoom150(object sender, EventArgs eventargs)
+        void Zoom150(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
-            previewControl.Zoom = 1.50;
+            _previewControl.Zoom = 1.50;
         }
 
-        void Zoom100(object sender, EventArgs eventargs)
+        void Zoom100(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
-            previewControl.Zoom = 1.00;
+            _previewControl.Zoom = 1.00;
         }
 
-        void Zoom75(object sender, EventArgs eventargs)
+        void Zoom75(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
-            previewControl.Zoom = .75;
+            _previewControl.Zoom = .75;
         }
 
-        void Zoom50(object sender, EventArgs eventargs)
+        void Zoom50(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
-            previewControl.Zoom = .50;
+            _previewControl.Zoom = .50;
         }
 
-        void Zoom25(object sender, EventArgs eventargs)
+        void Zoom25(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
-            previewControl.Zoom = .25;
+            _previewControl.Zoom = .25;
         }
 
-        void Zoom10(object sender, EventArgs eventargs)
+        void Zoom10(object? sender, EventArgs eventargs)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
-            previewControl.Zoom = .10;
+            _previewControl.Zoom = .10;
         }
 
-        void OncloseToolStripButtonPaint(object sender, PaintEventArgs e)
+        void OncloseToolStripButtonPaint(object? sender, PaintEventArgs e)
         {
             if (sender is ToolStripItem item && !item.Selected)
             {
@@ -1437,66 +1460,66 @@ namespace System.Windows.Forms
             }
         }
 
-        void OnprintToolStripButtonClick(object sender, EventArgs e)
+        void OnprintToolStripButtonClick(object? sender, EventArgs e)
         {
-            if (previewControl.Document is not null)
+            if (_previewControl.Document is not null)
             {
-                previewControl.Document.Print();
+                _previewControl.Document.Print();
             }
         }
 
-        void OnzoomToolStripSplitButtonClick(object sender, EventArgs e)
+        void OnzoomToolStripSplitButtonClick(object? sender, EventArgs e)
         {
             ZoomAuto(null, EventArgs.Empty);
         }
 
         //--------
-        void OnonepageToolStripButtonClick(object sender, EventArgs e)
+        void OnonepageToolStripButtonClick(object? sender, EventArgs e)
         {
-            previewControl.Rows = 1;
-            previewControl.Columns = 1;
+            _previewControl.Rows = 1;
+            _previewControl.Columns = 1;
         }
 
-        void OntwopagesToolStripButtonClick(object sender, EventArgs e)
+        void OntwopagesToolStripButtonClick(object? sender, EventArgs e)
         {
-            previewControl.Rows = 1;
-            previewControl.Columns = 2;
+            _previewControl.Rows = 1;
+            _previewControl.Columns = 2;
         }
 
-        void OnthreepagesToolStripButtonClick(object sender, EventArgs e)
+        void OnthreepagesToolStripButtonClick(object? sender, EventArgs e)
         {
-            previewControl.Rows = 1;
-            previewControl.Columns = 3;
+            _previewControl.Rows = 1;
+            _previewControl.Columns = 3;
         }
 
-        void OnfourpagesToolStripButtonClick(object sender, EventArgs e)
+        void OnfourpagesToolStripButtonClick(object? sender, EventArgs e)
         {
-            previewControl.Rows = 2;
-            previewControl.Columns = 2;
+            _previewControl.Rows = 2;
+            _previewControl.Columns = 2;
         }
 
-        void OnsixpagesToolStripButtonClick(object sender, EventArgs e)
+        void OnsixpagesToolStripButtonClick(object? sender, EventArgs e)
         {
-            previewControl.Rows = 2;
-            previewControl.Columns = 3;
+            _previewControl.Rows = 2;
+            _previewControl.Columns = 3;
         }
 
         //----------------------
 
-        void UpdownMove(object sender, EventArgs eventargs)
+        void UpdownMove(object? sender, EventArgs eventargs)
         {
-            int pageNum = ((int)pageCounter.Value) - 1;
+            int pageNum = ((int)_pageCounter.Value) - 1;
             if (pageNum >= 0)
             {
                 // -1 because users like to count from one, and programmers from 0
-                previewControl.StartPage = pageNum;
+                _previewControl.StartPage = pageNum;
 
                 // And previewControl_PropertyChanged will change it again,
                 // ensuring it stays within legal bounds.
             }
             else
             {
-                pageCounter.Value = previewControl.StartPage + 1;
+                _pageCounter.Value = _previewControl.StartPage + 1;
             }
         }
     }
