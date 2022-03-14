@@ -7698,7 +7698,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="PictureBoxRemoteLocationNotSupported">
         <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
+        <target state="translated">Načítání ze vzdáleného umístění není podporováno.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">

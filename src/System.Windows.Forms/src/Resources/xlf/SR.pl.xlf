@@ -7698,7 +7698,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="PictureBoxRemoteLocationNotSupported">
         <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
+        <target state="translated">Ładowanie z lokalizacji zdalnej nie jest obsługiwane.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">

@@ -7698,7 +7698,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="PictureBoxRemoteLocationNotSupported">
         <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
+        <target state="translated">Das Laden vom Remotespeicherort wird nicht unterstützt.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">

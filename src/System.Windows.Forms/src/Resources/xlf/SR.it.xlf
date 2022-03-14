@@ -7698,7 +7698,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="PictureBoxRemoteLocationNotSupported">
         <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
+        <target state="translated">Il caricamento dalla posizione remota non è supportato.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">

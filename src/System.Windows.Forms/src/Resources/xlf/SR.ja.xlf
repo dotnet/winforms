@@ -7698,7 +7698,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PictureBoxRemoteLocationNotSupported">
         <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
+        <target state="translated">リモートの場所からの読み込みはサポートされていません。</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
