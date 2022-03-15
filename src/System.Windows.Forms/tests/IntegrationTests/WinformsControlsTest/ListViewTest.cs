@@ -142,7 +142,7 @@ namespace WinformsControlsTest
             listView1.Groups.Add(lvgroup1);
             listView1.Items.Add(new ListViewItem
             {
-                Text = "Item",
+                Text = "Item4",
                 Group = lvgroup1
             });
 
@@ -155,7 +155,7 @@ namespace WinformsControlsTest
             listView1.Groups.Add(lvgroup2);
             listView1.Items.Add(new ListViewItem
             {
-                Text = "Item",
+                Text = "Item5",
                 Group = lvgroup2
             });
 
@@ -181,7 +181,7 @@ namespace WinformsControlsTest
             listView1.Groups.Add(lvgroup1);
             listView1.Items.Add(new ListViewItem
             {
-                Text = "Item",
+                Text = "Item6",
                 Group = lvgroup1
             });
         }
