@@ -7698,7 +7698,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="PictureBoxRemoteLocationNotSupported">
         <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
+        <target state="translated">Le chargement à partir d’un emplacement distant n’est pas pris en charge.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">

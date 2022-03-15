@@ -7699,7 +7699,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PictureBoxRemoteLocationNotSupported">
         <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
+        <target state="translated">Загрузка из удаленного расположения не поддерживается.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">

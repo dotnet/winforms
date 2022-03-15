@@ -7698,7 +7698,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="PictureBoxRemoteLocationNotSupported">
         <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
+        <target state="translated">No se admite la carga desde la ubicación remota.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">

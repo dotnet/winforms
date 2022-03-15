@@ -7698,7 +7698,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="PictureBoxRemoteLocationNotSupported">
         <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
+        <target state="translated">Uzak konumdan yükleme desteklenmiyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">

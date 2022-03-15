@@ -7698,7 +7698,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="PictureBoxRemoteLocationNotSupported">
         <source>Loading from remote location not supported.</source>
-        <target state="new">Loading from remote location not supported.</target>
+        <target state="translated">Não há suporte para carregamento do local remoto.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
