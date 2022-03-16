@@ -2,7 +2,7 @@
 <Project>
   <Import Project="$(RepositoryEngineeringDir)CodeStyle.targets" />
   <Import Project="Sdk.targets" Sdk="Microsoft.DotNet.Arcade.Sdk" />
-  <Import Project="$(RepositoryEngineeringDir)packageContent.targets" />
+  <Import Project="$(RepositoryEngineeringDir)packageContent.targets" Condition="'$(CMakeOutputDir)' == ''" />
   <Import Project="$(RepositoryEngineeringDir)versioning.targets" />
   <Import Project="$(RepositoryEngineeringDir)ApiCompatibility\PublicApiAnalyzer.targets" />
 
