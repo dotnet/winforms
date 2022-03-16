@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Tests</AssemblyName>
-    <Platforms>x86;x64;arm64</Platforms>
+    <Platforms>x86;x64</Platforms>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
