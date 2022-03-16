@@ -95,8 +95,8 @@ namespace System.Windows.Forms.UITests
                 InitializeTileList(listView, columnCount, subItemsCount, tileSize: new Size(100, 100));
 
                 AccessibleObject? accessibleObject = listView.Items[0].SubItems[1].AccessibilityObject;
-                IRawElementProviderFragment? nextAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NextSibling)!;
-                IRawElementProviderFragment? previousAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.PreviousSibling)!;
+                IRawElementProviderFragment? nextAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NextSibling);
+                IRawElementProviderFragment? previousAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.PreviousSibling);
 
                 Assert.Null(nextAccessibleObject);
                 Assert.Null(previousAccessibleObject);
