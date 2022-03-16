@@ -27,10 +27,14 @@ add_library(System_Windows_Forms_NativeTests SHARED
     DispatchImpl.cpp
     StandardErrorInfoUsageTest.cpp
     RawErrorInfoUsageTest.cpp
+    Exports.def
     ${IDL_OUTPUT_DIRECTORY}/${IDL_NAME}_i.c
 )
 
 file(GENERATE OUTPUT $<TARGET_FILE_DIR:${PROJECT_NAME}>/System_Windows_Forms_NativeTests.X.manifest INPUT ${CMAKE_CURRENT_SOURCE_DIR}/System_Windows_Forms_NativeTests.X.manifest)
+file(GENERATE OUTPUT $<TARGET_FILE_DIR:${PROJECT_NAME}>/App.manifest INPUT ${CMAKE_CURRENT_SOURCE_DIR}/App.manifest)
 
 install(TARGETS System_Windows_Forms_NativeTests)
 install(FILES $<TARGET_FILE_DIR:${PROJECT_NAME}>/System_Windows_Forms_NativeTests.tlb TYPE BIN)
+install(FILES $<TARGET_FILE_DIR:${PROJECT_NAME}>/System_Windows_Forms_NativeTests.X.manifest TYPE BIN)
+install(FILES $<TARGET_FILE_DIR:${PROJECT_NAME}>/App.manifest TYPE BIN)

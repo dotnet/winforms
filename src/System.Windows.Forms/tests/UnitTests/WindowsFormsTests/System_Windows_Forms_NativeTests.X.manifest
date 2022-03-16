@@ -7,10 +7,14 @@
   version="1.0.0.0" />
 
 <file name = "System_Windows_Forms_NativeTests.dll">
-  <!-- Basic Test -->
+  <!-- RawErrorInfoUsageTest -->
   <comClass
-    clsid="{ED349A5B-257B-4349-8CB8-2C30B0C05FC3}"
+    clsid="{0ED8EE0D-22E3-49EA-850C-E69B20D1F296}"
     threadingModel="Both" />
+    <!-- StandardErrorInfoUsageTest Test -->
+    <comClass
+      clsid="{EA1FCB3A-277C-4C79-AB85-E2ED3E858201}"
+      threadingModel="Both" />
 </file>
 
 </assembly>

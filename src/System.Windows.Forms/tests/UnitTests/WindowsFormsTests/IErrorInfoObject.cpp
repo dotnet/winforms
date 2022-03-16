@@ -10,22 +10,13 @@
 #include "RawErrorInfoUsageTest.h"
 #include "StandardErrorInfoUsageTest.h"
 
-extern "C" __declspec(dllexport) HRESULT WINAPI Create_Raw_IErrorInfo_UsageObject(_Out_ LPVOID FAR * ppDispatchPtr)
+STDAPI DllGetClassObject(_In_ REFCLSID rclsid, _In_ REFIID riid, _Out_ LPVOID FAR* ppv)
 {
-    IClassFactory* classFactory;
-    HRESULT hr;
-    RETURN_IF_FAILED(ClassFactoryBasic<RawErrorInfoUsageTest>::Create(IID_IClassFactory, (LPVOID*)&classFactory));
-    RETURN_IF_FAILED(classFactory->CreateInstance(nullptr, IID_IBasicTest, ppDispatchPtr));
-    ((IUnknown*)*ppDispatchPtr)->AddRef();
-    return S_OK;
-}
+    if (rclsid == __uuidof(RawErrorInfoUsageTest))
+        return ClassFactoryBasic<RawErrorInfoUsageTest>::Create(riid, ppv);
 
-extern "C" __declspec(dllexport) HRESULT WINAPI Create_Standard_IErrorInfo_UsageObject(_Out_ LPVOID FAR * ppDispatchPtr)
-{
-    IClassFactory* classFactory;
-    HRESULT hr;
-    RETURN_IF_FAILED(ClassFactoryBasic<StandardErrorInfoUsageTest>::Create(IID_IClassFactory, (LPVOID*)&classFactory));
-    RETURN_IF_FAILED(classFactory->CreateInstance(nullptr, IID_IBasicTest, ppDispatchPtr));
-    ((IUnknown*)*ppDispatchPtr)->AddRef();
-    return S_OK;
+    if (rclsid == __uuidof(StandardErrorInfoUsageTest))
+        return ClassFactoryBasic<StandardErrorInfoUsageTest>::Create(riid, ppv);
+
+    return CLASS_E_CLASSNOTAVAILABLE;
 }

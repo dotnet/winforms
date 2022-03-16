@@ -57,6 +57,7 @@
   <Target Name="CopyTlbProjectFiles" BeforeTargets="CopyNativeProjectBinaries">
     <ItemGroup>
       <NativeProjectBinaries Include="$(NativeProjectOutputFolder)\*.tlb" />
+      <NativeProjectBinaries Include="$(NativeProjectOutputFolder)\*.manifest" />
     </ItemGroup>
   </Target>
 
