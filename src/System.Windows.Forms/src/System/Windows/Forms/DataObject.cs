@@ -473,6 +473,21 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// This function copies the given STGMEDIUM structure.
+        /// </summary>
+        private bool CopyMedium(ref STGMEDIUM mediumSrc, out STGMEDIUM mediumDest)
+        {
+            mediumDest = new();
+            int hr = Ole32.CopyStgMedium(ref mediumSrc, ref mediumDest);
+            if (hr != 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         ///  Part of IComDataObject, used to interop with OLE.
         /// </summary>
         int IComDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection)
@@ -609,6 +624,20 @@ namespace System.Windows.Forms
             {
                 converter.OleDataObject.GetDataHere(ref formatetc, ref medium);
             }
+            else if (_innerData is DataStore dataStore
+                && DragDropHelper.s_formats.Contains(DataFormats.GetFormat(formatetc.cfFormat).Name))
+            {
+                string dragDropFormat = DataFormats.GetFormat(formatetc.cfFormat).Name;
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {dragDropFormat}");
+
+                if (dataStore.GetData(dragDropFormat) is KeyValuePair<FORMATETC, STGMEDIUM> dragDropEntry
+                    && dragDropEntry.Value is STGMEDIUM mediumSrc
+                    && CopyMedium(ref mediumSrc, out STGMEDIUM mediumDest))
+                {
+                    medium = mediumDest;
+                    return;
+                }
+            }
             else
             {
                 GetDataIntoOleStructs(ref formatetc, ref medium);
@@ -668,6 +697,15 @@ namespace System.Windows.Forms
             if (_innerData is OleConverter converter)
             {
                 converter.OleDataObject.SetData(ref pFormatetcIn, ref pmedium, fRelease);
+                return;
+            }
+            else if (_innerData is DataStore dataStore
+                && DragDropHelper.s_formats.Contains(DataFormats.GetFormat(pFormatetcIn.cfFormat).Name))
+            {
+                string dragDropFormat = DataFormats.GetFormat(pFormatetcIn.cfFormat).Name;
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {dragDropFormat}");
+
+                dataStore.SetData(dragDropFormat, new KeyValuePair<FORMATETC, STGMEDIUM>(pFormatetcIn, pmedium));
                 return;
             }
 

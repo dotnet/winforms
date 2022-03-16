@@ -15,15 +15,47 @@ using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
+    /// <summary>
+    ///  Helper class to allow drop targets to display a drag image while the cursor is over the target window
+    ///  and allow an application to specify the image that will be displayed during a Shell drag-and-drop operation.
+    /// </summary>
     internal static class DragDropHelper
     {
         private const int DSH_ALLOWDROPDESCRIPTIONTEXT = 0x0001;
-        private const string CF_DROPDESCRIPTION = "DropDescription";
+        private const string CF_DISABLEDRAGTEXT = "DisableDragText";
+        private const string CF_DRAGCONTEXT = "DragContext";
+        private const string CF_DRAGIMAGE = "DragImage";
         private const string CF_DRAGIMAGEBITS = "DragImageBits";
+        private const string CF_DRAGSOURCEHELPERFLAGS = "DragSourceHelperFlags";
+        private const string CF_DRAGWINDOW = "DragWindow";
+        private const string CF_DROPDESCRIPTION = "DropDescription";
+        private const string CF_ISCOMPUTINGIMAGE = "IsComputingImage";
+        private const string CF_ISSHOWINGLAYERED = "IsShowingLayered";
+        private const string CF_ISSHOWINGTEXT = "IsShowingText";
+        private const string CF_SHELL_IDLIST_ARRAY = "Shell IDList Array";
+        private const string CF_UNTRUSTEDDRAGDROP = "UntrustedDragDrop";
+        private const string CF_USINGDEFAULTDRAGIMAGE = "UsingDefaultDragImage";
+
+        public static readonly string[] s_formats = new string[]
+        {
+            CF_DISABLEDRAGTEXT,
+            CF_DRAGCONTEXT,
+            CF_DRAGIMAGE,
+            CF_DRAGIMAGEBITS,
+            CF_DRAGSOURCEHELPERFLAGS,
+            CF_DRAGWINDOW,
+            CF_DROPDESCRIPTION,
+            CF_ISCOMPUTINGIMAGE,
+            CF_ISSHOWINGLAYERED,
+            CF_ISSHOWINGTEXT,
+            CF_SHELL_IDLIST_ARRAY,
+            CF_UNTRUSTEDDRAGDROP,
+            CF_USINGDEFAULTDRAGIMAGE
+        };
 
         /// <summary>
         ///  Creates an in-process server drag-image manager object and returns an interface pointer
-        ///  to IDragSourceHelper2. Exposes methods that allow the application to specify the image
+        ///  to IDragSourceHelper2. Exposes methods that allow the application to specify the imaged
         ///  that will be displayed during a Shell drag-and-drop operation.
         /// </summary>
         private static bool TryGetDragSourceHelper([NotNullWhen(true)] out IDragSourceHelper2? dragSourceHelper)
@@ -230,7 +262,8 @@ namespace System.Windows.Forms
             message = string.Empty;
             insert = string.Empty;
 
-            if (dataObject is null)
+            // Check if the data object contains a drop description format.
+            if (dataObject is null || !GetDropDescriptionPresent(dataObject))
             {
                 return false;
             }
@@ -239,12 +272,6 @@ namespace System.Windows.Forms
 
             try
             {
-                // Check if the data object contains a drop description format.
-                if (!GetDropDescriptionPresent(dataObject))
-                {
-                    return false;
-                }
-
                 // Create the drop description clipboard format.
                 FORMATETC formatEtc = new()
                 {
@@ -330,13 +357,13 @@ namespace System.Windows.Forms
                 medium = new()
                 {
                     pUnkForRelease = null,
-                    tymed = TYMED.TYMED_HGLOBAL
-                };
+                    tymed = TYMED.TYMED_HGLOBAL,
 
-                // Allocate a suitably sized block of memory.
-                medium.unionmember = Kernel32.GlobalAlloc(
-                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
-                    (uint)sizeof(DROPDESCRIPTION));
+                    // Allocate a suitably sized block of memory.
+                    unionmember = Kernel32.GlobalAlloc(
+                        Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                        (uint)sizeof(DROPDESCRIPTION))
+                };
                 if (medium.unionmember == IntPtr.Zero)
                 {
                     return;
@@ -362,6 +389,9 @@ namespace System.Windows.Forms
 
                 // Load the drop description into the data object.
                 dataObject.SetData(ref formatEtc, ref medium, true);
+
+                // Set IsShowingText to true.
+                SetIsShowingText(dataObject, true);
             }
             catch
             {
@@ -406,7 +436,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Sets the drag image into a data object.
         /// </summary>
-        public static HRESULT SetDragImage(IComDataObject dataObject, Bitmap dragImage)
+        public static HRESULT SetDragImage(IComDataObject dataObject, Bitmap dragImage, Point cursorOffset, bool usingDefaultDragImage)
         {
             if (dataObject is null
                 || dragImage is null
@@ -421,9 +451,14 @@ namespace System.Windows.Forms
                 {
                     hbmpDragImage = dragImage.GetHBITMAP(),
                     sizeDragImage = dragImage.Size,
-                    ptOffset = new Point(0, 0),
+                    ptOffset = cursorOffset,
                     crColorKey = GetSysColor(COLOR.WINDOW)
                 };
+
+                if (usingDefaultDragImage)
+                {
+                    SetUsingDefaultDragImage(dataObject, usingDefaultDragImage);
+                }
 
                 dragSourceHelper.SetFlags(DSH_ALLOWDROPDESCRIPTIONTEXT).ThrowIfFailed();
                 dragSourceHelper.InitializeFromBitmap(shDragImage, dataObject).ThrowIfFailed();
@@ -439,6 +474,104 @@ namespace System.Windows.Forms
             }
 
             return HRESULT.S_OK;
+        }
+
+        /// <summary>
+        ///  Sets the IsShowingLayered format for a data object.
+        /// </summary>
+        private static void SetIsShowingLayered(IComDataObject dataObject, bool value)
+        {
+            SetBooleanFormat(dataObject, CF_ISSHOWINGLAYERED, value);
+        }
+
+        /// <summary>
+        ///  Sets the IsShowingText format for a data object.
+        /// </summary>
+        private static void SetIsShowingText(IComDataObject dataObject, bool value)
+        {
+            SetBooleanFormat(dataObject, CF_ISSHOWINGTEXT, value);
+        }
+
+        /// <summary>
+        ///  Sets the DisableDragText format for a data object.
+        /// </summary>
+        private static void SetDisableDragText(IComDataObject dataObject, bool value)
+        {
+            SetBooleanFormat(dataObject, CF_DISABLEDRAGTEXT, value);
+        }
+
+        /// <summary>
+        ///  Sets the UsingDefaultDragImage format for a data object.
+        /// </summary>
+        private static void SetUsingDefaultDragImage(IComDataObject dataObject, bool value)
+        {
+            SetBooleanFormat(dataObject, CF_USINGDEFAULTDRAGIMAGE, value);
+        }
+
+        /// <summary>
+        ///  Sets boolean formats for a data object.
+        /// </summary>
+        private static unsafe void SetBooleanFormat(IComDataObject dataObject, string format, bool value)
+        {
+            if (dataObject is null)
+            {
+                return;
+            }
+
+            STGMEDIUM medium = default;
+
+            try
+            {
+                // Create the clipboard format.
+                FORMATETC formatEtc = new()
+                {
+                    cfFormat = (short)RegisterClipboardFormatW(format),
+                    dwAspect = DVASPECT.DVASPECT_CONTENT,
+                    lindex = -1,
+                    ptd = IntPtr.Zero,
+                    tymed = TYMED.TYMED_HGLOBAL
+                };
+
+                // Create a global memory object storage medium.
+                medium = new()
+                {
+                    pUnkForRelease = null,
+                    tymed = TYMED.TYMED_HGLOBAL,
+
+                    // Allocate a suitably sized block of memory.
+                    unionmember = Kernel32.GlobalAlloc(
+                        Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                        sizeof(uint))
+                };
+                if (medium.unionmember == IntPtr.Zero)
+                {
+                    return;
+                }
+
+                // Lock the global memory object.
+                IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
+                if (basePtr == IntPtr.Zero)
+                {
+                    Kernel32.GlobalFree(medium.unionmember);
+                    medium.unionmember = IntPtr.Zero;
+                    return;
+                }
+
+                // Write the boolean out to the global memory handle.
+                BOOL* pValue = (BOOL*)basePtr;
+                *pValue = value.ToBOOL();
+
+                // Unlock the global memory object
+                Kernel32.GlobalUnlock(medium.unionmember);
+
+                // Load the boolean format into the data object.
+                dataObject.SetData(ref formatEtc, ref medium, true);
+            }
+            catch
+            {
+                Kernel32.GlobalFree(medium.unionmember);
+                medium.unionmember = IntPtr.Zero;
+            }
         }
     }
 }

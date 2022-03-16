@@ -5283,6 +5283,16 @@ namespace System.Windows.Forms
         /// </summary>
         public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects)
         {
+            return DoDragDrop(data, allowedEffects, null, default);
+        }
+
+        public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap dragImage, Point cursorOffset)
+        {
+            return DoDragDrop(data, allowedEffects, dragImage, cursorOffset, false);
+        }
+
+        public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap dragImage, Point cursorOffset, bool usingDefaultDragImage)
+        {
             Ole32.IDropSource dropSource = new DropSource(this);
 
             IComDataObject dataObject = null;
@@ -5305,6 +5315,11 @@ namespace System.Windows.Forms
                 }
 
                 dataObject = (IComDataObject)iwdata;
+            }
+
+            if (dragImage is not null)
+            {
+                DragDropHelper.SetDragImage(dataObject, dragImage, cursorOffset, usingDefaultDragImage);
             }
 
             HRESULT hr = Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out Ole32.DROPEFFECT finalEffect);

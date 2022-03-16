@@ -14,10 +14,17 @@ namespace WinformsControlsTest
     {
         private readonly string _dragDropDataDirectory = "Data\\DragDrop";
         private readonly List<PictureBox> _pictureBoxList;
+        private string nyanCatAscii =
+            ".,__,.........,__,.....╭¬¬¬¬¬━━╮" + Environment.NewLine +
+            "`•.,¸,.•*¯`•.,¸,.•*|:¬¬¬¬¬¬::::|:^--------^ " + Environment.NewLine +
+            "`•.,¸,.•*¯`•.,¸,.•*|:¬¬¬¬¬¬::::||｡◕‿‿◕｡| " + Environment.NewLine +
+            "-........--\"\"-.......--\"╰O━━━━O╯╰--O-O--╯";
 
         public DragDrop()
         {
             InitializeComponent();
+
+            richTextBox1.Visible = false;
 
             _pictureBoxList = new()
             {
@@ -28,27 +35,37 @@ namespace WinformsControlsTest
                 pictureBox5
             };
 
+            AllowDrop = true;
             DragEnter += DragDrop_DragEnter;
 
             pictureBox1.AllowDrop = true;
             pictureBox1.DragEnter += PictureBox_DragEnter;
             pictureBox1.DragDrop += PictureBox_DragDrop;
+            pictureBox1.MouseDown += PictureBox_MouseDown;
 
             pictureBox2.AllowDrop = true;
             pictureBox2.DragEnter += PictureBox_DragEnter;
             pictureBox2.DragDrop += PictureBox_DragDrop;
+            pictureBox2.MouseDown += PictureBox_MouseDown;
 
             pictureBox3.AllowDrop = true;
             pictureBox3.DragEnter += PictureBox_DragEnter;
             pictureBox3.DragDrop += PictureBox_DragDrop;
+            pictureBox3.MouseDown += PictureBox_MouseDown;
 
             pictureBox4.AllowDrop = true;
             pictureBox4.DragEnter += PictureBox_DragEnter;
             pictureBox4.DragDrop += PictureBox_DragDrop;
+            pictureBox4.MouseDown += PictureBox_MouseDown;
 
             pictureBox5.AllowDrop = true;
             pictureBox5.DragEnter += PictureBox_DragEnter;
             pictureBox5.DragDrop += PictureBox_DragDrop;
+            pictureBox5.MouseDown += PictureBox_MouseDown;
+
+            textBox1.AllowDrop = true;
+            textBox1.DragEnter += TextBox1_DragEnter;
+            textBox1.DragDrop += TextBox1_DragDrop;
 
             buttonOpenCats.Click += new EventHandler(ButtonOpenCats_Click);
             buttonClear.Click += new EventHandler(ButtonClear_Click);
@@ -66,8 +83,8 @@ namespace WinformsControlsTest
 
         private void DragDrop_DragEnter(object? sender, DragEventArgs e)
         {
-            e.DropIcon = DropIconType.None;
-            e.Effect = DragDropEffects.None;
+            e.DropIcon = DropIconType.NoDropIcon;
+            e.Effect = DragDropEffects.All;
         }
 
         private void PictureBox_DragEnter(object? sender, DragEventArgs e)
@@ -115,6 +132,50 @@ namespace WinformsControlsTest
                 && files.All(file => file.Contains("NyanCat") && file.EndsWith(".bmp")))
             {
                 LoadCats(pb, files);
+            }
+        }
+
+        private void PictureBox_MouseDown(object? sender, MouseEventArgs e)
+        {
+            if (sender is PictureBox pb && pb is not null)
+            {
+                DataObject data = new(nameof(nyanCatAscii), nyanCatAscii);
+                Bitmap dragImage = (Bitmap)Image.FromFile(@"Data\DragDrop\NyanCatAscii_301.bmp");
+                pb.DoDragDrop(data, DragDropEffects.All, dragImage, new Point(0, 100));
+            }
+        }
+
+        private void TextBox1_DragDrop(object? sender, DragEventArgs e)
+        {
+            if (e is not null
+                && e.Data is not null
+                && e.Data.GetDataPresent(nameof(nyanCatAscii), false)
+                && e.Data.GetData(nameof(nyanCatAscii)) is string asciiCat)
+            {
+                textBox1.Text += textBox1.Text.Length > 0
+                    ? Environment.NewLine + Environment.NewLine + asciiCat
+                    : asciiCat;
+            }
+
+            textBox1.SelectionStart = textBox1.Text.Length;
+            textBox1.SelectionLength = 0;
+        }
+
+        private void TextBox1_DragEnter(object? sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.None;
+
+            if (e.Data is not null && e.Data.GetDataPresent(nameof(nyanCatAscii)))
+            {
+                // Set the target drop icon to a plus sign (+).
+                e.DropIcon = DropIconType.Copy;
+
+                // Set the target drop text.
+                e.Message = "Copy cat to %1";
+                e.Insert = "~=[,,_,,]:3";
+
+                // Set the target drop effect.
+                e.Effect = DragDropEffects.Copy;
             }
         }
 
