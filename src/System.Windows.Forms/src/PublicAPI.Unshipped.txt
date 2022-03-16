@@ -1,5 +1,3 @@
-~System.Windows.Forms.Control.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset) -> System.Windows.Forms.DragDropEffects
-~System.Windows.Forms.Control.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset, bool usingDefaultDragImage) -> System.Windows.Forms.DragDropEffects
 ~override System.Windows.Forms.SplitContainer.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 override System.Windows.Forms.PrintPreviewControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.Name.get -> string!
@@ -7,6 +5,8 @@ override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.Name
 override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DoDefaultAction() -> void
 override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DefaultAction.get -> string!
 ~override System.Windows.Forms.TreeView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
+~System.Windows.Forms.Control.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset) -> System.Windows.Forms.DragDropEffects
+~System.Windows.Forms.Control.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset, bool usingDefaultDragImage) -> System.Windows.Forms.DragDropEffects
 System.Windows.Forms.DragEventArgs.DropIcon.get -> System.Windows.Forms.DropIconType
 System.Windows.Forms.DragEventArgs.DropIcon.set -> void
 System.Windows.Forms.DragEventArgs.Insert.get -> string!

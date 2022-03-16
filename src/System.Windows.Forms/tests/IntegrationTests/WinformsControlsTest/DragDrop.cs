@@ -12,13 +12,13 @@ namespace WinformsControlsTest
 {
     public partial class DragDrop : Form
     {
-        private readonly string _dragDropDataDirectory = "Data\\DragDrop";
-        private readonly List<PictureBox> _pictureBoxList;
-        private string nyanCatAscii =
+        private readonly string _nyanCatAscii =
             ".,__,.........,__,.....╭¬¬¬¬¬━━╮" + Environment.NewLine +
             "`•.,¸,.•*¯`•.,¸,.•*|:¬¬¬¬¬¬::::|:^--------^ " + Environment.NewLine +
             "`•.,¸,.•*¯`•.,¸,.•*|:¬¬¬¬¬¬::::||｡◕‿‿◕｡| " + Environment.NewLine +
             "-........--\"\"-.......--\"╰O━━━━O╯╰--O-O--╯";
+        private readonly string _dragDropDataDirectory = "Data\\DragDrop";
+        private readonly List<PictureBox> _pictureBoxList;
 
         public DragDrop()
         {
@@ -139,7 +139,7 @@ namespace WinformsControlsTest
         {
             if (sender is PictureBox pb && pb is not null)
             {
-                DataObject data = new(nameof(nyanCatAscii), nyanCatAscii);
+                DataObject data = new(nameof(_nyanCatAscii), _nyanCatAscii);
                 Bitmap dragImage = (Bitmap)Image.FromFile(@"Data\DragDrop\NyanCatAscii_301.bmp");
                 pb.DoDragDrop(data, DragDropEffects.All, dragImage, new Point(0, 100));
             }
@@ -149,8 +149,8 @@ namespace WinformsControlsTest
         {
             if (e is not null
                 && e.Data is not null
-                && e.Data.GetDataPresent(nameof(nyanCatAscii), false)
-                && e.Data.GetData(nameof(nyanCatAscii)) is string asciiCat)
+                && e.Data.GetDataPresent(nameof(_nyanCatAscii), false)
+                && e.Data.GetData(nameof(_nyanCatAscii)) is string asciiCat)
             {
                 textBox1.Text += textBox1.Text.Length > 0
                     ? Environment.NewLine + Environment.NewLine + asciiCat
@@ -165,7 +165,7 @@ namespace WinformsControlsTest
         {
             e.Effect = DragDropEffects.None;
 
-            if (e.Data is not null && e.Data.GetDataPresent(nameof(nyanCatAscii)))
+            if (e.Data is not null && e.Data.GetDataPresent(nameof(_nyanCatAscii)))
             {
                 // Set the target drop icon to a plus sign (+).
                 e.DropIcon = DropIconType.Copy;
