@@ -2325,6 +2325,19 @@ namespace System.Windows.Forms
                     break;
                 case User32.WM.DESTROY:
                     base.WndProc(ref m);
+                    if (IsHandleCreated && IsAccessibilityObjectCreated)
+                    {
+                        UiaCore.UiaReturnRawElementProvider(Handle, wParam: IntPtr.Zero, lParam: IntPtr.Zero, el: null);
+
+                        if (OsVersion.IsWindows8OrGreater)
+                        {
+                            ((MonthCalendarAccessibleObject)AccessibilityObject).DisconnectChildren();
+
+                            HRESULT result = UiaCore.UiaDisconnectProvider(AccessibilityObject);
+                            Debug.Assert(result == 0);
+                        }
+                    }
+
                     break;
                 case User32.WM.PAINT:
                     base.WndProc(ref m);
