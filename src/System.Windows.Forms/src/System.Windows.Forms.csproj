@@ -52,6 +52,9 @@
     <EmbeddedResource Update="Resources\System\Windows\Forms\PrintPreviewDialog.resx">
       <LogicalName>System.Windows.Forms.PrintPreviewDialog.resources</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="ILLink.Substitutions.xml">
+      <LogicalName>ILLink.Substitutions.xml</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

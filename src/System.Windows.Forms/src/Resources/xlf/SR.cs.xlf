@@ -7696,6 +7696,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Událost aktivovaná při změně hodnoty vlastnosti SizeMode ovládacího prvku PictureBox</target>
         <note />
       </trans-unit>
+      <trans-unit id="PictureBoxRemoteLocationNotSupported">
+        <source>Loading from remote location not supported.</source>
+        <target state="translated">Načítání ze vzdáleného umístění není podporováno.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
         <source>Controls how the PictureBox will handle image placement and control sizing.</source>
         <target state="translated">Určuje, jak prvek PictureBox ošetří umístění obrázku a nastavení velikosti ovládacího prvku.</target>
