@@ -477,6 +477,46 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// This function copies a given drag-and-drop STGMEDIUM structure.
+        /// </summary>
+        public static bool CopyDragDropStgMedium(ref STGMEDIUM mediumSrc, short cfFormat, out STGMEDIUM mediumDest)
+        {
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"CopyDragDropStgMedium: {mediumSrc.tymed}");
+
+            mediumDest = new()
+            {
+                pUnkForRelease = mediumSrc.pUnkForRelease,
+                tymed = mediumSrc.tymed
+            };
+
+            if (mediumSrc.tymed.Equals(TYMED.TYMED_HGLOBAL))
+            {
+                mediumDest.unionmember = Ole32.OleDuplicateData(
+                    mediumSrc.unionmember,
+                    cfFormat,
+                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
+                if (mediumDest.unionmember == IntPtr.Zero)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            else if (mediumSrc.tymed.Equals(TYMED.TYMED_ISTREAM) && mediumSrc.unionmember != IntPtr.Zero)
+            {
+                mediumDest.unionmember = mediumSrc.unionmember;
+
+                // Increment the reference count.
+                Marshal.AddRef(mediumSrc.unionmember);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         ///  Sets the IsShowingLayered format for a data object.
         /// </summary>
         private static void SetIsShowingLayered(IComDataObject dataObject, bool value)

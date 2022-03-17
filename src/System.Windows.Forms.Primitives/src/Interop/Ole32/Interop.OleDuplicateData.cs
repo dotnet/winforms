@@ -3,13 +3,16 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
+using static Interop.Kernel32;
 
 internal static partial class Interop
 {
     internal static partial class Ole32
     {
-        [DllImport("urlmon.dll", ExactSpelling = true)]
-        public static extern int CopyStgMedium(ref STGMEDIUM pcstgmedSrc, ref STGMEDIUM pstgmedDest);
+        [DllImport(Libraries.Ole32, ExactSpelling = true)]
+        public static extern IntPtr OleDuplicateData(
+            IntPtr hSrc,
+            short cfFormat,
+            GMEM uiFlags);
     }
 }
