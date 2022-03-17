@@ -37,7 +37,7 @@ namespace System.Windows.Forms
                 {
                     if (_owner.IsHandleCreated)
                     {
-                        SelectionMode current = _owner._selectionModeChanging ? _owner._cachedSelectionMode : _owner.selectionMode;
+                        SelectionMode current = _owner._selectionModeChanging ? _owner._cachedSelectionMode : _owner._selectionMode;
                         switch (current)
                         {
                             case SelectionMode.None:

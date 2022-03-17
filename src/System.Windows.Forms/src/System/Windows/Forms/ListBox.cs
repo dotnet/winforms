@@ -81,9 +81,9 @@ namespace System.Windows.Forms
         private bool _doubleClickFired;
         private bool _selectedValueChangedFired;
 
-        private DrawMode drawMode = DrawMode.Normal;
-        private BorderStyle borderStyle = BorderStyle.Fixed3D;
-        private SelectionMode selectionMode = SelectionMode.One;
+        private DrawMode _drawMode = DrawMode.Normal;
+        private BorderStyle _borderStyle = BorderStyle.Fixed3D;
+        private SelectionMode _selectionMode = SelectionMode.One;
 
         private SelectionMode _cachedSelectionMode = SelectionMode.One;
 
@@ -227,14 +227,14 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListBoxBorderDescr))]
         public BorderStyle BorderStyle
         {
-            get => borderStyle;
+            get => _borderStyle;
             set
             {
                 SourceGenerated.EnumValidator.Validate(value);
 
-                if (value != borderStyle)
+                if (value != _borderStyle)
                 {
-                    borderStyle = value;
+                    _borderStyle = value;
                     RecreateHandle();
                     // Avoid the listbox and textbox behavior in Collection editors
                     //
@@ -315,7 +315,7 @@ namespace System.Windows.Forms
                     cp.Style |= (int)LBS.USETABSTOPS;
                 }
 
-                switch (borderStyle)
+                switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
                         cp.ExStyle |= (int)WS_EX.CLIENTEDGE;
@@ -334,7 +334,7 @@ namespace System.Windows.Forms
                     cp.Style |= (int)WS.HSCROLL;
                 }
 
-                switch (selectionMode)
+                switch (_selectionMode)
                 {
                     case SelectionMode.None:
                         cp.Style |= (int)LBS.NOSEL;
@@ -349,7 +349,7 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                switch (drawMode)
+                switch (_drawMode)
                 {
                     case DrawMode.Normal:
                         break;
@@ -409,23 +409,23 @@ namespace System.Windows.Forms
         {
             get
             {
-                return drawMode;
+                return _drawMode;
             }
 
             set
             {
                 //valid values are 0x0 to 0x2
                 SourceGenerated.EnumValidator.Validate(value);
-                if (drawMode != value)
+                if (_drawMode != value)
                 {
                     if (MultiColumn && value == DrawMode.OwnerDrawVariable)
                     {
                         throw new ArgumentException(SR.ListBoxVarHeightMultiCol, nameof(value));
                     }
 
-                    drawMode = value;
+                    _drawMode = value;
                     RecreateHandle();
-                    if (drawMode == DrawMode.OwnerDrawVariable)
+                    if (_drawMode == DrawMode.OwnerDrawVariable)
                     {
                         // Force a layout after RecreateHandle() completes because now
                         // the LB is definitely fully populated and can report a preferred size accurately.
@@ -593,8 +593,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (drawMode == DrawMode.OwnerDrawFixed ||
-                    drawMode == DrawMode.OwnerDrawVariable)
+                if (_drawMode == DrawMode.OwnerDrawFixed ||
+                    _drawMode == DrawMode.OwnerDrawVariable)
                 {
                     return _itemHeight;
                 }
@@ -612,7 +612,7 @@ namespace System.Windows.Forms
                 if (_itemHeight != value)
                 {
                     _itemHeight = value;
-                    if (drawMode == DrawMode.OwnerDrawFixed && IsHandleCreated)
+                    if (_drawMode == DrawMode.OwnerDrawFixed && IsHandleCreated)
                     {
                         BeginUpdate();
                         SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, value);
@@ -710,7 +710,7 @@ namespace System.Windows.Forms
             {
                 if (_multiColumn != value)
                 {
-                    if (value && drawMode == DrawMode.OwnerDrawVariable)
+                    if (value && _drawMode == DrawMode.OwnerDrawVariable)
                     {
                         throw new ArgumentException(SR.ListBoxVarHeightMultiCol, nameof(value));
                     }
@@ -734,7 +734,7 @@ namespace System.Windows.Forms
             {
                 int height = 0;
 
-                if (drawMode == DrawMode.OwnerDrawVariable)
+                if (_drawMode == DrawMode.OwnerDrawVariable)
                 {
                     // don't try to get item heights from the LB when items haven't been
                     // added to the LB yet. Just return current height.
@@ -768,7 +768,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (borderStyle != BorderStyle.None)
+                if (_borderStyle != BorderStyle.None)
                 {
                     height += SystemInformation.BorderSize.Height * 4 + 3;
                 }
@@ -830,7 +830,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return selectionMode != SelectionMode.None;
+                return _selectionMode != SelectionMode.None;
             }
         }
 
@@ -850,7 +850,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                SelectionMode current = (_selectionModeChanging) ? _cachedSelectionMode : selectionMode;
+                SelectionMode current = (_selectionModeChanging) ? _cachedSelectionMode : _selectionMode;
 
                 if (current == SelectionMode.None)
                 {
@@ -878,12 +878,12 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectedIndex), value));
                 }
 
-                if (selectionMode == SelectionMode.None)
+                if (_selectionMode == SelectionMode.None)
                 {
                     throw new ArgumentException(SR.ListBoxInvalidSelectionMode, nameof(value));
                 }
 
-                if (selectionMode == SelectionMode.One && value != -1)
+                if (_selectionMode == SelectionMode.One && value != -1)
                 {
                     // Single select an individual value.
                     int currentIndex = SelectedIndex;
@@ -1025,16 +1025,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                return selectionMode;
+                return _selectionMode;
             }
             set
             {
                 SourceGenerated.EnumValidator.Validate(value);
 
-                if (selectionMode != value)
+                if (_selectionMode != value)
                 {
                     SelectedItems.EnsureUpToDate();
-                    selectionMode = value;
+                    _selectionMode = value;
                     try
                     {
                         _selectionModeChanging = true;
@@ -1043,7 +1043,7 @@ namespace System.Windows.Forms
                     finally
                     {
                         _selectionModeChanging = false;
-                        _cachedSelectionMode = selectionMode;
+                        _cachedSelectionMode = _selectionMode;
                         // update the selectedItems list and SelectedItems index collection
                         if (IsHandleCreated)
                         {
@@ -1445,7 +1445,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            if (drawMode != DrawMode.OwnerDrawVariable)
+            if (_drawMode != DrawMode.OwnerDrawVariable)
             {
                 index = 0;
             }
@@ -1671,9 +1671,9 @@ namespace System.Windows.Forms
         private void NativeSetSelected(int index, bool value)
         {
             Debug.Assert(IsHandleCreated, "Should only call Native methods after the handle has been created");
-            Debug.Assert(selectionMode != SelectionMode.None, "Guard against setting selection for None selection mode outside this code.");
+            Debug.Assert(_selectionMode != SelectionMode.None, "Guard against setting selection for None selection mode outside this code.");
 
-            if (selectionMode == SelectionMode.One)
+            if (_selectionMode == SelectionMode.One)
             {
                 SendMessageW(this, (WM)LB.SETCURSEL, value ? index : -1);
             }
@@ -1699,7 +1699,7 @@ namespace System.Windows.Forms
                 SelectedItems.SetSelected(i, false);
             }
 
-            switch (selectionMode)
+            switch (_selectionMode)
             {
                 case SelectionMode.One:
                     int index = (int)SendMessageW(this, (WM)LB.GETCURSEL);
@@ -1795,7 +1795,7 @@ namespace System.Windows.Forms
                 SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, _columnWidth);
             }
 
-            if (drawMode == DrawMode.OwnerDrawFixed)
+            if (_drawMode == DrawMode.OwnerDrawFixed)
             {
                 SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
             }
@@ -1825,7 +1825,7 @@ namespace System.Windows.Forms
                 {
                     NativeAdd(_itemsCollection[i]);
 
-                    if (selectionMode != SelectionMode.None)
+                    if (_selectionMode != SelectionMode.None)
                     {
                         if (_selectedItems is not null)
                         {
@@ -1837,7 +1837,7 @@ namespace System.Windows.Forms
 
             if (_selectedItems is not null)
             {
-                if (_selectedItems.Count > 0 && selectionMode == SelectionMode.One)
+                if (_selectedItems.Count > 0 && _selectionMode == SelectionMode.One)
                 {
                     SelectedItems.Dirty();
                     SelectedItems.EnsureUpToDate();
@@ -1993,7 +1993,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override void Refresh()
         {
-            if (drawMode == DrawMode.OwnerDrawVariable)
+            if (_drawMode == DrawMode.OwnerDrawVariable)
             {
                 //Fire MeasureItem for Each Item in the Listbox...
                 int cnt = Items.Count;
@@ -2186,7 +2186,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            if (selectionMode == SelectionMode.None)
+            if (_selectionMode == SelectionMode.None)
             {
                 throw new InvalidOperationException(SR.ListBoxInvalidSelectionMode);
             }
@@ -2414,7 +2414,7 @@ namespace System.Windows.Forms
         {
             MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m.LParamInternal;
 
-            if (drawMode == DrawMode.OwnerDrawVariable && mis->itemID >= 0)
+            if (_drawMode == DrawMode.OwnerDrawVariable && mis->itemID >= 0)
             {
                 using Graphics graphics = CreateGraphicsInternal();
                 var mie = new MeasureItemEventArgs(graphics, (int)mis->itemID, ItemHeight);
