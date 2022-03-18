@@ -1,0 +1,29 @@
+name: Windows Forms localization issue
+description: Report a localization issue (.NET Core 3.1 or .NET 5+).
+labels: ["untriaged", "tenet-localization"]
+assignees: []
+title: "[LOC] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+        :warning: Have checked existing issues to see whether someone else has already reported your issue?
+        :book: Please also read https://github.com/dotnet/winforms/blob/main/docs/issue-guide.md.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Which files are affected?
+      description: |
+        List affected files. These would likely include files like:
+        * https://github.com/dotnet/winforms/search?l=XML&p=1&q=SR.+extension%3Axlf, or
+        * https://github.com/dotnet/winforms/search?q=extension%3Aresx&unscoped_q=extension%3Aresx
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Which languages are affected?
+    validations:
+      required: true
