@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
@@ -39,7 +37,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Current listener of the onItemCheck event.
         /// </summary>
-        private ItemCheckEventHandler _onItemCheck;
+        private ItemCheckEventHandler? _onItemCheck;
 
         /// <summary>
         ///  Should we use 3d checkboxes or flat ones?
@@ -55,8 +53,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The collection of checked items in the CheckedListBox.
         /// </summary>
-        private CheckedItemCollection _checkedItemCollection;
-        private CheckedIndexCollection _checkedIndexCollection;
+        private CheckedItemCollection? _checkedItemCollection;
+        private CheckedIndexCollection? _checkedIndexCollection;
 
         private static readonly WM LBC_GETCHECKSTATE = RegisterWindowMessageW("LBC_GETCHECKSTATE");
         private static readonly WM LBC_SETCHECKSTATE = RegisterWindowMessageW("LBC_SETCHECKSTATE");
@@ -144,7 +142,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new object DataSource
+        public new object? DataSource
         {
             get => base.DataSource;
             set => base.DataSource = value;
@@ -314,7 +312,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler DataSourceChanged
+        new public event EventHandler? DataSourceChanged
         {
             add => base.DataSourceChanged += value;
             remove => base.DataSourceChanged -= value;
@@ -322,7 +320,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler DisplayMemberChanged
+        new public event EventHandler? DisplayMemberChanged
         {
             add => base.DisplayMemberChanged += value;
             remove => base.DisplayMemberChanged -= value;
@@ -330,7 +328,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.CheckedListBoxItemCheckDescr))]
-        public event ItemCheckEventHandler ItemCheck
+        public event ItemCheckEventHandler? ItemCheck
         {
             add => _onItemCheck += value;
             remove => _onItemCheck -= value;
@@ -339,7 +337,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public new event EventHandler Click
+        public new event EventHandler? Click
         {
             add => base.Click += value;
             remove => base.Click -= value;
@@ -348,7 +346,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public new event MouseEventHandler MouseClick
+        public new event MouseEventHandler? MouseClick
         {
             add => base.MouseClick += value;
             remove => base.MouseClick -= value;
@@ -357,7 +355,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event DrawItemEventHandler DrawItem
+        public new event DrawItemEventHandler? DrawItem
         {
             add => base.DrawItem += value;
             remove => base.DrawItem -= value;
@@ -366,7 +364,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MeasureItemEventHandler MeasureItem
+        public new event MeasureItemEventHandler? MeasureItem
         {
             add => base.MeasureItem += value;
             remove => base.MeasureItem -= value;
@@ -383,7 +381,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ValueMemberChanged
+        new public event EventHandler? ValueMemberChanged
         {
             add => base.ValueMemberChanged += value;
             remove => base.ValueMemberChanged -= value;
@@ -635,7 +633,7 @@ namespace System.Windows.Forms
 
                 // Setup text font, color, and text
 
-                string text = GetItemText(item);
+                string? text = GetItemText(item);
 
                 if (SelectionMode != SelectionMode.None && (e.State & DrawItemState.Selected) == DrawItemState.Selected)
                 {
@@ -689,7 +687,6 @@ namespace System.Windows.Forms
                             tabStops[i] = tabDistance;
                         }
 
-                        //(
                         if (Math.Abs(tabOffset) < tabDistance)
                         {
                             tabStops[0] = tabDistance + tabOffset;
@@ -843,7 +840,7 @@ namespace System.Windows.Forms
 
             if (IsAccessibilityObjectCreated)
             {
-                AccessibleObject checkedItem = AccessibilityObject.GetChild(ice.Index);
+                AccessibleObject? checkedItem = AccessibilityObject.GetChild(ice.Index);
 
                 if (checkedItem is not null)
                 {
@@ -858,7 +855,6 @@ namespace System.Windows.Forms
 
             // we'll use the ideal checkbox size plus enough for padding on the top
             // and bottom
-            //
             if (e.ItemHeight < _idealCheckSize + 2)
             {
                 e.ItemHeight = _idealCheckSize + 2;
@@ -895,7 +891,7 @@ namespace System.Windows.Forms
 
             for (int j = 0; j < Items.Count; j++)
             {
-                CheckedItems.SetCheckedState(j, (CheckState)savedcheckedItems[j]);
+                CheckedItems.SetCheckedState(j, (CheckState)savedcheckedItems[j]!);
             }
         }
 
