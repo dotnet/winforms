@@ -415,25 +415,25 @@ override System.Windows.Forms.FlowLayoutSettings.LayoutEngine.get -> System.Wind
 ~override System.Windows.Forms.FontDialog.ToString() -> string
 override System.Windows.Forms.Form.ControlCollection.Add(System.Windows.Forms.Control? value) -> void
 override System.Windows.Forms.Form.ControlCollection.Remove(System.Windows.Forms.Control? value) -> void
-~override System.Windows.Forms.Form.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.Form.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-~override System.Windows.Forms.Form.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.Form.OnBackgroundImageChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnBackgroundImageLayoutChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnEnabledChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnEnter(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnLayout(System.Windows.Forms.LayoutEventArgs levent) -> void
-~override System.Windows.Forms.Form.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.Form.OnResize(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnStyleChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnTextChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnVisibleChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.Text.get -> string
-~override System.Windows.Forms.Form.Text.set -> void
-~override System.Windows.Forms.Form.ToString() -> string
+override System.Windows.Forms.Form.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.Form.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
+override System.Windows.Forms.Form.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.Form.OnBackgroundImageChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnBackgroundImageLayoutChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnEnabledChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnEnter(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnLayout(System.Windows.Forms.LayoutEventArgs! levent) -> void
+override System.Windows.Forms.Form.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.Form.OnResize(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnStyleChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnTextChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnVisibleChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.Text.get -> string!
+override System.Windows.Forms.Form.Text.set -> void
+override System.Windows.Forms.Form.ToString() -> string!
 override System.Windows.Forms.GroupBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.GroupBox.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.GroupBox.OnFontChanged(System.EventArgs! e) -> void
@@ -1139,8 +1139,8 @@ static System.Windows.Forms.DataFormats.GetFormat(string! format) -> System.Wind
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextWidth(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxHeight, System.Windows.Forms.TextFormatFlags flags) -> int
-~static System.Windows.Forms.Form.ActiveForm.get -> System.Windows.Forms.Form
-~static System.Windows.Forms.Form.GetAutoScaleSize(System.Drawing.Font font) -> System.Drawing.SizeF
+static System.Windows.Forms.Form.ActiveForm.get -> System.Windows.Forms.Form?
+static System.Windows.Forms.Form.GetAutoScaleSize(System.Drawing.Font! font) -> System.Drawing.SizeF
 ~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string groupBoxText, System.Drawing.Font font, System.Drawing.Color textColor, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
 ~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string groupBoxText, System.Drawing.Font font, System.Drawing.Color textColor, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
 ~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string groupBoxText, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
@@ -1770,27 +1770,27 @@ System.Windows.Forms.FolderBrowserDialog.SelectedPath.get -> string!
 System.Windows.Forms.FolderBrowserDialog.SelectedPath.set -> void
 ~System.Windows.Forms.FontDialog.Font.get -> System.Drawing.Font
 ~System.Windows.Forms.FontDialog.Font.set -> void
-~System.Windows.Forms.Form.AcceptButton.get -> System.Windows.Forms.IButtonControl
-~System.Windows.Forms.Form.AcceptButton.set -> void
-~System.Windows.Forms.Form.ActivateMdiChild(System.Windows.Forms.Form form) -> void
-~System.Windows.Forms.Form.ActiveMdiChild.get -> System.Windows.Forms.Form
-~System.Windows.Forms.Form.AddOwnedForm(System.Windows.Forms.Form ownedForm) -> void
-~System.Windows.Forms.Form.CancelButton.get -> System.Windows.Forms.IButtonControl
-~System.Windows.Forms.Form.CancelButton.set -> void
+System.Windows.Forms.Form.AcceptButton.get -> System.Windows.Forms.IButtonControl?
+System.Windows.Forms.Form.AcceptButton.set -> void
+System.Windows.Forms.Form.ActivateMdiChild(System.Windows.Forms.Form? form) -> void
+System.Windows.Forms.Form.ActiveMdiChild.get -> System.Windows.Forms.Form?
+System.Windows.Forms.Form.AddOwnedForm(System.Windows.Forms.Form? ownedForm) -> void
+System.Windows.Forms.Form.CancelButton.get -> System.Windows.Forms.IButtonControl?
+System.Windows.Forms.Form.CancelButton.set -> void
 System.Windows.Forms.Form.ControlCollection.ControlCollection(System.Windows.Forms.Form! owner) -> void
-~System.Windows.Forms.Form.Icon.get -> System.Drawing.Icon
-~System.Windows.Forms.Form.Icon.set -> void
-~System.Windows.Forms.Form.MainMenuStrip.get -> System.Windows.Forms.MenuStrip
-~System.Windows.Forms.Form.MainMenuStrip.set -> void
-~System.Windows.Forms.Form.MdiChildren.get -> System.Windows.Forms.Form[]
-~System.Windows.Forms.Form.MdiParent.get -> System.Windows.Forms.Form
-~System.Windows.Forms.Form.MdiParent.set -> void
-~System.Windows.Forms.Form.OwnedForms.get -> System.Windows.Forms.Form[]
-~System.Windows.Forms.Form.Owner.get -> System.Windows.Forms.Form
-~System.Windows.Forms.Form.Owner.set -> void
-~System.Windows.Forms.Form.RemoveOwnedForm(System.Windows.Forms.Form ownedForm) -> void
-~System.Windows.Forms.Form.Show(System.Windows.Forms.IWin32Window owner) -> void
-~System.Windows.Forms.Form.ShowDialog(System.Windows.Forms.IWin32Window owner) -> System.Windows.Forms.DialogResult
+System.Windows.Forms.Form.Icon.get -> System.Drawing.Icon?
+System.Windows.Forms.Form.Icon.set -> void
+System.Windows.Forms.Form.MainMenuStrip.get -> System.Windows.Forms.MenuStrip?
+System.Windows.Forms.Form.MainMenuStrip.set -> void
+System.Windows.Forms.Form.MdiChildren.get -> System.Windows.Forms.Form![]!
+System.Windows.Forms.Form.MdiParent.get -> System.Windows.Forms.Form?
+System.Windows.Forms.Form.MdiParent.set -> void
+System.Windows.Forms.Form.OwnedForms.get -> System.Windows.Forms.Form![]!
+System.Windows.Forms.Form.Owner.get -> System.Windows.Forms.Form?
+System.Windows.Forms.Form.Owner.set -> void
+System.Windows.Forms.Form.RemoveOwnedForm(System.Windows.Forms.Form? ownedForm) -> void
+System.Windows.Forms.Form.Show(System.Windows.Forms.IWin32Window? owner) -> void
+System.Windows.Forms.Form.ShowDialog(System.Windows.Forms.IWin32Window? owner) -> System.Windows.Forms.DialogResult
 ~System.Windows.Forms.HelpProvider.Tag.get -> object
 ~System.Windows.Forms.HelpProvider.Tag.set -> void
 ~System.Windows.Forms.HtmlDocument.ActiveElement.get -> System.Windows.Forms.HtmlElement
@@ -3147,27 +3147,27 @@ virtual System.Windows.Forms.DataObject.SetText(string! textData, System.Windows
 ~virtual System.Windows.Forms.Design.WindowsFormsComponentEditor.GetComponentEditorPages() -> System.Type[]
 ~virtual System.Windows.Forms.ErrorProvider.OnRightToLeftChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.FontDialog.OnApply(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnActivated(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnClosed(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnClosing(System.ComponentModel.CancelEventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnDeactivate(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnDpiChanged(System.Windows.Forms.DpiChangedEventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnFormClosed(System.Windows.Forms.FormClosedEventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnFormClosing(System.Windows.Forms.FormClosingEventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnHelpButtonClicked(System.ComponentModel.CancelEventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnInputLanguageChanged(System.Windows.Forms.InputLanguageChangedEventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnInputLanguageChanging(System.Windows.Forms.InputLanguageChangingEventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnLoad(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnMaximizedBoundsChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnMaximumSizeChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnMdiChildActivate(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnMenuComplete(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnMenuStart(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnMinimumSizeChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnResizeBegin(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnResizeEnd(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnShown(System.EventArgs e) -> void
+virtual System.Windows.Forms.Form.OnActivated(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnClosed(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnClosing(System.ComponentModel.CancelEventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnDeactivate(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnDpiChanged(System.Windows.Forms.DpiChangedEventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnFormClosed(System.Windows.Forms.FormClosedEventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnFormClosing(System.Windows.Forms.FormClosingEventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnHelpButtonClicked(System.ComponentModel.CancelEventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnInputLanguageChanged(System.Windows.Forms.InputLanguageChangedEventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnInputLanguageChanging(System.Windows.Forms.InputLanguageChangingEventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnLoad(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnMaximizedBoundsChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnMaximumSizeChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnMdiChildActivate(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnMenuComplete(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnMenuStart(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnMinimumSizeChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnResizeBegin(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnResizeEnd(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnShown(System.EventArgs! e) -> void
 virtual System.Windows.Forms.FormCollection.this[int index].get -> System.Windows.Forms.Form?
 virtual System.Windows.Forms.FormCollection.this[string? name].get -> System.Windows.Forms.Form?
 ~virtual System.Windows.Forms.HelpProvider.CanExtend(object target) -> bool
@@ -8043,44 +8043,44 @@ System.Windows.Forms.FontDialog.ShowHelp.get -> bool
 System.Windows.Forms.FontDialog.ShowHelp.set -> void
 System.Windows.Forms.Form
 System.Windows.Forms.Form.Activate() -> void
-System.Windows.Forms.Form.Activated -> System.EventHandler
+System.Windows.Forms.Form.Activated -> System.EventHandler?
 System.Windows.Forms.Form.AllowTransparency.get -> bool
 System.Windows.Forms.Form.AllowTransparency.set -> void
 System.Windows.Forms.Form.ApplyAutoScaling() -> void
 System.Windows.Forms.Form.AutoScale.get -> bool
 System.Windows.Forms.Form.AutoScale.set -> void
-System.Windows.Forms.Form.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.Form.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.Form.AutoSizeMode.get -> System.Windows.Forms.AutoSizeMode
 System.Windows.Forms.Form.AutoSizeMode.set -> void
-System.Windows.Forms.Form.AutoValidateChanged -> System.EventHandler
+System.Windows.Forms.Form.AutoValidateChanged -> System.EventHandler?
 System.Windows.Forms.Form.CenterToParent() -> void
 System.Windows.Forms.Form.CenterToScreen() -> void
 System.Windows.Forms.Form.ClientSize.get -> System.Drawing.Size
 System.Windows.Forms.Form.ClientSize.set -> void
 System.Windows.Forms.Form.Close() -> void
-System.Windows.Forms.Form.Closed -> System.EventHandler
-System.Windows.Forms.Form.Closing -> System.ComponentModel.CancelEventHandler
+System.Windows.Forms.Form.Closed -> System.EventHandler?
+System.Windows.Forms.Form.Closing -> System.ComponentModel.CancelEventHandler?
 System.Windows.Forms.Form.ControlBox.get -> bool
 System.Windows.Forms.Form.ControlBox.set -> void
 System.Windows.Forms.Form.ControlCollection
-System.Windows.Forms.Form.Deactivate -> System.EventHandler
+System.Windows.Forms.Form.Deactivate -> System.EventHandler?
 System.Windows.Forms.Form.DesktopBounds.get -> System.Drawing.Rectangle
 System.Windows.Forms.Form.DesktopBounds.set -> void
 System.Windows.Forms.Form.DesktopLocation.get -> System.Drawing.Point
 System.Windows.Forms.Form.DesktopLocation.set -> void
 System.Windows.Forms.Form.DialogResult.get -> System.Windows.Forms.DialogResult
 System.Windows.Forms.Form.DialogResult.set -> void
-System.Windows.Forms.Form.DpiChanged -> System.Windows.Forms.DpiChangedEventHandler
+System.Windows.Forms.Form.DpiChanged -> System.Windows.Forms.DpiChangedEventHandler?
 System.Windows.Forms.Form.Form() -> void
 System.Windows.Forms.Form.FormBorderStyle.get -> System.Windows.Forms.FormBorderStyle
 System.Windows.Forms.Form.FormBorderStyle.set -> void
-System.Windows.Forms.Form.FormClosed -> System.Windows.Forms.FormClosedEventHandler
-System.Windows.Forms.Form.FormClosing -> System.Windows.Forms.FormClosingEventHandler
+System.Windows.Forms.Form.FormClosed -> System.Windows.Forms.FormClosedEventHandler?
+System.Windows.Forms.Form.FormClosing -> System.Windows.Forms.FormClosingEventHandler?
 System.Windows.Forms.Form.HelpButton.get -> bool
 System.Windows.Forms.Form.HelpButton.set -> void
-System.Windows.Forms.Form.HelpButtonClicked -> System.ComponentModel.CancelEventHandler
-System.Windows.Forms.Form.InputLanguageChanged -> System.Windows.Forms.InputLanguageChangedEventHandler
-System.Windows.Forms.Form.InputLanguageChanging -> System.Windows.Forms.InputLanguageChangingEventHandler
+System.Windows.Forms.Form.HelpButtonClicked -> System.ComponentModel.CancelEventHandler?
+System.Windows.Forms.Form.InputLanguageChanged -> System.Windows.Forms.InputLanguageChangedEventHandler?
+System.Windows.Forms.Form.InputLanguageChanging -> System.Windows.Forms.InputLanguageChangingEventHandler?
 System.Windows.Forms.Form.IsMdiChild.get -> bool
 System.Windows.Forms.Form.IsMdiContainer.get -> bool
 System.Windows.Forms.Form.IsMdiContainer.set -> void
@@ -8088,33 +8088,33 @@ System.Windows.Forms.Form.IsRestrictedWindow.get -> bool
 System.Windows.Forms.Form.KeyPreview.get -> bool
 System.Windows.Forms.Form.KeyPreview.set -> void
 System.Windows.Forms.Form.LayoutMdi(System.Windows.Forms.MdiLayout value) -> void
-System.Windows.Forms.Form.Load -> System.EventHandler
+System.Windows.Forms.Form.Load -> System.EventHandler?
 System.Windows.Forms.Form.Location.get -> System.Drawing.Point
 System.Windows.Forms.Form.Location.set -> void
 System.Windows.Forms.Form.Margin.get -> System.Windows.Forms.Padding
 System.Windows.Forms.Form.Margin.set -> void
-System.Windows.Forms.Form.MarginChanged -> System.EventHandler
+System.Windows.Forms.Form.MarginChanged -> System.EventHandler?
 System.Windows.Forms.Form.MaximizeBox.get -> bool
 System.Windows.Forms.Form.MaximizeBox.set -> void
 System.Windows.Forms.Form.MaximizedBounds.get -> System.Drawing.Rectangle
 System.Windows.Forms.Form.MaximizedBounds.set -> void
-System.Windows.Forms.Form.MaximizedBoundsChanged -> System.EventHandler
-System.Windows.Forms.Form.MaximumSizeChanged -> System.EventHandler
-System.Windows.Forms.Form.MdiChildActivate -> System.EventHandler
+System.Windows.Forms.Form.MaximizedBoundsChanged -> System.EventHandler?
+System.Windows.Forms.Form.MaximumSizeChanged -> System.EventHandler?
+System.Windows.Forms.Form.MdiChildActivate -> System.EventHandler?
 System.Windows.Forms.Form.MdiChildrenMinimizedAnchorBottom.get -> bool
 System.Windows.Forms.Form.MdiChildrenMinimizedAnchorBottom.set -> void
-System.Windows.Forms.Form.MenuComplete -> System.EventHandler
-System.Windows.Forms.Form.MenuStart -> System.EventHandler
+System.Windows.Forms.Form.MenuComplete -> System.EventHandler?
+System.Windows.Forms.Form.MenuStart -> System.EventHandler?
 System.Windows.Forms.Form.MinimizeBox.get -> bool
 System.Windows.Forms.Form.MinimizeBox.set -> void
-System.Windows.Forms.Form.MinimumSizeChanged -> System.EventHandler
+System.Windows.Forms.Form.MinimumSizeChanged -> System.EventHandler?
 System.Windows.Forms.Form.Modal.get -> bool
 System.Windows.Forms.Form.Opacity.get -> double
 System.Windows.Forms.Form.Opacity.set -> void
-System.Windows.Forms.Form.ResizeBegin -> System.EventHandler
-System.Windows.Forms.Form.ResizeEnd -> System.EventHandler
+System.Windows.Forms.Form.ResizeBegin -> System.EventHandler?
+System.Windows.Forms.Form.ResizeEnd -> System.EventHandler?
 System.Windows.Forms.Form.RestoreBounds.get -> System.Drawing.Rectangle
-System.Windows.Forms.Form.RightToLeftLayoutChanged -> System.EventHandler
+System.Windows.Forms.Form.RightToLeftLayoutChanged -> System.EventHandler?
 System.Windows.Forms.Form.SetDesktopBounds(int x, int y, int width, int height) -> void
 System.Windows.Forms.Form.SetDesktopLocation(int x, int y) -> void
 System.Windows.Forms.Form.ShowDialog() -> System.Windows.Forms.DialogResult
@@ -8122,7 +8122,7 @@ System.Windows.Forms.Form.ShowIcon.get -> bool
 System.Windows.Forms.Form.ShowIcon.set -> void
 System.Windows.Forms.Form.ShowInTaskbar.get -> bool
 System.Windows.Forms.Form.ShowInTaskbar.set -> void
-System.Windows.Forms.Form.Shown -> System.EventHandler
+System.Windows.Forms.Form.Shown -> System.EventHandler?
 System.Windows.Forms.Form.Size.get -> System.Drawing.Size
 System.Windows.Forms.Form.Size.set -> void
 System.Windows.Forms.Form.SizeGripStyle.get -> System.Windows.Forms.SizeGripStyle
@@ -8131,10 +8131,10 @@ System.Windows.Forms.Form.StartPosition.get -> System.Windows.Forms.FormStartPos
 System.Windows.Forms.Form.StartPosition.set -> void
 System.Windows.Forms.Form.TabIndex.get -> int
 System.Windows.Forms.Form.TabIndex.set -> void
-System.Windows.Forms.Form.TabIndexChanged -> System.EventHandler
+System.Windows.Forms.Form.TabIndexChanged -> System.EventHandler?
 System.Windows.Forms.Form.TabStop.get -> bool
 System.Windows.Forms.Form.TabStop.set -> void
-System.Windows.Forms.Form.TabStopChanged -> System.EventHandler
+System.Windows.Forms.Form.TabStopChanged -> System.EventHandler?
 System.Windows.Forms.Form.TopLevel.get -> bool
 System.Windows.Forms.Form.TopLevel.set -> void
 System.Windows.Forms.Form.TopMost.get -> bool
