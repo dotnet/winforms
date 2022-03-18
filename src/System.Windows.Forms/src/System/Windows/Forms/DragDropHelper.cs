@@ -221,107 +221,42 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines whether a drop description format is present in a data object.
+        /// This function copies a given drag-and-drop STGMEDIUM structure.
         /// </summary>
-        /// <returns><see langword="true"/> if a drop description format is present in <paramref name="dataObject"/>; otherwise <see langword="false"/>.</returns>
-        private static bool GetDropDescriptionPresent(IComDataObject dataObject)
+        public static bool CopyDragDropStgMedium(ref STGMEDIUM mediumSrc, short cfFormat, out STGMEDIUM mediumDest)
         {
-            if (dataObject is null)
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"CopyDragDropStgMedium: {mediumSrc.tymed}");
+
+            mediumDest = new()
             {
-                return false;
-            }
+                pUnkForRelease = mediumSrc.pUnkForRelease,
+                tymed = mediumSrc.tymed
+            };
 
-            try
+            if (mediumSrc.tymed.Equals(TYMED.TYMED_HGLOBAL))
             {
-                // Create the drop description clipboard format.
-                FORMATETC formatEtc = new()
-                {
-                    cfFormat = (short)RegisterClipboardFormatW(CF_DROPDESCRIPTION),
-                    dwAspect = DVASPECT.DVASPECT_CONTENT,
-                    lindex = -1,
-                    ptd = IntPtr.Zero,
-                    tymed = TYMED.TYMED_HGLOBAL
-                };
-
-                // Check if the data object contains a drop description.
-                return dataObject.QueryGetData(ref formatEtc) == (int)HRESULT.S_OK;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        ///  Gets the drop description from a data object.
-        /// </summary>
-        /// <returns><see langword="true"/> if the drop description was successfully obtained from <paramref name="dataObject"/>; otherwise <see langword="false"/>.</returns>
-        public static unsafe bool GetDropDescription(IComDataObject dataObject, out DropIconType dropIcon, out string message, out string insert)
-        {
-            dropIcon = DropIconType.Default;
-            message = string.Empty;
-            insert = string.Empty;
-
-            // Check if the data object contains a drop description format.
-            if (dataObject is null || !GetDropDescriptionPresent(dataObject))
-            {
-                return false;
-            }
-
-            STGMEDIUM medium = default;
-
-            try
-            {
-                // Create the drop description clipboard format.
-                FORMATETC formatEtc = new()
-                {
-                    cfFormat = (short)RegisterClipboardFormatW(CF_DROPDESCRIPTION),
-                    dwAspect = DVASPECT.DVASPECT_CONTENT,
-                    lindex = -1,
-                    ptd = IntPtr.Zero,
-                    tymed = TYMED.TYMED_HGLOBAL
-                };
-
-                // Create the storage medium used for data transfer.
-                medium = new();
-
-                // Get the drop description from the data object.
-                dataObject.GetData(ref formatEtc, out medium);
-
-                // Lock the global memory object.
-                IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
-                if (basePtr == IntPtr.Zero)
+                mediumDest.unionmember = Ole32.OleDuplicateData(
+                    mediumSrc.unionmember,
+                    cfFormat,
+                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
+                if (mediumDest.unionmember == IntPtr.Zero)
                 {
                     return false;
                 }
-
-                // Read the drop description from the global memory handle.
-                DROPDESCRIPTION* pDropDescription = (DROPDESCRIPTION*)basePtr;
-
-                // Check if we have a valid drop description.
-                if (pDropDescription->Message.IsEmpty
-                    || pDropDescription->Type < DROPIMAGETYPE.DROPIMAGE_INVALID
-                    || pDropDescription->Type > DROPIMAGETYPE.DROPIMAGE_NOIMAGE)
-                {
-                    return false;
-                }
-
-                // Get the drop description.
-                dropIcon = (DropIconType)pDropDescription->Type;
-                message = pDropDescription->Message.ToString();
-                insert = pDropDescription->Insert.ToString();
 
                 return true;
             }
-            finally
+            else if (mediumSrc.tymed.Equals(TYMED.TYMED_ISTREAM) && mediumSrc.unionmember != IntPtr.Zero)
             {
-                // Unlock the global memory object.
-                Kernel32.GlobalUnlock(medium.unionmember);
+                mediumDest.unionmember = mediumSrc.unionmember;
 
-                if (medium.unionmember != IntPtr.Zero)
-                    Kernel32.GlobalFree(medium.unionmember);
-
-                Ole32.ReleaseStgMedium(ref medium);
+                // Increment the reference count.
+                Marshal.AddRef(mediumSrc.unionmember);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -401,39 +336,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Determines whether a drag image format is present in a data object.
-        /// </summary>
-        /// <param name="dataObject"></param>
-        /// <returns><see langword="true"/> if a drag image format is present in <paramref name="dataObject"/>; otherwise <see langword="false"/>.</returns>
-        public static bool GetDragImagePresent(IComDataObject dataObject)
-        {
-            if (dataObject is null)
-            {
-                return false;
-            }
-
-            try
-            {
-                // Create the drag image clipboard format.
-                FORMATETC formatEtc = new()
-                {
-                    cfFormat = (short)RegisterClipboardFormatW(CF_DRAGIMAGEBITS),
-                    dwAspect = DVASPECT.DVASPECT_CONTENT,
-                    lindex = -1,
-                    ptd = IntPtr.Zero,
-                    tymed = TYMED.TYMED_HGLOBAL
-                };
-
-                // Check if the data object contains a drag image.
-                return dataObject.QueryGetData(ref formatEtc) == (int)HRESULT.S_OK;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
         /// Sets the drag image into a data object.
         /// </summary>
         public static HRESULT SetDragImage(IComDataObject dataObject, Bitmap dragImage, Point cursorOffset, bool usingDefaultDragImage)
@@ -477,47 +379,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This function copies a given drag-and-drop STGMEDIUM structure.
-        /// </summary>
-        public static bool CopyDragDropStgMedium(ref STGMEDIUM mediumSrc, short cfFormat, out STGMEDIUM mediumDest)
-        {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"CopyDragDropStgMedium: {mediumSrc.tymed}");
-
-            mediumDest = new()
-            {
-                pUnkForRelease = mediumSrc.pUnkForRelease,
-                tymed = mediumSrc.tymed
-            };
-
-            if (mediumSrc.tymed.Equals(TYMED.TYMED_HGLOBAL))
-            {
-                mediumDest.unionmember = Ole32.OleDuplicateData(
-                    mediumSrc.unionmember,
-                    cfFormat,
-                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
-                if (mediumDest.unionmember == IntPtr.Zero)
-                {
-                    return false;
-                }
-
-                return true;
-            }
-            else if (mediumSrc.tymed.Equals(TYMED.TYMED_ISTREAM) && mediumSrc.unionmember != IntPtr.Zero)
-            {
-                mediumDest.unionmember = mediumSrc.unionmember;
-
-                // Increment the reference count.
-                Marshal.AddRef(mediumSrc.unionmember);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        ///  Sets the IsShowingLayered format for a data object.
+        ///  Sets the IsShowingLayered format into a data object.
         /// </summary>
         private static void SetIsShowingLayered(IComDataObject dataObject, bool value)
         {
@@ -525,7 +387,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets the IsShowingText format for a data object.
+        ///  Sets the IsShowingText format into a data object.
         /// </summary>
         private static void SetIsShowingText(IComDataObject dataObject, bool value)
         {
@@ -533,7 +395,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets the DisableDragText format for a data object.
+        ///  Sets the DisableDragText format into a data object.
         /// </summary>
         private static void SetDisableDragText(IComDataObject dataObject, bool value)
         {
@@ -541,7 +403,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets the UsingDefaultDragImage format for a data object.
+        ///  Sets the UsingDefaultDragImage format into a data object.
         /// </summary>
         private static void SetUsingDefaultDragImage(IComDataObject dataObject, bool value)
         {
@@ -549,7 +411,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets boolean formats for a data object.
+        ///  Sets boolean formats into a data object.
         /// </summary>
         private static unsafe void SetBooleanFormat(IComDataObject dataObject, string format, bool value)
         {

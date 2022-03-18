@@ -139,8 +139,13 @@ namespace WinformsControlsTest
         {
             if (sender is PictureBox pb && pb is not null)
             {
+                // Create the cat ascii data object.
                 DataObject data = new(nameof(_nyanCatAscii), _nyanCatAscii);
+
+                // Note the outer edges of the drag image are blended out if the width or height exceeds 300 pixels.
                 Bitmap dragImage = (Bitmap)Image.FromFile(@"Data\DragDrop\NyanCatAscii_301.bmp");
+
+                // Call DoDragDrop, specifying the drag image bitmap, along with the cursor offset.
                 pb.DoDragDrop(data, DragDropEffects.All, dragImage, new Point(0, 100));
             }
         }
