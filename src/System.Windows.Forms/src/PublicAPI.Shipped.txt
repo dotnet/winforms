@@ -51,12 +51,12 @@ override System.Windows.Forms.ButtonBase.OnTextChanged(System.EventArgs! e) -> v
 override System.Windows.Forms.ButtonBase.OnVisibleChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ButtonBase.Text.get -> string!
 override System.Windows.Forms.ButtonBase.Text.set -> void
-~override System.Windows.Forms.CheckBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.CheckBox.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.CheckBox.OnClick(System.EventArgs e) -> void
-~override System.Windows.Forms.CheckBox.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.CheckBox.OnMouseUp(System.Windows.Forms.MouseEventArgs mevent) -> void
-~override System.Windows.Forms.CheckBox.ToString() -> string
+override System.Windows.Forms.CheckBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.CheckBox.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.CheckBox.OnClick(System.EventArgs! e) -> void
+override System.Windows.Forms.CheckBox.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.CheckBox.OnMouseUp(System.Windows.Forms.MouseEventArgs! mevent) -> void
+override System.Windows.Forms.CheckBox.ToString() -> string!
 ~override System.Windows.Forms.CheckedListBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.CheckedListBox.CreateItemCollection() -> System.Windows.Forms.ListBox.ObjectCollection
 ~override System.Windows.Forms.CheckedListBox.CreateParams.get -> System.Windows.Forms.CreateParams
@@ -2756,9 +2756,9 @@ System.Windows.Forms.ToolStripDropDownItemAccessibleObject.ToolStripDropDownItem
 ~virtual System.Windows.Forms.BindingSource.SyncRoot.get -> object
 ~virtual System.Windows.Forms.BindingSource.this[int index].get -> object
 ~virtual System.Windows.Forms.BindingSource.this[int index].set -> void
-~virtual System.Windows.Forms.CheckBox.OnAppearanceChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.CheckBox.OnCheckedChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.CheckBox.OnCheckStateChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.CheckBox.OnAppearanceChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.CheckBox.OnCheckedChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.CheckBox.OnCheckStateChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.CheckedListBox.OnItemCheck(System.Windows.Forms.ItemCheckEventArgs ice) -> void
 ~virtual System.Windows.Forms.ComboBox.AddItemsCore(object[] value) -> void
 ~virtual System.Windows.Forms.ComboBox.ObjectCollection.this[int index].get -> object
@@ -6154,7 +6154,7 @@ System.Windows.Forms.CharacterCasing.Upper = 1 -> System.Windows.Forms.Character
 System.Windows.Forms.CheckBox
 System.Windows.Forms.CheckBox.Appearance.get -> System.Windows.Forms.Appearance
 System.Windows.Forms.CheckBox.Appearance.set -> void
-System.Windows.Forms.CheckBox.AppearanceChanged -> System.EventHandler
+System.Windows.Forms.CheckBox.AppearanceChanged -> System.EventHandler?
 System.Windows.Forms.CheckBox.AutoCheck.get -> bool
 System.Windows.Forms.CheckBox.AutoCheck.set -> void
 System.Windows.Forms.CheckBox.CheckAlign.get -> System.Drawing.ContentAlignment
@@ -6164,12 +6164,12 @@ System.Windows.Forms.CheckBox.CheckBoxAccessibleObject
 System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(System.Windows.Forms.Control! owner) -> void
 System.Windows.Forms.CheckBox.Checked.get -> bool
 System.Windows.Forms.CheckBox.Checked.set -> void
-System.Windows.Forms.CheckBox.CheckedChanged -> System.EventHandler
+System.Windows.Forms.CheckBox.CheckedChanged -> System.EventHandler?
 System.Windows.Forms.CheckBox.CheckState.get -> System.Windows.Forms.CheckState
 System.Windows.Forms.CheckBox.CheckState.set -> void
-System.Windows.Forms.CheckBox.CheckStateChanged -> System.EventHandler
-System.Windows.Forms.CheckBox.DoubleClick -> System.EventHandler
-System.Windows.Forms.CheckBox.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.CheckBox.CheckStateChanged -> System.EventHandler?
+System.Windows.Forms.CheckBox.DoubleClick -> System.EventHandler?
+System.Windows.Forms.CheckBox.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.CheckBox.ThreeState.get -> bool
 System.Windows.Forms.CheckBox.ThreeState.set -> void
 System.Windows.Forms.CheckBoxRenderer
