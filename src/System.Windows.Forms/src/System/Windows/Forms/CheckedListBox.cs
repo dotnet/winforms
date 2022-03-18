@@ -8,7 +8,6 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.User32;
-using Hashtable = System.Collections.Hashtable;
 
 namespace System.Windows.Forms
 {
@@ -879,19 +878,19 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void RefreshItems()
         {
-            Hashtable savedcheckedItems = new Hashtable();
+            CheckState[] savedCheckedItems = new CheckState[Items.Count];
             for (int i = 0; i < Items.Count; i++)
             {
-                savedcheckedItems[i] = CheckedItems.GetCheckedState(i);
+                savedCheckedItems[i] = CheckedItems.GetCheckedState(i);
             }
 
             //call the base
             base.RefreshItems();
-            // restore the checkedItems...
 
+            // restore the checkedItems...
             for (int j = 0; j < Items.Count; j++)
             {
-                CheckedItems.SetCheckedState(j, (CheckState)savedcheckedItems[j]!);
+                CheckedItems.SetCheckedState(j, savedCheckedItems[j]);
             }
         }
 
