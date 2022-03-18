@@ -460,7 +460,7 @@ namespace System.Windows.Forms
         /// </remarks>
         private protected bool BindingFieldEmpty => _displayMember.BindingField.Length == 0;
 
-        private protected int FindStringInternal(string str, IList items, int startIndex, bool exact, bool ignoreCase)
+        private protected int FindStringInternal(string? str, IList? items, int startIndex, bool exact, bool ignoreCase)
         {
             if (str is null)
             {

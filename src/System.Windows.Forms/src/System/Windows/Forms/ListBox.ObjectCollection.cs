@@ -100,7 +100,7 @@ namespace System.Windows.Forms
                 ArgumentNullException.ThrowIfNull(item);
 
                 int index = -1;
-                if (!_owner.sorted)
+                if (!_owner._sorted)
                 {
                     InnerArray.Add(item);
                 }
@@ -130,16 +130,16 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    if (_owner.sorted)
+                    if (_owner._sorted)
                     {
                         if (_owner.IsHandleCreated)
                         {
                             _owner.NativeInsert(index, item);
                             _owner.UpdateMaxItemWidth(item, false);
-                            if (_owner.selectedItems is not null)
+                            if (_owner._selectedItems is not null)
                             {
                                 // Sorting may throw the LB contents and the selectedItem array out of synch.
-                                _owner.selectedItems.Dirty();
+                                _owner._selectedItems.Dirty();
                             }
                         }
                     }
@@ -264,7 +264,7 @@ namespace System.Windows.Forms
                 }
 
                 InnerArray.Clear();
-                _owner.maxWidth = -1;
+                _owner._maxWidth = -1;
                 _owner.UpdateHorizontalExtent();
             }
 
@@ -344,7 +344,7 @@ namespace System.Windows.Forms
                 // If the List box is sorted, then nust treat this like an add
                 // because we are going to twiddle the index anyway.
                 //
-                if (_owner.sorted)
+                if (_owner._sorted)
                 {
                     Add(item);
                 }
