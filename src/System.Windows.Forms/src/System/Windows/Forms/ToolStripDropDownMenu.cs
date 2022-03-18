@@ -64,6 +64,11 @@ namespace System.Windows.Forms
         {
         }
 
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
+            return new ToolStripDropDownMenuAccessibleObject(this);
+        }
+
         /// <summary>
         ///  Constructor to autogenerate
         /// </summary>
