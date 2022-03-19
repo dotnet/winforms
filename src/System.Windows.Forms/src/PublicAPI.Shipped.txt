@@ -670,11 +670,11 @@ override System.Windows.Forms.ProgressBar.ToString() -> string!
 ~override System.Windows.Forms.PropertyGrid.Site.set -> void
 ~override System.Windows.Forms.PropertyGrid.Text.get -> string
 ~override System.Windows.Forms.PropertyGrid.Text.set -> void
-~override System.Windows.Forms.PropertyGridInternal.PropertiesTab.GetDefaultProperty(object obj) -> System.ComponentModel.PropertyDescriptor
-~override System.Windows.Forms.PropertyGridInternal.PropertiesTab.GetProperties(object component, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
-~override System.Windows.Forms.PropertyGridInternal.PropertiesTab.GetProperties(System.ComponentModel.ITypeDescriptorContext context, object component, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
-~override System.Windows.Forms.PropertyGridInternal.PropertiesTab.HelpKeyword.get -> string
-~override System.Windows.Forms.PropertyGridInternal.PropertiesTab.TabName.get -> string
+override System.Windows.Forms.PropertyGridInternal.PropertiesTab.GetDefaultProperty(object! obj) -> System.ComponentModel.PropertyDescriptor?
+override System.Windows.Forms.PropertyGridInternal.PropertiesTab.GetProperties(object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection?
+override System.Windows.Forms.PropertyGridInternal.PropertiesTab.GetProperties(System.ComponentModel.ITypeDescriptorContext? context, object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection?
+override System.Windows.Forms.PropertyGridInternal.PropertiesTab.HelpKeyword.get -> string!
+override System.Windows.Forms.PropertyGridInternal.PropertiesTab.TabName.get -> string!
 ~override System.Windows.Forms.PropertyManager.Current.get -> object
 ~override System.Windows.Forms.PropertyManager.GetListName(System.Collections.ArrayList listAccessors) -> string
 ~override System.Windows.Forms.PropertyManager.OnCurrentChanged(System.EventArgs ea) -> void
@@ -3527,7 +3527,7 @@ abstract System.Windows.Forms.CommonDialog.Reset() -> void
 abstract System.Windows.Forms.CommonDialog.RunDialog(System.IntPtr hwndOwner) -> bool
 abstract System.Windows.Forms.Design.ComponentEditorPage.LoadComponent() -> void
 abstract System.Windows.Forms.Design.ComponentEditorPage.SaveComponent() -> void
-abstract System.Windows.Forms.Design.PropertyTab.GetProperties(object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection!
+abstract System.Windows.Forms.Design.PropertyTab.GetProperties(object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection?
 abstract System.Windows.Forms.Design.PropertyTab.TabName.get -> string?
 abstract System.Windows.Forms.FeatureSupport.GetVersionPresent(object! feature) -> System.Version?
 abstract System.Windows.Forms.GridItem.GridItems.get -> System.Windows.Forms.GridItemCollection!
@@ -13161,8 +13161,8 @@ virtual System.Windows.Forms.Design.PropertyTab.Components.set -> void
 virtual System.Windows.Forms.Design.PropertyTab.Dispose() -> void
 virtual System.Windows.Forms.Design.PropertyTab.Dispose(bool disposing) -> void
 virtual System.Windows.Forms.Design.PropertyTab.GetDefaultProperty(object! component) -> System.ComponentModel.PropertyDescriptor?
-virtual System.Windows.Forms.Design.PropertyTab.GetProperties(object! component) -> System.ComponentModel.PropertyDescriptorCollection!
-virtual System.Windows.Forms.Design.PropertyTab.GetProperties(System.ComponentModel.ITypeDescriptorContext? context, object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection!
+virtual System.Windows.Forms.Design.PropertyTab.GetProperties(object! component) -> System.ComponentModel.PropertyDescriptorCollection?
+virtual System.Windows.Forms.Design.PropertyTab.GetProperties(System.ComponentModel.ITypeDescriptorContext? context, object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection?
 virtual System.Windows.Forms.Design.PropertyTab.HelpKeyword.get -> string?
 virtual System.Windows.Forms.Design.WindowsFormsComponentEditor.GetInitialComponentEditorPageIndex() -> int
 virtual System.Windows.Forms.DrawItemEventArgs.Dispose(bool disposing) -> void

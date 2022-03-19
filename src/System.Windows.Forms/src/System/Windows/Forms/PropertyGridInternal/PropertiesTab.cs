@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Windows.Forms.Design;
 
@@ -16,14 +14,14 @@ namespace System.Windows.Forms.PropertyGridInternal
         public override string HelpKeyword => "vs.properties"; // do not localize.
 
 #pragma warning disable CA1725 // Parameter names should match base declaration - publicly shipped API
-        public override PropertyDescriptor GetDefaultProperty(object obj)
+        public override PropertyDescriptor? GetDefaultProperty(object obj)
 #pragma warning restore CA1725
         {
-            PropertyDescriptor defaultProperty = base.GetDefaultProperty(obj);
+            PropertyDescriptor? defaultProperty = base.GetDefaultProperty(obj);
 
             if (defaultProperty is null)
             {
-                PropertyDescriptorCollection properties = GetProperties(obj);
+                PropertyDescriptorCollection? properties = GetProperties(obj);
                 if (properties is not null)
                 {
                     for (int i = 0; i < properties.Count; i++)
@@ -40,10 +38,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             return defaultProperty;
         }
 
-        public override PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes)
+        public override PropertyDescriptorCollection? GetProperties(object component, Attribute[]? attributes)
             => GetProperties(context: null, component, attributes);
 
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object component, Attribute[] attributes)
+        public override PropertyDescriptorCollection? GetProperties(ITypeDescriptorContext? context, object component, Attribute[]? attributes)
         {
             attributes ??= new Attribute[] { BrowsableAttribute.Yes };
 
