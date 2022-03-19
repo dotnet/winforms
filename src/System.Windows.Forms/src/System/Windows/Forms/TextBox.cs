@@ -27,58 +27,58 @@ namespace System.Windows.Forms
         ///  presses.  While this is typically desired by multiline edits, this
         ///  can interfere with normal key processing in a dialog.
         /// </summary>
-        private bool acceptsReturn;
+        private bool _acceptsReturn;
 
         /// <summary>
         ///  Indicates what the current special password character is.  This is
         ///  displayed instead of any other text the user might enter.
         /// </summary>
-        private char passwordChar;
+        private char _passwordChar;
 
-        private bool useSystemPasswordChar;
+        private bool _useSystemPasswordChar;
 
         /// <summary>
         ///  Controls whether or not the case of characters entered into the edit
         ///  box is forced to a specific case.
         /// </summary>
-        private CharacterCasing characterCasing = System.Windows.Forms.CharacterCasing.Normal;
+        private CharacterCasing _characterCasing = CharacterCasing.Normal;
 
         /// <summary>
         ///  Controls which scrollbars appear by default.
         /// </summary>
-        private ScrollBars scrollBars = System.Windows.Forms.ScrollBars.None;
+        private ScrollBars _scrollBars = ScrollBars.None;
 
         /// <summary>
         ///  Controls text alignment in the edit box.
         /// </summary>
-        private HorizontalAlignment textAlign = HorizontalAlignment.Left;
+        private HorizontalAlignment _textAlign = HorizontalAlignment.Left;
 
         /// <summary>
         ///  True if the selection has been set by the user.  If the selection has
         ///  never been set and we get focus, we focus all the text in the control
         ///  so we mimic the Windows dialog manager.
         /// </summary>
-        private bool selectionSet;
+        private bool _selectionSet;
 
         /// <summary>
         ///  This stores the value for the autocomplete mode which can be either
         ///  None, AutoSuggest, AutoAppend or AutoSuggestAppend.
         /// </summary>
-        private AutoCompleteMode autoCompleteMode = AutoCompleteMode.None;
+        private AutoCompleteMode _autoCompleteMode = AutoCompleteMode.None;
 
         /// <summary>
         ///  This stores the value for the autoCompleteSource mode which can be one of the values
         ///  from AutoCompleteSource enum.
         /// </summary>
-        private AutoCompleteSource autoCompleteSource = AutoCompleteSource.None;
+        private AutoCompleteSource _autoCompleteSource = AutoCompleteSource.None;
 
         /// <summary>
         ///  This stores the custom StringCollection required for the autoCompleteSource when its set to CustomSource.
         /// </summary>
-        private AutoCompleteStringCollection? autoCompleteCustomSource;
-        private bool fromHandleCreate;
-        private StringSource? stringSource;
-        private string placeholderText = string.Empty;
+        private AutoCompleteStringCollection? _autoCompleteCustomSource;
+        private bool _fromHandleCreate;
+        private StringSource? _stringSource;
+        private string _placeholderText = string.Empty;
 
         public TextBox()
         {
@@ -96,11 +96,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return acceptsReturn;
+                return _acceptsReturn;
             }
             set
             {
-                acceptsReturn = value;
+                _acceptsReturn = value;
             }
         }
 
@@ -117,18 +117,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                return autoCompleteMode;
+                return _autoCompleteMode;
             }
             set
             {
                 SourceGenerated.EnumValidator.Validate(value);
                 bool resetAutoComplete = false;
-                if (autoCompleteMode != AutoCompleteMode.None && value == AutoCompleteMode.None)
+                if (_autoCompleteMode != AutoCompleteMode.None && value == AutoCompleteMode.None)
                 {
                     resetAutoComplete = true;
                 }
 
-                autoCompleteMode = value;
+                _autoCompleteMode = value;
                 SetAutoComplete(resetAutoComplete);
             }
         }
@@ -146,7 +146,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return autoCompleteSource;
+                return _autoCompleteSource;
             }
             set
             {
@@ -160,7 +160,7 @@ namespace System.Windows.Forms
                     case AutoCompleteSource.FileSystemDirectories:
                     case AutoCompleteSource.HistoryList:
                     case AutoCompleteSource.RecentlyUsedList:
-                        autoCompleteSource = value;
+                        _autoCompleteSource = value;
                         SetAutoComplete(false);
                         break;
                     case AutoCompleteSource.ListItems:
@@ -186,28 +186,28 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (autoCompleteCustomSource is null)
+                if (_autoCompleteCustomSource is null)
                 {
-                    autoCompleteCustomSource = new AutoCompleteStringCollection();
-                    autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
+                    _autoCompleteCustomSource = new AutoCompleteStringCollection();
+                    _autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
 
-                return autoCompleteCustomSource;
+                return _autoCompleteCustomSource;
             }
             set
             {
-                if (autoCompleteCustomSource != value)
+                if (_autoCompleteCustomSource != value)
                 {
-                    if (autoCompleteCustomSource is not null)
+                    if (_autoCompleteCustomSource is not null)
                     {
-                        autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
+                        _autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
 
-                    autoCompleteCustomSource = value;
+                    _autoCompleteCustomSource = value;
 
-                    if (autoCompleteCustomSource is not null)
+                    if (_autoCompleteCustomSource is not null)
                     {
-                        autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
+                        _autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
 
                     SetAutoComplete(false);
@@ -226,15 +226,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                return characterCasing;
+                return _characterCasing;
             }
             set
             {
-                if (characterCasing != value)
+                if (_characterCasing != value)
                 {
                     SourceGenerated.EnumValidator.Validate(value);
 
-                    characterCasing = value;
+                    _characterCasing = value;
                     RecreateHandle();
                 }
             }
@@ -273,7 +273,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                switch (characterCasing)
+                switch (_characterCasing)
                 {
                     case CharacterCasing.Lower:
                         cp.Style |= (int)ES.LOWERCASE;
@@ -284,7 +284,7 @@ namespace System.Windows.Forms
                 }
 
                 // Translate for Rtl if necessary
-                HorizontalAlignment align = RtlTranslateHorizontal(textAlign);
+                HorizontalAlignment align = RtlTranslateHorizontal(_textAlign);
 
                 // WS_EX_RIGHT overrides the ES_XXXX alignment styles
                 cp.ExStyle &= ~(int)WS_EX.RIGHT;
@@ -305,20 +305,20 @@ namespace System.Windows.Forms
                 if (Multiline)
                 {
                     // Don't show horizontal scroll bars which won't do anything
-                    if ((scrollBars & ScrollBars.Horizontal) == ScrollBars.Horizontal
-                        && textAlign == HorizontalAlignment.Left
+                    if ((_scrollBars & ScrollBars.Horizontal) == ScrollBars.Horizontal
+                        && _textAlign == HorizontalAlignment.Left
                         && !WordWrap)
                     {
                         cp.Style |= (int)WS.HSCROLL;
                     }
 
-                    if ((scrollBars & ScrollBars.Vertical) == ScrollBars.Vertical)
+                    if ((_scrollBars & ScrollBars.Vertical) == ScrollBars.Vertical)
                     {
                         cp.Style |= (int)WS.VSCROLL;
                     }
                 }
 
-                if (useSystemPasswordChar)
+                if (_useSystemPasswordChar)
                 {
                     cp.Style |= (int)ES.PASSWORD;
                 }
@@ -349,8 +349,8 @@ namespace System.Windows.Forms
             }
             set
             {
-                passwordChar = value;
-                if (!useSystemPasswordChar)
+                _passwordChar = value;
+                if (!_useSystemPasswordChar)
                 {
                     if (IsHandleCreated)
                     {
@@ -383,15 +383,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                return scrollBars;
+                return _scrollBars;
             }
             set
             {
-                if (scrollBars != value)
+                if (_scrollBars != value)
                 {
                     SourceGenerated.EnumValidator.Validate(value);
 
-                    scrollBars = value;
+                    _scrollBars = value;
                     RecreateHandle();
                 }
             }
@@ -429,7 +429,7 @@ namespace System.Windows.Forms
             set
             {
                 base.Text = value;
-                selectionSet = false;
+                _selectionSet = false;
             }
         }
 
@@ -445,15 +445,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                return textAlign;
+                return _textAlign;
             }
             set
             {
-                if (textAlign != value)
+                if (_textAlign != value)
                 {
                     SourceGenerated.EnumValidator.Validate(value);
 
-                    textAlign = value;
+                    _textAlign = value;
                     RecreateHandle();
                     OnTextAlignChanged(EventArgs.Empty);
                 }
@@ -475,13 +475,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return useSystemPasswordChar;
+                return _useSystemPasswordChar;
             }
             set
             {
-                if (value != useSystemPasswordChar)
+                if (value != _useSystemPasswordChar)
                 {
-                    useSystemPasswordChar = value;
+                    _useSystemPasswordChar = value;
 
                     // RecreateHandle will update IME restricted mode.
                     RecreateHandle();
@@ -511,15 +511,15 @@ namespace System.Windows.Forms
                 // so this will undo it, but on a dispose we'll be Destroying the window anyway.
 
                 ResetAutoComplete(true);
-                if (autoCompleteCustomSource is not null)
+                if (_autoCompleteCustomSource is not null)
                 {
-                    autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
+                    _autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
 
-                if (stringSource is not null)
+                if (_stringSource is not null)
                 {
-                    stringSource.ReleaseAutoComplete();
-                    stringSource = null;
+                    _stringSource.ReleaseAutoComplete();
+                    _stringSource = null;
                 }
             }
 
@@ -536,7 +536,7 @@ namespace System.Windows.Forms
                 switch (keyData & Keys.KeyCode)
                 {
                     case Keys.Return:
-                        return acceptsReturn;
+                        return _acceptsReturn;
                 }
             }
 
@@ -578,11 +578,11 @@ namespace System.Windows.Forms
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
-            if (!selectionSet)
+            if (!_selectionSet)
             {
                 // We get one shot at selecting when we first get focus.  If we don't
                 // do it, we still want to act like the selection was set.
-                selectionSet = true;
+                _selectionSet = true;
 
                 // If the user didn't provide a selection, force one in.
                 if (SelectionLength == 0 && Control.MouseButtons == MouseButtons.None)
@@ -606,11 +606,11 @@ namespace System.Windows.Forms
 
             base.SetSelectionOnHandle();
 
-            if (passwordChar != 0)
+            if (_passwordChar != 0)
             {
-                if (!useSystemPasswordChar)
+                if (!_useSystemPasswordChar)
                 {
-                    SendMessageW(this, (WM)EM.SETPASSWORDCHAR, (nint)passwordChar);
+                    SendMessageW(this, (WM)EM.SETPASSWORDCHAR, (nint)_passwordChar);
                 }
             }
 
@@ -620,22 +620,22 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    fromHandleCreate = true;
+                    _fromHandleCreate = true;
                     SetAutoComplete(false);
                 }
                 finally
                 {
-                    fromHandleCreate = false;
+                    _fromHandleCreate = false;
                 }
             }
         }
 
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            if (stringSource is not null)
+            if (_stringSource is not null)
             {
-                stringSource.ReleaseAutoComplete();
-                stringSource = null;
+                _stringSource.ReleaseAutoComplete();
+                _stringSource = null;
             }
 
             base.OnHandleDestroyed(e);
@@ -729,7 +729,7 @@ namespace System.Windows.Forms
         {
             // If user set selection into text box, mark it so we don't
             // clobber it when we get focus.
-            selectionSet = true;
+            _selectionSet = true;
             base.SelectInternal(start, length, textLen);
         }
 
@@ -750,21 +750,21 @@ namespace System.Windows.Forms
         private void SetAutoComplete(bool reset)
         {
             // Autocomplete Not Enabled for Password enabled and MultiLine Textboxes.
-            if (Multiline || passwordChar != 0 || useSystemPasswordChar || AutoCompleteSource == AutoCompleteSource.None)
+            if (Multiline || _passwordChar != 0 || _useSystemPasswordChar || AutoCompleteSource == AutoCompleteSource.None)
             {
                 return;
             }
 
             if (AutoCompleteMode != AutoCompleteMode.None)
             {
-                if (!fromHandleCreate)
+                if (!_fromHandleCreate)
                 {
                     //RecreateHandle to avoid Leak.
                     // notice the use of member variable to avoid re-entrancy
                     AutoCompleteMode backUpMode = AutoCompleteMode;
-                    autoCompleteMode = AutoCompleteMode.None;
+                    _autoCompleteMode = AutoCompleteMode.None;
                     RecreateHandle();
-                    autoCompleteMode = backUpMode;
+                    _autoCompleteMode = backUpMode;
                 }
 
                 if (AutoCompleteSource == AutoCompleteSource.CustomSource)
@@ -777,17 +777,17 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            if (stringSource is null)
+                            if (_stringSource is null)
                             {
-                                stringSource = new StringSource(GetStringsForAutoComplete());
-                                if (!stringSource.Bind(new HandleRef(this, Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
+                                _stringSource = new StringSource(GetStringsForAutoComplete());
+                                if (!_stringSource.Bind(new HandleRef(this, Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                                 {
                                     throw new ArgumentException(SR.AutoCompleteFailure);
                                 }
                             }
                             else
                             {
-                                stringSource.RefreshList(GetStringsForAutoComplete());
+                                _stringSource.RefreshList(GetStringsForAutoComplete());
                             }
                         }
                     }
@@ -866,7 +866,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return placeholderText;
+                return _placeholderText;
             }
             set
             {
@@ -875,9 +875,9 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
-                if (placeholderText != value)
+                if (_placeholderText != value)
                 {
-                    placeholderText = value;
+                    _placeholderText = value;
                     if (IsHandleCreated)
                     {
                         Invalidate();
