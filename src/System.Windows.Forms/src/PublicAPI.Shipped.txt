@@ -787,16 +787,16 @@ override System.Windows.Forms.TableLayoutSettings.LayoutEngine.get -> System.Win
 ~override System.Windows.Forms.TabPage.Text.get -> string
 ~override System.Windows.Forms.TabPage.Text.set -> void
 ~override System.Windows.Forms.TabPage.ToString() -> string
-~override System.Windows.Forms.TextBox.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.TextBox.OnBackColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.TextBox.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.TextBox.OnGotFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.TextBox.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.TextBox.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.TextBox.OnKeyUp(System.Windows.Forms.KeyEventArgs e) -> void
-~override System.Windows.Forms.TextBox.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.TextBox.Text.get -> string
-~override System.Windows.Forms.TextBox.Text.set -> void
+override System.Windows.Forms.TextBox.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.TextBox.OnBackColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.TextBox.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.TextBox.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.TextBox.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.TextBox.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.TextBox.OnKeyUp(System.Windows.Forms.KeyEventArgs! e) -> void
+override System.Windows.Forms.TextBox.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.TextBox.Text.get -> string!
+override System.Windows.Forms.TextBox.Text.set -> void
 ~override System.Windows.Forms.TextBoxBase.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.TextBoxBase.BackgroundImage.set -> void
 ~override System.Windows.Forms.TextBoxBase.Text.get -> string
@@ -2419,9 +2419,9 @@ System.Windows.Forms.TableLayoutSettings.SetRowSpan(object! control, int value) 
 ~System.Windows.Forms.TabPage.TabPage(string text) -> void
 ~System.Windows.Forms.TabPage.ToolTipText.get -> string
 ~System.Windows.Forms.TabPage.ToolTipText.set -> void
-~System.Windows.Forms.TextBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection
-~System.Windows.Forms.TextBox.AutoCompleteCustomSource.set -> void
-~System.Windows.Forms.TextBox.Paste(string text) -> void
+System.Windows.Forms.TextBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection!
+System.Windows.Forms.TextBox.AutoCompleteCustomSource.set -> void
+System.Windows.Forms.TextBox.Paste(string? text) -> void
 ~System.Windows.Forms.TextBoxBase.AppendText(string text) -> void
 ~System.Windows.Forms.TextBoxBase.Lines.get -> string[]
 ~System.Windows.Forms.TextBoxBase.Lines.set -> void
@@ -3329,9 +3329,9 @@ virtual System.Windows.Forms.ScrollableControl.ScrollToControl(System.Windows.Fo
 ~virtual System.Windows.Forms.TabControl.TabPageCollection.this[string key].get -> System.Windows.Forms.TabPage
 ~virtual System.Windows.Forms.TableLayoutControlCollection.Add(System.Windows.Forms.Control control, int column, int row) -> void
 ~virtual System.Windows.Forms.TableLayoutPanel.OnCellPaint(System.Windows.Forms.TableLayoutCellPaintEventArgs e) -> void
-~virtual System.Windows.Forms.TextBox.OnTextAlignChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.TextBox.PlaceholderText.get -> string
-~virtual System.Windows.Forms.TextBox.PlaceholderText.set -> void
+virtual System.Windows.Forms.TextBox.OnTextAlignChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.TextBox.PlaceholderText.get -> string!
+virtual System.Windows.Forms.TextBox.PlaceholderText.set -> void
 ~virtual System.Windows.Forms.TextBoxBase.SelectedText.get -> string
 ~virtual System.Windows.Forms.TextBoxBase.SelectedText.set -> void
 ~virtual System.Windows.Forms.ToolStrip.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
@@ -10954,7 +10954,7 @@ System.Windows.Forms.TextBox.ScrollBars.get -> System.Windows.Forms.ScrollBars
 System.Windows.Forms.TextBox.ScrollBars.set -> void
 System.Windows.Forms.TextBox.TextAlign.get -> System.Windows.Forms.HorizontalAlignment
 System.Windows.Forms.TextBox.TextAlign.set -> void
-System.Windows.Forms.TextBox.TextAlignChanged -> System.EventHandler
+System.Windows.Forms.TextBox.TextAlignChanged -> System.EventHandler?
 System.Windows.Forms.TextBox.TextBox() -> void
 System.Windows.Forms.TextBox.UseSystemPasswordChar.get -> bool
 System.Windows.Forms.TextBox.UseSystemPasswordChar.set -> void

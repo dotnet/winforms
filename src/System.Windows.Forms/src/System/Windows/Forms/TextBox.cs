@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
@@ -76,9 +75,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This stores the custom StringCollection required for the autoCompleteSource when its set to CustomSource.
         /// </summary>
-        private AutoCompleteStringCollection autoCompleteCustomSource;
+        private AutoCompleteStringCollection? autoCompleteCustomSource;
         private bool fromHandleCreate;
-        private StringSource stringSource;
+        private StringSource? stringSource;
         private string placeholderText = string.Empty;
 
         public TextBox()
@@ -182,6 +181,7 @@ namespace System.Windows.Forms
         [Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
+        [AllowNull]
         public AutoCompleteStringCollection AutoCompleteCustomSource
         {
             get
@@ -205,7 +205,7 @@ namespace System.Windows.Forms
 
                     autoCompleteCustomSource = value;
 
-                    if (value is not null)
+                    if (autoCompleteCustomSource is not null)
                     {
                         autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
@@ -422,6 +422,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the current text in the text box.
         /// </summary>
+        [AllowNull]
         public override string Text
         {
             get => base.Text;
@@ -495,7 +496,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.RadioButtonOnTextAlignChangedDescr))]
-        public event EventHandler TextAlignChanged
+        public event EventHandler? TextAlignChanged
         {
             add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
             remove => Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
@@ -542,7 +543,7 @@ namespace System.Windows.Forms
             return base.IsInputKey(keyData);
         }
 
-        private void OnAutoCompleteCustomSourceChanged(object sender, CollectionChangeEventArgs e)
+        private void OnAutoCompleteCustomSourceChanged(object? sender, CollectionChangeEventArgs e)
         {
             if (AutoCompleteSource == AutoCompleteSource.CustomSource)
             {
@@ -716,7 +717,7 @@ namespace System.Windows.Forms
         ///  Observe that this method does not honor the MaxLength property as the parameter-less base's
         ///  Paste does
         /// </summary>
-        public void Paste(string text)
+        public void Paste(string? text)
         {
             base.SetSelectedTextInternal(text, false);
         }
@@ -860,6 +861,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [DefaultValue("")]
         [SRDescription(nameof(SR.TextBoxPlaceholderTextDescr))]
+        [AllowNull]
         public virtual string PlaceholderText
         {
             get
