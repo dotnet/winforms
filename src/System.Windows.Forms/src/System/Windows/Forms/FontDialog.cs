@@ -153,11 +153,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Font? result = font;
-                if (result is null)
-                {
-                    result = Control.DefaultFont;
-                }
+                Font? result = font ?? Control.DefaultFont;
 
                 float actualSize = result.SizeInPoints;
                 if (minSize != defaultMinSize && actualSize < MinSize)
