@@ -905,10 +905,7 @@ namespace System.Windows.Forms
                     Ole32.CLSCTX.INPROC_SERVER,
                     ref NativeMethods.ActiveX.IID_IUnknown,
                     out activeXInstance);
-                if (!hr.Succeeded())
-                {
-                    throw Marshal.GetExceptionForHR((int)hr);
-                }
+                hr.ThrowIfFailed();
 
                 Debug.Assert(activeXInstance is not null, "w/o an exception being thrown we must have an object...");
 
