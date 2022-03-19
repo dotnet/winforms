@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 #if DEBUG
 using System.Diagnostics;
 #endif
+using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
@@ -16,7 +15,7 @@ namespace System.Windows.Forms
         private Button okButton;
         private Button cancelButton;
         private TableLayoutPanel okCancelTableLayoutPanel;
-        Form active;
+        Form? active;
 
         public MdiWindowDialog()
             : base()
@@ -24,12 +23,12 @@ namespace System.Windows.Forms
             InitializeComponent();
         }
 
-        public Form ActiveChildForm
+        public Form? ActiveChildForm
         {
             get
             {
 #if DEBUG
-                ListItem item = (ListItem)itemList.SelectedItem;
+                ListItem? item = (ListItem?)itemList.SelectedItem;
                 Debug.Assert(item is not null, "No item selected!");
 #endif
                 return active;
@@ -56,14 +55,14 @@ namespace System.Windows.Forms
             itemList.SelectedIndex = selIndex;
         }
 
-        private void ItemList_doubleClick(object source, EventArgs e)
+        private void ItemList_doubleClick(object? source, EventArgs e)
         {
             okButton.PerformClick();
         }
 
-        private void ItemList_selectedIndexChanged(object source, EventArgs e)
+        private void ItemList_selectedIndexChanged(object? source, EventArgs e)
         {
-            ListItem item = (ListItem)itemList.SelectedItem;
+            ListItem? item = (ListItem?)itemList.SelectedItem;
             if (item is not null)
             {
                 active = item.form;
@@ -75,6 +74,10 @@ namespace System.Windows.Forms
         ///  designer.  It can be modified using the form editor.  Do not
         ///  modify it using the code editor.
         /// </summary>
+        [MemberNotNull(nameof(itemList))]
+        [MemberNotNull(nameof(okButton))]
+        [MemberNotNull(nameof(cancelButton))]
+        [MemberNotNull(nameof(okCancelTableLayoutPanel))]
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MdiWindowDialog));
