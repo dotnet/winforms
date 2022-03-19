@@ -8,16 +8,16 @@ namespace System.Windows.Forms
     {
         private class ListItem
         {
-            public Form form;
+            public Form Form { get; }
 
             public ListItem(Form f)
             {
-                form = f;
+                Form = f;
             }
 
             public override string ToString()
             {
-                return form.Text;
+                return Form.Text;
             }
         }
     }

@@ -65,7 +65,7 @@ namespace System.Windows.Forms
             ListItem? item = (ListItem?)_itemList.SelectedItem;
             if (item is not null)
             {
-                _active = item.form;
+                _active = item.Form;
             }
         }
 
