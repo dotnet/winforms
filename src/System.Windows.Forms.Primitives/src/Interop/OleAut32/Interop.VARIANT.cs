@@ -206,10 +206,7 @@ internal static partial class Interop
             {
                 Guid guid;
                 HRESULT hr = record.GetGuid(&guid);
-                if (!hr.Succeeded())
-                {
-                    throw Marshal.GetExceptionForHR((int)hr)!;
-                }
+                hr.ThrowIfFailed();
 
                 Type? t = System.Type.GetTypeFromCLSID(guid);
                 if (t is null || !t.IsValueType)
@@ -594,10 +591,7 @@ internal static partial class Interop
                 if (vt == VARENUM.RECORD)
                 {
                     HRESULT hr = SafeArrayGetRecordInfo(psa, out IRecordInfo record);
-                    if (!hr.Succeeded())
-                    {
-                        throw Marshal.GetExceptionForHR((int)hr)!;
-                    }
+                    hr.ThrowIfFailed();
 
                     elementType = GetRecordElementType(record);
                 }

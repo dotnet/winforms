@@ -2436,11 +2436,7 @@ namespace System.Windows.Forms
                 Ole32.CLSCTX.INPROC_SERVER,
                 ref NativeMethods.ActiveX.IID_IUnknown,
                 out object ret);
-
-            if (!hr.Succeeded())
-            {
-                throw Marshal.GetExceptionForHR((int)hr);
-            }
+            hr.ThrowIfFailed();
 
             _instance = ret;
             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t{(_instance is not null)}");
