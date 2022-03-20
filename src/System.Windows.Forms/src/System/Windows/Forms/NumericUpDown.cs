@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using static Interop;
@@ -59,13 +58,13 @@ namespace System.Windows.Forms
         private bool currentValueChanged;
 
         // Event handler for the onValueChanged event
-        private EventHandler onValueChanged;
+        private EventHandler? onValueChanged;
 
         // Disable value range checking while initializing the control
         private bool initializing;
 
         // Provides for finer acceleration behavior.
-        private NumericUpDownAccelerationCollection accelerations;
+        private NumericUpDownAccelerationCollection? accelerations;
 
         // the current NumericUpDownAcceleration object.
         private int accelerationsCurrentIndex;
@@ -82,10 +81,6 @@ namespace System.Windows.Forms
             StopAcceleration();
         }
 
-        //////////////////////////////////////////////////////////////
-        // Properties
-        //
-        //////////////////////////////////////////////////////////////
         /// <summary>
         ///  Specifies the acceleration information.
         /// </summary>
@@ -248,7 +243,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler PaddingChanged
+        new public event EventHandler? PaddingChanged
         {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
@@ -257,6 +252,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines whether the UpDownButtons have been pressed for enough time to activate acceleration.
         /// </summary>
+        [MemberNotNullWhen(true, nameof(accelerations))]
         private bool Spinning
         {
             get
@@ -271,6 +267,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Bindable(false)]
+        [AllowNull]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         // We're just overriding this to make it non-browsable.
         public override string Text
@@ -281,7 +278,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        new public event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -348,16 +345,12 @@ namespace System.Windows.Forms
             }
         }
 
-        //////////////////////////////////////////////////////////////
-        // Methods
-        //
-        //////////////////////////////////////////////////////////////
         /// <summary>
         ///  Occurs when the <see cref="Value"/> property has been changed in some way.
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.NumericUpDownOnValueChangedDescr))]
-        public event EventHandler ValueChanged
+        public event EventHandler? ValueChanged
         {
             add => onValueChanged += value;
             remove => onValueChanged -= value;
@@ -412,7 +405,6 @@ namespace System.Windows.Forms
             decimal newValue = currentValue;
 
             // Operations on Decimals can throw OverflowException.
-            //
             try
             {
                 newValue -= Increment;
@@ -474,7 +466,7 @@ namespace System.Windows.Forms
         ///  Restricts the entry of characters to digits (including hex), the negative sign,
         ///  the decimal point, and editing keystrokes (backspace).
         /// </summary>
-        protected override void OnTextBoxKeyPress(object source, KeyPressEventArgs e)
+        protected override void OnTextBoxKeyPress(object? source, KeyPressEventArgs e)
         {
             base.OnTextBoxKeyPress(source, e);
 
@@ -590,7 +582,8 @@ namespace System.Windows.Forms
         {
             // Spinning will check if accelerations is null.
             if (Spinning && accelerationsCurrentIndex < (accelerations.Count - 1))
-            { // if index not the last entry ...
+            {
+                // if index not the last entry ...
                 // Ticks are in 100-nanoseconds (1E-7 seconds).
                 long nowTicks = DateTime.Now.Ticks;
                 long buttonPressedElapsedTime = nowTicks - buttonPressedStartTime;
@@ -631,7 +624,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ShouldSerializeIncrement()
         {
-            return !Increment.Equals(NumericUpDown.DefaultIncrement);
+            return !Increment.Equals(DefaultIncrement);
         }
 
         /// <summary>
@@ -639,7 +632,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ShouldSerializeMaximum()
         {
-            return !Maximum.Equals(NumericUpDown.DefaultMaximum);
+            return !Maximum.Equals(DefaultMaximum);
         }
 
         /// <summary>
@@ -647,7 +640,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ShouldSerializeMinimum()
         {
-            return !Minimum.Equals(NumericUpDown.DefaultMinimum);
+            return !Minimum.Equals(DefaultMinimum);
         }
 
         /// <summary>
@@ -655,7 +648,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ShouldSerializeValue()
         {
-            return !Value.Equals(NumericUpDown.DefaultValue);
+            return !Value.Equals(DefaultValue);
         }
 
         /// <summary>
@@ -702,7 +695,6 @@ namespace System.Windows.Forms
             decimal newValue = currentValue;
 
             // Operations on Decimals can throw OverflowException.
-            //
             try
             {
                 newValue += Increment;
