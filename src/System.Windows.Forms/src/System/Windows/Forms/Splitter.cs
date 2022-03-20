@@ -742,28 +742,28 @@ namespace System.Windows.Forms
                         case DockStyle.Top:
                             if (target.Bottom == Top)
                             {
-                                return (Control)target;
+                                return target;
                             }
 
                             break;
                         case DockStyle.Bottom:
                             if (target.Top == Bottom)
                             {
-                                return (Control)target;
+                                return target;
                             }
 
                             break;
                         case DockStyle.Left:
                             if (target.Right == Left)
                             {
-                                return (Control)target;
+                                return target;
                             }
 
                             break;
                         case DockStyle.Right:
                             if (target.Left == Right)
                             {
-                                return (Control)target;
+                                return target;
                             }
 
                             break;
