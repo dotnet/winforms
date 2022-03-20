@@ -36,42 +36,42 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The number of decimal places to display.
         /// </summary>
-        private int decimalPlaces = DefaultDecimalPlaces;
+        private int _decimalPlaces = DefaultDecimalPlaces;
 
         /// <summary>
         ///  The amount to increment by.
         /// </summary>
-        private decimal increment = DefaultIncrement;
+        private decimal _increment = DefaultIncrement;
 
         // Display the thousands separator?
-        private bool thousandsSeparator = DefaultThousandsSeparator;
+        private bool _thousandsSeparator = DefaultThousandsSeparator;
 
         // Minimum and maximum values
-        private decimal minimum = DefaultMinimum;
-        private decimal maximum = DefaultMaximum;
+        private decimal _minimum = DefaultMinimum;
+        private decimal _maximum = DefaultMaximum;
 
         // Hexadecimal
-        private bool hexadecimal = DefaultHexadecimal;
+        private bool _hexadecimal = DefaultHexadecimal;
 
         // Internal storage of the current value
-        private decimal currentValue = DefaultValue;
-        private bool currentValueChanged;
+        private decimal _currentValue = DefaultValue;
+        private bool _currentValueChanged;
 
         // Event handler for the onValueChanged event
-        private EventHandler? onValueChanged;
+        private EventHandler? _onValueChanged;
 
         // Disable value range checking while initializing the control
-        private bool initializing;
+        private bool _initializing;
 
         // Provides for finer acceleration behavior.
-        private NumericUpDownAccelerationCollection? accelerations;
+        private NumericUpDownAccelerationCollection? _accelerations;
 
         // the current NumericUpDownAcceleration object.
-        private int accelerationsCurrentIndex;
+        private int _accelerationsCurrentIndex;
 
         // Used to calculate the time elapsed since the up/down button was pressed,
         // to know when to get the next entry in the acceleration table.
-        private long buttonPressedStartTime;
+        private long _buttonPressedStartTime;
 
         public NumericUpDown() : base()
         {
@@ -90,12 +90,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (accelerations is null)
+                if (_accelerations is null)
                 {
-                    accelerations = new NumericUpDownAccelerationCollection();
+                    _accelerations = new NumericUpDownAccelerationCollection();
                 }
 
-                return accelerations;
+                return _accelerations;
             }
         }
 
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return decimalPlaces;
+                return _decimalPlaces;
             }
 
             set
@@ -119,7 +119,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(DecimalPlaces), value, 0, 99));
                 }
 
-                decimalPlaces = value;
+                _decimalPlaces = value;
                 UpdateEditText();
             }
         }
@@ -136,12 +136,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                return hexadecimal;
+                return _hexadecimal;
             }
 
             set
             {
-                hexadecimal = value;
+                _hexadecimal = value;
                 UpdateEditText();
             }
         }
@@ -157,12 +157,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (accelerationsCurrentIndex != InvalidValue)
+                if (_accelerationsCurrentIndex != InvalidValue)
                 {
-                    return Accelerations[accelerationsCurrentIndex].Increment;
+                    return Accelerations[_accelerationsCurrentIndex].Increment;
                 }
 
-                return increment;
+                return _increment;
             }
 
             set
@@ -173,7 +173,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    increment = value;
+                    _increment = value;
                 }
             }
         }
@@ -188,20 +188,20 @@ namespace System.Windows.Forms
         {
             get
             {
-                return maximum;
+                return _maximum;
             }
 
             set
             {
-                maximum = value;
-                if (minimum > maximum)
+                _maximum = value;
+                if (_minimum > _maximum)
                 {
-                    minimum = maximum;
+                    _minimum = _maximum;
                 }
 
-                Value = Constrain(currentValue);
+                Value = Constrain(_currentValue);
 
-                Debug.Assert(maximum == value, "Maximum != what we just set it to!");
+                Debug.Assert(_maximum == value, "Maximum != what we just set it to!");
             }
         }
 
@@ -215,20 +215,20 @@ namespace System.Windows.Forms
         {
             get
             {
-                return minimum;
+                return _minimum;
             }
 
             set
             {
-                minimum = value;
-                if (minimum > maximum)
+                _minimum = value;
+                if (_minimum > _maximum)
                 {
-                    maximum = value;
+                    _maximum = value;
                 }
 
-                Value = Constrain(currentValue);
+                Value = Constrain(_currentValue);
 
-                Debug.Assert(minimum.Equals(value), "Minimum != what we just set it to!");
+                Debug.Assert(_minimum.Equals(value), "Minimum != what we just set it to!");
             }
         }
 
@@ -252,12 +252,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines whether the UpDownButtons have been pressed for enough time to activate acceleration.
         /// </summary>
-        [MemberNotNullWhen(true, nameof(accelerations))]
+        [MemberNotNullWhen(true, nameof(_accelerations))]
         private bool Spinning
         {
             get
             {
-                return accelerations is not null && buttonPressedStartTime != InvalidValue;
+                return _accelerations is not null && _buttonPressedStartTime != InvalidValue;
             }
         }
 
@@ -296,12 +296,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                return thousandsSeparator;
+                return _thousandsSeparator;
             }
 
             set
             {
-                thousandsSeparator = value;
+                _thousandsSeparator = value;
                 UpdateEditText();
             }
         }
@@ -322,23 +322,23 @@ namespace System.Windows.Forms
                     ValidateEditText();
                 }
 
-                return currentValue;
+                return _currentValue;
             }
 
             set
             {
-                if (value != currentValue)
+                if (value != _currentValue)
                 {
-                    if (!initializing && ((value < minimum) || (value > maximum)))
+                    if (!_initializing && ((value < _minimum) || (value > _maximum)))
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", $"'{nameof(Maximum)}'"));
                     }
                     else
                     {
-                        currentValue = value;
+                        _currentValue = value;
 
                         OnValueChanged(EventArgs.Empty);
-                        currentValueChanged = true;
+                        _currentValueChanged = true;
                         UpdateEditText();
                     }
                 }
@@ -352,8 +352,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.NumericUpDownOnValueChangedDescr))]
         public event EventHandler? ValueChanged
         {
-            add => onValueChanged += value;
-            remove => onValueChanged -= value;
+            add => _onValueChanged += value;
+            remove => _onValueChanged -= value;
         }
 
         /// <summary>
@@ -361,7 +361,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void BeginInit()
         {
-            initializing = true;
+            _initializing = true;
         }
 
         //
@@ -369,17 +369,17 @@ namespace System.Windows.Forms
         //
         private decimal Constrain(decimal value)
         {
-            Debug.Assert(minimum <= maximum,
+            Debug.Assert(_minimum <= _maximum,
                          "minimum > maximum");
 
-            if (value < minimum)
+            if (value < _minimum)
             {
-                value = minimum;
+                value = _minimum;
             }
 
-            if (value > maximum)
+            if (value > _maximum)
             {
-                value = maximum;
+                value = _maximum;
             }
 
             return value;
@@ -402,16 +402,16 @@ namespace System.Windows.Forms
                 ParseEditText();
             }
 
-            decimal newValue = currentValue;
+            decimal newValue = _currentValue;
 
             // Operations on Decimals can throw OverflowException.
             try
             {
                 newValue -= Increment;
 
-                if (newValue < minimum)
+                if (newValue < _minimum)
                 {
-                    newValue = minimum;
+                    newValue = _minimum;
                     if (Spinning)
                     {
                         StopAcceleration();
@@ -420,7 +420,7 @@ namespace System.Windows.Forms
             }
             catch (OverflowException)
             {
-                newValue = minimum;
+                newValue = _minimum;
             }
 
             Value = newValue;
@@ -431,8 +431,8 @@ namespace System.Windows.Forms
         /// </summary>
         public void EndInit()
         {
-            initializing = false;
-            Value = Constrain(currentValue);
+            _initializing = false;
+            Value = Constrain(_currentValue);
             UpdateEditText();
         }
 
@@ -511,7 +511,7 @@ namespace System.Windows.Forms
         protected virtual void OnValueChanged(EventArgs e)
         {
             // Call the event handler
-            onValueChanged?.Invoke(this, e);
+            _onValueChanged?.Invoke(this, e);
         }
 
         protected override void OnLostFocus(EventArgs e)
@@ -581,19 +581,19 @@ namespace System.Windows.Forms
         private void SetNextAcceleration()
         {
             // Spinning will check if accelerations is null.
-            if (Spinning && accelerationsCurrentIndex < (accelerations.Count - 1))
+            if (Spinning && _accelerationsCurrentIndex < (_accelerations.Count - 1))
             {
                 // if index not the last entry ...
                 // Ticks are in 100-nanoseconds (1E-7 seconds).
                 long nowTicks = DateTime.Now.Ticks;
-                long buttonPressedElapsedTime = nowTicks - buttonPressedStartTime;
-                long accelerationInterval = 10000000L * accelerations[accelerationsCurrentIndex + 1].Seconds;  // next entry.
+                long buttonPressedElapsedTime = nowTicks - _buttonPressedStartTime;
+                long accelerationInterval = 10000000L * _accelerations[_accelerationsCurrentIndex + 1].Seconds;  // next entry.
 
                 // If Up/Down button pressed for more than the current acceleration entry interval, get next entry in the accel table.
                 if (buttonPressedElapsedTime > accelerationInterval)
                 {
-                    buttonPressedStartTime = nowTicks;
-                    accelerationsCurrentIndex++;
+                    _buttonPressedStartTime = nowTicks;
+                    _accelerationsCurrentIndex++;
                 }
             }
         }
@@ -656,7 +656,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void StartAcceleration()
         {
-            buttonPressedStartTime = DateTime.Now.Ticks;
+            _buttonPressedStartTime = DateTime.Now.Ticks;
         }
 
         /// <summary>
@@ -664,8 +664,8 @@ namespace System.Windows.Forms
         /// </summary>
         private void StopAcceleration()
         {
-            accelerationsCurrentIndex = InvalidValue;
-            buttonPressedStartTime = InvalidValue;
+            _accelerationsCurrentIndex = InvalidValue;
+            _buttonPressedStartTime = InvalidValue;
         }
 
         internal override bool SupportsUiaProviders => true;
@@ -692,16 +692,16 @@ namespace System.Windows.Forms
                 ParseEditText();
             }
 
-            decimal newValue = currentValue;
+            decimal newValue = _currentValue;
 
             // Operations on Decimals can throw OverflowException.
             try
             {
                 newValue += Increment;
 
-                if (newValue > maximum)
+                if (newValue > _maximum)
                 {
-                    newValue = maximum;
+                    newValue = _maximum;
                     if (Spinning)
                     {
                         StopAcceleration();
@@ -710,7 +710,7 @@ namespace System.Windows.Forms
             }
             catch (OverflowException)
             {
-                newValue = maximum;
+                newValue = _maximum;
             }
 
             Value = newValue;
@@ -740,7 +740,7 @@ namespace System.Windows.Forms
         {
             // If we're initializing, we don't want to update the edit text yet,
             // just in case the value is invalid.
-            if (initializing)
+            if (_initializing)
             {
                 return;
             }
@@ -754,17 +754,17 @@ namespace System.Windows.Forms
             // Verify that the user is not starting the string with a "-"
             // before attempting to set the Value property since a "-" is a valid character with
             // which to start a string representing a negative number.
-            if (currentValueChanged || (!string.IsNullOrEmpty(Text) &&
+            if (_currentValueChanged || (!string.IsNullOrEmpty(Text) &&
                 !(Text.Length == 1 && Text == "-")))
             {
-                currentValueChanged = false;
+                _currentValueChanged = false;
                 ChangingText = true;
 
                 // Make sure the current value is within the min/max
-                Debug.Assert(minimum <= currentValue && currentValue <= maximum,
+                Debug.Assert(_minimum <= _currentValue && _currentValue <= _maximum,
                              "DecimalValue lies outside of [minimum, maximum]");
 
-                Text = GetNumberText(currentValue);
+                Text = GetNumberText(_currentValue);
                 Debug.Assert(ChangingText == false, "ChangingText should have been set to false");
             }
         }
