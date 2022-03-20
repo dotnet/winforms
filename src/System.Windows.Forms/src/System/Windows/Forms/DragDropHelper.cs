@@ -53,6 +53,13 @@ namespace System.Windows.Forms
             CF_USINGDEFAULTDRAGIMAGE
         };
 
+        // The drag-and-drop storage mediums consist of the types TYMED_HGLOBAL and TYMED_ISTREAM.
+        private static readonly TYMED[] s_tymeds = new TYMED[]
+        {
+            TYMED.TYMED_HGLOBAL,
+            TYMED.TYMED_ISTREAM
+        };
+
         /// <summary>
         ///  Creates an in-process server drag-image manager object and returns an interface pointer
         ///  to IDragSourceHelper2. Exposes methods that allow the application to specify the imaged
@@ -223,21 +230,32 @@ namespace System.Windows.Forms
         /// <summary>
         /// This function copies a given drag-and-drop STGMEDIUM structure.
         /// </summary>
-        public static bool CopyDragDropStgMedium(ref STGMEDIUM mediumSrc, short cfFormat, out STGMEDIUM mediumDest)
+        public static bool CopyDragDropStgMedium(ref STGMEDIUM mediumSrc, FORMATETC formatEtc, out STGMEDIUM mediumDest)
         {
+            mediumDest = new();
+            string formatName = DataFormats.GetFormat(formatEtc.cfFormat).Name;
+
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"CopyDragDropStgMedium: {mediumSrc.tymed}");
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   Format: {formatName}");
 
-            mediumDest = new()
+            // Verify the storage medium is a drag-and-drop format.
+            if (!s_formats.Contains(formatName) || !s_tymeds.Contains(mediumSrc.tymed))
             {
-                pUnkForRelease = mediumSrc.pUnkForRelease,
-                tymed = mediumSrc.tymed
-            };
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   Invalid format: {formatName}");
+                return false;
+            }
 
+            // Copy the storage medium type and release pointer.
+            mediumDest.tymed = mediumSrc.tymed;
+            mediumDest.pUnkForRelease = mediumSrc.pUnkForRelease;
+
+            // The drag-and-drop storage mediums consist of the types TYMED_HGLOBAL and TYMED_ISTREAM.
             if (mediumSrc.tymed.Equals(TYMED.TYMED_HGLOBAL))
             {
+                // TYMED_HGLOBAL - Copy global memory handles using the OleDuplicateData function.
                 mediumDest.unionmember = Ole32.OleDuplicateData(
                     mediumSrc.unionmember,
-                    cfFormat,
+                    formatEtc.cfFormat,
                     Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
                 if (mediumDest.unionmember == IntPtr.Zero)
                 {
@@ -248,6 +266,7 @@ namespace System.Windows.Forms
             }
             else if (mediumSrc.tymed.Equals(TYMED.TYMED_ISTREAM) && mediumSrc.unionmember != IntPtr.Zero)
             {
+                // TYMED_ISTREAM - This is a pointer to the DragContext.
                 mediumDest.unionmember = mediumSrc.unionmember;
 
                 // Increment the reference count.

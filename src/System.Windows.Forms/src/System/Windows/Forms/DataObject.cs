@@ -618,7 +618,7 @@ namespace System.Windows.Forms
                 if (dataStore.GetData(dragDropFormat) is KeyValuePair<FORMATETC, STGMEDIUM> dragDropEntry
                     && dragDropEntry.Key is FORMATETC formatEtc
                     && dragDropEntry.Value is STGMEDIUM mediumSrc
-                    && DragDropHelper.CopyDragDropStgMedium(ref mediumSrc, formatEtc.cfFormat, out STGMEDIUM mediumDest))
+                    && DragDropHelper.CopyDragDropStgMedium(ref mediumSrc, formatEtc, out STGMEDIUM mediumDest))
                 {
                     medium = mediumDest;
                     return;
