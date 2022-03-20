@@ -164,7 +164,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
             {
                 get
                 {

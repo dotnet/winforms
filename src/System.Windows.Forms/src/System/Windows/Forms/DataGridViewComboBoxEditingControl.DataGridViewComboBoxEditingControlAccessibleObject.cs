@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms
@@ -13,21 +11,22 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Defines the DataGridView ComboBox EditingControl accessible object.
         /// </summary>
-        internal class DataGridViewComboBoxEditingControlAccessibleObject : ComboBox.ComboBoxAccessibleObject
+        internal class DataGridViewComboBoxEditingControlAccessibleObject : ComboBoxAccessibleObject
         {
             private readonly DataGridViewComboBoxEditingControl ownerControl;
 
             /// <summary>
             ///  The parent is changed when the editing control is attached to another editing cell.
             /// </summary>
-            private AccessibleObject _parentAccessibleObject;
+            private AccessibleObject? _parentAccessibleObject;
 
-            public DataGridViewComboBoxEditingControlAccessibleObject(DataGridViewComboBoxEditingControl ownerControl) : base(ownerControl)
+            public DataGridViewComboBoxEditingControlAccessibleObject(DataGridViewComboBoxEditingControl ownerControl)
+                : base(ownerControl)
             {
                 this.ownerControl = ownerControl;
             }
 
-            public override AccessibleObject Parent
+            public override AccessibleObject? Parent
             {
                 get
                 {
@@ -35,7 +34,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
@@ -53,7 +52,7 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
             {
                 get
                 {
@@ -83,7 +82,7 @@ namespace System.Windows.Forms
             ///  Sets the parent accessible object for the node which can be added or removed to/from hierarchy nodes.
             /// </summary>
             /// <param name="parent">The parent accessible object.</param>
-            internal override void SetParent(AccessibleObject parent)
+            internal override void SetParent(AccessibleObject? parent)
             {
                 _parentAccessibleObject = parent;
             }

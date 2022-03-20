@@ -35,7 +35,7 @@ namespace System.Windows.Forms
                     return base.FragmentNavigate(direction);
                 }
 
-                internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
+                internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
                 {
                     get
                     {
