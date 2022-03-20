@@ -991,14 +991,14 @@ namespace System.Windows.Forms
                 return dataGridViewColumn;
             }
 
-            public DataGridViewColumn[] GetCollectionOfBoundDataGridViewColumns()
+            public List<DataGridViewColumn> GetCollectionOfBoundDataGridViewColumns()
             {
                 if (_props is null)
                 {
                     return null;
                 }
 
-                ArrayList cols = new ArrayList();
+                List<DataGridViewColumn> cols = new(_props.Count);
 
                 for (int i = 0; i < _props.Count; i++)
                 {
@@ -1032,9 +1032,7 @@ namespace System.Windows.Forms
                     cols.Add(dataGridViewColumn);
                 }
 
-                DataGridViewColumn[] ret = new DataGridViewColumn[cols.Count];
-                cols.CopyTo(ret);
-                return ret;
+                return cols;
             }
 
             private void GetSortingInformationFromBackend(out PropertyDescriptor sortProperty, out SortOrder sortOrder)
