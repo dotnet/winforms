@@ -610,12 +610,12 @@ namespace System.Windows.Forms
                 converter.OleDataObject.GetDataHere(ref formatetc, ref medium);
             }
             else if (_innerData is DataStore dataStore
-                && DragDropHelper.s_formats.Contains(DataFormats.GetFormat(formatetc.cfFormat).Name))
+                && DataFormats.GetFormat(formatetc.cfFormat).Name is string formatName
+                && DragDropHelper.s_formats.Contains(formatName))
             {
-                string dragDropFormat = DataFormats.GetFormat(formatetc.cfFormat).Name;
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {dragDropFormat}");
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {formatName}");
 
-                if (dataStore.GetData(dragDropFormat) is KeyValuePair<FORMATETC, STGMEDIUM> dragDropEntry
+                if (dataStore.GetData(formatName) is KeyValuePair<FORMATETC, STGMEDIUM> dragDropEntry
                     && dragDropEntry.Key is FORMATETC formatEtc
                     && dragDropEntry.Value is STGMEDIUM mediumSrc
                     && DragDropHelper.CopyDragDropStgMedium(ref mediumSrc, formatEtc, out STGMEDIUM mediumDest))
@@ -686,12 +686,11 @@ namespace System.Windows.Forms
                 return;
             }
             else if (_innerData is DataStore dataStore
-                && DragDropHelper.s_formats.Contains(DataFormats.GetFormat(pFormatetcIn.cfFormat).Name))
+                && DataFormats.GetFormat(pFormatetcIn.cfFormat).Name is string formatName
+                && DragDropHelper.s_formats.Contains(formatName))
             {
-                string dragDropFormat = DataFormats.GetFormat(pFormatetcIn.cfFormat).Name;
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {dragDropFormat}");
-
-                dataStore.SetData(dragDropFormat, new KeyValuePair<FORMATETC, STGMEDIUM>(pFormatetcIn, pmedium));
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {formatName}");
+                dataStore.SetData(formatName, new KeyValuePair<FORMATETC, STGMEDIUM>(pFormatetcIn, pmedium));
                 return;
             }
 

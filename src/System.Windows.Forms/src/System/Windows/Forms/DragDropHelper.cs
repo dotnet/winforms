@@ -80,9 +80,9 @@ namespace System.Windows.Forms
                 dragSourceHelper = (IDragSourceHelper2)obj;
                 return true;
             }
-            catch (COMException comEx)
+            catch (COMException ex)
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"TryGetDragSourceHelper COMException {comEx}");
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"TryGetDragSourceHelper COMException {ex}");
                 dragSourceHelper = null;
                 return false;
             }
@@ -108,9 +108,9 @@ namespace System.Windows.Forms
                 dropTargetHelper = (IDropTargetHelper)obj;
                 return true;
             }
-            catch (COMException comEx)
+            catch (COMException ex)
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"TryGetDropTargetHelper COMException {comEx}");
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"TryGetDropTargetHelper COMException {ex}");
                 dropTargetHelper = null;
                 return false;
             }
@@ -131,10 +131,10 @@ namespace System.Windows.Forms
             {
                 dropTargetHelper.DragEnter(hwndTarget, dataObject, ref ppt, dwEffect).ThrowIfFailed();
             }
-            catch (COMException comEx)
+            catch (COMException ex)
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper::DragEnter COM error {comEx}");
-                return (HRESULT)comEx.HResult;
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper::DragEnter COM error {ex}");
+                return (HRESULT)ex.HResult;
             }
             finally
             {
@@ -159,9 +159,9 @@ namespace System.Windows.Forms
             {
                 dropTargetHelper.DragOver(ref ppt, dwEffect).ThrowIfFailed();
             }
-            catch (COMException comEx)
+            catch (COMException ex)
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper::DragOver COM error {comEx}");
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper::DragOver COM error {ex}");
                 return HRESULT.S_FALSE;
             }
             finally
@@ -186,9 +186,9 @@ namespace System.Windows.Forms
             {
                 dropTargetHelper.DragLeave().ThrowIfFailed();
             }
-            catch (COMException comEx)
+            catch (COMException ex)
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper::DragLeave COM error {comEx}");
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper::DragLeave COM error {ex}");
                 return HRESULT.S_FALSE;
             }
             finally
@@ -214,9 +214,9 @@ namespace System.Windows.Forms
             {
                 dropTargetHelper.Drop(dataObject, ref ppt, dwEffect).ThrowIfFailed();
             }
-            catch (COMException comEx)
+            catch (COMException ex)
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper::Drop COM error {comEx}");
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper::Drop COM error {ex}");
                 return HRESULT.S_FALSE;
             }
             finally
@@ -384,9 +384,9 @@ namespace System.Windows.Forms
                 dragSourceHelper.SetFlags(DSH_ALLOWDROPDESCRIPTIONTEXT).ThrowIfFailed();
                 dragSourceHelper.InitializeFromBitmap(shDragImage, dataObject).ThrowIfFailed();
             }
-            catch (COMException comEx)
+            catch (COMException ex)
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropHelper SetDragImage COM error {comEx}");
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropHelper SetDragImage COM error {ex}");
                 return HRESULT.S_FALSE;
             }
             finally
