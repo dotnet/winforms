@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -16,9 +14,9 @@ namespace System.Windows.Forms
     {
         protected class DataGridViewRowAccessibleObject : AccessibleObject
         {
-            private int[] runtimeId;
-            private DataGridViewRow owner;
-            private DataGridViewSelectedRowCellsAccessibleObject selectedCellsAccessibilityObject;
+            private int[]? runtimeId;
+            private DataGridViewRow? owner;
+            private DataGridViewSelectedRowCellsAccessibleObject? selectedCellsAccessibilityObject;
 
             public DataGridViewRowAccessibleObject()
             {
@@ -26,7 +24,7 @@ namespace System.Windows.Forms
 
             public DataGridViewRowAccessibleObject(DataGridViewRow owner)
             {
-                this.owner = owner;
+                this.owner = owner.OrThrowIfNull();
             }
 
             /// <summary>
@@ -61,7 +59,7 @@ namespace System.Windows.Forms
                         horizontalScrollBarHeight = owner.DataGridView.HorizontalScrollBarHeight;
                     }
 
-                    Rectangle dataGridViewRect = ParentPrivate.Bounds;
+                    Rectangle dataGridViewRect = ParentPrivate!.Bounds;
 
                     int columnHeadersHeight = 0;
                     if (owner.DataGridView.ColumnHeadersVisible)
@@ -105,7 +103,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public DataGridViewRow Owner
+            public DataGridViewRow? Owner
             {
                 get => owner;
                 set
@@ -119,9 +117,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject Parent => ParentPrivate;
+            public override AccessibleObject? Parent => ParentPrivate;
 
-            private AccessibleObject ParentPrivate
+            private AccessibleObject? ParentPrivate
             {
                 get
                 {
@@ -140,7 +138,7 @@ namespace System.Windows.Forms
                 => runtimeId ??= new int[]
                 {
                     RuntimeIDFirstItem, // first item is static - 0x2a
-                    Parent.GetHashCode(),
+                    Parent?.GetHashCode() ?? 0,
                     GetHashCode()
                 };
 
@@ -231,7 +229,7 @@ namespace System.Windows.Forms
 
                     for (int i = startIndex; i < childCount; i++)
                     {
-                        AccessibleObject cellAccObj = GetChild(i);
+                        AccessibleObject? cellAccObj = GetChild(i);
                         if (cellAccObj is not null)
                         {
                             sb.Append(cellAccObj.Value);
@@ -247,7 +245,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject GetChild(int index)
+            public override AccessibleObject? GetChild(int index)
             {
                 if (index < 0)
                 {
@@ -306,7 +304,7 @@ namespace System.Windows.Forms
 
             public override AccessibleObject GetSelected() => SelectedCellsAccessibilityObject;
 
-            public override AccessibleObject GetFocused()
+            public override AccessibleObject? GetFocused()
             {
                 if (owner is null)
                 {
@@ -326,7 +324,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
+            public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
             {
                 if (owner is null)
                 {
@@ -363,7 +361,7 @@ namespace System.Windows.Forms
                         else if (owner.DataGridView.ColumnHeadersVisible)
                         {
                             // return the top row header acc obj
-                            return ParentPrivate.GetChild(0);
+                            return ParentPrivate?.GetChild(0);
                         }
                         else
                         {
@@ -404,7 +402,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                 }
 
-                DataGridView dataGridView = owner.DataGridView;
+                DataGridView? dataGridView = owner.DataGridView;
 
                 if (dataGridView is null || !dataGridView.IsHandleCreated)
                 {
@@ -450,7 +448,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 {
                     if (Owner is null)
@@ -476,7 +474,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
             {
                 get
                 {
@@ -489,9 +487,9 @@ namespace System.Windows.Forms
                 return patternId.Equals(UiaCore.UIA.LegacyIAccessiblePatternId);
             }
 
-            internal override bool IsReadOnly => owner.ReadOnly;
+            internal override bool IsReadOnly => owner?.ReadOnly ?? false;
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyId)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyId)
             {
                 switch (propertyId)
                 {
