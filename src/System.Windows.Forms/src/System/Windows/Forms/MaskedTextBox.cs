@@ -57,10 +57,10 @@ namespace System.Windows.Forms
         /////////  Instance fields
 
         // Used for keeping selection when prompt is hidden on leave (text changes).
-        private int lastSelLength;
+        private int _lastSelLength;
 
         // Used for caret positioning.
-        private int caretTestPos;
+        private int _caretTestPos;
 
         // Bit mask - Determines when the Korean IME composition string is completed so converted character can be processed.
         private static readonly int IME_ENDING_COMPOSITION = BitVector32.CreateMask();
@@ -98,15 +98,15 @@ namespace System.Windows.Forms
 
         /////////  Properties backend fields. See corresponding property comments for more info.
 
-        private char passwordChar; // control's pwd char, it could be different from the one displayed if using system password.
-        private Type? validatingType;
-        private IFormatProvider? formatProvider;
-        private MaskedTextProvider maskedTextProvider;
-        private InsertKeyMode insertMode;
-        private HorizontalAlignment textAlign;
+        private char _passwordChar; // control's pwd char, it could be different from the one displayed if using system password.
+        private Type? _validatingType;
+        private IFormatProvider? _formatProvider;
+        private MaskedTextProvider _maskedTextProvider;
+        private InsertKeyMode _insertMode;
+        private HorizontalAlignment _textAlign;
 
         // Bit vector to represent bool variables.
-        private BitVector32 flagState;
+        private BitVector32 _flagState;
 
         /// <summary>
         ///  Constructs the MaskedTextBox with the specified MaskedTextProvider object.
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
         public MaskedTextBox()
         {
             MaskedTextProvider maskedTextProvider = new MaskedTextProvider(nullMask, CultureInfo.CurrentCulture);
-            flagState[IS_NULL_MASK] = true;
+            _flagState[IS_NULL_MASK] = true;
             Initialize(maskedTextProvider);
         }
 
@@ -126,7 +126,7 @@ namespace System.Windows.Forms
             ArgumentNullException.ThrowIfNull(mask);
 
             MaskedTextProvider maskedTextProvider = new MaskedTextProvider(mask, CultureInfo.CurrentCulture);
-            flagState[IS_NULL_MASK] = false;
+            _flagState[IS_NULL_MASK] = false;
             Initialize(maskedTextProvider);
         }
 
@@ -137,7 +137,7 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(maskedTextProvider);
 
-            flagState[IS_NULL_MASK] = false;
+            _flagState[IS_NULL_MASK] = false;
             Initialize(maskedTextProvider);
         }
 
@@ -145,36 +145,36 @@ namespace System.Windows.Forms
         ///  Initializes the object with the specified MaskedTextProvider object and default
         ///  property values.
         /// </summary>
-        [MemberNotNull(nameof(maskedTextProvider))]
+        [MemberNotNull(nameof(_maskedTextProvider))]
         private void Initialize(MaskedTextProvider maskedTextProvider)
         {
             Debug.Assert(maskedTextProvider is not null, "Initializing from a null MaskProvider ref.");
 
-            this.maskedTextProvider = maskedTextProvider;
+            _maskedTextProvider = maskedTextProvider;
 
             // set the initial display text.
-            if (!flagState[IS_NULL_MASK])
+            if (!_flagState[IS_NULL_MASK])
             {
                 SetWindowText();
             }
 
             // set default values.
-            passwordChar = this.maskedTextProvider.PasswordChar;
-            insertMode = InsertKeyMode.Default;
+            _passwordChar = _maskedTextProvider.PasswordChar;
+            _insertMode = InsertKeyMode.Default;
 
-            flagState[HIDE_PROMPT_ON_LEAVE] = false;
-            flagState[BEEP_ON_ERROR] = false;
-            flagState[USE_SYSTEM_PASSWORD_CHAR] = false;
-            flagState[REJECT_INPUT_ON_FIRST_FAILURE] = false;
+            _flagState[HIDE_PROMPT_ON_LEAVE] = false;
+            _flagState[BEEP_ON_ERROR] = false;
+            _flagState[USE_SYSTEM_PASSWORD_CHAR] = false;
+            _flagState[REJECT_INPUT_ON_FIRST_FAILURE] = false;
 
             // CutCopyMaskFormat - set same defaults as TextMaskFormat (IncludePromptAndLiterals).
             // It is a lot easier to handle this flags individually since that's the way the MaskedTextProvider does it.
-            flagState[CUTCOPYINCLUDEPROMPT] = this.maskedTextProvider.IncludePrompt;
-            flagState[CUTCOPYINCLUDELITERALS] = this.maskedTextProvider.IncludeLiterals;
+            _flagState[CUTCOPYINCLUDEPROMPT] = _maskedTextProvider.IncludePrompt;
+            _flagState[CUTCOPYINCLUDELITERALS] = _maskedTextProvider.IncludeLiterals;
 
             // fields for internal use.
-            flagState[HANDLE_KEY_PRESS] = true;
-            caretTestPos = 0;
+            _flagState[HANDLE_KEY_PRESS] = true;
+            _caretTestPos = 0;
         }
 
         ///////////////////  Properties
@@ -204,20 +204,20 @@ namespace System.Windows.Forms
         {
             get
             {
-                return maskedTextProvider.AllowPromptAsInput;
+                return _maskedTextProvider.AllowPromptAsInput;
             }
             set
             {
-                if (value != maskedTextProvider.AllowPromptAsInput)
+                if (value != _maskedTextProvider.AllowPromptAsInput)
                 {
                     // Recreate masked text provider since this property is read-only.
                     MaskedTextProvider newProvider = new MaskedTextProvider(
-                        maskedTextProvider.Mask,
-                        maskedTextProvider.Culture,
+                        _maskedTextProvider.Mask,
+                        _maskedTextProvider.Culture,
                         value,
-                        maskedTextProvider.PromptChar,
-                        maskedTextProvider.PasswordChar,
-                        maskedTextProvider.AsciiOnly);
+                        _maskedTextProvider.PromptChar,
+                        _maskedTextProvider.PasswordChar,
+                        _maskedTextProvider.AsciiOnly);
 
                     SetMaskedTextProvider(newProvider);
                 }
@@ -248,20 +248,20 @@ namespace System.Windows.Forms
         {
             get
             {
-                return maskedTextProvider.AsciiOnly;
+                return _maskedTextProvider.AsciiOnly;
             }
 
             set
             {
-                if (value != maskedTextProvider.AsciiOnly)
+                if (value != _maskedTextProvider.AsciiOnly)
                 {
                     // Recreate masked text provider since this property is read-only.
                     MaskedTextProvider newProvider = new MaskedTextProvider(
-                        maskedTextProvider.Mask,
-                        maskedTextProvider.Culture,
-                        maskedTextProvider.AllowPromptAsInput,
-                        maskedTextProvider.PromptChar,
-                        maskedTextProvider.PasswordChar,
+                        _maskedTextProvider.Mask,
+                        _maskedTextProvider.Culture,
+                        _maskedTextProvider.AllowPromptAsInput,
+                        _maskedTextProvider.PromptChar,
+                        _maskedTextProvider.PasswordChar,
                         value);
 
                     SetMaskedTextProvider(newProvider);
@@ -279,11 +279,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return flagState[BEEP_ON_ERROR];
+                return _flagState[BEEP_ON_ERROR];
             }
             set
             {
-                flagState[BEEP_ON_ERROR] = value;
+                _flagState[BEEP_ON_ERROR] = value;
             }
         }
 
@@ -316,7 +316,7 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
 
                 // Translate for Rtl if necessary
-                HorizontalAlignment align = RtlTranslateHorizontal(textAlign);
+                HorizontalAlignment align = RtlTranslateHorizontal(_textAlign);
                 cp.ExStyle &= ~(int)WS_EX.RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
                 switch (align)
                 {
@@ -345,23 +345,23 @@ namespace System.Windows.Forms
         {
             get
             {
-                return maskedTextProvider.Culture;
+                return _maskedTextProvider.Culture;
             }
 
             set
             {
                 ArgumentNullException.ThrowIfNull(value);
 
-                if (!maskedTextProvider.Culture.Equals(value))
+                if (!_maskedTextProvider.Culture.Equals(value))
                 {
                     // Recreate masked text provider since this property is read-only.
                     MaskedTextProvider newProvider = new MaskedTextProvider(
-                        maskedTextProvider.Mask,
+                        _maskedTextProvider.Mask,
                         value,
-                        maskedTextProvider.AllowPromptAsInput,
-                        maskedTextProvider.PromptChar,
-                        maskedTextProvider.PasswordChar,
-                        maskedTextProvider.AsciiOnly);
+                        _maskedTextProvider.AllowPromptAsInput,
+                        _maskedTextProvider.PromptChar,
+                        _maskedTextProvider.PasswordChar,
+                        _maskedTextProvider.AsciiOnly);
 
                     SetMaskedTextProvider(newProvider);
                 }
@@ -381,9 +381,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (flagState[CUTCOPYINCLUDEPROMPT])
+                if (_flagState[CUTCOPYINCLUDEPROMPT])
                 {
-                    if (flagState[CUTCOPYINCLUDELITERALS])
+                    if (_flagState[CUTCOPYINCLUDELITERALS])
                     {
                         return MaskFormat.IncludePromptAndLiterals;
                     }
@@ -391,7 +391,7 @@ namespace System.Windows.Forms
                     return MaskFormat.IncludePrompt;
                 }
 
-                if (flagState[CUTCOPYINCLUDELITERALS])
+                if (_flagState[CUTCOPYINCLUDELITERALS])
                 {
                     return MaskFormat.IncludeLiterals;
                 }
@@ -406,19 +406,19 @@ namespace System.Windows.Forms
 
                 if (value == MaskFormat.IncludePrompt)
                 {
-                    flagState[CUTCOPYINCLUDEPROMPT] = true;
-                    flagState[CUTCOPYINCLUDELITERALS] = false;
+                    _flagState[CUTCOPYINCLUDEPROMPT] = true;
+                    _flagState[CUTCOPYINCLUDELITERALS] = false;
                 }
                 else if (value == MaskFormat.IncludeLiterals)
                 {
-                    flagState[CUTCOPYINCLUDEPROMPT] = false;
-                    flagState[CUTCOPYINCLUDELITERALS] = true;
+                    _flagState[CUTCOPYINCLUDEPROMPT] = false;
+                    _flagState[CUTCOPYINCLUDELITERALS] = true;
                 }
                 else // value == MaskFormat.IncludePromptAndLiterals || value == MaskFormat.ExcludePromptAndLiterals
                 {
                     bool include = value == MaskFormat.IncludePromptAndLiterals;
-                    flagState[CUTCOPYINCLUDEPROMPT] = include;
-                    flagState[CUTCOPYINCLUDELITERALS] = include;
+                    _flagState[CUTCOPYINCLUDEPROMPT] = include;
+                    _flagState[CUTCOPYINCLUDELITERALS] = include;
                 }
             }
         }
@@ -432,12 +432,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                return formatProvider;
+                return _formatProvider;
             }
 
             set
             {
-                formatProvider = value;
+                _formatProvider = value;
             }
         }
 
@@ -452,17 +452,17 @@ namespace System.Windows.Forms
         {
             get
             {
-                return flagState[HIDE_PROMPT_ON_LEAVE];
+                return _flagState[HIDE_PROMPT_ON_LEAVE];
             }
             set
             {
-                if (flagState[HIDE_PROMPT_ON_LEAVE] != value)
+                if (_flagState[HIDE_PROMPT_ON_LEAVE] != value)
                 {
-                    flagState[HIDE_PROMPT_ON_LEAVE] = value;
+                    _flagState[HIDE_PROMPT_ON_LEAVE] = value;
 
                     // If the control is not focused and there are available edit positions (mask not full) we need to
                     // update the displayed text.
-                    if (!flagState[IS_NULL_MASK] && !Focused && !MaskFull && !DesignMode)
+                    if (!_flagState[IS_NULL_MASK] && !Focused && !MaskFull && !DesignMode)
                     {
                         SetWindowText();
                     }
@@ -477,11 +477,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return maskedTextProvider.IncludeLiterals;
+                return _maskedTextProvider.IncludeLiterals;
             }
             set
             {
-                maskedTextProvider.IncludeLiterals = value;
+                _maskedTextProvider.IncludeLiterals = value;
             }
         }
 
@@ -493,11 +493,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return maskedTextProvider.IncludePrompt;
+                return _maskedTextProvider.IncludePrompt;
             }
             set
             {
-                maskedTextProvider.IncludePrompt = value;
+                _maskedTextProvider.IncludePrompt = value;
             }
         }
 
@@ -513,17 +513,17 @@ namespace System.Windows.Forms
         {
             get
             {
-                return insertMode;
+                return _insertMode;
             }
             set
             {
                 //valid values are 0x0 to 0x2
                 SourceGenerated.EnumValidator.Validate(value);
 
-                if (insertMode != value)
+                if (_insertMode != value)
                 {
                     bool isOverwrite = IsOverwriteMode;
-                    insertMode = value;
+                    _insertMode = value;
 
                     if (isOverwrite != IsOverwriteMode)
                     {
@@ -554,12 +554,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (flagState[IS_NULL_MASK])
+                if (_flagState[IS_NULL_MASK])
                 {
                     return false; // EditBox always inserts.
                 }
 
-                switch (insertMode)
+                switch (_insertMode)
                 {
                     case InsertKeyMode.Overwrite:
                         return true;
@@ -573,7 +573,7 @@ namespace System.Windows.Forms
                         // behavior of apps like WinWord, WordPad and VS; so we have to keep track of it and not query its
                         // system value.
                         //return Control.IsKeyLocked(Keys.Insert);
-                        return flagState[INSERT_TOGGLED];
+                        return _flagState[INSERT_TOGGLED];
 
                     default:
                         Debug.Fail("Invalid InsertKeyMode.  This code path should have never been executed.");
@@ -606,14 +606,14 @@ namespace System.Windows.Forms
             {
                 string[] lines;
 
-                flagState[QUERY_BASE_TEXT] = true;
+                _flagState[QUERY_BASE_TEXT] = true;
                 try
                 {
                     lines = base.Lines;
                 }
                 finally
                 {
-                    flagState[QUERY_BASE_TEXT] = false;
+                    _flagState[QUERY_BASE_TEXT] = false;
                 }
 
                 return lines;
@@ -637,16 +637,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                return flagState[IS_NULL_MASK] ? string.Empty : maskedTextProvider.Mask;
+                return _flagState[IS_NULL_MASK] ? string.Empty : _maskedTextProvider.Mask;
             }
             set
             {
                 //
                 // We don't do anything if:
-                // 1.  IsNullOrEmpty( value )->[Reset control] && this.flagState[IS_NULL_MASK]==>Already Reset.
-                // 2. !IsNullOrEmpty( value )->[Set control] && !this.flagState[IS_NULL_MASK][control is set] && [value is the same]==>No need to update.
+                // 1.  IsNullOrEmpty( value )->[Reset control] && _flagState[IS_NULL_MASK]==>Already Reset.
+                // 2. !IsNullOrEmpty( value )->[Set control] && !_flagState[IS_NULL_MASK][control is set] && [value is the same]==>No need to update.
                 //
-                if (flagState[IS_NULL_MASK] == string.IsNullOrEmpty(value) && (flagState[IS_NULL_MASK] || value == maskedTextProvider.Mask))
+                if (_flagState[IS_NULL_MASK] == string.IsNullOrEmpty(value) && (_flagState[IS_NULL_MASK] || value == _maskedTextProvider.Mask))
                 {
                     return;
                 }
@@ -654,7 +654,7 @@ namespace System.Windows.Forms
                 string? text = null;
                 string? newMask = value;
 
-                // We need to update the this.flagState[IS_NULL_MASK]field before raising any events (when setting the maskedTextProvider) so
+                // We need to update the _flagState[IS_NULL_MASK]field before raising any events (when setting the maskedTextProvider) so
                 // querying for properties from an event handler returns the right value (i.e: Text).
 
                 if (string.IsNullOrEmpty(value)) // Resetting the control, the native edit control will be in charge.
@@ -662,13 +662,13 @@ namespace System.Windows.Forms
                     // Need to get the formatted & unformatted text before resetting the mask, they'll be used to determine whether we need to
                     // raise the TextChanged event.
                     string formattedText = TextOutput;
-                    string unformattedText = maskedTextProvider.ToString(false, false);
+                    string unformattedText = _maskedTextProvider.ToString(false, false);
 
-                    flagState[IS_NULL_MASK] = true;
+                    _flagState[IS_NULL_MASK] = true;
 
-                    if (maskedTextProvider.IsPassword)
+                    if (_maskedTextProvider.IsPassword)
                     {
-                        SetEditControlPasswordChar(maskedTextProvider.PasswordChar);
+                        SetEditControlPasswordChar(_maskedTextProvider.PasswordChar);
                     }
 
                     // Set the window text to the unformatted text before raising events. Also, TextChanged needs to be raised after MaskChanged so
@@ -697,7 +697,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (flagState[IS_NULL_MASK])
+                    if (_flagState[IS_NULL_MASK])
                     {
                         // If this.IsNullMask, we are setting the mask to a new value; in this case we need to get the text because
                         // the underlying MTP does not have it (used as a property backend only) and pass it to SetMaskedTextProvider
@@ -710,11 +710,11 @@ namespace System.Windows.Forms
                 // Recreate masked text provider since this property is read-only.
                 MaskedTextProvider newProvider = new MaskedTextProvider(
                     newMask!,
-                    maskedTextProvider.Culture,
-                    maskedTextProvider.AllowPromptAsInput,
-                    maskedTextProvider.PromptChar,
-                    maskedTextProvider.PasswordChar,
-                    maskedTextProvider.AsciiOnly);
+                    _maskedTextProvider.Culture,
+                    _maskedTextProvider.AllowPromptAsInput,
+                    _maskedTextProvider.PromptChar,
+                    _maskedTextProvider.PasswordChar,
+                    _maskedTextProvider.AsciiOnly);
 
                 //text is null when setting to a different mask value or when resetting the mask to null.
                 //text is not null only when setting the mask from null to some value.
@@ -742,7 +742,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return maskedTextProvider.MaskCompleted;
+                return _maskedTextProvider.MaskCompleted;
             }
         }
 
@@ -754,7 +754,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return maskedTextProvider.MaskFull;
+                return _maskedTextProvider.MaskFull;
             }
         }
 
@@ -769,7 +769,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return flagState[IS_NULL_MASK] ? null : (MaskedTextProvider)maskedTextProvider.Clone();
+                return _flagState[IS_NULL_MASK] ? null : (MaskedTextProvider)_maskedTextProvider.Clone();
             }
         }
 
@@ -837,7 +837,7 @@ namespace System.Windows.Forms
             {
                 // The password char could be the one set in the control or the system password char,
                 // in any case the maskedTextProvider has the correct one.
-                return maskedTextProvider.PasswordChar;
+                return _maskedTextProvider.PasswordChar;
             }
             set
             {
@@ -847,22 +847,22 @@ namespace System.Windows.Forms
                     throw new ArgumentException(SR.MaskedTextBoxInvalidCharError);
                 }
 
-                if (passwordChar != value)
+                if (_passwordChar != value)
                 {
-                    if (value == maskedTextProvider.PromptChar)
+                    if (value == _maskedTextProvider.PromptChar)
                     {
                         // Prompt and password chars must be different.
                         throw new InvalidOperationException(SR.MaskedTextBoxPasswordAndPromptCharError);
                     }
 
-                    passwordChar = value;
+                    _passwordChar = value;
 
                     // UseSystemPasswordChar take precedence over PasswordChar...Let's check.
                     if (!UseSystemPasswordChar)
                     {
-                        maskedTextProvider.PasswordChar = value;
+                        _maskedTextProvider.PasswordChar = value;
 
-                        if (flagState[IS_NULL_MASK])
+                        if (_flagState[IS_NULL_MASK])
                         {
                             SetEditControlPasswordChar(value);
                         }
@@ -881,7 +881,7 @@ namespace System.Windows.Forms
         ///  Determines if the control is in password protect mode.
         /// </summary>
         private protected override bool PasswordProtect
-            => maskedTextProvider?.IsPassword ?? base.PasswordProtect;
+            => _maskedTextProvider?.IsPassword ?? base.PasswordProtect;
 
         /// <summary>
         ///  Specifies the prompt character to be used in the formatted string for unsupplied characters.
@@ -895,7 +895,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return maskedTextProvider.PromptChar;
+                return _maskedTextProvider.PromptChar;
             }
             set
             {
@@ -905,10 +905,10 @@ namespace System.Windows.Forms
                     throw new ArgumentException(SR.MaskedTextBoxInvalidCharError);
                 }
 
-                if (maskedTextProvider.PromptChar != value)
+                if (_maskedTextProvider.PromptChar != value)
                 {
                     // We need to check maskedTextProvider password char in case it is using the system password.
-                    if (value == passwordChar || value == maskedTextProvider.PasswordChar)
+                    if (value == _passwordChar || value == _maskedTextProvider.PasswordChar)
                     {
                         // Prompt and password chars must be different.
                         throw new InvalidOperationException(SR.MaskedTextBoxPasswordAndPromptCharError);
@@ -916,12 +916,12 @@ namespace System.Windows.Forms
 
                     // Recreate masked text provider to be consistent with AllowPromptAsInput - current text may have chars with same value as new prompt.
                     MaskedTextProvider newProvider = new MaskedTextProvider(
-                        maskedTextProvider.Mask,
-                        maskedTextProvider.Culture,
-                        maskedTextProvider.AllowPromptAsInput,
+                        _maskedTextProvider.Mask,
+                        _maskedTextProvider.Culture,
+                        _maskedTextProvider.AllowPromptAsInput,
                         value,
-                        maskedTextProvider.PasswordChar,
-                        maskedTextProvider.AsciiOnly);
+                        _maskedTextProvider.PasswordChar,
+                        _maskedTextProvider.AsciiOnly);
 
                     SetMaskedTextProvider(newProvider);
                 }
@@ -942,7 +942,7 @@ namespace System.Windows.Forms
                     // if true, this disables IME in the base class.
                     base.ReadOnly = value;
 
-                    if (!flagState[IS_NULL_MASK])
+                    if (!_flagState[IS_NULL_MASK])
                     {
                         // Prompt will be hidden.
                         SetWindowText();
@@ -962,11 +962,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return flagState[REJECT_INPUT_ON_FIRST_FAILURE];
+                return _flagState[REJECT_INPUT_ON_FIRST_FAILURE];
             }
             set
             {
-                flagState[REJECT_INPUT_ON_FIRST_FAILURE] = value;
+                _flagState[REJECT_INPUT_ON_FIRST_FAILURE] = value;
             }
         }
 
@@ -981,11 +981,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return maskedTextProvider.ResetOnPrompt;
+                return _maskedTextProvider.ResetOnPrompt;
             }
             set
             {
-                maskedTextProvider.ResetOnPrompt = value;
+                _maskedTextProvider.ResetOnPrompt = value;
             }
         }
 
@@ -1000,11 +1000,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return maskedTextProvider.ResetOnSpace;
+                return _maskedTextProvider.ResetOnSpace;
             }
             set
             {
-                maskedTextProvider.ResetOnSpace = value;
+                _maskedTextProvider.ResetOnSpace = value;
             }
         }
 
@@ -1019,11 +1019,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return maskedTextProvider.SkipLiterals;
+                return _maskedTextProvider.SkipLiterals;
             }
             set
             {
-                maskedTextProvider.SkipLiterals = value;
+                _maskedTextProvider.SkipLiterals = value;
             }
         }
 
@@ -1035,7 +1035,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (flagState[IS_NULL_MASK])
+                if (_flagState[IS_NULL_MASK])
                 {
                     return base.SelectedText;
                 }
@@ -1050,7 +1050,7 @@ namespace System.Windows.Forms
 
         internal override void SetSelectedTextInternal(string? value, bool clearUndo)
         {
-            if (flagState[IS_NULL_MASK])
+            if (_flagState[IS_NULL_MASK])
             {
                 base.SetSelectedTextInternal(value, true); // Operates as a regular text box base.
                 return;
@@ -1064,7 +1064,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void ImeComplete()
         {
-            flagState[IME_COMPLETING] = true;
+            _flagState[IME_COMPLETING] = true;
             ImeNotify(Imm32.CPS.COMPLETE);
         }
 
@@ -1149,7 +1149,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (flagState[IS_NULL_MASK] || flagState[QUERY_BASE_TEXT])
+                if (_flagState[IS_NULL_MASK] || _flagState[QUERY_BASE_TEXT])
                 {
                     return base.Text;
                 }
@@ -1158,7 +1158,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (flagState[IS_NULL_MASK])
+                if (_flagState[IS_NULL_MASK])
                 {
                     base.Text = value;
                     return;
@@ -1167,30 +1167,30 @@ namespace System.Windows.Forms
                 if (string.IsNullOrEmpty(value))
                 {
                     // reset the input text.
-                    Delete(Keys.Delete, 0, maskedTextProvider.Length);
+                    Delete(Keys.Delete, 0, _maskedTextProvider.Length);
                 }
                 else
                 {
                     if (RejectInputOnFirstFailure)
                     {
                         string oldText = TextOutput;
-                        if (maskedTextProvider.Set(value, out caretTestPos, out MaskedTextResultHint hint))
+                        if (_maskedTextProvider.Set(value, out _caretTestPos, out MaskedTextResultHint hint))
                         {
                             if (TextOutput != oldText)
                             {
                                 SetText();
                             }
 
-                            SelectionStart = ++caretTestPos;
+                            SelectionStart = ++_caretTestPos;
                         }
                         else
                         {
-                            OnMaskInputRejected(new MaskInputRejectedEventArgs(caretTestPos, hint));
+                            OnMaskInputRejected(new MaskInputRejectedEventArgs(_caretTestPos, hint));
                         }
                     }
                     else
                     {
-                        Replace(value, /*startPosition*/ 0, /*selectionLen*/ maskedTextProvider.Length);
+                        Replace(value, /*startPosition*/ 0, /*selectionLen*/ _maskedTextProvider.Length);
                     }
                 }
             }
@@ -1204,7 +1204,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (flagState[IS_NULL_MASK])
+                if (_flagState[IS_NULL_MASK])
                 {
                     return base.TextLength;
                 }
@@ -1227,8 +1227,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
-                return maskedTextProvider.ToString();
+                Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+                return _maskedTextProvider.ToString();
             }
         }
 
@@ -1244,17 +1244,17 @@ namespace System.Windows.Forms
         {
             get
             {
-                return textAlign;
+                return _textAlign;
             }
             set
             {
-                if (textAlign != value)
+                if (_textAlign != value)
                 {
                     //verify that 'value' is a valid enum type...
                     //valid values are 0x0 to 0x2
                     SourceGenerated.EnumValidator.Validate(value);
 
-                    textAlign = value;
+                    _textAlign = value;
                     RecreateHandle();
                     OnTextAlignChanged(EventArgs.Empty);
                 }
@@ -1316,7 +1316,7 @@ namespace System.Windows.Forms
 
                 // Changing the TextMaskFormat will likely change the 'output' text (Text getter value).  Cache old value to
                 // verify it against the new value and raise OnTextChange if needed.
-                string? oldText = flagState[IS_NULL_MASK] ? null : TextOutput;
+                string? oldText = _flagState[IS_NULL_MASK] ? null : TextOutput;
 
                 if (value == MaskFormat.IncludePrompt)
                 {
@@ -1348,7 +1348,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
         {
-            if (flagState[IS_NULL_MASK])
+            if (_flagState[IS_NULL_MASK])
             {
                 return base.ToString();
             }
@@ -1394,11 +1394,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return flagState[USE_SYSTEM_PASSWORD_CHAR];
+                return _flagState[USE_SYSTEM_PASSWORD_CHAR];
             }
             set
             {
-                if (value != flagState[USE_SYSTEM_PASSWORD_CHAR])
+                if (value != _flagState[USE_SYSTEM_PASSWORD_CHAR])
                 {
                     if (value)
                     {
@@ -1408,19 +1408,19 @@ namespace System.Windows.Forms
                             throw new InvalidOperationException(SR.MaskedTextBoxPasswordAndPromptCharError);
                         }
 
-                        maskedTextProvider.PasswordChar = SystemPasswordChar;
+                        _maskedTextProvider.PasswordChar = SystemPasswordChar;
                     }
                     else
                     {
-                        // this.passwordChar could be '\0', in which case we are resetting the display to show the input char.
-                        maskedTextProvider.PasswordChar = passwordChar;
+                        // _passwordChar could be '\0', in which case we are resetting the display to show the input char.
+                        _maskedTextProvider.PasswordChar = _passwordChar;
                     }
 
-                    flagState[USE_SYSTEM_PASSWORD_CHAR] = value;
+                    _flagState[USE_SYSTEM_PASSWORD_CHAR] = value;
 
-                    if (flagState[IS_NULL_MASK])
+                    if (_flagState[IS_NULL_MASK])
                     {
-                        SetEditControlPasswordChar(maskedTextProvider.PasswordChar);
+                        SetEditControlPasswordChar(_maskedTextProvider.PasswordChar);
                     }
                     else
                     {
@@ -1445,13 +1445,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return validatingType;
+                return _validatingType;
             }
             set
             {
-                if (validatingType != value)
+                if (_validatingType != value)
                 {
-                    validatingType = value;
+                    _validatingType = value;
                 }
             }
         }
@@ -1488,7 +1488,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void CreateHandle()
         {
-            if (!flagState[IS_NULL_MASK] && RecreatingHandle)
+            if (!_flagState[IS_NULL_MASK] && RecreatingHandle)
             {
                 // update cached text value in Control. Don't preserve caret, cannot query for selection start at this time.
                 SetWindowText(GetFormattedDisplayString(), false, false);
@@ -1503,14 +1503,14 @@ namespace System.Windows.Forms
         /// </summary>
         private void Delete(Keys keyCode, int startPosition, int selectionLen)
         {
-            Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+            Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
             Debug.Assert(keyCode == Keys.Delete || keyCode == Keys.Back, "Delete called with keyCode == " + keyCode.ToString());
-            Debug.Assert(startPosition >= 0 && ((startPosition + selectionLen) <= maskedTextProvider.Length), "Invalid position range.");
+            Debug.Assert(startPosition >= 0 && ((startPosition + selectionLen) <= _maskedTextProvider.Length), "Invalid position range.");
 
             // On backspace, moving the start postion back by one has the same effect as delete.  If text is selected, there is no
             // need for moving the position back.
 
-            caretTestPos = startPosition;
+            _caretTestPos = startPosition;
 
             if (selectionLen == 0)
             {
@@ -1525,7 +1525,7 @@ namespace System.Windows.Forms
                 }
                 else // (keyCode == Keys.Delete)
                 {
-                    if ((startPosition + selectionLen) == maskedTextProvider.Length) // At end of string, delete does nothing.
+                    if ((startPosition + selectionLen) == _maskedTextProvider.Length) // At end of string, delete does nothing.
                     {
                         return;
                     }
@@ -1535,12 +1535,12 @@ namespace System.Windows.Forms
             int endPos = selectionLen > 0 ? startPosition + selectionLen - 1 : startPosition;
 
             string oldText = TextOutput;
-            if (maskedTextProvider.RemoveAt(startPosition, endPos, out int tempPos, out MaskedTextResultHint hint))
+            if (_maskedTextProvider.RemoveAt(startPosition, endPos, out int tempPos, out MaskedTextResultHint hint))
             {
                 if (TextOutput != oldText)
                 {
                     SetText();
-                    caretTestPos = startPosition;
+                    _caretTestPos = startPosition;
                 }
                 else
                 {
@@ -1554,7 +1554,7 @@ namespace System.Windows.Forms
 
                     if (selectionLen > 0)
                     {
-                        caretTestPos = startPosition;
+                        _caretTestPos = startPosition;
                     }
                     else
                     {
@@ -1562,39 +1562,39 @@ namespace System.Windows.Forms
                         {
                             if (keyCode == Keys.Delete)
                             {
-                                caretTestPos = maskedTextProvider.FindEditPositionFrom(startPosition, forward);
+                                _caretTestPos = _maskedTextProvider.FindEditPositionFrom(startPosition, forward);
                             }
                             else
                             {
-                                if (maskedTextProvider.FindAssignedEditPositionFrom(startPosition, forward) == MaskedTextProvider.InvalidIndex)
+                                if (_maskedTextProvider.FindAssignedEditPositionFrom(startPosition, forward) == MaskedTextProvider.InvalidIndex)
                                 {
                                     // No assigned position at the right, nothing to shift then move to the next assigned position at the
                                     // left (if any).
-                                    caretTestPos = maskedTextProvider.FindAssignedEditPositionFrom(startPosition, backward);
+                                    _caretTestPos = _maskedTextProvider.FindAssignedEditPositionFrom(startPosition, backward);
                                 }
                                 else
                                 {
                                     // there are assigned positions at the right so move to an edit position at the left to get ready for
                                     // removing the character on it or just shifting the characters at the right
-                                    caretTestPos = maskedTextProvider.FindEditPositionFrom(startPosition, backward);
+                                    _caretTestPos = _maskedTextProvider.FindEditPositionFrom(startPosition, backward);
                                 }
 
-                                if (caretTestPos != MaskedTextProvider.InvalidIndex)
+                                if (_caretTestPos != MaskedTextProvider.InvalidIndex)
                                 {
-                                    caretTestPos++; // backspace gets ready to remove one position past the edit position.
+                                    _caretTestPos++; // backspace gets ready to remove one position past the edit position.
                                 }
                             }
 
-                            if (caretTestPos == MaskedTextProvider.InvalidIndex)
+                            if (_caretTestPos == MaskedTextProvider.InvalidIndex)
                             {
-                                caretTestPos = startPosition;
+                                _caretTestPos = startPosition;
                             }
                         }
                         else // (hint == MaskedTextProvider.OperationHint.SideEffect)
                         {
                             if (keyCode == Keys.Back)  // Case 3.
                             {
-                                caretTestPos = startPosition;
+                                _caretTestPos = startPosition;
                             }
                         }
                     }
@@ -1607,8 +1607,8 @@ namespace System.Windows.Forms
 
             // Reposition caret.  Call base.SelectInternal for perf reasons.
             //this.SelectionLength = 0;
-            //this.SelectionStart  = this.caretTestPos; // new caret position.
-            base.SelectInternal(caretTestPos, 0, maskedTextProvider.Length);
+            //this.SelectionStart  = _caretTestPos; // new caret position.
+            base.SelectInternal(_caretTestPos, 0, _maskedTextProvider.Length);
 
             return;
         }
@@ -1620,14 +1620,14 @@ namespace System.Windows.Forms
         {
             char ch;
 
-            flagState[QUERY_BASE_TEXT] = true;
+            _flagState[QUERY_BASE_TEXT] = true;
             try
             {
                 ch = base.GetCharFromPosition(pt);
             }
             finally
             {
-                flagState[QUERY_BASE_TEXT] = false;
+                _flagState[QUERY_BASE_TEXT] = false;
             }
 
             return ch;
@@ -1640,14 +1640,14 @@ namespace System.Windows.Forms
         {
             int index;
 
-            flagState[QUERY_BASE_TEXT] = true;
+            _flagState[QUERY_BASE_TEXT] = true;
             try
             {
                 index = base.GetCharIndexFromPosition(pt);
             }
             finally
             {
-                flagState[QUERY_BASE_TEXT] = false;
+                _flagState[QUERY_BASE_TEXT] = false;
             }
 
             return index;
@@ -1659,16 +1659,16 @@ namespace System.Windows.Forms
         /// </summary>
         internal override int GetEndPosition()
         {
-            if (flagState[IS_NULL_MASK])
+            if (_flagState[IS_NULL_MASK])
             {
                 return base.GetEndPosition();
             }
 
-            int pos = maskedTextProvider.FindEditPositionFrom(maskedTextProvider.LastAssignedPosition + 1, forward);
+            int pos = _maskedTextProvider.FindEditPositionFrom(_maskedTextProvider.LastAssignedPosition + 1, forward);
 
             if (pos == MaskedTextProvider.InvalidIndex)
             {
-                pos = maskedTextProvider.LastAssignedPosition + 1;
+                pos = _maskedTextProvider.LastAssignedPosition + 1;
             }
 
             return pos;
@@ -1698,7 +1698,7 @@ namespace System.Windows.Forms
         /// </summary>
         private string GetFormattedDisplayString()
         {
-            Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+            Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
             bool includePrompt;
 
@@ -1715,7 +1715,7 @@ namespace System.Windows.Forms
                 includePrompt = !(HidePromptOnLeave && !Focused);
             }
 
-            return maskedTextProvider.ToString(/*ignorePwdChar */ false, includePrompt, /*includeLiterals*/ true, 0, maskedTextProvider.Length);
+            return _maskedTextProvider.ToString(/*ignorePwdChar */ false, includePrompt, /*includeLiterals*/ true, 0, _maskedTextProvider.Length);
         }
 
         /// <summary>
@@ -1735,14 +1735,14 @@ namespace System.Windows.Forms
         {
             Point pos;
 
-            flagState[QUERY_BASE_TEXT] = true;
+            _flagState[QUERY_BASE_TEXT] = true;
             try
             {
                 pos = base.GetPositionFromCharIndex(index);
             }
             finally
             {
-                flagState[QUERY_BASE_TEXT] = false;
+                _flagState[QUERY_BASE_TEXT] = false;
             }
 
             return pos;
@@ -1756,14 +1756,14 @@ namespace System.Windows.Forms
         {
             Size size;
 
-            flagState[QUERY_BASE_TEXT] = true;
+            _flagState[QUERY_BASE_TEXT] = true;
             try
             {
                 size = base.GetPreferredSizeCore(proposedConstraints);
             }
             finally
             {
-                flagState[QUERY_BASE_TEXT] = false;
+                _flagState[QUERY_BASE_TEXT] = false;
             }
 
             return size;
@@ -1776,7 +1776,7 @@ namespace System.Windows.Forms
         /// </summary>
         private string GetSelectedText()
         {
-            Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+            Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
             base.GetSelectionStartAndLength(out int selStart, out int selLength);
 
@@ -1788,7 +1788,7 @@ namespace System.Windows.Forms
             bool includePrompt = (CutCopyMaskFormat & MaskFormat.IncludePrompt) != 0;
             bool includeLiterals = (CutCopyMaskFormat & MaskFormat.IncludeLiterals) != 0;
 
-            return maskedTextProvider.ToString(ignorePasswordChar: true, includePrompt, includeLiterals, selStart, selLength);
+            return _maskedTextProvider.ToString(ignorePasswordChar: true, includePrompt, includeLiterals, selStart, selLength);
         }
 
         protected unsafe override void OnBackColorChanged(EventArgs e)
@@ -1811,9 +1811,9 @@ namespace System.Windows.Forms
             base.OnHandleCreated(e);
             base.SetSelectionOnHandle();
 
-            if (flagState[IS_NULL_MASK] && maskedTextProvider.IsPassword)
+            if (_flagState[IS_NULL_MASK] && _maskedTextProvider.IsPassword)
             {
-                SetEditControlPasswordChar(maskedTextProvider.PasswordChar);
+                SetEditControlPasswordChar(_maskedTextProvider.PasswordChar);
             }
         }
 
@@ -1836,7 +1836,7 @@ namespace System.Windows.Forms
         {
             base.OnKeyDown(e);
 
-            if (flagState[IS_NULL_MASK])
+            if (_flagState[IS_NULL_MASK])
             {
                 // Operates as a regular text box base.
                 return;
@@ -1847,14 +1847,14 @@ namespace System.Windows.Forms
             // Special-case Return & Esc since they generate invalid characters we should not process OnKeyPress.
             if (keyCode == Keys.Return || keyCode == Keys.Escape)
             {
-                flagState[HANDLE_KEY_PRESS] = false;
+                _flagState[HANDLE_KEY_PRESS] = false;
             }
 
             // Insert is toggled when not modified with some other key (ctrl, shift...).  Note that shift-Insert is
             // same as paste.
-            if (keyCode == Keys.Insert && e.Modifiers == Keys.None && insertMode == InsertKeyMode.Default)
+            if (keyCode == Keys.Insert && e.Modifiers == Keys.None && _insertMode == InsertKeyMode.Default)
             {
-                flagState[INSERT_TOGGLED] = !flagState[INSERT_TOGGLED];
+                _flagState[INSERT_TOGGLED] = !_flagState[INSERT_TOGGLED];
                 OnIsOverwriteModeChanged(EventArgs.Empty);
                 return;
             }
@@ -1882,7 +1882,7 @@ namespace System.Windows.Forms
                         // Next OnKeyPress should not be handled to allow Ctrl-<x/c/v/a> to be processed in the
                         // base class so corresponding messages can be generated (WM_CUT/WM_COPY/WM_PASTE).
                         // Combined characters don't generate OnKeyDown by themselves but they generate OnKeyPress.
-                        flagState[HANDLE_KEY_PRESS] = false;
+                        _flagState[HANDLE_KEY_PRESS] = false;
                         return;
                 }
             }
@@ -1908,11 +1908,11 @@ namespace System.Windows.Forms
                             {
                                 if (keyCode == Keys.Delete) // delete to the end of the string.
                                 {
-                                    selectionLen = maskedTextProvider.Length - startPosition;
+                                    selectionLen = _maskedTextProvider.Length - startPosition;
                                 }
                                 else // ( keyCode == Keys.Back ) // delete to the beginning of the string.
                                 {
-                                    selectionLen = startPosition == maskedTextProvider.Length /*at end of text*/ ? startPosition : startPosition + 1;
+                                    selectionLen = startPosition == _maskedTextProvider.Length /*at end of text*/ ? startPosition : startPosition + 1;
                                     startPosition = 0;
                                 }
                             }
@@ -1920,9 +1920,9 @@ namespace System.Windows.Forms
                             goto default;
 
                         default:
-                            if (!flagState[HANDLE_KEY_PRESS])
+                            if (!_flagState[HANDLE_KEY_PRESS])
                             {
-                                flagState[HANDLE_KEY_PRESS] = true;
+                                _flagState[HANDLE_KEY_PRESS] = true;
                             }
 
                             break;
@@ -1948,16 +1948,16 @@ namespace System.Windows.Forms
         {
             base.OnKeyPress(e);
 
-            if (flagState[IS_NULL_MASK])
+            if (_flagState[IS_NULL_MASK])
             {
                 // Operates as a regular text box base.
                 return;
             }
 
             // This key may be a combined key involving a letter, like Ctrl-A; let the native control handle it.
-            if (!flagState[HANDLE_KEY_PRESS])
+            if (!_flagState[HANDLE_KEY_PRESS])
             {
-                flagState[HANDLE_KEY_PRESS] = true;
+                _flagState[HANDLE_KEY_PRESS] = true;
 
                 // When the combined key involves a letter, the final character is not a letter. There are some
                 // Ctrl combined keys that generate a letter and can be confusing; we do not mean to pass those
@@ -1982,14 +1982,14 @@ namespace System.Windows.Forms
                         SetText(); // Now set the text in the display.
                     }
 
-                    SelectionStart = ++caretTestPos; // caretTestPos is updated in PlaceChar.
+                    SelectionStart = ++_caretTestPos; // caretTestPos is updated in PlaceChar.
 
                     if (ImeModeConversion.InputLanguageTable == ImeModeConversion.KoreanTable)
                     {
                         // Korean IMEs complete composition when a character has been fully converted, so the composition string
                         // is only one-character long; once composed we block the IME if there isn't more room in the test string.
 
-                        int editPos = maskedTextProvider.FindUnassignedEditPositionFrom(caretTestPos, forward);
+                        int editPos = _maskedTextProvider.FindUnassignedEditPositionFrom(_caretTestPos, forward);
                         if (editPos == MaskedTextProvider.InvalidIndex)
                         {
                             ImeComplete();  // Force completion of composition.
@@ -1998,7 +1998,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    OnMaskInputRejected(new MaskInputRejectedEventArgs(caretTestPos, hint)); // caretTestPos is updated in PlaceChar.
+                    OnMaskInputRejected(new MaskInputRejectedEventArgs(_caretTestPos, hint)); // caretTestPos is updated in PlaceChar.
                 }
 
                 if (selectionLen > 0)
@@ -2019,14 +2019,14 @@ namespace System.Windows.Forms
 
             // KeyUp is the last message to be processed so it is the best place to reset these flags.
 
-            if (flagState[IME_COMPLETING])
+            if (_flagState[IME_COMPLETING])
             {
-                flagState[IME_COMPLETING] = false;
+                _flagState[IME_COMPLETING] = false;
             }
 
-            if (flagState[IME_ENDING_COMPOSITION])
+            if (_flagState[IME_ENDING_COMPOSITION])
             {
-                flagState[IME_ENDING_COMPOSITION] = false;
+                _flagState[IME_ENDING_COMPOSITION] = false;
             }
         }
 
@@ -2047,7 +2047,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnMaskInputRejected(MaskInputRejectedEventArgs e)
         {
-            Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+            Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
             if (BeepOnError)
             {
@@ -2115,15 +2115,15 @@ namespace System.Windows.Forms
         {
             // A text changed event handler will most likely query for the Text value, we need to return the
             // formatted one.
-            bool queryBaseText = flagState[QUERY_BASE_TEXT];
-            flagState[QUERY_BASE_TEXT] = false;
+            bool queryBaseText = _flagState[QUERY_BASE_TEXT];
+            _flagState[QUERY_BASE_TEXT] = false;
             try
             {
                 base.OnTextChanged(e);
             }
             finally
             {
-                flagState[QUERY_BASE_TEXT] = queryBaseText;
+                _flagState[QUERY_BASE_TEXT] = queryBaseText;
             }
         }
 
@@ -2133,17 +2133,17 @@ namespace System.Windows.Forms
         /// </summary>
         private void Replace(string text, int startPosition, int selectionLen)
         {
-            Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+            Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
             Debug.Assert(text is not null, "text is null.");
 
             // Clone the MaskedTextProvider so text properties are not modified until the paste operation is
             // completed.  This is needed in case one of these properties is retrieved in a MaskedInputRejected
             // event handler (clipboard text is attempted to be set into the input text char by char).
 
-            MaskedTextProvider clonedProvider = (MaskedTextProvider)maskedTextProvider.Clone();
+            MaskedTextProvider clonedProvider = (MaskedTextProvider)_maskedTextProvider.Clone();
 
             // Cache the current caret position so we restore it in case the text does not change.
-            int currentCaretPos = caretTestPos;
+            int currentCaretPos = _caretTestPos;
 
             // First replace characters in the selection (if any and if any edit positions) until completed, or the test position falls
             // outside the selection range, or there's no more room in the test string for editable characters.
@@ -2157,12 +2157,12 @@ namespace System.Windows.Forms
                 bool succeeded;
 
                 succeeded = (startPosition > endPos) ?
-                    clonedProvider.InsertAt(text, startPosition, out caretTestPos, out hint) :
-                    clonedProvider.Replace(text, startPosition, endPos, out caretTestPos, out hint);
+                    clonedProvider.InsertAt(text, startPosition, out _caretTestPos, out hint) :
+                    clonedProvider.Replace(text, startPosition, endPos, out _caretTestPos, out hint);
 
                 if (!succeeded)
                 {
-                    OnMaskInputRejected(new MaskInputRejectedEventArgs(caretTestPos, hint));
+                    OnMaskInputRejected(new MaskInputRejectedEventArgs(_caretTestPos, hint));
                 }
             }
             else
@@ -2173,7 +2173,7 @@ namespace System.Windows.Forms
 
                 foreach (char ch in text)
                 {
-                    if (!maskedTextProvider.VerifyEscapeChar(ch, startPosition))  // char won't be escaped, find and edit position for it.
+                    if (!_maskedTextProvider.VerifyEscapeChar(ch, startPosition))  // char won't be escaped, find and edit position for it.
                     {
                         // Observe that we look for a position w/o respecting the selection length, because the input text could be larger than
                         // the number of edit positions in the selection.
@@ -2197,7 +2197,7 @@ namespace System.Windows.Forms
                     if (PlaceChar(clonedProvider, ch, startPosition, length, replace, out tempHint))
                     {
                         // caretTestPos is updated in PlaceChar call.
-                        startPosition = caretTestPos + 1;
+                        startPosition = _caretTestPos + 1;
 
                         // place char will insert or replace a single character so the hint must be success, and that will be the final operation
                         // result hint.
@@ -2219,9 +2219,9 @@ namespace System.Windows.Forms
 
                     if (startPosition <= endPos)
                     {
-                        if (!clonedProvider.RemoveAt(startPosition, endPos, out caretTestPos, out tempHint))
+                        if (!clonedProvider.RemoveAt(startPosition, endPos, out _caretTestPos, out tempHint))
                         {
-                            OnMaskInputRejected(new MaskInputRejectedEventArgs(caretTestPos, tempHint));
+                            OnMaskInputRejected(new MaskInputRejectedEventArgs(_caretTestPos, tempHint));
                         }
 
                         // If 'replace' is not actually performed (maybe the input is empty which means 'remove', hint will be whatever
@@ -2237,7 +2237,7 @@ namespace System.Windows.Forms
             bool updateText = TextOutput != clonedProvider.ToString();
 
             // Always set the mtp, the formatted text could be the same but the assigned positions may be different.
-            maskedTextProvider = clonedProvider;
+            _maskedTextProvider = clonedProvider;
 
             // Update text if needed.
             if (updateText)
@@ -2245,12 +2245,12 @@ namespace System.Windows.Forms
                 SetText();
 
                 // Update caret position.
-                caretTestPos = startPosition;
-                base.SelectInternal(caretTestPos, 0, maskedTextProvider.Length);
+                _caretTestPos = startPosition;
+                base.SelectInternal(_caretTestPos, 0, _maskedTextProvider.Length);
             }
             else
             {
-                caretTestPos = currentCaretPos;
+                _caretTestPos = currentCaretPos;
             }
 
             return;
@@ -2263,7 +2263,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void PasteInt(string? text)
         {
-            Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+            Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
             base.GetSelectionStartAndLength(out int selStart, out int selLength);
 
@@ -2290,11 +2290,11 @@ namespace System.Windows.Forms
         {
             object? parseRetVal = null;
 
-            if (validatingType is not null)
+            if (_validatingType is not null)
             {
                 string? message = null;
 
-                if (!flagState[IS_NULL_MASK] && maskedTextProvider.MaskCompleted == false)
+                if (!_flagState[IS_NULL_MASK] && _maskedTextProvider.MaskCompleted == false)
                 {
                     message = SR.MaskedTextBoxIncompleteMsg;
                 }
@@ -2302,9 +2302,9 @@ namespace System.Windows.Forms
                 {
                     string textValue;
 
-                    if (!flagState[IS_NULL_MASK]) // replace prompt with space.
+                    if (!_flagState[IS_NULL_MASK]) // replace prompt with space.
                     {
-                        textValue = maskedTextProvider.ToString(/*includePrompt*/ false, IncludeLiterals);
+                        textValue = _maskedTextProvider.ToString(/*includePrompt*/ false, IncludeLiterals);
                     }
                     else
                     {
@@ -2315,13 +2315,13 @@ namespace System.Windows.Forms
                     {
                         parseRetVal = Formatter.ParseObject(
                             textValue,              // data
-                            validatingType,    // targetType
+                            _validatingType,    // targetType
                             typeof(string),         // sourceType
                             null,                   // targetConverter
                             null,                   // sourceConverter
-                            formatProvider,    // formatInfo
+                            _formatProvider,    // formatInfo
                             null,                   // nullValue
-                            Formatter.GetDefaultDataSourceNullValue(validatingType));   // dataSourceNullValue
+                            Formatter.GetDefaultDataSourceNullValue(_validatingType));   // dataSourceNullValue
                     }
                     catch (Exception exception)
                     {
@@ -2346,7 +2346,7 @@ namespace System.Windows.Forms
                     message = SR.MaskedTextBoxTypeValidationSucceeded;
                 }
 
-                TypeValidationEventArgs tve = new TypeValidationEventArgs(validatingType, isValidInput, parseRetVal, message);
+                TypeValidationEventArgs tve = new TypeValidationEventArgs(_validatingType, isValidInput, parseRetVal, message);
                 OnTypeValidationCompleted(tve);
 
                 if (e is not null)
@@ -2365,7 +2365,7 @@ namespace System.Windows.Forms
         private bool PlaceChar(char ch, int startPosition, int length, bool overwrite,
             out MaskedTextResultHint hint)
         {
-            return PlaceChar(maskedTextProvider, ch, startPosition, length, overwrite, out hint);
+            return PlaceChar(_maskedTextProvider, ch, startPosition, length, overwrite, out hint);
         }
 
         /// <summary>
@@ -2374,27 +2374,27 @@ namespace System.Windows.Forms
         private bool PlaceChar(MaskedTextProvider provider, char ch, int startPosition, int length, bool overwrite,
             out MaskedTextResultHint hint)
         {
-            Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+            Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
-            caretTestPos = startPosition;
+            _caretTestPos = startPosition;
 
-            if (startPosition < maskedTextProvider.Length)
+            if (startPosition < _maskedTextProvider.Length)
             {
                 if (length > 0)  // Replacing selection with input char.
                 {
                     int endPos = startPosition + length - 1;
-                    return provider.Replace(ch, startPosition, endPos, out caretTestPos, out hint);
+                    return provider.Replace(ch, startPosition, endPos, out _caretTestPos, out hint);
                 }
                 else
                 {
                     if (overwrite)
                     {
                         // overwrite character at next edit position from startPosition (inclusive).
-                        return provider.Replace(ch, startPosition, out caretTestPos, out hint);
+                        return provider.Replace(ch, startPosition, out _caretTestPos, out hint);
                     }
                     else // insert.
                     {
-                        return provider.InsertAt(ch, startPosition, out caretTestPos, out hint);
+                        return provider.InsertAt(ch, startPosition, out _caretTestPos, out hint);
                     }
                 }
             }
@@ -2438,7 +2438,7 @@ namespace System.Windows.Forms
 
             bool msgProcessed = base.ProcessKeyMessage(ref m);
 
-            if (flagState[IS_NULL_MASK])
+            if (_flagState[IS_NULL_MASK])
             {
                 return msgProcessed; // Operates as a regular text box base.
             }
@@ -2488,24 +2488,24 @@ namespace System.Windows.Forms
             Debug.Assert(newProvider is not null, "Initializing from a null MaskProvider ref.");
 
             // Set R/W properties.
-            newProvider.IncludePrompt = maskedTextProvider.IncludePrompt;
-            newProvider.IncludeLiterals = maskedTextProvider.IncludeLiterals;
-            newProvider.SkipLiterals = maskedTextProvider.SkipLiterals;
-            newProvider.ResetOnPrompt = maskedTextProvider.ResetOnPrompt;
-            newProvider.ResetOnSpace = maskedTextProvider.ResetOnSpace;
+            newProvider.IncludePrompt = _maskedTextProvider.IncludePrompt;
+            newProvider.IncludeLiterals = _maskedTextProvider.IncludeLiterals;
+            newProvider.SkipLiterals = _maskedTextProvider.SkipLiterals;
+            newProvider.ResetOnPrompt = _maskedTextProvider.ResetOnPrompt;
+            newProvider.ResetOnSpace = _maskedTextProvider.ResetOnSpace;
 
             // If mask not initialized and not initializing it, the new provider is just a property backend.
             // Change won't have any effect in text.
-            if (flagState[IS_NULL_MASK] && textOnInitializingMask is null)
+            if (_flagState[IS_NULL_MASK] && textOnInitializingMask is null)
             {
-                maskedTextProvider = newProvider;
+                _maskedTextProvider = newProvider;
                 return;
             }
 
             int testPos = 0;
             bool raiseOnMaskInputRejected = false; // Raise if new provider rejects old text.
             MaskedTextResultHint hint = MaskedTextResultHint.NoEffect;
-            MaskedTextProvider oldProvider = maskedTextProvider;
+            MaskedTextProvider oldProvider = _maskedTextProvider;
 
             // Attempt to add previous text.
             // If the mask is the same, we need to preserve the caret and character positions if the text is added successfully.
@@ -2570,11 +2570,11 @@ namespace System.Windows.Forms
             }
 
             // Set provider.
-            maskedTextProvider = newProvider;
+            _maskedTextProvider = newProvider;
 
-            if (flagState[IS_NULL_MASK])
+            if (_flagState[IS_NULL_MASK])
             {
-                flagState[IS_NULL_MASK] = false;
+                _flagState[IS_NULL_MASK] = false;
             }
 
             // Raising events need to be done only after the new provider has been set so the MTB is in a state where properties
@@ -2631,13 +2631,13 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetWindowText(string text, bool raiseTextChangedEvent, bool preserveCaret)
         {
-            flagState[QUERY_BASE_TEXT] = true;
+            _flagState[QUERY_BASE_TEXT] = true;
 
             try
             {
                 if (preserveCaret)
                 {
-                    caretTestPos = SelectionStart;
+                    _caretTestPos = SelectionStart;
                 }
 
                 WindowText = text;  // this calls Win32::SetWindowText directly, no OnTextChanged raised.
@@ -2649,12 +2649,12 @@ namespace System.Windows.Forms
 
                 if (preserveCaret)
                 {
-                    SelectionStart = caretTestPos;
+                    SelectionStart = _caretTestPos;
                 }
             }
             finally
             {
-                flagState[QUERY_BASE_TEXT] = false;
+                _flagState[QUERY_BASE_TEXT] = false;
             }
         }
 
@@ -2689,7 +2689,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool WmClear()
         {
-            Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+            Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
             if (!ReadOnly)
             {
@@ -2708,9 +2708,9 @@ namespace System.Windows.Forms
         /// </summary>
         private bool WmCopy()
         {
-            Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+            Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
-            if (maskedTextProvider.IsPassword) // cannot copy password to clipboard.
+            if (_maskedTextProvider.IsPassword) // cannot copy password to clipboard.
             {
                 return false;
             }
@@ -2750,10 +2750,10 @@ namespace System.Windows.Forms
         /// </summary>
         private bool WmImeComposition(ref Message m)
         {
-            Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+            Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
 #if DEBUG
-            if (ReadOnly || maskedTextProvider.IsPassword)
+            if (ReadOnly || _maskedTextProvider.IsPassword)
             {
                 // This should have been already handled by the ReadOnly, PasswordChar and ImeMode properties.
                 Debug.Assert(ImeMode == ImeMode.Disable, "IME enabled when in RO or Pwd mode.");
@@ -2782,10 +2782,10 @@ namespace System.Windows.Forms
                 // Process any update in the composition string.
                 if (imeConversionType != imeConversionNone)
                 {
-                    if (flagState[IME_ENDING_COMPOSITION])
+                    if (_flagState[IME_ENDING_COMPOSITION])
                     {
                         // If IME is completing the conversion, we don't want to process further characters.
-                        return flagState[IME_COMPLETING];
+                        return _flagState[IME_COMPLETING];
                     }
                 }
             }
@@ -2799,13 +2799,13 @@ namespace System.Windows.Forms
         /// </summary>
         private bool WmImeStartComposition()
         {
-            Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+            Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
             // Position the composition window in a valid place.
 
             base.GetSelectionStartAndLength(out int startPosition, out int selectionLen);
 
-            int startEditPos = maskedTextProvider.FindEditPositionFrom(startPosition, forward);
+            int startEditPos = _maskedTextProvider.FindEditPositionFrom(startPosition, forward);
 
             if (startEditPos != MaskedTextProvider.InvalidIndex)
             {
@@ -2815,7 +2815,7 @@ namespace System.Windows.Forms
                     // character only, otherwise it would overwrite the selection with the caret (composition string),
                     // deleting a portion of the mask.
 
-                    int endEditPos = maskedTextProvider.FindEditPositionFrom(startPosition + selectionLen - 1, backward);
+                    int endEditPos = _maskedTextProvider.FindEditPositionFrom(startPosition + selectionLen - 1, backward);
 
                     if (endEditPos >= startEditPos)
                     {
@@ -2833,8 +2833,8 @@ namespace System.Windows.Forms
                 // update caret position.
                 if (startPosition != startEditPos)
                 {
-                    caretTestPos = startEditPos;
-                    SelectionStart = caretTestPos;
+                    _caretTestPos = startEditPos;
+                    SelectionStart = _caretTestPos;
                 }
 
                 SelectionLength = 0;
@@ -2856,7 +2856,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmPaste()
         {
-            Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+            Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
             if (ReadOnly)
             {
@@ -2928,7 +2928,7 @@ namespace System.Windows.Forms
                     break;  // continue.
             }
 
-            if (flagState[IS_NULL_MASK])
+            if (_flagState[IS_NULL_MASK])
             {
                 base.WndProc(ref m); // Operates as a regular text box base.
                 return;
@@ -2945,7 +2945,7 @@ namespace System.Windows.Forms
                     goto default;
 
                 case (int)WM.IME_ENDCOMPOSITION:
-                    flagState[IME_ENDING_COMPOSITION] = true;
+                    _flagState[IME_ENDING_COMPOSITION] = true;
                     goto default;
 
                 case (int)WM.IME_COMPOSITION:
@@ -2997,16 +2997,16 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmKillFocus()
         {
-            Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+            Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
-            base.GetSelectionStartAndLength(out caretTestPos, out lastSelLength);
+            base.GetSelectionStartAndLength(out _caretTestPos, out _lastSelLength);
 
             if (HidePromptOnLeave && !MaskFull)
             {
                 SetWindowText(); // Update text w/ no prompt.
 
                 // We need to update selection info in case the control is queried for it while it doesn't have the focus.
-                base.SelectInternal(caretTestPos, lastSelLength, maskedTextProvider.Length);
+                base.SelectInternal(_caretTestPos, _lastSelLength, _maskedTextProvider.Length);
             }
         }
 
@@ -3016,7 +3016,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmSetFocus()
         {
-            Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+            Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
             if (HidePromptOnLeave && !MaskFull) // Prompt will show up.
             {
@@ -3025,7 +3025,7 @@ namespace System.Windows.Forms
 
             // Restore previous selection. Do this always (as opposed to within the condition above as in WmKillFocus)
             // because HidePromptOnLeave could have changed while the control did not have the focus.
-            base.SelectInternal(caretTestPos, lastSelLength, maskedTextProvider.Length);
+            base.SelectInternal(_caretTestPos, _lastSelLength, _maskedTextProvider.Length);
         }
     }
 }
