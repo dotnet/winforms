@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -100,8 +99,8 @@ namespace System.Windows.Forms
         /////////  Properties backend fields. See corresponding property comments for more info.
 
         private char passwordChar; // control's pwd char, it could be different from the one displayed if using system password.
-        private Type validatingType;
-        private IFormatProvider formatProvider;
+        private Type? validatingType;
+        private IFormatProvider? formatProvider;
         private MaskedTextProvider maskedTextProvider;
         private InsertKeyMode insertMode;
         private HorizontalAlignment textAlign;
@@ -146,6 +145,7 @@ namespace System.Windows.Forms
         ///  Initializes the object with the specified MaskedTextProvider object and default
         ///  property values.
         /// </summary>
+        [MemberNotNull(nameof(maskedTextProvider))]
         private void Initialize(MaskedTextProvider maskedTextProvider)
         {
             Debug.Assert(maskedTextProvider is not null, "Initializing from a null MaskProvider ref.");
@@ -230,7 +230,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new event EventHandler AcceptsTabChanged
+        public new event EventHandler? AcceptsTabChanged
         {
             add { }
             remove { }
@@ -316,7 +316,6 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
 
                 // Translate for Rtl if necessary
-                //
                 HorizontalAlignment align = RtlTranslateHorizontal(textAlign);
                 cp.ExStyle &= ~(int)WS_EX.RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
                 switch (align)
@@ -429,7 +428,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public IFormatProvider FormatProvider
+        public IFormatProvider? FormatProvider
         {
             get
             {
@@ -588,7 +587,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.MaskedTextBoxIsOverwriteModeChangedDescr))]
-        public event EventHandler IsOverwriteModeChanged
+        public event EventHandler? IsOverwriteModeChanged
         {
             add => Events.AddHandler(EVENT_ISOVERWRITEMODECHANGED, value);
             remove => Events.RemoveHandler(EVENT_ISOVERWRITEMODECHANGED, value);
@@ -600,6 +599,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [AllowNull]
         public new string[] Lines
         {
             get
@@ -631,6 +631,7 @@ namespace System.Windows.Forms
         [DefaultValue("")]
         [MergableProperty(false)]
         [Localizable(true)]
+        [AllowNull]
         [Editor("System.Windows.Forms.Design.MaskPropertyEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
         public string Mask
         {
@@ -650,8 +651,8 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                string text = null;
-                string newMask = value;
+                string? text = null;
+                string? newMask = value;
 
                 // We need to update the this.flagState[IS_NULL_MASK]field before raising any events (when setting the maskedTextProvider) so
                 // querying for properties from an event handler returns the right value (i.e: Text).
@@ -708,7 +709,7 @@ namespace System.Windows.Forms
 
                 // Recreate masked text provider since this property is read-only.
                 MaskedTextProvider newProvider = new MaskedTextProvider(
-                    newMask,
+                    newMask!,
                     maskedTextProvider.Culture,
                     maskedTextProvider.AllowPromptAsInput,
                     maskedTextProvider.PromptChar,
@@ -726,7 +727,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.MaskedTextBoxMaskChangedDescr))]
-        public event EventHandler MaskChanged
+        public event EventHandler? MaskChanged
         {
             add => Events.AddHandler(EVENT_MASKCHANGED, value);
             remove => Events.RemoveHandler(EVENT_MASKCHANGED, value);
@@ -764,7 +765,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public MaskedTextProvider MaskedTextProvider
+        public MaskedTextProvider? MaskedTextProvider
         {
             get
             {
@@ -777,7 +778,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.MaskedTextBoxMaskInputRejectedDescr))]
-        public event MaskInputRejectedEventHandler MaskInputRejected
+        public event MaskInputRejectedEventHandler? MaskInputRejected
         {
             add => Events.AddHandler(EVENT_MASKINPUTREJECTED, value);
             remove => Events.RemoveHandler(EVENT_MASKINPUTREJECTED, value);
@@ -815,7 +816,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new event EventHandler MultilineChanged
+        public new event EventHandler? MultilineChanged
         {
             add { }
             remove { }
@@ -1029,6 +1030,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The currently selected text (if any) in the control.
         /// </summary>
+        [AllowNull]
         public override string SelectedText
         {
             get
@@ -1046,7 +1048,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override void SetSelectedTextInternal(string value, bool clearUndo)
+        internal override void SetSelectedTextInternal(string? value, bool clearUndo)
         {
             if (flagState[IS_NULL_MASK])
             {
@@ -1141,6 +1143,7 @@ namespace System.Windows.Forms
         [RefreshProperties(RefreshProperties.Repaint)]
         [Bindable(true)]
         [DefaultValue("")]
+        [AllowNull]
         [Localizable(true)]
         public override string Text
         {
@@ -1263,7 +1266,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.RadioButtonOnTextAlignChangedDescr))]
-        public event EventHandler TextAlignChanged
+        public event EventHandler? TextAlignChanged
         {
             add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
 
@@ -1313,7 +1316,7 @@ namespace System.Windows.Forms
 
                 // Changing the TextMaskFormat will likely change the 'output' text (Text getter value).  Cache old value to
                 // verify it against the new value and raise OnTextChange if needed.
-                string oldText = flagState[IS_NULL_MASK] ? null : TextOutput;
+                string? oldText = flagState[IS_NULL_MASK] ? null : TextOutput;
 
                 if (value == MaskFormat.IncludePrompt)
                 {
@@ -1373,7 +1376,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatFocus))]
         [SRDescription(nameof(SR.MaskedTextBoxTypeValidationCompletedDescr))]
-        public event TypeValidationEventHandler TypeValidationCompleted
+        public event TypeValidationEventHandler? TypeValidationCompleted
         {
             add => Events.AddHandler(EVENT_VALIDATIONCOMPLETED, value);
             remove => Events.RemoveHandler(EVENT_VALIDATIONCOMPLETED, value);
@@ -1438,7 +1441,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [DefaultValue(null)]
-        public Type ValidatingType
+        public Type? ValidatingType
         {
             get
             {
@@ -2258,7 +2261,7 @@ namespace System.Windows.Forms
         ///  input is longer than selected text, and/or removing remaining characters from the selection if
         ///  input contains less characters.
         /// </summary>
-        private void PasteInt(string text)
+        private void PasteInt(string? text)
         {
             Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
@@ -2283,13 +2286,13 @@ namespace System.Windows.Forms
         ///  on output (Cancel provides proper handling of focus shifting at the Control class level).
         ///  Note: The text being validated does not include prompt chars.
         /// </summary>
-        private object PerformTypeValidation(CancelEventArgs e)
+        private object? PerformTypeValidation(CancelEventArgs? e)
         {
-            object parseRetVal = null;
+            object? parseRetVal = null;
 
             if (validatingType is not null)
             {
-                string message = null;
+                string? message = null;
 
                 if (!flagState[IS_NULL_MASK] && maskedTextProvider.MaskCompleted == false)
                 {
@@ -2480,7 +2483,7 @@ namespace System.Windows.Forms
         ///  Overload to allow for passing the text when the mask is being changed from null,
         ///  in this case the maskedTextProvider holds backend info only (not the text).
         /// </summary>
-        private void SetMaskedTextProvider(MaskedTextProvider newProvider, string textOnInitializingMask)
+        private void SetMaskedTextProvider(MaskedTextProvider newProvider, string? textOnInitializingMask)
         {
             Debug.Assert(newProvider is not null, "Initializing from a null MaskProvider ref.");
 
@@ -2676,7 +2679,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Forces type validation.  Returns the validated text value.
         /// </summary>
-        public object ValidateText()
+        public object? ValidateText()
         {
             return PerformTypeValidation(null);
         }
