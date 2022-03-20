@@ -42,26 +42,31 @@ namespace WinformsControlsTest
             pictureBox1.DragEnter += PictureBox_DragEnter;
             pictureBox1.DragDrop += PictureBox_DragDrop;
             pictureBox1.MouseDown += PictureBox_MouseDown;
+            pictureBox1.GiveFeedback += PictureBox_GiveFeedback;
 
             pictureBox2.AllowDrop = true;
             pictureBox2.DragEnter += PictureBox_DragEnter;
             pictureBox2.DragDrop += PictureBox_DragDrop;
             pictureBox2.MouseDown += PictureBox_MouseDown;
+            pictureBox2.GiveFeedback += PictureBox_GiveFeedback;
 
             pictureBox3.AllowDrop = true;
             pictureBox3.DragEnter += PictureBox_DragEnter;
             pictureBox3.DragDrop += PictureBox_DragDrop;
             pictureBox3.MouseDown += PictureBox_MouseDown;
+            pictureBox3.GiveFeedback += PictureBox_GiveFeedback;
 
             pictureBox4.AllowDrop = true;
             pictureBox4.DragEnter += PictureBox_DragEnter;
             pictureBox4.DragDrop += PictureBox_DragDrop;
             pictureBox4.MouseDown += PictureBox_MouseDown;
+            pictureBox4.GiveFeedback += PictureBox_GiveFeedback;
 
             pictureBox5.AllowDrop = true;
             pictureBox5.DragEnter += PictureBox_DragEnter;
             pictureBox5.DragDrop += PictureBox_DragDrop;
             pictureBox5.MouseDown += PictureBox_MouseDown;
+            pictureBox5.GiveFeedback += PictureBox_GiveFeedback;
 
             textBox1.AllowDrop = true;
             textBox1.DragEnter += TextBox1_DragEnter;
@@ -148,6 +153,12 @@ namespace WinformsControlsTest
                 // Call DoDragDrop, specifying the drag image bitmap, along with the cursor offset.
                 pb.DoDragDrop(data, DragDropEffects.All, dragImage, new Point(0, 100));
             }
+        }
+
+        private void PictureBox_GiveFeedback(object? sender, GiveFeedbackEventArgs e)
+        {
+            // Hide the default cursor.
+            e.UseDefaultCursors = false;
         }
 
         private void TextBox1_DragDrop(object? sender, DragEventArgs e)
