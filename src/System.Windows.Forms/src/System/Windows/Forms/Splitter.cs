@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -34,7 +33,7 @@ namespace System.Windows.Forms
         private int minSize = 25;
         private int minExtra = 25;
         private Point anchor = Point.Empty;
-        private Control splitTarget;
+        private Control? splitTarget;
         private int splitSize = -1;
         private int splitterThickness = 3;
         private int initTargetSize;
@@ -44,7 +43,7 @@ namespace System.Windows.Forms
         private static readonly object EVENT_MOVED = new object();
 
         // Cannot expose IMessageFilter.PreFilterMessage through this unsealed class
-        private SplitterMessageFilter splitterMessageFilter;
+        private SplitterMessageFilter? splitterMessageFilter;
 
         /// <summary>
         ///  Creates a new Splitter.
@@ -128,7 +127,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged
+        new public event EventHandler? ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -136,7 +135,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -144,7 +143,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        new public event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -160,7 +159,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        new public event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -176,7 +175,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler FontChanged
+        new public event EventHandler? FontChanged
         {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
@@ -304,7 +303,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged
+        public new event EventHandler? ImeModeChanged
         {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
@@ -445,7 +444,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TabStopChanged
+        new public event EventHandler? TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
@@ -455,6 +454,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Bindable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;
@@ -463,7 +463,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        new public event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -471,7 +471,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler Enter
+        public new event EventHandler? Enter
         {
             add => base.Enter += value;
             remove => base.Enter -= value;
@@ -479,7 +479,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler KeyUp
+        public new event KeyEventHandler? KeyUp
         {
             add => base.KeyUp += value;
             remove => base.KeyUp -= value;
@@ -487,7 +487,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler KeyDown
+        public new event KeyEventHandler? KeyDown
         {
             add => base.KeyDown += value;
             remove => base.KeyDown -= value;
@@ -495,7 +495,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyPressEventHandler KeyPress
+        public new event KeyPressEventHandler? KeyPress
         {
             add => base.KeyPress += value;
             remove => base.KeyPress -= value;
@@ -503,7 +503,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler Leave
+        public new event EventHandler? Leave
         {
             add => base.Leave += value;
             remove => base.Leave -= value;
@@ -511,7 +511,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
-        public event SplitterEventHandler SplitterMoving
+        public event SplitterEventHandler? SplitterMoving
         {
             add => Events.AddHandler(EVENT_MOVING, value);
             remove => Events.RemoveHandler(EVENT_MOVING, value);
@@ -519,7 +519,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
-        public event SplitterEventHandler SplitterMoved
+        public event SplitterEventHandler? SplitterMoved
         {
             add => Events.AddHandler(EVENT_MOVED, value);
             remove => Events.RemoveHandler(EVENT_MOVED, value);
@@ -567,7 +567,7 @@ namespace System.Windows.Forms
         private Rectangle CalcSplitLine(int splitSize, int minWeight)
         {
             Rectangle r = Bounds;
-            Rectangle bounds = splitTarget.Bounds;
+            Rectangle bounds = splitTarget!.Bounds;
             switch (Dock)
             {
                 case DockStyle.Top:
@@ -612,7 +612,7 @@ namespace System.Windows.Forms
         /// </summary>
         private int CalcSplitSize()
         {
-            Control target = FindTarget();
+            Control? target = FindTarget();
             if (target is null)
             {
                 return -1;
@@ -638,7 +638,7 @@ namespace System.Windows.Forms
         private SplitData CalcSplitBounds()
         {
             SplitData spd = new SplitData();
-            Control target = FindTarget();
+            Control? target = FindTarget();
             spd.target = target;
             if (target is not null)
             {
@@ -721,9 +721,9 @@ namespace System.Windows.Forms
         ///  is docked left, the target is the control that is just to the left
         ///  of the splitter.
         /// </summary>
-        private Control FindTarget()
+        private Control? FindTarget()
         {
-            Control parent = ParentInternal;
+            Control? parent = ParentInternal;
             if (parent is null)
             {
                 return null;
@@ -793,16 +793,16 @@ namespace System.Windows.Forms
             switch (Dock)
             {
                 case DockStyle.Top:
-                    size = splitTarget.Height + delta;
+                    size = splitTarget!.Height + delta;
                     break;
                 case DockStyle.Bottom:
-                    size = splitTarget.Height - delta;
+                    size = splitTarget!.Height - delta;
                     break;
                 case DockStyle.Left:
-                    size = splitTarget.Width + delta;
+                    size = splitTarget!.Width + delta;
                     break;
                 case DockStyle.Right:
-                    size = splitTarget.Width - delta;
+                    size = splitTarget!.Width - delta;
                     break;
             }
 
@@ -862,7 +862,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSplitterMoving(SplitterEventArgs sevent)
         {
-            ((SplitterEventHandler)Events[EVENT_MOVING])?.Invoke(this, sevent);
+            ((SplitterEventHandler?)Events[EVENT_MOVING])?.Invoke(this, sevent);
 
             if (splitTarget is not null)
             {
@@ -877,7 +877,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSplitterMoved(SplitterEventArgs sevent)
         {
-            ((SplitterEventHandler)Events[EVENT_MOVED])?.Invoke(this, sevent);
+            ((SplitterEventHandler?)Events[EVENT_MOVED])?.Invoke(this, sevent);
 
             if (splitTarget is not null)
             {
@@ -998,7 +998,7 @@ namespace System.Windows.Forms
         {
             public int dockWidth = -1;
             public int dockHeight = -1;
-            internal Control target;
+            internal Control? target;
         }
 
         private class SplitterMessageFilter : IMessageFilter
