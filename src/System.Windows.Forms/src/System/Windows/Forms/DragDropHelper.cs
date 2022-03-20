@@ -120,11 +120,11 @@ namespace System.Windows.Forms
         ///  Notifies the drag-image manager that the drop target has been entered, and provides it with the
         ///  information needed to display the drag image.
         /// </summary>
-        public static HRESULT DragEnter(IntPtr hwndTarget, IComDataObject dataObject, ref Point ppt, uint dwEffect)
+        public static void DragEnter(IntPtr hwndTarget, IComDataObject dataObject, ref Point ppt, uint dwEffect)
         {
             if (!TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper))
             {
-                return HRESULT.S_FALSE;
+                return;
             }
 
             try
@@ -134,25 +134,23 @@ namespace System.Windows.Forms
             catch (COMException ex)
             {
                 Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper::DragEnter COM error {ex}");
-                return (HRESULT)ex.HResult;
+                return;
             }
             finally
             {
                 Marshal.FinalReleaseComObject(dropTargetHelper);
             }
-
-            return HRESULT.S_OK;
         }
 
         /// <summary>
         ///  Notifies the drag-image manager that the cursor position has changed and provides it with the
         ///  information needed to display the drag image.
         /// </summary>
-        public static HRESULT DragOver(ref Point ppt, uint dwEffect)
+        public static void DragOver(ref Point ppt, uint dwEffect)
         {
             if (!TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper))
             {
-                return HRESULT.S_FALSE;
+                return;
             }
 
             try
@@ -162,24 +160,22 @@ namespace System.Windows.Forms
             catch (COMException ex)
             {
                 Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper::DragOver COM error {ex}");
-                return HRESULT.S_FALSE;
+                return;
             }
             finally
             {
                 Marshal.FinalReleaseComObject(dropTargetHelper);
             }
-
-            return HRESULT.S_OK;
         }
 
         /// <summary>
         ///  Notifies the drag-image manager that the cursor has left the drop target.
         /// </summary>
-        public static HRESULT DragLeave()
+        public static void DragLeave()
         {
             if (!TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper))
             {
-                return HRESULT.S_FALSE;
+                return;
             }
 
             try
@@ -189,25 +185,23 @@ namespace System.Windows.Forms
             catch (COMException ex)
             {
                 Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper::DragLeave COM error {ex}");
-                return HRESULT.S_FALSE;
+                return;
             }
             finally
             {
                 Marshal.FinalReleaseComObject(dropTargetHelper);
             }
-
-            return HRESULT.S_OK;
         }
 
         /// <summary>
         ///  Notifies the drag-image manager that the object has been dropped, and provides it with the
         ///  information needed to display the drag image.
         /// </summary>
-        public static HRESULT Drop(IComDataObject dataObject, ref Point ppt, uint dwEffect)
+        public static void Drop(IComDataObject dataObject, ref Point ppt, uint dwEffect)
         {
             if (!TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper))
             {
-                return HRESULT.S_FALSE;
+                return;
             }
 
             try
@@ -217,14 +211,12 @@ namespace System.Windows.Forms
             catch (COMException ex)
             {
                 Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper::Drop COM error {ex}");
-                return HRESULT.S_FALSE;
+                return;
             }
             finally
             {
                 Marshal.FinalReleaseComObject(dropTargetHelper);
             }
-
-            return HRESULT.S_OK;
         }
 
         /// <summary>
@@ -357,13 +349,13 @@ namespace System.Windows.Forms
         /// <summary>
         /// Sets the drag image into a data object.
         /// </summary>
-        public static HRESULT SetDragImage(IComDataObject dataObject, Bitmap dragImage, Point cursorOffset, bool usingDefaultDragImage)
+        public static void SetDragImage(IComDataObject dataObject, Bitmap dragImage, Point cursorOffset, bool usingDefaultDragImage)
         {
             if (dataObject is null
                 || dragImage is null
                 || !TryGetDragSourceHelper(out IDragSourceHelper2? dragSourceHelper))
             {
-                return HRESULT.S_FALSE;
+                return;
             }
 
             try
@@ -387,14 +379,12 @@ namespace System.Windows.Forms
             catch (COMException ex)
             {
                 Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropHelper SetDragImage COM error {ex}");
-                return HRESULT.S_FALSE;
+                return;
             }
             finally
             {
                 Marshal.FinalReleaseComObject(dragSourceHelper);
             }
-
-            return HRESULT.S_OK;
         }
 
         /// <summary>
