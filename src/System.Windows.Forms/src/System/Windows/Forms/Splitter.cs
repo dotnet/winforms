@@ -846,11 +846,7 @@ namespace System.Windows.Forms
             base.OnMouseUp(e);
             if (_splitTarget is not null)
             {
-                int x = e.X + Left;
-                int y = e.Y + Top;
                 Rectangle r = CalcSplitLine(GetSplitSize(e.X, e.Y), 0);
-                int xSplit = r.X;
-                int ySplit = r.Y;
                 SplitEnd(true);
             }
         }
