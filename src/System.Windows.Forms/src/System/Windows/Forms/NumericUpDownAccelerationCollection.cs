@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     [ListBindable(false)]
     public class NumericUpDownAccelerationCollection : MarshalByRefObject, ICollection<NumericUpDownAcceleration>, IEnumerable<NumericUpDownAcceleration>
     {
-        readonly List<NumericUpDownAcceleration> items;
+        private readonly List<NumericUpDownAcceleration> _items;
 
         /// <summary>
         ///  Adds an item (NumericUpDownAcceleration object) to the ICollection.
@@ -27,9 +27,9 @@ namespace System.Windows.Forms
             // Keep the array sorted, insert in the right spot.
             int index = 0;
 
-            while (index < items.Count)
+            while (index < _items.Count)
             {
-                if (acceleration.Seconds < items[index].Seconds)
+                if (acceleration.Seconds < _items[index].Seconds)
                 {
                     break;
                 }
@@ -37,7 +37,7 @@ namespace System.Windows.Forms
                 index++;
             }
 
-            items.Insert(index, acceleration);
+            _items.Insert(index, acceleration);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Clear()
         {
-            items.Clear();
+            _items.Clear();
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool Contains(NumericUpDownAcceleration acceleration)
         {
-            return items.Contains(acceleration);
+            return _items.Contains(acceleration);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void CopyTo(NumericUpDownAcceleration[] array, int index)
         {
-            items.CopyTo(array, index);
+            _items.CopyTo(array, index);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace System.Windows.Forms
         /// </summary>
         public int Count
         {
-            get { return items.Count; }
+            get { return _items.Count; }
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool Remove(NumericUpDownAcceleration acceleration)
         {
-            return items.Remove(acceleration);
+            return _items.Remove(acceleration);
         }
 
         /// <summary>
@@ -94,12 +94,12 @@ namespace System.Windows.Forms
         /// </summary>
         IEnumerator<NumericUpDownAcceleration> IEnumerable<NumericUpDownAcceleration>.GetEnumerator()
         {
-            return items.GetEnumerator();
+            return _items.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable)items).GetEnumerator();
+            return ((IEnumerable)_items).GetEnumerator();
         }
 
         ///  NumericUpDownAccelerationCollection methods.
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
         /// </summary>
         public NumericUpDownAccelerationCollection()
         {
-            items = new List<NumericUpDownAcceleration>();
+            _items = new List<NumericUpDownAcceleration>();
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace System.Windows.Forms
         /// </summary>
         public NumericUpDownAcceleration this[int index]
         {
-            get { return items[index]; }
+            get { return _items[index]; }
         }
     }
 }
