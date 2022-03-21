@@ -13,7 +13,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal class DataGridViewComboBoxEditingControlAccessibleObject : ComboBoxAccessibleObject
         {
-            private readonly DataGridViewComboBoxEditingControl ownerControl;
+            private readonly DataGridViewComboBoxEditingControl _ownerControl;
 
             /// <summary>
             ///  The parent is changed when the editing control is attached to another editing cell.
@@ -23,7 +23,7 @@ namespace System.Windows.Forms
             public DataGridViewComboBoxEditingControlAccessibleObject(DataGridViewComboBoxEditingControl ownerControl)
                 : base(ownerControl)
             {
-                this.ownerControl = ownerControl;
+                _ownerControl = ownerControl;
             }
 
             public override AccessibleObject? Parent
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
             {
                 if (patternId == UiaCore.UIA.ExpandCollapsePatternId)
                 {
-                    return ownerControl.DropDownStyle != ComboBoxStyle.Simple;
+                    return _ownerControl.DropDownStyle != ComboBoxStyle.Simple;
                 }
 
                 return base.IsPatternSupported(patternId);
@@ -74,7 +74,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return ownerControl.DroppedDown ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+                    return _ownerControl.DroppedDown ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
                 }
             }
 
