@@ -151,12 +151,14 @@ namespace WinformsControlsTest
                 Bitmap dragImage = (Bitmap)Image.FromFile(@"Data\DragDrop\NyanCatAscii_301.bmp");
 
                 // Call DoDragDrop, specifying the drag image bitmap, along with the cursor offset.
-                pb.DoDragDrop(data, DragDropEffects.All, dragImage, new Point(0, 100));
+                pb.DoDragDrop(data, DragDropEffects.All, dragImage, new Point(0, 111));
             }
         }
 
         private void PictureBox_GiveFeedback(object? sender, GiveFeedbackEventArgs e)
         {
+            Cursor.Current = Cursors.Default;
+
             // Hide the default cursor.
             e.UseDefaultCursors = false;
         }
