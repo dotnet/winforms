@@ -1285,7 +1285,7 @@ static System.Windows.Forms.Screen.PrimaryScreen.get -> System.Windows.Forms.Scr
 ~System.Windows.Forms.AxHost.AxHost(string clsid, int flags) -> void
 ~System.Windows.Forms.AxHost.ClsidAttribute.ClsidAttribute(string clsid) -> void
 ~System.Windows.Forms.AxHost.ClsidAttribute.Value.get -> string
-~System.Windows.Forms.AxHost.ConnectionPointCookie.ConnectionPointCookie(object source, object sink, System.Type eventInterface) -> void
+System.Windows.Forms.AxHost.ConnectionPointCookie.ConnectionPointCookie(object! source, object! sink, System.Type! eventInterface) -> void
 ~System.Windows.Forms.AxHost.ContainingControl.get -> System.Windows.Forms.ContainerControl
 ~System.Windows.Forms.AxHost.ContainingControl.set -> void
 ~System.Windows.Forms.AxHost.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void

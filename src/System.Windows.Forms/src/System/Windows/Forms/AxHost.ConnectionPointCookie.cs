@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -15,7 +13,7 @@ namespace System.Windows.Forms
     {
         public class ConnectionPointCookie
         {
-            private Ole32.IConnectionPoint _connectionPoint;
+            private Ole32.IConnectionPoint? _connectionPoint;
             private uint _cookie;
             internal int _threadId;
 
@@ -142,13 +140,13 @@ namespace System.Windows.Forms
                 {
                     if (!AppDomain.CurrentDomain.IsFinalizingForUnload())
                     {
-                        SynchronizationContext context = SynchronizationContext.Current;
+                        SynchronizationContext? context = SynchronizationContext.Current;
                         context?.Post(new SendOrPostCallback(AttemptDisconnect), null);
                     }
                 }
             }
 
-            void AttemptDisconnect(object trash)
+            void AttemptDisconnect(object? trash)
             {
                 if (_threadId == Environment.CurrentManagedThreadId)
                 {
