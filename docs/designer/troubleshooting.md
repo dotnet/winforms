@@ -14,7 +14,9 @@ The default verbosity is set to  _Warnings_, which includes Warnings and Errors 
 
 > :warning: Some log events are not correctly classified. This is known, and the re-classification work is under way.
 
-## Connection Timeouts
+## "Designer never loads" problems and possible ways to resolve those
+
+### Connection Timeouts
 
 When the OOP designer starts it launches the designer server process (aka DesignToolsServer.exe). If the server process fails to launch and connect to the Visual Studio, you may see the following error:
 
@@ -29,9 +31,15 @@ The default connection timeout is set to _2 minutes_ (prior to VS 2022 17.1p5 wa
 
 There can be various reasons why the server process may be taking longer than the allocated time. For example, some users have reported to have solutions with a large number of projects. The designer performs a shadow copying of the necessary files and folders before it can render your form or control, and if you have a slow hard drive, or the project files are located on a network drive, it can have a significant effect on how fast files are copied to the shadow cache folder.
 
-Another common reason for the connection timeouts is AV services, and adding exclusion rules for devevn.exe and DesignToolsServer.exe can increase the I/O of the shadow cache. For example, to add an exception to the Windows Defender so that it is not slowed down by the system call hooks Defender uses to provide real-time protection can be done with the following PowerShell command:
+### Antivirus is blocking the server process executables
+
+Some customers have reported that the connection timeouts were caused by configurations of their antivirus services. In such cases it is recommended to add exclusion rules for `devevn.exe` and `DesignToolsServer.exe`, and this can unblock these executables and can increase the I/O of the shadow cache. For example, to add an exception to the Windows Defender so that it is not slowed down by the system call hooks Defender uses to provide real-time protection can be done with the following PowerShell command:
 
 ```powershell
 Add-MpPreference -ExclusionProcess 'devenv.exe'
 Add-MpPreference -ExclusionProcess 'DesignToolsServer.exe'
 ```
+
+### `Switch.System.IO.UseLegacyPathHandling` override is enabled
+
+The designer server process uses long paths and requires [path normalizations](https://docs.microsoft.com/dotnet/framework/migration-guide/mitigation-path-normalization), the behaviours that can be altered `Switch.System.IO.UseLegacyPathHandling` appcontext switch. The default value of the switch is `false`, and if the value is set to `true` either in devenv.exe.config (which is located somewhere like C:\Program Files\Microsoft Visual Studio\2022\Common7\IDE) or in the [registry](https://docs.microsoft.com/dotnet/api/system.appcontext?view=net-6.0#appcontext-for-library-consumers) it will prevent the designer from loading with `Argument Exception: Illegal characters in path` error.
