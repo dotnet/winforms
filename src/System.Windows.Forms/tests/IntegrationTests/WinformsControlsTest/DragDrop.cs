@@ -144,23 +144,25 @@ namespace WinformsControlsTest
         {
             if (sender is PictureBox pb && pb is not null)
             {
-                // Create the cat ascii data object.
+                // Create the ascii cat data object.
                 DataObject data = new(nameof(_nyanCatAscii), _nyanCatAscii);
 
-                // Note the outer edges of the drag image are blended out if the width or height exceeds 300 pixels.
-                Bitmap dragImage = (Bitmap)Image.FromFile(@"Data\DragDrop\NyanCatAscii_301.bmp");
-
-                // Call DoDragDrop, specifying the drag image bitmap, along with the cursor offset.
-                pb.DoDragDrop(data, DragDropEffects.All, dragImage, new Point(0, 111));
+                // Call DoDragDrop.
+                pb.DoDragDrop(data, DragDropEffects.All);
             }
         }
 
         private void PictureBox_GiveFeedback(object? sender, GiveFeedbackEventArgs e)
         {
-            Cursor.Current = Cursors.Default;
-
             // Hide the default cursor.
+            Cursor.Current = Cursors.Default;
             e.UseDefaultCursors = false;
+
+            // Note the outer edges of the drag image are blended out if the width or height exceeds 300 pixels.
+            e.DragImage = (Bitmap)Image.FromFile(@"Data\DragDrop\NyanCatAscii_301.bmp");
+
+            // Set the cursor to the bottom left-hand corner of the drag image.
+            e.CursorOffset = new Point(0, 111);
         }
 
         private void TextBox1_DragDrop(object? sender, DragEventArgs e)

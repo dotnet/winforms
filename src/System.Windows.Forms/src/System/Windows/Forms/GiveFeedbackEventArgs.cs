@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -16,6 +18,9 @@ namespace System.Windows.Forms
         {
             Effect = effect;
             UseDefaultCursors = useDefaultCursors;
+            DragImage = null;
+            CursorOffset = default;
+            UseDefaultDragImage = false;
         }
 
         /// <summary>
@@ -27,5 +32,20 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether a default pointer is used.
         /// </summary>
         public bool UseDefaultCursors { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the drag image bitmap.
+        /// </summary>
+        public Bitmap? DragImage { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the drag image cursor offset.
+        /// </summary>
+        public Point CursorOffset { get; set; }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether a layered window drag image is used.
+        /// </summary>
+        public bool UseDefaultDragImage { get; set; }
     }
 }

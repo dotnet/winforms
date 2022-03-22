@@ -3,16 +3,23 @@
 // See the LICENSE file in the project root for more information.
 
 using static Interop;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
     internal class DropSource : Ole32.IDropSource
     {
         private readonly ISupportOleDropSource _peer;
+        private readonly IComDataObject? _dataObject;
 
-        public DropSource(ISupportOleDropSource peer)
+        public DropSource(ISupportOleDropSource peer) : this(peer, null)
+        {
+        }
+
+        public DropSource(ISupportOleDropSource peer, IComDataObject? dataObject)
         {
             _peer = peer.OrThrowIfNull();
+            _dataObject = dataObject;
         }
 
         public HRESULT QueryContinueDrag(BOOL fEscapePressed, User32.MK grfKeyState)
@@ -48,6 +55,12 @@ namespace System.Windows.Forms
         {
             var gfbevent = new GiveFeedbackEventArgs((DragDropEffects)dwEffect, true);
             _peer.OnGiveFeedback(gfbevent);
+
+            if (gfbevent.DragImage is not null)
+            {
+                DragDropHelper.SetDragImage(_dataObject, gfbevent.DragImage, gfbevent.CursorOffset, gfbevent.UseDefaultDragImage);
+            }
+
             if (gfbevent.UseDefaultCursors)
             {
                 return HRESULT.DRAGDROP_S_USEDEFAULTCURSORS;

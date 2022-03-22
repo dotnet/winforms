@@ -32,12 +32,13 @@ namespace System.Windows.Forms
         private const string CF_ISCOMPUTINGIMAGE = "IsComputingImage";
         private const string CF_ISSHOWINGLAYERED = "IsShowingLayered";
         private const string CF_ISSHOWINGTEXT = "IsShowingText";
-        private const string CF_NETRESOURCE = "Net Resource";
+        private const string CF_NET_RESOURCE = "Net Resource";
         private const string CF_PREFERRED_DROPEFFECT = "Preferred DropEffect";
         private const string CF_SHELL_IDLIST_ARRAY = "Shell IDList Array";
         private const string CF_UNTRUSTEDDRAGDROP = "UntrustedDragDrop";
         private const string CF_USINGDEFAULTDRAGIMAGE = "UsingDefaultDragImage";
 
+        // Drag-and-drop private formats.
         public static readonly string[] s_formats = new string[]
         {
             CF_DISABLEDRAGTEXT,
@@ -50,14 +51,14 @@ namespace System.Windows.Forms
             CF_ISCOMPUTINGIMAGE,
             CF_ISSHOWINGLAYERED,
             CF_ISSHOWINGTEXT,
-            CF_NETRESOURCE,
+            CF_NET_RESOURCE,
             CF_PREFERRED_DROPEFFECT,
             CF_SHELL_IDLIST_ARRAY,
             CF_UNTRUSTEDDRAGDROP,
             CF_USINGDEFAULTDRAGIMAGE
         };
 
-        // The drag-and-drop storage mediums consist of the types TYMED_HGLOBAL and TYMED_ISTREAM.
+        // Drag-and-drop storage mediums consist of the types TYMED_HGLOBAL and TYMED_ISTREAM.
         private static readonly TYMED[] s_tymeds = new TYMED[]
         {
             TYMED.TYMED_HGLOBAL,
@@ -351,12 +352,45 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// Determines whether a drag image format is present in a data object.
+        /// </summary>
+        /// <returns><see langword="true"/> if a drag image format is present in <paramref name="dataObject"/>; otherwise <see langword="false"/>.</returns>
+        public static bool GetDragImagePresent(IComDataObject dataObject)
+        {
+            if (dataObject is null)
+            {
+                return false;
+            }
+
+            try
+            {
+                // Create the drag image clipboard format.
+                FORMATETC formatEtc = new()
+                {
+                    cfFormat = (short)RegisterClipboardFormatW(CF_DRAGIMAGEBITS),
+                    dwAspect = DVASPECT.DVASPECT_CONTENT,
+                    lindex = -1,
+                    ptd = IntPtr.Zero,
+                    tymed = TYMED.TYMED_HGLOBAL
+                };
+
+                // Check if the data object contains a drag image.
+                return dataObject.QueryGetData(ref formatEtc) == (int)HRESULT.S_OK;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Sets the drag image into a data object.
         /// </summary>
-        public static void SetDragImage(IComDataObject dataObject, Bitmap dragImage, Point cursorOffset, bool usingDefaultDragImage)
+        public static void SetDragImage(IComDataObject? dataObject, Bitmap dragImage, Point cursorOffset, bool usingDefaultDragImage)
         {
             if (dataObject is null
                 || dragImage is null
+                || GetDragImagePresent(dataObject)
                 || !TryGetDragSourceHelper(out IDragSourceHelper2? dragSourceHelper))
             {
                 return;

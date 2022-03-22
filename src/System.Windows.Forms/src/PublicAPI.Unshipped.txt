@@ -5,8 +5,6 @@ override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.Name
 override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DoDefaultAction() -> void
 override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DefaultAction.get -> string!
 ~override System.Windows.Forms.TreeView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~System.Windows.Forms.Control.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset) -> System.Windows.Forms.DragDropEffects
-~System.Windows.Forms.Control.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset, bool usingDefaultDragImage) -> System.Windows.Forms.DragDropEffects
 System.Windows.Forms.DragEventArgs.DropIcon.get -> System.Windows.Forms.DropIconType
 System.Windows.Forms.DragEventArgs.DropIcon.set -> void
 System.Windows.Forms.DragEventArgs.Insert.get -> string!
@@ -22,3 +20,9 @@ System.Windows.Forms.DropIconType.Move = 2 -> System.Windows.Forms.DropIconType
 System.Windows.Forms.DropIconType.NoDropIcon = 8 -> System.Windows.Forms.DropIconType
 System.Windows.Forms.DropIconType.None = 0 -> System.Windows.Forms.DropIconType
 System.Windows.Forms.DropIconType.Warning = 7 -> System.Windows.Forms.DropIconType
+System.Windows.Forms.GiveFeedbackEventArgs.CursorOffset.get -> System.Drawing.Point
+System.Windows.Forms.GiveFeedbackEventArgs.CursorOffset.set -> void
+System.Windows.Forms.GiveFeedbackEventArgs.DragImage.get -> System.Drawing.Bitmap?
+System.Windows.Forms.GiveFeedbackEventArgs.DragImage.set -> void
+System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultDragImage.get -> bool
+System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultDragImage.set -> void
