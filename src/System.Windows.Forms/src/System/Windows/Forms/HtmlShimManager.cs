@@ -259,10 +259,5 @@ namespace System.Windows.Forms
                 htmlWindowShims = null;
             }
         }
-
-        ~HtmlShimManager()
-        {
-            Dispose(false);
-        }
     }
 }
