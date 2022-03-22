@@ -552,7 +552,7 @@ override System.Windows.Forms.ListView.OnSystemColorsChanged(System.EventArgs! e
 override System.Windows.Forms.ListView.Text.get -> string!
 override System.Windows.Forms.ListView.Text.set -> void
 override System.Windows.Forms.ListView.ToString() -> string!
-~override System.Windows.Forms.ListViewItem.ListViewSubItem.ToString() -> string
+override System.Windows.Forms.ListViewItem.ListViewSubItem.ToString() -> string!
 ~override System.Windows.Forms.ListViewItem.ToString() -> string
 ~override System.Windows.Forms.ListViewItemConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
 ~override System.Windows.Forms.ListViewItemConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
@@ -2150,30 +2150,30 @@ System.Windows.Forms.ListView.TopItem.set -> void
 ~System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem[] subItems, int imageIndex, System.Windows.Forms.ListViewGroup group) -> void
 ~System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem[] subItems, string imageKey) -> void
 ~System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem[] subItems, string imageKey, System.Windows.Forms.ListViewGroup group) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItem.Font.get -> System.Drawing.Font
-~System.Windows.Forms.ListViewItem.ListViewSubItem.Font.set -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItem.ListViewSubItem(System.Windows.Forms.ListViewItem owner, string text) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItem.ListViewSubItem(System.Windows.Forms.ListViewItem owner, string text, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font font) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItem.Name.get -> string
-~System.Windows.Forms.ListViewItem.ListViewSubItem.Name.set -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItem.Tag.get -> object
-~System.Windows.Forms.ListViewItem.ListViewSubItem.Tag.set -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItem.Text.get -> string
-~System.Windows.Forms.ListViewItem.ListViewSubItem.Text.set -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(string text) -> System.Windows.Forms.ListViewItem.ListViewSubItem
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(string text, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font font) -> System.Windows.Forms.ListViewItem.ListViewSubItem
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(System.Windows.Forms.ListViewItem.ListViewSubItem item) -> System.Windows.Forms.ListViewItem.ListViewSubItem
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(string[] items) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(string[] items, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font font) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(System.Windows.Forms.ListViewItem.ListViewSubItem[] items) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Contains(System.Windows.Forms.ListViewItem.ListViewSubItem subItem) -> bool
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.IndexOf(System.Windows.Forms.ListViewItem.ListViewSubItem subItem) -> int
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Insert(int index, System.Windows.Forms.ListViewItem.ListViewSubItem item) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.ListViewSubItemCollection(System.Windows.Forms.ListViewItem owner) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Remove(System.Windows.Forms.ListViewItem.ListViewSubItem item) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem.ListViewSubItem
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[int index].set -> void
+System.Windows.Forms.ListViewItem.ListViewSubItem.Font.get -> System.Drawing.Font!
+System.Windows.Forms.ListViewItem.ListViewSubItem.Font.set -> void
+System.Windows.Forms.ListViewItem.ListViewSubItem.ListViewSubItem(System.Windows.Forms.ListViewItem! owner, string? text) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItem.ListViewSubItem(System.Windows.Forms.ListViewItem! owner, string? text, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font! font) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItem.Name.get -> string!
+System.Windows.Forms.ListViewItem.ListViewSubItem.Name.set -> void
+System.Windows.Forms.ListViewItem.ListViewSubItem.Tag.get -> object?
+System.Windows.Forms.ListViewItem.ListViewSubItem.Tag.set -> void
+System.Windows.Forms.ListViewItem.ListViewSubItem.Text.get -> string!
+System.Windows.Forms.ListViewItem.ListViewSubItem.Text.set -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(string? text) -> System.Windows.Forms.ListViewItem.ListViewSubItem!
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(string? text, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font! font) -> System.Windows.Forms.ListViewItem.ListViewSubItem!
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(System.Windows.Forms.ListViewItem.ListViewSubItem! item) -> System.Windows.Forms.ListViewItem.ListViewSubItem!
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(string![]! items) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(string![]! items, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font! font) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(System.Windows.Forms.ListViewItem.ListViewSubItem![]! items) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Contains(System.Windows.Forms.ListViewItem.ListViewSubItem? subItem) -> bool
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.IndexOf(System.Windows.Forms.ListViewItem.ListViewSubItem? subItem) -> int
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Insert(int index, System.Windows.Forms.ListViewItem.ListViewSubItem! item) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.ListViewSubItemCollection(System.Windows.Forms.ListViewItem! owner) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Remove(System.Windows.Forms.ListViewItem.ListViewSubItem? item) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem.ListViewSubItem!
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[int index].set -> void
 ~System.Windows.Forms.ListViewItem.Name.get -> string
 ~System.Windows.Forms.ListViewItem.Name.set -> void
 ~System.Windows.Forms.ListViewItem.SubItems.get -> System.Windows.Forms.ListViewItem.ListViewSubItemCollection
@@ -3268,10 +3268,10 @@ virtual System.Windows.Forms.ListView.OnVirtualItemsSelectionRangeChanged(System
 ~virtual System.Windows.Forms.ListView.SelectedListViewItemCollection.this[string key].get -> System.Windows.Forms.ListViewItem
 ~virtual System.Windows.Forms.ListViewItem.Clone() -> object
 ~virtual System.Windows.Forms.ListViewItem.Deserialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
-~virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.ContainsKey(string key) -> bool
-~virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.IndexOfKey(string key) -> int
-~virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.RemoveByKey(string key) -> void
-~virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[string key].get -> System.Windows.Forms.ListViewItem.ListViewSubItem
+virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.RemoveByKey(string? key) -> void
+virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[string! key].get -> System.Windows.Forms.ListViewItem.ListViewSubItem?
 ~virtual System.Windows.Forms.ListViewItem.Serialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
 ~virtual System.Windows.Forms.MaskedTextBox.OnIsOverwriteModeChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.MaskedTextBox.OnMaskChanged(System.EventArgs e) -> void
