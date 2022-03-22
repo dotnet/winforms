@@ -32,6 +32,8 @@ namespace System.Windows.Forms
         private const string CF_ISCOMPUTINGIMAGE = "IsComputingImage";
         private const string CF_ISSHOWINGLAYERED = "IsShowingLayered";
         private const string CF_ISSHOWINGTEXT = "IsShowingText";
+        private const string CF_NETRESOURCE = "Net Resource";
+        private const string CF_PREFERRED_DROPEFFECT = "Preferred DropEffect";
         private const string CF_SHELL_IDLIST_ARRAY = "Shell IDList Array";
         private const string CF_UNTRUSTEDDRAGDROP = "UntrustedDragDrop";
         private const string CF_USINGDEFAULTDRAGIMAGE = "UsingDefaultDragImage";
@@ -48,6 +50,8 @@ namespace System.Windows.Forms
             CF_ISCOMPUTINGIMAGE,
             CF_ISSHOWINGLAYERED,
             CF_ISSHOWINGTEXT,
+            CF_NETRESOURCE,
+            CF_PREFERRED_DROPEFFECT,
             CF_SHELL_IDLIST_ARRAY,
             CF_UNTRUSTEDDRAGDROP,
             CF_USINGDEFAULTDRAGIMAGE

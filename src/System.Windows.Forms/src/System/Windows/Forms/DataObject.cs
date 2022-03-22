@@ -562,6 +562,24 @@ namespace System.Windows.Forms
                 converter.OleDataObject.GetData(ref formatetc, out medium);
                 return;
             }
+            else if (_innerData is DataStore dataStore
+                && DataFormats.GetFormat(formatetc.cfFormat).Name is string formatName
+                && DragDropHelper.s_formats.Contains(formatName))
+            {
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {formatName}");
+
+                if (dataStore.GetData(formatName) is KeyValuePair<FORMATETC, STGMEDIUM> dragDropEntry
+                    && dragDropEntry.Key is FORMATETC formatEtc
+                    && dragDropEntry.Value is STGMEDIUM mediumSrc
+                    && DragDropHelper.CopyDragDropStgMedium(ref mediumSrc, formatEtc, out STGMEDIUM mediumDest))
+                {
+                    medium = mediumDest;
+                    return;
+                }
+
+                medium = default;
+                return;
+            }
 
             medium = new STGMEDIUM();
 
@@ -608,21 +626,6 @@ namespace System.Windows.Forms
             if (_innerData is OleConverter converter)
             {
                 converter.OleDataObject.GetDataHere(ref formatetc, ref medium);
-            }
-            else if (_innerData is DataStore dataStore
-                && DataFormats.GetFormat(formatetc.cfFormat).Name is string formatName
-                && DragDropHelper.s_formats.Contains(formatName))
-            {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {formatName}");
-
-                if (dataStore.GetData(formatName) is KeyValuePair<FORMATETC, STGMEDIUM> dragDropEntry
-                    && dragDropEntry.Key is FORMATETC formatEtc
-                    && dragDropEntry.Value is STGMEDIUM mediumSrc
-                    && DragDropHelper.CopyDragDropStgMedium(ref mediumSrc, formatEtc, out STGMEDIUM mediumDest))
-                {
-                    medium = mediumDest;
-                    return;
-                }
             }
             else
             {
