@@ -18,7 +18,7 @@ The default verbosity is set to  _Warnings_, which includes Warnings and Errors 
 
 ### Connection Timeouts
 
-When the OOP designer starts it launches the designer server process (aka DesignToolsServer.exe). If the server process fails to launch and connect to the Visual Studio, you may see the following error:
+When the OOP designer starts it launches the designer server process (aka DesignToolsServer.exe). If the server process fails to launch or connect to the Visual Studio, you may see the following error:
 
 ```
 [02:59:20.7198643] [MyProj]: Timed out waiting for the design tools server process launch to complete.
