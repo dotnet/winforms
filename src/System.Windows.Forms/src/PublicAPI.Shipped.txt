@@ -57,17 +57,17 @@ override System.Windows.Forms.CheckBox.OnClick(System.EventArgs! e) -> void
 override System.Windows.Forms.CheckBox.OnHandleCreated(System.EventArgs! e) -> void
 override System.Windows.Forms.CheckBox.OnMouseUp(System.Windows.Forms.MouseEventArgs! mevent) -> void
 override System.Windows.Forms.CheckBox.ToString() -> string!
-~override System.Windows.Forms.CheckedListBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.CheckedListBox.CreateItemCollection() -> System.Windows.Forms.ListBox.ObjectCollection
-~override System.Windows.Forms.CheckedListBox.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.CheckedListBox.OnBackColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.CheckedListBox.OnClick(System.EventArgs e) -> void
-~override System.Windows.Forms.CheckedListBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs e) -> void
-~override System.Windows.Forms.CheckedListBox.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.CheckedListBox.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.CheckedListBox.OnKeyPress(System.Windows.Forms.KeyPressEventArgs e) -> void
-~override System.Windows.Forms.CheckedListBox.OnMeasureItem(System.Windows.Forms.MeasureItemEventArgs e) -> void
-~override System.Windows.Forms.CheckedListBox.OnSelectedIndexChanged(System.EventArgs e) -> void
+override System.Windows.Forms.CheckedListBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.CheckedListBox.CreateItemCollection() -> System.Windows.Forms.ListBox.ObjectCollection!
+override System.Windows.Forms.CheckedListBox.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.CheckedListBox.OnBackColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.CheckedListBox.OnClick(System.EventArgs! e) -> void
+override System.Windows.Forms.CheckedListBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs! e) -> void
+override System.Windows.Forms.CheckedListBox.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.CheckedListBox.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.CheckedListBox.OnKeyPress(System.Windows.Forms.KeyPressEventArgs! e) -> void
+override System.Windows.Forms.CheckedListBox.OnMeasureItem(System.Windows.Forms.MeasureItemEventArgs! e) -> void
+override System.Windows.Forms.CheckedListBox.OnSelectedIndexChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ColorDialog.ToString() -> string!
 ~override System.Windows.Forms.ColumnHeaderConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
 ~override System.Windows.Forms.ColumnHeaderConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
@@ -1374,24 +1374,24 @@ System.Windows.Forms.ButtonBase.ImageList.get -> System.Windows.Forms.ImageList?
 System.Windows.Forms.ButtonBase.ImageList.set -> void
 ~System.Windows.Forms.CheckedListBox.CheckedIndexCollection.CopyTo(System.Array dest, int index) -> void
 ~System.Windows.Forms.CheckedListBox.CheckedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.CheckedListBox.CheckedIndices.get -> System.Windows.Forms.CheckedListBox.CheckedIndexCollection
+System.Windows.Forms.CheckedListBox.CheckedIndices.get -> System.Windows.Forms.CheckedListBox.CheckedIndexCollection!
 ~System.Windows.Forms.CheckedListBox.CheckedItemCollection.Contains(object item) -> bool
 ~System.Windows.Forms.CheckedListBox.CheckedItemCollection.CopyTo(System.Array dest, int index) -> void
 ~System.Windows.Forms.CheckedListBox.CheckedItemCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.CheckedListBox.CheckedItemCollection.IndexOf(object item) -> int
 ~System.Windows.Forms.CheckedListBox.CheckedItemCollection.this[int index].get -> object
 ~System.Windows.Forms.CheckedListBox.CheckedItemCollection.this[int index].set -> void
-~System.Windows.Forms.CheckedListBox.CheckedItems.get -> System.Windows.Forms.CheckedListBox.CheckedItemCollection
-~System.Windows.Forms.CheckedListBox.DataSource.get -> object
-~System.Windows.Forms.CheckedListBox.DataSource.set -> void
-~System.Windows.Forms.CheckedListBox.DisplayMember.get -> string
-~System.Windows.Forms.CheckedListBox.DisplayMember.set -> void
-~System.Windows.Forms.CheckedListBox.Items.get -> System.Windows.Forms.CheckedListBox.ObjectCollection
+System.Windows.Forms.CheckedListBox.CheckedItems.get -> System.Windows.Forms.CheckedListBox.CheckedItemCollection!
+System.Windows.Forms.CheckedListBox.DataSource.get -> object?
+System.Windows.Forms.CheckedListBox.DataSource.set -> void
+System.Windows.Forms.CheckedListBox.DisplayMember.get -> string!
+System.Windows.Forms.CheckedListBox.DisplayMember.set -> void
+System.Windows.Forms.CheckedListBox.Items.get -> System.Windows.Forms.CheckedListBox.ObjectCollection!
 ~System.Windows.Forms.CheckedListBox.ObjectCollection.Add(object item, bool isChecked) -> int
 ~System.Windows.Forms.CheckedListBox.ObjectCollection.Add(object item, System.Windows.Forms.CheckState check) -> int
 ~System.Windows.Forms.CheckedListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.CheckedListBox owner) -> void
-~System.Windows.Forms.CheckedListBox.ValueMember.get -> string
-~System.Windows.Forms.CheckedListBox.ValueMember.set -> void
+System.Windows.Forms.CheckedListBox.ValueMember.get -> string!
+System.Windows.Forms.CheckedListBox.ValueMember.set -> void
 System.Windows.Forms.ColorDialog.CustomColors.get -> int[]!
 System.Windows.Forms.ColorDialog.CustomColors.set -> void
 ~System.Windows.Forms.ComboBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection
@@ -2759,7 +2759,7 @@ System.Windows.Forms.ToolStripDropDownItemAccessibleObject.ToolStripDropDownItem
 virtual System.Windows.Forms.CheckBox.OnAppearanceChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.CheckBox.OnCheckedChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.CheckBox.OnCheckStateChanged(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.CheckedListBox.OnItemCheck(System.Windows.Forms.ItemCheckEventArgs ice) -> void
+virtual System.Windows.Forms.CheckedListBox.OnItemCheck(System.Windows.Forms.ItemCheckEventArgs! ice) -> void
 ~virtual System.Windows.Forms.ComboBox.AddItemsCore(object[] value) -> void
 ~virtual System.Windows.Forms.ComboBox.ObjectCollection.this[int index].get -> object
 ~virtual System.Windows.Forms.ComboBox.ObjectCollection.this[int index].set -> void
@@ -6186,15 +6186,15 @@ System.Windows.Forms.CheckedListBox.CheckedItemCollection.IsReadOnly.get -> bool
 System.Windows.Forms.CheckedListBox.CheckedListBox() -> void
 System.Windows.Forms.CheckedListBox.CheckOnClick.get -> bool
 System.Windows.Forms.CheckedListBox.CheckOnClick.set -> void
-System.Windows.Forms.CheckedListBox.Click -> System.EventHandler
-System.Windows.Forms.CheckedListBox.DataSourceChanged -> System.EventHandler
-System.Windows.Forms.CheckedListBox.DisplayMemberChanged -> System.EventHandler
-System.Windows.Forms.CheckedListBox.DrawItem -> System.Windows.Forms.DrawItemEventHandler
+System.Windows.Forms.CheckedListBox.Click -> System.EventHandler?
+System.Windows.Forms.CheckedListBox.DataSourceChanged -> System.EventHandler?
+System.Windows.Forms.CheckedListBox.DisplayMemberChanged -> System.EventHandler?
+System.Windows.Forms.CheckedListBox.DrawItem -> System.Windows.Forms.DrawItemEventHandler?
 System.Windows.Forms.CheckedListBox.GetItemChecked(int index) -> bool
 System.Windows.Forms.CheckedListBox.GetItemCheckState(int index) -> System.Windows.Forms.CheckState
-System.Windows.Forms.CheckedListBox.ItemCheck -> System.Windows.Forms.ItemCheckEventHandler
-System.Windows.Forms.CheckedListBox.MeasureItem -> System.Windows.Forms.MeasureItemEventHandler
-System.Windows.Forms.CheckedListBox.MouseClick -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.CheckedListBox.ItemCheck -> System.Windows.Forms.ItemCheckEventHandler?
+System.Windows.Forms.CheckedListBox.MeasureItem -> System.Windows.Forms.MeasureItemEventHandler?
+System.Windows.Forms.CheckedListBox.MouseClick -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.CheckedListBox.ObjectCollection
 System.Windows.Forms.CheckedListBox.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.CheckedListBox.Padding.set -> void
@@ -6204,7 +6204,7 @@ System.Windows.Forms.CheckedListBox.ThreeDCheckBoxes.get -> bool
 System.Windows.Forms.CheckedListBox.ThreeDCheckBoxes.set -> void
 System.Windows.Forms.CheckedListBox.UseCompatibleTextRendering.get -> bool
 System.Windows.Forms.CheckedListBox.UseCompatibleTextRendering.set -> void
-System.Windows.Forms.CheckedListBox.ValueMemberChanged -> System.EventHandler
+System.Windows.Forms.CheckedListBox.ValueMemberChanged -> System.EventHandler?
 System.Windows.Forms.CheckState
 System.Windows.Forms.CheckState.Checked = 1 -> System.Windows.Forms.CheckState
 System.Windows.Forms.CheckState.Indeterminate = 2 -> System.Windows.Forms.CheckState
