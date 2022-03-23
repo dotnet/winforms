@@ -5,15 +5,13 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
     [Collection("Sequential")]
     public class PropertyGrid_IErrorInfoSupportTests
     {
-        public const int DISP_E_MEMBERNOTFOUND = unchecked((int)0x80020003);
-        public const string System_Windows_Forms_NativeTests = "System_Windows_Forms_NativeTests";
-
         [Fact]
         public void ISupportErrorInfo_Supported_ButNoIErrorInfoGiven()
         {
@@ -29,11 +27,15 @@ namespace System.Windows.Forms.Tests
                     try
                     {
                         encodingEntry.SetPropertyTextValue("333");
-                        Assert.False(true);
+                        Assert.False(true, "Invalid set values should produce ExternalException which will be presenttted to the user.");
                     }
                     catch (ExternalException ex)
                     {
-                        Assert.Equal(DISP_E_MEMBERNOTFOUND, ex.HResult);
+                        // Most default C++ implementation when Invoke return error code
+                        // consult IErrorInfo object and populate EXCEPINFO structure
+                        // So grid entry knows only about error code.
+                        Assert.Equal((int)HRESULT.DISP_E_MEMBERNOTFOUND, ex.HResult);
+                        Assert.Equal("Error From StandardErrorInfoUsageTest", ex.Message);
                     }
                     finally
                     {
@@ -58,11 +60,14 @@ namespace System.Windows.Forms.Tests
                     try
                     {
                         encodingEntry.SetPropertyTextValue("123");
-                        Assert.False(true);
+                        Assert.False(true, "Invalid set values should produce ExternalException which will be presenttted to the user.");
                     }
                     catch (ExternalException ex)
                     {
-                        Assert.Equal("Error From IErrorInfo", ex.Message);
+                        // If C++ implementation of Invoke did not populate EXCEPINFO structure
+                        // from IErrorInfo then we read that information about error call.
+                        // and display that error message to the user.
+                        Assert.Equal("Error From RawErrorInfoUsageTest", ex.Message);
                     }
                     finally
                     {
@@ -72,18 +77,23 @@ namespace System.Windows.Forms.Tests
                 });
         }
 
-        private void ExecuteWithActivationContext(string applicationManifest, Action action)
+        private unsafe void ExecuteWithActivationContext(string applicationManifest, Action action)
         {
-            ACTCTXW context = new ACTCTXW();
-            context.cbSize = Marshal.SizeOf<ACTCTXW>();
-            context.lpSource = applicationManifest;
+            var context = new Kernel32.ACTCTXW();
+            IntPtr handle;
+            fixed (char* p = applicationManifest)
+            {
+                context.cbSize = (uint)sizeof(Kernel32.ACTCTXW);
+                context.lpSource = p;
 
-            var handle = CreateActCtxW(in context);
+                handle = Kernel32.CreateActCtxW(ref context);
+            }
+
             if (handle == IntPtr.Zero)
                 throw new Win32Exception();
             try
             {
-                if (!ActivateActCtx(handle, out var cookie))
+                if (Kernel32.ActivateActCtx(handle, out var cookie).IsFalse())
                     throw new Win32Exception();
                 try
                 {
@@ -91,7 +101,7 @@ namespace System.Windows.Forms.Tests
                 }
                 finally
                 {
-                    if (!DeactivateActCtx(0, cookie))
+                    if (Kernel32.DeactivateActCtx(0, cookie).IsFalse())
                         throw new Win32Exception();
                 }
             }
@@ -101,25 +111,11 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        struct ACTCTXW
-        {
-            public int cbSize; // ULONG
-            public int dwFlags; // DWORD
-            public string lpSource; // LPCWSTR
-            public short wProcessorArchitecture; // USHORT
-            public short wLangId; // LANGID
-            public string lpAssemblyDirectory; // LPCWSTR
-            public string lpResourceName; // LPCWSTR
-            public string lpApplicationName; // LPCWSTR
-            public IntPtr hModule; // HMODULE
-        }
-
         private object CreateComObjectWithRawIErrorInfoUsage()
         {
             Guid clsidRawErrorInfoUsageTest = new("0ED8EE0D-22E3-49EA-850C-E69B20D1F296");
             var IID_IUnknown = new Guid("{00000000-0000-0000-C000-000000000046}");
-            CoCreateInstance(ref clsid,
+            CoCreateInstance(ref clsidRawErrorInfoUsageTest,
                 IntPtr.Zero,
                 1,
                 ref IID_IUnknown,
@@ -131,7 +127,7 @@ namespace System.Windows.Forms.Tests
         {
             Guid clsidStandardErrorInfoUsageTest = new("EA1FCB3A-277C-4C79-AB85-E2ED3E858201");
             var IID_IUnknown = new Guid("{00000000-0000-0000-C000-000000000046}");
-            CoCreateInstance(ref clsid,
+            CoCreateInstance(ref clsidStandardErrorInfoUsageTest,
                 IntPtr.Zero,
                 1,
                 ref IID_IUnknown,
@@ -148,15 +144,6 @@ namespace System.Windows.Forms.Tests
             [MarshalAs(UnmanagedType.Interface)] out object ppv);
 
         [DllImport("kernel32", SetLastError = true)]
-        private static extern IntPtr CreateActCtxW(in ACTCTXW pActCtx);
-
-        [DllImport("kernel32", SetLastError = true)]
         private static extern void ReleaseActCtx(IntPtr hActCtx);
-
-        [DllImport("kernel32", SetLastError = true)]
-        private static extern bool ActivateActCtx(IntPtr hActCtx, out IntPtr lpCookie);
-
-        [DllImport("kernel32")]
-        private static extern bool DeactivateActCtx(int dwFlags, IntPtr ulCookie);
     }
 }

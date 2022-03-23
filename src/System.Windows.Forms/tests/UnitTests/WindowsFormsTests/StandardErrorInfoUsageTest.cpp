@@ -19,7 +19,7 @@ HRESULT STDMETHODCALLTYPE StandardErrorInfoUsageTest::put_Int_Property(
     {
         if (SUCCEEDED(cei->SetGUID(IID_IBasicTest)))
         {
-            if (SUCCEEDED(cei->SetDescription(L"Error From IErrorInfo")))
+            if (SUCCEEDED(cei->SetDescription(L"Error From StandardErrorInfoUsageTest")))
             {
                 IErrorInfo* errorInfo;
                 if (SUCCEEDED(cei->QueryInterface(IID_IErrorInfo, (void**)&errorInfo)))

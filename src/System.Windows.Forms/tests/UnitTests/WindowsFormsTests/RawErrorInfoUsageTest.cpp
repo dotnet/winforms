@@ -29,7 +29,7 @@ HRESULT STDMETHODCALLTYPE RawErrorInfoUsageTest::InterfaceSupportsErrorInfo(
     {
         if (SUCCEEDED(cei->SetGUID(IID_IBasicTest)))
         {
-            if (SUCCEEDED(cei->SetDescription(L"Error From IErrorInfo")))
+            if (SUCCEEDED(cei->SetDescription(L"Error From RawErrorInfoUsageTest")))
             {
                 IErrorInfo* errorInfo;
                 if (SUCCEEDED(cei->QueryInterface(IID_IErrorInfo, (void**)&errorInfo)))
