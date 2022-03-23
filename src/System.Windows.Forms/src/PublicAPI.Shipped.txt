@@ -412,7 +412,7 @@ override System.Windows.Forms.DomainUpDown.ToString() -> string!
 override System.Windows.Forms.FileDialog.ToString() -> string!
 ~override System.Windows.Forms.FlowLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
 override System.Windows.Forms.FlowLayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
-~override System.Windows.Forms.FontDialog.ToString() -> string
+override System.Windows.Forms.FontDialog.ToString() -> string!
 override System.Windows.Forms.Form.ControlCollection.Add(System.Windows.Forms.Control? value) -> void
 override System.Windows.Forms.Form.ControlCollection.Remove(System.Windows.Forms.Control? value) -> void
 override System.Windows.Forms.Form.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
@@ -1088,7 +1088,7 @@ static readonly System.Windows.Forms.DataFormats.WaveAudio -> string!
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.No -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Yes -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
 ~static readonly System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Default -> System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute
-~static readonly System.Windows.Forms.FontDialog.EventApply -> object
+static readonly System.Windows.Forms.FontDialog.EventApply -> object!
 ~static System.Resources.ResXResourceReader.FromFileContents(string fileContents) -> System.Resources.ResXResourceReader
 ~static System.Resources.ResXResourceReader.FromFileContents(string fileContents, System.ComponentModel.Design.ITypeResolutionService typeResolver) -> System.Resources.ResXResourceReader
 ~static System.Resources.ResXResourceReader.FromFileContents(string fileContents, System.Reflection.AssemblyName[] assemblyNames) -> System.Resources.ResXResourceReader
@@ -1768,8 +1768,8 @@ System.Windows.Forms.FolderBrowserDialog.InitialDirectory.get -> string!
 System.Windows.Forms.FolderBrowserDialog.InitialDirectory.set -> void
 System.Windows.Forms.FolderBrowserDialog.SelectedPath.get -> string!
 System.Windows.Forms.FolderBrowserDialog.SelectedPath.set -> void
-~System.Windows.Forms.FontDialog.Font.get -> System.Drawing.Font
-~System.Windows.Forms.FontDialog.Font.set -> void
+System.Windows.Forms.FontDialog.Font.get -> System.Drawing.Font!
+System.Windows.Forms.FontDialog.Font.set -> void
 System.Windows.Forms.Form.AcceptButton.get -> System.Windows.Forms.IButtonControl?
 System.Windows.Forms.Form.AcceptButton.set -> void
 System.Windows.Forms.Form.ActivateMdiChild(System.Windows.Forms.Form? form) -> void
@@ -3146,7 +3146,7 @@ virtual System.Windows.Forms.DataObject.SetText(string! textData, System.Windows
 ~virtual System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(System.ComponentModel.ITypeDescriptorContext context, object component, System.Windows.Forms.IWin32Window owner) -> bool
 ~virtual System.Windows.Forms.Design.WindowsFormsComponentEditor.GetComponentEditorPages() -> System.Type[]
 ~virtual System.Windows.Forms.ErrorProvider.OnRightToLeftChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.FontDialog.OnApply(System.EventArgs e) -> void
+virtual System.Windows.Forms.FontDialog.OnApply(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Form.OnActivated(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Form.OnClosed(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Form.OnClosing(System.ComponentModel.CancelEventArgs! e) -> void
@@ -8018,7 +8018,7 @@ System.Windows.Forms.FontDialog.AllowVectorFonts.get -> bool
 System.Windows.Forms.FontDialog.AllowVectorFonts.set -> void
 System.Windows.Forms.FontDialog.AllowVerticalFonts.get -> bool
 System.Windows.Forms.FontDialog.AllowVerticalFonts.set -> void
-System.Windows.Forms.FontDialog.Apply -> System.EventHandler
+System.Windows.Forms.FontDialog.Apply -> System.EventHandler?
 System.Windows.Forms.FontDialog.Color.get -> System.Drawing.Color
 System.Windows.Forms.FontDialog.Color.set -> void
 System.Windows.Forms.FontDialog.FixedPitchOnly.get -> bool
