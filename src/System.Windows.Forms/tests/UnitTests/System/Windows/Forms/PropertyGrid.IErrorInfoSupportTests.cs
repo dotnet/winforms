@@ -117,7 +117,7 @@ namespace System.Windows.Forms.Tests
 
         private object CreateComObjectWithRawIErrorInfoUsage()
         {
-            var clsid = new Guid("0ED8EE0D-22E3-49EA-850C-E69B20D1F296");
+            Guid clsidRawErrorInfoUsageTest = new("0ED8EE0D-22E3-49EA-850C-E69B20D1F296");
             var IID_IUnknown = new Guid("{00000000-0000-0000-C000-000000000046}");
             CoCreateInstance(ref clsid,
                 IntPtr.Zero,
@@ -129,7 +129,7 @@ namespace System.Windows.Forms.Tests
 
         private object CreateComObjectWithStandardIErrorInfoUsage()
         {
-            var clsid = new Guid("EA1FCB3A-277C-4C79-AB85-E2ED3E858201");
+            Guid clsidStandardErrorInfoUsageTest = new("EA1FCB3A-277C-4C79-AB85-E2ED3E858201");
             var IID_IUnknown = new Guid("{00000000-0000-0000-C000-000000000046}");
             CoCreateInstance(ref clsid,
                 IntPtr.Zero,
