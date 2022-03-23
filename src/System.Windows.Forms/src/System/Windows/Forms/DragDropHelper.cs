@@ -16,8 +16,8 @@ using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Helper class to allow drop targets to display a drag image while the cursor is over the target window
-    ///  and allow an application to specify the image that will be displayed during a Shell drag-and-drop operation.
+    ///  Helper class to allow drop targets to display a drag image while the cursor is over the target window and allow
+    ///  an application to specify the image that will be displayed during a Shell drag-and-drop operation.
     /// </summary>
     internal static class DragDropHelper
     {
@@ -66,9 +66,9 @@ namespace System.Windows.Forms
         };
 
         /// <summary>
-        ///  Creates an in-process server drag-image manager object and returns an interface pointer
-        ///  to IDragSourceHelper2. Exposes methods that allow the application to specify the imaged
-        ///  that will be displayed during a Shell drag-and-drop operation.
+        ///  Creates an in-process server drag-image manager object and returns an interface pointer to
+        ///  IDragSourceHelper2. Exposes methods that allow the application to specify the image that will be displayed
+        ///  during a Shell drag-and-drop operation.
         /// </summary>
         private static bool TryGetDragSourceHelper([NotNullWhen(true)] out IDragSourceHelper2? dragSourceHelper)
         {
@@ -94,9 +94,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Creates an in-process server drag-image manager object and returns an interface pointer
-        ///  to IDropTargetHelper. Exposes methods that allow drop targets to display a drag image
-        ///  while the image is over the target window.
+        ///  Creates an in-process server drag-image manager object and returns an interface pointer to
+        ///  IDropTargetHelper. Exposes methods that allow drop targets to display a drag image while the image is over
+        ///  the target window.
         /// </summary>
         private static bool TryGetDropTargetHelper([NotNullWhen(true)] out IDropTargetHelper? dropTargetHelper)
         {
@@ -122,8 +122,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Notifies the drag-image manager that the drop target has been entered, and provides it with the
-        ///  information needed to display the drag image.
+        ///  Notifies the drag-image manager that the drop target has been entered, and provides it with the information
+        ///  needed to display the drag image.
         /// </summary>
         public static void DragEnter(IntPtr hwndTarget, IComDataObject dataObject, ref Point ppt, uint dwEffect)
         {
@@ -148,8 +148,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Notifies the drag-image manager that the cursor position has changed and provides it with the
-        ///  information needed to display the drag image.
+        ///  Notifies the drag-image manager that the cursor position has changed and provides it with the information
+        ///  needed to display the drag image.
         /// </summary>
         public static void DragOver(ref Point ppt, uint dwEffect)
         {
@@ -199,8 +199,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Notifies the drag-image manager that the object has been dropped, and provides it with the
-        ///  information needed to display the drag image.
+        ///  Notifies the drag-image manager that the object has been dropped, and provides it with the information
+        ///  needed to display the drag image.
         /// </summary>
         public static void Drop(IComDataObject dataObject, ref Point ppt, uint dwEffect)
         {
@@ -227,6 +227,10 @@ namespace System.Windows.Forms
         /// <summary>
         /// This function copies a given drag-and-drop STGMEDIUM structure.
         /// </summary>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="mediumSrc"/> was copied into <paramref name="mediumDest"/>
+        /// successfully; otherwise <see langword="false"/>.
+        /// </returns>
         public static bool CopyDragDropStgMedium(ref STGMEDIUM mediumSrc, FORMATETC formatEtc, out STGMEDIUM mediumDest)
         {
             mediumDest = new();
@@ -354,7 +358,9 @@ namespace System.Windows.Forms
         /// <summary>
         /// Determines whether a drag image format is present in a data object.
         /// </summary>
-        /// <returns><see langword="true"/> if a drag image format is present in <paramref name="dataObject"/>; otherwise <see langword="false"/>.</returns>
+        /// <returns>
+        /// <see langword="true"/> if a drag image format is present in <paramref name="dataObject"/>;otherwise <see langword="false"/>.
+        /// </returns>
         public static bool GetDragImagePresent(IComDataObject dataObject)
         {
             if (dataObject is null)
