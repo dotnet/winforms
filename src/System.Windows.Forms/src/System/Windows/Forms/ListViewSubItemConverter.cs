@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
@@ -15,7 +13,7 @@ namespace System.Windows.Forms
 {
     internal class ListViewSubItemConverter : ExpandableObjectConverter
     {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
         {
             if (destinationType == typeof(InstanceDescriptor))
             {
@@ -25,13 +23,13 @@ namespace System.Windows.Forms
             return base.CanConvertTo(context, destinationType);
         }
 
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
             ArgumentNullException.ThrowIfNull(destinationType);
 
             if (destinationType == typeof(InstanceDescriptor) && value is ListViewItem.ListViewSubItem item)
             {
-                ConstructorInfo ctor;
+                ConstructorInfo? ctor;
 
                 // Subitem has custom style
                 if (item.CustomStyle)
@@ -45,7 +43,7 @@ namespace System.Windows.Forms
                         typeof(Font)
                     });
                     Debug.Assert(ctor is not null, "Expected the constructor to exist.");
-                    return new InstanceDescriptor(ctor, new object[]
+                    return new InstanceDescriptor(ctor, new object?[]
                     {
                         null,
                         item.Text,
@@ -58,7 +56,7 @@ namespace System.Windows.Forms
                 // Otherwise, just use the text constructor
                 ctor = typeof(ListViewItem.ListViewSubItem).GetConstructor(new Type[] { typeof(ListViewItem), typeof(string) });
                 Debug.Assert(ctor is not null, "Expected the constructor to exist.");
-                return new InstanceDescriptor(ctor, new object[] { null, item.Text }, true);
+                return new InstanceDescriptor(ctor, new object?[] { null, item.Text }, true);
             }
 
             return base.ConvertTo(context, culture, value, destinationType);

@@ -51,23 +51,23 @@ override System.Windows.Forms.ButtonBase.OnTextChanged(System.EventArgs! e) -> v
 override System.Windows.Forms.ButtonBase.OnVisibleChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ButtonBase.Text.get -> string!
 override System.Windows.Forms.ButtonBase.Text.set -> void
-~override System.Windows.Forms.CheckBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.CheckBox.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.CheckBox.OnClick(System.EventArgs e) -> void
-~override System.Windows.Forms.CheckBox.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.CheckBox.OnMouseUp(System.Windows.Forms.MouseEventArgs mevent) -> void
-~override System.Windows.Forms.CheckBox.ToString() -> string
-~override System.Windows.Forms.CheckedListBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.CheckedListBox.CreateItemCollection() -> System.Windows.Forms.ListBox.ObjectCollection
-~override System.Windows.Forms.CheckedListBox.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.CheckedListBox.OnBackColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.CheckedListBox.OnClick(System.EventArgs e) -> void
-~override System.Windows.Forms.CheckedListBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs e) -> void
-~override System.Windows.Forms.CheckedListBox.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.CheckedListBox.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.CheckedListBox.OnKeyPress(System.Windows.Forms.KeyPressEventArgs e) -> void
-~override System.Windows.Forms.CheckedListBox.OnMeasureItem(System.Windows.Forms.MeasureItemEventArgs e) -> void
-~override System.Windows.Forms.CheckedListBox.OnSelectedIndexChanged(System.EventArgs e) -> void
+override System.Windows.Forms.CheckBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.CheckBox.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.CheckBox.OnClick(System.EventArgs! e) -> void
+override System.Windows.Forms.CheckBox.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.CheckBox.OnMouseUp(System.Windows.Forms.MouseEventArgs! mevent) -> void
+override System.Windows.Forms.CheckBox.ToString() -> string!
+override System.Windows.Forms.CheckedListBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.CheckedListBox.CreateItemCollection() -> System.Windows.Forms.ListBox.ObjectCollection!
+override System.Windows.Forms.CheckedListBox.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.CheckedListBox.OnBackColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.CheckedListBox.OnClick(System.EventArgs! e) -> void
+override System.Windows.Forms.CheckedListBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs! e) -> void
+override System.Windows.Forms.CheckedListBox.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.CheckedListBox.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.CheckedListBox.OnKeyPress(System.Windows.Forms.KeyPressEventArgs! e) -> void
+override System.Windows.Forms.CheckedListBox.OnMeasureItem(System.Windows.Forms.MeasureItemEventArgs! e) -> void
+override System.Windows.Forms.CheckedListBox.OnSelectedIndexChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ColorDialog.ToString() -> string!
 ~override System.Windows.Forms.ColumnHeaderConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
 ~override System.Windows.Forms.ColumnHeaderConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
@@ -415,25 +415,25 @@ override System.Windows.Forms.FlowLayoutSettings.LayoutEngine.get -> System.Wind
 ~override System.Windows.Forms.FontDialog.ToString() -> string
 override System.Windows.Forms.Form.ControlCollection.Add(System.Windows.Forms.Control? value) -> void
 override System.Windows.Forms.Form.ControlCollection.Remove(System.Windows.Forms.Control? value) -> void
-~override System.Windows.Forms.Form.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.Form.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-~override System.Windows.Forms.Form.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.Form.OnBackgroundImageChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnBackgroundImageLayoutChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnEnabledChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnEnter(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnLayout(System.Windows.Forms.LayoutEventArgs levent) -> void
-~override System.Windows.Forms.Form.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.Form.OnResize(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnStyleChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnTextChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.OnVisibleChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Form.Text.get -> string
-~override System.Windows.Forms.Form.Text.set -> void
-~override System.Windows.Forms.Form.ToString() -> string
+override System.Windows.Forms.Form.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.Form.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
+override System.Windows.Forms.Form.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.Form.OnBackgroundImageChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnBackgroundImageLayoutChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnEnabledChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnEnter(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnLayout(System.Windows.Forms.LayoutEventArgs! levent) -> void
+override System.Windows.Forms.Form.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.Form.OnResize(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnStyleChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnTextChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnVisibleChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.Text.get -> string!
+override System.Windows.Forms.Form.Text.set -> void
+override System.Windows.Forms.Form.ToString() -> string!
 override System.Windows.Forms.GroupBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.GroupBox.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.GroupBox.OnFontChanged(System.EventArgs! e) -> void
@@ -513,28 +513,28 @@ override System.Windows.Forms.ListBindingConverter.CanConvertTo(System.Component
 override System.Windows.Forms.ListBindingConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
 override System.Windows.Forms.ListBindingConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext? context, System.Collections.IDictionary! propertyValues) -> object!
 override System.Windows.Forms.ListBindingConverter.GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
-~override System.Windows.Forms.ListBox.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.ListBox.BackgroundImage.set -> void
-~override System.Windows.Forms.ListBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ListBox.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.ListBox.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.ListBox.Font.set -> void
-~override System.Windows.Forms.ListBox.OnChangeUICues(System.Windows.Forms.UICuesEventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnDataSourceChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnDisplayMemberChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnGotFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnParentChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnResize(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnSelectedIndexChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.OnSelectedValueChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ListBox.SetItemCore(int index, object value) -> void
-~override System.Windows.Forms.ListBox.SetItemsCore(System.Collections.IList value) -> void
-~override System.Windows.Forms.ListBox.Text.get -> string
-~override System.Windows.Forms.ListBox.Text.set -> void
-~override System.Windows.Forms.ListBox.ToString() -> string
+override System.Windows.Forms.ListBox.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.ListBox.BackgroundImage.set -> void
+override System.Windows.Forms.ListBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ListBox.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.ListBox.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.ListBox.Font.set -> void
+override System.Windows.Forms.ListBox.OnChangeUICues(System.Windows.Forms.UICuesEventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnDataSourceChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnDisplayMemberChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnParentChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnResize(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnSelectedIndexChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.OnSelectedValueChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ListBox.SetItemCore(int index, object! value) -> void
+override System.Windows.Forms.ListBox.SetItemsCore(System.Collections.IList! value) -> void
+override System.Windows.Forms.ListBox.Text.get -> string?
+override System.Windows.Forms.ListBox.Text.set -> void
+override System.Windows.Forms.ListBox.ToString() -> string!
 override System.Windows.Forms.ListControl.OnBindingContextChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ListView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ListView.CreateParams.get -> System.Windows.Forms.CreateParams!
@@ -552,7 +552,7 @@ override System.Windows.Forms.ListView.OnSystemColorsChanged(System.EventArgs! e
 override System.Windows.Forms.ListView.Text.get -> string!
 override System.Windows.Forms.ListView.Text.set -> void
 override System.Windows.Forms.ListView.ToString() -> string!
-~override System.Windows.Forms.ListViewItem.ListViewSubItem.ToString() -> string
+override System.Windows.Forms.ListViewItem.ListViewSubItem.ToString() -> string!
 ~override System.Windows.Forms.ListViewItem.ToString() -> string
 ~override System.Windows.Forms.ListViewItemConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
 ~override System.Windows.Forms.ListViewItemConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
@@ -670,11 +670,11 @@ override System.Windows.Forms.ProgressBar.ToString() -> string!
 ~override System.Windows.Forms.PropertyGrid.Site.set -> void
 ~override System.Windows.Forms.PropertyGrid.Text.get -> string
 ~override System.Windows.Forms.PropertyGrid.Text.set -> void
-~override System.Windows.Forms.PropertyGridInternal.PropertiesTab.GetDefaultProperty(object obj) -> System.ComponentModel.PropertyDescriptor
-~override System.Windows.Forms.PropertyGridInternal.PropertiesTab.GetProperties(object component, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
-~override System.Windows.Forms.PropertyGridInternal.PropertiesTab.GetProperties(System.ComponentModel.ITypeDescriptorContext context, object component, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
-~override System.Windows.Forms.PropertyGridInternal.PropertiesTab.HelpKeyword.get -> string
-~override System.Windows.Forms.PropertyGridInternal.PropertiesTab.TabName.get -> string
+override System.Windows.Forms.PropertyGridInternal.PropertiesTab.GetDefaultProperty(object! obj) -> System.ComponentModel.PropertyDescriptor?
+override System.Windows.Forms.PropertyGridInternal.PropertiesTab.GetProperties(object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection?
+override System.Windows.Forms.PropertyGridInternal.PropertiesTab.GetProperties(System.ComponentModel.ITypeDescriptorContext? context, object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection?
+override System.Windows.Forms.PropertyGridInternal.PropertiesTab.HelpKeyword.get -> string!
+override System.Windows.Forms.PropertyGridInternal.PropertiesTab.TabName.get -> string!
 ~override System.Windows.Forms.PropertyManager.Current.get -> object
 ~override System.Windows.Forms.PropertyManager.GetListName(System.Collections.ArrayList listAccessors) -> string
 ~override System.Windows.Forms.PropertyManager.OnCurrentChanged(System.EventArgs ea) -> void
@@ -787,16 +787,16 @@ override System.Windows.Forms.TableLayoutSettings.LayoutEngine.get -> System.Win
 ~override System.Windows.Forms.TabPage.Text.get -> string
 ~override System.Windows.Forms.TabPage.Text.set -> void
 ~override System.Windows.Forms.TabPage.ToString() -> string
-~override System.Windows.Forms.TextBox.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.TextBox.OnBackColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.TextBox.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.TextBox.OnGotFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.TextBox.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.TextBox.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.TextBox.OnKeyUp(System.Windows.Forms.KeyEventArgs e) -> void
-~override System.Windows.Forms.TextBox.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.TextBox.Text.get -> string
-~override System.Windows.Forms.TextBox.Text.set -> void
+override System.Windows.Forms.TextBox.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.TextBox.OnBackColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.TextBox.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.TextBox.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.TextBox.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.TextBox.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.TextBox.OnKeyUp(System.Windows.Forms.KeyEventArgs! e) -> void
+override System.Windows.Forms.TextBox.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.TextBox.Text.get -> string!
+override System.Windows.Forms.TextBox.Text.set -> void
 ~override System.Windows.Forms.TextBoxBase.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.TextBoxBase.BackgroundImage.set -> void
 ~override System.Windows.Forms.TextBoxBase.Text.get -> string
@@ -1139,8 +1139,8 @@ static System.Windows.Forms.DataFormats.GetFormat(string! format) -> System.Wind
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextWidth(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxHeight, System.Windows.Forms.TextFormatFlags flags) -> int
-~static System.Windows.Forms.Form.ActiveForm.get -> System.Windows.Forms.Form
-~static System.Windows.Forms.Form.GetAutoScaleSize(System.Drawing.Font font) -> System.Drawing.SizeF
+static System.Windows.Forms.Form.ActiveForm.get -> System.Windows.Forms.Form?
+static System.Windows.Forms.Form.GetAutoScaleSize(System.Drawing.Font! font) -> System.Drawing.SizeF
 ~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string groupBoxText, System.Drawing.Font font, System.Drawing.Color textColor, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
 ~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string groupBoxText, System.Drawing.Font font, System.Drawing.Color textColor, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
 ~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string groupBoxText, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
@@ -1285,7 +1285,7 @@ static System.Windows.Forms.Screen.PrimaryScreen.get -> System.Windows.Forms.Scr
 ~System.Windows.Forms.AxHost.AxHost(string clsid, int flags) -> void
 ~System.Windows.Forms.AxHost.ClsidAttribute.ClsidAttribute(string clsid) -> void
 ~System.Windows.Forms.AxHost.ClsidAttribute.Value.get -> string
-~System.Windows.Forms.AxHost.ConnectionPointCookie.ConnectionPointCookie(object source, object sink, System.Type eventInterface) -> void
+System.Windows.Forms.AxHost.ConnectionPointCookie.ConnectionPointCookie(object! source, object! sink, System.Type! eventInterface) -> void
 ~System.Windows.Forms.AxHost.ContainingControl.get -> System.Windows.Forms.ContainerControl
 ~System.Windows.Forms.AxHost.ContainingControl.set -> void
 ~System.Windows.Forms.AxHost.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
@@ -1374,24 +1374,24 @@ System.Windows.Forms.ButtonBase.ImageList.get -> System.Windows.Forms.ImageList?
 System.Windows.Forms.ButtonBase.ImageList.set -> void
 ~System.Windows.Forms.CheckedListBox.CheckedIndexCollection.CopyTo(System.Array dest, int index) -> void
 ~System.Windows.Forms.CheckedListBox.CheckedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.CheckedListBox.CheckedIndices.get -> System.Windows.Forms.CheckedListBox.CheckedIndexCollection
+System.Windows.Forms.CheckedListBox.CheckedIndices.get -> System.Windows.Forms.CheckedListBox.CheckedIndexCollection!
 ~System.Windows.Forms.CheckedListBox.CheckedItemCollection.Contains(object item) -> bool
 ~System.Windows.Forms.CheckedListBox.CheckedItemCollection.CopyTo(System.Array dest, int index) -> void
 ~System.Windows.Forms.CheckedListBox.CheckedItemCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.CheckedListBox.CheckedItemCollection.IndexOf(object item) -> int
 ~System.Windows.Forms.CheckedListBox.CheckedItemCollection.this[int index].get -> object
 ~System.Windows.Forms.CheckedListBox.CheckedItemCollection.this[int index].set -> void
-~System.Windows.Forms.CheckedListBox.CheckedItems.get -> System.Windows.Forms.CheckedListBox.CheckedItemCollection
-~System.Windows.Forms.CheckedListBox.DataSource.get -> object
-~System.Windows.Forms.CheckedListBox.DataSource.set -> void
-~System.Windows.Forms.CheckedListBox.DisplayMember.get -> string
-~System.Windows.Forms.CheckedListBox.DisplayMember.set -> void
-~System.Windows.Forms.CheckedListBox.Items.get -> System.Windows.Forms.CheckedListBox.ObjectCollection
+System.Windows.Forms.CheckedListBox.CheckedItems.get -> System.Windows.Forms.CheckedListBox.CheckedItemCollection!
+System.Windows.Forms.CheckedListBox.DataSource.get -> object?
+System.Windows.Forms.CheckedListBox.DataSource.set -> void
+System.Windows.Forms.CheckedListBox.DisplayMember.get -> string!
+System.Windows.Forms.CheckedListBox.DisplayMember.set -> void
+System.Windows.Forms.CheckedListBox.Items.get -> System.Windows.Forms.CheckedListBox.ObjectCollection!
 ~System.Windows.Forms.CheckedListBox.ObjectCollection.Add(object item, bool isChecked) -> int
 ~System.Windows.Forms.CheckedListBox.ObjectCollection.Add(object item, System.Windows.Forms.CheckState check) -> int
 ~System.Windows.Forms.CheckedListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.CheckedListBox owner) -> void
-~System.Windows.Forms.CheckedListBox.ValueMember.get -> string
-~System.Windows.Forms.CheckedListBox.ValueMember.set -> void
+System.Windows.Forms.CheckedListBox.ValueMember.get -> string!
+System.Windows.Forms.CheckedListBox.ValueMember.set -> void
 System.Windows.Forms.ColorDialog.CustomColors.get -> int[]!
 System.Windows.Forms.ColorDialog.CustomColors.set -> void
 ~System.Windows.Forms.ComboBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection
@@ -1770,27 +1770,27 @@ System.Windows.Forms.FolderBrowserDialog.SelectedPath.get -> string!
 System.Windows.Forms.FolderBrowserDialog.SelectedPath.set -> void
 ~System.Windows.Forms.FontDialog.Font.get -> System.Drawing.Font
 ~System.Windows.Forms.FontDialog.Font.set -> void
-~System.Windows.Forms.Form.AcceptButton.get -> System.Windows.Forms.IButtonControl
-~System.Windows.Forms.Form.AcceptButton.set -> void
-~System.Windows.Forms.Form.ActivateMdiChild(System.Windows.Forms.Form form) -> void
-~System.Windows.Forms.Form.ActiveMdiChild.get -> System.Windows.Forms.Form
-~System.Windows.Forms.Form.AddOwnedForm(System.Windows.Forms.Form ownedForm) -> void
-~System.Windows.Forms.Form.CancelButton.get -> System.Windows.Forms.IButtonControl
-~System.Windows.Forms.Form.CancelButton.set -> void
+System.Windows.Forms.Form.AcceptButton.get -> System.Windows.Forms.IButtonControl?
+System.Windows.Forms.Form.AcceptButton.set -> void
+System.Windows.Forms.Form.ActivateMdiChild(System.Windows.Forms.Form? form) -> void
+System.Windows.Forms.Form.ActiveMdiChild.get -> System.Windows.Forms.Form?
+System.Windows.Forms.Form.AddOwnedForm(System.Windows.Forms.Form? ownedForm) -> void
+System.Windows.Forms.Form.CancelButton.get -> System.Windows.Forms.IButtonControl?
+System.Windows.Forms.Form.CancelButton.set -> void
 System.Windows.Forms.Form.ControlCollection.ControlCollection(System.Windows.Forms.Form! owner) -> void
-~System.Windows.Forms.Form.Icon.get -> System.Drawing.Icon
-~System.Windows.Forms.Form.Icon.set -> void
-~System.Windows.Forms.Form.MainMenuStrip.get -> System.Windows.Forms.MenuStrip
-~System.Windows.Forms.Form.MainMenuStrip.set -> void
-~System.Windows.Forms.Form.MdiChildren.get -> System.Windows.Forms.Form[]
-~System.Windows.Forms.Form.MdiParent.get -> System.Windows.Forms.Form
-~System.Windows.Forms.Form.MdiParent.set -> void
-~System.Windows.Forms.Form.OwnedForms.get -> System.Windows.Forms.Form[]
-~System.Windows.Forms.Form.Owner.get -> System.Windows.Forms.Form
-~System.Windows.Forms.Form.Owner.set -> void
-~System.Windows.Forms.Form.RemoveOwnedForm(System.Windows.Forms.Form ownedForm) -> void
-~System.Windows.Forms.Form.Show(System.Windows.Forms.IWin32Window owner) -> void
-~System.Windows.Forms.Form.ShowDialog(System.Windows.Forms.IWin32Window owner) -> System.Windows.Forms.DialogResult
+System.Windows.Forms.Form.Icon.get -> System.Drawing.Icon?
+System.Windows.Forms.Form.Icon.set -> void
+System.Windows.Forms.Form.MainMenuStrip.get -> System.Windows.Forms.MenuStrip?
+System.Windows.Forms.Form.MainMenuStrip.set -> void
+System.Windows.Forms.Form.MdiChildren.get -> System.Windows.Forms.Form![]!
+System.Windows.Forms.Form.MdiParent.get -> System.Windows.Forms.Form?
+System.Windows.Forms.Form.MdiParent.set -> void
+System.Windows.Forms.Form.OwnedForms.get -> System.Windows.Forms.Form![]!
+System.Windows.Forms.Form.Owner.get -> System.Windows.Forms.Form?
+System.Windows.Forms.Form.Owner.set -> void
+System.Windows.Forms.Form.RemoveOwnedForm(System.Windows.Forms.Form? ownedForm) -> void
+System.Windows.Forms.Form.Show(System.Windows.Forms.IWin32Window? owner) -> void
+System.Windows.Forms.Form.ShowDialog(System.Windows.Forms.IWin32Window? owner) -> System.Windows.Forms.DialogResult
 ~System.Windows.Forms.HelpProvider.Tag.get -> object
 ~System.Windows.Forms.HelpProvider.Tag.set -> void
 ~System.Windows.Forms.HtmlDocument.ActiveElement.get -> System.Windows.Forms.HtmlElement
@@ -1992,19 +1992,19 @@ System.Windows.Forms.Label.ImageList.set -> void
 ~System.Windows.Forms.LinkLabel.OverrideCursor.get -> System.Windows.Forms.Cursor
 ~System.Windows.Forms.LinkLabel.OverrideCursor.set -> void
 ~System.Windows.Forms.LinkLabel.PointInLink(int x, int y) -> System.Windows.Forms.LinkLabel.Link
-~System.Windows.Forms.ListBox.CustomTabOffsets.get -> System.Windows.Forms.ListBox.IntegerCollection
-~System.Windows.Forms.ListBox.FindString(string s) -> int
-~System.Windows.Forms.ListBox.FindString(string s, int startIndex) -> int
-~System.Windows.Forms.ListBox.FindStringExact(string s) -> int
-~System.Windows.Forms.ListBox.FindStringExact(string s, int startIndex) -> int
-~System.Windows.Forms.ListBox.Items.get -> System.Windows.Forms.ListBox.ObjectCollection
+System.Windows.Forms.ListBox.CustomTabOffsets.get -> System.Windows.Forms.ListBox.IntegerCollection!
+System.Windows.Forms.ListBox.FindString(string! s) -> int
+System.Windows.Forms.ListBox.FindString(string! s, int startIndex) -> int
+System.Windows.Forms.ListBox.FindStringExact(string! s) -> int
+System.Windows.Forms.ListBox.FindStringExact(string! s, int startIndex) -> int
+System.Windows.Forms.ListBox.Items.get -> System.Windows.Forms.ListBox.ObjectCollection!
 System.Windows.Forms.ListBox.SelectedIndexCollection.CopyTo(System.Array! destination, int index) -> void
 System.Windows.Forms.ListBox.SelectedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator!
 System.Windows.Forms.ListBox.SelectedIndexCollection.SelectedIndexCollection(System.Windows.Forms.ListBox! owner) -> void
-~System.Windows.Forms.ListBox.SelectedIndices.get -> System.Windows.Forms.ListBox.SelectedIndexCollection
-~System.Windows.Forms.ListBox.SelectedItem.get -> object
-~System.Windows.Forms.ListBox.SelectedItem.set -> void
-~System.Windows.Forms.ListBox.SelectedItems.get -> System.Windows.Forms.ListBox.SelectedObjectCollection
+System.Windows.Forms.ListBox.SelectedIndices.get -> System.Windows.Forms.ListBox.SelectedIndexCollection!
+System.Windows.Forms.ListBox.SelectedItem.get -> object?
+System.Windows.Forms.ListBox.SelectedItem.set -> void
+System.Windows.Forms.ListBox.SelectedItems.get -> System.Windows.Forms.ListBox.SelectedObjectCollection!
 System.Windows.Forms.ListBox.SelectedObjectCollection.Add(object! value) -> void
 System.Windows.Forms.ListBox.SelectedObjectCollection.Contains(object? selectedObject) -> bool
 System.Windows.Forms.ListBox.SelectedObjectCollection.CopyTo(System.Array! destination, int index) -> void
@@ -2150,30 +2150,30 @@ System.Windows.Forms.ListView.TopItem.set -> void
 ~System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem[] subItems, int imageIndex, System.Windows.Forms.ListViewGroup group) -> void
 ~System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem[] subItems, string imageKey) -> void
 ~System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem[] subItems, string imageKey, System.Windows.Forms.ListViewGroup group) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItem.Font.get -> System.Drawing.Font
-~System.Windows.Forms.ListViewItem.ListViewSubItem.Font.set -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItem.ListViewSubItem(System.Windows.Forms.ListViewItem owner, string text) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItem.ListViewSubItem(System.Windows.Forms.ListViewItem owner, string text, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font font) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItem.Name.get -> string
-~System.Windows.Forms.ListViewItem.ListViewSubItem.Name.set -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItem.Tag.get -> object
-~System.Windows.Forms.ListViewItem.ListViewSubItem.Tag.set -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItem.Text.get -> string
-~System.Windows.Forms.ListViewItem.ListViewSubItem.Text.set -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(string text) -> System.Windows.Forms.ListViewItem.ListViewSubItem
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(string text, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font font) -> System.Windows.Forms.ListViewItem.ListViewSubItem
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(System.Windows.Forms.ListViewItem.ListViewSubItem item) -> System.Windows.Forms.ListViewItem.ListViewSubItem
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(string[] items) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(string[] items, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font font) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(System.Windows.Forms.ListViewItem.ListViewSubItem[] items) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Contains(System.Windows.Forms.ListViewItem.ListViewSubItem subItem) -> bool
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.IndexOf(System.Windows.Forms.ListViewItem.ListViewSubItem subItem) -> int
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Insert(int index, System.Windows.Forms.ListViewItem.ListViewSubItem item) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.ListViewSubItemCollection(System.Windows.Forms.ListViewItem owner) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Remove(System.Windows.Forms.ListViewItem.ListViewSubItem item) -> void
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem.ListViewSubItem
-~System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[int index].set -> void
+System.Windows.Forms.ListViewItem.ListViewSubItem.Font.get -> System.Drawing.Font!
+System.Windows.Forms.ListViewItem.ListViewSubItem.Font.set -> void
+System.Windows.Forms.ListViewItem.ListViewSubItem.ListViewSubItem(System.Windows.Forms.ListViewItem! owner, string? text) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItem.ListViewSubItem(System.Windows.Forms.ListViewItem! owner, string? text, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font! font) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItem.Name.get -> string!
+System.Windows.Forms.ListViewItem.ListViewSubItem.Name.set -> void
+System.Windows.Forms.ListViewItem.ListViewSubItem.Tag.get -> object?
+System.Windows.Forms.ListViewItem.ListViewSubItem.Tag.set -> void
+System.Windows.Forms.ListViewItem.ListViewSubItem.Text.get -> string!
+System.Windows.Forms.ListViewItem.ListViewSubItem.Text.set -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(string? text) -> System.Windows.Forms.ListViewItem.ListViewSubItem!
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(string? text, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font! font) -> System.Windows.Forms.ListViewItem.ListViewSubItem!
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(System.Windows.Forms.ListViewItem.ListViewSubItem! item) -> System.Windows.Forms.ListViewItem.ListViewSubItem!
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(string![]! items) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(string![]! items, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font! font) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(System.Windows.Forms.ListViewItem.ListViewSubItem![]! items) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Contains(System.Windows.Forms.ListViewItem.ListViewSubItem? subItem) -> bool
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.IndexOf(System.Windows.Forms.ListViewItem.ListViewSubItem? subItem) -> int
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Insert(int index, System.Windows.Forms.ListViewItem.ListViewSubItem! item) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.ListViewSubItemCollection(System.Windows.Forms.ListViewItem! owner) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Remove(System.Windows.Forms.ListViewItem.ListViewSubItem? item) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem.ListViewSubItem!
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[int index].set -> void
 ~System.Windows.Forms.ListViewItem.Name.get -> string
 ~System.Windows.Forms.ListViewItem.Name.set -> void
 ~System.Windows.Forms.ListViewItem.SubItems.get -> System.Windows.Forms.ListViewItem.ListViewSubItemCollection
@@ -2419,9 +2419,9 @@ System.Windows.Forms.TableLayoutSettings.SetRowSpan(object! control, int value) 
 ~System.Windows.Forms.TabPage.TabPage(string text) -> void
 ~System.Windows.Forms.TabPage.ToolTipText.get -> string
 ~System.Windows.Forms.TabPage.ToolTipText.set -> void
-~System.Windows.Forms.TextBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection
-~System.Windows.Forms.TextBox.AutoCompleteCustomSource.set -> void
-~System.Windows.Forms.TextBox.Paste(string text) -> void
+System.Windows.Forms.TextBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection!
+System.Windows.Forms.TextBox.AutoCompleteCustomSource.set -> void
+System.Windows.Forms.TextBox.Paste(string? text) -> void
 ~System.Windows.Forms.TextBoxBase.AppendText(string text) -> void
 ~System.Windows.Forms.TextBoxBase.Lines.get -> string[]
 ~System.Windows.Forms.TextBoxBase.Lines.set -> void
@@ -2756,10 +2756,10 @@ System.Windows.Forms.ToolStripDropDownItemAccessibleObject.ToolStripDropDownItem
 ~virtual System.Windows.Forms.BindingSource.SyncRoot.get -> object
 ~virtual System.Windows.Forms.BindingSource.this[int index].get -> object
 ~virtual System.Windows.Forms.BindingSource.this[int index].set -> void
-~virtual System.Windows.Forms.CheckBox.OnAppearanceChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.CheckBox.OnCheckedChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.CheckBox.OnCheckStateChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.CheckedListBox.OnItemCheck(System.Windows.Forms.ItemCheckEventArgs ice) -> void
+virtual System.Windows.Forms.CheckBox.OnAppearanceChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.CheckBox.OnCheckedChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.CheckBox.OnCheckStateChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.CheckedListBox.OnItemCheck(System.Windows.Forms.ItemCheckEventArgs! ice) -> void
 ~virtual System.Windows.Forms.ComboBox.AddItemsCore(object[] value) -> void
 ~virtual System.Windows.Forms.ComboBox.ObjectCollection.this[int index].get -> object
 ~virtual System.Windows.Forms.ComboBox.ObjectCollection.this[int index].set -> void
@@ -3147,27 +3147,27 @@ virtual System.Windows.Forms.DataObject.SetText(string! textData, System.Windows
 ~virtual System.Windows.Forms.Design.WindowsFormsComponentEditor.GetComponentEditorPages() -> System.Type[]
 ~virtual System.Windows.Forms.ErrorProvider.OnRightToLeftChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.FontDialog.OnApply(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnActivated(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnClosed(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnClosing(System.ComponentModel.CancelEventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnDeactivate(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnDpiChanged(System.Windows.Forms.DpiChangedEventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnFormClosed(System.Windows.Forms.FormClosedEventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnFormClosing(System.Windows.Forms.FormClosingEventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnHelpButtonClicked(System.ComponentModel.CancelEventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnInputLanguageChanged(System.Windows.Forms.InputLanguageChangedEventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnInputLanguageChanging(System.Windows.Forms.InputLanguageChangingEventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnLoad(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnMaximizedBoundsChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnMaximumSizeChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnMdiChildActivate(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnMenuComplete(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnMenuStart(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnMinimumSizeChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnResizeBegin(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnResizeEnd(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Form.OnShown(System.EventArgs e) -> void
+virtual System.Windows.Forms.Form.OnActivated(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnClosed(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnClosing(System.ComponentModel.CancelEventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnDeactivate(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnDpiChanged(System.Windows.Forms.DpiChangedEventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnFormClosed(System.Windows.Forms.FormClosedEventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnFormClosing(System.Windows.Forms.FormClosingEventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnHelpButtonClicked(System.ComponentModel.CancelEventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnInputLanguageChanged(System.Windows.Forms.InputLanguageChangedEventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnInputLanguageChanging(System.Windows.Forms.InputLanguageChangingEventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnLoad(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnMaximizedBoundsChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnMaximumSizeChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnMdiChildActivate(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnMenuComplete(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnMenuStart(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnMinimumSizeChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnResizeBegin(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnResizeEnd(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnShown(System.EventArgs! e) -> void
 virtual System.Windows.Forms.FormCollection.this[int index].get -> System.Windows.Forms.Form?
 virtual System.Windows.Forms.FormCollection.this[string? name].get -> System.Windows.Forms.Form?
 ~virtual System.Windows.Forms.HelpProvider.CanExtend(object target) -> bool
@@ -3193,10 +3193,10 @@ virtual System.Windows.Forms.LayoutSettings.LayoutEngine.get -> System.Windows.F
 ~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[int index].set -> void
 ~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[string key].get -> System.Windows.Forms.LinkLabel.Link
 ~virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLabelLinkClickedEventArgs e) -> void
-~virtual System.Windows.Forms.ListBox.AddItemsCore(object[] value) -> void
-~virtual System.Windows.Forms.ListBox.CreateItemCollection() -> System.Windows.Forms.ListBox.ObjectCollection
-~virtual System.Windows.Forms.ListBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs e) -> void
-~virtual System.Windows.Forms.ListBox.OnMeasureItem(System.Windows.Forms.MeasureItemEventArgs e) -> void
+virtual System.Windows.Forms.ListBox.AddItemsCore(object![]! value) -> void
+virtual System.Windows.Forms.ListBox.CreateItemCollection() -> System.Windows.Forms.ListBox.ObjectCollection!
+virtual System.Windows.Forms.ListBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs! e) -> void
+virtual System.Windows.Forms.ListBox.OnMeasureItem(System.Windows.Forms.MeasureItemEventArgs! e) -> void
 virtual System.Windows.Forms.ListControl.OnDataSourceChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ListControl.OnDisplayMemberChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ListControl.OnFormat(System.Windows.Forms.ListControlConvertEventArgs! e) -> void
@@ -3268,10 +3268,10 @@ virtual System.Windows.Forms.ListView.OnVirtualItemsSelectionRangeChanged(System
 ~virtual System.Windows.Forms.ListView.SelectedListViewItemCollection.this[string key].get -> System.Windows.Forms.ListViewItem
 ~virtual System.Windows.Forms.ListViewItem.Clone() -> object
 ~virtual System.Windows.Forms.ListViewItem.Deserialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
-~virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.ContainsKey(string key) -> bool
-~virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.IndexOfKey(string key) -> int
-~virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.RemoveByKey(string key) -> void
-~virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[string key].get -> System.Windows.Forms.ListViewItem.ListViewSubItem
+virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.RemoveByKey(string? key) -> void
+virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[string! key].get -> System.Windows.Forms.ListViewItem.ListViewSubItem?
 ~virtual System.Windows.Forms.ListViewItem.Serialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
 ~virtual System.Windows.Forms.MaskedTextBox.OnIsOverwriteModeChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.MaskedTextBox.OnMaskChanged(System.EventArgs e) -> void
@@ -3329,9 +3329,9 @@ virtual System.Windows.Forms.ScrollableControl.ScrollToControl(System.Windows.Fo
 ~virtual System.Windows.Forms.TabControl.TabPageCollection.this[string key].get -> System.Windows.Forms.TabPage
 ~virtual System.Windows.Forms.TableLayoutControlCollection.Add(System.Windows.Forms.Control control, int column, int row) -> void
 ~virtual System.Windows.Forms.TableLayoutPanel.OnCellPaint(System.Windows.Forms.TableLayoutCellPaintEventArgs e) -> void
-~virtual System.Windows.Forms.TextBox.OnTextAlignChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.TextBox.PlaceholderText.get -> string
-~virtual System.Windows.Forms.TextBox.PlaceholderText.set -> void
+virtual System.Windows.Forms.TextBox.OnTextAlignChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.TextBox.PlaceholderText.get -> string!
+virtual System.Windows.Forms.TextBox.PlaceholderText.set -> void
 ~virtual System.Windows.Forms.TextBoxBase.SelectedText.get -> string
 ~virtual System.Windows.Forms.TextBoxBase.SelectedText.set -> void
 ~virtual System.Windows.Forms.ToolStrip.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
@@ -3527,7 +3527,7 @@ abstract System.Windows.Forms.CommonDialog.Reset() -> void
 abstract System.Windows.Forms.CommonDialog.RunDialog(System.IntPtr hwndOwner) -> bool
 abstract System.Windows.Forms.Design.ComponentEditorPage.LoadComponent() -> void
 abstract System.Windows.Forms.Design.ComponentEditorPage.SaveComponent() -> void
-abstract System.Windows.Forms.Design.PropertyTab.GetProperties(object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection!
+abstract System.Windows.Forms.Design.PropertyTab.GetProperties(object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection?
 abstract System.Windows.Forms.Design.PropertyTab.TabName.get -> string?
 abstract System.Windows.Forms.FeatureSupport.GetVersionPresent(object! feature) -> System.Version?
 abstract System.Windows.Forms.GridItem.GridItems.get -> System.Windows.Forms.GridItemCollection!
@@ -6154,7 +6154,7 @@ System.Windows.Forms.CharacterCasing.Upper = 1 -> System.Windows.Forms.Character
 System.Windows.Forms.CheckBox
 System.Windows.Forms.CheckBox.Appearance.get -> System.Windows.Forms.Appearance
 System.Windows.Forms.CheckBox.Appearance.set -> void
-System.Windows.Forms.CheckBox.AppearanceChanged -> System.EventHandler
+System.Windows.Forms.CheckBox.AppearanceChanged -> System.EventHandler?
 System.Windows.Forms.CheckBox.AutoCheck.get -> bool
 System.Windows.Forms.CheckBox.AutoCheck.set -> void
 System.Windows.Forms.CheckBox.CheckAlign.get -> System.Drawing.ContentAlignment
@@ -6164,12 +6164,12 @@ System.Windows.Forms.CheckBox.CheckBoxAccessibleObject
 System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(System.Windows.Forms.Control! owner) -> void
 System.Windows.Forms.CheckBox.Checked.get -> bool
 System.Windows.Forms.CheckBox.Checked.set -> void
-System.Windows.Forms.CheckBox.CheckedChanged -> System.EventHandler
+System.Windows.Forms.CheckBox.CheckedChanged -> System.EventHandler?
 System.Windows.Forms.CheckBox.CheckState.get -> System.Windows.Forms.CheckState
 System.Windows.Forms.CheckBox.CheckState.set -> void
-System.Windows.Forms.CheckBox.CheckStateChanged -> System.EventHandler
-System.Windows.Forms.CheckBox.DoubleClick -> System.EventHandler
-System.Windows.Forms.CheckBox.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.CheckBox.CheckStateChanged -> System.EventHandler?
+System.Windows.Forms.CheckBox.DoubleClick -> System.EventHandler?
+System.Windows.Forms.CheckBox.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.CheckBox.ThreeState.get -> bool
 System.Windows.Forms.CheckBox.ThreeState.set -> void
 System.Windows.Forms.CheckBoxRenderer
@@ -6186,15 +6186,15 @@ System.Windows.Forms.CheckedListBox.CheckedItemCollection.IsReadOnly.get -> bool
 System.Windows.Forms.CheckedListBox.CheckedListBox() -> void
 System.Windows.Forms.CheckedListBox.CheckOnClick.get -> bool
 System.Windows.Forms.CheckedListBox.CheckOnClick.set -> void
-System.Windows.Forms.CheckedListBox.Click -> System.EventHandler
-System.Windows.Forms.CheckedListBox.DataSourceChanged -> System.EventHandler
-System.Windows.Forms.CheckedListBox.DisplayMemberChanged -> System.EventHandler
-System.Windows.Forms.CheckedListBox.DrawItem -> System.Windows.Forms.DrawItemEventHandler
+System.Windows.Forms.CheckedListBox.Click -> System.EventHandler?
+System.Windows.Forms.CheckedListBox.DataSourceChanged -> System.EventHandler?
+System.Windows.Forms.CheckedListBox.DisplayMemberChanged -> System.EventHandler?
+System.Windows.Forms.CheckedListBox.DrawItem -> System.Windows.Forms.DrawItemEventHandler?
 System.Windows.Forms.CheckedListBox.GetItemChecked(int index) -> bool
 System.Windows.Forms.CheckedListBox.GetItemCheckState(int index) -> System.Windows.Forms.CheckState
-System.Windows.Forms.CheckedListBox.ItemCheck -> System.Windows.Forms.ItemCheckEventHandler
-System.Windows.Forms.CheckedListBox.MeasureItem -> System.Windows.Forms.MeasureItemEventHandler
-System.Windows.Forms.CheckedListBox.MouseClick -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.CheckedListBox.ItemCheck -> System.Windows.Forms.ItemCheckEventHandler?
+System.Windows.Forms.CheckedListBox.MeasureItem -> System.Windows.Forms.MeasureItemEventHandler?
+System.Windows.Forms.CheckedListBox.MouseClick -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.CheckedListBox.ObjectCollection
 System.Windows.Forms.CheckedListBox.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.CheckedListBox.Padding.set -> void
@@ -6204,7 +6204,7 @@ System.Windows.Forms.CheckedListBox.ThreeDCheckBoxes.get -> bool
 System.Windows.Forms.CheckedListBox.ThreeDCheckBoxes.set -> void
 System.Windows.Forms.CheckedListBox.UseCompatibleTextRendering.get -> bool
 System.Windows.Forms.CheckedListBox.UseCompatibleTextRendering.set -> void
-System.Windows.Forms.CheckedListBox.ValueMemberChanged -> System.EventHandler
+System.Windows.Forms.CheckedListBox.ValueMemberChanged -> System.EventHandler?
 System.Windows.Forms.CheckState
 System.Windows.Forms.CheckState.Checked = 1 -> System.Windows.Forms.CheckState
 System.Windows.Forms.CheckState.Indeterminate = 2 -> System.Windows.Forms.CheckState
@@ -8043,44 +8043,44 @@ System.Windows.Forms.FontDialog.ShowHelp.get -> bool
 System.Windows.Forms.FontDialog.ShowHelp.set -> void
 System.Windows.Forms.Form
 System.Windows.Forms.Form.Activate() -> void
-System.Windows.Forms.Form.Activated -> System.EventHandler
+System.Windows.Forms.Form.Activated -> System.EventHandler?
 System.Windows.Forms.Form.AllowTransparency.get -> bool
 System.Windows.Forms.Form.AllowTransparency.set -> void
 System.Windows.Forms.Form.ApplyAutoScaling() -> void
 System.Windows.Forms.Form.AutoScale.get -> bool
 System.Windows.Forms.Form.AutoScale.set -> void
-System.Windows.Forms.Form.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.Form.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.Form.AutoSizeMode.get -> System.Windows.Forms.AutoSizeMode
 System.Windows.Forms.Form.AutoSizeMode.set -> void
-System.Windows.Forms.Form.AutoValidateChanged -> System.EventHandler
+System.Windows.Forms.Form.AutoValidateChanged -> System.EventHandler?
 System.Windows.Forms.Form.CenterToParent() -> void
 System.Windows.Forms.Form.CenterToScreen() -> void
 System.Windows.Forms.Form.ClientSize.get -> System.Drawing.Size
 System.Windows.Forms.Form.ClientSize.set -> void
 System.Windows.Forms.Form.Close() -> void
-System.Windows.Forms.Form.Closed -> System.EventHandler
-System.Windows.Forms.Form.Closing -> System.ComponentModel.CancelEventHandler
+System.Windows.Forms.Form.Closed -> System.EventHandler?
+System.Windows.Forms.Form.Closing -> System.ComponentModel.CancelEventHandler?
 System.Windows.Forms.Form.ControlBox.get -> bool
 System.Windows.Forms.Form.ControlBox.set -> void
 System.Windows.Forms.Form.ControlCollection
-System.Windows.Forms.Form.Deactivate -> System.EventHandler
+System.Windows.Forms.Form.Deactivate -> System.EventHandler?
 System.Windows.Forms.Form.DesktopBounds.get -> System.Drawing.Rectangle
 System.Windows.Forms.Form.DesktopBounds.set -> void
 System.Windows.Forms.Form.DesktopLocation.get -> System.Drawing.Point
 System.Windows.Forms.Form.DesktopLocation.set -> void
 System.Windows.Forms.Form.DialogResult.get -> System.Windows.Forms.DialogResult
 System.Windows.Forms.Form.DialogResult.set -> void
-System.Windows.Forms.Form.DpiChanged -> System.Windows.Forms.DpiChangedEventHandler
+System.Windows.Forms.Form.DpiChanged -> System.Windows.Forms.DpiChangedEventHandler?
 System.Windows.Forms.Form.Form() -> void
 System.Windows.Forms.Form.FormBorderStyle.get -> System.Windows.Forms.FormBorderStyle
 System.Windows.Forms.Form.FormBorderStyle.set -> void
-System.Windows.Forms.Form.FormClosed -> System.Windows.Forms.FormClosedEventHandler
-System.Windows.Forms.Form.FormClosing -> System.Windows.Forms.FormClosingEventHandler
+System.Windows.Forms.Form.FormClosed -> System.Windows.Forms.FormClosedEventHandler?
+System.Windows.Forms.Form.FormClosing -> System.Windows.Forms.FormClosingEventHandler?
 System.Windows.Forms.Form.HelpButton.get -> bool
 System.Windows.Forms.Form.HelpButton.set -> void
-System.Windows.Forms.Form.HelpButtonClicked -> System.ComponentModel.CancelEventHandler
-System.Windows.Forms.Form.InputLanguageChanged -> System.Windows.Forms.InputLanguageChangedEventHandler
-System.Windows.Forms.Form.InputLanguageChanging -> System.Windows.Forms.InputLanguageChangingEventHandler
+System.Windows.Forms.Form.HelpButtonClicked -> System.ComponentModel.CancelEventHandler?
+System.Windows.Forms.Form.InputLanguageChanged -> System.Windows.Forms.InputLanguageChangedEventHandler?
+System.Windows.Forms.Form.InputLanguageChanging -> System.Windows.Forms.InputLanguageChangingEventHandler?
 System.Windows.Forms.Form.IsMdiChild.get -> bool
 System.Windows.Forms.Form.IsMdiContainer.get -> bool
 System.Windows.Forms.Form.IsMdiContainer.set -> void
@@ -8088,33 +8088,33 @@ System.Windows.Forms.Form.IsRestrictedWindow.get -> bool
 System.Windows.Forms.Form.KeyPreview.get -> bool
 System.Windows.Forms.Form.KeyPreview.set -> void
 System.Windows.Forms.Form.LayoutMdi(System.Windows.Forms.MdiLayout value) -> void
-System.Windows.Forms.Form.Load -> System.EventHandler
+System.Windows.Forms.Form.Load -> System.EventHandler?
 System.Windows.Forms.Form.Location.get -> System.Drawing.Point
 System.Windows.Forms.Form.Location.set -> void
 System.Windows.Forms.Form.Margin.get -> System.Windows.Forms.Padding
 System.Windows.Forms.Form.Margin.set -> void
-System.Windows.Forms.Form.MarginChanged -> System.EventHandler
+System.Windows.Forms.Form.MarginChanged -> System.EventHandler?
 System.Windows.Forms.Form.MaximizeBox.get -> bool
 System.Windows.Forms.Form.MaximizeBox.set -> void
 System.Windows.Forms.Form.MaximizedBounds.get -> System.Drawing.Rectangle
 System.Windows.Forms.Form.MaximizedBounds.set -> void
-System.Windows.Forms.Form.MaximizedBoundsChanged -> System.EventHandler
-System.Windows.Forms.Form.MaximumSizeChanged -> System.EventHandler
-System.Windows.Forms.Form.MdiChildActivate -> System.EventHandler
+System.Windows.Forms.Form.MaximizedBoundsChanged -> System.EventHandler?
+System.Windows.Forms.Form.MaximumSizeChanged -> System.EventHandler?
+System.Windows.Forms.Form.MdiChildActivate -> System.EventHandler?
 System.Windows.Forms.Form.MdiChildrenMinimizedAnchorBottom.get -> bool
 System.Windows.Forms.Form.MdiChildrenMinimizedAnchorBottom.set -> void
-System.Windows.Forms.Form.MenuComplete -> System.EventHandler
-System.Windows.Forms.Form.MenuStart -> System.EventHandler
+System.Windows.Forms.Form.MenuComplete -> System.EventHandler?
+System.Windows.Forms.Form.MenuStart -> System.EventHandler?
 System.Windows.Forms.Form.MinimizeBox.get -> bool
 System.Windows.Forms.Form.MinimizeBox.set -> void
-System.Windows.Forms.Form.MinimumSizeChanged -> System.EventHandler
+System.Windows.Forms.Form.MinimumSizeChanged -> System.EventHandler?
 System.Windows.Forms.Form.Modal.get -> bool
 System.Windows.Forms.Form.Opacity.get -> double
 System.Windows.Forms.Form.Opacity.set -> void
-System.Windows.Forms.Form.ResizeBegin -> System.EventHandler
-System.Windows.Forms.Form.ResizeEnd -> System.EventHandler
+System.Windows.Forms.Form.ResizeBegin -> System.EventHandler?
+System.Windows.Forms.Form.ResizeEnd -> System.EventHandler?
 System.Windows.Forms.Form.RestoreBounds.get -> System.Drawing.Rectangle
-System.Windows.Forms.Form.RightToLeftLayoutChanged -> System.EventHandler
+System.Windows.Forms.Form.RightToLeftLayoutChanged -> System.EventHandler?
 System.Windows.Forms.Form.SetDesktopBounds(int x, int y, int width, int height) -> void
 System.Windows.Forms.Form.SetDesktopLocation(int x, int y) -> void
 System.Windows.Forms.Form.ShowDialog() -> System.Windows.Forms.DialogResult
@@ -8122,7 +8122,7 @@ System.Windows.Forms.Form.ShowIcon.get -> bool
 System.Windows.Forms.Form.ShowIcon.set -> void
 System.Windows.Forms.Form.ShowInTaskbar.get -> bool
 System.Windows.Forms.Form.ShowInTaskbar.set -> void
-System.Windows.Forms.Form.Shown -> System.EventHandler
+System.Windows.Forms.Form.Shown -> System.EventHandler?
 System.Windows.Forms.Form.Size.get -> System.Drawing.Size
 System.Windows.Forms.Form.Size.set -> void
 System.Windows.Forms.Form.SizeGripStyle.get -> System.Windows.Forms.SizeGripStyle
@@ -8131,10 +8131,10 @@ System.Windows.Forms.Form.StartPosition.get -> System.Windows.Forms.FormStartPos
 System.Windows.Forms.Form.StartPosition.set -> void
 System.Windows.Forms.Form.TabIndex.get -> int
 System.Windows.Forms.Form.TabIndex.set -> void
-System.Windows.Forms.Form.TabIndexChanged -> System.EventHandler
+System.Windows.Forms.Form.TabIndexChanged -> System.EventHandler?
 System.Windows.Forms.Form.TabStop.get -> bool
 System.Windows.Forms.Form.TabStop.set -> void
-System.Windows.Forms.Form.TabStopChanged -> System.EventHandler
+System.Windows.Forms.Form.TabStopChanged -> System.EventHandler?
 System.Windows.Forms.Form.TopLevel.get -> bool
 System.Windows.Forms.Form.TopLevel.set -> void
 System.Windows.Forms.Form.TopMost.get -> bool
@@ -8863,16 +8863,16 @@ System.Windows.Forms.ListBindingConverter
 System.Windows.Forms.ListBindingConverter.ListBindingConverter() -> void
 System.Windows.Forms.ListBindingHelper
 System.Windows.Forms.ListBox
-System.Windows.Forms.ListBox.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.ListBox.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.ListBox.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.ListBox.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.ListBox.BeginUpdate() -> void
 System.Windows.Forms.ListBox.BorderStyle.get -> System.Windows.Forms.BorderStyle
 System.Windows.Forms.ListBox.BorderStyle.set -> void
 System.Windows.Forms.ListBox.ClearSelected() -> void
-System.Windows.Forms.ListBox.Click -> System.EventHandler
+System.Windows.Forms.ListBox.Click -> System.EventHandler?
 System.Windows.Forms.ListBox.ColumnWidth.get -> int
 System.Windows.Forms.ListBox.ColumnWidth.set -> void
-System.Windows.Forms.ListBox.DrawItem -> System.Windows.Forms.DrawItemEventHandler
+System.Windows.Forms.ListBox.DrawItem -> System.Windows.Forms.DrawItemEventHandler?
 System.Windows.Forms.ListBox.EndUpdate() -> void
 System.Windows.Forms.ListBox.GetItemHeight(int index) -> int
 System.Windows.Forms.ListBox.GetItemRectangle(int index) -> System.Drawing.Rectangle
@@ -8900,8 +8900,8 @@ System.Windows.Forms.ListBox.IntegerCollection.this[int index].set -> void
 System.Windows.Forms.ListBox.IntegralHeight.get -> bool
 System.Windows.Forms.ListBox.IntegralHeight.set -> void
 System.Windows.Forms.ListBox.ListBox() -> void
-System.Windows.Forms.ListBox.MeasureItem -> System.Windows.Forms.MeasureItemEventHandler
-System.Windows.Forms.ListBox.MouseClick -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.ListBox.MeasureItem -> System.Windows.Forms.MeasureItemEventHandler?
+System.Windows.Forms.ListBox.MouseClick -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.ListBox.MultiColumn.get -> bool
 System.Windows.Forms.ListBox.MultiColumn.set -> void
 System.Windows.Forms.ListBox.ObjectCollection
@@ -8922,12 +8922,12 @@ System.Windows.Forms.ListBox.ObjectCollection.Remove(object! value) -> void
 System.Windows.Forms.ListBox.ObjectCollection.RemoveAt(int index) -> void
 System.Windows.Forms.ListBox.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.ListBox.Padding.set -> void
-System.Windows.Forms.ListBox.PaddingChanged -> System.EventHandler
-System.Windows.Forms.ListBox.Paint -> System.Windows.Forms.PaintEventHandler
+System.Windows.Forms.ListBox.PaddingChanged -> System.EventHandler?
+System.Windows.Forms.ListBox.Paint -> System.Windows.Forms.PaintEventHandler?
 System.Windows.Forms.ListBox.PreferredHeight.get -> int
 System.Windows.Forms.ListBox.ScrollAlwaysVisible.get -> bool
 System.Windows.Forms.ListBox.ScrollAlwaysVisible.set -> void
-System.Windows.Forms.ListBox.SelectedIndexChanged -> System.EventHandler
+System.Windows.Forms.ListBox.SelectedIndexChanged -> System.EventHandler?
 System.Windows.Forms.ListBox.SelectedIndexCollection
 System.Windows.Forms.ListBox.SelectedIndexCollection.Add(int index) -> void
 System.Windows.Forms.ListBox.SelectedIndexCollection.Clear() -> void
@@ -8944,7 +8944,7 @@ System.Windows.Forms.ListBox.SelectedObjectCollection.IsReadOnly.get -> bool
 System.Windows.Forms.ListBox.SetSelected(int index, bool value) -> void
 System.Windows.Forms.ListBox.Sorted.get -> bool
 System.Windows.Forms.ListBox.Sorted.set -> void
-System.Windows.Forms.ListBox.TextChanged -> System.EventHandler
+System.Windows.Forms.ListBox.TextChanged -> System.EventHandler?
 System.Windows.Forms.ListBox.TopIndex.get -> int
 System.Windows.Forms.ListBox.TopIndex.set -> void
 System.Windows.Forms.ListBox.UseCustomTabOffsets.get -> bool
@@ -10954,7 +10954,7 @@ System.Windows.Forms.TextBox.ScrollBars.get -> System.Windows.Forms.ScrollBars
 System.Windows.Forms.TextBox.ScrollBars.set -> void
 System.Windows.Forms.TextBox.TextAlign.get -> System.Windows.Forms.HorizontalAlignment
 System.Windows.Forms.TextBox.TextAlign.set -> void
-System.Windows.Forms.TextBox.TextAlignChanged -> System.EventHandler
+System.Windows.Forms.TextBox.TextAlignChanged -> System.EventHandler?
 System.Windows.Forms.TextBox.TextBox() -> void
 System.Windows.Forms.TextBox.UseSystemPasswordChar.get -> bool
 System.Windows.Forms.TextBox.UseSystemPasswordChar.set -> void
@@ -13161,8 +13161,8 @@ virtual System.Windows.Forms.Design.PropertyTab.Components.set -> void
 virtual System.Windows.Forms.Design.PropertyTab.Dispose() -> void
 virtual System.Windows.Forms.Design.PropertyTab.Dispose(bool disposing) -> void
 virtual System.Windows.Forms.Design.PropertyTab.GetDefaultProperty(object! component) -> System.ComponentModel.PropertyDescriptor?
-virtual System.Windows.Forms.Design.PropertyTab.GetProperties(object! component) -> System.ComponentModel.PropertyDescriptorCollection!
-virtual System.Windows.Forms.Design.PropertyTab.GetProperties(System.ComponentModel.ITypeDescriptorContext? context, object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection!
+virtual System.Windows.Forms.Design.PropertyTab.GetProperties(object! component) -> System.ComponentModel.PropertyDescriptorCollection?
+virtual System.Windows.Forms.Design.PropertyTab.GetProperties(System.ComponentModel.ITypeDescriptorContext? context, object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection?
 virtual System.Windows.Forms.Design.PropertyTab.HelpKeyword.get -> string?
 virtual System.Windows.Forms.Design.WindowsFormsComponentEditor.GetInitialComponentEditorPageIndex() -> int
 virtual System.Windows.Forms.DrawItemEventArgs.Dispose(bool disposing) -> void
@@ -13426,3 +13426,10 @@ virtual System.Windows.Forms.TreeNodeCollection.RemoveAt(int index) -> void
 virtual System.Windows.Forms.TreeView.RightToLeftLayout.get -> bool
 virtual System.Windows.Forms.TreeView.RightToLeftLayout.set -> void
 virtual System.Windows.Forms.UpDownBase.ValidateEditText() -> void
+~override System.Windows.Forms.SplitContainer.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.PrintPreviewControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.Name.get -> string!
+~override System.Windows.Forms.DateTimePicker.OnGotFocus(System.EventArgs e) -> void
+override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DoDefaultAction() -> void
+override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DefaultAction.get -> string!
+~override System.Windows.Forms.TreeView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject

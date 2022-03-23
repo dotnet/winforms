@@ -206,12 +206,12 @@ namespace System.Windows.Forms
             try
             {
                 HRESULT hr = dialog.SetFileTypes((uint)filterItems.Length, filterItems);
-                ThrowIfFailed(hr);
+                hr.ThrowIfFailed();
 
                 if (filterItems.Length > 0)
                 {
                     hr = dialog.SetFileTypeIndex(unchecked((uint)FilterIndex));
-                    ThrowIfFailed(hr);
+                    hr.ThrowIfFailed();
                 }
             }
             finally
@@ -253,17 +253,8 @@ namespace System.Windows.Forms
         private protected static string? GetFilePathFromShellItem(IShellItem item)
         {
             HRESULT hr = item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING, out string? filename);
-            ThrowIfFailed(hr);
+            hr.ThrowIfFailed();
             return filename;
-        }
-
-        private static void ThrowIfFailed(HRESULT hr)
-        {
-            if (hr.Failed())
-            {
-                // If we failed, we have a valid exception
-                throw Marshal.GetExceptionForHR((int)hr)!;
-            }
         }
 
         private readonly FileDialogCustomPlacesCollection _customPlaces = new();

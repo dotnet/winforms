@@ -30,7 +30,7 @@ internal static partial class Interop
             IntPtr hWnd,
             WM Msg,
             nint wParam,
-            string lParam)
+            string? lParam)
         {
             fixed (char* c = lParam)
             {
@@ -42,7 +42,7 @@ internal static partial class Interop
             IHandle hWnd,
             WM Msg,
             nint wParam,
-            string lParam)
+            string? lParam)
         {
             fixed (char* c = lParam)
             {

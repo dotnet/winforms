@@ -255,6 +255,95 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("index", ex.ParamName);
         }
 
+        [WinFormsFact]
+        public void CheckedListBox_RefreshItems_InvokeEmpty_Success()
+        {
+            using var control = new SubCheckedListBox();
+            control.RefreshItems();
+            Assert.Empty(control.Items);
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.RefreshItems();
+            Assert.Empty(control.Items);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CheckedListBox_RefreshItems_InvokeNotEmpty_Success()
+        {
+            using var control = new SubCheckedListBox();
+            control.Items.Add("item1");
+            control.Items.Add("item2");
+
+            control.RefreshItems();
+            Assert.Equal(new object[] { "item1", "item2" }, control.Items.Cast<object>());
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.RefreshItems();
+            Assert.Equal(new object[] { "item1", "item2" }, control.Items.Cast<object>());
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CheckedListBox_RefreshItems_InvokeEmptyWithHandle_Success()
+        {
+            using var control = new SubCheckedListBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.RefreshItems();
+            Assert.Empty(control.Items);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            control.RefreshItems();
+            Assert.Empty(control.Items);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void CheckedListBox_RefreshItems_InvokeNotEmptyWithHandle_Success()
+        {
+            using var control = new SubCheckedListBox();
+            control.Items.Add("item1");
+            control.Items.Add("item2");
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.RefreshItems();
+            Assert.Equal(new object[] { "item1", "item2" }, control.Items.Cast<object>());
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            control.RefreshItems();
+            Assert.Equal(new object[] { "item1", "item2" }, control.Items.Cast<object>());
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
         [WinFormsTheory]
         [InlineData(1)]
         [InlineData(-1)]
@@ -533,6 +622,8 @@ namespace System.Windows.Forms.Tests
 
         private class SubCheckedListBox : CheckedListBox
         {
+            public new void RefreshItems() => base.RefreshItems();
+
             public new void OnDrawItem(DrawItemEventArgs e) => base.OnDrawItem(e);
         }
     }

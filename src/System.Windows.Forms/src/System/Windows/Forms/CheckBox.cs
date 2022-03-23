@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
@@ -105,7 +103,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.CheckBoxOnAppearanceChangedDescr))]
-        public event EventHandler AppearanceChanged
+        public event EventHandler? AppearanceChanged
         {
             add => Events.AddHandler(EVENT_APPEARANCECHANGED, value);
             remove => Events.RemoveHandler(EVENT_APPEARANCECHANGED, value);
@@ -230,7 +228,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler DoubleClick
+        public new event EventHandler? DoubleClick
         {
             add => base.DoubleClick += value;
             remove => base.DoubleClick -= value;
@@ -239,7 +237,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseDoubleClick
+        public new event MouseEventHandler? MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
             remove => base.MouseDoubleClick -= value;
@@ -400,7 +398,7 @@ namespace System.Windows.Forms
         ///  property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
-        public event EventHandler CheckedChanged
+        public event EventHandler? CheckedChanged
         {
             add => Events.AddHandler(EVENT_CHECKEDCHANGED, value);
             remove => Events.RemoveHandler(EVENT_CHECKEDCHANGED, value);
@@ -412,7 +410,7 @@ namespace System.Windows.Forms
         ///  property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
-        public event EventHandler CheckStateChanged
+        public event EventHandler? CheckStateChanged
         {
             add => Events.AddHandler(EVENT_CHECKSTATECHANGED, value);
             remove => Events.RemoveHandler(EVENT_CHECKSTATECHANGED, value);
@@ -463,7 +461,7 @@ namespace System.Windows.Forms
                 AccessibilityNotifyClients(AccessibleEvents.SystemCaptureEnd, -1);
             }
 
-            ((EventHandler)Events[EVENT_CHECKEDCHANGED])?.Invoke(this, e);
+            ((EventHandler?)Events[EVENT_CHECKEDCHANGED])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -476,7 +474,7 @@ namespace System.Windows.Forms
                 Refresh();
             }
 
-            ((EventHandler)Events[EVENT_CHECKSTATECHANGED])?.Invoke(this, e);
+            ((EventHandler?)Events[EVENT_CHECKSTATECHANGED])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -592,7 +590,6 @@ namespace System.Windows.Forms
                 if (Focus())
                 {
                     //Paint in raised state...
-                    //
                     ResetFlagsandPaint();
                     if (!ValidationCancelled)
                     {

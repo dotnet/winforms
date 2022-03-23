@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System
@@ -16,7 +17,7 @@ namespace System
         private static bool s_registered;
         private readonly bool _lockTaken;
 
-        public MallocSpyScope(Ole32.IMallocSpy mallocSpy, bool currentThreadOnly = true)
+        public MallocSpyScope(IMallocSpy mallocSpy, bool currentThreadOnly = true)
         {
             _lockTaken = false;
             Monitor.Enter(s_lock, ref _lockTaken);
@@ -26,7 +27,7 @@ namespace System
                 // If another thread allocated while we were registered and hasn't freed everything yet, we can't
                 // deregister. As such we'll keep a permanent global spy and forward to whatever our current context is.
 
-                HRESULT result = Ole32.CoRegisterMallocSpy(s_masterSpy);
+                var result = CoRegisterMallocSpy(s_masterSpy);
                 if (result.Failed())
                 {
                     throw new InvalidOperationException(result.AsString());
@@ -50,5 +51,8 @@ namespace System
                 Monitor.Exit(s_lock);
             }
         }
+
+        [DllImport("ole32.dll", ExactSpelling = true)]
+        private static extern HRESULT CoRegisterMallocSpy(IMallocSpy pMallocSpy);
     }
 }

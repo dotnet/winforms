@@ -107,20 +107,20 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Gets the properties of the specified <paramref name="component"/>.
         /// </summary>
-        public virtual PropertyDescriptorCollection GetProperties(object component)
+        public virtual PropertyDescriptorCollection? GetProperties(object component)
             => GetProperties(component, attributes: null);
 
         /// <summary>
         ///  Gets the properties of the specified <paramref name="component"/> which match the specified
         ///  <paramref name="attributes"/>.
         /// </summary>
-        public abstract PropertyDescriptorCollection GetProperties(object component, Attribute[]? attributes);
+        public abstract PropertyDescriptorCollection? GetProperties(object component, Attribute[]? attributes);
 
         /// <summary>
         ///  Gets the properties of the specified <paramref name="component"/> that match the specified
         ///  <paramref name="attributes"/> and <paramref name="context"/>.
         /// </summary>
-        public virtual PropertyDescriptorCollection GetProperties(
+        public virtual PropertyDescriptorCollection? GetProperties(
             ITypeDescriptorContext? context,
             object component,
             Attribute[]? attributes) => GetProperties(component, attributes);
