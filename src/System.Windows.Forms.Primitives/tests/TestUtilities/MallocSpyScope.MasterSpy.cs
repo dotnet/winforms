@@ -11,13 +11,13 @@ namespace System
         /// <summary>
         ///  Redirecting spy that we register as a global.
         /// </summary>
-        private class MasterSpy : Ole32.IMallocSpy
+        private class MasterSpy : IMallocSpy
         {
-            private Ole32.IMallocSpy _currentSpy;
+            private IMallocSpy _currentSpy;
             private uint _registeredThread;
             private readonly object _lock = new();
 
-            public Ole32.IMallocSpy CurrentSpy
+            public IMallocSpy CurrentSpy
             {
                 get
                 {
@@ -29,7 +29,7 @@ namespace System
                 }
             }
 
-            public void SetSpy(Ole32.IMallocSpy spy, bool currentThreadOnly)
+            public void SetSpy(IMallocSpy spy, bool currentThreadOnly)
             {
                 lock (_lock)
                 {
@@ -42,7 +42,7 @@ namespace System
 
             public unsafe void* PostAlloc(void* pActual)
             {
-                Ole32.IMallocSpy current = CurrentSpy;
+                IMallocSpy current = CurrentSpy;
                 return current is null
                     ? pActual
                     : current.PostAlloc(pActual);
@@ -50,7 +50,7 @@ namespace System
 
             public unsafe void* PreFree(void* pRequest, BOOL fSpyed)
             {
-                Ole32.IMallocSpy current = CurrentSpy;
+                IMallocSpy current = CurrentSpy;
                 return current is null
                     ? pRequest
                     : current.PreFree(pRequest, fSpyed);
@@ -63,7 +63,7 @@ namespace System
 
             public unsafe void* PostRealloc(void* pActual, BOOL fSpyed)
             {
-                Ole32.IMallocSpy current = CurrentSpy;
+                IMallocSpy current = CurrentSpy;
                 return current is null
                     ? pActual
                     : current.PostRealloc(pActual, fSpyed);
@@ -71,7 +71,7 @@ namespace System
 
             public unsafe void* PreGetSize(void* pRequest, BOOL fSpyed)
             {
-                Ole32.IMallocSpy current = CurrentSpy;
+                IMallocSpy current = CurrentSpy;
                 return current is null
                     ? pRequest
                     : current.PreGetSize(pRequest, fSpyed);
@@ -82,7 +82,7 @@ namespace System
 
             public unsafe void* PreDidAlloc(void* pRequest, BOOL fSpyed)
             {
-                Ole32.IMallocSpy current = CurrentSpy;
+                IMallocSpy current = CurrentSpy;
                 return current is null
                     ? pRequest
                     : current.PreDidAlloc(pRequest, fSpyed);

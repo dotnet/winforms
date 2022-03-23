@@ -6,7 +6,7 @@ using static Interop;
 
 namespace System
 {
-    internal class MallocSpy : Ole32.IMallocSpy
+    internal class MallocSpy : IMallocSpy
     {
         public virtual nuint PreAlloc(nuint cbRequest) => cbRequest;
         public virtual unsafe void* PostAlloc(void* pActual) => pActual;
