@@ -3,18 +3,49 @@
 
 # trigger ci builds for completed checkins into main and any release branches
 trigger:
-- main
-- release/*
-- internal/release/*
-- internal/experimental/*
+  branches:
+    include:
+      - main
+      - release/*
+      - internal/release/*
+      - internal/experimental/*
+  paths:
+    include:
+      - '*'
+    exclude:
+      - .github/*
+      - docs/*
+      - CODE-OF-CONDUCT.md
+      - CONTRIBUTING.md
+      - LICENSE.TXT
+      - PATENTS.TXT
+      - README.md
+      - SECURITY.md
+      - THIRD-PARTY-NOTICES.TXT
 
 # trigger ci builds on pull requests into main and any release branches
 pr:
-- main
-- vnext
-- release/*
-- internal/release/*
-- internal/experimental/*
+  autoCancel: true
+  branches:
+    include:
+      - main
+      - vnext
+      - release/*
+      - internal/release/*
+      - internal/experimental/*
+  paths:
+    include:
+      - '*'
+    exclude:
+      - .github/*
+      - docs/*
+      - CODE-OF-CONDUCT.md
+      - CONTRIBUTING.md
+      - LICENSE.TXT
+      - PATENTS.TXT
+      - README.md
+      - SECURITY.md
+      - THIRD-PARTY-NOTICES.TXT
 
 variables:
   - name: TeamName
