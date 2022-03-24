@@ -204,7 +204,7 @@ namespace System.Windows.Forms
 
                 AccessibleObject? GetItemAccessibleObject(ToolStripItem item)
                 {
-                    if (item is ToolStripControlHost controlHostItem)
+                    if (item is ToolStripControlHost controlHostItem and not ToolStripScrollButton)
                     {
                         if (ShouldItemBeSkipped(controlHostItem.Control))
                         {
@@ -324,7 +324,9 @@ namespace System.Windows.Forms
                     }
 
                     // Items can be either in DisplayedItems or in OverflowItems (if overflow)
-                    items = (placement == ToolStripItemPlacement.Main) ? _owningToolStrip.DisplayedItems : _owningToolStrip.OverflowItems;
+                    items = placement == ToolStripItemPlacement.Main || child.Owner is ToolStripScrollButton
+                        ? _owningToolStrip.DisplayedItems
+                        : _owningToolStrip.OverflowItems;
                 }
 
                 // First we walk through the head aligned items.
@@ -424,12 +426,7 @@ namespace System.Windows.Forms
                     || (hostedControl is Label label && string.IsNullOrEmpty(label.Text));
 
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
+                => this;
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {

@@ -362,10 +362,8 @@ namespace System.Windows.Forms
                             return null;
                         }
 
-                        int increment = direction == UiaCore.NavigateDirection.NextSibling ? 1 : -1;
                         AccessibleObject? sibling = null;
-
-                        index += increment;
+                        index += direction == UiaCore.NavigateDirection.NextSibling ? 1 : -1;
                         int itemsCount = GetChildFragmentCount();
                         if (index >= 0 && index < itemsCount)
                         {

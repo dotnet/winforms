@@ -65,9 +65,7 @@ namespace System.Windows.Forms
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new ToolStripDropDownMenuAccessibleObject(this);
-        }
+            => new ToolStripDropDownMenuAccessibleObject(this);
 
         /// <summary>
         ///  Constructor to autogenerate
@@ -135,21 +133,8 @@ namespace System.Windows.Forms
             }
         }
 
-        private ToolStripScrollButton DownScrollButton
-        {
-            get
-            {
-                if (downScrollButton is null)
-                {
-                    downScrollButton = new ToolStripScrollButton(false)
-                    {
-                        ParentInternal = this
-                    };
-                }
-
-                return downScrollButton;
-            }
-        }
+        internal ToolStripScrollButton DownScrollButton
+            => downScrollButton ??= new ToolStripScrollButton(false) { ParentInternal = this };
 
         /// <summary>
         ///  the rectangle representing
@@ -242,21 +227,8 @@ namespace System.Windows.Forms
         internal Rectangle TextRectangle
             => textRectangle;
 
-        private ToolStripScrollButton UpScrollButton
-        {
-            get
-            {
-                if (upScrollButton is null)
-                {
-                    upScrollButton = new ToolStripScrollButton(true)
-                    {
-                        ParentInternal = this
-                    };
-                }
-
-                return upScrollButton;
-            }
-        }
+        internal ToolStripScrollButton UpScrollButton
+            => upScrollButton ??= new ToolStripScrollButton(true) { ParentInternal = this };
 
         /// <summary>
         ///  this takes a native menu and builds up a managed toolstrip around it.
@@ -815,7 +787,7 @@ namespace System.Windows.Forms
             base.SetDisplayedItems();
             if (RequiresScrollButtons)
             {
-                DisplayedItems.Add(UpScrollButton);
+                DisplayedItems.Insert(0, UpScrollButton);
                 DisplayedItems.Add(DownScrollButton);
                 UpdateScrollButtonLocations();
                 UpScrollButton.Visible = true;
