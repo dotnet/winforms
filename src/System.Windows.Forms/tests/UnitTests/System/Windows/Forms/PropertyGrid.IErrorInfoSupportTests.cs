@@ -32,8 +32,9 @@ namespace System.Windows.Forms.Tests
                     catch (ExternalException ex)
                     {
                         // Most default C++ implementation when Invoke return error code
-                        // consult IErrorInfo object and populate EXCEPINFO structure
-                        // So grid entry knows only about error code.
+                        // implementation consults IErrorInfo object and populates EXCEPINFO structure.
+                        // From EXCEPINFO grid entry reads error code and message.
+                        // IErrorInfo consulted too, but it does not hold error message anymore.
                         Assert.Equal((int)HRESULT.DISP_E_MEMBERNOTFOUND, ex.HResult);
                         Assert.Equal("Error From StandardErrorInfoUsageTest", ex.Message);
                     }
