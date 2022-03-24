@@ -114,9 +114,9 @@ namespace System.Windows.Forms.Tests
         private object CreateComObjectWithRawIErrorInfoUsage()
         {
             Guid clsidRawErrorInfoUsageTest = new("0ED8EE0D-22E3-49EA-850C-E69B20D1F296");
-            CoCreateInstance(ref clsidRawErrorInfoUsageTest,
+            Ole32.CoCreateInstance(ref clsidRawErrorInfoUsageTest,
                 IntPtr.Zero,
-                1,
+                Ole32.CLSCTX.INPROC_SERVER,
                 ref NativeMethods.ActiveX.IID_IUnknown,
                 out object result);
             return result;
@@ -125,21 +125,13 @@ namespace System.Windows.Forms.Tests
         private object CreateComObjectWithStandardIErrorInfoUsage()
         {
             Guid clsidStandardErrorInfoUsageTest = new("EA1FCB3A-277C-4C79-AB85-E2ED3E858201");
-            CoCreateInstance(ref clsidStandardErrorInfoUsageTest,
+            Ole32.CoCreateInstance(ref clsidStandardErrorInfoUsageTest,
                 IntPtr.Zero,
-                1,
+                Ole32.CLSCTX.INPROC_SERVER,
                 ref NativeMethods.ActiveX.IID_IUnknown,
                 out object result);
             return result;
         }
-
-        [DllImport("ole32.dll", ExactSpelling = true, PreserveSig = false)]
-        private static extern void CoCreateInstance(
-            ref Guid rclsid,
-            IntPtr punkOuter,
-            int dwClsContext,
-            ref Guid riid,
-            [MarshalAs(UnmanagedType.Interface)] out object ppv);
 
         [DllImport("kernel32", SetLastError = true)]
         private static extern void ReleaseActCtx(IntPtr hActCtx);
