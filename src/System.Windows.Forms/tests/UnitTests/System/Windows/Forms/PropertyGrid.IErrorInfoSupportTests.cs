@@ -65,8 +65,7 @@ namespace System.Windows.Forms.Tests
                     catch (ExternalException ex)
                     {
                         // If C++ implementation of Invoke did not populate EXCEPINFO structure
-                        // from IErrorInfo then we read that information about error call.
-                        // and display that error message to the user.
+                        // from IErrorInfo, then we read that information about error call and display that error message to the user.
                         Assert.Equal("Error From RawErrorInfoUsageTest", ex.Message);
                     }
                     finally
