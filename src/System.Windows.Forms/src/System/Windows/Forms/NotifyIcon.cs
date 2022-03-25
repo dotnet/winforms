@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using static Interop;
 using static Interop.Shell32;
@@ -39,17 +38,17 @@ namespace System.Windows.Forms
 
         private readonly object syncObj = new object();
 
-        private Icon icon;
+        private Icon? icon;
         private string text = string.Empty;
         private readonly uint id;
         private bool added;
         private NotifyIconNativeWindow window;
-        private ContextMenuStrip contextMenuStrip;
+        private ContextMenuStrip? contextMenuStrip;
         private ToolTipIcon balloonTipIcon;
         private string balloonTipText = string.Empty;
         private string balloonTipTitle = string.Empty;
         private static uint s_nextId;
-        private object userData;
+        private object? userData;
         private bool doubleClick; // checks if doubleclick is fired
 
         // Visible defaults to false, but the NotifyIconDesigner makes it seem like the default is
@@ -153,7 +152,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.NotifyIconOnBalloonTipClickedDescr))]
-        public event EventHandler BalloonTipClicked
+        public event EventHandler? BalloonTipClicked
         {
             add => Events.AddHandler(EVENT_BALLOONTIPCLICKED, value);
 
@@ -165,7 +164,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.NotifyIconOnBalloonTipClosedDescr))]
-        public event EventHandler BalloonTipClosed
+        public event EventHandler? BalloonTipClosed
         {
             add => Events.AddHandler(EVENT_BALLOONTIPCLOSED, value);
 
@@ -177,7 +176,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.NotifyIconOnBalloonTipShownDescr))]
-        public event EventHandler BalloonTipShown
+        public event EventHandler? BalloonTipShown
         {
             add => Events.AddHandler(EVENT_BALLOONTIPSHOWN, value);
             remove => Events.RemoveHandler(EVENT_BALLOONTIPSHOWN, value);
@@ -186,7 +185,7 @@ namespace System.Windows.Forms
         [DefaultValue(null)]
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.NotifyIconMenuDescr))]
-        public ContextMenuStrip ContextMenuStrip
+        public ContextMenuStrip? ContextMenuStrip
         {
             get
             {
@@ -207,7 +206,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [DefaultValue(null)]
         [SRDescription(nameof(SR.NotifyIconIconDescr))]
-        public Icon Icon
+        public Icon? Icon
         {
             get
             {
@@ -230,6 +229,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         [Localizable(true)]
         [DefaultValue("")]
+        [AllowNull]
         [SRDescription(nameof(SR.NotifyIconTextDescr))]
         [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
         public string Text
@@ -247,7 +247,7 @@ namespace System.Windows.Forms
 
                 if (value is not null && !value.Equals(text))
                 {
-                    if (value is not null && value.Length > MaxTextSize)
+                    if (value.Length > MaxTextSize)
                     {
                         throw new ArgumentOutOfRangeException(nameof(Text), value, SR.TrayIcon_TextTooLong);
                     }
@@ -290,7 +290,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag
+        public object? Tag
         {
             get
             {
@@ -307,7 +307,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ControlOnClickDescr))]
-        public event EventHandler Click
+        public event EventHandler? Click
         {
             add => Events.AddHandler(EVENT_CLICK, value);
             remove => Events.RemoveHandler(EVENT_CLICK, value);
@@ -318,7 +318,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
-        public event EventHandler DoubleClick
+        public event EventHandler? DoubleClick
         {
             add => Events.AddHandler(EVENT_DOUBLECLICK, value);
             remove => Events.RemoveHandler(EVENT_DOUBLECLICK, value);
@@ -329,7 +329,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.NotifyIconMouseClickDescr))]
-        public event MouseEventHandler MouseClick
+        public event MouseEventHandler? MouseClick
         {
             add => Events.AddHandler(EVENT_MOUSECLICK, value);
             remove => Events.RemoveHandler(EVENT_MOUSECLICK, value);
@@ -340,7 +340,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.NotifyIconMouseDoubleClickDescr))]
-        public event MouseEventHandler MouseDoubleClick
+        public event MouseEventHandler? MouseDoubleClick
         {
             add => Events.AddHandler(EVENT_MOUSEDOUBLECLICK, value);
             remove => Events.RemoveHandler(EVENT_MOUSEDOUBLECLICK, value);
@@ -352,7 +352,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ControlOnMouseDownDescr))]
-        public event MouseEventHandler MouseDown
+        public event MouseEventHandler? MouseDown
         {
             add => Events.AddHandler(EVENT_MOUSEDOWN, value);
             remove => Events.RemoveHandler(EVENT_MOUSEDOWN, value);
@@ -364,7 +364,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
-        public event MouseEventHandler MouseMove
+        public event MouseEventHandler? MouseMove
         {
             add => Events.AddHandler(EVENT_MOUSEMOVE, value);
             remove => Events.RemoveHandler(EVENT_MOUSEMOVE, value);
@@ -377,7 +377,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ControlOnMouseUpDescr))]
-        public event MouseEventHandler MouseUp
+        public event MouseEventHandler? MouseUp
         {
             add => Events.AddHandler(EVENT_MOUSEUP, value);
             remove => Events.RemoveHandler(EVENT_MOUSEUP, value);
@@ -401,7 +401,7 @@ namespace System.Windows.Forms
                     Text = string.Empty;
                     UpdateIcon(false);
                     window.DestroyHandle();
-                    window = null;
+                    window = null!;
                     contextMenuStrip = null;
                 }
             }
@@ -409,7 +409,6 @@ namespace System.Windows.Forms
             {
                 // This same post is done in ControlNativeWindow's finalize method, so if you change
                 // it, change it there too.
-                //
                 if (window is not null && window.Handle != IntPtr.Zero)
                 {
                     User32.PostMessageW(window, User32.WM.CLOSE);
@@ -425,7 +424,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnBalloonTipClicked()
         {
-            ((EventHandler)Events[EVENT_BALLOONTIPCLICKED])?.Invoke(this, EventArgs.Empty);
+            ((EventHandler?)Events[EVENT_BALLOONTIPCLICKED])?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -433,7 +432,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnBalloonTipClosed()
         {
-            ((EventHandler)Events[EVENT_BALLOONTIPCLOSED])?.Invoke(this, EventArgs.Empty);
+            ((EventHandler?)Events[EVENT_BALLOONTIPCLOSED])?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -441,7 +440,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnBalloonTipShown()
         {
-            ((EventHandler)Events[EVENT_BALLOONTIPSHOWN])?.Invoke(this, EventArgs.Empty);
+            ((EventHandler?)Events[EVENT_BALLOONTIPSHOWN])?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -453,7 +452,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnClick(EventArgs e)
         {
-            ((EventHandler)Events[EVENT_CLICK])?.Invoke(this, e);
+            ((EventHandler?)Events[EVENT_CLICK])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -462,7 +461,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnDoubleClick(EventArgs e)
         {
-            ((EventHandler)Events[EVENT_DOUBLECLICK])?.Invoke(this, e);
+            ((EventHandler?)Events[EVENT_DOUBLECLICK])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -471,7 +470,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnMouseClick(MouseEventArgs mea)
         {
-            ((MouseEventHandler)Events[EVENT_MOUSECLICK])?.Invoke(this, mea);
+            ((MouseEventHandler?)Events[EVENT_MOUSECLICK])?.Invoke(this, mea);
         }
 
         /// <summary>
@@ -480,7 +479,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnMouseDoubleClick(MouseEventArgs mea)
         {
-            ((MouseEventHandler)Events[EVENT_MOUSEDOUBLECLICK])?.Invoke(this, mea);
+            ((MouseEventHandler?)Events[EVENT_MOUSEDOUBLECLICK])?.Invoke(this, mea);
         }
 
         /// <summary>
@@ -490,7 +489,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnMouseDown(MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[EVENT_MOUSEDOWN])?.Invoke(this, e);
+            ((MouseEventHandler?)Events[EVENT_MOUSEDOWN])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -499,7 +498,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnMouseMove(MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[EVENT_MOUSEMOVE])?.Invoke(this, e);
+            ((MouseEventHandler?)Events[EVENT_MOUSEMOVE])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -508,7 +507,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnMouseUp(MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[EVENT_MOUSEUP])?.Invoke(this, e);
+            ((MouseEventHandler?)Events[EVENT_MOUSEUP])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -637,7 +636,6 @@ namespace System.Windows.Forms
             lock (syncObj)
             {
                 // Bail if in design mode...
-                //
                 if (DesignMode)
                 {
                     return;
