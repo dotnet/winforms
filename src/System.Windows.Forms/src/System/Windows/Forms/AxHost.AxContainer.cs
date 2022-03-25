@@ -107,12 +107,12 @@ namespace System.Windows.Forms
                 CultureInfo culture,
                 string[] namedParameters)
             {
-                foreach (var e in _containerCache)
+                foreach (var (keyControl, valueControl) in _containerCache)
                 {
-                    string ctlName = GetNameForControl(e.Key);
+                    string ctlName = GetNameForControl(keyControl);
                     if (ctlName.Equals(name))
                     {
-                        return GetProxyForControl(e.Value);
+                        return GetProxyForControl(valueControl);
                     }
                 }
 
