@@ -132,7 +132,7 @@ namespace System.Windows.Forms
                 Oleaut32.IExtender rval = null;
                 if (_proxyCache is null)
                 {
-                    _proxyCache = new Dictionary<Control, Oleaut32.IExtender>();
+                    _proxyCache = new();
                 }
                 else
                 {
@@ -400,7 +400,7 @@ namespace System.Windows.Forms
                     ComponentCollection comps = container.Components;
                     if (comps is not null)
                     {
-                        _components = new Dictionary<Control, Control>();
+                        _components = new();
                         foreach (IComponent comp in comps)
                         {
                             if (comp is Control control && comp != _parent && comp.Site is not null)
@@ -479,7 +479,7 @@ namespace System.Windows.Forms
 
             private bool GetControlBelongs(Control ctl)
             {
-                var comps = GetComponents();
+                Dictionary<Control, Control> comps = GetComponents();
                 return comps.ContainsKey(ctl);
             }
 
