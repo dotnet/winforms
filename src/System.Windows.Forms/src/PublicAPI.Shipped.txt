@@ -2227,12 +2227,12 @@ System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[int index].set 
 ~System.Windows.Forms.NotifyIcon.Text.get -> string
 ~System.Windows.Forms.NotifyIcon.Text.set -> void
 ~System.Windows.Forms.NumericUpDown.Accelerations.get -> System.Windows.Forms.NumericUpDownAccelerationCollection
-~System.Windows.Forms.NumericUpDownAccelerationCollection.Add(System.Windows.Forms.NumericUpDownAcceleration acceleration) -> void
-~System.Windows.Forms.NumericUpDownAccelerationCollection.AddRange(params System.Windows.Forms.NumericUpDownAcceleration[] accelerations) -> void
-~System.Windows.Forms.NumericUpDownAccelerationCollection.Contains(System.Windows.Forms.NumericUpDownAcceleration acceleration) -> bool
-~System.Windows.Forms.NumericUpDownAccelerationCollection.CopyTo(System.Windows.Forms.NumericUpDownAcceleration[] array, int index) -> void
-~System.Windows.Forms.NumericUpDownAccelerationCollection.Remove(System.Windows.Forms.NumericUpDownAcceleration acceleration) -> bool
-~System.Windows.Forms.NumericUpDownAccelerationCollection.this[int index].get -> System.Windows.Forms.NumericUpDownAcceleration
+System.Windows.Forms.NumericUpDownAccelerationCollection.Add(System.Windows.Forms.NumericUpDownAcceleration! acceleration) -> void
+System.Windows.Forms.NumericUpDownAccelerationCollection.AddRange(params System.Windows.Forms.NumericUpDownAcceleration![]! accelerations) -> void
+System.Windows.Forms.NumericUpDownAccelerationCollection.Contains(System.Windows.Forms.NumericUpDownAcceleration! acceleration) -> bool
+System.Windows.Forms.NumericUpDownAccelerationCollection.CopyTo(System.Windows.Forms.NumericUpDownAcceleration![]! array, int index) -> void
+System.Windows.Forms.NumericUpDownAccelerationCollection.Remove(System.Windows.Forms.NumericUpDownAcceleration! acceleration) -> bool
+System.Windows.Forms.NumericUpDownAccelerationCollection.this[int index].get -> System.Windows.Forms.NumericUpDownAcceleration!
 ~System.Windows.Forms.OpenFileDialog.OpenFile() -> System.IO.Stream
 ~System.Windows.Forms.OpenFileDialog.SafeFileName.get -> string
 ~System.Windows.Forms.OpenFileDialog.SafeFileNames.get -> string[]
