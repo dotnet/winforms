@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms
@@ -39,16 +37,16 @@ namespace System.Windows.Forms
         }
 
         [ThreadStatic]
-        private static KeyboardToolTipStateMachine s_instance;
+        private static KeyboardToolTipStateMachine? s_instance;
 
         private readonly ToolToTipDictionary _toolToTip = new();
 
         private SmState _currentState = SmState.Hidden;
-        private IKeyboardToolTip _currentTool;
+        private IKeyboardToolTip? _currentTool;
         private readonly InternalStateMachineTimer _timer = new();
-        private SendOrPostCallback _refocusDelayExpirationCallback;
+        private SendOrPostCallback? _refocusDelayExpirationCallback;
 
-        private readonly WeakReference<IKeyboardToolTip> _lastFocusedTool = new(null);
+        private readonly WeakReference<IKeyboardToolTip> _lastFocusedTool = new(null!);
 
         private KeyboardToolTipStateMachine()
         {
@@ -113,7 +111,7 @@ namespace System.Windows.Forms
                 Transit(SmEvent.LeftTool, sender);
                 if (_currentTool is null)
                 {
-                    _lastFocusedTool.SetTarget(null);
+                    _lastFocusedTool.SetTarget(null!);
                 }
             }
         }
@@ -148,7 +146,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_lastFocusedTool.TryGetTarget(out IKeyboardToolTip tool))
+                if (_lastFocusedTool.TryGetTarget(out IKeyboardToolTip? tool))
                 {
                     return tool;
                 }
@@ -167,15 +165,15 @@ namespace System.Windows.Forms
         {
             ResetTimer();
             _currentTool = null;
-            SendOrPostCallback expirationCallback = null;
-            _refocusDelayExpirationCallback = expirationCallback = (object toolObject) =>
+            SendOrPostCallback? expirationCallback = null;
+            _refocusDelayExpirationCallback = expirationCallback = (object? toolObject) =>
             {
-                if (_currentState == SmState.WaitForRefocus && _refocusDelayExpirationCallback == expirationCallback)
+                if (toolObject is not null && _currentState == SmState.WaitForRefocus && _refocusDelayExpirationCallback == expirationCallback)
                 {
                     Transit(SmEvent.RefocusWaitDelayExpired, (IKeyboardToolTip)toolObject);
                 }
             };
-            SynchronizationContext.Current.Post(expirationCallback, tool);
+            SynchronizationContext.Current?.Post(expirationCallback, tool);
             return SmState.WaitForRefocus;
         }
 
@@ -196,12 +194,12 @@ namespace System.Windows.Forms
                 0 :
                 toolTip.GetDelayTime(ComCtl32.TTDT.AUTOPOP);
 
-            if (!_currentTool.IsHoveredWithMouse())
+            if (_currentTool is not null && !_currentTool.IsHoveredWithMouse())
             {
                 toolTip.ShowKeyboardToolTip(toolTipText, _currentTool, autoPopDelay);
             }
 
-            if (!toolTip.IsPersistent)
+            if (_currentTool is not null && !toolTip.IsPersistent)
             {
                 StartTimer(
                     autoPopDelay,
@@ -230,7 +228,7 @@ namespace System.Windows.Forms
 
         private EventHandler GetOneRunTickHandler(Action<Timer> handler)
         {
-            void wrapper(object sender, EventArgs eventArgs)
+            void wrapper(object? sender, EventArgs eventArgs)
             {
                 _timer.Stop();
                 _timer.Tick -= wrapper;
@@ -245,7 +243,7 @@ namespace System.Windows.Forms
             bool fullFsmResetRequired = false;
             try
             {
-                ToolTip toolTip = _toolToTip[source];
+                ToolTip? toolTip = _toolToTip[source];
                 if ((_currentTool is null || _currentTool.CanShowToolTipsNow()) && toolTip is not null)
                 {
                     _currentState = Transition(source, toolTip, @event);
@@ -278,7 +276,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            ToolTip currentToolTip = _toolToTip[_currentTool];
+            ToolTip? currentToolTip = _toolToTip[_currentTool];
+
             // This test is required because typing is not dismissing non-persistent tooltips.
             if (currentToolTip?.IsPersistent == true)
             {
@@ -292,7 +291,7 @@ namespace System.Windows.Forms
         {
             if (_currentState == SmState.Shown && _currentTool is not null)
             {
-                ToolTip currentToolTip = _toolToTip[_currentTool];
+                ToolTip? currentToolTip = _toolToTip[_currentTool];
                 if (currentToolTip is not null)
                 {
                     currentToolTip.HideToolTip(_currentTool);
@@ -310,7 +309,7 @@ namespace System.Windows.Forms
             _timer.Stop();
         }
 
-        private void Reset(ToolTip toolTipToReset)
+        private void Reset(ToolTip? toolTipToReset)
         {
             if (toolTipToReset is null || (_currentTool is not null && _toolToTip[_currentTool] == toolTipToReset))
             {
