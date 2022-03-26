@@ -9,6 +9,6 @@ internal partial class Interop
     internal static partial class UiaCore
     {
         [DllImport(Libraries.UiaCore, ExactSpelling = true)]
-        public static extern HRESULT UiaRaiseAutomationPropertyChangedEvent(IRawElementProviderSimple pProvider, UIA id, object oldValue, object newValue);
+        public static extern HRESULT UiaRaiseAutomationPropertyChangedEvent(IRawElementProviderSimple pProvider, UIA id, object? oldValue, object? newValue);
     }
 }
