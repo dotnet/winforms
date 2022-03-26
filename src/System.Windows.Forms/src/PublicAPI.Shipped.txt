@@ -380,20 +380,20 @@ override System.Windows.Forms.CursorConverter.GetStandardValuesSupported(System.
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates cellState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.PaintBorder(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle bounds, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.ToString() -> string
-~override System.Windows.Forms.DateTimePicker.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.DateTimePicker.BackgroundImage.set -> void
-~override System.Windows.Forms.DateTimePicker.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DateTimePicker.CreateParams.get -> System.Windows.Forms.CreateParams
+override System.Windows.Forms.DateTimePicker.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.DateTimePicker.BackgroundImage.set -> void
+override System.Windows.Forms.DateTimePicker.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DateTimePicker.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.KeyboardShortcut.get -> string?
 override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.Value.get -> string!
-~override System.Windows.Forms.DateTimePicker.OnEnabledChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.DateTimePicker.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.DateTimePicker.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.DateTimePicker.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.DateTimePicker.OnSystemColorsChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.DateTimePicker.Text.get -> string
-~override System.Windows.Forms.DateTimePicker.Text.set -> void
-~override System.Windows.Forms.DateTimePicker.ToString() -> string
+override System.Windows.Forms.DateTimePicker.OnEnabledChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.DateTimePicker.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.DateTimePicker.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.DateTimePicker.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.DateTimePicker.OnSystemColorsChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.DateTimePicker.Text.get -> string!
+override System.Windows.Forms.DateTimePicker.Text.set -> void
+override System.Windows.Forms.DateTimePicker.ToString() -> string!
 ~override System.Windows.Forms.Design.ComponentEditorForm.OnActivated(System.EventArgs e) -> void
 ~override System.Windows.Forms.Design.ComponentEditorForm.OnHelpRequested(System.Windows.Forms.HelpEventArgs e) -> void
 ~override System.Windows.Forms.Design.ComponentEditorPage.CreateParams.get -> System.Windows.Forms.CreateParams
@@ -1698,10 +1698,10 @@ System.Windows.Forms.DataFormats.Format.Name.get -> string!
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.DataGridViewSortCompareEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, object cellValue1, object cellValue2, int rowIndex1, int rowIndex2) -> void
 System.Windows.Forms.DataObject.DataObject(object! data) -> void
 System.Windows.Forms.DataObject.DataObject(string! format, object! data) -> void
-~System.Windows.Forms.DateTimePicker.CalendarFont.get -> System.Drawing.Font
-~System.Windows.Forms.DateTimePicker.CalendarFont.set -> void
-~System.Windows.Forms.DateTimePicker.CustomFormat.get -> string
-~System.Windows.Forms.DateTimePicker.CustomFormat.set -> void
+System.Windows.Forms.DateTimePicker.CalendarFont.get -> System.Drawing.Font!
+System.Windows.Forms.DateTimePicker.CalendarFont.set -> void
+System.Windows.Forms.DateTimePicker.CustomFormat.get -> string?
+System.Windows.Forms.DateTimePicker.CustomFormat.set -> void
 System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DateTimePickerAccessibleObject(System.Windows.Forms.DateTimePicker! owner) -> void
 ~System.Windows.Forms.Design.ComponentEditorForm.ComponentEditorForm(object component, System.Type[] pageTypes) -> void
 ~System.Windows.Forms.Design.ComponentEditorPage.Component.get -> System.ComponentModel.IComponent
@@ -3131,11 +3131,11 @@ virtual System.Windows.Forms.DataObject.SetFileDropList(System.Collections.Speci
 virtual System.Windows.Forms.DataObject.SetImage(System.Drawing.Image! image) -> void
 virtual System.Windows.Forms.DataObject.SetText(string! textData) -> void
 virtual System.Windows.Forms.DataObject.SetText(string! textData, System.Windows.Forms.TextDataFormat format) -> void
-~virtual System.Windows.Forms.DateTimePicker.OnCloseUp(System.EventArgs eventargs) -> void
-~virtual System.Windows.Forms.DateTimePicker.OnDropDown(System.EventArgs eventargs) -> void
-~virtual System.Windows.Forms.DateTimePicker.OnFormatChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DateTimePicker.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DateTimePicker.OnValueChanged(System.EventArgs eventargs) -> void
+virtual System.Windows.Forms.DateTimePicker.OnCloseUp(System.EventArgs! eventargs) -> void
+virtual System.Windows.Forms.DateTimePicker.OnDropDown(System.EventArgs! eventargs) -> void
+virtual System.Windows.Forms.DateTimePicker.OnFormatChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DateTimePicker.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DateTimePicker.OnValueChanged(System.EventArgs! eventargs) -> void
 ~virtual System.Windows.Forms.Design.ComponentEditorForm.OnSelChangeSelector(object source, System.Windows.Forms.TreeViewEventArgs e) -> void
 ~virtual System.Windows.Forms.Design.ComponentEditorForm.ShowForm(System.Windows.Forms.IWin32Window owner) -> System.Windows.Forms.DialogResult
 ~virtual System.Windows.Forms.Design.ComponentEditorForm.ShowForm(System.Windows.Forms.IWin32Window owner, int page) -> System.Windows.Forms.DialogResult
@@ -7628,9 +7628,9 @@ System.Windows.Forms.DateRangeEventArgs.End.get -> System.DateTime
 System.Windows.Forms.DateRangeEventArgs.Start.get -> System.DateTime
 System.Windows.Forms.DateRangeEventHandler
 System.Windows.Forms.DateTimePicker
-System.Windows.Forms.DateTimePicker.BackColorChanged -> System.EventHandler
-System.Windows.Forms.DateTimePicker.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.DateTimePicker.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.DateTimePicker.BackColorChanged -> System.EventHandler?
+System.Windows.Forms.DateTimePicker.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.DateTimePicker.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.DateTimePicker.CalendarForeColor.get -> System.Drawing.Color
 System.Windows.Forms.DateTimePicker.CalendarForeColor.set -> void
 System.Windows.Forms.DateTimePicker.CalendarMonthBackground.get -> System.Drawing.Color
@@ -7643,38 +7643,38 @@ System.Windows.Forms.DateTimePicker.CalendarTrailingForeColor.get -> System.Draw
 System.Windows.Forms.DateTimePicker.CalendarTrailingForeColor.set -> void
 System.Windows.Forms.DateTimePicker.Checked.get -> bool
 System.Windows.Forms.DateTimePicker.Checked.set -> void
-System.Windows.Forms.DateTimePicker.Click -> System.EventHandler
-System.Windows.Forms.DateTimePicker.CloseUp -> System.EventHandler
+System.Windows.Forms.DateTimePicker.Click -> System.EventHandler?
+System.Windows.Forms.DateTimePicker.CloseUp -> System.EventHandler?
 System.Windows.Forms.DateTimePicker.DateTimePicker() -> void
 System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject
-System.Windows.Forms.DateTimePicker.DoubleClick -> System.EventHandler
-System.Windows.Forms.DateTimePicker.DropDown -> System.EventHandler
+System.Windows.Forms.DateTimePicker.DoubleClick -> System.EventHandler?
+System.Windows.Forms.DateTimePicker.DropDown -> System.EventHandler?
 System.Windows.Forms.DateTimePicker.DropDownAlign.get -> System.Windows.Forms.LeftRightAlignment
 System.Windows.Forms.DateTimePicker.DropDownAlign.set -> void
-System.Windows.Forms.DateTimePicker.ForeColorChanged -> System.EventHandler
+System.Windows.Forms.DateTimePicker.ForeColorChanged -> System.EventHandler?
 System.Windows.Forms.DateTimePicker.Format.get -> System.Windows.Forms.DateTimePickerFormat
 System.Windows.Forms.DateTimePicker.Format.set -> void
-System.Windows.Forms.DateTimePicker.FormatChanged -> System.EventHandler
+System.Windows.Forms.DateTimePicker.FormatChanged -> System.EventHandler?
 System.Windows.Forms.DateTimePicker.MaxDate.get -> System.DateTime
 System.Windows.Forms.DateTimePicker.MaxDate.set -> void
 System.Windows.Forms.DateTimePicker.MinDate.get -> System.DateTime
 System.Windows.Forms.DateTimePicker.MinDate.set -> void
-System.Windows.Forms.DateTimePicker.MouseClick -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.DateTimePicker.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.DateTimePicker.MouseClick -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.DateTimePicker.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.DateTimePicker.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.DateTimePicker.Padding.set -> void
-System.Windows.Forms.DateTimePicker.PaddingChanged -> System.EventHandler
-System.Windows.Forms.DateTimePicker.Paint -> System.Windows.Forms.PaintEventHandler
+System.Windows.Forms.DateTimePicker.PaddingChanged -> System.EventHandler?
+System.Windows.Forms.DateTimePicker.Paint -> System.Windows.Forms.PaintEventHandler?
 System.Windows.Forms.DateTimePicker.PreferredHeight.get -> int
-System.Windows.Forms.DateTimePicker.RightToLeftLayoutChanged -> System.EventHandler
+System.Windows.Forms.DateTimePicker.RightToLeftLayoutChanged -> System.EventHandler?
 System.Windows.Forms.DateTimePicker.ShowCheckBox.get -> bool
 System.Windows.Forms.DateTimePicker.ShowCheckBox.set -> void
 System.Windows.Forms.DateTimePicker.ShowUpDown.get -> bool
 System.Windows.Forms.DateTimePicker.ShowUpDown.set -> void
-System.Windows.Forms.DateTimePicker.TextChanged -> System.EventHandler
+System.Windows.Forms.DateTimePicker.TextChanged -> System.EventHandler?
 System.Windows.Forms.DateTimePicker.Value.get -> System.DateTime
 System.Windows.Forms.DateTimePicker.Value.set -> void
-System.Windows.Forms.DateTimePicker.ValueChanged -> System.EventHandler
+System.Windows.Forms.DateTimePicker.ValueChanged -> System.EventHandler?
 System.Windows.Forms.DateTimePickerFormat
 System.Windows.Forms.DateTimePickerFormat.Custom = 8 -> System.Windows.Forms.DateTimePickerFormat
 System.Windows.Forms.DateTimePickerFormat.Long = 1 -> System.Windows.Forms.DateTimePickerFormat
@@ -13429,7 +13429,7 @@ virtual System.Windows.Forms.UpDownBase.ValidateEditText() -> void
 ~override System.Windows.Forms.SplitContainer.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 override System.Windows.Forms.PrintPreviewControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.Name.get -> string!
-~override System.Windows.Forms.DateTimePicker.OnGotFocus(System.EventArgs e) -> void
+override System.Windows.Forms.DateTimePicker.OnGotFocus(System.EventArgs! e) -> void
 override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DoDefaultAction() -> void
 override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DefaultAction.get -> string!
 ~override System.Windows.Forms.TreeView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject

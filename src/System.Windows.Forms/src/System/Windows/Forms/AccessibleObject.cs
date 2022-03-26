@@ -2062,7 +2062,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        internal virtual bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object oldValue, object newValue)
+        internal virtual bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object? oldValue, object? newValue)
         {
             if (UiaCore.UiaClientsAreListening().IsTrue() && CanNotifyClients)
             {
