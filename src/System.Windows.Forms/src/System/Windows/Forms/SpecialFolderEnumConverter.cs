@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
-    internal class SpecialFolderEnumConverter : EnumConverter
+    internal partial class SpecialFolderEnumConverter : EnumConverter
     {
         public SpecialFolderEnumConverter(Type type) : base(type)
         {
@@ -44,15 +44,5 @@ namespace System.Windows.Forms
         }
 
         protected override IComparer Comparer => SpecialFolderEnumComparer.Default;
-
-        private class SpecialFolderEnumComparer : IComparer
-        {
-            public static readonly SpecialFolderEnumComparer Default = new SpecialFolderEnumComparer();
-
-            public int Compare(object? a, object? b)
-            {
-                return string.Compare(a?.ToString(), b?.ToString(), StringComparison.InvariantCulture);
-            }
-        }
     }
 }
