@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms
@@ -11,7 +9,7 @@ namespace System.Windows.Forms
     internal class ListViewGroupItemCollection : ListView.ListViewItemCollection.IInnerList
     {
         private readonly ListViewGroup _group;
-        private ArrayList _items;
+        private ArrayList? _items;
 
         public ListViewGroupItemCollection(ListViewGroup group)
         {
@@ -20,7 +18,7 @@ namespace System.Windows.Forms
 
         public int Count => Items.Count;
 
-        private ArrayList Items => _items ?? (_items = new ArrayList());
+        private ArrayList Items => _items ??= new ArrayList();
 
         public bool OwnerIsVirtualListView => _group.ListView is not null && _group.ListView.VirtualMode;
 
@@ -28,14 +26,14 @@ namespace System.Windows.Forms
 
         public ListViewItem this[int index]
         {
-            get => (ListViewItem)Items[index];
+            get => (ListViewItem)Items[index]!;
             set
             {
                 if (value != Items[index])
                 {
-                    MoveToGroup((ListViewItem)Items[index], null);
+                    MoveToGroup((ListViewItem)Items[index]!, null);
                     Items[index] = value;
-                    MoveToGroup((ListViewItem)Items[index], _group);
+                    MoveToGroup((ListViewItem)Items[index]!, _group);
                 }
             }
         }
@@ -99,7 +97,7 @@ namespace System.Windows.Forms
             return item;
         }
 
-        private void MoveToGroup(ListViewItem item, ListViewGroup newGroup)
+        private void MoveToGroup(ListViewItem item, ListViewGroup? newGroup)
         {
             ListViewGroup oldGroup = item.Group;
             if (oldGroup != newGroup)

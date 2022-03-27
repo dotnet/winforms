@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -18,7 +16,7 @@ namespace System.Windows.Forms
     {
         private readonly ListView _listView;
 
-        private ArrayList _list;
+        private ArrayList? _list;
 
         internal ListViewGroupCollection(ListView listView)
         {
@@ -35,11 +33,11 @@ namespace System.Windows.Forms
 
         bool IList.IsReadOnly => false;
 
-        private ArrayList List => _list ?? (_list = new ArrayList());
+        private ArrayList List => _list ??= new ArrayList();
 
         public ListViewGroup this[int index]
         {
-            get => (ListViewGroup)List[index];
+            get => (ListViewGroup)List[index]!;
             set
             {
                 ArgumentNullException.ThrowIfNull(value);
@@ -55,7 +53,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public ListViewGroup this[string key]
+        public ListViewGroup? this[string key]
         {
             get
             {
@@ -101,7 +99,7 @@ namespace System.Windows.Forms
             }
         }
 
-        object IList.this[int index]
+        object? IList.this[int index]
         {
             get => this[index];
             set
@@ -135,16 +133,16 @@ namespace System.Windows.Forms
             return index;
         }
 
-        public ListViewGroup Add(string key, string headerText)
+        public ListViewGroup Add(string? key, string? headerText)
         {
             ListViewGroup group = new ListViewGroup(key, headerText);
             Add(group);
             return group;
         }
 
-        int IList.Add(object value)
+        int IList.Add(object? value)
         {
-            if (!(value is ListViewGroup group))
+            if (value is not ListViewGroup group)
             {
                 throw new ArgumentException(SR.ListViewGroupCollectionBadListViewGroup, nameof(value));
             }
@@ -209,11 +207,11 @@ namespace System.Windows.Forms
             _listView.UpdateGroupView();
         }
 
-        public bool Contains(ListViewGroup value) => List.Contains(value);
+        public bool Contains(ListViewGroup? value) => List.Contains(value);
 
-        bool IList.Contains(object value)
+        bool IList.Contains(object? value)
         {
-            if (!(value is ListViewGroup group))
+            if (value is not ListViewGroup group)
             {
                 return false;
             }
@@ -225,16 +223,16 @@ namespace System.Windows.Forms
 
         public IEnumerator GetEnumerator() => List.GetEnumerator();
 
-        public int IndexOf(ListViewGroup value) => List.IndexOf(value);
+        public int IndexOf(ListViewGroup? value) => List.IndexOf(value);
 
-        int IList.IndexOf(object value)
+        int IList.IndexOf(object? value)
         {
-            if (!(value is ListViewGroup group))
+            if (value is not ListViewGroup group)
             {
                 return -1;
             }
 
-            return IndexOf((ListViewGroup)value);
+            return IndexOf(group);
         }
 
         public void Insert(int index, ListViewGroup group)
@@ -257,7 +255,7 @@ namespace System.Windows.Forms
             }
         }
 
-        void IList.Insert(int index, object value)
+        void IList.Insert(int index, object? value)
         {
             if (value is ListViewGroup group)
             {
@@ -289,7 +287,7 @@ namespace System.Windows.Forms
             }
         }
 
-        void IList.Remove(object value)
+        void IList.Remove(object? value)
         {
             if (value is ListViewGroup group)
             {
