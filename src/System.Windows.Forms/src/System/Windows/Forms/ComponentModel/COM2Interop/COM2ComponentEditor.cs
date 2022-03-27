@@ -127,7 +127,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     string errString = SR.ErrorPropertyPageFailed;
 
-                    IUIService? uiSvc = (context is not null) ? ((IUIService?)context.GetService(typeof(IUIService))) : null;
+                    IUIService? uiSvc = (IUIService?)context?.GetService(typeof(IUIService));
 
                     if (uiSvc is null)
                     {
