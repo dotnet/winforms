@@ -27,17 +27,17 @@ namespace System.Windows.Forms
         private const ContentAlignment AnyRight = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
 
         // Used to see if we need to iterate through the autochecked items and modify their tabstops.
-        private bool firstfocus = true;
-        private bool isChecked;
-        private bool autoCheck = true;
-        private ContentAlignment checkAlign = ContentAlignment.MiddleLeft;
-        private Appearance appearance = System.Windows.Forms.Appearance.Normal;
+        private bool _firstfocus = true;
+        private bool _isChecked;
+        private bool _autoCheck = true;
+        private ContentAlignment _checkAlign = ContentAlignment.MiddleLeft;
+        private Appearance _appearance = Appearance.Normal;
 
         private const int FlatSystemStylePaddingWidth = 24;
         private const int FlatSystemStyleMinimumHeight = 13;
 
-        internal int flatSystemStylePaddingWidth = FlatSystemStylePaddingWidth;
-        internal int flatSystemStyleMinimumHeight = FlatSystemStyleMinimumHeight;
+        internal int _flatSystemStylePaddingWidth = FlatSystemStylePaddingWidth;
+        internal int _flatSystemStyleMinimumHeight = FlatSystemStyleMinimumHeight;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="RadioButton"/>
@@ -47,8 +47,8 @@ namespace System.Windows.Forms
         {
             if (DpiHelper.IsScalingRequirementMet)
             {
-                flatSystemStylePaddingWidth = LogicalToDeviceUnits(FlatSystemStylePaddingWidth);
-                flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
+                _flatSystemStylePaddingWidth = LogicalToDeviceUnits(FlatSystemStylePaddingWidth);
+                _flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
             }
 
             // Radio buttons shouldn't respond to right clicks, so we need to do all our own click logic
@@ -71,14 +71,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return autoCheck;
+                return _autoCheck;
             }
 
             set
             {
-                if (autoCheck != value)
+                if (_autoCheck != value)
                 {
-                    autoCheck = value;
+                    _autoCheck = value;
                     PerformAutoUpdates(false);
                 }
             }
@@ -97,19 +97,19 @@ namespace System.Windows.Forms
         {
             get
             {
-                return appearance;
+                return _appearance;
             }
 
             set
             {
-                if (appearance != value)
+                if (_appearance != value)
                 {
                     //valid values are 0x0 to 0x1
                     SourceGenerated.EnumValidator.Validate(value);
 
                     using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Appearance))
                     {
-                        appearance = value;
+                        _appearance = value;
                         if (OwnerDraw)
                         {
                             Refresh();
@@ -149,13 +149,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return checkAlign;
+                return _checkAlign;
             }
             set
             {
                 SourceGenerated.EnumValidator.Validate(value);
 
-                checkAlign = value;
+                _checkAlign = value;
                 if (OwnerDraw)
                 {
                     Invalidate();
@@ -180,14 +180,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return isChecked;
+                return _isChecked;
             }
 
             set
             {
-                if (isChecked != value)
+                if (_isChecked != value)
                 {
-                    isChecked = value;
+                    _isChecked = value;
 
                     if (IsHandleCreated)
                     {
@@ -277,8 +277,8 @@ namespace System.Windows.Forms
 
             if (DpiHelper.IsScalingRequirementMet)
             {
-                flatSystemStylePaddingWidth = LogicalToDeviceUnits(FlatSystemStylePaddingWidth);
-                flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
+                _flatSystemStylePaddingWidth = LogicalToDeviceUnits(FlatSystemStylePaddingWidth);
+                _flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
             }
         }
 
@@ -291,8 +291,8 @@ namespace System.Windows.Forms
 
             Size textSize = TextRenderer.MeasureText(Text, Font);
             Size size = SizeFromClientSize(textSize);
-            size.Width += flatSystemStylePaddingWidth;
-            size.Height = DpiHelper.IsScalingRequirementMet ? Math.Max(size.Height + 5, flatSystemStyleMinimumHeight) : size.Height + 5; // ensure minimum height to avoid truncation of RadioButton circle or text
+            size.Width += _flatSystemStylePaddingWidth;
+            size.Height = DpiHelper.IsScalingRequirementMet ? Math.Max(size.Height + 5, _flatSystemStyleMinimumHeight) : size.Height + 5; // ensure minimum height to avoid truncation of RadioButton circle or text
             return size;
         }
 
@@ -383,7 +383,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (nint)isChecked.ToBOOL());
+                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (nint)_isChecked.ToBOOL());
             }
         }
 
@@ -412,7 +412,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnClick(EventArgs e)
         {
-            if (autoCheck)
+            if (_autoCheck)
             {
                 Checked = true;
             }
@@ -452,15 +452,15 @@ namespace System.Windows.Forms
 
         private void PerformAutoUpdates(bool tabbedInto)
         {
-            if (autoCheck)
+            if (_autoCheck)
             {
-                if (firstfocus)
+                if (_firstfocus)
                 {
                     WipeTabStops(tabbedInto);
                 }
 
-                TabStop = isChecked;
-                if (isChecked)
+                TabStop = _isChecked;
+                if (_isChecked)
                 {
                     Control parent = ParentInternal;
                     if (parent is not null)
@@ -472,7 +472,7 @@ namespace System.Windows.Forms
                             if (ctl != this && ctl is RadioButton radioButton)
                             {
                                 RadioButton button = radioButton;
-                                if (button.autoCheck && button.Checked)
+                                if (button._autoCheck && button.Checked)
                                 {
                                     PropertyDescriptor? propDesc = TypeDescriptor.GetProperties(this)["Checked"];
                                     propDesc?.SetValue(button, false);
@@ -500,10 +500,10 @@ namespace System.Windows.Forms
                     {
                         if (!tabbedInto)
                         {
-                            button.firstfocus = false;
+                            button._firstfocus = false;
                         }
 
-                        if (button.autoCheck)
+                        if (button._autoCheck)
                         {
                             button.TabStop = false;
                         }
