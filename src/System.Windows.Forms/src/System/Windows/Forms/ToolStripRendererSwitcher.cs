@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 
 namespace System.Windows.Forms
@@ -15,7 +13,7 @@ namespace System.Windows.Forms
         private static readonly int stateUseDefaultRenderer = BitVector32.CreateMask();
         private static readonly int stateAttachedRendererChanged = BitVector32.CreateMask(stateUseDefaultRenderer);
 
-        private ToolStripRenderer renderer;
+        private ToolStripRenderer? renderer;
         private Type currentRendererType = typeof(Type);
         private BitVector32 state;
 
@@ -57,7 +55,7 @@ namespace System.Windows.Forms
                     Renderer = ToolStripManager.CreateRenderer(RenderMode);
                 }
 
-                return renderer;
+                return renderer!;
             }
             set
             {
@@ -65,7 +63,7 @@ namespace System.Windows.Forms
                 // will autogenerate a new ToolStripRenderer.
                 if (renderer != value)
                 {
-                    state[stateUseDefaultRenderer] = (value is null);
+                    state[stateUseDefaultRenderer] = value is null;
                     renderer = value;
                     currentRendererType = (renderer is not null) ? renderer.GetType() : typeof(Type);
 
@@ -127,14 +125,14 @@ namespace System.Windows.Forms
             }
         }
 
-        public event EventHandler RendererChanged;
+        public event EventHandler? RendererChanged;
 
         private void OnRendererChanged(EventArgs e)
         {
             RendererChanged?.Invoke(this, e);
         }
 
-        private void OnDefaultRendererChanged(object sender, EventArgs e)
+        private void OnDefaultRendererChanged(object? sender, EventArgs e)
         {
             if (state[stateUseDefaultRenderer])
             {
@@ -142,7 +140,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void OnControlDisposed(object sender, EventArgs e)
+        private void OnControlDisposed(object? sender, EventArgs e)
         {
             if (state[stateAttachedRendererChanged])
             {
@@ -151,7 +149,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void OnControlVisibleChanged(object sender, EventArgs e)
+        private void OnControlVisibleChanged(object? sender, EventArgs e)
         {
             if (sender is Control control)
             {
@@ -177,7 +175,7 @@ namespace System.Windows.Forms
         public bool ShouldSerializeRenderMode()
         {
             // We should NEVER serialize custom.
-            return (RenderMode != defaultRenderMode && RenderMode != ToolStripRenderMode.Custom);
+            return RenderMode != defaultRenderMode && RenderMode != ToolStripRenderMode.Custom;
         }
 
         public void ResetRenderMode()
