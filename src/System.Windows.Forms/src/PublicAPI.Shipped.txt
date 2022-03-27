@@ -679,13 +679,13 @@ override System.Windows.Forms.PropertyGridInternal.PropertiesTab.TabName.get -> 
 ~override System.Windows.Forms.PropertyManager.GetListName(System.Collections.ArrayList listAccessors) -> string
 ~override System.Windows.Forms.PropertyManager.OnCurrentChanged(System.EventArgs ea) -> void
 ~override System.Windows.Forms.PropertyManager.OnCurrentItemChanged(System.EventArgs ea) -> void
-~override System.Windows.Forms.RadioButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.RadioButton.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.RadioButton.OnClick(System.EventArgs e) -> void
-~override System.Windows.Forms.RadioButton.OnEnter(System.EventArgs e) -> void
-~override System.Windows.Forms.RadioButton.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.RadioButton.OnMouseUp(System.Windows.Forms.MouseEventArgs mevent) -> void
-~override System.Windows.Forms.RadioButton.ToString() -> string
+override System.Windows.Forms.RadioButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.RadioButton.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.RadioButton.OnClick(System.EventArgs! e) -> void
+override System.Windows.Forms.RadioButton.OnEnter(System.EventArgs! e) -> void
+override System.Windows.Forms.RadioButton.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.RadioButton.OnMouseUp(System.Windows.Forms.MouseEventArgs! mevent) -> void
+override System.Windows.Forms.RadioButton.ToString() -> string!
 ~override System.Windows.Forms.RichTextBox.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.RichTextBox.BackgroundImage.set -> void
 ~override System.Windows.Forms.RichTextBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -3299,7 +3299,7 @@ virtual System.Windows.Forms.ProgressBar.OnRightToLeftLayoutChanged(System.Event
 ~virtual System.Windows.Forms.PropertyGrid.ShowPropertyPageImage.get -> System.Drawing.Bitmap
 ~virtual System.Windows.Forms.PropertyGrid.SortByCategoryImage.get -> System.Drawing.Bitmap
 ~virtual System.Windows.Forms.PropertyGrid.SortByPropertyImage.get -> System.Drawing.Bitmap
-~virtual System.Windows.Forms.RadioButton.OnCheckedChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.RadioButton.OnCheckedChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.RichTextBox.CreateRichEditOleCallback() -> object
 ~virtual System.Windows.Forms.RichTextBox.OnContentsResized(System.Windows.Forms.ContentsResizedEventArgs e) -> void
 ~virtual System.Windows.Forms.RichTextBox.OnHScroll(System.EventArgs e) -> void
@@ -9984,16 +9984,16 @@ System.Windows.Forms.QuestionEventHandler
 System.Windows.Forms.RadioButton
 System.Windows.Forms.RadioButton.Appearance.get -> System.Windows.Forms.Appearance
 System.Windows.Forms.RadioButton.Appearance.set -> void
-System.Windows.Forms.RadioButton.AppearanceChanged -> System.EventHandler
+System.Windows.Forms.RadioButton.AppearanceChanged -> System.EventHandler?
 System.Windows.Forms.RadioButton.AutoCheck.get -> bool
 System.Windows.Forms.RadioButton.AutoCheck.set -> void
 System.Windows.Forms.RadioButton.CheckAlign.get -> System.Drawing.ContentAlignment
 System.Windows.Forms.RadioButton.CheckAlign.set -> void
 System.Windows.Forms.RadioButton.Checked.get -> bool
 System.Windows.Forms.RadioButton.Checked.set -> void
-System.Windows.Forms.RadioButton.CheckedChanged -> System.EventHandler
-System.Windows.Forms.RadioButton.DoubleClick -> System.EventHandler
-System.Windows.Forms.RadioButton.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.RadioButton.CheckedChanged -> System.EventHandler?
+System.Windows.Forms.RadioButton.DoubleClick -> System.EventHandler?
+System.Windows.Forms.RadioButton.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.RadioButton.PerformClick() -> void
 System.Windows.Forms.RadioButton.RadioButton() -> void
 System.Windows.Forms.RadioButton.RadioButtonAccessibleObject

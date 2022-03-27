@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.ButtonInternal;
@@ -131,7 +129,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.RadioButtonOnAppearanceChangedDescr))]
-        public event EventHandler AppearanceChanged
+        public event EventHandler? AppearanceChanged
         {
             add => Events.AddHandler(EVENT_APPEARANCECHANGED, value);
 
@@ -207,7 +205,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler DoubleClick
+        public new event EventHandler? DoubleClick
         {
             add => base.DoubleClick += value;
             remove => base.DoubleClick -= value;
@@ -216,7 +214,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseDoubleClick
+        public new event MouseEventHandler? MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
             remove => base.MouseDoubleClick -= value;
@@ -241,7 +239,6 @@ namespace System.Windows.Forms
                     }
 
                     // Determine the alignment of the radio button
-                    //
                     ContentAlignment align = RtlTranslateContent(CheckAlign);
                     if ((int)(align & AnyRight) != 0)
                     {
@@ -365,7 +362,7 @@ namespace System.Windows.Forms
         ///  property changes.
         /// </summary>
         [SRDescription(nameof(SR.RadioButtonOnCheckedChangedDescr))]
-        public event EventHandler CheckedChanged
+        public event EventHandler? CheckedChanged
         {
             add => Events.AddHandler(EVENT_CHECKEDCHANGED, value);
             remove => Events.RemoveHandler(EVENT_CHECKEDCHANGED, value);
@@ -407,7 +404,7 @@ namespace System.Windows.Forms
                 AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
             }
 
-            ((EventHandler)Events[EVENT_CHECKEDCHANGED])?.Invoke(this, e);
+            ((EventHandler?)Events[EVENT_CHECKEDCHANGED])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -427,14 +424,12 @@ namespace System.Windows.Forms
         {
             // Just like the Win32 RadioButton, fire a click if the
             // user arrows onto the control..
-            //
             if (MouseButtons == MouseButtons.None)
             {
                 if (User32.GetKeyState((int)Keys.Tab) >= 0)
                 {
                     //We enter the radioButton by using arrow keys
                     //Paint in raised state...
-                    //
                     ResetFlagsandPaint();
                     if (!ValidationCancelled)
                     {
@@ -474,13 +469,13 @@ namespace System.Windows.Forms
                         for (int i = 0; i < children.Count; i++)
                         {
                             Control ctl = children[i];
-                            if (ctl != this && ctl is RadioButton)
+                            if (ctl != this && ctl is RadioButton radioButton)
                             {
-                                RadioButton button = (RadioButton)ctl;
+                                RadioButton button = radioButton;
                                 if (button.autoCheck && button.Checked)
                                 {
-                                    PropertyDescriptor propDesc = TypeDescriptor.GetProperties(this)["Checked"];
-                                    propDesc.SetValue(button, false);
+                                    PropertyDescriptor? propDesc = TypeDescriptor.GetProperties(this)["Checked"];
+                                    propDesc?.SetValue(button, false);
                                 }
                             }
                         }
@@ -553,7 +548,6 @@ namespace System.Windows.Forms
                     if (User32.WindowFromPoint(pt) == Handle)
                     {
                         //Paint in raised state...
-                        //
                         ResetFlagsandPaint();
                         if (!ValidationCancelled)
                         {
