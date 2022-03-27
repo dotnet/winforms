@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
@@ -80,7 +79,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool doubleClickFired;
 
-        private static int[] shortcutsToDisable;
+        private static int[]? shortcutsToDisable;
 
         // We store all boolean properties in here.
         //
@@ -136,7 +135,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.TextBoxBaseOnAcceptsTabChangedDescr))]
-        public event EventHandler AcceptsTabChanged
+        public event EventHandler? AcceptsTabChanged
         {
             add => Events.AddHandler(EVENT_ACCEPTSTABCHANGED, value);
             remove => Events.RemoveHandler(EVENT_ACCEPTSTABCHANGED, value);
@@ -182,7 +181,7 @@ namespace System.Windows.Forms
             // the shortcut key we are not supported in TextBox.
             bool returnedValue = base.ProcessCmdKey(ref msg, keyData);
 
-            if (ShortcutsEnabled == false)
+            if (ShortcutsEnabled == false && shortcutsToDisable is not null)
             {
                 foreach (int shortcutValue in shortcutsToDisable)
                 {
@@ -305,7 +304,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -313,7 +312,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler AutoSizeChanged
+        new public event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -321,7 +320,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        new public event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -337,7 +336,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        new public event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -376,7 +375,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.TextBoxBaseOnBorderStyleChangedDescr))]
-        public event EventHandler BorderStyleChanged
+        public event EventHandler? BorderStyleChanged
         {
             add => Events.AddHandler(EVENT_BORDERSTYLECHANGED, value);
             remove => Events.RemoveHandler(EVENT_BORDERSTYLECHANGED, value);
@@ -481,7 +480,7 @@ namespace System.Windows.Forms
 
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public new event EventHandler Click
+        public new event EventHandler? Click
         {
             add => base.Click += value;
             remove => base.Click -= value;
@@ -489,7 +488,7 @@ namespace System.Windows.Forms
 
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public new event MouseEventHandler MouseClick
+        public new event MouseEventHandler? MouseClick
         {
             add => base.MouseClick += value;
             remove => base.MouseClick -= value;
@@ -564,7 +563,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.TextBoxBaseOnHideSelectionChangedDescr))]
-        public event EventHandler HideSelectionChanged
+        public event EventHandler? HideSelectionChanged
         {
             add => Events.AddHandler(EVENT_HIDESELECTIONCHANGED, value);
             remove => Events.RemoveHandler(EVENT_HIDESELECTIONCHANGED, value);
@@ -605,6 +604,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [MergableProperty(false)]
         [Localizable(true)]
+        [AllowNull]
         [SRDescription(nameof(SR.TextBoxLinesDescr))]
         [Editor("System.Windows.Forms.Design.StringArrayEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
         public string[] Lines
@@ -753,7 +753,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.TextBoxBaseOnModifiedChangedDescr))]
-        public event EventHandler ModifiedChanged
+        public event EventHandler? ModifiedChanged
         {
             add => Events.AddHandler(EVENT_MODIFIEDCHANGED, value);
             remove => Events.RemoveHandler(EVENT_MODIFIEDCHANGED, value);
@@ -785,7 +785,6 @@ namespace System.Windows.Forms
                         if (value)
                         {
                             // Multi-line textboxes do not have fixed height
-                            //
                             SetStyle(ControlStyles.FixedHeight, false);
                         }
                         else
@@ -804,7 +803,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.TextBoxBaseOnMultilineChangedDescr))]
-        public event EventHandler MultilineChanged
+        public event EventHandler? MultilineChanged
         {
             add => Events.AddHandler(EVENT_MULTILINECHANGED, value);
             remove => Events.RemoveHandler(EVENT_MULTILINECHANGED, value);
@@ -824,7 +823,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
-        public new event EventHandler PaddingChanged
+        public new event EventHandler? PaddingChanged
         {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
@@ -939,7 +938,6 @@ namespace System.Windows.Forms
                 //Here, we return the max of either 0 or the # returned by
                 //the windows call.  This eliminates a problem on nt4 where
                 // a huge negative # is being returned.
-                //
                 start = Math.Max(0, start);
                 // ditto for end
                 end = Math.Max(0, end);
@@ -1001,7 +999,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.TextBoxBaseOnReadOnlyChangedDescr))]
-        public event EventHandler ReadOnlyChanged
+        public event EventHandler? ReadOnlyChanged
         {
             add => Events.AddHandler(EVENT_READONLYCHANGED, value);
             remove => Events.RemoveHandler(EVENT_READONLYCHANGED, value);
@@ -1012,6 +1010,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [Browsable(false)]
+        [AllowNull]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.TextBoxSelectedTextDescr))]
         public virtual string SelectedText
@@ -1030,7 +1029,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Replaces the selected text with the one passed in.
         /// </summary>
-        internal virtual void SetSelectedTextInternal(string text, bool clearUndo)
+        internal virtual void SetSelectedTextInternal(string? text, bool clearUndo)
         {
             if (!IsHandleCreated)
             {
@@ -1130,6 +1129,7 @@ namespace System.Windows.Forms
         ///  the current text in the text box.
         /// </summary>
         [Localizable(true)]
+        [AllowNull]
         [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
         public override string Text
         {
@@ -1248,7 +1248,6 @@ namespace System.Windows.Forms
         {
             // If we're anchored to two opposite sides of the form, don't adjust the size because
             // we'll lose our anchored size by resetting to the requested width.
-            //
             if (returnIfAnchored && (Anchor & (AnchorStyles.Top | AnchorStyles.Bottom)) == (AnchorStyles.Top | AnchorStyles.Bottom))
             {
                 return;
@@ -1268,7 +1267,6 @@ namespace System.Windows.Forms
                     // Changing the font of a multi-line textbox can sometimes cause a painting problem
                     // The only workaround I can find is to size the textbox big enough for the font, and
                     // then restore its correct size.
-                    //
                     if (textBoxFlags[multiline])
                     {
                         Height = Math.Max(saveHeight, PreferredHeight + 2); // 2 = fudge factor
@@ -1294,7 +1292,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Append text to the current text of text box.
         /// </summary>
-        public void AppendText(string text)
+        public void AppendText(string? text)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -1487,7 +1485,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event PaintEventHandler Paint
+        public new event PaintEventHandler? Paint
         {
             add => base.Paint += value;
             remove => base.Paint -= value;
