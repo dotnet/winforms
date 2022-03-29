@@ -2105,10 +2105,10 @@ System.Windows.Forms.ListViewGroupCollection.Add(string? key, string? headerText
 System.Windows.Forms.ListViewGroupCollection.Add(System.Windows.Forms.ListViewGroup! group) -> int
 System.Windows.Forms.ListViewGroupCollection.AddRange(System.Windows.Forms.ListViewGroup![]! groups) -> void
 System.Windows.Forms.ListViewGroupCollection.AddRange(System.Windows.Forms.ListViewGroupCollection! groups) -> void
-System.Windows.Forms.ListViewGroupCollection.Contains(System.Windows.Forms.ListViewGroup? value) -> bool
+System.Windows.Forms.ListViewGroupCollection.Contains(System.Windows.Forms.ListViewGroup! value) -> bool
 System.Windows.Forms.ListViewGroupCollection.CopyTo(System.Array! array, int index) -> void
 System.Windows.Forms.ListViewGroupCollection.GetEnumerator() -> System.Collections.IEnumerator!
-System.Windows.Forms.ListViewGroupCollection.IndexOf(System.Windows.Forms.ListViewGroup? value) -> int
+System.Windows.Forms.ListViewGroupCollection.IndexOf(System.Windows.Forms.ListViewGroup! value) -> int
 System.Windows.Forms.ListViewGroupCollection.Insert(int index, System.Windows.Forms.ListViewGroup! group) -> void
 System.Windows.Forms.ListViewGroupCollection.Remove(System.Windows.Forms.ListViewGroup! group) -> void
 System.Windows.Forms.ListViewGroupCollection.this[int index].get -> System.Windows.Forms.ListViewGroup!

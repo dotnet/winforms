@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     {
         private readonly ListView _listView;
 
-        private ArrayList? _list;
+        private List<ListViewGroup>? _list;
 
         internal ListViewGroupCollection(ListView listView)
         {
@@ -33,11 +33,11 @@ namespace System.Windows.Forms
 
         bool IList.IsReadOnly => false;
 
-        private ArrayList List => _list ??= new ArrayList();
+        private List<ListViewGroup> List => _list ??= new List<ListViewGroup>();
 
         public ListViewGroup this[int index]
         {
-            get => (ListViewGroup)List[index]!;
+            get => List[index];
             set
             {
                 ArgumentNullException.ThrowIfNull(value);
@@ -123,7 +123,8 @@ namespace System.Windows.Forms
 
             CheckListViewItems(group);
             group.ListView = _listView;
-            int index = List.Add(group);
+            List.Add(group);
+            int index = List.Count - 1;
             if (_listView.IsHandleCreated)
             {
                 _listView.InsertGroupInListView(List.Count, group);
@@ -207,7 +208,7 @@ namespace System.Windows.Forms
             _listView.UpdateGroupView();
         }
 
-        public bool Contains(ListViewGroup? value) => List.Contains(value);
+        public bool Contains(ListViewGroup value) => List.Contains(value);
 
         bool IList.Contains(object? value)
         {
@@ -219,11 +220,11 @@ namespace System.Windows.Forms
             return Contains(group);
         }
 
-        public void CopyTo(Array array, int index) => List.CopyTo(array, index);
+        public void CopyTo(Array array, int index) => ((ICollection)List).CopyTo(array, index);
 
         public IEnumerator GetEnumerator() => List.GetEnumerator();
 
-        public int IndexOf(ListViewGroup? value) => List.IndexOf(value);
+        public int IndexOf(ListViewGroup value) => List.IndexOf(value);
 
         int IList.IndexOf(object? value)
         {
