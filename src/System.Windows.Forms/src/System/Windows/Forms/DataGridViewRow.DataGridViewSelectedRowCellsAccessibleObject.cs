@@ -10,17 +10,17 @@ namespace System.Windows.Forms
     {
         private class DataGridViewSelectedRowCellsAccessibleObject : AccessibleObject
         {
-            private readonly DataGridViewRow _owner;
+            private readonly DataGridViewRow _owningDataGridViewRow;
             private int[]? _runtimeId;
 
             internal DataGridViewSelectedRowCellsAccessibleObject(DataGridViewRow owner)
             {
-                _owner = owner;
+                _owningDataGridViewRow = owner;
             }
 
             public override string Name => SR.DataGridView_AccSelectedRowCellsName;
 
-            public override AccessibleObject Parent => _owner.AccessibilityObject;
+            public override AccessibleObject Parent => _owningDataGridViewRow.AccessibilityObject;
 
             public override AccessibleRole Role => AccessibleRole.Grouping;
 
@@ -39,9 +39,9 @@ namespace System.Windows.Forms
                 if (index < GetChildCount())
                 {
                     int selectedCellsCount = -1;
-                    for (int i = 1; i < _owner.AccessibilityObject.GetChildCount(); i++)
+                    for (int i = 1; i < _owningDataGridViewRow.AccessibilityObject.GetChildCount(); i++)
                     {
-                        AccessibleObject? child = _owner.AccessibilityObject.GetChild(i);
+                        AccessibleObject? child = _owningDataGridViewRow.AccessibilityObject.GetChild(i);
                         if (child is not null && (child.State & AccessibleStates.Selected) == AccessibleStates.Selected)
                         {
                             selectedCellsCount++;
@@ -67,9 +67,9 @@ namespace System.Windows.Forms
                 int selectedCellsCount = 0;
 
                 // start the enumeration from 1, because the first acc obj in the data grid view row is the row header cell
-                for (int i = 1; i < _owner.AccessibilityObject.GetChildCount(); i++)
+                for (int i = 1; i < _owningDataGridViewRow.AccessibilityObject.GetChildCount(); i++)
                 {
-                    AccessibleObject? child = _owner.AccessibilityObject.GetChild(i);
+                    AccessibleObject? child = _owningDataGridViewRow.AccessibilityObject.GetChild(i);
                     if (child is not null && (child.State & AccessibleStates.Selected) == AccessibleStates.Selected)
                     {
                         selectedCellsCount++;
@@ -83,9 +83,9 @@ namespace System.Windows.Forms
 
             public override AccessibleObject? GetFocused()
             {
-                if (_owner.DataGridView?.CurrentCell is not null && _owner.DataGridView.CurrentCell.Selected)
+                if (_owningDataGridViewRow.DataGridView?.CurrentCell is not null && _owningDataGridViewRow.DataGridView.CurrentCell.Selected)
                 {
-                    return _owner.DataGridView.CurrentCell.AccessibilityObject;
+                    return _owningDataGridViewRow.DataGridView.CurrentCell.AccessibilityObject;
                 }
                 else
                 {
