@@ -556,20 +556,20 @@ override System.Windows.Forms.ListViewItem.ListViewSubItem.ToString() -> string!
 ~override System.Windows.Forms.ListViewItem.ToString() -> string
 ~override System.Windows.Forms.ListViewItemConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
 ~override System.Windows.Forms.ListViewItemConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Windows.Forms.MaskedTextBox.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.MaskedTextBox.OnBackColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.MaskedTextBox.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.MaskedTextBox.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
-~override System.Windows.Forms.MaskedTextBox.OnKeyPress(System.Windows.Forms.KeyPressEventArgs e) -> void
-~override System.Windows.Forms.MaskedTextBox.OnKeyUp(System.Windows.Forms.KeyEventArgs e) -> void
-~override System.Windows.Forms.MaskedTextBox.OnMultilineChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.MaskedTextBox.OnTextChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.MaskedTextBox.OnValidating(System.ComponentModel.CancelEventArgs e) -> void
-~override System.Windows.Forms.MaskedTextBox.SelectedText.get -> string
-~override System.Windows.Forms.MaskedTextBox.SelectedText.set -> void
-~override System.Windows.Forms.MaskedTextBox.Text.get -> string
-~override System.Windows.Forms.MaskedTextBox.Text.set -> void
-~override System.Windows.Forms.MaskedTextBox.ToString() -> string
+override System.Windows.Forms.MaskedTextBox.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.MaskedTextBox.OnBackColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.MaskedTextBox.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.MaskedTextBox.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
+override System.Windows.Forms.MaskedTextBox.OnKeyPress(System.Windows.Forms.KeyPressEventArgs! e) -> void
+override System.Windows.Forms.MaskedTextBox.OnKeyUp(System.Windows.Forms.KeyEventArgs! e) -> void
+override System.Windows.Forms.MaskedTextBox.OnMultilineChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.MaskedTextBox.OnTextChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.MaskedTextBox.OnValidating(System.ComponentModel.CancelEventArgs! e) -> void
+override System.Windows.Forms.MaskedTextBox.SelectedText.get -> string!
+override System.Windows.Forms.MaskedTextBox.SelectedText.set -> void
+override System.Windows.Forms.MaskedTextBox.Text.get -> string!
+override System.Windows.Forms.MaskedTextBox.Text.set -> void
+override System.Windows.Forms.MaskedTextBox.ToString() -> string!
 ~override System.Windows.Forms.MdiClient.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.MdiClient.BackgroundImage.set -> void
 ~override System.Windows.Forms.MdiClient.ControlCollection.Add(System.Windows.Forms.Control value) -> void
@@ -2183,20 +2183,20 @@ System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[int index].set 
 ~System.Windows.Forms.ListViewItem.Text.set -> void
 ~System.Windows.Forms.ListViewItem.ToolTipText.get -> string
 ~System.Windows.Forms.ListViewItem.ToolTipText.set -> void
-~System.Windows.Forms.MaskedTextBox.Culture.get -> System.Globalization.CultureInfo
-~System.Windows.Forms.MaskedTextBox.Culture.set -> void
-~System.Windows.Forms.MaskedTextBox.FormatProvider.get -> System.IFormatProvider
-~System.Windows.Forms.MaskedTextBox.FormatProvider.set -> void
-~System.Windows.Forms.MaskedTextBox.Lines.get -> string[]
-~System.Windows.Forms.MaskedTextBox.Lines.set -> void
-~System.Windows.Forms.MaskedTextBox.Mask.get -> string
-~System.Windows.Forms.MaskedTextBox.Mask.set -> void
-~System.Windows.Forms.MaskedTextBox.MaskedTextBox(string mask) -> void
-~System.Windows.Forms.MaskedTextBox.MaskedTextBox(System.ComponentModel.MaskedTextProvider maskedTextProvider) -> void
-~System.Windows.Forms.MaskedTextBox.MaskedTextProvider.get -> System.ComponentModel.MaskedTextProvider
-~System.Windows.Forms.MaskedTextBox.ValidateText() -> object
-~System.Windows.Forms.MaskedTextBox.ValidatingType.get -> System.Type
-~System.Windows.Forms.MaskedTextBox.ValidatingType.set -> void
+System.Windows.Forms.MaskedTextBox.Culture.get -> System.Globalization.CultureInfo!
+System.Windows.Forms.MaskedTextBox.Culture.set -> void
+System.Windows.Forms.MaskedTextBox.FormatProvider.get -> System.IFormatProvider?
+System.Windows.Forms.MaskedTextBox.FormatProvider.set -> void
+System.Windows.Forms.MaskedTextBox.Lines.get -> string![]!
+System.Windows.Forms.MaskedTextBox.Lines.set -> void
+System.Windows.Forms.MaskedTextBox.Mask.get -> string!
+System.Windows.Forms.MaskedTextBox.Mask.set -> void
+System.Windows.Forms.MaskedTextBox.MaskedTextBox(string! mask) -> void
+System.Windows.Forms.MaskedTextBox.MaskedTextBox(System.ComponentModel.MaskedTextProvider! maskedTextProvider) -> void
+System.Windows.Forms.MaskedTextBox.MaskedTextProvider.get -> System.ComponentModel.MaskedTextProvider?
+System.Windows.Forms.MaskedTextBox.ValidateText() -> object?
+System.Windows.Forms.MaskedTextBox.ValidatingType.get -> System.Type?
+System.Windows.Forms.MaskedTextBox.ValidatingType.set -> void
 ~System.Windows.Forms.MdiClient.ControlCollection.ControlCollection(System.Windows.Forms.MdiClient owner) -> void
 ~System.Windows.Forms.MdiClient.MdiChildren.get -> System.Windows.Forms.Form[]
 ~System.Windows.Forms.MenuStrip.MdiWindowListItem.get -> System.Windows.Forms.ToolStripMenuItem
@@ -3273,9 +3273,9 @@ virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.IndexOfKey(s
 virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.RemoveByKey(string? key) -> void
 virtual System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[string! key].get -> System.Windows.Forms.ListViewItem.ListViewSubItem?
 ~virtual System.Windows.Forms.ListViewItem.Serialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
-~virtual System.Windows.Forms.MaskedTextBox.OnIsOverwriteModeChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.MaskedTextBox.OnMaskChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.MaskedTextBox.OnTextAlignChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.MaskedTextBox.OnIsOverwriteModeChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.MaskedTextBox.OnMaskChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.MaskedTextBox.OnTextAlignChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.MenuStrip.OnMenuActivate(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.MenuStrip.OnMenuDeactivate(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.MonthCalendar.OnDateChanged(System.Windows.Forms.DateRangeEventArgs drevent) -> void
@@ -9229,7 +9229,7 @@ System.Windows.Forms.ListViewVirtualItemsSelectionRangeChangedEventHandler
 System.Windows.Forms.MaskedTextBox
 System.Windows.Forms.MaskedTextBox.AcceptsTab.get -> bool
 System.Windows.Forms.MaskedTextBox.AcceptsTab.set -> void
-System.Windows.Forms.MaskedTextBox.AcceptsTabChanged -> System.EventHandler
+System.Windows.Forms.MaskedTextBox.AcceptsTabChanged -> System.EventHandler?
 System.Windows.Forms.MaskedTextBox.AllowPromptAsInput.get -> bool
 System.Windows.Forms.MaskedTextBox.AllowPromptAsInput.set -> void
 System.Windows.Forms.MaskedTextBox.AsciiOnly.get -> bool
@@ -9247,13 +9247,13 @@ System.Windows.Forms.MaskedTextBox.HidePromptOnLeave.set -> void
 System.Windows.Forms.MaskedTextBox.InsertKeyMode.get -> System.Windows.Forms.InsertKeyMode
 System.Windows.Forms.MaskedTextBox.InsertKeyMode.set -> void
 System.Windows.Forms.MaskedTextBox.IsOverwriteMode.get -> bool
-System.Windows.Forms.MaskedTextBox.IsOverwriteModeChanged -> System.EventHandler
-System.Windows.Forms.MaskedTextBox.MaskChanged -> System.EventHandler
+System.Windows.Forms.MaskedTextBox.IsOverwriteModeChanged -> System.EventHandler?
+System.Windows.Forms.MaskedTextBox.MaskChanged -> System.EventHandler?
 System.Windows.Forms.MaskedTextBox.MaskCompleted.get -> bool
 System.Windows.Forms.MaskedTextBox.MaskedTextBox() -> void
 System.Windows.Forms.MaskedTextBox.MaskFull.get -> bool
-System.Windows.Forms.MaskedTextBox.MaskInputRejected -> System.Windows.Forms.MaskInputRejectedEventHandler
-System.Windows.Forms.MaskedTextBox.MultilineChanged -> System.EventHandler
+System.Windows.Forms.MaskedTextBox.MaskInputRejected -> System.Windows.Forms.MaskInputRejectedEventHandler?
+System.Windows.Forms.MaskedTextBox.MultilineChanged -> System.EventHandler?
 System.Windows.Forms.MaskedTextBox.PasswordChar.get -> char
 System.Windows.Forms.MaskedTextBox.PasswordChar.set -> void
 System.Windows.Forms.MaskedTextBox.PromptChar.get -> char
@@ -9271,10 +9271,10 @@ System.Windows.Forms.MaskedTextBox.SkipLiterals.get -> bool
 System.Windows.Forms.MaskedTextBox.SkipLiterals.set -> void
 System.Windows.Forms.MaskedTextBox.TextAlign.get -> System.Windows.Forms.HorizontalAlignment
 System.Windows.Forms.MaskedTextBox.TextAlign.set -> void
-System.Windows.Forms.MaskedTextBox.TextAlignChanged -> System.EventHandler
+System.Windows.Forms.MaskedTextBox.TextAlignChanged -> System.EventHandler?
 System.Windows.Forms.MaskedTextBox.TextMaskFormat.get -> System.Windows.Forms.MaskFormat
 System.Windows.Forms.MaskedTextBox.TextMaskFormat.set -> void
-System.Windows.Forms.MaskedTextBox.TypeValidationCompleted -> System.Windows.Forms.TypeValidationEventHandler
+System.Windows.Forms.MaskedTextBox.TypeValidationCompleted -> System.Windows.Forms.TypeValidationEventHandler?
 System.Windows.Forms.MaskedTextBox.Undo() -> void
 System.Windows.Forms.MaskedTextBox.UseSystemPasswordChar.get -> bool
 System.Windows.Forms.MaskedTextBox.UseSystemPasswordChar.set -> void
