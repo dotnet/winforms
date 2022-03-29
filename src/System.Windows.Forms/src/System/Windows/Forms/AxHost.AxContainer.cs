@@ -423,7 +423,7 @@ namespace System.Windows.Forms
                 {
                     if (ctls.Length > 0 && _components is null)
                     {
-                        _components = new Dictionary<Control, Control>();
+                        _components = new();
                         checkHashTable = false;
                     }
 
@@ -448,7 +448,7 @@ namespace System.Windows.Forms
 
                 if (_components is null)
                 {
-                    _components = new Dictionary<Control, Control>();
+                    _components = new();
                 }
 
                 if (ctl != _parent && !_components.ContainsKey(ctl))
