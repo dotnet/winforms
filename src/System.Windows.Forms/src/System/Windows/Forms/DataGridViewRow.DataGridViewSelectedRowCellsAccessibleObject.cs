@@ -83,9 +83,10 @@ namespace System.Windows.Forms
 
             public override AccessibleObject? GetFocused()
             {
-                if (_owningDataGridViewRow.DataGridView?.CurrentCell is not null && _owningDataGridViewRow.DataGridView.CurrentCell.Selected)
+                DataGridViewCell? currentCell = _owningDataGridViewRow.DataGridView?.CurrentCell;
+                if (currentCell is not null && currentCell.Selected)
                 {
-                    return _owningDataGridViewRow.DataGridView.CurrentCell.AccessibilityObject;
+                    return currentCell.AccessibilityObject;
                 }
                 else
                 {
