@@ -1546,9 +1546,9 @@ namespace System.Windows.Forms
                         {
                             _listItemSorter = new IconComparer(_sorting);
                         }
-                        else if (_listItemSorter is IconComparer)
+                        else if (_listItemSorter is IconComparer iconComparer)
                         {
-                            ((IconComparer)_listItemSorter).SortOrder = _sorting;
+                            iconComparer.SortOrder = _sorting;
                         }
                     }
                     else if (value == SortOrder.None)
