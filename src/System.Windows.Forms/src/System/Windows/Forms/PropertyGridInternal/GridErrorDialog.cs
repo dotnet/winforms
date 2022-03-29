@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -79,7 +78,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Called when the details button is clicked.
         /// </summary>
-        private void DetailsClick(object sender, EventArgs devent)
+        private void DetailsClick(object? sender, EventArgs devent)
         {
             int delta = _detailsTextBox.Height + 8;
 
@@ -114,6 +113,15 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         private static bool IsRTLResources => SR.RTL != "RTL_False";
 
+        [MemberNotNull(nameof(_messageLabel))]
+        [MemberNotNull(nameof(_pictureBox))]
+        [MemberNotNull(nameof(_detailsButton))]
+        [MemberNotNull(nameof(_okButton))]
+        [MemberNotNull(nameof(_cancelButton))]
+        [MemberNotNull(nameof(_buttonTableLayoutPanel))]
+        [MemberNotNull(nameof(_pictureLabelTableLayoutPanel))]
+        [MemberNotNull(nameof(_overarchingTableLayoutPanel))]
+        [MemberNotNull(nameof(_detailsTextBox))]
         private void InitializeComponent()
         {
             if (IsRTLResources)
@@ -281,14 +289,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             _buttonTableLayoutPanel.ResumeLayout(performLayout: false);
             _buttonTableLayoutPanel.PerformLayout();
             _pictureLabelTableLayoutPanel.ResumeLayout(performLayout: false);
-            ((System.ComponentModel.ISupportInitialize)(_pictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)_pictureBox).EndInit();
             ResumeLayout(performLayout: false);
             PerformLayout();
         }
 
-        private void OnButtonClick(object s, EventArgs e)
+        private void OnButtonClick(object? s, EventArgs e)
         {
-            DialogResult = ((Button)s).DialogResult;
+            DialogResult = ((Button)s!).DialogResult;
             Close();
         }
 
@@ -301,7 +309,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(_ownerGrid, g, _detailsButton.Text, _detailsButton.Font);
                     int detailsWidth = (int)Math.Ceiling(sizef.Width);
-                    detailsWidth += _detailsButton.Image.Width;
+                    detailsWidth += _detailsButton.Image!.Width;
                     _detailsButton.Width = (int)Math.Ceiling(detailsWidth * (_ownerGrid.UseCompatibleTextRendering ? 1.15f : 1.4f));
                     _detailsButton.Height = _okButton.Height;
                 }
