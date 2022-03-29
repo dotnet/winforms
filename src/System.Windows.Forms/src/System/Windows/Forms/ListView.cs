@@ -6914,22 +6914,22 @@ namespace System.Windows.Forms
                 case User32.WM.KEYUP:
                     int key = (int)m.WParamInternal;
 
+                    // User can collapse/expand a group using the keyboard by focusing the group header and using left/right
                     if (GroupsDisplayed && (key is User32.VK.LEFT or User32.VK.RIGHT) && SelectedItems.Count > 0)
                     {
                         ListViewGroup group = SelectedItems[0].Group;
 
-                        if (group is null || group.CollapsedState is ListViewGroupCollapsedState.Default
-                            || (key == User32.VK.LEFT && group.CollapsedState is ListViewGroupCollapsedState.Collapsed)
-                            || (key == User32.VK.RIGHT && group.CollapsedState is ListViewGroupCollapsedState.Expanded))
+                        if (group is null || group.CollapsedState is ListViewGroupCollapsedState.Default)
                         {
                             break;
                         }
 
-                        group.SetCollapsedStateInternal(group.CollapsedState == ListViewGroupCollapsedState.Expanded
-                                                ? ListViewGroupCollapsedState.Collapsed
-                                                : ListViewGroupCollapsedState.Expanded);
-
-                        OnGroupCollapsedStateChanged(new ListViewGroupEventArgs(Groups.IndexOf(group)));
+                        ListViewGroupCollapsedState nativeState = group.GetNativeCollapsedState();
+                        if (nativeState != group.CollapsedState)
+                        {
+                            group.SetCollapsedStateInternal(nativeState);
+                            OnGroupCollapsedStateChanged(new ListViewGroupEventArgs(Groups.IndexOf(group)));
+                        }
                     }
 
                     break;

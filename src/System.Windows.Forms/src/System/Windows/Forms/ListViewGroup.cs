@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.Serialization;
+using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -392,6 +394,27 @@ namespace System.Windows.Forms
 
                 Items.AddRange(items);
             }
+        }
+
+        internal ListViewGroupCollapsedState GetNativeCollapsedState()
+        {
+            if (ListView is null)
+            {
+                throw new InvalidOperationException(nameof(ListView));
+            }
+
+            if (!ListView.GroupsEnabled)
+            {
+                return ListViewGroupCollapsedState.Default;
+            }
+
+            LVGS state = (LVGS)User32.SendMessageW(ListView, (User32.WM)LVM.GETGROUPSTATE, ID, (nint)(LVGS.COLLAPSIBLE | LVGS.COLLAPSED));
+            if (!state.HasFlag(LVGS.COLLAPSIBLE))
+            {
+                return ListViewGroupCollapsedState.Default;
+            }
+
+            return state.HasFlag(LVGS.COLLAPSED) ? ListViewGroupCollapsedState.Collapsed : ListViewGroupCollapsedState.Expanded;
         }
 
         // Should be used for the cases when sending the message `LVM.SETGROUPINFO` isn't required
