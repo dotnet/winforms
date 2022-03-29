@@ -590,14 +590,14 @@ override System.Windows.Forms.MaskedTextBox.ToString() -> string!
 ~override System.Windows.Forms.MonthCalendar.Text.get -> string
 ~override System.Windows.Forms.MonthCalendar.Text.set -> void
 ~override System.Windows.Forms.MonthCalendar.ToString() -> string
-~override System.Windows.Forms.NumericUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.NumericUpDown.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
-~override System.Windows.Forms.NumericUpDown.OnKeyUp(System.Windows.Forms.KeyEventArgs e) -> void
-~override System.Windows.Forms.NumericUpDown.OnLostFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.NumericUpDown.OnTextBoxKeyPress(object source, System.Windows.Forms.KeyPressEventArgs e) -> void
-~override System.Windows.Forms.NumericUpDown.Text.get -> string
-~override System.Windows.Forms.NumericUpDown.Text.set -> void
-~override System.Windows.Forms.NumericUpDown.ToString() -> string
+override System.Windows.Forms.NumericUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.NumericUpDown.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
+override System.Windows.Forms.NumericUpDown.OnKeyUp(System.Windows.Forms.KeyEventArgs! e) -> void
+override System.Windows.Forms.NumericUpDown.OnLostFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.NumericUpDown.OnTextBoxKeyPress(object? source, System.Windows.Forms.KeyPressEventArgs! e) -> void
+override System.Windows.Forms.NumericUpDown.Text.get -> string!
+override System.Windows.Forms.NumericUpDown.Text.set -> void
+override System.Windows.Forms.NumericUpDown.ToString() -> string!
 override System.Windows.Forms.Panel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.Panel.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.Panel.OnResize(System.EventArgs! eventargs) -> void
@@ -2226,7 +2226,7 @@ System.Windows.Forms.MaskedTextBox.ValidatingType.set -> void
 ~System.Windows.Forms.NotifyIcon.Tag.set -> void
 ~System.Windows.Forms.NotifyIcon.Text.get -> string
 ~System.Windows.Forms.NotifyIcon.Text.set -> void
-~System.Windows.Forms.NumericUpDown.Accelerations.get -> System.Windows.Forms.NumericUpDownAccelerationCollection
+System.Windows.Forms.NumericUpDown.Accelerations.get -> System.Windows.Forms.NumericUpDownAccelerationCollection!
 System.Windows.Forms.NumericUpDownAccelerationCollection.Add(System.Windows.Forms.NumericUpDownAcceleration! acceleration) -> void
 System.Windows.Forms.NumericUpDownAccelerationCollection.AddRange(params System.Windows.Forms.NumericUpDownAcceleration![]! accelerations) -> void
 System.Windows.Forms.NumericUpDownAccelerationCollection.Contains(System.Windows.Forms.NumericUpDownAcceleration! acceleration) -> bool
@@ -3283,7 +3283,7 @@ virtual System.Windows.Forms.MaskedTextBox.OnTextAlignChanged(System.EventArgs! 
 ~virtual System.Windows.Forms.MonthCalendar.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
 virtual System.Windows.Forms.NativeWindow.CreateHandle(System.Windows.Forms.CreateParams! cp) -> void
 virtual System.Windows.Forms.NativeWindow.OnThreadException(System.Exception! e) -> void
-~virtual System.Windows.Forms.NumericUpDown.OnValueChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.NumericUpDown.OnValueChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.PictureBox.OnLoadCompleted(System.ComponentModel.AsyncCompletedEventArgs e) -> void
 ~virtual System.Windows.Forms.PictureBox.OnLoadProgressChanged(System.ComponentModel.ProgressChangedEventArgs e) -> void
 ~virtual System.Windows.Forms.PictureBox.OnSizeModeChanged(System.EventArgs e) -> void
@@ -9514,14 +9514,14 @@ System.Windows.Forms.NumericUpDown.Minimum.set -> void
 System.Windows.Forms.NumericUpDown.NumericUpDown() -> void
 System.Windows.Forms.NumericUpDown.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.NumericUpDown.Padding.set -> void
-System.Windows.Forms.NumericUpDown.PaddingChanged -> System.EventHandler
+System.Windows.Forms.NumericUpDown.PaddingChanged -> System.EventHandler?
 System.Windows.Forms.NumericUpDown.ParseEditText() -> void
-System.Windows.Forms.NumericUpDown.TextChanged -> System.EventHandler
+System.Windows.Forms.NumericUpDown.TextChanged -> System.EventHandler?
 System.Windows.Forms.NumericUpDown.ThousandsSeparator.get -> bool
 System.Windows.Forms.NumericUpDown.ThousandsSeparator.set -> void
 System.Windows.Forms.NumericUpDown.Value.get -> decimal
 System.Windows.Forms.NumericUpDown.Value.set -> void
-System.Windows.Forms.NumericUpDown.ValueChanged -> System.EventHandler
+System.Windows.Forms.NumericUpDown.ValueChanged -> System.EventHandler?
 System.Windows.Forms.NumericUpDownAcceleration
 System.Windows.Forms.NumericUpDownAcceleration.Increment.get -> decimal
 System.Windows.Forms.NumericUpDownAcceleration.Increment.set -> void
