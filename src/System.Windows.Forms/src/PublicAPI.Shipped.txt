@@ -7,7 +7,7 @@ abstract System.Windows.Forms.ListControl.SetItemsCore(System.Collections.IList!
 ~override System.Resources.ResXFileRef.ToString() -> string
 ~override System.Resources.ResXResourceSet.GetDefaultReader() -> System.Type
 ~override System.Resources.ResXResourceSet.GetDefaultWriter() -> System.Type
-~override System.Windows.Forms.AxHost.AxComponentEditor.EditComponent(System.ComponentModel.ITypeDescriptorContext context, object obj, System.Windows.Forms.IWin32Window parent) -> bool
+override System.Windows.Forms.AxHost.AxComponentEditor.EditComponent(System.ComponentModel.ITypeDescriptorContext? context, object! obj, System.Windows.Forms.IWin32Window? parent) -> bool
 ~override System.Windows.Forms.AxHost.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.AxHost.BackgroundImage.set -> void
 ~override System.Windows.Forms.AxHost.CreateParams.get -> System.Windows.Forms.CreateParams
@@ -398,7 +398,7 @@ override System.Windows.Forms.DateTimePicker.ToString() -> string!
 ~override System.Windows.Forms.Design.ComponentEditorForm.OnHelpRequested(System.Windows.Forms.HelpEventArgs e) -> void
 ~override System.Windows.Forms.Design.ComponentEditorPage.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Equals(object obj) -> bool
-~override System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(System.ComponentModel.ITypeDescriptorContext context, object component) -> bool
+override System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(System.ComponentModel.ITypeDescriptorContext? context, object! component) -> bool
 override System.Windows.Forms.DomainUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Add(object? item) -> int
 override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Insert(int index, object? item) -> void
@@ -1722,7 +1722,7 @@ System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.DateTimePicke
 ~System.Windows.Forms.Design.IUIService.ShowMessage(string message, string caption) -> void
 ~System.Windows.Forms.Design.IUIService.ShowMessage(string message, string caption, System.Windows.Forms.MessageBoxButtons buttons) -> System.Windows.Forms.DialogResult
 ~System.Windows.Forms.Design.IUIService.Styles.get -> System.Collections.IDictionary
-~System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(object component, System.Windows.Forms.IWin32Window owner) -> bool
+System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(object! component, System.Windows.Forms.IWin32Window? owner) -> bool
 System.Windows.Forms.DomainUpDown.Items.get -> System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection!
 System.Windows.Forms.DomainUpDown.OnSelectedItemChanged(object? source, System.EventArgs! e) -> void
 System.Windows.Forms.DomainUpDown.SelectedItem.get -> object?
@@ -3143,8 +3143,8 @@ virtual System.Windows.Forms.DateTimePicker.OnValueChanged(System.EventArgs! eve
 ~virtual System.Windows.Forms.Design.ComponentEditorPage.SetComponent(System.ComponentModel.IComponent component) -> void
 ~virtual System.Windows.Forms.Design.ComponentEditorPage.SetSite(System.Windows.Forms.IComponentEditorPageSite site) -> void
 ~virtual System.Windows.Forms.Design.ComponentEditorPage.Title.get -> string
-~virtual System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(System.ComponentModel.ITypeDescriptorContext context, object component, System.Windows.Forms.IWin32Window owner) -> bool
-~virtual System.Windows.Forms.Design.WindowsFormsComponentEditor.GetComponentEditorPages() -> System.Type[]
+virtual System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(System.ComponentModel.ITypeDescriptorContext? context, object! component, System.Windows.Forms.IWin32Window? owner) -> bool
+virtual System.Windows.Forms.Design.WindowsFormsComponentEditor.GetComponentEditorPages() -> System.Type![]?
 ~virtual System.Windows.Forms.ErrorProvider.OnRightToLeftChanged(System.EventArgs e) -> void
 virtual System.Windows.Forms.FontDialog.OnApply(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Form.OnActivated(System.EventArgs! e) -> void
