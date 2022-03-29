@@ -2101,20 +2101,20 @@ System.Windows.Forms.ListView.StateImageList.get -> System.Windows.Forms.ImageLi
 System.Windows.Forms.ListView.StateImageList.set -> void
 System.Windows.Forms.ListView.TopItem.get -> System.Windows.Forms.ListViewItem?
 System.Windows.Forms.ListView.TopItem.set -> void
-~System.Windows.Forms.ListViewGroupCollection.Add(string key, string headerText) -> System.Windows.Forms.ListViewGroup
-~System.Windows.Forms.ListViewGroupCollection.Add(System.Windows.Forms.ListViewGroup group) -> int
-~System.Windows.Forms.ListViewGroupCollection.AddRange(System.Windows.Forms.ListViewGroup[] groups) -> void
-~System.Windows.Forms.ListViewGroupCollection.AddRange(System.Windows.Forms.ListViewGroupCollection groups) -> void
-~System.Windows.Forms.ListViewGroupCollection.Contains(System.Windows.Forms.ListViewGroup value) -> bool
-~System.Windows.Forms.ListViewGroupCollection.CopyTo(System.Array array, int index) -> void
-~System.Windows.Forms.ListViewGroupCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ListViewGroupCollection.IndexOf(System.Windows.Forms.ListViewGroup value) -> int
-~System.Windows.Forms.ListViewGroupCollection.Insert(int index, System.Windows.Forms.ListViewGroup group) -> void
-~System.Windows.Forms.ListViewGroupCollection.Remove(System.Windows.Forms.ListViewGroup group) -> void
-~System.Windows.Forms.ListViewGroupCollection.this[int index].get -> System.Windows.Forms.ListViewGroup
-~System.Windows.Forms.ListViewGroupCollection.this[int index].set -> void
-~System.Windows.Forms.ListViewGroupCollection.this[string key].get -> System.Windows.Forms.ListViewGroup
-~System.Windows.Forms.ListViewGroupCollection.this[string key].set -> void
+System.Windows.Forms.ListViewGroupCollection.Add(string? key, string? headerText) -> System.Windows.Forms.ListViewGroup!
+System.Windows.Forms.ListViewGroupCollection.Add(System.Windows.Forms.ListViewGroup! group) -> int
+System.Windows.Forms.ListViewGroupCollection.AddRange(System.Windows.Forms.ListViewGroup![]! groups) -> void
+System.Windows.Forms.ListViewGroupCollection.AddRange(System.Windows.Forms.ListViewGroupCollection! groups) -> void
+System.Windows.Forms.ListViewGroupCollection.Contains(System.Windows.Forms.ListViewGroup! value) -> bool
+System.Windows.Forms.ListViewGroupCollection.CopyTo(System.Array! array, int index) -> void
+System.Windows.Forms.ListViewGroupCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ListViewGroupCollection.IndexOf(System.Windows.Forms.ListViewGroup! value) -> int
+System.Windows.Forms.ListViewGroupCollection.Insert(int index, System.Windows.Forms.ListViewGroup! group) -> void
+System.Windows.Forms.ListViewGroupCollection.Remove(System.Windows.Forms.ListViewGroup! group) -> void
+System.Windows.Forms.ListViewGroupCollection.this[int index].get -> System.Windows.Forms.ListViewGroup!
+System.Windows.Forms.ListViewGroupCollection.this[int index].set -> void
+System.Windows.Forms.ListViewGroupCollection.this[string! key].get -> System.Windows.Forms.ListViewGroup?
+System.Windows.Forms.ListViewGroupCollection.this[string! key].set -> void
 ~System.Windows.Forms.ListViewHitTestInfo.Item.get -> System.Windows.Forms.ListViewItem
 ~System.Windows.Forms.ListViewHitTestInfo.ListViewHitTestInfo(System.Windows.Forms.ListViewItem hitItem, System.Windows.Forms.ListViewItem.ListViewSubItem hitSubItem, System.Windows.Forms.ListViewHitTestLocations hitLocation) -> void
 ~System.Windows.Forms.ListViewHitTestInfo.SubItem.get -> System.Windows.Forms.ListViewItem.ListViewSubItem
