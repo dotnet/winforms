@@ -734,20 +734,20 @@ override System.Windows.Forms.ScrollableControl.OnVisibleChanged(System.EventArg
 ~override System.Windows.Forms.SplitContainer.OnRightToLeftChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.SplitContainer.Text.get -> string
 ~override System.Windows.Forms.SplitContainer.Text.set -> void
-~override System.Windows.Forms.Splitter.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.Splitter.BackgroundImage.set -> void
-~override System.Windows.Forms.Splitter.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.Splitter.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.Splitter.DefaultCursor.get -> System.Windows.Forms.Cursor
-~override System.Windows.Forms.Splitter.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.Splitter.Font.set -> void
-~override System.Windows.Forms.Splitter.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
-~override System.Windows.Forms.Splitter.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.Splitter.OnMouseMove(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.Splitter.OnMouseUp(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.Splitter.Text.get -> string
-~override System.Windows.Forms.Splitter.Text.set -> void
-~override System.Windows.Forms.Splitter.ToString() -> string
+override System.Windows.Forms.Splitter.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.Splitter.BackgroundImage.set -> void
+override System.Windows.Forms.Splitter.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.Splitter.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.Splitter.DefaultCursor.get -> System.Windows.Forms.Cursor!
+override System.Windows.Forms.Splitter.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.Splitter.Font.set -> void
+override System.Windows.Forms.Splitter.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
+override System.Windows.Forms.Splitter.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.Splitter.OnMouseMove(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.Splitter.OnMouseUp(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.Splitter.Text.get -> string!
+override System.Windows.Forms.Splitter.Text.set -> void
+override System.Windows.Forms.Splitter.ToString() -> string!
 ~override System.Windows.Forms.StatusStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.StatusStrip.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
 ~override System.Windows.Forms.StatusStrip.OnLayout(System.Windows.Forms.LayoutEventArgs levent) -> void
@@ -3310,8 +3310,8 @@ virtual System.Windows.Forms.RadioButton.OnCheckedChanged(System.EventArgs! e) -
 ~virtual System.Windows.Forms.RichTextBox.OnVScroll(System.EventArgs e) -> void
 virtual System.Windows.Forms.ScrollableControl.OnScroll(System.Windows.Forms.ScrollEventArgs! se) -> void
 virtual System.Windows.Forms.ScrollableControl.ScrollToControl(System.Windows.Forms.Control! activeControl) -> System.Drawing.Point
-~virtual System.Windows.Forms.Splitter.OnSplitterMoved(System.Windows.Forms.SplitterEventArgs sevent) -> void
-~virtual System.Windows.Forms.Splitter.OnSplitterMoving(System.Windows.Forms.SplitterEventArgs sevent) -> void
+virtual System.Windows.Forms.Splitter.OnSplitterMoved(System.Windows.Forms.SplitterEventArgs! sevent) -> void
+virtual System.Windows.Forms.Splitter.OnSplitterMoving(System.Windows.Forms.SplitterEventArgs! sevent) -> void
 ~virtual System.Windows.Forms.TabControl.GetItems() -> object[]
 ~virtual System.Windows.Forms.TabControl.GetItems(System.Type baseType) -> object[]
 ~virtual System.Windows.Forms.TabControl.OnDeselected(System.Windows.Forms.TabControlEventArgs e) -> void
@@ -10519,20 +10519,20 @@ System.Windows.Forms.SplitContainer.TabStop.get -> bool
 System.Windows.Forms.SplitContainer.TabStop.set -> void
 System.Windows.Forms.SplitContainer.TextChanged -> System.EventHandler
 System.Windows.Forms.Splitter
-System.Windows.Forms.Splitter.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.Splitter.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.Splitter.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.Splitter.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.Splitter.BorderStyle.get -> System.Windows.Forms.BorderStyle
 System.Windows.Forms.Splitter.BorderStyle.set -> void
-System.Windows.Forms.Splitter.Enter -> System.EventHandler
-System.Windows.Forms.Splitter.FontChanged -> System.EventHandler
-System.Windows.Forms.Splitter.ForeColorChanged -> System.EventHandler
+System.Windows.Forms.Splitter.Enter -> System.EventHandler?
+System.Windows.Forms.Splitter.FontChanged -> System.EventHandler?
+System.Windows.Forms.Splitter.ForeColorChanged -> System.EventHandler?
 System.Windows.Forms.Splitter.ImeMode.get -> System.Windows.Forms.ImeMode
 System.Windows.Forms.Splitter.ImeMode.set -> void
-System.Windows.Forms.Splitter.ImeModeChanged -> System.EventHandler
-System.Windows.Forms.Splitter.KeyDown -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.Splitter.KeyPress -> System.Windows.Forms.KeyPressEventHandler
-System.Windows.Forms.Splitter.KeyUp -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.Splitter.Leave -> System.EventHandler
+System.Windows.Forms.Splitter.ImeModeChanged -> System.EventHandler?
+System.Windows.Forms.Splitter.KeyDown -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.Splitter.KeyPress -> System.Windows.Forms.KeyPressEventHandler?
+System.Windows.Forms.Splitter.KeyUp -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.Splitter.Leave -> System.EventHandler?
 System.Windows.Forms.Splitter.MinExtra.get -> int
 System.Windows.Forms.Splitter.MinExtra.set -> void
 System.Windows.Forms.Splitter.MinSize.get -> int
@@ -10540,12 +10540,12 @@ System.Windows.Forms.Splitter.MinSize.set -> void
 System.Windows.Forms.Splitter.SplitPosition.get -> int
 System.Windows.Forms.Splitter.SplitPosition.set -> void
 System.Windows.Forms.Splitter.Splitter() -> void
-System.Windows.Forms.Splitter.SplitterMoved -> System.Windows.Forms.SplitterEventHandler
-System.Windows.Forms.Splitter.SplitterMoving -> System.Windows.Forms.SplitterEventHandler
+System.Windows.Forms.Splitter.SplitterMoved -> System.Windows.Forms.SplitterEventHandler?
+System.Windows.Forms.Splitter.SplitterMoving -> System.Windows.Forms.SplitterEventHandler?
 System.Windows.Forms.Splitter.TabStop.get -> bool
 System.Windows.Forms.Splitter.TabStop.set -> void
-System.Windows.Forms.Splitter.TabStopChanged -> System.EventHandler
-System.Windows.Forms.Splitter.TextChanged -> System.EventHandler
+System.Windows.Forms.Splitter.TabStopChanged -> System.EventHandler?
+System.Windows.Forms.Splitter.TextChanged -> System.EventHandler?
 System.Windows.Forms.SplitterCancelEventArgs
 System.Windows.Forms.SplitterCancelEventArgs.MouseCursorX.get -> int
 System.Windows.Forms.SplitterCancelEventArgs.MouseCursorY.get -> int
