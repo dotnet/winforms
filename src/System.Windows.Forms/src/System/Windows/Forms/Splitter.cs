@@ -564,10 +564,10 @@ namespace System.Windows.Forms
         ///  Calculates the bounding rect of the split line. minWeight refers
         ///  to the minimum height or width of the splitline.
         /// </summary>
-        private Rectangle CalcSplitLine(int splitSize, int minWeight)
+        private Rectangle CalcSplitLine(Control splitTarget, int splitSize, int minWeight)
         {
             Rectangle r = Bounds;
-            Rectangle bounds = _splitTarget!.Bounds;
+            Rectangle bounds = splitTarget.Bounds;
             switch (Dock)
             {
                 case DockStyle.Top:
@@ -705,7 +705,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            Rectangle r = CalcSplitLine(splitSize, 3);
+            Rectangle r = CalcSplitLine(_splitTarget, splitSize, 3);
             using var dc = new User32.GetDcScope(ParentInternal.Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
             Gdi32.HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
             using var halftoneScope = new Gdi32.ObjectScope(halftone);
@@ -777,7 +777,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Calculates the split size based on the mouse position (x, y).
         /// </summary>
-        private int GetSplitSize(int x, int y)
+        private int GetSplitSize(Control splitTarget, int x, int y)
         {
             int delta;
             if (Horizontal)
@@ -793,16 +793,16 @@ namespace System.Windows.Forms
             switch (Dock)
             {
                 case DockStyle.Top:
-                    size = _splitTarget!.Height + delta;
+                    size = splitTarget.Height + delta;
                     break;
                 case DockStyle.Bottom:
-                    size = _splitTarget!.Height - delta;
+                    size = splitTarget.Height - delta;
                     break;
                 case DockStyle.Left:
-                    size = _splitTarget!.Width + delta;
+                    size = splitTarget.Width + delta;
                     break;
                 case DockStyle.Right:
-                    size = _splitTarget!.Width - delta;
+                    size = splitTarget.Width - delta;
                     break;
             }
 
@@ -834,7 +834,7 @@ namespace System.Windows.Forms
             {
                 int x = e.X + Left;
                 int y = e.Y + Top;
-                Rectangle r = CalcSplitLine(GetSplitSize(e.X, e.Y), 0);
+                Rectangle r = CalcSplitLine(_splitTarget, GetSplitSize(_splitTarget, e.X, e.Y), 0);
                 int xSplit = r.X;
                 int ySplit = r.Y;
                 OnSplitterMoving(new SplitterEventArgs(x, y, xSplit, ySplit));
@@ -846,7 +846,7 @@ namespace System.Windows.Forms
             base.OnMouseUp(e);
             if (_splitTarget is not null)
             {
-                Rectangle r = CalcSplitLine(GetSplitSize(e.X, e.Y), 0);
+                Rectangle r = CalcSplitLine(_splitTarget, GetSplitSize(_splitTarget, e.X, e.Y), 0);
                 SplitEnd(true);
             }
         }
@@ -862,7 +862,7 @@ namespace System.Windows.Forms
 
             if (_splitTarget is not null)
             {
-                SplitMove(sevent.SplitX, sevent.SplitY);
+                SplitMove(_splitTarget, sevent.SplitX, sevent.SplitY);
             }
         }
 
@@ -877,7 +877,7 @@ namespace System.Windows.Forms
 
             if (_splitTarget is not null)
             {
-                SplitMove(sevent.SplitX, sevent.SplitY);
+                SplitMove(_splitTarget, sevent.SplitX, sevent.SplitY);
             }
         }
 
@@ -915,7 +915,7 @@ namespace System.Windows.Forms
             {
                 _anchor = new Point(x, y);
                 _splitTarget = spd.target;
-                _splitSize = GetSplitSize(x, y);
+                _splitSize = GetSplitSize(_splitTarget, x, y);
 
                 if (_splitterMessageFilter is not null)
                 {
@@ -968,9 +968,9 @@ namespace System.Windows.Forms
         ///  Moves the splitter line to the splitSize for the mouse position
         ///  (x, y).
         /// </summary>
-        private void SplitMove(int x, int y)
+        private void SplitMove(Control splitTarget, int x, int y)
         {
-            int size = GetSplitSize(x - Left + _anchor.X, y - Top + _anchor.Y);
+            int size = GetSplitSize(splitTarget, x - Left + _anchor.X, y - Top + _anchor.Y);
             if (_splitSize != size)
             {
                 _splitSize = size;
