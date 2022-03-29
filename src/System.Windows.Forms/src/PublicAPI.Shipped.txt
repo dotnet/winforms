@@ -410,7 +410,7 @@ override System.Windows.Forms.DomainUpDown.OnTextBoxKeyPress(object? source, Sys
 override System.Windows.Forms.DomainUpDown.ToString() -> string!
 ~override System.Windows.Forms.ErrorProvider.Site.set -> void
 override System.Windows.Forms.FileDialog.ToString() -> string!
-~override System.Windows.Forms.FlowLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
+override System.Windows.Forms.FlowLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
 override System.Windows.Forms.FlowLayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
 override System.Windows.Forms.FontDialog.ToString() -> string!
 override System.Windows.Forms.Form.ControlCollection.Add(System.Windows.Forms.Control? value) -> void
@@ -1758,8 +1758,8 @@ System.Windows.Forms.FileDialog.InitialDirectory.get -> string!
 System.Windows.Forms.FileDialog.InitialDirectory.set -> void
 System.Windows.Forms.FileDialog.Title.get -> string!
 System.Windows.Forms.FileDialog.Title.set -> void
-~System.Windows.Forms.FlowLayoutPanel.GetFlowBreak(System.Windows.Forms.Control control) -> bool
-~System.Windows.Forms.FlowLayoutPanel.SetFlowBreak(System.Windows.Forms.Control control, bool value) -> void
+System.Windows.Forms.FlowLayoutPanel.GetFlowBreak(System.Windows.Forms.Control! control) -> bool
+System.Windows.Forms.FlowLayoutPanel.SetFlowBreak(System.Windows.Forms.Control! control, bool value) -> void
 System.Windows.Forms.FlowLayoutSettings.GetFlowBreak(object! child) -> bool
 System.Windows.Forms.FlowLayoutSettings.SetFlowBreak(object! child, bool value) -> void
 System.Windows.Forms.FolderBrowserDialog.Description.get -> string!
