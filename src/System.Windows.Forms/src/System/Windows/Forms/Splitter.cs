@@ -844,11 +844,7 @@ namespace System.Windows.Forms
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            if (_splitTarget is not null)
-            {
-                Rectangle r = CalcSplitLine(_splitTarget, GetSplitSize(_splitTarget, e.X, e.Y), 0);
-                SplitEnd(true);
-            }
+            SplitEnd(true);
         }
 
         /// <summary>
