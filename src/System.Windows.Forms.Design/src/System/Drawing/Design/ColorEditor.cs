@@ -1082,12 +1082,14 @@ namespace System.Drawing.Design
 
         private class CustomColorDialog : ColorDialog
         {
+            private static readonly Assembly s_assembly = typeof(ColorEditor).Module.Assembly;
+            private static readonly string s_resourceName = $"{s_assembly.GetName().Name}.colordlg.data";
             private IntPtr hInstance;
 
             public CustomColorDialog()
             {
                 // colordlg.data was copied from VB6's dlg-4300.dlg
-                Stream stream = typeof(ColorEditor).Module.Assembly.GetManifestResourceStream(typeof(ColorEditor), "colordlg.data");
+                using Stream stream = s_assembly.GetManifestResourceStream(s_resourceName);
 
                 int size = (int)(stream.Length - stream.Position);
                 byte[] buffer = new byte[size];
