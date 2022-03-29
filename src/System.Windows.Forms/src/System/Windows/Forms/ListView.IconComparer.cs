@@ -13,18 +13,18 @@ namespace System.Windows.Forms
         //subhag
         internal class IconComparer : IComparer
         {
-            private SortOrder sortOrder;
+            private SortOrder _sortOrder;
 
             public IconComparer(SortOrder currentSortOrder)
             {
-                sortOrder = currentSortOrder;
+                _sortOrder = currentSortOrder;
             }
 
             public SortOrder SortOrder
             {
                 set
                 {
-                    sortOrder = value;
+                    _sortOrder = value;
                 }
             }
 
@@ -33,7 +33,7 @@ namespace System.Windows.Forms
                 //subhag
                 ListViewItem? currentItem = (ListViewItem?)obj1;
                 ListViewItem? nextItem = (ListViewItem?)obj2;
-                if (sortOrder == SortOrder.Ascending)
+                if (_sortOrder == SortOrder.Ascending)
                 {
                     return string.Compare(currentItem?.Text, nextItem?.Text, false, CultureInfo.CurrentCulture);
                 }
