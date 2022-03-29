@@ -36,6 +36,7 @@ namespace WinformsControlsTest
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.btnSaveFileDialog = new System.Windows.Forms.Button();
             this.btnOpenFileDialog = new System.Windows.Forms.Button();
+            this.btnColorDialog = new System.Windows.Forms.Button();
             this.btnThreadExceptionDialog = new System.Windows.Forms.Button();
             this.btnPrintDialog = new System.Windows.Forms.Button();
             this.btnFolderBrowserDialog = new System.Windows.Forms.Button();
@@ -67,6 +68,16 @@ namespace WinformsControlsTest
             this.btnOpenFileDialog.Text = "Open &file dialog";
             this.btnOpenFileDialog.UseVisualStyleBackColor = true;
             this.btnOpenFileDialog.Click += new System.EventHandler(this.btnOpenFileDialog_Click);
+            // 
+            // btnColorDialog
+            // 
+            this.btnColorDialog.Location = new System.Drawing.Point(3, 32);
+            this.btnColorDialog.Name = "btnColorDialog";
+            this.btnColorDialog.Size = new System.Drawing.Size(163, 23);
+            this.btnColorDialog.TabIndex = 2;
+            this.btnColorDialog.Text = "&Color dialog";
+            this.btnColorDialog.UseVisualStyleBackColor = true;
+            this.btnColorDialog.Click += new System.EventHandler(this.btnColorDialog_Click);
             // 
             // btnThreadExceptionDialog
             // 
@@ -110,6 +121,7 @@ namespace WinformsControlsTest
             // 
             // flowLayoutPanel1
             // 
+            this.flowLayoutPanel1.Controls.Add(this.btnColorDialog);
             this.flowLayoutPanel1.Controls.Add(this.btnThreadExceptionDialog);
             this.flowLayoutPanel1.Controls.Add(this.btnPrintDialog);
             this.flowLayoutPanel1.Controls.Add(this.btnFolderBrowserDialog);
@@ -150,6 +162,7 @@ namespace WinformsControlsTest
         private System.Windows.Forms.PropertyGrid propertyGrid1;
         private System.Windows.Forms.Button btnSaveFileDialog;
         private System.Windows.Forms.Button btnOpenFileDialog;
+        private System.Windows.Forms.Button btnColorDialog;
         private System.Windows.Forms.Button btnThreadExceptionDialog;
         private System.Windows.Forms.Button btnPrintDialog;
         private System.Windows.Forms.Button btnFolderBrowserDialog;
