@@ -797,11 +797,11 @@ override System.Windows.Forms.TextBox.OnKeyUp(System.Windows.Forms.KeyEventArgs!
 override System.Windows.Forms.TextBox.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
 override System.Windows.Forms.TextBox.Text.get -> string!
 override System.Windows.Forms.TextBox.Text.set -> void
-~override System.Windows.Forms.TextBoxBase.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.TextBoxBase.BackgroundImage.set -> void
-~override System.Windows.Forms.TextBoxBase.Text.get -> string
-~override System.Windows.Forms.TextBoxBase.Text.set -> void
-~override System.Windows.Forms.TextBoxBase.ToString() -> string
+override System.Windows.Forms.TextBoxBase.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.TextBoxBase.BackgroundImage.set -> void
+override System.Windows.Forms.TextBoxBase.Text.get -> string!
+override System.Windows.Forms.TextBoxBase.Text.set -> void
+override System.Windows.Forms.TextBoxBase.ToString() -> string!
 ~override System.Windows.Forms.ToolStrip.BindingContext.get -> System.Windows.Forms.BindingContext
 ~override System.Windows.Forms.ToolStrip.BindingContext.set -> void
 ~override System.Windows.Forms.ToolStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -2422,9 +2422,9 @@ System.Windows.Forms.TableLayoutSettings.SetRowSpan(object! control, int value) 
 System.Windows.Forms.TextBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection!
 System.Windows.Forms.TextBox.AutoCompleteCustomSource.set -> void
 System.Windows.Forms.TextBox.Paste(string? text) -> void
-~System.Windows.Forms.TextBoxBase.AppendText(string text) -> void
-~System.Windows.Forms.TextBoxBase.Lines.get -> string[]
-~System.Windows.Forms.TextBoxBase.Lines.set -> void
+System.Windows.Forms.TextBoxBase.AppendText(string? text) -> void
+System.Windows.Forms.TextBoxBase.Lines.get -> string![]!
+System.Windows.Forms.TextBoxBase.Lines.set -> void
 ~System.Windows.Forms.ThreadExceptionDialog.ThreadExceptionDialog(System.Exception t) -> void
 ~System.Windows.Forms.ToolStrip.Controls.get -> System.Windows.Forms.Control.ControlCollection
 ~System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point point) -> System.Windows.Forms.Control
@@ -3332,8 +3332,8 @@ virtual System.Windows.Forms.Splitter.OnSplitterMoving(System.Windows.Forms.Spli
 virtual System.Windows.Forms.TextBox.OnTextAlignChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.TextBox.PlaceholderText.get -> string!
 virtual System.Windows.Forms.TextBox.PlaceholderText.set -> void
-~virtual System.Windows.Forms.TextBoxBase.SelectedText.get -> string
-~virtual System.Windows.Forms.TextBoxBase.SelectedText.set -> void
+virtual System.Windows.Forms.TextBoxBase.SelectedText.get -> string!
+virtual System.Windows.Forms.TextBoxBase.SelectedText.set -> void
 ~virtual System.Windows.Forms.ToolStrip.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
 ~virtual System.Windows.Forms.ToolStrip.CreateLayoutSettings(System.Windows.Forms.ToolStripLayoutStyle layoutStyle) -> System.Windows.Forms.LayoutSettings
 ~virtual System.Windows.Forms.ToolStrip.DisplayedItems.get -> System.Windows.Forms.ToolStripItemCollection
@@ -10961,17 +10961,17 @@ System.Windows.Forms.TextBox.UseSystemPasswordChar.set -> void
 System.Windows.Forms.TextBoxBase
 System.Windows.Forms.TextBoxBase.AcceptsTab.get -> bool
 System.Windows.Forms.TextBoxBase.AcceptsTab.set -> void
-System.Windows.Forms.TextBoxBase.AcceptsTabChanged -> System.EventHandler
-System.Windows.Forms.TextBoxBase.AutoSizeChanged -> System.EventHandler
-System.Windows.Forms.TextBoxBase.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.TextBoxBase.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.TextBoxBase.AcceptsTabChanged -> System.EventHandler?
+System.Windows.Forms.TextBoxBase.AutoSizeChanged -> System.EventHandler?
+System.Windows.Forms.TextBoxBase.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.TextBoxBase.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.TextBoxBase.BorderStyle.get -> System.Windows.Forms.BorderStyle
 System.Windows.Forms.TextBoxBase.BorderStyle.set -> void
-System.Windows.Forms.TextBoxBase.BorderStyleChanged -> System.EventHandler
+System.Windows.Forms.TextBoxBase.BorderStyleChanged -> System.EventHandler?
 System.Windows.Forms.TextBoxBase.CanUndo.get -> bool
 System.Windows.Forms.TextBoxBase.Clear() -> void
 System.Windows.Forms.TextBoxBase.ClearUndo() -> void
-System.Windows.Forms.TextBoxBase.Click -> System.EventHandler
+System.Windows.Forms.TextBoxBase.Click -> System.EventHandler?
 System.Windows.Forms.TextBoxBase.Copy() -> void
 System.Windows.Forms.TextBoxBase.Cut() -> void
 System.Windows.Forms.TextBoxBase.DeselectAll() -> void
@@ -10979,21 +10979,21 @@ System.Windows.Forms.TextBoxBase.GetFirstCharIndexFromLine(int lineNumber) -> in
 System.Windows.Forms.TextBoxBase.GetFirstCharIndexOfCurrentLine() -> int
 System.Windows.Forms.TextBoxBase.HideSelection.get -> bool
 System.Windows.Forms.TextBoxBase.HideSelection.set -> void
-System.Windows.Forms.TextBoxBase.HideSelectionChanged -> System.EventHandler
+System.Windows.Forms.TextBoxBase.HideSelectionChanged -> System.EventHandler?
 System.Windows.Forms.TextBoxBase.Modified.get -> bool
 System.Windows.Forms.TextBoxBase.Modified.set -> void
-System.Windows.Forms.TextBoxBase.ModifiedChanged -> System.EventHandler
-System.Windows.Forms.TextBoxBase.MouseClick -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.TextBoxBase.MultilineChanged -> System.EventHandler
+System.Windows.Forms.TextBoxBase.ModifiedChanged -> System.EventHandler?
+System.Windows.Forms.TextBoxBase.MouseClick -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.TextBoxBase.MultilineChanged -> System.EventHandler?
 System.Windows.Forms.TextBoxBase.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.TextBoxBase.Padding.set -> void
-System.Windows.Forms.TextBoxBase.PaddingChanged -> System.EventHandler
-System.Windows.Forms.TextBoxBase.Paint -> System.Windows.Forms.PaintEventHandler
+System.Windows.Forms.TextBoxBase.PaddingChanged -> System.EventHandler?
+System.Windows.Forms.TextBoxBase.Paint -> System.Windows.Forms.PaintEventHandler?
 System.Windows.Forms.TextBoxBase.Paste() -> void
 System.Windows.Forms.TextBoxBase.PreferredHeight.get -> int
 System.Windows.Forms.TextBoxBase.ReadOnly.get -> bool
 System.Windows.Forms.TextBoxBase.ReadOnly.set -> void
-System.Windows.Forms.TextBoxBase.ReadOnlyChanged -> System.EventHandler
+System.Windows.Forms.TextBoxBase.ReadOnlyChanged -> System.EventHandler?
 System.Windows.Forms.TextBoxBase.ScrollToCaret() -> void
 System.Windows.Forms.TextBoxBase.Select(int start, int length) -> void
 System.Windows.Forms.TextBoxBase.SelectAll() -> void
