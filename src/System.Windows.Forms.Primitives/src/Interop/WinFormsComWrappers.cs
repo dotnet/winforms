@@ -21,6 +21,7 @@ internal partial class Interop
         private static readonly ComInterfaceEntry* s_streamEntry = InitializeIStreamEntry();
         private static readonly ComInterfaceEntry* s_fileDialogEventsEntry = InitializeIFileDialogEventsEntry();
         private static readonly ComInterfaceEntry* s_enumStringEntry = InitializeIEnumStringEntry();
+        private static readonly ComInterfaceEntry* s_dropSourceEntry = InitializeIDropSourceEntry();
 
         internal static WinFormsComWrappers Instance { get; } = new WinFormsComWrappers();
 
@@ -62,6 +63,18 @@ internal partial class Interop
             return wrapperEntry;
         }
 
+        private static ComInterfaceEntry* InitializeIDropSourceEntry()
+        {
+            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
+
+            IntPtr iDropSourceVtbl = IDropSourceVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+
+            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
+            wrapperEntry->IID = IID.IDropSource;
+            wrapperEntry->Vtable = iDropSourceVtbl;
+            return wrapperEntry;
+        }
+
         protected override unsafe ComInterfaceEntry* ComputeVtables(object obj, CreateComInterfaceFlags flags, out int count)
         {
             if (obj is Interop.Ole32.IStream)
@@ -74,6 +87,12 @@ internal partial class Interop
             {
                 count = 1;
                 return s_fileDialogEventsEntry;
+            }
+
+            if (obj is Ole32.IDropSource)
+            {
+                count = 1;
+                return s_dropSourceEntry;
             }
 
             if (obj is IEnumString)
