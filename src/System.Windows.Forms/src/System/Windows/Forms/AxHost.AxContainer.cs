@@ -29,10 +29,10 @@ namespace System.Windows.Forms
             private AxHost _siteUIActive;
             private AxHost _siteActive;
             private bool _formAlreadyCreated;
-            private readonly Hashtable _containerCache = new();  // name -> Control
+            private readonly Dictionary<Control, Control> _containerCache = new();  // name -> Control
             private int _lockCount;
-            private Hashtable _components;  // Control -> any
-            private Hashtable _proxyCache;
+            private Dictionary<Control, Control> _components;  // Control -> any
+            private Dictionary<Control, Oleaut32.IExtender> _proxyCache;
             private AxHost _controlInEditMode;
 
             internal AxContainer(ContainerControl parent)
@@ -107,12 +107,12 @@ namespace System.Windows.Forms
                 CultureInfo culture,
                 string[] namedParameters)
             {
-                foreach (DictionaryEntry e in _containerCache)
+                foreach (var (keyControl, valueControl) in _containerCache)
                 {
-                    string ctlName = GetNameForControl((Control)e.Key);
+                    string ctlName = GetNameForControl(keyControl);
                     if (ctlName.Equals(name))
                     {
-                        return GetProxyForControl((Control)e.Value);
+                        return GetProxyForControl(valueControl);
                     }
                 }
 
@@ -132,11 +132,11 @@ namespace System.Windows.Forms
                 Oleaut32.IExtender rval = null;
                 if (_proxyCache is null)
                 {
-                    _proxyCache = new Hashtable();
+                    _proxyCache = new();
                 }
                 else
                 {
-                    rval = (Oleaut32.IExtender)_proxyCache[ctl];
+                    _proxyCache.TryGetValue(ctl, out rval);
                 }
 
                 if (rval is null)
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
             {
                 lock (this)
                 {
-                    if (_containerCache.Contains(ctl))
+                    if (_containerCache.ContainsKey(ctl))
                     {
                         throw new ArgumentException(string.Format(SR.AXDuplicateControl, GetNameForControl(ctl)), nameof(ctl));
                     }
@@ -214,7 +214,7 @@ namespace System.Windows.Forms
             {
                 lock (this)
                 {
-                    if (_containerCache.Contains(ctl))
+                    if (_containerCache.ContainsKey(ctl))
                     {
                         _containerCache.Remove(ctl);
                     }
@@ -317,7 +317,7 @@ namespace System.Windows.Forms
 
                             break;
                         case GC_WCH.ALL:
-                            Hashtable htbl = GetComponents();
+                            Dictionary<Control, Control> htbl = GetComponents();
                             ctls = new Control[htbl.Keys.Count];
                             htbl.Keys.CopyTo(ctls, 0);
                             ctl = _parent;
@@ -400,12 +400,12 @@ namespace System.Windows.Forms
                     ComponentCollection comps = container.Components;
                     if (comps is not null)
                     {
-                        _components = new Hashtable();
+                        _components = new();
                         foreach (IComponent comp in comps)
                         {
-                            if (comp is Control && comp != _parent && comp.Site is not null)
+                            if (comp is Control control && comp != _parent && comp.Site is not null)
                             {
-                                _components.Add(comp, comp);
+                                _components.Add(control, control);
                             }
                         }
 
@@ -423,13 +423,13 @@ namespace System.Windows.Forms
                 {
                     if (ctls.Length > 0 && _components is null)
                     {
-                        _components = new Hashtable();
+                        _components = new();
                         checkHashTable = false;
                     }
 
                     for (int i = 0; i < ctls.Length; i++)
                     {
-                        if (checkHashTable && !_components.Contains(ctls[i]))
+                        if (checkHashTable && !_components.ContainsKey(ctls[i]))
                         {
                             _components.Add(ctls[i], ctls[i]);
                         }
@@ -448,10 +448,10 @@ namespace System.Windows.Forms
 
                 if (_components is null)
                 {
-                    _components = new Hashtable();
+                    _components = new();
                 }
 
-                if (ctl != _parent && !_components.Contains(ctl))
+                if (ctl != _parent && !_components.ContainsKey(ctl))
                 {
                     _components.Add(ctl, ctl);
                 }
@@ -462,12 +462,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            private Hashtable GetComponents()
+            private Dictionary<Control, Control> GetComponents()
             {
                 return GetComponents(GetParentsContainer());
             }
 
-            private Hashtable GetComponents(IContainer cont)
+            private Dictionary<Control, Control> GetComponents(IContainer cont)
             {
                 if (_lockCount == 0)
                 {
@@ -479,8 +479,8 @@ namespace System.Windows.Forms
 
             private bool GetControlBelongs(Control ctl)
             {
-                Hashtable comps = GetComponents();
-                return comps[ctl] is not null;
+                Dictionary<Control, Control> comps = GetComponents();
+                return comps.ContainsKey(ctl);
             }
 
             private IContainer GetParentIsDesigned()
@@ -628,7 +628,7 @@ namespace System.Windows.Forms
 
             private void ListAxControls(ArrayList list, bool fuseOcx)
             {
-                Hashtable components = GetComponents();
+                var components = GetComponents();
                 if (components is null)
                 {
                     return;
