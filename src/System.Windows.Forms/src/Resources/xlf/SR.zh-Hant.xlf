@@ -932,6 +932,11 @@
         <target state="translated">執行 CreateHandle() 時，無法呼叫值 {0}()。</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollapsedStateName">
+        <source>Collapsed</source>
+        <target state="new">Collapsed</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CollectionEmptyException">
         <source>Cannot operate with an empty collection.</source>
         <target state="translated">無法使用空的集合作業。</target>
@@ -4859,6 +4864,11 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="ExceptionCreatingObject">
         <source>Exception occurred while trying to create an instance of {0}. The exception was "{1}".</source>
         <target state="translated">當嘗試建立 {0} 的執行個體時發生例外狀況。例外狀況為 "{1}"。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
         <note />
       </trans-unit>
       <trans-unit id="ExternalException">

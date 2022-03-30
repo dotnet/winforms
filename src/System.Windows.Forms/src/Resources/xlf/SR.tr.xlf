@@ -932,6 +932,11 @@
         <target state="translated">CreateHandle() yapılırken {0}() değeri çağrılamaz.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollapsedStateName">
+        <source>Collapsed</source>
+        <target state="new">Collapsed</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CollectionEmptyException">
         <source>Cannot operate with an empty collection.</source>
         <target state="translated">Boş koleksiyon ile çalışılamaz.</target>
@@ -4859,6 +4864,11 @@ Devam'a tıkladığınızda uygulama bu hatayı yoksayar ve işlemi sürdürmeye
       <trans-unit id="ExceptionCreatingObject">
         <source>Exception occurred while trying to create an instance of {0}. The exception was "{1}".</source>
         <target state="translated">{0} örneği oluşturulmaya çalışılırken özel durum oluştu. Özel durum: "{1}".</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
         <note />
       </trans-unit>
       <trans-unit id="ExternalException">

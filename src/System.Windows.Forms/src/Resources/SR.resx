@@ -6901,4 +6901,10 @@ Stack trace where the illegal operation occurred was:
   <data name="EditDefaultAccessibleName" xml:space="preserve">
     <value>Spinner</value>
   </data>
+    <data name="CollapsedStateName" xml:space="preserve">
+    <value>Collapsed</value>
+  </data>
+  <data name="ExpandedStateName" xml:space="preserve">
+    <value>Expanded</value>
+  </data>
 </root>

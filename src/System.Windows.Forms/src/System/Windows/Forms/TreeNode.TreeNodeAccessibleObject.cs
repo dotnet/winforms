@@ -44,15 +44,12 @@ namespace System.Windows.Forms
                             : SR.AccessibleActionCheck;
                     }
 
-                    UiaCore.ExpandCollapseState expandCollapseState = ExpandCollapseState;
-                    if (expandCollapseState == UiaCore.ExpandCollapseState.LeafNode)
+                    return ExpandCollapseState switch
                     {
-                        return string.Empty;
-                    }
-
-                    return expandCollapseState == UiaCore.ExpandCollapseState.Expanded
-                        ? SR.AccessibleActionCollapse
-                        : SR.AccessibleActionExpand;
+                        UiaCore.ExpandCollapseState.LeafNode => string.Empty,
+                        UiaCore.ExpandCollapseState.Expanded => SR.AccessibleActionCollapse,
+                        _ => SR.AccessibleActionExpand
+                    };
                 }
             }
 

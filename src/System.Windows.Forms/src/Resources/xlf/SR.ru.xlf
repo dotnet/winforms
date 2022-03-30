@@ -932,6 +932,11 @@
         <target state="translated">Вызов значения {0}() во время выполнения CreateHandle() невозможен.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollapsedStateName">
+        <source>Collapsed</source>
+        <target state="new">Collapsed</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CollectionEmptyException">
         <source>Cannot operate with an empty collection.</source>
         <target state="translated">Работа с пустой коллекцией невозможна.</target>
@@ -4860,6 +4865,11 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="ExceptionCreatingObject">
         <source>Exception occurred while trying to create an instance of {0}. The exception was "{1}".</source>
         <target state="translated">Исключение при попытке создания экземпляра {0}. Исключение: "{1}".</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
         <note />
       </trans-unit>
       <trans-unit id="ExternalException">

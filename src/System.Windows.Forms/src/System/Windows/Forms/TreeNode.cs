@@ -227,6 +227,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  This flag is necessary to avoid announcing the node status message
+        ///  during a bulk action (e.g. <see cref="TreeNode.ExpandAll"/> method)
+        /// </summary>
+        internal bool IsAnnouncementStopped { get; private set; }
+
+        /// <summary>
         ///  The bounding rectangle for the node (text area only). The coordinates
         ///  are relative to the upper left corner of the TreeView control.
         /// </summary>
@@ -1767,11 +1773,14 @@ namespace System.Windows.Forms
         /// </summary>
         public void ExpandAll()
         {
+            IsAnnouncementStopped = true;
             Expand();
             for (int i = 0; i < childCount; i++)
             {
                 children[i].ExpandAll();
             }
+
+            IsAnnouncementStopped = false;
         }
 
         /// <summary>

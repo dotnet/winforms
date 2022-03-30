@@ -932,6 +932,11 @@
         <target state="translated">CreateHandle() 중에는 {0}() 값을 호출할 수 없습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollapsedStateName">
+        <source>Collapsed</source>
+        <target state="new">Collapsed</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CollectionEmptyException">
         <source>Cannot operate with an empty collection.</source>
         <target state="translated">빈 컬렉션으로 작업할 수 없습니다.</target>
@@ -4859,6 +4864,11 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="ExceptionCreatingObject">
         <source>Exception occurred while trying to create an instance of {0}. The exception was "{1}".</source>
         <target state="translated">{0}의 인스턴스를 만드는 동안 예외가 발생했습니다. 예외는 "{1}"입니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
         <note />
       </trans-unit>
       <trans-unit id="ExternalException">

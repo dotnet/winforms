@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Windows.Forms.Automation;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static System.Windows.Forms.TreeNode;
@@ -484,6 +485,111 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(testText, node.AccessibilityObject.Value);
             Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeNodeAccessibleObject_Expand_Collapse_Calls_RaiseAutomationNotification_TreeNode(bool checkBoxesEnabled)
+        {
+            using TreeView control = new() { CheckBoxes = checkBoxesEnabled };
+            control.CreateControl();
+            control.Nodes.Add("Test node");
+            control.Nodes[0].Nodes.Add("Child");
+            TreeNode node = control.Nodes[0];
+
+            Assert.NotNull(control.AccessibilityObject);
+
+            SubTreeNodeAccessibleObject accessibleObject = new(node, control);
+            node.TestAccessor().Dynamic._accessibleObject = accessibleObject;
+
+            node.Expand();
+
+            Assert.Equal(1, accessibleObject.RaiseAutomationNotificationCallCount);
+            Assert.Equal(SR.ExpandedStateName, accessibleObject.LastMessage);
+
+            node.Collapse();
+
+            Assert.Equal(2, accessibleObject.RaiseAutomationNotificationCallCount);
+            Assert.Equal(SR.CollapsedStateName, accessibleObject.LastMessage);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeNodeAccessibleObject_Expand_Collapse_Calls_RaiseAutomationNotification_SubTreeNode(bool checkBoxesEnabled)
+        {
+            using TreeView control = new() { CheckBoxes = checkBoxesEnabled };
+            control.CreateControl();
+            control.Nodes.Add("Parent");
+            control.Nodes[0].Nodes.Add("Test Node");
+            control.Nodes[0].Nodes[0].Nodes.Add("Test Node");
+            TreeNode node = control.Nodes[0].Nodes[0];
+
+            Assert.NotNull(control.AccessibilityObject);
+
+            SubTreeNodeAccessibleObject accessibleObject = new(node, control);
+            node.TestAccessor().Dynamic._accessibleObject = accessibleObject;
+
+            node.Expand();
+
+            Assert.Equal(1, accessibleObject.RaiseAutomationNotificationCallCount);
+            Assert.Equal(SR.ExpandedStateName, accessibleObject.LastMessage);
+
+            node.Collapse();
+
+            Assert.Equal(2, accessibleObject.RaiseAutomationNotificationCallCount);
+            Assert.Equal(SR.CollapsedStateName, accessibleObject.LastMessage);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeNodeAccessibleObject_ExpandAll_DoesNot_Calls_RaiseAutomationNotification(bool checkBoxesEnabled)
+        {
+            using TreeView control = new() { CheckBoxes = checkBoxesEnabled };
+            control.CreateControl();
+            control.Nodes.Add("Parent");
+            control.Nodes[0].Nodes.Add("Test Node 1");
+            control.Nodes[0].Nodes[0].Nodes.Add("Test Node 2");
+            control.Nodes[0].Nodes[0].Nodes[0].Nodes.Add("Test Node 3");
+
+            Assert.NotNull(control.AccessibilityObject);
+
+            SubTreeNodeAccessibleObject accessibleObject1 = new(control.Nodes[0], control);
+            SubTreeNodeAccessibleObject accessibleObject2 = new(control.Nodes[0].Nodes[0], control);
+            SubTreeNodeAccessibleObject accessibleObject3 = new(control.Nodes[0].Nodes[0].Nodes[0], control);
+            SubTreeNodeAccessibleObject accessibleObject4 = new(control.Nodes[0].Nodes[0].Nodes[0].Nodes[0], control);
+
+            control.Nodes[0].TestAccessor().Dynamic._accessibleObject = accessibleObject1;
+            control.Nodes[0].Nodes[0].TestAccessor().Dynamic._accessibleObject = accessibleObject2;
+            control.Nodes[0].Nodes[0].Nodes[0].TestAccessor().Dynamic._accessibleObject = accessibleObject3;
+            control.Nodes[0].Nodes[0].Nodes[0].Nodes[0].TestAccessor().Dynamic._accessibleObject = accessibleObject4;
+
+            control.Nodes[0].ExpandAll();
+
+            Assert.Equal(0, accessibleObject1.RaiseAutomationNotificationCallCount);
+            Assert.Equal(0, accessibleObject2.RaiseAutomationNotificationCallCount);
+            Assert.Equal(0, accessibleObject3.RaiseAutomationNotificationCallCount);
+            Assert.Equal(0, accessibleObject4.RaiseAutomationNotificationCallCount);
+        }
+
+        private class SubTreeNodeAccessibleObject : TreeNodeAccessibleObject
+        {
+            internal string LastMessage { get; private set; }
+
+            internal int RaiseAutomationNotificationCallCount { get; private set; }
+
+            public SubTreeNodeAccessibleObject(TreeNode owningTreeNode, TreeView owningTreeView) : base(owningTreeNode, owningTreeView)
+            {
+            }
+
+            internal override bool InternalRaiseAutomationNotification(AutomationNotificationKind notificationKind, AutomationNotificationProcessing notificationProcessing, string notificationText)
+            {
+                RaiseAutomationNotificationCallCount++;
+                LastMessage = notificationText;
+                return true;
+            }
         }
     }
 }

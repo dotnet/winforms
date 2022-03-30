@@ -932,6 +932,11 @@
         <target state="translated">Der Wert {0}() kann nicht während der Ausführung von CreateHandle() aufgerufen werden.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollapsedStateName">
+        <source>Collapsed</source>
+        <target state="new">Collapsed</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CollectionEmptyException">
         <source>Cannot operate with an empty collection.</source>
         <target state="translated">Der Vorgang kann nicht mit einer leeren Sammlung durchgeführt werden.</target>
@@ -4859,6 +4864,11 @@ Wenn Sie auf "Weiter" klicken, ignoriert die Anwendung den Fehler und setzt den 
       <trans-unit id="ExceptionCreatingObject">
         <source>Exception occurred while trying to create an instance of {0}. The exception was "{1}".</source>
         <target state="translated">Ausnahme beim Erstellen einer Instanz von {0}: {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
         <note />
       </trans-unit>
       <trans-unit id="ExternalException">

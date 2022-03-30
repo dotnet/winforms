@@ -2250,13 +2250,13 @@ namespace System.Windows.Forms
         {
             onAfterCollapse?.Invoke(this, e);
 
-            // Raise an event to announce the expand-collapse state change.
-            if (IsAccessibilityObjectCreated)
+            if (IsAccessibilityObjectCreated && !e.Node.IsAnnouncementStopped)
             {
-                e.Node.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                    oldValue: UiaCore.ExpandCollapseState.Expanded,
-                    newValue: UiaCore.ExpandCollapseState.Collapsed);
+                // Raise an event to announce the expand-collapse state change.
+                e.Node.AccessibilityObject.InternalRaiseAutomationNotification(
+                    Automation.AutomationNotificationKind.ActionCompleted,
+                    Automation.AutomationNotificationProcessing.CurrentThenMostRecent,
+                    SR.CollapsedStateName);
             }
         }
 
@@ -2275,13 +2275,13 @@ namespace System.Windows.Forms
         {
             onAfterExpand?.Invoke(this, e);
 
-            // Raise anevent to announce the expand-collapse state change.
-            if (IsAccessibilityObjectCreated)
+            if (IsAccessibilityObjectCreated && !e.Node.IsAnnouncementStopped)
             {
-                e.Node.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                    oldValue: UiaCore.ExpandCollapseState.Collapsed,
-                    newValue: UiaCore.ExpandCollapseState.Expanded);
+                // Raise an event to announce the expand-collapse state change.
+                e.Node.AccessibilityObject.InternalRaiseAutomationNotification(
+                    Automation.AutomationNotificationKind.ActionCompleted,
+                    Automation.AutomationNotificationProcessing.CurrentThenMostRecent,
+                    SR.ExpandedStateName);
             }
         }
 

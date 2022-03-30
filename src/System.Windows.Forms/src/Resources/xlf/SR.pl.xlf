@@ -932,6 +932,11 @@
         <target state="translated">Nie można wywołać wartości {0}() w trakcie wykonywania CreateHandle().</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollapsedStateName">
+        <source>Collapsed</source>
+        <target state="new">Collapsed</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CollectionEmptyException">
         <source>Cannot operate with an empty collection.</source>
         <target state="translated">Nie można operować pustą kolekcją.</target>
@@ -4859,6 +4864,11 @@ Jeśli klikniesz pozycję Kontynuuj, aplikacja zignoruje ten błąd i będzie pr
       <trans-unit id="ExceptionCreatingObject">
         <source>Exception occurred while trying to create an instance of {0}. The exception was "{1}".</source>
         <target state="translated">Wystąpił wyjątek podczas próby utworzenia wystąpienia elementu {0}. Wyjątek to: "{1}".</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
         <note />
       </trans-unit>
       <trans-unit id="ExternalException">
