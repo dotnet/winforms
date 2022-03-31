@@ -1372,8 +1372,8 @@ System.Windows.Forms.ButtonBase.ImageKey.get -> string!
 System.Windows.Forms.ButtonBase.ImageKey.set -> void
 System.Windows.Forms.ButtonBase.ImageList.get -> System.Windows.Forms.ImageList?
 System.Windows.Forms.ButtonBase.ImageList.set -> void
-~System.Windows.Forms.CheckedListBox.CheckedIndexCollection.CopyTo(System.Array dest, int index) -> void
-~System.Windows.Forms.CheckedListBox.CheckedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
+System.Windows.Forms.CheckedListBox.CheckedIndexCollection.CopyTo(System.Array! dest, int index) -> void
+System.Windows.Forms.CheckedListBox.CheckedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator!
 System.Windows.Forms.CheckedListBox.CheckedIndices.get -> System.Windows.Forms.CheckedListBox.CheckedIndexCollection!
 ~System.Windows.Forms.CheckedListBox.CheckedItemCollection.Contains(object item) -> bool
 ~System.Windows.Forms.CheckedListBox.CheckedItemCollection.CopyTo(System.Array dest, int index) -> void
