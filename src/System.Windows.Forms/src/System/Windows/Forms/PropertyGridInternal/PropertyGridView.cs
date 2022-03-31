@@ -1016,6 +1016,23 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void CreateUI() => UpdateUIBasedOnFont(layoutRequired: false);
 
+        internal void DisconnectChildren()
+        {
+            Debug.Assert(OsVersion.IsWindows8OrGreater);
+            UiaCore.UiaDisconnectProvider(_editTextBox?.AccessibilityObject);
+            if (_allGridEntries != null)
+            {
+                foreach (GridEntry gridEntry in _allGridEntries)
+                {
+                    // needs additional testing
+                    HRESULT result = UiaCore.UiaDisconnectProvider(gridEntry.AccessibilityObject);
+                    Debug.Assert(result == 0);
+                }
+            }
+
+            _allGridEntries = null;
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

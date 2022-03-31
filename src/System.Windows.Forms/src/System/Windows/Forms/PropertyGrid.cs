@@ -26,11 +26,11 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionPropertyGrid))]
     public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, Ole32.IPropertyNotifySink
     {
-        private readonly HelpPane _helpPane;
+        private HelpPane _helpPane;
         private int _helpPaneSizeRatio = -1;
         private int _commandsPaneSizeRatio = -1;
-        private readonly CommandsPane _commandsPane;
-        private readonly ToolStrip _toolStrip;
+        private CommandsPane _commandsPane;
+        private ToolStrip _toolStrip;
 
         private bool _helpVisible = true;
         private bool _toolbarVisible = true;
@@ -43,7 +43,7 @@ namespace System.Windows.Forms
         private Bitmap _categoryBitmap;
         private Bitmap _propertyPageBitmap;
 
-        private readonly List<TabInfo> _tabs = new();
+        private List<TabInfo> _tabs = new();
         private TabInfo _selectedTab;
         private bool _tabsDirty = true;
 
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
         private readonly ToolStripSeparator _separator2;
 
         // Our main view
-        private readonly PropertyGridView _gridView;
+        private PropertyGridView _gridView;
 
         private IDesignerHost _designerHost;
         private IDesignerEventService _designerEventService;
@@ -1826,12 +1826,15 @@ namespace System.Windows.Forms
 
                 ActiveDesigner = null;
 
-                foreach (var tabInfo in _tabs)
+                if (_tabs != null)
                 {
-                    tabInfo.Tab.Dispose();
-                }
+                    foreach (var tabInfo in _tabs)
+                    {
+                        tabInfo.Tab.Dispose();
+                    }
 
-                _tabs.Clear();
+                    _tabs.Clear();
+                }
 
                 _normalButtonImages?.Dispose();
                 _normalButtonImages = null;
@@ -4255,6 +4258,54 @@ namespace System.Windows.Forms
 
                     m.ResultInternal = 1;
                     return;
+                case User32.WM.DESTROY:
+                    base.WndProc(ref m);
+                    if (OsVersion.IsWindows8OrGreater && IsAccessibilityObjectCreated)
+                    {
+                        _gridView?.DisconnectChildren();
+                        HRESULT result = UiaCore.UiaDisconnectProvider(_gridView?.AccessibilityObject);
+                        Debug.Assert(result == 0);
+                        result = UiaCore.UiaDisconnectProvider(_helpPane?.AccessibilityObject);
+                        Debug.Assert(result == 0);
+                        result = UiaCore.UiaDisconnectProvider(_commandsPane?.AccessibilityObject);
+                        Debug.Assert(result == 0);
+                        result = UiaCore.UiaDisconnectProvider(_toolStrip?.AccessibilityObject);
+                        Debug.Assert(result == 0);
+                        //quite possible nullifying all these and other objects won't be necessary when all provider will be disconnected
+                        _gridView = null;
+                        _commandsPane = null;
+                        _helpPane = null;
+                        _toolStrip = null;
+
+                        foreach (var tab in _tabs)
+                        {
+                            if (tab.Button?.Visible ?? false)
+                            {
+                                UiaCore.UiaDisconnectProvider(tab.Button.AccessibilityObject);
+                            }
+                        }
+
+                        _tabs = null;
+                        if (_viewSortButtons != null)
+                        {
+                            foreach (ToolStripButton toolStripButton in _viewSortButtons)
+                            {
+                                result = UiaCore.UiaDisconnectProvider(toolStripButton.AccessibilityObject);
+
+                                //needs further investigation, uncommenting it caused a crash for the third tool strip button if debugger is not attached
+                                //Debug.Assert(result == 0);
+                            }
+                        }
+
+                        _viewSortButtons = null;
+                        result = UiaCore.UiaDisconnectProvider(_viewPropertyPagesButton?.AccessibilityObject);
+                        Debug.Assert(result == 0);
+                        _viewPropertyPagesButton = null;
+                        result = UiaCore.UiaDisconnectProvider(AccessibilityObject);
+                        Debug.Assert(result == 0);
+                    }
+
+                    break;
                 case (User32.WM)AutomationMessages.PGM_GETBUTTONCOUNT:
                     if (_toolStrip is not null)
                     {
