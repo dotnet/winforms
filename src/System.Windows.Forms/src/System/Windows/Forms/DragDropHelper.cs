@@ -234,48 +234,54 @@ namespace System.Windows.Forms
         public static bool CopyDragDropStgMedium(ref STGMEDIUM mediumSrc, FORMATETC formatEtc, out STGMEDIUM mediumDest)
         {
             mediumDest = new();
-            string formatName = DataFormats.GetFormat(formatEtc.cfFormat).Name;
 
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"CopyDragDropStgMedium: {mediumSrc.tymed}");
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   Format: {formatName}");
-
-            // Verify the storage medium is a drag-and-drop format.
-            if (!s_formats.Contains(formatName) || !s_tymeds.Contains(mediumSrc.tymed))
+            try
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   Invalid format: {formatName}");
-                return false;
-            }
+                string formatName = DataFormats.GetFormat(formatEtc.cfFormat).Name;
 
-            // Copy the storage medium type and release pointer.
-            mediumDest.tymed = mediumSrc.tymed;
-            mediumDest.pUnkForRelease = mediumSrc.pUnkForRelease;
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"CopyDragDropStgMedium: {mediumSrc.tymed}");
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   Format: {formatName}");
 
-            // The drag-and-drop storage mediums consist of the types TYMED_HGLOBAL and TYMED_ISTREAM.
-            if (mediumSrc.tymed.Equals(TYMED.TYMED_HGLOBAL))
-            {
-                // TYMED_HGLOBAL - Copy global memory handles using the OleDuplicateData function.
-                mediumDest.unionmember = Ole32.OleDuplicateData(
-                    mediumSrc.unionmember,
-                    formatEtc.cfFormat,
-                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
-                if (mediumDest.unionmember == IntPtr.Zero)
+                // Verify the storage medium is a drag-and-drop format.
+                if (!s_formats.Contains(formatName) || !s_tymeds.Contains(mediumSrc.tymed))
                 {
+                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   Invalid format: {formatName}");
                     return false;
                 }
 
-                return true;
-            }
-            else if (mediumSrc.tymed.Equals(TYMED.TYMED_ISTREAM) && mediumSrc.unionmember != IntPtr.Zero)
-            {
-                // TYMED_ISTREAM - This is a pointer to the DragContext.
-                mediumDest.unionmember = mediumSrc.unionmember;
+                // The drag-and-drop storage mediums consist of the types TYMED_HGLOBAL and TYMED_ISTREAM.
+                if (mediumSrc.tymed.Equals(TYMED.TYMED_HGLOBAL))
+                {
+                    // TYMED_HGLOBAL - Copy global memory handles using the OleDuplicateData function.
+                    mediumDest.unionmember = Ole32.OleDuplicateData(
+                        mediumSrc.unionmember,
+                        formatEtc.cfFormat,
+                        Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
+                    if (mediumDest.unionmember == IntPtr.Zero)
+                    {
+                        return false;
+                    }
+                }
+                else if (mediumSrc.tymed.Equals(TYMED.TYMED_ISTREAM) && mediumSrc.unionmember != IntPtr.Zero)
+                {
+                    // TYMED_ISTREAM - This is a pointer to the DragContext.
+                    mediumDest.unionmember = mediumSrc.unionmember;
 
-                // Increment the reference count.
-                Marshal.AddRef(mediumSrc.unionmember);
+                    // Increment the reference count.
+                    Marshal.AddRef(mediumSrc.unionmember);
+                }
+
+                // Copy the storage medium type and release pointer.
+                mediumDest.tymed = mediumSrc.tymed;
+                mediumDest.pUnkForRelease = mediumSrc.pUnkForRelease;
                 return true;
             }
-            else
+            catch
             {
+                mediumDest.pUnkForRelease = null;
+                mediumDest.tymed = TYMED.TYMED_NULL;
+                Kernel32.GlobalFree(mediumDest.unionmember);
+                mediumDest.unionmember = IntPtr.Zero;
                 return false;
             }
         }
@@ -298,6 +304,9 @@ namespace System.Windows.Forms
 
             try
             {
+                // Set IsShowingText to true.
+                SetIsShowingText(dataObject, true);
+
                 // Create the drop description clipboard format.
                 FORMATETC formatEtc = new()
                 {
@@ -344,9 +353,6 @@ namespace System.Windows.Forms
 
                 // Load the drop description into the data object.
                 dataObject.SetData(ref formatEtc, ref medium, true);
-
-                // Set IsShowingText to true.
-                SetIsShowingText(dataObject, true);
             }
             catch
             {
@@ -496,7 +502,7 @@ namespace System.Windows.Forms
                     // Allocate a suitably sized block of memory.
                     unionmember = Kernel32.GlobalAlloc(
                         Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
-                        sizeof(uint))
+                        sizeof(BOOL))
                 };
                 if (medium.unionmember == IntPtr.Zero)
                 {
