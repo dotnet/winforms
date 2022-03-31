@@ -77,7 +77,7 @@ namespace System.Windows.Forms
                 pdwEffect = (uint)drgevent.Effect;
                 _lastEffect = drgevent.Effect;
 
-                if (drgevent.DropIcon is > DropIconType.Default
+                if (drgevent.DropIcon > DropIconType.Default
                     && drgevent.Data is IComDataObject comDataObject
                     && _owner is Control control)
                 {
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
                 pdwEffect = (uint)drgevent.Effect;
                 _lastEffect = drgevent.Effect;
 
-                if (_lastDropIcon is > DropIconType.Default
+                if (_lastDropIcon > DropIconType.Default
                     && _lastDataObject is IComDataObject comDataObject)
                 {
                     if (!drgevent.DropIcon.Equals(_lastDropIcon)
@@ -142,7 +142,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragLeave received");
             _owner.OnDragLeave(EventArgs.Empty);
 
-            if (_lastDropIcon is > DropIconType.Default
+            if (_lastDropIcon > DropIconType.Default
                 && _lastDataObject is IComDataObject comDataObject)
             {
                 DragDropHelper.SetDropDescription(comDataObject, DropIconType.Default, string.Empty, string.Empty);
@@ -167,7 +167,7 @@ namespace System.Windows.Forms
                 _owner.OnDragDrop(drgevent);
                 pdwEffect = (uint)drgevent.Effect;
 
-                if (_lastDropIcon is > DropIconType.Default
+                if (_lastDropIcon > DropIconType.Default
                     && drgevent.Data is IComDataObject comDataObject)
                 {
                     DragDropHelper.SetDropDescription(comDataObject, DropIconType.Default, string.Empty, string.Empty);
