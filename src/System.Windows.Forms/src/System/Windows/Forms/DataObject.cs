@@ -687,6 +687,7 @@ namespace System.Windows.Forms
             else if (_innerData is DataStore dataStore
                 && DataFormats.GetFormat(pFormatetcIn.cfFormat).Name is string formatName
                 && DragDropHelper.s_formats.Contains(formatName)
+                && DragDropHelper.s_tymeds.Contains(pmedium.tymed)
                 && pFormatetcIn.ptd.Equals(IntPtr.Zero))
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {formatName}");
