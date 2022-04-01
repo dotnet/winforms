@@ -14,23 +14,20 @@ HRESULT STDMETHODCALLTYPE StandardErrorInfoUsageTest::get_Int_Property(
 HRESULT STDMETHODCALLTYPE StandardErrorInfoUsageTest::put_Int_Property(
     /* [in] */ int val)
 {
-    ICreateErrorInfo* cei;
+    ComSmartPtr<ICreateErrorInfo> cei;
     if (SUCCEEDED(::CreateErrorInfo(&cei)))
     {
         if (SUCCEEDED(cei->SetGUID(IID_IBasicTest)))
         {
             if (SUCCEEDED(cei->SetDescription(L"Error From StandardErrorInfoUsageTest")))
             {
-                IErrorInfo* errorInfo;
+                ComSmartPtr<IErrorInfo> errorInfo;
                 if (SUCCEEDED(cei->QueryInterface(IID_IErrorInfo, (void**)&errorInfo)))
                 {
                     ::SetErrorInfo(0, errorInfo);
-                    errorInfo->Release();
                 }
             }
         }
-
-        cei->Release();
     }
 
     return DISP_E_MEMBERNOTFOUND;

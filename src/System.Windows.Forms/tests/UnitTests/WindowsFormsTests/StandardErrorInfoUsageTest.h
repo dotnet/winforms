@@ -16,10 +16,6 @@ public:
     {
     }
 
-    ~StandardErrorInfoUsageTest()
-    {
-    }
-
 public: // IBasicTest
     
     virtual HRESULT STDMETHODCALLTYPE get_Int_Property( 
