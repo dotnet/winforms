@@ -572,9 +572,6 @@ namespace System.Windows.Forms
                     medium = dragDropFormat.Medium;
                     return;
                 }
-
-                medium = default;
-                return;
             }
 
             medium = new STGMEDIUM();
