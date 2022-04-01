@@ -10,7 +10,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents a drag and drop private format.
+    ///  Represents a private drag and drop format used for IDataObject::SetData and IDataObject::GetData implementations.
     /// </summary>
     internal class DragDropFormat
     {
@@ -21,20 +21,28 @@ namespace System.Windows.Forms
         private STGMEDIUM _mediumOut;
 
         /// <summary>
-        ///  Represents a drag and drop storage medium.
+        ///  Represents a private drag and drop storage medium.
         /// </summary>
         public STGMEDIUM Medium
         {
             get
             {
-                if (DragDropHelper.CopyDragDropStgMedium(ref _mediumIn, _formatEtc, out _mediumOut))
+                if (_release)
                 {
-                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DragDropFormat storage medium copied.");
-                    return _mediumOut;
+                    // Handle when the data object retains ownership of the storage medium and return a copy.
+                    if (DragDropHelper.CopyDragDropStgMedium(ref _mediumIn, _formatEtc, out _mediumOut))
+                    {
+                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DragDropFormat storage medium copied.");
+                        return _mediumOut;
+                    }
+                    else
+                    {
+                        return default;
+                    }
                 }
                 else
                 {
-                    return default;
+                    return _mediumIn;
                 }
             }
         }
@@ -46,8 +54,21 @@ namespace System.Windows.Forms
             Debug.Assert(DragDropHelper.s_tymeds.Contains(pMedium.tymed), "DragDropFormat constructor received an incompatible storage medium type.");
 
             _formatEtc = pFormatetc;
-            _mediumIn = pMedium;
             _release = fRelease;
+
+            if (_release)
+            {
+                _mediumIn = pMedium;
+            }
+            else
+            {
+                // Handle when the caller retains ownership of the storage medium. Weltkante said in this case we must
+                // copy it if we want to keep the storage medium beyond the IDataObject::SetData method call.
+                if (DragDropHelper.CopyDragDropStgMedium(ref pMedium, pFormatetc, out STGMEDIUM _mediumCopy))
+                {
+                    _mediumIn = _mediumCopy;
+                }
+            }
         }
 
         ~DragDropFormat()
@@ -56,10 +77,14 @@ namespace System.Windows.Forms
 
             if (_release)
             {
-                // Release the copied storage medium.
                 Ole32.ReleaseStgMedium(ref _mediumOut);
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat {_formatName} storage medium released.");
             }
+            else
+            {
+                Ole32.ReleaseStgMedium(ref _mediumIn);
+            }
+
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat {_formatName} storage medium released.");
         }
     }
 }
