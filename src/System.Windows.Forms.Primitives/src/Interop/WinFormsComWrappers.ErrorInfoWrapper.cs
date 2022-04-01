@@ -37,6 +37,10 @@ internal partial class Interop
                     pBstrDescription = Marshal.PtrToStringUni(descriptionPtr);
                     Marshal.FreeBSTR(descriptionPtr);
                 }
+                else
+                {
+                    pBstrDescription = null;
+                }
 
                 return result.Succeeded();
             }
