@@ -59,7 +59,7 @@ namespace System.Windows.Forms
         };
 
         // Drag-and-drop storage mediums consist of the types TYMED_HGLOBAL and TYMED_ISTREAM.
-        private static readonly TYMED[] s_tymeds = new TYMED[]
+        public static readonly TYMED[] s_tymeds = new TYMED[]
         {
             TYMED.TYMED_HGLOBAL,
             TYMED.TYMED_ISTREAM

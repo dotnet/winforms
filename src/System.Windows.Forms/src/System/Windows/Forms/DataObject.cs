@@ -567,13 +567,9 @@ namespace System.Windows.Forms
                 && DragDropHelper.s_formats.Contains(formatName))
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {formatName}");
-
-                if (dataStore.GetData(formatName) is KeyValuePair<FORMATETC, STGMEDIUM> dragDropEntry
-                    && dragDropEntry.Key is FORMATETC formatEtc
-                    && dragDropEntry.Value is STGMEDIUM mediumSrc
-                    && DragDropHelper.CopyDragDropStgMedium(ref mediumSrc, formatEtc, out STGMEDIUM mediumDest))
+                if (dataStore.GetData(formatName) is DragDropFormat dragDropFormat)
                 {
-                    medium = mediumDest;
+                    medium = dragDropFormat.Medium;
                     return;
                 }
 
@@ -694,7 +690,7 @@ namespace System.Windows.Forms
                 && pFormatetcIn.ptd.Equals(IntPtr.Zero))
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {formatName}");
-                dataStore.SetData(formatName, new KeyValuePair<FORMATETC, STGMEDIUM>(pFormatetcIn, pmedium));
+                dataStore.SetData(formatName, new DragDropFormat(pFormatetcIn, pmedium, fRelease));
                 return;
             }
 
