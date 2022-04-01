@@ -50,6 +50,7 @@ namespace System.Windows.Forms
         public DragDropFormat(FORMATETC pFormatetc, STGMEDIUM pMedium, bool fRelease)
         {
             _formatName = DataFormats.GetFormat(pFormatetc.cfFormat).Name;
+            Debug.Assert(pFormatetc.ptd.Equals(IntPtr.Zero), "DragDropFormat constructur received a non-NULL target device pointer.");
             Debug.Assert(DragDropHelper.s_formats.Contains(_formatName), "DragDropFormat constructor received an incompatible clipboard format.");
             Debug.Assert(DragDropHelper.s_tymeds.Contains(pMedium.tymed), "DragDropFormat constructor received an incompatible storage medium type.");
 
