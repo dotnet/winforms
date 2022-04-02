@@ -46,7 +46,7 @@ namespace System.Windows.Forms
         private readonly InternalStateMachineTimer _timer = new();
         private SendOrPostCallback? _refocusDelayExpirationCallback;
 
-        private readonly WeakReference<IKeyboardToolTip> _lastFocusedTool = new(null!);
+        private readonly WeakReference<IKeyboardToolTip?> _lastFocusedTool = new(null);
 
         private KeyboardToolTipStateMachine()
         {
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
                 Transit(SmEvent.LeftTool, sender);
                 if (_currentTool is null)
                 {
-                    _lastFocusedTool.SetTarget(null!);
+                    _lastFocusedTool.SetTarget(null);
                 }
             }
         }
