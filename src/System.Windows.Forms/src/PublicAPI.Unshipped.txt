@@ -1,3 +1,4 @@
+~System.Windows.Forms.Control.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
 System.Windows.Forms.DragEventArgs.DropIcon.get -> System.Windows.Forms.DropIconType
 System.Windows.Forms.DragEventArgs.DropIcon.set -> void
 System.Windows.Forms.DragEventArgs.Insert.get -> string!

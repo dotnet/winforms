@@ -50,9 +50,13 @@ namespace System.Windows.Forms
         public DragDropFormat(FORMATETC pFormatetc, STGMEDIUM pMedium, bool fRelease)
         {
             _formatName = DataFormats.GetFormat(pFormatetc.cfFormat).Name;
+
             Debug.Assert(pFormatetc.ptd.Equals(IntPtr.Zero), "DragDropFormat constructur received a non-NULL target device pointer.");
             Debug.Assert(DragDropHelper.s_formats.Contains(_formatName), "DragDropFormat constructor received an incompatible clipboard format.");
             Debug.Assert(DragDropHelper.s_tymeds.Contains(pMedium.tymed), "DragDropFormat constructor received an incompatible storage medium type.");
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat {_formatName} created");
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat pMedium.tymed {pMedium.tymed}");
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat fRelease {fRelease}");
 
             _formatEtc = pFormatetc;
             _release = fRelease;
@@ -63,8 +67,10 @@ namespace System.Windows.Forms
             }
             else
             {
-                // Handle when the caller retains ownership of the storage medium. Weltkante said in this case we must
-                // copy it if we want to keep the storage medium beyond the IDataObject::SetData method call.
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat fRelease {fRelease}");
+
+                // Handle when the caller retains ownership of the storage medium. We must copy the medium if we want to
+                // keep it beyond the IDataObject::SetData method call.
                 if (DragDropHelper.CopyDragDropStgMedium(ref pMedium, pFormatetc, out STGMEDIUM _mediumCopy))
                 {
                     _mediumIn = _mediumCopy;
@@ -74,7 +80,7 @@ namespace System.Windows.Forms
 
         ~DragDropFormat()
         {
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DragDropFormat destroyed");
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat {_formatName} destroyed");
 
             if (_release)
             {

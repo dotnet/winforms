@@ -19,6 +19,8 @@ namespace WinformsControlsTest
             "-........--\"\"-.......--\"╰O━━━━O╯╰--O-O--╯";
         private readonly string _dragDropDataDirectory = "Data\\DragDrop";
         private readonly List<PictureBox> _pictureBoxList;
+        private Bitmap _nyanCatAscii301Bmp = new(@"Data\DragDrop\NyanCatAscii_301.bmp");
+        private Bitmap _nyanCat1Bmp = new(@"Data\DragDrop\NyanCat1.bmp");
 
         public DragDrop()
         {
@@ -70,6 +72,7 @@ namespace WinformsControlsTest
 
             textBox1.AllowDrop = true;
             textBox1.DragEnter += TextBox1_DragEnter;
+            textBox1.DragOver += TextBox1_DragOver;
             textBox1.DragDrop += TextBox1_DragDrop;
 
             buttonOpenCats.Click += new EventHandler(ButtonOpenCats_Click);
@@ -88,8 +91,8 @@ namespace WinformsControlsTest
 
         private void DragDrop_DragEnter(object? sender, DragEventArgs e)
         {
-            e.DropIcon = DropIconType.NoDropIcon;
-            e.Effect = DragDropEffects.All;
+            e.DropIcon = DropIconType.Warning;
+            e.Effect = DragDropEffects.None;
         }
 
         private void PictureBox_DragEnter(object? sender, DragEventArgs e)
@@ -147,8 +150,9 @@ namespace WinformsControlsTest
                 // Create the ascii cat data object.
                 DataObject data = new(nameof(_nyanCatAscii), _nyanCatAscii);
 
-                // Call DoDragDrop.
-                pb.DoDragDrop(data, DragDropEffects.All);
+                // Set the initial drag image.
+                // Set useDefaultDragImage to true to specify a layered drag image window with size 96x96.
+                pb.DoDragDrop(data, DragDropEffects.All, _nyanCat1Bmp, new Point(0, 96), true);
             }
         }
 
@@ -158,11 +162,24 @@ namespace WinformsControlsTest
             Cursor.Current = Cursors.Default;
             e.UseDefaultCursors = false;
 
-            // Note the outer edges of the drag image are blended out if the width or height exceeds 300 pixels.
-            e.DragImage = (Bitmap)Image.FromFile(@"Data\DragDrop\NyanCatAscii_301.bmp");
+            if (e.Effect.Equals(DragDropEffects.Copy))
+            {
+                // Specify a new drag image in GiveFeedback.
+                // Note the outer edges of the drag image are blended out if the image width or height exceeds 300 pixels.
+                e.DragImage = _nyanCatAscii301Bmp;
 
-            // Set the cursor to the bottom left-hand corner of the drag image.
-            e.CursorOffset = new Point(0, 111);
+                // Set the cursor to the bottom left-hand corner of the drag image.
+                e.CursorOffset = new Point(0, 111);
+
+                // Set UseDefaultDragImage to false to remove the 96x96 layered drag image window.
+                e.UseDefaultDragImage = false;
+            }
+            else
+            {
+                e.DragImage = _nyanCat1Bmp;
+                e.CursorOffset = new Point(0, 96);
+                e.UseDefaultDragImage = true;
+            }
         }
 
         private void TextBox1_DragDrop(object? sender, DragEventArgs e)
@@ -182,6 +199,24 @@ namespace WinformsControlsTest
         }
 
         private void TextBox1_DragEnter(object? sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.None;
+
+            if (e.Data is not null && e.Data.GetDataPresent(nameof(_nyanCatAscii)))
+            {
+                // Set the target drop icon to a plus sign (+).
+                e.DropIcon = DropIconType.Copy;
+
+                // Set the target drop text.
+                e.Message = "Copy cat to %1";
+                e.Insert = "~=[,,_,,]:3";
+
+                // Set the target drop effect.
+                e.Effect = DragDropEffects.Copy;
+            }
+        }
+
+        private void TextBox1_DragOver(object? sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.None;
 

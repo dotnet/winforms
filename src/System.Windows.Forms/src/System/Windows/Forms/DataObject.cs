@@ -567,6 +567,13 @@ namespace System.Windows.Forms
                 && DragDropHelper.s_formats.Contains(formatName))
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {formatName}");
+
+                if (!dataStore.GetDataPresent(formatName))
+                {
+                    medium = default;
+                    return;
+                }
+
                 if (dataStore.GetData(formatName) is DragDropFormat dragDropFormat)
                 {
                     medium = dragDropFormat.Medium;

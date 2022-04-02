@@ -17,7 +17,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     ///  Helper class to allow drop targets to display a drag image while the cursor is over the target window and allow
-    ///  an application to specify the image that will be displayed during a Shell drag-and-drop operation.
+    ///  an application to specify the image that will be displayed during a Shell drag and drop operation.
     /// </summary>
     internal static class DragDropHelper
     {
@@ -29,7 +29,9 @@ namespace System.Windows.Forms
         private const string CF_DRAGSOURCEHELPERFLAGS = "DragSourceHelperFlags";
         private const string CF_DRAGWINDOW = "DragWindow";
         private const string CF_DROPDESCRIPTION = "DropDescription";
+        private const string CF_DROPTARGETSTATE = "DropTargetState";
         private const string CF_ISCOMPUTINGIMAGE = "IsComputingImage";
+        private const string CF_ISNEWDRAGIMAGE = "IsNewDragImage";
         private const string CF_ISSHOWINGLAYERED = "IsShowingLayered";
         private const string CF_ISSHOWINGTEXT = "IsShowingText";
         private const string CF_NET_RESOURCE = "Net Resource";
@@ -38,7 +40,16 @@ namespace System.Windows.Forms
         private const string CF_UNTRUSTEDDRAGDROP = "UntrustedDragDrop";
         private const string CF_USINGDEFAULTDRAGIMAGE = "UsingDefaultDragImage";
 
-        // Drag-and-drop private formats.
+        private enum DropTargetState
+        {
+            None = -1,
+            DragEnter = 0,
+            DragOver = 1,
+            DragLeave = 2,
+            Drop = 3
+        }
+
+        // Drag and drop private formats.
         public static readonly string[] s_formats = new string[]
         {
             CF_DISABLEDRAGTEXT,
@@ -48,7 +59,9 @@ namespace System.Windows.Forms
             CF_DRAGSOURCEHELPERFLAGS,
             CF_DRAGWINDOW,
             CF_DROPDESCRIPTION,
+            CF_DROPTARGETSTATE,
             CF_ISCOMPUTINGIMAGE,
+            CF_ISNEWDRAGIMAGE,
             CF_ISSHOWINGLAYERED,
             CF_ISSHOWINGTEXT,
             CF_NET_RESOURCE,
@@ -58,7 +71,7 @@ namespace System.Windows.Forms
             CF_USINGDEFAULTDRAGIMAGE
         };
 
-        // Drag-and-drop storage mediums consist of the types TYMED_HGLOBAL and TYMED_ISTREAM.
+        // Drag and drop storage mediums consist of the types TYMED_HGLOBAL and TYMED_ISTREAM.
         public static readonly TYMED[] s_tymeds = new TYMED[]
         {
             TYMED.TYMED_HGLOBAL,
@@ -68,7 +81,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates an in-process server drag-image manager object and returns an interface pointer to
         ///  IDragSourceHelper2. Exposes methods that allow the application to specify the image that will be displayed
-        ///  during a Shell drag-and-drop operation.
+        ///  during a Shell drag and drop operation.
         /// </summary>
         private static bool TryGetDragSourceHelper([NotNullWhen(true)] out IDragSourceHelper2? dragSourceHelper)
         {
@@ -145,14 +158,21 @@ namespace System.Windows.Forms
             {
                 Marshal.FinalReleaseComObject(dropTargetHelper);
             }
+
+            SetDropTargetState(dataObject, DropTargetState.DragEnter);
         }
 
         /// <summary>
         ///  Notifies the drag-image manager that the cursor position has changed and provides it with the information
         ///  needed to display the drag image.
         /// </summary>
-        public static void DragOver(ref Point ppt, uint dwEffect)
+        public static void DragOver(IntPtr hwndTarget, IComDataObject dataObject, ref Point ppt, uint dwEffect)
         {
+            if (GetIsNewDragImage(dataObject) || GetDropTargetState(dataObject) is not DropTargetState.DragEnter)
+            {
+                DragEnter(hwndTarget, dataObject, ref ppt, dwEffect);
+            }
+
             if (!TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper))
             {
                 return;
@@ -171,12 +191,14 @@ namespace System.Windows.Forms
             {
                 Marshal.FinalReleaseComObject(dropTargetHelper);
             }
+
+            SetDropTargetState(dataObject, DropTargetState.DragOver);
         }
 
         /// <summary>
         ///  Notifies the drag-image manager that the cursor has left the drop target.
         /// </summary>
-        public static void DragLeave()
+        public static void DragLeave(IComDataObject dataObject)
         {
             if (!TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper))
             {
@@ -196,6 +218,8 @@ namespace System.Windows.Forms
             {
                 Marshal.FinalReleaseComObject(dropTargetHelper);
             }
+
+            SetDropTargetState(dataObject, DropTargetState.DragLeave);
         }
 
         /// <summary>
@@ -222,10 +246,12 @@ namespace System.Windows.Forms
             {
                 Marshal.FinalReleaseComObject(dropTargetHelper);
             }
+
+            SetDropTargetState(dataObject, DropTargetState.Drop);
         }
 
         /// <summary>
-        /// This function copies a given drag-and-drop STGMEDIUM structure.
+        /// This function copies a given drag and drop STGMEDIUM structure.
         /// </summary>
         /// <returns>
         /// <see langword="true"/> if <paramref name="mediumSrc"/> was copied into <paramref name="mediumDest"/>
@@ -282,6 +308,7 @@ namespace System.Windows.Forms
                 mediumDest.tymed = TYMED.TYMED_NULL;
                 Kernel32.GlobalFree(mediumDest.unionmember);
                 mediumDest.unionmember = IntPtr.Zero;
+                Ole32.ReleaseStgMedium(ref mediumDest);
                 return false;
             }
         }
@@ -304,9 +331,6 @@ namespace System.Windows.Forms
 
             try
             {
-                // Set IsShowingText to true.
-                SetIsShowingText(dataObject, true);
-
                 // Create the drop description clipboard format.
                 FORMATETC formatEtc = new()
                 {
@@ -358,41 +382,12 @@ namespace System.Windows.Forms
             {
                 Kernel32.GlobalFree(medium.unionmember);
                 medium.unionmember = IntPtr.Zero;
-            }
-        }
-
-        /// <summary>
-        /// Determines whether a drag image format is present in a data object.
-        /// </summary>
-        /// <returns>
-        /// <see langword="true"/> if a drag image format is present in <paramref name="dataObject"/>;otherwise <see langword="false"/>.
-        /// </returns>
-        public static bool GetDragImagePresent(IComDataObject dataObject)
-        {
-            if (dataObject is null)
-            {
-                return false;
+                Ole32.ReleaseStgMedium(ref medium);
+                return;
             }
 
-            try
-            {
-                // Create the drag image clipboard format.
-                FORMATETC formatEtc = new()
-                {
-                    cfFormat = (short)RegisterClipboardFormatW(CF_DRAGIMAGEBITS),
-                    dwAspect = DVASPECT.DVASPECT_CONTENT,
-                    lindex = -1,
-                    ptd = IntPtr.Zero,
-                    tymed = TYMED.TYMED_HGLOBAL
-                };
-
-                // Check if the data object contains a drag image.
-                return dataObject.QueryGetData(ref formatEtc) == (int)HRESULT.S_OK;
-            }
-            catch
-            {
-                return false;
-            }
+            // Set IsShowingText to true.
+            SetIsShowingText(dataObject, true);
         }
 
         /// <summary>
@@ -402,39 +397,240 @@ namespace System.Windows.Forms
         {
             if (dataObject is null
                 || dragImage is null
-                || GetDragImagePresent(dataObject)
                 || !TryGetDragSourceHelper(out IDragSourceHelper2? dragSourceHelper))
             {
                 return;
             }
 
+            Gdi32.HBITMAP hbmpDragImage = (Gdi32.HBITMAP)IntPtr.Zero;
+
             try
             {
+                hbmpDragImage = dragImage.GetHBITMAP();
                 SHDRAGIMAGE shDragImage = new()
                 {
-                    hbmpDragImage = dragImage.GetHBITMAP(),
+                    hbmpDragImage = hbmpDragImage,
                     sizeDragImage = dragImage.Size,
                     ptOffset = cursorOffset,
                     crColorKey = GetSysColor(COLOR.WINDOW)
                 };
 
-                if (usingDefaultDragImage)
-                {
-                    SetUsingDefaultDragImage(dataObject, usingDefaultDragImage);
-                }
-
                 dragSourceHelper.SetFlags(DSH_ALLOWDROPDESCRIPTIONTEXT).ThrowIfFailed();
                 dragSourceHelper.InitializeFromBitmap(shDragImage, dataObject).ThrowIfFailed();
             }
-            catch (COMException ex)
+            catch (Exception ex)
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropHelper SetDragImage COM error {ex}");
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropHelper SetDragImage error {ex}");
+                Gdi32.DeleteObject(hbmpDragImage);
                 return;
             }
             finally
             {
                 Marshal.FinalReleaseComObject(dragSourceHelper);
             }
+
+            SetIsNewDragImage(dataObject, true);
+            SetIsShowingText(dataObject, true);
+            SetUsingDefaultDragImage(dataObject, usingDefaultDragImage);
+        }
+
+        /// <summary>
+        ///  Gets the DropTargetState format from a data object.
+        /// </summary>
+        private static unsafe DropTargetState GetDropTargetState(IComDataObject dataObject)
+        {
+            if (dataObject is null)
+            {
+                return DropTargetState.None;
+            }
+
+            // Create the clipboard format.
+            FORMATETC formatEtc = new()
+            {
+                cfFormat = (short)RegisterClipboardFormatW(CF_DROPTARGETSTATE),
+                dwAspect = DVASPECT.DVASPECT_CONTENT,
+                lindex = -1,
+                ptd = IntPtr.Zero,
+                tymed = TYMED.TYMED_HGLOBAL
+            };
+
+            // Check if the data object contains a DropTargetState.
+            if (dataObject.QueryGetData(ref formatEtc) != (int)HRESULT.S_OK)
+            {
+                return DropTargetState.None;
+            }
+
+            // Create the storage medium used for data transfer.
+            STGMEDIUM medium = new();
+            try
+            {
+                // Get the DropTargetState from the data object.
+                dataObject.GetData(ref formatEtc, out medium);
+
+                // Lock the global memory object.
+                IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
+                if (basePtr == IntPtr.Zero)
+                {
+                    Kernel32.GlobalFree(medium.unionmember);
+                    medium.unionmember = IntPtr.Zero;
+                    return DropTargetState.None;
+                }
+
+                // Read the DropTargetState from the global memory handle.
+                DropTargetState* pValue = (DropTargetState*)basePtr;
+                return *pValue;
+            }
+            finally
+            {
+                Kernel32.GlobalUnlock(medium.unionmember);
+                Kernel32.GlobalFree(medium.unionmember);
+                medium.unionmember = IntPtr.Zero;
+                Ole32.ReleaseStgMedium(ref medium);
+            }
+        }
+
+        /// <summary>
+        ///  Sets the DropTargetState format into a data object.
+        /// </summary>
+        private static unsafe void SetDropTargetState(IComDataObject dataObject, DropTargetState state)
+        {
+            if (dataObject is null)
+            {
+                return;
+            }
+
+            STGMEDIUM medium = default;
+
+            try
+            {
+                // Create the clipboard format.
+                FORMATETC formatEtc = new()
+                {
+                    cfFormat = (short)RegisterClipboardFormatW(CF_DROPTARGETSTATE),
+                    dwAspect = DVASPECT.DVASPECT_CONTENT,
+                    lindex = -1,
+                    ptd = IntPtr.Zero,
+                    tymed = TYMED.TYMED_HGLOBAL
+                };
+
+                // Create a global memory object storage medium.
+                medium = new()
+                {
+                    pUnkForRelease = null,
+                    tymed = TYMED.TYMED_HGLOBAL,
+
+                    // Allocate a suitably sized block of memory.
+                    unionmember = Kernel32.GlobalAlloc(
+                        Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                        sizeof(DropTargetState))
+                };
+                if (medium.unionmember == IntPtr.Zero)
+                {
+                    return;
+                }
+
+                // Lock the global memory object.
+                IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
+                if (basePtr == IntPtr.Zero)
+                {
+                    Kernel32.GlobalFree(medium.unionmember);
+                    medium.unionmember = IntPtr.Zero;
+                    return;
+                }
+
+                // Write the DropTargetState out to the global memory handle.
+                DropTargetState* pValue = (DropTargetState*)basePtr;
+                *pValue = state;
+
+                // Unlock the global memory object
+                Kernel32.GlobalUnlock(medium.unionmember);
+
+                // Load the DropTargetState format into the data object.
+                dataObject.SetData(ref formatEtc, ref medium, true);
+            }
+            catch
+            {
+                Kernel32.GlobalFree(medium.unionmember);
+                medium.unionmember = IntPtr.Zero;
+                Ole32.ReleaseStgMedium(ref medium);
+            }
+
+            if (state.Equals(DropTargetState.DragEnter))
+            {
+                SetIsNewDragImage(dataObject, false);
+            }
+        }
+
+        /// <summary>
+        ///  Gets the IsNewDragImage format from a data object.
+        /// </summary>
+        private static bool GetIsNewDragImage(IComDataObject dataObject)
+        {
+            return GetBooleanFormat(dataObject, CF_ISNEWDRAGIMAGE);
+        }
+
+        /// <summary>
+        ///  Gets boolean formats from a data object.
+        /// </summary>
+        private static unsafe bool GetBooleanFormat(IComDataObject dataObject, string format)
+        {
+            if (dataObject is null
+                || string.IsNullOrWhiteSpace(format))
+            {
+                return false;
+            }
+
+            // Create the clipboard format.
+            FORMATETC formatEtc = new()
+            {
+                cfFormat = (short)RegisterClipboardFormatW(format),
+                dwAspect = DVASPECT.DVASPECT_CONTENT,
+                lindex = -1,
+                ptd = IntPtr.Zero,
+                tymed = TYMED.TYMED_HGLOBAL
+            };
+
+            // Check if the data object contains a boolean.
+            if (dataObject.QueryGetData(ref formatEtc) != (int)HRESULT.S_OK)
+            {
+                return false;
+            }
+
+            // Create the storage medium used for data transfer.
+            STGMEDIUM medium = new();
+            try
+            {
+                // Get the boolean from the data object.
+                dataObject.GetData(ref formatEtc, out medium);
+
+                // Lock the global memory object.
+                IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
+                if (basePtr == IntPtr.Zero)
+                {
+                    Kernel32.GlobalFree(medium.unionmember);
+                    medium.unionmember = IntPtr.Zero;
+                    return false;
+                }
+
+                // Read the BOOL from the global memory handle.
+                BOOL* pValue = (BOOL*)basePtr;
+                return *pValue == BOOL.TRUE;
+            }
+            finally
+            {
+                Kernel32.GlobalUnlock(medium.unionmember);
+                Kernel32.GlobalFree(medium.unionmember);
+                medium.unionmember = IntPtr.Zero;
+                Ole32.ReleaseStgMedium(ref medium);
+            }
+        }
+
+        /// <summary>
+        ///  Sets the IsNewDragImage format into a data object.
+        /// </summary>
+        private static void SetIsNewDragImage(IComDataObject dataObject, bool value)
+        {
+            SetBooleanFormat(dataObject, CF_ISNEWDRAGIMAGE, value);
         }
 
         /// <summary>
@@ -532,6 +728,7 @@ namespace System.Windows.Forms
             {
                 Kernel32.GlobalFree(medium.unionmember);
                 medium.unionmember = IntPtr.Zero;
+                Ole32.ReleaseStgMedium(ref medium);
             }
         }
     }
