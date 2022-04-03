@@ -211,12 +211,12 @@ namespace System.Windows.Forms
                 DataGridViewRow dataGridViewRow = SharedRow(index);
                 if (dataGridViewRow.Index == -1)
                 {
-                    if (index == 0 && items.Count == 1)
+                    if (SharedList.LastIndexOf(dataGridViewRow) == index && SharedList.IndexOf(dataGridViewRow) == index)
                     {
-                        // The only row present in the grid gets unshared.
+                        // This is the only instance of this shared row in the grid.
                         // Simply update the index and return the current row without cloning it.
-                        dataGridViewRow.Index = 0;
-                        dataGridViewRow.State = SharedRowState(0);
+                        dataGridViewRow.Index = index;
+                        dataGridViewRow.State = SharedRowState(index);
                         if (DataGridView is not null)
                         {
                             DataGridView.OnRowUnshared(dataGridViewRow);

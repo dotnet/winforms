@@ -423,14 +423,16 @@ namespace System.Windows.Forms.Tests
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
 
+            // DataGridViewHeaderCell with OwningRow will be visible only if: gridVisible && rowHeadersVisible && OwningRow.Displayed.
+            // And OwningRow.Displayed will be true if columnVisible.
             DataGridViewCell cell = Assert.IsType<DataGridViewHeaderCell>(row.Cells[0]);
-            if (gridVisible && rowHeadersVisible)
+            if (gridVisible && rowHeadersVisible && !columnVisible)
             {
                 Assert.Throws<InvalidOperationException>(() => cell.Displayed);
             }
             else
             {
-                Assert.Equal(gridVisible && rowHeadersVisible && columnHeadersVisible && columnVisible, cell.Displayed);
+                Assert.Equal(gridVisible && rowHeadersVisible && columnVisible, cell.Displayed);
             }
 
             Assert.True(control.IsHandleCreated);

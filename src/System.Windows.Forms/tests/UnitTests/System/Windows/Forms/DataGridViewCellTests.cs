@@ -553,7 +553,7 @@ namespace System.Windows.Forms.Tests
             control.HandleCreated += (sender, e) => createdCallCount++;
 
             DataGridViewCell cell = row.Cells[0];
-            Assert.False(cell.Displayed);
+            Assert.Equal(gridVisible && columnVisible, cell.Displayed);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
