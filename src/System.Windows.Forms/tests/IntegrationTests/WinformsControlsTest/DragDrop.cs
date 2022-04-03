@@ -4,6 +4,7 @@
 
 #nullable enable
 
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -19,8 +20,11 @@ namespace WinformsControlsTest
             "-........--\"\"-.......--\"╰O━━━━O╯╰--O-O--╯";
         private readonly string _dragDropDataDirectory = "Data\\DragDrop";
         private readonly List<PictureBox> _pictureBoxList;
-        private Bitmap _nyanCatAscii301Bmp = new(@"Data\DragDrop\NyanCatAscii_301.bmp");
-        private Bitmap _nyanCat1Bmp = new(@"Data\DragDrop\NyanCat1.bmp");
+        private readonly Bitmap _nyanCatAscii301Bmp = new(@"Data\DragDrop\NyanCatAscii_301.bmp");
+        private readonly Bitmap _nyanCatBmp = new(@"Data\DragDrop\NyanCat1.bmp");
+        private readonly Bitmap _toolStripAsciiCatBmp = new(@"Data\DragDrop\ToolStripAsciiCat.bmp");
+        private readonly Bitmap _toolStripNyanCatBmp = new(@"Data\DragDrop\ToolStripNyanCat.bmp");
+        private ContextMenuStrip? _catContextMenuStrip;
 
         public DragDrop()
         {
@@ -77,6 +81,8 @@ namespace WinformsControlsTest
 
             buttonOpenCats.Click += new EventHandler(ButtonOpenCats_Click);
             buttonClear.Click += new EventHandler(ButtonClear_Click);
+
+            CreateCatToolStrip();
         }
 
         private void ButtonClear_Click(object? sender, EventArgs e)
@@ -150,9 +156,9 @@ namespace WinformsControlsTest
                 // Create the ascii cat data object.
                 DataObject data = new(nameof(_nyanCatAscii), _nyanCatAscii);
 
-                // Set the initial drag image.
+                // Call DoDragDrop and set the initial drag image.
                 // Set useDefaultDragImage to true to specify a layered drag image window with size 96x96.
-                pb.DoDragDrop(data, DragDropEffects.All, _nyanCat1Bmp, new Point(0, 96), true);
+                pb.DoDragDrop(data, DragDropEffects.All, _nyanCatBmp, new Point(0, 96), true);
             }
         }
 
@@ -176,7 +182,7 @@ namespace WinformsControlsTest
             }
             else
             {
-                e.DragImage = _nyanCat1Bmp;
+                e.DragImage = _nyanCatBmp;
                 e.CursorOffset = new Point(0, 96);
                 e.UseDefaultDragImage = true;
             }
@@ -269,6 +275,147 @@ namespace WinformsControlsTest
                 };
 
                 Process.Start(startInfo);
+            }
+        }
+
+        private void CreateCatToolStrip()
+        {
+            TableLayoutPanel tableLayoutPanel = new()
+            {
+                ColumnCount = 1,
+                Dock = DockStyle.Top,
+                Height = 30,
+                RowCount = 1
+            };
+
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+
+            _catContextMenuStrip = new ContextMenuStrip
+            {
+                AllowDrop = true,
+                AutoSize = true,
+                ImageScalingSize = new Size(75, 75)
+            };
+
+            _catContextMenuStrip.Opening += new CancelEventHandler(ContextMenuStrip_Opening);
+
+            ToolStrip toolStrip = new()
+            {
+                Dock = DockStyle.Top,
+            };
+
+            ToolStripDropDownButton catToolStripDropDownButton = new("Cats", null, null, "Cats")
+            {
+                DropDown = _catContextMenuStrip,
+            };
+
+            toolStrip.Items.Add(catToolStripDropDownButton);
+            tableLayoutPanel.Controls.Add(toolStrip, 0, 0);
+            Controls.Add(tableLayoutPanel);
+            ContextMenuStrip = _catContextMenuStrip;
+        }
+
+        void ContextMenuStrip_Opening(object? sender, CancelEventArgs e)
+        {
+            if (_catContextMenuStrip is null)
+            {
+                return;
+            }
+
+            _catContextMenuStrip.Items.Clear();
+            Control control = _catContextMenuStrip.SourceControl;
+
+            if (control is not null)
+            {
+                _catContextMenuStrip.Items.Add("Source: " + control.GetType().ToString());
+            }
+            else if (_catContextMenuStrip.OwnerItem is ToolStripDropDownItem toolStripDropDownItem)
+            {
+                _catContextMenuStrip.Items.Add("Source: " + toolStripDropDownItem.GetType().ToString());
+            }
+
+            ToolStripItem asciiCatItem = new ToolStripMenuItem()
+            {
+                ImageScaling = ToolStripItemImageScaling.SizeToFit,
+                Text = "Ascii Cat",
+                Name = "AsciiCatItem",
+                Image = _toolStripAsciiCatBmp
+            };
+
+            ToolStripItem nyanCatItem = new ToolStripMenuItem()
+            {
+                ImageScaling = ToolStripItemImageScaling.SizeToFit,
+                Text = "Nyan Cat",
+                Name = "NyanCatItem",
+                Image = _toolStripNyanCatBmp
+            };
+
+            asciiCatItem.AllowDrop = true;
+            asciiCatItem.DragEnter += AsciiCatItem_DragEnter;
+            asciiCatItem.MouseDown += AsciiCatItem_MouseDown;
+            asciiCatItem.GiveFeedback += AsciiCatItem_GiveFeedback;
+
+            nyanCatItem.AllowDrop = true;
+            nyanCatItem.DragEnter += NyanCatItem_DragEnter;
+            nyanCatItem.MouseDown += NyanCatItem_MouseDown;
+            nyanCatItem.GiveFeedback += NyanCatItem_GiveFeedback;
+
+            _catContextMenuStrip.Items.Add("-");
+            _catContextMenuStrip.Items.Add(asciiCatItem);
+            _catContextMenuStrip.Items.Add(nyanCatItem);
+
+            e.Cancel = false;
+        }
+
+        private void NyanCatItem_DragEnter(object? sender, DragEventArgs e)
+        {
+            e.DropIcon = DropIconType.Copy;
+            e.Message = "NyanCat";
+            e.Effect = DragDropEffects.Copy;
+        }
+
+        private void AsciiCatItem_DragEnter(object? sender, DragEventArgs e)
+        {
+            e.DropIcon = DropIconType.Copy;
+            e.Message = "AsciiCat";
+            e.Effect = DragDropEffects.Copy;
+        }
+
+        private void NyanCatItem_GiveFeedback(object? sender, GiveFeedbackEventArgs e)
+        {
+            // Hide the default cursor.
+            Cursor.Current = Cursors.Default;
+            e.UseDefaultCursors = false;
+        }
+
+        private void AsciiCatItem_GiveFeedback(object? sender, GiveFeedbackEventArgs e)
+        {
+            // Hide the default cursor.
+            Cursor.Current = Cursors.Default;
+            e.UseDefaultCursors = false;
+        }
+
+        private void NyanCatItem_MouseDown(object? sender, MouseEventArgs e)
+        {
+            if (sender is ToolStripItem toolStripItem)
+            {
+                // Create the ascii cat data object.
+                DataObject data = new(nameof(_nyanCatAscii), _nyanCatAscii);
+
+                // Call DoDragDrop and set the initial drag image.
+                toolStripItem.DoDragDrop(data, DragDropEffects.Copy, _nyanCatBmp, new Point(0, 96), true);
+            }
+        }
+
+        private void AsciiCatItem_MouseDown(object? sender, MouseEventArgs e)
+        {
+            if (sender is ToolStripItem toolStripItem)
+            {
+                // Create the ascii cat data object.
+                DataObject data = new(nameof(_nyanCatAscii), _nyanCatAscii);
+
+                // Call DoDragDrop and set the initial drag image.
+                toolStripItem.DoDragDrop(data, DragDropEffects.Copy, _nyanCatAscii301Bmp, new Point(0, 111), false);
             }
         }
     }

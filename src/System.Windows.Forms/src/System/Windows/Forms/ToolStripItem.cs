@@ -2132,7 +2132,20 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects)
         {
-            Ole32.IDropSource dropSource = DropSource;
+            return DoDragDrop(data, allowedEffects, dragImage: null, cursorOffset: default, useDefaultDragImage: false);
+        }
+
+        /// <summary>
+        ///  Begins a drag operation. The allowedEffects determine which
+        ///  drag operations can occur. If the drag operation needs to interop
+        ///  with applications in another process, data should either be
+        ///  a base managed class (String, Bitmap, or Metafile) or some Object
+        ///  that implements System.Runtime.Serialization.ISerializable. data can also be any Object that
+        ///  implements System.Windows.Forms.IDataObject.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
+        {
             IComDataObject dataObject = null;
 
             dataObject = data as IComDataObject;
@@ -2163,6 +2176,7 @@ namespace System.Windows.Forms
                 dataObject = (IComDataObject)iwdata;
             }
 
+            Ole32.IDropSource dropSource = CreateDropSource(dataObject, dragImage, cursorOffset, useDefaultDragImage);
             HRESULT hr = Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out Ole32.DROPEFFECT finalEffect);
             if (!hr.Succeeded())
             {
@@ -2170,6 +2184,16 @@ namespace System.Windows.Forms
             }
 
             return (DragDropEffects)finalEffect;
+        }
+
+        internal Ole32.IDropSource CreateDropSource(IComDataObject dataObject, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
+        {
+            if ((ParentInternal is not null) && ParentInternal.AllowItemReorder && (ParentInternal.ItemReorderDropSource is not null))
+            {
+                return new DropSource(ParentInternal.ItemReorderDropSource, dataObject, dragImage, cursorOffset, useDefaultDragImage);
+            }
+
+            return new DropSource(this, dataObject, dragImage, cursorOffset, useDefaultDragImage);
         }
 
         internal void FireEvent(ToolStripItemEventType met)

@@ -52,7 +52,7 @@ namespace WinformsControlsTest
             // 
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
+            this.pictureBox1.Location = new System.Drawing.Point(12, 52);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(125, 125);
             this.pictureBox1.TabIndex = 12;
@@ -61,7 +61,7 @@ namespace WinformsControlsTest
             // pictureBox2
             // 
             this.pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox2.Location = new System.Drawing.Point(12, 143);
+            this.pictureBox2.Location = new System.Drawing.Point(12, 183);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(125, 125);
             this.pictureBox2.TabIndex = 13;
@@ -70,7 +70,7 @@ namespace WinformsControlsTest
             // pictureBox3
             // 
             this.pictureBox3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox3.Location = new System.Drawing.Point(12, 274);
+            this.pictureBox3.Location = new System.Drawing.Point(12, 314);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(125, 125);
             this.pictureBox3.TabIndex = 14;
@@ -79,7 +79,7 @@ namespace WinformsControlsTest
             // pictureBox4
             // 
             this.pictureBox4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox4.Location = new System.Drawing.Point(12, 405);
+            this.pictureBox4.Location = new System.Drawing.Point(12, 445);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(125, 125);
             this.pictureBox4.TabIndex = 15;
@@ -88,7 +88,7 @@ namespace WinformsControlsTest
             // pictureBox5
             // 
             this.pictureBox5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox5.Location = new System.Drawing.Point(12, 536);
+            this.pictureBox5.Location = new System.Drawing.Point(12, 576);
             this.pictureBox5.Name = "pictureBox5";
             this.pictureBox5.Size = new System.Drawing.Size(125, 125);
             this.pictureBox5.TabIndex = 16;
@@ -96,7 +96,7 @@ namespace WinformsControlsTest
             // 
             // buttonClear
             // 
-            this.buttonClear.Location = new System.Drawing.Point(938, 665);
+            this.buttonClear.Location = new System.Drawing.Point(938, 705);
             this.buttonClear.Name = "buttonClear";
             this.buttonClear.Size = new System.Drawing.Size(82, 31);
             this.buttonClear.TabIndex = 19;
@@ -105,7 +105,7 @@ namespace WinformsControlsTest
             // 
             // buttonOpenCats
             // 
-            this.buttonOpenCats.Location = new System.Drawing.Point(850, 665);
+            this.buttonOpenCats.Location = new System.Drawing.Point(850, 705);
             this.buttonOpenCats.Name = "buttonOpenCats";
             this.buttonOpenCats.Size = new System.Drawing.Size(82, 31);
             this.buttonOpenCats.TabIndex = 20;
@@ -115,7 +115,7 @@ namespace WinformsControlsTest
             // richTextBox1
             // 
             this.richTextBox1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.richTextBox1.Location = new System.Drawing.Point(180, 12);
+            this.richTextBox1.Location = new System.Drawing.Point(180, 52);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(436, 650);
             this.richTextBox1.TabIndex = 21;
@@ -124,7 +124,7 @@ namespace WinformsControlsTest
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.textBox1.Location = new System.Drawing.Point(636, 12);
+            this.textBox1.Location = new System.Drawing.Point(636, 52);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(383, 649);
@@ -132,7 +132,7 @@ namespace WinformsControlsTest
             // 
             // DragDrop
             // 
-            this.ClientSize = new System.Drawing.Size(1031, 700);
+            this.ClientSize = new System.Drawing.Size(1031, 740);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.buttonOpenCats);

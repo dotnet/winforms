@@ -17,12 +17,25 @@ namespace System.Windows.Forms
         private DropIconType _lastDropIcon = DropIconType.Default;
         private string _lastMessage = string.Empty;
         private string _lastInsert = string.Empty;
+        private readonly IntPtr _hwndTarget;
         private readonly IDropTarget _owner;
 
         public DropTarget(IDropTarget owner)
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DropTarget created");
             _owner = owner.OrThrowIfNull();
+
+            if (_owner is Control control && control.IsHandleCreated)
+            {
+                _hwndTarget = control.Handle;
+            }
+            else if (_owner is ToolStripDropTargetManager toolStripTargetManager
+                && toolStripTargetManager.Owner is not null
+                && toolStripTargetManager.Owner is ToolStrip toolStrip
+                && toolStrip.IsHandleCreated)
+            {
+                _hwndTarget = toolStrip.Handle;
+            }
         }
 
 #if DEBUG
@@ -56,10 +69,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            DragEventArgs drgevent = new DragEventArgs(data, (int)grfKeyState, pt.X, pt.Y, (DragDropEffects)pdwEffect, _lastEffect);
-            drgevent.DropIcon = _lastDropIcon;
-            drgevent.Message = _lastMessage;
-            drgevent.Insert = _lastInsert;
+            DragEventArgs drgevent = new DragEventArgs(data, (int)grfKeyState, pt.X, pt.Y, (DragDropEffects)pdwEffect, _lastEffect, _lastDropIcon, _lastMessage, _lastInsert);
             _lastDataObject = data;
             return drgevent;
         }
@@ -79,7 +89,7 @@ namespace System.Windows.Forms
 
                 if (drgevent.DropIcon > DropIconType.Default
                     && drgevent.Data is IComDataObject comDataObject
-                    && _owner is Control control)
+                    && _hwndTarget != IntPtr.Zero)
                 {
                     _lastDropIcon = !drgevent.DropIcon.Equals(_lastDropIcon) is bool newDropIcon ? drgevent.DropIcon : _lastDropIcon;
                     _lastMessage = !drgevent.Message.Equals(_lastMessage) is bool newMessage ? drgevent.Message : _lastMessage;
@@ -90,7 +100,7 @@ namespace System.Windows.Forms
                         DragDropHelper.SetDropDescription(comDataObject, _lastDropIcon, _lastMessage, _lastInsert);
                     }
 
-                    DragDropHelper.DragEnter(control.Handle, comDataObject, ref pt, pdwEffect);
+                    DragDropHelper.DragEnter(_hwndTarget, comDataObject, ref pt, pdwEffect);
                 }
             }
             else
@@ -114,7 +124,7 @@ namespace System.Windows.Forms
 
                 if (drgevent.DropIcon > DropIconType.Default
                     && drgevent.Data is IComDataObject comDataObject
-                    && _owner is Control control)
+                    && _hwndTarget != IntPtr.Zero)
                 {
                     _lastDropIcon = !drgevent.DropIcon.Equals(_lastDropIcon) is bool newDropIcon ? drgevent.DropIcon : _lastDropIcon;
                     _lastMessage = !drgevent.Message.Equals(_lastMessage) is bool newMessage ? drgevent.Message : _lastMessage;
@@ -125,7 +135,7 @@ namespace System.Windows.Forms
                         DragDropHelper.SetDropDescription(comDataObject, _lastDropIcon, _lastMessage, _lastInsert);
                     }
 
-                    DragDropHelper.DragOver(control.Handle, comDataObject, ref pt, pdwEffect);
+                    DragDropHelper.DragOver(_hwndTarget, comDataObject, ref pt, pdwEffect);
                 }
             }
             else

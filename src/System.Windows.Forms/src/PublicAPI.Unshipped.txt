@@ -1,4 +1,6 @@
 ~System.Windows.Forms.Control.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
+System.Windows.Forms.DragEventArgs.DragEventArgs(System.Windows.Forms.IDataObject? data, int keyState, int x, int y, System.Windows.Forms.DragDropEffects allowedEffect, System.Windows.Forms.DragDropEffects effect, System.Windows.Forms.DropIconType dropIcon, string! message, string! insert) -> void
+~System.Windows.Forms.ToolStripItem.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
 System.Windows.Forms.DragEventArgs.DropIcon.get -> System.Windows.Forms.DropIconType
 System.Windows.Forms.DragEventArgs.DropIcon.set -> void
 System.Windows.Forms.DragEventArgs.Insert.get -> string!

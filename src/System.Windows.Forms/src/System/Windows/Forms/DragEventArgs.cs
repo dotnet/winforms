@@ -20,6 +20,20 @@ namespace System.Windows.Forms
             int y,
             DragDropEffects allowedEffect,
             DragDropEffects effect)
+            : this(data, keyState, x, y, allowedEffect, effect, DropIconType.Default, string.Empty, string.Empty)
+        {
+        }
+
+        public DragEventArgs(
+            IDataObject? data,
+            int keyState,
+            int x,
+            int y,
+            DragDropEffects allowedEffect,
+            DragDropEffects effect,
+            DropIconType dropIcon,
+            string message,
+            string insert)
         {
             Data = data;
             KeyState = keyState;
@@ -27,9 +41,9 @@ namespace System.Windows.Forms
             Y = y;
             AllowedEffect = allowedEffect;
             Effect = effect;
-            DropIcon = DropIconType.Default;
-            Message = string.Empty;
-            Insert = string.Empty;
+            DropIcon = dropIcon;
+            Message = message;
+            Insert = insert;
         }
 
         /// <summary>

@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using static Interop;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
@@ -32,6 +33,11 @@ namespace System.Windows.Forms
 #else
         internal static readonly TraceSwitch DragDropDebug;
 #endif
+
+        public ToolStrip Owner
+        {
+            get => owner;
+        }
 
         public ToolStripDropTargetManager(ToolStrip owner)
         {
@@ -263,18 +269,51 @@ namespace System.Windows.Forms
                 if (lastDropTarget is not null)
                 {
                     OnDragLeave(EventArgs.Empty);
+
+                    // tell the drag image manager you've left
+                    if (e.DropIcon > DropIconType.Default
+                        && e.Data is IComDataObject comDataObject)
+                    {
+                        e.DropIcon = DropIconType.Default;
+                        e.Message = string.Empty;
+                        e.Insert = string.Empty;
+
+                        DragDropHelper.SetDropDescription(comDataObject, e.DropIcon, e.Message, e.Insert);
+                        DragDropHelper.DragLeave(comDataObject);
+                    }
                 }
 
                 lastDropTarget = newTarget;
                 if (newTarget is not null)
                 {
-                    DragEventArgs dragEnterArgs = new DragEventArgs(e.Data, e.KeyState, e.X, e.Y, e.AllowedEffect, e.Effect)
+                    DragEventArgs dragEnterArgs = new DragEventArgs(e.Data, e.KeyState, e.X, e.Y, e.AllowedEffect, e.Effect, e.DropIcon, e.Message, e.Insert)
                     {
-                        Effect = DragDropEffects.None
+                        Effect = DragDropEffects.None,
+                        DropIcon = DropIconType.Default,
+                        Message = string.Empty,
+                        Insert = string.Empty
                     };
 
                     // tell the next drag target you've entered
                     OnDragEnter(dragEnterArgs);
+
+                    // tell the drag image manager you've entered
+                    if (dragEnterArgs.DropIcon > DropIconType.Default
+                        && dragEnterArgs.Data is IComDataObject comDataObject
+                        && owner is ToolStrip toolStrip && toolStrip.IsHandleCreated)
+                    {
+                        e.DropIcon = !dragEnterArgs.DropIcon.Equals(e.DropIcon) is bool newDropIcon ? dragEnterArgs.DropIcon : e.DropIcon;
+                        e.Message = !dragEnterArgs.Message.Equals(e.Message) is bool newMessage ? dragEnterArgs.Message : e.Message;
+                        e.Insert = !dragEnterArgs.Insert.Equals(e.Insert) is bool newInsert ? dragEnterArgs.Insert : e.Insert;
+
+                        if (newDropIcon || newMessage || newInsert)
+                        {
+                            DragDropHelper.SetDropDescription(comDataObject, e.DropIcon, e.Message, e.Insert);
+                        }
+
+                        Point pt = new(dragEnterArgs.X, dragEnterArgs.Y);
+                        DragDropHelper.DragEnter(toolStrip.Handle, comDataObject, ref pt, (uint)dragEnterArgs.Effect);
+                    }
                 }
             }
         }

@@ -45,6 +45,12 @@
     <EmbeddedResource Include="Data\DragDrop\NyanCatAscii_301.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Data\DragDrop\ToolStripAsciiCat.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\DragDrop\ToolStripNyanCat.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Images\SmallA.bmp">
       <LogicalName>WinformsControlsTest.SmallA.bmp</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

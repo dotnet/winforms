@@ -5286,6 +5286,14 @@ namespace System.Windows.Forms
             return DoDragDrop(data, allowedEffects, null, default, false);
         }
 
+        /// <summary>
+        ///  Begins a drag operation. The allowedEffects determine which
+        ///  drag operations can occur. If the drag operation needs to interop
+        ///  with applications in another process, data should either be
+        ///  a base managed class (String, Bitmap, or Metafile) or some Object
+        ///  that implements System.Runtime.Serialization.ISerializable. data can also be any Object that
+        ///  implements System.Windows.Forms.IDataObject.
+        /// </summary>
         public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
             IComDataObject dataObject = null;

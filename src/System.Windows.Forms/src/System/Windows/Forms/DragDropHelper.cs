@@ -40,15 +40,6 @@ namespace System.Windows.Forms
         private const string CF_UNTRUSTEDDRAGDROP = "UntrustedDragDrop";
         private const string CF_USINGDEFAULTDRAGIMAGE = "UsingDefaultDragImage";
 
-        private enum DropTargetState
-        {
-            None = -1,
-            DragEnter = 0,
-            DragOver = 1,
-            DragLeave = 2,
-            Drop = 3
-        }
-
         // Drag and drop private formats.
         public static readonly string[] s_formats = new string[]
         {
@@ -159,7 +150,7 @@ namespace System.Windows.Forms
                 Marshal.FinalReleaseComObject(dropTargetHelper);
             }
 
-            SetDropTargetState(dataObject, DropTargetState.DragEnter);
+            SetIsNewDragImage(dataObject, false);
         }
 
         /// <summary>
@@ -168,7 +159,9 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DragOver(IntPtr hwndTarget, IComDataObject dataObject, ref Point ppt, uint dwEffect)
         {
-            if (GetIsNewDragImage(dataObject) || GetDropTargetState(dataObject) is not DropTargetState.DragEnter)
+            // If the application has set a new drag image, e.g. in DropSource.GiveFeedback, we must call DragEnter
+            // before calling DragOver in order for the Windows drag image manager to effectively display the drag image.
+            if (GetIsNewDragImage(dataObject))
             {
                 DragEnter(hwndTarget, dataObject, ref ppt, dwEffect);
             }
@@ -191,8 +184,6 @@ namespace System.Windows.Forms
             {
                 Marshal.FinalReleaseComObject(dropTargetHelper);
             }
-
-            SetDropTargetState(dataObject, DropTargetState.DragOver);
         }
 
         /// <summary>
@@ -218,8 +209,6 @@ namespace System.Windows.Forms
             {
                 Marshal.FinalReleaseComObject(dropTargetHelper);
             }
-
-            SetDropTargetState(dataObject, DropTargetState.DragLeave);
         }
 
         /// <summary>
@@ -246,8 +235,6 @@ namespace System.Windows.Forms
             {
                 Marshal.FinalReleaseComObject(dropTargetHelper);
             }
-
-            SetDropTargetState(dataObject, DropTargetState.Drop);
         }
 
         /// <summary>
@@ -308,7 +295,6 @@ namespace System.Windows.Forms
                 mediumDest.tymed = TYMED.TYMED_NULL;
                 Kernel32.GlobalFree(mediumDest.unionmember);
                 mediumDest.unionmember = IntPtr.Zero;
-                Ole32.ReleaseStgMedium(ref mediumDest);
                 return false;
             }
         }
@@ -382,7 +368,6 @@ namespace System.Windows.Forms
             {
                 Kernel32.GlobalFree(medium.unionmember);
                 medium.unionmember = IntPtr.Zero;
-                Ole32.ReleaseStgMedium(ref medium);
                 return;
             }
 
@@ -435,133 +420,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the DropTargetState format from a data object.
-        /// </summary>
-        private static unsafe DropTargetState GetDropTargetState(IComDataObject dataObject)
-        {
-            if (dataObject is null)
-            {
-                return DropTargetState.None;
-            }
-
-            // Create the clipboard format.
-            FORMATETC formatEtc = new()
-            {
-                cfFormat = (short)RegisterClipboardFormatW(CF_DROPTARGETSTATE),
-                dwAspect = DVASPECT.DVASPECT_CONTENT,
-                lindex = -1,
-                ptd = IntPtr.Zero,
-                tymed = TYMED.TYMED_HGLOBAL
-            };
-
-            // Check if the data object contains a DropTargetState.
-            if (dataObject.QueryGetData(ref formatEtc) != (int)HRESULT.S_OK)
-            {
-                return DropTargetState.None;
-            }
-
-            // Create the storage medium used for data transfer.
-            STGMEDIUM medium = new();
-            try
-            {
-                // Get the DropTargetState from the data object.
-                dataObject.GetData(ref formatEtc, out medium);
-
-                // Lock the global memory object.
-                IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
-                if (basePtr == IntPtr.Zero)
-                {
-                    Kernel32.GlobalFree(medium.unionmember);
-                    medium.unionmember = IntPtr.Zero;
-                    return DropTargetState.None;
-                }
-
-                // Read the DropTargetState from the global memory handle.
-                DropTargetState* pValue = (DropTargetState*)basePtr;
-                return *pValue;
-            }
-            finally
-            {
-                Kernel32.GlobalUnlock(medium.unionmember);
-                Kernel32.GlobalFree(medium.unionmember);
-                medium.unionmember = IntPtr.Zero;
-                Ole32.ReleaseStgMedium(ref medium);
-            }
-        }
-
-        /// <summary>
-        ///  Sets the DropTargetState format into a data object.
-        /// </summary>
-        private static unsafe void SetDropTargetState(IComDataObject dataObject, DropTargetState state)
-        {
-            if (dataObject is null)
-            {
-                return;
-            }
-
-            STGMEDIUM medium = default;
-
-            try
-            {
-                // Create the clipboard format.
-                FORMATETC formatEtc = new()
-                {
-                    cfFormat = (short)RegisterClipboardFormatW(CF_DROPTARGETSTATE),
-                    dwAspect = DVASPECT.DVASPECT_CONTENT,
-                    lindex = -1,
-                    ptd = IntPtr.Zero,
-                    tymed = TYMED.TYMED_HGLOBAL
-                };
-
-                // Create a global memory object storage medium.
-                medium = new()
-                {
-                    pUnkForRelease = null,
-                    tymed = TYMED.TYMED_HGLOBAL,
-
-                    // Allocate a suitably sized block of memory.
-                    unionmember = Kernel32.GlobalAlloc(
-                        Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
-                        sizeof(DropTargetState))
-                };
-                if (medium.unionmember == IntPtr.Zero)
-                {
-                    return;
-                }
-
-                // Lock the global memory object.
-                IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
-                if (basePtr == IntPtr.Zero)
-                {
-                    Kernel32.GlobalFree(medium.unionmember);
-                    medium.unionmember = IntPtr.Zero;
-                    return;
-                }
-
-                // Write the DropTargetState out to the global memory handle.
-                DropTargetState* pValue = (DropTargetState*)basePtr;
-                *pValue = state;
-
-                // Unlock the global memory object
-                Kernel32.GlobalUnlock(medium.unionmember);
-
-                // Load the DropTargetState format into the data object.
-                dataObject.SetData(ref formatEtc, ref medium, true);
-            }
-            catch
-            {
-                Kernel32.GlobalFree(medium.unionmember);
-                medium.unionmember = IntPtr.Zero;
-                Ole32.ReleaseStgMedium(ref medium);
-            }
-
-            if (state.Equals(DropTargetState.DragEnter))
-            {
-                SetIsNewDragImage(dataObject, false);
-            }
-        }
-
-        /// <summary>
         ///  Gets the IsNewDragImage format from a data object.
         /// </summary>
         private static bool GetIsNewDragImage(IComDataObject dataObject)
@@ -607,8 +465,6 @@ namespace System.Windows.Forms
                 IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
                 if (basePtr == IntPtr.Zero)
                 {
-                    Kernel32.GlobalFree(medium.unionmember);
-                    medium.unionmember = IntPtr.Zero;
                     return false;
                 }
 
@@ -619,9 +475,6 @@ namespace System.Windows.Forms
             finally
             {
                 Kernel32.GlobalUnlock(medium.unionmember);
-                Kernel32.GlobalFree(medium.unionmember);
-                medium.unionmember = IntPtr.Zero;
-                Ole32.ReleaseStgMedium(ref medium);
             }
         }
 
@@ -728,7 +581,6 @@ namespace System.Windows.Forms
             {
                 Kernel32.GlobalFree(medium.unionmember);
                 medium.unionmember = IntPtr.Zero;
-                Ole32.ReleaseStgMedium(ref medium);
             }
         }
     }
