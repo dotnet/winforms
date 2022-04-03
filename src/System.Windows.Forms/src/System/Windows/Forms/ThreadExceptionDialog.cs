@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -69,8 +67,8 @@ namespace System.Windows.Forms
         private readonly Button detailsButton = new Button();
         private readonly Button helpButton = new Button();
         private readonly TextBox details = new TextBox();
-        private Bitmap expandImage;
-        private Bitmap collapseImage;
+        private Bitmap? expandImage;
+        private Bitmap? collapseImage;
         private bool detailsVisible;
 
         /// <summary>
@@ -189,7 +187,7 @@ namespace System.Windows.Forms
             foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
             {
                 AssemblyName name = asm.GetName();
-                string fileVer = SR.NotAvailable;
+                string? fileVer = SR.NotAvailable;
 
                 try
                 {
@@ -256,7 +254,7 @@ namespace System.Windows.Forms
             int width = textSize.Width + scaledPaddingWidth;
             int buttonTop = Math.Max(textSize.Height, scaledMaxTextHeight) + scaledPaddingHeight;
 
-            Form activeForm = Form.ActiveForm;
+            Form? activeForm = Form.ActiveForm;
             if (activeForm is null || activeForm.Text.Length == 0)
             {
                 Text = SR.ExDlgCaption;
@@ -311,7 +309,7 @@ namespace System.Windows.Forms
             detailsButton.FlatStyle = FlatStyle.Standard;
             detailsButton.Click += new EventHandler(DetailsClick);
 
-            Button b = null;
+            Button? b = null;
             int startIndex = 0;
 
             if (detailAnchor)
@@ -361,7 +359,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void ThreadExceptionDialog_DpiChanged(object sender, DpiChangedEventArgs e)
+        private void ThreadExceptionDialog_DpiChanged(object? sender, DpiChangedEventArgs e)
         {
             if (expandImage is not null)
             {
@@ -397,7 +395,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler AutoSizeChanged
+        new public event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -406,7 +404,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Called when the details button is clicked.
         /// </summary>
-        private void DetailsClick(object sender, EventArgs eventargs)
+        private void DetailsClick(object? sender, EventArgs eventargs)
         {
             int delta = details.Height + scaledHeightPadding;
             if (detailsVisible)
@@ -420,7 +418,7 @@ namespace System.Windows.Forms
             detailsButton.Image = detailsVisible ? collapseImage : expandImage;
         }
 
-        private static string Trim(string s)
+        private static string? Trim(string s)
         {
             if (s is null)
             {
