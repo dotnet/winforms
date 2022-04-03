@@ -122,8 +122,8 @@ namespace System.Windows.Forms
                             keyState |= User32.MK.SHIFT;
                         }
 
-                        _lastComDataObject = lpdataobj;
                         lastDataObject = new DataObject(lpdataobj);
+                        _lastComDataObject = lpdataobj;
 
                         if (!owner.EnableAutoDragDrop)
                         {
@@ -143,6 +143,10 @@ namespace System.Windows.Forms
                         {
                             // we are just querying
 
+                            e.DropIcon = _lastDropIcon = DropIconType.Default;
+                            e.Message = _lastMessage = string.Empty;
+                            e.Insert = _lastInsert = string.Empty;
+
                             // We can get here without GetDragDropEffects actually being called first.
                             // This happens when you drag/drop between two rtb's. Say you drag from rtb1 to rtb2.
                             // GetDragDropEffects will first be called for rtb1, then QueryAcceptData for rtb1 just
@@ -152,9 +156,7 @@ namespace System.Windows.Forms
                             e.Effect = ((keyState & User32.MK.CONTROL) == User32.MK.CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
                             owner.OnDragEnter(e);
 
-                            if (e.DropIcon > DropIconType.Default
-                                && _lastComDataObject is not null
-                                && owner.IsHandleCreated)
+                            if (e.DropIcon > DropIconType.Default && _lastComDataObject is not null && owner.IsHandleCreated)
                             {
                                 _lastDropIcon = !e.DropIcon.Equals(_lastDropIcon) is bool newDropIcon ? e.DropIcon : _lastDropIcon;
                                 _lastMessage = !e.Message.Equals(_lastMessage) is bool newMessage ? e.Message : _lastMessage;
@@ -173,18 +175,23 @@ namespace System.Windows.Forms
                         {
                             owner.OnDragDrop(e);
 
-                            if (_lastDropIcon > DropIconType.Default
-                                && _lastComDataObject is not null)
+                            if (_lastDropIcon > DropIconType.Default && _lastComDataObject is not null)
                             {
-                                _lastDropIcon = DropIconType.Default;
-                                _lastMessage = string.Empty;
-                                _lastInsert = string.Empty;
+                                _lastDropIcon = !_lastDropIcon.Equals(DropIconType.Default) is bool newDropIcon ? DropIconType.Default : _lastDropIcon;
+                                _lastMessage = !_lastMessage.Equals(string.Empty) is bool newMessage ? string.Empty : _lastMessage;
+                                _lastInsert = !_lastInsert.Equals(string.Empty) is bool newInsert ? string.Empty : _lastInsert;
+
+                                if (newDropIcon || newMessage || newInsert)
+                                {
+                                    DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropIcon, _lastMessage, _lastInsert);
+                                }
 
                                 Point pt = new(e.X, e.Y);
-                                DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropIcon, _lastMessage, _lastInsert);
                                 DragDropHelper.Drop(_lastComDataObject, ref pt, (uint)e.Effect);
+                                DragDropHelper.DragLeave(_lastComDataObject);
                             }
 
+                            _lastComDataObject = null;
                             lastDataObject = null;
                         }
 
@@ -203,6 +210,7 @@ namespace System.Windows.Forms
                     else
                     {
                         Debug.WriteLineIf(RichTextDbg.TraceVerbose, "\tCancel data, allowdrop == false");
+                        _lastComDataObject = null;
                         lastDataObject = null;
                         return HRESULT.E_FAIL;
                     }

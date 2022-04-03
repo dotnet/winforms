@@ -154,11 +154,15 @@ namespace System.Windows.Forms
             if (_lastDropIcon > DropIconType.Default
                 && _lastDataObject is IComDataObject comDataObject)
             {
-                _lastDropIcon = DropIconType.Default;
-                _lastMessage = string.Empty;
-                _lastInsert = string.Empty;
+                _lastDropIcon = !_lastDropIcon.Equals(DropIconType.Default) is bool newDropIcon ? DropIconType.Default : _lastDropIcon;
+                _lastMessage = !_lastMessage.Equals(string.Empty) is bool newMessage ? string.Empty : _lastMessage;
+                _lastInsert = !_lastInsert.Equals(string.Empty) is bool newInsert ? string.Empty : _lastInsert;
 
-                DragDropHelper.SetDropDescription(comDataObject, _lastDropIcon, _lastMessage, _lastInsert);
+                if (newDropIcon || newMessage || newInsert)
+                {
+                    DragDropHelper.SetDropDescription(comDataObject, _lastDropIcon, _lastMessage, _lastInsert);
+                }
+
                 DragDropHelper.DragLeave(comDataObject);
             }
 
@@ -179,11 +183,15 @@ namespace System.Windows.Forms
                 if (_lastDropIcon > DropIconType.Default
                     && drgevent.Data is IComDataObject comDataObject)
                 {
-                    _lastDropIcon = DropIconType.Default;
-                    _lastMessage = string.Empty;
-                    _lastInsert = string.Empty;
+                    _lastDropIcon = !_lastDropIcon.Equals(DropIconType.Default) is bool newDropIcon ? DropIconType.Default : _lastDropIcon;
+                    _lastMessage = !_lastMessage.Equals(string.Empty) is bool newMessage ? string.Empty : _lastMessage;
+                    _lastInsert = !_lastInsert.Equals(string.Empty) is bool newInsert ? string.Empty : _lastInsert;
 
-                    DragDropHelper.SetDropDescription(comDataObject, _lastDropIcon, _lastMessage, _lastInsert);
+                    if (newDropIcon || newMessage || newInsert)
+                    {
+                        DragDropHelper.SetDropDescription(comDataObject, _lastDropIcon, _lastMessage, _lastInsert);
+                    }
+
                     DragDropHelper.Drop(comDataObject, ref pt, pdwEffect);
                 }
             }
