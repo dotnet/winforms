@@ -14,13 +14,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Initializes a new instance of the <see cref="GiveFeedbackEventArgs"/> class.
         /// </summary>
-        public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors)
+        public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors) : this(effect, useDefaultCursors, null, default, false)
+        {
+        }
+
+        public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
             Effect = effect;
             UseDefaultCursors = useDefaultCursors;
-            DragImage = null;
-            CursorOffset = default;
-            UseDefaultDragImage = false;
+            DragImage = dragImage;
+            CursorOffset = cursorOffset;
+            UseDefaultDragImage = useDefaultDragImage;
         }
 
         /// <summary>

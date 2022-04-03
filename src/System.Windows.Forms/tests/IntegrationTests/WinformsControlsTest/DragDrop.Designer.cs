@@ -39,8 +39,8 @@ namespace WinformsControlsTest
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.buttonClear = new System.Windows.Forms.Button();
             this.buttonOpenCats = new System.Windows.Forms.Button();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.richTextBox = new System.Windows.Forms.RichTextBox();
+            this.textBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -114,27 +114,27 @@ namespace WinformsControlsTest
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.richTextBox1.Location = new System.Drawing.Point(180, 52);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(436, 650);
-            this.richTextBox1.TabIndex = 21;
-            this.richTextBox1.Text = "";
+            this.richTextBox.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.richTextBox.Location = new System.Drawing.Point(180, 52);
+            this.richTextBox.Name = "richTextBox1";
+            this.richTextBox.Size = new System.Drawing.Size(436, 650);
+            this.richTextBox.TabIndex = 21;
+            this.richTextBox.Text = "";
             // 
             // textBox1
             // 
-            this.textBox1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.textBox1.Location = new System.Drawing.Point(636, 52);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(383, 649);
-            this.textBox1.TabIndex = 18;
+            this.textBox.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.textBox.Location = new System.Drawing.Point(636, 52);
+            this.textBox.Multiline = true;
+            this.textBox.Name = "textBox1";
+            this.textBox.Size = new System.Drawing.Size(383, 649);
+            this.textBox.TabIndex = 18;
             // 
             // DragDrop
             // 
             this.ClientSize = new System.Drawing.Size(1031, 740);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.textBox);
+            this.Controls.Add(this.richTextBox);
             this.Controls.Add(this.buttonOpenCats);
             this.Controls.Add(this.buttonClear);
             this.Controls.Add(this.pictureBox5);
@@ -162,7 +162,7 @@ namespace WinformsControlsTest
         private System.Windows.Forms.PictureBox pictureBox5;
         private System.Windows.Forms.Button buttonClear;
         private System.Windows.Forms.Button buttonOpenCats;
-        private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.RichTextBox richTextBox;
+        private System.Windows.Forms.TextBox textBox;
     }
 }

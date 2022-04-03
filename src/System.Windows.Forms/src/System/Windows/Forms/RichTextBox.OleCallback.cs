@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Diagnostics;
+using System.Drawing;
 using static Interop;
 using static Interop.Richedit;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
@@ -19,6 +20,10 @@ namespace System.Windows.Forms
             private readonly RichTextBox owner;
             IDataObject lastDataObject;
             DragDropEffects lastEffect;
+            private IComDataObject _lastComDataObject;
+            private DropIconType _lastDropIcon = DropIconType.Default;
+            private string _lastMessage = string.Empty;
+            private string _lastInsert = string.Empty;
 
             internal OleCallback(RichTextBox owner)
             {
@@ -117,6 +122,7 @@ namespace System.Windows.Forms
                             keyState |= User32.MK.SHIFT;
                         }
 
+                        _lastComDataObject = lpdataobj;
                         lastDataObject = new DataObject(lpdataobj);
 
                         if (!owner.EnableAutoDragDrop)
@@ -129,7 +135,10 @@ namespace System.Windows.Forms
                                                   Control.MousePosition.X,
                                                   Control.MousePosition.Y,
                                                   DragDropEffects.All,
-                                                  lastEffect);
+                                                  lastEffect,
+                                                  _lastDropIcon,
+                                                  _lastMessage,
+                                                  _lastInsert);
                         if (fReally == 0)
                         {
                             // we are just querying
@@ -142,10 +151,40 @@ namespace System.Windows.Forms
                             // the drag. Thus we need to set the effect here as well.
                             e.Effect = ((keyState & User32.MK.CONTROL) == User32.MK.CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
                             owner.OnDragEnter(e);
+
+                            if (e.DropIcon > DropIconType.Default
+                                && _lastComDataObject is not null
+                                && owner.IsHandleCreated)
+                            {
+                                _lastDropIcon = !e.DropIcon.Equals(_lastDropIcon) is bool newDropIcon ? e.DropIcon : _lastDropIcon;
+                                _lastMessage = !e.Message.Equals(_lastMessage) is bool newMessage ? e.Message : _lastMessage;
+                                _lastInsert = !e.Insert.Equals(_lastInsert) is bool newInsert ? e.Insert : _lastInsert;
+
+                                if (newDropIcon || newMessage || newInsert)
+                                {
+                                    DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropIcon, _lastMessage, _lastInsert);
+                                }
+
+                                Point pt = new(e.X, e.Y);
+                                DragDropHelper.DragEnter(owner.Handle, _lastComDataObject, ref pt, (uint)e.Effect);
+                            }
                         }
                         else
                         {
                             owner.OnDragDrop(e);
+
+                            if (_lastDropIcon > DropIconType.Default
+                                && _lastComDataObject is not null)
+                            {
+                                _lastDropIcon = DropIconType.Default;
+                                _lastMessage = string.Empty;
+                                _lastInsert = string.Empty;
+
+                                Point pt = new(e.X, e.Y);
+                                DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropIcon, _lastMessage, _lastInsert);
+                                DragDropHelper.Drop(_lastComDataObject, ref pt, (uint)e.Effect);
+                            }
+
                             lastDataObject = null;
                         }
 
@@ -234,7 +273,10 @@ namespace System.Windows.Forms
                                                                 Control.MousePosition.X,
                                                                 Control.MousePosition.Y,
                                                                 DragDropEffects.All,
-                                                                lastEffect);
+                                                                lastEffect,
+                                                                _lastDropIcon,
+                                                                _lastMessage,
+                                                                _lastInsert);
 
                             // Now tell which of the allowable effects we want to use, but only if we are not already none
                             if (lastEffect != DragDropEffects.None)
@@ -244,6 +286,23 @@ namespace System.Windows.Forms
 
                             owner.OnDragOver(e);
                             lastEffect = e.Effect;
+
+                            if (e.DropIcon > DropIconType.Default
+                                && _lastComDataObject is not null
+                                && owner.IsHandleCreated)
+                            {
+                                _lastDropIcon = !e.DropIcon.Equals(_lastDropIcon) is bool newDropIcon ? e.DropIcon : _lastDropIcon;
+                                _lastMessage = !e.Message.Equals(_lastMessage) is bool newMessage ? e.Message : _lastMessage;
+                                _lastInsert = !e.Insert.Equals(_lastInsert) is bool newInsert ? e.Insert : _lastInsert;
+
+                                if (newDropIcon || newMessage || newInsert)
+                                {
+                                    DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropIcon, _lastMessage, _lastInsert);
+                                }
+
+                                Point pt = new(e.X, e.Y);
+                                DragDropHelper.DragOver(owner.Handle, _lastComDataObject, ref pt, (uint)e.Effect);
+                            }
                         }
                     }
 

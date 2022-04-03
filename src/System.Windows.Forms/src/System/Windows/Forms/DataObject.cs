@@ -562,19 +562,19 @@ namespace System.Windows.Forms
                 converter.OleDataObject.GetData(ref formatetc, out medium);
                 return;
             }
-            else if (_innerData is DataStore dataStore
+            else if (_innerData is IDataObject dataObject
                 && DataFormats.GetFormat(formatetc.cfFormat).Name is string formatName
                 && DragDropHelper.s_formats.Contains(formatName))
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {formatName}");
 
-                if (!dataStore.GetDataPresent(formatName))
+                if (!dataObject.GetDataPresent(formatName))
                 {
                     medium = default;
                     return;
                 }
 
-                if (dataStore.GetData(formatName) is DragDropFormat dragDropFormat)
+                if (dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
                 {
                     medium = dragDropFormat.Medium;
                     return;
@@ -688,14 +688,14 @@ namespace System.Windows.Forms
                 converter.OleDataObject.SetData(ref pFormatetcIn, ref pmedium, fRelease);
                 return;
             }
-            else if (_innerData is DataStore dataStore
+            else if (_innerData is IDataObject dataObject
                 && DataFormats.GetFormat(pFormatetcIn.cfFormat).Name is string formatName
                 && DragDropHelper.s_formats.Contains(formatName)
                 && DragDropHelper.s_tymeds.Contains(pmedium.tymed)
                 && pFormatetcIn.ptd.Equals(IntPtr.Zero))
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {formatName}");
-                dataStore.SetData(formatName, new DragDropFormat(pFormatetcIn, pmedium, fRelease));
+                dataObject.SetData(formatName, new DragDropFormat(pFormatetcIn, pmedium, fRelease));
                 return;
             }
 

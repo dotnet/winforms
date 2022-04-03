@@ -8,7 +8,7 @@ using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
-    internal class DropSource : Ole32.IDropSource
+    internal class DropSource : Ole32.IDropSource, Ole32.IDropSourceNotfiy
     {
         private readonly ISupportOleDropSource _peer;
         private readonly IComDataObject? _dataObject;
@@ -66,11 +66,7 @@ namespace System.Windows.Forms
 
         public HRESULT GiveFeedback(Ole32.DROPEFFECT dwEffect)
         {
-            var gfbevent = new GiveFeedbackEventArgs((DragDropEffects)dwEffect, true);
-            gfbevent.DragImage = _lastDragImage;
-            gfbevent.CursorOffset = _lastCursorOffset;
-            gfbevent.UseDefaultDragImage = _lastUseDefaultDragImage;
-
+            var gfbevent = new GiveFeedbackEventArgs((DragDropEffects)dwEffect, true, _lastDragImage, _lastCursorOffset, _lastUseDefaultDragImage);
             _peer.OnGiveFeedback(gfbevent);
 
             if (gfbevent.DragImage is not null)
@@ -88,6 +84,21 @@ namespace System.Windows.Forms
             if (gfbevent.UseDefaultCursors)
             {
                 return HRESULT.DRAGDROP_S_USEDEFAULTCURSORS;
+            }
+
+            return HRESULT.S_OK;
+        }
+
+        public HRESULT DragEnterTarget(IntPtr hwndTarget)
+        {
+            return HRESULT.S_OK;
+        }
+
+        public HRESULT DragLeaveTarget()
+        {
+            if (_dataObject is IComDataObject comDataObject)
+            {
+                DragDropHelper.DragLeave(comDataObject);
             }
 
             return HRESULT.S_OK;

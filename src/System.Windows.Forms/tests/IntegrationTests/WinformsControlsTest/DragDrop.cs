@@ -30,8 +30,6 @@ namespace WinformsControlsTest
         {
             InitializeComponent();
 
-            richTextBox1.Visible = false;
-
             _pictureBoxList = new()
             {
                 pictureBox1,
@@ -74,10 +72,15 @@ namespace WinformsControlsTest
             pictureBox5.MouseDown += PictureBox_MouseDown;
             pictureBox5.GiveFeedback += PictureBox_GiveFeedback;
 
-            textBox1.AllowDrop = true;
-            textBox1.DragEnter += TextBox1_DragEnter;
-            textBox1.DragOver += TextBox1_DragOver;
-            textBox1.DragDrop += TextBox1_DragDrop;
+            textBox.AllowDrop = true;
+            textBox.DragEnter += TextBox1_DragEnter;
+            textBox.DragOver += TextBox1_DragOver;
+            textBox.DragDrop += TextBox1_DragDrop;
+
+            richTextBox.AllowDrop = true;
+            richTextBox.EnableAutoDragDrop = true;
+            richTextBox.DragEnter += RichTextBox_DragEnter;
+            richTextBox.DragOver += RichTextBox_DragOver;
 
             buttonOpenCats.Click += new EventHandler(ButtonOpenCats_Click);
             buttonClear.Click += new EventHandler(ButtonClear_Click);
@@ -88,8 +91,8 @@ namespace WinformsControlsTest
         private void ButtonClear_Click(object? sender, EventArgs e)
         {
             ClearCats();
-            richTextBox1.Clear();
-            textBox1.Clear();
+            richTextBox.Clear();
+            textBox.Clear();
         }
 
         private void ButtonOpenCats_Click(object? sender, EventArgs e)
@@ -195,13 +198,13 @@ namespace WinformsControlsTest
                 && e.Data.GetDataPresent(nameof(_nyanCatAscii), false)
                 && e.Data.GetData(nameof(_nyanCatAscii)) is string asciiCat)
             {
-                textBox1.Text += textBox1.Text.Length > 0
+                textBox.Text += textBox.Text.Length > 0
                     ? Environment.NewLine + Environment.NewLine + asciiCat
                     : asciiCat;
             }
 
-            textBox1.SelectionStart = textBox1.Text.Length;
-            textBox1.SelectionLength = 0;
+            textBox.SelectionStart = textBox.Text.Length;
+            textBox.SelectionLength = 0;
         }
 
         private void TextBox1_DragEnter(object? sender, DragEventArgs e)
@@ -238,6 +241,20 @@ namespace WinformsControlsTest
                 // Set the target drop effect.
                 e.Effect = DragDropEffects.Copy;
             }
+        }
+
+        private void RichTextBox_DragEnter(object? sender, DragEventArgs e)
+        {
+            e.DropIcon = DropIconType.Copy;
+            e.Message = "RichTextBox.DragEnter";
+            e.Effect = DragDropEffects.Copy;
+        }
+
+        private void RichTextBox_DragOver(object? sender, DragEventArgs e)
+        {
+            e.DropIcon = DropIconType.Copy;
+            e.Message = "RichTextBox.DragOver";
+            e.Effect = DragDropEffects.Copy;
         }
 
         private void LoadCats(PictureBox pb, string[] bitmaps)
