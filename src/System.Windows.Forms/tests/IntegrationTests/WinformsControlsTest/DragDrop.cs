@@ -20,9 +20,11 @@ namespace WinformsControlsTest
             "-........--\"\"-.......--\"╰O━━━━O╯╰--O-O--╯";
         private readonly string _dragDropDataDirectory = "Data\\DragDrop";
         private readonly List<PictureBox> _pictureBoxList;
+        private readonly Bitmap _dragAcceptBmp = new(@"Data\DragDrop\DragAccept.bmp");
         private readonly Bitmap _nyanCatAscii301Bmp = new(@"Data\DragDrop\NyanCatAscii_301.bmp");
         private readonly Bitmap _nyanCatBmp = new(@"Data\DragDrop\NyanCat1.bmp");
         private readonly Bitmap _toolStripAsciiCatBmp = new(@"Data\DragDrop\ToolStripAsciiCat.bmp");
+        private readonly Bitmap _toolStripDragAcceptBmp = new(@"Data\DragDrop\ToolStripDragAccept.bmp");
         private readonly Bitmap _toolStripNyanCatBmp = new(@"Data\DragDrop\ToolStripNyanCat.bmp");
         private ContextMenuStrip? _catContextMenuStrip;
 
@@ -80,7 +82,7 @@ namespace WinformsControlsTest
             richTextBox.AllowDrop = true;
             richTextBox.EnableAutoDragDrop = true;
             richTextBox.DragEnter += RichTextBox_DragEnter;
-            richTextBox.DragOver += RichTextBox_DragOver;
+            richTextBox.DragDrop += RichTextBox_DragDrop;
 
             buttonOpenCats.Click += new EventHandler(ButtonOpenCats_Click);
             buttonClear.Click += new EventHandler(ButtonClear_Click);
@@ -245,16 +247,31 @@ namespace WinformsControlsTest
 
         private void RichTextBox_DragEnter(object? sender, DragEventArgs e)
         {
-            e.DropIcon = DropIconType.Copy;
-            e.Message = "RichTextBox.DragEnter";
-            e.Effect = DragDropEffects.Copy;
+            if (e.Data is not null
+                && e.Data.GetDataPresent(DataFormats.FileDrop)
+                && e.Data.GetDataPresent("FileName")
+                && e.Data.GetData("FileName") is string[] fileNames
+                && fileNames.Length > 0 && fileNames[0].EndsWith("DragAccept.rtf"))
+            {
+                e.DropIcon = DropIconType.Link;
+                e.Message = "%1 (shellapi.h)";
+                e.Insert = "DragAcceptFiles";
+                e.Effect = DragDropEffects.Link;
+            }
         }
 
-        private void RichTextBox_DragOver(object? sender, DragEventArgs e)
+        private void RichTextBox_DragDrop(object? sender, DragEventArgs e)
         {
-            e.DropIcon = DropIconType.Copy;
-            e.Message = "RichTextBox.DragOver";
-            e.Effect = DragDropEffects.Copy;
+            if (e.Data is not null
+                && e.Data.GetDataPresent(DataFormats.FileDrop)
+                && e.Data.GetDataPresent("FileName")
+                && e.Data.GetData("FileName") is string[] fileNames
+                && fileNames.Length > 0 && fileNames[0].EndsWith("DragAccept.rtf"))
+            {
+                richTextBox.Clear();
+                richTextBox.LoadFile(fileNames[0], RichTextBoxStreamType.RichText);
+                e.Effect = DragDropEffects.None;
+            }
         }
 
         private void LoadCats(PictureBox pb, string[] bitmaps)
@@ -351,12 +368,12 @@ namespace WinformsControlsTest
                 _catContextMenuStrip.Items.Add("Source: " + toolStripDropDownItem.GetType().ToString());
             }
 
-            ToolStripItem asciiCatItem = new ToolStripMenuItem()
+            ToolStripItem dragAcceptItem = new ToolStripMenuItem()
             {
                 ImageScaling = ToolStripItemImageScaling.SizeToFit,
-                Text = "Ascii Cat",
-                Name = "AsciiCatItem",
-                Image = _toolStripAsciiCatBmp
+                Text = "DragAcceptFiles",
+                Name = "DragAcceptItem",
+                Image = _toolStripDragAcceptBmp
             };
 
             ToolStripItem nyanCatItem = new ToolStripMenuItem()
@@ -367,35 +384,62 @@ namespace WinformsControlsTest
                 Image = _toolStripNyanCatBmp
             };
 
-            asciiCatItem.AllowDrop = true;
-            asciiCatItem.DragEnter += AsciiCatItem_DragEnter;
-            asciiCatItem.MouseDown += AsciiCatItem_MouseDown;
-            asciiCatItem.GiveFeedback += AsciiCatItem_GiveFeedback;
+            ToolStripItem asciiCatItem = new ToolStripMenuItem()
+            {
+                ImageScaling = ToolStripItemImageScaling.SizeToFit,
+                Text = "Ascii Cat",
+                Name = "AsciiCatItem",
+                Image = _toolStripAsciiCatBmp
+            };
+
+            dragAcceptItem.AllowDrop = true;
+            dragAcceptItem.DragEnter += DragAcceptItem_DragEnter;
+            dragAcceptItem.MouseDown += DragAcceptItem_MouseDown;
+            dragAcceptItem.GiveFeedback += DragAcceptItem_GiveFeedback;
 
             nyanCatItem.AllowDrop = true;
             nyanCatItem.DragEnter += NyanCatItem_DragEnter;
             nyanCatItem.MouseDown += NyanCatItem_MouseDown;
             nyanCatItem.GiveFeedback += NyanCatItem_GiveFeedback;
 
-            _catContextMenuStrip.Items.Add("-");
-            _catContextMenuStrip.Items.Add(asciiCatItem);
-            _catContextMenuStrip.Items.Add(nyanCatItem);
+            asciiCatItem.AllowDrop = true;
+            asciiCatItem.DragEnter += AsciiCatItem_DragEnter;
+            asciiCatItem.MouseDown += AsciiCatItem_MouseDown;
+            asciiCatItem.GiveFeedback += AsciiCatItem_GiveFeedback;
 
+            _catContextMenuStrip.Items.Add("-");
+            _catContextMenuStrip.Items.Add(dragAcceptItem);
+            _catContextMenuStrip.Items.Add(nyanCatItem);
+            _catContextMenuStrip.Items.Add(asciiCatItem);
             e.Cancel = false;
+        }
+
+        private void DragAcceptItem_DragEnter(object? sender, DragEventArgs e)
+        {
+            e.DropIcon = DropIconType.Link;
+            e.Message = "DragAcceptFiles";
+            e.Effect = DragDropEffects.Link;
         }
 
         private void NyanCatItem_DragEnter(object? sender, DragEventArgs e)
         {
-            e.DropIcon = DropIconType.Copy;
+            e.DropIcon = DropIconType.Link;
             e.Message = "NyanCat";
-            e.Effect = DragDropEffects.Copy;
+            e.Effect = DragDropEffects.Link;
         }
 
         private void AsciiCatItem_DragEnter(object? sender, DragEventArgs e)
         {
-            e.DropIcon = DropIconType.Copy;
+            e.DropIcon = DropIconType.Link;
             e.Message = "AsciiCat";
-            e.Effect = DragDropEffects.Copy;
+            e.Effect = DragDropEffects.Link;
+        }
+
+        private void DragAcceptItem_GiveFeedback(object? sender, GiveFeedbackEventArgs e)
+        {
+            // Hide the default cursor.
+            Cursor.Current = Cursors.Default;
+            e.UseDefaultCursors = false;
         }
 
         private void NyanCatItem_GiveFeedback(object? sender, GiveFeedbackEventArgs e)
@@ -412,6 +456,19 @@ namespace WinformsControlsTest
             e.UseDefaultCursors = false;
         }
 
+        private void DragAcceptItem_MouseDown(object? sender, MouseEventArgs e)
+        {
+            if (sender is ToolStripItem toolStripItem)
+            {
+                // Read the rich text format file and populate the data object with the contents.
+                DataObject data = new(DataFormats.FileDrop, new string[] { @"Data\DragDrop\DragAccept.rtf" });
+                //DataObject data = new("foo", "bar");
+
+                // Call DoDragDrop and set the initial drag image.
+                toolStripItem.DoDragDrop(data, DragDropEffects.All, _dragAcceptBmp, new Point(0, 96), true);
+            }
+        }
+
         private void NyanCatItem_MouseDown(object? sender, MouseEventArgs e)
         {
             if (sender is ToolStripItem toolStripItem)
@@ -420,7 +477,7 @@ namespace WinformsControlsTest
                 DataObject data = new(nameof(_nyanCatAscii), _nyanCatAscii);
 
                 // Call DoDragDrop and set the initial drag image.
-                toolStripItem.DoDragDrop(data, DragDropEffects.Copy, _nyanCatBmp, new Point(0, 96), true);
+                toolStripItem.DoDragDrop(data, DragDropEffects.All, _nyanCatBmp, new Point(0, 96), true);
             }
         }
 
@@ -432,7 +489,7 @@ namespace WinformsControlsTest
                 DataObject data = new(nameof(_nyanCatAscii), _nyanCatAscii);
 
                 // Call DoDragDrop and set the initial drag image.
-                toolStripItem.DoDragDrop(data, DragDropEffects.Copy, _nyanCatAscii301Bmp, new Point(0, 111), false);
+                toolStripItem.DoDragDrop(data, DragDropEffects.All, _nyanCatAscii301Bmp, new Point(0, 111), false);
             }
         }
     }
