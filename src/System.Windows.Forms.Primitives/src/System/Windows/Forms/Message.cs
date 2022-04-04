@@ -85,11 +85,6 @@ namespace System.Windows.Forms
         /// </summary>
         public object? GetLParam(Type cls) => Marshal.PtrToStructure(LParamInternal, cls);
 
-        /// <summary>
-        ///  Gets the <see cref="LParam"/> value, and converts the value to an object of given type.
-        /// </summary>
-        public T? GetLParam<T>() => Marshal.PtrToStructure<T>(LParamInternal);
-
         internal static Message Create(IntPtr hWnd, User32.WM msg, nint wparam, nint lparam)
             => Create(hWnd, (int)msg, wparam, lparam);
 

@@ -210,33 +210,6 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
-        public void Message_GetLParam_T_Invoke_ReturnsExpected()
-        {
-            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf<TestStruct>());
-            try
-            {
-                var original = new TestStruct
-                {
-                    _field1 = 1,
-                    _field2 = 2
-                };
-                Marshal.StructureToPtr(original, ptr, fDeleteOld: false);
-
-                var message = new Message
-                {
-                    LParam = ptr
-                };
-                TestStruct lparam = message.GetLParam<TestStruct>();
-                Assert.Equal(1, lparam._field1);
-                Assert.Equal(2, lparam._field2);
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(ptr);
-            }
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         private struct TestStruct
         {

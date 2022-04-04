@@ -2050,11 +2050,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the WM_WINDOWFROMPOINT message.
         /// </summary>
-        private void WmWindowFromPoint(ref Message message)
+        private unsafe void WmWindowFromPoint(ref Message message)
         {
-            var point = message.GetLParam<Point>();
+            var lpPoint = (Point*)message.LParamInternal;
             bool result = false;
-            message.ResultInternal = GetWindowFromPoint(point, ref result);
+            message.ResultInternal = GetWindowFromPoint(*lpPoint, ref result);
         }
 
         /// <summary>
@@ -2299,17 +2299,17 @@ namespace System.Windows.Forms
             }
         }
 
-        private void WndProc(ref Message message)
+        private unsafe void WndProc(ref Message message)
         {
             switch (message.Msg)
             {
                 case (int)(User32.WM.REFLECT_NOTIFY):
-                    User32.NMHDR nmhdr = message.GetLParam<User32.NMHDR>();
-                    if (nmhdr.code == (int)TTN.SHOW && !_trackPosition)
+                    var nmhdr = (User32.NMHDR*)message.LParamInternal;
+                    if (nmhdr->code == (int)TTN.SHOW && !_trackPosition)
                     {
                         WmShow();
                     }
-                    else if (nmhdr.code == (int)TTN.POP)
+                    else if (nmhdr->code == (int)TTN.POP)
                     {
                         WmPop();
                         _window?.DefWndProc(ref message);

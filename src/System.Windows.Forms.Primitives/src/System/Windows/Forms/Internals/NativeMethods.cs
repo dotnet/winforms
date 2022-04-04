@@ -122,38 +122,24 @@ namespace System.Windows.Forms
             public int FlagsEx;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class ENLINK
+        [StructLayout(LayoutKind.Sequential, Pack = 4)]
+        public struct ENLINK
         {
             public User32.NMHDR nmhdr;
             public int msg;
-            public IntPtr wParam = IntPtr.Zero;
-            public IntPtr lParam = IntPtr.Zero;
+            public IntPtr wParam;
+            public IntPtr lParam;
             public Richedit.CHARRANGE charrange;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class ENLINK64
-        {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 56)]
-            public byte[] contents = new byte[56];
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class ENPROTECTED
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 4)]
+        public struct ENPROTECTED
         {
             public User32.NMHDR nmhdr;
             public int msg;
             public IntPtr wParam;
             public IntPtr lParam;
             public Richedit.CHARRANGE chrg;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class ENPROTECTED64
-        {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 56)]
-            public byte[] contents = new byte[56];
         }
 
         public class ActiveX
