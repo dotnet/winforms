@@ -145,7 +145,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                Marshal.FinalReleaseComObject(dropTargetHelper);
+                Marshal.ReleaseComObject(dropTargetHelper);
             }
 
             SetIsNewDragImage(dataObject, false);
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                Marshal.FinalReleaseComObject(dropTargetHelper);
+                Marshal.ReleaseComObject(dropTargetHelper);
             }
         }
 
@@ -205,7 +205,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                Marshal.FinalReleaseComObject(dropTargetHelper);
+                Marshal.ReleaseComObject(dropTargetHelper);
             }
         }
 
@@ -231,7 +231,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                Marshal.FinalReleaseComObject(dropTargetHelper);
+                Marshal.ReleaseComObject(dropTargetHelper);
             }
 
             SetInShellDragLoop(dataObject, false);
@@ -411,7 +411,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                Marshal.FinalReleaseComObject(dragSourceHelper);
+                Marshal.ReleaseComObject(dragSourceHelper);
             }
 
             SetIsNewDragImage(dataObject, true);
