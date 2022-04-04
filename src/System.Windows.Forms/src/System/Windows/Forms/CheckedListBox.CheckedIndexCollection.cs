@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -77,7 +75,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            object IList.this[int index]
+            object? IList.this[int index]
             {
                 get
                 {
@@ -89,7 +87,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            int IList.Add(object value)
+            int IList.Add(object? value)
             {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
@@ -99,12 +97,12 @@ namespace System.Windows.Forms
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
-            void IList.Insert(int index, object value)
+            void IList.Insert(int index, object? value)
             {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
-            void IList.Remove(object value)
+            void IList.Remove(object? value)
             {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
@@ -116,14 +114,14 @@ namespace System.Windows.Forms
 
             public bool Contains(int index)
             {
-                return (IndexOf(index) != -1);
+                return IndexOf(index) != -1;
             }
 
-            bool IList.Contains(object index)
+            bool IList.Contains(object? index)
             {
-                if (index is int)
+                if (index is int indexAsInt)
                 {
-                    return Contains((int)index);
+                    return Contains(indexAsInt);
                 }
                 else
                 {
@@ -170,11 +168,11 @@ namespace System.Windows.Forms
                 return -1;
             }
 
-            int IList.IndexOf(object index)
+            int IList.IndexOf(object? index)
             {
-                if (index is int)
+                if (index is int indexAsInt)
                 {
-                    return IndexOf((int)index);
+                    return IndexOf(indexAsInt);
                 }
                 else
                 {
