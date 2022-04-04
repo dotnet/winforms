@@ -568,15 +568,27 @@ namespace System.Windows.Forms
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {formatName}");
 
-                if (!dataObject.GetDataPresent(formatName))
+                if (dataObject.GetDataPresent(formatName))
                 {
-                    medium = default;
-                    return;
+                    if (dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
+                    {
+                        medium = dragDropFormat.Medium;
+                        return;
+                    }
                 }
-
-                if (dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
+                else
                 {
-                    medium = dragDropFormat.Medium;
+                    // If the requested drag and drop format is not present in the data object, return an empty storage
+                    // medium to the Windows drag image manager. What to return in this scenario isn't well documented but the
+                    // drag image manager responds a lot better than if we let this fall through and throw DV_E_FORMATETC.
+                    // The IDataObject::GetData documentation states that if the data object cannot comply with the
+                    // information specified in the FORMATETC, that this method should return DV_E_FORMATETC. However,
+                    // it isn't that we cannot comply, we just haven't been asked to store this format yet. It seems odd
+                    // that the Windows drag image manager is asking for formats that are not yet stored in the data
+                    // object, but it responds appropriately when given an empty storage medium in these cases, and
+                    // proceeds along with the drag loop as expected. Otherwise, returning DV_E_FORMATETC here results
+                    // in flickering and a degraded drag experience.
+                    medium = default;
                     return;
                 }
             }
