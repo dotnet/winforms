@@ -2425,7 +2425,7 @@ System.Windows.Forms.TextBox.Paste(string? text) -> void
 System.Windows.Forms.TextBoxBase.AppendText(string? text) -> void
 System.Windows.Forms.TextBoxBase.Lines.get -> string![]!
 System.Windows.Forms.TextBoxBase.Lines.set -> void
-~System.Windows.Forms.ThreadExceptionDialog.ThreadExceptionDialog(System.Exception t) -> void
+System.Windows.Forms.ThreadExceptionDialog.ThreadExceptionDialog(System.Exception! t) -> void
 ~System.Windows.Forms.ToolStrip.Controls.get -> System.Windows.Forms.Control.ControlCollection
 ~System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point point) -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point pt, System.Windows.Forms.GetChildAtPointSkip skipValue) -> System.Windows.Forms.Control
@@ -11046,7 +11046,7 @@ System.Windows.Forms.TextImageRelation.TextAboveImage = 2 -> System.Windows.Form
 System.Windows.Forms.TextImageRelation.TextBeforeImage = 8 -> System.Windows.Forms.TextImageRelation
 System.Windows.Forms.TextRenderer
 System.Windows.Forms.ThreadExceptionDialog
-System.Windows.Forms.ThreadExceptionDialog.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.ThreadExceptionDialog.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.TickStyle
 System.Windows.Forms.TickStyle.Both = 3 -> System.Windows.Forms.TickStyle
 System.Windows.Forms.TickStyle.BottomRight = 2 -> System.Windows.Forms.TickStyle
