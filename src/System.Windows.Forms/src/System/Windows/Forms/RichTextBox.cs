@@ -3279,11 +3279,11 @@ namespace System.Windows.Forms
             //unfortunately does not respect IA64 struct alignment conventions.
             if (IntPtr.Size == 8)
             {
-                enlink = ConvertFromENLINK64((NativeMethods.ENLINK64)m.GetLParam(typeof(NativeMethods.ENLINK64)));
+                enlink = ConvertFromENLINK64(m.GetLParam<NativeMethods.ENLINK64>());
             }
             else
             {
-                enlink = (NativeMethods.ENLINK)m.GetLParam(typeof(NativeMethods.ENLINK));
+                enlink = m.GetLParam<NativeMethods.ENLINK>();
             }
 
             switch ((User32.WM)enlink.msg)
@@ -3449,11 +3449,11 @@ namespace System.Windows.Forms
                             //unfortunately does not respect IA64 struct alignment conventions.
                             if (IntPtr.Size == 8)
                             {
-                                enprotected = ConvertFromENPROTECTED64((NativeMethods.ENPROTECTED64)m.GetLParam(typeof(NativeMethods.ENPROTECTED64)));
+                                enprotected = ConvertFromENPROTECTED64(m.GetLParam<NativeMethods.ENPROTECTED64>());
                             }
                             else
                             {
-                                enprotected = (NativeMethods.ENPROTECTED)m.GetLParam(typeof(NativeMethods.ENPROTECTED));
+                                enprotected = m.GetLParam<NativeMethods.ENPROTECTED>();
                             }
 
                             switch (enprotected.msg)

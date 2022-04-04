@@ -2052,7 +2052,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmWindowFromPoint(ref Message message)
         {
-            var point = (Point)message.GetLParam(typeof(Point));
+            var point = message.GetLParam<Point>();
             bool result = false;
             message.ResultInternal = GetWindowFromPoint(point, ref result);
         }
@@ -2304,7 +2304,7 @@ namespace System.Windows.Forms
             switch (message.Msg)
             {
                 case (int)(User32.WM.REFLECT_NOTIFY):
-                    User32.NMHDR nmhdr = (User32.NMHDR)message.GetLParam(typeof(User32.NMHDR));
+                    User32.NMHDR nmhdr = message.GetLParam<User32.NMHDR>();
                     if (nmhdr.code == (int)TTN.SHOW && !_trackPosition)
                     {
                         WmShow();
