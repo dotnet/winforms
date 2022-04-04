@@ -233,6 +233,8 @@ namespace System.Windows.Forms
             {
                 Marshal.FinalReleaseComObject(dropTargetHelper);
             }
+
+            SetInShellDragLoop(dataObject, false);
         }
 
         /// <summary>
@@ -420,7 +422,45 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the InShellDragLoop format from a data object.
         /// </summary>
-        private static bool GetShellInDragLoop(IComDataObject dataObject)
+        public static unsafe bool InShellDragLoop(IDataObject dataObject)
+        {
+            if (dataObject.GetDataPresent(CF_INSHELLDRAGLOOP)
+                && dataObject.GetData(CF_INSHELLDRAGLOOP) is DragDropFormat dragDropFormat)
+            {
+                try
+                {
+                    if (dragDropFormat.Medium.unionmember == IntPtr.Zero)
+                    {
+                        return false;
+                    }
+
+                    // Lock the global memory object.
+                    IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
+                    if (basePtr == IntPtr.Zero)
+                    {
+                        return false;
+                    }
+
+                    // Read the BOOL from the global memory handle.
+                    BOOL* pValue = (BOOL*)basePtr;
+                    return *pValue == BOOL.TRUE;
+                }
+                finally
+                {
+                    // Unlock the global memory object
+                    Kernel32.GlobalUnlock(dragDropFormat.Medium.unionmember);
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        ///  Gets the InShellDragLoop format from a data object.
+        /// </summary>
+        private static bool GetInShellDragLoop(IComDataObject dataObject)
         {
             return GetBooleanFormat(dataObject, CF_INSHELLDRAGLOOP);
         }
@@ -487,7 +527,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the InShellDragLoop format into a data object.
         /// </summary>
-        private static void SetInShellDragLoop(IComDataObject dataObject, bool value)
+        public static void SetInShellDragLoop(IComDataObject? dataObject, bool value)
         {
             SetBooleanFormat(dataObject, CF_INSHELLDRAGLOOP, value);
         }
@@ -495,7 +535,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the IsNewDragImage format into a data object.
         /// </summary>
-        private static void SetIsNewDragImage(IComDataObject dataObject, bool value)
+        private static void SetIsNewDragImage(IComDataObject? dataObject, bool value)
         {
             SetBooleanFormat(dataObject, CF_ISNEWDRAGIMAGE, value);
         }
@@ -503,7 +543,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the IsShowingLayered format into a data object.
         /// </summary>
-        private static void SetIsShowingLayered(IComDataObject dataObject, bool value)
+        private static void SetIsShowingLayered(IComDataObject? dataObject, bool value)
         {
             SetBooleanFormat(dataObject, CF_ISSHOWINGLAYERED, value);
         }
@@ -511,7 +551,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the IsShowingText format into a data object.
         /// </summary>
-        private static void SetIsShowingText(IComDataObject dataObject, bool value)
+        private static void SetIsShowingText(IComDataObject? dataObject, bool value)
         {
             SetBooleanFormat(dataObject, CF_ISSHOWINGTEXT, value);
         }
@@ -519,7 +559,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the DisableDragText format into a data object.
         /// </summary>
-        private static void SetDisableDragText(IComDataObject dataObject, bool value)
+        private static void SetDisableDragText(IComDataObject? dataObject, bool value)
         {
             SetBooleanFormat(dataObject, CF_DISABLEDRAGTEXT, value);
         }
@@ -527,7 +567,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the UsingDefaultDragImage format into a data object.
         /// </summary>
-        private static void SetUsingDefaultDragImage(IComDataObject dataObject, bool value)
+        private static void SetUsingDefaultDragImage(IComDataObject? dataObject, bool value)
         {
             SetBooleanFormat(dataObject, CF_USINGDEFAULTDRAGIMAGE, value);
         }
@@ -535,7 +575,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets boolean formats into a data object.
         /// </summary>
-        private static unsafe void SetBooleanFormat(IComDataObject dataObject, string format, bool value)
+        private static unsafe void SetBooleanFormat(IComDataObject? dataObject, string format, bool value)
         {
             if (dataObject is null)
             {

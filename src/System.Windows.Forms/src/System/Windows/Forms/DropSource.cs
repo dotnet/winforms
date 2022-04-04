@@ -31,6 +31,7 @@ namespace System.Windows.Forms
                 _lastCursorOffset = cursorOffset;
                 _lastUseDefaultDragImage = useDefaultDragImage;
 
+                DragDropHelper.SetInShellDragLoop(_dataObject, true);
                 DragDropHelper.SetDragImage(_dataObject, dragImage, cursorOffset, useDefaultDragImage);
             }
         }

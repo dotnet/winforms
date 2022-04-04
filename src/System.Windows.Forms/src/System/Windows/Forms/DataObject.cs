@@ -563,15 +563,19 @@ namespace System.Windows.Forms
                 return;
             }
             else if (_innerData is IDataObject dataObject
+                && DragDropHelper.InShellDragLoop(dataObject)
                 && DataFormats.GetFormat(formatetc.cfFormat).Name is string formatName
                 && DragDropHelper.s_formats.Contains(formatName))
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {formatName}");
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   InShellDragLoop drag-and-drop format requested: {formatName}");
 
-                if (dataObject.GetDataPresent(formatName) && dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
+                if (dataObject.GetDataPresent(formatName))
                 {
+                    if (dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
+                    {
                         medium = dragDropFormat.Medium;
                         return;
+                    }
                 }
                 else
                 {
