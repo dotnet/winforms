@@ -568,13 +568,10 @@ namespace System.Windows.Forms
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {formatName}");
 
-                if (dataObject.GetDataPresent(formatName))
+                if (dataObject.GetDataPresent(formatName) && dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
                 {
-                    if (dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
-                    {
                         medium = dragDropFormat.Medium;
                         return;
-                    }
                 }
                 else
                 {

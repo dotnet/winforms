@@ -29,12 +29,11 @@ namespace System.Windows.Forms
         private const string CF_DRAGSOURCEHELPERFLAGS = "DragSourceHelperFlags";
         private const string CF_DRAGWINDOW = "DragWindow";
         private const string CF_DROPDESCRIPTION = "DropDescription";
-        private const string CF_DROPTARGETSTATE = "DropTargetState";
+        private const string CF_INSHELLDRAGLOOP = "InShellDragLoop";
         private const string CF_ISCOMPUTINGIMAGE = "IsComputingImage";
         private const string CF_ISNEWDRAGIMAGE = "IsNewDragImage";
         private const string CF_ISSHOWINGLAYERED = "IsShowingLayered";
         private const string CF_ISSHOWINGTEXT = "IsShowingText";
-        private const string CF_NET_RESOURCE = "Net Resource";
         private const string CF_PREFERRED_DROPEFFECT = "Preferred DropEffect";
         private const string CF_SHELL_IDLIST_ARRAY = "Shell IDList Array";
         private const string CF_UNTRUSTEDDRAGDROP = "UntrustedDragDrop";
@@ -50,12 +49,11 @@ namespace System.Windows.Forms
             CF_DRAGSOURCEHELPERFLAGS,
             CF_DRAGWINDOW,
             CF_DROPDESCRIPTION,
-            CF_DROPTARGETSTATE,
+            CF_INSHELLDRAGLOOP,
             CF_ISCOMPUTINGIMAGE,
             CF_ISNEWDRAGIMAGE,
             CF_ISSHOWINGLAYERED,
             CF_ISSHOWINGTEXT,
-            CF_NET_RESOURCE,
             CF_PREFERRED_DROPEFFECT,
             CF_SHELL_IDLIST_ARRAY,
             CF_UNTRUSTEDDRAGDROP,
@@ -420,6 +418,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Gets the InShellDragLoop format from a data object.
+        /// </summary>
+        private static bool GetShellInDragLoop(IComDataObject dataObject)
+        {
+            return GetBooleanFormat(dataObject, CF_INSHELLDRAGLOOP);
+        }
+
+        /// <summary>
         ///  Gets the IsNewDragImage format from a data object.
         /// </summary>
         private static bool GetIsNewDragImage(IComDataObject dataObject)
@@ -476,6 +482,14 @@ namespace System.Windows.Forms
             {
                 Kernel32.GlobalUnlock(medium.unionmember);
             }
+        }
+
+        /// <summary>
+        ///  Sets the InShellDragLoop format into a data object.
+        /// </summary>
+        private static void SetInShellDragLoop(IComDataObject dataObject, bool value)
+        {
+            SetBooleanFormat(dataObject, CF_INSHELLDRAGLOOP, value);
         }
 
         /// <summary>
