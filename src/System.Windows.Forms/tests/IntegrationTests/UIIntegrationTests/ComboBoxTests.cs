@@ -35,8 +35,8 @@ public class ComboBoxTests : ControlTestBase
             comboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
             comboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
 
-            // Allow a little time to process the keystroke.
-            await Task.Delay(DelayMS);
+
+                return Task.CompletedTask;
         });
     }
 }
