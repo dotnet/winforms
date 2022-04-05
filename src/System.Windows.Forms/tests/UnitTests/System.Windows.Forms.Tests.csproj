@@ -9,8 +9,6 @@
     <NoWarn>$(NoWarn),1573,1591,1712,WFDEV001</NoWarn>
   </PropertyGroup>
 
-  <Import Project="ProjectReference.targets" Sdk="Microsoft.DotNet.CMake.Sdk" />
-
   <ItemGroup>
     <PackageReference Include="Moq" Version="$(MoqPackageVersion)" />
     <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
