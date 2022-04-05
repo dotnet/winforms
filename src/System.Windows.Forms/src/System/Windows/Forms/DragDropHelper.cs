@@ -22,11 +22,9 @@ namespace System.Windows.Forms
     internal static class DragDropHelper
     {
         private const int DSH_ALLOWDROPDESCRIPTIONTEXT = 0x0001;
-        private const string CF_DISABLEDRAGTEXT = "DisableDragText";
         private const string CF_DROPDESCRIPTION = "DropDescription";
         private const string CF_INSHELLDRAGLOOP = "InShellDragLoop";
         private const string CF_ISNEWDRAGIMAGE = "IsNewDragImage";
-        private const string CF_ISSHOWINGLAYERED = "IsShowingLayered";
         private const string CF_ISSHOWINGTEXT = "IsShowingText";
         private const string CF_USINGDEFAULTDRAGIMAGE = "UsingDefaultDragImage";
 
@@ -196,9 +194,6 @@ namespace System.Windows.Forms
             {
                 Marshal.ReleaseComObject(dropTargetHelper);
             }
-
-            // Set InDragLoop to false to indicate the data object is no longer in a drag-and-drop loop.
-            SetInDragLoop(dataObject, false);
         }
 
         /// <summary>
@@ -399,8 +394,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns whether the specified FORMATETC is the InShellDragLoop format.
+        ///  Returns whether the specified FORMATETC is the CFSTR_INDRAGLOOP format.
         /// </summary>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="formatEtc"/> is the CFSTR_INDRAGLOOP format; otherwise <see langword="false"/>.
+        /// </returns>
         public static bool IsInDragLoopFormat(FORMATETC formatEtc)
         {
             return DataFormats.GetFormat(formatEtc.cfFormat).Name.Equals(CF_INSHELLDRAGLOOP);
@@ -409,6 +407,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns whether the data object is in a drag-and-drop loop.
         /// </summary>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="dataObject"/> is in a drag-and-drop loop; otherwise <see langword="false"/>.
+        /// </returns>
         public static unsafe bool InDragLoop(IDataObject dataObject)
         {
             if (dataObject.GetDataPresent(CF_INSHELLDRAGLOOP)
@@ -442,14 +443,6 @@ namespace System.Windows.Forms
             {
                 return false;
             }
-        }
-
-        /// <summary>
-        ///  Gets the InShellDragLoop format from a data object.
-        /// </summary>
-        private static bool GetInShellDragLoop(IComDataObject dataObject)
-        {
-            return GetBooleanFormat(dataObject, CF_INSHELLDRAGLOOP);
         }
 
         /// <summary>
@@ -528,27 +521,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets the IsShowingLayered format into a data object.
-        /// </summary>
-        private static void SetIsShowingLayered(IComDataObject? dataObject, bool value)
-        {
-            SetBooleanFormat(dataObject, CF_ISSHOWINGLAYERED, value);
-        }
-
-        /// <summary>
         ///  Sets the IsShowingText format into a data object.
         /// </summary>
         private static void SetIsShowingText(IComDataObject? dataObject, bool value)
         {
             SetBooleanFormat(dataObject, CF_ISSHOWINGTEXT, value);
-        }
-
-        /// <summary>
-        ///  Sets the DisableDragText format into a data object.
-        /// </summary>
-        private static void SetDisableDragText(IComDataObject? dataObject, bool value)
-        {
-            SetBooleanFormat(dataObject, CF_DISABLEDRAGTEXT, value);
         }
 
         /// <summary>

@@ -28,8 +28,7 @@ namespace System.Windows.Forms
             {
                 if (_release)
                 {
-                    // Handle when the data object retains ownership of the storage medium and return a copy of the data.
-                    // Free the original storage medium after it has been used by calling the ReleaseStgMedium function.
+                    // Handle when the data object retains ownership of the storage medium.
                     if (DragDropHelper.CopyStgMedium(ref _medium, _formatEtc, out STGMEDIUM _mediumOut))
                     {
                         return _mediumOut;
@@ -59,21 +58,23 @@ namespace System.Windows.Forms
             }
             else
             {
-                // Handle when the caller retains ownership of the storage medium and the data object uses the storage
-                // medium for the duration of the SetData call only.
-                _medium = default;
+                // Handle when the caller retains ownership of the storage medium.
+                if (DragDropHelper.CopyStgMedium(ref pMedium, _formatEtc, out STGMEDIUM _mediumCopy))
+                {
+                    _medium = _mediumCopy;
+                }
+                else
+                {
+                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Copy storage medium unsuccessful {_formatName}");
+                    _medium = default;
+                }
             }
         }
 
         ~DragDropFormat()
         {
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat {_formatName} destroyed");
-
-            if (_release)
-            {
-                Ole32.ReleaseStgMedium(ref _medium);
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat {_formatName} storage medium released.");
-            }
+            Ole32.ReleaseStgMedium(ref _medium);
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat {_formatName} storage medium released.");
         }
     }
 }
