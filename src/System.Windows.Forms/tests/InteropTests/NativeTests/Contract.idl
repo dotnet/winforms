@@ -14,7 +14,7 @@ interface IBasicTest : IDispatch
 [
     uuid(0971AD7E-3D4A-4C44-B0A3-A518AC88DFE1)
 ]
-library System_Windows_Forms_NativeTests
+library NativeTests
 {
     importlib("stdole2.tlb");
 

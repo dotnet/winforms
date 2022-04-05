@@ -3,10 +3,10 @@
 
 <assemblyIdentity
     type="win32"
-    name="System_Windows_Forms_NativeTests.X"
+    name="NativeTests.X"
     version="1.0.0.0" />
 
-<file name = "System_Windows_Forms_NativeTests.dll">
+<file name="NativeTests.dll">
     <!-- RawErrorInfoUsageTest -->
     <comClass
         clsid="{0ED8EE0D-22E3-49EA-850C-E69B20D1F296}"

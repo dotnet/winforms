@@ -23,4 +23,11 @@
     <NativeProjectReference Include="NativeTests\CMakeLists.txt" CMakeProject="NativeTests\NativeTests.proj" BuildNative="true" />
   </ItemGroup>
 
+  <Target Name="CopyTlbProjectFiles" BeforeTargets="CopyNativeProjectBinaries">
+    <ItemGroup>
+      <NativeProjectBinaries Include="$(NativeProjectOutputFolder)\*.tlb" />
+      <NativeProjectBinaries Include="$(NativeProjectOutputFolder)\*.manifest" />
+    </ItemGroup>
+  </Target>
+
 </Project>

@@ -5,7 +5,7 @@
 
 namespace
 {
-    const wchar_t* s_tlbDefault = L"System_Windows_Forms_NativeTests.tlb";
+    const wchar_t* s_tlbDefault = L"NativeTests.tlb";
 }
 
 DispatchImpl::DispatchImpl(GUID guid, void *instance, const wchar_t* tlb)

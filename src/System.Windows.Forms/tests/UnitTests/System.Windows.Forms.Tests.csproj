@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Tests</AssemblyName>
-    <Platforms>x86;x64</Platforms>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -28,10 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <NativeProjectReference Include="WindowsFormsTests\CMakeLists.txt" CMakeProject="WindowsFormsTests\WindowsFormsTests.proj" BuildNative="true" />
-  </ItemGroup>
-
-  <ItemGroup>
     <!-- workaround for https://github.com/dotnet/sdk/issues/3254 -->
     <Reference Include="$(BaseOutputPath)..\System.Drawing.Facade\$(Configuration)\$(TargetFramework)\System.Drawing.dll" />
   </ItemGroup>
@@ -53,12 +48,5 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
-
-  <Target Name="CopyTlbProjectFiles" BeforeTargets="CopyNativeProjectBinaries">
-    <ItemGroup>
-      <NativeProjectBinaries Include="$(NativeProjectOutputFolder)\*.tlb" />
-      <NativeProjectBinaries Include="$(NativeProjectOutputFolder)\*.manifest" />
-    </ItemGroup>
-  </Target>
 
 </Project>
