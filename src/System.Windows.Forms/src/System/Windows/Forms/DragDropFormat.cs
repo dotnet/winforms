@@ -54,9 +54,6 @@ namespace System.Windows.Forms
             Debug.Assert(pFormatetc.ptd.Equals(IntPtr.Zero), "DragDropFormat constructur received a non-NULL target device pointer.");
             Debug.Assert(DragDropHelper.s_formats.Contains(_formatName), "DragDropFormat constructor received an incompatible clipboard format.");
             Debug.Assert(DragDropHelper.s_tymeds.Contains(pMedium.tymed), "DragDropFormat constructor received an incompatible storage medium type.");
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat {_formatName} created");
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat pMedium.tymed {pMedium.tymed}");
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat fRelease {fRelease}");
 
             _formatEtc = pFormatetc;
             _release = fRelease;
@@ -76,6 +73,10 @@ namespace System.Windows.Forms
                     _mediumIn = _mediumCopy;
                 }
             }
+
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat {_formatName} constructed");
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat pMedium.tymed {pMedium.tymed}");
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat fRelease {fRelease}");
         }
 
         ~DragDropFormat()

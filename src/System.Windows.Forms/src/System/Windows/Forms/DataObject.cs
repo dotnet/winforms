@@ -562,12 +562,10 @@ namespace System.Windows.Forms
                 converter.OleDataObject.GetData(ref formatetc, out medium);
                 return;
             }
-            else if (_innerData is IDataObject dataObject
-                && DragDropHelper.InShellDragLoop(dataObject)
-                && DataFormats.GetFormat(formatetc.cfFormat).Name is string formatName
-                && DragDropHelper.s_formats.Contains(formatName))
+            else if (_innerData is IDataObject dataObject && DragDropHelper.InDragLoop(dataObject))
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   InShellDragLoop drag-and-drop format requested: {formatName}");
+                string formatName = DataFormats.GetFormat(formatetc.cfFormat).Name;
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   InDragLoop drag-and-drop private format retrieved {formatName}");
 
                 if (dataObject.GetDataPresent(formatName))
                 {
@@ -580,15 +578,16 @@ namespace System.Windows.Forms
                 else
                 {
                     // If the requested drag and drop format is not present in the data object, return an empty storage
-                    // medium to the Windows drag image manager. What to return in this scenario isn't well documented but the
-                    // drag image manager responds a lot better than if we let this fall through and throw DV_E_FORMATETC.
-                    // The IDataObject::GetData documentation states that if the data object cannot comply with the
-                    // information specified in the FORMATETC, that this method should return DV_E_FORMATETC. However,
-                    // it isn't that we cannot comply, we just haven't been asked to store this format yet. It seems odd
-                    // that the Windows drag image manager is asking for formats that are not yet stored in the data
-                    // object, but it responds appropriately when given an empty storage medium in these cases, and
-                    // proceeds along with the drag loop as expected. Otherwise, returning DV_E_FORMATETC here results
-                    // in flickering and a degraded drag experience.
+                    // medium to the drag image manager. What to return in this situation isn't well documented but the
+                    // Windows drag image manager responds a lot better than if we let this fall through and throw
+                    // DV_E_FORMATETC. The IDataObject::GetData documentation states that if the data object cannot
+                    // comply with the information specified in the FORMATETC, that this method should return DV_E_FORMATETC.
+                    // However, it isn't that we cannot comply, we just haven't been asked to load this format yet.
+                    // Otherwise, returning DV_E_FORMATETC here results in flickering and a degraded drag experience.
+                    // This might require more thought. Perhaps instead we're supposed to load the data object with
+                    // these missing formats beforehand, e.g. while setting the drag image, so that they are present
+                    // when it comes time for the drag image manager to retrieve them.
+
                     medium = default;
                     return;
                 }
@@ -702,12 +701,10 @@ namespace System.Windows.Forms
                 return;
             }
             else if (_innerData is IDataObject dataObject
-                && DataFormats.GetFormat(pFormatetcIn.cfFormat).Name is string formatName
-                && DragDropHelper.s_formats.Contains(formatName)
-                && DragDropHelper.s_tymeds.Contains(pmedium.tymed)
-                && pFormatetcIn.ptd.Equals(IntPtr.Zero))
+                && (DragDropHelper.IsInDragLoopFormat(pFormatetcIn) || DragDropHelper.InDragLoop(dataObject)))
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   Drag-and-drop format: {formatName}");
+                string formatName = DataFormats.GetFormat(pFormatetcIn.cfFormat).Name;
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   InDragLoop drag-and-drop private format loaded {formatName}");
                 dataObject.SetData(formatName, new DragDropFormat(pFormatetcIn, pmedium, fRelease));
                 return;
             }

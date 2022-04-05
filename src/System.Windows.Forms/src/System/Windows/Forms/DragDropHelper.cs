@@ -234,7 +234,8 @@ namespace System.Windows.Forms
                 Marshal.ReleaseComObject(dropTargetHelper);
             }
 
-            SetInShellDragLoop(dataObject, false);
+            // Set InDragLoop to false to indicate the data object is no longer in a drag-and-drop loop.
+            SetInDragLoop(dataObject, false);
         }
 
         /// <summary>
@@ -387,6 +388,9 @@ namespace System.Windows.Forms
                 return;
             }
 
+            // Set InDragLoop to true to indicate the data object is in a drag-and-drop loop.
+            SetInDragLoop(dataObject, true);
+
             Gdi32.HBITMAP hbmpDragImage = (Gdi32.HBITMAP)IntPtr.Zero;
 
             try
@@ -420,9 +424,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the InShellDragLoop format from a data object.
+        ///  Returns whether the specified FORMATETC is the InShellDragLoop format.
         /// </summary>
-        public static unsafe bool InShellDragLoop(IDataObject dataObject)
+        public static bool IsInDragLoopFormat(FORMATETC formatEtc)
+        {
+            return DataFormats.GetFormat(formatEtc.cfFormat).Name.Equals(CF_INSHELLDRAGLOOP);
+        }
+
+        /// <summary>
+        ///  Returns whether the data object is in a drag-and-drop loop.
+        /// </summary>
+        public static unsafe bool InDragLoop(IDataObject dataObject)
         {
             if (dataObject.GetDataPresent(CF_INSHELLDRAGLOOP)
                 && dataObject.GetData(CF_INSHELLDRAGLOOP) is DragDropFormat dragDropFormat)
@@ -527,7 +539,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the InShellDragLoop format into a data object.
         /// </summary>
-        public static void SetInShellDragLoop(IComDataObject? dataObject, bool value)
+        public static void SetInDragLoop(IComDataObject? dataObject, bool value)
         {
             SetBooleanFormat(dataObject, CF_INSHELLDRAGLOOP, value);
         }
