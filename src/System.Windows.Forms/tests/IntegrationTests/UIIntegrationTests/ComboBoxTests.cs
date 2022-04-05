@@ -9,9 +9,6 @@ namespace System.Windows.Forms.UITests;
 
 public class ComboBoxTests : ControlTestBase
 {
-    // This value may need to be adjusted if tests fail in CI/different environment.
-    private const int DelayMS = 100;
-
     public ComboBoxTests(ITestOutputHelper testOutputHelper)
         : base(testOutputHelper)
     {
@@ -35,8 +32,7 @@ public class ComboBoxTests : ControlTestBase
             comboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
             comboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
 
-
-                return Task.CompletedTask;
+            return Task.CompletedTask;
         });
     }
 }
