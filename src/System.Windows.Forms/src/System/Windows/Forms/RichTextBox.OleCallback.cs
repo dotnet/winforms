@@ -295,9 +295,7 @@ namespace System.Windows.Forms
                             owner.OnDragOver(e);
                             lastEffect = e.Effect;
 
-                            if (e.DropIcon > DropIconType.Default
-                                && _lastComDataObject is not null
-                                && owner.IsHandleCreated)
+                            if (e.DropIcon > DropIconType.Default && _lastComDataObject is not null && owner.IsHandleCreated)
                             {
                                 _lastDropIcon = !e.DropIcon.Equals(_lastDropIcon) is bool newDropIcon ? e.DropIcon : _lastDropIcon;
                                 _lastMessage = !e.Message.Equals(_lastMessage) is bool newMessage ? e.Message : _lastMessage;

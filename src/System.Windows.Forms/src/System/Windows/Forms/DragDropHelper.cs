@@ -23,49 +23,12 @@ namespace System.Windows.Forms
     {
         private const int DSH_ALLOWDROPDESCRIPTIONTEXT = 0x0001;
         private const string CF_DISABLEDRAGTEXT = "DisableDragText";
-        private const string CF_DRAGCONTEXT = "DragContext";
-        private const string CF_DRAGIMAGE = "DragImage";
-        private const string CF_DRAGIMAGEBITS = "DragImageBits";
-        private const string CF_DRAGSOURCEHELPERFLAGS = "DragSourceHelperFlags";
-        private const string CF_DRAGWINDOW = "DragWindow";
         private const string CF_DROPDESCRIPTION = "DropDescription";
         private const string CF_INSHELLDRAGLOOP = "InShellDragLoop";
-        private const string CF_ISCOMPUTINGIMAGE = "IsComputingImage";
         private const string CF_ISNEWDRAGIMAGE = "IsNewDragImage";
         private const string CF_ISSHOWINGLAYERED = "IsShowingLayered";
         private const string CF_ISSHOWINGTEXT = "IsShowingText";
-        private const string CF_PREFERRED_DROPEFFECT = "Preferred DropEffect";
-        private const string CF_SHELL_IDLIST_ARRAY = "Shell IDList Array";
-        private const string CF_UNTRUSTEDDRAGDROP = "UntrustedDragDrop";
         private const string CF_USINGDEFAULTDRAGIMAGE = "UsingDefaultDragImage";
-
-        // Drag and drop private formats.
-        public static readonly string[] s_formats = new string[]
-        {
-            CF_DISABLEDRAGTEXT,
-            CF_DRAGCONTEXT,
-            CF_DRAGIMAGE,
-            CF_DRAGIMAGEBITS,
-            CF_DRAGSOURCEHELPERFLAGS,
-            CF_DRAGWINDOW,
-            CF_DROPDESCRIPTION,
-            CF_INSHELLDRAGLOOP,
-            CF_ISCOMPUTINGIMAGE,
-            CF_ISNEWDRAGIMAGE,
-            CF_ISSHOWINGLAYERED,
-            CF_ISSHOWINGTEXT,
-            CF_PREFERRED_DROPEFFECT,
-            CF_SHELL_IDLIST_ARRAY,
-            CF_UNTRUSTEDDRAGDROP,
-            CF_USINGDEFAULTDRAGIMAGE
-        };
-
-        // Drag and drop storage mediums consist of the types TYMED_HGLOBAL and TYMED_ISTREAM.
-        public static readonly TYMED[] s_tymeds = new TYMED[]
-        {
-            TYMED.TYMED_HGLOBAL,
-            TYMED.TYMED_ISTREAM
-        };
 
         /// <summary>
         ///  Creates an in-process server drag-image manager object and returns an interface pointer to
@@ -140,7 +103,7 @@ namespace System.Windows.Forms
             }
             catch (COMException ex)
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper::DragEnter COM error {ex}");
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper DragEnter {ex}");
                 return;
             }
             finally
@@ -175,7 +138,7 @@ namespace System.Windows.Forms
             }
             catch (COMException ex)
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper::DragOver COM error {ex}");
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper DragOver {ex}");
                 return;
             }
             finally
@@ -200,7 +163,7 @@ namespace System.Windows.Forms
             }
             catch (COMException ex)
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper::DragLeave COM error {ex}");
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper DragLeave {ex}");
                 return;
             }
             finally
@@ -226,7 +189,7 @@ namespace System.Windows.Forms
             }
             catch (COMException ex)
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper::Drop COM error {ex}");
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper Drop {ex}");
                 return;
             }
             finally
@@ -239,55 +202,67 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This function copies a given drag and drop STGMEDIUM structure.
+        /// This function copies a given STGMEDIUM structure.
         /// </summary>
         /// <returns>
         /// <see langword="true"/> if <paramref name="mediumSrc"/> was copied into <paramref name="mediumDest"/>
         /// successfully; otherwise <see langword="false"/>.
         /// </returns>
-        public static bool CopyDragDropStgMedium(ref STGMEDIUM mediumSrc, FORMATETC formatEtc, out STGMEDIUM mediumDest)
+        public static bool CopyStgMedium(ref STGMEDIUM mediumSrc, FORMATETC formatEtc, out STGMEDIUM mediumDest)
         {
             mediumDest = new();
 
             try
             {
                 string formatName = DataFormats.GetFormat(formatEtc.cfFormat).Name;
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"CopyStgMedium {mediumSrc.tymed} {formatName}");
 
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"CopyDragDropStgMedium: {mediumSrc.tymed}");
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   Format: {formatName}");
-
-                // Verify the storage medium is a drag-and-drop format.
-                if (!s_formats.Contains(formatName) || !s_tymeds.Contains(mediumSrc.tymed))
+                // Copy the handle.
+                switch (mediumSrc.tymed)
                 {
-                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   Invalid format: {formatName}");
-                    return false;
-                }
+                    case TYMED.TYMED_HGLOBAL:
+                    case TYMED.TYMED_FILE:
+                    case TYMED.TYMED_ENHMF:
+                    case TYMED.TYMED_GDI:
+                    case TYMED.TYMED_MFPICT:
 
-                // The drag-and-drop storage mediums consist of the types TYMED_HGLOBAL and TYMED_ISTREAM.
-                if (mediumSrc.tymed.Equals(TYMED.TYMED_HGLOBAL))
-                {
-                    // TYMED_HGLOBAL - Copy global memory handles using the OleDuplicateData function.
-                    mediumDest.unionmember = Ole32.OleDuplicateData(
-                        mediumSrc.unionmember,
-                        formatEtc.cfFormat,
-                        Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
-                    if (mediumDest.unionmember == IntPtr.Zero)
-                    {
-                        return false;
-                    }
-                }
-                else if (mediumSrc.tymed.Equals(TYMED.TYMED_ISTREAM) && mediumSrc.unionmember != IntPtr.Zero)
-                {
-                    // TYMED_ISTREAM - This is a pointer to the DragContext.
-                    mediumDest.unionmember = mediumSrc.unionmember;
+                        mediumDest.unionmember = Ole32.OleDuplicateData(
+                            mediumSrc.unionmember,
+                            formatEtc.cfFormat,
+                            Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
+                        if (mediumDest.unionmember == IntPtr.Zero)
+                        {
+                            return false;
+                        }
 
-                    // Increment the reference count.
-                    Marshal.AddRef(mediumSrc.unionmember);
+                        break;
+
+                    case TYMED.TYMED_ISTORAGE:
+                    case TYMED.TYMED_ISTREAM:
+
+                        mediumDest.unionmember = mediumSrc.unionmember;
+
+                        // Increment the reference count.
+                        Marshal.AddRef(mediumSrc.unionmember);
+                        break;
+
+                    default:
+                    case TYMED.TYMED_NULL:
+
+                        mediumDest.unionmember = IntPtr.Zero;
+                        break;
                 }
 
                 // Copy the storage medium type and release pointer.
                 mediumDest.tymed = mediumSrc.tymed;
                 mediumDest.pUnkForRelease = mediumSrc.pUnkForRelease;
+
+                if (mediumSrc.pUnkForRelease is not null)
+                {
+                    // Increment the reference count.
+                    Marshal.GetIUnknownForObject(mediumSrc.pUnkForRelease);
+                }
+
                 return true;
             }
             catch
@@ -409,7 +384,7 @@ namespace System.Windows.Forms
             }
             catch (Exception ex)
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropHelper SetDragImage error {ex}");
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropHelper SetDragImage {ex}");
                 Gdi32.DeleteObject(hbmpDragImage);
                 return;
             }

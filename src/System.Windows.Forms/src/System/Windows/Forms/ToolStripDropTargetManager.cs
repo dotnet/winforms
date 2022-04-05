@@ -271,8 +271,7 @@ namespace System.Windows.Forms
                     OnDragLeave(EventArgs.Empty);
 
                     // tell the drag image manager you've left
-                    if (e.DropIcon > DropIconType.Default
-                        && e.Data is IComDataObject comDataObject)
+                    if (e.DropIcon > DropIconType.Default && e.Data is IComDataObject comDataObject)
                     {
                         e.DropIcon = DropIconType.Default;
                         e.Message = string.Empty;
@@ -298,9 +297,7 @@ namespace System.Windows.Forms
                     OnDragEnter(dragEnterArgs);
 
                     // tell the drag image manager you've entered
-                    if (dragEnterArgs.DropIcon > DropIconType.Default
-                        && dragEnterArgs.Data is IComDataObject comDataObject
-                        && owner is ToolStrip toolStrip && toolStrip.IsHandleCreated)
+                    if (dragEnterArgs.DropIcon > DropIconType.Default && dragEnterArgs.Data is IComDataObject comDataObject && owner is ToolStrip toolStrip && toolStrip.IsHandleCreated)
                     {
                         e.DropIcon = !dragEnterArgs.DropIcon.Equals(e.DropIcon) is bool newDropIcon ? dragEnterArgs.DropIcon : e.DropIcon;
                         e.Message = !dragEnterArgs.Message.Equals(e.Message) is bool newMessage ? dragEnterArgs.Message : e.Message;

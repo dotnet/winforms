@@ -19,13 +19,13 @@ namespace WinformsControlsTest
             "`•.,¸,.•*¯`•.,¸,.•*|:¬¬¬¬¬¬::::||｡◕‿‿◕｡| " + Environment.NewLine +
             "-........--\"\"-.......--\"╰O━━━━O╯╰--O-O--╯";
         private readonly string _dragDropDataDirectory = "Data\\DragDrop";
-        private readonly List<PictureBox> _pictureBoxList;
         private readonly Bitmap _dragAcceptBmp = new(@"Data\DragDrop\DragAccept.bmp");
         private readonly Bitmap _nyanCatAscii301Bmp = new(@"Data\DragDrop\NyanCatAscii_301.bmp");
         private readonly Bitmap _nyanCatBmp = new(@"Data\DragDrop\NyanCat1.bmp");
         private readonly Bitmap _toolStripAsciiCatBmp = new(@"Data\DragDrop\ToolStripAsciiCat.bmp");
         private readonly Bitmap _toolStripDragAcceptBmp = new(@"Data\DragDrop\ToolStripDragAccept.bmp");
         private readonly Bitmap _toolStripNyanCatBmp = new(@"Data\DragDrop\ToolStripNyanCat.bmp");
+        private readonly List<PictureBox> _pictureBoxList;
         private ContextMenuStrip? _catContextMenuStrip;
 
         public DragDrop()
@@ -341,13 +341,7 @@ namespace WinformsControlsTest
 
         private void LoadCat(PictureBox pictureBox, Bitmap image)
         {
-            Image? previousImage = pictureBox.Image is not null ? pictureBox.Image : null;
             pictureBox.Image = image;
-
-            if (previousImage is not null)
-            {
-                previousImage.Dispose();
-            }
         }
 
         private void LoadCats(PictureBox pictureBox, string[] bitmapFiles)
@@ -356,13 +350,7 @@ namespace WinformsControlsTest
 
             if (bitmapFiles.Length == 1)
             {
-                Image? previousImage = pictureBox.Image is not null ? pictureBox.Image : null;
                 pictureBox.Image = new Bitmap(bitmapFiles[0]);
-
-                if (previousImage is not null)
-                {
-                    previousImage.Dispose();
-                }
             }
             else
             {
@@ -370,13 +358,7 @@ namespace WinformsControlsTest
                 {
                     if (_pictureBoxList[i] is not null)
                     {
-                        Image? previousImage = _pictureBoxList[i].Image is not null ? pictureBox.Image : null;
                         _pictureBoxList[i].Image = new Bitmap(bitmapFiles[i]);
-
-                        if (previousImage is not null)
-                        {
-                            previousImage.Dispose();
-                        }
                     }
                 }
             }

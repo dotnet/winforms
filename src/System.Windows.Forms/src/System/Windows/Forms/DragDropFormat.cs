@@ -17,11 +17,10 @@ namespace System.Windows.Forms
         private readonly bool _release;
         private readonly string _formatName;
         private FORMATETC _formatEtc;
-        private STGMEDIUM _mediumIn;
-        private STGMEDIUM _mediumOut;
+        private STGMEDIUM _medium;
 
         /// <summary>
-        ///  Represents a private drag and drop storage medium.
+        ///  Represents a private drag and drop storage medium used for data transfer.
         /// </summary>
         public STGMEDIUM Medium
         {
@@ -29,20 +28,21 @@ namespace System.Windows.Forms
             {
                 if (_release)
                 {
-                    // Handle when the data object retains ownership of the storage medium and return a copy.
-                    if (DragDropHelper.CopyDragDropStgMedium(ref _mediumIn, _formatEtc, out _mediumOut))
+                    // Handle when the data object retains ownership of the storage medium and return a copy of the data.
+                    // Free the original storage medium after it has been used by calling the ReleaseStgMedium function.
+                    if (DragDropHelper.CopyStgMedium(ref _medium, _formatEtc, out STGMEDIUM _mediumOut))
                     {
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DragDropFormat storage medium copied.");
                         return _mediumOut;
                     }
                     else
                     {
+                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Copy storage medium unsuccessful {_formatName}");
                         return default;
                     }
                 }
                 else
                 {
-                    return _mediumIn;
+                    return _medium;
                 }
             }
         }
@@ -50,33 +50,19 @@ namespace System.Windows.Forms
         public DragDropFormat(FORMATETC pFormatetc, STGMEDIUM pMedium, bool fRelease)
         {
             _formatName = DataFormats.GetFormat(pFormatetc.cfFormat).Name;
-
-            Debug.Assert(pFormatetc.ptd.Equals(IntPtr.Zero), "DragDropFormat constructur received a non-NULL target device pointer.");
-            Debug.Assert(DragDropHelper.s_formats.Contains(_formatName), "DragDropFormat constructor received an incompatible clipboard format.");
-            Debug.Assert(DragDropHelper.s_tymeds.Contains(pMedium.tymed), "DragDropFormat constructor received an incompatible storage medium type.");
-
             _formatEtc = pFormatetc;
             _release = fRelease;
 
             if (_release)
             {
-                _mediumIn = pMedium;
+                _medium = pMedium;
             }
             else
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat fRelease {fRelease}");
-
-                // Handle when the caller retains ownership of the storage medium. We must copy the medium if we want to
-                // keep it beyond the IDataObject::SetData method call.
-                if (DragDropHelper.CopyDragDropStgMedium(ref pMedium, pFormatetc, out STGMEDIUM _mediumCopy))
-                {
-                    _mediumIn = _mediumCopy;
-                }
+                // Handle when the caller retains ownership of the storage medium and the data object uses the storage
+                // medium for the duration of the SetData call only.
+                _medium = default;
             }
-
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat {_formatName} constructed");
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat pMedium.tymed {pMedium.tymed}");
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat fRelease {fRelease}");
         }
 
         ~DragDropFormat()
@@ -85,14 +71,9 @@ namespace System.Windows.Forms
 
             if (_release)
             {
-                Ole32.ReleaseStgMedium(ref _mediumOut);
+                Ole32.ReleaseStgMedium(ref _medium);
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat {_formatName} storage medium released.");
             }
-            else
-            {
-                Ole32.ReleaseStgMedium(ref _mediumIn);
-            }
-
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropFormat {_formatName} storage medium released.");
         }
     }
 }
