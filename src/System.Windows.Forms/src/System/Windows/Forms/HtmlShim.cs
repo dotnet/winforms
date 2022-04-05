@@ -27,11 +27,6 @@ namespace System.Windows.Forms
         {
         }
 
-        ~HtmlShim()
-        {
-            Dispose(false);
-        }
-
         private EventHandlerList Events
         {
             get
