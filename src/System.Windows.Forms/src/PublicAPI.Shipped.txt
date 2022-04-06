@@ -1387,9 +1387,9 @@ System.Windows.Forms.CheckedListBox.DataSource.set -> void
 System.Windows.Forms.CheckedListBox.DisplayMember.get -> string!
 System.Windows.Forms.CheckedListBox.DisplayMember.set -> void
 System.Windows.Forms.CheckedListBox.Items.get -> System.Windows.Forms.CheckedListBox.ObjectCollection!
-~System.Windows.Forms.CheckedListBox.ObjectCollection.Add(object item, bool isChecked) -> int
-~System.Windows.Forms.CheckedListBox.ObjectCollection.Add(object item, System.Windows.Forms.CheckState check) -> int
-~System.Windows.Forms.CheckedListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.CheckedListBox owner) -> void
+System.Windows.Forms.CheckedListBox.ObjectCollection.Add(object! item, bool isChecked) -> int
+System.Windows.Forms.CheckedListBox.ObjectCollection.Add(object! item, System.Windows.Forms.CheckState check) -> int
+System.Windows.Forms.CheckedListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.CheckedListBox! owner) -> void
 System.Windows.Forms.CheckedListBox.ValueMember.get -> string!
 System.Windows.Forms.CheckedListBox.ValueMember.set -> void
 System.Windows.Forms.ColorDialog.CustomColors.get -> int[]!
