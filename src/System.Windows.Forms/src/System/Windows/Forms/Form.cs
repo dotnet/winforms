@@ -3087,7 +3087,23 @@ namespace System.Windows.Forms
 
         protected override AccessibleObject CreateAccessibilityInstance()
         {
-            return new FormAccessibleObject(this);
+            AccessibleObject accessibleObject = new FormAccessibleObject(this);
+
+            // Try to raise UIA focus event for the form, if it's focused.
+            // Try it after the accessible object creation, because a screen reader
+            // gets the accessible object after "OnGotFocus", "OnLoad", "OnShown" handlers,
+            // and the object is not created yet, when these methods work, so we can't raise
+            // the event while the object is not created. It's the Form control's feature only,
+            // for the rest controls the accessibility tree will be built, when they get focus.
+            // This case works for an empty form or a form with disabled or invisible controls
+            // to have consistent behavior with .NET Framework.
+            // If the form has any control (ActiveControl is true), a screen reader will focus on it instead.
+            if (Focused && ActiveControl is null)
+            {
+                accessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
+
+            return accessibleObject;
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -3946,6 +3962,19 @@ namespace System.Windows.Forms
             }
 
             base.OnFontChanged(e);
+        }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+
+            // Raise the UIA focus event for an empty form (form with no ActiveControl),
+            // when it gets focus to a screen reader can focus on it and announce its title text.
+            // If the form has any control, a screen reader will focus on it instead.
+            if (Focused && IsAccessibilityObjectCreated && ActiveControl is null)
+            {
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
         }
 
         /// <summary>
