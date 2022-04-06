@@ -11,7 +11,7 @@ internal static partial class Interop
     {
         [DllImport(Libraries.Ole32, ExactSpelling = true)]
         private static extern HRESULT DoDragDrop(
-            IDataObject pDataObj,
+            IntPtr pDataObj,
             IntPtr pDropSource,
             DROPEFFECT dwOKEffects,
             out DROPEFFECT pdwEffect);
