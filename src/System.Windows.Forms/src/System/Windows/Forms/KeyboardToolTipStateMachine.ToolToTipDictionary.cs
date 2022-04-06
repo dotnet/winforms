@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Runtime.CompilerServices;
 
 namespace System.Windows.Forms
@@ -12,14 +10,14 @@ namespace System.Windows.Forms
     {
         private sealed class ToolToTipDictionary
         {
-            private readonly ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip>> _table = new();
+            private readonly ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip?>> _table = new();
 
-            public ToolTip this[IKeyboardToolTip tool]
+            public ToolTip? this[IKeyboardToolTip tool]
             {
                 get
                 {
-                    ToolTip toolTip = null;
-                    if (_table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
+                    ToolTip? toolTip = null;
+                    if (_table.TryGetValue(tool, out WeakReference<ToolTip?>? toolTipReference))
                     {
                         if (!toolTipReference.TryGetTarget(out toolTip))
                         {
@@ -32,22 +30,22 @@ namespace System.Windows.Forms
                 }
                 set
                 {
-                    if (_table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
+                    if (_table.TryGetValue(tool, out WeakReference<ToolTip?>? toolTipReference))
                     {
                         toolTipReference.SetTarget(value);
                     }
                     else
                     {
-                        _table.Add(tool, new WeakReference<ToolTip>(value));
+                        _table.Add(tool, new WeakReference<ToolTip?>(value));
                     }
                 }
             }
 
             public void Remove(IKeyboardToolTip tool, ToolTip toolTip)
             {
-                if (_table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
+                if (_table.TryGetValue(tool, out WeakReference<ToolTip?>? toolTipReference))
                 {
-                    if (toolTipReference.TryGetTarget(out ToolTip existingToolTip))
+                    if (toolTipReference.TryGetTarget(out ToolTip? existingToolTip))
                     {
                         if (existingToolTip == toolTip)
                         {
