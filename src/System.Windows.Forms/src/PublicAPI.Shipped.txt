@@ -1375,12 +1375,12 @@ System.Windows.Forms.ButtonBase.ImageList.set -> void
 System.Windows.Forms.CheckedListBox.CheckedIndexCollection.CopyTo(System.Array! dest, int index) -> void
 System.Windows.Forms.CheckedListBox.CheckedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator!
 System.Windows.Forms.CheckedListBox.CheckedIndices.get -> System.Windows.Forms.CheckedListBox.CheckedIndexCollection!
-~System.Windows.Forms.CheckedListBox.CheckedItemCollection.Contains(object item) -> bool
-~System.Windows.Forms.CheckedListBox.CheckedItemCollection.CopyTo(System.Array dest, int index) -> void
-~System.Windows.Forms.CheckedListBox.CheckedItemCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.CheckedListBox.CheckedItemCollection.IndexOf(object item) -> int
-~System.Windows.Forms.CheckedListBox.CheckedItemCollection.this[int index].get -> object
-~System.Windows.Forms.CheckedListBox.CheckedItemCollection.this[int index].set -> void
+System.Windows.Forms.CheckedListBox.CheckedItemCollection.Contains(object? item) -> bool
+System.Windows.Forms.CheckedListBox.CheckedItemCollection.CopyTo(System.Array! dest, int index) -> void
+System.Windows.Forms.CheckedListBox.CheckedItemCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.CheckedListBox.CheckedItemCollection.IndexOf(object? item) -> int
+System.Windows.Forms.CheckedListBox.CheckedItemCollection.this[int index].get -> object?
+System.Windows.Forms.CheckedListBox.CheckedItemCollection.this[int index].set -> void
 System.Windows.Forms.CheckedListBox.CheckedItems.get -> System.Windows.Forms.CheckedListBox.CheckedItemCollection!
 System.Windows.Forms.CheckedListBox.DataSource.get -> object?
 System.Windows.Forms.CheckedListBox.DataSource.set -> void
