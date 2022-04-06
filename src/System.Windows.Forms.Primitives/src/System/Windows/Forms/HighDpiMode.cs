@@ -37,8 +37,9 @@ namespace System.Windows.Forms
         SystemAware,
 
         /// <summary>
-        ///  The window checks for DPI when it's created and adjusts scale factor when the DPI changes.
+        /// The window checks for DPI when it's created and adjusts scale factor when the DPI changes.
         /// </summary>
+        [Obsolete("Permonitor mode is applicable only on Windows 8.1. Winforms does not support this mode", true)]
         PerMonitor,
 
         /// <summary>
