@@ -194,12 +194,17 @@ namespace System.Windows.Forms
                 0 :
                 toolTip.GetDelayTime(ComCtl32.TTDT.AUTOPOP);
 
-            if (_currentTool is not null && !_currentTool.IsHoveredWithMouse())
+            if (_currentTool is null)
+            {
+                return SmState.Shown;
+            }
+
+            if (!_currentTool.IsHoveredWithMouse())
             {
                 toolTip.ShowKeyboardToolTip(toolTipText, _currentTool, autoPopDelay);
             }
 
-            if (_currentTool is not null && !toolTip.IsPersistent)
+            if (!toolTip.IsPersistent)
             {
                 StartTimer(
                     autoPopDelay,
