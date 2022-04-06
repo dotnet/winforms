@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -53,7 +51,7 @@ namespace System.Windows.Forms
             /// </summary>
             [Browsable(false)]
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public object this[int index]
+            public object? this[int index]
             {
                 get
                 {
@@ -97,12 +95,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            public bool Contains(object item)
+            public bool Contains(object? item)
             {
                 return IndexOf(item) != -1;
             }
 
-            public int IndexOf(object item)
+            public int IndexOf(object? item)
             {
                 return InnerArray.IndexOf(item, s_anyMask);
             }
@@ -112,7 +110,7 @@ namespace System.Windows.Forms
                 return InnerArray.IndexOf(item, s_anyMask);
             }
 
-            int IList.Add(object value)
+            int IList.Add(object? value)
             {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
@@ -122,12 +120,12 @@ namespace System.Windows.Forms
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
-            void IList.Insert(int index, object value)
+            void IList.Insert(int index, object? value)
             {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
-            void IList.Remove(object value)
+            void IList.Remove(object? value)
             {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
