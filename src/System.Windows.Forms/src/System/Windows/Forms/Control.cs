@@ -4587,7 +4587,6 @@ namespace System.Windows.Forms
             ActiveXInstance.UpdateBounds(ref x, ref y, ref width, ref height, flags);
         }
 
-
         /// <summary>
         ///  Recursively enables required scaling from the given control
         /// </summary>
