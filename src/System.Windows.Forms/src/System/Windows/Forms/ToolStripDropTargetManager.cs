@@ -278,7 +278,7 @@ namespace System.Windows.Forms
                         e.Insert = string.Empty;
 
                         DragDropHelper.SetDropDescription(comDataObject, e.DropIcon, e.Message, e.Insert);
-                        DragDropHelper.DragLeave(comDataObject);
+                        DragDropHelper.DragLeave();
                     }
                 }
 

@@ -87,9 +87,7 @@ namespace System.Windows.Forms
                 pdwEffect = (uint)drgevent.Effect;
                 _lastEffect = drgevent.Effect;
 
-                if (drgevent.DropIcon > DropIconType.Default
-                    && drgevent.Data is IComDataObject comDataObject
-                    && _hwndTarget != IntPtr.Zero)
+                if (drgevent.DropIcon > DropIconType.Default && drgevent.Data is IComDataObject comDataObject && _hwndTarget != IntPtr.Zero)
                 {
                     _lastDropIcon = !drgevent.DropIcon.Equals(_lastDropIcon) is bool newDropIcon ? drgevent.DropIcon : _lastDropIcon;
                     _lastMessage = !drgevent.Message.Equals(_lastMessage) is bool newMessage ? drgevent.Message : _lastMessage;
@@ -122,9 +120,7 @@ namespace System.Windows.Forms
                 pdwEffect = (uint)drgevent.Effect;
                 _lastEffect = drgevent.Effect;
 
-                if (drgevent.DropIcon > DropIconType.Default
-                    && drgevent.Data is IComDataObject comDataObject
-                    && _hwndTarget != IntPtr.Zero)
+                if (drgevent.DropIcon > DropIconType.Default && drgevent.Data is IComDataObject comDataObject && _hwndTarget != IntPtr.Zero)
                 {
                     _lastDropIcon = !drgevent.DropIcon.Equals(_lastDropIcon) is bool newDropIcon ? drgevent.DropIcon : _lastDropIcon;
                     _lastMessage = !drgevent.Message.Equals(_lastMessage) is bool newMessage ? drgevent.Message : _lastMessage;
@@ -151,8 +147,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragLeave received");
             _owner.OnDragLeave(EventArgs.Empty);
 
-            if (_lastDropIcon > DropIconType.Default
-                && _lastDataObject is IComDataObject comDataObject)
+            if (_lastDropIcon > DropIconType.Default && _lastDataObject is IComDataObject comDataObject)
             {
                 _lastDropIcon = !_lastDropIcon.Equals(DropIconType.Default) is bool newDropIcon ? DropIconType.Default : _lastDropIcon;
                 _lastMessage = !_lastMessage.Equals(string.Empty) is bool newMessage ? string.Empty : _lastMessage;
@@ -163,7 +158,7 @@ namespace System.Windows.Forms
                     DragDropHelper.SetDropDescription(comDataObject, _lastDropIcon, _lastMessage, _lastInsert);
                 }
 
-                DragDropHelper.DragLeave(comDataObject);
+                DragDropHelper.DragLeave();
             }
 
             return HRESULT.S_OK;
@@ -180,8 +175,7 @@ namespace System.Windows.Forms
                 _owner.OnDragDrop(drgevent);
                 pdwEffect = (uint)drgevent.Effect;
 
-                if (_lastDropIcon > DropIconType.Default
-                    && drgevent.Data is IComDataObject comDataObject)
+                if (_lastDropIcon > DropIconType.Default && drgevent.Data is IComDataObject comDataObject)
                 {
                     _lastDropIcon = !_lastDropIcon.Equals(DropIconType.Default) is bool newDropIcon ? DropIconType.Default : _lastDropIcon;
                     _lastMessage = !_lastMessage.Equals(string.Empty) is bool newMessage ? string.Empty : _lastMessage;

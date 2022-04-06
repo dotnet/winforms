@@ -188,7 +188,7 @@ namespace System.Windows.Forms
 
                                 Point pt = new(e.X, e.Y);
                                 DragDropHelper.Drop(_lastComDataObject, ref pt, (uint)e.Effect);
-                                DragDropHelper.DragLeave(_lastComDataObject);
+                                DragDropHelper.DragLeave();
                             }
 
                             _lastComDataObject = null;

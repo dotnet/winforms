@@ -737,27 +737,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This represents what we're actually going to drag. If the parent has set AllowItemReorder to true,
-        ///  then the item should call back on the private OnQueryContinueDrag/OnGiveFeedback that is implemented
-        ///  in the parent ToolStrip.
-        ///
-        ///  Else if the parent does not support reordering of items (Parent.AllowItemReorder = false) -
-        ///  then call back on the ToolStripItem's OnQueryContinueDrag/OnGiveFeedback methods.
-        /// </summary>
-        private DropSource DropSource
-        {
-            get
-            {
-                if ((ParentInternal is not null) && (ParentInternal.AllowItemReorder) && (ParentInternal.ItemReorderDropSource is not null))
-                {
-                    return new DropSource(ParentInternal.ItemReorderDropSource);
-                }
-
-                return new DropSource(this);
-            }
-        }
-
-        /// <summary>
         ///  Occurs when the control is clicked.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -2186,6 +2165,14 @@ namespace System.Windows.Forms
             return (DragDropEffects)finalEffect;
         }
 
+        /// <summary>
+        ///  This represents what we're actually going to drag. If the parent has set AllowItemReorder to true,
+        ///  then the item should call back on the private OnQueryContinueDrag/OnGiveFeedback that is implemented
+        ///  in the parent ToolStrip.
+        ///
+        ///  Else if the parent does not support reordering of items (Parent.AllowItemReorder = false) -
+        ///  then call back on the ToolStripItem's OnQueryContinueDrag/OnGiveFeedback methods.
+        /// </summary>
         internal Ole32.IDropSource CreateDropSource(IComDataObject dataObject, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
             if ((ParentInternal is not null) && ParentInternal.AllowItemReorder && (ParentInternal.ItemReorderDropSource is not null))

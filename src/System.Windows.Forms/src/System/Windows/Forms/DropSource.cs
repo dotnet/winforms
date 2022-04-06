@@ -96,9 +96,9 @@ namespace System.Windows.Forms
 
         public HRESULT DragLeaveTarget()
         {
-            if (_dataObject is IComDataObject comDataObject)
+            if (_lastDragImage is not null)
             {
-                DragDropHelper.DragLeave(comDataObject);
+                DragDropHelper.DragLeave();
             }
 
             return HRESULT.S_OK;

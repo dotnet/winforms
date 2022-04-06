@@ -5283,7 +5283,7 @@ namespace System.Windows.Forms
         /// </summary>
         public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects)
         {
-            return DoDragDrop(data, allowedEffects, null, default, false);
+            return DoDragDrop(data, allowedEffects, dragImage: null, cursorOffset: default, useDefaultDragImage: false);
         }
 
         /// <summary>

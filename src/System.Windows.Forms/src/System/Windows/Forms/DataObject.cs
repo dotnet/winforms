@@ -562,35 +562,18 @@ namespace System.Windows.Forms
                 converter.OleDataObject.GetData(ref formatetc, out medium);
                 return;
             }
-            else if (_innerData is IDataObject dataObject && DragDropHelper.InDragLoop(dataObject))
+            else if (_innerData is IDataObject dataObject && DragDropHelper.IsInDragLoop(dataObject))
             {
+                medium = new STGMEDIUM();
                 string formatName = DataFormats.GetFormat(formatetc.cfFormat).Name;
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"  GetData InDragLoop {formatName}");
-                if (dataObject.GetDataPresent(formatName))
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"  InDragLoop {formatName}");
+                if (dataObject.GetDataPresent(formatName) && dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
                 {
-                    if (dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
-                    {
-                        medium = dragDropFormat.Medium;
-                        Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"    drag-and-drop private format retrieved {formatName}");
-                        return;
-                    }
+                    medium = dragDropFormat.Medium;
+                    Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"    drag-and-drop private format retrieved {formatName}");
                 }
-                else
-                {
-                    // If the requested drag and drop format is not present in the data object, return an empty storage
-                    // medium to the drag image manager. What to return in this situation isn't well documented but the
-                    // Windows drag image manager responds a lot better than if we let this fall through and throw
-                    // DV_E_FORMATETC. The IDataObject::GetData documentation states that if the data object cannot
-                    // comply with the information specified in the FORMATETC, that this method should return DV_E_FORMATETC.
-                    // However, it isn't that we cannot comply, we just haven't been asked to load this format yet.
-                    // Otherwise, returning DV_E_FORMATETC here results in flickering and a degraded drag experience.
-                    // This might require more thought. Perhaps instead we're supposed to load the data object with
-                    // these missing formats beforehand, e.g. while setting the drag image, so that they are present
-                    // when it comes time for the drag image manager to retrieve them.
 
-                    medium = default;
-                    return;
-                }
+                return;
             }
 
             medium = new STGMEDIUM();
@@ -701,10 +684,10 @@ namespace System.Windows.Forms
                 return;
             }
             else if (_innerData is IDataObject dataObject
-                && (DragDropHelper.IsInDragLoopFormat(pFormatetcIn) || DragDropHelper.InDragLoop(dataObject)))
+                && (DragDropHelper.IsInDragLoopFormat(pFormatetcIn) || DragDropHelper.IsInDragLoop(dataObject)))
             {
                 string formatName = DataFormats.GetFormat(pFormatetcIn.cfFormat).Name;
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $" SetData InDragLoop {formatName}");
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $" InDragLoop {formatName}");
                 dataObject.SetData(formatName, new DragDropFormat(pFormatetcIn, pmedium, fRelease));
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   drag-and-drop private format loaded {formatName}");
                 return;

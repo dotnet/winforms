@@ -16,8 +16,8 @@ using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Helper class to allow drop targets to display a drag image while the cursor is over the target window and allow
-    ///  an application to specify the image that will be displayed during a Shell drag and drop operation.
+    ///  Helper class for drop targets to display the drag image while the cursor is over the target window and allows
+    ///  the application to specify the drag image bitmap that will be displayed during a drag-and-drop operation.
     /// </summary>
     internal static class DragDropHelper
     {
@@ -31,7 +31,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates an in-process server drag-image manager object and returns an interface pointer to
         ///  IDragSourceHelper2. Exposes methods that allow the application to specify the image that will be displayed
-        ///  during a Shell drag and drop operation.
+        ///  during a drag-and-drop operation.
         /// </summary>
         private static bool TryGetDragSourceHelper([NotNullWhen(true)] out IDragSourceHelper2? dragSourceHelper)
         {
@@ -148,7 +148,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Notifies the drag-image manager that the cursor has left the drop target.
         /// </summary>
-        public static void DragLeave(IComDataObject dataObject)
+        public static void DragLeave()
         {
             if (!TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper))
             {
@@ -210,7 +210,7 @@ namespace System.Windows.Forms
             try
             {
                 string formatName = DataFormats.GetFormat(formatEtc.cfFormat).Name;
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"CopyStgMedium {mediumSrc.tymed} {formatName}");
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropHelper CopyStgMedium {mediumSrc.tymed} {formatName}");
 
                 // Copy the handle.
                 switch (mediumSrc.tymed)
@@ -365,6 +365,8 @@ namespace System.Windows.Forms
 
             try
             {
+                // The Windows drag image manager will own this bitmap object and free the memory when its finished.
+                // Only call DeleteObject if an exception occurs while initializing.
                 hbmpDragImage = dragImage.GetHBITMAP();
                 SHDRAGIMAGE shDragImage = new()
                 {
@@ -410,7 +412,7 @@ namespace System.Windows.Forms
         /// <returns>
         /// <see langword="true"/> if <paramref name="dataObject"/> is in a drag-and-drop loop; otherwise <see langword="false"/>.
         /// </returns>
-        public static unsafe bool InDragLoop(IDataObject dataObject)
+        public static unsafe bool IsInDragLoop(IDataObject dataObject)
         {
             if (dataObject.GetDataPresent(CF_INSHELLDRAGLOOP)
                 && dataObject.GetData(CF_INSHELLDRAGLOOP) is DragDropFormat dragDropFormat)
@@ -448,6 +450,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the IsNewDragImage format from a data object.
         /// </summary>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="dataObject"/> contains a new drag image; otherwise <see langword="false"/>.
+        /// </returns>
         private static bool GetIsNewDragImage(IComDataObject dataObject)
         {
             return GetBooleanFormat(dataObject, CF_ISNEWDRAGIMAGE);
@@ -507,7 +512,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the InShellDragLoop format into a data object.
         /// </summary>
-        public static void SetInDragLoop(IComDataObject? dataObject, bool value)
+        private static void SetInDragLoop(IComDataObject? dataObject, bool value)
         {
             SetBooleanFormat(dataObject, CF_INSHELLDRAGLOOP, value);
         }

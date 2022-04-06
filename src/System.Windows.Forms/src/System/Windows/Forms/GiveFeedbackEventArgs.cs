@@ -14,7 +14,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Initializes a new instance of the <see cref="GiveFeedbackEventArgs"/> class.
         /// </summary>
-        public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors) : this(effect, useDefaultCursors, null, default, false)
+        public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors) : this(effect, useDefaultCursors, dragImage: null, cursorOffset: default, useDefaultDragImage: false)
         {
         }
 
