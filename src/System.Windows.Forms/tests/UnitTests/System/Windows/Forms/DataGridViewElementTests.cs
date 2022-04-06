@@ -351,6 +351,20 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
+        [WinFormsFact]
+        public void DataGridViewElement_Subclasses_SuppressFinalizeCall()
+        {
+            TestAccessor<DataGridViewElement> testAccessor = new(null);
+            var needSuppressFinalize = testAccessor.CreateDelegate<Func<Type, bool>>("NeedSuppressFinalize");
+
+            foreach (var type in typeof(DataGridViewElement).Assembly.GetTypes().Where(type => type == typeof(DataGridViewBand) || type == typeof(DataGridViewCell) ||
+                type.IsSubclassOf(typeof(DataGridViewBand)) || type.IsSubclassOf(typeof(DataGridViewCell))))
+            {
+                Assert.True(needSuppressFinalize(type), $"Type {type} is not present in the DataGridViewElement.NeedSuppressFinalize() method. " +
+                    $"Consider adding it or add exclusion to this test (if a new class really needs a finalizer).");
+            }
+        }
+
         private class SubDataGridViewCell : DataGridViewCell
         {
             public new void RaiseCellClick(DataGridViewCellEventArgs e) => base.RaiseCellClick(e);
