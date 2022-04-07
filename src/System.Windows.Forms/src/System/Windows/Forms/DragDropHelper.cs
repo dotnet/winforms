@@ -24,8 +24,8 @@ namespace System.Windows.Forms
         private const int DSH_ALLOWDROPDESCRIPTIONTEXT = 0x0001;
         private const string CF_DROPDESCRIPTION = "DropDescription";
         private const string CF_INSHELLDRAGLOOP = "InShellDragLoop";
-        private const string CF_ISNEWDRAGIMAGE = "IsNewDragImage";
         private const string CF_ISSHOWINGTEXT = "IsShowingText";
+        private const string CF_NEWDRAGIMAGE = "NewDragImage";
         private const string CF_USINGDEFAULTDRAGIMAGE = "UsingDefaultDragImage";
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                 Marshal.ReleaseComObject(dropTargetHelper);
             }
 
-            SetIsNewDragImage(dataObject, false);
+            SetNewDragImage(dataObject, false);
         }
 
         /// <summary>
@@ -119,8 +119,8 @@ namespace System.Windows.Forms
         public static void DragOver(IntPtr hwndTarget, IComDataObject dataObject, ref Point ppt, uint dwEffect)
         {
             // If the application has set a new drag image, e.g. in DropSource.GiveFeedback, we must call DragEnter
-            // before calling DragOver in order for the Windows drag image manager to effectively display the drag image.
-            if (GetIsNewDragImage(dataObject))
+            // before calling DragOver for the Windows drag-image manager to effectively display the drag image.
+            if (GetNewDragImage(dataObject))
             {
                 DragEnter(hwndTarget, dataObject, ref ppt, dwEffect);
             }
@@ -197,19 +197,36 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This function copies a given STGMEDIUM structure.
+        ///  Releases formats used by the drag-and-drop helper.
+        /// </summary>
+        private static void ReleaseDragDropFormats(IComDataObject comDataObject)
+        {
+            if (comDataObject is IDataObject iwDataObject)
+            {
+                foreach (string format in iwDataObject.GetFormats())
+                {
+                    if (iwDataObject.GetData(format) is DragDropFormat dragDropFormat)
+                    {
+                        dragDropFormat.Dispose();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Copies a given STGMEDIUM structure.
         /// </summary>
         /// <returns>
         /// <see langword="true"/> if <paramref name="mediumSrc"/> was copied into <paramref name="mediumDest"/>
         /// successfully; otherwise <see langword="false"/>.
         /// </returns>
-        public static bool CopyStgMedium(ref STGMEDIUM mediumSrc, FORMATETC formatEtc, out STGMEDIUM mediumDest)
+        public static bool CopyMedium(short cfFormat, ref STGMEDIUM mediumSrc, out STGMEDIUM mediumDest)
         {
             mediumDest = new();
 
             try
             {
-                string formatName = DataFormats.GetFormat(formatEtc.cfFormat).Name;
+                string formatName = DataFormats.GetFormat(cfFormat).Name;
                 Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropHelper CopyStgMedium {mediumSrc.tymed} {formatName}");
 
                 // Copy the handle.
@@ -223,7 +240,7 @@ namespace System.Windows.Forms
 
                         mediumDest.unionmember = Ole32.OleDuplicateData(
                             mediumSrc.unionmember,
-                            formatEtc.cfFormat,
+                            cfFormat,
                             Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
                         if (mediumDest.unionmember == IntPtr.Zero)
                         {
@@ -262,10 +279,7 @@ namespace System.Windows.Forms
             }
             catch
             {
-                mediumDest.pUnkForRelease = null;
-                mediumDest.tymed = TYMED.TYMED_NULL;
-                Kernel32.GlobalFree(mediumDest.unionmember);
-                mediumDest.unionmember = IntPtr.Zero;
+                Ole32.ReleaseStgMedium(ref mediumDest);
                 return false;
             }
         }
@@ -337,8 +351,7 @@ namespace System.Windows.Forms
             }
             catch
             {
-                Kernel32.GlobalFree(medium.unionmember);
-                medium.unionmember = IntPtr.Zero;
+                Ole32.ReleaseStgMedium(ref medium);
                 return;
             }
 
@@ -357,9 +370,6 @@ namespace System.Windows.Forms
             {
                 return;
             }
-
-            // Set InDragLoop to true to indicate the data object is in a drag-and-drop loop.
-            SetInDragLoop(dataObject, true);
 
             Gdi32.HBITMAP hbmpDragImage = (Gdi32.HBITMAP)IntPtr.Zero;
 
@@ -390,40 +400,36 @@ namespace System.Windows.Forms
                 Marshal.ReleaseComObject(dragSourceHelper);
             }
 
-            SetIsNewDragImage(dataObject, true);
+            SetNewDragImage(dataObject, true);
             SetIsShowingText(dataObject, true);
             SetUsingDefaultDragImage(dataObject, usingDefaultDragImage);
         }
 
         /// <summary>
-        ///  Returns whether the specified FORMATETC is the CFSTR_INDRAGLOOP format.
+        ///  Determines whether the specified FORMATETC is InDragLoop.
         /// </summary>
         /// <returns>
-        /// <see langword="true"/> if <paramref name="formatEtc"/> is the CFSTR_INDRAGLOOP format; otherwise <see langword="false"/>.
+        /// <see langword="true"/> if <paramref name="formatEtc"/> is the InDragLoop format; otherwise <see langword="false"/>.
         /// </returns>
-        public static bool IsInDragLoopFormat(FORMATETC formatEtc)
+        public static bool GetInDragLoopFormat(FORMATETC formatEtc)
         {
             return DataFormats.GetFormat(formatEtc.cfFormat).Name.Equals(CF_INSHELLDRAGLOOP);
         }
 
         /// <summary>
-        ///  Returns whether the data object is in a drag-and-drop loop.
+        ///  Determines whether the data object is in a drag-and-drop loop.
         /// </summary>
         /// <returns>
         /// <see langword="true"/> if <paramref name="dataObject"/> is in a drag-and-drop loop; otherwise <see langword="false"/>.
         /// </returns>
-        public static unsafe bool IsInDragLoop(IDataObject dataObject)
+        public static unsafe bool GetInDragLoop(IDataObject dataObject)
         {
             if (dataObject.GetDataPresent(CF_INSHELLDRAGLOOP)
-                && dataObject.GetData(CF_INSHELLDRAGLOOP) is DragDropFormat dragDropFormat)
+                && dataObject.GetData(CF_INSHELLDRAGLOOP) is DragDropFormat dragDropFormat
+                && dragDropFormat.Medium.unionmember != IntPtr.Zero)
             {
                 try
                 {
-                    if (dragDropFormat.Medium.unionmember == IntPtr.Zero)
-                    {
-                        return false;
-                    }
-
                     // Lock the global memory object.
                     IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
                     if (basePtr == IntPtr.Zero)
@@ -448,14 +454,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the IsNewDragImage format from a data object.
+        ///  Gets the NewDragImage format from a data object.
         /// </summary>
         /// <returns>
         /// <see langword="true"/> if <paramref name="dataObject"/> contains a new drag image; otherwise <see langword="false"/>.
         /// </returns>
-        private static bool GetIsNewDragImage(IComDataObject dataObject)
+        private static bool GetNewDragImage(IComDataObject dataObject)
         {
-            return GetBooleanFormat(dataObject, CF_ISNEWDRAGIMAGE);
+            return GetBooleanFormat(dataObject, CF_NEWDRAGIMAGE);
         }
 
         /// <summary>
@@ -512,17 +518,23 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the InShellDragLoop format into a data object.
         /// </summary>
-        private static void SetInDragLoop(IComDataObject? dataObject, bool value)
+        public static void SetInDragLoop(IComDataObject? dataObject, bool value)
         {
             SetBooleanFormat(dataObject, CF_INSHELLDRAGLOOP, value);
+
+            if (!value && dataObject is not null)
+            {
+                // The loop is over, release the drag-and-drop formats.
+                ReleaseDragDropFormats(dataObject);
+            }
         }
 
         /// <summary>
-        ///  Sets the IsNewDragImage format into a data object.
+        ///  Sets the NewDragImage format into a data object.
         /// </summary>
-        private static void SetIsNewDragImage(IComDataObject? dataObject, bool value)
+        private static void SetNewDragImage(IComDataObject? dataObject, bool value)
         {
-            SetBooleanFormat(dataObject, CF_ISNEWDRAGIMAGE, value);
+            SetBooleanFormat(dataObject, CF_NEWDRAGIMAGE, value);
         }
 
         /// <summary>
@@ -602,8 +614,7 @@ namespace System.Windows.Forms
             }
             catch
             {
-                Kernel32.GlobalFree(medium.unionmember);
-                medium.unionmember = IntPtr.Zero;
+                Ole32.ReleaseStgMedium(ref medium);
             }
         }
     }
