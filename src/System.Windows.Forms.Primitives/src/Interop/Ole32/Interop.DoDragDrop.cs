@@ -22,8 +22,19 @@ internal static partial class Interop
             DROPEFFECT dwOKEffects,
             out DROPEFFECT pdwEffect)
         {
-            var dropSourcePtr = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(pDropSource, CreateComInterfaceFlags.None);
-            return DoDragDrop(pDataObj, dropSourcePtr, dwOKEffects, out pdwEffect);
+            HRESULT result;
+            var dropSourceUnkPtr = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(pDropSource, CreateComInterfaceFlags.None);
+            var IID_IDropSource = IID.IDropSource;
+            result = (HRESULT)Marshal.QueryInterface(dropSourceUnkPtr, ref IID_IDropSource, out var dropSourcePtr);
+            Marshal.Release(dropSourceUnkPtr);
+            if (result.Failed())
+            {
+                pdwEffect = DROPEFFECT.NONE;
+                return result;
+            }
+
+            result = DoDragDrop(pDataObj, dropSourcePtr, dwOKEffects, out pdwEffect);
+            return result;
         }
     }
 }
