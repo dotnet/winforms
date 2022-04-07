@@ -185,9 +185,16 @@ internal partial class Interop
 
         internal IntPtr GetComPointer<T>(T obj, Guid iid) where T : class
         {
+            TryGetComPointer(obj, iid, out var comPtr).ThrowIfFailed();
+            return comPtr;
+        }
+
+        internal HRESULT TryGetComPointer<T>(T obj, Guid iid, out IntPtr comPtr) where T : class
+        {
             if (obj is null)
             {
-                return IntPtr.Zero;
+                comPtr = IntPtr.Zero;
+                return HRESULT.S_OK;
             }
 
             IntPtr pobj_local;
@@ -195,12 +202,8 @@ internal partial class Interop
             Guid local_IID = iid;
             HRESULT result = (HRESULT)Marshal.QueryInterface(pUnk_local, ref local_IID, out pobj_local);
             Marshal.Release(pUnk_local);
-            if (result.Failed())
-            {
-                Marshal.ThrowExceptionForHR((int)result);
-            }
-
-            return pobj_local;
+            comPtr = pobj_local;
+            return result;
         }
 
         private IntPtr GetOrCreateComInterfaceForObject(object obj)
