@@ -2155,11 +2155,21 @@ namespace System.Windows.Forms
                 dataObject = (IComDataObject)iwdata;
             }
 
+            if (dragImage is not null)
+            {
+                DragDropHelper.SetInDragLoop(dataObject, true);
+            }
+
             Ole32.IDropSource dropSource = CreateDropSource(dataObject, dragImage, cursorOffset, useDefaultDragImage);
             HRESULT hr = Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out Ole32.DROPEFFECT finalEffect);
             if (!hr.Succeeded())
             {
                 return DragDropEffects.None;
+            }
+
+            if (dragImage is not null)
+            {
+                DragDropHelper.SetInDragLoop(dataObject, false);
             }
 
             return (DragDropEffects)finalEffect;
