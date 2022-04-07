@@ -34,11 +34,13 @@ public class DragDropTests : ControlTestBase
                 inputSimulator => inputSimulator.Mouse
                     .LeftButtonDown()
                     .Sleep(100)
+                    .MoveMouseTo(targetMousePosition.X - 40, targetMousePosition.Y)
+                    .Sleep(DragDropDelayMS)
                     .MoveMouseTo(targetMousePosition.X, targetMousePosition.Y)
                     .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
                     .MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2)
                     .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
-                    .MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2)
+                    .MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4)
                     .Sleep(DragDropDelayMS)
                     .LeftButtonUp()
                     .Sleep(DragDropDelayMS));
