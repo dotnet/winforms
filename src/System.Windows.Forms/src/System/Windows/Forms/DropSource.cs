@@ -77,6 +77,7 @@ namespace System.Windows.Forms
 
                 if (newDragImage || newCursorOffset || newUseDefaultDragImage)
                 {
+                    DragDropHelper.SetInDragLoop(_dataObject, true);
                     DragDropHelper.SetDragImage(_dataObject, _lastDragImage, _lastCursorOffset, _lastUseDefaultDragImage);
                 }
             }
