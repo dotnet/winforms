@@ -24,17 +24,14 @@ public class DragDropTests : ControlTestBase
         {
             await MoveMouseToControlAsync(form.ListDragSource);
 
+            var targetMousePosition = ToVirtualPoint(form.ListDragTarget.PointToScreen(new Point(10, 10)));
             await InputSimulator.SendAsync(
                 form,
-                inputSimulator => inputSimulator.Mouse.LeftButtonDown());
-
-            await InputSimulator.SendAsync(
-                    form,
-                    inputSimulator => inputSimulator.Mouse
-                        .LeftButtonDown()
-                        .MoveMouseBy(form.ListDragSource.DisplayRectangle.Width, 0)
-                        .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
-                        .LeftButtonUp());
+                inputSimulator => inputSimulator.Mouse
+                    .LeftButtonDown()
+                    .MoveMouseTo(targetMousePosition.X, targetMousePosition.Y)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .LeftButtonUp());
 
             Assert.Equal(1, form.ListDragTarget.Items.Count);
         });
