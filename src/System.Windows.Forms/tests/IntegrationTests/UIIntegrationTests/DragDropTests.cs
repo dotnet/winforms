@@ -3,10 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using WindowsInput.Native;
 using Xunit;
 using Xunit.Abstractions;
-using static Interop;
 
 namespace System.Windows.Forms.UITests;
 
@@ -170,8 +168,8 @@ public class DragDropTests : ControlTestBase
                     }
                     finally
                     {
-                        // The screenOffset is used to account for any desktop bands 
-                        // that may be at the top or left side of the screen when 
+                        // The screenOffset is used to account for any desktop bands
+                        // that may be at the top or left side of the screen when
                         // determining when to cancel the drag drop operation.
                         screenOffset = SystemInformation.WorkingArea.Location;
 
@@ -225,7 +223,7 @@ public class DragDropTests : ControlTestBase
 
             // Determine whether string data exists in the drop data. If not, then
             // the drop effect reflects that the drop cannot occur.
-            if (!e.Data.GetDataPresent(typeof(string)))
+            if (e.Data is null || !e.Data.GetDataPresent(typeof(string)))
             {
                 e.Effect = DragDropEffects.None;
                 DropLocationLabel.Text = "None - no string data.";
@@ -271,7 +269,7 @@ public class DragDropTests : ControlTestBase
 
             // Get the index of the item the mouse is below.
 
-            // The mouse locations are relative to the screen, so they must be 
+            // The mouse locations are relative to the screen, so they must be
             // converted to client coordinates.
 
             indexOfItemUnderMouseToDrop =
@@ -293,13 +291,12 @@ public class DragDropTests : ControlTestBase
             testOutputHelper.WriteLine($"Drag drop on drag target.");
 
             // Ensure that the list item index is contained in the data.
-            if (e.Data.GetDataPresent(typeof(string)))
+            if (e.Data is not null && e.Data.GetDataPresent(typeof(string)))
             {
-                Object item = e.Data.GetData(typeof(string));
+                object? item = e.Data.GetData(typeof(string));
 
                 // Perform drag-and-drop, depending upon the effect.
-                if (e.Effect == DragDropEffects.Copy ||
-                    e.Effect == DragDropEffects.Move)
+                if (item is not null && (e.Effect == DragDropEffects.Copy || e.Effect == DragDropEffects.Move))
                 {
                     // Insert the item.
                     if (indexOfItemUnderMouseToDrop != ListBox.NoMatches)
