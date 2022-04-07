@@ -31,10 +31,10 @@ public class PropertyGridTests
                 }
                 catch (ExternalException ex)
                 {
-                        // Most default C++ implementation when Invoke return error code
-                        // implementation consults IErrorInfo object and populates EXCEPINFO structure.
-                        // From EXCEPINFO grid entry reads error code and message.
-                        // IErrorInfo consulted too, but it does not hold error message anymore.
+                    // Most default C++ implementation when Invoke return error code
+                    // implementation consults IErrorInfo object and populates EXCEPINFO structure.
+                    // From EXCEPINFO grid entry reads error code and message.
+                    // IErrorInfo consulted too, but it does not hold error message anymore.
                     Assert.Equal((int)HRESULT.DISP_E_MEMBERNOTFOUND, ex.HResult);
                     Assert.Equal("Error From StandardErrorInfoUsageTest", ex.Message);
                 }
@@ -65,8 +65,8 @@ public class PropertyGridTests
                 }
                 catch (ExternalException ex)
                 {
-                        // If C++ implementation of Invoke did not populate EXCEPINFO structure
-                        // from IErrorInfo, then we read that information about error call and display that error message to the user.
+                    // If C++ implementation of Invoke did not populate EXCEPINFO structure
+                    // from IErrorInfo, then we read that information about error call and display that error message to the user.
                     Assert.Equal("Error From RawErrorInfoUsageTest", ex.Message);
                 }
                 finally
@@ -90,11 +90,17 @@ public class PropertyGridTests
         }
 
         if (handle == IntPtr.Zero)
+        {
             throw new Win32Exception();
+        }
+
         try
         {
             if (Kernel32.ActivateActCtx(handle, out var cookie).IsFalse())
+            {
                 throw new Win32Exception();
+            }
+
             try
             {
                 action();
@@ -102,7 +108,9 @@ public class PropertyGridTests
             finally
             {
                 if (Kernel32.DeactivateActCtx(0, cookie).IsFalse())
+                {
                     throw new Win32Exception();
+                }
             }
         }
         finally
