@@ -1635,16 +1635,17 @@ namespace System.Windows.Forms
                     // Go thru the list of cloned columns and see if there is another column w/ the same data property name.
                     for (int clonedColIndex = 0; clonedColIndex < clonedColumnsCount; clonedColIndex++)
                     {
-                        if (finalClonedColumns[clonedColIndex] is not null &&
-                            string.Compare(finalClonedColumns[clonedColIndex].DataPropertyName,
+                        var clonedColumn = finalClonedColumns[clonedColIndex];
+                        if (clonedColumn is not null &&
+                            string.Compare(clonedColumn.DataPropertyName,
                                 boundColumns[j].DataPropertyName,
                                 true /*ignoreCase*/,
                                 CultureInfo.InvariantCulture) == 0)
                         {
                             // add the cloned column.
-                            dataGridViewCols.Add(finalClonedColumns[clonedColIndex]);
-                            MapDataGridViewColumnToDataBoundField(finalClonedColumns[clonedColIndex]);
-                            Debug.Assert(finalClonedColumns[clonedColIndex].IsDataBound);
+                            dataGridViewCols.Add(clonedColumn);
+                            MapDataGridViewColumnToDataBoundField(clonedColumn);
+                            Debug.Assert(clonedColumn.IsDataBound);
                             finalClonedColumns[clonedColIndex] = null;
                             addNewColumn = false;
                             break;
