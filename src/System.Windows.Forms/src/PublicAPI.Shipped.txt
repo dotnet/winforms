@@ -2084,9 +2084,9 @@ System.Windows.Forms.ListView.LargeImageList.set -> void
 ~System.Windows.Forms.ListView.ListViewItemCollection.ListViewItemCollection(System.Windows.Forms.ListView owner) -> void
 System.Windows.Forms.ListView.ListViewItemSorter.get -> System.Collections.IComparer?
 System.Windows.Forms.ListView.ListViewItemSorter.set -> void
-~System.Windows.Forms.ListView.SelectedIndexCollection.CopyTo(System.Array dest, int index) -> void
-~System.Windows.Forms.ListView.SelectedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ListView.SelectedIndexCollection.SelectedIndexCollection(System.Windows.Forms.ListView owner) -> void
+System.Windows.Forms.ListView.SelectedIndexCollection.CopyTo(System.Array! dest, int index) -> void
+System.Windows.Forms.ListView.SelectedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ListView.SelectedIndexCollection.SelectedIndexCollection(System.Windows.Forms.ListView! owner) -> void
 System.Windows.Forms.ListView.SelectedIndices.get -> System.Windows.Forms.ListView.SelectedIndexCollection!
 System.Windows.Forms.ListView.SelectedItems.get -> System.Windows.Forms.ListView.SelectedListViewItemCollection!
 ~System.Windows.Forms.ListView.SelectedListViewItemCollection.Contains(System.Windows.Forms.ListViewItem item) -> bool
