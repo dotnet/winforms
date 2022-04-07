@@ -1005,21 +1005,21 @@ namespace System.Windows.Forms
             SuspendLayout();
 
             //
-            // toolStrip1
+            // _toolStrip1
             //
             resources.ApplyResources(_toolStrip1, "toolStrip1");
             _toolStrip1.Items.AddRange(new ToolStripItem[]
             {
-            _printToolStripButton,
-            _zoomToolStripSplitButton,
-            _separatorToolStripSeparator,
-            _onePageToolStripButton,
-            _twoPagesToolStripButton,
-            _threePagesToolStripButton,
-            _fourPagesToolStripButton,
-            _sixPagesToolStripButton,
-            _separatorToolStripSeparator1,
-            _closeToolStripButton
+                _printToolStripButton,
+                _zoomToolStripSplitButton,
+                _separatorToolStripSeparator,
+                _onePageToolStripButton,
+                _twoPagesToolStripButton,
+                _threePagesToolStripButton,
+                _fourPagesToolStripButton,
+                _sixPagesToolStripButton,
+                _separatorToolStripSeparator1,
+                _closeToolStripButton
             });
             _toolStrip1.Name = "toolStrip1";
 
@@ -1033,35 +1033,35 @@ namespace System.Windows.Forms
             _toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
 
             //
-            // printToolStripButton
+            // _printToolStripButton
             //
             _printToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             _printToolStripButton.Name = "printToolStripButton";
             resources.ApplyResources(_printToolStripButton, "printToolStripButton");
 
             //
-            // zoomToolStripSplitButton
+            // _zoomToolStripSplitButton
             //
             _zoomToolStripSplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             _zoomToolStripSplitButton.DoubleClickEnabled = true;
             _zoomToolStripSplitButton.DropDownItems.AddRange(new ToolStripItem[]
             {
-            _autoToolStripMenuItem,
-            _toolStripMenuItem1,
-            _toolStripMenuItem2,
-            _toolStripMenuItem3,
-            _toolStripMenuItem4,
-            _toolStripMenuItem5,
-            _toolStripMenuItem6,
-            _toolStripMenuItem7,
-            _toolStripMenuItem8
+                _autoToolStripMenuItem,
+                _toolStripMenuItem1,
+                _toolStripMenuItem2,
+                _toolStripMenuItem3,
+                _toolStripMenuItem4,
+                _toolStripMenuItem5,
+                _toolStripMenuItem6,
+                _toolStripMenuItem7,
+                _toolStripMenuItem8
             });
             _zoomToolStripSplitButton.Name = "zoomToolStripSplitButton";
             _zoomToolStripSplitButton.SplitterWidth = 1;
             resources.ApplyResources(_zoomToolStripSplitButton, "zoomToolStripSplitButton");
 
             //
-            // autoToolStripMenuItem
+            // _autoToolStripMenuItem
             //
             _autoToolStripMenuItem.CheckOnClick = true;
             _autoToolStripMenuItem.DoubleClickEnabled = true;
@@ -1070,7 +1070,7 @@ namespace System.Windows.Forms
             resources.ApplyResources(_autoToolStripMenuItem, "autoToolStripMenuItem");
 
             //
-            // toolStripMenuItem1
+            // _toolStripMenuItem1
             //
             _toolStripMenuItem1.CheckOnClick = true;
             _toolStripMenuItem1.DoubleClickEnabled = true;
@@ -1078,7 +1078,7 @@ namespace System.Windows.Forms
             resources.ApplyResources(_toolStripMenuItem1, "toolStripMenuItem1");
 
             //
-            // toolStripMenuItem2
+            // _toolStripMenuItem2
             //
             _toolStripMenuItem2.CheckOnClick = true;
             _toolStripMenuItem2.DoubleClickEnabled = true;
@@ -1086,7 +1086,7 @@ namespace System.Windows.Forms
             resources.ApplyResources(_toolStripMenuItem2, "toolStripMenuItem2");
 
             //
-            // toolStripMenuItem3
+            // _toolStripMenuItem3
             //
             _toolStripMenuItem3.CheckOnClick = true;
             _toolStripMenuItem3.DoubleClickEnabled = true;
@@ -1094,7 +1094,7 @@ namespace System.Windows.Forms
             resources.ApplyResources(_toolStripMenuItem3, "toolStripMenuItem3");
 
             //
-            // toolStripMenuItem4
+            // _toolStripMenuItem4
             //
             _toolStripMenuItem4.CheckOnClick = true;
             _toolStripMenuItem4.DoubleClickEnabled = true;
@@ -1102,7 +1102,7 @@ namespace System.Windows.Forms
             resources.ApplyResources(_toolStripMenuItem4, "toolStripMenuItem4");
 
             //
-            // toolStripMenuItem5
+            // _toolStripMenuItem5
             //
             _toolStripMenuItem5.CheckOnClick = true;
             _toolStripMenuItem5.DoubleClickEnabled = true;
@@ -1110,7 +1110,7 @@ namespace System.Windows.Forms
             resources.ApplyResources(_toolStripMenuItem5, "toolStripMenuItem5");
 
             //
-            // toolStripMenuItem6
+            // _toolStripMenuItem6
             //
             _toolStripMenuItem6.CheckOnClick = true;
             _toolStripMenuItem6.DoubleClickEnabled = true;
@@ -1118,7 +1118,7 @@ namespace System.Windows.Forms
             resources.ApplyResources(_toolStripMenuItem6, "toolStripMenuItem6");
 
             //
-            // toolStripMenuItem7
+            // _toolStripMenuItem7
             //
             _toolStripMenuItem7.CheckOnClick = true;
             _toolStripMenuItem7.DoubleClickEnabled = true;
@@ -1126,7 +1126,7 @@ namespace System.Windows.Forms
             resources.ApplyResources(_toolStripMenuItem7, "toolStripMenuItem7");
 
             //
-            // toolStripMenuItem8
+            // _toolStripMenuItem8
             //
             _toolStripMenuItem8.CheckOnClick = true;
             _toolStripMenuItem8.DoubleClickEnabled = true;
@@ -1134,59 +1134,59 @@ namespace System.Windows.Forms
             resources.ApplyResources(_toolStripMenuItem8, "toolStripMenuItem8");
 
             //
-            // separatorToolStripSeparator
+            // _separatorToolStripSeparator
             //
             _separatorToolStripSeparator.Name = "separatorToolStripSeparator";
 
             //
-            // onepageToolStripButton
+            // _onepageToolStripButton
             //
             _onePageToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             _onePageToolStripButton.Name = "onepageToolStripButton";
             resources.ApplyResources(_onePageToolStripButton, "onepageToolStripButton");
 
             //
-            // twopagesToolStripButton
+            // _twopagesToolStripButton
             //
             _twoPagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             _twoPagesToolStripButton.Name = "twopagesToolStripButton";
             resources.ApplyResources(_twoPagesToolStripButton, "twopagesToolStripButton");
 
             //
-            // threepagesToolStripButton
+            // _threepagesToolStripButton
             //
             _threePagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             _threePagesToolStripButton.Name = "threepagesToolStripButton";
             resources.ApplyResources(_threePagesToolStripButton, "threepagesToolStripButton");
 
             //
-            // fourpagesToolStripButton
+            // _fourpagesToolStripButton
             //
             _fourPagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             _fourPagesToolStripButton.Name = "fourpagesToolStripButton";
             resources.ApplyResources(_fourPagesToolStripButton, "fourpagesToolStripButton");
 
             //
-            // sixpagesToolStripButton
+            // _sixpagesToolStripButton
             //
             _sixPagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             _sixPagesToolStripButton.Name = "sixpagesToolStripButton";
             resources.ApplyResources(_sixPagesToolStripButton, "sixpagesToolStripButton");
 
             //
-            // separatorToolStripSeparator1
+            // _separatorToolStripSeparator1
             //
             _separatorToolStripSeparator1.Name = "separatorToolStripSeparator1";
 
             //
-            // closeToolStripButton
+            // _closeToolStripButton
             //
             _closeToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
             _closeToolStripButton.Name = "closeToolStripButton";
             resources.ApplyResources(_closeToolStripButton, "closeToolStripButton");
 
             //
-            // pageCounter
+            // _pageCounter
             //
             resources.ApplyResources(_pageCounter, "pageCounter");
             _pageCounter.Text = "1";
@@ -1198,7 +1198,7 @@ namespace System.Windows.Forms
             _pageCounter.Name = "pageCounter";
 
             //
-            // pageToolStripLabel
+            // _pageToolStripLabel
             //
             _pageToolStripLabel.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             _pageToolStripLabel.Name = "pageToolStripLabel";
