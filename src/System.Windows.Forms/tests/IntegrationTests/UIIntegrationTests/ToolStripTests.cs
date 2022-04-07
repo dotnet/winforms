@@ -42,13 +42,17 @@ namespace System.Windows.Forms.UITests
                 f1.Show();
 
                 Assert.NotNull(_sharedImageList);
+#if DEBUG
                 Assert.False(_sharedImageList.IsDisposed);
+#endif
                 Assert.Single(_sharedImageList.Images);
 
                 f1.Close();
 
                 Assert.NotNull(_sharedImageList);
+#if DEBUG
                 Assert.False(_sharedImageList.IsDisposed);
+#endif
                 Assert.Single(_sharedImageList.Images);
             }
 
@@ -69,13 +73,17 @@ namespace System.Windows.Forms.UITests
                 f2.Controls.Add(toolStrip);
 
                 Assert.NotNull(_sharedImageList);
+#if DEBUG
                 Assert.False(_sharedImageList.IsDisposed);
+#endif
                 Assert.Single(_sharedImageList.Images);
 
                 f2.Close();
 
                 Assert.NotNull(_sharedImageList);
+#if DEBUG
                 Assert.False(_sharedImageList.IsDisposed);
+#endif
                 Assert.Single(_sharedImageList.Images);
             }
         }
