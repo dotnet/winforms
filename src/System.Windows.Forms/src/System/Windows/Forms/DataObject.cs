@@ -569,7 +569,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"  InDragLoop {formatName}");
                 if (dataObject.GetDataPresent(formatName) && dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
                 {
-                    medium = dragDropFormat.GetMedium();
+                    medium = dragDropFormat.GetData();
                     Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"    drag-and-drop private format retrieved {formatName}");
                 }
 
@@ -690,7 +690,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $" InDragLoop {formatName}");
                 if (dataObject.GetDataPresent(formatName) && dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
                 {
-                    dragDropFormat.UpdateMedium(pFormatetcIn.cfFormat, pmedium, fRelease);
+                    dragDropFormat.RefreshData(pFormatetcIn.cfFormat, pmedium, fRelease);
                 }
                 else
                 {

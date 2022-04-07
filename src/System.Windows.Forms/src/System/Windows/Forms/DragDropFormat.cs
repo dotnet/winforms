@@ -8,7 +8,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents an arbitrary private drag-and-drop format used for data transfer by the drag-image manager.
+    ///  Represents a private format used for data transfer by the drag-and-drop helpers.
     /// </summary>
     internal class DragDropFormat : IDisposable
     {
@@ -20,37 +20,37 @@ namespace System.Windows.Forms
         public DragDropFormat(short cfFormat, STGMEDIUM pMedium, bool fRelease)
         {
             _cfFormat = cfFormat;
-            _medium = HandleMedium(cfFormat, pMedium, fRelease);
+            _medium = HandleOwner(cfFormat, pMedium, fRelease);
         }
 
         /// <summary>
-        ///  Returns a copy of the storage medium.
+        ///  Returns a copy of the storage mediumn in this instance.
         /// </summary>
-        public STGMEDIUM GetMedium()
+        public STGMEDIUM GetData()
         {
             return CopyMedium(_cfFormat, _medium);
         }
 
         /// <summary>
-        ///  Updates the storage medium.
+        ///  Refreshes the storage medium in this instance.
         /// </summary>
-        public bool UpdateMedium(short cfFormat, STGMEDIUM pMedium, bool fRelease)
+        public void RefreshData(short cfFormat, STGMEDIUM pMedium, bool fRelease)
         {
             if (!cfFormat.Equals(_cfFormat))
             {
-                return false;
+                return;
             }
 
             ReleaseMedium(_medium);
             _cfFormat = cfFormat;
-            _medium = HandleMedium(cfFormat, pMedium, fRelease);
-            return true;
+            _medium = HandleOwner(cfFormat, pMedium, fRelease);
+            return;
         }
 
         /// <summary>
         ///  Handles whether the data object or the caller owns the storage medium.
         /// </summary>
-        private STGMEDIUM HandleMedium(short cfFormat, STGMEDIUM pMedium, bool fRelease)
+        private STGMEDIUM HandleOwner(short cfFormat, STGMEDIUM pMedium, bool fRelease)
         {
             STGMEDIUM medium;
 
