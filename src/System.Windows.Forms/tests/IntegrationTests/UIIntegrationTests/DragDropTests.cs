@@ -114,7 +114,7 @@ public class DragDropTests : ControlTestBase
             this.testOutputHelper = testOutputHelper;
         }
 
-        private void ListDragSource_MouseDown(object sender, MouseEventArgs e)
+        private void ListDragSource_MouseDown(object? sender, MouseEventArgs e)
         {
             // Get the index of the item the mouse is below.
             indexOfItemUnderMouseToDrag = ListDragSource.IndexFromPoint(e.X, e.Y);
@@ -140,14 +140,14 @@ public class DragDropTests : ControlTestBase
             }
         }
 
-        private void ListDragSource_MouseUp(object sender, MouseEventArgs e)
+        private void ListDragSource_MouseUp(object? sender, MouseEventArgs e)
         {
             // Reset the drag rectangle when the mouse button is raised.
             dragBoxFromMouseDown = Rectangle.Empty;
             testOutputHelper.WriteLine($"Mouse up on drag source at position ({e.X},{e.Y}).");
         }
 
-        private void ListDragSource_MouseMove(object sender, MouseEventArgs e)
+        private void ListDragSource_MouseMove(object? sender, MouseEventArgs e)
         {
             testOutputHelper.WriteLine($"Mouse move on drag source to position ({e.X},{e.Y}) with buttons {e.Button}.");
             if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
@@ -203,7 +203,7 @@ public class DragDropTests : ControlTestBase
             }
         }
 
-        private void ListDragSource_GiveFeedback(object sender, GiveFeedbackEventArgs e)
+        private void ListDragSource_GiveFeedback(object? sender, GiveFeedbackEventArgs e)
         {
             testOutputHelper.WriteLine($"Give feedback on drag source.");
 
@@ -219,7 +219,7 @@ public class DragDropTests : ControlTestBase
             }
         }
 
-        private void ListDragTarget_DragOver(object sender, DragEventArgs e)
+        private void ListDragTarget_DragOver(object? sender, DragEventArgs e)
         {
             testOutputHelper.WriteLine($"Drag over on the drag target.");
 
@@ -269,7 +269,7 @@ public class DragDropTests : ControlTestBase
                 e.Effect = DragDropEffects.None;
             }
 
-            // Get the index of the item the mouse is below. 
+            // Get the index of the item the mouse is below.
 
             // The mouse locations are relative to the screen, so they must be 
             // converted to client coordinates.
@@ -288,7 +288,7 @@ public class DragDropTests : ControlTestBase
             }
         }
 
-        private void ListDragTarget_DragDrop(object sender, DragEventArgs e)
+        private void ListDragTarget_DragDrop(object? sender, DragEventArgs e)
         {
             testOutputHelper.WriteLine($"Drag drop on drag target.");
 
@@ -313,7 +313,7 @@ public class DragDropTests : ControlTestBase
             DropLocationLabel.Text = "None";
         }
 
-        private void ListDragSource_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
+        private void ListDragSource_QueryContinueDrag(object? sender, QueryContinueDragEventArgs e)
         {
             testOutputHelper.WriteLine($"Query for drag continuation.");
 
@@ -336,7 +336,7 @@ public class DragDropTests : ControlTestBase
             }
         }
 
-        private void ListDragTarget_DragEnter(object sender, DragEventArgs e)
+        private void ListDragTarget_DragEnter(object? sender, DragEventArgs e)
         {
             testOutputHelper.WriteLine($"Drag enter on target.");
 
@@ -344,7 +344,7 @@ public class DragDropTests : ControlTestBase
             DropLocationLabel.Text = "None";
         }
 
-        private void ListDragTarget_DragLeave(object sender, EventArgs e)
+        private void ListDragTarget_DragLeave(object? sender, EventArgs e)
         {
             testOutputHelper.WriteLine($"Drag leave on target.");
 
