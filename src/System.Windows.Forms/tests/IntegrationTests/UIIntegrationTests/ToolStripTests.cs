@@ -23,9 +23,14 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public void ToolStrip_shared_imagelist_should_not_get_disposed_when_toolstrip_does()
         {
-            // establish a scope
+            ShowForm(_sharedImageList);
+            ShowForm(_sharedImageList);
+
+            return;
+
+            static void ShowForm(ImageList sharedImageList)
             {
-                using Form f1 = new();
+                using Form form = new();
                 using ToolStripButton toolStripButton = new()
                 {
                     ImageKey = "square",
@@ -33,58 +38,27 @@ namespace System.Windows.Forms.UITests
                 };
                 using ToolStrip toolStrip = new()
                 {
-                    ImageList = _sharedImageList
+                    ImageList = sharedImageList
                 };
                 toolStrip.Items.Add(toolStripButton);
 
-                f1.Controls.Add(toolStrip);
+                form.Controls.Add(toolStrip);
 
-                f1.Show();
+                form.Show();
 
-                Assert.NotNull(_sharedImageList);
+                Assert.NotNull(sharedImageList);
 #if DEBUG
-                Assert.False(_sharedImageList.IsDisposed);
+                Assert.False(sharedImageList.IsDisposed);
 #endif
-                Assert.Single(_sharedImageList.Images);
+                Assert.Single(sharedImageList.Images);
 
-                f1.Close();
+                form.Close();
 
-                Assert.NotNull(_sharedImageList);
+                Assert.NotNull(sharedImageList);
 #if DEBUG
-                Assert.False(_sharedImageList.IsDisposed);
+                Assert.False(sharedImageList.IsDisposed);
 #endif
-                Assert.Single(_sharedImageList.Images);
-            }
-
-            // establish another scope
-            {
-                using Form f2 = new();
-                using ToolStripButton toolStripButton = new()
-                {
-                    ImageKey = "square",
-                    ToolTipText = "Random Button"
-                };
-                using ToolStrip toolStrip = new()
-                {
-                    ImageList = _sharedImageList
-                };
-                toolStrip.Items.Add(toolStripButton);
-
-                f2.Controls.Add(toolStrip);
-
-                Assert.NotNull(_sharedImageList);
-#if DEBUG
-                Assert.False(_sharedImageList.IsDisposed);
-#endif
-                Assert.Single(_sharedImageList.Images);
-
-                f2.Close();
-
-                Assert.NotNull(_sharedImageList);
-#if DEBUG
-                Assert.False(_sharedImageList.IsDisposed);
-#endif
-                Assert.Single(_sharedImageList.Images);
+                Assert.Single(sharedImageList.Images);
             }
         }
     }
