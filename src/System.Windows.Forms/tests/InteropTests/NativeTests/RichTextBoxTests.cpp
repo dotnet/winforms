@@ -6,7 +6,7 @@
 #include <cassert>
 #include <richedit.h>
 
-void WINAPI RichTextBox_Enlink(ENLINK* enlink)
+extern "C" __declspec(dllexport) void WINAPI RichTextBox_Enlink(ENLINK* enlink)
 {
     enlink->nmhdr.code = 132;
     enlink->nmhdr.hwndFrom = (HWND)765;
@@ -18,7 +18,7 @@ void WINAPI RichTextBox_Enlink(ENLINK* enlink)
     enlink->chrg.cpMax = 1577;
 }
 
-void WINAPI RichTextBox_Enprotected(ENPROTECTED* enprotected)
+extern "C" __declspec(dllexport) void WINAPI RichTextBox_Enprotected(ENPROTECTED* enprotected)
 {
     enprotected->nmhdr.code = 132;
     enprotected->nmhdr.hwndFrom = (HWND)765;
