@@ -130,7 +130,8 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/6714")]
+        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6714")]
         public async Task Button_AchorNone_NoResizeOnWindowSizeTallerAsync()
         {
             await RunTestAsync(async (form, button) =>
