@@ -11,6 +11,7 @@ using static Interop;
 
 namespace System.Windows.Forms.UITests
 {
+    [UseDefaultXunitCulture]
     public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     {
         private const int SPIF_SENDCHANGE = 0x0002;
@@ -22,8 +23,6 @@ namespace System.Windows.Forms.UITests
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
         {
             TestOutputHelper = testOutputHelper;
-            Thread.CurrentThread.CurrentCulture =
-                Thread.CurrentThread.CurrentUICulture = new("en-US");
 
             Application.EnableVisualStyles();
 
