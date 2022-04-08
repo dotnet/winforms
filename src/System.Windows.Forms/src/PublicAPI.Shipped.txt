@@ -14,36 +14,36 @@
 ~override System.Windows.Forms.AxHost.Site.set -> void
 ~override System.Windows.Forms.AxHost.Text.get -> string
 ~override System.Windows.Forms.AxHost.Text.set -> void
-~override System.Windows.Forms.ComboBox.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.ComboBox.BackgroundImage.set -> void
-~override System.Windows.Forms.ComboBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ComboBox.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.ComboBox.OnBackColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnDataSourceChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnDisplayMemberChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnForeColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnGotFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnKeyPress(System.Windows.Forms.KeyPressEventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnKeyUp(System.Windows.Forms.KeyEventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnLostFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnMouseEnter(System.EventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnMouseLeave(System.EventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnParentBackColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnResize(System.EventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnSelectedIndexChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnSelectedValueChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnTextChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ComboBox.OnValidating(System.ComponentModel.CancelEventArgs e) -> void
-~override System.Windows.Forms.ComboBox.SetItemCore(int index, object value) -> void
-~override System.Windows.Forms.ComboBox.SetItemsCore(System.Collections.IList value) -> void
-~override System.Windows.Forms.ComboBox.Text.get -> string
-~override System.Windows.Forms.ComboBox.Text.set -> void
-~override System.Windows.Forms.ComboBox.ToString() -> string
+override System.Windows.Forms.ComboBox.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.ComboBox.BackgroundImage.set -> void
+override System.Windows.Forms.ComboBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ComboBox.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.ComboBox.OnBackColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnDataSourceChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnDisplayMemberChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnForeColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnKeyPress(System.Windows.Forms.KeyPressEventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnKeyUp(System.Windows.Forms.KeyEventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnLostFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnMouseEnter(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnMouseLeave(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnParentBackColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnResize(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnSelectedIndexChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnSelectedValueChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnTextChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnValidating(System.ComponentModel.CancelEventArgs! e) -> void
+override System.Windows.Forms.ComboBox.SetItemCore(int index, object! value) -> void
+override System.Windows.Forms.ComboBox.SetItemsCore(System.Collections.IList! value) -> void
+override System.Windows.Forms.ComboBox.Text.get -> string!
+override System.Windows.Forms.ComboBox.Text.set -> void
+override System.Windows.Forms.ComboBox.ToString() -> string!
 ~override System.Windows.Forms.ControlBindingsCollection.AddCore(System.Windows.Forms.Binding dataBinding) -> void
 ~override System.Windows.Forms.ControlBindingsCollection.RemoveCore(System.Windows.Forms.Binding dataBinding) -> void
 ~override System.Windows.Forms.CurrencyManager.Current.get -> object
@@ -445,19 +445,19 @@
 ~System.Windows.Forms.BindingSource.List.get -> System.Collections.IList
 ~System.Windows.Forms.BindingSource.Sort.get -> string
 ~System.Windows.Forms.BindingSource.Sort.set -> void
-~System.Windows.Forms.ComboBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection
-~System.Windows.Forms.ComboBox.AutoCompleteCustomSource.set -> void
-~System.Windows.Forms.ComboBox.DataSource.get -> object
-~System.Windows.Forms.ComboBox.DataSource.set -> void
-~System.Windows.Forms.ComboBox.FindString(string s) -> int
-~System.Windows.Forms.ComboBox.FindString(string s, int startIndex) -> int
-~System.Windows.Forms.ComboBox.FindStringExact(string s) -> int
-~System.Windows.Forms.ComboBox.FindStringExact(string s, int startIndex) -> int
-~System.Windows.Forms.ComboBox.Items.get -> System.Windows.Forms.ComboBox.ObjectCollection
-~System.Windows.Forms.ComboBox.SelectedItem.get -> object
-~System.Windows.Forms.ComboBox.SelectedItem.set -> void
-~System.Windows.Forms.ComboBox.SelectedText.get -> string
-~System.Windows.Forms.ComboBox.SelectedText.set -> void
+System.Windows.Forms.ComboBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection!
+System.Windows.Forms.ComboBox.AutoCompleteCustomSource.set -> void
+System.Windows.Forms.ComboBox.DataSource.get -> object?
+System.Windows.Forms.ComboBox.DataSource.set -> void
+System.Windows.Forms.ComboBox.FindString(string? s) -> int
+System.Windows.Forms.ComboBox.FindString(string? s, int startIndex) -> int
+System.Windows.Forms.ComboBox.FindStringExact(string? s) -> int
+System.Windows.Forms.ComboBox.FindStringExact(string? s, int startIndex) -> int
+System.Windows.Forms.ComboBox.Items.get -> System.Windows.Forms.ComboBox.ObjectCollection!
+System.Windows.Forms.ComboBox.SelectedItem.get -> object?
+System.Windows.Forms.ComboBox.SelectedItem.set -> void
+System.Windows.Forms.ComboBox.SelectedText.get -> string!
+System.Windows.Forms.ComboBox.SelectedText.set -> void
 ~System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitmap logicalBitmap) -> void
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember) -> System.Windows.Forms.Binding
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled) -> System.Windows.Forms.Binding
@@ -912,15 +912,15 @@
 ~virtual System.Windows.Forms.BindingSource.SyncRoot.get -> object
 ~virtual System.Windows.Forms.BindingSource.this[int index].get -> object
 ~virtual System.Windows.Forms.BindingSource.this[int index].set -> void
-~virtual System.Windows.Forms.ComboBox.AddItemsCore(object[] value) -> void
-~virtual System.Windows.Forms.ComboBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs e) -> void
-~virtual System.Windows.Forms.ComboBox.OnDropDown(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ComboBox.OnDropDownClosed(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ComboBox.OnDropDownStyleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ComboBox.OnMeasureItem(System.Windows.Forms.MeasureItemEventArgs e) -> void
-~virtual System.Windows.Forms.ComboBox.OnSelectedItemChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ComboBox.OnSelectionChangeCommitted(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ComboBox.OnTextUpdate(System.EventArgs e) -> void
+virtual System.Windows.Forms.ComboBox.AddItemsCore(object![]? value) -> void
+virtual System.Windows.Forms.ComboBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs! e) -> void
+virtual System.Windows.Forms.ComboBox.OnDropDown(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ComboBox.OnDropDownClosed(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ComboBox.OnDropDownStyleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ComboBox.OnMeasureItem(System.Windows.Forms.MeasureItemEventArgs! e) -> void
+virtual System.Windows.Forms.ComboBox.OnSelectedItemChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ComboBox.OnSelectionChangeCommitted(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ComboBox.OnTextUpdate(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.DataGridView.AdjustColumnHeaderBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder, bool isFirstDisplayedColumn, bool isLastVisibleColumn) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 ~virtual System.Windows.Forms.DataGridView.AdjustedTopLeftHeaderBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 ~virtual System.Windows.Forms.DataGridView.CreateColumnsInstance() -> System.Windows.Forms.DataGridViewColumnCollection
@@ -4997,23 +4997,23 @@ System.Windows.Forms.ComboBox.AutoCompleteMode.get -> System.Windows.Forms.AutoC
 System.Windows.Forms.ComboBox.AutoCompleteMode.set -> void
 System.Windows.Forms.ComboBox.AutoCompleteSource.get -> System.Windows.Forms.AutoCompleteSource
 System.Windows.Forms.ComboBox.AutoCompleteSource.set -> void
-System.Windows.Forms.ComboBox.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.ComboBox.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.ComboBox.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.ComboBox.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.ComboBox.BeginUpdate() -> void
 System.Windows.Forms.ComboBox.ChildAccessibleObject
 System.Windows.Forms.ComboBox.ChildAccessibleObject.ChildAccessibleObject(System.Windows.Forms.ComboBox! owner, nint handle) -> void
 System.Windows.Forms.ComboBox.ComboBox() -> void
-System.Windows.Forms.ComboBox.DoubleClick -> System.EventHandler
-System.Windows.Forms.ComboBox.DrawItem -> System.Windows.Forms.DrawItemEventHandler
+System.Windows.Forms.ComboBox.DoubleClick -> System.EventHandler?
+System.Windows.Forms.ComboBox.DrawItem -> System.Windows.Forms.DrawItemEventHandler?
 System.Windows.Forms.ComboBox.DrawMode.get -> System.Windows.Forms.DrawMode
 System.Windows.Forms.ComboBox.DrawMode.set -> void
-System.Windows.Forms.ComboBox.DropDown -> System.EventHandler
-System.Windows.Forms.ComboBox.DropDownClosed -> System.EventHandler
+System.Windows.Forms.ComboBox.DropDown -> System.EventHandler?
+System.Windows.Forms.ComboBox.DropDownClosed -> System.EventHandler?
 System.Windows.Forms.ComboBox.DropDownHeight.get -> int
 System.Windows.Forms.ComboBox.DropDownHeight.set -> void
 System.Windows.Forms.ComboBox.DropDownStyle.get -> System.Windows.Forms.ComboBoxStyle
 System.Windows.Forms.ComboBox.DropDownStyle.set -> void
-System.Windows.Forms.ComboBox.DropDownStyleChanged -> System.EventHandler
+System.Windows.Forms.ComboBox.DropDownStyleChanged -> System.EventHandler?
 System.Windows.Forms.ComboBox.DropDownWidth.get -> int
 System.Windows.Forms.ComboBox.DropDownWidth.set -> void
 System.Windows.Forms.ComboBox.DroppedDown.get -> bool
@@ -5030,7 +5030,7 @@ System.Windows.Forms.ComboBox.MaxDropDownItems.get -> int
 System.Windows.Forms.ComboBox.MaxDropDownItems.set -> void
 System.Windows.Forms.ComboBox.MaxLength.get -> int
 System.Windows.Forms.ComboBox.MaxLength.set -> void
-System.Windows.Forms.ComboBox.MeasureItem -> System.Windows.Forms.MeasureItemEventHandler
+System.Windows.Forms.ComboBox.MeasureItem -> System.Windows.Forms.MeasureItemEventHandler?
 System.Windows.Forms.ComboBox.ObjectCollection
 System.Windows.Forms.ComboBox.ObjectCollection.Add(object! item) -> int
 System.Windows.Forms.ComboBox.ObjectCollection.AddRange(object![]! items) -> void
@@ -5047,20 +5047,20 @@ System.Windows.Forms.ComboBox.ObjectCollection.Remove(object? value) -> void
 System.Windows.Forms.ComboBox.ObjectCollection.RemoveAt(int index) -> void
 System.Windows.Forms.ComboBox.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.ComboBox.Padding.set -> void
-System.Windows.Forms.ComboBox.PaddingChanged -> System.EventHandler
-System.Windows.Forms.ComboBox.Paint -> System.Windows.Forms.PaintEventHandler
+System.Windows.Forms.ComboBox.PaddingChanged -> System.EventHandler?
+System.Windows.Forms.ComboBox.Paint -> System.Windows.Forms.PaintEventHandler?
 System.Windows.Forms.ComboBox.PreferredHeight.get -> int
 System.Windows.Forms.ComboBox.Select(int start, int length) -> void
 System.Windows.Forms.ComboBox.SelectAll() -> void
-System.Windows.Forms.ComboBox.SelectedIndexChanged -> System.EventHandler
-System.Windows.Forms.ComboBox.SelectionChangeCommitted -> System.EventHandler
+System.Windows.Forms.ComboBox.SelectedIndexChanged -> System.EventHandler?
+System.Windows.Forms.ComboBox.SelectionChangeCommitted -> System.EventHandler?
 System.Windows.Forms.ComboBox.SelectionLength.get -> int
 System.Windows.Forms.ComboBox.SelectionLength.set -> void
 System.Windows.Forms.ComboBox.SelectionStart.get -> int
 System.Windows.Forms.ComboBox.SelectionStart.set -> void
 System.Windows.Forms.ComboBox.Sorted.get -> bool
 System.Windows.Forms.ComboBox.Sorted.set -> void
-System.Windows.Forms.ComboBox.TextUpdate -> System.EventHandler
+System.Windows.Forms.ComboBox.TextUpdate -> System.EventHandler?
 System.Windows.Forms.ComboBoxRenderer
 System.Windows.Forms.ComboBoxStyle
 System.Windows.Forms.ComboBoxStyle.DropDown = 1 -> System.Windows.Forms.ComboBoxStyle

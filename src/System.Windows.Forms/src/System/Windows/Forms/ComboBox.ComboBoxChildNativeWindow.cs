@@ -33,9 +33,9 @@ public partial class ComboBox
                         // raise focus changed event for the items. Monitoring
                         // item change in setters does not guarantee that focus
                         // is properly announced.
-                        object before = _owner.SelectedItem;
+                        object? before = _owner.SelectedItem;
                         DefWndProc(ref m);
-                        object after = _owner.SelectedItem;
+                        object? after = _owner.SelectedItem;
 
                         // Call the focus event for the new selected item accessible object provided by ComboBoxAccessibleObject.
                         // If the owning ComboBox has a custom accessible object,

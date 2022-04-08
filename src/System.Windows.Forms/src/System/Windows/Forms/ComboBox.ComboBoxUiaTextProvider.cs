@@ -33,7 +33,7 @@ public partial class ComboBox
             _owningComboBox = owner.OrThrowIfNull();
             Debug.Assert(_owningComboBox.IsHandleCreated);
 
-            _owningChildEdit = owner._childEdit;
+            _owningChildEdit = owner._childEdit!;
         }
 
         public override Rectangle BoundingRectangle
