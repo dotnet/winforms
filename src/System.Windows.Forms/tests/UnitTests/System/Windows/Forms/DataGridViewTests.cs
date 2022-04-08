@@ -1105,9 +1105,8 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/6597")]
-        [ConditionalWinFormsTheory(UnsupportedArchitecture = Architecture.Arm64,
-            Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6597")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/6739")]
+        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6739")]
         [MemberData(nameof(RowHeadersWidth_SetWithHandle_TestData))]
         public void DataGridView_RowHeadersWidth_SetWithHandle_GetReturnsExpected(DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode, bool rowHeadersVisible, bool autoSize, int value, int expectedValue, int expectedInvalidatedCallCount)
         {
@@ -1968,9 +1967,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/6597")]
-        [ConditionalWinFormsTheory(UnsupportedArchitecture = Architecture.Arm64,
-            Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6597")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/6926")]
+        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6926")]
         [MemberData(nameof(OnColumnHeadersHeightChanged_TestData))]
         public void DataGridView_OnColumnHeadersHeightChanged_InvokeWithHandle_CallsColumnHeadersHeightChanged(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode, bool columnHeadersVisible, EventArgs eventArgs)
         {

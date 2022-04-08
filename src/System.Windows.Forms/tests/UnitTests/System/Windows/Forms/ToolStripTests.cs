@@ -7121,8 +7121,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [ActiveIssue("https://github.com/dotnet/winforms/issues/6610")]
-        [ConditionalWinFormsFact(UnsupportedArchitecture = Architecture.Arm64,
-            Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6610")]
+        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6610")]
         public void ToolStrip_WndProc_InvokeMouseActivateWithHandle_Success()
         {
             using var control = new SubToolStrip();
