@@ -1135,7 +1135,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETCOLOR, (nint)ComCtl32.MCSC.TRAILINGTEXT));
         }
 
-        [UseDefaultXunitCulture(SetUnmanagedUiThreadCulture = true)]
         [WinFormsFact]
         public void MonthCalendar_Handle_GetWithDefaultFirstDayOfWeek_Success()
         {
@@ -1144,7 +1143,12 @@ namespace System.Windows.Forms.Tests
                 FirstDayOfWeek = Day.Default
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int expected = (int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
+            int expected = (int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek + 6;
+            while (expected > 6)
+            {
+                expected -= 7;
+            }
+
             Assert.Equal(expected, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETFIRSTDAYOFWEEK));
         }
 
