@@ -5318,21 +5318,28 @@ namespace System.Windows.Forms
                 dataObject = (IComDataObject)iwdata;
             }
 
-            if (dragImage is not null)
-            {
-                DragDropHelper.SetInDragLoop(dataObject, true);
-            }
+            Ole32.DROPEFFECT finalEffect;
 
-            Ole32.IDropSource dropSource = new DropSource(this, dataObject, dragImage, cursorOffset, useDefaultDragImage);
-            HRESULT hr = Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out Ole32.DROPEFFECT finalEffect);
-            if (!hr.Succeeded())
+            try
             {
-                return DragDropEffects.None;
-            }
+                if (dragImage is not null)
+                {
+                    DragDropHelper.SetInDragLoop(dataObject, true);
+                }
 
-            if (dragImage is not null)
+                Ole32.IDropSource dropSource = new DropSource(this, dataObject, dragImage, cursorOffset, useDefaultDragImage);
+                HRESULT hr = Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out finalEffect);
+                if (!hr.Succeeded())
+                {
+                    return DragDropEffects.None;
+                }
+            }
+            finally
             {
-                DragDropHelper.SetInDragLoop(dataObject, false);
+                if (dragImage is not null)
+                {
+                    DragDropHelper.SetInDragLoop(dataObject, false);
+                }
             }
 
             return (DragDropEffects)finalEffect;

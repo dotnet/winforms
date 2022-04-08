@@ -17,6 +17,10 @@ namespace System.Windows.Forms
 
         public STGMEDIUM Medium => _medium;
 
+        /// <summary>
+        ///  Initializes a new instance of the <see cref="DragDropFormat"/> class using
+        ///  the specified format, storage medium, and owner.
+        /// </summary>
         public DragDropFormat(short cfFormat, STGMEDIUM pMedium, bool fRelease)
         {
             _cfFormat = cfFormat;
