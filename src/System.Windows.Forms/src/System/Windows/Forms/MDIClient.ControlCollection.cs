@@ -54,7 +54,7 @@ namespace System.Windows.Forms
                     throw new ArgumentException(SR.AddDifferentThreads, nameof(value));
                 }
 
-                owner.children.Add((Form)value);
+                owner._children.Add((Form)value);
                 base.Add(value);
             }
 
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
             /// </summary>
             public override void Remove(Control value)
             {
-                owner.children.Remove(value);
+                owner._children.Remove(value);
                 base.Remove(value);
             }
         }

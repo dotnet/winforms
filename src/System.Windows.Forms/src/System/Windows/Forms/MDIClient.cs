@@ -23,8 +23,7 @@ namespace System.Windows.Forms
     {
         // kept in add order, not ZOrder. Need to return the correct
         // array of items...
-        //
-        private readonly ArrayList children = new ArrayList();
+        private readonly ArrayList _children = new ArrayList();
 
         /// <summary>
         ///  Creates a new MdiClient.
@@ -131,8 +130,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                Form[] temp = new Form[children.Count];
-                children.CopyTo(temp, 0);
+                Form[] temp = new Form[_children.Count];
+                _children.CopyTo(temp, 0);
                 return temp;
             }
         }
@@ -194,7 +193,6 @@ namespace System.Windows.Forms
         protected override void ScaleCore(float dx, float dy)
         {
             // Don't scale child forms...
-            //
 
             SuspendLayout();
             try
