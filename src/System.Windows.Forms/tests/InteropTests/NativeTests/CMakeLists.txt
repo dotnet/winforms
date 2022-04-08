@@ -32,11 +32,13 @@ add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/we4055>) # 'conversion' : from 
 
 add_library(NativeTests SHARED
     AccessibleObjectTests.cpp
-    WebBrowserSiteBaseInteropTests.cpp
     DllGetClassObject.cpp
     DispatchImpl.cpp
-    StandardErrorInfoUsageTest.cpp
     RawErrorInfoUsageTest.cpp
+    RichTextBoxTests.cpp
+    StandardErrorInfoUsageTest.cpp
+    WebBrowserSiteBaseInteropTests.cpp
+
     Exports.def
     ${IDL_OUTPUT_DIRECTORY}/${IDL_NAME}_i.c
 )
