@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using static Interop;
@@ -23,7 +22,7 @@ namespace System.Windows.Forms
     {
         // kept in add order, not ZOrder. Need to return the correct
         // array of items...
-        private readonly ArrayList _children = new ArrayList();
+        private readonly List<Form> _children = new List<Form>();
 
         /// <summary>
         ///  Creates a new MdiClient.
@@ -130,9 +129,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Form[] temp = new Form[_children.Count];
-                _children.CopyTo(temp, 0);
-                return temp;
+                return _children.ToArray();
             }
         }
 

@@ -63,7 +63,11 @@ namespace System.Windows.Forms
             /// </summary>
             public override void Remove(Control value)
             {
-                owner._children.Remove(value);
+                if (value is Form form)
+                {
+                    owner._children.Remove(form);
+                }
+
                 base.Remove(value);
             }
         }
