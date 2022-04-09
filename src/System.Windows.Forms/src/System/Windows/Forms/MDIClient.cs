@@ -252,9 +252,8 @@ namespace System.Windows.Forms
                 for (int i = 0; i < Controls.Count; i++)
                 {
                     Control ctl = Controls[i];
-                    if (ctl is not null && ctl is Form)
+                    if (ctl is not null && ctl is Form child)
                     {
-                        Form child = (Form)ctl;
                         // Only adjust the window position for visible MDI Child windows to prevent
                         // them from being re-displayed.
                         if (child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized)
