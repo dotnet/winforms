@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Drawing.Design
@@ -13,7 +11,7 @@ namespace System.Drawing.Design
     /// </summary>
     internal class Com2ExtendedUITypeEditor : UITypeEditor
     {
-        private readonly UITypeEditor innerEditor;
+        private readonly UITypeEditor? innerEditor;
 
         public Com2ExtendedUITypeEditor(UITypeEditor baseTypeEditor)
         {
@@ -22,10 +20,10 @@ namespace System.Drawing.Design
 
         public Com2ExtendedUITypeEditor(Type baseType)
         {
-            innerEditor = (UITypeEditor)TypeDescriptor.GetEditor(baseType, typeof(UITypeEditor));
+            innerEditor = (UITypeEditor?)TypeDescriptor.GetEditor(baseType, typeof(UITypeEditor));
         }
 
-        public UITypeEditor InnerEditor
+        public UITypeEditor? InnerEditor
         {
             get
             {
@@ -33,7 +31,7 @@ namespace System.Drawing.Design
             }
         }
 
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
             if (innerEditor is not null)
             {
@@ -49,7 +47,7 @@ namespace System.Drawing.Design
         ///  Determines if this editor supports the painting of a representation
         ///  of an object's value.
         /// </summary>
-        public override bool GetPaintValueSupported(ITypeDescriptorContext context)
+        public override bool GetPaintValueSupported(ITypeDescriptorContext? context)
         {
             if (innerEditor is not null)
             {
@@ -63,7 +61,7 @@ namespace System.Drawing.Design
         ///  Retrieves the editing style of the Edit method.  If the method
         ///  is not supported, this will return None.
         /// </summary>
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
         {
             if (innerEditor is not null)
             {
