@@ -10,11 +10,11 @@ namespace System.Windows.Forms
     {
         private class SplitterMessageFilter : IMessageFilter
         {
-            private readonly Splitter owner;
+            private readonly Splitter _owner;
 
             public SplitterMessageFilter(Splitter splitter)
             {
-                owner = splitter;
+                _owner = splitter;
             }
 
             /// <summary>
@@ -25,7 +25,7 @@ namespace System.Windows.Forms
                 {
                     if (m.MsgInternal == User32.WM.KEYDOWN && (Keys)m.WParamInternal == Keys.Escape)
                     {
-                        owner.SplitEnd(false);
+                        _owner.SplitEnd(false);
                     }
 
                     return true;
