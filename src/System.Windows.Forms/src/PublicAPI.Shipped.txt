@@ -2040,18 +2040,18 @@ System.Windows.Forms.ListView.CheckedItems.get -> System.Windows.Forms.ListView.
 ~System.Windows.Forms.ListView.CheckedListViewItemCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.ListView.CheckedListViewItemCollection.IndexOf(System.Windows.Forms.ListViewItem item) -> int
 ~System.Windows.Forms.ListView.CheckedListViewItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.ListView.ColumnHeaderCollection.ColumnHeaderCollection(System.Windows.Forms.ListView owner) -> void
-~System.Windows.Forms.ListView.ColumnHeaderCollection.Contains(System.Windows.Forms.ColumnHeader value) -> bool
-~System.Windows.Forms.ListView.ColumnHeaderCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ListView.ColumnHeaderCollection.IndexOf(System.Windows.Forms.ColumnHeader value) -> int
-~System.Windows.Forms.ListView.ColumnHeaderCollection.Insert(int index, string key, string text) -> void
-~System.Windows.Forms.ListView.ColumnHeaderCollection.Insert(int index, string key, string text, int width) -> void
-~System.Windows.Forms.ListView.ColumnHeaderCollection.Insert(int index, string key, string text, int width, System.Windows.Forms.HorizontalAlignment textAlign, int imageIndex) -> void
-~System.Windows.Forms.ListView.ColumnHeaderCollection.Insert(int index, string key, string text, int width, System.Windows.Forms.HorizontalAlignment textAlign, string imageKey) -> void
-~System.Windows.Forms.ListView.ColumnHeaderCollection.Insert(int index, string text) -> void
-~System.Windows.Forms.ListView.ColumnHeaderCollection.Insert(int index, string text, int width) -> void
-~System.Windows.Forms.ListView.ColumnHeaderCollection.Insert(int index, string text, int width, System.Windows.Forms.HorizontalAlignment textAlign) -> void
-~System.Windows.Forms.ListView.ColumnHeaderCollection.Insert(int index, System.Windows.Forms.ColumnHeader value) -> void
+System.Windows.Forms.ListView.ColumnHeaderCollection.ColumnHeaderCollection(System.Windows.Forms.ListView! owner) -> void
+System.Windows.Forms.ListView.ColumnHeaderCollection.Contains(System.Windows.Forms.ColumnHeader? value) -> bool
+System.Windows.Forms.ListView.ColumnHeaderCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ListView.ColumnHeaderCollection.IndexOf(System.Windows.Forms.ColumnHeader? value) -> int
+System.Windows.Forms.ListView.ColumnHeaderCollection.Insert(int index, string? key, string? text) -> void
+System.Windows.Forms.ListView.ColumnHeaderCollection.Insert(int index, string? key, string? text, int width) -> void
+System.Windows.Forms.ListView.ColumnHeaderCollection.Insert(int index, string? key, string? text, int width, System.Windows.Forms.HorizontalAlignment textAlign, int imageIndex) -> void
+System.Windows.Forms.ListView.ColumnHeaderCollection.Insert(int index, string? key, string? text, int width, System.Windows.Forms.HorizontalAlignment textAlign, string! imageKey) -> void
+System.Windows.Forms.ListView.ColumnHeaderCollection.Insert(int index, string? text) -> void
+System.Windows.Forms.ListView.ColumnHeaderCollection.Insert(int index, string? text, int width) -> void
+System.Windows.Forms.ListView.ColumnHeaderCollection.Insert(int index, string? text, int width, System.Windows.Forms.HorizontalAlignment textAlign) -> void
+System.Windows.Forms.ListView.ColumnHeaderCollection.Insert(int index, System.Windows.Forms.ColumnHeader! value) -> void
 System.Windows.Forms.ListView.Columns.get -> System.Windows.Forms.ListView.ColumnHeaderCollection!
 System.Windows.Forms.ListView.FindItemWithText(string! text) -> System.Windows.Forms.ListViewItem?
 System.Windows.Forms.ListView.FindItemWithText(string! text, bool includeSubItemsInSearch, int startIndex) -> System.Windows.Forms.ListViewItem?
@@ -3210,21 +3210,21 @@ virtual System.Windows.Forms.ListControl.SetItemCore(int index, object! value) -
 ~virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.ContainsKey(string key) -> bool
 ~virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.IndexOfKey(string key) -> int
 ~virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.this[string key].get -> System.Windows.Forms.ListViewItem
-~virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string key, string text) -> System.Windows.Forms.ColumnHeader
-~virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string key, string text, int width) -> System.Windows.Forms.ColumnHeader
-~virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string key, string text, int width, System.Windows.Forms.HorizontalAlignment textAlign, int imageIndex) -> System.Windows.Forms.ColumnHeader
-~virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string key, string text, int width, System.Windows.Forms.HorizontalAlignment textAlign, string imageKey) -> System.Windows.Forms.ColumnHeader
-~virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string text) -> System.Windows.Forms.ColumnHeader
-~virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string text, int width) -> System.Windows.Forms.ColumnHeader
-~virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string text, int width, System.Windows.Forms.HorizontalAlignment textAlign) -> System.Windows.Forms.ColumnHeader
-~virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(System.Windows.Forms.ColumnHeader value) -> int
-~virtual System.Windows.Forms.ListView.ColumnHeaderCollection.AddRange(System.Windows.Forms.ColumnHeader[] values) -> void
-~virtual System.Windows.Forms.ListView.ColumnHeaderCollection.ContainsKey(string key) -> bool
-~virtual System.Windows.Forms.ListView.ColumnHeaderCollection.IndexOfKey(string key) -> int
-~virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Remove(System.Windows.Forms.ColumnHeader column) -> void
-~virtual System.Windows.Forms.ListView.ColumnHeaderCollection.RemoveByKey(string key) -> void
-~virtual System.Windows.Forms.ListView.ColumnHeaderCollection.this[int index].get -> System.Windows.Forms.ColumnHeader
-~virtual System.Windows.Forms.ListView.ColumnHeaderCollection.this[string key].get -> System.Windows.Forms.ColumnHeader
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string? key, string? text) -> System.Windows.Forms.ColumnHeader!
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string? key, string? text, int width) -> System.Windows.Forms.ColumnHeader!
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string? key, string? text, int width, System.Windows.Forms.HorizontalAlignment textAlign, int imageIndex) -> System.Windows.Forms.ColumnHeader!
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string? key, string? text, int width, System.Windows.Forms.HorizontalAlignment textAlign, string! imageKey) -> System.Windows.Forms.ColumnHeader!
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string? text) -> System.Windows.Forms.ColumnHeader!
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string? text, int width) -> System.Windows.Forms.ColumnHeader!
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string? text, int width, System.Windows.Forms.HorizontalAlignment textAlign) -> System.Windows.Forms.ColumnHeader!
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(System.Windows.Forms.ColumnHeader! value) -> int
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.AddRange(System.Windows.Forms.ColumnHeader![]! values) -> void
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Remove(System.Windows.Forms.ColumnHeader! column) -> void
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.RemoveByKey(string? key) -> void
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.this[int index].get -> System.Windows.Forms.ColumnHeader!
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.this[string? key].get -> System.Windows.Forms.ColumnHeader?
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string key, string text, int imageIndex) -> System.Windows.Forms.ListViewItem
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string key, string text, string imageKey) -> System.Windows.Forms.ListViewItem
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string text) -> System.Windows.Forms.ListViewItem

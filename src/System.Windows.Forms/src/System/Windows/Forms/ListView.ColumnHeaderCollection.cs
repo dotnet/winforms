@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -41,7 +39,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            object IList.this[int index]
+            object? IList.this[int index]
             {
                 get
                 {
@@ -56,7 +54,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the child control with the specified key.
             /// </summary>
-            public virtual ColumnHeader this[string key]
+            public virtual ColumnHeader? this[string? key]
             {
                 get
                 {
@@ -126,7 +124,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Removes the child control with the specified key.
             /// </summary>
-            public virtual void RemoveByKey(string key)
+            public virtual void RemoveByKey(string? key)
             {
                 int index = IndexOfKey(key);
                 if (IsValidIndex(index))
@@ -144,7 +142,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
             /// </summary>
-            public virtual int IndexOfKey(string key)
+            public virtual int IndexOfKey(string? key)
             {
                 // Step 0 - Arg validation
                 if (string.IsNullOrEmpty(key))
@@ -187,7 +185,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Adds a column to the end of the Column list
             /// </summary>
-            public virtual ColumnHeader Add(string text, int width, HorizontalAlignment textAlign)
+            public virtual ColumnHeader Add(string? text, int width, HorizontalAlignment textAlign)
             {
                 ColumnHeader columnHeader = new ColumnHeader
                 {
@@ -205,7 +203,7 @@ namespace System.Windows.Forms
                 return index;
             }
 
-            public virtual ColumnHeader Add(string text)
+            public virtual ColumnHeader Add(string? text)
             {
                 ColumnHeader columnHeader = new ColumnHeader
                 {
@@ -216,7 +214,7 @@ namespace System.Windows.Forms
 
             // <-- NEW ADD OVERLOADS IN WHIDBEY
 
-            public virtual ColumnHeader Add(string text, int width)
+            public virtual ColumnHeader Add(string? text, int width)
             {
                 ColumnHeader columnHeader = new ColumnHeader
                 {
@@ -226,7 +224,7 @@ namespace System.Windows.Forms
                 return owner.InsertColumn(Count, columnHeader);
             }
 
-            public virtual ColumnHeader Add(string key, string text)
+            public virtual ColumnHeader Add(string? key, string? text)
             {
                 ColumnHeader columnHeader = new ColumnHeader
                 {
@@ -236,7 +234,7 @@ namespace System.Windows.Forms
                 return owner.InsertColumn(Count, columnHeader);
             }
 
-            public virtual ColumnHeader Add(string key, string text, int width)
+            public virtual ColumnHeader Add(string? key, string? text, int width)
             {
                 ColumnHeader columnHeader = new ColumnHeader
                 {
@@ -247,7 +245,7 @@ namespace System.Windows.Forms
                 return owner.InsertColumn(Count, columnHeader);
             }
 
-            public virtual ColumnHeader Add(string key, string text, int width, HorizontalAlignment textAlign, string imageKey)
+            public virtual ColumnHeader Add(string? key, string? text, int width, HorizontalAlignment textAlign, string imageKey)
             {
                 ColumnHeader columnHeader = new ColumnHeader(imageKey)
                 {
@@ -259,7 +257,7 @@ namespace System.Windows.Forms
                 return owner.InsertColumn(Count, columnHeader);
             }
 
-            public virtual ColumnHeader Add(string key, string text, int width, HorizontalAlignment textAlign, int imageIndex)
+            public virtual ColumnHeader Add(string? key, string? text, int width, HorizontalAlignment textAlign, int imageIndex)
             {
                 ColumnHeader columnHeader = new ColumnHeader(imageIndex)
                 {
@@ -304,11 +302,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            int IList.Add(object value)
+            int IList.Add(object? value)
             {
-                if (value is ColumnHeader)
+                if (value is ColumnHeader columnHeader)
                 {
-                    return Add((ColumnHeader)value);
+                    return Add(columnHeader);
                 }
                 else
                 {
@@ -357,16 +355,16 @@ namespace System.Windows.Forms
                 }
             }
 
-            public bool Contains(ColumnHeader value)
+            public bool Contains(ColumnHeader? value)
             {
                 return IndexOf(value) != -1;
             }
 
-            bool IList.Contains(object value)
+            bool IList.Contains(object? value)
             {
-                if (value is ColumnHeader)
+                if (value is ColumnHeader columnHeader)
                 {
-                    return Contains((ColumnHeader)value);
+                    return Contains(columnHeader);
                 }
 
                 return false;
@@ -375,7 +373,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns true if the collection contains an item with the specified key, false otherwise.
             /// </summary>
-            public virtual bool ContainsKey(string key)
+            public virtual bool ContainsKey(string? key)
             {
                 return IsValidIndex(IndexOfKey(key));
             }
@@ -384,11 +382,11 @@ namespace System.Windows.Forms
             {
                 if (Count > 0)
                 {
-                    System.Array.Copy(owner._columnHeaders, 0, dest, index, Count);
+                    Array.Copy(owner._columnHeaders!, 0, dest, index, Count);
                 }
             }
 
-            public int IndexOf(ColumnHeader value)
+            public int IndexOf(ColumnHeader? value)
             {
                 for (int index = 0; index < Count; ++index)
                 {
@@ -401,11 +399,11 @@ namespace System.Windows.Forms
                 return -1;
             }
 
-            int IList.IndexOf(object value)
+            int IList.IndexOf(object? value)
             {
-                if (value is ColumnHeader)
+                if (value is ColumnHeader columnHeader)
                 {
-                    return IndexOf((ColumnHeader)value);
+                    return IndexOf(columnHeader);
                 }
 
                 return -1;
@@ -421,15 +419,15 @@ namespace System.Windows.Forms
                 owner.InsertColumn(index, value);
             }
 
-            void IList.Insert(int index, object value)
+            void IList.Insert(int index, object? value)
             {
-                if (value is ColumnHeader)
+                if (value is ColumnHeader columnHeader)
                 {
-                    Insert(index, (ColumnHeader)value);
+                    Insert(index, columnHeader);
                 }
             }
 
-            public void Insert(int index, string text, int width, HorizontalAlignment textAlign)
+            public void Insert(int index, string? text, int width, HorizontalAlignment textAlign)
             {
                 ColumnHeader columnHeader = new ColumnHeader
                 {
@@ -442,7 +440,7 @@ namespace System.Windows.Forms
 
             // <-- NEW INSERT OVERLOADS IN WHIDBEY
 
-            public void Insert(int index, string text)
+            public void Insert(int index, string? text)
             {
                 ColumnHeader columnHeader = new ColumnHeader
                 {
@@ -451,7 +449,7 @@ namespace System.Windows.Forms
                 Insert(index, columnHeader);
             }
 
-            public void Insert(int index, string text, int width)
+            public void Insert(int index, string? text, int width)
             {
                 ColumnHeader columnHeader = new ColumnHeader
                 {
@@ -461,7 +459,7 @@ namespace System.Windows.Forms
                 Insert(index, columnHeader);
             }
 
-            public void Insert(int index, string key, string text)
+            public void Insert(int index, string? key, string? text)
             {
                 ColumnHeader columnHeader = new ColumnHeader
                 {
@@ -471,7 +469,7 @@ namespace System.Windows.Forms
                 Insert(index, columnHeader);
             }
 
-            public void Insert(int index, string key, string text, int width)
+            public void Insert(int index, string? key, string? text, int width)
             {
                 ColumnHeader columnHeader = new ColumnHeader
                 {
@@ -482,7 +480,7 @@ namespace System.Windows.Forms
                 Insert(index, columnHeader);
             }
 
-            public void Insert(int index, string key, string text, int width, HorizontalAlignment textAlign, string imageKey)
+            public void Insert(int index, string? key, string? text, int width, HorizontalAlignment textAlign, string imageKey)
             {
                 ColumnHeader columnHeader = new ColumnHeader(imageKey)
                 {
@@ -494,7 +492,7 @@ namespace System.Windows.Forms
                 Insert(index, columnHeader);
             }
 
-            public void Insert(int index, string key, string text, int width, HorizontalAlignment textAlign, int imageIndex)
+            public void Insert(int index, string? key, string? text, int width, HorizontalAlignment textAlign, int imageIndex)
             {
                 ColumnHeader columnHeader = new ColumnHeader(imageIndex)
                 {
@@ -591,11 +589,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            void IList.Remove(object value)
+            void IList.Remove(object? value)
             {
-                if (value is ColumnHeader)
+                if (value is ColumnHeader columnHeader)
                 {
-                    Remove((ColumnHeader)value);
+                    Remove(columnHeader);
                 }
             }
 
