@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -19,16 +18,15 @@ namespace System.Windows.Forms
         {
             internal static int s_inWndProcCnt;
 
-            // This hashtable can contain null for those ACWindows we find, but are sure are not ours.
-            private static readonly Hashtable s_ACWindows = new Hashtable();
+            // This dictionary can contain null for those ACWindows we find, but are sure are not ours.
+            private static readonly Dictionary<IntPtr, ACNativeWindow?> s_ACWindows = new Dictionary<IntPtr, ACNativeWindow?>();
 
             internal ACNativeWindow(IntPtr acHandle)
             {
                 Debug.Assert(!s_ACWindows.ContainsKey(acHandle));
                 AssignHandle(acHandle);
                 s_ACWindows.Add(acHandle, this);
-                EnumChildWindows(new HandleRef(this, acHandle),
-                    ACNativeWindow.RegisterACWindowRecursive);
+                EnumChildWindows(new HandleRef(this, acHandle), RegisterACWindowRecursive);
             }
 
             private static BOOL RegisterACWindowRecursive(IntPtr handle)
@@ -52,7 +50,7 @@ namespace System.Windows.Forms
                         return true;
                     }
 
-                    foreach (object o in s_ACWindows.Values)
+                    foreach (ACNativeWindow? o in s_ACWindows.Values)
                     {
                         if (o is ACNativeWindow window && window.Visible)
                         {
@@ -112,8 +110,8 @@ namespace System.Windows.Forms
             /// </summary>
             internal static void ClearNullACWindows()
             {
-                ArrayList nulllist = new ArrayList();
-                foreach (DictionaryEntry e in s_ACWindows)
+                List<IntPtr> nulllist = new List<IntPtr>();
+                foreach (KeyValuePair<IntPtr, ACNativeWindow?> e in s_ACWindows)
                 {
                     if (e.Value is null)
                     {
