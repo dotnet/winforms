@@ -982,42 +982,5 @@ namespace System.Windows.Forms
             string s = base.ToString();
             return s + ", MinExtra: " + MinExtra.ToString(CultureInfo.CurrentCulture) + ", MinSize: " + MinSize.ToString(CultureInfo.CurrentCulture);
         }
-
-        /// <summary>
-        ///  Return value holder...
-        /// </summary>
-        private class SplitData
-        {
-            public int dockWidth = -1;
-            public int dockHeight = -1;
-            internal Control? target;
-        }
-
-        private class SplitterMessageFilter : IMessageFilter
-        {
-            private readonly Splitter owner;
-
-            public SplitterMessageFilter(Splitter splitter)
-            {
-                owner = splitter;
-            }
-
-            /// <summary>
-            /// </summary>
-            public bool PreFilterMessage(ref Message m)
-            {
-                if (m.MsgInternal >= User32.WM.KEYFIRST && m.MsgInternal <= User32.WM.KEYLAST)
-                {
-                    if (m.MsgInternal == User32.WM.KEYDOWN && (Keys)m.WParamInternal == Keys.Escape)
-                    {
-                        owner.SplitEnd(false);
-                    }
-
-                    return true;
-                }
-
-                return false;
-            }
-        }
     }
 }
