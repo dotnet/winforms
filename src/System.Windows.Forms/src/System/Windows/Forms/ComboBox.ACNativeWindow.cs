@@ -50,9 +50,9 @@ namespace System.Windows.Forms
                         return true;
                     }
 
-                    foreach (ACNativeWindow? o in s_ACWindows.Values)
+                    foreach (ACNativeWindow? window in s_ACWindows.Values)
                     {
-                        if (o is ACNativeWindow window && window.Visible)
+                        if (window is not null && window.Visible)
                         {
                             return true;
                         }
@@ -111,11 +111,11 @@ namespace System.Windows.Forms
             internal static void ClearNullACWindows()
             {
                 List<IntPtr> nulllist = new List<IntPtr>();
-                foreach (KeyValuePair<IntPtr, ACNativeWindow?> e in s_ACWindows)
+                foreach (KeyValuePair<IntPtr, ACNativeWindow?> acNativeWindowByHandle in s_ACWindows)
                 {
-                    if (e.Value is null)
+                    if (acNativeWindowByHandle.Value is null)
                     {
-                        nulllist.Add(e.Key);
+                        nulllist.Add(acNativeWindowByHandle.Key);
                     }
                 }
 
