@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public partial class SplitContainer
@@ -16,12 +14,13 @@ namespace System.Windows.Forms
         {
             private readonly SplitContainer _owner;
 
-            public SplitContainerTypedControlCollection(Control c, Type type, bool isReadOnly) : base(c, type, isReadOnly)
+            public SplitContainerTypedControlCollection(SplitContainer splitContainer, Type type, bool isReadOnly)
+                : base(splitContainer, type, isReadOnly)
             {
-                _owner = c as SplitContainer;
+                _owner = splitContainer;
             }
 
-            public override void Remove(Control value)
+            public override void Remove(Control? value)
             {
                 if (value is SplitterPanel)
                 {
