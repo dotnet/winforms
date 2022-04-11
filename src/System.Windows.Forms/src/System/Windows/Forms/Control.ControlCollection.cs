@@ -16,7 +16,7 @@ namespace System.Windows.Forms
         ///  Collection of controls...
         /// </summary>
         [ListBindable(false)]
-        public class ControlCollection : ArrangedElementCollection, IList, ICloneable
+        public partial class ControlCollection : ArrangedElementCollection, IList, ICloneable
         {
             ///  A caching mechanism for key accessor
             ///  We use an index here rather than control so that we don't have lifetime
@@ -505,67 +505,6 @@ namespace System.Windows.Forms
             public virtual void SetChildIndex(Control child, int newIndex)
             {
                 SetChildIndexInternal(child, newIndex);
-            }
-
-            // This is the same as WinformsUtils.ArraySubsetEnumerator
-            // however since we're no longer an array, we've gotta employ a
-            // special version of this.
-            private class ControlCollectionEnumerator : IEnumerator
-            {
-                private readonly ControlCollection _controls;
-                private int _current;
-                private readonly int _originalCount;
-
-                public ControlCollectionEnumerator(ControlCollection controls)
-                {
-                    _controls = controls;
-                    _originalCount = controls.Count;
-                    _current = -1;
-                }
-
-                public bool MoveNext()
-                {
-                    // We have to use Controls.Count here because someone could have deleted
-                    // an item from the array.
-                    //
-                    // this can happen if someone does:
-                    //     foreach (Control c in Controls) { c.Dispose(); }
-                    //
-                    // We also don't want to iterate past the original size of the collection
-                    //
-                    // this can happen if someone does
-                    //     foreach (Control c in Controls) { c.Controls.Add(new Label()); }
-
-                    if (_current < _controls.Count - 1 && _current < _originalCount - 1)
-                    {
-                        _current++;
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-
-                public void Reset()
-                {
-                    _current = -1;
-                }
-
-                public object? Current
-                {
-                    get
-                    {
-                        if (_current == -1)
-                        {
-                            return null;
-                        }
-                        else
-                        {
-                            return _controls[_current];
-                        }
-                    }
-                }
             }
         }
     }
