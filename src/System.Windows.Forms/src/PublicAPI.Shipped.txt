@@ -2330,12 +2330,12 @@ System.Windows.Forms.ScrollableControl.VerticalScroll.get -> System.Windows.Form
 ~System.Windows.Forms.SplitContainer.OnSplitterMoving(System.Windows.Forms.SplitterCancelEventArgs e) -> void
 ~System.Windows.Forms.SplitContainer.Panel1.get -> System.Windows.Forms.SplitterPanel
 ~System.Windows.Forms.SplitContainer.Panel2.get -> System.Windows.Forms.SplitterPanel
-~System.Windows.Forms.SplitterPanel.DockPadding.get -> System.Windows.Forms.ScrollableControl.DockPaddingEdges
-~System.Windows.Forms.SplitterPanel.Name.get -> string
-~System.Windows.Forms.SplitterPanel.Name.set -> void
-~System.Windows.Forms.SplitterPanel.Parent.get -> System.Windows.Forms.Control
-~System.Windows.Forms.SplitterPanel.Parent.set -> void
-~System.Windows.Forms.SplitterPanel.SplitterPanel(System.Windows.Forms.SplitContainer owner) -> void
+System.Windows.Forms.SplitterPanel.DockPadding.get -> System.Windows.Forms.ScrollableControl.DockPaddingEdges!
+System.Windows.Forms.SplitterPanel.Name.get -> string?
+System.Windows.Forms.SplitterPanel.Name.set -> void
+System.Windows.Forms.SplitterPanel.Parent.get -> System.Windows.Forms.Control?
+System.Windows.Forms.SplitterPanel.Parent.set -> void
+System.Windows.Forms.SplitterPanel.SplitterPanel(System.Windows.Forms.SplitContainer? owner) -> void
 ~System.Windows.Forms.TabControl.ControlCollection.ControlCollection(System.Windows.Forms.TabControl owner) -> void
 ~System.Windows.Forms.TabControl.DeselectTab(string tabPageName) -> void
 ~System.Windows.Forms.TabControl.DeselectTab(System.Windows.Forms.TabPage tabPage) -> void
@@ -10569,17 +10569,17 @@ System.Windows.Forms.SplitterPanel.Anchor.get -> System.Windows.Forms.AnchorStyl
 System.Windows.Forms.SplitterPanel.Anchor.set -> void
 System.Windows.Forms.SplitterPanel.AutoSize.get -> bool
 System.Windows.Forms.SplitterPanel.AutoSize.set -> void
-System.Windows.Forms.SplitterPanel.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.SplitterPanel.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.SplitterPanel.BorderStyle.get -> System.Windows.Forms.BorderStyle
 System.Windows.Forms.SplitterPanel.BorderStyle.set -> void
 System.Windows.Forms.SplitterPanel.Dock.get -> System.Windows.Forms.DockStyle
 System.Windows.Forms.SplitterPanel.Dock.set -> void
-System.Windows.Forms.SplitterPanel.DockChanged -> System.EventHandler
+System.Windows.Forms.SplitterPanel.DockChanged -> System.EventHandler?
 System.Windows.Forms.SplitterPanel.Height.get -> int
 System.Windows.Forms.SplitterPanel.Height.set -> void
 System.Windows.Forms.SplitterPanel.Location.get -> System.Drawing.Point
 System.Windows.Forms.SplitterPanel.Location.set -> void
-System.Windows.Forms.SplitterPanel.LocationChanged -> System.EventHandler
+System.Windows.Forms.SplitterPanel.LocationChanged -> System.EventHandler?
 System.Windows.Forms.SplitterPanel.MaximumSize.get -> System.Drawing.Size
 System.Windows.Forms.SplitterPanel.MaximumSize.set -> void
 System.Windows.Forms.SplitterPanel.MinimumSize.get -> System.Drawing.Size
@@ -10588,13 +10588,13 @@ System.Windows.Forms.SplitterPanel.Size.get -> System.Drawing.Size
 System.Windows.Forms.SplitterPanel.Size.set -> void
 System.Windows.Forms.SplitterPanel.TabIndex.get -> int
 System.Windows.Forms.SplitterPanel.TabIndex.set -> void
-System.Windows.Forms.SplitterPanel.TabIndexChanged -> System.EventHandler
+System.Windows.Forms.SplitterPanel.TabIndexChanged -> System.EventHandler?
 System.Windows.Forms.SplitterPanel.TabStop.get -> bool
 System.Windows.Forms.SplitterPanel.TabStop.set -> void
-System.Windows.Forms.SplitterPanel.TabStopChanged -> System.EventHandler
+System.Windows.Forms.SplitterPanel.TabStopChanged -> System.EventHandler?
 System.Windows.Forms.SplitterPanel.Visible.get -> bool
 System.Windows.Forms.SplitterPanel.Visible.set -> void
-System.Windows.Forms.SplitterPanel.VisibleChanged -> System.EventHandler
+System.Windows.Forms.SplitterPanel.VisibleChanged -> System.EventHandler?
 System.Windows.Forms.SplitterPanel.Width.get -> int
 System.Windows.Forms.SplitterPanel.Width.set -> void
 System.Windows.Forms.StatusStrip
