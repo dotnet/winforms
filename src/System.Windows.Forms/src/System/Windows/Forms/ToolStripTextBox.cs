@@ -506,7 +506,7 @@ namespace System.Windows.Forms
         public void Clear() { TextBox.Clear(); }
         public void ClearUndo() { TextBox.ClearUndo(); }
         public void Copy() { TextBox.Copy(); }
-        public void Cut() { TextBox.Copy(); }
+        public void Cut() { TextBox.Cut(); }
         public void DeselectAll() { TextBox.DeselectAll(); }
         public char GetCharFromPosition(Point pt) { return TextBox.GetCharFromPosition(pt); }
         public int GetCharIndexFromPosition(Point pt) { return TextBox.GetCharIndexFromPosition(pt); }
