@@ -22,15 +22,9 @@ namespace System.Windows.Forms
 
             public override void Remove(Control? value)
             {
-                if (value is SplitterPanel)
+                if (value is SplitterPanel && !_owner.DesignMode && IsReadOnly)
                 {
-                    if (!_owner.DesignMode)
-                    {
-                        if (IsReadOnly)
-                        {
-                            throw new NotSupportedException(SR.ReadonlyControlsCollection);
-                        }
-                    }
+                    throw new NotSupportedException(SR.ReadonlyControlsCollection);
                 }
 
                 base.Remove(value);
