@@ -32,20 +32,21 @@ namespace System.Windows.Forms
 
             internal override void SetChildIndexInternal(Control child, int newIndex)
             {
-                if (child is SplitterPanel)
+                if (child is not SplitterPanel)
                 {
-                    if (!_owner.DesignMode)
-                    {
-                        if (IsReadOnly)
-                        {
-                            throw new NotSupportedException(SR.ReadonlyControlsCollection);
-                        }
-                    }
-                    else
-                    {
-                        // just no-op it at DT.
-                        return;
-                    }
+                    base.SetChildIndexInternal(child, newIndex);
+                    return;
+                }
+
+                if (_owner.DesignMode)
+                {
+                    // just no-op it at DT.
+                    return;
+                }
+
+                if (IsReadOnly)
+                {
+                    throw new NotSupportedException(SR.ReadonlyControlsCollection);
                 }
 
                 base.SetChildIndexInternal(child, newIndex);
