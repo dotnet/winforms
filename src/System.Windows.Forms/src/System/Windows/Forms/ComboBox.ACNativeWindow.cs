@@ -19,7 +19,7 @@ namespace System.Windows.Forms
             internal static int s_inWndProcCnt;
 
             // This dictionary can contain null for those ACWindows we find, but are sure are not ours.
-            private static readonly Dictionary<IntPtr, ACNativeWindow?> s_ACWindows = new Dictionary<IntPtr, ACNativeWindow?>();
+            private static readonly Dictionary<IntPtr, ACNativeWindow?> s_ACWindows = new();
 
             internal ACNativeWindow(IntPtr acHandle)
             {
@@ -110,16 +110,16 @@ namespace System.Windows.Forms
             /// </summary>
             internal static void ClearNullACWindows()
             {
-                List<IntPtr> nulllist = new List<IntPtr>();
+                List<IntPtr> toRemove = new();
                 foreach (KeyValuePair<IntPtr, ACNativeWindow?> acNativeWindowByHandle in s_ACWindows)
                 {
                     if (acNativeWindowByHandle.Value is null)
                     {
-                        nulllist.Add(acNativeWindowByHandle.Key);
+                        toRemove.Add(acNativeWindowByHandle.Key);
                     }
                 }
 
-                foreach (IntPtr handle in nulllist)
+                foreach (IntPtr handle in toRemove)
                 {
                     s_ACWindows.Remove(handle);
                 }
