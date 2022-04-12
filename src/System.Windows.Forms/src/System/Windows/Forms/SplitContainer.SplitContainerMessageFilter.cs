@@ -19,22 +19,22 @@ namespace System.Windows.Forms
 
             bool IMessageFilter.PreFilterMessage(ref Message m)
             {
-                if (m.MsgInternal >= User32.WM.KEYFIRST && m.MsgInternal <= User32.WM.KEYLAST)
+                if (m.MsgInternal < User32.WM.KEYFIRST || m.MsgInternal > User32.WM.KEYLAST)
                 {
-                    if ((m.MsgInternal == User32.WM.KEYDOWN && (Keys)m.WParamInternal == Keys.Escape)
-                        || (m.MsgInternal == User32.WM.SYSKEYDOWN))
-                    {
-                        // Notify that splitMOVE was reverted. This is used in ONKEYUP.
-                        _owner._splitBegin = false;
-                        _owner.SplitEnd(false);
-                        _owner._splitterClick = false;
-                        _owner._splitterDrag = false;
-                    }
-
-                    return true;
+                    return false;
                 }
 
-                return false;
+                if ((m.MsgInternal == User32.WM.KEYDOWN && (Keys)m.WParamInternal == Keys.Escape)
+                    || (m.MsgInternal == User32.WM.SYSKEYDOWN))
+                {
+                    // Notify that splitMOVE was reverted. This is used in ONKEYUP.
+                    _owner._splitBegin = false;
+                    _owner.SplitEnd(false);
+                    _owner._splitterClick = false;
+                    _owner._splitterDrag = false;
+                }
+
+                return true;
             }
         }
     }

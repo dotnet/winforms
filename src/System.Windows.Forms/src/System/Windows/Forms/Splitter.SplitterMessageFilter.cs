@@ -21,17 +21,17 @@ namespace System.Windows.Forms
             /// </summary>
             public bool PreFilterMessage(ref Message m)
             {
-                if (m.MsgInternal >= User32.WM.KEYFIRST && m.MsgInternal <= User32.WM.KEYLAST)
+                if (m.MsgInternal < User32.WM.KEYFIRST || m.MsgInternal > User32.WM.KEYLAST)
                 {
-                    if (m.MsgInternal == User32.WM.KEYDOWN && (Keys)m.WParamInternal == Keys.Escape)
-                    {
-                        _owner.SplitEnd(false);
-                    }
-
-                    return true;
+                    return false;
                 }
 
-                return false;
+                if (m.MsgInternal == User32.WM.KEYDOWN && (Keys)m.WParamInternal == Keys.Escape)
+                {
+                    _owner.SplitEnd(false);
+                }
+
+                return true;
             }
         }
     }
