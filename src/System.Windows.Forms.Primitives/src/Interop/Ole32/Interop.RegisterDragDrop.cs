@@ -23,6 +23,7 @@ internal partial class Interop
             }
 
             result = RegisterDragDrop(hwnd.Handle, dropTargetPtr);
+            Marshal.Release(dropTargetPtr);
             GC.KeepAlive(hwnd);
             return result;
         }
