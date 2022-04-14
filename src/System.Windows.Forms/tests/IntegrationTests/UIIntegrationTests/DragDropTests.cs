@@ -326,15 +326,15 @@ public class DragDropTests : ControlTestBase
             // Cancel the drag if the mouse moves off the form.
             if (sender is ListBox lb)
             {
-                Form f = lb.FindForm();
+                Form form = lb.FindForm();
 
                 // Cancel the drag if the mouse moves off the form. The screenOffset
                 // takes into account any desktop bands that may be at the top or left
                 // side of the screen.
-                if (((Control.MousePosition.X - screenOffset.X) < f.DesktopBounds.Left) ||
-                    ((Control.MousePosition.X - screenOffset.X) > f.DesktopBounds.Right) ||
-                    ((Control.MousePosition.Y - screenOffset.Y) < f.DesktopBounds.Top) ||
-                    ((Control.MousePosition.Y - screenOffset.Y) > f.DesktopBounds.Bottom))
+                if (((Control.MousePosition.X - screenOffset.X) < form.DesktopBounds.Left) ||
+                    ((Control.MousePosition.X - screenOffset.X) > form.DesktopBounds.Right) ||
+                    ((Control.MousePosition.Y - screenOffset.Y) < form.DesktopBounds.Top) ||
+                    ((Control.MousePosition.Y - screenOffset.Y) > form.DesktopBounds.Bottom))
                 {
                     testOutputHelper.WriteLine($"Cancelling drag.");
                     e.Action = DragAction.Cancel;
