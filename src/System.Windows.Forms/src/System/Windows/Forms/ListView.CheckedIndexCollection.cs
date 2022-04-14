@@ -12,12 +12,12 @@ namespace System.Windows.Forms
         [ListBindable(false)]
         public class CheckedIndexCollection : IList
         {
-            private readonly ListView owner;
+            private readonly ListView _owner;
 
             /* C#r: protected */
             public CheckedIndexCollection(ListView owner)
             {
-                this.owner = owner;
+                _owner = owner;
             }
 
             /// <summary>
@@ -28,14 +28,14 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (!owner.CheckBoxes)
+                    if (!_owner.CheckBoxes)
                     {
                         return 0;
                     }
 
                     // Count the number of checked items
                     int count = 0;
-                    foreach (ListViewItem item in owner.Items)
+                    foreach (ListViewItem item in _owner.Items)
                     {
                         if (item is not null && item.Checked)
                         {
@@ -53,9 +53,9 @@ namespace System.Windows.Forms
                 {
                     int[] indices = new int[Count];
                     int index = 0;
-                    for (int i = 0; i < owner.Items.Count && index < indices.Length; ++i)
+                    for (int i = 0; i < _owner.Items.Count && index < indices.Length; ++i)
                     {
-                        if (owner.Items[i].Checked)
+                        if (_owner.Items[i].Checked)
                         {
                             indices[index++] = i;
                         }
@@ -78,11 +78,11 @@ namespace System.Windows.Forms
                     }
 
                     // Loop through the main collection until we find the right index.
-                    int cnt = owner.Items.Count;
+                    int cnt = _owner.Items.Count;
                     int nChecked = 0;
                     for (int i = 0; i < cnt; i++)
                     {
-                        ListViewItem item = owner.Items[i];
+                        ListViewItem item = _owner.Items[i];
 
                         if (item.Checked)
                         {
@@ -146,7 +146,7 @@ namespace System.Windows.Forms
 
             public bool Contains(int checkedIndex)
             {
-                if (owner.Items[checkedIndex].Checked)
+                if (_owner.Items[checkedIndex].Checked)
                 {
                     return true;
                 }
