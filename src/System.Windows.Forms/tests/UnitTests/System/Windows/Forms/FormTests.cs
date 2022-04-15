@@ -1820,6 +1820,32 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/6421")]
+        [WinFormsFact]
+        public void Form_ShowInTaskBar_SetFalse_GetReturnsExpected()
+        {
+            using var control = new Form
+            {
+                ShowInTaskbar = true,
+            };
+
+            var prefValue = DialogResult.OK;
+
+            control.Load += (object sender, EventArgs e) =>
+            {
+                control.ShowInTaskbar = false;
+            };
+
+            control.Shown += (object sender, EventArgs e) =>
+            {
+                control.DialogResult = prefValue;
+            };
+
+            control.ShowDialog();
+
+            Assert.Equal(prefValue, control.DialogResult);
+        }
+
         public static IEnumerable<object[]> Visible_Set_TestData()
         {
             foreach (DialogResult dialogResult in Enum.GetValues(typeof(DialogResult)))
