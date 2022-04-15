@@ -80,7 +80,7 @@ namespace System.Windows.Forms
 
                         if (owner.IsHandleCreated && !owner.ListViewHandleDestroyed)
                         {
-                            return (ListViewItem)owner._listItemsTable[DisplayIndexToID(displayIndex)];
+                            return owner._listItemsTable[DisplayIndexToID(displayIndex)];
                         }
                         else
                         {
