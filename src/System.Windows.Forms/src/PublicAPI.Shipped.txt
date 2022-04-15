@@ -714,26 +714,26 @@ override System.Windows.Forms.ScrollableControl.OnPaddingChanged(System.EventArg
 override System.Windows.Forms.ScrollableControl.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
 override System.Windows.Forms.ScrollableControl.OnRightToLeftChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ScrollableControl.OnVisibleChanged(System.EventArgs! e) -> void
-~override System.Windows.Forms.SplitContainer.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.SplitContainer.BackgroundImage.set -> void
-~override System.Windows.Forms.SplitContainer.BindingContext.get -> System.Windows.Forms.BindingContext
-~override System.Windows.Forms.SplitContainer.BindingContext.set -> void
-~override System.Windows.Forms.SplitContainer.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-~override System.Windows.Forms.SplitContainer.OnGotFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.SplitContainer.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
-~override System.Windows.Forms.SplitContainer.OnKeyUp(System.Windows.Forms.KeyEventArgs e) -> void
-~override System.Windows.Forms.SplitContainer.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~override System.Windows.Forms.SplitContainer.OnLostFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.SplitContainer.OnMouseCaptureChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.SplitContainer.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.SplitContainer.OnMouseLeave(System.EventArgs e) -> void
-~override System.Windows.Forms.SplitContainer.OnMouseMove(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.SplitContainer.OnMouseUp(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.SplitContainer.OnMove(System.EventArgs e) -> void
-~override System.Windows.Forms.SplitContainer.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.SplitContainer.OnRightToLeftChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.SplitContainer.Text.get -> string
-~override System.Windows.Forms.SplitContainer.Text.set -> void
+override System.Windows.Forms.SplitContainer.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.SplitContainer.BackgroundImage.set -> void
+override System.Windows.Forms.SplitContainer.BindingContext.get -> System.Windows.Forms.BindingContext?
+override System.Windows.Forms.SplitContainer.BindingContext.set -> void
+override System.Windows.Forms.SplitContainer.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
+override System.Windows.Forms.SplitContainer.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.SplitContainer.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
+override System.Windows.Forms.SplitContainer.OnKeyUp(System.Windows.Forms.KeyEventArgs! e) -> void
+override System.Windows.Forms.SplitContainer.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
+override System.Windows.Forms.SplitContainer.OnLostFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.SplitContainer.OnMouseCaptureChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.SplitContainer.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.SplitContainer.OnMouseLeave(System.EventArgs! e) -> void
+override System.Windows.Forms.SplitContainer.OnMouseMove(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.SplitContainer.OnMouseUp(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.SplitContainer.OnMove(System.EventArgs! e) -> void
+override System.Windows.Forms.SplitContainer.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.SplitContainer.OnRightToLeftChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.SplitContainer.Text.get -> string!
+override System.Windows.Forms.SplitContainer.Text.set -> void
 override System.Windows.Forms.Splitter.BackgroundImage.get -> System.Drawing.Image?
 override System.Windows.Forms.Splitter.BackgroundImage.set -> void
 override System.Windows.Forms.Splitter.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
@@ -2325,17 +2325,17 @@ System.Windows.Forms.ScrollableControl.DockPadding.get -> System.Windows.Forms.S
 System.Windows.Forms.ScrollableControl.HorizontalScroll.get -> System.Windows.Forms.HScrollProperties!
 System.Windows.Forms.ScrollableControl.ScrollControlIntoView(System.Windows.Forms.Control! activeControl) -> void
 System.Windows.Forms.ScrollableControl.VerticalScroll.get -> System.Windows.Forms.VScrollProperties!
-~System.Windows.Forms.SplitContainer.Controls.get -> System.Windows.Forms.Control.ControlCollection
-~System.Windows.Forms.SplitContainer.OnSplitterMoved(System.Windows.Forms.SplitterEventArgs e) -> void
-~System.Windows.Forms.SplitContainer.OnSplitterMoving(System.Windows.Forms.SplitterCancelEventArgs e) -> void
-~System.Windows.Forms.SplitContainer.Panel1.get -> System.Windows.Forms.SplitterPanel
-~System.Windows.Forms.SplitContainer.Panel2.get -> System.Windows.Forms.SplitterPanel
+System.Windows.Forms.SplitContainer.Controls.get -> System.Windows.Forms.Control.ControlCollection!
+System.Windows.Forms.SplitContainer.OnSplitterMoved(System.Windows.Forms.SplitterEventArgs! e) -> void
+System.Windows.Forms.SplitContainer.OnSplitterMoving(System.Windows.Forms.SplitterCancelEventArgs! e) -> void
+System.Windows.Forms.SplitContainer.Panel1.get -> System.Windows.Forms.SplitterPanel!
+System.Windows.Forms.SplitContainer.Panel2.get -> System.Windows.Forms.SplitterPanel!
 System.Windows.Forms.SplitterPanel.DockPadding.get -> System.Windows.Forms.ScrollableControl.DockPaddingEdges!
 System.Windows.Forms.SplitterPanel.Name.get -> string?
 System.Windows.Forms.SplitterPanel.Name.set -> void
 System.Windows.Forms.SplitterPanel.Parent.get -> System.Windows.Forms.Control?
 System.Windows.Forms.SplitterPanel.Parent.set -> void
-System.Windows.Forms.SplitterPanel.SplitterPanel(System.Windows.Forms.SplitContainer? owner) -> void
+System.Windows.Forms.SplitterPanel.SplitterPanel(System.Windows.Forms.SplitContainer! owner) -> void
 ~System.Windows.Forms.TabControl.ControlCollection.ControlCollection(System.Windows.Forms.TabControl owner) -> void
 ~System.Windows.Forms.TabControl.DeselectTab(string tabPageName) -> void
 ~System.Windows.Forms.TabControl.DeselectTab(System.Windows.Forms.TabPage tabPage) -> void
@@ -10477,14 +10477,14 @@ System.Windows.Forms.SplitContainer.AutoScrollMinSize.get -> System.Drawing.Size
 System.Windows.Forms.SplitContainer.AutoScrollMinSize.set -> void
 System.Windows.Forms.SplitContainer.AutoScrollPosition.get -> System.Drawing.Point
 System.Windows.Forms.SplitContainer.AutoScrollPosition.set -> void
-System.Windows.Forms.SplitContainer.AutoSizeChanged -> System.EventHandler
-System.Windows.Forms.SplitContainer.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.SplitContainer.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.SplitContainer.AutoSizeChanged -> System.EventHandler?
+System.Windows.Forms.SplitContainer.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.SplitContainer.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.SplitContainer.BeginInit() -> void
 System.Windows.Forms.SplitContainer.BorderStyle.get -> System.Windows.Forms.BorderStyle
 System.Windows.Forms.SplitContainer.BorderStyle.set -> void
-System.Windows.Forms.SplitContainer.ControlAdded -> System.Windows.Forms.ControlEventHandler
-System.Windows.Forms.SplitContainer.ControlRemoved -> System.Windows.Forms.ControlEventHandler
+System.Windows.Forms.SplitContainer.ControlAdded -> System.Windows.Forms.ControlEventHandler?
+System.Windows.Forms.SplitContainer.ControlRemoved -> System.Windows.Forms.ControlEventHandler?
 System.Windows.Forms.SplitContainer.Dock.get -> System.Windows.Forms.DockStyle
 System.Windows.Forms.SplitContainer.Dock.set -> void
 System.Windows.Forms.SplitContainer.EndInit() -> void
@@ -10496,7 +10496,7 @@ System.Windows.Forms.SplitContainer.Orientation.get -> System.Windows.Forms.Orie
 System.Windows.Forms.SplitContainer.Orientation.set -> void
 System.Windows.Forms.SplitContainer.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.SplitContainer.Padding.set -> void
-System.Windows.Forms.SplitContainer.PaddingChanged -> System.EventHandler
+System.Windows.Forms.SplitContainer.PaddingChanged -> System.EventHandler?
 System.Windows.Forms.SplitContainer.Panel1Collapsed.get -> bool
 System.Windows.Forms.SplitContainer.Panel1Collapsed.set -> void
 System.Windows.Forms.SplitContainer.Panel1MinSize.get -> int
@@ -10510,14 +10510,14 @@ System.Windows.Forms.SplitContainer.SplitterDistance.get -> int
 System.Windows.Forms.SplitContainer.SplitterDistance.set -> void
 System.Windows.Forms.SplitContainer.SplitterIncrement.get -> int
 System.Windows.Forms.SplitContainer.SplitterIncrement.set -> void
-System.Windows.Forms.SplitContainer.SplitterMoved -> System.Windows.Forms.SplitterEventHandler
-System.Windows.Forms.SplitContainer.SplitterMoving -> System.Windows.Forms.SplitterCancelEventHandler
+System.Windows.Forms.SplitContainer.SplitterMoved -> System.Windows.Forms.SplitterEventHandler?
+System.Windows.Forms.SplitContainer.SplitterMoving -> System.Windows.Forms.SplitterCancelEventHandler?
 System.Windows.Forms.SplitContainer.SplitterRectangle.get -> System.Drawing.Rectangle
 System.Windows.Forms.SplitContainer.SplitterWidth.get -> int
 System.Windows.Forms.SplitContainer.SplitterWidth.set -> void
 System.Windows.Forms.SplitContainer.TabStop.get -> bool
 System.Windows.Forms.SplitContainer.TabStop.set -> void
-System.Windows.Forms.SplitContainer.TextChanged -> System.EventHandler
+System.Windows.Forms.SplitContainer.TextChanged -> System.EventHandler?
 System.Windows.Forms.Splitter
 System.Windows.Forms.Splitter.BackgroundImageChanged -> System.EventHandler?
 System.Windows.Forms.Splitter.BackgroundImageLayoutChanged -> System.EventHandler?
@@ -13426,7 +13426,7 @@ virtual System.Windows.Forms.TreeNodeCollection.RemoveAt(int index) -> void
 virtual System.Windows.Forms.TreeView.RightToLeftLayout.get -> bool
 virtual System.Windows.Forms.TreeView.RightToLeftLayout.set -> void
 virtual System.Windows.Forms.UpDownBase.ValidateEditText() -> void
-~override System.Windows.Forms.SplitContainer.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.SplitContainer.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.PrintPreviewControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DateTimePicker.DateTimePickerAccessibleObject.Name.get -> string!
 override System.Windows.Forms.DateTimePicker.OnGotFocus(System.EventArgs! e) -> void

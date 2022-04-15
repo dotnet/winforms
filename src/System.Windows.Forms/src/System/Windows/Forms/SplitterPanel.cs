@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     [ToolboxItem(false)]
     public sealed class SplitterPanel : Panel
     {
-        public SplitterPanel(SplitContainer? owner) : base()
+        public SplitterPanel(SplitContainer owner) : base()
         {
             Owner = owner;
             SetStyle(ControlStyles.ResizeRedraw, true);
@@ -194,7 +194,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The parent of this control.
         /// </summary>
-        internal SplitContainer? Owner { get; }
+        internal SplitContainer Owner { get; }
 
         /// <summary>
         ///  Gets or sets the <see cref="SplitContainer" /> that contains this <see cref="SplitterPanel" />.
