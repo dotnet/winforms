@@ -266,7 +266,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 int index = GetChildIndex(child);
 
                 // Ensure that it is a valid child and not the first child.
-                if (index == -1 || index == 0)
+                if (index <= 0)
                 {
                     return null;
                 }
