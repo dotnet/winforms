@@ -6,11 +6,13 @@
     <AssemblyName>AccessibilityTests</AssemblyName>
     <!--<TargetFrameworks>net472;net6.0-windows</TargetFrameworks>-->
     <ApplicationManifest>app1.manifest</ApplicationManifest>
-
     <EnableXlfLocalization>false</EnableXlfLocalization>
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
+    <!-- NU1505 reports duplicate package download for Microsoft.NETCore.App.Host.win-x64.
+         Disabling this warning until https://github.com/dotnet/sdk/issues/24747 is fixed.-->
+    <NoWarn>$(NoWarn);NU1505</NoWarn>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\..\src\System.Windows.Forms.csproj" />
   </ItemGroup>

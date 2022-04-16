@@ -4,11 +4,13 @@
     <AssemblyName>NativeHost.ManagedControl</AssemblyName>
     <Platforms>x86;x64</Platforms>
     <EnableComHosting>true</EnableComHosting>
-
     <EnableXlfLocalization>false</EnableXlfLocalization>
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
+    <!-- NU1505 reports duplicate package download for Microsoft.NETCore.App.Host.win-x64.
+         Disabling this warning until https://github.com/dotnet/sdk/issues/24747 is fixed.-->
+    <NoWarn>$(NoWarn);NU1505</NoWarn>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
     <ProjectReference Include="..\..\..\src\System.Windows.Forms.csproj" />
