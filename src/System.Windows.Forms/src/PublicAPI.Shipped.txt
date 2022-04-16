@@ -2030,8 +2030,8 @@ System.Windows.Forms.ListControl.SelectedValue.get -> object?
 System.Windows.Forms.ListControl.SelectedValue.set -> void
 System.Windows.Forms.ListControl.ValueMember.get -> string!
 System.Windows.Forms.ListControl.ValueMember.set -> void
-~System.Windows.Forms.ListView.CheckedIndexCollection.CheckedIndexCollection(System.Windows.Forms.ListView owner) -> void
-~System.Windows.Forms.ListView.CheckedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
+System.Windows.Forms.ListView.CheckedIndexCollection.CheckedIndexCollection(System.Windows.Forms.ListView! owner) -> void
+System.Windows.Forms.ListView.CheckedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator!
 System.Windows.Forms.ListView.CheckedIndices.get -> System.Windows.Forms.ListView.CheckedIndexCollection!
 System.Windows.Forms.ListView.CheckedItems.get -> System.Windows.Forms.ListView.CheckedListViewItemCollection!
 ~System.Windows.Forms.ListView.CheckedListViewItemCollection.CheckedListViewItemCollection(System.Windows.Forms.ListView owner) -> void
