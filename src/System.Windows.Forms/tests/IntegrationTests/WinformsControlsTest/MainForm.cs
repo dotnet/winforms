@@ -144,6 +144,10 @@ namespace WinformsControlsTest
                 new InitInfo("FormBorderStyles", (obj, e) => new FormBorderStyles().Show(this))
             },
             {
+                MainFormControlsTabOrder.FormShowInTaskbarButton,
+                new InitInfo("FormShowInTaskbar", (obj, e) => new FormShowInTaskbar().Show(this))
+            },
+            {
                 MainFormControlsTabOrder.ToggleIconButton,
                 new InitInfo("ToggleFormIcon", (obj, e) => ShowIcon = !ShowIcon)
             },
