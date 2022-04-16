@@ -1820,30 +1820,35 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/6421")]
         [WinFormsFact]
-        public void Form_ShowInTaskBar_SetFalse_GetReturnsExpected()
+        public void Form_ShowInTaskbar_SetFalse_GetReturnsExpected()
         {
-            using var control = new Form
+            // Regression test for https://github.com/dotnet/winforms/issues/6421
+
+            using var form = new Form
             {
                 ShowInTaskbar = true,
             };
 
-            var prefValue = DialogResult.OK;
+            bool expectedIsHandleCreated = true;
+            DialogResult expectedDialogResult = DialogResult.OK;
 
-            control.Load += (object sender, EventArgs e) =>
+            form.Load += (object sender, EventArgs e) =>
             {
-                control.ShowInTaskbar = false;
+                IntPtr formHandle = form.Handle;
+                form.ShowInTaskbar = false;
+
+                Assert.Equal(expectedIsHandleCreated, form.IsHandleCreated);
+                Assert.NotEqual(formHandle, form.Handle);
             };
 
-            control.Shown += (object sender, EventArgs e) =>
+            form.Shown += (object sender, EventArgs e) =>
             {
-                control.DialogResult = prefValue;
+                form.DialogResult = expectedDialogResult;
             };
 
-            control.ShowDialog();
-
-            Assert.Equal(prefValue, control.DialogResult);
+            Assert.Equal(expectedDialogResult, form.ShowDialog());
+            Assert.Equal(expectedDialogResult, form.DialogResult);
         }
 
         public static IEnumerable<object[]> Visible_Set_TestData()
