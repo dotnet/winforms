@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -30,8 +29,6 @@ namespace WinformsControlsTest
 
         private void BtnTest_Click(object sender, EventArgs e)
         {
-            bool expectedIsHandleCreated = true;
-
             using var form = new Form()
             {
                 Width = 680,
