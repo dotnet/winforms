@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -34,7 +32,7 @@ namespace System.Windows.Forms
             IDisposable
         {
             private readonly AxHost _host;
-            private ConnectionPointCookie _connectionPoint;
+            private ConnectionPointCookie? _connectionPoint;
 
             internal OleInterfaces(AxHost host)
             {
@@ -47,7 +45,7 @@ namespace System.Windows.Forms
                 {
                     if (!AppDomain.CurrentDomain.IsFinalizingForUnload())
                     {
-                        SynchronizationContext context = SynchronizationContext.Current;
+                        SynchronizationContext? context = SynchronizationContext.Current;
                         if (context is null)
                         {
                             Debug.Fail("Attempted to disconnect ConnectionPointCookie from the finalizer with no SynchronizationContext.");
@@ -94,7 +92,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            void AttemptStopEvents(object trash)
+            void AttemptStopEvents(object? trash)
             {
                 if (_connectionPoint is null)
                 {
@@ -121,7 +119,7 @@ namespace System.Windows.Forms
             }
 
             // IGetVBAObject methods:
-            unsafe HRESULT IGetVBAObject.GetObject(Guid* riid, IVBFormat[] rval, uint dwReserved)
+            unsafe HRESULT IGetVBAObject.GetObject(Guid* riid, IVBFormat?[] rval, uint dwReserved)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in GetObject");
 
@@ -162,12 +160,12 @@ namespace System.Windows.Forms
 
             // IReflect methods:
 
-            MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers)
+            MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder? binder, Type[] types, ParameterModifier[]? modifiers)
             {
                 return null;
             }
 
-            MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr)
+            MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr)
             {
                 return null;
             }
@@ -177,7 +175,7 @@ namespace System.Windows.Forms
                 return Array.Empty<MethodInfo>();
             }
 
-            FieldInfo IReflect.GetField(string name, BindingFlags bindingAttr)
+            FieldInfo? IReflect.GetField(string name, BindingFlags bindingAttr)
             {
                 return null;
             }
@@ -187,18 +185,18 @@ namespace System.Windows.Forms
                 return Array.Empty<FieldInfo>();
             }
 
-            PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr)
+            PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr)
             {
                 return null;
             }
 
-            PropertyInfo IReflect.GetProperty(
+            PropertyInfo? IReflect.GetProperty(
                 string name,
                 BindingFlags bindingAttr,
-                Binder binder,
-                Type returnType,
+                Binder? binder,
+                Type? returnType,
                 Type[] types,
-                ParameterModifier[] modifiers)
+                ParameterModifier[]? modifiers)
             {
                 return null;
             }
@@ -218,15 +216,15 @@ namespace System.Windows.Forms
                 return Array.Empty<MemberInfo>();
             }
 
-            object IReflect.InvokeMember(
+            object? IReflect.InvokeMember(
                 string name,
                 BindingFlags invokeAttr,
-                Binder binder,
-                object target,
-                object[] args,
-                ParameterModifier[] modifiers,
-                CultureInfo culture,
-                string[] namedParameters)
+                Binder? binder,
+                object? target,
+                object?[]? args,
+                ParameterModifier[]? modifiers,
+                CultureInfo? culture,
+                string[]? namedParameters)
             {
                 if (name.StartsWith("[DISPID="))
                 {
@@ -246,7 +244,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return null;
+                    return null!;
                 }
             }
 
@@ -417,7 +415,6 @@ namespace System.Windows.Forms
 
                     // The fact that we have a fake window means that the OCX inplace deactivated when we hid it. It means
                     // that we have to bring it back from RUNNING to INPLACE so that it can re-create its handle properly.
-                    //
                     _host.TransitionDownTo(OC_LOADED);
                     _host.TransitionUpTo(OC_INPLACE);
                 }
@@ -506,7 +503,7 @@ namespace System.Windows.Forms
 
             unsafe HRESULT IOleInPlaceSite.GetWindowContext(
                 out IOleInPlaceFrame ppFrame,
-                out IOleInPlaceUIWindow ppDoc,
+                out IOleInPlaceUIWindow? ppDoc,
                 RECT* lprcPosRect,
                 RECT* lprcClipRect,
                 OLEINPLACEFRAMEINFO* lpFrameInfo)
@@ -584,7 +581,6 @@ namespace System.Windows.Forms
                 // can set to control size changes at runtime, but the control itself ignores that and sets the new size.
                 // We prevent this by not allowing controls to call OnPosRectChange(), unless we instantiated the resize.
                 // visual basic6 does the same.
-                //
                 bool useRect = true;
                 if (s_windowsMediaPlayer_Clsid.Equals(_host._clsid))
                 {
@@ -620,7 +616,7 @@ namespace System.Windows.Forms
                 _host.NoComponentChangeEvents++;
                 try
                 {
-                    AxPropertyDescriptor prop = null;
+                    AxPropertyDescriptor? prop = null;
 
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in OnChanged");
 
@@ -650,7 +646,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (_host.Site.TryGetService(out IComponentChangeService changeService))
+                    if (_host.Site.TryGetService(out IComponentChangeService? changeService))
                     {
                         try
                         {
@@ -665,9 +661,9 @@ namespace System.Windows.Forms
                         changeService.OnComponentChanged(_host, prop, oldValue: null, prop?.GetValue(_host));
                     }
                 }
-                catch (Exception t)
+                catch (Exception ex)
                 {
-                    Debug.Fail(t.ToString());
+                    Debug.Fail(ex.ToString());
                     throw;
                 }
                 finally
