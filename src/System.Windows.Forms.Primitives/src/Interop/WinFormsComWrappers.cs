@@ -226,6 +226,7 @@ internal partial class Interop
 
             IntPtr pobj_local;
             IntPtr pUnk_local = GetOrCreateComInterfaceForObject(obj);
+            if (pUnk_local == IntPtr.Zer)
             Guid local_IID = iid;
             HRESULT result = (HRESULT)Marshal.QueryInterface(pUnk_local, ref local_IID, out pobj_local);
             Marshal.Release(pUnk_local);
