@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
@@ -34,11 +32,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  the user to modify the value.  Host assistance in presenting UI to the user
         ///  can be found through the valueAccess.getService function.
         /// </summary>
-        public unsafe override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        public unsafe override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
-            IntPtr parentHandle = (IntPtr)User32.GetFocus();
+            IntPtr parentHandle = User32.GetFocus();
 
-            IUIService uiSvc = (IUIService)provider.GetService(typeof(IUIService));
+            IUIService? uiSvc = (IUIService?)provider.GetService(typeof(IUIService));
             if (uiSvc is not null)
             {
                 IWin32Window parent = uiSvc.GetDialogOwnerWindow();
@@ -49,14 +47,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             BOOL useValue = BOOL.FALSE;
-            object pValue = value;
+            object? pValue = value;
 
             try
             {
-                object obj = propDesc.TargetObject;
-                if (obj is ICustomTypeDescriptor)
+                object? obj = propDesc.TargetObject;
+                if (obj is ICustomTypeDescriptor customTypeDescriptor)
                 {
-                    obj = ((ICustomTypeDescriptor)obj).GetPropertyOwner(propDesc);
+                    obj = customTypeDescriptor.GetPropertyOwner(propDesc);
                 }
 
                 Debug.Assert(obj is VSSDK.IProvidePropertyBuilder, "object is not IProvidePropertyBuilder");
@@ -90,7 +88,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Retrieves the editing style of the Edit method.  If the method
         ///  is not supported, this will return None.
         /// </summary>
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
         {
             return UITypeEditorEditStyle.Modal;
         }
