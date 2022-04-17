@@ -114,9 +114,7 @@ namespace System.Windows.Forms
 
                         if (closure.screens.Count > 0)
                         {
-                            Screen[] temp = new Screen[closure.screens.Count];
-                            closure.screens.CopyTo(temp, 0);
-                            s_screens = temp;
+                            s_screens = closure.screens.ToArray();
                         }
                         else
                         {
