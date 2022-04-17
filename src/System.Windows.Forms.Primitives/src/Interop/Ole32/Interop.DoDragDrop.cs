@@ -22,14 +22,21 @@ internal static partial class Interop
             DROPEFFECT dwOKEffects,
             out DROPEFFECT pdwEffect)
         {
-            var result = WinFormsComWrappers.Instance.TryGetComPointer(pDropSource, IID.IDropSource, out var dropSourcePtr);
+            var result = WinFormsComWrappers.Instance.TryGetComPointer(pDataObj, IID.IDataObject, out var dataObjectPtr);
             if (result.Failed())
             {
                 pdwEffect = DROPEFFECT.NONE;
                 return result;
             }
 
-            result = DoDragDrop(pDataObj, dropSourcePtr, dwOKEffects, out pdwEffect);
+            result = WinFormsComWrappers.Instance.TryGetComPointer(pDropSource, IID.IDropSource, out var dropSourcePtr);
+            if (result.Failed())
+            {
+                pdwEffect = DROPEFFECT.NONE;
+                return result;
+            }
+
+            result = DoDragDrop(dataObjectPtr, dropSourcePtr, dwOKEffects, out pdwEffect);
             return result;
         }
     }
