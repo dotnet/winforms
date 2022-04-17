@@ -1830,7 +1830,6 @@ namespace System.Windows.Forms.Tests
                 ShowInTaskbar = true,
             };
 
-            bool expectedIsHandleCreated = true;
             DialogResult expectedDialogResult = DialogResult.OK;
 
             form.Load += (object sender, EventArgs e) =>
@@ -1838,7 +1837,7 @@ namespace System.Windows.Forms.Tests
                 IntPtr formHandle = form.Handle;
                 form.ShowInTaskbar = false;
 
-                Assert.Equal(expectedIsHandleCreated, form.IsHandleCreated);
+                Assert.True(form.IsHandleCreated);
                 Assert.NotEqual(formHandle, form.Handle);
             };
 
