@@ -138,7 +138,7 @@ namespace System.Windows.Forms
         internal TreeNodeCollection nodes;
         internal TreeNode editNode;
         internal TreeNode root;
-        internal Dictionary<IntPtr, TreeNode> _nodeTable = new();
+        internal Dictionary<IntPtr, TreeNode> _nodesByHandle = new();
         internal bool nodesCollectionClear; //this is set when the treeNodeCollection is getting cleared and used by TreeView
         private MouseButtons downButton;
         private TreeViewDrawMode drawMode = TreeViewDrawMode.Normal;
@@ -1934,7 +1934,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal TreeNode NodeFromHandle(IntPtr handle)
         {
-            _nodeTable.TryGetValue(handle, out TreeNode treeNode);
+            _nodesByHandle.TryGetValue(handle, out TreeNode treeNode);
             return treeNode;
         }
 
