@@ -216,7 +216,7 @@ internal partial class Interop
             return comPtr;
         }
 
-        internal HRESULT TryGetComPointer<T>(T obj, Guid iid, out IntPtr comPtr) where T : class
+        internal HRESULT TryGetComPointer<T>(T? obj, Guid iid, out IntPtr comPtr) where T : class
         {
             if (obj is null)
             {
