@@ -299,8 +299,8 @@ namespace System.Windows.Forms.Design
                     }
                     else
                     {
-                        majorVer = short.Parse(ver.Substring(0, dot), CultureInfo.InvariantCulture);
-                        minorVer = short.Parse(ver.Substring(dot + 1, ver.Length - dot - 1), CultureInfo.InvariantCulture);
+                        majorVer = short.Parse(ver.AsSpan(0, dot), CultureInfo.InvariantCulture);
+                        minorVer = short.Parse(ver.AsSpan(dot + 1, ver.Length - dot - 1), CultureInfo.InvariantCulture);
                     }
 
                     Debug.Assert(majorVer > 0 && minorVer >= 0, "No Major version number found for: " + controlKey);
