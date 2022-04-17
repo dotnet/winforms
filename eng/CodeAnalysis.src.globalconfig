@@ -364,7 +364,7 @@ dotnet_diagnostic.CA1843.severity = warning
 dotnet_diagnostic.CA1844.severity = warning
 
 # Use span-based 'string.Concat'
-dotnet_diagnostic.CA1845.severity = none # TODO: warning
+dotnet_diagnostic.CA1845.severity = warning
 
 # Prefer 'AsSpan' over 'Substring'
 dotnet_diagnostic.CA1846.severity = none # TODO: warning

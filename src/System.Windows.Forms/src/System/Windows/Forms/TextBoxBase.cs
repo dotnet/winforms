@@ -2055,7 +2055,7 @@ namespace System.Windows.Forms
             string txt = Text;
             if (txt.Length > 40)
             {
-                txt = txt.Substring(0, 40) + "...";
+                txt = string.Concat(txt.AsSpan(0, 40), "...");
             }
 
             return s + ", Text: " + txt.ToString();

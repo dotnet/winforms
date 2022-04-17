@@ -112,11 +112,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     // try to get the field value
                     if (a is null)
                     {
-                        t = Type.GetType(attrName.Substring(0, lastDot) + assemblyName);
+                        t = Type.GetType(string.Concat(attrName.AsSpan(0, lastDot), assemblyName));
                     }
                     else
                     {
-                        t = a.GetType(attrName.Substring(0, lastDot) + assemblyName);
+                        t = a.GetType(string.Concat(attrName.AsSpan(0, lastDot), assemblyName));
                     }
 
                     if (t is null)
