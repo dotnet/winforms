@@ -14,15 +14,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal class Com2PropertyBuilderUITypeEditor : Com2ExtendedUITypeEditor
     {
-        private readonly Com2PropertyDescriptor propDesc;
-        private readonly string guidString;
-        private readonly VSSDK.CTLBLDTYPE bldrType;
+        private readonly Com2PropertyDescriptor _propDesc;
+        private readonly string _guidString;
+        private readonly VSSDK.CTLBLDTYPE _bldrType;
 
         public Com2PropertyBuilderUITypeEditor(Com2PropertyDescriptor pd, string guidString, VSSDK.CTLBLDTYPE type, UITypeEditor baseEditor) : base(baseEditor)
         {
-            propDesc = pd;
-            this.guidString = guidString;
-            bldrType = type;
+            _propDesc = pd;
+            _guidString = guidString;
+            _bldrType = type;
         }
 
         /// <summary>
@@ -51,18 +51,18 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                object? obj = propDesc.TargetObject;
+                object? obj = _propDesc.TargetObject;
                 if (obj is ICustomTypeDescriptor customTypeDescriptor)
                 {
-                    obj = customTypeDescriptor.GetPropertyOwner(propDesc);
+                    obj = customTypeDescriptor.GetPropertyOwner(_propDesc);
                 }
 
                 Debug.Assert(obj is VSSDK.IProvidePropertyBuilder, "object is not IProvidePropertyBuilder");
                 VSSDK.IProvidePropertyBuilder propBuilder = (VSSDK.IProvidePropertyBuilder)obj;
 
                 if (!propBuilder.ExecuteBuilder(
-                    propDesc.DISPID,
-                    guidString,
+                    _propDesc.DISPID,
+                    _guidString,
                     null,
                     parentHandle,
                     ref pValue,
@@ -76,7 +76,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 Debug.Fail("Failed to show property frame: " + ex.ErrorCode.ToString(CultureInfo.InvariantCulture));
             }
 
-            if (useValue.IsTrue() && (bldrType & VSSDK.CTLBLDTYPE.FEDITSOBJIDRECTLY) == 0)
+            if (useValue.IsTrue() && (_bldrType & VSSDK.CTLBLDTYPE.FEDITSOBJIDRECTLY) == 0)
             {
                 return pValue;
             }

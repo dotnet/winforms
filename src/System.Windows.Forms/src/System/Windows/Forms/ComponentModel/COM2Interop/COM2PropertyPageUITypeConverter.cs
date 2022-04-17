@@ -12,13 +12,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2PropertyPageDisplayService
     {
-        private readonly Com2PropertyDescriptor propDesc;
-        private Guid guid;
+        private readonly Com2PropertyDescriptor _propDesc;
+        private readonly Guid _guid;
 
         public Com2PropertyPageUITypeEditor(Com2PropertyDescriptor pd, Guid guid, UITypeEditor baseEditor) : base(baseEditor)
         {
-            propDesc = pd;
-            this.guid = guid;
+            _propDesc = pd;
+            _guid = guid;
         }
 
         /// <summary>
@@ -45,14 +45,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (instance is not null && !instance.GetType().IsArray)
                 {
-                    instance = propDesc.TargetObject;
+                    instance = _propDesc.TargetObject;
                     if (instance is ICustomTypeDescriptor customTypeDescriptor)
                     {
-                        instance = customTypeDescriptor.GetPropertyOwner(propDesc);
+                        instance = customTypeDescriptor.GetPropertyOwner(_propDesc);
                     }
                 }
 
-                propPageSvc.ShowPropertyPage(propDesc.Name, instance, (int)propDesc.DISPID, guid, hWndParent);
+                propPageSvc.ShowPropertyPage(_propDesc.Name, instance, (int)_propDesc.DISPID, _guid, hWndParent);
             }
             catch (Exception ex)
             {
