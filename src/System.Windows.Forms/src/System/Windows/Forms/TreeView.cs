@@ -138,7 +138,7 @@ namespace System.Windows.Forms
         internal TreeNodeCollection nodes;
         internal TreeNode editNode;
         internal TreeNode root;
-        internal Hashtable _nodeTable = new();
+        internal Dictionary<IntPtr, TreeNode> _nodeTable = new();
         internal bool nodesCollectionClear; //this is set when the treeNodeCollection is getting cleared and used by TreeView
         private MouseButtons downButton;
         private TreeViewDrawMode drawMode = TreeViewDrawMode.Normal;
@@ -1932,7 +1932,11 @@ namespace System.Windows.Forms
         ///  Note this can be null - particularly if any windows messages get generated during
         ///  the insertion of a tree node (TVM_INSERTITEM)
         /// </summary>
-        internal TreeNode NodeFromHandle(IntPtr handle) => (TreeNode)_nodeTable[handle];
+        internal TreeNode NodeFromHandle(IntPtr handle)
+        {
+            _nodeTable.TryGetValue(handle, out TreeNode treeNode);
+            return treeNode;
+        }
 
         /// <summary>
         ///  Fires the DrawNode event.
