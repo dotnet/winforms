@@ -532,7 +532,7 @@ dotnet_diagnostic.CA2249.severity = warning
 dotnet_diagnostic.CA2250.severity = warning
 
 # Use 'string.Equals'
-dotnet_diagnostic.CA2251.severity = none # TODO: warning
+dotnet_diagnostic.CA2251.severity = warning
 
 # This API requires opting into preview features
 dotnet_diagnostic.CA2252.severity = error

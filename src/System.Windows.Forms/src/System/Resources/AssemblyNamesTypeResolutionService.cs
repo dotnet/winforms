@@ -139,7 +139,7 @@ namespace System.Resources
                         List<AssemblyName> assemblyList = new List<AssemblyName>(_names.Length);
                         foreach (AssemblyName asmName in _names)
                         {
-                            if (string.Compare(assemblyName.Name, asmName.Name, StringComparison.OrdinalIgnoreCase) == 0)
+                            if (string.Equals(assemblyName.Name, asmName.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 assemblyList.Insert(0, asmName);
                             }
