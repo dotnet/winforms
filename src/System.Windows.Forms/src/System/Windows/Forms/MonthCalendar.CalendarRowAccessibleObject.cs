@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using static Interop;
@@ -96,6 +97,27 @@ namespace System.Windows.Forms
             }
 
             internal void ClearChildCollection() => _cellsAccessibleObjects = null;
+
+            internal void DisconnectChildren()
+            {
+                Debug.Assert(OsVersion.IsWindows8OrGreater);
+                if (_weekNumberCellAccessibleObject is not null)
+                {
+                    HRESULT result = UiaCore.UiaDisconnectProvider(_weekNumberCellAccessibleObject);
+                    Debug.Assert(result == 0);
+                }
+
+                if (_cellsAccessibleObjects is null)
+                {
+                    return;
+                }
+
+                foreach (CalendarCellAccessibleObject cell in _cellsAccessibleObjects)
+                {
+                    HRESULT result = UiaCore.UiaDisconnectProvider(cell);
+                    Debug.Assert(result == 0);
+                }
+            }
 
             public override string? Description
             {

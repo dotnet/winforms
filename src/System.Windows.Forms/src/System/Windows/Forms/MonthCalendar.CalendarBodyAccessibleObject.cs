@@ -51,6 +51,22 @@ namespace System.Windows.Forms
             public override Rectangle Bounds
                 => _monthCalendarAccessibleObject.GetCalendarPartRectangle(MCGIP.CALENDARBODY, _calendarIndex);
 
+            internal void DisconnectChildren()
+            {
+                Debug.Assert(OsVersion.IsWindows8OrGreater);
+                if (_rowsAccessibleObjects == null)
+                {
+                    return;
+                }
+
+                foreach (CalendarRowAccessibleObject row in _rowsAccessibleObjects)
+                {
+                    row.DisconnectChildren();
+                    HRESULT result = UiaCore.UiaDisconnectProvider(row);
+                    Debug.Assert(result == 0);
+                }
+            }
+
             internal void ClearChildCollection()
             {
                 if (RowsAccessibleObjects is not null)
