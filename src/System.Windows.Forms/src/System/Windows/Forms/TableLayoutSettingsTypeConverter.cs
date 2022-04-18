@@ -216,7 +216,7 @@ namespace System.Windows.Forms.Layout
                             nextIndex++;
                         }
 
-                        SizeType type = (SizeType)Enum.Parse(sizeTypeType, styleString.Substring(currentIndex, nextIndex - currentIndex), true);
+                        SizeType type = (SizeType)Enum.Parse(sizeTypeType, styleString.AsSpan(currentIndex, nextIndex - currentIndex), true);
 
                         // ----- Float Parsing --------------
                         // Find the next Digit (start of the float)

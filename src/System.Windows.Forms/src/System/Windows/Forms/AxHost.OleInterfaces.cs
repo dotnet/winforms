@@ -231,7 +231,7 @@ namespace System.Windows.Forms
                 if (name.StartsWith("[DISPID="))
                 {
                     int endIndex = name.IndexOf(']');
-                    DispatchID dispid = (DispatchID)int.Parse(name.Substring(8, endIndex - 8), CultureInfo.InvariantCulture);
+                    DispatchID dispid = (DispatchID)int.Parse(name.AsSpan(8, endIndex - 8), CultureInfo.InvariantCulture);
                     object ambient = _host.GetAmbientProperty(dispid);
                     if (ambient is not null)
                     {

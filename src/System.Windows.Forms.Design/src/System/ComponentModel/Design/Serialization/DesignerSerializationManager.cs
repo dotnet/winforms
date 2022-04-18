@@ -848,7 +848,7 @@ namespace System.ComponentModel.Design.Serialization
                         break;
                     }
 
-                    typeName = typeName.Substring(0, dotIndex) + "+" + typeName.Substring(dotIndex + 1, typeName.Length - dotIndex - 1);
+                    typeName = string.Concat(typeName.AsSpan(0, dotIndex), "+", typeName.AsSpan(dotIndex + 1, typeName.Length - dotIndex - 1));
                 }
             }
 

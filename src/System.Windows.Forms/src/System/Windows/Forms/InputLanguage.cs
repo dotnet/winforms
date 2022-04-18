@@ -351,7 +351,7 @@ namespace System.Windows.Forms
 
         private static string PadWithZeroes(string input, int length)
         {
-            return "0000000000000000".Substring(0, length - input.Length) + input;
+            return string.Concat("0000000000000000".AsSpan(0, length - input.Length), input);
         }
     }
 }

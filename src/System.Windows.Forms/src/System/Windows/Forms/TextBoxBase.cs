@@ -2034,8 +2034,8 @@ namespace System.Windows.Forms
             // IMPORTANT: Avoid off-by-1 errors!
             // The end value passed in is the character immediately after the last character selected.
 
-            int newStart = start == 0 ? 0 : e.GetByteCount(str.Substring(0, start));
-            end = newStart + e.GetByteCount(str.Substring(start, end - start));
+            int newStart = start == 0 ? 0 : e.GetByteCount(str.AsSpan(0, start));
+            end = newStart + e.GetByteCount(str.AsSpan(start, end - start));
             start = newStart;
 
             if (swap)
@@ -2055,7 +2055,7 @@ namespace System.Windows.Forms
             string txt = Text;
             if (txt.Length > 40)
             {
-                txt = txt.Substring(0, 40) + "...";
+                txt = string.Concat(txt.AsSpan(0, 40), "...");
             }
 
             return s + ", Text: " + txt.ToString();

@@ -31,7 +31,7 @@ namespace System
 
         public NoAssertContext()
         {
-            s_suppressedThreads.AddOrUpdate(Thread.CurrentThread.ManagedThreadId, 1, (key, oldValue) => oldValue + 1);
+            s_suppressedThreads.AddOrUpdate(Environment.CurrentManagedThreadId, 1, (key, oldValue) => oldValue + 1);
 
             // Lock to make sure we are hooked properly if two threads come into the constructor/dispose at the same time.
             lock (s_lock)
@@ -51,7 +51,7 @@ namespace System
         {
             GC.SuppressFinalize(this);
 
-            int currentThread = Thread.CurrentThread.ManagedThreadId;
+            int currentThread = Environment.CurrentManagedThreadId;
             if (s_suppressedThreads.TryRemove(currentThread, out int count))
             {
                 if (count > 1)
@@ -91,7 +91,7 @@ namespace System
 
             public override void Fail(string message)
             {
-                if (!s_suppressedThreads.TryGetValue(Thread.CurrentThread.ManagedThreadId, out _))
+                if (!s_suppressedThreads.TryGetValue(Environment.CurrentManagedThreadId, out _))
                 {
                     s_defaultListener.Fail(message);
                 }
@@ -99,7 +99,7 @@ namespace System
 
             public override void Fail(string message, string detailMessage)
             {
-                if (!s_suppressedThreads.TryGetValue(Thread.CurrentThread.ManagedThreadId, out _))
+                if (!s_suppressedThreads.TryGetValue(Environment.CurrentManagedThreadId, out _))
                 {
                     s_defaultListener.Fail(message, detailMessage);
                 }
@@ -109,7 +109,7 @@ namespace System
 
             public override void Write(string message)
             {
-                if (!s_suppressedThreads.TryGetValue(Thread.CurrentThread.ManagedThreadId, out _))
+                if (!s_suppressedThreads.TryGetValue(Environment.CurrentManagedThreadId, out _))
                 {
                     s_defaultListener.Write(message);
                 }
@@ -117,7 +117,7 @@ namespace System
 
             public override void WriteLine(string message)
             {
-                if (!s_suppressedThreads.TryGetValue(Thread.CurrentThread.ManagedThreadId, out _))
+                if (!s_suppressedThreads.TryGetValue(Environment.CurrentManagedThreadId, out _))
                 {
                     s_defaultListener.WriteLine(message);
                 }

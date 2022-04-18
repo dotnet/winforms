@@ -1135,7 +1135,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 else
                 {
-                    b.Append(baseName.Substring(i));
+                    b.Append(baseName.AsSpan(i));
                     break;
                 }
             }
