@@ -6361,7 +6361,10 @@ namespace System.Windows.Forms
 
             if (Modal && _dialogResult == DialogResult.None)
             {
-                DialogResult = DialogResult.Cancel;
+                if (GetState(States.Recreate) == false)
+                {
+                    DialogResult = DialogResult.Cancel;
+                }
             }
         }
 
