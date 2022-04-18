@@ -102,9 +102,7 @@ namespace System.Windows.Forms
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId
-                        => _owningTreeView.CheckBoxes
-                            ? UiaCore.UIA.CheckBoxControlTypeId
-                            : UiaCore.UIA.TreeItemControlTypeId,
+                        => UiaCore.UIA.TreeItemControlTypeId,
                     UiaCore.UIA.IsEnabledPropertyId
                         => _owningTreeView.Enabled,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
