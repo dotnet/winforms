@@ -244,7 +244,7 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         // If no inner cell entire DGV should be announced as focused by Narrator.
                         // Else only inner cell should be announced as focused by Narrator but not entire DGV.
-                        return RowCount == 0;
+                        return _ownerDataGridView.Focused;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return _ownerDataGridView.CanFocus;
                     case UiaCore.UIA.IsControlElementPropertyId:
