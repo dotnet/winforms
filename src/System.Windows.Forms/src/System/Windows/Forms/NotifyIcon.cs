@@ -36,34 +36,34 @@ namespace System.Windows.Forms
         private const int WM_TRAYMOUSEMESSAGE = (int)User32.WM.USER + 1024;
         private static readonly User32.WM WM_TASKBARCREATED = User32.RegisterWindowMessageW("TaskbarCreated");
 
-        private readonly object syncObj = new object();
+        private readonly object _syncObj = new object();
 
-        private Icon? icon;
-        private string text = string.Empty;
-        private readonly uint id;
-        private bool added;
-        private NotifyIconNativeWindow window;
-        private ContextMenuStrip? contextMenuStrip;
-        private ToolTipIcon balloonTipIcon;
-        private string balloonTipText = string.Empty;
-        private string balloonTipTitle = string.Empty;
+        private Icon? _icon;
+        private string _text = string.Empty;
+        private readonly uint _id;
+        private bool _added;
+        private NotifyIconNativeWindow _window;
+        private ContextMenuStrip? _contextMenuStrip;
+        private ToolTipIcon _balloonTipIcon;
+        private string _balloonTipText = string.Empty;
+        private string _balloonTipTitle = string.Empty;
         private static uint s_nextId;
-        private object? userData;
-        private bool doubleClick; // checks if doubleclick is fired
+        private object? _userData;
+        private bool _doubleClick; // checks if doubleclick is fired
 
         // Visible defaults to false, but the NotifyIconDesigner makes it seem like the default is
         // true.  We do this because while visible is the more common case, if it was a true default,
         // there would be no way to create a hidden NotifyIcon without being visible for a moment.
-        private bool visible;
+        private bool _visible;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="NotifyIcon"/> class.
         /// </summary>
         public NotifyIcon()
         {
-            id = ++s_nextId;
-            window = new NotifyIconNativeWindow(this);
-            UpdateIcon(visible);
+            _id = ++s_nextId;
+            _window = new NotifyIconNativeWindow(this);
+            UpdateIcon(_visible);
         }
 
         /// <summary>
@@ -89,13 +89,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return balloonTipText;
+                return _balloonTipText;
             }
             set
             {
-                if (value != balloonTipText)
+                if (value != _balloonTipText)
                 {
-                    balloonTipText = value;
+                    _balloonTipText = value;
                 }
             }
         }
@@ -111,15 +111,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                return balloonTipIcon;
+                return _balloonTipIcon;
             }
             set
             {
                 //valid values are 0x0 to 0x3
                 SourceGenerated.EnumValidator.Validate(value);
-                if (value != balloonTipIcon)
+                if (value != _balloonTipIcon)
                 {
-                    balloonTipIcon = value;
+                    _balloonTipIcon = value;
                 }
             }
         }
@@ -136,13 +136,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return balloonTipTitle;
+                return _balloonTipTitle;
             }
             set
             {
-                if (value != balloonTipTitle)
+                if (value != _balloonTipTitle)
                 {
-                    balloonTipTitle = value;
+                    _balloonTipTitle = value;
                 }
             }
         }
@@ -189,12 +189,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                return contextMenuStrip;
+                return _contextMenuStrip;
             }
 
             set
             {
-                contextMenuStrip = value;
+                _contextMenuStrip = value;
             }
         }
 
@@ -210,14 +210,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return icon;
+                return _icon;
             }
             set
             {
-                if (icon != value)
+                if (_icon != value)
                 {
-                    icon = value;
-                    UpdateIcon(visible);
+                    _icon = value;
+                    UpdateIcon(_visible);
                 }
             }
         }
@@ -236,7 +236,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return text;
+                return _text;
             }
             set
             {
@@ -245,15 +245,15 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
-                if (value is not null && !value.Equals(text))
+                if (value is not null && !value.Equals(_text))
                 {
                     if (value.Length > MaxTextSize)
                     {
                         throw new ArgumentOutOfRangeException(nameof(Text), value, SR.TrayIcon_TextTooLong);
                     }
 
-                    text = value;
-                    if (added)
+                    _text = value;
+                    if (_added)
                     {
                         UpdateIcon(true);
                     }
@@ -272,14 +272,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return visible;
+                return _visible;
             }
             set
             {
-                if (visible != value)
+                if (_visible != value)
                 {
                     UpdateIcon(value);
-                    visible = value;
+                    _visible = value;
                 }
             }
         }
@@ -294,11 +294,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return userData;
+                return _userData;
             }
             set
             {
-                userData = value;
+                _userData = value;
             }
         }
 
@@ -395,24 +395,24 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (window is not null)
+                if (_window is not null)
                 {
-                    icon = null;
+                    _icon = null;
                     Text = string.Empty;
                     UpdateIcon(false);
-                    window.DestroyHandle();
-                    window = null!;
-                    contextMenuStrip = null;
+                    _window.DestroyHandle();
+                    _window = null!;
+                    _contextMenuStrip = null;
                 }
             }
             else
             {
                 // This same post is done in ControlNativeWindow's finalize method, so if you change
                 // it, change it there too.
-                if (window is not null && window.Handle != IntPtr.Zero)
+                if (_window is not null && _window.Handle != IntPtr.Zero)
                 {
-                    User32.PostMessageW(window, User32.WM.CLOSE);
-                    window.ReleaseHandle();
+                    User32.PostMessageW(_window, User32.WM.CLOSE);
+                    _window.ReleaseHandle();
                 }
             }
 
@@ -529,7 +529,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void ShowBalloonTip(int timeout)
         {
-            ShowBalloonTip(timeout, balloonTipTitle, balloonTipText, balloonTipIcon);
+            ShowBalloonTip(timeout, _balloonTipTitle, _balloonTipText, _balloonTipIcon);
         }
 
         /// <summary>
@@ -565,7 +565,7 @@ namespace System.Windows.Forms
             //valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(tipIcon, nameof(tipIcon));
 
-            if (added)
+            if (_added)
             {
                 // Bail if in design mode...
                 if (DesignMode)
@@ -577,15 +577,15 @@ namespace System.Windows.Forms
                 {
                     cbSize = (uint)sizeof(NOTIFYICONDATAW),
                     uFlags = NIF.INFO,
-                    uID = id,
+                    uID = _id,
                     uTimeoutOrVersion = (uint)timeout
                 };
-                if (window.Handle == IntPtr.Zero)
+                if (_window.Handle == IntPtr.Zero)
                 {
-                    window.CreateHandle(new CreateParams());
+                    _window.CreateHandle(new CreateParams());
                 }
 
-                data.hWnd = window.Handle;
+                data.hWnd = _window.Handle;
                 data.InfoTitle = tipTitle;
                 data.Info = tipText;
                 switch (tipIcon)
@@ -613,18 +613,18 @@ namespace System.Windows.Forms
         /// </summary>
         private void ShowContextMenu()
         {
-            if (contextMenuStrip is not null)
+            if (_contextMenuStrip is not null)
             {
                 User32.GetCursorPos(out Point pt);
 
                 // Summary: the current window must be made the foreground window
                 // before calling TrackPopupMenuEx, and a task switch must be
                 // forced after the call.
-                User32.SetForegroundWindow(window);
+                User32.SetForegroundWindow(_window);
 
                 // this will set the context menu strip to be toplevel
                 // and will allow us to overlap the system tray
-                contextMenuStrip.ShowInTaskbar(pt.X, pt.Y);
+                _contextMenuStrip.ShowInTaskbar(pt.X, pt.Y);
             }
         }
 
@@ -633,7 +633,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void UpdateIcon(bool showIconInTray)
         {
-            lock (syncObj)
+            lock (_syncObj)
             {
                 // Bail if in design mode...
                 if (DesignMode)
@@ -641,49 +641,49 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                window.LockReference(showIconInTray);
+                _window.LockReference(showIconInTray);
 
                 var data = new NOTIFYICONDATAW
                 {
                     cbSize = (uint)sizeof(NOTIFYICONDATAW),
                     uCallbackMessage = WM_TRAYMOUSEMESSAGE,
                     uFlags = NIF.MESSAGE,
-                    uID = id
+                    uID = _id
                 };
                 if (showIconInTray)
                 {
-                    if (window.Handle == IntPtr.Zero)
+                    if (_window.Handle == IntPtr.Zero)
                     {
-                        window.CreateHandle(new CreateParams());
+                        _window.CreateHandle(new CreateParams());
                     }
                 }
 
-                data.hWnd = window.Handle;
-                if (icon is not null)
+                data.hWnd = _window.Handle;
+                if (_icon is not null)
                 {
                     data.uFlags |= NIF.ICON;
-                    data.hIcon = icon.Handle;
+                    data.hIcon = _icon.Handle;
                 }
 
                 data.uFlags |= NIF.TIP;
-                data.Tip = text;
+                data.Tip = _text;
 
-                if (showIconInTray && icon is not null)
+                if (showIconInTray && _icon is not null)
                 {
-                    if (!added)
+                    if (!_added)
                     {
                         Shell_NotifyIconW(NIM.ADD, ref data);
-                        added = true;
+                        _added = true;
                     }
                     else
                     {
                         Shell_NotifyIconW(NIM.MODIFY, ref data);
                     }
                 }
-                else if (added)
+                else if (_added)
                 {
                     Shell_NotifyIconW(NIM.DELETE, ref data);
-                    added = false;
+                    _added = false;
                 }
             }
         }
@@ -697,7 +697,7 @@ namespace System.Windows.Forms
             {
                 OnDoubleClick(new MouseEventArgs(button, 2, 0, 0, 0));
                 OnMouseDoubleClick(new MouseEventArgs(button, 2, 0, 0, 0));
-                doubleClick = true;
+                _doubleClick = true;
             }
 
             OnMouseDown(new MouseEventArgs(button, clicks, 0, 0, 0));
@@ -718,19 +718,19 @@ namespace System.Windows.Forms
         {
             OnMouseUp(new MouseEventArgs(button, 0, 0, 0, 0));
             //subhag
-            if (!doubleClick)
+            if (!_doubleClick)
             {
                 OnClick(new MouseEventArgs(button, 0, 0, 0, 0));
                 OnMouseClick(new MouseEventArgs(button, 0, 0, 0, 0));
             }
 
-            doubleClick = false;
+            _doubleClick = false;
         }
 
         private void WmTaskbarCreated(ref Message m)
         {
-            added = false;
-            UpdateIcon(visible);
+            _added = false;
+            UpdateIcon(_visible);
         }
 
         private void WndProc(ref Message msg)
@@ -768,7 +768,7 @@ namespace System.Windows.Forms
                             WmMouseDown(ref msg, MouseButtons.Right, 1);
                             break;
                         case User32.WM.RBUTTONUP:
-                            if (contextMenuStrip is not null)
+                            if (_contextMenuStrip is not null)
                             {
                                 ShowContextMenu();
                             }
@@ -800,7 +800,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        window.DefWndProc(ref msg);
+                        _window.DefWndProc(ref msg);
                     }
 
                     break;
@@ -817,7 +817,7 @@ namespace System.Windows.Forms
                         WmTaskbarCreated(ref msg);
                     }
 
-                    window.DefWndProc(ref msg);
+                    _window.DefWndProc(ref msg);
                     break;
             }
         }
