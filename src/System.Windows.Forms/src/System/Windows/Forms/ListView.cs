@@ -128,11 +128,11 @@ namespace System.Windows.Forms
         private ListViewGroup? _defaultGroup;
         private ListViewGroup? _focusedGroup;
 
-        // Invariant: the table always contains all Items in the ListView, and maps IDs -> Items.
+        // Invariant: the dictionary always contains all Items in the ListView, and maps IDs -> Items.
         // listItemsArray is null if the handle is created; otherwise, it contains all Items.
         // We do not try to sort listItemsArray as items are added, but during a handle recreate
         // we will make sure we get the items in the same order the ListView displays them.
-        private readonly Hashtable _listItemsTable = new Hashtable(); // elements are ListViewItem's
+        private readonly Dictionary<int, ListViewItem> _listItemsById = new();
         private List<ListViewItem>? _listViewItems = new();
 
         private Size _tileSize = Size.Empty;
@@ -2504,7 +2504,7 @@ namespace System.Windows.Forms
             Debug.Assert(_listItemSorter is not null, "null sorter!");
             if (_listItemSorter is not null)
             {
-                return _listItemSorter.Compare(_listItemsTable[(int)lparam1], _listItemsTable[(int)lparam2]);
+                return _listItemSorter.Compare(_listItemsById[(int)lparam1], _listItemsById[(int)lparam2]);
             }
             else
             {
@@ -4108,7 +4108,6 @@ namespace System.Windows.Forms
             }
 
             // loop through the items and give them id's so we can identify them later.
-            //
             for (int i = 0; i < items.Length; i++)
             {
                 ListViewItem item = items[i];
@@ -4119,16 +4118,14 @@ namespace System.Windows.Forms
                 }
 
                 // create an ID..
-                //
                 int itemID = GenerateUniqueID();
-                Debug.Assert(!_listItemsTable.ContainsKey(itemID), "internal hash table inconsistent -- inserting item, but it's already in the hash table");
-                _listItemsTable.Add(itemID, item);
+                Debug.Assert(!_listItemsById.ContainsKey(itemID), "internal hash table inconsistent -- inserting item, but it's already in the hash table");
+                _listItemsById.Add(itemID, item);
 
                 _itemCount++;
                 item.Host(this, itemID, -1);
 
                 // if there's no handle created, just ad them to our list items array.
-                //
                 if (!IsHandleCreated)
                 {
                     Debug.Assert(_listViewItems is not null, "listItemsArray is null, but the handle isn't created");

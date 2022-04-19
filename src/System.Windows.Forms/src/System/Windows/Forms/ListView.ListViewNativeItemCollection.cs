@@ -80,7 +80,7 @@ namespace System.Windows.Forms
 
                         if (owner.IsHandleCreated && !owner.ListViewHandleDestroyed)
                         {
-                            return (ListViewItem)owner._listItemsTable[DisplayIndexToID(displayIndex)];
+                            return owner._listItemsById[DisplayIndexToID(displayIndex)];
                         }
                         else
                         {
@@ -301,7 +301,7 @@ namespace System.Windows.Forms
                     owner._listViewItems.Clear();
                 }
 
-                owner._listItemsTable.Clear();
+                owner._listItemsById.Clear();
                 if (owner.IsHandleCreated && !owner.CheckBoxes)
                 {
                     owner._savedCheckedItems = null;
@@ -320,7 +320,7 @@ namespace System.Windows.Forms
                 owner.ApplyUpdateCachedItems();
                 if (owner.IsHandleCreated && !owner.ListViewHandleDestroyed)
                 {
-                    return owner._listItemsTable[item.ID] == item;
+                    return owner._listItemsById[item.ID] == item;
                 }
                 else
                 {
@@ -445,7 +445,7 @@ namespace System.Windows.Forms
                 }
 
                 owner._itemCount--;
-                owner._listItemsTable.Remove(itemID);
+                owner._listItemsById.Remove(itemID);
 
                 if (owner.ExpectingMouseUp)
                 {
