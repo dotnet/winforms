@@ -8,7 +8,7 @@ namespace System.Windows.Forms.Layout
 {
     public abstract class LayoutEngine
     {
-        internal IArrangedElement CastToArrangedElement(object obj)
+        internal static IArrangedElement CastToArrangedElement(object obj)
         {
             if (obj is not IArrangedElement element)
             {

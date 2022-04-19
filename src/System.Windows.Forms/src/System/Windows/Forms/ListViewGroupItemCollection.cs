@@ -97,7 +97,7 @@ namespace System.Windows.Forms
             return item;
         }
 
-        private void MoveToGroup(ListViewItem item, ListViewGroup? newGroup)
+        private static void MoveToGroup(ListViewItem item, ListViewGroup? newGroup)
         {
             ListViewGroup oldGroup = item.Group;
             if (oldGroup != newGroup)
@@ -121,7 +121,7 @@ namespace System.Windows.Forms
 
         public void RemoveAt(int index) => Remove(this[index]);
 
-        private void UpdateNativeListViewItem(ListViewItem item)
+        private static void UpdateNativeListViewItem(ListViewItem item)
         {
             if (item.ListView is not null && item.ListView.IsHandleCreated && !item.ListView.InsertingItemsNatively)
             {

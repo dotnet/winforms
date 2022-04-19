@@ -188,7 +188,7 @@ namespace System.Windows.Forms.ButtonInternal
             hdc.DrawLine(bottomRightInsetPen, p4, p1);  // Right  (bottom-up)
         }
 
-        private void Draw3DBorderNormal(IDeviceContext deviceContext, ref Rectangle bounds, ColorData colors)
+        private static void Draw3DBorderNormal(IDeviceContext deviceContext, ref Rectangle bounds, ColorData colors)
         {
             using var hdc = new DeviceContextHdcScope(deviceContext);
 

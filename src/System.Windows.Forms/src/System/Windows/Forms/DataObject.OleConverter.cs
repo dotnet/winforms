@@ -111,7 +111,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the specified form from the specified hglobal.
             /// </summary>
-            private object? GetDataFromHGLOBAL(string format, IntPtr hglobal)
+            private static object? GetDataFromHGLOBAL(string format, IntPtr hglobal)
             {
                 object? data = null;
 
@@ -304,7 +304,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Creates an Stream from the data stored in handle.
             /// </summary>
-            private Stream ReadByteStreamFromHandle(IntPtr handle, out bool isSerializedObject)
+            private static Stream ReadByteStreamFromHandle(IntPtr handle, out bool isSerializedObject)
             {
                 IntPtr ptr = Kernel32.GlobalLock(handle);
                 if (ptr == IntPtr.Zero)
@@ -360,7 +360,7 @@ namespace System.Windows.Forms
             ///  Creates a new instance of the Object that has been persisted into the
             ///  handle.
             /// </summary>
-            private object ReadObjectFromHandle(IntPtr handle, bool restrictDeserialization)
+            private static object ReadObjectFromHandle(IntPtr handle, bool restrictDeserialization)
             {
                 Stream stream = ReadByteStreamFromHandle(handle, out bool isSerializedObject);
                 if (isSerializedObject)
@@ -389,7 +389,7 @@ namespace System.Windows.Forms
             ///  Parses the HDROP format and returns a list of strings using
             ///  the DragQueryFile function.
             /// </summary>
-            private string[]? ReadFileListFromHandle(IntPtr hdrop)
+            private static string[]? ReadFileListFromHandle(IntPtr hdrop)
             {
                 uint count = Shell32.DragQueryFileW(hdrop, 0xFFFFFFFF, null);
                 if (count == 0)
@@ -419,7 +419,7 @@ namespace System.Windows.Forms
             ///  unicode is set to true, then the string is assume to be Unicode,
             ///  else DBCS (ASCI) is assumed.
             /// </summary>
-            private unsafe string ReadStringFromHandle(IntPtr handle, bool unicode)
+            private static unsafe string ReadStringFromHandle(IntPtr handle, bool unicode)
             {
                 string? stringData = null;
 
@@ -443,7 +443,7 @@ namespace System.Windows.Forms
                 return stringData;
             }
 
-            private unsafe string ReadHtmlFromHandle(IntPtr handle)
+            private static unsafe string ReadHtmlFromHandle(IntPtr handle)
             {
                 IntPtr ptr = Kernel32.GlobalLock(handle);
                 try

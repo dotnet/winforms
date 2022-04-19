@@ -96,13 +96,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
 #if DEBUG
             ComNativeDescriptor cnd = new ComNativeDescriptor();
-            dbgObjName = cnd.GetName(obj);
+            dbgObjName = ComNativeDescriptor.GetName(obj);
             if (dbgObjName is null)
             {
                 dbgObjName = "(null)";
             }
 
-            dbgObjClass = cnd.GetClassName(obj);
+            dbgObjClass = ComNativeDescriptor.GetClassName(obj);
             if (dbgObjClass is null)
             {
                 dbgObjClass = "(null)";

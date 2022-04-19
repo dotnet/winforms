@@ -403,7 +403,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Little private routine that helps with auto-sizing.
         /// </summary>
-        private int PreferredDimension
+        private static int PreferredDimension
         {
             get
             {

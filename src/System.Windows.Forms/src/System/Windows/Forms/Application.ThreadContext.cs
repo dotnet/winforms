@@ -768,7 +768,7 @@ namespace System.Windows.Forms
             ///  Determines if it is OK to allow an application to quit and shutdown
             ///  the runtime.  We only allow this if we own the base message pump.
             /// </summary>
-            internal bool GetAllowQuit()
+            internal static bool GetAllowQuit()
                 => s_totalMessageLoopCount > 0 && s_baseLoopReason == msoloop.Main;
 
             /// <summary>

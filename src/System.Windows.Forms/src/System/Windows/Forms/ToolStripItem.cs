@@ -674,7 +674,7 @@ namespace System.Windows.Forms
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        private RightToLeft DefaultRightToLeft => RightToLeft.Inherit;
+        private static RightToLeft DefaultRightToLeft => RightToLeft.Inherit;
 
         /// <summary>
         ///  Occurs when the control is double clicked.

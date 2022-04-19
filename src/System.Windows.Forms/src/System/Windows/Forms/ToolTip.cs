@@ -1668,7 +1668,7 @@ namespace System.Windows.Forms
             return new Point(optimalLocation.Left, optimalLocation.Top);
         }
 
-        private bool IsCompetingLocationBetter(long originalLocationClippedArea,
+        private static bool IsCompetingLocationBetter(long originalLocationClippedArea,
             long originalLocationWeight,
             long originalLocationAreaWithinTopControl,
             int originalIndex,

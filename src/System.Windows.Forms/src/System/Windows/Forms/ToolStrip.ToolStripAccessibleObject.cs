@@ -235,7 +235,7 @@ namespace System.Windows.Forms
             ///  from the accessibility tree. It's necessary, because hosted native controls internally add accessible objects
             ///  to the accessibility tree, and thus create duplicated. To avoid duplicates, remove hosted items with native accessibility objects from the tree.
             /// </summary>
-            private AccessibleObject? GetFollowingChildFragment(int index, ToolStripItemCollection items, UiaCore.NavigateDirection direction)
+            private static AccessibleObject? GetFollowingChildFragment(int index, ToolStripItemCollection items, UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
@@ -418,7 +418,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            private bool ShouldItemBeSkipped(Control hostedControl)
+            private static bool ShouldItemBeSkipped(Control hostedControl)
                 => hostedControl is null
                     || !hostedControl.SupportsUiaProviders
                     || (hostedControl is Label label && string.IsNullOrEmpty(label.Text));

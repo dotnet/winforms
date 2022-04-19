@@ -1829,7 +1829,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void NotifyAboutGotFocus(TreeNode treeNode)
+        private static void NotifyAboutGotFocus(TreeNode treeNode)
         {
             if (treeNode is not null)
             {
@@ -1837,7 +1837,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void NotifyAboutLostFocus(TreeNode treeNode)
+        private static void NotifyAboutLostFocus(TreeNode treeNode)
         {
             if (treeNode is not null)
             {

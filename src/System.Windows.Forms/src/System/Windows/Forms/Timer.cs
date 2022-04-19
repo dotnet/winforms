@@ -234,7 +234,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns true if we need to marshal across threads to access this timer's HWND.
             /// </summary>
-            private bool GetInvokeRequired(IntPtr hWnd)
+            private static bool GetInvokeRequired(IntPtr hWnd)
             {
                 if (hWnd != IntPtr.Zero)
                 {

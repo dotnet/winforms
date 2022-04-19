@@ -51,7 +51,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void RenderToolStripBorderInternal(ToolStripRenderEventArgs e)
+        private static void RenderToolStripBorderInternal(ToolStripRenderEventArgs e)
         {
             Rectangle bounds = new Rectangle(Point.Empty, e.ToolStrip.Size);
             Graphics g = e.Graphics;

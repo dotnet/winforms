@@ -62,11 +62,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     return s_none;
                 }
 
-                string text = ComNativeDescriptor.Instance.GetName(value);
+                string text = ComNativeDescriptor.GetName(value);
 
                 if (text is null || text.Length == 0)
                 {
-                    text = ComNativeDescriptor.Instance.GetClassName(value);
+                    text = ComNativeDescriptor.GetClassName(value);
                 }
 
                 if (text is null)

@@ -167,7 +167,7 @@ namespace System.Windows.Forms
                 return rval;
             }
 
-            internal string GetNameForControl(Control ctl)
+            internal static string GetNameForControl(Control ctl)
             {
                 string name = (ctl.Site is not null) ? ctl.Site.Name : ctl.Name;
                 return name ?? "";
@@ -1122,7 +1122,7 @@ namespace System.Windows.Forms
                     get
                     {
                         Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getName for proxy for {GetP()}");
-                        return GetC().GetNameForControl(GetP());
+                        return GetNameForControl(GetP());
                     }
                 }
 

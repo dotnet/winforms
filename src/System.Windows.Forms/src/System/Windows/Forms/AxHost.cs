@@ -2289,7 +2289,7 @@ namespace System.Windows.Forms
 
                     return null;
                 case Ole32.DispatchID.AMBIENT_DISPLAYNAME:
-                    string rval = GetParentContainer().GetNameForControl(this);
+                    string rval = AxContainer.GetNameForControl(this);
                     if (rval is null)
                     {
                         rval = string.Empty;
@@ -3610,12 +3610,12 @@ namespace System.Windows.Forms
         }
 
         private const int HMperInch = 2540;
-        private int Pix2HM(int pix, int logP)
+        private static int Pix2HM(int pix, int logP)
         {
             return (HMperInch * pix + (logP >> 1)) / logP;
         }
 
-        private int HM2Pix(int hm, int logP)
+        private static int HM2Pix(int hm, int logP)
         {
             return (logP * hm + HMperInch / 2) / HMperInch;
         }
@@ -4298,7 +4298,7 @@ namespace System.Windows.Forms
             return DateTime.FromOADate(date);
         }
 
-        private int Convert2int(object o, bool xDirection)
+        private static int Convert2int(object o, bool xDirection)
         {
             o = ((Array)o).GetValue(0);
 
@@ -4312,7 +4312,7 @@ namespace System.Windows.Forms
             return Convert.ToInt32(o, CultureInfo.InvariantCulture);
         }
 
-        private short Convert2short(object o)
+        private static short Convert2short(object o)
         {
             o = ((Array)o).GetValue(0);
             return Convert.ToInt16(o, CultureInfo.InvariantCulture);

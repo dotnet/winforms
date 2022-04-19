@@ -105,7 +105,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Give an extra pixel for breathing room.
                 // Calling base.PropertyDepth to avoid the -1 in our override.
                 return 1 + gridHost.OutlineIconSize + OutlineIconPadding
-                    + (base.PropertyDepth * gridHost.DefaultOutlineIndent);
+                    + (base.PropertyDepth * PropertyGridView.DefaultOutlineIndent);
             }
         }
 

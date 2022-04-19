@@ -700,7 +700,7 @@ namespace System.Resources
             return Convert.FromBase64String(text);
         }
 
-        private Type ResolveType(string typeName, ITypeResolutionService typeResolver)
+        private static Type ResolveType(string typeName, ITypeResolutionService typeResolver)
         {
             Type resolvedType = null;
             if (typeResolver is not null)

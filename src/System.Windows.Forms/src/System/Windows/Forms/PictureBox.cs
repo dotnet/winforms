@@ -149,7 +149,7 @@ namespace System.Windows.Forms
         ///  Try to build a URI, but if that fails, that means it's a relative path, and we treat it as
         ///  relative to the working directory (which is what GetFullPath uses).
         /// </summary>
-        private Uri CalculateUri(string path)
+        private static Uri CalculateUri(string path)
         {
             try
             {

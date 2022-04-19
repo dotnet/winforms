@@ -2670,7 +2670,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool ContainsNavigationKeyCode(Keys keyCode)
+        private static bool ContainsNavigationKeyCode(Keys keyCode)
         {
             switch (keyCode)
             {

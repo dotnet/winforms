@@ -1626,7 +1626,9 @@ namespace System.Windows.Forms
         }
 
         [Conditional("DEBUG")]
+#pragma warning disable CA1822 // Mark members as static
         internal void CheckInCreate()
+#pragma warning restore CA1822 // Mark members as static
         {
 #if DEBUG
             if (_inGridViewCreate)
@@ -1637,7 +1639,7 @@ namespace System.Windows.Forms
 #endif
         }
 
-        private ToolStripSeparator CreateSeparatorButton()
+        private static ToolStripSeparator CreateSeparatorButton()
         {
             ToolStripSeparator button = new();
             return button;
@@ -2361,7 +2363,7 @@ namespace System.Windows.Forms
 
                 // This is so changes to names of native objects will be reflected in the combo box.
                 object obj = GetUnwrappedObject(0);
-                if (ComNativeDescriptor.Instance.IsNameDispId(obj, dispID) || dispID == Ole32.DispatchID.Name)
+                if (ComNativeDescriptor.IsNameDispId(obj, dispID) || dispID == Ole32.DispatchID.Name)
                 {
                     OnComComponentNameChanged(new ComponentRenameEventArgs(obj, null, TypeDescriptor.GetClassName(obj)));
                 }

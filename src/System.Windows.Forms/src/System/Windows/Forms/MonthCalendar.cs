@@ -572,7 +572,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private DateTime Now => DateTime.Now.Date;
+        private static DateTime Now => DateTime.Now.Date;
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -1185,7 +1185,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Compares only the day and month of each time.
         /// </summary>
-        private bool CompareDayAndMonth(DateTime t1, DateTime t2)
+        private static bool CompareDayAndMonth(DateTime t1, DateTime t2)
             => (t1.Day == t2.Day && t1.Month == t2.Month);
 
         protected override void CreateHandle()
@@ -1234,7 +1234,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the enumeration value corresponding to the hit area.
         /// </summary>
-        private HitArea GetHitArea(MCHT hit)
+        private static HitArea GetHitArea(MCHT hit)
         {
             switch (hit)
             {
@@ -2270,7 +2270,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the WM_GETDLGCODE message.
         /// </summary>
-        private void WmGetDlgCode(ref Message m)
+        private static void WmGetDlgCode(ref Message m)
         {
             // The MonthCalendar does its own handling of arrow keys.
             m.ResultInternal = (nint)User32.DLGC.WANTARROWS;

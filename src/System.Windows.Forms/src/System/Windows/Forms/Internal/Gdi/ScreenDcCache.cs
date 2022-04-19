@@ -98,7 +98,7 @@ namespace System.Windows.Forms
         }
 
         [Conditional("DEBUG")]
-        private void ValidateHdc(Gdi32.HDC hdc)
+        private static void ValidateHdc(Gdi32.HDC hdc)
         {
             // A few sanity checks against the HDC to see if it was left in a dirty state
 

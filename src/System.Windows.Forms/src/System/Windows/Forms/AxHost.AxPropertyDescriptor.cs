@@ -323,7 +323,7 @@ namespace System.Windows.Forms
                         catch (ExternalException ex)
                         {
                             hr = (HRESULT)ex.ErrorCode;
-                            Debug.Fail($"An exception occurred inside IPerPropertyBrowsing::GetPredefinedStrings(dispid={dispid}), object type={new ComNativeDescriptor().GetClassName(ppb)}");
+                            Debug.Fail($"An exception occurred inside IPerPropertyBrowsing::GetPredefinedStrings(dispid={dispid}), object type={ComNativeDescriptor.GetClassName(ppb)}");
                         }
 
                         if (hr == HRESULT.S_OK)

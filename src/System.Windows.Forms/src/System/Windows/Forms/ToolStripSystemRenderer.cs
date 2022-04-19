@@ -633,7 +633,7 @@ namespace System.Windows.Forms
         ///  everyone should just call this private shared method.  Users need to override each item they want
         ///  to change the look and feel of.
         ///  </summary>
-        private void RenderItemInternal(ToolStripItemRenderEventArgs e)
+        private static void RenderItemInternal(ToolStripItemRenderEventArgs e)
         {
             ToolStripItem item = e.Item;
             Graphics g = e.Graphics;
@@ -679,7 +679,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  </summary>
-        private void RenderSeparatorInternal(Graphics g, ToolStripItem item, Rectangle bounds, bool vertical)
+        private static void RenderSeparatorInternal(Graphics g, ToolStripItem item, Rectangle bounds, bool vertical)
         {
             VisualStyleElement separator = (vertical)
                 ? VisualStyleElement.ToolBar.SeparatorHorizontal.Normal
@@ -734,7 +734,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void RenderSmall3DBorderInternal(Graphics g, Rectangle bounds, ToolBarState state, bool rightToLeft)
+        private static void RenderSmall3DBorderInternal(Graphics g, Rectangle bounds, ToolBarState state, bool rightToLeft)
         {
             if ((state == ToolBarState.Hot) || (state == ToolBarState.Pressed) || (state == ToolBarState.Checked))
             {
@@ -752,7 +752,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void RenderStatusStripBorder(ToolStripRenderEventArgs e)
+        private static void RenderStatusStripBorder(ToolStripRenderEventArgs e)
         {
             if (!Application.RenderWithVisualStyles)
             {

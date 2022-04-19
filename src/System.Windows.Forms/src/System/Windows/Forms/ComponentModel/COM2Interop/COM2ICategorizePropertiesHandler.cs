@@ -11,7 +11,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     {
         public override Type Interface => typeof(VSSDK.ICategorizeProperties);
 
-        private unsafe string? GetCategoryFromObject(object obj, Ole32.DispatchID dispid)
+        private static unsafe string? GetCategoryFromObject(object obj, Ole32.DispatchID dispid)
         {
             if (obj is not VSSDK.ICategorizeProperties catObj)
             {

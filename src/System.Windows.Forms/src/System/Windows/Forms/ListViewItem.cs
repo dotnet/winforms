@@ -1265,7 +1265,7 @@ namespace System.Windows.Forms
             lastIndex = index;
         }
 
-        internal bool ShouldSerializeText() => false;
+        internal static bool ShouldSerializeText() => false;
 
         private bool ShouldSerializePosition() => !position.Equals(new Point(-1, -1));
 

@@ -265,7 +265,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     object target = TargetObject;
                     if (target is not null)
                     {
-                        HRESULT hr = new ComNativeDescriptor().GetPropertyValue(target, dispid, new object[1]);
+                        HRESULT hr = ComNativeDescriptor.GetPropertyValue(target, dispid, new object[1]);
 
                         // if not, go ahead and make this a browsable item
                         if (hr.Succeeded())

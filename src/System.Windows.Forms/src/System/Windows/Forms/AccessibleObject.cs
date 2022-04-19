@@ -1672,7 +1672,7 @@ namespace System.Windows.Forms
             return AsIAccessible(obj);
         }
 
-        private IAccessible? AsIAccessible(AccessibleObject? obj)
+        private static IAccessible? AsIAccessible(AccessibleObject? obj)
         {
             if (obj is not null && obj._systemWrapper)
             {
@@ -1784,7 +1784,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Make sure that the childID is valid.
         /// </summary>
-        internal void ValidateChildID(ref object childID)
+        internal static void ValidateChildID(ref object childID)
         {
             // An empty childID is considered to be the same as CHILDID_SELF.
             // Some accessibility programs pass null into our functions, so we

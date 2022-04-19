@@ -36,7 +36,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private unsafe Guid GetPropertyPageGuid(Oleaut32.IPerPropertyBrowsing target, Ole32.DispatchID dispid)
+        private static unsafe Guid GetPropertyPageGuid(Oleaut32.IPerPropertyBrowsing target, Ole32.DispatchID dispid)
         {
             // check for a property page
             Guid guid = Guid.Empty;
@@ -132,7 +132,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             catch (ExternalException ex)
             {
                 hr = (HRESULT)ex.ErrorCode;
-                Debug.Fail($"An exception occurred inside IPerPropertyBrowsing::GetPredefinedStrings(dispid={sender.DISPID}), object type={new ComNativeDescriptor().GetClassName(ppb)}");
+                Debug.Fail($"An exception occurred inside IPerPropertyBrowsing::GetPredefinedStrings(dispid={sender.DISPID}), object type={ComNativeDescriptor.GetClassName(ppb)}");
             }
 
             // Terminate the existing editor if we created the current one so if the items have disappeared,

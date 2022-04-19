@@ -958,7 +958,7 @@ namespace System.Windows.Forms
 
         private void ResetAutoScrollMinSize() => AutoScrollMinSize = Size.Empty;
 
-        private void ResetScrollProperties(ScrollProperties scrollProperties)
+        private static void ResetScrollProperties(ScrollProperties scrollProperties)
         {
             // Set only these two values as when the ScrollBars are not visible ...
             // there is no meaning of the "value" property.

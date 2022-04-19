@@ -298,13 +298,13 @@ namespace System.Windows.Forms
                 {
                     if ((dwFlags & XFORMCOORDS.SIZE) != 0)
                     {
-                        pPtfContainer->X = _host.HM2Pix(pPtlHimetric->X, s_logPixelsX);
-                        pPtfContainer->Y = _host.HM2Pix(pPtlHimetric->Y, s_logPixelsY);
+                        pPtfContainer->X = HM2Pix(pPtlHimetric->X, s_logPixelsX);
+                        pPtfContainer->Y = HM2Pix(pPtlHimetric->Y, s_logPixelsY);
                     }
                     else if ((dwFlags & XFORMCOORDS.POSITION) != 0)
                     {
-                        pPtfContainer->X = _host.HM2Pix(pPtlHimetric->X, s_logPixelsX);
-                        pPtfContainer->Y = _host.HM2Pix(pPtlHimetric->Y, s_logPixelsY);
+                        pPtfContainer->X = HM2Pix(pPtlHimetric->X, s_logPixelsX);
+                        pPtfContainer->Y = HM2Pix(pPtlHimetric->Y, s_logPixelsY);
                     }
                     else
                     {
@@ -316,13 +316,13 @@ namespace System.Windows.Forms
                 {
                     if ((dwFlags & XFORMCOORDS.SIZE) != 0)
                     {
-                        pPtlHimetric->X = _host.Pix2HM((int)pPtfContainer->X, s_logPixelsX);
-                        pPtlHimetric->Y = _host.Pix2HM((int)pPtfContainer->Y, s_logPixelsY);
+                        pPtlHimetric->X = Pix2HM((int)pPtfContainer->X, s_logPixelsX);
+                        pPtlHimetric->Y = Pix2HM((int)pPtfContainer->Y, s_logPixelsY);
                     }
                     else if ((dwFlags & XFORMCOORDS.POSITION) != 0)
                     {
-                        pPtlHimetric->X = _host.Pix2HM((int)pPtfContainer->X, s_logPixelsX);
-                        pPtlHimetric->Y = _host.Pix2HM((int)pPtfContainer->Y, s_logPixelsY);
+                        pPtlHimetric->X = Pix2HM((int)pPtfContainer->X, s_logPixelsX);
+                        pPtlHimetric->Y = Pix2HM((int)pPtfContainer->Y, s_logPixelsY);
                     }
                     else
                     {

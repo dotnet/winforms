@@ -814,7 +814,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Takes the given key and splits it into an index and an element.
         /// </summary>
-        private short SplitKey(int key, out short element)
+        private static short SplitKey(int key, out short element)
         {
             element = (short)(key & 0x00000003);
             return (short)(key & 0xFFFFFFFC);
