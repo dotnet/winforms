@@ -294,7 +294,7 @@ dotnet_diagnostic.CA1820.severity = none
 dotnet_diagnostic.CA1821.severity = none # TODO: warning
 
 # Mark members as static
-dotnet_diagnostic.CA1822.severity = none # TODO: warning
+dotnet_diagnostic.CA1822.severity = warning
 dotnet_code_quality.CA1822.api_surface = private, internal
 
 # Avoid unused private fields
