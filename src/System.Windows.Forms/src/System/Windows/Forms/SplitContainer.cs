@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
@@ -64,10 +63,10 @@ namespace System.Windows.Forms
         private bool _splitBreak;
 
         // Split Cursor
-        Cursor _overrideCursor;
+        Cursor? _overrideCursor;
 
         // Needed For Tabbing
-        Control _nextActiveControl;
+        Control? _nextActiveControl;
         private bool _callBaseVersion;
         private bool _splitterFocused;
 
@@ -87,7 +86,7 @@ namespace System.Windows.Forms
         private static readonly object s_eventMoved = new object();
 
         // IMessageFilter implementation
-        private SplitContainerMessageFilter _splitContainerMessageFilter;
+        private SplitContainerMessageFilter? _splitContainerMessageFilter;
 
         // This would avoid re-entrant code into SelectNextControl.
         private bool _selectNextControl;
@@ -113,11 +112,6 @@ namespace System.Windows.Forms
             UpdateSplitter();
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        //                                                                                         //
-        //PROPERTIES START IN ALPHABETICAL ORDER                                                   //
-        //                                                                                         //
-        /////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
         ///  This property is overridden to allow the AutoScroll to be set on all the panels when
         ///  The autoScroll on SplitContainer is shown.
@@ -197,7 +191,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler AutoSizeChanged
+        new public event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -205,7 +199,7 @@ namespace System.Windows.Forms
 
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -224,7 +218,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [SRDescription(nameof(SR.ContainerControlBindingContextDescr))]
-        public override BindingContext BindingContext
+        public override BindingContext? BindingContext
         {
             get
             {
@@ -256,13 +250,10 @@ namespace System.Windows.Forms
                     _borderStyle = value;
                     Invalidate();
                     SetInnerMostBorder(this);
-                    if (ParentInternal is not null)
+                    if (ParentInternal is SplitterPanel splitterPanel)
                     {
-                        if (ParentInternal is SplitterPanel)
-                        {
-                            SplitContainer sc = (SplitContainer)((SplitterPanel)ParentInternal).Owner;
-                            sc.SetInnerMostBorder(sc);
-                        }
+                        SplitContainer sc = splitterPanel.Owner;
+                        sc.SetInnerMostBorder(sc);
                     }
                 }
 
@@ -294,7 +285,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event ControlEventHandler ControlAdded
+        public new event ControlEventHandler? ControlAdded
         {
             add => base.ControlAdded += value;
             remove => base.ControlAdded -= value;
@@ -302,7 +293,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event ControlEventHandler ControlRemoved
+        public new event ControlEventHandler? ControlRemoved
         {
             add => base.ControlRemoved += value;
             remove => base.ControlRemoved -= value;
@@ -320,13 +311,10 @@ namespace System.Windows.Forms
             set
             {
                 base.Dock = value;
-                if (ParentInternal is not null)
+                if (ParentInternal is SplitterPanel splitterPanel)
                 {
-                    if (ParentInternal is SplitterPanel)
-                    {
-                        SplitContainer sc = (SplitContainer)((SplitterPanel)ParentInternal).Owner;
-                        sc.SetInnerMostBorder(sc);
-                    }
+                    SplitContainer sc = splitterPanel.Owner;
+                    sc.SetInnerMostBorder(sc);
                 }
 
                 ResizeSplitContainer();
@@ -449,7 +437,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private Cursor OverrideCursor
+        private Cursor? OverrideCursor
         {
             get
             {
@@ -526,7 +514,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler PaddingChanged
+        public new event EventHandler? PaddingChanged
         {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
@@ -826,7 +814,7 @@ namespace System.Windows.Forms
             get
             {
                 // if CollapsedMode then splitterwidth == 0;
-                return (CollapsedMode) ? 0 : _splitterWidth;
+                return CollapsedMode ? 0 : _splitterWidth;
             }
         }
 
@@ -856,22 +844,13 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Bindable(false)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;
             set => base.Text = value;
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        //                                                                            //
-        //END PROPERTIES                                                              //
-        //                                                                            //
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        //                                                                            //
-        //Start PUBLIC FUNCTIONS                                                      //
-        //                                                                            //
-        /////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
         ///  ISupportInitialize support. Disables splitter panel min size and splitter width
         ///  validation during initialization.
@@ -906,19 +885,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        //                                                                            //
-        //End PUBLIC FUNCTIONS                                                        //
-        //                                                                            //
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        //                                                                            //
-        //Start EVENT HANDLERS                                                        //
-        //                                                                            //
-        /////////////////////////////////////////////////////////////////////////////////////////////
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler BackgroundImageChanged
+        new public event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -926,7 +895,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        new public event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -934,7 +903,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
-        public event SplitterCancelEventHandler SplitterMoving
+        public event SplitterCancelEventHandler? SplitterMoving
         {
             add => Events.AddHandler(s_eventMoving, value);
             remove => Events.RemoveHandler(s_eventMoving, value);
@@ -942,7 +911,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
-        public event SplitterEventHandler SplitterMoved
+        public event SplitterEventHandler? SplitterMoved
         {
             add => Events.AddHandler(s_eventMoved, value);
             remove => Events.RemoveHandler(s_eventMoved, value);
@@ -950,22 +919,12 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        new public event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        //                                                                            //
-        //End EVENT HANDLERS                                                          //
-        //                                                                            //
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        //                                                                            //
-        //start EVENT Delegates                                                       //
-        //                                                                            //
-        /////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
         ///  Overrides the Control.OnGotFocus to Invalidate...
         /// </summary>
@@ -1034,10 +993,10 @@ namespace System.Windows.Forms
                         DrawSplitBar(DrawStart);
                     }
                     else
-                    { //draw helper move
+                    {
+                        //draw helper move
                         DrawSplitBar(DrawMove);
                         //Moving by mouse .....gives the origin of the splitter..
-                        //
                         Rectangle r = CalcSplitLine(_splitterDistance, 0);
                         int xSplit = r.X;
                         int ySplit = r.Y;
@@ -1132,7 +1091,6 @@ namespace System.Windows.Forms
                 else
                 {
                     OverrideCursor = null;
-                    ;
                 }
 
                 if (_splitterClick)
@@ -1278,7 +1236,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void OnSplitterMoving(SplitterCancelEventArgs e)
         {
-            ((SplitterCancelEventHandler)Events[s_eventMoving])?.Invoke(this, e);
+            ((SplitterCancelEventHandler?)Events[s_eventMoving])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1288,14 +1246,9 @@ namespace System.Windows.Forms
         /// </summary>
         public void OnSplitterMoved(SplitterEventArgs e)
         {
-            ((SplitterEventHandler)Events[s_eventMoved])?.Invoke(this, e);
+            ((SplitterEventHandler?)Events[s_eventMoved])?.Invoke(this, e);
         }
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////
-        //                                                                                            //
-        ///END DELEGATES                                                                              //
-        //                                                                                            //
-        ////////////////////////////////////////////////////////////////////////////////////////////////
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnRightToLeftChanged(EventArgs e)
         {
@@ -1856,10 +1809,11 @@ namespace System.Windows.Forms
                 SelectNextControlInContainer(this, forward, true, true, false);
             }
             else
-            { //If this SplitContainer cannot be selected let the parent select the next in line
+            {
+                //If this SplitContainer cannot be selected let the parent select the next in line
                 try
                 {
-                    Control parent = ParentInternal;
+                    Control? parent = ParentInternal;
                     _selectNextControl = true;
                     while (parent is not null)
                     {
@@ -1881,17 +1835,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Selects the next control following ctl.
         /// </summary>
-        private bool SelectNextControlInContainer(Control ctl, bool forward, bool tabStopOnly,
+        private bool SelectNextControlInContainer(Control? ctl, bool forward, bool tabStopOnly,
                                       bool nested, bool wrap)
         {
             if (!Contains(ctl) ||
-                (!nested && ctl.ParentInternal != this))
+                (!nested && ctl?.ParentInternal != this))
             {
                 ctl = null;
             }
 
-            Control start = ctl;
-            SplitterPanel firstPanel = null;
+            SplitterPanel? firstPanel = null;
             do
             {
                 ctl = GetNextControl(ctl, forward);
@@ -1922,9 +1875,9 @@ namespace System.Windows.Forms
                 {
                     if (ctl.CanSelect && ctl.TabStop)
                     {
-                        if (ctl is SplitContainer)
+                        if (ctl is SplitContainer splitContainer)
                         {
-                            ((SplitContainer)ctl).Select(forward, forward);
+                            splitContainer.Select(forward, forward);
                         }
                         else
                         {
@@ -1943,7 +1896,7 @@ namespace System.Windows.Forms
                 IContainerControl c = ParentInternal.GetContainerControl();
                 if (c is not null)
                 {
-                    if (!(c is ContainerControl cc))
+                    if (c is not ContainerControl cc)
                     {
                         c.ActiveControl = this;
                     }
@@ -1985,16 +1938,15 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Selects the next control following ctl.
         /// </summary>
-        private bool SelectNextControlInPanel(Control ctl, bool forward, bool tabStopOnly,
+        private bool SelectNextControlInPanel(Control? ctl, bool forward, bool tabStopOnly,
                                       bool nested, bool wrap)
         {
             if (!Contains(ctl) ||
-                (!nested && ctl.ParentInternal != this))
+                (!nested && ctl?.ParentInternal != this))
             {
                 ctl = null;
             }
 
-            Control start = ctl;
             do
             {
                 ctl = GetNextControl(ctl, forward);
@@ -2006,9 +1958,9 @@ namespace System.Windows.Forms
                 {
                     if (ctl.CanSelect && (!tabStopOnly || ctl.TabStop))
                     {
-                        if (ctl is SplitContainer)
+                        if (ctl is SplitContainer splitContainer)
                         {
-                            ((SplitContainer)ctl).Select(forward, forward);
+                            splitContainer.Select(forward, forward);
                         }
                         else
                         {
@@ -2038,7 +1990,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (ctl is null || !(ctl.ParentInternal.Visible))
+                    if (ctl is null || !ctl.ParentInternal.Visible)
                     {
                         _callBaseVersion = true;
                     }
@@ -2448,7 +2400,7 @@ namespace System.Windows.Forms
                     IContainerControl c = ParentInternal.GetContainerControl();
                     if (c is not null)
                     {
-                        if (!(c is ContainerControl cc))
+                        if (c is not ContainerControl cc)
                         {
                             c.ActiveControl = this;
                         }
