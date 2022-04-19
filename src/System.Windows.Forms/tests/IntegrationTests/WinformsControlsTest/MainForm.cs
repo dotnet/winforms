@@ -178,7 +178,7 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.ToolTipsButton,
                 new InitInfo("ToolTips", (obj, e) => new ToolTipTests().Show(this))
-            }
+            },
         };
 
         protected override void OnShown(EventArgs e)
@@ -242,8 +242,9 @@ namespace WinformsControlsTest
             // 4. Calculate the new form size showing all buttons in two vertical columns
             int padding = overarchingFlowLayoutPanel.Controls[0].Margin.All;
             ClientSize = new Size(
-                (biggestButton.Width + padding * 2) * 2 + padding * 2,
-                (int)((overarchingFlowLayoutPanel.Controls.Count + 1) / 2 * (biggestButton.Height + padding * 2) + padding * 2));
+                (biggestButton.Width + padding * 2) * 2 + padding * 2 + overarchingFlowLayoutPanel.Location.X * 2,
+                (overarchingFlowLayoutPanel.Controls.Count + 1) / 2 * (biggestButton.Height + padding * 2)
+                    + padding * 2 + overarchingFlowLayoutPanel.Location.Y * 2);
             MinimumSize = Size;
             Debug.WriteLine($"Minimum form size: {MinimumSize}", nameof(MainForm));
         }
