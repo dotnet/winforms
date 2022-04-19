@@ -28,8 +28,8 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionErrorProvider))]
     public partial class ErrorProvider : Component, IExtenderProvider, ISupportInitialize
     {
-        private readonly Hashtable _items = new Hashtable();
-        private readonly Hashtable _windows = new Hashtable();
+        private readonly Dictionary<Control, ControlItem> _items = new();
+        private readonly Dictionary<Control, ErrorWindow> _windows = new();
         private Icon _icon = DefaultIcon;
         private IconRegion _region;
         private int _itemIdCounter;
@@ -134,7 +134,7 @@ namespace System.Windows.Forms
 
                 if (value == ErrorBlinkStyle.AlwaysBlink)
                 {
-                    // Need to start blinking on all the controlItems in our items hashTable.
+                    // Need to start blinking on all the controlItems in our items dictionary.
                     _showIcon = true;
                     _blinkStyle = ErrorBlinkStyle.AlwaysBlink;
                     foreach (ErrorWindow w in _windows.Values)
@@ -472,7 +472,7 @@ namespace System.Windows.Forms
             }
 
             // We can only show one error per control, so we will build up a string.
-            Hashtable controlError = new Hashtable(bindingsCount);
+            Dictionary<Control, string> controlError = new(bindingsCount);
 
             for (int j = 0; j < bindingsCount; j++)
             {
@@ -491,9 +491,9 @@ namespace System.Windows.Forms
                 }
 
                 string outputError = string.Empty;
-                if (controlError.Contains(dataBinding.Control))
+                if (controlError.ContainsKey(dataBinding.Control))
                 {
-                    outputError = (string)controlError[dataBinding.Control];
+                    outputError = controlError[dataBinding.Control];
                 }
 
                 // Utilize the error string without including the field name.
@@ -580,8 +580,7 @@ namespace System.Windows.Forms
             {
                 _icon = value.OrThrowIfNull();
                 DisposeRegion();
-                ErrorWindow[] array = new ErrorWindow[_windows.Values.Count];
-                _windows.Values.CopyTo(array, 0);
+                ErrorWindow[] array = _windows.Values.ToArray();
                 for (int i = 0; i < array.Length; i++)
                 {
                     array[i].Update(timerCaused: false);
@@ -658,8 +657,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Clear()
         {
-            ErrorWindow[] w = new ErrorWindow[_windows.Values.Count];
-            _windows.Values.CopyTo(w, 0);
+            ErrorWindow[] w = _windows.Values.ToArray();
             for (int i = 0; i < w.Length; i++)
             {
                 w[i].Dispose();
@@ -717,8 +715,7 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(control);
 
-            ControlItem item = (ControlItem)_items[control];
-            if (item is null)
+            if (!_items.TryGetValue(control, out ControlItem item))
             {
                 item = new ControlItem(this, control, (IntPtr)(++_itemIdCounter));
                 _items[control] = item;
@@ -732,8 +729,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal ErrorWindow EnsureErrorWindow(Control parent)
         {
-            ErrorWindow window = (ErrorWindow)_windows[parent];
-            if (window is null)
+            if (!_windows.TryGetValue(parent, out ErrorWindow window))
             {
                 window = new ErrorWindow(this, parent);
                 _windows[parent] = window;
