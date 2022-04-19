@@ -459,7 +459,7 @@ namespace System.Windows.Forms.Design
                     ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)host.GetDesigner(comp);
                     if (itemDesigner != null)
                     {
-                        topmost = itemDesigner.GetFirstDropDown(currentItem);
+                        topmost = ToolStripItemDesigner.GetFirstDropDown(currentItem);
                     }
                 }
             }
@@ -483,7 +483,7 @@ namespace System.Windows.Forms.Design
                         ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)host.GetDesigner(ownerItem);
                         if (itemDesigner != null)
                         {
-                            topmost = itemDesigner.GetFirstDropDown((ToolStripDropDownItem)ownerItem);
+                            topmost = ToolStripItemDesigner.GetFirstDropDown((ToolStripDropDownItem)ownerItem);
                         }
                     }
                 }

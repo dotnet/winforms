@@ -74,13 +74,13 @@ namespace System.ComponentModel.Design
             return returnValue;
         }
 
-        private object GetCustomAttribute(MemberInfo info, Type attributeType)
+        private static object GetCustomAttribute(MemberInfo info, Type attributeType)
         {
             object[] attributes = info.GetCustomAttributes(attributeType, true);
             return attributes.Length > 0 ? attributes[0] : null;
         }
 
-        private void GetMemberDisplayProperties(MemberInfo info, out string displayName, out string description, out string category)
+        private static void GetMemberDisplayProperties(MemberInfo info, out string displayName, out string description, out string category)
         {
             displayName = string.Empty;
             description = string.Empty;

@@ -94,7 +94,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  This will remove the Command for F2.
         /// </summary>
-        internal void CloseManager()
+        internal static void CloseManager()
         {
         }
 

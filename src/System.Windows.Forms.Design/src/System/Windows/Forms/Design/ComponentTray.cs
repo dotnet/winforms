@@ -1143,7 +1143,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 OleDragDropHandler dragDropHandler = GetOleDragHandler();
-                object[] dragComps = dragDropHandler.GetDraggingObjects(de);
+                object[] dragComps = OleDragDropHandler.GetDraggingObjects(de);
                 // Only assume the items came from the ToolBox if dragComps is null
                 if (toolboxService != null && dragComps is null)
                 {
@@ -1701,7 +1701,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        internal TrayControl GetTrayControlFromComponent(IComponent comp)
+        internal static TrayControl GetTrayControlFromComponent(IComponent comp)
         {
             return TrayControl.FromComponent(comp);
         }
@@ -1868,7 +1868,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
+#pragma warning disable CA1822 // Mark members as static
         internal void RearrangeInAutoSlots(Control c, Point pos)
+#pragma warning restore CA1822 // Mark members as static
         {
 #if DEBUG
             int index = controls.IndexOf(c);
@@ -2416,7 +2418,7 @@ namespace System.Windows.Forms.Design
                     InheritanceUI iui = _tray.InheritanceUI;
                     if (iui != null)
                     {
-                        e.Graphics.DrawImage(iui.InheritanceGlyph, 0, 0);
+                        e.Graphics.DrawImage(InheritanceUI.InheritanceGlyph, 0, 0);
                     }
                 }
             }

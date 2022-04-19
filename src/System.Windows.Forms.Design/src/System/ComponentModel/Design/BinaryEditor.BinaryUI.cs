@@ -45,7 +45,7 @@ namespace System.ComponentModel.Design
 
                     if (value is not null)
                     {
-                        bytes = _editor.ConvertToBytes(value);
+                        bytes = ConvertToBytes(value);
                     }
 
                     if (bytes is not null)
@@ -88,7 +88,7 @@ namespace System.ComponentModel.Design
             private void ButtonOK_click(object source, EventArgs e)
             {
                 object localValue = _value;
-                _editor.ConvertToValue(_byteViewer.GetBytes(), ref localValue);
+                ConvertToValue(_byteViewer.GetBytes(), ref localValue);
                 _value = localValue;
             }
 

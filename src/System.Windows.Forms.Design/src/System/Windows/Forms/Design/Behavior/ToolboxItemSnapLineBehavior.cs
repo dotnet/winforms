@@ -237,7 +237,7 @@ namespace System.Windows.Forms.Design.Behavior
         ///  this will return some generic snaplines Allowing the rect to
         ///  snap to existing control edges on the surface.
         /// </summary>
-        private SnapLine[] GenerateNewToolSnapLines(Rectangle r)
+        private static SnapLine[] GenerateNewToolSnapLines(Rectangle r)
         {
             return new SnapLine[]
             {

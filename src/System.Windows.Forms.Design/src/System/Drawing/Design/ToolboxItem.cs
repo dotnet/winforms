@@ -769,7 +769,7 @@ namespace System.Drawing.Design
             }
         }
 
-        private AssemblyName GetNonRetargetedAssemblyName(Type type, AssemblyName policiedAssemblyName)
+        private static AssemblyName GetNonRetargetedAssemblyName(Type type, AssemblyName policiedAssemblyName)
         {
             Debug.Assert(type != null);
             if (policiedAssemblyName is null)
@@ -1032,7 +1032,7 @@ namespace System.Drawing.Design
                 base.Clear();
             }
 
-            private string GetPropertyName(object key)
+            private static string GetPropertyName(object key)
             {
                 ArgumentNullException.ThrowIfNull(key);
 

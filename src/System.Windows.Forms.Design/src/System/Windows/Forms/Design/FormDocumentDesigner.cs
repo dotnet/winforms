@@ -242,7 +242,7 @@ namespace System.Windows.Forms.Design
             set => ShadowProperties[nameof(WindowState)] = value;
         }
 
-        private void ApplyAutoScaling(SizeF baseVar, Form form)
+        private static void ApplyAutoScaling(SizeF baseVar, Form form)
         {
             // We also don't do this if the property is empty.  Otherwise we will perform two GetAutoScaleBaseSize calls only to find that they returned the same value.
             if (!baseVar.IsEmpty)

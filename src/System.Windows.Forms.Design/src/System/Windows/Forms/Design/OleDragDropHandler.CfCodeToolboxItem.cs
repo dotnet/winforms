@@ -157,7 +157,7 @@ namespace System.Windows.Forms.Design
                 {
                     foreach (IComponent component in componentsArray)
                     {
-                        ComponentTray.TrayControl c = tray.GetTrayControlFromComponent(component);
+                        ComponentTray.TrayControl c = ComponentTray.GetTrayControlFromComponent(component);
 
                         if (c != null)
                         {

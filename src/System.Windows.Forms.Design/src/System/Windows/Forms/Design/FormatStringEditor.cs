@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Design
             }
 
             editorService.ShowDialog(_formatStringDialog);
-            _formatStringDialog.End();
+            FormatStringDialog.End();
 
             if (!_formatStringDialog.Dirty)
             {

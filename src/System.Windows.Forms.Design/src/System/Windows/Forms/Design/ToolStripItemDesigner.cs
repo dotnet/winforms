@@ -631,7 +631,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Returns the root dropdown in the chain.
         /// </summary>
-        internal ToolStripDropDown GetFirstDropDown(ToolStripItem currentItem)
+        internal static ToolStripDropDown GetFirstDropDown(ToolStripItem currentItem)
         {
             if (currentItem.Owner is ToolStripDropDown)
             {

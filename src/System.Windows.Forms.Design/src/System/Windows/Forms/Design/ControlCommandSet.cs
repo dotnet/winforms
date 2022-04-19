@@ -1560,7 +1560,7 @@ namespace System.Windows.Forms.Design
             selSvc.SetSelectedComponents(new object[] { targetSelection }, SelectionTypes.Replace);
         }
 
-        private Control GetNextControlInTab(Control basectl, Control ctl, bool forward)
+        private static Control GetNextControlInTab(Control basectl, Control ctl, bool forward)
         {
             if (forward)
             {

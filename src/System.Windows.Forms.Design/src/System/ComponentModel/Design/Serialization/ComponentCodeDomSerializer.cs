@@ -55,7 +55,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Determines if we can cache the results of serializing a component.
         /// </summary>
-        private bool CanCacheComponent(IDesignerSerializationManager manager, object value, PropertyDescriptorCollection props)
+        private static bool CanCacheComponent(IDesignerSerializationManager manager, object value, PropertyDescriptorCollection props)
         {
             if (value is IComponent comp)
             {
@@ -500,7 +500,7 @@ namespace System.ComponentModel.Design.Serialization
                                 if ((entry.Resources is not null || entry.Metadata is not null) && cache is not null && cache.Enabled)
                                 {
                                     ResourceCodeDomSerializer res = ResourceCodeDomSerializer.Default;
-                                    res.ApplyCacheEntry(manager, entry);
+                                    ResourceCodeDomSerializer.ApplyCacheEntry(manager, entry);
                                 }
                             }
 
@@ -542,7 +542,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  This emits a method invoke to IPersistComponentSettings.LoadComponentSettings.
         /// </summary>
-        private void SerializeLoadComponentSettings(IDesignerSerializationManager manager, CodeStatementCollection statements, CodeExpression valueExpression, object value)
+        private static void SerializeLoadComponentSettings(IDesignerSerializationManager manager, CodeStatementCollection statements, CodeExpression valueExpression, object value)
         {
             Trace("Emitting LoadComponentSettings");
 
@@ -563,7 +563,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  This emits a method invoke to ISupportInitialize.
         /// </summary>
-        private void SerializeSupportInitialize(IDesignerSerializationManager manager, CodeStatementCollection statements, CodeExpression valueExpression, object value, string methodName)
+        private static void SerializeSupportInitialize(IDesignerSerializationManager manager, CodeStatementCollection statements, CodeExpression valueExpression, object value, string methodName)
         {
             Trace("Emitting {0}", methodName);
 

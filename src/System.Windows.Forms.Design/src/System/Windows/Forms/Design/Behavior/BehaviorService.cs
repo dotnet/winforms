@@ -824,7 +824,7 @@ namespace System.Windows.Forms.Design.Behavior
             TestHook_SetText(ref m, snapLineInfo);
         }
 
-        private void TestHook_SetText(ref Message m, string text)
+        private static void TestHook_SetText(ref Message m, string text)
         {
             if (m.LParamInternal == 0)
             {

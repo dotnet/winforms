@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private Control GetParent(ToolStripContainer container, Control c)
+        private static Control GetParent(ToolStripContainer container, Control c)
         {
             Control newParent = container.ContentPanel;
             DockStyle dock = c.Dock;
