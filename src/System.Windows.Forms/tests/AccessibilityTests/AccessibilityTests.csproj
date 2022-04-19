@@ -5,7 +5,7 @@
     <RootNamespace>AccessibilityTests</RootNamespace>
     <AssemblyName>AccessibilityTests</AssemblyName>
     <!--<TargetFrameworks>net472;net6.0-windows</TargetFrameworks>-->
-    <ApplicationManifest>app1.manifest</ApplicationManifest>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
     <EnableXlfLocalization>false</EnableXlfLocalization>
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
     <!-- NU1505 reports duplicate package download for Microsoft.NETCore.App.Host.win-x64.
