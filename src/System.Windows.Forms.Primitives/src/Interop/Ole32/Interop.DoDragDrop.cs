@@ -32,6 +32,7 @@ internal static partial class Interop
             result = WinFormsComWrappers.Instance.TryGetComPointer(pDropSource, IID.IDropSource, out var dropSourcePtr);
             if (result.Failed())
             {
+                Marshal.Release(dataObjectPtr);
                 pdwEffect = DROPEFFECT.NONE;
                 return result;
             }
