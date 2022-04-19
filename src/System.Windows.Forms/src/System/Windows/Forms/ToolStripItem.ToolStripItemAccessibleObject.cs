@@ -327,12 +327,7 @@ namespace System.Windows.Forms
                         return dropDown.AccessibilityObject;
                     }
 
-                    ToolStrip owner = Owner.Parent ?? Owner.Owner;
-                    return owner is not null
-                        ? owner.OverflowItems.Contains(Owner)
-                            ? owner.OverflowButton.DropDown.AccessibilityObject
-                            : owner.AccessibilityObject
-                        : base.Parent;
+                    return (Owner.Parent is not null) ? Owner.Parent.AccessibilityObject : base.Parent;
                 }
             }
 
