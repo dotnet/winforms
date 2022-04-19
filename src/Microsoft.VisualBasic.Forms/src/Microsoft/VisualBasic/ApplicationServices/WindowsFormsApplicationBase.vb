@@ -810,7 +810,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' Validates that the value being passed as an AuthenticationMode enum is a legal value
         ''' </summary>
         ''' <param name="value"></param>
-        Private Sub ValidateAuthenticationModeEnumValue(value As AuthenticationMode, paramName As String)
+        Private Shared Sub ValidateAuthenticationModeEnumValue(value As AuthenticationMode, paramName As String)
             If value < AuthenticationMode.Windows OrElse value > AuthenticationMode.ApplicationDefined Then
                 Throw New InvalidEnumArgumentException(paramName, value, GetType(AuthenticationMode))
             End If
@@ -820,7 +820,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' Validates that the value being passed as an ShutdownMode enum is a legal value
         ''' </summary>
         ''' <param name="value"></param>
-        Private Sub ValidateShutdownModeEnumValue(value As ShutdownMode, paramName As String)
+        Private Shared Sub ValidateShutdownModeEnumValue(value As ShutdownMode, paramName As String)
             If value < ShutdownMode.AfterMainFormCloses OrElse value > ShutdownMode.AfterAllFormsClose Then
                 Throw New InvalidEnumArgumentException(paramName, value, GetType(ShutdownMode))
             End If

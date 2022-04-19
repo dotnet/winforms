@@ -142,7 +142,7 @@ Namespace Microsoft.VisualBasic
             ''' </summary>
             ''' <param name="location">The filename being tested</param>
             ''' <returns>A full name and path of the file</returns>
-            Private Function ValidateFilename(location As String) As String
+            Private Shared Function ValidateFilename(location As String) As String
                 If String.IsNullOrEmpty(location) Then
                     Throw GetArgumentNullException("location")
                 End If
@@ -154,7 +154,7 @@ Namespace Microsoft.VisualBasic
             ''' Validates that the value being passed as an AudioPlayMode enum is a legal value
             ''' </summary>
             ''' <param name="value"></param>
-            Private Sub ValidateAudioPlayModeEnum(value As AudioPlayMode, paramName As String)
+            Private Shared Sub ValidateAudioPlayModeEnum(value As AudioPlayMode, paramName As String)
                 If value < AudioPlayMode.WaitToComplete OrElse value > AudioPlayMode.BackgroundLoop Then
                     Throw New ComponentModel.InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(AudioPlayMode))
                 End If

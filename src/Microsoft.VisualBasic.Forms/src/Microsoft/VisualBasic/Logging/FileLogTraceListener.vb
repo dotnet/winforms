@@ -933,7 +933,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Validates that the value being passed as an LogFileLocation enum is a legal value
         ''' </summary>
         ''' <param name="value"></param>
-        Private Sub ValidateLogFileLocationEnumValue(value As LogFileLocation, paramName As String)
+        Private Shared Sub ValidateLogFileLocationEnumValue(value As LogFileLocation, paramName As String)
             If value < LogFileLocation.TempDirectory OrElse value > LogFileLocation.Custom Then
                 Throw New InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(LogFileLocation))
             End If
@@ -943,7 +943,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Validates that the value being passed as an DiskSpaceExhaustedOption enum is a legal value
         ''' </summary>
         ''' <param name="value"></param>
-        Private Sub ValidateDiskSpaceExhaustedOptionEnumValue(value As DiskSpaceExhaustedOption, paramName As String)
+        Private Shared Sub ValidateDiskSpaceExhaustedOptionEnumValue(value As DiskSpaceExhaustedOption, paramName As String)
             If value < DiskSpaceExhaustedOption.ThrowException OrElse value > DiskSpaceExhaustedOption.DiscardMessages Then
                 Throw New InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(DiskSpaceExhaustedOption))
             End If
@@ -953,7 +953,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Validates that the value being passed as an LogFileCreationScheduleOption enum is a legal value
         ''' </summary>
         ''' <param name="value"></param>
-        Private Sub ValidateLogFileCreationScheduleOptionEnumValue(value As LogFileCreationScheduleOption, paramName As String)
+        Private Shared Sub ValidateLogFileCreationScheduleOptionEnumValue(value As LogFileCreationScheduleOption, paramName As String)
             If value < LogFileCreationScheduleOption.None OrElse value > LogFileCreationScheduleOption.Weekly Then
                 Throw New InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(LogFileCreationScheduleOption))
             End If
