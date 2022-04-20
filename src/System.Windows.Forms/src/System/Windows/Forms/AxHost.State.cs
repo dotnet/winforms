@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -25,13 +23,13 @@ namespace System.Windows.Forms
         {
             private const int VERSION = 1;
             private int _length;
-            private byte[] _buffer;
-            private MemoryStream _memoryStream;
-            private Ole32.IStorage _storage;
-            private Ole32.ILockBytes _iLockBytes;
+            private byte[]? _buffer;
+            private MemoryStream? _memoryStream;
+            private Ole32.IStorage? _storage;
+            private WinFormsComWrappers.LockBytesComWrapper? _iLockBytes;
             private bool _manualUpdate;
-            private string _licenseKey;
-            private readonly PropertyBagStream _propertyBag;
+            private string? _licenseKey;
+            private readonly PropertyBagStream? _propertyBag;
             private const string PropertyBagSerializationName = "PropertyBagBinary";
             private const string DataSerializationName = "Data";
 
@@ -68,7 +66,7 @@ namespace System.Windows.Forms
                 Type = STG_STORAGE;
             }
 
-            public State(Stream ms, int storageType, bool manualUpdate, string licKey)
+            public State(Stream ms, int storageType, bool manualUpdate, string? licKey)
             {
                 Type = storageType;
                 // dangerous?
@@ -96,7 +94,7 @@ namespace System.Windows.Forms
                     {
                         try
                         {
-                            byte[] data = (byte[])enumerator.Value;
+                            byte[]? data = enumerator.Value as byte[];
                             if (data is not null)
                             {
                                 using var datMemoryStream = new MemoryStream(data);
@@ -113,7 +111,7 @@ namespace System.Windows.Forms
                         try
                         {
                             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Loading up property bag from stream...");
-                            byte[] data = (byte[])enumerator.Value;
+                            byte[]? data = enumerator.Value as byte[];
                             if (data is not null)
                             {
                                 _propertyBag = new PropertyBagStream();
@@ -136,7 +134,7 @@ namespace System.Windows.Forms
                 return _manualUpdate;
             }
 
-            internal string _GetLicenseKey()
+            internal string? _GetLicenseKey()
             {
                 return _licenseKey;
             }
@@ -165,12 +163,12 @@ namespace System.Windows.Forms
                 try
                 {
                     _iLockBytes = Ole32.CreateILockBytesOnHGlobal(hglobal, BOOL.TRUE);
+                    Debug.Assert(_iLockBytes is not null, "_iLockBytes is NULL!");
                     if (_buffer is null)
                     {
                         _storage = Ole32.StgCreateDocfileOnILockBytes(
                             _iLockBytes,
-                            Ole32.STGM.CREATE | Ole32.STGM.READWRITE | Ole32.STGM.SHARE_EXCLUSIVE,
-                            0);
+                            Ole32.STGM.CREATE | Ole32.STGM.READWRITE | Ole32.STGM.SHARE_EXCLUSIVE);
                     }
                     else
                     {
@@ -178,8 +176,7 @@ namespace System.Windows.Forms
                             _iLockBytes,
                             null,
                             Ole32.STGM.READWRITE | Ole32.STGM.SHARE_EXCLUSIVE,
-                            IntPtr.Zero,
-                            0);
+                            IntPtr.Zero);
                     }
                 }
                 catch (Exception)
@@ -190,6 +187,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
+                        _iLockBytes?.Dispose();
                         _iLockBytes = null;
                     }
 
@@ -197,12 +195,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal Oleaut32.IPropertyBag GetPropBag()
+            internal Oleaut32.IPropertyBag? GetPropBag()
             {
                 return _propertyBag;
             }
 
-            internal Ole32.IStorage GetStorage()
+            internal Ole32.IStorage? GetStorage()
             {
                 if (_storage is null)
                 {
@@ -212,7 +210,7 @@ namespace System.Windows.Forms
                 return _storage;
             }
 
-            internal Ole32.IStream GetStream()
+            internal Ole32.IStream? GetStream()
             {
                 if (_memoryStream is null)
                 {
@@ -269,7 +267,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal State RefreshStorage(Ole32.IPersistStorage iPersistStorage)
+            internal State? RefreshStorage(Ole32.IPersistStorage iPersistStorage)
             {
                 Debug.Assert(_storage is not null, "how can we not have a storage object?");
                 Debug.Assert(_iLockBytes is not null, "how can we have a storage w/o ILockBytes?");

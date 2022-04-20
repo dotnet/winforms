@@ -897,8 +897,8 @@
 ~System.Windows.Forms.AxHost.RaiseOnMouseUp(object o1, object o2, object o3, object o4) -> void
 ~System.Windows.Forms.AxHost.SetAboutBoxDelegate(System.Windows.Forms.AxHost.AboutBoxDelegate d) -> void
 ~System.Windows.Forms.AxHost.ShowPropertyPages(System.Windows.Forms.Control control) -> void
-~System.Windows.Forms.AxHost.State.State(System.IO.Stream ms, int storageType, bool manualUpdate, string licKey) -> void
-~System.Windows.Forms.AxHost.State.State(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
+System.Windows.Forms.AxHost.State.State(System.IO.Stream! ms, int storageType, bool manualUpdate, string? licKey) -> void
+System.Windows.Forms.AxHost.State.State(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
 ~System.Windows.Forms.BaseCollection.CopyTo(System.Array ar, int index) -> void
 ~System.Windows.Forms.BaseCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.BaseCollection.SyncRoot.get -> object

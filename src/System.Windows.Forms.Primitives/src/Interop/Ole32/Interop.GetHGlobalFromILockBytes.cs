@@ -9,6 +9,11 @@ internal partial class Interop
     internal static partial class Ole32
     {
         [DllImport(Libraries.Ole32, PreserveSig = false, ExactSpelling = true)]
-        public static extern IntPtr GetHGlobalFromILockBytes(ILockBytes pLkbyt);
+        private static extern IntPtr GetHGlobalFromILockBytes(IntPtr pLkbyt);
+
+        public static IntPtr GetHGlobalFromILockBytes(WinFormsComWrappers.LockBytesComWrapper pLkbyt)
+        {
+            return GetHGlobalFromILockBytes(pLkbyt.Instance);
+        }
     }
 }
