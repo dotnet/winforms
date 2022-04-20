@@ -12,20 +12,20 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  What we return textually for null.
         /// </summary>
-        protected static readonly string none = SR.toStringNone;
+        protected static readonly string s_none = SR.toStringNone;
 
-        private readonly bool allowExpand;
+        private readonly bool _allowExpand;
 
         public Com2IDispatchConverter(bool allowExpand, TypeConverter baseConverter)
             : base(baseConverter)
         {
-            this.allowExpand = allowExpand;
+            _allowExpand = allowExpand;
         }
 
         public Com2IDispatchConverter(Com2PropertyDescriptor propDesc, bool allowExpand)
             : base(propDesc.PropertyType)
         {
-            this.allowExpand = allowExpand;
+            _allowExpand = allowExpand;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 if (value is null)
                 {
-                    return none;
+                    return s_none;
                 }
 
                 string text = ComNativeDescriptor.Instance.GetName(value);
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override bool GetPropertiesSupported(ITypeDescriptorContext? context)
         {
-            return allowExpand;
+            return _allowExpand;
         }
 
         // no dropdown, please!
