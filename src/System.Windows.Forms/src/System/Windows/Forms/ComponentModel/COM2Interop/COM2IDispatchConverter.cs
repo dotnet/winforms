@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Globalization;
 
@@ -34,7 +32,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Determines if this converter can convert an object in the given source
         ///  type to the native type of the converter.
         /// </summary>
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
             return false;
         }
@@ -43,7 +41,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Determines if this converter can convert an object to the given destination
         ///  type.
         /// </summary>
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
         {
             return destinationType == typeof(string);
         }
@@ -55,7 +53,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  type is string.  If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
             if (destinationType == typeof(string))
             {
@@ -82,7 +80,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
+        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
         {
             return TypeDescriptor.GetProperties(value, attributes);
         }
@@ -91,14 +89,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Determines if this object supports properties.  By default, this
         ///  is false.
         /// </summary>
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
+        public override bool GetPropertiesSupported(ITypeDescriptorContext? context)
         {
             return allowExpand;
         }
 
         // no dropdown, please!
-        //
-        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext? context)
         {
             return false;
         }
