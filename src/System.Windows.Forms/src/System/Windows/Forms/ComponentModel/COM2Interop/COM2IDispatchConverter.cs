@@ -11,8 +11,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal class Com2IDispatchConverter : Com2ExtendedTypeConverter
     {
-        readonly Com2PropertyDescriptor propDesc;
-
         /// <summary>
         ///  What we return textually for null.
         /// </summary>
@@ -20,15 +18,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private readonly bool allowExpand;
 
-        public Com2IDispatchConverter(Com2PropertyDescriptor propDesc, bool allowExpand, TypeConverter baseConverter) : base(baseConverter)
+        public Com2IDispatchConverter(bool allowExpand, TypeConverter baseConverter)
+            : base(baseConverter)
         {
-            this.propDesc = propDesc;
             this.allowExpand = allowExpand;
         }
 
-        public Com2IDispatchConverter(Com2PropertyDescriptor propDesc, bool allowExpand) : base(propDesc.PropertyType)
+        public Com2IDispatchConverter(Com2PropertyDescriptor propDesc, bool allowExpand)
+            : base(propDesc.PropertyType)
         {
-            this.propDesc = propDesc;
             this.allowExpand = allowExpand;
         }
 
