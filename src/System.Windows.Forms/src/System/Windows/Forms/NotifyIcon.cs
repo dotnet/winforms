@@ -245,7 +245,7 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
-                if (value is not null && !value.Equals(_text))
+                if (!value.Equals(_text))
                 {
                     if (value.Length > MaxTextSize)
                     {
