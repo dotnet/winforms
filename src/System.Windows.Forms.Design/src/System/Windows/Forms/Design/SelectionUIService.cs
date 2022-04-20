@@ -1975,7 +1975,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private struct HitTestInfo
+        private struct HitTestInfo : IEquatable<HitTestInfo>
         {
             public readonly int hitTest;
             public readonly SelectionUIItem selectionUIHit;
@@ -2001,7 +2001,7 @@ namespace System.Windows.Forms.Design
                 try
                 {
                     HitTestInfo hi = (HitTestInfo)obj;
-                    return hitTest == hi.hitTest && selectionUIHit == hi.selectionUIHit && containerSelector == hi.containerSelector;
+                    return Equals(hi);
                 }
                 catch (Exception ex)
                 {
@@ -2014,12 +2014,17 @@ namespace System.Windows.Forms.Design
                 return false;
             }
 
+            public bool Equals(HitTestInfo other)
+                => hitTest == other.hitTest
+                    && selectionUIHit == other.selectionUIHit
+                    && containerSelector == other.containerSelector;
+
             public static bool operator ==(HitTestInfo left, HitTestInfo right)
             {
-                return (left.hitTest == right.hitTest && left.selectionUIHit == right.selectionUIHit && left.containerSelector == right.containerSelector);
+                return left.Equals(right);
             }
 
-            public static bool operator !=(HitTestInfo left, HitTestInfo right) => !(left == right);
+            public static bool operator !=(HitTestInfo left, HitTestInfo right) => !left.Equals(right);
 
             public override int GetHashCode()
             {

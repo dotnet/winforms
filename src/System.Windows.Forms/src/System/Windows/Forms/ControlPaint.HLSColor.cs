@@ -11,7 +11,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Logic copied from Windows sources to copy the lightening and darkening of colors.
         /// </summary>
-        private readonly struct HLSColor
+        private readonly struct HLSColor : IEquatable<HLSColor>
         {
             private const int ShadowAdjustment = -333;
             private const int HighlightAdjustment = 500;
@@ -127,11 +127,15 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                HLSColor c = hlsColor;
-                return _hue == c._hue &&
-                       _saturation == c._saturation &&
-                       Luminosity == c.Luminosity &&
-                       _isSystemColors_Control == c._isSystemColors_Control;
+                return Equals(hlsColor);
+            }
+
+            public bool Equals(HLSColor other)
+            {
+                return _hue == other._hue
+                    && _saturation == other._saturation
+                    && Luminosity == other.Luminosity
+                    && _isSystemColors_Control == other._isSystemColors_Control;
             }
 
             public static bool operator ==(HLSColor a, HLSColor b) => a.Equals(b);

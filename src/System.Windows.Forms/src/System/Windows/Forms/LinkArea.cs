@@ -13,7 +13,7 @@ namespace System.Windows.Forms
 {
     [TypeConverter(typeof(LinkAreaConverter))]
     [Serializable] // This type is participating in resx serialization scenarios.
-    public struct LinkArea
+    public struct LinkArea : IEquatable<LinkArea>
     {
 #pragma warning disable IDE1006
         private int start; // Do NOT rename (binary serialization).
@@ -44,13 +44,16 @@ namespace System.Windows.Forms
 
         public override bool Equals(object o)
         {
-            if (!(o is LinkArea a))
+            if (o is not LinkArea a)
             {
                 return false;
             }
 
             return this == a;
         }
+
+        public bool Equals(LinkArea other)
+            => other.Start == start && other.Length == length;
 
         public override string ToString() => $"{{Start={Start}, Length={Length}}}";
 

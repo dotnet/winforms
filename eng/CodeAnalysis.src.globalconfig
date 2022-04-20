@@ -134,7 +134,7 @@ dotnet_diagnostic.CA1064.severity = none
 dotnet_diagnostic.CA1065.severity = none
 
 # Implement IEquatable when overriding Object.Equals
-dotnet_diagnostic.CA1066.severity = none # TODO: warning
+dotnet_diagnostic.CA1066.severity = warning
 
 # Override Object.Equals(object) when implementing IEquatable<T>
 dotnet_diagnostic.CA1067.severity = warning
