@@ -1868,15 +1868,14 @@ namespace System.Windows.Forms.Design
             }
         }
 
-#pragma warning disable CA1822 // Mark members as static
         internal void RearrangeInAutoSlots(Control c, Point pos)
-#pragma warning restore CA1822 // Mark members as static
         {
 #if DEBUG
             int index = controls.IndexOf(c);
             Debug.Assert(index != -1, "Add control to the list of controls before autoarranging.!!!");
-            Debug.Assert(Visible == c.Visible, "TrayControl for " + ((TrayControl)c).Component + " should not be positioned");
 #endif
+            Debug.Assert(Visible == c.Visible, "TrayControl for " + ((TrayControl)c).Component + " should not be positioned");
+
             TrayControl tc = (TrayControl)c;
             tc.Positioned = true;
             tc.Location = pos;
