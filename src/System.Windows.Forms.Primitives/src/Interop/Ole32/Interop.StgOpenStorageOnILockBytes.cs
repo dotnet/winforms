@@ -11,7 +11,7 @@ internal partial class Interop
         [DllImport(Libraries.Ole32, PreserveSig = false, ExactSpelling = true)]
         private static extern IStorage StgOpenStorageOnILockBytes(IntPtr iLockBytes, IStorage? pStgPriority, STGM grfMode, IntPtr snbExclude, uint reserved);
 
-        public static IStorage StgOpenStorageOnILockBytes(WinFormsComWrappers.LockBytesComWrapper iLockBytes, IStorage? pStgPriority, STGM grfMode, IntPtr snbExclude)
+        public static IStorage StgOpenStorageOnILockBytes(WinFormsComWrappers.LockBytesWrapper iLockBytes, IStorage? pStgPriority, STGM grfMode, IntPtr snbExclude)
         {
             return StgOpenStorageOnILockBytes(iLockBytes.Instance, pStgPriority, grfMode, snbExclude, 0);
         }

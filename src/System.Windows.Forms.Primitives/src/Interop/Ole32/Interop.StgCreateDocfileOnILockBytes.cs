@@ -11,7 +11,7 @@ internal partial class Interop
         [DllImport(Libraries.Ole32, PreserveSig = false, ExactSpelling = true)]
         private static extern IStorage StgCreateDocfileOnILockBytes(IntPtr iLockBytes, STGM grfMode, uint reserved);
 
-        public static IStorage StgCreateDocfileOnILockBytes(WinFormsComWrappers.LockBytesComWrapper iLockBytes, STGM grfMode)
+        public static IStorage StgCreateDocfileOnILockBytes(WinFormsComWrappers.LockBytesWrapper iLockBytes, STGM grfMode)
         {
             return StgCreateDocfileOnILockBytes(iLockBytes.Instance, grfMode, 0);
         }

@@ -26,7 +26,7 @@ namespace System.Windows.Forms
             private byte[]? _buffer;
             private MemoryStream? _memoryStream;
             private Ole32.IStorage? _storage;
-            private WinFormsComWrappers.LockBytesComWrapper? _iLockBytes;
+            private WinFormsComWrappers.LockBytesWrapper? _iLockBytes;
             private bool _manualUpdate;
             private string? _licenseKey;
             private readonly PropertyBagStream? _propertyBag;

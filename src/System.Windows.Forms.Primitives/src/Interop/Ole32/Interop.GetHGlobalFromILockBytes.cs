@@ -11,7 +11,7 @@ internal partial class Interop
         [DllImport(Libraries.Ole32, PreserveSig = false, ExactSpelling = true)]
         private static extern IntPtr GetHGlobalFromILockBytes(IntPtr pLkbyt);
 
-        public static IntPtr GetHGlobalFromILockBytes(WinFormsComWrappers.LockBytesComWrapper pLkbyt)
+        public static IntPtr GetHGlobalFromILockBytes(WinFormsComWrappers.LockBytesWrapper pLkbyt)
         {
             return GetHGlobalFromILockBytes(pLkbyt.Instance);
         }

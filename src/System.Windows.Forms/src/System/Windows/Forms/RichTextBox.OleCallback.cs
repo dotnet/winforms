@@ -32,7 +32,7 @@ namespace System.Windows.Forms
                     return HRESULT.E_FAIL;
                 }
 
-                WinFormsComWrappers.LockBytesComWrapper? pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, BOOL.TRUE);
+                WinFormsComWrappers.LockBytesWrapper? pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, BOOL.TRUE);
                 Debug.Assert(pLockBytes is not null, "pLockBytes is NULL!");
 
                 storage = Ole32.StgCreateDocfileOnILockBytes(

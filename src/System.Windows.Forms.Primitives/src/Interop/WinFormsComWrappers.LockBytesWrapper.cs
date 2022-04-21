@@ -9,11 +9,11 @@ internal partial class Interop
 {
     internal unsafe partial class WinFormsComWrappers
     {
-        internal class LockBytesComWrapper
+        internal class LockBytesWrapper
         {
             private IntPtr _wrappedInstance;
 
-            public LockBytesComWrapper(IntPtr wrappedInstance)
+            public LockBytesWrapper(IntPtr wrappedInstance)
             {
                 _wrappedInstance = wrappedInstance.OrThrowIfZero();
             }

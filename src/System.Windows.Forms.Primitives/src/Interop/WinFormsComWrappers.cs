@@ -183,7 +183,7 @@ internal partial class Interop
             if (hr == S_OK)
             {
                 Marshal.Release(externalComObject);
-                return new LockBytesComWrapper(lockBytesComObject);
+                return new LockBytesWrapper(lockBytesComObject);
             }
 
             Guid shellItemIID = IID.IShellItem;
