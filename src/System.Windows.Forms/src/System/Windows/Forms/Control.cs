@@ -3428,7 +3428,17 @@ namespace System.Windows.Forms
         public Size Size
         {
             get => new Size(_width, _height);
-            set => SetBounds(_x, _y, value.Width, value.Height, BoundsSpecified.Size);
+            set
+            {
+                if (CommonProperties.GetNeedsAnchorLayout(this))
+                {
+                    // Reset AnchorInfo that may have been calculated based on default Size of the control or
+                    // with the previous size of the control.  Especially in the designer scenario.                  .
+                    DefaultLayout.SetAnchorInfo(element: this, value: null);
+                }
+
+                SetBounds(_x, _y, value.Width, value.Height, BoundsSpecified.Size);
+            }
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged))]

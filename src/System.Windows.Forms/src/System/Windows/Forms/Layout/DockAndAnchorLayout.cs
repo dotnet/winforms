@@ -159,7 +159,7 @@ namespace System.Windows.Forms.Layout
             // This in turn will lead to a cascade of native calls and callbacks
             if (CompModSwitches.RichLayout.TraceInfo)
             {
-                Debug.WriteLine($"\t\t'{element}' is anchored at {GetCachedBounds(element).ToString()}");
+                Debug.WriteLine($"\t\t'{element}' is anchored at {GetCachedBounds(element)}");
             }
 
             AnchorInfo layout = GetAnchorInfo(element);
@@ -748,7 +748,10 @@ namespace System.Windows.Forms.Layout
 
                 CommonProperties.xSetAnchor(element, value);
 
-                if (CommonProperties.GetNeedsAnchorLayout(element))
+                // Updating AnchorInfo is only needed when control is ready for layout. Oneway to check this precondition is to
+                // check if the control is parented. This helps avoid calculating AnchorInfo with default initial values of the Control.
+                // AnchorInfo is recalculated everytime there is a layout change.
+                if (CommonProperties.GetNeedsAnchorLayout(element) && element is Control control && control.Parent is not null)
                 {
                     UpdateAnchorInfo(element);
                 }
@@ -797,8 +800,15 @@ namespace System.Windows.Forms.Layout
                         {
                             // We are transitioning from docked to not docked, restore the original bounds.
                             element.SetBounds(CommonProperties.GetSpecifiedBounds(element), BoundsSpecified.None);
-                            // Restore Anchor information as its now relevant again.
-                            UpdateAnchorInfo(element);
+
+                            // Updating AnchorInfo is only needed when control is ready for layout. InitLayoutCore() does call UpdateAnchorInfo().
+                            // At the least, we are checking if control is parented before updating AnchorInfo. This helps avoid calculating
+                            // AnchorInfo with default initial values of the Control. They are always overriden when layout happen.
+                            if (element is Control control && control.Parent is not null)
+                            {
+                                // Restore Anchor information as its now relevant again.
+                                UpdateAnchorInfo(element);
+                            }
                         }
                     }
                     else
@@ -922,7 +932,7 @@ namespace System.Windows.Forms.Layout
             return (AnchorInfo)element.Properties.GetObject(s_layoutInfoProperty);
         }
 
-        private static void SetAnchorInfo(IArrangedElement element, AnchorInfo value)
+        internal static void SetAnchorInfo(IArrangedElement element, AnchorInfo value)
         {
             element.Properties.SetObject(s_layoutInfoProperty, value);
         }
@@ -1012,14 +1022,6 @@ namespace System.Windows.Forms.Layout
         public static bool IsAnchored(AnchorStyles anchor, AnchorStyles desiredAnchor)
         {
             return (anchor & desiredAnchor) == desiredAnchor;
-        }
-
-        private sealed class AnchorInfo
-        {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
         }
     }
 }
