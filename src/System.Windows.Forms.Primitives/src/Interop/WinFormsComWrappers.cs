@@ -23,6 +23,7 @@ internal partial class Interop
         private static readonly ComInterfaceEntry* s_enumStringEntry = InitializeIEnumStringEntry();
         private static readonly ComInterfaceEntry* s_dropSourceEntry = InitializeIDropSourceEntry();
         private static readonly ComInterfaceEntry* s_dropTargetEntry = InitializeIDropTargetEntry();
+        private static readonly ComInterfaceEntry* s_dataObjectEntry = InitializeIDataObjectEntry();
 
         internal static WinFormsComWrappers Instance { get; } = new WinFormsComWrappers();
 
@@ -88,7 +89,19 @@ internal partial class Interop
             return wrapperEntry;
         }
 
-    protected override unsafe ComInterfaceEntry* ComputeVtables(object obj, CreateComInterfaceFlags flags, out int count)
+        private static ComInterfaceEntry* InitializeIDataObjectEntry()
+        {
+            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
+
+            IntPtr iDataObjectVtbl = IDataObjectVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+
+            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
+            wrapperEntry->IID = IID.IDataObject;
+            wrapperEntry->Vtable = iDataObjectVtbl;
+            return wrapperEntry;
+        }
+
+        protected override unsafe ComInterfaceEntry* ComputeVtables(object obj, CreateComInterfaceFlags flags, out int count)
         {
             if (obj is Interop.Ole32.IStream)
             {
@@ -118,6 +131,12 @@ internal partial class Interop
             {
                 count = 1;
                 return s_enumStringEntry;
+            }
+
+            if (obj is IDataObject)
+            {
+                count = 1;
+                return s_dataObjectEntry;
             }
 
             throw new NotImplementedException($"ComWrappers for type {obj.GetType()} not implemented.");
@@ -197,7 +216,7 @@ internal partial class Interop
             return comPtr;
         }
 
-        internal HRESULT TryGetComPointer<T>(T obj, Guid iid, out IntPtr comPtr) where T : class
+        internal HRESULT TryGetComPointer<T>(T? obj, Guid iid, out IntPtr comPtr) where T : class
         {
             if (obj is null)
             {

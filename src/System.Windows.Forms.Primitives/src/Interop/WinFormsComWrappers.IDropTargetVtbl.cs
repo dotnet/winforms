@@ -30,7 +30,8 @@ internal partial class Interop
             private static int DragEnter(IntPtr thisPtr, IntPtr pDataObj, uint grfKeyState, Point pt, uint* pdwEffect)
             {
                 Ole32.IDropTarget inst = ComInterfaceDispatch.GetInstance<Ole32.IDropTarget>((ComInterfaceDispatch*)thisPtr);
-                return (int)inst.DragEnter(Marshal.GetObjectForIUnknown(pDataObj), grfKeyState, pt, ref *pdwEffect);
+                var dataObject = WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(pDataObj, CreateObjectFlags.Unwrap);
+                return (int)inst.DragEnter(dataObject, grfKeyState, pt, ref *pdwEffect);
             }
 
             [UnmanagedCallersOnly]
@@ -51,7 +52,8 @@ internal partial class Interop
             private static int Drop(IntPtr thisPtr, IntPtr pDataObj, uint grfKeyState, Point pt, uint* pdwEffect)
             {
                 Ole32.IDropTarget inst = ComInterfaceDispatch.GetInstance<Ole32.IDropTarget>((ComInterfaceDispatch*)thisPtr);
-                return (int)inst.Drop(Marshal.GetObjectForIUnknown(pDataObj), grfKeyState, pt, ref *pdwEffect);
+                var dataObject = WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(pDataObj, CreateObjectFlags.Unwrap);
+                return (int)inst.Drop(dataObject, grfKeyState, pt, ref *pdwEffect);
             }
         }
     }
