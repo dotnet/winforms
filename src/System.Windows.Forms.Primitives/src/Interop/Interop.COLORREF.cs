@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 internal partial class Interop
 {
     [StructLayout(LayoutKind.Explicit)]
-    internal struct COLORREF
+    internal struct COLORREF : IEquatable<COLORREF>
     {
         [FieldOffset(0)]
         public byte R;

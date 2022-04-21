@@ -1,0 +1,3 @@
+System.Windows.Forms.BindingMemberInfo.Equals(System.Windows.Forms.BindingMemberInfo other) -> bool
+System.Windows.Forms.LinkArea.Equals(System.Windows.Forms.LinkArea other) -> bool
+System.Windows.Forms.TableLayoutPanelCellPosition.Equals(System.Windows.Forms.TableLayoutPanelCellPosition other) -> bool

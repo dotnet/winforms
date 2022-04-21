@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Implements a Windows message.
     /// </summary>
-    public struct Message
+    public struct Message : IEquatable<Message>
     {
 #if DEBUG
         private static readonly TraceSwitch s_allWinMessages = new("AllWinMessages", "Output every received message");
@@ -115,12 +115,15 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            return HWnd == m.HWnd
-                && MsgInternal == m.MsgInternal
-                && WParamInternal == m.WParamInternal
-                && LParamInternal == m.LParamInternal
-                && ResultInternal == m.ResultInternal;
+            return Equals(m);
         }
+
+        public bool Equals(Message other)
+            => HWnd == other.HWnd
+                && MsgInternal == other.MsgInternal
+                && WParamInternal == other.WParamInternal
+                && LParamInternal == other.LParamInternal
+                && ResultInternal == other.ResultInternal;
 
         public static bool operator ==(Message a, Message b) => a.Equals(b);
 

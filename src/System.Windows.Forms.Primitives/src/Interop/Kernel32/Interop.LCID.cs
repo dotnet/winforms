@@ -6,7 +6,7 @@ internal partial class Interop
 {
     internal partial class Kernel32
     {
-        public struct LCID
+        public struct LCID : IEquatable<LCID>
         {
             public uint RawValue;
 
