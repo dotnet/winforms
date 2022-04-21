@@ -12,46 +12,46 @@ namespace System.Windows.Forms
     /// </summary>
     internal class DataGridViewCellLinkedListEnumerator : IEnumerator
     {
-        private readonly DataGridViewCellLinkedListElement headElement;
-        private DataGridViewCellLinkedListElement? current;
-        private bool reset;
+        private readonly DataGridViewCellLinkedListElement _headElement;
+        private DataGridViewCellLinkedListElement? _current;
+        private bool _reset;
 
         public DataGridViewCellLinkedListEnumerator(DataGridViewCellLinkedListElement headElement)
         {
-            this.headElement = headElement;
-            reset = true;
+            _headElement = headElement;
+            _reset = true;
         }
 
         object IEnumerator.Current
         {
             get
             {
-                Debug.Assert(current is not null); // Since this is for internal use only.
-                return current.DataGridViewCell;
+                Debug.Assert(_current is not null); // Since this is for internal use only.
+                return _current.DataGridViewCell;
             }
         }
 
         bool IEnumerator.MoveNext()
         {
-            if (reset)
+            if (_reset)
             {
-                Debug.Assert(current is null);
-                current = headElement;
-                reset = false;
+                Debug.Assert(_current is null);
+                _current = _headElement;
+                _reset = false;
             }
             else
             {
-                Debug.Assert(current is not null); // Since this is for internal use only.
-                current = current.Next;
+                Debug.Assert(_current is not null); // Since this is for internal use only.
+                _current = _current.Next;
             }
 
-            return current is not null;
+            return _current is not null;
         }
 
         void IEnumerator.Reset()
         {
-            reset = true;
-            current = null;
+            _reset = true;
+            _current = null;
         }
     }
 }

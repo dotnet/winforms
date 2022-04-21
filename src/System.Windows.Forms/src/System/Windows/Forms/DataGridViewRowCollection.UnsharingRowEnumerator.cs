@@ -10,16 +10,16 @@ namespace System.Windows.Forms
     {
         private class UnsharingRowEnumerator : IEnumerator
         {
-            private readonly DataGridViewRowCollection owner;
-            private int current;
+            private readonly DataGridViewRowCollection _owner;
+            private int _current;
 
             /// <summary>
             ///  Creates a new enumerator that will enumerate over the rows and unshare the accessed rows if needed.
             /// </summary>
             public UnsharingRowEnumerator(DataGridViewRowCollection owner)
             {
-                this.owner = owner;
-                current = -1;
+                _owner = owner;
+                _current = -1;
             }
 
             /// <summary>
@@ -27,14 +27,14 @@ namespace System.Windows.Forms
             /// </summary>
             bool IEnumerator.MoveNext()
             {
-                if (current < owner.Count - 1)
+                if (_current < _owner.Count - 1)
                 {
-                    current++;
+                    _current++;
                     return true;
                 }
                 else
                 {
-                    current = owner.Count;
+                    _current = _owner.Count;
                     return false;
                 }
             }
@@ -44,7 +44,7 @@ namespace System.Windows.Forms
             /// </summary>
             void IEnumerator.Reset()
             {
-                current = -1;
+                _current = -1;
             }
 
             /// <summary>
@@ -54,17 +54,17 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (current == -1)
+                    if (_current == -1)
                     {
                         throw new InvalidOperationException(SR.DataGridViewRowCollection_EnumNotStarted);
                     }
 
-                    if (current == owner.Count)
+                    if (_current == _owner.Count)
                     {
                         throw new InvalidOperationException(SR.DataGridViewRowCollection_EnumFinished);
                     }
 
-                    return owner[current];
+                    return _owner[_current];
                 }
             }
         }
