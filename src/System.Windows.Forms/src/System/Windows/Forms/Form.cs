@@ -6034,7 +6034,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  WM_ENTERSIZEMOVE handler, so that user can hook up OnResizeBegin event.
         /// </summary>
-        private void WmEnterSizeMove(ref Message m)
+        private void WmEnterSizeMove()
         {
             _formStateEx[FormStateExInModalSizingLoop] = 1;
             OnResizeBegin(EventArgs.Empty);
@@ -6043,7 +6043,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  WM_EXITSIZEMOVE handler, so that user can hook up OnResizeEnd event.
         /// </summary>
-        private void WmExitSizeMove(ref Message m)
+        private void WmExitSizeMove()
         {
             _formStateEx[FormStateExInModalSizingLoop] = 0;
             OnResizeEnd(EventArgs.Empty);
@@ -6565,11 +6565,11 @@ namespace System.Windows.Forms
                     WmClose(ref m);
                     break;
                 case User32.WM.ENTERSIZEMOVE:
-                    WmEnterSizeMove(ref m);
+                    WmEnterSizeMove();
                     DefWndProc(ref m);
                     break;
                 case User32.WM.EXITSIZEMOVE:
-                    WmExitSizeMove(ref m);
+                    WmExitSizeMove();
                     DefWndProc(ref m);
                     break;
                 case User32.WM.CREATE:

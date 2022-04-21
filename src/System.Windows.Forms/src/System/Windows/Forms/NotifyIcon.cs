@@ -693,7 +693,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the mouse-down event
         /// </summary>
-        private void WmMouseDown(ref Message m, MouseButtons button, int clicks)
+        private void WmMouseDown(MouseButtons button, int clicks)
         {
             if (clicks == 2)
             {
@@ -708,7 +708,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the mouse-move event
         /// </summary>
-        private void WmMouseMove(ref Message m)
+        private void WmMouseMove()
         {
             OnMouseMove(new MouseEventArgs(Control.MouseButtons, 0, 0, 0, 0));
         }
@@ -716,7 +716,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the mouse-up event
         /// </summary>
-        private void WmMouseUp(ref Message m, MouseButtons button)
+        private void WmMouseUp(MouseButtons button)
         {
             OnMouseUp(new MouseEventArgs(button, 0, 0, 0, 0));
             //subhag
@@ -729,7 +729,7 @@ namespace System.Windows.Forms
             doubleClick = false;
         }
 
-        private void WmTaskbarCreated(ref Message m)
+        private void WmTaskbarCreated()
         {
             added = false;
             UpdateIcon(visible);
@@ -743,31 +743,31 @@ namespace System.Windows.Forms
                     switch ((User32.WM)msg.LParamInternal)
                     {
                         case User32.WM.LBUTTONDBLCLK:
-                            WmMouseDown(ref msg, MouseButtons.Left, 2);
+                            WmMouseDown(MouseButtons.Left, 2);
                             break;
                         case User32.WM.LBUTTONDOWN:
-                            WmMouseDown(ref msg, MouseButtons.Left, 1);
+                            WmMouseDown(MouseButtons.Left, 1);
                             break;
                         case User32.WM.LBUTTONUP:
-                            WmMouseUp(ref msg, MouseButtons.Left);
+                            WmMouseUp(MouseButtons.Left);
                             break;
                         case User32.WM.MBUTTONDBLCLK:
-                            WmMouseDown(ref msg, MouseButtons.Middle, 2);
+                            WmMouseDown(MouseButtons.Middle, 2);
                             break;
                         case User32.WM.MBUTTONDOWN:
-                            WmMouseDown(ref msg, MouseButtons.Middle, 1);
+                            WmMouseDown(MouseButtons.Middle, 1);
                             break;
                         case User32.WM.MBUTTONUP:
-                            WmMouseUp(ref msg, MouseButtons.Middle);
+                            WmMouseUp(MouseButtons.Middle);
                             break;
                         case User32.WM.MOUSEMOVE:
-                            WmMouseMove(ref msg);
+                            WmMouseMove();
                             break;
                         case User32.WM.RBUTTONDBLCLK:
-                            WmMouseDown(ref msg, MouseButtons.Right, 2);
+                            WmMouseDown(MouseButtons.Right, 2);
                             break;
                         case User32.WM.RBUTTONDOWN:
-                            WmMouseDown(ref msg, MouseButtons.Right, 1);
+                            WmMouseDown(MouseButtons.Right, 1);
                             break;
                         case User32.WM.RBUTTONUP:
                             if (contextMenuStrip is not null)
@@ -775,7 +775,7 @@ namespace System.Windows.Forms
                                 ShowContextMenu();
                             }
 
-                            WmMouseUp(ref msg, MouseButtons.Right);
+                            WmMouseUp(MouseButtons.Right);
                             break;
                         case (User32.WM)NIN.BALLOONSHOW:
                             OnBalloonTipShown();
@@ -816,7 +816,7 @@ namespace System.Windows.Forms
                 default:
                     if (msg.Msg == (int)WM_TASKBARCREATED)
                     {
-                        WmTaskbarCreated(ref msg);
+                        WmTaskbarCreated();
                     }
 
                     window.DefWndProc(ref msg);

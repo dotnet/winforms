@@ -5847,7 +5847,7 @@ namespace System.Windows.Forms
             Debug.Assert(retval != 0, "LVM_SETTILEVIEWINFO failed");
         }
 
-        private void WmNmClick(ref Message m)
+        private void WmNmClick()
         {
             // If we're checked, hittest to see if we're
             // on the check mark
@@ -5889,7 +5889,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void WmNmDblClick(ref Message m)
+        private void WmNmDblClick()
         {
             // If we're checked, hittest to see if we're
             // on the item
@@ -6627,7 +6627,7 @@ namespace System.Windows.Forms
                     }
 
                 case (int)NM.CLICK:
-                    WmNmClick(ref m);
+                    WmNmClick();
                     // FALL THROUGH //
                     goto case (int)NM.RCLICK;
 
@@ -6653,7 +6653,7 @@ namespace System.Windows.Forms
                     break;
 
                 case (int)NM.DBLCLK:
-                    WmNmDblClick(ref m);
+                    WmNmDblClick();
                     // FALL THROUGH //
                     goto case (int)NM.RDBLCLK;
 
