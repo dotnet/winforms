@@ -25,14 +25,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     ///  This class only knows how to process things that are natively in the typeinfo.  Other property
     ///  information such as IPerPropertyBrowsing is handled elsewhere.
     /// </summary>
-    internal class Com2TypeInfoProcessor
+    internal static class Com2TypeInfoProcessor
     {
         private static readonly TraceSwitch DbgTypeInfoProcessorSwitch = new TraceSwitch("DbgTypeInfoProcessor", "Com2TypeInfoProcessor: debug Com2 type info processing");
-
-        private Com2TypeInfoProcessor()
-        {
-        }
-
         private static ModuleBuilder moduleBuilder;
 
         private static ModuleBuilder ModuleBuilder

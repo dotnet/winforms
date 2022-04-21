@@ -8,7 +8,7 @@ namespace System.Windows.Forms.Layout
     // strings to use as property names.  Doing this allows us to use reference comparisons
     // which is advantageous because 1) pref and 2) we will not accidently collide with
     // names that extenders provide.
-    internal class PropertyNames
+    internal static class PropertyNames
     {
         public const string Alignment = "Alignment";
         public const string Anchor = "Anchor";
