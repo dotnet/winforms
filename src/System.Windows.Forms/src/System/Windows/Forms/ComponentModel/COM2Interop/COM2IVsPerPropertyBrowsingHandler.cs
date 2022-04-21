@@ -193,11 +193,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     HRESULT hr = vsObj.DisplayChildProperties(sender.DISPID, &pfResult);
                     if (gveevent.TypeConverter is Com2IDispatchConverter)
                     {
-                        gveevent.TypeConverter = new Com2IDispatchConverter(sender, (hr == HRESULT.S_OK && pfResult.IsTrue()));
+                        gveevent.TypeConverter = new Com2IDispatchConverter(sender, hr == HRESULT.S_OK && pfResult.IsTrue());
                     }
                     else
                     {
-                        gveevent.TypeConverter = new Com2IDispatchConverter(sender, (hr == HRESULT.S_OK && pfResult.IsTrue()), gveevent.TypeConverter);
+                        gveevent.TypeConverter = new Com2IDispatchConverter(hr == HRESULT.S_OK && pfResult.IsTrue(), gveevent.TypeConverter);
                     }
                 }
             }
