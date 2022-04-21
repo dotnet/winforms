@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Diagnostics;
 
@@ -15,7 +13,7 @@ namespace System.Windows.Forms
     internal class DataGridViewIntLinkedListEnumerator : IEnumerator
     {
         private readonly DataGridViewIntLinkedListElement _headElement;
-        private DataGridViewIntLinkedListElement _current;
+        private DataGridViewIntLinkedListElement? _current;
         private bool _reset;
 
         public DataGridViewIntLinkedListEnumerator(DataGridViewIntLinkedListElement headElement)
