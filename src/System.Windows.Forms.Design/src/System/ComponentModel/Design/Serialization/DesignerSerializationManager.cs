@@ -616,7 +616,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  This method takes a property that is owned by the given owner, and it wraps them in new property that is owned by the serialization manager.
         /// </summary>
-        private PropertyDescriptor WrapProperty(PropertyDescriptor property, object owner)
+        private static PropertyDescriptor WrapProperty(PropertyDescriptor property, object owner)
         {
             ArgumentNullException.ThrowIfNull(property);
 

@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Generators
     [Generator(LanguageNames.CSharp)]
     internal class ApplicationConfigurationGenerator : IIncrementalGenerator
     {
-        private void Execute(
+        private static void Execute(
             SourceProductionContext context,
             ImmutableArray<SyntaxNode> syntaxNodes,
             OutputKind outputKind,
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Generators
             }
         }
 
-        private string? GetUserProjectNamespace(SyntaxNode node)
+        private static string? GetUserProjectNamespace(SyntaxNode node)
         {
             string? ns = null;
 

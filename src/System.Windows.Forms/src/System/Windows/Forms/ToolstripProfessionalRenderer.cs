@@ -955,7 +955,7 @@ namespace System.Windows.Forms
         ///
         ///  if there isn't enough room to do (2) and (3) it merges into a single gradient from beginning to end.
         /// </summary>
-        private void FillWithDoubleGradient(Color beginColor, Color middleColor, Color endColor, Graphics g, Rectangle bounds, int firstGradientWidth, int secondGradientWidth, LinearGradientMode mode, bool flipHorizontal)
+        private static void FillWithDoubleGradient(Color beginColor, Color middleColor, Color endColor, Graphics g, Rectangle bounds, int firstGradientWidth, int secondGradientWidth, LinearGradientMode mode, bool flipHorizontal)
         {
             if ((bounds.Width == 0) || (bounds.Height == 0))
             {
@@ -1119,13 +1119,13 @@ namespace System.Windows.Forms
             }
         }
 
-        private void RenderBackgroundGradient(Graphics g, Control control, Color beginColor, Color endColor)
+        private static void RenderBackgroundGradient(Graphics g, Control control, Color beginColor, Color endColor)
         {
             RenderBackgroundGradient(g, control, beginColor, endColor, Orientation.Horizontal);
         }
 
         // renders the overall gradient
-        private void RenderBackgroundGradient(Graphics g, Control control, Color beginColor, Color endColor, Orientation orientation)
+        private static void RenderBackgroundGradient(Graphics g, Control control, Color beginColor, Color endColor, Orientation orientation)
         {
             if (control.RightToLeft == RightToLeft.Yes)
             {
@@ -1649,7 +1649,7 @@ namespace System.Windows.Forms
 
         // This draws differently sized arrows than the base one...
         // used only for drawing the overflow button madness.
-        private Point RenderArrowInternal(Graphics g, Rectangle dropDownRect, ArrowDirection direction, Brush brush)
+        private static Point RenderArrowInternal(Graphics g, Rectangle dropDownRect, ArrowDirection direction, Brush brush)
         {
             Point middle = new Point(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
 

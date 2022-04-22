@@ -198,7 +198,7 @@ namespace System.ComponentModel.Design
                         //Here, we'll try to get the traycontrol associated with the comp and supply the glyph with an alternative bounds
                         if (_serviceProvider.GetService(typeof(ComponentTray)) is ComponentTray compTray)
                         {
-                            ComponentTray.TrayControl trayControl = compTray.GetTrayControlFromComponent(comp);
+                            ComponentTray.TrayControl trayControl = ComponentTray.GetTrayControlFromComponent(comp);
                             if (trayControl is not null)
                             {
                                 Rectangle trayBounds = trayControl.Bounds;

@@ -485,7 +485,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Extracts the filename(s) returned by the file dialog.
         /// </summary>
-        private string[] GetMultiselectFiles(UnicodeCharBuffer charBuffer)
+        private static string[] GetMultiselectFiles(UnicodeCharBuffer charBuffer)
         {
             string directory = charBuffer.GetString();
             string fileName = charBuffer.GetString();
@@ -717,7 +717,7 @@ namespace System.Windows.Forms
         ///  given parameters. It also ensures that the focus is set back on the window that
         ///  had the focus to begin with (before we displayed the MessageBox).
         /// </summary>
-        private protected bool MessageBoxWithFocusRestore(string message, string caption,
+        private protected static bool MessageBoxWithFocusRestore(string message, string caption,
                 MessageBoxButtons buttons, MessageBoxIcon icon)
         {
             IntPtr focusHandle = User32.GetFocus();

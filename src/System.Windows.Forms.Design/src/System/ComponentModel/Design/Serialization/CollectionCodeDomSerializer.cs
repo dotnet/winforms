@@ -37,7 +37,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Computes the delta between an existing collection and a modified one. This is for the case of inherited items that have collection properties so we only generate Add/AddRange calls for the items that have been added.  It works by Hashing up the items in the original collection and then walking the modified collection and only returning those items which do not exist in the base collection.
         /// </summary>
-        private ICollection GetCollectionDelta(ICollection original, ICollection modified)
+        private static ICollection GetCollectionDelta(ICollection original, ICollection modified)
         {
             if (original is null || modified is null || original.Count == 0)
             {

@@ -88,7 +88,7 @@ namespace System.Windows.Forms.Design
         ///  This is called by MoveControls when the user has requested that the move be
         ///  cancelled.  This puts all the controls back to where they were.
         /// </summary>
-        private void CancelControlMove(Control[] controls, BoundsInfo[] bounds)
+        private static void CancelControlMove(Control[] controls, BoundsInfo[] bounds)
         {
             Debug.Assert(bounds != null && controls != null && bounds.Length == controls.Length, "bounds->controls mismatch");
 

@@ -172,7 +172,7 @@ namespace System.Windows.Forms
             return _listManagers.ContainsKey(GetKey(dataSource, dataMember));
         }
 
-        private HashKey GetKey(object dataSource, string dataMember)
+        private static HashKey GetKey(object dataSource, string dataMember)
         {
             return new HashKey(dataSource, dataMember);
         }

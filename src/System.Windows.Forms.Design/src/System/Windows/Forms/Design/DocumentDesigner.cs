@@ -299,7 +299,7 @@ namespace System.Windows.Forms.Design
             // of our own tray. If so, we should prevent this drag-drop from proceeding.
             //
             OleDragDropHandler ddh = GetOleDragHandler();
-            object[] dragComps = ddh.GetDraggingObjects(de);
+            object[] dragComps = OleDragDropHandler.GetDraggingObjects(de);
 
             if (dragComps != null)
             {
@@ -377,7 +377,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private ToolboxItem CreateCfCodeToolboxItem(IDataObject dataObject)
+        private static ToolboxItem CreateCfCodeToolboxItem(IDataObject dataObject)
         {
             object serializationData = dataObject.GetData(OleDragDropHandler.NestedToolboxItemFormat, false);
             if (serializationData != null)
@@ -874,7 +874,7 @@ namespace System.Windows.Forms.Design
         ///  Checks to see if the give CLSID is an ActiveX control
         ///  that we support.  This ignores designtime controls.
         /// </summary>
-        private bool IsSupportedActiveXControl(string clsid)
+        private static bool IsSupportedActiveXControl(string clsid)
         {
             RegistryKey key = null;
             RegistryKey designtimeKey = null;

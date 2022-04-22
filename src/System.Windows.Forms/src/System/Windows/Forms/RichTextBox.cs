@@ -1508,7 +1508,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private string GetEditorActionName(int actionID)
+        private static string GetEditorActionName(int actionID)
         {
             switch (actionID)
             {
@@ -2320,7 +2320,7 @@ namespace System.Windows.Forms
             return index;
         }
 
-        private bool GetCharInCharSet(char c, char[] charSet, bool negate)
+        private static bool GetCharInCharSet(char c, char[] charSet, bool negate)
         {
             bool match = false;
             int charSetLen = charSet.Length;

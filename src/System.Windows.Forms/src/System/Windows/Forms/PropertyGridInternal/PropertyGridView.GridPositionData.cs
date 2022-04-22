@@ -18,7 +18,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public GridPositionData(PropertyGridView gridView)
             {
-                _selectedItemTree = gridView.GetGridEntryHierarchy(gridView._selectedGridEntry);
+                _selectedItemTree = GetGridEntryHierarchy(gridView._selectedGridEntry);
                 _expandedState = gridView.SaveHierarchyState(gridView.TopLevelGridEntries);
                 _itemRow = gridView._selectedRow;
             }

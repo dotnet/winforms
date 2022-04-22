@@ -309,7 +309,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private unsafe int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
+        private static unsafe int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
         {
             switch ((User32.SBH)PARAM.LOWORD(m.WParamInternal))
             {

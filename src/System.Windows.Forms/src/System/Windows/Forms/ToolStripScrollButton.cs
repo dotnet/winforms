@@ -192,7 +192,7 @@ namespace System.Windows.Forms
             {
             }
 
-            public bool FreezeLocationChange
+            public static bool FreezeLocationChange
             {
                 get => false;
             }

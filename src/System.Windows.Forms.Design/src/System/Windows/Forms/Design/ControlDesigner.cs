@@ -1577,9 +1577,9 @@ namespace System.Windows.Forms.Design
         protected virtual void OnPaintAdornments(PaintEventArgs pe)
         {
             // If this control is being inherited, paint it
-            if (_inheritanceUI != null && pe.ClipRectangle.IntersectsWith(_inheritanceUI.InheritanceGlyphRectangle))
+            if (_inheritanceUI != null && pe.ClipRectangle.IntersectsWith(InheritanceUI.InheritanceGlyphRectangle))
             {
-                pe.Graphics.DrawImage(_inheritanceUI.InheritanceGlyph, 0, 0);
+                pe.Graphics.DrawImage(InheritanceUI.InheritanceGlyph, 0, 0);
             }
         }
 
@@ -2361,7 +2361,7 @@ namespace System.Windows.Forms.Design
 
         private IOverlayService OverlayService => _overlayService ??= GetService<IOverlayService>();
 
-        private bool IsMouseMessage(User32.WM msg)
+        private static bool IsMouseMessage(User32.WM msg)
         {
             if (msg >= User32.WM.MOUSEFIRST && msg <= User32.WM.MOUSELAST)
             {
@@ -2492,13 +2492,13 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private bool IsWindowInCurrentProcess(IntPtr hwnd)
+        private static bool IsWindowInCurrentProcess(IntPtr hwnd)
         {
             User32.GetWindowThreadProcessId(hwnd, out uint pid);
             return pid == CurrentProcessId;
         }
 
-        private uint CurrentProcessId
+        private static uint CurrentProcessId
         {
             get
             {

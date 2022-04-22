@@ -97,7 +97,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private int LabelBaselineOffset(ContentAlignment alignment, BorderStyle borderStyle)
+        private static int LabelBaselineOffset(ContentAlignment alignment, BorderStyle borderStyle)
         {
             if (((alignment & DesignerUtils.AnyMiddleAlignment) != 0) ||
                  ((alignment & DesignerUtils.AnyTopAlignment) != 0))

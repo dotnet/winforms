@@ -33,7 +33,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  from ShouldSerializeValue (indicating the ambient value for this property)
         ///  This will look for an AmbientValueAttribute and use it if it can.
         /// </summary>
-        private object GetPropertyValue(IDesignerSerializationManager manager, PropertyDescriptor property, object value, out bool validValue)
+        private static object GetPropertyValue(IDesignerSerializationManager manager, PropertyDescriptor property, object value, out bool validValue)
         {
             object propertyValue = null;
             validValue = true;

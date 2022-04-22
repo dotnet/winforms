@@ -681,7 +681,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private void AdjustOrigin(Graphics g, Point newOrigin, ref Rectangle r)
+        private static void AdjustOrigin(Graphics g, Point newOrigin, ref Rectangle r)
         {
             Debug.WriteLineIf(
                 s_gridViewDebugPaint.TraceVerbose,
@@ -1124,7 +1124,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private int GetEntryLabelIndent(GridEntry gridEntry) => gridEntry.PropertyLabelIndent + 1;
+        private static int GetEntryLabelIndent(GridEntry gridEntry) => gridEntry.PropertyLabelIndent + 1;
 
         private int GetEntryLabelLength(Graphics g, GridEntry gridEntry)
         {
@@ -1444,7 +1444,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return null;
         }
 
-        public int SplitterWidth => 1;
+        public static int SplitterWidth => 1;
 
         /// <summary>
         ///  The width of the label, splitter, and value.
@@ -1455,7 +1455,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public int ValuePaintWidth => _paintWidth;
 
-        public int ValueStringIndent => EditIndent;
+        public static int ValueStringIndent => EditIndent;
 
         public int ValueWidth => (int)(LabelWidth * (_labelRatio - 1));
 
@@ -1749,7 +1749,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return _allGridEntries;
         }
 
-        private int GetCurrentValueIndex(GridEntry gridEntry)
+        private static int GetCurrentValueIndex(GridEntry gridEntry)
         {
             if (!gridEntry.Enumerable)
             {
@@ -1813,7 +1813,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return -1;
         }
 
-        public int DefaultOutlineIndent => OutlineIndent;
+        public static int DefaultOutlineIndent => OutlineIndent;
 
         public int GetScrollOffset()
         {
@@ -1830,7 +1830,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  Returns an array of entries specifying the current heirarchy of entries from the given
         ///  <paramref name="gridEntry"/> through its parents to the root.
         /// </summary>
-        private GridEntryCollection GetGridEntryHierarchy(GridEntry gridEntry)
+        private static GridEntryCollection GetGridEntryHierarchy(GridEntry gridEntry)
         {
             if (gridEntry is null)
             {
@@ -2137,7 +2137,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return true;
         }
 
-        internal bool IsSiblingControl(Control control1, Control control2)
+        internal static bool IsSiblingControl(Control control1, Control control2)
         {
             Control parent1 = control1.ParentInternal;
             Control parent2 = control2.ParentInternal;
@@ -4233,7 +4233,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             SelectRow(_selectedRow);
         }
 
-        private void ResetOrigin(Graphics g) => g.ResetTransform();
+        private static void ResetOrigin(Graphics g) => g.ResetTransform();
 
         internal void RestoreHierarchyState(ArrayList expandedItems)
         {

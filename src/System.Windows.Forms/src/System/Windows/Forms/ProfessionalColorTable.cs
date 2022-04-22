@@ -334,7 +334,7 @@ namespace System.Windows.Forms
             return graphics.FindNearestColor(Color.FromArgb(r, g, b));
         }
 
-        private void InitCommonColors(ref Dictionary<KnownColors, Color> rgbTable)
+        private static void InitCommonColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
             // We need to calculate our own alpha blended color based on the Highlight and Window
             // colors on the system. Since terminalserver + alphablending doesnt work we can't just do a
@@ -666,7 +666,7 @@ namespace System.Windows.Forms
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrXLFormulaBarBkgd] = buttonFace;
         }
 
-        private void InitOliveLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
+        private static void InitOliveLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(81, 94, 51);
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(81, 94, 51);
@@ -912,7 +912,7 @@ namespace System.Windows.Forms
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrXLFormulaBarBkgd] = Color.FromArgb(217, 217, 167);
         }
 
-        private void InitSilverLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
+        private static void InitSilverLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(173, 174, 193);
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterFloating] = Color.FromArgb(122, 121, 153);
@@ -1154,7 +1154,7 @@ namespace System.Windows.Forms
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrXLFormulaBarBkgd] = Color.FromArgb(215, 215, 229);
         }
 
-        private void InitRoyaleColors(ref Dictionary<KnownColors, Color> rgbTable)
+        private static void InitRoyaleColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBkgd] = Color.FromArgb(238, 237, 240); // msocbvcrCBBkgd
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBDragHandle] = Color.FromArgb(189, 188, 191); // msocbvcrCBDragHandle -> Needs to equal VSCOLOR_COMMANDBAR_DRAGHANDLE in vscolors.cpp
@@ -1436,7 +1436,7 @@ namespace System.Windows.Forms
             InitCommonColors(ref rgbTable);
         }
 
-        private void InitBlueLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
+        private static void InitBlueLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(196, 205, 218);
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(196, 205, 218);

@@ -374,10 +374,10 @@ namespace System.ComponentModel.Design.Serialization
             using (TraceScope("ComponentCodeDomSerializerBase::DeserializePropertiesFromResources"))
             {
                 // It is much faster to dig through the resources first, and then map these resources to properties than it is to filter properties at each turn.  Why?  Because filtering properties requires a separate filter call for each object (because designers get a chance to filter, the cache is per-component), while resources are loaded once per document.
-                IDictionaryEnumerator de = ResourceCodeDomSerializer.Default.GetMetadataEnumerator(manager);
+                IDictionaryEnumerator de = ResourceCodeDomSerializer.GetMetadataEnumerator(manager);
                 if (de is null)
                 {
-                    de = ResourceCodeDomSerializer.Default.GetEnumerator(manager, CultureInfo.InvariantCulture);
+                    de = ResourceCodeDomSerializer.GetEnumerator(manager, CultureInfo.InvariantCulture);
                 }
 
                 if (de is not null)
@@ -1534,7 +1534,7 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        private object ExecuteBinaryExpression(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
+        private static object ExecuteBinaryExpression(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
         {
             // "Binary" operator type is actually a combination of several types of operators: boolean, binary  and math.  Group them into categories here.
             CodeBinaryOperatorType[] booleanOperators = new CodeBinaryOperatorType[]
@@ -1594,7 +1594,7 @@ namespace System.ComponentModel.Design.Serialization
             return left;
         }
 
-        private object ExecuteBinaryOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
+        private static object ExecuteBinaryOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
         {
             TypeCode leftType = left.GetTypeCode();
             TypeCode rightType = right.GetTypeCode();
@@ -1781,7 +1781,7 @@ namespace System.ComponentModel.Design.Serialization
             return result;
         }
 
-        private object ExecuteBooleanOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
+        private static object ExecuteBooleanOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
         {
             bool result = false;
             switch (op)
@@ -1821,7 +1821,7 @@ namespace System.ComponentModel.Design.Serialization
             return result;
         }
 
-        private object ExecuteMathOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
+        private static object ExecuteMathOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
         {
             if (op == CodeBinaryOperatorType.Add)
             {
@@ -2635,7 +2635,7 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        private PropertyDescriptorCollection GetFilteredProperties(IDesignerSerializationManager manager, object value, Attribute[] filter)
+        private static PropertyDescriptorCollection GetFilteredProperties(IDesignerSerializationManager manager, object value, Attribute[] filter)
         {
             PropertyDescriptorCollection props = GetPropertiesHelper(manager, value, filter);
             if (value is IComponent comp)
@@ -2912,7 +2912,7 @@ namespace System.ComponentModel.Design.Serialization
             return expression;
         }
 
-        private CodeExpression GetLegacyExpression(IDesignerSerializationManager manager, object value)
+        private static CodeExpression GetLegacyExpression(IDesignerSerializationManager manager, object value)
         {
             CodeExpression expression = null;
             if (manager.Context[typeof(LegacyExpressionTable)] is LegacyExpressionTable table)
@@ -2983,7 +2983,7 @@ namespace System.ComponentModel.Design.Serialization
             return expression;
         }
 
-        private void SetLegacyExpression(IDesignerSerializationManager manager, object value)
+        private static void SetLegacyExpression(IDesignerSerializationManager manager, object value)
         {
             if (value is IComponent)
             {

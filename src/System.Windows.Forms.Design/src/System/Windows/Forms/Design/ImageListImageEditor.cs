@@ -97,7 +97,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override bool GetPaintValueSupported(ITypeDescriptorContext context) => true;
 
-        private ImageListImage LoadImageFromStream(Stream stream, bool imageIsIcon)
+        private static ImageListImage LoadImageFromStream(Stream stream, bool imageIsIcon)
         {
             // Copy the original stream to a buffer, then wrap a memory stream around it to avoid locking the file.
             byte[] buffer = new byte[stream.Length];

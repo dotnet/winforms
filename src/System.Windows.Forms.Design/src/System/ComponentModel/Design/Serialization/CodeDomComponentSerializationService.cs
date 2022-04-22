@@ -488,7 +488,7 @@ namespace System.ComponentModel.Design.Serialization
             /// <summary>
             ///  Gets a name for this object.  It first tries the object's site, if it exists, and otherwise fabricates a unique name.
             /// </summary>
-            private string GetObjectName(object value)
+            private static string GetObjectName(object value)
             {
                 if (value is IComponent comp)
                 {
@@ -781,7 +781,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
 
-                private void DeserializeDesignTimeProperties(IDesignerSerializationManager manager, string name, object state)
+                private static void DeserializeDesignTimeProperties(IDesignerSerializationManager manager, string name, object state)
                 {
                     if (state is not null)
                     {
@@ -806,7 +806,7 @@ namespace System.ComponentModel.Design.Serialization
                 ///  This is used to resolve nested component references.  NestedComponents don't exist as sited components within the DesignerHost, they are actually sited within a parent component.  This method takes the FullName defined on INestedSite and returns the component which matches it. outerComponent is the name of the topmost component which does exist in the DesignerHost
                 ///  This code also exists in VSCodeDomDesignerLoader -- please keep them in sync.
                 /// </summary>
-                private IComponent ResolveNestedName(IDesignerSerializationManager manager, string name, ref string outerComponent)
+                private static IComponent ResolveNestedName(IDesignerSerializationManager manager, string name, ref string outerComponent)
                 {
                     IComponent curComp = null;
                     if (name is not null && manager is not null)
@@ -1039,7 +1039,7 @@ namespace System.ComponentModel.Design.Serialization
                     return resolved;
                 }
 
-                private void DeserializeEventResets(IDesignerSerializationManager manager, string name, object state)
+                private static void DeserializeEventResets(IDesignerSerializationManager manager, string name, object state)
                 {
                     if (state is List<string> eventNames && manager is not null && !string.IsNullOrEmpty(name))
                     {

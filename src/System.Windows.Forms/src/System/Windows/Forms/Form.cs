@@ -2698,7 +2698,7 @@ namespace System.Windows.Forms
         // Fonts) we end up making everything too small due to roundoff,
         // etc... solution - just don't shrink as much.
         //
-        private float AdjustScale(float scale)
+        private static float AdjustScale(float scale)
         {
             // NOTE : This function is cloned in FormDocumentDesigner... remember to keep
             //      : them in sync
@@ -5360,7 +5360,7 @@ namespace System.Windows.Forms
             return _formState[FormStateAutoScaling] != 0;
         }
 
-        private bool ShouldSerializeClientSize()
+        private static bool ShouldSerializeClientSize()
         {
             return true;
         }

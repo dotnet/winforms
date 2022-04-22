@@ -182,7 +182,7 @@ namespace System.Windows.Forms
                 return NewLuma(Luminosity, n, scale);
             }
 
-            private int NewLuma(int luminosity, int n, bool scale)
+            private static int NewLuma(int luminosity, int n, bool scale)
             {
                 if (n == 0)
                 {
@@ -210,7 +210,7 @@ namespace System.Windows.Forms
                 return luminosity;
             }
 
-            private Color ColorFromHLS(int hue, int luminosity, int saturation)
+            private static Color ColorFromHLS(int hue, int luminosity, int saturation)
             {
                 byte r, g, b;
                 int magic1, magic2;
@@ -247,7 +247,7 @@ namespace System.Windows.Forms
                 return Color.FromArgb(r, g, b);
             }
 
-            private int HueToRGB(int n1, int n2, int hue)
+            private static int HueToRGB(int n1, int n2, int hue)
             {
                 // range check: note values passed add/subtract thirds of range
 

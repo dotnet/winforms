@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Design
         {
             readonly Binding binding;
 
-            internal LocalUIItem(DesignBindingValueUIHandler handler, Binding binding) : base(handler.DataBitmap, new PropertyValueUIItemInvokeHandler(handler.OnPropertyValueUIItemInvoke), GetToolTip(binding))
+            internal LocalUIItem(DesignBindingValueUIHandler handler, Binding binding) : base(handler.DataBitmap, new PropertyValueUIItemInvokeHandler(OnPropertyValueUIItemInvoke), GetToolTip(binding))
             {
                 this.binding = binding;
             }

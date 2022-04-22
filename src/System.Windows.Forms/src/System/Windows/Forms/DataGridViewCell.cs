@@ -2573,7 +2573,7 @@ namespace System.Windows.Forms
             return toolTipText;
         }
 
-        private protected string GetToolTipTextWithoutMnemonic(string toolTipText)
+        private protected static string GetToolTipTextWithoutMnemonic(string toolTipText)
         {
             if (WindowsFormsUtils.ContainsMnemonic(toolTipText))
             {

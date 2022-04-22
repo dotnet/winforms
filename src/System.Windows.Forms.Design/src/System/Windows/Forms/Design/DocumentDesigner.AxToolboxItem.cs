@@ -227,7 +227,7 @@ namespace System.Windows.Forms.Design
             ///  Get the VSProject of the Containing Project.
             ///  Get the References property of the VSProject.</para>
             /// </summary>
-            private object GetReferences(IDesignerHost host)
+            private static object GetReferences(IDesignerHost host)
             {
                 Debug.Assert(host != null, "Null Designer Host");
 

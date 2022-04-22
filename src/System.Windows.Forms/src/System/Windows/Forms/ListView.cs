@@ -2993,7 +2993,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DeleteFileName(string? fileName)
+        private static void DeleteFileName(string? fileName)
         {
             if (!string.IsNullOrEmpty(fileName))
             {

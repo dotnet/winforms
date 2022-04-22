@@ -109,7 +109,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private Rectangle GetDetailsListRectangle(Point point, ListViewItem item, Rectangle itemBounds)
+        private static Rectangle GetDetailsListRectangle(Point point, ListViewItem item, Rectangle itemBounds)
         {
             // The GetItemRect(index, ItemBoundsPortion.Label) method returns the width of the cell,
             // not the text for "Details" and "List" views. As result, if the text is smaller than the cell,

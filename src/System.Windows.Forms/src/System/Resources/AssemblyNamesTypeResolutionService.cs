@@ -199,7 +199,7 @@ namespace System.Resources
         /// <summary>
         ///  This is matching %windir%\Microsoft.NET\Framework*, so both 32bit and 64bit framework will be covered.
         /// </summary>
-        private bool IsDotNetAssembly(string assemblyPath)
+        private static bool IsDotNetAssembly(string assemblyPath)
         {
             return assemblyPath is not null && (assemblyPath.StartsWith(s_dotNetPath, StringComparison.OrdinalIgnoreCase) || assemblyPath.StartsWith(s_dotNetPathX86, StringComparison.OrdinalIgnoreCase));
         }

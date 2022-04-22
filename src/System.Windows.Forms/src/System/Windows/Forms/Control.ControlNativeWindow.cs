@@ -56,7 +56,7 @@ namespace System.Windows.Forms
 
             protected override void OnThreadException(Exception e)
             {
-                _control.WndProcException(e);
+                WndProcException(e);
             }
 
             // IWindowTarget method

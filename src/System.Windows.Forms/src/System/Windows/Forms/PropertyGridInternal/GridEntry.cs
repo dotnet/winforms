@@ -1788,8 +1788,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            rect.X += paintIndent + ownerGrid.ValueStringIndent;
-            rect.Width -= paintIndent + 2 * ownerGrid.ValueStringIndent;
+            rect.X += paintIndent + PropertyGridView.ValueStringIndent;
+            rect.Width -= paintIndent + 2 * PropertyGridView.ValueStringIndent;
 
             // Bold the property if we need to persist it (e.g. it's not the default value).
             bool valueModified = paintFlags.HasFlag(PaintValueFlags.CheckShouldSerialize) && ShouldSerializePropertyValue();
@@ -1935,7 +1935,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             // Are we in the value?
-            labelWidth += gridHost.SplitterWidth;
+            labelWidth += PropertyGridView.SplitterWidth;
             if (x >= labelWidth && x <= labelWidth + gridHost.ValueWidth)
             {
                 RaiseEvent(count % 2 == 0 ? s_valueDoubleClickEvent : s_valueClickEvent, EventArgs.Empty);
@@ -2006,7 +2006,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return _cacheItems.LastShouldSerialize;
         }
 
-        private PropertyDescriptor[] SortParenProperties(PropertyDescriptor[] props)
+        private static PropertyDescriptor[] SortParenProperties(PropertyDescriptor[] props)
         {
             PropertyDescriptor[] newProperties = null;
             int newPosition = 0;

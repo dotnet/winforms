@@ -210,7 +210,7 @@ namespace System.Windows.Forms.Layout
         ///  - Does nothing if Cache is valid
         ///  - sets RowStart,RowSpan,ColumnStart,ColumnSpan into the LayoutInfo[] collection (containerInfo.ChildrenInfo)
         /// </summary>
-        private void EnsureRowAndColumnAssignments(IArrangedElement container, ContainerInfo containerInfo, bool doNotCache)
+        private static void EnsureRowAndColumnAssignments(IArrangedElement container, ContainerInfo containerInfo, bool doNotCache)
         {
             // Assign new rows and columns if the cache is invalid or if we are in GetPreferredSize
             if (!HasCachedAssignments(containerInfo) || doNotCache)
@@ -224,7 +224,7 @@ namespace System.Windows.Forms.Layout
         /// <summary>
         ///  ExpandLastElement: expands the row/column to fill the rest of the space in the container.
         /// </summary>
-        private void ExpandLastElement(ContainerInfo containerInfo, Size usedSpace, Size totalSpace)
+        private static void ExpandLastElement(ContainerInfo containerInfo, Size usedSpace, Size totalSpace)
         {
             Strip[] rows = containerInfo.Rows;
             Strip[] cols = containerInfo.Columns;
@@ -243,7 +243,7 @@ namespace System.Windows.Forms.Layout
         ///  AssignRowsAndColumns: part of EnsureRowAndColumnAssignments.
         ///  determines the number of rows and columns we need to create
         /// </summary>
-        private void AssignRowsAndColumns(ContainerInfo containerInfo)
+        private static void AssignRowsAndColumns(ContainerInfo containerInfo)
         {
             int numCols = containerInfo.MaxColumns;
             int numRows = containerInfo.MaxRows;
@@ -320,7 +320,7 @@ namespace System.Windows.Forms.Layout
         ///  Determines the placement of fixed and flow elements.  Walks through the rows/columns - if there's a
         ///  spot for the fixed element, place it, else place the next flow element.
         /// </summary>
-        private bool xAssignRowsAndColumns(ContainerInfo containerInfo, LayoutInfo[] childrenInfo, int maxColumns, int maxRows, TableLayoutPanelGrowStyle growStyle)
+        private static bool xAssignRowsAndColumns(ContainerInfo containerInfo, LayoutInfo[] childrenInfo, int maxColumns, int maxRows, TableLayoutPanelGrowStyle growStyle)
         {
             Debug.Assert(maxColumns > 0, "maxColumn must be positive");
 
@@ -512,7 +512,7 @@ namespace System.Windows.Forms.Layout
         ///  IsCursorPastInsertionPoint: part of xAssignRowsAndColumns.
         ///  check to see if the user specified location for fixedLayoutInfo has passed the insertion point specified by the cursor
         /// </summary>
-        private bool IsCursorPastInsertionPoint(LayoutInfo fixedLayoutInfo, int insertionRow, int insertionCol)
+        private static bool IsCursorPastInsertionPoint(LayoutInfo fixedLayoutInfo, int insertionRow, int insertionCol)
         {
             Debug.Assert(fixedLayoutInfo.IsAbsolutelyPositioned, "should only check for those elements which are absolutely positioned");
 
@@ -535,7 +535,7 @@ namespace System.Windows.Forms.Layout
         ///  IsOverlappingWithReservationGrid: part of xAssignRowsAndColumns.
         ///  check to see if the absolutely positioned layoutInfo fits in the reservation grid
         /// </summary>
-        private bool IsOverlappingWithReservationGrid(LayoutInfo fixedLayoutInfo, ReservationGrid reservationGrid, int currentRow)
+        private static bool IsOverlappingWithReservationGrid(LayoutInfo fixedLayoutInfo, ReservationGrid reservationGrid, int currentRow)
         {
             //since we shall not put anything above our current row, this means that the fixedLayoutInfo overlaps with something already placed on the table
             if (fixedLayoutInfo.RowPosition < currentRow)
@@ -563,7 +563,7 @@ namespace System.Windows.Forms.Layout
         ///  collide with a rowSpanned element.  ColStop will be the column on which the
         ///  element ends (exclusive).
         /// </summary>
-        private void AdvanceUntilFits(int maxColumns, ReservationGrid reservationGrid, LayoutInfo layoutInfo, out int colStop)
+        private static void AdvanceUntilFits(int maxColumns, ReservationGrid reservationGrid, LayoutInfo layoutInfo, out int colStop)
         {
             int prevRow = layoutInfo.RowStart;
             do
@@ -576,7 +576,7 @@ namespace System.Windows.Forms.Layout
         /// <summary>
         ///  GetColStartAndStop: part of xAssignRowsAndColumns.
         /// </summary>
-        private void GetColStartAndStop(int maxColumns, ReservationGrid reservationGrid, LayoutInfo layoutInfo, out int colStop)
+        private static void GetColStartAndStop(int maxColumns, ReservationGrid reservationGrid, LayoutInfo layoutInfo, out int colStop)
         {
             // Compute the column our element ends on
             colStop = layoutInfo.ColumnStart + layoutInfo.ColumnSpan;
@@ -595,7 +595,7 @@ namespace System.Windows.Forms.Layout
             }
         }
 
-        private bool ScanRowForOverlap(int maxColumns, ReservationGrid reservationGrid, LayoutInfo layoutInfo, int stopCol, int rowOffset)
+        private static bool ScanRowForOverlap(int maxColumns, ReservationGrid reservationGrid, LayoutInfo layoutInfo, int stopCol, int rowOffset)
         {
             for (int i = layoutInfo.ColumnStart; i < stopCol; i++)
             {
@@ -617,7 +617,7 @@ namespace System.Windows.Forms.Layout
             return false;
         }
 
-        private Size ApplyStyles(ContainerInfo containerInfo, Size proposedConstraints, bool measureOnly)
+        private static Size ApplyStyles(ContainerInfo containerInfo, Size proposedConstraints, bool measureOnly)
         {
             Size preferredSize = Size.Empty;
 
@@ -652,7 +652,7 @@ namespace System.Windows.Forms.Layout
         }
 
         //allocate space for all absolutely sized strips. Set the size of the rest of the strips to 0.
-        private void InitializeStrips(Strip[] strips, IList styles)
+        private static void InitializeStrips(Strip[] strips, IList styles)
         {
             Strip strip;
             for (int i = 0; i < strips.Length; i++)
@@ -675,7 +675,7 @@ namespace System.Windows.Forms.Layout
             }
         }
 
-        private int InflateColumns(ContainerInfo containerInfo, Size proposedConstraints, bool measureOnly)
+        private static int InflateColumns(ContainerInfo containerInfo, Size proposedConstraints, bool measureOnly)
         {
             bool dontHonorConstraint = measureOnly;
 
@@ -799,7 +799,7 @@ namespace System.Windows.Forms.Layout
             return width;
         }
 
-        private int InflateRows(ContainerInfo containerInfo, Size proposedConstraints, int expandLastElementWidth, bool measureOnly)
+        private static int InflateRows(ContainerInfo containerInfo, Size proposedConstraints, int expandLastElementWidth, bool measureOnly)
         {
             bool dontHonorConstraint = measureOnly;
 
@@ -864,7 +864,7 @@ namespace System.Windows.Forms.Layout
             return DistributeStyles(containerInfo.CellBorderWidth, containerInfo.RowStyles, containerInfo.Rows, proposedConstraints.Height, dontHonorConstraint);
         }
 
-        private Size GetElementSize(IArrangedElement element, Size proposedConstraints)
+        private static Size GetElementSize(IArrangedElement element, Size proposedConstraints)
         {
             if (CommonProperties.GetAutoSize(element))
             {
@@ -876,7 +876,7 @@ namespace System.Windows.Forms.Layout
             }
         }
 
-        internal int SumStrips(Strip[] strips, int start, int span)
+        internal static int SumStrips(Strip[] strips, int start, int span)
         {
             int size = 0;
             for (int i = start; i < Math.Min(start + span, strips.Length); i++)
@@ -891,13 +891,13 @@ namespace System.Windows.Forms.Layout
         /// <summary>
         ///  Sets the minimum size for each element
         /// </summary>
-        private void DistributeSize(IList styles, Strip[] strips, int start, int stop, int min, int max, int cellBorderWidth)
+        private static void DistributeSize(IList styles, Strip[] strips, int start, int stop, int min, int max, int cellBorderWidth)
         {
             xDistributeSize(styles, strips, start, stop, min, MinSizeProxy.GetInstance, cellBorderWidth);
             xDistributeSize(styles, strips, start, stop, max, MaxSizeProxy.GetInstance, cellBorderWidth);
         }
 
-        private void xDistributeSize(IList styles, Strip[] strips, int start, int stop, int desiredLength, SizeProxy sizeProxy, int cellBorderWidth)
+        private static void xDistributeSize(IList styles, Strip[] strips, int start, int stop, int desiredLength, SizeProxy sizeProxy, int cellBorderWidth)
         {
             int currentLength = 0;   //total length allocated so far
             int numUninitializedStrips = 0;  //number of strips whose Size is 0 and is not absolutely positioned
@@ -1007,7 +1007,7 @@ namespace System.Windows.Forms.Layout
         }
 
         //determines whether strip[index]'s style is absolutely sized
-        private bool IsAbsolutelySized(int index, IList styles)
+        private static bool IsAbsolutelySized(int index, IList styles)
         {
             return (index < styles.Count) && ((TableLayoutStyle)styles[index]).SizeType == SizeType.Absolute;
         }
@@ -1016,7 +1016,7 @@ namespace System.Windows.Forms.Layout
         ///  Now that we've allocated minimum and maximum sizes to everyone (the strips), distribute the extra space
         ///  as according to the Row/Column styles.
         /// </summary>
-        private int DistributeStyles(int cellBorderWidth, IList styles, Strip[] strips, int maxSize, bool dontHonorConstraint)
+        private static int DistributeStyles(int cellBorderWidth, IList styles, Strip[] strips, int maxSize, bool dontHonorConstraint)
         {
             int usedSpace = 0;
             //first, allocate the minimum space required for each element
@@ -1182,7 +1182,7 @@ namespace System.Windows.Forms.Layout
             return usedSpace;
         }
 
-        private void SetElementBounds(ContainerInfo containerInfo, RectangleF displayRectF)
+        private static void SetElementBounds(ContainerInfo containerInfo, RectangleF displayRectF)
         {
             int cellBorderWidth = containerInfo.CellBorderWidth;
 
@@ -1303,7 +1303,7 @@ namespace System.Windows.Forms.Layout
             Debug_VerifyNoOverlapping(containerInfo.Container);
         }
 
-        internal IArrangedElement GetControlFromPosition(IArrangedElement container, int column, int row)
+        internal static IArrangedElement GetControlFromPosition(IArrangedElement container, int column, int row)
         {
             if (row < 0)
             {
@@ -1344,7 +1344,7 @@ namespace System.Windows.Forms.Layout
             return null;
         }
 
-        internal TableLayoutPanelCellPosition GetPositionFromControl(IArrangedElement container, IArrangedElement child)
+        internal static TableLayoutPanelCellPosition GetPositionFromControl(IArrangedElement container, IArrangedElement child)
         {
             if (container is null || child is null)
             {
@@ -1418,7 +1418,7 @@ namespace System.Windows.Forms.Layout
         #region DEBUG
         // Verify that the Row/Column assignments on the control are current.
         [Conditional("DEBUG_LAYOUT")]
-        private void Debug_VerifyAssignmentsAreCurrent(IArrangedElement container, ContainerInfo containerInfo)
+        private static void Debug_VerifyAssignmentsAreCurrent(IArrangedElement container, ContainerInfo containerInfo)
         {
 #if DEBUG
             Hashtable oldLayoutInfo = new Hashtable();
@@ -1482,7 +1482,7 @@ namespace System.Windows.Forms.Layout
 
         // Verifies that there is no overlapping of controls on the table (unless forced to do so via abs. positioning)
         [Conditional("DEBUG_LAYOUT")]
-        private void Debug_VerifyNoOverlapping(IArrangedElement container)
+        private static void Debug_VerifyNoOverlapping(IArrangedElement container)
         {
             // this code may be useful for debugging, but doesnt work well with
             // row styles

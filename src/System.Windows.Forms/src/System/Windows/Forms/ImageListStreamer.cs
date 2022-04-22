@@ -81,7 +81,7 @@ namespace System.Windows.Forms
         ///  Compresses the given input, returning a new array that represents
         ///  the compressed data.
         /// </summary>
-        private byte[] Compress(byte[] input)
+        private static byte[] Compress(byte[] input)
         {
             int finalLength = 0;
             int idx = 0;
@@ -146,7 +146,7 @@ namespace System.Windows.Forms
         ///  Decompresses the given input, returning a new array that represents
         ///  the uncompressed data.
         /// </summary>
-        private byte[] Decompress(byte[] input)
+        private static byte[] Decompress(byte[] input)
         {
             int finalLength = 0;
             int idx = 0;

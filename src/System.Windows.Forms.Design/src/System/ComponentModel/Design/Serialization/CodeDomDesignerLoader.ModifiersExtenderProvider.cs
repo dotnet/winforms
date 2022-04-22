@@ -85,7 +85,7 @@ namespace System.ComponentModel.Design.Serialization
             [SRDescription(nameof(SR.CodeDomDesignerLoaderPropGenerateMember))]
             [Category("Design")]
             [HelpKeyword("Designer_GenerateMember")]
-            public bool GetGenerateMember(IComponent comp)
+            public static bool GetGenerateMember(IComponent comp)
             {
                 ISite site = comp.Site;
 
@@ -122,7 +122,7 @@ namespace System.ComponentModel.Design.Serialization
             [Category("Design")]
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             [HelpKeyword("Designer_Modifiers")]
-            public MemberAttributes GetModifiers(IComponent comp)
+            public static MemberAttributes GetModifiers(IComponent comp)
             {
                 ISite site = comp.Site;
 
@@ -160,7 +160,7 @@ namespace System.ComponentModel.Design.Serialization
             ///  is a boolean that, if true, causes a field member to be generated for
             ///  the object.
             /// </summary>
-            public void SetGenerateMember(IComponent comp, bool generate)
+            public static void SetGenerateMember(IComponent comp, bool generate)
             {
                 ISite site = comp.Site;
 
@@ -208,7 +208,7 @@ namespace System.ComponentModel.Design.Serialization
             ///  is an enum representing the "public/protected/private" scope
             ///  of a component.
             /// </summary>
-            public void SetModifiers(IComponent comp, MemberAttributes modifiers)
+            public static void SetModifiers(IComponent comp, MemberAttributes modifiers)
             {
                 ISite site = comp.Site;
 

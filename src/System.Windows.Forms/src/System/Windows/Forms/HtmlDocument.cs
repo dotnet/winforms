@@ -564,7 +564,7 @@ namespace System.Windows.Forms
             remove => DocumentShim.RemoveHandler(s_eventStop, value);
         }
 
-        private Color ColorFromObject(object oColor)
+        private static Color ColorFromObject(object oColor)
         {
             try
             {

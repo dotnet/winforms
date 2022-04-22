@@ -91,7 +91,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Returns a code dom serializer
         /// </summary>
-        private object GetCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
+        private static object GetCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
         {
             if (currentSerializer is null)
             {
@@ -301,7 +301,7 @@ namespace System.ComponentModel.Design.Serialization
             /// <summary>
             ///  Broadcasts a global change, indicating that all objects on the designer have changed.
             /// </summary>
-            private void BroadcastGlobalChange(IComponent component)
+            private static void BroadcastGlobalChange(IComponent component)
             {
                 ISite site = component.Site;
 

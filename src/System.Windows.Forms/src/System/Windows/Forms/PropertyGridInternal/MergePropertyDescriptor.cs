@@ -103,7 +103,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  This method attempts to copy the given value so unique values are always passed to each object.
         ///  If the value cannot be copied the original value will be returned.
         /// </summary>
-        private object CopyValue(object value)
+        private static object CopyValue(object value)
         {
             // Null is always OK.
             if (value is null)

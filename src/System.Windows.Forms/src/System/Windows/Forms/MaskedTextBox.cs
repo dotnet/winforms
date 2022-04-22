@@ -1109,7 +1109,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The value of the Edit control default password char.
         /// </summary>
-        private char SystemPasswordChar
+        private static char SystemPasswordChar
         {
             get
             {

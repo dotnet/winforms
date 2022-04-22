@@ -225,7 +225,7 @@ namespace System.Windows.Forms
             }
 
             [OnDeserializing]
-            private void OnDeserializing(StreamingContext ctx)
+            private static void OnDeserializing(StreamingContext ctx)
             {
             }
 
@@ -237,12 +237,12 @@ namespace System.Windows.Forms
             }
 
             [OnSerializing]
-            private void OnSerializing(StreamingContext ctx)
+            private static void OnSerializing(StreamingContext ctx)
             {
             }
 
             [OnSerialized]
-            private void OnSerialized(StreamingContext ctx)
+            private static void OnSerialized(StreamingContext ctx)
             {
             }
 

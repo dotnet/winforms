@@ -1232,7 +1232,7 @@ namespace System.Windows.Forms
             return base.IsInputKey(keyData);
         }
 
-        private void NotifyAboutFocusState(TabPage selectedTab, bool focused)
+        private static void NotifyAboutFocusState(TabPage selectedTab, bool focused)
         {
             if (selectedTab is null)
             {

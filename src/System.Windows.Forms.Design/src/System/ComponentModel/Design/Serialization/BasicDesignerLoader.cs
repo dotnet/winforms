@@ -881,7 +881,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  to it.  You should only throw for missing services that are absolutely essential for
         ///  operation.  If there is a way to gracefully degrade, then you should do it.
         /// </summary>
-        private void ThrowMissingService(Type serviceType)
+        private static void ThrowMissingService(Type serviceType)
         {
             Exception ex = new InvalidOperationException(string.Format(SR.BasicDesignerLoaderMissingService, serviceType.Name));
             ex.HelpLink = SR.BasicDesignerLoaderMissingService;

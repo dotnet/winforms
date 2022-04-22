@@ -172,7 +172,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Do proper cleanup of ownership, etc.
             /// </summary>
-            private void OnAfterRemove(ToolStripPanelRow row)
+            private static void OnAfterRemove(ToolStripPanelRow row)
             {
 #if DEBUG
                 if (s_toolStripPanelMissingRowDebug.TraceVerbose)

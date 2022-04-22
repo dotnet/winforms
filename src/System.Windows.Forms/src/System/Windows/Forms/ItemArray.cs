@@ -277,7 +277,7 @@ namespace System.Windows.Forms
             Version++;
         }
 
-        public Entry GetEntry(object element)
+        public static Entry GetEntry(object element)
         {
             return element is Entry entryElement ? entryElement : new Entry(element);
         }

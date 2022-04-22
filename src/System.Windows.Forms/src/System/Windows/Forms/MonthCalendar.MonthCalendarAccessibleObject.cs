@@ -124,7 +124,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Associates Win API day of week values with DateTime values.
             /// </summary>
-            private DayOfWeek CastDayToDayOfWeek(Day day)
+            private static DayOfWeek CastDayToDayOfWeek(Day day)
                 => day switch
                 {
                     Day.Monday => DayOfWeek.Monday,

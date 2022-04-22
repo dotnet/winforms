@@ -76,7 +76,7 @@ namespace System.Windows.Forms
         ///  windows forms control should not attempt to quit the application.
         /// </summary>
         public static bool AllowQuit
-            => ThreadContext.FromCurrent().GetAllowQuit();
+            => ThreadContext.GetAllowQuit();
 
         /// <summary>
         ///  Returns True if it is OK to continue idle processing. Typically called in an Application.Idle event handler.

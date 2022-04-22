@@ -458,12 +458,12 @@ namespace System.Windows.Forms
             }
         }
 
-        private void RenderItemInternalFilled(ToolStripItemRenderEventArgs e)
+        private static void RenderItemInternalFilled(ToolStripItemRenderEventArgs e)
         {
             RenderItemInternalFilled(e, /*pressFill=*/true);
         }
 
-        private void RenderItemInternalFilled(ToolStripItemRenderEventArgs e, bool pressFill)
+        private static void RenderItemInternalFilled(ToolStripItemRenderEventArgs e, bool pressFill)
         {
             Graphics g = e.Graphics;
             Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
@@ -486,7 +486,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DrawHightContrastDashedBorder(Graphics graphics, ToolStripItem item)
+        private static void DrawHightContrastDashedBorder(Graphics graphics, ToolStripItem item)
         {
             var bounds = item.ClientBounds;
             float[] dashValues = { 2, 2 };

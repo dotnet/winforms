@@ -579,7 +579,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private unsafe void CopyBitmapData(BitmapData sourceData, BitmapData targetData)
+        private static unsafe void CopyBitmapData(BitmapData sourceData, BitmapData targetData)
         {
             Debug.Assert(Image.GetPixelFormatSize(sourceData.PixelFormat) == 32);
             Debug.Assert(Image.GetPixelFormatSize(sourceData.PixelFormat) == Image.GetPixelFormatSize(targetData.PixelFormat));

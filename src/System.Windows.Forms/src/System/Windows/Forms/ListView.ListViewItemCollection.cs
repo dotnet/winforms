@@ -327,7 +327,7 @@ namespace System.Windows.Forms
             ///  Searches for Controls by their Name property, builds up a list
             ///  of all the controls that match.
             /// </summary>
-            private void FindInternal(string key, bool searchAllSubItems, ListViewItemCollection listViewItems, List<ListViewItem> foundItems)
+            private static void FindInternal(string key, bool searchAllSubItems, ListViewItemCollection listViewItems, List<ListViewItem> foundItems)
             {
                 for (int i = 0; i < listViewItems.Count; i++)
                 {

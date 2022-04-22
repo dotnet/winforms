@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// This is a small helper method that returns the serializer for base Class
         /// </summary>
-        private CodeDomSerializer GetBaseSerializer(IDesignerSerializationManager manager)
+        private static CodeDomSerializer GetBaseSerializer(IDesignerSerializationManager manager)
         {
             return (CodeDomSerializer)manager.GetSerializer(typeof(Component), typeof(CodeDomSerializer));
         }

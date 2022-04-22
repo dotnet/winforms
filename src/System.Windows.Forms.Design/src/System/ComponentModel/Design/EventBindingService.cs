@@ -144,7 +144,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Returns true if the given event has a generic argument or return value in its raise method.
         /// </summary>
-        private bool HasGenericArgument(EventDescriptor ed)
+        private static bool HasGenericArgument(EventDescriptor ed)
         {
             if (ed is null || ed.ComponentType is null)
             {

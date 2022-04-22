@@ -323,7 +323,7 @@ namespace System.Windows.Forms
             return BackColor != SystemColors.AppWorkspace;
         }
 
-        private bool ShouldSerializeLocation()
+        private static bool ShouldSerializeLocation()
         {
             return false;
         }

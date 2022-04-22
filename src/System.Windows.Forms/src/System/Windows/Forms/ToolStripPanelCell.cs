@@ -353,12 +353,12 @@ namespace System.Windows.Forms
             }
         }
 
-        private int ShrinkHorizontal(int shrinkBy)
+        private static int ShrinkHorizontal(int shrinkBy)
         {
             return 0;
         }
 
-        private int ShrinkVertical(int shrinkBy)
+        private static int ShrinkVertical(int shrinkBy)
         {
             return 0;
         }

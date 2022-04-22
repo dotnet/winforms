@@ -1321,7 +1321,7 @@ namespace System.ComponentModel.Design
                     }
                 }
 
-                private SerializationStore Serialize(UndoEngine engine, object component, MemberDescriptor member)
+                private static SerializationStore Serialize(UndoEngine engine, object component, MemberDescriptor member)
                 {
                     SerializationStore store;
                     using (store = engine._serializationService.CreateStore())

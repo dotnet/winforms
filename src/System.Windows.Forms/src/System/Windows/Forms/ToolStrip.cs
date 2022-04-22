@@ -2887,7 +2887,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void PaintParentRegion(Graphics g, Region region)
+        internal static void PaintParentRegion(Graphics g, Region region)
         {
         }
 

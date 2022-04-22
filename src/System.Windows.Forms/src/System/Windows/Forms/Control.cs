@@ -1836,7 +1836,7 @@ namespace System.Windows.Forms
 
         protected virtual Padding DefaultPadding => Padding.Empty;
 
-        private RightToLeft DefaultRightToLeft => RightToLeft.No;
+        private static RightToLeft DefaultRightToLeft => RightToLeft.No;
 
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
@@ -3650,7 +3650,7 @@ namespace System.Windows.Forms
         }
 
         // This auto upgraded v1 client to per-process doublebuffering logic
-        private BufferedGraphicsContext BufferContext => BufferedGraphicsManager.Current;
+        private static BufferedGraphicsContext BufferContext => BufferedGraphicsManager.Current;
 
         /// <summary>
         ///  Indicates whether the user interface is in a state to show or hide keyboard
@@ -5815,7 +5815,7 @@ namespace System.Windows.Forms
             return new Rectangle(sx, sy, sw, sh);
         }
 
-        private MouseButtons GetXButton(int wparam)
+        private static MouseButtons GetXButton(int wparam)
         {
             switch (wparam)
             {
@@ -6511,7 +6511,7 @@ namespace System.Windows.Forms
         ///  When the invoke request comes from this thread, there won't be an ExecutionContext so we just invoke
         ///  the callback as is.
         /// </summary>
-        private void InvokeMarshaledCallback(ThreadMethodEntry tme)
+        private static void InvokeMarshaledCallback(ThreadMethodEntry tme)
         {
             if (tme._executionContext is not null)
             {
@@ -6881,7 +6881,7 @@ namespace System.Windows.Forms
         }
 
         // Checks if this is a container control and will be scaled by parent.
-        private bool IsScaledByParent(Control control)
+        private static bool IsScaledByParent(Control control)
         {
             Control parentControl = control.Parent;
             while (parentControl is not null and not ContainerControl)
@@ -6945,7 +6945,7 @@ namespace System.Windows.Forms
             AdjustWindowRectExForDpi(ref rect, style, bMenu, exStyle, _deviceDpi);
         }
 
-        private void AdjustWindowRectExForDpi(ref RECT rect, int style, bool bMenu, int exStyle, int dpi)
+        private static void AdjustWindowRectExForDpi(ref RECT rect, int style, bool bMenu, int exStyle, int dpi)
         {
             if ((DpiHelper.IsPerMonitorV2Awareness || DpiHelper.IsScalingRequired) && OsVersion.IsWindows10_1703OrGreater)
             {
@@ -7048,7 +7048,7 @@ namespace System.Windows.Forms
         ///  buffer needed.  If a buffer was passed, it fills the buffer.
         ///  If the passed buffer is not long enough it will return -1.
         /// </summary>
-        private void MarshalStringToMessage(string value, ref Message m)
+        private static void MarshalStringToMessage(string value, ref Message m)
         {
             if (m.LParamInternal == 0)
             {
@@ -12552,7 +12552,7 @@ namespace System.Windows.Forms
             if (!ReflectMessage(p, ref m))
             {
                 // Additional Check For Control .... TabControl truncates the Hwnd value...
-                IntPtr handle = _window.GetHandleFromWindowId((short)PARAM.LOWORD(m.WParamInternal));
+                IntPtr handle = NativeWindow.GetHandleFromWindowId((short)PARAM.LOWORD(m.WParamInternal));
                 if (handle != IntPtr.Zero)
                 {
                     Control control = FromHandle(handle);
@@ -13393,7 +13393,7 @@ namespace System.Windows.Forms
         ///  Called when an exception occurs in dispatching messages through
         ///  the main window procedure.
         /// </summary>
-        private void WndProcException(Exception e)
+        private static void WndProcException(Exception e)
         {
             Application.OnThreadException(e);
         }

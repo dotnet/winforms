@@ -70,7 +70,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  This is the name of the resource manager object we declare on the component surface.
         /// </summary>
-        private string ResourceManagerName
+        private static string ResourceManagerName
         {
             get => "resources";
         }
@@ -136,7 +136,7 @@ namespace System.ComponentModel.Design.Serialization
             return instance;
         }
 
-        private SerializationResourceManager CreateResourceManager(IDesignerSerializationManager manager)
+        private static SerializationResourceManager CreateResourceManager(IDesignerSerializationManager manager)
         {
             Trace("Variable is our resource manager.  Creating it");
             SerializationResourceManager sm = GetResourceManager(manager);
@@ -172,7 +172,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Deserializes the given CodeDom object into a real object.  This will use the serialization manager to create objects and resolve data types.  It uses the invariant resource blob to obtain resources.
         /// </summary>
-        public object DeserializeInvariant(IDesignerSerializationManager manager, string resourceName)
+        public static object DeserializeInvariant(IDesignerSerializationManager manager, string resourceName)
         {
             SerializationResourceManager resources = GetResourceManager(manager);
             return resources.GetObject(resourceName, true);
@@ -181,7 +181,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Try to discover the data type we should apply a cast for.  To do this, we first search the context stack for an ExpressionContext to decrypt, and if we fail that we try the actual object.  If we can't find a cast type we  return null.
         /// </summary>
-        private Type GetCastType(IDesignerSerializationManager manager, object value)
+        private static Type GetCastType(IDesignerSerializationManager manager, object value)
         {
             // Is there an ExpressionContext we can work with?
             ExpressionContext tree = (ExpressionContext)manager.Context[typeof(ExpressionContext)];
@@ -210,7 +210,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Retrieves a dictionary enumerator for the requested culture, or null if no resources for that culture exist.
         /// </summary>
-        public IDictionaryEnumerator GetEnumerator(IDesignerSerializationManager manager, CultureInfo culture)
+        public static IDictionaryEnumerator GetEnumerator(IDesignerSerializationManager manager, CultureInfo culture)
         {
             SerializationResourceManager resources = GetResourceManager(manager);
             return resources.GetEnumerator(culture);
@@ -219,7 +219,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Retrieves a dictionary enumerator for the requested culture, or null if no resources for that culture exist.
         /// </summary>
-        public IDictionaryEnumerator GetMetadataEnumerator(IDesignerSerializationManager manager)
+        public static IDictionaryEnumerator GetMetadataEnumerator(IDesignerSerializationManager manager)
         {
             SerializationResourceManager resources = GetResourceManager(manager);
             return resources.GetMetadataEnumerator();
@@ -228,7 +228,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Demand creates the serialization resource manager.  Stores the manager as an appended context value.
         /// </summary>
-        private SerializationResourceManager GetResourceManager(IDesignerSerializationManager manager)
+        private static SerializationResourceManager GetResourceManager(IDesignerSerializationManager manager)
         {
             if (!(manager.Context[typeof(SerializationResourceManager)] is SerializationResourceManager sm))
             {
@@ -408,7 +408,7 @@ namespace System.ComponentModel.Design.Serialization
             SetValueUsingCommonTraceScope(manager, name, value, nameof(WriteResourceInvariant), true, true, true, false);
         }
 
-        private void SetValueUsingCommonTraceScope(IDesignerSerializationManager manager, string name, object value, string calleeName,
+        private static void SetValueUsingCommonTraceScope(IDesignerSerializationManager manager, string name, object value, string calleeName,
             bool forceInvariant, bool shouldSerializeInvariant, bool ensureInvariant, bool applyingCachedResources)
         {
             using (TraceScope("ResourceCodeDomSerializer::" + calleeName))
@@ -423,7 +423,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  This is called by the component code dom serializer's caching logic to save cached resource data back into the resx files.
         /// </summary>
-        internal void ApplyCacheEntry(IDesignerSerializationManager manager, ComponentCache.Entry entry)
+        internal static void ApplyCacheEntry(IDesignerSerializationManager manager, ComponentCache.Entry entry)
         {
             SerializationResourceManager sm = GetResourceManager(manager);
             if (entry.Metadata is not null)
@@ -610,7 +610,7 @@ namespace System.ComponentModel.Design.Serialization
             /// <summary>
             ///  The component serializer supports caching serialized outputs for speed.  It holds both a collection of statements as well as an opaque blob for resources.  This function adds data to that blob. The parameters to this function are the same as those to SetValue, or SetMetadata (when isMetadata is true).
             /// </summary>
-            private void AddCacheEntry(IDesignerSerializationManager manager, string name, object value, bool isMetadata, bool forceInvariant, bool shouldSerializeValue, bool ensureInvariant)
+            private static void AddCacheEntry(IDesignerSerializationManager manager, string name, object value, bool isMetadata, bool forceInvariant, bool shouldSerializeValue, bool ensureInvariant)
             {
                 if (manager.Context[typeof(ComponentCache.Entry)] is ComponentCache.Entry entry)
                 {

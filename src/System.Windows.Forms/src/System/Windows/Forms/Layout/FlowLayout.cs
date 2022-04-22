@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Layout
         ///  Both LayoutCore and GetPreferredSize forward to this method.
         ///  The measureOnly flag determines which behavior we get.
         /// </summary>
-        private Size TryCalculatePreferredSize(IArrangedElement container, Rectangle displayRect, bool measureOnly)
+        private static Size TryCalculatePreferredSize(IArrangedElement container, Rectangle displayRect, bool measureOnly)
         {
             FlowDirection flowDirection = GetFlowDirection(container);
             bool wrapContents = GetWrapContents(container);
@@ -156,7 +156,7 @@ namespace System.Windows.Forms.Layout
         ///  index. RowBounds was computed by a call to measure row and is used for alignment/boxstretch.
         ///  See the ElementProxy class for an explanation of the elementProxy parameter.
         /// </summary>
-        private void LayoutRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, int endIndex, Rectangle rowBounds)
+        private static void LayoutRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, int endIndex, Rectangle rowBounds)
         {
             Size outSize = TryCalculatePreferredSizeRow(containerProxy, elementProxy, startIndex, endIndex, rowBounds, /* breakIndex = */ out int dummy, /* measureOnly = */ false);
             Debug.Assert(dummy == endIndex, "EndIndex / BreakIndex mismatch.");
@@ -168,7 +168,7 @@ namespace System.Windows.Forms.Layout
         ///  controls from startIndex up to but not including breakIndex. See the ElementProxy
         ///  class for an explanation of the elementProxy parameter.
         /// </summary>
-        private Size MeasureRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, Rectangle displayRectangle, out int breakIndex)
+        private static Size MeasureRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, Rectangle displayRectangle, out int breakIndex)
         {
             return TryCalculatePreferredSizeRow(containerProxy, elementProxy, startIndex, endIndex: containerProxy.Container.Children.Count, rowBounds: displayRectangle, breakIndex: out breakIndex, measureOnly: true);
         }
@@ -177,7 +177,7 @@ namespace System.Windows.Forms.Layout
         ///  LayoutRow and MeasureRow both forward to this method. The measureOnly flag
         ///  determines which behavior we get.
         /// </summary>
-        private Size TryCalculatePreferredSizeRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, int endIndex, Rectangle rowBounds, out int breakIndex, bool measureOnly)
+        private static Size TryCalculatePreferredSizeRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, int endIndex, Rectangle rowBounds, out int breakIndex, bool measureOnly)
         {
             Debug.Assert(startIndex < endIndex, "Loop should be in forward Z-order.");
             Point location = rowBounds.Location;
@@ -323,7 +323,7 @@ namespace System.Windows.Forms.Layout
         }
 
         [Conditional("DEBUG_VERIFY_ALIGNMENT")]
-        private void Debug_VerifyAlignment(IArrangedElement container, FlowDirection flowDirection)
+        private static void Debug_VerifyAlignment(IArrangedElement container, FlowDirection flowDirection)
         {
 #if DEBUG
             // We cannot apply any of these checks @ design-time since dragging new children into a FlowLayoutPanel
