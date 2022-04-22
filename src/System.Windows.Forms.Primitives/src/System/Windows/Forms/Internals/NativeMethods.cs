@@ -122,26 +122,6 @@ namespace System.Windows.Forms
             public int FlagsEx;
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 4)]
-        public struct ENLINK
-        {
-            public User32.NMHDR nmhdr;
-            public int msg;
-            public IntPtr wParam;
-            public IntPtr lParam;
-            public Richedit.CHARRANGE charrange;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 4)]
-        public struct ENPROTECTED
-        {
-            public User32.NMHDR nmhdr;
-            public int msg;
-            public IntPtr wParam;
-            public IntPtr lParam;
-            public Richedit.CHARRANGE chrg;
-        }
-
         public class ActiveX
         {
             public const int ALIGN_MIN = 0x0;

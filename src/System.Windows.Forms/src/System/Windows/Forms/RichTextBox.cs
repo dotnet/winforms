@@ -3274,8 +3274,8 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void EnLinkMsgHandler(ref Message m)
         {
-            NativeMethods.ENLINK enlink;
-            enlink = *(NativeMethods.ENLINK*)m.LParamInternal;
+            ENLINK enlink;
+            enlink = *(ENLINK*)m.LParamInternal;
 
             switch ((User32.WM)enlink.msg)
             {
@@ -3434,9 +3434,9 @@ namespace System.Windows.Forms
 
                     case EN.PROTECTED:
                         {
-                            NativeMethods.ENPROTECTED enprotected;
+                            ENPROTECTED enprotected;
 
-                            enprotected = *(NativeMethods.ENPROTECTED*)m.LParamInternal;
+                            enprotected = *(ENPROTECTED*)m.LParamInternal;
 
                             switch (enprotected.msg)
                             {

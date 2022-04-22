@@ -4,7 +4,7 @@
 
 using System.Runtime.InteropServices;
 using Xunit;
-using static System.Windows.Forms.NativeMethods;
+using static Interop.Richedit;
 
 namespace System.Windows.Forms.Interop.Tests;
 
@@ -21,8 +21,8 @@ public class RichTextBoxTests
         Assert.Equal((IntPtr)765, enlink.nmhdr.hwndFrom);
         Assert.Equal((IntPtr)432, enlink.nmhdr.idFrom);
         Assert.Equal(22, enlink.msg);
-        Assert.Equal((IntPtr)6578, enlink.wParam);
-        Assert.Equal((IntPtr)54425, enlink.lParam);
+        Assert.Equal((nuint)6578, enlink.wParam);
+        Assert.Equal(54425, enlink.lParam);
         Assert.Equal(109, enlink.charrange.cpMin);
         Assert.Equal(1577, enlink.charrange.cpMax);
     }
@@ -36,8 +36,8 @@ public class RichTextBoxTests
         Assert.Equal((IntPtr)765, enprotected.nmhdr.hwndFrom);
         Assert.Equal((IntPtr)432, enprotected.nmhdr.idFrom);
         Assert.Equal(22, enprotected.msg);
-        Assert.Equal((IntPtr)6578, enprotected.wParam);
-        Assert.Equal((IntPtr)54425, enprotected.lParam);
+        Assert.Equal((nuint)6578, enprotected.wParam);
+        Assert.Equal(54425, enprotected.lParam);
         Assert.Equal(109, enprotected.chrg.cpMin);
         Assert.Equal(1577, enprotected.chrg.cpMax);
     }
