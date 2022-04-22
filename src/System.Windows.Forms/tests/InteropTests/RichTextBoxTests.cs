@@ -111,7 +111,7 @@ public class RichTextBoxTests
     {
         RichTextBox_ParaFormat(out var value);
 
-        Assert.Equal(432u, value.cbSize);
+        Assert.Equal(132u, value.cbSize);
         Assert.Equal(PFM.ALIGNMENT, value.dwMask);
         Assert.Equal(PFN.UCROMAN, value.wNumbering);
         Assert.Equal(6578, value.wReserved);
