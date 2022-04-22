@@ -6,26 +6,114 @@
 #include <cassert>
 #include <richedit.h>
 
-extern "C" __declspec(dllexport) void WINAPI RichTextBox_Enlink(ENLINK* enlink)
+extern "C" __declspec(dllexport) void WINAPI RichTextBox_EnLink(ENLINK* value)
 {
-    enlink->nmhdr.code = 132;
-    enlink->nmhdr.hwndFrom = (HWND)765;
-    enlink->nmhdr.idFrom = 432;
-    enlink->msg = 22;
-    enlink->wParam = 6578;
-    enlink->lParam = 54425;
-    enlink->chrg.cpMin = 109;
-    enlink->chrg.cpMax = 1577;
+    value->nmhdr.code = 132;
+    value->nmhdr.hwndFrom = (HWND)765;
+    value->nmhdr.idFrom = 432;
+    value->msg = 22;
+    value->wParam = 6578;
+    value->lParam = 54425;
+    value->chrg.cpMin = 109;
+    value->chrg.cpMax = 1577;
 }
 
-extern "C" __declspec(dllexport) void WINAPI RichTextBox_Enprotected(ENPROTECTED* enprotected)
+extern "C" __declspec(dllexport) void WINAPI RichTextBox_EnProtected(ENPROTECTED* value)
 {
-    enprotected->nmhdr.code = 132;
-    enprotected->nmhdr.hwndFrom = (HWND)765;
-    enprotected->nmhdr.idFrom = 432;
-    enprotected->msg = 22;
-    enprotected->wParam = 6578;
-    enprotected->lParam = 54425;
-    enprotected->chrg.cpMin = 109;
-    enprotected->chrg.cpMax = 1577;
+    value->nmhdr.code = 132;
+    value->nmhdr.hwndFrom = (HWND)765;
+    value->nmhdr.idFrom = 432;
+    value->msg = 22;
+    value->wParam = 6578;
+    value->lParam = 54425;
+    value->chrg.cpMin = 109;
+    value->chrg.cpMax = 1577;
+}
+
+extern "C" __declspec(dllexport) void WINAPI RichTextBox_EnDropFiles(ENDROPFILES* value)
+{
+    value->nmhdr.code = 132;
+    value->nmhdr.hwndFrom = (HWND)765;
+    value->nmhdr.idFrom = 432;
+    value->hDrop = (HANDLE)22;
+    value->cp = 6578;
+    value->fProtected = TRUE;
+}
+
+extern "C" __declspec(dllexport) void WINAPI RichTextBox_CharRange(CHARRANGE* value)
+{
+    value->cpMin = 109;
+    value->cpMax = 1577;
+}
+
+extern "C" __declspec(dllexport) void WINAPI RichTextBox_EditStream(EDITSTREAM* value)
+{
+    value->dwCookie = 109;
+    value->dwError = 1577;
+    value->pfnCallback = (EDITSTREAMCALLBACK)6578;
+}
+
+extern "C" __declspec(dllexport) void WINAPI RichTextBox_FindTextW(FINDTEXTW* value)
+{
+    value->lpstrText = L"Fine Text";
+    value->chrg.cpMin = 109;
+    value->chrg.cpMax = 1577;
+}
+
+extern "C" __declspec(dllexport) void WINAPI RichTextBox_GetTextEx(GETTEXTEX* value)
+{
+    value->cb = 132;
+    value->flags = GT_RAWTEXT;
+    value->codepage = 432;
+    value->lpDefaultChar = (LPCSTR)22;
+    value->lpUsedDefChar = (LPBOOL)6578;
+}
+
+extern "C" __declspec(dllexport) void WINAPI RichTextBox_GetTextLengthEx(GETTEXTLENGTHEX* value)
+{
+    value->flags = GTL_NUMBYTES;
+    value->codepage = 432;
+}
+
+extern "C" __declspec(dllexport) void WINAPI RichTextBox_ParaFormat(PARAFORMAT* value)
+{
+    value->cbSize = 132;
+    value->dwMask = PFM_ALIGNMENT;
+    value->wNumbering = PFN_UCROMAN;
+    value->wReserved = 6578;
+    value->dxStartIndent = 109;
+    value->dxRightIndent = 432;
+    value->dxOffset = 54425;
+    value->wAlignment = PFA_JUSTIFY;
+    value->cTabCount = 6565;
+    value->rgxTabs[0] = 8989;
+    value->rgxTabs[31] = 812;
+}
+
+extern "C" __declspec(dllexport) void WINAPI RichTextBox_ReqResize(REQRESIZE* value)
+{
+    value->nmhdr.code = 132;
+    value->nmhdr.hwndFrom = (HWND)765;
+    value->nmhdr.idFrom = 432;
+    value->rc.left = 6578;
+    value->rc.right = 109;
+    value->rc.top = 54425;
+    value->rc.bottom = 8989;
+}
+
+extern "C" __declspec(dllexport) void WINAPI RichTextBox_SelChange(SELCHANGE* value)
+{
+    value->nmhdr.code = 132;
+    value->nmhdr.hwndFrom = (HWND)765;
+    value->nmhdr.idFrom = 432;
+    value->seltyp = SEL_MULTICHAR;
+    value->chrg.cpMin = 109;
+    value->chrg.cpMax = 1577;
+}
+
+extern "C" __declspec(dllexport) void WINAPI RichTextBox_TextRange(TEXTRANGE* value)
+{
+    value->lpstrText = "Fine Text";
+    value->chrg.cpMin = 109;
+    value->chrg.cpMax = 1577;
 }

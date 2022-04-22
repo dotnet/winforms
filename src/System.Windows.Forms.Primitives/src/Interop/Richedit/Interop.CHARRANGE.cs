@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal static partial class Richedit
     {
-        [StructLayout(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential, Pack = 4)]
         public struct CHARRANGE
         {
             public int cpMin;
