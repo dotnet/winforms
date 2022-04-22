@@ -16,7 +16,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT GetObject(
                 Guid* riid,
-                [Out, MarshalAs(UnmanagedType.LPArray)] IVBFormat[] rval,
+                [Out, MarshalAs(UnmanagedType.LPArray)] IVBFormat?[] rval,
                 uint dwReserved);
         }
     }

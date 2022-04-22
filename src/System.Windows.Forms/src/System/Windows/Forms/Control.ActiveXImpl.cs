@@ -868,7 +868,7 @@ namespace System.Windows.Forms
 
                     inPlaceSite.GetWindowContext(
                         out IOleInPlaceFrame pFrame,
-                        out IOleInPlaceUIWindow pWindow,
+                        out IOleInPlaceUIWindow? pWindow,
                         &posRect,
                         &clipRect,
                         &inPlaceFrameInfo);
