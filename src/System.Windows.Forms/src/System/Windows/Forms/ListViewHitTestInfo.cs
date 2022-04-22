@@ -9,51 +9,29 @@ namespace System.Windows.Forms
     /// </summary>
     public class ListViewHitTestInfo
     {
-        private readonly ListViewHitTestLocations loc;
-        private readonly ListViewItem? item;
-        private readonly ListViewItem.ListViewSubItem? subItem;
-
         /// <summary>
         ///  Creates a ListViewHitTestInfo instance.
         /// </summary>
         public ListViewHitTestInfo(ListViewItem? hitItem, ListViewItem.ListViewSubItem? hitSubItem, ListViewHitTestLocations hitLocation)
         {
-            item = hitItem;
-            subItem = hitSubItem;
-            loc = hitLocation;
+            Item = hitItem;
+            SubItem = hitSubItem;
+            Location = hitLocation;
         }
 
         /// <summary>
         ///  This gives the exact location returned by hit test on listview.
         /// </summary>
-        public ListViewHitTestLocations Location
-        {
-            get
-            {
-                return loc;
-            }
-        }
+        public ListViewHitTestLocations Location { get; }
 
         /// <summary>
         ///  This gives the ListViewItem returned by hit test on listview.
         /// </summary>
-        public ListViewItem? Item
-        {
-            get
-            {
-                return item;
-            }
-        }
+        public ListViewItem? Item { get; }
 
         /// <summary>
         ///  This gives the ListViewSubItem returned by hit test on listview.
         /// </summary>
-        public ListViewItem.ListViewSubItem? SubItem
-        {
-            get
-            {
-                return subItem;
-            }
-        }
+        public ListViewItem.ListViewSubItem? SubItem { get; }
     }
 }
