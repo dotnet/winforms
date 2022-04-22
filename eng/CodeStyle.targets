@@ -5,6 +5,11 @@
     <EditorConfigFiles Include="$(MSBuildThisFileDirectory)CodeAnalysis.src.globalconfig" />
   </ItemGroup>
 
+  <!--
+    Because some test projects such as System.Windows.Forms.TestUtilities and WinformsControlsTest do not satifsy the naming conditions in
+    https://github.com/dotnet/arcade/blob/e7ede87875f41a9b3df898ae08da5ebc96e24f56/src/Microsoft.DotNet.Arcade.Sdk/tools/Tests.props
+    we have to also test the presence of word Test as a workaround.
+  -->
   <ItemGroup Condition="'$(IsTestProject)' == 'true' Or $(MSBuildProjectName.Contains('Test'))">
     <EditorConfigFiles Remove="$(MSBuildThisFileDirectory)CodeAnalysis.src.globalconfig" />
     <EditorConfigFiles Include="$(MSBuildThisFileDirectory)CodeAnalysis.test.globalconfig" />
