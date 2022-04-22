@@ -1870,10 +1870,7 @@ namespace System.Windows.Forms.Design
 
         internal void RearrangeInAutoSlots(Control c, Point pos)
         {
-#if DEBUG
-            int index = controls.IndexOf(c);
-            Debug.Assert(index != -1, "Add control to the list of controls before autoarranging.!!!");
-#endif
+            Debug.Assert(controls.IndexOf(c) != -1, "Add control to the list of controls before autoarranging.!!!");
             Debug.Assert(Visible == c.Visible, "TrayControl for " + ((TrayControl)c).Component + " should not be positioned");
 
             TrayControl tc = (TrayControl)c;
