@@ -1480,9 +1480,9 @@
 ~System.Windows.Forms.ListView.SelectedListViewItemCollection.IndexOf(System.Windows.Forms.ListViewItem item) -> int
 ~System.Windows.Forms.ListView.SelectedListViewItemCollection.SelectedListViewItemCollection(System.Windows.Forms.ListView owner) -> void
 ~System.Windows.Forms.ListView.SelectedListViewItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.ListViewHitTestInfo.Item.get -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.ListViewHitTestInfo.ListViewHitTestInfo(System.Windows.Forms.ListViewItem hitItem, System.Windows.Forms.ListViewItem.ListViewSubItem hitSubItem, System.Windows.Forms.ListViewHitTestLocations hitLocation) -> void
-~System.Windows.Forms.ListViewHitTestInfo.SubItem.get -> System.Windows.Forms.ListViewItem.ListViewSubItem
+System.Windows.Forms.ListViewHitTestInfo.Item.get -> System.Windows.Forms.ListViewItem?
+System.Windows.Forms.ListViewHitTestInfo.ListViewHitTestInfo(System.Windows.Forms.ListViewItem? hitItem, System.Windows.Forms.ListViewItem.ListViewSubItem? hitSubItem, System.Windows.Forms.ListViewHitTestLocations hitLocation) -> void
+System.Windows.Forms.ListViewHitTestInfo.SubItem.get -> System.Windows.Forms.ListViewItem.ListViewSubItem?
 ~System.Windows.Forms.ListViewItem.FindNearestItem(System.Windows.Forms.SearchDirectionHint searchDirection) -> System.Windows.Forms.ListViewItem
 ~System.Windows.Forms.ListViewItem.Font.get -> System.Drawing.Font
 ~System.Windows.Forms.ListViewItem.Font.set -> void
