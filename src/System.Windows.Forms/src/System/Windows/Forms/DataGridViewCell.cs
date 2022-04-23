@@ -84,6 +84,10 @@ namespace System.Windows.Forms
             _useDefaultToolTipText = true;
         }
 
+        /// <summary>
+        /// Currently this finalizer is unneeded (empty). See https://github.com/dotnet/winforms/issues/6858.<br/>
+        /// All classes that are not need to be finalized contains in <see cref="DataGridViewElement.s_typesWithEmptyFinalizer"/> collection. Consider to modify it if needed.
+        /// </summary>
         ~DataGridViewCell()
         {
             Dispose(false);
@@ -1320,6 +1324,9 @@ namespace System.Windows.Forms
                     contextMenuStrip.Disposed -= new EventHandler(DetachContextMenuStrip);
                 }
             }
+
+            // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this class type (and all of its subclasses) from DataGridViewElement.s_typesWithEmptyFinalizer!
+            // Also consider to modify ~DataGridViewCell() description.
         }
 
         protected virtual bool DoubleClickUnsharesRow(DataGridViewCellEventArgs e)

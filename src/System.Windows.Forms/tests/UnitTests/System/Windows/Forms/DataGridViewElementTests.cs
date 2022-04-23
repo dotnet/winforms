@@ -355,12 +355,12 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewElement_Subclasses_SuppressFinalizeCall()
         {
             TestAccessor<DataGridViewElement> testAccessor = new(null);
-            var needSuppressFinalize = testAccessor.CreateDelegate<Func<Type, bool>>("NeedSuppressFinalize");
+            var typesWithEmptyFinalizer = testAccessor.Dynamic.s_typesWithEmptyFinalizer as HashSet<Type>;
 
             foreach (var type in typeof(DataGridViewElement).Assembly.GetTypes().Where(type => type == typeof(DataGridViewBand) || type == typeof(DataGridViewCell) ||
                 type.IsSubclassOf(typeof(DataGridViewBand)) || type.IsSubclassOf(typeof(DataGridViewCell))))
             {
-                Assert.True(needSuppressFinalize(type), $"Type {type} is not present in the DataGridViewElement.NeedSuppressFinalize() method. " +
+                Assert.True(typesWithEmptyFinalizer.Contains(type), $"Type {type} is not present in the DataGridViewElement.s_typesWithEmptyFinalizer collection. " +
                     $"Consider adding it or add exclusion to this test (if a new class really needs a finalizer).");
             }
         }

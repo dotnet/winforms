@@ -11,6 +11,34 @@ namespace System.Windows.Forms
     /// </summary>
     public class DataGridViewElement
     {
+        /// <summary>
+        /// These are subclasses of the <see cref="DataGridViewElement"/> for which you don't need to call the finalizer, because it's empty.
+        /// See https://github.com/dotnet/winforms/issues/6858.
+        /// </summary>
+        private static readonly HashSet<Type> s_typesWithEmptyFinalizer = new()
+        {
+            typeof(DataGridViewBand),
+            typeof(DataGridViewColumn),
+            typeof(DataGridViewButtonColumn),
+            typeof(DataGridViewCheckBoxColumn),
+            typeof(DataGridViewComboBoxColumn),
+            typeof(DataGridViewImageColumn),
+            typeof(DataGridViewLinkColumn),
+            typeof(DataGridViewTextBoxColumn),
+            typeof(DataGridViewRow),
+            typeof(DataGridViewCell),
+            typeof(DataGridViewButtonCell),
+            typeof(DataGridViewCheckBoxCell),
+            typeof(DataGridViewComboBoxCell),
+            typeof(DataGridViewHeaderCell),
+            typeof(DataGridViewColumnHeaderCell),
+            typeof(DataGridViewTopLeftHeaderCell),
+            typeof(DataGridViewRowHeaderCell),
+            typeof(DataGridViewImageCell),
+            typeof(DataGridViewLinkCell),
+            typeof(DataGridViewTextBoxCell)
+        };
+
         private DataGridView? _dataGridView;
 
         /// <summary>
@@ -18,7 +46,7 @@ namespace System.Windows.Forms
         /// </summary>
         public DataGridViewElement()
         {
-            if (NeedSuppressFinalize(GetType()))
+            if (s_typesWithEmptyFinalizer.Contains(GetType()))
                 GC.SuppressFinalize(this);
 
             State = DataGridViewElementStates.Visible;
@@ -91,21 +119,6 @@ namespace System.Windows.Forms
         protected void RaiseMouseWheel(MouseEventArgs e)
         {
             _dataGridView?.OnMouseWheelInternal(e);
-        }
-
-        /// <summary>
-        /// Determines whether <see cref="GC.SuppressFinalize(object)" /> should be called in the constructor for the given <paramref name="type"/>.<br/>
-        /// <see cref="GC.SuppressFinalize(object)" /> must be called on known internal subclasses of <see cref="DataGridViewBand" /> / <see cref="DataGridViewCell" /> which don't need a finalizer.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns><see langword="true"/> if need to call <see cref="GC.SuppressFinalize(object)" />, <see langword="false"/> otherwise.</returns>
-        private static bool NeedSuppressFinalize(Type type)
-        {
-            return type == typeof(DataGridViewBand) || type == typeof(DataGridViewColumn) || type == typeof(DataGridViewButtonColumn) || type == typeof(DataGridViewCheckBoxColumn) ||
-                type == typeof(DataGridViewComboBoxColumn) || type == typeof(DataGridViewImageColumn) || type == typeof(DataGridViewLinkColumn) || type == typeof(DataGridViewTextBoxColumn) ||
-                type == typeof(DataGridViewRow) || type == typeof(DataGridViewCell) || type == typeof(DataGridViewButtonCell) || type == typeof(DataGridViewCheckBoxCell) ||
-                type == typeof(DataGridViewComboBoxCell) || type == typeof(DataGridViewHeaderCell) || type == typeof(DataGridViewColumnHeaderCell) || type == typeof(DataGridViewTopLeftHeaderCell) ||
-                type == typeof(DataGridViewRowHeaderCell) || type == typeof(DataGridViewImageCell) || type == typeof(DataGridViewLinkCell) || type == typeof(DataGridViewTextBoxCell);
         }
     }
 }

@@ -63,6 +63,9 @@ namespace System.Windows.Forms
                 FlipXPThemesBitmap.Dispose();
             }
 
+            // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this class type (and all of its subclasses) from DataGridViewElement.s_typesWithEmptyFinalizer!
+            // Also consider to modify ~DataGridViewCell() description.
+
             base.Dispose(disposing);
         }
 
