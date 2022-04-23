@@ -8,6 +8,7 @@ internal partial class Interop
 {
     internal static partial class Richedit
     {
+        // All structures from richedit.h is packed at 4
         [StructLayout(LayoutKind.Sequential, Pack = 4)]
         public struct ENDROPFILES
         {
