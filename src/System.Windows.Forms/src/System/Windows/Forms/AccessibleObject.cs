@@ -66,9 +66,6 @@ namespace System.Windows.Forms
         // Indicates this object is being used ONLY to wrap a system IAccessible
         private readonly bool _systemWrapper;
 
-        private UiaTextProvider? _textProvider;
-        private UiaTextProvider2? _textProvider2;
-
         // The support for the UIA Notification event begins in RS3.
         // Assume the UIA Notification event is available until we learn otherwise.
         // If we learn that the UIA Notification event is not available,
@@ -555,28 +552,60 @@ namespace System.Windows.Forms
 
         internal virtual void Invoke() => DoDefaultAction();
 
-        internal virtual UiaCore.ITextRangeProvider? DocumentRangeInternal => _textProvider?.DocumentRange;
+        internal virtual UiaCore.ITextRangeProvider? DocumentRangeInternal
+        {
+            get
+            {
+                Debug.Fail("Not implemented. DocumentRangeInternal property should be overridden.");
+                return null;
+            }
+        }
 
-        internal virtual UiaCore.ITextRangeProvider[]? GetTextSelection() => _textProvider?.GetSelection();
+        internal virtual UiaCore.ITextRangeProvider[]? GetTextSelection()
+        {
+            Debug.Fail("Not implemented. GetTextSelection method should be overridden.");
+            return null;
+        }
 
-        internal virtual UiaCore.ITextRangeProvider[]? GetTextVisibleRanges() => _textProvider?.GetVisibleRanges();
+        internal virtual UiaCore.ITextRangeProvider[]? GetTextVisibleRanges()
+        {
+            Debug.Fail("Not implemented. GetTextVisibleRanges method should be overridden.");
+            return null;
+        }
 
         internal virtual UiaCore.ITextRangeProvider? GetTextRangeFromChild(UiaCore.IRawElementProviderSimple childElement)
-            => _textProvider?.RangeFromChild(childElement);
+        {
+            Debug.Fail("Not implemented. GetTextRangeFromChild method should be overridden.");
+            return null;
+        }
 
-        internal virtual UiaCore.ITextRangeProvider? GetTextRangeFromPoint(Point screenLocation) => _textProvider?.RangeFromPoint(screenLocation);
+        internal virtual UiaCore.ITextRangeProvider? GetTextRangeFromPoint(Point screenLocation)
+        {
+            Debug.Fail("Not implemented. GetTextRangeFromPoint method should be overridden.");
+            return null;
+        }
 
         internal virtual UiaCore.SupportedTextSelection SupportedTextSelectionInternal
-            => _textProvider?.SupportedTextSelection ?? UiaCore.SupportedTextSelection.None;
+        {
+            get
+            {
+                Debug.Fail("Not implemented. SupportedTextSelectionInternal property should be overridden.");
+                return UiaCore.SupportedTextSelection.None;
+            }
+        }
 
         internal virtual UiaCore.ITextRangeProvider? GetTextCaretRange(out BOOL isActive)
         {
             isActive = BOOL.FALSE;
-            return _textProvider2?.GetCaretRange(out isActive);
+            Debug.Fail("Not implemented. GetTextCaretRange method should be overridden.");
+            return null;
         }
 
-        internal virtual UiaCore.ITextRangeProvider? GetRangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement) =>
-            _textProvider2?.RangeFromAnnotation(annotationElement);
+        internal virtual UiaCore.ITextRangeProvider? GetRangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement)
+        {
+            Debug.Fail("Not implemented. GetRangeFromAnnotation method should be overridden.");
+            return null;
+        }
 
         internal virtual bool IsReadOnly => false;
 
@@ -1742,12 +1771,6 @@ namespace System.Windows.Forms
                 _systemIEnumVariant = (Oleaut32.IEnumVariant?)en;
                 _systemIOleWindow = (Ole32.IOleWindow?)acc;
             }
-        }
-
-        internal void UseTextProviders(UiaTextProvider textProvider, UiaTextProvider2 textProvider2)
-        {
-            _textProvider = textProvider.OrThrowIfNull();
-            _textProvider2 = textProvider2.OrThrowIfNull();
         }
 
         /// <summary>

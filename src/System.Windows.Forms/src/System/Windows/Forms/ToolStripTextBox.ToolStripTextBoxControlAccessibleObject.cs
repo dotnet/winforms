@@ -9,27 +9,24 @@ namespace System.Windows.Forms
 {
     public partial class ToolStripTextBox
     {
-        private class ToolStripTextBoxControlAccessibleObject : ToolStripHostedControlAccessibleObject
+        private class ToolStripTextBoxControlAccessibleObject : TextBoxBaseAccessibleObject
         {
-            private readonly TextBoxBase _owningTextBoxBase;
-            private readonly TextBoxBaseUiaTextProvider _textProvider;
+            public ToolStripTextBoxControlAccessibleObject(TextBox toolStripHostedControl) : base(toolStripHostedControl)
+            { }
 
-            public ToolStripTextBoxControlAccessibleObject(TextBox toolStripHostedControl, ToolStripControlHost? toolStripControlHost) : base(toolStripHostedControl, toolStripControlHost)
-            {
-                _owningTextBoxBase = toolStripHostedControl;
-                _textProvider = new TextBoxBaseUiaTextProvider(toolStripHostedControl);
-                UseTextProviders(_textProvider, _textProvider);
-            }
-
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
-                propertyID switch
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+                => propertyID switch
                 {
                     // If we don't set a default role for the accessible object
                     // it will be retrieved from Windows.
                     // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                    UiaCore.UIA.ControlTypePropertyId => _owningTextBoxBase.AccessibleRole == AccessibleRole.Default
+                    UiaCore.UIA.ControlTypePropertyId => Owner.AccessibleRole == AccessibleRole.Default
                                                          ? UiaCore.UIA.EditControlTypeId
                                                          : base.GetPropertyValue(propertyID),
+                    UiaCore.UIA.HasKeyboardFocusPropertyId
+                        => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
+                    UiaCore.UIA.IsOffscreenPropertyId
+                        => GetIsOffscreenPropertyValue(Owner.ToolStripControlHost?.Placement, Bounds),
                     _ => base.GetPropertyValue(propertyID)
                 };
 
@@ -37,12 +34,8 @@ namespace System.Windows.Forms
                 patternId switch
                 {
                     UiaCore.UIA.ValuePatternId => true,
-                    UiaCore.UIA.TextPatternId => true,
-                    UiaCore.UIA.TextPattern2Id => true,
                     _ => base.IsPatternSupported(patternId)
                 };
-
-            internal override bool IsReadOnly => _owningTextBoxBase.ReadOnly;
         }
     }
 }

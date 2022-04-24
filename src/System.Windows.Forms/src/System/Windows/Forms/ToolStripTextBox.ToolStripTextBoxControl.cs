@@ -218,9 +218,7 @@ namespace System.Windows.Forms
             }
 
             protected override AccessibleObject CreateAccessibilityInstance()
-            {
-                return new ToolStripTextBoxControlAccessibleObject(this, Owner);
-            }
+                => new ToolStripTextBoxControlAccessibleObject(this);
 
             protected override void Dispose(bool disposing)
             {

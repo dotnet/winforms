@@ -11,16 +11,13 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         private partial class GridViewTextBox
         {
-            private class GridViewTextBoxAccessibleObject : ControlAccessibleObject
+            private class GridViewTextBoxAccessibleObject : TextBoxBaseAccessibleObject
             {
                 private readonly PropertyGridView _owningPropertyGridView;
-                private readonly TextBoxBaseUiaTextProvider _textProvider;
 
                 public GridViewTextBoxAccessibleObject(GridViewTextBox owner) : base(owner)
                 {
                     _owningPropertyGridView = owner.PropertyGridView;
-                    _textProvider = new TextBoxBaseUiaTextProvider(owner);
-                    UseTextProviders(_textProvider, _textProvider);
                 }
 
                 public override AccessibleStates State
@@ -40,8 +37,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return states;
                     }
                 }
-
-                internal override bool IsIAccessibleExSupported() => true;
 
                 /// <summary>
                 ///  Returns the element in the specified direction.
@@ -83,8 +78,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 internal override bool IsPatternSupported(UiaCore.UIA patternId) => patternId switch
                 {
                     UiaCore.UIA.ValuePatternId => true,
-                    UiaCore.UIA.TextPatternId => true,
-                    UiaCore.UIA.TextPattern2Id => true,
                     _ => base.IsPatternSupported(patternId)
                 };
 
