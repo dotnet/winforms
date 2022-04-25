@@ -10311,6 +10311,16 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Especifica se ToolStrip deve preservar as configurações de usuário via IPersistComponentSettings.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="new">Line down</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="new">Line up</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">
         <source>Specifies the settings key to use to save settings.</source>
         <target state="translated">Especifica a chave de configurações a ser usada para salvar as configurações.</target>

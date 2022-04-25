@@ -106,6 +106,36 @@ namespace System.Windows.Forms.Tests
             Assert.Null(itemAccessibleObject2.FragmentNavigate(NavigateDirection.NextSibling));
         }
 
+        [WinFormsFact]
+        public void ToolStripScrollButtonAccessibleObject_Properties_ReturnExpected()
+        {
+            using ToolStrip toolStrip = new();
+            using ToolStripDropDownItem ownerItem = new ToolStripDropDownButton();
+            SubToolStripDropDownMenu dropDownMenu = new SubToolStripDropDownMenu(ownerItem, true, true);
+
+            toolStrip.Items.Add(ownerItem);
+            ownerItem.TestAccessor().Dynamic.dropDown = dropDownMenu;
+            ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 1"));
+            ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 2"));
+            dropDownMenu.UpdateDisplayedItems();
+
+            AccessibleObject upScrollButtonAccessibleObject = dropDownMenu.UpScrollButton.AccessibilityObject;
+            AccessibleObject downScrollButtonAccessibleObject = dropDownMenu.DownScrollButton.AccessibilityObject;
+
+            var expectedUpButtonName = SR.ToolStripScrollButtonUpAccessibleName;
+            var expectedDownButtonName = SR.ToolStripScrollButtonDownAccessibleName;
+            var expectedDefaultAction = SR.AccessibleActionPress;
+            var expectedControlType = UIA.ButtonControlTypeId;
+
+            Assert.Equal(expectedUpButtonName, upScrollButtonAccessibleObject.Name);
+            Assert.Equal(expectedDefaultAction, upScrollButtonAccessibleObject.DefaultAction);
+            Assert.Equal(expectedControlType, upScrollButtonAccessibleObject.GetPropertyValue(UIA.ControlTypePropertyId));
+
+            Assert.Equal(expectedDownButtonName, downScrollButtonAccessibleObject.Name);
+            Assert.Equal(expectedDefaultAction, downScrollButtonAccessibleObject.DefaultAction);
+            Assert.Equal(expectedControlType, downScrollButtonAccessibleObject.GetPropertyValue(UIA.ControlTypePropertyId));
+        }
+
         private class SubToolStripDropDownMenu : ToolStripDropDownMenu
         {
             private readonly bool _requiresScrollButtons;

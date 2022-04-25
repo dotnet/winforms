@@ -10311,6 +10311,16 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Określa, czy element ToolStrip ma utrwalić ustawienia użytkownika przy użyciu elementu IPersistComponentSettings.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="new">Line down</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="new">Line up</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">
         <source>Specifies the settings key to use to save settings.</source>
         <target state="translated">Określa klucz ustawień używany do zapisania ustawień.</target>

@@ -41,6 +41,18 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
                 => _owner.OwnerScrollButton?.Owner?.AccessibilityObject;
+
+            public override string? Name => _owner.UpDirection
+                ? SR.ToolStripScrollButtonUpAccessibleName
+                : SR.ToolStripScrollButtonDownAccessibleName;
+
+            public override string? DefaultAction => SR.AccessibleActionPress;
+
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
+            {
+                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
+                _ => base.GetPropertyValue(propertyID),
+            };
         }
     }
 }

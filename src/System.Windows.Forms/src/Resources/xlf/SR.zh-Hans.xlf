@@ -10311,6 +10311,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">指定 ToolStrip 是否应通过 IPersistComponentSettings 保持用户设置。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="new">Line down</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="new">Line up</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">
         <source>Specifies the settings key to use to save settings.</source>
         <target state="translated">指定用于保存设置的设置键。</target>
