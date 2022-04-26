@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal static partial class Richedit
     {
-        [StructLayout(LayoutKind.Sequential, Pack = 4)]
+        [StructLayout(LayoutKind.Sequential, Pack = RichEditPack)]
         public struct EDITSTREAM
         {
             public UIntPtr dwCookie;

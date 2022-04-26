@@ -3272,19 +3272,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles link messages (mouse move, down, up, dblclk, etc)
         /// </summary>
-        private void EnLinkMsgHandler(ref Message m)
+        private unsafe void EnLinkMsgHandler(ref Message m)
         {
-            NativeMethods.ENLINK enlink;
-            //On 64-bit, we do some custom marshalling to get this to work. The richedit control
-            //unfortunately does not respect IA64 struct alignment conventions.
-            if (IntPtr.Size == 8)
-            {
-                enlink = ConvertFromENLINK64((NativeMethods.ENLINK64)m.GetLParam(typeof(NativeMethods.ENLINK64)));
-            }
-            else
-            {
-                enlink = (NativeMethods.ENLINK)m.GetLParam(typeof(NativeMethods.ENLINK));
-            }
+            ENLINK enlink;
+            enlink = *(ENLINK*)m.LParamInternal;
 
             switch ((User32.WM)enlink.msg)
             {
@@ -3443,18 +3434,9 @@ namespace System.Windows.Forms
 
                     case EN.PROTECTED:
                         {
-                            NativeMethods.ENPROTECTED enprotected;
+                            ENPROTECTED enprotected;
 
-                            //On 64-bit, we do some custom marshalling to get this to work. The richedit control
-                            //unfortunately does not respect IA64 struct alignment conventions.
-                            if (IntPtr.Size == 8)
-                            {
-                                enprotected = ConvertFromENPROTECTED64((NativeMethods.ENPROTECTED64)m.GetLParam(typeof(NativeMethods.ENPROTECTED64)));
-                            }
-                            else
-                            {
-                                enprotected = (NativeMethods.ENPROTECTED)m.GetLParam(typeof(NativeMethods.ENPROTECTED));
-                            }
+                            enprotected = *(ENPROTECTED*)m.LParamInternal;
 
                             switch (enprotected.msg)
                             {
@@ -3512,50 +3494,6 @@ namespace System.Windows.Forms
             {
                 base.WndProc(ref m);
             }
-        }
-
-        private unsafe NativeMethods.ENPROTECTED ConvertFromENPROTECTED64(NativeMethods.ENPROTECTED64 es64)
-        {
-            NativeMethods.ENPROTECTED es = new NativeMethods.ENPROTECTED();
-
-            fixed (byte* es64p = &es64.contents[0])
-            {
-                es.nmhdr = new User32.NMHDR();
-                es.chrg = new Richedit.CHARRANGE();
-
-                es.nmhdr.hwndFrom = Marshal.ReadIntPtr((IntPtr)es64p);
-                es.nmhdr.idFrom = Marshal.ReadIntPtr((IntPtr)(es64p + 8));
-                es.nmhdr.code = Marshal.ReadInt32((IntPtr)(es64p + 16));
-                es.msg = Marshal.ReadInt32((IntPtr)(es64p + 24));
-                es.wParam = Marshal.ReadIntPtr((IntPtr)(es64p + 28));
-                es.lParam = Marshal.ReadIntPtr((IntPtr)(es64p + 36));
-                es.chrg.cpMin = Marshal.ReadInt32((IntPtr)(es64p + 44));
-                es.chrg.cpMax = Marshal.ReadInt32((IntPtr)(es64p + 48));
-            }
-
-            return es;
-        }
-
-        private static unsafe NativeMethods.ENLINK ConvertFromENLINK64(NativeMethods.ENLINK64 es64)
-        {
-            NativeMethods.ENLINK es = new NativeMethods.ENLINK();
-
-            fixed (byte* es64p = &es64.contents[0])
-            {
-                es.nmhdr = new User32.NMHDR();
-                es.charrange = new Richedit.CHARRANGE();
-
-                es.nmhdr.hwndFrom = Marshal.ReadIntPtr((IntPtr)es64p);
-                es.nmhdr.idFrom = Marshal.ReadIntPtr((IntPtr)(es64p + 8));
-                es.nmhdr.code = Marshal.ReadInt32((IntPtr)(es64p + 16));
-                es.msg = Marshal.ReadInt32((IntPtr)(es64p + 24));
-                es.wParam = Marshal.ReadIntPtr((IntPtr)(es64p + 28));
-                es.lParam = Marshal.ReadIntPtr((IntPtr)(es64p + 36));
-                es.charrange.cpMin = Marshal.ReadInt32((IntPtr)(es64p + 44));
-                es.charrange.cpMax = Marshal.ReadInt32((IntPtr)(es64p + 48));
-            }
-
-            return es;
         }
 
         private void WmSelectionChange(Richedit.SELCHANGE selChange)

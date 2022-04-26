@@ -122,40 +122,6 @@ namespace System.Windows.Forms
             public int FlagsEx;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class ENLINK
-        {
-            public User32.NMHDR nmhdr;
-            public int msg;
-            public IntPtr wParam = IntPtr.Zero;
-            public IntPtr lParam = IntPtr.Zero;
-            public Richedit.CHARRANGE charrange;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class ENLINK64
-        {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 56)]
-            public byte[] contents = new byte[56];
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class ENPROTECTED
-        {
-            public User32.NMHDR nmhdr;
-            public int msg;
-            public IntPtr wParam;
-            public IntPtr lParam;
-            public Richedit.CHARRANGE chrg;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class ENPROTECTED64
-        {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 56)]
-            public byte[] contents = new byte[56];
-        }
-
         public class ActiveX
         {
             public const int ALIGN_MIN = 0x0;

@@ -9,10 +9,13 @@ internal partial class Interop
     internal static partial class Richedit
     {
         [StructLayout(LayoutKind.Sequential, Pack = RichEditPack)]
-        public struct GETTEXTLENGTHEX
+        public struct ENPROTECTED
         {
-            public GTL flags;
-            public uint codepage;
+            public User32.NMHDR nmhdr;
+            public int msg;
+            public nuint wParam;
+            public nint lParam;
+            public CHARRANGE chrg;
         }
     }
 }
