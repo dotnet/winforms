@@ -1487,5 +1487,39 @@
       ],
       "taskName": "Lock stale issues and PRs"
     }
+  },
+  {
+    "taskType": "trigger",
+    "capabilityId": "IssueResponder",
+    "subCapability": "PullRequestResponder",
+    "version": "1.0",
+    "config": {
+      "conditions": {
+        "operator": "and",
+        "operands": [
+          {
+            "name": "titleContains",
+            "parameters": {
+              "titlePattern": "Enable nullability"
+            }
+          }
+        ]
+      },
+      "eventType": "pull_request",
+      "eventNames": [
+        "pull_request",
+        "issues",
+        "project_card"
+      ],
+      "actions": [
+        {
+          "name": "addLabel",
+          "parameters": {
+            "label": "area: NRT"
+          }
+        }
+      ],
+      "taskName": "Apply \"area: NRT\" label"
+    }
   }
 ]
