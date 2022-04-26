@@ -23,6 +23,7 @@ namespace Xunit
         private readonly Lazy<CultureInfo> _uiCulture;
         private CultureInfo _originalCulture;
         private CultureInfo _originalUICulture;
+        private bool _updateUnmanagedUiThreadCulture;
 
         /// <summary>
         ///  Replaces the culture and UI culture of the current thread with <paramref name="culture" />.
@@ -70,11 +71,12 @@ namespace Xunit
             _originalCulture = Thread.CurrentThread.CurrentCulture;
             _originalUICulture = Thread.CurrentThread.CurrentUICulture;
 
-            CultureInfo.DefaultThreadCurrentCulture =
-                Thread.CurrentThread.CurrentCulture = Culture;
+            CultureInfo.DefaultThreadCurrentCulture = Culture;
+            Thread.CurrentThread.CurrentCulture = Culture;
             Thread.CurrentThread.CurrentUICulture = UICulture;
 
-            if (SetUnmanagedUiThreadCulture)
+            _updateUnmanagedUiThreadCulture = !_originalUICulture.Equals(UICulture);
+            if (SetUnmanagedUiThreadCulture && _updateUnmanagedUiThreadCulture)
             {
                 SetNativeUiThreadCulture(UICulture);
             }
@@ -93,7 +95,7 @@ namespace Xunit
             Thread.CurrentThread.CurrentCulture = _originalCulture;
             Thread.CurrentThread.CurrentUICulture = _originalUICulture;
 
-            if (SetUnmanagedUiThreadCulture)
+            if (SetUnmanagedUiThreadCulture && _updateUnmanagedUiThreadCulture)
             {
                 SetNativeUiThreadCulture(_originalUICulture);
             }
