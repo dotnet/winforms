@@ -163,7 +163,6 @@ namespace System.Windows.Forms
                 try
                 {
                     _iLockBytes = Ole32.CreateILockBytesOnHGlobal(hglobal, BOOL.TRUE);
-                    Debug.Assert(_iLockBytes is not null, "_iLockBytes is NULL!");
                     if (_buffer is null)
                     {
                         _storage = Ole32.StgCreateDocfileOnILockBytes(

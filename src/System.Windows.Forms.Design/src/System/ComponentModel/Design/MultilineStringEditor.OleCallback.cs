@@ -28,7 +28,6 @@ namespace System.ComponentModel.Design
                 Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::GetNewStorage");
 
                 WinFormsComWrappers.LockBytesWrapper pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, BOOL.TRUE);
-                Debug.Assert(pLockBytes is not null, "pLockBytes is NULL!");
 
                 storage = Ole32.StgCreateDocfileOnILockBytes(
                     pLockBytes,
