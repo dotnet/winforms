@@ -8,17 +8,12 @@ internal partial class Interop
 {
     internal static partial class Ole32
     {
-        [DllImport(Libraries.Ole32, PreserveSig = false, EntryPoint = "CreateILockBytesOnHGlobal")]
-        private static extern IntPtr CreateILockBytesOnHGlobalRaw(IntPtr hGlobal, BOOL fDeleteOnRelease);
+        [DllImport(Libraries.Ole32)]
+        private static extern HRESULT CreateILockBytesOnHGlobal(IntPtr hGlobal, BOOL fDeleteOnRelease, out IntPtr pplkbyt);
 
-        public static WinFormsComWrappers.LockBytesWrapper? CreateILockBytesOnHGlobal(IntPtr hGlobal, BOOL fDeleteOnRelease)
+        public static WinFormsComWrappers.LockBytesWrapper CreateILockBytesOnHGlobal(IntPtr hGlobal, BOOL fDeleteOnRelease)
         {
-            var ptr = CreateILockBytesOnHGlobalRaw(hGlobal, fDeleteOnRelease);
-            if (ptr == IntPtr.Zero)
-            {
-                return null;
-            }
-
+            CreateILockBytesOnHGlobal(hGlobal, fDeleteOnRelease, out var ptr).ThrowIfFailed();
             return (WinFormsComWrappers.LockBytesWrapper)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ptr, CreateObjectFlags.None);
         }
     }
