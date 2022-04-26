@@ -173,6 +173,14 @@ internal partial class Interop
                 return new PictureWrapper(pictureComObject);
             }
 
+            Guid dataObjectIID = IID.IDataObject;
+            hr = Marshal.QueryInterface(externalComObject, ref dataObjectIID, out IntPtr dataObjectComObject);
+            if (hr == S_OK)
+            {
+                Marshal.Release(externalComObject);
+                return new DataObjectWrapper(dataObjectComObject);
+            }
+
             Guid errorInfoIID = IID.IErrorInfo;
             hr = Marshal.QueryInterface(externalComObject, ref errorInfoIID, out IntPtr errorInfoComObject);
             if (hr == S_OK)
@@ -283,6 +291,7 @@ internal partial class Interop
                 ShellItemWrapper siw => siw.Instance,
                 FileOpenDialogWrapper fodw => fodw.Instance,
                 FileSaveDialogWrapper fsdw => fsdw.Instance,
+                DataObjectWrapper dow => dow.Instance,
                 _ => GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None),
             };
         }

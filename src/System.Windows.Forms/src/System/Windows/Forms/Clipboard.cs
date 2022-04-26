@@ -139,12 +139,12 @@ namespace System.Windows.Forms
         private static IDataObject? GetDataObject(int retryTimes, int retryDelay)
         {
             IComDataObject? dataObject = null;
-            HRESULT hr;
+            bool success;
             int retry = retryTimes;
             do
             {
-                hr = Ole32.OleGetClipboard(ref dataObject);
-                if (hr != HRESULT.S_OK)
+                success = Ole32.OleGetClipboard(out dataObject, out HRESULT hr);
+                if (!success)
                 {
                     if (retry == 0)
                     {
@@ -155,15 +155,10 @@ namespace System.Windows.Forms
                     Thread.Sleep(millisecondsTimeout: retryDelay);
                 }
             }
-            while (hr != 0);
+            while (!success);
 
             if (dataObject is not null)
             {
-                if (dataObject is IDataObject ido && !Marshal.IsComObject(dataObject))
-                {
-                    return ido;
-                }
-
                 return new DataObject(dataObject);
             }
 

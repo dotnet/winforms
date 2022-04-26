@@ -121,6 +121,12 @@ internal partial class Interop
                 try
                 {
                     var formatEtc = instance.EnumFormatEtc(direction);
+                    if (Marshal.IsComObject(formatEtc))
+                    {
+                        *pEnumFormatC = Marshal.GetIUnknownForObject(formatEtc);
+                        return HRESULT.S_OK;
+                    }
+
                     var result = WinFormsComWrappers.Instance.TryGetComPointer(formatEtc, IID.IEnumFORMATETC, out var formatEtcPtr);
                     if (result.Failed())
                     {
@@ -173,13 +179,6 @@ internal partial class Interop
 
                 result = WinFormsComWrappers.Instance.TryGetComPointer(enumAdvice, IID.IEnumSTATDATA, out var enumAdvicePtr);
                 return result;
-            }
-
-            internal struct STGMEDIUM_Raw
-            {
-                public TYMED tymed;
-                public IntPtr unionmember;
-                public IntPtr pUnkForRelease;
             }
         }
     }
