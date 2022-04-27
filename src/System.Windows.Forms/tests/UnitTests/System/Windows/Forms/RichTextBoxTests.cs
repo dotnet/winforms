@@ -7934,22 +7934,17 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void RichTextBox_RichEditOleCallback_CreateStorage()
+        public void RichTextBox_OleObject_HandleJunkOleObject()
         {
-            using var control = new RichTextBoxWithCallback();
+            using var control = new RichTextBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
-            var callback = control.CreateRichEditOleCallback();
-            callback.GetNewStorage(out var storage);
-            Assert.NotNull(storage);
+            using var memoryStream = new MemoryStream();
+            using var bitmap = new Bitmap(100, 100);
+            bitmap.Save(memoryStream, Drawing.Imaging.ImageFormat.Png);
+            Clipboard.SetData("Embed Source", memoryStream);
 
-            storage.Stat(out var stats, Ole32.STATFLAG.DEFAULT);
-            Assert.Equal(Ole32.STGM.SHARE_EXCLUSIVE | Ole32.STGM.READWRITE, stats.grfMode);
-        }
-
-        private class RichTextBoxWithCallback : RichTextBox
-        {
-            public new IRichEditOleCallback CreateRichEditOleCallback() => (IRichEditOleCallback)base.CreateRichEditOleCallback();
+            control.Paste();
         }
 
         [WinFormsFact]
