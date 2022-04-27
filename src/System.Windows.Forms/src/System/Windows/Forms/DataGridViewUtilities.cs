@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    internal class DataGridViewUtilities
+    internal static class DataGridViewUtilities
     {
         private const byte IconMarginWidth = 3;      // 3 pixels of margin on the left and right of icons
         private const byte IconMarginHeight = 2;     // 2 pixels of margin on the top and bottom of icons

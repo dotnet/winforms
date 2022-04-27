@@ -9,13 +9,9 @@ namespace System.Windows.Forms
 {
     public partial class DataGridViewButtonCell
     {
-        private class DataGridViewButtonCellRenderer
+        private static class DataGridViewButtonCellRenderer
         {
             private static VisualStyleRenderer? s_visualStyleRenderer;
-
-            private DataGridViewButtonCellRenderer()
-            {
-            }
 
             public static VisualStyleRenderer DataGridViewButtonRenderer
             {

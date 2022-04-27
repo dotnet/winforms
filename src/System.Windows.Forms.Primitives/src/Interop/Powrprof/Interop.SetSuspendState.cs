@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 internal partial class Interop
 {
-    internal partial class Powrprof
+    internal static partial class Powrprof
     {
         [DllImport(Libraries.Powrprof, ExactSpelling = true, SetLastError = true)]
         public static extern BOOLEAN SetSuspendState(BOOLEAN bHibernate, BOOLEAN bForce, BOOLEAN bWakeupEventsDisabled);

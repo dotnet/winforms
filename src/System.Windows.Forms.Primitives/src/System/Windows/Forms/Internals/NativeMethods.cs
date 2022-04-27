@@ -122,7 +122,7 @@ namespace System.Windows.Forms
             public int FlagsEx;
         }
 
-        public class ActiveX
+        public static class ActiveX
         {
             public const int ALIGN_MIN = 0x0;
             public const int ALIGN_NO_CHANGE = 0x0;
@@ -133,10 +133,6 @@ namespace System.Windows.Forms
             public const int ALIGN_MAX = 0x4;
 
             public static Guid IID_IUnknown = new Guid("{00000000-0000-0000-C000-000000000046}");
-
-            private ActiveX()
-            {
-            }
         }
 
         /// <summary>

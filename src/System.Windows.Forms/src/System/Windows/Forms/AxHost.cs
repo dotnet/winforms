@@ -39,7 +39,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Flags which may be passed to the AxHost constructor
         /// </summary>
-        internal class AxFlags
+        internal static class AxFlags
         {
             /// <summary>
             ///  Indicates that the context menu for the control should not contain an

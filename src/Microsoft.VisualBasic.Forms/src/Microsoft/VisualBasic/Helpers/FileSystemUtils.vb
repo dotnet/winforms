@@ -13,7 +13,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
     ''' <summary>
     '''  Internal utilities from Microsoft.VisualBasic.FileIO.FileSystem.
     ''' </summary>
-    Friend Class FileSystemUtils
+    Friend NotInheritable Class FileSystemUtils
 
         ''' <summary>
         ''' Normalize the path, but throw exception if the path ends with separator.
