@@ -15,7 +15,7 @@ namespace System.Windows.Forms
 
             internal CheckedIndexCollection(CheckedListBox owner)
             {
-                _owner = owner;
+                _owner = owner.OrThrowIfNull();
             }
 
             /// <summary>
