@@ -24,7 +24,7 @@ namespace System.Windows.Forms
 
             public DataGridViewRowAccessibleObject(DataGridViewRow owner)
             {
-                _owner = owner.OrThrowIfNull();
+                _owner = owner;
             }
 
             /// <summary>

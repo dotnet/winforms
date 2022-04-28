@@ -22,19 +22,19 @@ namespace System.Windows.Forms.Tests
             Assert.Null(accessibleObject.Help);
         }
 
-        [Fact]
-        public void DataGridViewRowAccessibleObject_Ctor_OwningDataGridViewRowIsNull_RaiseException()
+        public static IEnumerable<object[]> Ctor_DataGridViewRow_TestData()
         {
-            Assert.Throws<ArgumentNullException>(() => { new DataGridViewRowAccessibleObject(null); });
+            yield return new object[] { null };
+            yield return new object[] { new DataGridViewRow() };
         }
 
-        [WinFormsFact]
-        public void DataGridViewRowAccessibleObject_Ctor_DataGridViewRow()
+        [Theory]
+        [MemberData(nameof(Ctor_DataGridViewRow_TestData))]
+        public void DataGridViewRowAccessibleObject_Ctor_DataGridViewRow(DataGridViewRow owner)
         {
-            using var dataGridViewRow = new DataGridViewRow();
-            var accessibleObject = new DataGridViewRowAccessibleObject(dataGridViewRow);
+            var accessibleObject = new DataGridViewRowAccessibleObject(owner);
 
-            Assert.Equal(dataGridViewRow, accessibleObject.Owner);
+            Assert.Equal(owner, accessibleObject.Owner);
             Assert.Equal(AccessibleRole.Row, accessibleObject.Role);
             Assert.Null(accessibleObject.DefaultAction);
             Assert.Null(accessibleObject.Help);
@@ -52,10 +52,16 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, accessibleObject.Bounds);
         }
 
-        [Fact]
-        public void DataGridViewRowAccessibleObject_Bounds_GetNoOwner_ThrowsInvalidOperationException()
+        public static IEnumerable<object[]> NoOwner_TestData()
         {
-            DataGridViewRowAccessibleObject accessibleObject = new();
+            yield return new object[] { new DataGridViewRowAccessibleObject() };
+            yield return new object[] { new DataGridViewRowAccessibleObject(null) };
+        }
+
+        [Theory]
+        [MemberData(nameof(NoOwner_TestData))]
+        public void DataGridViewRowAccessibleObject_Bounds_GetNoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
+        {
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Bounds);
         }
 
@@ -146,10 +152,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(dataGridView.IsHandleCreated);
         }
 
-        [Fact]
-        public void DataGridViewRowAccessibleObject_Name_GetNoOwner_ThrowsInvalidOperationException()
+        [Theory]
+        [MemberData(nameof(NoOwner_TestData))]
+        public void DataGridViewRowAccessibleObject_Name_GetNoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
-            DataGridViewRowAccessibleObject accessibleObject = new();
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Name);
         }
 
@@ -184,10 +190,10 @@ namespace System.Windows.Forms.Tests
             Assert.Same(expected, accessibleObject.Parent);
         }
 
-        [Fact]
-        public void DataGridViewRowAccessibleObject_Parent_GetNoOwner_ThrowsInvalidOperationException()
+        [Theory]
+        [MemberData(nameof(NoOwner_TestData))]
+        public void DataGridViewRowAccessibleObject_Parent_GetNoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
-            DataGridViewRowAccessibleObject accessibleObject = new();
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Parent);
         }
 
@@ -203,10 +209,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, accessibleObject.State);
         }
 
-        [Fact]
-        public void DataGridViewRowAccessibleObject_State_GetNoOwner_ThrowsInvalidOperationException()
+        [Theory]
+        [MemberData(nameof(NoOwner_TestData))]
+        public void DataGridViewRowAccessibleObject_State_GetNoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
-            DataGridViewRowAccessibleObject accessibleObject = new();
             Assert.Throws<InvalidOperationException>(() => accessibleObject.State);
         }
 
@@ -222,10 +228,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, accessibleObject.Value);
         }
 
-        [Fact]
-        public void DataGridViewRowAccessibleObject_Value_NoOwner_ThrowsInvalidOperationException()
+        [Theory]
+        [MemberData(nameof(NoOwner_TestData))]
+        public void DataGridViewRowAccessibleObject_Value_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
-            DataGridViewRowAccessibleObject accessibleObject = new();
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Value);
         }
 
@@ -236,10 +242,10 @@ namespace System.Windows.Forms.Tests
             accessibleObject.DoDefaultAction();
         }
 
-        [Fact]
-        public void DataGridViewRowAccessibleObject_GetChild_NoOwner_ThrowsInvalidOperationException()
+        [Theory]
+        [MemberData(nameof(NoOwner_TestData))]
+        public void DataGridViewRowAccessibleObject_GetChild_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
-            DataGridViewRowAccessibleObject accessibleObject = new();
             Assert.Throws<InvalidOperationException>(() => accessibleObject.GetChild(0));
         }
 
@@ -263,10 +269,10 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("index", () => accessibleObject.GetChild(index));
         }
 
-        [Fact]
-        public void DataGridViewRowAccessibleObject_GetChildCount_NoOwner_ThrowsInvalidOperationException()
+        [Theory]
+        [MemberData(nameof(NoOwner_TestData))]
+        public void DataGridViewRowAccessibleObject_GetChildCount_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
-            DataGridViewRowAccessibleObject accessibleObject = new();
             Assert.Throws<InvalidOperationException>(() => accessibleObject.GetChildCount());
         }
 
@@ -279,10 +285,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, accessibleObject.GetChildCount());
         }
 
-        [Fact]
-        public void DataGridViewRowAccessibleObject_GetFocused_NoOwner_ThrowsInvalidOperationException()
+        [Theory]
+        [MemberData(nameof(NoOwner_TestData))]
+        public void DataGridViewRowAccessibleObject_GetFocused_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
-            DataGridViewRowAccessibleObject accessibleObject = new();
             Assert.Throws<InvalidOperationException>(() => accessibleObject.GetFocused());
         }
 
@@ -310,10 +316,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("Selected Row Cells", selectedAccessibleObject.Value);
         }
 
-        [Fact]
-        public void DataGridViewRowAccessibleObject_GetSelected_NoOwner_ThrowsInvalidOperationException()
+        [Theory]
+        [MemberData(nameof(NoOwner_TestData))]
+        public void DataGridViewRowAccessibleObject_GetSelected_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
-            DataGridViewRowAccessibleObject accessibleObject = new();
             Assert.Throws<InvalidOperationException>(() => accessibleObject.GetSelected());
         }
 
@@ -332,10 +338,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, accessibleObject.Navigate(navigationDirection));
         }
 
-        [Fact]
-        public void DataGridViewRowAccessibleObject_Navigate_NoOwner_ThrowsInvalidOperationException()
+        [Theory]
+        [MemberData(nameof(NoOwner_TestData))]
+        public void DataGridViewRowAccessibleObject_Navigate_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
-            DataGridViewRowAccessibleObject accessibleObject = new();
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Navigate(AccessibleNavigation.Right));
         }
 
@@ -370,10 +376,10 @@ namespace System.Windows.Forms.Tests
             accessibleObject.Select(flags);
         }
 
-        [Fact]
-        public void DataGridViewRowAccessibleObject_Select_NoOwner_ThrowsInvalidOperationException()
+        [Theory]
+        [MemberData(nameof(NoOwner_TestData))]
+        public void DataGridViewRowAccessibleObject_Select_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
-            DataGridViewRowAccessibleObject accessibleObject = new();
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Select(AccessibleSelection.None));
         }
 
