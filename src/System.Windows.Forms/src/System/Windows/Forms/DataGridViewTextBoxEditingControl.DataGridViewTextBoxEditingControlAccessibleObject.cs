@@ -11,21 +11,15 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Defines the DataGridView TextBox EditingControl accessible object.
         /// </summary>
-        internal class DataGridViewTextBoxEditingControlAccessibleObject : ControlAccessibleObject
+        internal class DataGridViewTextBoxEditingControlAccessibleObject : TextBoxBaseAccessibleObject
         {
             /// <summary>
             ///  The parent is changed when the editing control is attached to another editing cell.
             /// </summary>
             private AccessibleObject? _parentAccessibleObject;
-            private readonly TextBoxBase _owningDataGridViewTextBoxEditingControl;
-            private readonly TextBoxBaseUiaTextProvider _textProvider;
 
             public DataGridViewTextBoxEditingControlAccessibleObject(DataGridViewTextBoxEditingControl ownerControl) : base(ownerControl)
-            {
-                _owningDataGridViewTextBoxEditingControl = ownerControl;
-                _textProvider = new TextBoxBaseUiaTextProvider(ownerControl);
-                UseTextProviders(_textProvider, _textProvider);
-            }
+            { }
 
             public override AccessibleObject? Parent => _parentAccessibleObject;
 
@@ -72,12 +66,8 @@ namespace System.Windows.Forms
                 => patternId switch
                 {
                     UiaCore.UIA.ValuePatternId => true,
-                    UiaCore.UIA.TextPatternId => true,
-                    UiaCore.UIA.TextPattern2Id => true,
                     _ => base.IsPatternSupported(patternId)
                 };
-
-            internal override bool IsReadOnly => _owningDataGridViewTextBoxEditingControl.ReadOnly;
 
             /// <summary>
             ///  Sets the parent accessible object for the node which can be added or removed to/from hierarchy nodes.

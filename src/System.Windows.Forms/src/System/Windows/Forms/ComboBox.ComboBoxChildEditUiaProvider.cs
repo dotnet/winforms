@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -16,7 +17,7 @@ namespace System.Windows.Forms
         {
             private const string COMBO_BOX_EDIT_AUTOMATION_ID = "1001";
 
-            private readonly ComboBox _owner;
+            private readonly ComboBox _owningComboBox;
             private readonly ComboBoxUiaTextProvider _textProvider;
             private readonly IntPtr _handle;
 
@@ -27,10 +28,9 @@ namespace System.Windows.Forms
             /// <param name="childEditControlhandle">The child edit native window handle.</param>
             public ComboBoxChildEditUiaProvider(ComboBox owner, IntPtr childEditControlhandle) : base(owner, childEditControlhandle)
             {
-                _owner = owner;
+                _owningComboBox = owner;
                 _handle = childEditControlhandle;
                 _textProvider = new ComboBoxUiaTextProvider(owner);
-                UseTextProviders(_textProvider, _textProvider);
             }
 
             /// <summary>
@@ -40,7 +40,7 @@ namespace System.Windows.Forms
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (!_owner.IsHandleCreated)
+                if (!_owningComboBox.IsHandleCreated)
                 {
                     return null;
                 }
@@ -48,14 +48,14 @@ namespace System.Windows.Forms
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.Parent:
-                        return _owner.AccessibilityObject;
+                        return _owningComboBox.AccessibilityObject;
                     case UiaCore.NavigateDirection.PreviousSibling:
-                        return _owner.DroppedDown
-                            ? _owner.ChildListAccessibleObject
+                        return _owningComboBox.DroppedDown
+                            ? _owningComboBox.ChildListAccessibleObject
                             : null;
                     case UiaCore.NavigateDirection.NextSibling:
-                        return _owner.DropDownStyle != ComboBoxStyle.Simple
-                            && _owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject
+                        return _owningComboBox.DropDownStyle != ComboBoxStyle.Simple
+                            && _owningComboBox.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject
                                 ? comboBoxAccessibleObject.DropDownButtonUiaProvider
                                 : null;
                     default:
@@ -67,12 +67,7 @@ namespace System.Windows.Forms
             ///  Gets the top level element.
             /// </summary>
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            {
-                get
-                {
-                    return _owner.AccessibilityObject;
-                }
-            }
+                => _owningComboBox.AccessibilityObject;
 
             public override string Name => base.Name ?? SR.ComboBoxEditDefaultAccessibleName;
 
@@ -88,11 +83,11 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.ControlTypePropertyId:
                         return UiaCore.UIA.EditControlTypeId;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return _owner.Focused;
+                        return _owningComboBox.Focused;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
                     case UiaCore.UIA.IsEnabledPropertyId:
-                        return _owner.Enabled;
+                        return _owningComboBox.Enabled;
                     case UiaCore.UIA.AutomationIdPropertyId:
                         return COMBO_BOX_EDIT_AUTOMATION_ID;
                     case UiaCore.UIA.NativeWindowHandlePropertyId:
@@ -128,6 +123,30 @@ namespace System.Windows.Forms
             ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, GetHashCode() };
+
+            internal override UiaCore.ITextRangeProvider DocumentRangeInternal
+                => _textProvider.DocumentRange;
+
+            internal override UiaCore.ITextRangeProvider[]? GetTextSelection()
+                => _textProvider.GetSelection();
+
+            internal override UiaCore.ITextRangeProvider[]? GetTextVisibleRanges()
+                => _textProvider.GetVisibleRanges();
+
+            internal override UiaCore.ITextRangeProvider? GetTextRangeFromChild(UiaCore.IRawElementProviderSimple childElement)
+                => _textProvider.RangeFromChild(childElement);
+
+            internal override UiaCore.ITextRangeProvider? GetTextRangeFromPoint(Point screenLocation)
+                => _textProvider.RangeFromPoint(screenLocation);
+
+            internal override UiaCore.SupportedTextSelection SupportedTextSelectionInternal
+                => _textProvider.SupportedTextSelection;
+
+            internal override UiaCore.ITextRangeProvider? GetTextCaretRange(out BOOL isActive)
+                => _textProvider.GetCaretRange(out isActive);
+
+            internal override UiaCore.ITextRangeProvider GetRangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement)
+                => _textProvider.RangeFromAnnotation(annotationElement);
         }
     }
 }
