@@ -31,10 +31,10 @@ namespace System.Windows.Forms
             ///  Returns the index of the row, taking into account the invisibility of other rows.
             /// </summary>
             private int VisibleIndex
-                => _owningDataGridViewRow?.DataGridView is not null
-                    ? _owningDataGridViewRow.DataGridView.ColumnHeadersVisible
-                        ? _owningDataGridViewRow.DataGridView.Rows.GetVisibleIndex(_owningDataGridViewRow) + 1
-                        : _owningDataGridViewRow.DataGridView.Rows.GetVisibleIndex(_owningDataGridViewRow)
+                => _owningDataGridViewRow?.DataGridView is DataGridView dataGridView
+                    ? dataGridView.ColumnHeadersVisible
+                        ? dataGridView.Rows.GetVisibleIndex(_owningDataGridViewRow) + 1
+                        : dataGridView.Rows.GetVisibleIndex(_owningDataGridViewRow)
                     : -1;
 
             public override Rectangle Bounds
@@ -311,10 +311,10 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                 }
 
-                if (_owningDataGridViewRow.DataGridView is not null &&
-                    _owningDataGridViewRow.DataGridView.Focused &&
-                    _owningDataGridViewRow.DataGridView.CurrentCell is not null &&
-                    _owningDataGridViewRow.DataGridView.CurrentCell.RowIndex == _owningDataGridViewRow.Index)
+                if (_owningDataGridViewRow.DataGridView is DataGridView dataGridView &&
+                    dataGridView.Focused &&
+                    dataGridView.CurrentCell is not null &&
+                    dataGridView.CurrentCell.RowIndex == _owningDataGridViewRow.Index)
                 {
                     return _owningDataGridViewRow.DataGridView.CurrentCell.AccessibilityObject;
                 }
