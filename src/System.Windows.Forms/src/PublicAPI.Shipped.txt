@@ -664,9 +664,9 @@
 ~override System.Windows.Forms.TreeView.Text.get -> string
 ~override System.Windows.Forms.TreeView.Text.set -> void
 ~override System.Windows.Forms.TreeView.ToString() -> string
-~override System.Windows.Forms.TreeViewImageIndexConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Windows.Forms.TreeViewImageIndexConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Windows.Forms.TreeViewImageIndexConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext context) -> System.ComponentModel.TypeConverter.StandardValuesCollection
+override System.Windows.Forms.TreeViewImageIndexConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
+override System.Windows.Forms.TreeViewImageIndexConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
+override System.Windows.Forms.TreeViewImageIndexConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext? context) -> System.ComponentModel.TypeConverter.StandardValuesCollection!
 ~override System.Windows.Forms.TreeViewImageKeyConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
 ~override System.Windows.Forms.UpDownBase.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.UpDownBase.BackgroundImage.set -> void
