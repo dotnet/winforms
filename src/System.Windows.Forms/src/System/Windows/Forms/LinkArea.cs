@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
@@ -39,14 +37,14 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsEmpty => length == start && start == 0;
 
-        public override bool Equals(object o)
+        public override bool Equals(object? o)
         {
             if (o is not LinkArea a)
             {
                 return false;
             }
 
-            return this == a;
+            return Equals(a);
         }
 
         public bool Equals(LinkArea other)
@@ -55,14 +53,10 @@ namespace System.Windows.Forms
         public override string ToString() => $"{{Start={Start}, Length={Length}}}";
 
         public static bool operator ==(LinkArea linkArea1, LinkArea linkArea2)
-        {
-            return linkArea1.start == linkArea2.start && linkArea1.length == linkArea2.length;
-        }
+            => linkArea1.Equals(linkArea2);
 
         public static bool operator !=(LinkArea linkArea1, LinkArea linkArea2)
-        {
-            return !(linkArea1 == linkArea2);
-        }
+            => !linkArea1.Equals(linkArea2);
 
         public override int GetHashCode() => HashCode.Combine(start, length);
     }
