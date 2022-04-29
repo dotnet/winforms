@@ -17,7 +17,7 @@ namespace System.Windows.Forms
             /* C#r: protected */
             public CheckedIndexCollection(ListView owner)
             {
-                _owner = owner;
+                _owner = owner.OrThrowIfNull();
             }
 
             /// <summary>
