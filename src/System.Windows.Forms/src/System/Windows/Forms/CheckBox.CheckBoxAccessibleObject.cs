@@ -22,7 +22,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    string defaultAction = Owner.AccessibleDefaultActionDescription;
+                    string? defaultAction = Owner.AccessibleDefaultActionDescription;
 
                     if (defaultAction is not null)
                     {
