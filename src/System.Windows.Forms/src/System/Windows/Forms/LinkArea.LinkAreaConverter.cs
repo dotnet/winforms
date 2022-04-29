@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -23,7 +21,7 @@ namespace System.Windows.Forms
             ///  Determines if this converter can convert an object in the given source
             ///  type to the native type of the converter.
             /// </summary>
-            public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+            public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
             {
                 if (sourceType == typeof(string))
                 {
@@ -37,7 +35,7 @@ namespace System.Windows.Forms
             ///  Gets a value indicating whether this converter can convert an object to the
             ///  given destination type using the context.
             /// </summary>
-            public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+            public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
             {
                 if (destinationType == typeof(InstanceDescriptor))
                 {
@@ -50,7 +48,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Converts the given object to the converter's native type.
             /// </summary>
-            public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+            public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
             {
                 if (value is string valueStr)
                 {
@@ -72,7 +70,7 @@ namespace System.Windows.Forms
                     TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));
                     for (int i = 0; i < values.Length; i++)
                     {
-                        values[i] = (int)intConverter.ConvertFromString(context, culture, tokens[i]);
+                        values[i] = (int)intConverter.ConvertFromString(context, culture, tokens[i])!;
                     }
 
                     if (values.Length != 2)
@@ -95,7 +93,7 @@ namespace System.Windows.Forms
             ///  type is string. If this cannot convert to the destination type, this will
             ///  throw a NotSupportedException.
             /// </summary>
-            public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+            public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
             {
                 if (value is LinkArea pt)
                 {
@@ -108,7 +106,7 @@ namespace System.Windows.Forms
 
                         string sep = culture.TextInfo.ListSeparator + " ";
                         TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));
-                        string[] args = new string[]
+                        string?[] args = new string?[]
                         {
                             intConverter.ConvertToString(context, culture, pt.Start),
                             intConverter.ConvertToString(context, culture, pt.Length)
@@ -131,14 +129,15 @@ namespace System.Windows.Forms
             ///  for the object. This is useful for objects that are immutable, but still
             ///  want to provide changable properties.
             /// </summary>
-            public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
+            public override object CreateInstance(ITypeDescriptorContext? context, IDictionary propertyValues)
             {
                 ArgumentNullException.ThrowIfNull(propertyValues);
 
                 try
                 {
-                    return new LinkArea((int)propertyValues[nameof(LinkArea.Start)],
-                                    (int)propertyValues[nameof(LinkArea.Length)]);
+                    return new LinkArea(
+                        (int)propertyValues[nameof(Start)]!,
+                        (int)propertyValues[nameof(Length)]!);
                 }
                 catch (InvalidCastException invalidCast)
                 {
@@ -154,14 +153,14 @@ namespace System.Windows.Forms
             ///  Determines if changing a value on this object should require a call to
             ///  CreateInstance to create a new value.
             /// </summary>
-            public override bool GetCreateInstanceSupported(ITypeDescriptorContext context) => true;
+            public override bool GetCreateInstanceSupported(ITypeDescriptorContext? context) => true;
 
             /// <summary>
             ///  Retrieves the set of properties for this type. By default, a type has
             ///  does not return any properties. An easy implementation of this method
             ///  can just call TypeDescriptor.GetProperties for the correct data type.
             /// </summary>
-            public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
+            public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(LinkArea), attributes);
                 return props.Sort(new string[] { nameof(LinkArea.Start), nameof(LinkArea.Length) });
@@ -170,7 +169,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Determines if this object supports properties. By default, this is false.
             /// </summary>
-            public override bool GetPropertiesSupported(ITypeDescriptorContext context) => true;
+            public override bool GetPropertiesSupported(ITypeDescriptorContext? context) => true;
         }
     }
 }

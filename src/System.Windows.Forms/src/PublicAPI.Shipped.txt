@@ -341,14 +341,14 @@ override System.Windows.Forms.Layout.TableLayoutSettingsTypeConverter.CanConvert
 override System.Windows.Forms.Layout.TableLayoutSettingsTypeConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
 override System.Windows.Forms.Layout.TableLayoutSettingsTypeConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
 override System.Windows.Forms.LinkArea.Equals(object? o) -> bool
-~override System.Windows.Forms.LinkArea.LinkAreaConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-~override System.Windows.Forms.LinkArea.LinkAreaConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Windows.Forms.LinkArea.LinkAreaConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Windows.Forms.LinkArea.LinkAreaConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Windows.Forms.LinkArea.LinkAreaConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext context, System.Collections.IDictionary propertyValues) -> object
-~override System.Windows.Forms.LinkArea.LinkAreaConverter.GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
-~override System.Windows.Forms.LinkArea.LinkAreaConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext context, object value, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
-~override System.Windows.Forms.LinkArea.LinkAreaConverter.GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.Windows.Forms.LinkArea.LinkAreaConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
+override System.Windows.Forms.LinkArea.LinkAreaConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Windows.Forms.LinkArea.LinkAreaConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
+override System.Windows.Forms.LinkArea.LinkAreaConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
+override System.Windows.Forms.LinkArea.LinkAreaConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext? context, System.Collections.IDictionary! propertyValues) -> object!
+override System.Windows.Forms.LinkArea.LinkAreaConverter.GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
+override System.Windows.Forms.LinkArea.LinkAreaConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext? context, object! value, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection!
+override System.Windows.Forms.LinkArea.LinkAreaConverter.GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
 override System.Windows.Forms.LinkArea.ToString() -> string!
 ~override System.Windows.Forms.LinkLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.LinkLabel.OnAutoSizeChanged(System.EventArgs e) -> void
