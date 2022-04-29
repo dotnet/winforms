@@ -178,6 +178,14 @@ internal partial class Interop
                 return new FileSaveDialogWrapper(fileSaveDialogComObject);
             }
 
+            Guid lockBytesIID = IID.ILockBytes;
+            hr = Marshal.QueryInterface(externalComObject, ref lockBytesIID, out IntPtr lockBytesComObject);
+            if (hr == S_OK)
+            {
+                Marshal.Release(externalComObject);
+                return new LockBytesWrapper(lockBytesComObject);
+            }
+
             Guid shellItemIID = IID.IShellItem;
             hr = Marshal.QueryInterface(externalComObject, ref shellItemIID, out IntPtr shellItemComObject);
             if (hr == S_OK)

@@ -7934,6 +7934,20 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void RichTextBox_OleObject_IncompleteOleObject_DoNothing()
+        {
+            using var control = new RichTextBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            using var memoryStream = new MemoryStream();
+            using var bitmap = new Bitmap(100, 100);
+            bitmap.Save(memoryStream, Drawing.Imaging.ImageFormat.Png);
+            Clipboard.SetData("Embed Source", memoryStream);
+
+            Assert.Equal(string.Empty, control.Text);
+        }
+
+        [WinFormsFact]
         public void RichTextBox_CanPaste_NullFormat_ThrowsNullReferenceException()
         {
             using var control = new RichTextBox();
