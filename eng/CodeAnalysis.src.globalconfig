@@ -409,7 +409,7 @@ dotnet_diagnostic.CA2012.severity = warning
 dotnet_diagnostic.CA2013.severity = warning
 
 # Do not use stackalloc in loops
-dotnet_diagnostic.CA2014.severity = none # TODO: warning
+dotnet_diagnostic.CA2014.severity = warning
 
 # Do not define finalizers for types derived from MemoryManager<T>
 dotnet_diagnostic.CA2015.severity = warning
