@@ -275,13 +275,13 @@
 ~override System.Windows.Forms.DataGridViewRow.Clone() -> object
 ~override System.Windows.Forms.DataGridViewRow.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
 ~override System.Windows.Forms.DataGridViewRow.ContextMenuStrip.set -> void
-~override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Name.get -> string
-~override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Value.get -> string
+override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Name.get -> string!
+override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Value.get -> string!
 ~override System.Windows.Forms.DataGridViewRow.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
 ~override System.Windows.Forms.DataGridViewRow.DefaultCellStyle.set -> void
 ~override System.Windows.Forms.DataGridViewRow.InheritedStyle.get -> System.Windows.Forms.DataGridViewCellStyle
@@ -1232,9 +1232,9 @@
 ~System.Windows.Forms.DataGridViewRow.CreateCells(System.Windows.Forms.DataGridView dataGridView) -> void
 ~System.Windows.Forms.DataGridViewRow.CreateCells(System.Windows.Forms.DataGridView dataGridView, params object[] values) -> void
 ~System.Windows.Forms.DataGridViewRow.DataBoundItem.get -> object
-~System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.DataGridViewRowAccessibleObject(System.Windows.Forms.DataGridViewRow owner) -> void
-~System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Owner.get -> System.Windows.Forms.DataGridViewRow
-~System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Owner.set -> void
+System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.DataGridViewRowAccessibleObject(System.Windows.Forms.DataGridViewRow! owner) -> void
+System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Owner.get -> System.Windows.Forms.DataGridViewRow?
+System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Owner.set -> void
 ~System.Windows.Forms.DataGridViewRow.ErrorText.get -> string
 ~System.Windows.Forms.DataGridViewRow.ErrorText.set -> void
 ~System.Windows.Forms.DataGridViewRow.GetContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip
