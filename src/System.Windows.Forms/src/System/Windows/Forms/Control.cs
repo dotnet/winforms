@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -9722,7 +9723,7 @@ namespace System.Windows.Forms
         {
             ((PaintEventHandler)Events[s_paintEvent])?.Invoke(this, e);
         }
-
+#nullable enable
         private void RemovePendingMessages(User32.WM msgMin, User32.WM msgMax)
         {
             if (!IsDisposed)
@@ -9849,7 +9850,7 @@ namespace System.Windows.Forms
 
                 HandleRef parentHandle = new HandleRef(this, User32.GetParent(this));
 
-                Control[] controlSnapshot = null;
+                Control?[]? controlSnapshot = null;
                 SetState(States.Recreate, true);
 
                 try
@@ -9861,7 +9862,7 @@ namespace System.Windows.Forms
                     // This behavior can be overridden in OnParentHandleRecreat* and is in ListView.
 
                     //fish out control collection w/o demand creating one.
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                    ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
                     if (controlsCollection is not null && controlsCollection.Count > 0)
                     {
                         controlSnapshot = new Control[controlsCollection.Count];
@@ -9926,7 +9927,7 @@ namespace System.Windows.Forms
                     {
                         for (int i = 0; i < controlSnapshot.Length; i++)
                         {
-                            Control childControl = controlSnapshot[i];
+                            Control? childControl = controlSnapshot[i];
                             if (childControl is not null && childControl.IsHandleCreated)
                             {
                                 // Re-parent the control.
@@ -10127,7 +10128,7 @@ namespace System.Windows.Forms
             if (!performLayout)
             {
                 CommonProperties.xClearPreferredSizeCache(this);
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
@@ -10166,7 +10167,7 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.ToString(CultureInfo.CurrentCulture));
                         if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
                         {
-                            throw Marshal.GetExceptionForHR((int)n);
+                            throw Marshal.GetExceptionForHR((int)n)!;
                         }
                     }
                     else
@@ -10178,7 +10179,7 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.ToString(CultureInfo.InvariantCulture));
                         if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_NOTREGISTERED)
                         {
-                            throw Marshal.GetExceptionForHR((int)n);
+                            throw Marshal.GetExceptionForHR((int)n)!;
                         }
                     }
 
@@ -10239,7 +10240,7 @@ namespace System.Windows.Forms
                 ScaleControl(factor, factor, this);
                 if (ScaleChildren)
                 {
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                    ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
                     if (controlsCollection is not null)
                     {
                         // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -10307,7 +10308,7 @@ namespace System.Windows.Forms
         {
             if (ScaleChildren)
             {
-                var controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                var controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
                 if (controlsCollection is not null)
                 {
@@ -10552,7 +10553,7 @@ namespace System.Windows.Forms
 
                 SetBounds(sx, sy, sw, sh, BoundsSpecified.All);
 
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
                 if (controlsCollection is not null)
                 {
@@ -10604,7 +10605,7 @@ namespace System.Windows.Forms
         // used by Form
         protected virtual void Select(bool directed, bool forward)
         {
-            IContainerControl c = GetContainerControl();
+            IContainerControl? c = GetContainerControl();
 
             if (c is not null)
             {
@@ -10615,9 +10616,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Selects the next control following ctl.
         /// </summary>
-        public bool SelectNextControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
+        public bool SelectNextControl(Control? ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
         {
-            Control nextSelectableControl = GetNextSelectableControl(ctl, forward, tabStopOnly, nested, wrap);
+            Control? nextSelectableControl = GetNextSelectableControl(ctl, forward, tabStopOnly, nested, wrap);
             if (nextSelectableControl is not null)
             {
                 nextSelectableControl.Select(true, forward);
@@ -10629,16 +10630,16 @@ namespace System.Windows.Forms
             }
         }
 
-        private Control GetNextSelectableControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
+        private Control? GetNextSelectableControl(Control? ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
         {
             if (!Contains(ctl) ||
-                (!nested && ctl._parent != this))
+                (!nested && ctl?._parent != this))
             {
                 ctl = null;
             }
 
             bool alreadyWrapped = false;
-            Control start = ctl;
+            Control? start = ctl;
             do
             {
                 ctl = GetNextControl(ctl, forward);
@@ -10683,10 +10684,9 @@ namespace System.Windows.Forms
         {
             //           We want to move focus away from hidden controls, so this
             //           function was added.
-            //
             if (ContainsFocus && ParentInternal is not null)
             {
-                IContainerControl c = ParentInternal.GetContainerControl();
+                IContainerControl? c = ParentInternal.GetContainerControl();
 
                 if (c is not null)
                 {
@@ -10840,7 +10840,6 @@ namespace System.Windows.Forms
                                 flags |= User32.SWP.NOSIZE;
                             }
 
-                            //
                             // Give a chance for derived controls to do what they want, just before we resize.
                             OnBoundsUpdate(x, y, width, height);
 
@@ -11181,7 +11180,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static AutoValidate GetAutoValidateForControl(Control control)
         {
-            ContainerControl parent = control.ParentContainerControl;
+            ContainerControl? parent = control.ParentContainerControl;
             return (parent is not null) ? parent.AutoValidate : AutoValidate.EnablePreventFocusChange;
         }
 
@@ -11221,7 +11220,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeCursor()
         {
-            object cursor = Properties.GetObject(s_cursorProperty, out bool found);
+            object? cursor = Properties.GetObject(s_cursorProperty, out bool found);
             return (found && cursor is not null);
         }
 
@@ -11250,7 +11249,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeFont()
         {
-            object font = Properties.GetObject(s_fontProperty, out bool found);
+            object? font = Properties.GetObject(s_fontProperty, out bool found);
             return (found && font is not null);
         }
 
@@ -11455,9 +11454,9 @@ namespace System.Windows.Forms
         /// <summary>
         /// Retrieve Font from propertybag. This is the FOnt that was explicitly set on control by the application.
         /// </summary>
-        internal bool TryGetExplicitlySetFont(out Font localFont)
+        internal bool TryGetExplicitlySetFont([NotNullWhen(true)] out Font? localFont)
         {
-            localFont = (Font)Properties.GetObject(s_fontProperty);
+            localFont = (Font?)Properties.GetObject(s_fontProperty);
 
             return localFont is not null;
         }
@@ -11910,7 +11909,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void WmContextMenu(ref Message m, Control sourceControl)
         {
-            var contextMenuStrip = (ContextMenuStrip)Properties.GetObject(s_contextMenuStripProperty);
+            var contextMenuStrip = (ContextMenuStrip?)Properties.GetObject(s_contextMenuStripProperty);
             if (contextMenuStrip is not null)
             {
                 int x = PARAM.SignedLOWORD(m.LParamInternal);
@@ -12008,7 +12007,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmGetControlName(ref Message m)
         {
-            string name;
+            string? name;
 
             if (Site is not null)
             {
@@ -12032,7 +12031,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmGetControlType(ref Message m)
         {
-            string type = GetType().AssemblyQualifiedName;
+            string? type = GetType().AssemblyQualifiedName;
             MarshalStringToMessage(type, ref m);
         }
 
@@ -12592,9 +12591,9 @@ namespace System.Windows.Forms
             bool usingBeginPaint = dc.IsNull;
             using var paintScope = usingBeginPaint ? new User32.BeginPaintScope(Handle) : default;
 
-            if (dc.IsNull)
+            if (usingBeginPaint)
             {
-                dc = paintScope.HDC;
+                dc = paintScope!.HDC;
                 clip = paintScope.PaintStruct.rcPaint;
             }
             else
@@ -12609,8 +12608,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            BufferedGraphics bufferedGraphics = null;
-            PaintEventArgs pevent = null;
+            BufferedGraphics? bufferedGraphics = null;
+            PaintEventArgs? pevent = null;
 
             using var paletteScope = doubleBuffered || usingBeginPaint
                 ? Gdi32.SelectPaletteScope.HalftonePalette(dc, forceBackground: false, realizePalette: false)
@@ -12815,7 +12814,7 @@ namespace System.Windows.Forms
 
             if (!HostedInWin32DialogManager)
             {
-                IContainerControl c = GetContainerControl();
+                IContainerControl? c = GetContainerControl();
                 if (c is not null)
                 {
                     bool activateSucceed;
@@ -12951,7 +12950,6 @@ namespace System.Windows.Forms
             if (((User32.UISF)PARAM.HIWORD(m.WParamInternal) & User32.UISF.HIDEACCEL) != 0)
             {
                 // yes, clear means show.  nice api, guys.
-                //
                 bool showKeyboard = (cmd == User32.UIS.CLEAR);
 
                 if (showKeyboard != keyboard || !keyboardInitialized)
@@ -13402,7 +13400,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
                 if (controlsCollection is null)
                 {
                     return ArrangedElementCollection.Empty;
@@ -13426,7 +13424,7 @@ namespace System.Windows.Forms
             get { return GetState(States.Visible); }
         }
 
-        void IArrangedElement.PerformLayout(IArrangedElement affectedElement, string affectedProperty)
+        void IArrangedElement.PerformLayout(IArrangedElement affectedElement, string? affectedProperty)
         {
             PerformLayout(new LayoutEventArgs(affectedElement, affectedProperty));
         }
@@ -13440,9 +13438,9 @@ namespace System.Windows.Forms
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified)
         {
             ISite site = Site;
-            IComponentChangeService changeService = null;
-            PropertyDescriptor sizeProperty = null;
-            PropertyDescriptor locationProperty = null;
+            IComponentChangeService? changeService = null;
+            PropertyDescriptor? sizeProperty = null;
+            PropertyDescriptor? locationProperty = null;
             bool sizeChanged = false;
             bool locationChanged = false;
 
@@ -13456,7 +13454,7 @@ namespace System.Windows.Forms
                 {
                     if (sizeProperty is not null && !sizeProperty.IsReadOnly && (bounds.Width != Width || bounds.Height != Height))
                     {
-                        if (!(site is INestedSite))
+                        if (site is not INestedSite)
                         {
                             changeService.OnComponentChanging(this, sizeProperty);
                         }
@@ -13466,7 +13464,7 @@ namespace System.Windows.Forms
 
                     if (locationProperty is not null && !locationProperty.IsReadOnly && (bounds.X != _x || bounds.Y != _y))
                     {
-                        if (!(site is INestedSite))
+                        if (site is not INestedSite)
                         {
                             changeService.OnComponentChanging(this, locationProperty);
                         }
@@ -13709,7 +13707,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleObject.GetClientSite(out Ole32.IOleClientSite ppClientSite)
+        HRESULT Ole32.IOleObject.GetClientSite(out Ole32.IOleClientSite? ppClientSite)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetClientSite");
             ppClientSite = ActiveXInstance.GetClientSite();
@@ -13755,7 +13753,7 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT Ole32.IOleObject.GetClipboardData(uint dwReserved, out IComDataObject ppDataObject)
+        HRESULT Ole32.IOleObject.GetClipboardData(uint dwReserved, out IComDataObject? ppDataObject)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetClipboardData");
             ppDataObject = null;
@@ -13833,7 +13831,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetUserType");
             if (dwFormOfType == Ole32.USERCLASSTYPE.FULL)
             {
-                pszUserType = GetType().FullName;
+                pszUserType = GetType().FullName!;
             }
             else
             {
@@ -13893,7 +13891,7 @@ namespace System.Windows.Forms
             return hr;
         }
 
-        HRESULT Ole32.IOleObject.EnumAdvise(out IEnumSTATDATA e)
+        HRESULT Ole32.IOleObject.EnumAdvise(out IEnumSTATDATA? e)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnumAdvise");
             e = null;
@@ -14270,7 +14268,7 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.CanShowToolTipsNow()
         {
-            IKeyboardToolTip host = ToolStripControlHost;
+            IKeyboardToolTip? host = ToolStripControlHost;
             return IsHandleCreated && Visible && (host is null || host.CanShowToolTipsNow());
         }
 
@@ -14288,7 +14286,7 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.AllowsToolTip()
         {
-            IKeyboardToolTip host = ToolStripControlHost;
+            IKeyboardToolTip? host = ToolStripControlHost;
             return (host is null || host.AllowsToolTip()) && AllowsKeyboardToolTip();
         }
 
@@ -14302,7 +14300,7 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.ShowsOwnToolTip()
         {
-            IKeyboardToolTip host = ToolStripControlHost;
+            IKeyboardToolTip? host = ToolStripControlHost;
             return (host is null || host.ShowsOwnToolTip()) && ShowsOwnKeyboardToolTip();
         }
 
@@ -14337,7 +14335,7 @@ namespace System.Windows.Forms
 
             return neighboringControlsRectangles;
 
-            void AddIfCreated(Control control)
+            void AddIfCreated(Control? control)
             {
                 if (control?.IsHandleCreated ?? false)
                 {
@@ -14400,14 +14398,14 @@ namespace System.Windows.Forms
         internal virtual ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(ComCtl32.TTF flags, string caption, ToolTip tooltip)
             => new ComCtl32.ToolInfoWrapper<Control>(this, flags, caption);
 
-        private readonly WeakReference<ToolStripControlHost> toolStripControlHostReference
-            = new WeakReference<ToolStripControlHost>(null);
+        private readonly WeakReference<ToolStripControlHost?> toolStripControlHostReference
+            = new WeakReference<ToolStripControlHost?>(null);
 
-        internal ToolStripControlHost ToolStripControlHost
+        internal ToolStripControlHost? ToolStripControlHost
         {
             get
             {
-                toolStripControlHostReference.TryGetTarget(out ToolStripControlHost value);
+                toolStripControlHostReference.TryGetTarget(out ToolStripControlHost? value);
                 return value;
             }
             set

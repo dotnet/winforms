@@ -1047,7 +1047,7 @@ System.Windows.Forms.AxHost.State.State(System.Runtime.Serialization.Serializati
 ~System.Windows.Forms.Control.Region.get -> System.Drawing.Region
 ~System.Windows.Forms.Control.Region.set -> void
 ~System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitmap logicalBitmap) -> void
-~System.Windows.Forms.Control.SelectNextControl(System.Windows.Forms.Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap) -> bool
+System.Windows.Forms.Control.SelectNextControl(System.Windows.Forms.Control? ctl, bool forward, bool tabStopOnly, bool nested, bool wrap) -> bool
 ~System.Windows.Forms.Control.Tag.get -> object
 ~System.Windows.Forms.Control.Tag.set -> void
 ~System.Windows.Forms.Control.TopLevelControl.get -> System.Windows.Forms.Control
