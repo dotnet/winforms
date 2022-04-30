@@ -135,7 +135,7 @@ namespace System.Windows.Forms
             return result;
         }
 
-        private protected override string?[] ProcessVistaFiles(Interop.WinFormsComWrappers.FileDialogWrapper dialog)
+        private protected override string[] ProcessVistaFiles(Interop.WinFormsComWrappers.FileDialogWrapper dialog)
         {
             var openDialog = (WinFormsComWrappers.FileOpenDialogWrapper)dialog;
             if (Multiselect)
@@ -149,7 +149,7 @@ namespace System.Windows.Forms
                 try
                 {
                     results.GetCount(out uint count);
-                    string?[] files = new string?[count];
+                    string[] files = new string[count];
                     for (uint i = 0; i < count; ++i)
                     {
                         results.GetItemAt(i, out IShellItem item);
@@ -168,10 +168,10 @@ namespace System.Windows.Forms
                 openDialog.GetResult(out IShellItem? item);
                 if (item is null)
                 {
-                    return Array.Empty<string?>();
+                    return Array.Empty<string>();
                 }
 
-                return new string?[] { GetFilePathFromShellItem(item) };
+                return new string[] { GetFilePathFromShellItem(item) };
             }
         }
 

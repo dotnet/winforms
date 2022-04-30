@@ -138,7 +138,7 @@ namespace System.Windows.Forms
             return ret;
         }
 
-        private protected abstract string?[] ProcessVistaFiles(WinFormsComWrappers.FileDialogWrapper dialog);
+        private protected abstract string[] ProcessVistaFiles(WinFormsComWrappers.FileDialogWrapper dialog);
 
         private bool HandleVistaFileOk(WinFormsComWrappers.FileDialogWrapper dialog)
         {
@@ -250,11 +250,11 @@ namespace System.Windows.Forms
             return extensions.ToArray();
         }
 
-        private protected static string? GetFilePathFromShellItem(IShellItem item)
+        private protected static string GetFilePathFromShellItem(IShellItem item)
         {
             HRESULT hr = item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING, out string? filename);
             hr.ThrowIfFailed();
-            return filename;
+            return filename!;
         }
 
         private readonly FileDialogCustomPlacesCollection _customPlaces = new();
