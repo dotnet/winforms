@@ -2553,7 +2553,7 @@ namespace System.Windows.Forms
             return maxSize;
         }
 
-        internal static Size GetPreferredSizeVertical(IArrangedElement container, Size proposedConstraints)
+        internal static Size GetPreferredSizeVertical(IArrangedElement container)
         {
             Size maxSize = Size.Empty;
             bool requiresOverflow = false;
@@ -2885,10 +2885,6 @@ namespace System.Windows.Forms
                 SetToolStripState(STATE_LOCATIONCHANGING, false);
                 base.SetBoundsCore(x, y, width, height, specified);
             }
-        }
-
-        internal static void PaintParentRegion(Graphics g, Region region)
-        {
         }
 
         internal bool ProcessCmdKeyInternal(ref Message m, Keys keyData)
