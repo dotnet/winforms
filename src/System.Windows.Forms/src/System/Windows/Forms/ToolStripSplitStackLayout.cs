@@ -203,7 +203,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                return ToolStrip.GetPreferredSizeVertical(container, proposedConstraints);
+                return ToolStrip.GetPreferredSizeVertical(container);
             }
         }
 
@@ -431,7 +431,7 @@ namespace System.Windows.Forms
             {
                 // if we're autosizing, make sure we pad out items to the preferred width, not the
                 // width of the display rectangle.
-                toolStripPreferredSize = ToolStrip.GetPreferredSizeVertical(toolStrip, Size.Empty) - toolStrip.Padding.Size;
+                toolStripPreferredSize = ToolStrip.GetPreferredSizeVertical(toolStrip) - toolStrip.Padding.Size;
             }
 
             CalculatePlacementsVertical();

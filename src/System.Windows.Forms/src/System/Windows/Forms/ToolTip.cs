@@ -1531,7 +1531,7 @@ namespace System.Windows.Forms
             SetTool(tool.GetOwnerWindow(), text, TipInfo.Type.Absolute, new Point(pointX, pointY));
 
             // Then look for a better ToolTip location.
-            if (TryGetBubbleSize(tool, toolRectangle, out Size bubbleSize))
+            if (TryGetBubbleSize(tool, out Size bubbleSize))
             {
                 Point optimalPoint = GetOptimalToolTipPosition(tool, toolRectangle, bubbleSize.Width, bubbleSize.Height);
 
@@ -1559,7 +1559,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool TryGetBubbleSize(IKeyboardToolTip tool, Rectangle toolRectangle, out Size bubbleSize)
+        private bool TryGetBubbleSize(IKeyboardToolTip tool, out Size bubbleSize)
         {
             // Get bubble size to use it for optimal position calculation. Requesting the bubble
             // size will AV if there isn't a current tool window.

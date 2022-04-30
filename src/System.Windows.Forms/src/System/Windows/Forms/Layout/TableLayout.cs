@@ -568,7 +568,7 @@ namespace System.Windows.Forms.Layout
             int prevRow = layoutInfo.RowStart;
             do
             {
-                GetColStartAndStop(maxColumns, reservationGrid, layoutInfo, out colStop);
+                GetColStartAndStop(maxColumns, layoutInfo, out colStop);
             }
             while (ScanRowForOverlap(maxColumns, reservationGrid, layoutInfo, colStop, layoutInfo.RowStart - prevRow));
         }
@@ -576,7 +576,7 @@ namespace System.Windows.Forms.Layout
         /// <summary>
         ///  GetColStartAndStop: part of xAssignRowsAndColumns.
         /// </summary>
-        private static void GetColStartAndStop(int maxColumns, ReservationGrid reservationGrid, LayoutInfo layoutInfo, out int colStop)
+        private static void GetColStartAndStop(int maxColumns, LayoutInfo layoutInfo, out int colStop)
         {
             // Compute the column our element ends on
             colStop = layoutInfo.ColumnStart + layoutInfo.ColumnSpan;

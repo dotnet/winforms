@@ -471,7 +471,7 @@ namespace System.Windows.Forms.Layout
 
         private static Size GetVerticalDockedSize(IArrangedElement element, Size remainingSize, bool measureOnly)
         {
-            Size newSize = xGetDockedSize(element, remainingSize, /* constraints = */ new Size(remainingSize.Width, 1), measureOnly);
+            Size newSize = xGetDockedSize(element, /* constraints = */ new Size(remainingSize.Width, 1));
             if (!measureOnly)
             {
                 newSize.Width = remainingSize.Width;
@@ -488,7 +488,7 @@ namespace System.Windows.Forms.Layout
 
         private static Size GetHorizontalDockedSize(IArrangedElement element, Size remainingSize, bool measureOnly)
         {
-            Size newSize = xGetDockedSize(element, remainingSize, /* constraints = */ new Size(1, remainingSize.Height), measureOnly);
+            Size newSize = xGetDockedSize(element, /* constraints = */ new Size(1, remainingSize.Height));
             if (!measureOnly)
             {
                 newSize.Height = remainingSize.Height;
@@ -503,7 +503,7 @@ namespace System.Windows.Forms.Layout
             return newSize;
         }
 
-        private static Size xGetDockedSize(IArrangedElement element, Size remainingSize, Size constraints, bool measureOnly)
+        private static Size xGetDockedSize(IArrangedElement element, Size constraints)
         {
             Size desiredSize;
             if (CommonProperties.GetAutoSize(element))
@@ -735,7 +735,7 @@ namespace System.Windows.Forms.Layout
 
         public static AnchorStyles GetAnchor(IArrangedElement element) => CommonProperties.xGetAnchor(element);
 
-        public static void SetAnchor(IArrangedElement container, IArrangedElement element, AnchorStyles value)
+        public static void SetAnchor(IArrangedElement element, AnchorStyles value)
         {
             AnchorStyles oldValue = GetAnchor(element);
             if (oldValue != value)

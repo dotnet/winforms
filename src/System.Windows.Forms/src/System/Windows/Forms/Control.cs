@@ -759,7 +759,7 @@ namespace System.Windows.Forms
         public virtual AnchorStyles Anchor
         {
             get => DefaultLayout.GetAnchor(this);
-            set => DefaultLayout.SetAnchor(ParentInternal, this, value);
+            set => DefaultLayout.SetAnchor(this, value);
         }
 
         [SRCategory(nameof(SR.CatLayout))]

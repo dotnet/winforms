@@ -105,7 +105,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return nameBstr.String.TrimStart('_').ToString();
         }
 
-        internal static TypeConverter GetConverter(object component)
+        internal static TypeConverter GetConverter()
         {
             return TypeDescriptor.GetConverter(typeof(IComponent));
         }
@@ -242,7 +242,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Checks all our property manages to see if any have become invalid.
         /// </summary>
-        private void CheckClear(object component)
+        private void CheckClear()
         {
             // walk the list every so many calls
             if ((++clearCount % CLEAR_INTERVAL) == 0)
@@ -302,7 +302,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             // check caches if necessary
             //
-            CheckClear(component);
+            CheckClear();
 
             // Get the property info Object
             //
@@ -363,7 +363,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         internal PropertyDescriptor GetDefaultProperty(object component)
         {
-            CheckClear(component);
+            CheckClear();
 
             Com2Properties propsInfo = GetPropsInfo(component);
             if (propsInfo is not null)
@@ -374,17 +374,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return null;
         }
 
-        internal static EventDescriptorCollection GetEvents(object component)
+        internal static EventDescriptorCollection GetEvents()
         {
             return new EventDescriptorCollection(null);
         }
 
-        internal static EventDescriptorCollection GetEvents(object component, Attribute[] attributes)
-        {
-            return new EventDescriptorCollection(null);
-        }
-
-        internal static EventDescriptor GetDefaultEvent(object component)
+        internal static EventDescriptor GetDefaultEvent()
         {
             return null;
         }
@@ -523,7 +518,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// </summary>
             TypeConverter ICustomTypeDescriptor.GetConverter()
             {
-                return GetConverter(_instance);
+                return GetConverter();
             }
 
             /// <summary>
@@ -531,7 +526,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// </summary>
             EventDescriptor ICustomTypeDescriptor.GetDefaultEvent()
             {
-                return GetDefaultEvent(_instance);
+                return GetDefaultEvent();
             }
 
             /// <summary>
@@ -555,7 +550,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// </summary>
             EventDescriptorCollection ICustomTypeDescriptor.GetEvents()
             {
-                return GetEvents(_instance);
+                return GetEvents();
             }
 
             /// <summary>
@@ -563,7 +558,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// </summary>
             EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
             {
-                return GetEvents(_instance, attributes);
+                return GetEvents();
             }
 
             /// <summary>
