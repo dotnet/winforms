@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         /// </summary>
         private ListViewGroup(SerializationInfo info, StreamingContext context) : this()
         {
-            Deserialize(info, context);
+            Deserialize(info);
         }
 
         /// <summary>
@@ -348,7 +348,7 @@ namespace System.Windows.Forms
         [TypeConverter(typeof(StringConverter))]
         public object? Tag { get; set; }
 
-        private void Deserialize(SerializationInfo info, StreamingContext context)
+        private void Deserialize(SerializationInfo info)
         {
             int count = 0;
 
