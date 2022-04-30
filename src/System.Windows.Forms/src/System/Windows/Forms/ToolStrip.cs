@@ -309,11 +309,11 @@ namespace System.Windows.Forms
 
                 if (value)
                 {
-                    DropTargetManager.EnsureRegistered(this);
+                    DropTargetManager.EnsureRegistered();
                 }
                 else
                 {
-                    DropTargetManager.EnsureUnRegistered(this);
+                    DropTargetManager.EnsureUnRegistered();
                 }
             }
         }
@@ -345,11 +345,11 @@ namespace System.Windows.Forms
                         ItemReorderDropSource = dragDropHandler;
                         ItemReorderDropTarget = dragDropHandler;
 
-                        DropTargetManager.EnsureRegistered(this);
+                        DropTargetManager.EnsureRegistered();
                     }
                     else
                     {
-                        DropTargetManager.EnsureUnRegistered(this);
+                        DropTargetManager.EnsureUnRegistered();
                     }
                 }
             }
@@ -3479,7 +3479,7 @@ namespace System.Windows.Forms
         {
             if ((AllowDrop || AllowItemReorder) && (DropTargetManager is not null))
             {
-                DropTargetManager.EnsureRegistered(this);
+                DropTargetManager.EnsureRegistered();
             }
 
             // calling control's (in base) version AFTER we register our DropTarget, so it will
@@ -3492,7 +3492,7 @@ namespace System.Windows.Forms
             if (DropTargetManager is not null)
             {
                 // Make sure we unregister ourselves as a drop target
-                DropTargetManager.EnsureUnRegistered(this);
+                DropTargetManager.EnsureUnRegistered();
             }
 
             base.OnHandleDestroyed(e);

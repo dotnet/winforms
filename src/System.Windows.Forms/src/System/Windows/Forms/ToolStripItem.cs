@@ -819,7 +819,7 @@ namespace System.Windows.Forms
         {
             if (ParentInternal is not null)
             {
-                ParentInternal.DropTargetManager.EnsureRegistered(this);
+                ParentInternal.DropTargetManager.EnsureRegistered();
             }
         }
 
@@ -2814,7 +2814,7 @@ namespace System.Windows.Forms
             SetAmbientMargin();
             if ((oldParent is not null) && (oldParent.DropTargetManager is not null))
             {
-                oldParent.DropTargetManager.EnsureUnRegistered(this);
+                oldParent.DropTargetManager.EnsureUnRegistered();
             }
 
             if (AllowDrop && (newParent is not null))
