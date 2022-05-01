@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
@@ -122,7 +121,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public new event EventHandler AutoSizeChanged
+        public new event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -146,7 +145,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -154,7 +153,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler BackgroundImageChanged
+        public new event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -171,7 +170,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -205,7 +204,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected bool ChangingText { get; set; }
 
-        public override ContextMenuStrip ContextMenuStrip
+        public override ContextMenuStrip? ContextMenuStrip
         {
             get => base.ContextMenuStrip;
             set
@@ -294,7 +293,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler MouseEnter
+        public new event EventHandler? MouseEnter
         {
             add => base.MouseEnter += value;
             remove => base.MouseEnter -= value;
@@ -302,7 +301,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler MouseLeave
+        public new event EventHandler? MouseLeave
         {
             add => base.MouseLeave += value;
             remove => base.MouseLeave -= value;
@@ -310,7 +309,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler MouseHover
+        public new event EventHandler? MouseHover
         {
             add => base.MouseHover += value;
             remove => base.MouseHover -= value;
@@ -318,7 +317,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseMove
+        public new event MouseEventHandler? MouseMove
         {
             add => base.MouseMove += value;
             remove => base.MouseMove -= value;
@@ -369,6 +368,7 @@ namespace System.Windows.Forms
         ///  Gets or sets the text displayed in the up-down control.
         /// </summary>
         [Localizable(true)]
+        [AllowNull]
         public override string Text
         {
             get => _upDownEdit.Text;
@@ -471,7 +471,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  When overridden in a derived class, raises the Changed event.
         /// </summary>
-        protected virtual void OnChanged(object source, EventArgs e)
+        protected virtual void OnChanged(object? source, EventArgs e)
         {
         }
 
@@ -575,7 +575,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Raises the <see cref="Control.KeyDown"/> event.
         /// </summary>
-        protected virtual void OnTextBoxKeyDown(object source, KeyEventArgs e)
+        protected virtual void OnTextBoxKeyDown(object? source, KeyEventArgs e)
         {
             OnKeyDown(e);
             if (InterceptArrowKeys)
@@ -605,13 +605,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Raises the <see cref="Control.KeyPress"/> event.
         /// </summary>
-        protected virtual void OnTextBoxKeyPress(object source, KeyPressEventArgs e)
+        protected virtual void OnTextBoxKeyPress(object? source, KeyPressEventArgs e)
             => OnKeyPress(e);
 
         /// <summary>
         ///  Raises the <see cref="Control.LostFocus"/> event.
         /// </summary>
-        protected virtual void OnTextBoxLostFocus(object source, EventArgs e)
+        protected virtual void OnTextBoxLostFocus(object? source, EventArgs e)
         {
             if (UserEdit)
             {
@@ -622,7 +622,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Raises the <see cref="Control.Resize"/> event.
         /// </summary>
-        protected virtual void OnTextBoxResize(object source, EventArgs e)
+        protected virtual void OnTextBoxResize(object? source, EventArgs e)
         {
             Height = PreferredHeight;
             PositionControls();
@@ -632,7 +632,7 @@ namespace System.Windows.Forms
         ///  Raises the TextBoxTextChanged event.
         ///  event.
         /// </summary>
-        protected virtual void OnTextBoxTextChanged(object source, EventArgs e)
+        protected virtual void OnTextBoxTextChanged(object? source, EventArgs e)
         {
             if (ChangingText)
             {
@@ -800,7 +800,7 @@ namespace System.Windows.Forms
         ///  Handles UpDown events, which are generated by clicking on the updown
         ///  buttons in the child updown control.
         /// </summary>
-        private void OnUpDown(object source, UpDownEventArgs e)
+        private void OnUpDown(object? source, UpDownEventArgs e)
         {
             // Modify the value
             if (e.ButtonID == (int)ButtonID.Up)
