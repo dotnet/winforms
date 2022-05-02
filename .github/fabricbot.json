@@ -1521,5 +1521,228 @@
       ],
       "taskName": "Apply \"area: NRT\" label"
     }
+  },
+  {
+    "taskType": "trigger",
+    "capabilityId": "IssueResponder",
+    "subCapability": "IssuesOnlyResponder",
+    "version": "1.0",
+    "config": {
+      "conditions": {
+        "operator": "and",
+        "operands": [
+          {
+            "name": "isOpen",
+            "parameters": {}
+          },
+          {
+            "name": "isAction",
+            "parameters": {
+              "action": "labeled"
+            }
+          },
+          {
+            "name": "hasLabel",
+            "parameters": {
+              "label": "up-for-grabs "
+            }
+          }
+        ]
+      },
+      "eventType": "issue",
+      "eventNames": [
+        "issues",
+        "project_card"
+      ],
+      "actions": [
+        {
+          "name": "addMilestone",
+          "parameters": {
+            "milestoneName": "Up-for-grabs"
+          }
+        },
+        {
+          "name": "addReply",
+          "parameters": {
+            "comment": "This issue is now marked as \"up for grabs\", and we’re looking for a community volunteer to work on this issue. If we receive no interest in 120 days, we will close the issue. To learn more about how we handle feature requests, please see our [documentation](https://aka.ms/winforms/issue-lifecycle).\n\nHappy Coding!"
+          }
+        }
+      ],
+      "taskName": "Up-for-grabs: labelled"
+    }
+  },
+  {
+    "taskType": "scheduled",
+    "capabilityId": "ScheduledSearch",
+    "subCapability": "ScheduledSearch",
+    "version": "1.1",
+    "config": {
+      "frequency": [
+        {
+          "weekDay": 0,
+          "hours": [],
+          "timezoneOffset": 10
+        },
+        {
+          "weekDay": 1,
+          "hours": [],
+          "timezoneOffset": 10
+        },
+        {
+          "weekDay": 2,
+          "hours": [],
+          "timezoneOffset": 10
+        },
+        {
+          "weekDay": 3,
+          "hours": [],
+          "timezoneOffset": 10
+        },
+        {
+          "weekDay": 4,
+          "hours": [],
+          "timezoneOffset": 10
+        },
+        {
+          "weekDay": 5,
+          "hours": [],
+          "timezoneOffset": 10
+        },
+        {
+          "weekDay": 6,
+          "hours": [],
+          "timezoneOffset": 10
+        }
+      ],
+      "searchTerms": [
+        {
+          "name": "isIssue",
+          "parameters": {}
+        },
+        {
+          "name": "isOpen",
+          "parameters": {}
+        },
+        {
+          "name": "noAssignees",
+          "parameters": {}
+        },
+        {
+          "name": "isPartOfMilestone",
+          "parameters": {
+            "milestone": "Up-for-grabs"
+          }
+        },
+        {
+          "name": "noActivitySince",
+          "parameters": {
+            "days": 90
+          }
+        }
+      ],
+      "taskName": "Up-for-grabs: mark as \"no activity\"",
+      "actions": [
+        {
+          "name": "addLabel",
+          "parameters": {
+            "label": ":zzz: no-recent-activity"
+          }
+        },
+        {
+          "name": "addReply",
+          "parameters": {
+            "comment": "This issue has not yet received the community interest. 30 days to go. To learn more about how we handle feature requests, please see our [documentation](https://aka.ms/winforms/issue-lifecycle).\n\nHappy Coding!"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "taskType": "scheduled",
+    "capabilityId": "ScheduledSearch",
+    "subCapability": "ScheduledSearch",
+    "version": "1.1",
+    "config": {
+      "frequency": [
+        {
+          "weekDay": 0,
+          "hours": [],
+          "timezoneOffset": 10
+        },
+        {
+          "weekDay": 1,
+          "hours": [],
+          "timezoneOffset": 10
+        },
+        {
+          "weekDay": 2,
+          "hours": [],
+          "timezoneOffset": 10
+        },
+        {
+          "weekDay": 3,
+          "hours": [],
+          "timezoneOffset": 10
+        },
+        {
+          "weekDay": 4,
+          "hours": [],
+          "timezoneOffset": 10
+        },
+        {
+          "weekDay": 5,
+          "hours": [],
+          "timezoneOffset": 10
+        },
+        {
+          "weekDay": 6,
+          "hours": [],
+          "timezoneOffset": 10
+        }
+      ],
+      "searchTerms": [
+        {
+          "name": "isIssue",
+          "parameters": {}
+        },
+        {
+          "name": "isOpen",
+          "parameters": {}
+        },
+        {
+          "name": "noAssignees",
+          "parameters": {}
+        },
+        {
+          "name": "isPartOfMilestone",
+          "parameters": {
+            "milestone": "Up-for-grabs"
+          }
+        },
+        {
+          "name": "hasLabel",
+          "parameters": {
+            "label": ":zzz: no-recent-activity"
+          }
+        },
+        {
+          "name": "noActivitySince",
+          "parameters": {
+            "days": 30
+          }
+        }
+      ],
+      "taskName": "Up-for-grabs: close stale",
+      "actions": [
+        {
+          "name": "closeIssue",
+          "parameters": {}
+        },
+        {
+          "name": "removeMilestone",
+          "parameters": {}
+        }
+      ]
+    }
   }
 ]
