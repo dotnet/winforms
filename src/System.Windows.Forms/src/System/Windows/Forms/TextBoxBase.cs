@@ -2198,6 +2198,23 @@ namespace System.Windows.Forms
                     }
 
                     break;
+                case WM.DESTROY:
+                    base.WndProc(ref m);
+                    if (IsAccessibilityObjectCreated && !RecreatingHandle)
+                    {
+                        if (OsVersion.IsWindows8OrGreater)
+                        {
+                            HRESULT result = UiaCore.UiaDisconnectProvider(AccessibilityObject);
+                            Debug.Assert(result == 0);
+                        }
+
+                        if (AccessibilityObject is TextBoxBaseAccessibleObject accessibleObject)
+                        {
+                            accessibleObject.ClearObjects();
+                        }
+                    }
+
+                    break;
                 default:
                     base.WndProc(ref m);
                     break;

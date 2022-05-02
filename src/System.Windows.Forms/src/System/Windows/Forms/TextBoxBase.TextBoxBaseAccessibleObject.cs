@@ -12,11 +12,35 @@ namespace System.Windows.Forms
     {
         internal class TextBoxBaseAccessibleObject : ControlAccessibleObject
         {
-            private readonly TextBoxBaseUiaTextProvider _textProvider;
+            private TextBoxBaseUiaTextProvider? _textProvider;
 
             public TextBoxBaseAccessibleObject(TextBoxBase owner) : base(owner)
             {
                 _textProvider = new TextBoxBaseUiaTextProvider(owner);
+            }
+
+            internal void ClearObjects()
+            {
+                _textProvider = null;
+
+                // A place for future memory leak fixing:
+                //
+                // 1) This method should be added to the ControlAccessibleObject class:
+                //    internal void ClearOwnerControl()
+                //    {
+                //        this.Owner = null;
+                //    }
+                //
+                // 2) Owner property shoud be changed from this
+                //        public Control Owner { get; }
+                //    to something like this
+                //        public Control? Owner { get; private set; }
+                //
+                // 3) These changes will produce different sorts of warnings:
+                //     non-nullable member will became nullable, additional checks for null should be added, etc.
+                //
+                // 4) This method call should be uncommented
+                //        ClearOwnerControl();
             }
 
             internal override bool IsIAccessibleExSupported() => true;
@@ -32,29 +56,32 @@ namespace System.Windows.Forms
             internal override bool IsReadOnly
                 => Owner is TextBoxBase textBoxBase && textBoxBase.ReadOnly;
 
-            internal override ITextRangeProvider DocumentRangeInternal
-                => _textProvider.DocumentRange;
+            internal override ITextRangeProvider? DocumentRangeInternal
+                => _textProvider?.DocumentRange;
 
             internal override ITextRangeProvider[]? GetTextSelection()
-                => _textProvider.GetSelection();
+                => _textProvider?.GetSelection();
 
             internal override ITextRangeProvider[]? GetTextVisibleRanges()
-                => _textProvider.GetVisibleRanges();
+                => _textProvider?.GetVisibleRanges();
 
             internal override ITextRangeProvider? GetTextRangeFromChild(IRawElementProviderSimple childElement)
-                => _textProvider.RangeFromChild(childElement);
+                => _textProvider?.RangeFromChild(childElement);
 
             internal override ITextRangeProvider? GetTextRangeFromPoint(Point screenLocation)
-                => _textProvider.RangeFromPoint(screenLocation);
+                => _textProvider?.RangeFromPoint(screenLocation);
 
             internal override SupportedTextSelection SupportedTextSelectionInternal
-                => _textProvider.SupportedTextSelection;
+                => _textProvider?.SupportedTextSelection ?? SupportedTextSelection.None;
 
             internal override ITextRangeProvider? GetTextCaretRange(out BOOL isActive)
-                => _textProvider.GetCaretRange(out isActive);
+            {
+                isActive = BOOL.FALSE;
+                return _textProvider?.GetCaretRange(out isActive);
+            }
 
-            internal override ITextRangeProvider GetRangeFromAnnotation(IRawElementProviderSimple annotationElement)
-                => _textProvider.RangeFromAnnotation(annotationElement);
+            internal override ITextRangeProvider? GetRangeFromAnnotation(IRawElementProviderSimple annotationElement)
+                => _textProvider?.RangeFromAnnotation(annotationElement);
         }
     }
 }
