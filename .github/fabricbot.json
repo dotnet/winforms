@@ -1536,13 +1536,7 @@
             "parameters": {}
           },
           {
-            "name": "isAction",
-            "parameters": {
-              "action": "labeled"
-            }
-          },
-          {
-            "name": "hasLabel",
+            "name": "labelAdded",
             "parameters": {
               "label": "up-for-grabs "
             }
