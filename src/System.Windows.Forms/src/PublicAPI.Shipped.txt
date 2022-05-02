@@ -141,8 +141,8 @@ override System.Windows.Forms.ColumnHeaderConverter.ConvertTo(System.ComponentMo
 ~override System.Windows.Forms.DataGridViewCellCollection.List.get -> System.Collections.ArrayList
 ~override System.Windows.Forms.DataGridViewCellStyle.Equals(object o) -> bool
 ~override System.Windows.Forms.DataGridViewCellStyle.ToString() -> string
-~override System.Windows.Forms.DataGridViewCellStyleConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Windows.Forms.DataGridViewCellStyleConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
+override System.Windows.Forms.DataGridViewCellStyleConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Windows.Forms.DataGridViewCellStyleConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.ContentClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs e) -> bool
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.ContentDoubleClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs e) -> bool
