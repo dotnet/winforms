@@ -24,7 +24,7 @@ namespace System.Windows.Forms
     public class UserControl : ContainerControl
     {
         private static readonly object EVENT_LOAD = new object();
-        private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
+        private BorderStyle _borderStyle = BorderStyle.None;
 
         /// <summary>
         ///  Creates a new UserControl object. A vast majority of people
@@ -133,17 +133,17 @@ namespace System.Windows.Forms
         {
             get
             {
-                return borderStyle;
+                return _borderStyle;
             }
 
             set
             {
-                if (borderStyle != value)
+                if (_borderStyle != value)
                 {
                     //valid values are 0x0 to 0x2
                     SourceGenerated.EnumValidator.Validate(value);
 
-                    borderStyle = value;
+                    _borderStyle = value;
                     UpdateStyles();
                 }
             }
@@ -165,7 +165,7 @@ namespace System.Windows.Forms
                 cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;
                 cp.ExStyle &= ~(int)User32.WS_EX.CLIENTEDGE;
 
-                switch (borderStyle)
+                switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
                         cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
