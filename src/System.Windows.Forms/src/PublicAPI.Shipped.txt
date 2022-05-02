@@ -668,21 +668,21 @@ override System.Windows.Forms.TreeViewImageIndexConverter.ConvertFrom(System.Com
 override System.Windows.Forms.TreeViewImageIndexConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
 override System.Windows.Forms.TreeViewImageIndexConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext? context) -> System.ComponentModel.TypeConverter.StandardValuesCollection!
 ~override System.Windows.Forms.TreeViewImageKeyConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Windows.Forms.UpDownBase.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.UpDownBase.BackgroundImage.set -> void
-~override System.Windows.Forms.UpDownBase.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
-~override System.Windows.Forms.UpDownBase.ContextMenuStrip.set -> void
-~override System.Windows.Forms.UpDownBase.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.UpDownBase.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.UpDownBase.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.UpDownBase.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.UpDownBase.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~override System.Windows.Forms.UpDownBase.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.UpDownBase.OnMouseUp(System.Windows.Forms.MouseEventArgs mevent) -> void
-~override System.Windows.Forms.UpDownBase.OnMouseWheel(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.UpDownBase.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.UpDownBase.Text.get -> string
-~override System.Windows.Forms.UpDownBase.Text.set -> void
+override System.Windows.Forms.UpDownBase.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.UpDownBase.BackgroundImage.set -> void
+override System.Windows.Forms.UpDownBase.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
+override System.Windows.Forms.UpDownBase.ContextMenuStrip.set -> void
+override System.Windows.Forms.UpDownBase.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.UpDownBase.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.UpDownBase.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.UpDownBase.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.UpDownBase.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
+override System.Windows.Forms.UpDownBase.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.UpDownBase.OnMouseUp(System.Windows.Forms.MouseEventArgs! mevent) -> void
+override System.Windows.Forms.UpDownBase.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.UpDownBase.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.UpDownBase.Text.get -> string!
+override System.Windows.Forms.UpDownBase.Text.set -> void
 ~override System.Windows.Forms.UserControl.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.UserControl.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
 ~override System.Windows.Forms.UserControl.OnResize(System.EventArgs e) -> void
@@ -1945,7 +1945,7 @@ System.Windows.Forms.ListViewHitTestInfo.SubItem.get -> System.Windows.Forms.Lis
 ~System.Windows.Forms.TypeValidationEventArgs.ReturnValue.get -> object
 ~System.Windows.Forms.TypeValidationEventArgs.TypeValidationEventArgs(System.Type validatingType, bool isValidInput, object returnValue, string message) -> void
 ~System.Windows.Forms.TypeValidationEventArgs.ValidatingType.get -> System.Type
-~System.Windows.Forms.UpDownBase.DockPadding.get -> System.Windows.Forms.ScrollableControl.DockPaddingEdges
+System.Windows.Forms.UpDownBase.DockPadding.get -> System.Windows.Forms.ScrollableControl.DockPaddingEdges!
 ~System.Windows.Forms.WebBrowser.Document.get -> System.Windows.Forms.HtmlDocument
 ~System.Windows.Forms.WebBrowser.DocumentStream.get -> System.IO.Stream
 ~System.Windows.Forms.WebBrowser.DocumentStream.set -> void
@@ -2607,12 +2607,12 @@ System.Windows.Forms.ListViewHitTestInfo.SubItem.get -> System.Windows.Forms.Lis
 ~virtual System.Windows.Forms.TreeView.OnNodeMouseDoubleClick(System.Windows.Forms.TreeNodeMouseClickEventArgs e) -> void
 ~virtual System.Windows.Forms.TreeView.OnNodeMouseHover(System.Windows.Forms.TreeNodeMouseHoverEventArgs e) -> void
 ~virtual System.Windows.Forms.TreeView.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.UpDownBase.OnChanged(object source, System.EventArgs e) -> void
-~virtual System.Windows.Forms.UpDownBase.OnTextBoxKeyDown(object source, System.Windows.Forms.KeyEventArgs e) -> void
-~virtual System.Windows.Forms.UpDownBase.OnTextBoxKeyPress(object source, System.Windows.Forms.KeyPressEventArgs e) -> void
-~virtual System.Windows.Forms.UpDownBase.OnTextBoxLostFocus(object source, System.EventArgs e) -> void
-~virtual System.Windows.Forms.UpDownBase.OnTextBoxResize(object source, System.EventArgs e) -> void
-~virtual System.Windows.Forms.UpDownBase.OnTextBoxTextChanged(object source, System.EventArgs e) -> void
+virtual System.Windows.Forms.UpDownBase.OnChanged(object? source, System.EventArgs! e) -> void
+virtual System.Windows.Forms.UpDownBase.OnTextBoxKeyDown(object? source, System.Windows.Forms.KeyEventArgs! e) -> void
+virtual System.Windows.Forms.UpDownBase.OnTextBoxKeyPress(object? source, System.Windows.Forms.KeyPressEventArgs! e) -> void
+virtual System.Windows.Forms.UpDownBase.OnTextBoxLostFocus(object? source, System.EventArgs! e) -> void
+virtual System.Windows.Forms.UpDownBase.OnTextBoxResize(object? source, System.EventArgs! e) -> void
+virtual System.Windows.Forms.UpDownBase.OnTextBoxTextChanged(object? source, System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.UserControl.OnLoad(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.WebBrowser.OnCanGoBackChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.WebBrowser.OnCanGoForwardChanged(System.EventArgs e) -> void
@@ -11994,19 +11994,19 @@ System.Windows.Forms.UpDownBase.AutoScrollMargin.get -> System.Drawing.Size
 System.Windows.Forms.UpDownBase.AutoScrollMargin.set -> void
 System.Windows.Forms.UpDownBase.AutoScrollMinSize.get -> System.Drawing.Size
 System.Windows.Forms.UpDownBase.AutoScrollMinSize.set -> void
-System.Windows.Forms.UpDownBase.AutoSizeChanged -> System.EventHandler
-System.Windows.Forms.UpDownBase.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.UpDownBase.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.UpDownBase.AutoSizeChanged -> System.EventHandler?
+System.Windows.Forms.UpDownBase.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.UpDownBase.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.UpDownBase.BorderStyle.get -> System.Windows.Forms.BorderStyle
 System.Windows.Forms.UpDownBase.BorderStyle.set -> void
 System.Windows.Forms.UpDownBase.ChangingText.get -> bool
 System.Windows.Forms.UpDownBase.ChangingText.set -> void
 System.Windows.Forms.UpDownBase.InterceptArrowKeys.get -> bool
 System.Windows.Forms.UpDownBase.InterceptArrowKeys.set -> void
-System.Windows.Forms.UpDownBase.MouseEnter -> System.EventHandler
-System.Windows.Forms.UpDownBase.MouseHover -> System.EventHandler
-System.Windows.Forms.UpDownBase.MouseLeave -> System.EventHandler
-System.Windows.Forms.UpDownBase.MouseMove -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.UpDownBase.MouseEnter -> System.EventHandler?
+System.Windows.Forms.UpDownBase.MouseHover -> System.EventHandler?
+System.Windows.Forms.UpDownBase.MouseLeave -> System.EventHandler?
+System.Windows.Forms.UpDownBase.MouseMove -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.UpDownBase.PreferredHeight.get -> int
 System.Windows.Forms.UpDownBase.ReadOnly.get -> bool
 System.Windows.Forms.UpDownBase.ReadOnly.set -> void
