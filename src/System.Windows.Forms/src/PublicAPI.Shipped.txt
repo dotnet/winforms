@@ -369,8 +369,8 @@ override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Va
 ~override System.Windows.Forms.LinkLabel.Text.get -> string
 ~override System.Windows.Forms.LinkLabel.Text.set -> void
 ~override System.Windows.Forms.ListViewItem.ToString() -> string
-~override System.Windows.Forms.ListViewItemConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Windows.Forms.ListViewItemConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
+override System.Windows.Forms.ListViewItemConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Windows.Forms.ListViewItemConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
 ~override System.Windows.Forms.MdiClient.ControlCollection.Add(System.Windows.Forms.Control value) -> void
 ~override System.Windows.Forms.MdiClient.ControlCollection.Remove(System.Windows.Forms.Control value) -> void
 ~override System.Windows.Forms.MenuStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
