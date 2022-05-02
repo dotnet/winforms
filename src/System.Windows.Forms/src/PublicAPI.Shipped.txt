@@ -993,8 +993,8 @@ System.Windows.Forms.AxHost.State.State(System.Runtime.Serialization.Serializati
 ~System.Windows.Forms.ContainerControl.ActiveControl.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.ContainerControl.ActiveControl.set -> void
 ~System.Windows.Forms.ContainerControl.ParentForm.get -> System.Windows.Forms.Form
-~System.Windows.Forms.ContextMenuStrip.ContextMenuStrip(System.ComponentModel.IContainer container) -> void
-~System.Windows.Forms.ContextMenuStrip.SourceControl.get -> System.Windows.Forms.Control
+System.Windows.Forms.ContextMenuStrip.ContextMenuStrip(System.ComponentModel.IContainer! container) -> void
+System.Windows.Forms.ContextMenuStrip.SourceControl.get -> System.Windows.Forms.Control?
 ~System.Windows.Forms.Control.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
 ~System.Windows.Forms.Control.AccessibleDefaultActionDescription.get -> string
 ~System.Windows.Forms.Control.AccessibleDefaultActionDescription.set -> void
