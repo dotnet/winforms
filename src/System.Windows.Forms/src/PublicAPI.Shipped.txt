@@ -683,11 +683,11 @@ override System.Windows.Forms.UpDownBase.OnMouseWheel(System.Windows.Forms.Mouse
 override System.Windows.Forms.UpDownBase.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
 override System.Windows.Forms.UpDownBase.Text.get -> string!
 override System.Windows.Forms.UpDownBase.Text.set -> void
-~override System.Windows.Forms.UserControl.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.UserControl.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.UserControl.OnResize(System.EventArgs e) -> void
-~override System.Windows.Forms.UserControl.Text.get -> string
-~override System.Windows.Forms.UserControl.Text.set -> void
+override System.Windows.Forms.UserControl.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.UserControl.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.UserControl.OnResize(System.EventArgs! e) -> void
+override System.Windows.Forms.UserControl.Text.get -> string!
+override System.Windows.Forms.UserControl.Text.set -> void
 ~override System.Windows.Forms.WebBrowser.AttachInterfaces(object nativeActiveXObject) -> void
 ~override System.Windows.Forms.WebBrowser.CreateWebBrowserSiteBase() -> System.Windows.Forms.WebBrowserSiteBase
 ~override System.Windows.Forms.WebBrowserBase.BackgroundImage.get -> System.Drawing.Image
@@ -2613,7 +2613,7 @@ virtual System.Windows.Forms.UpDownBase.OnTextBoxKeyPress(object? source, System
 virtual System.Windows.Forms.UpDownBase.OnTextBoxLostFocus(object? source, System.EventArgs! e) -> void
 virtual System.Windows.Forms.UpDownBase.OnTextBoxResize(object? source, System.EventArgs! e) -> void
 virtual System.Windows.Forms.UpDownBase.OnTextBoxTextChanged(object? source, System.EventArgs! e) -> void
-~virtual System.Windows.Forms.UserControl.OnLoad(System.EventArgs e) -> void
+virtual System.Windows.Forms.UserControl.OnLoad(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.WebBrowser.OnCanGoBackChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.WebBrowser.OnCanGoForwardChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.WebBrowser.OnDocumentCompleted(System.Windows.Forms.WebBrowserDocumentCompletedEventArgs e) -> void
@@ -12023,14 +12023,14 @@ System.Windows.Forms.UpDownEventArgs.ButtonID.get -> int
 System.Windows.Forms.UpDownEventArgs.UpDownEventArgs(int buttonPushed) -> void
 System.Windows.Forms.UpDownEventHandler
 System.Windows.Forms.UserControl
-System.Windows.Forms.UserControl.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.UserControl.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.UserControl.AutoSizeMode.get -> System.Windows.Forms.AutoSizeMode
 System.Windows.Forms.UserControl.AutoSizeMode.set -> void
-System.Windows.Forms.UserControl.AutoValidateChanged -> System.EventHandler
+System.Windows.Forms.UserControl.AutoValidateChanged -> System.EventHandler?
 System.Windows.Forms.UserControl.BorderStyle.get -> System.Windows.Forms.BorderStyle
 System.Windows.Forms.UserControl.BorderStyle.set -> void
-System.Windows.Forms.UserControl.Load -> System.EventHandler
-System.Windows.Forms.UserControl.TextChanged -> System.EventHandler
+System.Windows.Forms.UserControl.Load -> System.EventHandler?
+System.Windows.Forms.UserControl.TextChanged -> System.EventHandler?
 System.Windows.Forms.UserControl.UserControl() -> void
 System.Windows.Forms.ValidationConstraints
 System.Windows.Forms.ValidationConstraints.Enabled = 2 -> System.Windows.Forms.ValidationConstraints
