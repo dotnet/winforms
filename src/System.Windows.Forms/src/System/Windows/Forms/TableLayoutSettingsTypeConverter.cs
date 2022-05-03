@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
@@ -18,7 +16,7 @@ namespace System.Windows.Forms.Layout
         ///  Determines if this converter can convert an object in the given source
         ///  type to the native type of the converter.
         /// </summary>
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
             if (sourceType == typeof(string))
             {
@@ -32,7 +30,7 @@ namespace System.Windows.Forms.Layout
         ///  Gets a value indicating whether this converter can
         ///  convert an object to the given destination type using the context.
         /// </summary>
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
         {
             if (destinationType == typeof(InstanceDescriptor) || destinationType == typeof(string))
             {
@@ -45,12 +43,12 @@ namespace System.Windows.Forms.Layout
         /// <summary>
         ///  Converts the given object to the converter's native type.
         /// </summary>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
-            if (value is string)
+            if (value is string valueAsString)
             {
                 XmlDocument tableLayoutSettingsXml = new XmlDocument();
-                tableLayoutSettingsXml.LoadXml(value as string);
+                tableLayoutSettingsXml.LoadXml(valueAsString);
 
                 TableLayoutSettings settings = new TableLayoutSettings();
 
@@ -63,19 +61,15 @@ namespace System.Windows.Forms.Layout
             return base.ConvertFrom(context, culture, value);
         }
 
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
-            if (value is TableLayoutSettings && (destinationType == typeof(string)))
+            if (value is TableLayoutSettings tableLayoutSettings && (destinationType == typeof(string)))
             {
-                TableLayoutSettings tableLayoutSettings = value as TableLayoutSettings;
-
                 StringBuilder xmlStringBuilder = new StringBuilder();
                 XmlWriter xmlWriter = XmlWriter.Create(xmlStringBuilder);
                 xmlWriter.WriteStartElement("TableLayoutSettings");
 
-                //
                 // write controls
-                //
                 xmlWriter.WriteStartElement("Controls");
 
                 foreach (TableLayoutSettings.ControlInformation c in tableLayoutSettings.GetControlsInformation())
@@ -98,9 +92,7 @@ namespace System.Windows.Forms.Layout
 
                 xmlWriter.WriteEndElement(); // end Controls
 
-                //
                 // write columns
-                //
                 xmlWriter.WriteStartElement("Columns");
                 StringBuilder columnStyles = new StringBuilder();
                 foreach (ColumnStyle colStyle in tableLayoutSettings.ColumnStyles)
@@ -116,9 +108,7 @@ namespace System.Windows.Forms.Layout
                 xmlWriter.WriteAttributeString("Styles", columnStyles.ToString());
                 xmlWriter.WriteEndElement(); // end columns
 
-                //
                 // write rows
-                //
                 xmlWriter.WriteStartElement("Rows");
                 StringBuilder rowStyles = new StringBuilder();
                 foreach (RowStyle rowStyle in tableLayoutSettings.RowStyles)
@@ -143,9 +133,9 @@ namespace System.Windows.Forms.Layout
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        private static string GetAttributeValue(XmlNode node, string attribute)
+        private static string? GetAttributeValue(XmlNode node, string attribute)
         {
-            XmlAttribute attr = node.Attributes[attribute];
+            XmlAttribute? attr = node.Attributes?[attribute];
             if (attr is not null)
             {
                 return attr.Value;
@@ -156,7 +146,7 @@ namespace System.Windows.Forms.Layout
 
         private static int GetAttributeValue(XmlNode node, string attribute, int valueIfNotFound)
         {
-            string attributeValue = GetAttributeValue(node, attribute);
+            string? attributeValue = GetAttributeValue(node, attribute);
             if (!string.IsNullOrEmpty(attributeValue))
             {
                 if (int.TryParse(attributeValue, out int result))
@@ -172,7 +162,7 @@ namespace System.Windows.Forms.Layout
         {
             foreach (XmlNode controlXmlNode in controlXmlFragments)
             {
-                string name = GetAttributeValue(controlXmlNode, "Name");
+                string? name = GetAttributeValue(controlXmlNode, "Name");
 
                 if (!string.IsNullOrEmpty(name))
                 {
@@ -193,7 +183,7 @@ namespace System.Windows.Forms.Layout
         {
             foreach (XmlNode styleXmlNode in controlXmlFragments)
             {
-                string styleString = GetAttributeValue(styleXmlNode, "Styles");
+                string? styleString = GetAttributeValue(styleXmlNode, "Styles");
                 Type sizeTypeType = typeof(SizeType);
 
                 // styleString will consist of N Column/Row styles serialized in the following format
