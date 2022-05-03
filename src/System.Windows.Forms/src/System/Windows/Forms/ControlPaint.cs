@@ -1621,7 +1621,7 @@ namespace System.Windows.Forms
                 IntPtr.Zero);
         }
 
-        internal static bool IsImageTransparent(Image backgroundImage)
+        internal static bool IsImageTransparent(Image? backgroundImage)
             => backgroundImage is not null && (backgroundImage.Flags & (int)ImageFlags.HasAlpha) > 0;
 
         // takes an image and replaces all the pixels of oldColor with newColor, drawing the new image into the rectangle on

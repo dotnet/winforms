@@ -97,7 +97,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     get
                     {
-                        string name = Owner.AccessibleName;
+                        string? name = Owner.AccessibleName;
                         if (name is not null)
                         {
                             return name;

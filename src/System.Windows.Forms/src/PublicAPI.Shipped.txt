@@ -995,22 +995,22 @@ System.Windows.Forms.AxHost.State.State(System.Runtime.Serialization.Serializati
 ~System.Windows.Forms.ContainerControl.ParentForm.get -> System.Windows.Forms.Form
 System.Windows.Forms.ContextMenuStrip.ContextMenuStrip(System.ComponentModel.IContainer! container) -> void
 System.Windows.Forms.ContextMenuStrip.SourceControl.get -> System.Windows.Forms.Control?
-~System.Windows.Forms.Control.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
-~System.Windows.Forms.Control.AccessibleDefaultActionDescription.get -> string
-~System.Windows.Forms.Control.AccessibleDefaultActionDescription.set -> void
-~System.Windows.Forms.Control.AccessibleDescription.get -> string
-~System.Windows.Forms.Control.AccessibleDescription.set -> void
-~System.Windows.Forms.Control.AccessibleName.get -> string
-~System.Windows.Forms.Control.AccessibleName.set -> void
+System.Windows.Forms.Control.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject!
+System.Windows.Forms.Control.AccessibleDefaultActionDescription.get -> string?
+System.Windows.Forms.Control.AccessibleDefaultActionDescription.set -> void
+System.Windows.Forms.Control.AccessibleDescription.get -> string?
+System.Windows.Forms.Control.AccessibleDescription.set -> void
+System.Windows.Forms.Control.AccessibleName.get -> string?
+System.Windows.Forms.Control.AccessibleName.set -> void
 ~System.Windows.Forms.Control.BeginInvoke(System.Action method) -> System.IAsyncResult
 ~System.Windows.Forms.Control.BeginInvoke(System.Delegate method) -> System.IAsyncResult
 ~System.Windows.Forms.Control.BeginInvoke(System.Delegate method, params object[] args) -> System.IAsyncResult
 ~System.Windows.Forms.Control.CompanyName.get -> string
 ~System.Windows.Forms.Control.Contains(System.Windows.Forms.Control ctl) -> bool
-~System.Windows.Forms.Control.Control(string text) -> void
-~System.Windows.Forms.Control.Control(string text, int left, int top, int width, int height) -> void
-~System.Windows.Forms.Control.Control(System.Windows.Forms.Control parent, string text) -> void
-~System.Windows.Forms.Control.Control(System.Windows.Forms.Control parent, string text, int left, int top, int width, int height) -> void
+System.Windows.Forms.Control.Control(string? text) -> void
+System.Windows.Forms.Control.Control(string? text, int left, int top, int width, int height) -> void
+System.Windows.Forms.Control.Control(System.Windows.Forms.Control? parent, string? text) -> void
+System.Windows.Forms.Control.Control(System.Windows.Forms.Control? parent, string? text, int left, int top, int width, int height) -> void
 ~System.Windows.Forms.Control.Controls.get -> System.Windows.Forms.Control.ControlCollection
 ~System.Windows.Forms.Control.CreateGraphics() -> System.Drawing.Graphics
 ~System.Windows.Forms.Control.DataBindings.get -> System.Windows.Forms.ControlBindingsCollection
@@ -2024,8 +2024,8 @@ System.Windows.Forms.UpDownBase.DockPadding.get -> System.Windows.Forms.Scrollab
 ~virtual System.Windows.Forms.ComboBox.OnSelectionChangeCommitted(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ComboBox.OnTextUpdate(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ContainerControl.OnAutoValidateChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.BackgroundImage.get -> System.Drawing.Image
-~virtual System.Windows.Forms.Control.BackgroundImage.set -> void
+virtual System.Windows.Forms.Control.BackgroundImage.get -> System.Drawing.Image?
+virtual System.Windows.Forms.Control.BackgroundImage.set -> void
 ~virtual System.Windows.Forms.Control.BindingContext.get -> System.Windows.Forms.BindingContext
 ~virtual System.Windows.Forms.Control.BindingContext.set -> void
 ~virtual System.Windows.Forms.Control.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
@@ -2038,8 +2038,8 @@ System.Windows.Forms.UpDownBase.DockPadding.get -> System.Windows.Forms.Scrollab
 ~virtual System.Windows.Forms.Control.DefaultCursor.get -> System.Windows.Forms.Cursor
 ~virtual System.Windows.Forms.Control.Font.get -> System.Drawing.Font
 ~virtual System.Windows.Forms.Control.Font.set -> void
-~virtual System.Windows.Forms.Control.GetAccessibilityObjectById(int objectId) -> System.Windows.Forms.AccessibleObject
-~virtual System.Windows.Forms.Control.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
+virtual System.Windows.Forms.Control.GetAccessibilityObjectById(int objectId) -> System.Windows.Forms.AccessibleObject?
+virtual System.Windows.Forms.Control.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
 ~virtual System.Windows.Forms.Control.OnAutoSizeChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnBackColorChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnBackgroundImageChanged(System.EventArgs e) -> void
@@ -5947,10 +5947,10 @@ System.Windows.Forms.Control.AccessibilityNotifyClients(System.Windows.Forms.Acc
 System.Windows.Forms.Control.AccessibilityNotifyClients(System.Windows.Forms.AccessibleEvents accEvent, int objectID, int childID) -> void
 System.Windows.Forms.Control.AccessibleRole.get -> System.Windows.Forms.AccessibleRole
 System.Windows.Forms.Control.AccessibleRole.set -> void
-System.Windows.Forms.Control.AutoSizeChanged -> System.EventHandler
-System.Windows.Forms.Control.BackColorChanged -> System.EventHandler
-System.Windows.Forms.Control.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.Control.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.Control.AutoSizeChanged -> System.EventHandler?
+System.Windows.Forms.Control.BackColorChanged -> System.EventHandler?
+System.Windows.Forms.Control.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.Control.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.Control.BindingContextChanged -> System.EventHandler
 System.Windows.Forms.Control.Bottom.get -> int
 System.Windows.Forms.Control.Bounds.get -> System.Drawing.Rectangle

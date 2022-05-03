@@ -1466,7 +1466,7 @@ namespace System.Windows.Forms
 
         protected override bool ProcessDialogKey(Keys keyData)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "TextBoxBase.ProcessDialogKey [" + keyData.ToString() + "]");
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "TextBoxBase.ProcessDialogKey [" + keyData.ToString() + "]");
             Keys keyCode = (Keys)keyData & Keys.KeyCode;
 
             if (keyCode == Keys.Tab && AcceptsTab && (keyData & Keys.Control) != 0)
@@ -2120,12 +2120,12 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
             if (AcceptsTab)
             {
-                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "TextBox wants tabs");
+                Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "TextBox wants tabs");
                 m.ResultInternal = m.ResultInternal | (int)DLGC.WANTTAB;
             }
             else
             {
-                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "TextBox doesn't want tabs");
+                Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "TextBox doesn't want tabs");
                 m.ResultInternal = m.ResultInternal & ~(int)(DLGC.WANTTAB | DLGC.WANTALLKEYS);
             }
         }

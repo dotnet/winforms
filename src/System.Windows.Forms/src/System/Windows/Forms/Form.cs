@@ -230,7 +230,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Form::set_Active - " + Name);
+                Debug.WriteLineIf(s_focusTracing!.TraceVerbose, "Form::set_Active - " + Name);
                 if ((_formState[FormStateIsActive] != 0) != value)
                 {
                     if (value)
@@ -2232,7 +2232,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void SetVisibleCore(bool value)
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Form::SetVisibleCore(" + value.ToString() + ") - " + Name);
+            Debug.WriteLineIf(s_focusTracing!.TraceVerbose, "Form::SetVisibleCore(" + value.ToString() + ") - " + Name);
 
             // If DialogResult.OK and the value == Visible then this code has been called either through
             // ShowDialog( ) or explicit Hide( ) by the user. So don't go through this function again.
