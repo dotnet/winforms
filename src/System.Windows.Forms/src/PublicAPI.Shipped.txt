@@ -1538,20 +1538,20 @@ System.Windows.Forms.ListViewHitTestInfo.SubItem.get -> System.Windows.Forms.Lis
 ~System.Windows.Forms.MonthCalendar.MonthlyBoldedDates.set -> void
 ~System.Windows.Forms.MonthCalendar.SelectionRange.get -> System.Windows.Forms.SelectionRange
 ~System.Windows.Forms.MonthCalendar.SelectionRange.set -> void
-~System.Windows.Forms.NotifyIcon.BalloonTipText.get -> string
-~System.Windows.Forms.NotifyIcon.BalloonTipText.set -> void
-~System.Windows.Forms.NotifyIcon.BalloonTipTitle.get -> string
-~System.Windows.Forms.NotifyIcon.BalloonTipTitle.set -> void
-~System.Windows.Forms.NotifyIcon.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
-~System.Windows.Forms.NotifyIcon.ContextMenuStrip.set -> void
-~System.Windows.Forms.NotifyIcon.Icon.get -> System.Drawing.Icon
-~System.Windows.Forms.NotifyIcon.Icon.set -> void
-~System.Windows.Forms.NotifyIcon.NotifyIcon(System.ComponentModel.IContainer container) -> void
-~System.Windows.Forms.NotifyIcon.ShowBalloonTip(int timeout, string tipTitle, string tipText, System.Windows.Forms.ToolTipIcon tipIcon) -> void
-~System.Windows.Forms.NotifyIcon.Tag.get -> object
-~System.Windows.Forms.NotifyIcon.Tag.set -> void
-~System.Windows.Forms.NotifyIcon.Text.get -> string
-~System.Windows.Forms.NotifyIcon.Text.set -> void
+System.Windows.Forms.NotifyIcon.BalloonTipText.get -> string!
+System.Windows.Forms.NotifyIcon.BalloonTipText.set -> void
+System.Windows.Forms.NotifyIcon.BalloonTipTitle.get -> string!
+System.Windows.Forms.NotifyIcon.BalloonTipTitle.set -> void
+System.Windows.Forms.NotifyIcon.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
+System.Windows.Forms.NotifyIcon.ContextMenuStrip.set -> void
+System.Windows.Forms.NotifyIcon.Icon.get -> System.Drawing.Icon?
+System.Windows.Forms.NotifyIcon.Icon.set -> void
+System.Windows.Forms.NotifyIcon.NotifyIcon(System.ComponentModel.IContainer! container) -> void
+System.Windows.Forms.NotifyIcon.ShowBalloonTip(int timeout, string! tipTitle, string! tipText, System.Windows.Forms.ToolTipIcon tipIcon) -> void
+System.Windows.Forms.NotifyIcon.Tag.get -> object?
+System.Windows.Forms.NotifyIcon.Tag.set -> void
+System.Windows.Forms.NotifyIcon.Text.get -> string!
+System.Windows.Forms.NotifyIcon.Text.set -> void
 ~System.Windows.Forms.OpenFileDialog.OpenFile() -> System.IO.Stream
 ~System.Windows.Forms.OpenFileDialog.SafeFileName.get -> string
 ~System.Windows.Forms.OpenFileDialog.SafeFileNames.get -> string[]
@@ -9280,18 +9280,18 @@ System.Windows.Forms.NodeLabelEditEventArgs.NodeLabelEditEventArgs(System.Window
 System.Windows.Forms.NodeLabelEditEventArgs.NodeLabelEditEventArgs(System.Windows.Forms.TreeNode? node, string? label) -> void
 System.Windows.Forms.NodeLabelEditEventHandler
 System.Windows.Forms.NotifyIcon
-System.Windows.Forms.NotifyIcon.BalloonTipClicked -> System.EventHandler
-System.Windows.Forms.NotifyIcon.BalloonTipClosed -> System.EventHandler
+System.Windows.Forms.NotifyIcon.BalloonTipClicked -> System.EventHandler?
+System.Windows.Forms.NotifyIcon.BalloonTipClosed -> System.EventHandler?
 System.Windows.Forms.NotifyIcon.BalloonTipIcon.get -> System.Windows.Forms.ToolTipIcon
 System.Windows.Forms.NotifyIcon.BalloonTipIcon.set -> void
-System.Windows.Forms.NotifyIcon.BalloonTipShown -> System.EventHandler
-System.Windows.Forms.NotifyIcon.Click -> System.EventHandler
-System.Windows.Forms.NotifyIcon.DoubleClick -> System.EventHandler
-System.Windows.Forms.NotifyIcon.MouseClick -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.NotifyIcon.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.NotifyIcon.MouseDown -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.NotifyIcon.MouseMove -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.NotifyIcon.MouseUp -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.NotifyIcon.BalloonTipShown -> System.EventHandler?
+System.Windows.Forms.NotifyIcon.Click -> System.EventHandler?
+System.Windows.Forms.NotifyIcon.DoubleClick -> System.EventHandler?
+System.Windows.Forms.NotifyIcon.MouseClick -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.NotifyIcon.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.NotifyIcon.MouseDown -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.NotifyIcon.MouseMove -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.NotifyIcon.MouseUp -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.NotifyIcon.NotifyIcon() -> void
 System.Windows.Forms.NotifyIcon.ShowBalloonTip(int timeout) -> void
 System.Windows.Forms.NotifyIcon.Visible.get -> bool
