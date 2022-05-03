@@ -210,6 +210,14 @@ internal partial class Interop
                 return new AutoCompleteWrapper(autoCompleteComObject);
             }
 
+            Guid enumVariantIID = IID.IEnumVariant;
+            hr = Marshal.QueryInterface(externalComObject, ref enumVariantIID, out IntPtr enumVariantComObject);
+            if (hr == S_OK)
+            {
+                Marshal.Release(externalComObject);
+                return new EnumVariantWrapper(enumVariantComObject);
+            }
+
             throw new NotImplementedException();
         }
 
