@@ -396,7 +396,7 @@ namespace System.Windows.Forms.Layout
 
         #endregion
 
-        #region DockAndAnchorLayoutSpecific
+        #region DefaultLayoutSpecific
 
         ///  GetAutoSizeMode
         ///  Returns whether or not a control should snap to its smallest size
@@ -410,7 +410,7 @@ namespace System.Windows.Forms.Layout
         }
 
         ///  GetNeedsDockAndAnchorLayout
-        ///  Do not use.  Internal property for DockAndAnchor layout.
+        ///  Do not use.  Internal property for DefaultLayout layout.
         ///  Returns true if DefaultLayout needs to do any work for this element.
         ///  (Returns false if the element is purely absolutely positioned)
         internal static bool GetNeedsDockAndAnchorLayout(IArrangedElement element)
