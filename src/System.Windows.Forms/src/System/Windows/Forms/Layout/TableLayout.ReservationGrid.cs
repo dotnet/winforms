@@ -14,8 +14,8 @@ namespace System.Windows.Forms.Layout
         // The ReservationGrid is used to track elements which span rows to prevent overlap.
         private sealed class ReservationGrid
         {
-            int _numColumns = 1;
-            readonly List<BitArray> _rows = new List<BitArray>();
+            private int _numColumns = 1;
+            private readonly List<BitArray> _rows = new List<BitArray>();
 
             public bool IsReserved(int column, int rowOffset)
             {
