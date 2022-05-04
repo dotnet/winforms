@@ -1052,7 +1052,7 @@ namespace System.Windows.Forms
             add => Events.AddHandler(s_backgroundImageLayoutEvent, value);
             remove => Events.RemoveHandler(s_backgroundImageLayoutEvent, value);
         }
-#nullable disable
+
         // Set/reset by ContainerControl.AssignActiveControlInternal
         internal bool BecomingActiveControl
         {
@@ -1075,7 +1075,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void ResetBindings()
         {
-            ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(s_bindingsProperty);
+            ControlBindingsCollection? bindings = (ControlBindingsCollection?)Properties.GetObject(s_bindingsProperty);
             if (bindings is not null)
             {
                 bindings.Clear();
@@ -1087,12 +1087,12 @@ namespace System.Windows.Forms
         ///  ContainerControl can bypass the "containerControls" bindingContext property and do what the other simple controls
         ///  do.
         /// </summary>
-        internal BindingContext BindingContextInternal
+        internal BindingContext? BindingContextInternal
         {
             get
             {
                 // See if we have locally overridden the binding manager.
-                BindingContext context = (BindingContext)Properties.GetObject(s_bindingManagerProperty);
+                BindingContext? context = (BindingContext?)Properties.GetObject(s_bindingManagerProperty);
                 if (context is not null)
                 {
                     return context;
@@ -1110,15 +1110,14 @@ namespace System.Windows.Forms
             }
             set
             {
-                BindingContext oldContext = (BindingContext)Properties.GetObject(s_bindingManagerProperty);
-                BindingContext newContext = value;
+                BindingContext? oldContext = (BindingContext?)Properties.GetObject(s_bindingManagerProperty);
+                BindingContext? newContext = value;
 
                 if (oldContext != newContext)
                 {
                     Properties.SetObject(s_bindingManagerProperty, newContext);
 
                     // the property change will wire up the bindings.
-                    //
                     OnBindingContextChanged(EventArgs.Empty);
                 }
             }
@@ -1128,7 +1127,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlBindingContextDescr))]
-        public virtual BindingContext BindingContext
+        public virtual BindingContext? BindingContext
         {
             get => BindingContextInternal;
             set => BindingContextInternal = value;
@@ -1136,7 +1135,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnBindingContextChangedDescr))]
-        public event EventHandler BindingContextChanged
+        public event EventHandler? BindingContextChanged
         {
             add => Events.AddHandler(s_bindingContextEvent, value);
             remove => Events.RemoveHandler(s_bindingContextEvent, value);
@@ -1258,7 +1257,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnCausesValidationChangedDescr))]
-        public event EventHandler CausesValidationChanged
+        public event EventHandler? CausesValidationChanged
         {
             add => Events.AddHandler(s_causesValidationEvent, value);
             remove => Events.RemoveHandler(s_causesValidationEvent, value);
@@ -1308,7 +1307,7 @@ namespace System.Windows.Forms
                     cacheTextCounter--;
                     if (cacheTextCounter == 0)
                     {
-                        _text = (string)Properties.GetObject(s_acheTextFieldProperty, out found);
+                        _text = (string?)Properties.GetObject(s_acheTextFieldProperty, out found);
                     }
                 }
 
@@ -1357,7 +1356,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnClientSizeChangedDescr))]
-        public event EventHandler ClientSizeChanged
+        public event EventHandler? ClientSizeChanged
         {
             add => Events.AddHandler(s_clientSizeEvent, value);
             remove => Events.RemoveHandler(s_clientSizeEvent, value);
@@ -1407,12 +1406,12 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(null)]
         [SRDescription(nameof(SR.ControlContextMenuDescr))]
-        public virtual ContextMenuStrip ContextMenuStrip
+        public virtual ContextMenuStrip? ContextMenuStrip
         {
-            get => (ContextMenuStrip)Properties.GetObject(s_contextMenuStripProperty);
+            get => (ContextMenuStrip?)Properties.GetObject(s_contextMenuStripProperty);
             set
             {
-                ContextMenuStrip oldValue = Properties.GetObject(s_contextMenuStripProperty) as ContextMenuStrip;
+                ContextMenuStrip? oldValue = Properties.GetObject(s_contextMenuStripProperty) as ContextMenuStrip;
 
                 if (oldValue != value)
                 {
@@ -1437,7 +1436,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlContextMenuStripChangedDescr))]
-        public event EventHandler ContextMenuStripChanged
+        public event EventHandler? ContextMenuStripChanged
         {
             add => Events.AddHandler(s_contextMenuStripEvent, value);
             remove => Events.RemoveHandler(s_contextMenuStripEvent, value);
@@ -1453,7 +1452,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
                 if (controlsCollection is null)
                 {
@@ -1528,7 +1527,6 @@ namespace System.Windows.Forms
                 {
                     // When the window is actually created, we will parent WS_CHILD windows to the
                     // parking form if cp.parent == 0.
-                    //
                     cp.Parent = _parent is null ? IntPtr.Zero : _parent.InternalHandle;
                     cp.Style |= (int)(User32.WS.CHILD | User32.WS.CLIPSIBLINGS);
                 }
@@ -1600,8 +1598,8 @@ namespace System.Windows.Forms
                 {
                     while (container.ActiveControl is null)
                     {
-                        ContainerControl cc;
-                        Control parent = container.ParentInternal;
+                        ContainerControl? cc;
+                        Control? parent = container.ParentInternal;
                         if (parent is not null)
                         {
                             cc = parent.GetContainerControl() as ContainerControl;
@@ -1691,6 +1689,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ControlCursorDescr))]
         [AmbientValue(null)]
+        [AllowNull]
         public virtual Cursor Cursor
         {
             get
@@ -1700,7 +1699,7 @@ namespace System.Windows.Forms
                     return Cursors.WaitCursor;
                 }
 
-                Cursor cursor = (Cursor)Properties.GetObject(s_cursorProperty);
+                Cursor? cursor = (Cursor?)Properties.GetObject(s_cursorProperty);
                 if (cursor is not null)
                 {
                     return cursor;
@@ -1720,7 +1719,7 @@ namespace System.Windows.Forms
                     return p.Cursor;
                 }
 
-                AmbientProperties ambient = AmbientPropertiesService;
+                AmbientProperties? ambient = AmbientPropertiesService;
                 if (ambient is not null && ambient.Cursor is not null)
                 {
                     return ambient.Cursor;
@@ -1730,7 +1729,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                Cursor localCursor = (Cursor)Properties.GetObject(s_cursorProperty);
+                Cursor? localCursor = (Cursor?)Properties.GetObject(s_cursorProperty);
                 Cursor resolvedCursor = Cursor;
                 if (localCursor != value)
                 {
@@ -1761,7 +1760,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnCursorChangedDescr))]
-        public event EventHandler CursorChanged
+        public event EventHandler? CursorChanged
         {
             add => Events.AddHandler(s_cursorEvent, value);
             remove => Events.RemoveHandler(s_cursorEvent, value);
@@ -1779,7 +1778,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(s_bindingsProperty);
+                ControlBindingsCollection? bindings = (ControlBindingsCollection?)Properties.GetObject(s_bindingsProperty);
                 if (bindings is null)
                 {
                     bindings = new ControlBindingsCollection(this);
@@ -1843,7 +1842,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual Size DefaultSize => Size.Empty;
 
-        private void DetachContextMenuStrip(object sender, EventArgs e) => ContextMenuStrip = null;
+        private void DetachContextMenuStrip(object? sender, EventArgs e) => ContextMenuStrip = null;
 
         /// <summary>
         ///  Dpi value either for the primary screen or for the monitor where the top-level parent is displayed when
@@ -1865,7 +1864,7 @@ namespace System.Windows.Forms
                 Color color = BackColor;
                 if (color.A == 0)
                 {
-                    Control control = ParentInternal;
+                    Control? control = ParentInternal;
                     while (color.A == 0)
                     {
                         if (control is null)
@@ -1973,7 +1972,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnDockChangedDescr))]
-        public event EventHandler DockChanged
+        public event EventHandler? DockChanged
         {
             add => Events.AddHandler(s_dockEvent, value);
             remove => Events.RemoveHandler(s_dockEvent, value);
@@ -2052,7 +2051,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnEnabledChangedDescr))]
-        public event EventHandler EnabledChanged
+        public event EventHandler? EnabledChanged
         {
             add => Events.AddHandler(s_enabledEvent, value);
             remove => Events.RemoveHandler(s_enabledEvent, value);
@@ -2077,6 +2076,7 @@ namespace System.Windows.Forms
         [DispId((int)Ole32.DispatchID.FONT)]
         [AmbientValue(null)]
         [SRDescription(nameof(SR.ControlFontDescr))]
+        [AllowNull]
         public virtual Font Font
         {
             [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
@@ -2088,7 +2088,7 @@ namespace System.Windows.Forms
             [param: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
             set
             {
-                var local = (Font)Properties.GetObject(s_fontProperty);
+                var local = (Font?)Properties.GetObject(s_fontProperty);
                 bool localChanged;
                 if (value is null)
                 {
@@ -2155,7 +2155,7 @@ namespace System.Windows.Forms
             _dpiFonts.Add(dpi, font);
         }
 
-        private protected bool TryGetDpiFont(int dpi, out Font font)
+        private protected bool TryGetDpiFont(int dpi, [NotNullWhen(true)] out Font? font)
         {
             font = null;
             if (!User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
@@ -2184,7 +2184,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnFontChangedDescr))]
-        public event EventHandler FontChanged
+        public event EventHandler? FontChanged
         {
             add => Events.AddHandler(s_fontEvent, value);
             remove => Events.RemoveHandler(s_fontEvent, value);
@@ -2205,9 +2205,9 @@ namespace System.Windows.Forms
                     return _scaledFontWrapper.Handle;
                 }
 
-                if (TryGetExplicitlySetFont(out Font font))
+                if (TryGetExplicitlySetFont(out Font? font))
                 {
-                    FontHandleWrapper fontHandle = (FontHandleWrapper)Properties.GetObject(s_fontHandleWrapperProperty);
+                    FontHandleWrapper? fontHandle = (FontHandleWrapper?)Properties.GetObject(s_fontHandleWrapperProperty);
                     if (fontHandle is null)
                     {
                         fontHandle = new FontHandleWrapper(font);
@@ -2223,17 +2223,17 @@ namespace System.Windows.Forms
                     return _parent.FontHandle;
                 }
 
-                AmbientProperties ambient = AmbientPropertiesService;
+                AmbientProperties? ambient = AmbientPropertiesService;
 
                 if (ambient is not null && ambient.Font is not null)
                 {
-                    FontHandleWrapper fontHandle = null;
+                    FontHandleWrapper? fontHandle = null;
 
-                    Font currentAmbient = (Font)Properties.GetObject(s_currentAmbientFontProperty);
+                    Font? currentAmbient = (Font?)Properties.GetObject(s_currentAmbientFontProperty);
 
                     if (currentAmbient is not null && currentAmbient == ambient.Font)
                     {
-                        fontHandle = (FontHandleWrapper)Properties.GetObject(s_fontHandleWrapperProperty);
+                        fontHandle = (FontHandleWrapper?)Properties.GetObject(s_fontHandleWrapperProperty);
                     }
                     else
                     {
@@ -2266,7 +2266,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (TryGetExplicitlySetFont(out Font font))
+                    if (TryGetExplicitlySetFont(out Font? font))
                     {
                         fontHeight = font.Height;
                         Properties.SetInteger(s_fontHeightProperty, fontHeight);
@@ -2313,7 +2313,7 @@ namespace System.Windows.Forms
                     return color;
                 }
 
-                Control p = ParentInternal;
+                Control? p = ParentInternal;
                 if (p is not null && p.CanAccessProperties)
                 {
                     return p.ForeColor;
@@ -2328,7 +2328,7 @@ namespace System.Windows.Forms
 
                 if (c.IsEmpty)
                 {
-                    AmbientProperties ambient = AmbientPropertiesService;
+                    AmbientProperties? ambient = AmbientPropertiesService;
                     if (ambient is not null)
                     {
                         c = ambient.ForeColor;
@@ -2362,13 +2362,13 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnForeColorChangedDescr))]
-        public event EventHandler ForeColorChanged
+        public event EventHandler? ForeColorChanged
         {
             add => Events.AddHandler(s_foreColorEvent, value);
             remove => Events.RemoveHandler(s_foreColorEvent, value);
         }
 
-        private Font GetParentFont(out int fontDpi)
+        private Font? GetParentFont(out int fontDpi)
         {
             fontDpi = _deviceDpi;
             if (ParentInternal is not null && ParentInternal.CanAccessProperties)
@@ -2380,7 +2380,7 @@ namespace System.Windows.Forms
                 return null;
             }
         }
-
+#nullable disable
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual Size GetPreferredSize(Size proposedSize)
         {
@@ -12328,7 +12328,7 @@ namespace System.Windows.Forms
 
             var factor = (float)_deviceDpi / fontDpi;
 
-            if (!TryGetDpiFont(_deviceDpi, out Font fontForDpi))
+            if (!TryGetDpiFont(_deviceDpi, out Font? fontForDpi))
             {
                 fontForDpi = localFont.WithSize(localFont.Size * factor);
                 AddToDpiFonts(_deviceDpi, fontForDpi);

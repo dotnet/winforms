@@ -753,7 +753,7 @@ override System.Windows.Forms.UserControl.Text.set -> void
 ~static System.Windows.Forms.AxHost.GetPictureFromIPicture(object picture) -> System.Drawing.Image
 ~static System.Windows.Forms.AxHost.GetPictureFromIPictureDisp(object picture) -> System.Drawing.Image
 ~static System.Windows.Forms.BindingContext.UpdateBinding(System.Windows.Forms.BindingContext newBindingContext, System.Windows.Forms.Binding binding) -> void
-~static System.Windows.Forms.Control.DefaultFont.get -> System.Drawing.Font
+static System.Windows.Forms.Control.DefaultFont.get -> System.Drawing.Font!
 ~static System.Windows.Forms.Control.FromChildHandle(System.IntPtr handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.Control.FromHandle(System.IntPtr handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.Control.IsMnemonic(char charCode, string text) -> bool
@@ -1005,15 +1005,15 @@ System.Windows.Forms.Control.AccessibleName.set -> void
 ~System.Windows.Forms.Control.BeginInvoke(System.Action method) -> System.IAsyncResult
 ~System.Windows.Forms.Control.BeginInvoke(System.Delegate method) -> System.IAsyncResult
 ~System.Windows.Forms.Control.BeginInvoke(System.Delegate method, params object[] args) -> System.IAsyncResult
-~System.Windows.Forms.Control.CompanyName.get -> string
+System.Windows.Forms.Control.CompanyName.get -> string!
 ~System.Windows.Forms.Control.Contains(System.Windows.Forms.Control ctl) -> bool
 System.Windows.Forms.Control.Control(string? text) -> void
 System.Windows.Forms.Control.Control(string? text, int left, int top, int width, int height) -> void
 System.Windows.Forms.Control.Control(System.Windows.Forms.Control? parent, string? text) -> void
 System.Windows.Forms.Control.Control(System.Windows.Forms.Control? parent, string? text, int left, int top, int width, int height) -> void
-~System.Windows.Forms.Control.Controls.get -> System.Windows.Forms.Control.ControlCollection
+System.Windows.Forms.Control.Controls.get -> System.Windows.Forms.Control.ControlCollection!
 ~System.Windows.Forms.Control.CreateGraphics() -> System.Drawing.Graphics
-~System.Windows.Forms.Control.DataBindings.get -> System.Windows.Forms.ControlBindingsCollection
+System.Windows.Forms.Control.DataBindings.get -> System.Windows.Forms.ControlBindingsCollection!
 ~System.Windows.Forms.Control.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects) -> System.Windows.Forms.DragDropEffects
 ~System.Windows.Forms.Control.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
 ~System.Windows.Forms.Control.EndInvoke(System.IAsyncResult asyncResult) -> object
@@ -2026,18 +2026,18 @@ System.Windows.Forms.UpDownBase.DockPadding.get -> System.Windows.Forms.Scrollab
 ~virtual System.Windows.Forms.ContainerControl.OnAutoValidateChanged(System.EventArgs e) -> void
 virtual System.Windows.Forms.Control.BackgroundImage.get -> System.Drawing.Image?
 virtual System.Windows.Forms.Control.BackgroundImage.set -> void
-~virtual System.Windows.Forms.Control.BindingContext.get -> System.Windows.Forms.BindingContext
-~virtual System.Windows.Forms.Control.BindingContext.set -> void
-~virtual System.Windows.Forms.Control.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
-~virtual System.Windows.Forms.Control.ContextMenuStrip.set -> void
+virtual System.Windows.Forms.Control.BindingContext.get -> System.Windows.Forms.BindingContext?
+virtual System.Windows.Forms.Control.BindingContext.set -> void
+virtual System.Windows.Forms.Control.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
+virtual System.Windows.Forms.Control.ContextMenuStrip.set -> void
 ~virtual System.Windows.Forms.Control.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~virtual System.Windows.Forms.Control.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-~virtual System.Windows.Forms.Control.CreateParams.get -> System.Windows.Forms.CreateParams
-~virtual System.Windows.Forms.Control.Cursor.get -> System.Windows.Forms.Cursor
-~virtual System.Windows.Forms.Control.Cursor.set -> void
-~virtual System.Windows.Forms.Control.DefaultCursor.get -> System.Windows.Forms.Cursor
-~virtual System.Windows.Forms.Control.Font.get -> System.Drawing.Font
-~virtual System.Windows.Forms.Control.Font.set -> void
+virtual System.Windows.Forms.Control.CreateParams.get -> System.Windows.Forms.CreateParams!
+virtual System.Windows.Forms.Control.Cursor.get -> System.Windows.Forms.Cursor!
+virtual System.Windows.Forms.Control.Cursor.set -> void
+virtual System.Windows.Forms.Control.DefaultCursor.get -> System.Windows.Forms.Cursor!
+virtual System.Windows.Forms.Control.Font.get -> System.Drawing.Font!
+virtual System.Windows.Forms.Control.Font.set -> void
 virtual System.Windows.Forms.Control.GetAccessibilityObjectById(int objectId) -> System.Windows.Forms.AccessibleObject?
 virtual System.Windows.Forms.Control.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
 ~virtual System.Windows.Forms.Control.OnAutoSizeChanged(System.EventArgs e) -> void
@@ -5951,7 +5951,7 @@ System.Windows.Forms.Control.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.Control.BackColorChanged -> System.EventHandler?
 System.Windows.Forms.Control.BackgroundImageChanged -> System.EventHandler?
 System.Windows.Forms.Control.BackgroundImageLayoutChanged -> System.EventHandler?
-System.Windows.Forms.Control.BindingContextChanged -> System.EventHandler
+System.Windows.Forms.Control.BindingContextChanged -> System.EventHandler?
 System.Windows.Forms.Control.Bottom.get -> int
 System.Windows.Forms.Control.Bounds.get -> System.Drawing.Rectangle
 System.Windows.Forms.Control.Bounds.set -> void
@@ -5962,15 +5962,15 @@ System.Windows.Forms.Control.Capture.get -> bool
 System.Windows.Forms.Control.Capture.set -> void
 System.Windows.Forms.Control.CausesValidation.get -> bool
 System.Windows.Forms.Control.CausesValidation.set -> void
-System.Windows.Forms.Control.CausesValidationChanged -> System.EventHandler
+System.Windows.Forms.Control.CausesValidationChanged -> System.EventHandler?
 System.Windows.Forms.Control.ChangeUICues -> System.Windows.Forms.UICuesEventHandler
 System.Windows.Forms.Control.Click -> System.EventHandler
 System.Windows.Forms.Control.ClientRectangle.get -> System.Drawing.Rectangle
 System.Windows.Forms.Control.ClientSize.get -> System.Drawing.Size
 System.Windows.Forms.Control.ClientSize.set -> void
-System.Windows.Forms.Control.ClientSizeChanged -> System.EventHandler
+System.Windows.Forms.Control.ClientSizeChanged -> System.EventHandler?
 System.Windows.Forms.Control.ContainsFocus.get -> bool
-System.Windows.Forms.Control.ContextMenuStripChanged -> System.EventHandler
+System.Windows.Forms.Control.ContextMenuStripChanged -> System.EventHandler?
 System.Windows.Forms.Control.Control() -> void
 System.Windows.Forms.Control.ControlAccessibleObject
 System.Windows.Forms.Control.ControlAccessibleObject.ControlAccessibleObject(System.Windows.Forms.Control! ownerControl) -> void
@@ -5992,10 +5992,10 @@ System.Windows.Forms.Control.ControlCollection.RemoveAt(int index) -> void
 System.Windows.Forms.Control.ControlRemoved -> System.Windows.Forms.ControlEventHandler
 System.Windows.Forms.Control.CreateControl() -> void
 System.Windows.Forms.Control.Created.get -> bool
-System.Windows.Forms.Control.CursorChanged -> System.EventHandler
+System.Windows.Forms.Control.CursorChanged -> System.EventHandler?
 System.Windows.Forms.Control.DeviceDpi.get -> int
 System.Windows.Forms.Control.Disposing.get -> bool
-System.Windows.Forms.Control.DockChanged -> System.EventHandler
+System.Windows.Forms.Control.DockChanged -> System.EventHandler?
 System.Windows.Forms.Control.DoubleClick -> System.EventHandler
 System.Windows.Forms.Control.DpiChangedAfterParent -> System.EventHandler
 System.Windows.Forms.Control.DpiChangedBeforeParent -> System.EventHandler
@@ -6005,13 +6005,13 @@ System.Windows.Forms.Control.DragLeave -> System.EventHandler
 System.Windows.Forms.Control.DragOver -> System.Windows.Forms.DragEventHandler
 System.Windows.Forms.Control.Enabled.get -> bool
 System.Windows.Forms.Control.Enabled.set -> void
-System.Windows.Forms.Control.EnabledChanged -> System.EventHandler
+System.Windows.Forms.Control.EnabledChanged -> System.EventHandler?
 System.Windows.Forms.Control.Enter -> System.EventHandler
 System.Windows.Forms.Control.Focus() -> bool
-System.Windows.Forms.Control.FontChanged -> System.EventHandler
+System.Windows.Forms.Control.FontChanged -> System.EventHandler?
 System.Windows.Forms.Control.FontHeight.get -> int
 System.Windows.Forms.Control.FontHeight.set -> void
-System.Windows.Forms.Control.ForeColorChanged -> System.EventHandler
+System.Windows.Forms.Control.ForeColorChanged -> System.EventHandler?
 System.Windows.Forms.Control.GetAutoSizeMode() -> System.Windows.Forms.AutoSizeMode
 System.Windows.Forms.Control.GetStyle(System.Windows.Forms.ControlStyles flag) -> bool
 System.Windows.Forms.Control.GetTopLevel() -> bool
