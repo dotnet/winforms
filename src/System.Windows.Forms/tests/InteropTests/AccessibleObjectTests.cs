@@ -430,6 +430,36 @@ namespace System.Windows.Forms.InteropTests
             AssertSuccess(Test_IEnumVARIANTSkip(o));
         }
 
+        [WinFormsFact]
+        public void StandardAccessibleObject_IEnumVARIANTClone_Invoke_ReturnsExpected()
+        {
+            var dropDown = new ComboBox();
+            Assert.NotEqual(IntPtr.Zero, dropDown.Handle);
+            var o = new StandardAccessibleObject();
+            o.UseStdAccessibleObjects(dropDown.Handle);
+            AssertSuccess(Test_IEnumVARIANTClone(o));
+        }
+
+        [WinFormsFact]
+        public void StandardAccessibleObject_IEnumVARIANTNextReset_Invoke_ReturnsExpected()
+        {
+            var dropDown = new ComboBox();
+            Assert.NotEqual(IntPtr.Zero, dropDown.Handle);
+            var o = new StandardAccessibleObject();
+            o.UseStdAccessibleObjects(dropDown.Handle);
+            AssertSuccess(Test_IEnumVARIANTNextReset(o));
+        }
+
+        [WinFormsFact]
+        public void StandardAccessibleObject_IEnumVARIANTSkip_Invoke_ReturnsExpected()
+        {
+            var dropDown = new ComboBox();
+            Assert.NotEqual(IntPtr.Zero, dropDown.Handle);
+            var o = new StandardAccessibleObject();
+            o.UseStdAccessibleObjects(dropDown.Handle);
+            AssertSuccess(Test_IEnumVARIANTSkip(o));
+        }
+
         [WinFormsTheory]
         [InlineData((int)BOOL.TRUE)]
         [InlineData((int)BOOL.FALSE)]
@@ -685,6 +715,11 @@ namespace System.Windows.Forms.InteropTests
             public AccessibleObject ParentResult { get; set; }
 
             public override AccessibleObject Parent => ParentResult;
+        }
+
+        private class StandardAccessibleObject : AccessibleObject
+        {
+            public new void UseStdAccessibleObjects(IntPtr handle) => base.UseStdAccessibleObjects(handle);
         }
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]

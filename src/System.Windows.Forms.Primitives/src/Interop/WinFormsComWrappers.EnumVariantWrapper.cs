@@ -20,7 +20,18 @@ internal partial class Interop
 
             internal IntPtr Instance => _wrappedInstance;
 
+            ~EnumVariantWrapper()
+            {
+                DisposeInternal();
+            }
+
             public void Dispose()
+            {
+                DisposeInternal();
+                GC.SuppressFinalize(this);
+            }
+
+            private void DisposeInternal()
             {
                 Marshal.Release(_wrappedInstance);
                 _wrappedInstance = IntPtr.Zero;
