@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Layout
         private sealed class ReservationGrid
         {
             int _numColumns = 1;
-            readonly ArrayList _rows = new ArrayList();
+            readonly List<BitArray> _rows = new List<BitArray>();
 
             public bool IsReserved(int column, int rowOffset)
             {
@@ -24,12 +24,12 @@ namespace System.Windows.Forms.Layout
                     return false;
                 }
 
-                if (column >= ((BitArray)_rows[rowOffset]).Length)
+                if (column >= _rows[rowOffset].Length)
                 {
                     return false;
                 }
 
-                return ((BitArray)_rows[rowOffset])[column];
+                return _rows[rowOffset][column];
             }
 
             public void Reserve(int column, int rowOffset)
@@ -41,16 +41,16 @@ namespace System.Windows.Forms.Layout
                 }
 
                 //increase the length of the _rows[rowOffset] if necessary
-                if (column >= ((BitArray)_rows[rowOffset]).Length)
+                if (column >= _rows[rowOffset].Length)
                 {
-                    ((BitArray)_rows[rowOffset]).Length = column + 1;
+                    _rows[rowOffset].Length = column + 1;
                     if (column >= _numColumns)
                     {
                         _numColumns = column + 1;
                     }
                 }
 
-                ((BitArray)_rows[rowOffset])[column] = true;
+                _rows[rowOffset][column] = true;
                 Debug.Assert(IsReserved(column, rowOffset), "IsReserved/Reserved mismatch.");
             }
 
