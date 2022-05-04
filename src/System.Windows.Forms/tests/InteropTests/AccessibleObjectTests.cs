@@ -431,33 +431,26 @@ namespace System.Windows.Forms.InteropTests
         }
 
         [WinFormsFact]
-        public void StandardAccessibleObject_IEnumVARIANTClone_Invoke_ReturnsExpected()
+        public unsafe void SystemAccessibleObject_Enumeration()
         {
-            var dropDown = new ComboBox();
-            Assert.NotEqual(IntPtr.Zero, dropDown.Handle);
-            var o = new StandardAccessibleObject();
-            o.UseStdAccessibleObjects(dropDown.Handle);
-            AssertSuccess(Test_IEnumVARIANTClone(o));
-        }
+            using ComboBox control = new ComboBox
+            {
+                DropDownStyle = ComboBoxStyle.DropDown
+            };
+            control.CreateControl();
+            ComboBox.ComboBoxAccessibleObject accessibleObject = new ComboBox.ComboBoxAccessibleObject(control);
 
-        [WinFormsFact]
-        public void StandardAccessibleObject_IEnumVARIANTNextReset_Invoke_ReturnsExpected()
-        {
-            var dropDown = new ComboBox();
-            Assert.NotEqual(IntPtr.Zero, dropDown.Handle);
-            var o = new StandardAccessibleObject();
-            o.UseStdAccessibleObjects(dropDown.Handle);
-            AssertSuccess(Test_IEnumVARIANTNextReset(o));
-        }
+            var enumVariant = (IEnumVariant)accessibleObject;
+            Assert.Equal(HRESULT.S_OK, enumVariant.Reset());
 
-        [WinFormsFact]
-        public void StandardAccessibleObject_IEnumVARIANTSkip_Invoke_ReturnsExpected()
-        {
-            var dropDown = new ComboBox();
-            Assert.NotEqual(IntPtr.Zero, dropDown.Handle);
-            var o = new StandardAccessibleObject();
-            o.UseStdAccessibleObjects(dropDown.Handle);
-            AssertSuccess(Test_IEnumVARIANTSkip(o));
+            VARIANT variantObject;
+            uint retreivedCount;
+            var result = enumVariant.Next(1, (IntPtr)(void*)&variantObject, &retreivedCount);
+            Assert.Equal(HRESULT.S_OK, result);
+
+            var retreivedItem = variantObject.ToObject();
+
+            Assert.Equal(1, Assert.IsType<int>(retreivedItem));
         }
 
         [WinFormsTheory]
