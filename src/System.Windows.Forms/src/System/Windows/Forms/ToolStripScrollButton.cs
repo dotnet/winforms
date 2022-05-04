@@ -5,14 +5,13 @@
 #nullable disable
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
     ///  A non selectable ToolStrip item
     /// </summary>
-    internal class ToolStripScrollButton : ToolStripControlHost
+    internal partial class ToolStripScrollButton : ToolStripControlHost
     {
         private readonly bool up = true;
 
@@ -31,18 +30,23 @@ namespace System.Windows.Forms
 
         public ToolStripScrollButton(bool up) : base(CreateControlInstance(up))
         {
+            if (Control is StickyLabel stickyLabel)
+            {
+                stickyLabel.OwnerScrollButton = this;
+            }
+
             this.up = up;
         }
 
+        protected override AccessibleObject CreateAccessibilityInstance()
+           => this.Control.AccessibilityObject;
+
         private static Control CreateControlInstance(bool up)
-        {
-            StickyLabel label = new StickyLabel
+            => new StickyLabel(up)
             {
                 ImageAlign = ContentAlignment.MiddleCenter,
                 Image = (up) ? UpImage : DownImage
             };
-            return label;
-        }
 
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
@@ -78,12 +82,7 @@ namespace System.Windows.Forms
         }
 
         internal StickyLabel Label
-        {
-            get
-            {
-                return Control as StickyLabel;
-            }
-        }
+            => Control as StickyLabel;
 
         private static Image UpImage
         {
@@ -183,39 +182,6 @@ namespace System.Windows.Forms
             if (ParentInternal is ToolStripDropDownMenu parent && Label.Enabled)
             {
                 parent.ScrollInternal(up);
-            }
-        }
-
-        internal class StickyLabel : Label
-        {
-            public StickyLabel()
-            {
-            }
-
-            public static bool FreezeLocationChange
-            {
-                get => false;
-            }
-
-            protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
-            {
-                if (((specified & BoundsSpecified.Location) != 0) && FreezeLocationChange)
-                {
-                    return;
-                }
-
-                base.SetBoundsCore(x, y, width, height, specified);
-            }
-
-            protected override void WndProc(ref Message m)
-            {
-                if (m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <= (int)User32.WM.KEYLAST)
-                {
-                    DefWndProc(ref m);
-                    return;
-                }
-
-                base.WndProc(ref m);
             }
         }
     }

@@ -6004,6 +6004,12 @@ Stack trace where the illegal operation occurred was:
   <data name="ToolStripSaveSettingsDescr" xml:space="preserve">
     <value>Specifies whether the ToolStrip should persist user settings via IPersistComponentSettings.</value>
   </data>
+  <data name="ToolStripScrollButtonDownAccessibleName" xml:space="preserve">
+    <value>Line down</value>
+  </data>
+  <data name="ToolStripScrollButtonUpAccessibleName" xml:space="preserve">
+    <value>Line up</value>
+  </data>
   <data name="ToolStripSettingsKeyDescr" xml:space="preserve">
     <value>Specifies the settings key to use to save settings.</value>
   </data>

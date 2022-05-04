@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
+using static Interop.UiaCore;
 
 namespace System.Windows.Forms
 {
@@ -18,44 +18,32 @@ namespace System.Windows.Forms
             }
 
             public override void DoDefaultAction()
-            {
-                _accessibleObject.DoDefaultAction();
-            }
+                => _accessibleObject.DoDefaultAction();
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                return _accessibleObject.GetPropertyValue(propertyID);
-            }
+            internal override object? GetPropertyValue(UIA propertyID)
+                => _accessibleObject.GetPropertyValue(propertyID);
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                return _accessibleObject.IsPatternSupported(patternId);
-            }
+            internal override bool IsPatternSupported(UIA patternId)
+                => _accessibleObject.IsPatternSupported(patternId);
 
             internal override void Expand()
-            {
-                DoDefaultAction();
-            }
+                => DoDefaultAction();
 
             internal override void Collapse()
-            {
-                _accessibleObject.Collapse();
-            }
+                => _accessibleObject.Collapse();
 
-            internal override UiaCore.ExpandCollapseState ExpandCollapseState
-            {
-                get
+            internal override ExpandCollapseState ExpandCollapseState
+                => _accessibleObject.ExpandCollapseState;
+
+            internal override IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+                => direction switch
                 {
-                    return _accessibleObject.ExpandCollapseState;
-                }
-            }
-
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
-            {
-                return _accessibleObject.FragmentNavigate(direction);
-            }
+                    NavigateDirection.FirstChild => base.FragmentNavigate(direction),
+                    NavigateDirection.LastChild => base.FragmentNavigate(direction),
+                    _ => _accessibleObject.FragmentNavigate(direction)
+                };
         }
     }
 }
