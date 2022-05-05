@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     public class DataGridViewElement
     {
         /// <summary>
-        /// These are subclasses of the <see cref="DataGridViewElement"/> for which you don't need to call the finalizer, because it's empty.
+        /// These are subclasses of the <see cref="DataGridViewElement"/> for which we don't need to call the finalizer, because it's empty.
         /// See https://github.com/dotnet/winforms/issues/6858.
         /// </summary>
         private static readonly HashSet<Type> s_typesWithEmptyFinalizer = new()

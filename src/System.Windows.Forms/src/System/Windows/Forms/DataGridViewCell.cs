@@ -84,10 +84,8 @@ namespace System.Windows.Forms
             _useDefaultToolTipText = true;
         }
 
-        /// <summary>
-        /// Currently this finalizer is unneeded (empty). See https://github.com/dotnet/winforms/issues/6858.<br/>
-        /// All classes that are not need to be finalized contains in <see cref="DataGridViewElement.s_typesWithEmptyFinalizer"/> collection. Consider to modify it if needed.
-        /// </summary>
+        // NOTE: currently this finalizer is unneeded (empty). See https://github.com/dotnet/winforms/issues/6858.
+        // All classes that are not need to be finalized contains in DataGridViewElement.s_typesWithEmptyFinalizer collection. Consider to modify it if needed.
         ~DataGridViewCell()
         {
             Dispose(false);
