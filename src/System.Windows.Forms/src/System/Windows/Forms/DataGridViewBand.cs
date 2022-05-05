@@ -34,6 +34,8 @@ namespace System.Windows.Forms
         {
         }
 
+        // NOTE: currently this finalizer is unneeded (empty). See https://github.com/dotnet/winforms/issues/6858.
+        // All classes that are not need to be finalized contains in DataGridViewElement.s_typesWithEmptyFinalizer collection. Consider to modify it if needed.
         ~DataGridViewBand() => Dispose(false);
 
         internal int CachedThickness { get; set; }
@@ -824,6 +826,9 @@ namespace System.Windows.Forms
                     contextMenuStrip.Disposed -= new EventHandler(DetachContextMenuStrip);
                 }
             }
+
+            // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this class type (and all of its subclasses) from DataGridViewElement.s_typesWithEmptyFinalizer!
+            // Also consider to modify ~DataGridViewBand() description.
         }
 
         internal void GetHeightInfo(int rowIndex, out int height, out int minimumHeight)

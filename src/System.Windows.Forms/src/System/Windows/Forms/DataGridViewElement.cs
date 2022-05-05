@@ -11,6 +11,34 @@ namespace System.Windows.Forms
     /// </summary>
     public class DataGridViewElement
     {
+        /// <summary>
+        /// These are subclasses of the <see cref="DataGridViewElement"/> for which we don't need to call the finalizer, because it's empty.
+        /// See https://github.com/dotnet/winforms/issues/6858.
+        /// </summary>
+        private static readonly HashSet<Type> s_typesWithEmptyFinalizer = new()
+        {
+            typeof(DataGridViewBand),
+            typeof(DataGridViewColumn),
+            typeof(DataGridViewButtonColumn),
+            typeof(DataGridViewCheckBoxColumn),
+            typeof(DataGridViewComboBoxColumn),
+            typeof(DataGridViewImageColumn),
+            typeof(DataGridViewLinkColumn),
+            typeof(DataGridViewTextBoxColumn),
+            typeof(DataGridViewRow),
+            typeof(DataGridViewCell),
+            typeof(DataGridViewButtonCell),
+            typeof(DataGridViewCheckBoxCell),
+            typeof(DataGridViewComboBoxCell),
+            typeof(DataGridViewHeaderCell),
+            typeof(DataGridViewColumnHeaderCell),
+            typeof(DataGridViewTopLeftHeaderCell),
+            typeof(DataGridViewRowHeaderCell),
+            typeof(DataGridViewImageCell),
+            typeof(DataGridViewLinkCell),
+            typeof(DataGridViewTextBoxCell)
+        };
+
         private DataGridView? _dataGridView;
 
         /// <summary>
@@ -18,6 +46,9 @@ namespace System.Windows.Forms
         /// </summary>
         public DataGridViewElement()
         {
+            if (s_typesWithEmptyFinalizer.Contains(GetType()))
+                GC.SuppressFinalize(this);
+
             State = DataGridViewElementStates.Visible;
         }
 
