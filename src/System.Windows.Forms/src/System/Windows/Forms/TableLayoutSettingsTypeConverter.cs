@@ -136,26 +136,15 @@ namespace System.Windows.Forms.Layout
         private static string? GetAttributeValue(XmlNode node, string attribute)
         {
             XmlAttribute? attr = node.Attributes?[attribute];
-            if (attr is not null)
-            {
-                return attr.Value;
-            }
 
-            return null;
+            return attr?.Value;
         }
 
         private static int GetAttributeValue(XmlNode node, string attribute, int valueIfNotFound)
         {
             string? attributeValue = GetAttributeValue(node, attribute);
-            if (!string.IsNullOrEmpty(attributeValue))
-            {
-                if (int.TryParse(attributeValue, out int result))
-                {
-                    return result;
-                }
-            }
 
-            return valueIfNotFound;
+            return int.TryParse(attributeValue, out int result) ? result : valueIfNotFound;
         }
 
         private static void ParseControls(TableLayoutSettings settings, XmlNodeList controlXmlFragments)
