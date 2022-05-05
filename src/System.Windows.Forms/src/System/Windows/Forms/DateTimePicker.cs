@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -52,10 +51,10 @@ namespace System.Windows.Forms
         private static readonly string s_dateTimePickerLocalizedControlTypeString = SR.DateTimePickerLocalizedControlType;
 
         private const DTS TIMEFORMAT_NOUPDOWN = DTS.TIMEFORMAT & (~DTS.UPDOWN);
-        private EventHandler _onCloseUp;
-        private EventHandler _onDropDown;
-        private EventHandler _onValueChanged;
-        private EventHandler _onRightToLeftLayoutChanged;
+        private EventHandler? _onCloseUp;
+        private EventHandler? _onDropDown;
+        private EventHandler? _onValueChanged;
+        private EventHandler? _onRightToLeftLayoutChanged;
 
         private UiaCore.ExpandCollapseState _expandCollapseState;
 
@@ -97,13 +96,13 @@ namespace System.Windows.Forms
         private Color _calendarTitleForeColor = DefaultTitleForeColor;
         private Color _calendarMonthBackground = DefaultMonthBackColor;
         private Color _calendarTrailingText = DefaultTrailingForeColor;
-        private Font _calendarFont;
-        private FontHandleWrapper _calendarFontHandleWrapper;
+        private Font? _calendarFont;
+        private FontHandleWrapper? _calendarFontHandleWrapper;
 
         // Since there is no way to get the customFormat from the DTP, we need to cache it. Also we have to track if
         // the user wanted customFormat or shortDate format (shortDate is the lack of being in Long or DateTime format
         // without a customFormat).
-        private string _customFormat;
+        private string? _customFormat;
 
         private DateTimePickerFormat _format;
 
@@ -138,7 +137,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackColorChanged
+        new public event EventHandler? BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
@@ -146,7 +145,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -154,7 +153,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        new public event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -170,7 +169,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        new public event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -205,6 +204,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         [Localizable(true)]
         [AmbientValue(null)]
+        [AllowNull]
         [SRDescription(nameof(SR.DateTimePickerCalendarFontDescr))]
         public Font CalendarFont
         {
@@ -378,7 +378,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler Click
+        new public event EventHandler? Click
         {
             add => base.Click += value;
             remove => base.Click -= value;
@@ -432,7 +432,7 @@ namespace System.Windows.Forms
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.DateTimePickerCustomFormatDescr))]
-        public string CustomFormat
+        public string? CustomFormat
         {
             get => _customFormat;
             set
@@ -464,7 +464,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler DoubleClick
+        new public event EventHandler? DoubleClick
         {
             add => base.DoubleClick += value;
             remove => base.DoubleClick -= value;
@@ -499,7 +499,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged
+        new public event EventHandler? ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -531,7 +531,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.DateTimePickerOnFormatChangedDescr))]
-        public event EventHandler FormatChanged
+        public event EventHandler? FormatChanged
         {
             add => Events.AddHandler(s_formatChangedEvent, value);
             remove => Events.RemoveHandler(s_formatChangedEvent, value);
@@ -543,7 +543,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event PaintEventHandler Paint
+        public new event PaintEventHandler? Paint
         {
             add => base.Paint += value;
             remove => base.Paint -= value;
@@ -709,7 +709,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event MouseEventHandler MouseClick
+        new public event MouseEventHandler? MouseClick
         {
             add => base.MouseClick += value;
             remove => base.MouseClick -= value;
@@ -717,7 +717,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event MouseEventHandler MouseDoubleClick
+        new public event MouseEventHandler? MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
             remove => base.MouseDoubleClick -= value;
@@ -734,7 +734,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler PaddingChanged
+        public new event EventHandler? PaddingChanged
         {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
@@ -830,13 +830,13 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [AllowNull]
         public override string Text
         {
             get => Value.ToString(CustomFormat);
             set
             {
                 // Clause to check length
-                //
                 if (value is null || value.Length == 0)
                 {
                     ResetValue();
@@ -850,7 +850,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public event EventHandler TextChanged
+        new public event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -924,7 +924,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.DateTimePickerOnCloseUpDescr))]
-        public event EventHandler CloseUp
+        public event EventHandler? CloseUp
         {
             add => _onCloseUp += value;
             remove => _onCloseUp -= value;
@@ -932,7 +932,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
-        public event EventHandler RightToLeftLayoutChanged
+        public event EventHandler? RightToLeftLayoutChanged
         {
             add => _onRightToLeftLayoutChanged += value;
             remove => _onRightToLeftLayoutChanged -= value;
@@ -943,7 +943,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.valueChangedEventDescr))]
-        public event EventHandler ValueChanged
+        public event EventHandler? ValueChanged
         {
             add => _onValueChanged += value;
             remove => _onValueChanged -= value;
@@ -954,7 +954,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.DateTimePickerOnDropDownDescr))]
-        public event EventHandler DropDown
+        public event EventHandler? DropDown
         {
             add => _onDropDown += value;
             remove => _onDropDown -= value;
@@ -1167,7 +1167,7 @@ namespace System.Windows.Forms
                 // But I can't receive the previous value here,
                 // so I have to use current value twice.
                 // Anyway it doesn't matter because the Narrator pronounces actual AO state.
-                string value = AccessibilityObject.Value;
+                string? value = AccessibilityObject.Value;
                 AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                     UiaCore.UIA.ValueValuePropertyId,
                     oldValue: value,

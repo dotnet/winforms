@@ -1531,7 +1531,7 @@ namespace System.Windows.Forms
             SetTool(tool.GetOwnerWindow(), text, TipInfo.Type.Absolute, new Point(pointX, pointY));
 
             // Then look for a better ToolTip location.
-            if (TryGetBubbleSize(tool, toolRectangle, out Size bubbleSize))
+            if (TryGetBubbleSize(tool, out Size bubbleSize))
             {
                 Point optimalPoint = GetOptimalToolTipPosition(tool, toolRectangle, bubbleSize.Width, bubbleSize.Height);
 
@@ -1559,7 +1559,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool TryGetBubbleSize(IKeyboardToolTip tool, Rectangle toolRectangle, out Size bubbleSize)
+        private bool TryGetBubbleSize(IKeyboardToolTip tool, out Size bubbleSize)
         {
             // Get bubble size to use it for optimal position calculation. Requesting the bubble
             // size will AV if there isn't a current tool window.
@@ -1668,7 +1668,7 @@ namespace System.Windows.Forms
             return new Point(optimalLocation.Left, optimalLocation.Top);
         }
 
-        private bool IsCompetingLocationBetter(long originalLocationClippedArea,
+        private static bool IsCompetingLocationBetter(long originalLocationClippedArea,
             long originalLocationWeight,
             long originalLocationAreaWithinTopControl,
             int originalIndex,
@@ -2050,11 +2050,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the WM_WINDOWFROMPOINT message.
         /// </summary>
-        private void WmWindowFromPoint(ref Message message)
+        private unsafe void WmWindowFromPoint(ref Message message)
         {
-            var point = (Point)message.GetLParam(typeof(Point));
+            var lpPoint = (Point*)message.LParamInternal;
             bool result = false;
-            message.ResultInternal = GetWindowFromPoint(point, ref result);
+            message.ResultInternal = GetWindowFromPoint(*lpPoint, ref result);
         }
 
         /// <summary>
@@ -2299,17 +2299,17 @@ namespace System.Windows.Forms
             }
         }
 
-        private void WndProc(ref Message message)
+        private unsafe void WndProc(ref Message message)
         {
             switch (message.Msg)
             {
                 case (int)(User32.WM.REFLECT_NOTIFY):
-                    User32.NMHDR nmhdr = (User32.NMHDR)message.GetLParam(typeof(User32.NMHDR));
-                    if (nmhdr.code == (int)TTN.SHOW && !_trackPosition)
+                    var nmhdr = (User32.NMHDR*)message.LParamInternal;
+                    if (nmhdr->code == (int)TTN.SHOW && !_trackPosition)
                     {
                         WmShow();
                     }
-                    else if (nmhdr.code == (int)TTN.POP)
+                    else if (nmhdr->code == (int)TTN.POP)
                     {
                         WmPop();
                         _window?.DefWndProc(ref message);

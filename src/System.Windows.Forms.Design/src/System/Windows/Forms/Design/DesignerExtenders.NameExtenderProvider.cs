@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Design
             ///  This is an extender property that we offer to all components
             ///  on the form.  It implements the "Name" property.
             /// </summary>
-            public void SetName(IComponent comp, string newName)
+            public static void SetName(IComponent comp, string newName)
             {
                 ISite site = comp.Site;
                 if (site != null)

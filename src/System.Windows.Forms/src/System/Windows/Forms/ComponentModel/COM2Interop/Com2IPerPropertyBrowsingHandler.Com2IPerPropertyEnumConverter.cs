@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Globalization;
 using static Interop;
@@ -24,15 +22,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 _itemsEnum = items;
             }
 
-            public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destType)
+            public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destType)
             {
                 if (destType == typeof(string) && !_itemsEnum._arraysFetched)
                 {
-                    object curValue = _itemsEnum._target.GetValue(_itemsEnum._target.TargetObject);
+                    object? curValue = _itemsEnum._target.GetValue(_itemsEnum._target.TargetObject);
                     if (curValue == value || (curValue is not null && curValue.Equals(value)))
                     {
                         bool success = false;
-                        string val = GetDisplayString(
+                        string? val = GetDisplayString(
                             (Oleaut32.IPerPropertyBrowsing)_itemsEnum._target.TargetObject,
                             _itemsEnum._target.DISPID,
                             ref success);

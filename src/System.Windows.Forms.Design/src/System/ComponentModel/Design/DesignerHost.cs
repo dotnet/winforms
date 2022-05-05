@@ -559,7 +559,7 @@ namespace System.ComponentModel.Design
                     && (oldNameIndex - 1 >= 0 && className[oldNameIndex - 1] == '.')) // and is preceeded by a period
                 {
                     // We assume the preceeding chars are the namespace and preserve it.
-                    _rootComponentClassName = className.Substring(0, oldNameIndex) + newName;
+                    _rootComponentClassName = string.Concat(className.AsSpan(0, oldNameIndex), newName);
                 }
                 else
                 {

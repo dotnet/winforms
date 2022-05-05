@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static System.Windows.Forms.PropertyGridInternal.PropertyDescriptorGridEntry;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -47,18 +48,19 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (direction == UiaCore.NavigateDirection.Parent &&
-                    _owningPropertyGrid?.SelectedGridEntry is not null &&
-                    _owningDropDownButton.Visible)
+                if (!_owningDropDownButton.Visible
+                    || _owningPropertyGrid?.SelectedGridEntry?.AccessibilityObject is not PropertyDescriptorGridEntryAccessibleObject parent)
                 {
-                    return _owningPropertyGrid.SelectedGridEntry?.AccessibilityObject;
-                }
-                else if (direction == UiaCore.NavigateDirection.PreviousSibling)
-                {
-                    return _owningPropertyGrid?.EditAccessibleObject;
+                    return null;
                 }
 
-                return base.FragmentNavigate(direction);
+                return direction switch
+                {
+                    UiaCore.NavigateDirection.Parent => parent,
+                    UiaCore.NavigateDirection.NextSibling => parent.GetNextChild(this),
+                    UiaCore.NavigateDirection.PreviousSibling => parent.GetPreviousChild(this),
+                    _ => base.FragmentNavigate(direction),
+                };
             }
 
             /// <summary>

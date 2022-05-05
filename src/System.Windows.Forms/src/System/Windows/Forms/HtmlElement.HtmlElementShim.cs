@@ -134,12 +134,15 @@ namespace System.Windows.Forms
             protected override void Dispose(bool disposing)
             {
                 base.Dispose(disposing);
-                if (_htmlElement is not null)
+                if (disposing)
                 {
-                    Marshal.FinalReleaseComObject(_htmlElement.NativeHtmlElement);
-                }
+                    if (_htmlElement?.NativeHtmlElement is not null)
+                    {
+                        Marshal.FinalReleaseComObject(_htmlElement.NativeHtmlElement);
+                    }
 
-                _htmlElement = null;
+                    _htmlElement = null;
+                }
             }
 
             protected override object GetEventSender()

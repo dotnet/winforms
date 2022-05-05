@@ -237,7 +237,7 @@ namespace System.Windows.Forms
             ///  Retrieves the number of logical pixels per inch on the
             ///  primary monitor.
             /// </summary>
-            private Point LogPixels
+            private static Point LogPixels
             {
                 get
                 {
@@ -790,7 +790,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Converts coordinates in HiMetric to pixels.  Used for ActiveX sourcing.
             /// </summary>
-            private Point HiMetricToPixel(int x, int y)
+            private static Point HiMetricToPixel(int x, int y)
             {
                 Point pt = new Point
                 {
@@ -868,7 +868,7 @@ namespace System.Windows.Forms
 
                     inPlaceSite.GetWindowContext(
                         out IOleInPlaceFrame pFrame,
-                        out IOleInPlaceUIWindow pWindow,
+                        out IOleInPlaceUIWindow? pWindow,
                         &posRect,
                         &clipRect,
                         &inPlaceFrameInfo);
@@ -1250,7 +1250,7 @@ namespace System.Windows.Forms
                 return region;
             }
 
-            private void CallParentPropertyChanged(Control control, string propName)
+            private static void CallParentPropertyChanged(Control control, string propName)
             {
                 switch (propName)
                 {
@@ -1372,7 +1372,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Converts coordinates in pixels to HiMetric.
             /// </summary>
-            private Point PixelToHiMetric(int x, int y)
+            private static Point PixelToHiMetric(int x, int y)
             {
                 Point pt = new Point
                 {

@@ -727,7 +727,8 @@ namespace System.Windows.Forms.Tests
             };
 
             listView.Groups.Add(listViewGroup);
-            listView.Items.Add(new ListViewItem("Group Item", listViewGroup));
+            listView.Items.Add(new ListViewItem("Group Item 1", listViewGroup));
+            listView.Items.Add(new ListViewItem("Group Item 2", listViewGroup));
             listView.CreateControl();
             listViewGroup.Items[0].Selected = true;
             listViewGroup.Items[0].Focused = true;
@@ -743,30 +744,43 @@ namespace System.Windows.Forms.Tests
             // The MSDN page tells us what bits of lParam to use for each of the parameters.
             // All we need to do is some bit shifting to assemble lParam
             // lParam = repeatCount | (scanCode << 16)
-            nint keyCode = (nint)Keys.Left;
+            nint keyCode = (nint)Keys.Up;
             nint lParam = 0x00000001 | keyCode << 16;
+            User32.SendMessageW(listView, User32.WM.KEYDOWN, keyCode, lParam);
             User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
 
+            keyCode = (nint)Keys.Left;
+            lParam = 0x00000001 | keyCode << 16;
+            User32.SendMessageW(listView, User32.WM.KEYDOWN, keyCode, lParam);
+            User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
+
+            Assert.Equal(ListViewGroupCollapsedState.Collapsed, listViewGroup.GetNativeCollapsedState());
             Assert.Equal(ExpandCollapseState.Collapsed, listViewGroup.AccessibilityObject.ExpandCollapseState);
 
             keyCode = (nint)Keys.Left;
             lParam = 0x00000001 | keyCode << 16;
+            User32.SendMessageW(listView, User32.WM.KEYDOWN, keyCode, lParam);
             User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
 
             // The second left key pressing should not change Collapsed state
+            Assert.Equal(ListViewGroupCollapsedState.Collapsed, listViewGroup.GetNativeCollapsedState());
             Assert.Equal(ExpandCollapseState.Collapsed, listViewGroup.AccessibilityObject.ExpandCollapseState);
 
             keyCode = (nint)Keys.Right;
             lParam = 0x00000001 | keyCode << 16;
+            User32.SendMessageW(listView, User32.WM.KEYDOWN, keyCode, lParam);
             User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
 
+            Assert.Equal(ListViewGroupCollapsedState.Expanded, listViewGroup.GetNativeCollapsedState());
             Assert.Equal(ExpandCollapseState.Expanded, listViewGroup.AccessibilityObject.ExpandCollapseState);
 
             keyCode = (nint)Keys.Right;
             lParam = 0x00000001 | keyCode << 16;
+            User32.SendMessageW(listView, User32.WM.KEYDOWN, keyCode, lParam);
             User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
 
             // The second right key pressing should not change Expanded state
+            Assert.Equal(ListViewGroupCollapsedState.Expanded, listViewGroup.GetNativeCollapsedState());
             Assert.Equal(ExpandCollapseState.Expanded, listViewGroup.AccessibilityObject.ExpandCollapseState);
         }
 

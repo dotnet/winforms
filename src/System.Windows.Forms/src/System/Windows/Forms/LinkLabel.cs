@@ -148,7 +148,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private Color IELinkColor
+        private static Color IELinkColor
         {
             get
             {
@@ -156,7 +156,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private Color IEActiveLinkColor
+        private static Color IEActiveLinkColor
         {
             get
             {
@@ -164,7 +164,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private Color IEVisitedLinkColor
+        private static Color IEVisitedLinkColor
         {
             get
             {

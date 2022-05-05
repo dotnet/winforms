@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace System.Windows.Forms
 {
-    internal class Formatter
+    internal static class Formatter
     {
         private static readonly Type stringType = typeof(string);
         private static readonly Type booleanType = typeof(bool);

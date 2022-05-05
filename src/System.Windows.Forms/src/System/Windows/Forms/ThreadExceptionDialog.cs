@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -42,36 +40,36 @@ namespace System.Windows.Forms
         private const int PICTUREHEIGHT = 64;
         private const int EXCEPTIONMESSAGEVERTICALPADDING = 4;
 
-        private readonly int scaledMaxWidth = MAXWIDTH;
-        private readonly int scaledMaxHeight = MAXHEIGHT;
-        private readonly int scaledPaddingWidth = PADDINGWIDTH;
-        private readonly int scaledPaddingHeight = PADDINGHEIGHT;
-        private readonly int scaledMaxTextWidth = MAXTEXTWIDTH;
-        private readonly int scaledMaxTextHeight = MAXTEXTHEIGHT;
-        private readonly int scaledButtonTopPadding = BUTTONTOPPADDING;
-        private readonly int scaledButtonDetailsLeftPadding = BUTTONDETAILS_LEFTPADDING;
-        private readonly int scaledMessageTopPadding = MESSAGE_TOPPADDING;
-        private readonly int scaledHeightPadding = HEIGHTPADDING;
-        private readonly int scaledButtonWidth = BUTTONWIDTH;
-        private readonly int scaledButtonHeight = BUTTONHEIGHT;
-        private readonly int scaledButtonAlignmentWidth = BUTTONALIGNMENTWIDTH;
-        private readonly int scaledButtonAlignmentPadding = BUTTONALIGNMENTPADDING;
-        private readonly int scaledDetailsWidthPadding = DETAILSWIDTHPADDING;
-        private readonly int scaledDetailsHeight = DETAILSHEIGHT;
-        private readonly int scaledPictureWidth = PICTUREWIDTH;
-        private readonly int scaledPictureHeight = PICTUREHEIGHT;
-        private readonly int scaledExceptionMessageVerticalPadding = EXCEPTIONMESSAGEVERTICALPADDING;
+        private readonly int _scaledMaxWidth = MAXWIDTH;
+        private readonly int _scaledMaxHeight = MAXHEIGHT;
+        private readonly int _scaledPaddingWidth = PADDINGWIDTH;
+        private readonly int _scaledPaddingHeight = PADDINGHEIGHT;
+        private readonly int _scaledMaxTextWidth = MAXTEXTWIDTH;
+        private readonly int _scaledMaxTextHeight = MAXTEXTHEIGHT;
+        private readonly int _scaledButtonTopPadding = BUTTONTOPPADDING;
+        private readonly int _scaledButtonDetailsLeftPadding = BUTTONDETAILS_LEFTPADDING;
+        private readonly int _scaledMessageTopPadding = MESSAGE_TOPPADDING;
+        private readonly int _scaledHeightPadding = HEIGHTPADDING;
+        private readonly int _scaledButtonWidth = BUTTONWIDTH;
+        private readonly int _scaledButtonHeight = BUTTONHEIGHT;
+        private readonly int _scaledButtonAlignmentWidth = BUTTONALIGNMENTWIDTH;
+        private readonly int _scaledButtonAlignmentPadding = BUTTONALIGNMENTPADDING;
+        private readonly int _scaledDetailsWidthPadding = DETAILSWIDTHPADDING;
+        private readonly int _scaledDetailsHeight = DETAILSHEIGHT;
+        private readonly int _scaledPictureWidth = PICTUREWIDTH;
+        private readonly int _scaledPictureHeight = PICTUREHEIGHT;
+        private readonly int _scaledExceptionMessageVerticalPadding = EXCEPTIONMESSAGEVERTICALPADDING;
 
-        private readonly PictureBox pictureBox = new PictureBox();
-        private readonly Label message = new Label();
-        private readonly Button continueButton = new Button();
-        private readonly Button quitButton = new Button();
-        private readonly Button detailsButton = new Button();
-        private readonly Button helpButton = new Button();
-        private readonly TextBox details = new TextBox();
-        private Bitmap expandImage;
-        private Bitmap collapseImage;
-        private bool detailsVisible;
+        private readonly PictureBox _pictureBox = new PictureBox();
+        private readonly Label _message = new Label();
+        private readonly Button _continueButton = new Button();
+        private readonly Button _quitButton = new Button();
+        private readonly Button _detailsButton = new Button();
+        private readonly Button _helpButton = new Button();
+        private readonly TextBox _details = new TextBox();
+        private Bitmap? _expandImage;
+        private Bitmap? _collapseImage;
+        private bool _detailsVisible;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="ThreadExceptionDialog"/> class.
@@ -80,25 +78,25 @@ namespace System.Windows.Forms
         {
             if (DpiHelper.IsScalingRequirementMet)
             {
-                scaledMaxWidth = LogicalToDeviceUnits(MAXWIDTH);
-                scaledMaxHeight = LogicalToDeviceUnits(MAXHEIGHT);
-                scaledPaddingWidth = LogicalToDeviceUnits(PADDINGWIDTH);
-                scaledPaddingHeight = LogicalToDeviceUnits(PADDINGHEIGHT);
-                scaledMaxTextWidth = LogicalToDeviceUnits(MAXTEXTWIDTH);
-                scaledMaxTextHeight = LogicalToDeviceUnits(MAXTEXTHEIGHT);
-                scaledButtonTopPadding = LogicalToDeviceUnits(BUTTONTOPPADDING);
-                scaledButtonDetailsLeftPadding = LogicalToDeviceUnits(BUTTONDETAILS_LEFTPADDING);
-                scaledMessageTopPadding = LogicalToDeviceUnits(MESSAGE_TOPPADDING);
-                scaledHeightPadding = LogicalToDeviceUnits(HEIGHTPADDING);
-                scaledButtonWidth = LogicalToDeviceUnits(BUTTONWIDTH);
-                scaledButtonHeight = LogicalToDeviceUnits(BUTTONHEIGHT);
-                scaledButtonAlignmentWidth = LogicalToDeviceUnits(BUTTONALIGNMENTWIDTH);
-                scaledButtonAlignmentPadding = LogicalToDeviceUnits(BUTTONALIGNMENTPADDING);
-                scaledDetailsWidthPadding = LogicalToDeviceUnits(DETAILSWIDTHPADDING);
-                scaledDetailsHeight = LogicalToDeviceUnits(DETAILSHEIGHT);
-                scaledPictureWidth = LogicalToDeviceUnits(PICTUREWIDTH);
-                scaledPictureHeight = LogicalToDeviceUnits(PICTUREHEIGHT);
-                scaledExceptionMessageVerticalPadding = LogicalToDeviceUnits(EXCEPTIONMESSAGEVERTICALPADDING);
+                _scaledMaxWidth = LogicalToDeviceUnits(MAXWIDTH);
+                _scaledMaxHeight = LogicalToDeviceUnits(MAXHEIGHT);
+                _scaledPaddingWidth = LogicalToDeviceUnits(PADDINGWIDTH);
+                _scaledPaddingHeight = LogicalToDeviceUnits(PADDINGHEIGHT);
+                _scaledMaxTextWidth = LogicalToDeviceUnits(MAXTEXTWIDTH);
+                _scaledMaxTextHeight = LogicalToDeviceUnits(MAXTEXTHEIGHT);
+                _scaledButtonTopPadding = LogicalToDeviceUnits(BUTTONTOPPADDING);
+                _scaledButtonDetailsLeftPadding = LogicalToDeviceUnits(BUTTONDETAILS_LEFTPADDING);
+                _scaledMessageTopPadding = LogicalToDeviceUnits(MESSAGE_TOPPADDING);
+                _scaledHeightPadding = LogicalToDeviceUnits(HEIGHTPADDING);
+                _scaledButtonWidth = LogicalToDeviceUnits(BUTTONWIDTH);
+                _scaledButtonHeight = LogicalToDeviceUnits(BUTTONHEIGHT);
+                _scaledButtonAlignmentWidth = LogicalToDeviceUnits(BUTTONALIGNMENTWIDTH);
+                _scaledButtonAlignmentPadding = LogicalToDeviceUnits(BUTTONALIGNMENTPADDING);
+                _scaledDetailsWidthPadding = LogicalToDeviceUnits(DETAILSWIDTHPADDING);
+                _scaledDetailsHeight = LogicalToDeviceUnits(DETAILSHEIGHT);
+                _scaledPictureWidth = LogicalToDeviceUnits(PICTUREWIDTH);
+                _scaledPictureHeight = LogicalToDeviceUnits(PICTUREHEIGHT);
+                _scaledExceptionMessageVerticalPadding = LogicalToDeviceUnits(EXCEPTIONMESSAGEVERTICALPADDING);
             }
 
             string messageFormat;
@@ -112,11 +110,11 @@ namespace System.Windows.Forms
                 messageText = w.Message;
                 if (w.HelpUrl is null)
                 {
-                    buttons = new Button[] { continueButton };
+                    buttons = new Button[] { _continueButton };
                 }
                 else
                 {
-                    buttons = new Button[] { continueButton, helpButton };
+                    buttons = new Button[] { _continueButton, _helpButton };
                 }
             }
             else
@@ -136,7 +134,7 @@ namespace System.Windows.Forms
                         messageFormat = SR.ExDlgErrorText;
                     }
 
-                    buttons = new Button[] { detailsButton, continueButton, quitButton };
+                    buttons = new Button[] { _detailsButton, _continueButton, _quitButton };
                 }
                 else
                 {
@@ -149,7 +147,7 @@ namespace System.Windows.Forms
                         messageFormat = SR.ExDlgContinueErrorText;
                     }
 
-                    buttons = new Button[] { detailsButton, continueButton };
+                    buttons = new Button[] { _detailsButton, _continueButton };
                 }
             }
 
@@ -189,7 +187,7 @@ namespace System.Windows.Forms
             foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
             {
                 AssemblyName name = asm.GetName();
-                string fileVer = SR.NotAvailable;
+                string? fileVer = SR.NotAvailable;
 
                 try
                 {
@@ -225,9 +223,9 @@ namespace System.Windows.Forms
 
             string detailsText = detailsTextBuilder.ToString();
 
-            Graphics g = message.CreateGraphicsInternal();
+            Graphics g = _message.CreateGraphicsInternal();
 
-            Size textSize = new Size(scaledMaxWidth - scaledPaddingWidth, int.MaxValue);
+            Size textSize = new Size(_scaledMaxWidth - _scaledPaddingWidth, int.MaxValue);
 
             if (DpiHelper.IsScalingRequirementMet && !Control.UseCompatibleTextRenderingDefault)
             {
@@ -240,23 +238,23 @@ namespace System.Windows.Forms
                 textSize = Size.Ceiling(g.MeasureString(messageText, Font, textSize.Width));
             }
 
-            textSize.Height += scaledExceptionMessageVerticalPadding;
+            textSize.Height += _scaledExceptionMessageVerticalPadding;
             g.Dispose();
 
-            if (textSize.Width < scaledMaxTextWidth)
+            if (textSize.Width < _scaledMaxTextWidth)
             {
-                textSize.Width = scaledMaxTextWidth;
+                textSize.Width = _scaledMaxTextWidth;
             }
 
-            if (textSize.Height > scaledMaxHeight)
+            if (textSize.Height > _scaledMaxHeight)
             {
-                textSize.Height = scaledMaxHeight;
+                textSize.Height = _scaledMaxHeight;
             }
 
-            int width = textSize.Width + scaledPaddingWidth;
-            int buttonTop = Math.Max(textSize.Height, scaledMaxTextHeight) + scaledPaddingHeight;
+            int width = textSize.Width + _scaledPaddingWidth;
+            int buttonTop = Math.Max(textSize.Height, _scaledMaxTextHeight) + _scaledPaddingHeight;
 
-            Form activeForm = Form.ActiveForm;
+            Form? activeForm = Form.ActiveForm;
             if (activeForm is null || activeForm.Text.Length == 0)
             {
                 Text = SR.ExDlgCaption;
@@ -266,121 +264,121 @@ namespace System.Windows.Forms
                 Text = string.Format(SR.ExDlgCaption2, activeForm.Text);
             }
 
-            AcceptButton = continueButton;
-            CancelButton = continueButton;
+            AcceptButton = _continueButton;
+            CancelButton = _continueButton;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
             StartPosition = FormStartPosition.CenterScreen;
             Icon = null;
-            ClientSize = new Size(width, buttonTop + scaledButtonTopPadding);
+            ClientSize = new Size(width, buttonTop + _scaledButtonTopPadding);
             TopMost = true;
 
-            pictureBox.Location = new Point(scaledPictureWidth / 8, scaledPictureHeight / 8);
-            pictureBox.Size = new Size(scaledPictureWidth * 3 / 4, scaledPictureHeight * 3 / 4);
-            pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            _pictureBox.Location = new Point(_scaledPictureWidth / 8, _scaledPictureHeight / 8);
+            _pictureBox.Size = new Size(_scaledPictureWidth * 3 / 4, _scaledPictureHeight * 3 / 4);
+            _pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             if (t is Security.SecurityException)
             {
-                pictureBox.Image = SystemIcons.Information.ToBitmap();
+                _pictureBox.Image = SystemIcons.Information.ToBitmap();
             }
             else
             {
-                pictureBox.Image = SystemIcons.Error.ToBitmap();
+                _pictureBox.Image = SystemIcons.Error.ToBitmap();
             }
 
-            Controls.Add(pictureBox);
-            message.SetBounds(scaledPictureWidth,
-                              scaledMessageTopPadding + (scaledMaxTextHeight - Math.Min(textSize.Height, scaledMaxTextHeight)) / 2,
+            Controls.Add(_pictureBox);
+            _message.SetBounds(_scaledPictureWidth,
+                              _scaledMessageTopPadding + (_scaledMaxTextHeight - Math.Min(textSize.Height, _scaledMaxTextHeight)) / 2,
                               textSize.Width, textSize.Height);
-            message.Text = messageText;
-            Controls.Add(message);
+            _message.Text = messageText;
+            Controls.Add(_message);
 
-            continueButton.Text = SR.ExDlgContinue;
-            continueButton.FlatStyle = FlatStyle.Standard;
-            continueButton.DialogResult = DialogResult.Cancel;
+            _continueButton.Text = SR.ExDlgContinue;
+            _continueButton.FlatStyle = FlatStyle.Standard;
+            _continueButton.DialogResult = DialogResult.Cancel;
 
-            quitButton.Text = SR.ExDlgQuit;
-            quitButton.FlatStyle = FlatStyle.Standard;
-            quitButton.DialogResult = DialogResult.Abort;
+            _quitButton.Text = SR.ExDlgQuit;
+            _quitButton.FlatStyle = FlatStyle.Standard;
+            _quitButton.DialogResult = DialogResult.Abort;
 
-            helpButton.Text = SR.ExDlgHelp;
-            helpButton.FlatStyle = FlatStyle.Standard;
-            helpButton.DialogResult = DialogResult.Yes;
+            _helpButton.Text = SR.ExDlgHelp;
+            _helpButton.FlatStyle = FlatStyle.Standard;
+            _helpButton.DialogResult = DialogResult.Yes;
 
-            detailsButton.Text = SR.ExDlgShowDetails;
-            detailsButton.FlatStyle = FlatStyle.Standard;
-            detailsButton.Click += new EventHandler(DetailsClick);
+            _detailsButton.Text = SR.ExDlgShowDetails;
+            _detailsButton.FlatStyle = FlatStyle.Standard;
+            _detailsButton.Click += new EventHandler(DetailsClick);
 
-            Button b = null;
+            Button? b = null;
             int startIndex = 0;
 
             if (detailAnchor)
             {
-                b = detailsButton;
+                b = _detailsButton;
 
-                expandImage = DpiHelper.GetBitmapFromIcon(GetType(), DownBitmapName);
-                collapseImage = DpiHelper.GetBitmapFromIcon(GetType(), UpBitmapName);
+                _expandImage = DpiHelper.GetBitmapFromIcon(GetType(), DownBitmapName);
+                _collapseImage = DpiHelper.GetBitmapFromIcon(GetType(), UpBitmapName);
 
                 if (DpiHelper.IsScalingRequirementMet)
                 {
-                    ScaleBitmapLogicalToDevice(ref expandImage);
-                    ScaleBitmapLogicalToDevice(ref collapseImage);
+                    ScaleBitmapLogicalToDevice(ref _expandImage);
+                    ScaleBitmapLogicalToDevice(ref _collapseImage);
                 }
 
-                b.SetBounds(scaledButtonDetailsLeftPadding, buttonTop, scaledButtonWidth, scaledButtonHeight);
-                b.Image = expandImage;
+                b.SetBounds(_scaledButtonDetailsLeftPadding, buttonTop, _scaledButtonWidth, _scaledButtonHeight);
+                b.Image = _expandImage;
                 b.ImageAlign = ContentAlignment.MiddleLeft;
                 Controls.Add(b);
                 startIndex = 1;
             }
 
-            int buttonLeft = (width - scaledButtonDetailsLeftPadding - ((buttons.Length - startIndex) * scaledButtonAlignmentWidth - scaledButtonAlignmentPadding));
+            int buttonLeft = (width - _scaledButtonDetailsLeftPadding - ((buttons.Length - startIndex) * _scaledButtonAlignmentWidth - _scaledButtonAlignmentPadding));
 
             for (int i = startIndex; i < buttons.Length; i++)
             {
                 b = buttons[i];
-                b.SetBounds(buttonLeft, buttonTop, scaledButtonWidth, scaledButtonHeight);
+                b.SetBounds(buttonLeft, buttonTop, _scaledButtonWidth, _scaledButtonHeight);
                 Controls.Add(b);
-                buttonLeft += scaledButtonAlignmentWidth;
+                buttonLeft += _scaledButtonAlignmentWidth;
             }
 
-            details.Text = detailsText;
-            details.ScrollBars = ScrollBars.Both;
-            details.Multiline = true;
-            details.ReadOnly = true;
-            details.WordWrap = false;
-            details.TabStop = false;
-            details.AcceptsReturn = false;
+            _details.Text = detailsText;
+            _details.ScrollBars = ScrollBars.Both;
+            _details.Multiline = true;
+            _details.ReadOnly = true;
+            _details.WordWrap = false;
+            _details.TabStop = false;
+            _details.AcceptsReturn = false;
 
-            details.SetBounds(scaledButtonDetailsLeftPadding, buttonTop + scaledButtonTopPadding, width - scaledDetailsWidthPadding, scaledDetailsHeight);
-            details.Visible = detailsVisible;
-            Controls.Add(details);
+            _details.SetBounds(_scaledButtonDetailsLeftPadding, buttonTop + _scaledButtonTopPadding, width - _scaledDetailsWidthPadding, _scaledDetailsHeight);
+            _details.Visible = _detailsVisible;
+            Controls.Add(_details);
             if (DpiHelper.IsScalingRequirementMet)
             {
                 DpiChanged += ThreadExceptionDialog_DpiChanged;
             }
         }
 
-        private void ThreadExceptionDialog_DpiChanged(object sender, DpiChangedEventArgs e)
+        private void ThreadExceptionDialog_DpiChanged(object? sender, DpiChangedEventArgs e)
         {
-            if (expandImage is not null)
+            if (_expandImage is not null)
             {
-                expandImage.Dispose();
+                _expandImage.Dispose();
             }
 
-            expandImage = DpiHelper.GetBitmapFromIcon(GetType(), DownBitmapName);
+            _expandImage = DpiHelper.GetBitmapFromIcon(GetType(), DownBitmapName);
 
-            if (collapseImage is not null)
+            if (_collapseImage is not null)
             {
-                collapseImage.Dispose();
+                _collapseImage.Dispose();
             }
 
-            collapseImage = DpiHelper.GetBitmapFromIcon(GetType(), UpBitmapName);
+            _collapseImage = DpiHelper.GetBitmapFromIcon(GetType(), UpBitmapName);
 
-            ScaleBitmapLogicalToDevice(ref expandImage);
-            ScaleBitmapLogicalToDevice(ref collapseImage);
+            ScaleBitmapLogicalToDevice(ref _expandImage);
+            ScaleBitmapLogicalToDevice(ref _collapseImage);
 
-            detailsButton.Image = detailsVisible ? collapseImage : expandImage;
+            _detailsButton.Image = _detailsVisible ? _collapseImage : _expandImage;
         }
 
         /// <summary>
@@ -397,7 +395,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler AutoSizeChanged
+        new public event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -406,21 +404,21 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Called when the details button is clicked.
         /// </summary>
-        private void DetailsClick(object sender, EventArgs eventargs)
+        private void DetailsClick(object? sender, EventArgs eventargs)
         {
-            int delta = details.Height + scaledHeightPadding;
-            if (detailsVisible)
+            int delta = _details.Height + _scaledHeightPadding;
+            if (_detailsVisible)
             {
                 delta = -delta;
             }
 
             Height += delta;
-            detailsVisible = !detailsVisible;
-            details.Visible = detailsVisible;
-            detailsButton.Image = detailsVisible ? collapseImage : expandImage;
+            _detailsVisible = !_detailsVisible;
+            _details.Visible = _detailsVisible;
+            _detailsButton.Image = _detailsVisible ? _collapseImage : _expandImage;
         }
 
-        private static string Trim(string s)
+        private static string? Trim(string s)
         {
             if (s is null)
             {

@@ -406,7 +406,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        internal string GetNameForControl(Control ctl)
+        internal static string GetNameForControl(Control ctl)
         {
             string name = (ctl.Site is not null) ? ctl.Site.Name : ctl.Name;
             return name ?? "";

@@ -128,11 +128,11 @@ namespace System.Windows.Forms
         private ListViewGroup? _defaultGroup;
         private ListViewGroup? _focusedGroup;
 
-        // Invariant: the table always contains all Items in the ListView, and maps IDs -> Items.
+        // Invariant: the dictionary always contains all Items in the ListView, and maps IDs -> Items.
         // listItemsArray is null if the handle is created; otherwise, it contains all Items.
         // We do not try to sort listItemsArray as items are added, but during a handle recreate
         // we will make sure we get the items in the same order the ListView displays them.
-        private readonly Hashtable _listItemsTable = new Hashtable(); // elements are ListViewItem's
+        private readonly Dictionary<int, ListViewItem> _listItemsById = new();
         private List<ListViewItem>? _listViewItems = new();
 
         private Size _tileSize = Size.Empty;
@@ -1546,9 +1546,9 @@ namespace System.Windows.Forms
                         {
                             _listItemSorter = new IconComparer(_sorting);
                         }
-                        else if (_listItemSorter is IconComparer)
+                        else if (_listItemSorter is IconComparer iconComparer)
                         {
-                            ((IconComparer)_listItemSorter).SortOrder = _sorting;
+                            iconComparer.SortOrder = _sorting;
                         }
                     }
                     else if (value == SortOrder.None)
@@ -2504,7 +2504,7 @@ namespace System.Windows.Forms
             Debug.Assert(_listItemSorter is not null, "null sorter!");
             if (_listItemSorter is not null)
             {
-                return _listItemSorter.Compare(_listItemsTable[(int)lparam1], _listItemsTable[(int)lparam2]);
+                return _listItemSorter.Compare(_listItemsById[(int)lparam1], _listItemsById[(int)lparam2]);
             }
             else
             {
@@ -2993,7 +2993,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DeleteFileName(string? fileName)
+        private static void DeleteFileName(string? fileName)
         {
             if (!string.IsNullOrEmpty(fileName))
             {
@@ -4108,7 +4108,6 @@ namespace System.Windows.Forms
             }
 
             // loop through the items and give them id's so we can identify them later.
-            //
             for (int i = 0; i < items.Length; i++)
             {
                 ListViewItem item = items[i];
@@ -4119,16 +4118,14 @@ namespace System.Windows.Forms
                 }
 
                 // create an ID..
-                //
                 int itemID = GenerateUniqueID();
-                Debug.Assert(!_listItemsTable.ContainsKey(itemID), "internal hash table inconsistent -- inserting item, but it's already in the hash table");
-                _listItemsTable.Add(itemID, item);
+                Debug.Assert(!_listItemsById.ContainsKey(itemID), "internal hash table inconsistent -- inserting item, but it's already in the hash table");
+                _listItemsById.Add(itemID, item);
 
                 _itemCount++;
                 item.Host(this, itemID, -1);
 
                 // if there's no handle created, just ad them to our list items array.
-                //
                 if (!IsHandleCreated)
                 {
                     Debug.Assert(_listViewItems is not null, "listItemsArray is null, but the handle isn't created");
@@ -5850,7 +5847,7 @@ namespace System.Windows.Forms
             Debug.Assert(retval != 0, "LVM_SETTILEVIEWINFO failed");
         }
 
-        private void WmNmClick(ref Message m)
+        private void WmNmClick()
         {
             // If we're checked, hittest to see if we're
             // on the check mark
@@ -5892,7 +5889,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void WmNmDblClick(ref Message m)
+        private void WmNmDblClick()
         {
             // If we're checked, hittest to see if we're
             // on the item
@@ -6630,7 +6627,7 @@ namespace System.Windows.Forms
                     }
 
                 case (int)NM.CLICK:
-                    WmNmClick(ref m);
+                    WmNmClick();
                     // FALL THROUGH //
                     goto case (int)NM.RCLICK;
 
@@ -6656,7 +6653,7 @@ namespace System.Windows.Forms
                     break;
 
                 case (int)NM.DBLCLK:
-                    WmNmDblClick(ref m);
+                    WmNmDblClick();
                     // FALL THROUGH //
                     goto case (int)NM.RDBLCLK;
 
@@ -6914,22 +6911,22 @@ namespace System.Windows.Forms
                 case User32.WM.KEYUP:
                     int key = (int)m.WParamInternal;
 
+                    // User can collapse/expand a group using the keyboard by focusing the group header and using left/right
                     if (GroupsDisplayed && (key is User32.VK.LEFT or User32.VK.RIGHT) && SelectedItems.Count > 0)
                     {
                         ListViewGroup group = SelectedItems[0].Group;
 
-                        if (group is null || group.CollapsedState is ListViewGroupCollapsedState.Default
-                            || (key == User32.VK.LEFT && group.CollapsedState is ListViewGroupCollapsedState.Collapsed)
-                            || (key == User32.VK.RIGHT && group.CollapsedState is ListViewGroupCollapsedState.Expanded))
+                        if (group is null || group.CollapsedState is ListViewGroupCollapsedState.Default)
                         {
                             break;
                         }
 
-                        group.SetCollapsedStateInternal(group.CollapsedState == ListViewGroupCollapsedState.Expanded
-                                                ? ListViewGroupCollapsedState.Collapsed
-                                                : ListViewGroupCollapsedState.Expanded);
-
-                        OnGroupCollapsedStateChanged(new ListViewGroupEventArgs(Groups.IndexOf(group)));
+                        ListViewGroupCollapsedState nativeState = group.GetNativeCollapsedState();
+                        if (nativeState != group.CollapsedState)
+                        {
+                            group.SetCollapsedStateInternal(nativeState);
+                            OnGroupCollapsedStateChanged(new ListViewGroupEventArgs(Groups.IndexOf(group)));
+                        }
                     }
 
                     break;

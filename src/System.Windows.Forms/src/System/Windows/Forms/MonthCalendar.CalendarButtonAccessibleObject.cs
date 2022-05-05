@@ -62,7 +62,7 @@ namespace System.Windows.Forms
                 RaiseMouseClick(x, y);
             }
 
-            private void RaiseMouseClick(int x, int y)
+            private static void RaiseMouseClick(int x, int y)
             {
                 Point previousPosition = new();
                 BOOL setOldCursorPos = User32.GetPhysicalCursorPos(ref previousPosition);
@@ -84,7 +84,7 @@ namespace System.Windows.Forms
 
             public override AccessibleRole Role => AccessibleRole.PushButton;
 
-            private unsafe void SendMouseInput(int x, int y, User32.MOUSEEVENTF flags)
+            private static unsafe void SendMouseInput(int x, int y, User32.MOUSEEVENTF flags)
             {
                 if ((flags & User32.MOUSEEVENTF.ABSOLUTE) != 0)
                 {

@@ -122,7 +122,7 @@ namespace System.Windows.Forms
 
         IEnumerator IEnumerable.GetEnumerator() => _innerList.GetEnumerator();
 
-        private void EnsureNotOwned(TableLayoutStyle style)
+        private static void EnsureNotOwned(TableLayoutStyle style)
         {
             if (style.Owner is not null)
             {

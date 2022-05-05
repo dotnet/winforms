@@ -755,6 +755,38 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void TextBoxBase_Dispose_ClearsTextProvider()
+        {
+            using TextBox control = new();
+            control.CreateControl();
+            TextBoxBase.TextBoxBaseUiaTextProvider provider = control.AccessibilityObject.TestAccessor().Dynamic._textProvider;
+
+            Assert.IsType<TextBoxBase.TextBoxBaseUiaTextProvider>(provider);
+
+            control.Dispose();
+            provider = control.AccessibilityObject.TestAccessor().Dynamic._textProvider;
+
+            Assert.Null(provider);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_RecreateControl_DoesntClearTextProvider()
+        {
+            using TextBox control = new();
+            control.CreateControl();
+            TextBoxBase.TextBoxBaseUiaTextProvider provider = control.AccessibilityObject.TestAccessor().Dynamic._textProvider;
+
+            Assert.IsType<TextBoxBase.TextBoxBaseUiaTextProvider>(provider);
+
+            control.RecreateHandleCore();
+            provider = control.AccessibilityObject.TestAccessor().Dynamic._textProvider;
+
+            // The control's accessible object and its providers shouldn't be cleaned when recreating of the control
+            // because this object and all its providers will continue to be used. 
+            Assert.IsType<TextBoxBase.TextBoxBaseUiaTextProvider>(provider);
+        }
+
+        [WinFormsFact]
         public void TextBoxBase_CanUndo_GetDisposed_ThrowsObjectDisposedException()
         {
             using var control = new TextBox();

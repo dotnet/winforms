@@ -426,7 +426,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Helper Function to get Images from types.
         /// </summary>
-        private Bitmap GetImage(string name)
+        private static Bitmap GetImage(string name)
         {
             Bitmap image = null;
             if (name.StartsWith("new"))

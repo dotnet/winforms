@@ -309,11 +309,11 @@ namespace System.Windows.Forms
 
                 if (value)
                 {
-                    DropTargetManager.EnsureRegistered(this);
+                    DropTargetManager.EnsureRegistered();
                 }
                 else
                 {
-                    DropTargetManager.EnsureUnRegistered(this);
+                    DropTargetManager.EnsureUnRegistered();
                 }
             }
         }
@@ -345,11 +345,11 @@ namespace System.Windows.Forms
                         ItemReorderDropSource = dragDropHandler;
                         ItemReorderDropTarget = dragDropHandler;
 
-                        DropTargetManager.EnsureRegistered(this);
+                        DropTargetManager.EnsureRegistered();
                     }
                     else
                     {
-                        DropTargetManager.EnsureUnRegistered(this);
+                        DropTargetManager.EnsureUnRegistered();
                     }
                 }
             }
@@ -2139,8 +2139,6 @@ namespace System.Windows.Forms
                     }
 
                     ToolStripManager.ToolStrips.Remove(this);
-
-                    _imageList?.Dispose();
                 }
                 finally
                 {
@@ -2555,7 +2553,7 @@ namespace System.Windows.Forms
             return maxSize;
         }
 
-        internal static Size GetPreferredSizeVertical(IArrangedElement container, Size proposedConstraints)
+        internal static Size GetPreferredSizeVertical(IArrangedElement container)
         {
             Size maxSize = Size.Empty;
             bool requiresOverflow = false;
@@ -2887,10 +2885,6 @@ namespace System.Windows.Forms
                 SetToolStripState(STATE_LOCATIONCHANGING, false);
                 base.SetBoundsCore(x, y, width, height, specified);
             }
-        }
-
-        internal void PaintParentRegion(Graphics g, Region region)
-        {
         }
 
         internal bool ProcessCmdKeyInternal(ref Message m, Keys keyData)
@@ -3481,7 +3475,7 @@ namespace System.Windows.Forms
         {
             if ((AllowDrop || AllowItemReorder) && (DropTargetManager is not null))
             {
-                DropTargetManager.EnsureRegistered(this);
+                DropTargetManager.EnsureRegistered();
             }
 
             // calling control's (in base) version AFTER we register our DropTarget, so it will
@@ -3494,7 +3488,7 @@ namespace System.Windows.Forms
             if (DropTargetManager is not null)
             {
                 // Make sure we unregister ourselves as a drop target
-                DropTargetManager.EnsureUnRegistered(this);
+                DropTargetManager.EnsureUnRegistered();
             }
 
             base.OnHandleDestroyed(e);

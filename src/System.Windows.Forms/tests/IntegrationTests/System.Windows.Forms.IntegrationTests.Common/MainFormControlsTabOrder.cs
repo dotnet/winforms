@@ -28,6 +28,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         RichTextBoxesButton,
         PictureBoxesButton,
         FormBorderStylesButton,
+        FormShowInTaskbarButton,
         ToggleIconButton,
         ErrorProviderButton,
         TaskDialogButton,
@@ -36,6 +37,8 @@ namespace System.Windows.Forms.IntegrationTests.Common
         TrackBarsButton,
         ScrollBarsButton,
         ToolTipsButton,
+        AnchorLayoutButton,
+        DockLayoutButton,
         DragAndDrop
     }
 }

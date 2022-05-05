@@ -500,7 +500,7 @@ namespace System.Windows.Forms
                 return base.RaiseAutomationEvent(eventId);
             }
 
-            internal override bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object oldValue, object newValue)
+            internal override bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object? oldValue, object? newValue)
             {
                 if (!Owner.IsHandleCreated)
                 {

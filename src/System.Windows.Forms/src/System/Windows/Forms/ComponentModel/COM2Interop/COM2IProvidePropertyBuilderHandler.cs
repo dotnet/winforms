@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using static Interop;
 
@@ -13,7 +14,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     {
         public override Type Interface => typeof(VSSDK.IProvidePropertyBuilder);
 
-        private unsafe bool GetBuilderGuidString(VSSDK.IProvidePropertyBuilder target, Ole32.DispatchID dispid, ref string? strGuidBldr, VSSDK.CTLBLDTYPE* bldrType)
+        private unsafe bool GetBuilderGuidString(VSSDK.IProvidePropertyBuilder target, Ole32.DispatchID dispid, [NotNullWhen(true)] ref string? strGuidBldr, VSSDK.CTLBLDTYPE* bldrType)
         {
             BOOL valid = BOOL.FALSE;
             var pGuidBldr = new string[1];

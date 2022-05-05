@@ -44,7 +44,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (!(value is Form) || !((Form)value).IsMdiChild)
+                if (value is not Form form || !form.IsMdiChild)
                 {
                     throw new ArgumentException(SR.MDIChildAddToNonMDIParent, nameof(value));
                 }
@@ -54,7 +54,7 @@ namespace System.Windows.Forms
                     throw new ArgumentException(SR.AddDifferentThreads, nameof(value));
                 }
 
-                owner.children.Add((Form)value);
+                owner._children.Add(form);
                 base.Add(value);
             }
 
@@ -63,7 +63,11 @@ namespace System.Windows.Forms
             /// </summary>
             public override void Remove(Control value)
             {
-                owner.children.Remove(value);
+                if (value is Form form)
+                {
+                    owner._children.Remove(form);
+                }
+
                 base.Remove(value);
             }
         }

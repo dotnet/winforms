@@ -284,7 +284,7 @@ namespace System.ComponentModel.Design
             remove => Events.RemoveHandler(s_eventFormDeactivate, value);
         }
 
-        private void AddToCategories(LineInfo lineInfo, ListDictionary categories)
+        private static void AddToCategories(LineInfo lineInfo, ListDictionary categories)
         {
             string categoryName = lineInfo.Item.Category;
             if (categoryName is null)

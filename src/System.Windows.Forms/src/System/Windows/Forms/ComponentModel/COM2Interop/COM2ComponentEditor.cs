@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
@@ -16,11 +14,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     {
         public unsafe static bool NeedsComponentEditor(object obj)
         {
-            if (obj is Oleaut32.IPerPropertyBrowsing)
+            if (obj is Oleaut32.IPerPropertyBrowsing perPropertyBrowsing)
             {
                 // check for a property page
                 Guid guid = Guid.Empty;
-                HRESULT hr = ((Oleaut32.IPerPropertyBrowsing)obj).MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
+                HRESULT hr = perPropertyBrowsing.MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
                 if ((hr == HRESULT.S_OK) && !guid.Equals(Guid.Empty))
                 {
                     return true;
@@ -52,16 +50,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return false;
         }
 
-        public unsafe override bool EditComponent(ITypeDescriptorContext context, object obj, IWin32Window parent)
+        public unsafe override bool EditComponent(ITypeDescriptorContext? context, object obj, IWin32Window? parent)
         {
             IntPtr handle = (parent is null ? IntPtr.Zero : parent.Handle);
 
             // try to get the page guid
-            if (obj is Oleaut32.IPerPropertyBrowsing)
+            if (obj is Oleaut32.IPerPropertyBrowsing perPropertyBrowsing)
             {
                 // check for a property page
                 Guid guid = Guid.Empty;
-                HRESULT hr = ((Oleaut32.IPerPropertyBrowsing)obj).MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
+                HRESULT hr = perPropertyBrowsing.MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
                 if (hr == HRESULT.S_OK & !guid.Equals(Guid.Empty))
                 {
                     IntPtr pUnk = Marshal.GetIUnknownForObject(obj);
@@ -129,7 +127,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     string errString = SR.ErrorPropertyPageFailed;
 
-                    IUIService uiSvc = (context is not null) ? ((IUIService)context.GetService(typeof(IUIService))) : null;
+                    IUIService? uiSvc = (IUIService?)context?.GetService(typeof(IUIService));
 
                     if (uiSvc is null)
                     {

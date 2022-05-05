@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  This class provides static methods to create, activate and deactivate the theming scope.
     /// </summary>
-    internal class ThemingScope
+    internal static class ThemingScope
     {
         private static Kernel32.ACTCTXW s_enableThemingActivationContext;
         private static IntPtr s_hActCtx;

@@ -10,6 +10,7 @@ using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {
+    [UseDefaultXunitCulture]
     public class MonthCalendar_CalendarCellAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]

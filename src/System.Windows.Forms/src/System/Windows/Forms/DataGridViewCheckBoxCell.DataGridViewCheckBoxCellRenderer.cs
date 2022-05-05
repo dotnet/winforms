@@ -9,13 +9,9 @@ namespace System.Windows.Forms
 {
     public partial class DataGridViewCheckBoxCell
     {
-        private class DataGridViewCheckBoxCellRenderer
+        private static class DataGridViewCheckBoxCellRenderer
         {
             private static VisualStyleRenderer? s_visualStyleRenderer;
-
-            private DataGridViewCheckBoxCellRenderer()
-            {
-            }
 
             public static VisualStyleRenderer CheckBoxRenderer
             {

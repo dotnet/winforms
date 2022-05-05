@@ -66,7 +66,7 @@ namespace System.Windows.Forms.Design
             return _sortOrder == SortOrder.Descending ? -retVal : retVal;
         }
 
-        public int GetHashCode(MaskDescriptor maskDescriptor)
+        public static int GetHashCode(MaskDescriptor maskDescriptor)
         {
             if (maskDescriptor != null)
             {
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.Design
             return 0;
         }
 
-        public bool Equals(MaskDescriptor maskDescriptorA, MaskDescriptor maskDescriptorB)
+        public static bool Equals(MaskDescriptor maskDescriptorA, MaskDescriptor maskDescriptorB)
         {
             if (!MaskDescriptor.IsValidMaskDescriptor(maskDescriptorA) || !MaskDescriptor.IsValidMaskDescriptor(maskDescriptorB))
             {

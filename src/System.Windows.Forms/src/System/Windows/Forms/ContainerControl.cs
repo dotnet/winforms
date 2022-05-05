@@ -1371,7 +1371,7 @@ namespace System.Windows.Forms
             return SelectNextControl(_activeControl, forward, tabStopOnly: true, nested: true, wrap: false);
         }
 
-        private ScrollableControl FindScrollableParent(Control ctl)
+        private static ScrollableControl FindScrollableParent(Control ctl)
         {
             Control current = ctl.ParentInternal;
             while (current is not null && current is not ScrollableControl)

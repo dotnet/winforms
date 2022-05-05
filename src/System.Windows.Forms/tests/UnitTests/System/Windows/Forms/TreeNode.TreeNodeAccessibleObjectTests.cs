@@ -219,27 +219,18 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void TreeNodeAccessibleObject_GetPropertyValue_ControlType_IsCheckBox_IfNodesAreCheckBoxes()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeNodeAccessibleObject_GetPropertyValue_ControlType_IsTreeItem(bool checkBoxes)
         {
-            using TreeView control = new() { CheckBoxes = true };
-            TreeNode node = new(control);
-
-            UiaCore.UIA expected = UiaCore.UIA.CheckBoxControlTypeId;
-
-            Assert.Equal(expected, node.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
-            Assert.False(control.IsHandleCreated);
-        }
-
-        [WinFormsFact]
-        public void TreeNodeAccessibleObject_GetPropertyValue_ControlType_IsTreeItem_IfNodesAreNotCheckBoxes()
-        {
-            using TreeView control = new() { CheckBoxes = false };
+            using TreeView control = new() { CheckBoxes = checkBoxes };
             TreeNode node = new(control);
 
             UiaCore.UIA expected = UiaCore.UIA.TreeItemControlTypeId;
+            object actual = node.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
 
-            Assert.Equal(expected, node.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+            Assert.Equal(expected, actual);
             Assert.False(control.IsHandleCreated);
         }
 

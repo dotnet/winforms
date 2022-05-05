@@ -41,6 +41,75 @@ namespace System.Windows.Forms.UITests
             });
         }
 
+        [WinFormsFact]
+        public async Task ListView_Group_NavigateKeyboard_SucceedsAsync()
+        {
+            await RunTestAsync(async (form, listView) =>
+            {
+                var group = new ListViewGroup($"Group 1", HorizontalAlignment.Left) { CollapsedState = ListViewGroupCollapsedState.Expanded };
+                var item1 = new ListViewItem("g1-1") { Group = group };
+                var item2 = new ListViewItem("g1-2") { Group = group };
+                var item3 = new ListViewItem("g1-3") { Group = group };
+
+                listView.Groups.Add(group);
+                listView.Items.AddRange(new[] { item1, item2, item3 });
+                listView.Focus();
+
+                bool collapsedStateChangedFired = false;
+                listView.GroupCollapsedStateChanged += (sender, e) => collapsedStateChangedFired = true;
+
+                item1.Selected = true;
+
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
+                Assert.False(item1.Selected);
+                Assert.True(item2.Selected);
+                Assert.False(item3.Selected);
+                Assert.False(collapsedStateChangedFired);
+
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
+                Assert.False(item1.Selected);
+                Assert.False(item2.Selected);
+                Assert.True(item3.Selected);
+                Assert.False(collapsedStateChangedFired);
+
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
+                Assert.False(item1.Selected);
+                Assert.False(item2.Selected);
+                Assert.True(item3.Selected);
+                Assert.False(collapsedStateChangedFired);
+
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT).KeyPress(VirtualKeyCode.LEFT));
+                Assert.True(item1.Selected);
+                Assert.False(item2.Selected);
+                Assert.False(item3.Selected);
+                Assert.False(collapsedStateChangedFired);
+
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT));
+                Assert.True(item1.Selected);
+                Assert.False(item2.Selected);
+                Assert.False(item3.Selected);
+                Assert.False(collapsedStateChangedFired);
+
+                // Selects header, which selects all items in group
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.UP));
+                Assert.True(item2.Selected);
+                Assert.True(item2.Selected);
+                Assert.True(item2.Selected);
+                Assert.False(collapsedStateChangedFired);
+
+                // Collapse group
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT).KeyPress(VirtualKeyCode.UP).KeyPress(VirtualKeyCode.LEFT));
+                Assert.Equal(ListViewGroupCollapsedState.Collapsed, group.CollapsedState);
+                Assert.True(collapsedStateChangedFired);
+
+                // Expand group
+                collapsedStateChangedFired = false;
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.UP).KeyPress(VirtualKeyCode.RIGHT));
+                Assert.True(collapsedStateChangedFired);
+                Assert.Equal(ListViewGroupCollapsedState.Expanded, group.CollapsedState);
+            });
+        }
+
         [WinFormsTheory]
         [InlineData(2, 2, 150, 150, 0, 1, (int)NavigateDirection.FirstChild)]
         [InlineData(4, 3, 150, 150, 0, 3, (int)NavigateDirection.LastChild)]

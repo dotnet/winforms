@@ -1969,7 +1969,7 @@ namespace System.Windows.Forms
                 }
 
                 _handle = User32.SendMessageW(tv, (User32.WM)TVM.INSERTITEMW, 0, ref tvis);
-                tv._nodeTable[_handle] = this;
+                tv._nodesByHandle[_handle] = this;
 
                 // Lets update the Lparam to the Handle.
                 UpdateNode(TVIF.PARAM);
@@ -2068,7 +2068,7 @@ namespace System.Windows.Forms
                     User32.SendMessageW(tv, (User32.WM)TVM.DELETEITEM, 0, _handle);
                 }
 
-                treeView._nodeTable.Remove(_handle);
+                treeView._nodesByHandle.Remove(_handle);
                 _handle = IntPtr.Zero;
             }
 

@@ -10,7 +10,7 @@ namespace System.Windows.Forms
 {
     public partial class DataGridViewComboBoxCell
     {
-        private class DataGridViewComboBoxCellRenderer
+        private static class DataGridViewComboBoxCellRenderer
         {
             [ThreadStatic]
             private static VisualStyleRenderer? t_visualStyleRenderer;
@@ -18,10 +18,6 @@ namespace System.Windows.Forms
             private static readonly VisualStyleElement s_comboBoxDropDownButtonRight = VisualStyleElement.ComboBox.DropDownButtonRight.Normal;
             private static readonly VisualStyleElement s_comboBoxDropDownButtonLeft = VisualStyleElement.ComboBox.DropDownButtonLeft.Normal;
             private static readonly VisualStyleElement s_comboBoxReadOnlyButton = VisualStyleElement.ComboBox.ReadOnlyButton.Normal;
-
-            private DataGridViewComboBoxCellRenderer()
-            {
-            }
 
             public static VisualStyleRenderer VisualStyleRenderer
             {

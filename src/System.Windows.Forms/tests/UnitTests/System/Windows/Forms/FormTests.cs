@@ -975,6 +975,64 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void Form_Restore_RestoresPosition_User()
+        {
+            if (!OsVersion.IsWindows11_OrGreater)
+            {
+                return;
+            }
+
+            using var form = new Form();
+            form.Show();
+
+            form.Location = new Point(10, 11);
+            form.Size = new Size(200, 210);
+
+            User32.SendMessageW(form, User32.WM.SYSCOMMAND, (nint)User32.SC.MAXIMIZE, 0);
+
+            form.Location = new Point(20, 21);
+            form.Size = new Size(300, 310);
+
+            Assert.Equal(FormWindowState.Maximized, form.WindowState);
+            Assert.NotEqual(new Point(20, 21), form.Location);
+            Assert.NotEqual(new Size(300, 310), form.Size);
+
+            User32.SendMessageW(form, User32.WM.SYSCOMMAND, (nint)User32.SC.RESTORE, 0);
+
+            Assert.Equal(new Point(20, 21), form.Location);
+            Assert.Equal(new Size(300, 310), form.Size);
+        }
+
+        [WinFormsFact]
+        public void Form_Restore_RestoresPosition_WindowState()
+        {
+            if (!OsVersion.IsWindows11_OrGreater)
+            {
+                return;
+            }
+
+            using var form = new Form();
+            form.Show();
+
+            form.Location = new Point(10, 11);
+            form.Size = new Size(200, 210);
+
+            form.WindowState = FormWindowState.Maximized;
+
+            form.Location = new Point(20, 21);
+            form.Size = new Size(300, 310);
+
+            Assert.Equal(FormWindowState.Maximized, form.WindowState);
+            Assert.NotEqual(new Point(20, 21), form.Location);
+            Assert.NotEqual(new Size(300, 310), form.Size);
+
+            form.WindowState = FormWindowState.Normal;
+
+            Assert.Equal(new Point(20, 21), form.Location);
+            Assert.Equal(new Size(300, 310), form.Size);
+        }
+
         [WinFormsTheory]
         [InlineData(false, true)]
         [InlineData(true, false)]
@@ -1760,6 +1818,36 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedStyleChangedCallCount, invalidatedCallCount);
             Assert.Equal(expectedStyleChangedCallCount, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Form_ShowInTaskbar_SetFalse_GetReturnsExpected()
+        {
+            // Regression test for https://github.com/dotnet/winforms/issues/6421
+
+            using var form = new Form
+            {
+                ShowInTaskbar = true,
+            };
+
+            DialogResult expectedDialogResult = DialogResult.OK;
+
+            form.Load += (object sender, EventArgs e) =>
+            {
+                IntPtr formHandle = form.Handle;
+                form.ShowInTaskbar = false;
+
+                Assert.True(form.IsHandleCreated);
+                Assert.NotEqual(formHandle, form.Handle);
+            };
+
+            form.Shown += (object sender, EventArgs e) =>
+            {
+                form.DialogResult = expectedDialogResult;
+            };
+
+            Assert.Equal(expectedDialogResult, form.ShowDialog());
+            Assert.Equal(expectedDialogResult, form.DialogResult);
         }
 
         public static IEnumerable<object[]> Visible_Set_TestData()

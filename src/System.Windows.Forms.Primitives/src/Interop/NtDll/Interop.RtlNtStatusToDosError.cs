@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 internal partial class Interop
 {
-    internal partial class NtDll
+    internal static partial class NtDll
     {
         // https://docs.microsoft.com/windows/win32/api/winternl/nf-winternl-rtlntstatustodoserror
         [DllImport(Libraries.NtDll, ExactSpelling = true)]

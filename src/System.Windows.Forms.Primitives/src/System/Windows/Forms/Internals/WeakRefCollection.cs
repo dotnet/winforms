@@ -116,7 +116,7 @@ namespace System.Windows.Forms
             return hash.ToHashCode();
         }
 
-        private WeakRefObject? CreateWeakRefObject(object? value)
+        private static WeakRefObject? CreateWeakRefObject(object? value)
         {
             if (value is null)
             {

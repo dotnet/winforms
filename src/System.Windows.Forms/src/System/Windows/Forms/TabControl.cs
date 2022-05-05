@@ -1232,7 +1232,7 @@ namespace System.Windows.Forms
             return base.IsInputKey(keyData);
         }
 
-        private void NotifyAboutFocusState(TabPage selectedTab, bool focused)
+        private static void NotifyAboutFocusState(TabPage selectedTab, bool focused)
         {
             if (selectedTab is null)
             {
@@ -2068,7 +2068,7 @@ namespace System.Windows.Forms
             return tcc.Cancel;
         }
 
-        private void WmTabBaseReLayout(ref Message m)
+        private void WmTabBaseReLayout()
         {
             BeginUpdate();
             _cachedDisplayRect = Rectangle.Empty;
@@ -2158,7 +2158,7 @@ namespace System.Windows.Forms
 
             if (m.MsgInternal == _tabBaseReLayoutMessage)
             {
-                WmTabBaseReLayout(ref m);
+                WmTabBaseReLayout();
                 return;
             }
 

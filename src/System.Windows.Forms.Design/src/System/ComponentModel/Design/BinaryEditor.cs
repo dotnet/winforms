@@ -35,7 +35,7 @@ namespace System.ComponentModel.Design
         ///  Converts the given object to an array of bytes to be manipulated by the editor. The default implementation
         ///  of this supports byte[] and <see cref="Stream"/> objects.
         /// </summary>
-        internal byte[] ConvertToBytes(object value)
+        internal static byte[] ConvertToBytes(object value)
         {
             if (value is Stream stream)
             {
@@ -67,7 +67,7 @@ namespace System.ComponentModel.Design
         ///  Converts the given byte array back into a native object. If the object itself needs to be replaced (as is
         ///  the case for arrays), then a new object may be assigned out through <paramref name="value"/>.
         /// </summary>
-        internal void ConvertToValue(byte[] bytes, ref object value)
+        internal static void ConvertToValue(byte[] bytes, ref object value)
         {
             if (value is Stream stream)
             {

@@ -132,7 +132,7 @@ namespace System.Windows.Forms.Tests
             TreeNodeCollection collection = treeView.Nodes;
             collection.Add("Node 1");
             collection[0] = new TreeNode("New node 1");
-            Assert.Equal(1, treeView._nodeTable.Count);
+            Assert.Equal(1, treeView._nodesByHandle.Count);
             Assert.Equal(1, collection.Count);
         }
 

@@ -21,6 +21,9 @@ internal partial class Interop
         private static readonly ComInterfaceEntry* s_streamEntry = InitializeIStreamEntry();
         private static readonly ComInterfaceEntry* s_fileDialogEventsEntry = InitializeIFileDialogEventsEntry();
         private static readonly ComInterfaceEntry* s_enumStringEntry = InitializeIEnumStringEntry();
+        private static readonly ComInterfaceEntry* s_dropSourceEntry = InitializeIDropSourceEntry();
+        private static readonly ComInterfaceEntry* s_dropTargetEntry = InitializeIDropTargetEntry();
+        private static readonly ComInterfaceEntry* s_dataObjectEntry = InitializeIDataObjectEntry();
 
         internal static WinFormsComWrappers Instance { get; } = new WinFormsComWrappers();
 
@@ -62,6 +65,42 @@ internal partial class Interop
             return wrapperEntry;
         }
 
+        private static ComInterfaceEntry* InitializeIDropSourceEntry()
+        {
+            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
+
+            IntPtr iDropSourceVtbl = IDropSourceVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+
+            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
+            wrapperEntry->IID = IID.IDropSource;
+            wrapperEntry->Vtable = iDropSourceVtbl;
+            return wrapperEntry;
+        }
+
+        private static ComInterfaceEntry* InitializeIDropTargetEntry()
+        {
+            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
+
+            IntPtr iDropTargetVtbl = IDropTargetVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+
+            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
+            wrapperEntry->IID = IID.IDropTarget;
+            wrapperEntry->Vtable = iDropTargetVtbl;
+            return wrapperEntry;
+        }
+
+        private static ComInterfaceEntry* InitializeIDataObjectEntry()
+        {
+            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
+
+            IntPtr iDataObjectVtbl = IDataObjectVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+
+            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
+            wrapperEntry->IID = IID.IDataObject;
+            wrapperEntry->Vtable = iDataObjectVtbl;
+            return wrapperEntry;
+        }
+
         protected override unsafe ComInterfaceEntry* ComputeVtables(object obj, CreateComInterfaceFlags flags, out int count)
         {
             if (obj is Interop.Ole32.IStream)
@@ -76,10 +115,28 @@ internal partial class Interop
                 return s_fileDialogEventsEntry;
             }
 
+            if (obj is Ole32.IDropSource)
+            {
+                count = 1;
+                return s_dropSourceEntry;
+            }
+
+            if (obj is Interop.Ole32.IDropTarget)
+            {
+                count = 1;
+                return s_dropTargetEntry;
+            }
+
             if (obj is IEnumString)
             {
                 count = 1;
                 return s_enumStringEntry;
+            }
+
+            if (obj is IDataObject)
+            {
+                count = 1;
+                return s_dataObjectEntry;
             }
 
             throw new NotImplementedException($"ComWrappers for type {obj.GetType()} not implemented.");
@@ -97,6 +154,14 @@ internal partial class Interop
                 return new PictureWrapper(pictureComObject);
             }
 
+            Guid errorInfoIID = IID.IErrorInfo;
+            hr = Marshal.QueryInterface(externalComObject, ref errorInfoIID, out IntPtr errorInfoComObject);
+            if (hr == S_OK)
+            {
+                Marshal.Release(externalComObject);
+                return new ErrorInfoWrapper(errorInfoComObject);
+            }
+
             Guid fileOpenDialogIID = IID.IFileOpenDialog;
             hr = Marshal.QueryInterface(externalComObject, ref fileOpenDialogIID, out IntPtr fileOpenDialogComObject);
             if (hr == S_OK)
@@ -111,6 +176,14 @@ internal partial class Interop
             {
                 Marshal.Release(externalComObject);
                 return new FileSaveDialogWrapper(fileSaveDialogComObject);
+            }
+
+            Guid lockBytesIID = IID.ILockBytes;
+            hr = Marshal.QueryInterface(externalComObject, ref lockBytesIID, out IntPtr lockBytesComObject);
+            if (hr == S_OK)
+            {
+                Marshal.Release(externalComObject);
+                return new LockBytesWrapper(lockBytesComObject);
             }
 
             Guid shellItemIID = IID.IShellItem;
@@ -147,9 +220,16 @@ internal partial class Interop
 
         internal IntPtr GetComPointer<T>(T obj, Guid iid) where T : class
         {
+            TryGetComPointer(obj, iid, out var comPtr).ThrowIfFailed();
+            return comPtr;
+        }
+
+        internal HRESULT TryGetComPointer<T>(T? obj, Guid iid, out IntPtr comPtr) where T : class
+        {
             if (obj is null)
             {
-                return IntPtr.Zero;
+                comPtr = IntPtr.Zero;
+                return HRESULT.S_OK;
             }
 
             IntPtr pobj_local;
@@ -157,12 +237,8 @@ internal partial class Interop
             Guid local_IID = iid;
             HRESULT result = (HRESULT)Marshal.QueryInterface(pUnk_local, ref local_IID, out pobj_local);
             Marshal.Release(pUnk_local);
-            if (result.Failed())
-            {
-                Marshal.ThrowExceptionForHR((int)result);
-            }
-
-            return pobj_local;
+            comPtr = pobj_local;
+            return result;
         }
 
         private IntPtr GetOrCreateComInterfaceForObject(object obj)

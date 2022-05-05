@@ -11,6 +11,7 @@ using static Interop;
 
 namespace System.Windows.Forms.UITests
 {
+    [UseDefaultXunitCulture]
     public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     {
         private const int SPIF_SENDCHANGE = 0x0002;
@@ -22,8 +23,6 @@ namespace System.Windows.Forms.UITests
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
         {
             TestOutputHelper = testOutputHelper;
-            Thread.CurrentThread.CurrentCulture =
-                Thread.CurrentThread.CurrentUICulture = new("en-US");
 
             Application.EnableVisualStyles();
 
@@ -110,6 +109,13 @@ namespace System.Windows.Forms.UITests
             var centerOfRect = new Point(rect.Left, rect.Top) + new Size(rect.Width / 2, rect.Height / 2);
             var centerOnScreen = control.PointToScreen(centerOfRect);
             await MoveMouseAsync(control.FindForm(), centerOnScreen);
+        }
+
+        protected Point ToVirtualPoint(Point point)
+        {
+            int horizontalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CXSCREEN);
+            int verticalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CYSCREEN);
+            return new Point((int)Math.Round((65535.0 / horizontalResolution) * point.X), (int)Math.Round((65535.0 / verticalResolution) * point.Y));
         }
 
         protected async Task MoveMouseAsync(Form window, Point point, bool assertCorrectLocation = true)

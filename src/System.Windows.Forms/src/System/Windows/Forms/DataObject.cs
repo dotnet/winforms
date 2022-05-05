@@ -115,7 +115,7 @@ namespace System.Windows.Forms
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
         }
 
-        private Gdi32.HBITMAP GetCompatibleBitmap(Bitmap bm)
+        private static Gdi32.HBITMAP GetCompatibleBitmap(Bitmap bm)
         {
             using var screenDC = User32.GetDcScope.ScreenDC;
 
@@ -416,7 +416,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns true if the tymed is useable.
         /// </summary>
-        private bool GetTymedUseable(TYMED tymed)
+        private static bool GetTymedUseable(TYMED tymed)
         {
             for (int i = 0; i < s_allowedTymeds.Length; i++)
             {
@@ -779,7 +779,7 @@ namespace System.Windows.Forms
             return hr;
         }
 
-        private HRESULT SaveObjectToHandle(ref IntPtr handle, object data, bool restrictSerialization)
+        private static HRESULT SaveObjectToHandle(ref IntPtr handle, object data, bool restrictSerialization)
         {
             Stream stream = new MemoryStream();
             BinaryWriter bw = new BinaryWriter(stream);
@@ -804,7 +804,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Saves stream out to handle.
         /// </summary>
-        private unsafe HRESULT SaveStreamToHandle(ref IntPtr handle, Stream stream)
+        private static unsafe HRESULT SaveStreamToHandle(ref IntPtr handle, Stream stream)
         {
             if (handle != IntPtr.Zero)
             {
@@ -977,7 +977,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        private unsafe HRESULT SaveHtmlToHandle(IntPtr handle, string str)
+        private static unsafe HRESULT SaveHtmlToHandle(IntPtr handle, string str)
         {
             if (handle == IntPtr.Zero)
             {

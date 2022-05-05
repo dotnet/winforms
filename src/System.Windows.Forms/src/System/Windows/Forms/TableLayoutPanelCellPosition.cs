@@ -12,7 +12,7 @@ using System.Globalization;
 namespace System.Windows.Forms
 {
     [TypeConverter(typeof(TableLayoutPanelCellPositionTypeConverter))]
-    public struct TableLayoutPanelCellPosition
+    public struct TableLayoutPanelCellPosition : IEquatable<TableLayoutPanelCellPosition>
     {
         public TableLayoutPanelCellPosition(int column, int row)
         {
@@ -36,13 +36,16 @@ namespace System.Windows.Forms
 
         public override bool Equals(object other)
         {
-            if (!(other is TableLayoutPanelCellPosition otherCellPosition))
+            if (other is not TableLayoutPanelCellPosition otherCellPosition)
             {
                 return false;
             }
 
-            return this == otherCellPosition;
+            return Equals(otherCellPosition);
         }
+
+        public bool Equals(TableLayoutPanelCellPosition other)
+            => Row == other.Row && Column == other.Column;
 
         public static bool operator ==(TableLayoutPanelCellPosition p1, TableLayoutPanelCellPosition p2)
         {

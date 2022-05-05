@@ -616,7 +616,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  This method takes a property that is owned by the given owner, and it wraps them in new property that is owned by the serialization manager.
         /// </summary>
-        private PropertyDescriptor WrapProperty(PropertyDescriptor property, object owner)
+        private static PropertyDescriptor WrapProperty(PropertyDescriptor property, object owner)
         {
             ArgumentNullException.ThrowIfNull(property);
 
@@ -848,7 +848,7 @@ namespace System.ComponentModel.Design.Serialization
                         break;
                     }
 
-                    typeName = typeName.Substring(0, dotIndex) + "+" + typeName.Substring(dotIndex + 1, typeName.Length - dotIndex - 1);
+                    typeName = string.Concat(typeName.AsSpan(0, dotIndex), "+", typeName.AsSpan(dotIndex + 1, typeName.Length - dotIndex - 1));
                 }
             }
 

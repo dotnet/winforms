@@ -209,7 +209,7 @@ namespace System.Resources
             }
         }
 
-        private void SetupNameTable(XmlReader reader)
+        private static void SetupNameTable(XmlReader reader)
         {
             reader.NameTable.Add(ResXResourceWriter.TypeStr);
             reader.NameTable.Add(ResXResourceWriter.NameStr);
@@ -330,7 +330,7 @@ namespace System.Resources
         /// <summary>
         ///  Attempts to return the line and column (Y, X) of the XML reader.
         /// </summary>
-        private Point GetPosition(XmlReader reader)
+        private static Point GetPosition(XmlReader reader)
         {
             Point pt = new Point(0, 0);
 
@@ -689,13 +689,13 @@ namespace System.Resources
             }
         }
 
-        private string GetAliasFromTypeName(string typeName)
+        private static string GetAliasFromTypeName(string typeName)
         {
             int indexStart = typeName.IndexOf(',');
             return typeName.Substring(indexStart + 2);
         }
 
-        private string GetTypeFromTypeName(string typeName)
+        private static string GetTypeFromTypeName(string typeName)
         {
             int indexStart = typeName.IndexOf(',');
             return typeName.Substring(0, indexStart);

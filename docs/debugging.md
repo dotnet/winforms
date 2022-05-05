@@ -33,7 +33,7 @@ Add references to the binary(-ies) to your project ported to .NET. For example, 
 ```xml
 <ItemGroup>
     <Reference Include="[Drive]:[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\net7.0\System.Windows.Forms.dll" />
-    <Reference Include="[Drive]:[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\net7.0\System.Windows.Forms.Primitives.dll" />
+    <Reference Include="[Drive]:[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms.Primitives\Debug\net7.0\System.Windows.Forms.Primitives.dll" />
 </ItemGroup>
 ```
 

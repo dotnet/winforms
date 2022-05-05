@@ -6,6 +6,8 @@
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
+using System.Drawing.Design;
 using System.Windows.Forms;
 
 namespace WinformsControlsTest
@@ -25,7 +27,7 @@ namespace WinformsControlsTest
 
             _btnOpen = new("&Open dialog")
             {
-                Image = (System.Drawing.Bitmap?)(resources.GetObject("OpenDialog")),
+                Image = (Bitmap?)resources.GetObject("OpenDialog"),
                 Enabled = false,
             };
 
@@ -49,6 +51,14 @@ namespace WinformsControlsTest
             toolbar.Items.Add(_btnOpen);
         }
 
+        private void DisposeIfNeeded()
+        {
+            if (propertyGrid1.SelectedObject is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+        }
+
         private ToolStrip GetToolbar()
         {
             foreach (Control control in propertyGrid1.Controls)
@@ -63,28 +73,48 @@ namespace WinformsControlsTest
             throw new MissingMemberException("Unable to find the toolstrip in the PropertyGrid.");
         }
 
+        private void btnColorDialog_Click(object sender, EventArgs e)
+        {
+            DisposeIfNeeded();
+            propertyGrid1.SelectedObject = null;
+
+            Type? typeCustomColorDialog = typeof(ColorEditor).Assembly.GetTypes().SingleOrDefault(t => t.Name == "CustomColorDialog");
+            if (typeCustomColorDialog is null)
+            {
+                throw new Exception("Unable to locate 'CustomColorDialog' type.");
+            }
+
+            using ColorDialog dialog = (ColorDialog)Activator.CreateInstance(typeCustomColorDialog)!;
+            dialog.ShowDialog(this);
+        }
+
         private void btnOpenFileDialog_Click(object sender, EventArgs e)
         {
+            DisposeIfNeeded();
             propertyGrid1.SelectedObject = openFileDialog1;
         }
 
         private void btnSaveFileDialog_Click(object sender, EventArgs e)
         {
+            DisposeIfNeeded();
             propertyGrid1.SelectedObject = saveFileDialog1;
         }
 
         private void btnFolderBrowserDialog_Click(object sender, EventArgs e)
         {
+            DisposeIfNeeded();
             propertyGrid1.SelectedObject = folderBrowserDialog1;
         }
 
         private void btnPrintDialog_Click(object sender, EventArgs e)
         {
+            DisposeIfNeeded();
             propertyGrid1.SelectedObject = printDialog1;
         }
 
         private void btnThreadExceptionDialog_Click(object sender, EventArgs e)
         {
+            DisposeIfNeeded();
             propertyGrid1.SelectedObject = null;
 
             using ThreadExceptionDialog dialog = new(new Exception("Really long exception description string, because we want to see if it properly wraps around or is truncated."));

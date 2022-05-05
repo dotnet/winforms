@@ -974,7 +974,7 @@ namespace System.Windows.Forms.Design
         ///  this will return some generic snaplines Allowing the rect to
         ///  snap to existing control edges on the surface.
         /// </summary>
-        private SnapLine[] GenerateNewToolSnapLines(Rectangle r)
+        private static SnapLine[] GenerateNewToolSnapLines(Rectangle r)
         {
             return new SnapLine[]
             {
@@ -1065,7 +1065,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Retrieves the default dimensions for the given component class.
         /// </summary>
-        private Size GetDefaultSize(IComponent component)
+        private static Size GetDefaultSize(IComponent component)
         {
             //Check to see if the control is AutoSized. VSWhidbey #416721
             PropertyDescriptor prop = TypeDescriptor.GetProperties(component)["AutoSize"];
@@ -1561,7 +1561,7 @@ namespace System.Windows.Forms.Design
                         IContainer container = target.Component.Site.Container;
                         if (container != null)
                         {
-                            object[] dragComps = ddh.GetDraggingObjects(de);
+                            object[] dragComps = OleDragDropHandler.GetDraggingObjects(de);
                             for (int i = 0; i < dragComps.Length; i++)
                             {
                                 IComponent comp = dragComps[i] as IComponent;
@@ -1654,7 +1654,7 @@ namespace System.Windows.Forms.Design
             else
             {
                 OleDragDropHandler ddh = GetOleDragHandler();
-                dragComps = ddh.GetDraggingObjects(de);
+                dragComps = OleDragDropHandler.GetDraggingObjects(de);
             }
 
             Control draggedControl = null;

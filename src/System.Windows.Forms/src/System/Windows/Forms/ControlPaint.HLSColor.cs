@@ -11,7 +11,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Logic copied from Windows sources to copy the lightening and darkening of colors.
         /// </summary>
-        private readonly struct HLSColor
+        private readonly struct HLSColor : IEquatable<HLSColor>
         {
             private const int ShadowAdjustment = -333;
             private const int HighlightAdjustment = 500;
@@ -127,11 +127,15 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                HLSColor c = hlsColor;
-                return _hue == c._hue &&
-                       _saturation == c._saturation &&
-                       Luminosity == c.Luminosity &&
-                       _isSystemColors_Control == c._isSystemColors_Control;
+                return Equals(hlsColor);
+            }
+
+            public bool Equals(HLSColor other)
+            {
+                return _hue == other._hue
+                    && _saturation == other._saturation
+                    && Luminosity == other.Luminosity
+                    && _isSystemColors_Control == other._isSystemColors_Control;
             }
 
             public static bool operator ==(HLSColor a, HLSColor b) => a.Equals(b);
@@ -178,7 +182,7 @@ namespace System.Windows.Forms
                 return NewLuma(Luminosity, n, scale);
             }
 
-            private int NewLuma(int luminosity, int n, bool scale)
+            private static int NewLuma(int luminosity, int n, bool scale)
             {
                 if (n == 0)
                 {
@@ -206,7 +210,7 @@ namespace System.Windows.Forms
                 return luminosity;
             }
 
-            private Color ColorFromHLS(int hue, int luminosity, int saturation)
+            private static Color ColorFromHLS(int hue, int luminosity, int saturation)
             {
                 byte r, g, b;
                 int magic1, magic2;
@@ -243,7 +247,7 @@ namespace System.Windows.Forms
                 return Color.FromArgb(r, g, b);
             }
 
-            private int HueToRGB(int n1, int n2, int hue)
+            private static int HueToRGB(int n1, int n2, int hue)
             {
                 // range check: note values passed add/subtract thirds of range
 

@@ -6,7 +6,7 @@
 
 namespace System.Windows.Forms
 {
-    public struct BindingMemberInfo
+    public struct BindingMemberInfo : IEquatable<BindingMemberInfo>
     {
         private readonly string _dataList;
         private readonly string _dataField;
@@ -42,13 +42,16 @@ namespace System.Windows.Forms
 
         public override bool Equals(object otherObject)
         {
-            if (!(otherObject is BindingMemberInfo otherMember))
+            if (otherObject is not BindingMemberInfo otherMember)
             {
                 return false;
             }
 
-            return string.Equals(BindingMember, otherMember.BindingMember, StringComparison.OrdinalIgnoreCase);
+            return Equals(otherMember);
         }
+
+        public bool Equals(BindingMemberInfo other)
+            => string.Equals(BindingMember, other.BindingMember, StringComparison.OrdinalIgnoreCase);
 
         public static bool operator ==(BindingMemberInfo a, BindingMemberInfo b) => a.Equals(b);
 

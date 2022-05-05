@@ -184,7 +184,7 @@ namespace System.Windows.Forms
                         break;
                     }
 
-                    int index = dropDown.Items.IndexOf(_owner);
+                    int index = dropDown.DisplayedItems.IndexOf(_owner);
 
                     if (index == -1)
                     {
@@ -194,9 +194,9 @@ namespace System.Windows.Forms
 
                     index += direction == UiaCore.NavigateDirection.NextSibling ? 1 : -1;
 
-                    if (index >= 0 && index < dropDown.Items.Count)
+                    if (index >= 0 && index < dropDown.DisplayedItems.Count)
                     {
-                        ToolStripItem item = dropDown.Items[index];
+                        ToolStripItem item = dropDown.DisplayedItems[index];
                         if (item is ToolStripControlHost controlHostItem)
                         {
                             return controlHostItem.ControlAccessibilityObject;
@@ -206,6 +206,11 @@ namespace System.Windows.Forms
                     }
 
                     return null;
+                case UiaCore.NavigateDirection.FirstChild:
+                case UiaCore.NavigateDirection.LastChild:
+                    return _owner.DropDownItems.Count > 0
+                        ? _owner.DropDown.AccessibilityObject
+                        : null;
             }
 
             return base.FragmentNavigate(direction);

@@ -6,7 +6,7 @@ using Microsoft.Win32;
 
 namespace System.Windows.Forms
 {
-    internal class DisplayInformation
+    internal static class DisplayInformation
     {
         private static bool s_highContrast;               // whether we are under hight contrast mode
         private static bool s_lowRes;                     // whether we are under low resolution mode

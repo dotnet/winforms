@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -30,32 +29,32 @@ namespace System.Windows.Forms
 
         private const int defaultWidth = 3;
 
-        private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
-        private int minSize = 25;
-        private int minExtra = 25;
-        private Point anchor = Point.Empty;
-        private Control splitTarget;
-        private int splitSize = -1;
-        private int splitterThickness = 3;
-        private int initTargetSize;
-        private int lastDrawSplit = -1;
-        private int maxSize;
+        private BorderStyle _borderStyle = BorderStyle.None;
+        private int _minSize = 25;
+        private int _minExtra = 25;
+        private Point _anchor = Point.Empty;
+        private Control? _splitTarget;
+        private int _splitSize = -1;
+        private int _splitterThickness = 3;
+        private int _initTargetSize;
+        private int _lastDrawSplit = -1;
+        private int _maxSize;
         private static readonly object EVENT_MOVING = new object();
         private static readonly object EVENT_MOVED = new object();
 
         // Cannot expose IMessageFilter.PreFilterMessage through this unsealed class
-        private SplitterMessageFilter splitterMessageFilter;
+        private SplitterMessageFilter? _splitterMessageFilter;
 
         /// <summary>
         ///  Creates a new Splitter.
         /// </summary>
         public Splitter()
-        : base()
+            : base()
         {
             SetStyle(ControlStyles.Selectable, false);
             TabStop = false;
-            minSize = 25;
-            minExtra = 25;
+            _minSize = 25;
+            _minExtra = 25;
 
             Dock = DockStyle.Left;
         }
@@ -128,7 +127,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged
+        new public event EventHandler? ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -136,7 +135,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -144,7 +143,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        new public event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -160,7 +159,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        new public event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -176,7 +175,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler FontChanged
+        new public event EventHandler? FontChanged
         {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
@@ -192,14 +191,14 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.SplitterBorderStyleDescr))]
         public BorderStyle BorderStyle
         {
-            get => borderStyle;
+            get => _borderStyle;
             set
             {
                 SourceGenerated.EnumValidator.Validate(value);
 
-                if (borderStyle != value)
+                if (_borderStyle != value)
                 {
-                    borderStyle = value;
+                    _borderStyle = value;
                     UpdateStyles();
                 }
             }
@@ -222,7 +221,7 @@ namespace System.Windows.Forms
                 cp.Style &= ~(int)User32.WS.BORDER;
                 cp.ExStyle &= ~(int)User32.WS_EX.CLIENTEDGE;
 
-                switch (borderStyle)
+                switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
                         cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
@@ -257,14 +256,14 @@ namespace System.Windows.Forms
                     throw new ArgumentException(SR.SplitterInvalidDockEnum);
                 }
 
-                int requestedSize = splitterThickness;
+                int requestedSize = _splitterThickness;
 
                 base.Dock = value;
                 switch (Dock)
                 {
                     case DockStyle.Top:
                     case DockStyle.Bottom:
-                        if (splitterThickness != -1)
+                        if (_splitterThickness != -1)
                         {
                             Height = requestedSize;
                         }
@@ -272,7 +271,7 @@ namespace System.Windows.Forms
                         break;
                     case DockStyle.Left:
                     case DockStyle.Right:
-                        if (splitterThickness != -1)
+                        if (_splitterThickness != -1)
                         {
                             Width = requestedSize;
                         }
@@ -304,7 +303,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged
+        public new event EventHandler? ImeModeChanged
         {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
@@ -324,7 +323,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return minExtra;
+                return _minExtra;
             }
             set
             {
@@ -333,7 +332,7 @@ namespace System.Windows.Forms
                     value = 0;
                 }
 
-                minExtra = value;
+                _minExtra = value;
             }
         }
 
@@ -350,7 +349,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return minSize;
+                return _minSize;
             }
             set
             {
@@ -359,7 +358,7 @@ namespace System.Windows.Forms
                     value = 0;
                 }
 
-                minSize = value;
+                _minSize = value;
             }
         }
 
@@ -375,12 +374,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (splitSize == -1)
+                if (_splitSize == -1)
                 {
-                    splitSize = CalcSplitSize();
+                    _splitSize = CalcSplitSize();
                 }
 
-                return splitSize;
+                return _splitSize;
             }
             set
             {
@@ -389,22 +388,22 @@ namespace System.Windows.Forms
 
                 // this is not an else-if to handle the maxSize < minSize case...
                 // ie. we give minSize priority over maxSize...
-                if (value > maxSize)
+                if (value > _maxSize)
                 {
-                    value = maxSize;
+                    value = _maxSize;
                 }
 
-                if (value < minSize)
+                if (value < _minSize)
                 {
-                    value = minSize;
+                    value = _minSize;
                 }
 
-                splitSize = value;
+                _splitSize = value;
                 DrawSplitBar(DRAW_END);
 
                 if (spd.target is null)
                 {
-                    splitSize = -1;
+                    _splitSize = -1;
                     return;
                 }
 
@@ -415,14 +414,14 @@ namespace System.Windows.Forms
                         bounds.Height = value;
                         break;
                     case DockStyle.Bottom:
-                        bounds.Y += bounds.Height - splitSize;
+                        bounds.Y += bounds.Height - _splitSize;
                         bounds.Height = value;
                         break;
                     case DockStyle.Left:
                         bounds.Width = value;
                         break;
                     case DockStyle.Right:
-                        bounds.X += bounds.Width - splitSize;
+                        bounds.X += bounds.Width - _splitSize;
                         bounds.Width = value;
                         break;
                 }
@@ -445,7 +444,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TabStopChanged
+        new public event EventHandler? TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
@@ -455,6 +454,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Bindable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;
@@ -463,7 +463,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        new public event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -471,7 +471,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler Enter
+        public new event EventHandler? Enter
         {
             add => base.Enter += value;
             remove => base.Enter -= value;
@@ -479,7 +479,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler KeyUp
+        public new event KeyEventHandler? KeyUp
         {
             add => base.KeyUp += value;
             remove => base.KeyUp -= value;
@@ -487,7 +487,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler KeyDown
+        public new event KeyEventHandler? KeyDown
         {
             add => base.KeyDown += value;
             remove => base.KeyDown -= value;
@@ -495,7 +495,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyPressEventHandler KeyPress
+        public new event KeyPressEventHandler? KeyPress
         {
             add => base.KeyPress += value;
             remove => base.KeyPress -= value;
@@ -503,7 +503,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler Leave
+        public new event EventHandler? Leave
         {
             add => base.Leave += value;
             remove => base.Leave -= value;
@@ -511,7 +511,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
-        public event SplitterEventHandler SplitterMoving
+        public event SplitterEventHandler? SplitterMoving
         {
             add => Events.AddHandler(EVENT_MOVING, value);
             remove => Events.RemoveHandler(EVENT_MOVING, value);
@@ -519,7 +519,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
-        public event SplitterEventHandler SplitterMoved
+        public event SplitterEventHandler? SplitterMoved
         {
             add => Events.AddHandler(EVENT_MOVED, value);
             remove => Events.RemoveHandler(EVENT_MOVED, value);
@@ -531,32 +531,32 @@ namespace System.Windows.Forms
         /// </summary>
         private void DrawSplitBar(int mode)
         {
-            if (mode != DRAW_START && lastDrawSplit != -1)
+            if (mode != DRAW_START && _lastDrawSplit != -1)
             {
-                DrawSplitHelper(lastDrawSplit);
-                lastDrawSplit = -1;
+                DrawSplitHelper(_lastDrawSplit);
+                _lastDrawSplit = -1;
             }
 
             // Bail if drawing with no old point...
             //
-            else if (mode != DRAW_START && lastDrawSplit == -1)
+            else if (mode != DRAW_START && _lastDrawSplit == -1)
             {
                 return;
             }
 
             if (mode != DRAW_END)
             {
-                DrawSplitHelper(splitSize);
-                lastDrawSplit = splitSize;
+                DrawSplitHelper(_splitSize);
+                _lastDrawSplit = _splitSize;
             }
             else
             {
-                if (lastDrawSplit != -1)
+                if (_lastDrawSplit != -1)
                 {
-                    DrawSplitHelper(lastDrawSplit);
+                    DrawSplitHelper(_lastDrawSplit);
                 }
 
-                lastDrawSplit = -1;
+                _lastDrawSplit = -1;
             }
         }
 
@@ -564,7 +564,7 @@ namespace System.Windows.Forms
         ///  Calculates the bounding rect of the split line. minWeight refers
         ///  to the minimum height or width of the splitline.
         /// </summary>
-        private Rectangle CalcSplitLine(int splitSize, int minWeight)
+        private Rectangle CalcSplitLine(Control splitTarget, int splitSize, int minWeight)
         {
             Rectangle r = Bounds;
             Rectangle bounds = splitTarget.Bounds;
@@ -612,7 +612,7 @@ namespace System.Windows.Forms
         /// </summary>
         private int CalcSplitSize()
         {
-            Control target = FindTarget();
+            Control? target = FindTarget();
             if (target is null)
             {
                 return -1;
@@ -638,7 +638,7 @@ namespace System.Windows.Forms
         private SplitData CalcSplitBounds()
         {
             SplitData spd = new SplitData();
-            Control target = FindTarget();
+            Control? target = FindTarget();
             spd.target = target;
             if (target is not null)
             {
@@ -646,11 +646,11 @@ namespace System.Windows.Forms
                 {
                     case DockStyle.Left:
                     case DockStyle.Right:
-                        initTargetSize = target.Bounds.Width;
+                        _initTargetSize = target.Bounds.Width;
                         break;
                     case DockStyle.Top:
                     case DockStyle.Bottom:
-                        initTargetSize = target.Bounds.Height;
+                        _initTargetSize = target.Bounds.Height;
                         break;
                 }
 
@@ -680,11 +680,11 @@ namespace System.Windows.Forms
                 Size clientSize = parent.ClientSize;
                 if (Horizontal)
                 {
-                    maxSize = clientSize.Width - dockWidth - minExtra;
+                    _maxSize = clientSize.Width - dockWidth - _minExtra;
                 }
                 else
                 {
-                    maxSize = clientSize.Height - dockHeight - minExtra;
+                    _maxSize = clientSize.Height - dockHeight - _minExtra;
                 }
 
                 spd.dockWidth = dockWidth;
@@ -700,12 +700,12 @@ namespace System.Windows.Forms
         /// </summary>
         private void DrawSplitHelper(int splitSize)
         {
-            if (splitTarget is null)
+            if (_splitTarget is null)
             {
                 return;
             }
 
-            Rectangle r = CalcSplitLine(splitSize, 3);
+            Rectangle r = CalcSplitLine(_splitTarget, splitSize, 3);
             using var dc = new User32.GetDcScope(ParentInternal.Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
             Gdi32.HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
             using var halftoneScope = new Gdi32.ObjectScope(halftone);
@@ -721,9 +721,9 @@ namespace System.Windows.Forms
         ///  is docked left, the target is the control that is just to the left
         ///  of the splitter.
         /// </summary>
-        private Control FindTarget()
+        private Control? FindTarget()
         {
-            Control parent = ParentInternal;
+            Control? parent = ParentInternal;
             if (parent is null)
             {
                 return null;
@@ -742,28 +742,28 @@ namespace System.Windows.Forms
                         case DockStyle.Top:
                             if (target.Bottom == Top)
                             {
-                                return (Control)target;
+                                return target;
                             }
 
                             break;
                         case DockStyle.Bottom:
                             if (target.Top == Bottom)
                             {
-                                return (Control)target;
+                                return target;
                             }
 
                             break;
                         case DockStyle.Left:
                             if (target.Right == Left)
                             {
-                                return (Control)target;
+                                return target;
                             }
 
                             break;
                         case DockStyle.Right:
                             if (target.Left == Right)
                             {
-                                return (Control)target;
+                                return target;
                             }
 
                             break;
@@ -777,16 +777,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Calculates the split size based on the mouse position (x, y).
         /// </summary>
-        private int GetSplitSize(int x, int y)
+        private int GetSplitSize(Control splitTarget, int x, int y)
         {
             int delta;
             if (Horizontal)
             {
-                delta = x - anchor.X;
+                delta = x - _anchor.X;
             }
             else
             {
-                delta = y - anchor.Y;
+                delta = y - _anchor.Y;
             }
 
             int size = 0;
@@ -806,13 +806,13 @@ namespace System.Windows.Forms
                     break;
             }
 
-            return Math.Max(Math.Min(size, maxSize), minSize);
+            return Math.Max(Math.Min(size, _maxSize), _minSize);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
-            if (splitTarget is not null && e.KeyCode == Keys.Escape)
+            if (_splitTarget is not null && e.KeyCode == Keys.Escape)
             {
                 SplitEnd(false);
             }
@@ -830,11 +830,11 @@ namespace System.Windows.Forms
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            if (splitTarget is not null)
+            if (_splitTarget is not null)
             {
                 int x = e.X + Left;
                 int y = e.Y + Top;
-                Rectangle r = CalcSplitLine(GetSplitSize(e.X, e.Y), 0);
+                Rectangle r = CalcSplitLine(_splitTarget, GetSplitSize(_splitTarget, e.X, e.Y), 0);
                 int xSplit = r.X;
                 int ySplit = r.Y;
                 OnSplitterMoving(new SplitterEventArgs(x, y, xSplit, ySplit));
@@ -844,15 +844,7 @@ namespace System.Windows.Forms
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            if (splitTarget is not null)
-            {
-                int x = e.X + Left;
-                int y = e.Y + Top;
-                Rectangle r = CalcSplitLine(GetSplitSize(e.X, e.Y), 0);
-                int xSplit = r.X;
-                int ySplit = r.Y;
-                SplitEnd(true);
-            }
+            SplitEnd(true);
         }
 
         /// <summary>
@@ -862,11 +854,11 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSplitterMoving(SplitterEventArgs sevent)
         {
-            ((SplitterEventHandler)Events[EVENT_MOVING])?.Invoke(this, sevent);
+            ((SplitterEventHandler?)Events[EVENT_MOVING])?.Invoke(this, sevent);
 
-            if (splitTarget is not null)
+            if (_splitTarget is not null)
             {
-                SplitMove(sevent.SplitX, sevent.SplitY);
+                SplitMove(_splitTarget, sevent.SplitX, sevent.SplitY);
             }
         }
 
@@ -877,11 +869,11 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSplitterMoved(SplitterEventArgs sevent)
         {
-            ((SplitterEventHandler)Events[EVENT_MOVED])?.Invoke(this, sevent);
+            ((SplitterEventHandler?)Events[EVENT_MOVED])?.Invoke(this, sevent);
 
-            if (splitTarget is not null)
+            if (_splitTarget is not null)
             {
-                SplitMove(sevent.SplitX, sevent.SplitY);
+                SplitMove(_splitTarget, sevent.SplitX, sevent.SplitY);
             }
         }
 
@@ -894,7 +886,7 @@ namespace System.Windows.Forms
                     width = 3;
                 }
 
-                splitterThickness = width;
+                _splitterThickness = width;
             }
             else
             {
@@ -903,7 +895,7 @@ namespace System.Windows.Forms
                     height = 3;
                 }
 
-                splitterThickness = height;
+                _splitterThickness = height;
             }
 
             base.SetBoundsCore(x, y, width, height, specified);
@@ -915,18 +907,18 @@ namespace System.Windows.Forms
         private void SplitBegin(int x, int y)
         {
             SplitData spd = CalcSplitBounds();
-            if (spd.target is not null && (minSize < maxSize))
+            if (spd.target is not null && (_minSize < _maxSize))
             {
-                anchor = new Point(x, y);
-                splitTarget = spd.target;
-                splitSize = GetSplitSize(x, y);
+                _anchor = new Point(x, y);
+                _splitTarget = spd.target;
+                _splitSize = GetSplitSize(_splitTarget, x, y);
 
-                if (splitterMessageFilter is not null)
+                if (_splitterMessageFilter is not null)
                 {
-                    splitterMessageFilter = new SplitterMessageFilter(this);
+                    _splitterMessageFilter = new SplitterMessageFilter(this);
                 }
 
-                Application.AddMessageFilter(splitterMessageFilter);
+                Application.AddMessageFilter(_splitterMessageFilter);
 
                 Capture = true;
                 DrawSplitBar(DRAW_START);
@@ -939,24 +931,24 @@ namespace System.Windows.Forms
         private void SplitEnd(bool accept)
         {
             DrawSplitBar(DRAW_END);
-            splitTarget = null;
+            _splitTarget = null;
             Capture = false;
-            if (splitterMessageFilter is not null)
+            if (_splitterMessageFilter is not null)
             {
-                Application.RemoveMessageFilter(splitterMessageFilter);
-                splitterMessageFilter = null;
+                Application.RemoveMessageFilter(_splitterMessageFilter);
+                _splitterMessageFilter = null;
             }
 
             if (accept)
             {
                 ApplySplitPosition();
             }
-            else if (splitSize != initTargetSize)
+            else if (_splitSize != _initTargetSize)
             {
-                SplitPosition = initTargetSize;
+                SplitPosition = _initTargetSize;
             }
 
-            anchor = Point.Empty;
+            _anchor = Point.Empty;
         }
 
         /// <summary>
@@ -965,19 +957,19 @@ namespace System.Windows.Forms
         /// </summary>
         private void ApplySplitPosition()
         {
-            SplitPosition = splitSize;
+            SplitPosition = _splitSize;
         }
 
         /// <summary>
         ///  Moves the splitter line to the splitSize for the mouse position
         ///  (x, y).
         /// </summary>
-        private void SplitMove(int x, int y)
+        private void SplitMove(Control splitTarget, int x, int y)
         {
-            int size = GetSplitSize(x - Left + anchor.X, y - Top + anchor.Y);
-            if (splitSize != size)
+            int size = GetSplitSize(splitTarget, x - Left + _anchor.X, y - Top + _anchor.Y);
+            if (_splitSize != size)
             {
-                splitSize = size;
+                _splitSize = size;
                 DrawSplitBar(DRAW_MOVE);
             }
         }
@@ -989,43 +981,6 @@ namespace System.Windows.Forms
         {
             string s = base.ToString();
             return s + ", MinExtra: " + MinExtra.ToString(CultureInfo.CurrentCulture) + ", MinSize: " + MinSize.ToString(CultureInfo.CurrentCulture);
-        }
-
-        /// <summary>
-        ///  Return value holder...
-        /// </summary>
-        private class SplitData
-        {
-            public int dockWidth = -1;
-            public int dockHeight = -1;
-            internal Control target;
-        }
-
-        private class SplitterMessageFilter : IMessageFilter
-        {
-            private readonly Splitter owner;
-
-            public SplitterMessageFilter(Splitter splitter)
-            {
-                owner = splitter;
-            }
-
-            /// <summary>
-            /// </summary>
-            public bool PreFilterMessage(ref Message m)
-            {
-                if (m.MsgInternal >= User32.WM.KEYFIRST && m.MsgInternal <= User32.WM.KEYLAST)
-                {
-                    if (m.MsgInternal == User32.WM.KEYDOWN && (Keys)m.WParamInternal == Keys.Escape)
-                    {
-                        owner.SplitEnd(false);
-                    }
-
-                    return true;
-                }
-
-                return false;
-            }
         }
     }
 }

@@ -194,7 +194,7 @@ namespace System.Windows.Forms
         ///  Returns the virtual index of the item based on the
         ///  state mask.
         /// </summary>
-        public int IndexOf(object item, int stateMask = 0)
+        public int IndexOf(object? item, int stateMask = 0)
         {
             int virtualIndex = -1;
 
@@ -277,7 +277,7 @@ namespace System.Windows.Forms
             Version++;
         }
 
-        public Entry GetEntry(object element)
+        public static Entry GetEntry(object element)
         {
             return element is Entry entryElement ? entryElement : new Entry(element);
         }

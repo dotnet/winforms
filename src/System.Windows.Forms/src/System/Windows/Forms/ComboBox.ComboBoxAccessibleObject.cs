@@ -176,7 +176,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    string defaultAction = _owningComboBox.AccessibleDefaultActionDescription;
+                    string? defaultAction = _owningComboBox.AccessibleDefaultActionDescription;
                     if (defaultAction is not null)
                     {
                         return defaultAction;

@@ -613,7 +613,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Used to retrieve the current location of the given component.
         /// </summary>
-        private Point GetLocation(IComponent comp)
+        private static Point GetLocation(IComponent comp)
         {
             PropertyDescriptor prop = GetProperty(comp, "Location");
 
@@ -639,7 +639,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Retrieves the given property on the given component.
         /// </summary>
-        protected PropertyDescriptor GetProperty(object comp, string propName)
+        protected static PropertyDescriptor GetProperty(object comp, string propName)
         {
             return TypeDescriptor.GetProperties(comp)[propName];
         }
@@ -660,7 +660,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Used to retrieve the current size of the given component.
         /// </summary>
-        private Size GetSize(IComponent comp)
+        private static Size GetSize(IComponent comp)
         {
             PropertyDescriptor prop = GetProperty(comp, "Size");
             if (prop != null)
@@ -3567,7 +3567,7 @@ namespace System.Windows.Forms.Design
         ///  collection with a string[] which contains the component names in order
         ///  for each component in the list.
         /// </summary>
-        private ICollection PrependComponentNames(ICollection objects)
+        private static ICollection PrependComponentNames(ICollection objects)
         {
             object[] newObjects = new object[objects.Count + 1];
             int idx = 1;
@@ -3600,7 +3600,7 @@ namespace System.Windows.Forms.Design
         ///  called by the formatting commands when we need a given selection array sorted.
         ///  Sorting the array sorts by x from left to right, and by Y from top to bottom.
         /// </summary>
-        private void SortSelection(object[] selectedObjects, int nSortBy)
+        private static void SortSelection(object[] selectedObjects, int nSortBy)
         {
             IComparer comp;
             switch (nSortBy)
@@ -3855,7 +3855,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private void UpdatePasteTabIndex(Control componentControl, object parentComponent)
+        private static void UpdatePasteTabIndex(Control componentControl, object parentComponent)
         {
             Control parentControl = parentComponent as Control;
 

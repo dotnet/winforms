@@ -135,7 +135,7 @@ namespace System.Windows.Forms
             return preferredSize;
         }
 
-        private bool LeftMouseButtonIsDown()
+        private static bool LeftMouseButtonIsDown()
         {
             return (Control.MouseButtons == MouseButtons.Left) && (Control.ModifierKeys == Keys.None);
         }

@@ -175,7 +175,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public Control Component => _currentControl;
 
-            private InstanceCreationEditor GetInstanceCreationEditor(PropertyDescriptorGridEntry entry)
+            private static InstanceCreationEditor GetInstanceCreationEditor(PropertyDescriptorGridEntry entry)
             {
                 // First we look on the property type, and if we don't find that we'll go up to the editor type
                 // itself.  That way people can associate the InstanceCreationEditor with the type of DropDown

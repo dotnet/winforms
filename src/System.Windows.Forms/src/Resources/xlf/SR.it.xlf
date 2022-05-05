@@ -10311,6 +10311,16 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Specifica se per ToolStrip devono essere mantenute le impostazioni utente tramite IPersistComponentSettings.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="new">Line down</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="new">Line up</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">
         <source>Specifies the settings key to use to save settings.</source>
         <target state="translated">Specifica il tasto da utilizzare per salvare le impostazioni.</target>

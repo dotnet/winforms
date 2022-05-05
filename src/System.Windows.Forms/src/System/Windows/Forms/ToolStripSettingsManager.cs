@@ -178,7 +178,7 @@ namespace System.Windows.Forms
             ResumeAllLayout(form, true);
         }
 
-        private void ApplyToolStripSettings(ToolStrip toolStrip, SettingsStub settings, Dictionary<string, ToolStrip> itemLocationHash)
+        private static void ApplyToolStripSettings(ToolStrip toolStrip, SettingsStub settings, Dictionary<string, ToolStrip> itemLocationHash)
         {
             if (toolStrip is not null)
             {

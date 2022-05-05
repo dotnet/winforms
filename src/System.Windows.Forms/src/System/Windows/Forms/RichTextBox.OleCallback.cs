@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using static Interop;
@@ -18,8 +16,8 @@ namespace System.Windows.Forms
         private class OleCallback : Richedit.IRichEditOleCallback
         {
             private readonly RichTextBox owner;
-            IDataObject lastDataObject;
-            DragDropEffects lastEffect;
+            private IDataObject? lastDataObject;
+            private DragDropEffects lastEffect;
             private IComDataObject _lastComDataObject;
             private DropIconType _lastDropIcon = DropIconType.Default;
             private string _lastMessage = string.Empty;
@@ -30,7 +28,7 @@ namespace System.Windows.Forms
                 this.owner = owner;
             }
 
-            public HRESULT GetNewStorage(out Ole32.IStorage storage)
+            public HRESULT GetNewStorage(out Ole32.IStorage? storage)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetNewStorage");
                 if (!owner.AllowOleObjects)
@@ -39,13 +37,10 @@ namespace System.Windows.Forms
                     return HRESULT.E_FAIL;
                 }
 
-                Ole32.ILockBytes pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, BOOL.TRUE);
-                Debug.Assert(pLockBytes is not null, "pLockBytes is NULL!");
-
+                WinFormsComWrappers.LockBytesWrapper pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, BOOL.TRUE);
                 storage = Ole32.StgCreateDocfileOnILockBytes(
                     pLockBytes,
-                    Ole32.STGM.SHARE_EXCLUSIVE | Ole32.STGM.CREATE | Ole32.STGM.READWRITE,
-                    0);
+                    Ole32.STGM.SHARE_EXCLUSIVE | Ole32.STGM.CREATE | Ole32.STGM.READWRITE);
                 Debug.Assert(storage is not null, "storage is NULL!");
 
                 return HRESULT.S_OK;

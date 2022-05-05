@@ -192,6 +192,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        [UseDefaultXunitCulture(SetUnmanagedUiThreadCulture = true)]
         [WinFormsTheory]
         [InlineData(RightToLeft.No)]
         [InlineData(RightToLeft.Yes)]
@@ -237,6 +238,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(menuStrip.IsHandleCreated);
         }
 
+        [UseDefaultXunitCulture(SetUnmanagedUiThreadCulture = true)]
         [WinFormsTheory]
         [InlineData(RightToLeft.No)]
         [InlineData(RightToLeft.Yes)]

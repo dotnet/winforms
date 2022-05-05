@@ -143,7 +143,7 @@ namespace System.Windows.Forms.Layout
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        private string GetAttributeValue(XmlNode node, string attribute)
+        private static string GetAttributeValue(XmlNode node, string attribute)
         {
             XmlAttribute attr = node.Attributes[attribute];
             if (attr is not null)
@@ -154,7 +154,7 @@ namespace System.Windows.Forms.Layout
             return null;
         }
 
-        private int GetAttributeValue(XmlNode node, string attribute, int valueIfNotFound)
+        private static int GetAttributeValue(XmlNode node, string attribute, int valueIfNotFound)
         {
             string attributeValue = GetAttributeValue(node, attribute);
             if (!string.IsNullOrEmpty(attributeValue))
@@ -168,7 +168,7 @@ namespace System.Windows.Forms.Layout
             return valueIfNotFound;
         }
 
-        private void ParseControls(TableLayoutSettings settings, XmlNodeList controlXmlFragments)
+        private static void ParseControls(TableLayoutSettings settings, XmlNodeList controlXmlFragments)
         {
             foreach (XmlNode controlXmlNode in controlXmlFragments)
             {
@@ -189,7 +189,7 @@ namespace System.Windows.Forms.Layout
             }
         }
 
-        private void ParseStyles(TableLayoutSettings settings, XmlNodeList controlXmlFragments, bool columns)
+        private static void ParseStyles(TableLayoutSettings settings, XmlNodeList controlXmlFragments, bool columns)
         {
             foreach (XmlNode styleXmlNode in controlXmlFragments)
             {
@@ -216,7 +216,7 @@ namespace System.Windows.Forms.Layout
                             nextIndex++;
                         }
 
-                        SizeType type = (SizeType)Enum.Parse(sizeTypeType, styleString.Substring(currentIndex, nextIndex - currentIndex), true);
+                        SizeType type = (SizeType)Enum.Parse(sizeTypeType, styleString.AsSpan(currentIndex, nextIndex - currentIndex), true);
 
                         // ----- Float Parsing --------------
                         // Find the next Digit (start of the float)

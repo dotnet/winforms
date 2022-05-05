@@ -66,7 +66,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="value"> initial value</param>
         /// <returns> scaled metric</returns>
-        private int ScaleToCurrentDpi(int value)
+        private static int ScaleToCurrentDpi(int value)
         {
             return DpiHelper.IsScalingRequirementMet ? DpiHelper.LogicalToDeviceUnits(value) : value;
         }

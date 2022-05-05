@@ -289,7 +289,7 @@ namespace System.Windows.Forms.Automation
             if (_provider.TextLength == 0)
             {
                 rectangles.Add(ownerBounds);
-                return _provider.RectListToDoubleArray(rectangles);
+                return UiaTextProvider.RectListToDoubleArray(rectangles);
             }
 
             // if this is an end of line
@@ -321,7 +321,7 @@ namespace System.Windows.Forms.Automation
             if (_provider.IsMultiline)
             {
                 rectangles = GetMultilineBoundingRectangles(text, mapClientToScreen, clippingRectangle);
-                return _provider.RectListToDoubleArray(rectangles);
+                return UiaTextProvider.RectListToDoubleArray(rectangles);
             }
 
             // Figure out the rectangle for this one line.
@@ -338,7 +338,7 @@ namespace System.Windows.Forms.Automation
                 rectangles.Add(rectangle);
             }
 
-            return _provider.RectListToDoubleArray(rectangles);
+            return UiaTextProvider.RectListToDoubleArray(rectangles);
         }
 
         IRawElementProviderSimple ITextRangeProvider.GetEnclosingElement() => _enclosingElement;
@@ -659,7 +659,7 @@ namespace System.Windows.Forms.Automation
             return rects;
         }
 
-        private HorizontalTextAlignment GetHorizontalTextAlignment(ES editStyle)
+        private static HorizontalTextAlignment GetHorizontalTextAlignment(ES editStyle)
         {
             if (editStyle.HasFlag(ES.CENTER))
             {
@@ -674,7 +674,7 @@ namespace System.Windows.Forms.Automation
             return HorizontalTextAlignment.Left;
         }
 
-        private CapStyle GetCapStyle(ES editStyle) => editStyle.HasFlag(ES.UPPERCASE) ? CapStyle.AllCap : CapStyle.None;
+        private static CapStyle GetCapStyle(ES editStyle) => editStyle.HasFlag(ES.UPPERCASE) ? CapStyle.AllCap : CapStyle.None;
 
         private bool GetReadOnly() => _provider.IsReadOnly;
 
@@ -682,7 +682,7 @@ namespace System.Windows.Forms.Automation
 
         private static string GetFontName(LOGFONTW logfont) => logfont.FaceName.ToString();
 
-        private double GetFontSize(LOGFONTW logfont)
+        private static double GetFontSize(LOGFONTW logfont)
         {
             // Note: this assumes integral point sizes. violating this assumption would confuse the user
             // because they set something to 7 point but reports that it is, say 7.2 point, due to the rounding.

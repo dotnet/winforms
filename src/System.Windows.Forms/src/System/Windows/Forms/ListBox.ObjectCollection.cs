@@ -106,7 +106,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Entry entry = InnerArray.GetEntry(item);
+                    Entry entry = GetEntry(item);
                     if (Count > 0)
                     {
                         index = InnerArray.BinarySearch(entry);

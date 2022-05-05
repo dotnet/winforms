@@ -2,13 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
+using System.ComponentModel;
+using System.Globalization;
 
 namespace System.Windows.Forms
 {
-    using System.ComponentModel;
-    using System.Globalization;
-
     /// <summary>
     ///  ImageIndexConverter is a class that can be used to convert
     ///  image index values one data type to another.
@@ -22,7 +20,7 @@ namespace System.Windows.Forms
         ///  type is string.  If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
             ArgumentNullException.ThrowIfNull(destinationType);
 

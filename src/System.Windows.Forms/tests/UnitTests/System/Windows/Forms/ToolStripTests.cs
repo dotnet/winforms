@@ -6,8 +6,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 using Xunit;
 using static Interop;
 
@@ -7105,8 +7105,9 @@ namespace System.Windows.Forms.Tests
         }
 
         [ActiveIssue("https://github.com/dotnet/winforms/issues/6610")]
-        [ConditionalWinFormsFact(UnsupportedArchitecture = Architecture.X86,
-            Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6610")]
+        [WinFormsFact]
+        [SkipOnArchitecture(TestArchitectures.X86,
+            "Flaky tests, see: https://github.com/dotnet/winforms/issues/6610")]
         public void ToolStrip_WndProc_InvokeMouseActivate_Success()
         {
             using var control = new SubToolStrip();
@@ -7121,8 +7122,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [ActiveIssue("https://github.com/dotnet/winforms/issues/6610")]
-        [ConditionalWinFormsFact(UnsupportedArchitecture = Architecture.Arm64,
-            Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6610")]
+        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6610")]
         public void ToolStrip_WndProc_InvokeMouseActivateWithHandle_Success()
         {
             using var control = new SubToolStrip();

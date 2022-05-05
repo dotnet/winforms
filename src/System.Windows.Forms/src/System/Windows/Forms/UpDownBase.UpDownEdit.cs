@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using static Interop;
 
@@ -24,6 +23,7 @@ namespace System.Windows.Forms
                 _parent = parent;
             }
 
+            [AllowNull]
             public override string Text
             {
                 get => base.Text;

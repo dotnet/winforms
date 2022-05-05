@@ -25,14 +25,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     ///  This class only knows how to process things that are natively in the typeinfo.  Other property
     ///  information such as IPerPropertyBrowsing is handled elsewhere.
     /// </summary>
-    internal class Com2TypeInfoProcessor
+    internal static class Com2TypeInfoProcessor
     {
         private static readonly TraceSwitch DbgTypeInfoProcessorSwitch = new TraceSwitch("DbgTypeInfoProcessor", "Com2TypeInfoProcessor: debug Com2 type info processing");
-
-        private Com2TypeInfoProcessor()
-        {
-        }
-
         private static ModuleBuilder moduleBuilder;
 
         private static ModuleBuilder ModuleBuilder
@@ -138,7 +133,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             bool succeeded = false;
 
             // first try to find one with a valid value
-            cnd.GetPropertyValue(obj, "__id", ref succeeded);
+            ComNativeDescriptor.GetPropertyValue(obj, "__id", ref succeeded);
 
             if (succeeded)
             {
@@ -146,14 +141,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
             else
             {
-                cnd.GetPropertyValue(obj, DispatchID.Name, ref succeeded);
+                ComNativeDescriptor.GetPropertyValue(obj, DispatchID.Name, ref succeeded);
                 if (succeeded)
                 {
                     dispid = DispatchID.Name;
                 }
                 else
                 {
-                    cnd.GetPropertyValue(obj, "Name", ref succeeded);
+                    ComNativeDescriptor.GetPropertyValue(obj, "Name", ref succeeded);
                     if (succeeded)
                     {
                         names = new string[] { "Name" };
@@ -463,7 +458,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     try
                     {
-                        hr = cnd.GetPropertyValue(obj, pi.DispId, pvar);
+                        hr = ComNativeDescriptor.GetPropertyValue(obj, pi.DispId, pvar);
                     }
                     catch (ExternalException ex)
                     {
@@ -509,13 +504,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
             if (!hr.Succeeded())
             {
-                throw new COMException(string.Format(SR.TYPEINFOPROCESSORGetDocumentationFailed, dispid, hr, cnd.GetClassName(typeInfo)), (int)hr);
+                throw new COMException(string.Format(SR.TYPEINFOPROCESSORGetDocumentationFailed, dispid, hr, ComNativeDescriptor.GetClassName(typeInfo)), (int)hr);
             }
 
             string name = nameBstr.String.ToString();
             if (string.IsNullOrEmpty(name))
             {
-                Debug.Fail(string.Format(CultureInfo.CurrentCulture, "ITypeInfo::GetDocumentation didn't return a name for DISPID 0x{0:X} but returned SUCCEEDED(hr),  Component=" + cnd.GetClassName(typeInfo), dispid));
+                Debug.Fail(string.Format(CultureInfo.CurrentCulture, "ITypeInfo::GetDocumentation didn't return a name for DISPID 0x{0:X} but returned SUCCEEDED(hr),  Component=" + ComNativeDescriptor.GetClassName(typeInfo), dispid));
                 return null;
             }
 
@@ -1022,7 +1017,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            private PropertyDescriptor[] ClonePropertyDescriptors(PropertyDescriptor[] props)
+            private static PropertyDescriptor[] ClonePropertyDescriptors(PropertyDescriptor[] props)
             {
                 PropertyDescriptor[] retProps = new PropertyDescriptor[props.Length];
                 for (int i = 0; i < props.Length; i++)

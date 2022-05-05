@@ -4,7 +4,7 @@
 
 internal partial class Interop
 {
-    internal partial class SHDocVw
+    internal static partial class SHDocVw
     {
         public enum CSC : int
         {

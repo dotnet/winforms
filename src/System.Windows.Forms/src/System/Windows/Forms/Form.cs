@@ -230,7 +230,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Form::set_Active - " + Name);
+                Debug.WriteLineIf(s_focusTracing!.TraceVerbose, "Form::set_Active - " + Name);
                 if ((_formState[FormStateIsActive] != 0) != value)
                 {
                     if (value)
@@ -2232,7 +2232,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void SetVisibleCore(bool value)
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Form::SetVisibleCore(" + value.ToString() + ") - " + Name);
+            Debug.WriteLineIf(s_focusTracing!.TraceVerbose, "Form::SetVisibleCore(" + value.ToString() + ") - " + Name);
 
             // If DialogResult.OK and the value == Visible then this code has been called either through
             // ShowDialog( ) or explicit Hide( ) by the user. So don't go through this function again.
@@ -2382,7 +2382,6 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated && Visible)
                 {
-                    IntPtr hWnd = Handle;
                     switch (value)
                     {
                         case FormWindowState.Normal:
@@ -2699,7 +2698,7 @@ namespace System.Windows.Forms
         // Fonts) we end up making everything too small due to roundoff,
         // etc... solution - just don't shrink as much.
         //
-        private float AdjustScale(float scale)
+        private static float AdjustScale(float scale)
         {
             // NOTE : This function is cloned in FormDocumentDesigner... remember to keep
             //      : them in sync
@@ -3088,7 +3087,23 @@ namespace System.Windows.Forms
 
         protected override AccessibleObject CreateAccessibilityInstance()
         {
-            return new FormAccessibleObject(this);
+            AccessibleObject accessibleObject = new FormAccessibleObject(this);
+
+            // Try to raise UIA focus event for the form, if it's focused.
+            // Try it after the accessible object creation, because a screen reader
+            // gets the accessible object after "OnGotFocus", "OnLoad", "OnShown" handlers,
+            // and the object is not created yet, when these methods work, so we can't raise
+            // the event while the object is not created. It's the Form control's feature only,
+            // for the rest controls the accessibility tree will be built, when they get focus.
+            // This case works for an empty form or a form with disabled or invisible controls
+            // to have consistent behavior with .NET Framework.
+            // If the form has any control (ActiveControl is true), a screen reader will focus on it instead.
+            if (Focused && ActiveControl is null)
+            {
+                accessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
+
+            return accessibleObject;
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -3947,6 +3962,19 @@ namespace System.Windows.Forms
             }
 
             base.OnFontChanged(e);
+        }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+
+            // Raise the UIA focus event for an empty form (form with no ActiveControl),
+            // when it gets focus to a screen reader can focus on it and announce its title text.
+            // If the form has any control, a screen reader will focus on it instead.
+            if (Focused && IsAccessibilityObjectCreated && ActiveControl is null)
+            {
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
         }
 
         /// <summary>
@@ -5332,7 +5360,7 @@ namespace System.Windows.Forms
             return _formState[FormStateAutoScaling] != 0;
         }
 
-        private bool ShouldSerializeClientSize()
+        private static bool ShouldSerializeClientSize()
         {
             return true;
         }
@@ -5931,12 +5959,15 @@ namespace System.Windows.Forms
                         SuspendLayoutForMinimize();
                     }
 
-                    _restoredWindowBounds.Size = ClientSize;
-                    _formStateEx[FormStateExWindowBoundsWidthIsClientSize] = 1;
-                    _formStateEx[FormStateExWindowBoundsHeightIsClientSize] = 1;
-                    _restoredWindowBoundsSpecified = BoundsSpecified.Size;
-                    _restoredWindowBounds.Location = Location;
-                    _restoredWindowBoundsSpecified |= BoundsSpecified.Location;
+                    if (!OsVersion.IsWindows11_OrGreater)
+                    {
+                        _restoredWindowBounds.Size = ClientSize;
+                        _formStateEx[FormStateExWindowBoundsWidthIsClientSize] = 1;
+                        _formStateEx[FormStateExWindowBoundsHeightIsClientSize] = 1;
+                        _restoredWindowBoundsSpecified = BoundsSpecified.Size;
+                        _restoredWindowBounds.Location = Location;
+                        _restoredWindowBoundsSpecified |= BoundsSpecified.Location;
+                    }
 
                     // stash off restoreBounds As well...
                     _restoreBounds.Size = Size;
@@ -6003,7 +6034,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  WM_ENTERSIZEMOVE handler, so that user can hook up OnResizeBegin event.
         /// </summary>
-        private void WmEnterSizeMove(ref Message m)
+        private void WmEnterSizeMove()
         {
             _formStateEx[FormStateExInModalSizingLoop] = 1;
             OnResizeBegin(EventArgs.Empty);
@@ -6012,7 +6043,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  WM_EXITSIZEMOVE handler, so that user can hook up OnResizeEnd event.
         /// </summary>
-        private void WmExitSizeMove(ref Message m)
+        private void WmExitSizeMove()
         {
             _formStateEx[FormStateExInModalSizingLoop] = 0;
             OnResizeEnd(EventArgs.Empty);
@@ -6359,7 +6390,10 @@ namespace System.Windows.Forms
 
             if (Modal && _dialogResult == DialogResult.None)
             {
-                DialogResult = DialogResult.Cancel;
+                if (GetState(States.Recreate) == false)
+                {
+                    DialogResult = DialogResult.Cancel;
+                }
             }
         }
 
@@ -6531,11 +6565,11 @@ namespace System.Windows.Forms
                     WmClose(ref m);
                     break;
                 case User32.WM.ENTERSIZEMOVE:
-                    WmEnterSizeMove(ref m);
+                    WmEnterSizeMove();
                     DefWndProc(ref m);
                     break;
                 case User32.WM.EXITSIZEMOVE:
-                    WmExitSizeMove(ref m);
+                    WmExitSizeMove();
                     DefWndProc(ref m);
                     break;
                 case User32.WM.CREATE:

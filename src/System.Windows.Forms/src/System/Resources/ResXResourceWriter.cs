@@ -575,13 +575,13 @@ namespace System.Resources
             }
         }
 
-        private string GetTypeName(string typeName)
+        private static string GetTypeName(string typeName)
         {
             int indexStart = typeName.IndexOf(',');
             return ((indexStart == -1) ? typeName : typeName.Substring(0, indexStart));
         }
 
-        private string GetFullName(string typeName)
+        private static string GetFullName(string typeName)
         {
             int indexStart = typeName.IndexOf(',');
             if (indexStart == -1)

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 
 namespace System.Windows.Forms
@@ -12,17 +10,17 @@ namespace System.Windows.Forms
     {
         private class DataGridViewSelectedRowCellsAccessibleObject : AccessibleObject
         {
-            private readonly DataGridViewRow owner;
-            private int[] runtimeId;
+            private readonly DataGridViewRow _owningDataGridViewRow;
+            private int[]? _runtimeId;
 
             internal DataGridViewSelectedRowCellsAccessibleObject(DataGridViewRow owner)
             {
-                this.owner = owner;
+                _owningDataGridViewRow = owner;
             }
 
             public override string Name => SR.DataGridView_AccSelectedRowCellsName;
 
-            public override AccessibleObject Parent => owner.AccessibilityObject;
+            public override AccessibleObject Parent => _owningDataGridViewRow.AccessibilityObject;
 
             public override AccessibleRole Role => AccessibleRole.Grouping;
 
@@ -34,23 +32,24 @@ namespace System.Windows.Forms
             public override string Value => Name;
 
             internal override int[] RuntimeId
-                => runtimeId ??= new int[] { RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode() };
+                => _runtimeId ??= new int[] { RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode() };
 
-            public override AccessibleObject GetChild(int index)
+            public override AccessibleObject? GetChild(int index)
             {
                 if (index < GetChildCount())
                 {
                     int selectedCellsCount = -1;
-                    for (int i = 1; i < owner.AccessibilityObject.GetChildCount(); i++)
+                    for (int i = 1; i < _owningDataGridViewRow.AccessibilityObject.GetChildCount(); i++)
                     {
-                        if ((owner.AccessibilityObject.GetChild(i).State & AccessibleStates.Selected) == AccessibleStates.Selected)
+                        AccessibleObject? child = _owningDataGridViewRow.AccessibilityObject.GetChild(i);
+                        if (child is not null && (child.State & AccessibleStates.Selected) == AccessibleStates.Selected)
                         {
                             selectedCellsCount++;
                         }
 
                         if (selectedCellsCount == index)
                         {
-                            return owner.AccessibilityObject.GetChild(i);
+                            return child;
                         }
                     }
 
@@ -68,9 +67,10 @@ namespace System.Windows.Forms
                 int selectedCellsCount = 0;
 
                 // start the enumeration from 1, because the first acc obj in the data grid view row is the row header cell
-                for (int i = 1; i < owner.AccessibilityObject.GetChildCount(); i++)
+                for (int i = 1; i < _owningDataGridViewRow.AccessibilityObject.GetChildCount(); i++)
                 {
-                    if ((owner.AccessibilityObject.GetChild(i).State & AccessibleStates.Selected) == AccessibleStates.Selected)
+                    AccessibleObject? child = _owningDataGridViewRow.AccessibilityObject.GetChild(i);
+                    if (child is not null && (child.State & AccessibleStates.Selected) == AccessibleStates.Selected)
                     {
                         selectedCellsCount++;
                     }
@@ -81,11 +81,12 @@ namespace System.Windows.Forms
 
             public override AccessibleObject GetSelected() => this;
 
-            public override AccessibleObject GetFocused()
+            public override AccessibleObject? GetFocused()
             {
-                if (owner.DataGridView?.CurrentCell is not null && owner.DataGridView.CurrentCell.Selected)
+                DataGridViewCell? currentCell = _owningDataGridViewRow.DataGridView?.CurrentCell;
+                if (currentCell is not null && currentCell.Selected)
                 {
-                    return owner.DataGridView.CurrentCell.AccessibilityObject;
+                    return currentCell.AccessibilityObject;
                 }
                 else
                 {
@@ -93,7 +94,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
+            public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
             {
                 switch (navigationDirection)
                 {
