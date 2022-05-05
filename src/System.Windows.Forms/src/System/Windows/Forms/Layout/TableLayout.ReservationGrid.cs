@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Layout
         private sealed class ReservationGrid
         {
             private int _numColumns = 1;
-            private readonly List<BitArray> _rows = new List<BitArray>();
+            private readonly List<BitArray> _rows = new();
 
             public bool IsReserved(int column, int rowOffset)
             {
