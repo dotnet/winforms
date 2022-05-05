@@ -9996,6 +9996,16 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Öğenin BackColor özelliğinin değeri değiştiğinde gerçekleştirilir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemOnBindableCommandChangedDescr">
+        <source>Occurs whenever the bindable command changes.</source>
+        <target state="new">Occurs whenever the bindable command changes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnBindingContextChangedDescr">
+        <source>Occurs whenever the binding context changes.</source>
+        <target state="new">Occurs whenever the binding context changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemOnClickDescr">
         <source>Occurs when the item is clicked.</source>
         <target state="translated">Öğe tıklatıldığında gerçekleşir.</target>

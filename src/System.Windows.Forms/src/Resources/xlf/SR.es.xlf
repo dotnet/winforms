@@ -9996,6 +9996,16 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Tiene lugar cuando el valor de la propiedad BackColor cambia en el elemento.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemOnBindableCommandChangedDescr">
+        <source>Occurs whenever the bindable command changes.</source>
+        <target state="new">Occurs whenever the bindable command changes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnBindingContextChangedDescr">
+        <source>Occurs whenever the binding context changes.</source>
+        <target state="new">Occurs whenever the binding context changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemOnClickDescr">
         <source>Occurs when the item is clicked.</source>
         <target state="translated">Tiene lugar cuando se hace clic en el elemento.</target>

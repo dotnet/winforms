@@ -9996,6 +9996,16 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Generato quando il valore della proprietà BackColor dell'elemento viene modificato.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemOnBindableCommandChangedDescr">
+        <source>Occurs whenever the bindable command changes.</source>
+        <target state="new">Occurs whenever the bindable command changes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnBindingContextChangedDescr">
+        <source>Occurs whenever the binding context changes.</source>
+        <target state="new">Occurs whenever the binding context changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemOnClickDescr">
         <source>Occurs when the item is clicked.</source>
         <target state="translated">Generato quando si fa clic sull'elemento.</target>

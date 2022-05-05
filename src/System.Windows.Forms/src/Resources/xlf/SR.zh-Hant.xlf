@@ -9996,6 +9996,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">當 BackColor 屬性值在項目上變更時發生。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemOnBindableCommandChangedDescr">
+        <source>Occurs whenever the bindable command changes.</source>
+        <target state="new">Occurs whenever the bindable command changes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnBindingContextChangedDescr">
+        <source>Occurs whenever the binding context changes.</source>
+        <target state="new">Occurs whenever the binding context changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemOnClickDescr">
         <source>Occurs when the item is clicked.</source>
         <target state="translated">當按一下項目時發生。</target>

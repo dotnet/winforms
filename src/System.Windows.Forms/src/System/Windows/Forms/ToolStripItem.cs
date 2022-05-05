@@ -23,6 +23,7 @@ namespace System.Windows.Forms
     [ToolboxItem(false)]
     [DefaultProperty(nameof(Text))]
     public abstract partial class ToolStripItem : Component,
+                              IBindableComponent,
                               IDropTarget,
                               ISupportOleDropSource,
                               IArrangedElement,
@@ -59,6 +60,11 @@ namespace System.Windows.Forms
 
         private ToolStripItemDisplayStyle _displayStyle = ToolStripItemDisplayStyle.ImageAndText;
 
+        // Backing fields for Infrastructure to make ToolStripItem bindable.
+        private BindingContext _bindingContext;
+        private ControlBindingsCollection _dataBindings;
+        private System.Windows.Input.ICommand _bindableCommand;
+
         private static readonly ArrangedElementCollection s_emptyChildCollection = new ArrangedElementCollection();
 
         internal static readonly object s_mouseDownEvent = new object();
@@ -89,6 +95,9 @@ namespace System.Windows.Forms
         internal static readonly object s_ownerChangedEvent = new object();
         internal static readonly object s_paintEvent = new object();
         internal static readonly object s_textChangedEvent = new object();
+
+        internal static readonly object s_bindableCommandChangedEvent = new object();
+        internal static readonly object s_bindingContextChangedEvent = new object();
 
         // Property store keys for properties. The property store allocates most efficiently
         // in groups of four, so we try to lump properties in groups of four based on how
@@ -481,13 +490,47 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged))]
-        [SRDescription(nameof(SR.ToolStripItemOnBackColorChangedDescr))]
-        public event EventHandler BackColorChanged
+        [Bindable(true)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public System.Windows.Input.ICommand BindableCommand
         {
-            add => Events.AddHandler(s_backColorChangedEvent, value);
-            remove => Events.RemoveHandler(s_backColorChangedEvent, value);
+            get => _bindableCommand;
+            set
+            {
+                if (!Equals(_bindableCommand, value))
+                {
+                    _bindableCommand = value;
+                    OnBindableCommandChanged(EventArgs.Empty);
+                }
+            }
         }
+
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public BindingContext BindingContext
+        {
+            get
+            {
+                _bindingContext ??= new BindingContext();
+                return _bindingContext;
+            }
+            set
+            {
+                if (!Equals(_bindingContext, value))
+                {
+                    _bindingContext = value;
+                    OnBindingContextChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [RefreshProperties(RefreshProperties.All)]
+        [ParenthesizePropertyName(true)]
+        public ControlBindingsCollection DataBindings
+            => _dataBindings ??= new ControlBindingsCollection(this);
 
         /// <summary>
         ///  The bounds of the item
@@ -664,6 +707,38 @@ namespace System.Windows.Forms
             }
         }
 
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ToolStripItemOnBackColorChangedDescr))]
+        public event EventHandler BackColorChanged
+        {
+            add => Events.AddHandler(s_backColorChangedEvent, value);
+            remove => Events.RemoveHandler(s_backColorChangedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the binding context has changed
+        /// </summary>
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.ToolStripItemOnBindingContextChangedDescr))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event EventHandler BindingContextChanged
+        {
+            add => Events.AddHandler(s_bindingContextChangedEvent, value);
+            remove => Events.RemoveHandler(s_bindingContextChangedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the BindableCommand has changed
+        /// </summary>
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.ToolStripItemOnBindableCommandChangedDescr))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event EventHandler BindableCommandChanged
+        {
+            add => Events.AddHandler(s_bindableCommandChangedEvent, value);
+            remove => Events.RemoveHandler(s_bindableCommandChangedEvent, value);
+        }
+
         /// <summary>
         ///  Occurs when the display style has changed
         /// </summary>
@@ -674,7 +749,8 @@ namespace System.Windows.Forms
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        private static RightToLeft DefaultRightToLeft => RightToLeft.Inherit;
+        private static RightToLeft DefaultRightToLeft 
+            => RightToLeft.Inherit;
 
         /// <summary>
         ///  Occurs when the control is double clicked.
@@ -1837,6 +1913,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The text of the item
         /// </summary>
+        [Bindable(true)]
         [DefaultValue("")]
         [SRCategory(nameof(SR.CatAppearance))]
         [Localizable(true)]
@@ -2597,7 +2674,14 @@ namespace System.Windows.Forms
             InternalLayout.PerformLayout();
         }
 
-        protected virtual void OnClick(EventArgs e) => RaiseEvent(s_clickEvent, e);
+        protected virtual void OnClick(EventArgs e)
+        {
+            RaiseEvent(s_clickEvent, e);
+            if (BindableCommand?.CanExecute(null) ?? false)
+            {
+                BindableCommand.Execute(null);
+            }
+        }
 
         protected internal virtual void OnLayout(LayoutEventArgs e)
         {
@@ -2637,14 +2721,39 @@ namespace System.Windows.Forms
             }
         }
 
-        protected virtual void OnAvailableChanged(EventArgs e) => RaiseEvent(s_availableChangedEvent, e);
+        protected virtual void OnAvailableChanged(EventArgs e) 
+            => RaiseEvent(s_availableChangedEvent, e);
+
+        /// <summary>
+        ///  Raises the <see cref="ToolStripItem.BindableCommandChanged"/> event.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.OnBindingCommandChanged to send this event to any registered event listeners.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnBindableCommandChanged(EventArgs e)
+            => RaiseEvent(s_bindableCommandChangedEvent, e);
+
+        /// <summary>
+        ///  Raises the <see cref="ToolStripItem.BindingContextChanged"/> event.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.OnBindingCommandChanged to send this event to any registered event listeners.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnBindingContextChanged(EventArgs e)
+        {
+            if (_bindingContext is not null)
+            {
+                for (int i = 0; i < DataBindings.Count; i++)
+                {
+                    BindingContext.UpdateBinding(BindingContext, DataBindings[i]);
+                }
+            }
+
+            RaiseEvent(s_bindingContextChangedEvent, e);
+        }
 
         /// <summary>
         ///  Raises the <see cref="ToolStripItem.DragEnter"/> event.
-        ///  Inheriting classes should override this method to handle this event.
-        ///  Call base.OnEnter to send this event to any registered event listeners.
-        /// </summary>
-        /// <summary>
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.OnDragEnter to send this event to any registered event listeners.
         /// </summary>

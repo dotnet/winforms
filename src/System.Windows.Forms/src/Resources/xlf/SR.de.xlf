@@ -9996,6 +9996,16 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Tritt ein, wenn der Wert der BackColor-Eigenschaft für das Element geändert wird.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemOnBindableCommandChangedDescr">
+        <source>Occurs whenever the bindable command changes.</source>
+        <target state="new">Occurs whenever the bindable command changes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnBindingContextChangedDescr">
+        <source>Occurs whenever the binding context changes.</source>
+        <target state="new">Occurs whenever the binding context changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemOnClickDescr">
         <source>Occurs when the item is clicked.</source>
         <target state="translated">Tritt ein, wenn auf das Element geklickt wird.</target>

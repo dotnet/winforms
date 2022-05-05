@@ -1,5 +1,14 @@
 System.Windows.Forms.BindingMemberInfo.Equals(System.Windows.Forms.BindingMemberInfo other) -> bool
 System.Windows.Forms.LinkArea.Equals(System.Windows.Forms.LinkArea other) -> bool
 System.Windows.Forms.TableLayoutPanelCellPosition.Equals(System.Windows.Forms.TableLayoutPanelCellPosition other) -> bool
+System.Windows.Forms.ToolStripItem.BindableCommandChanged -> System.EventHandler
+System.Windows.Forms.ToolStripItem.BindingContextChanged -> System.EventHandler
 override System.Windows.Forms.Form.OnGotFocus(System.EventArgs! e) -> void
+~System.Windows.Forms.ToolStripItem.BindableCommand.get -> System.Windows.Input.ICommand
+~System.Windows.Forms.ToolStripItem.BindableCommand.set -> void
+~System.Windows.Forms.ToolStripItem.BindingContext.get -> System.Windows.Forms.BindingContext
+~System.Windows.Forms.ToolStripItem.BindingContext.set -> void
+~System.Windows.Forms.ToolStripItem.DataBindings.get -> System.Windows.Forms.ControlBindingsCollection
 ~override System.Windows.Forms.ToolStripDropDownMenu.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
+~virtual System.Windows.Forms.ToolStripItem.OnBindableCommandChanged(System.EventArgs e) -> void
+~virtual System.Windows.Forms.ToolStripItem.OnBindingContextChanged(System.EventArgs e) -> void
