@@ -5,14 +5,14 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Specifies the drop description icon type.
+    ///  Specifies the drop description image type.
     /// </summary>
-    public enum DropIconType
+    public enum DropImageType
     {
         /// <summary>
-        /// No drop icon preference; use the default icon.
+        /// No drop image preference; use the default image.
         /// </summary>
-        Default = -1,
+        Invalid = -1,
 
         /// <summary>
         /// A red bisected circle such as that found on a "no smoking" sign.
@@ -45,8 +45,8 @@ namespace System.Windows.Forms
         Warning = 7,
 
         /// <summary>
-        /// Windows 7 and later. Use no drop icon.
+        /// Windows 7 and later. Use no drop image.
         /// </summary>
-        NoDropIcon = 8
+        NoImage = 8
     }
 }

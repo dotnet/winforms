@@ -271,13 +271,12 @@ namespace System.Windows.Forms
                     OnDragLeave(EventArgs.Empty);
 
                     // tell the drag image manager you've left
-                    if (e.DropIcon > DropIconType.Default && e.Data is IComDataObject comDataObject)
+                    if (e.DropImageType > DropImageType.Invalid && e.Data is IComDataObject comDataObject)
                     {
-                        e.DropIcon = DropIconType.Default;
+                        e.DropImageType = DropImageType.Invalid;
                         e.Message = string.Empty;
-                        e.Insert = string.Empty;
-
-                        DragDropHelper.SetDropDescription(comDataObject, e.DropIcon, e.Message, e.Insert);
+                        e.MessageReplacementToken = string.Empty;
+                        DragDropHelper.SetDropDescription(comDataObject, e.DropImageType, e.Message, e.MessageReplacementToken);
                         DragDropHelper.DragLeave();
                     }
                 }
@@ -285,27 +284,26 @@ namespace System.Windows.Forms
                 lastDropTarget = newTarget;
                 if (newTarget is not null)
                 {
-                    DragEventArgs dragEnterArgs = new DragEventArgs(e.Data, e.KeyState, e.X, e.Y, e.AllowedEffect, e.Effect, e.DropIcon, e.Message, e.Insert)
+                    DragEventArgs dragEnterArgs = new DragEventArgs(e.Data, e.KeyState, e.X, e.Y, e.AllowedEffect, e.Effect, e.DropImageType, e.Message, e.MessageReplacementToken)
                     {
                         Effect = DragDropEffects.None,
-                        DropIcon = DropIconType.Default,
+                        DropImageType = DropImageType.Invalid,
                         Message = string.Empty,
-                        Insert = string.Empty
+                        MessageReplacementToken = string.Empty
                     };
 
                     // tell the next drag target you've entered
                     OnDragEnter(dragEnterArgs);
 
                     // tell the drag image manager you've entered
-                    if (dragEnterArgs.DropIcon > DropIconType.Default && dragEnterArgs.Data is IComDataObject comDataObject && owner is ToolStrip toolStrip && toolStrip.IsHandleCreated)
+                    if (dragEnterArgs.DropImageType > DropImageType.Invalid && dragEnterArgs.Data is IComDataObject comDataObject && owner is ToolStrip toolStrip && toolStrip.IsHandleCreated)
                     {
-                        e.DropIcon = !dragEnterArgs.DropIcon.Equals(e.DropIcon) is bool newDropIcon ? dragEnterArgs.DropIcon : e.DropIcon;
-                        e.Message = !dragEnterArgs.Message.Equals(e.Message) is bool newMessage ? dragEnterArgs.Message : e.Message;
-                        e.Insert = !dragEnterArgs.Insert.Equals(e.Insert) is bool newInsert ? dragEnterArgs.Insert : e.Insert;
-
-                        if (newDropIcon || newMessage || newInsert)
+                        if (!dragEnterArgs.DropImageType.Equals(e.DropImageType) || !dragEnterArgs.Message.Equals(e.Message) || !dragEnterArgs.MessageReplacementToken.Equals(e.MessageReplacementToken))
                         {
-                            DragDropHelper.SetDropDescription(comDataObject, e.DropIcon, e.Message, e.Insert);
+                            e.DropImageType = !dragEnterArgs.DropImageType.Equals(e.DropImageType) ? dragEnterArgs.DropImageType : e.DropImageType;
+                            e.Message = !dragEnterArgs.Message.Equals(e.Message) ? dragEnterArgs.Message : e.Message;
+                            e.MessageReplacementToken = !dragEnterArgs.MessageReplacementToken.Equals(e.MessageReplacementToken) ? dragEnterArgs.MessageReplacementToken : e.MessageReplacementToken;
+                            DragDropHelper.SetDropDescription(comDataObject, e.DropImageType, e.Message, e.MessageReplacementToken);
                         }
 
                         Point pt = new(dragEnterArgs.X, dragEnterArgs.Y);

@@ -14,11 +14,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Initializes a new instance of the <see cref="GiveFeedbackEventArgs"/> class.
         /// </summary>
-        public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors) : this(effect, useDefaultCursors, dragImage: null, cursorOffset: default, useDefaultDragImage: false)
+        public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors) : this(effect, useDefaultCursors, dragImage: default!, cursorOffset: default, useDefaultDragImage: false)
         {
         }
 
-        public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
+        public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
             Effect = effect;
             UseDefaultCursors = useDefaultCursors;
@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the drag image bitmap.
         /// </summary>
-        public Bitmap? DragImage { get; set; }
+        public Bitmap DragImage { get; set; }
 
         /// <summary>
         ///  Gets or sets the drag image cursor offset.

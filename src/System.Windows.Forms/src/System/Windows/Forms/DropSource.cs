@@ -66,17 +66,16 @@ namespace System.Windows.Forms
 
         public HRESULT GiveFeedback(Ole32.DROPEFFECT dwEffect)
         {
-            var gfbevent = new GiveFeedbackEventArgs((DragDropEffects)dwEffect, true, _lastDragImage, _lastCursorOffset, _lastUseDefaultDragImage);
+            var gfbevent = new GiveFeedbackEventArgs((DragDropEffects)dwEffect, _lastDragImage is null, _lastDragImage!, _lastCursorOffset, _lastUseDefaultDragImage);
             _peer.OnGiveFeedback(gfbevent);
 
             if (gfbevent.DragImage is not null && _dataObject is not null)
             {
-                _lastDragImage = !gfbevent.DragImage.Equals(_lastDragImage) is bool newDragImage ? gfbevent.DragImage : _lastDragImage;
-                _lastCursorOffset = !gfbevent.CursorOffset.Equals(_lastCursorOffset) is bool newCursorOffset ? gfbevent.CursorOffset : _lastCursorOffset;
-                _lastUseDefaultDragImage = !gfbevent.UseDefaultDragImage.Equals(_lastUseDefaultDragImage) is bool newUseDefaultDragImage ? gfbevent.UseDefaultDragImage : _lastUseDefaultDragImage;
-
-                if (newDragImage || newCursorOffset || newUseDefaultDragImage)
+                if (!gfbevent.DragImage.Equals(_lastDragImage) || !gfbevent.CursorOffset.Equals(_lastCursorOffset) || !gfbevent.UseDefaultDragImage.Equals(_lastUseDefaultDragImage))
                 {
+                    _lastDragImage = !gfbevent.DragImage.Equals(_lastDragImage) ? gfbevent.DragImage : _lastDragImage;
+                    _lastCursorOffset = !gfbevent.CursorOffset.Equals(_lastCursorOffset) ? gfbevent.CursorOffset : _lastCursorOffset;
+                    _lastUseDefaultDragImage = !gfbevent.UseDefaultDragImage.Equals(_lastUseDefaultDragImage) ? gfbevent.UseDefaultDragImage : _lastUseDefaultDragImage;
                     DragDropHelper.SetDragImage(_dataObject, _lastDragImage, _lastCursorOffset, _lastUseDefaultDragImage);
 
                     // If a target has already been entered, call DragEnter to effectively display the new drag image.

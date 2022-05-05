@@ -100,7 +100,7 @@ namespace WinformsControlsTest
 
         private void DragDrop_DragEnter(object? sender, DragEventArgs e)
         {
-            e.DropIcon = DropIconType.Warning;
+            e.DropImageType = DropImageType.Warning;
             e.Effect = DragDropEffects.None;
         }
 
@@ -117,24 +117,24 @@ namespace WinformsControlsTest
             {
                 if (files.All(file => file.Contains("NyanCat") && file.EndsWith(".bmp")))
                 {
-                    // Set the target drop icon to a plus sign (+).
-                    e.DropIcon = DropIconType.Copy;
+                    // Set the target drop image to a plus sign (+).
+                    e.DropImageType = DropImageType.Copy;
 
                     // Set the target drop text.
-                    e.Message = $"{e.DropIcon} %1 from Explorer";
-                    e.Insert = $"{(files.Length > 1 ? "Cats" : "Cat")}";
+                    e.Message = $"{e.DropImageType} %1 from Explorer";
+                    e.MessageReplacementToken = $"{(files.Length > 1 ? "Cats" : "Cat")}";
 
                     // Set the target drop effect.
                     e.Effect = DragDropEffects.Copy;
                 }
                 else if (files.Length == 1 && files.Any(file => file.EndsWith("DragAccept.rtf")))
                 {
-                    // Set the target drop icon to a red bisected circle.
-                    e.DropIcon = DropIconType.None;
+                    // Set the target drop image to a red bisected circle.
+                    e.DropImageType = DropImageType.None;
 
                     // Set the target drop text.
                     e.Message = $"{Path.GetFileNameWithoutExtension(files[0])}%1";
-                    e.Insert = Path.GetExtension(files[0]);
+                    e.MessageReplacementToken = Path.GetExtension(files[0]);
 
                     // Set the target drop effect.
                     e.Effect = DragDropEffects.None;
@@ -142,12 +142,12 @@ namespace WinformsControlsTest
             }
             else if (e.Data.GetDataPresent(nameof(_nyanCatBmp)))
             {
-                // Set the target drop icon to a plus sign (+).
-                e.DropIcon = DropIconType.Copy;
+                // Set the target drop image to a plus sign (+).
+                e.DropImageType = DropImageType.Copy;
 
                 // Set the target drop text.
-                e.Message = $"{e.DropIcon} %1 from WinForms";
-                e.Insert = "Cat";
+                e.Message = $"{e.DropImageType} %1 from WinForms";
+                e.MessageReplacementToken = "Cat";
 
                 // Set the target drop effect.
                 e.Effect = DragDropEffects.Copy;
@@ -236,33 +236,33 @@ namespace WinformsControlsTest
             {
                 if (e.Data.GetDataPresent(nameof(_nyanCatAscii)))
                 {
-                    // Set the target drop icon to a plus sign (+).
-                    e.DropIcon = DropIconType.Copy;
+                    // Set the target drop image to a plus sign (+).
+                    e.DropImageType = DropImageType.Copy;
 
                     // Set the target drop text.
                     e.Message = "Copy cat to %1";
-                    e.Insert = "~=[,,_,,]:3";
+                    e.MessageReplacementToken = "~=[,,_,,]:3";
 
                     // Set the target drop effect.
                     e.Effect = DragDropEffects.Copy;
                 }
                 else if (e.Data.GetDataPresent(nameof(_nyanCatBmp)))
                 {
-                    e.DropIcon = DropIconType.None;
+                    e.DropImageType = DropImageType.None;
                     e.Message = "Nyan %1";
-                    e.Insert = "Cat";
+                    e.MessageReplacementToken = "Cat";
                     e.Effect = DragDropEffects.None;
                 }
                 else if (e.Data.GetDataPresent(DataFormats.FileDrop)
                     && e.Data.GetData(DataFormats.FileDrop) is string[] files
                     && files.Length > 0 && files[0].EndsWith("DragAccept.rtf"))
                 {
-                    // Set the target drop icon to a red bisected circle.
-                    e.DropIcon = DropIconType.None;
+                    // Set the target drop image to a red bisected circle.
+                    e.DropImageType = DropImageType.None;
 
                     // Set the target drop text.
                     e.Message = $"{Path.GetFileNameWithoutExtension(files[0])}%1";
-                    e.Insert = Path.GetExtension(files[0]);
+                    e.MessageReplacementToken = Path.GetExtension(files[0]);
 
                     // Set the target drop effect.
                     e.Effect = DragDropEffects.None;
@@ -276,33 +276,33 @@ namespace WinformsControlsTest
             {
                 if (e.Data.GetDataPresent(nameof(_nyanCatAscii)))
                 {
-                    // Set the target drop icon to a plus sign (+).
-                    e.DropIcon = DropIconType.Copy;
+                    // Set the target drop image to a plus sign (+).
+                    e.DropImageType = DropImageType.Copy;
 
                     // Set the target drop text.
                     e.Message = "Copy cat to %1";
-                    e.Insert = "~=[,,_,,]:3";
+                    e.MessageReplacementToken = "~=[,,_,,]:3";
 
                     // Set the target drop effect.
                     e.Effect = DragDropEffects.Copy;
                 }
                 else if (e.Data.GetDataPresent(nameof(_nyanCatBmp)))
                 {
-                    e.DropIcon = DropIconType.None;
+                    e.DropImageType = DropImageType.None;
                     e.Message = "Nyan %1";
-                    e.Insert = "Cat";
+                    e.MessageReplacementToken = "Cat";
                     e.Effect = DragDropEffects.None;
                 }
                 else if (e.Data.GetDataPresent(DataFormats.FileDrop)
                     && e.Data.GetData(DataFormats.FileDrop) is string[] files
                     && files.Length > 0 && files[0].EndsWith("DragAccept.rtf"))
                 {
-                    // Set the target drop icon to a red bisected circle.
-                    e.DropIcon = DropIconType.None;
+                    // Set the target drop image to a red bisected circle.
+                    e.DropImageType = DropImageType.None;
 
                     // Set the target drop text.
                     e.Message = $"{Path.GetFileNameWithoutExtension(files[0])}%1";
-                    e.Insert = Path.GetExtension(files[0]);
+                    e.MessageReplacementToken = Path.GetExtension(files[0]);
 
                     // Set the target drop effect.
                     e.Effect = DragDropEffects.None;
@@ -319,23 +319,23 @@ namespace WinformsControlsTest
                     && e.Data.GetData("FileName") is string[] fileNames
                     && fileNames.Length > 0 && fileNames[0].EndsWith("DragAccept.rtf"))
                 {
-                    e.DropIcon = DropIconType.Link;
+                    e.DropImageType = DropImageType.Link;
                     e.Message = "%1 (shellapi.h)";
-                    e.Insert = "DragAcceptFiles";
+                    e.MessageReplacementToken = "DragAcceptFiles";
                     e.Effect = DragDropEffects.Link;
                 }
                 else if (e.Data.GetDataPresent(nameof(_nyanCatAscii)))
                 {
-                    e.DropIcon = DropIconType.None;
+                    e.DropImageType = DropImageType.None;
                     e.Message = "Ascii %1";
-                    e.Insert = "Cat";
+                    e.MessageReplacementToken = "Cat";
                     e.Effect = DragDropEffects.None;
                 }
                 else if (e.Data.GetDataPresent(nameof(_nyanCatBmp)))
                 {
-                    e.DropIcon = DropIconType.None;
+                    e.DropImageType = DropImageType.None;
                     e.Message = "Nyan %1";
-                    e.Insert = "Cat";
+                    e.MessageReplacementToken = "Cat";
                     e.Effect = DragDropEffects.None;
                 }
             }
@@ -519,21 +519,21 @@ namespace WinformsControlsTest
 
         private void DragAcceptItem_DragEnter(object? sender, DragEventArgs e)
         {
-            e.DropIcon = DropIconType.Link;
+            e.DropImageType = DropImageType.Link;
             e.Message = "DragAcceptFiles";
             e.Effect = DragDropEffects.Link;
         }
 
         private void NyanCatItem_DragEnter(object? sender, DragEventArgs e)
         {
-            e.DropIcon = DropIconType.Link;
+            e.DropImageType = DropImageType.Link;
             e.Message = "NyanCat";
             e.Effect = DragDropEffects.Link;
         }
 
         private void AsciiCatItem_DragEnter(object? sender, DragEventArgs e)
         {
-            e.DropIcon = DropIconType.Link;
+            e.DropImageType = DropImageType.Link;
             e.Message = "AsciiCat";
             e.Effect = DragDropEffects.Link;
         }

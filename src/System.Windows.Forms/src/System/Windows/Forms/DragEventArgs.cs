@@ -20,7 +20,7 @@ namespace System.Windows.Forms
             int y,
             DragDropEffects allowedEffect,
             DragDropEffects effect)
-            : this(data, keyState, x, y, allowedEffect, effect, dropIcon: DropIconType.Default, message: string.Empty, insert: string.Empty)
+            : this(data, keyState, x, y, allowedEffect, effect, dropImageType: DropImageType.Invalid, message: string.Empty, messageReplacementToken: string.Empty)
         {
         }
 
@@ -31,9 +31,9 @@ namespace System.Windows.Forms
             int y,
             DragDropEffects allowedEffect,
             DragDropEffects effect,
-            DropIconType dropIcon,
+            DropImageType dropImageType,
             string message,
-            string insert)
+            string messageReplacementToken)
         {
             Data = data;
             KeyState = keyState;
@@ -41,9 +41,9 @@ namespace System.Windows.Forms
             Y = y;
             AllowedEffect = allowedEffect;
             Effect = effect;
-            DropIcon = dropIcon;
+            DropImageType = dropImageType;
             Message = message;
-            Insert = insert;
+            MessageReplacementToken = messageReplacementToken;
         }
 
         /// <summary>
@@ -79,24 +79,24 @@ namespace System.Windows.Forms
         public DragDropEffects Effect { get; set; }
 
         /// <summary>
-        /// Gets or sets the drop description icon type.
+        /// Gets or sets the drop description image type.
         /// </summary>
-        public DropIconType DropIcon { get; set; }
+        public DropImageType DropImageType { get; set; }
 
         /// <summary>
         /// Gets or sets the drop description text such as "Move to %1".
         /// </summary>
         /// <remarks>
-        /// <para>UI coloring is applied to the text in Insert if used by specifying %1 in Message.</para>
+        /// <para>UI coloring is applied to the text in MessageReplacementToken if used by specifying %1 in Message.</para>
         /// </remarks>
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
         /// <summary>
         /// Gets or sets the drop description text such as "Documents" when %1 is specified in Message.
         /// </summary>
         /// <remarks>
-        /// <para>UI coloring is applied to the text in Insert if used by specifying %1 in Message.</para>
+        /// <para>UI coloring is applied to the text in MessageReplacementToken if used by specifying %1 in Message.</para>
         /// </remarks>
-        public string Insert { get; set; }
+        public string? MessageReplacementToken { get; set; }
     }
 }

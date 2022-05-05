@@ -262,11 +262,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the drop description into a data object.
         /// </summary>
-        public static unsafe void SetDropDescription(IComDataObject dataObject, DropIconType dropIcon, string message, string insert)
+        public static unsafe void SetDropDescription(IComDataObject dataObject, DropImageType dropIcon, string message, string insert)
         {
             if (dataObject is null
-                || dropIcon < DropIconType.Default
-                || dropIcon > DropIconType.NoDropIcon
+                || dropIcon < DropImageType.Invalid
+                || dropIcon > DropImageType.NoImage
                 || (message is not null && message.Length >= Kernel32.MAX_PATH)
                 || (insert is not null && insert.Length >= Kernel32.MAX_PATH))
             {

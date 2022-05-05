@@ -14,9 +14,9 @@ namespace System.Windows.Forms
     {
         private IDataObject? _lastDataObject;
         private DragDropEffects _lastEffect = DragDropEffects.None;
-        private DropIconType _lastDropIcon = DropIconType.Default;
+        private DropImageType _lastDropImageType = DropImageType.Invalid;
         private string _lastMessage = string.Empty;
-        private string _lastInsert = string.Empty;
+        private string _lastMessageReplacementToken = string.Empty;
         private readonly IntPtr _hwndTarget;
         private readonly IDropTarget _owner;
 
@@ -69,7 +69,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            DragEventArgs drgevent = new DragEventArgs(data, (int)grfKeyState, pt.X, pt.Y, (DragDropEffects)pdwEffect, _lastEffect, _lastDropIcon, _lastMessage, _lastInsert);
+            DragEventArgs drgevent = new DragEventArgs(data, (int)grfKeyState, pt.X, pt.Y, (DragDropEffects)pdwEffect, _lastEffect, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
             _lastDataObject = data;
             return drgevent;
         }
@@ -87,15 +87,16 @@ namespace System.Windows.Forms
                 pdwEffect = (uint)drgevent.Effect;
                 _lastEffect = drgevent.Effect;
 
-                if (drgevent.DropIcon > DropIconType.Default && drgevent.Data is IComDataObject comDataObject && _hwndTarget != IntPtr.Zero)
+                if (drgevent.DropImageType > DropImageType.Invalid && drgevent.Data is IComDataObject comDataObject && _hwndTarget != IntPtr.Zero)
                 {
-                    _lastDropIcon = !drgevent.DropIcon.Equals(_lastDropIcon) is bool newDropIcon ? drgevent.DropIcon : _lastDropIcon;
-                    _lastMessage = !drgevent.Message.Equals(_lastMessage) is bool newMessage ? drgevent.Message : _lastMessage;
-                    _lastInsert = !drgevent.Insert.Equals(_lastInsert) is bool newInsert ? drgevent.Insert : _lastInsert;
-
-                    if (newDropIcon || newMessage || newInsert)
+                    if (!drgevent.DropImageType.Equals(_lastDropImageType)
+                        || (drgevent.Message is not null && !drgevent.Message.Equals(_lastMessage))
+                        || (drgevent.MessageReplacementToken is not null && !drgevent.MessageReplacementToken.Equals(_lastMessageReplacementToken)))
                     {
-                        DragDropHelper.SetDropDescription(comDataObject, _lastDropIcon, _lastMessage, _lastInsert);
+                        _lastDropImageType = !drgevent.DropImageType.Equals(_lastDropImageType) ? drgevent.DropImageType : _lastDropImageType;
+                        _lastMessage = !drgevent.Message!.Equals(_lastMessage) ? drgevent.Message : _lastMessage;
+                        _lastMessageReplacementToken = !drgevent.MessageReplacementToken!.Equals(_lastMessageReplacementToken) ? drgevent.MessageReplacementToken : _lastMessageReplacementToken;
+                        DragDropHelper.SetDropDescription(comDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                     }
 
                     DragDropHelper.DragEnter(_hwndTarget, comDataObject, ref pt, pdwEffect);
@@ -120,15 +121,16 @@ namespace System.Windows.Forms
                 pdwEffect = (uint)drgevent.Effect;
                 _lastEffect = drgevent.Effect;
 
-                if (drgevent.DropIcon > DropIconType.Default && drgevent.Data is IComDataObject comDataObject && _hwndTarget != IntPtr.Zero)
+                if (drgevent.DropImageType > DropImageType.Invalid && drgevent.Data is IComDataObject comDataObject && _hwndTarget != IntPtr.Zero)
                 {
-                    _lastDropIcon = !drgevent.DropIcon.Equals(_lastDropIcon) is bool newDropIcon ? drgevent.DropIcon : _lastDropIcon;
-                    _lastMessage = !drgevent.Message.Equals(_lastMessage) is bool newMessage ? drgevent.Message : _lastMessage;
-                    _lastInsert = !drgevent.Insert.Equals(_lastInsert) is bool newInsert ? drgevent.Insert : _lastInsert;
-
-                    if (newDropIcon || newMessage || newInsert)
+                    if (!drgevent.DropImageType.Equals(_lastDropImageType)
+                        || (drgevent.Message is not null && !drgevent.Message.Equals(_lastMessage))
+                        || (drgevent.MessageReplacementToken is not null && !drgevent.MessageReplacementToken.Equals(_lastMessageReplacementToken)))
                     {
-                        DragDropHelper.SetDropDescription(comDataObject, _lastDropIcon, _lastMessage, _lastInsert);
+                        _lastDropImageType = !drgevent.DropImageType.Equals(_lastDropImageType) ? drgevent.DropImageType : _lastDropImageType;
+                        _lastMessage = !drgevent.Message!.Equals(_lastMessage) ? drgevent.Message : _lastMessage;
+                        _lastMessageReplacementToken = !drgevent.MessageReplacementToken!.Equals(_lastMessageReplacementToken) ? drgevent.MessageReplacementToken : _lastMessageReplacementToken;
+                        DragDropHelper.SetDropDescription(comDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                     }
 
                     DragDropHelper.DragOver(ref pt, pdwEffect);
@@ -147,15 +149,14 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragLeave received");
             _owner.OnDragLeave(EventArgs.Empty);
 
-            if (_lastDropIcon > DropIconType.Default && _lastDataObject is IComDataObject comDataObject)
+            if (_lastDropImageType > DropImageType.Invalid && _lastDataObject is IComDataObject comDataObject)
             {
-                _lastDropIcon = !_lastDropIcon.Equals(DropIconType.Default) is bool newDropIcon ? DropIconType.Default : _lastDropIcon;
-                _lastMessage = !_lastMessage.Equals(string.Empty) is bool newMessage ? string.Empty : _lastMessage;
-                _lastInsert = !_lastInsert.Equals(string.Empty) is bool newInsert ? string.Empty : _lastInsert;
-
-                if (newDropIcon || newMessage || newInsert)
+                if (!_lastDropImageType.Equals(DropImageType.Invalid) || !_lastMessage.Equals(string.Empty) || !_lastMessageReplacementToken.Equals(string.Empty))
                 {
-                    DragDropHelper.SetDropDescription(comDataObject, _lastDropIcon, _lastMessage, _lastInsert);
+                    _lastDropImageType = !_lastDropImageType.Equals(DropImageType.Invalid) ? DropImageType.Invalid : _lastDropImageType;
+                    _lastMessage = !_lastMessage.Equals(string.Empty) ? string.Empty : _lastMessage;
+                    _lastMessageReplacementToken = !_lastMessageReplacementToken.Equals(string.Empty) ? string.Empty : _lastMessageReplacementToken;
+                    DragDropHelper.SetDropDescription(comDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                 }
 
                 DragDropHelper.DragLeave();
@@ -175,15 +176,14 @@ namespace System.Windows.Forms
                 _owner.OnDragDrop(drgevent);
                 pdwEffect = (uint)drgevent.Effect;
 
-                if (_lastDropIcon > DropIconType.Default && drgevent.Data is IComDataObject comDataObject)
+                if (_lastDropImageType > DropImageType.Invalid && drgevent.Data is IComDataObject comDataObject)
                 {
-                    _lastDropIcon = !_lastDropIcon.Equals(DropIconType.Default) is bool newDropIcon ? DropIconType.Default : _lastDropIcon;
-                    _lastMessage = !_lastMessage.Equals(string.Empty) is bool newMessage ? string.Empty : _lastMessage;
-                    _lastInsert = !_lastInsert.Equals(string.Empty) is bool newInsert ? string.Empty : _lastInsert;
-
-                    if (newDropIcon || newMessage || newInsert)
+                    if (!_lastDropImageType.Equals(DropImageType.Invalid) || !_lastMessage.Equals(string.Empty) || !_lastMessageReplacementToken.Equals(string.Empty))
                     {
-                        DragDropHelper.SetDropDescription(comDataObject, _lastDropIcon, _lastMessage, _lastInsert);
+                        _lastDropImageType = !_lastDropImageType.Equals(DropImageType.Invalid) ? DropImageType.Invalid : _lastDropImageType;
+                        _lastMessage = !_lastMessage.Equals(string.Empty) ? string.Empty : _lastMessage;
+                        _lastMessageReplacementToken = !_lastMessageReplacementToken.Equals(string.Empty) ? string.Empty : _lastMessageReplacementToken;
+                        DragDropHelper.SetDropDescription(comDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                     }
 
                     DragDropHelper.Drop(comDataObject, ref pt, pdwEffect);

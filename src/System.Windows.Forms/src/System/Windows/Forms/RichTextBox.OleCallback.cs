@@ -19,9 +19,9 @@ namespace System.Windows.Forms
             private IDataObject? lastDataObject;
             private DragDropEffects lastEffect;
             private IComDataObject? _lastComDataObject;
-            private DropIconType _lastDropIcon = DropIconType.Default;
+            private DropImageType _lastDropImageType = DropImageType.Invalid;
             private string _lastMessage = string.Empty;
-            private string _lastInsert = string.Empty;
+            private string _lastMessageReplacementToken = string.Empty;
 
             internal OleCallback(RichTextBox owner)
             {
@@ -131,16 +131,16 @@ namespace System.Windows.Forms
                                                   Control.MousePosition.Y,
                                                   DragDropEffects.All,
                                                   lastEffect,
-                                                  _lastDropIcon,
+                                                  _lastDropImageType,
                                                   _lastMessage,
-                                                  _lastInsert);
+                                                  _lastMessageReplacementToken);
                         if (fReally == 0)
                         {
                             // we are just querying
 
-                            e.DropIcon = _lastDropIcon = DropIconType.Default;
+                            e.DropImageType = _lastDropImageType = DropImageType.Invalid;
                             e.Message = _lastMessage = string.Empty;
-                            e.Insert = _lastInsert = string.Empty;
+                            e.MessageReplacementToken = _lastMessageReplacementToken = string.Empty;
 
                             // We can get here without GetDragDropEffects actually being called first.
                             // This happens when you drag/drop between two rtb's. Say you drag from rtb1 to rtb2.
@@ -151,15 +151,14 @@ namespace System.Windows.Forms
                             e.Effect = ((keyState & User32.MK.CONTROL) == User32.MK.CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
                             owner.OnDragEnter(e);
 
-                            if (e.DropIcon > DropIconType.Default && _lastComDataObject is not null && owner.IsHandleCreated)
+                            if (e.DropImageType > DropImageType.Invalid && _lastComDataObject is not null && owner.IsHandleCreated)
                             {
-                                _lastDropIcon = !e.DropIcon.Equals(_lastDropIcon) is bool newDropIcon ? e.DropIcon : _lastDropIcon;
-                                _lastMessage = !e.Message.Equals(_lastMessage) is bool newMessage ? e.Message : _lastMessage;
-                                _lastInsert = !e.Insert.Equals(_lastInsert) is bool newInsert ? e.Insert : _lastInsert;
-
-                                if (newDropIcon || newMessage || newInsert)
+                                if (!e.DropImageType.Equals(_lastDropImageType) || !e.Message.Equals(_lastMessage) || !e.MessageReplacementToken.Equals(_lastMessageReplacementToken))
                                 {
-                                    DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropIcon, _lastMessage, _lastInsert);
+                                    _lastDropImageType = !e.DropImageType.Equals(_lastDropImageType) ? e.DropImageType : _lastDropImageType;
+                                    _lastMessage = !e.Message.Equals(_lastMessage) ? e.Message : _lastMessage;
+                                    _lastMessageReplacementToken = !e.MessageReplacementToken.Equals(_lastMessageReplacementToken) ? e.MessageReplacementToken : _lastMessageReplacementToken;
+                                    DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                                 }
 
                                 Point pt = new(e.X, e.Y);
@@ -170,15 +169,14 @@ namespace System.Windows.Forms
                         {
                             owner.OnDragDrop(e);
 
-                            if (_lastDropIcon > DropIconType.Default && _lastComDataObject is not null)
+                            if (_lastDropImageType > DropImageType.Invalid && _lastComDataObject is not null)
                             {
-                                _lastDropIcon = !_lastDropIcon.Equals(DropIconType.Default) is bool newDropIcon ? DropIconType.Default : _lastDropIcon;
-                                _lastMessage = !_lastMessage.Equals(string.Empty) is bool newMessage ? string.Empty : _lastMessage;
-                                _lastInsert = !_lastInsert.Equals(string.Empty) is bool newInsert ? string.Empty : _lastInsert;
-
-                                if (newDropIcon || newMessage || newInsert)
+                                if (!_lastDropImageType.Equals(DropImageType.Invalid) || !_lastMessage.Equals(string.Empty) || !_lastMessageReplacementToken.Equals(string.Empty))
                                 {
-                                    DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropIcon, _lastMessage, _lastInsert);
+                                    _lastDropImageType = !_lastDropImageType.Equals(DropImageType.Invalid) ? DropImageType.Invalid : _lastDropImageType;
+                                    _lastMessage = !_lastMessage.Equals(string.Empty) ? string.Empty : _lastMessage;
+                                    _lastMessageReplacementToken = !_lastMessageReplacementToken.Equals(string.Empty) ? string.Empty : _lastMessageReplacementToken;
+                                    DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                                 }
 
                                 Point pt = new(e.X, e.Y);
@@ -277,9 +275,9 @@ namespace System.Windows.Forms
                                                                 Control.MousePosition.Y,
                                                                 DragDropEffects.All,
                                                                 lastEffect,
-                                                                _lastDropIcon,
+                                                                _lastDropImageType,
                                                                 _lastMessage,
-                                                                _lastInsert);
+                                                                _lastMessageReplacementToken);
 
                             // Now tell which of the allowable effects we want to use, but only if we are not already none
                             if (lastEffect != DragDropEffects.None)
@@ -290,15 +288,14 @@ namespace System.Windows.Forms
                             owner.OnDragOver(e);
                             lastEffect = e.Effect;
 
-                            if (e.DropIcon > DropIconType.Default && _lastComDataObject is not null && owner.IsHandleCreated)
+                            if (e.DropImageType > DropImageType.Invalid && _lastComDataObject is not null && owner.IsHandleCreated)
                             {
-                                _lastDropIcon = !e.DropIcon.Equals(_lastDropIcon) is bool newDropIcon ? e.DropIcon : _lastDropIcon;
-                                _lastMessage = !e.Message.Equals(_lastMessage) is bool newMessage ? e.Message : _lastMessage;
-                                _lastInsert = !e.Insert.Equals(_lastInsert) is bool newInsert ? e.Insert : _lastInsert;
-
-                                if (newDropIcon || newMessage || newInsert)
+                                if (!e.DropImageType.Equals(_lastDropImageType) || !e.Message!.Equals(_lastMessage) || !e.MessageReplacementToken!.Equals(_lastMessageReplacementToken))
                                 {
-                                    DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropIcon, _lastMessage, _lastInsert);
+                                    _lastDropImageType = !e.DropImageType.Equals(_lastDropImageType) ? e.DropImageType : _lastDropImageType;
+                                    _lastMessage = !e.Message!.Equals(_lastMessage) ? e.Message : _lastMessage;
+                                    _lastMessageReplacementToken = !e.MessageReplacementToken!.Equals(_lastMessageReplacementToken) ? e.MessageReplacementToken : _lastMessageReplacementToken;
+                                    DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                                 }
 
                                 Point pt = new(e.X, e.Y);
