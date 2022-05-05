@@ -18,7 +18,7 @@ namespace System.Windows.Forms
             private readonly RichTextBox owner;
             private IDataObject? lastDataObject;
             private DragDropEffects lastEffect;
-            private IComDataObject _lastComDataObject;
+            private IComDataObject? _lastComDataObject;
             private DropIconType _lastDropIcon = DropIconType.Default;
             private string _lastMessage = string.Empty;
             private string _lastInsert = string.Empty;

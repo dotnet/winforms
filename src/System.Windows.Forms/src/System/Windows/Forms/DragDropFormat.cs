@@ -54,7 +54,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles whether the data object or the caller owns the storage medium.
         /// </summary>
-        private STGMEDIUM HandleOwner(short cfFormat, STGMEDIUM pMedium, bool fRelease)
+        private static STGMEDIUM HandleOwner(short cfFormat, STGMEDIUM pMedium, bool fRelease)
         {
             STGMEDIUM medium;
 
@@ -75,7 +75,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a copy of the specified storage medium.
         /// </summary>
-        private STGMEDIUM CopyMedium(short cfFormat, STGMEDIUM medium)
+        private static STGMEDIUM CopyMedium(short cfFormat, STGMEDIUM medium)
         {
             if (DragDropHelper.CopyMedium(cfFormat, ref medium, out STGMEDIUM mediumCopy))
             {
@@ -88,7 +88,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Frees the specified the storage medium.
         /// </summary>
-        private void ReleaseMedium(STGMEDIUM medium)
+        private static void ReleaseMedium(STGMEDIUM medium)
         {
             Ole32.ReleaseStgMedium(ref medium);
         }
