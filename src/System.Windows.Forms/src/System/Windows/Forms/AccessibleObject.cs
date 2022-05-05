@@ -1750,25 +1750,28 @@ namespace System.Windows.Forms
         protected void UseStdAccessibleObjects(IntPtr handle, int objid)
         {
             object? acc = null;
-            int result = UnsafeNativeMethods.CreateStdAccessibleObject(
+            UnsafeNativeMethods.CreateStdAccessibleObject(
                 new HandleRef(this, handle),
                 objid,
                 ref IID.IAccessible,
                 ref acc);
 
-            // Get the IEnumVariant interface
-            Guid IID_IEnumVariant = typeof(Oleaut32.IEnumVariant).GUID;
-            object? en = null;
-            result = UnsafeNativeMethods.CreateStdAccessibleObject(
-                        new HandleRef(this, handle),
-                        objid,
-                        ref IID_IEnumVariant,
-                        ref en);
+            Guid IID_IEnumVariant = IID.IEnumVariant;
+            Oleacc.CreateStdAccessibleObject(
+                new HandleRef(this, handle),
+                objid,
+                ref IID_IEnumVariant,
+                out var enumVariantPtr);
 
-            if (acc is not null || en is not null)
+            if (enumVariantPtr != IntPtr.Zero)
+            {
+                _systemIEnumVariant = (WinFormsComWrappers.EnumVariantWrapper)WinFormsComWrappers.Instance
+                    .GetOrCreateObjectForComInstance(enumVariantPtr, CreateObjectFlags.None);
+            }
+
+            if (acc is not null)
             {
                 _systemIAccessible = new SystemIAccessibleWrapper((IAccessible?)acc);
-                _systemIEnumVariant = (Oleaut32.IEnumVariant?)en;
                 _systemIOleWindow = (Ole32.IOleWindow?)acc;
             }
         }

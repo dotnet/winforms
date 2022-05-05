@@ -430,6 +430,29 @@ namespace System.Windows.Forms.InteropTests
             AssertSuccess(Test_IEnumVARIANTSkip(o));
         }
 
+        [WinFormsFact]
+        public unsafe void SystemAccessibleObject_Enumeration()
+        {
+            using ComboBox control = new ComboBox
+            {
+                DropDownStyle = ComboBoxStyle.DropDown
+            };
+            control.CreateControl();
+            ComboBox.ComboBoxAccessibleObject accessibleObject = new ComboBox.ComboBoxAccessibleObject(control);
+
+            var enumVariant = (IEnumVariant)accessibleObject;
+            Assert.Equal(HRESULT.S_OK, enumVariant.Reset());
+
+            VARIANT variantObject;
+            uint retreivedCount;
+            var result = enumVariant.Next(1, (IntPtr)(void*)&variantObject, &retreivedCount);
+            Assert.Equal(HRESULT.S_OK, result);
+
+            var retreivedItem = variantObject.ToObject();
+
+            Assert.Equal(1, Assert.IsType<int>(retreivedItem));
+        }
+
         [WinFormsTheory]
         [InlineData((int)BOOL.TRUE)]
         [InlineData((int)BOOL.FALSE)]
@@ -685,6 +708,11 @@ namespace System.Windows.Forms.InteropTests
             public AccessibleObject ParentResult { get; set; }
 
             public override AccessibleObject Parent => ParentResult;
+        }
+
+        private class StandardAccessibleObject : AccessibleObject
+        {
+            public new void UseStdAccessibleObjects(IntPtr handle) => base.UseStdAccessibleObjects(handle);
         }
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
