@@ -131,7 +131,7 @@ namespace System.Windows.Forms
                         DragDropHelper.SetDropDescription(comDataObject, _lastDropIcon, _lastMessage, _lastInsert);
                     }
 
-                    DragDropHelper.DragOver(_hwndTarget, comDataObject, ref pt, pdwEffect);
+                    DragDropHelper.DragOver(ref pt, pdwEffect);
                 }
             }
             else

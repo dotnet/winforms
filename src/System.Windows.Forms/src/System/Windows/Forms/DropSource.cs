@@ -12,6 +12,7 @@ namespace System.Windows.Forms
     {
         private readonly ISupportOleDropSource _peer;
         private readonly IComDataObject? _dataObject;
+        private IntPtr _lastHwndTarget;
         private Bitmap? _lastDragImage;
         private Point _lastCursorOffset;
         private bool _lastUseDefaultDragImage;
@@ -30,7 +31,6 @@ namespace System.Windows.Forms
                 _lastDragImage = dragImage;
                 _lastCursorOffset = cursorOffset;
                 _lastUseDefaultDragImage = useDefaultDragImage;
-
                 DragDropHelper.SetDragImage(_dataObject, dragImage, cursorOffset, useDefaultDragImage);
             }
         }
@@ -69,7 +69,7 @@ namespace System.Windows.Forms
             var gfbevent = new GiveFeedbackEventArgs((DragDropEffects)dwEffect, true, _lastDragImage, _lastCursorOffset, _lastUseDefaultDragImage);
             _peer.OnGiveFeedback(gfbevent);
 
-            if (gfbevent.DragImage is not null)
+            if (gfbevent.DragImage is not null && _dataObject is not null)
             {
                 _lastDragImage = !gfbevent.DragImage.Equals(_lastDragImage) is bool newDragImage ? gfbevent.DragImage : _lastDragImage;
                 _lastCursorOffset = !gfbevent.CursorOffset.Equals(_lastCursorOffset) is bool newCursorOffset ? gfbevent.CursorOffset : _lastCursorOffset;
@@ -77,8 +77,13 @@ namespace System.Windows.Forms
 
                 if (newDragImage || newCursorOffset || newUseDefaultDragImage)
                 {
-                    DragDropHelper.SetInDragLoop(_dataObject, true);
                     DragDropHelper.SetDragImage(_dataObject, _lastDragImage, _lastCursorOffset, _lastUseDefaultDragImage);
+
+                    // If a target has already been entered, call DragEnter to effectively display the new drag image.
+                    if (!_lastHwndTarget.Equals(IntPtr.Zero) && Cursor.Position is Point pt)
+                    {
+                        DragDropHelper.DragEnter(_lastHwndTarget, _dataObject, ref pt, (uint)gfbevent.Effect);
+                    }
                 }
             }
 
@@ -92,6 +97,7 @@ namespace System.Windows.Forms
 
         public HRESULT DragEnterTarget(IntPtr hwndTarget)
         {
+            _lastHwndTarget = hwndTarget;
             return HRESULT.S_OK;
         }
 

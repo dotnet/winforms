@@ -2159,11 +2159,6 @@ namespace System.Windows.Forms
 
             try
             {
-                if (dragImage is not null)
-                {
-                    DragDropHelper.SetInDragLoop(dataObject, true);
-                }
-
                 Ole32.IDropSource dropSource = CreateDropSource(dataObject, dragImage, cursorOffset, useDefaultDragImage);
                 HRESULT hr = Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out finalEffect);
                 if (!hr.Succeeded())
@@ -2173,7 +2168,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (dragImage is not null)
+                if (DragDropHelper.GetInDragLoop(dataObject))
                 {
                     DragDropHelper.SetInDragLoop(dataObject, false);
                 }

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -25,7 +23,6 @@ namespace System.Windows.Forms
         private const string CF_DROPDESCRIPTION = "DropDescription";
         private const string CF_INSHELLDRAGLOOP = "InShellDragLoop";
         private const string CF_ISSHOWINGTEXT = "IsShowingText";
-        private const string CF_NEWDRAGIMAGE = "NewDragImage";
         private const string CF_USINGDEFAULTDRAGIMAGE = "UsingDefaultDragImage";
 
         /// <summary>
@@ -43,14 +40,11 @@ namespace System.Windows.Forms
                     Ole32.CLSCTX.INPROC_SERVER,
                     ref NativeMethods.ActiveX.IID_IUnknown,
                     out object obj).ThrowIfFailed();
-
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "TryGetDragSourceHelper IDragSourceHelper2 created");
                 dragSourceHelper = (IDragSourceHelper2)obj;
                 return true;
             }
-            catch (COMException ex)
+            catch
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"TryGetDragSourceHelper COMException {ex}");
                 dragSourceHelper = null;
                 return false;
             }
@@ -71,14 +65,11 @@ namespace System.Windows.Forms
                     Ole32.CLSCTX.INPROC_SERVER,
                     ref NativeMethods.ActiveX.IID_IUnknown,
                     out object obj).ThrowIfFailed();
-
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "TryGetDropTargetHelper IDropTargetHelper created");
                 dropTargetHelper = (IDropTargetHelper)obj;
                 return true;
             }
-            catch (COMException ex)
+            catch
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"TryGetDropTargetHelper COMException {ex}");
                 dropTargetHelper = null;
                 return false;
             }
@@ -99,32 +90,22 @@ namespace System.Windows.Forms
             {
                 dropTargetHelper.DragEnter(hwndTarget, dataObject, ref ppt, dwEffect).ThrowIfFailed();
             }
-            catch (COMException ex)
+            catch
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper DragEnter {ex}");
                 return;
             }
             finally
             {
                 Marshal.ReleaseComObject(dropTargetHelper);
             }
-
-            SetNewDragImage(dataObject, false);
         }
 
         /// <summary>
         ///  Notifies the drag-image manager that the cursor position has changed and provides it with the information
         ///  needed to display the drag image.
         /// </summary>
-        public static void DragOver(IntPtr hwndTarget, IComDataObject dataObject, ref Point ppt, uint dwEffect)
+        public static void DragOver(ref Point ppt, uint dwEffect)
         {
-            // If the application has set a new drag image, e.g. in DropSource.GiveFeedback, we must call DragEnter
-            // before calling DragOver for the Windows drag-image manager to effectively display the drag image.
-            if (GetNewDragImage(dataObject))
-            {
-                DragEnter(hwndTarget, dataObject, ref ppt, dwEffect);
-            }
-
             if (!TryGetDropTargetHelper(out IDropTargetHelper? dropTargetHelper))
             {
                 return;
@@ -134,9 +115,8 @@ namespace System.Windows.Forms
             {
                 dropTargetHelper.DragOver(ref ppt, dwEffect).ThrowIfFailed();
             }
-            catch (COMException ex)
+            catch
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper DragOver {ex}");
                 return;
             }
             finally
@@ -159,9 +139,8 @@ namespace System.Windows.Forms
             {
                 dropTargetHelper.DragLeave().ThrowIfFailed();
             }
-            catch (COMException ex)
+            catch
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper DragLeave {ex}");
                 return;
             }
             finally
@@ -185,9 +164,8 @@ namespace System.Windows.Forms
             {
                 dropTargetHelper.Drop(dataObject, ref ppt, dwEffect).ThrowIfFailed();
             }
-            catch (COMException ex)
+            catch
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"IDropTargetHelper Drop {ex}");
                 return;
             }
             finally
@@ -201,11 +179,11 @@ namespace System.Windows.Forms
         /// </summary>
         private static void ReleaseDragDropFormats(IComDataObject comDataObject)
         {
-            if (comDataObject is IDataObject iwDataObject)
+            if (comDataObject is IDataObject iDataObject)
             {
-                foreach (string format in iwDataObject.GetFormats())
+                foreach (string format in iDataObject.GetFormats())
                 {
-                    if (iwDataObject.GetData(format) is DragDropFormat dragDropFormat)
+                    if (iDataObject.GetData(format) is DragDropFormat dragDropFormat)
                     {
                         dragDropFormat.Dispose();
                     }
@@ -226,9 +204,6 @@ namespace System.Windows.Forms
 
             try
             {
-                string formatName = DataFormats.GetFormat(cfFormat).Name;
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropHelper CopyStgMedium {mediumSrc.tymed} {formatName}");
-
                 // Copy the handle.
                 switch (mediumSrc.tymed)
                 {
@@ -302,7 +277,6 @@ namespace System.Windows.Forms
 
             try
             {
-                // Create the drop description clipboard format.
                 FORMATETC formatEtc = new()
                 {
                     cfFormat = (short)RegisterClipboardFormatW(CF_DROPDESCRIPTION),
@@ -312,13 +286,10 @@ namespace System.Windows.Forms
                     tymed = TYMED.TYMED_HGLOBAL
                 };
 
-                // Create the storage medium used for data transfer.
                 medium = new()
                 {
                     pUnkForRelease = null,
                     tymed = TYMED.TYMED_HGLOBAL,
-
-                    // Allocate a suitably sized block of memory.
                     unionmember = Kernel32.GlobalAlloc(
                         Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
                         (uint)sizeof(DROPDESCRIPTION))
@@ -328,7 +299,6 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                // Lock the global memory object.
                 IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
                 if (basePtr == IntPtr.Zero)
                 {
@@ -337,16 +307,11 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                // Write out the drop description to the global memory handle.
                 DROPDESCRIPTION* pDropDescription = (DROPDESCRIPTION*)basePtr;
                 pDropDescription->Type = (DROPIMAGETYPE)dropIcon;
                 pDropDescription->Message = message;
                 pDropDescription->Insert = insert;
-
-                // Unlock the global memory object.
                 Kernel32.GlobalUnlock(medium.unionmember);
-
-                // Load the drop description into the data object.
                 dataObject.SetData(ref formatEtc, ref medium, true);
             }
             catch
@@ -355,7 +320,6 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // Set IsShowingText to true.
             SetIsShowingText(dataObject, true);
         }
 
@@ -369,6 +333,16 @@ namespace System.Windows.Forms
                 || !TryGetDragSourceHelper(out IDragSourceHelper2? dragSourceHelper))
             {
                 return;
+            }
+
+            // Set the InShellDragLoop flag to true to facilitate loading and retrieving arbitrary private formats.
+            // The drag-and-drop helper object calls IDataObject::SetData to load private formats--used for cross-process
+            // support--into the data object. It later retrieves these formats by calling IDataObject::GetData.
+            // The data object's SetData and GetData implementations inspect for the InShellDragLoop flag to know when the
+            // data object is in a drag-and-drop loop and needs to load and retrieve the arbitrary private formats.
+            if (!GetInDragLoop(dataObject))
+            {
+                SetInDragLoop(dataObject, true);
             }
 
             Gdi32.HBITMAP hbmpDragImage = (Gdi32.HBITMAP)IntPtr.Zero;
@@ -389,9 +363,8 @@ namespace System.Windows.Forms
                 dragSourceHelper.SetFlags(DSH_ALLOWDROPDESCRIPTIONTEXT).ThrowIfFailed();
                 dragSourceHelper.InitializeFromBitmap(shDragImage, dataObject).ThrowIfFailed();
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"DragDropHelper SetDragImage {ex}");
                 Gdi32.DeleteObject(hbmpDragImage);
                 return;
             }
@@ -400,7 +373,6 @@ namespace System.Windows.Forms
                 Marshal.ReleaseComObject(dragSourceHelper);
             }
 
-            SetNewDragImage(dataObject, true);
             SetIsShowingText(dataObject, true);
             SetUsingDefaultDragImage(dataObject, usingDefaultDragImage);
         }
@@ -430,20 +402,17 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    // Lock the global memory object.
                     IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
                     if (basePtr == IntPtr.Zero)
                     {
                         return false;
                     }
 
-                    // Read the BOOL from the global memory handle.
                     BOOL* pValue = (BOOL*)basePtr;
                     return *pValue == BOOL.TRUE;
                 }
                 finally
                 {
-                    // Unlock the global memory object
                     Kernel32.GlobalUnlock(dragDropFormat.Medium.unionmember);
                 }
             }
@@ -454,14 +423,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the NewDragImage format from a data object.
+        ///  Gets the InShellDragLoop format from a data object.
         /// </summary>
-        /// <returns>
-        /// <see langword="true"/> if <paramref name="dataObject"/> contains a new drag image; otherwise <see langword="false"/>.
-        /// </returns>
-        private static bool GetNewDragImage(IComDataObject dataObject)
+        public static bool GetInDragLoop(IComDataObject dataObject)
         {
-            return GetBooleanFormat(dataObject, CF_NEWDRAGIMAGE);
+            return GetBooleanFormat(dataObject, CF_INSHELLDRAGLOOP);
         }
 
         /// <summary>
@@ -469,13 +435,11 @@ namespace System.Windows.Forms
         /// </summary>
         private static unsafe bool GetBooleanFormat(IComDataObject dataObject, string format)
         {
-            if (dataObject is null
-                || string.IsNullOrWhiteSpace(format))
+            if (dataObject is null || string.IsNullOrWhiteSpace(format))
             {
                 return false;
             }
 
-            // Create the clipboard format.
             FORMATETC formatEtc = new()
             {
                 cfFormat = (short)RegisterClipboardFormatW(format),
@@ -485,27 +449,22 @@ namespace System.Windows.Forms
                 tymed = TYMED.TYMED_HGLOBAL
             };
 
-            // Check if the data object contains a boolean.
             if (dataObject.QueryGetData(ref formatEtc) != (int)HRESULT.S_OK)
             {
                 return false;
             }
 
-            // Create the storage medium used for data transfer.
             STGMEDIUM medium = new();
+
             try
             {
-                // Get the boolean from the data object.
                 dataObject.GetData(ref formatEtc, out medium);
-
-                // Lock the global memory object.
                 IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
                 if (basePtr == IntPtr.Zero)
                 {
                     return false;
                 }
 
-                // Read the BOOL from the global memory handle.
                 BOOL* pValue = (BOOL*)basePtr;
                 return *pValue == BOOL.TRUE;
             }
@@ -524,17 +483,9 @@ namespace System.Windows.Forms
 
             if (!value && dataObject is not null)
             {
-                // The loop is over, release the drag-and-drop formats.
+                // The drag loop is over, release the drag and drop formats.
                 ReleaseDragDropFormats(dataObject);
             }
-        }
-
-        /// <summary>
-        ///  Sets the NewDragImage format into a data object.
-        /// </summary>
-        private static void SetNewDragImage(IComDataObject? dataObject, bool value)
-        {
-            SetBooleanFormat(dataObject, CF_NEWDRAGIMAGE, value);
         }
 
         /// <summary>
@@ -567,7 +518,6 @@ namespace System.Windows.Forms
 
             try
             {
-                // Create the clipboard format.
                 FORMATETC formatEtc = new()
                 {
                     cfFormat = (short)RegisterClipboardFormatW(format),
@@ -577,13 +527,10 @@ namespace System.Windows.Forms
                     tymed = TYMED.TYMED_HGLOBAL
                 };
 
-                // Create a global memory object storage medium.
                 medium = new()
                 {
                     pUnkForRelease = null,
                     tymed = TYMED.TYMED_HGLOBAL,
-
-                    // Allocate a suitably sized block of memory.
                     unionmember = Kernel32.GlobalAlloc(
                         Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
                         sizeof(BOOL))
@@ -593,7 +540,6 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                // Lock the global memory object.
                 IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
                 if (basePtr == IntPtr.Zero)
                 {
@@ -602,14 +548,9 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                // Write the boolean out to the global memory handle.
                 BOOL* pValue = (BOOL*)basePtr;
                 *pValue = value.ToBOOL();
-
-                // Unlock the global memory object
                 Kernel32.GlobalUnlock(medium.unionmember);
-
-                // Load the boolean format into the data object.
                 dataObject.SetData(ref formatEtc, ref medium, true);
             }
             catch

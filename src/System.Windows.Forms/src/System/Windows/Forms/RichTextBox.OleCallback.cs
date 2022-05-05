@@ -302,7 +302,7 @@ namespace System.Windows.Forms
                                 }
 
                                 Point pt = new(e.X, e.Y);
-                                DragDropHelper.DragOver(owner.Handle, _lastComDataObject, ref pt, (uint)e.Effect);
+                                DragDropHelper.DragOver(ref pt, (uint)e.Effect);
                             }
                         }
                     }
