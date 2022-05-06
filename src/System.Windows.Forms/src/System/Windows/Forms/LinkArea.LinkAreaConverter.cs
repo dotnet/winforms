@@ -67,17 +67,20 @@ namespace System.Windows.Forms
                     char sep = culture.TextInfo.ListSeparator[0];
                     string[] tokens = text.Split(new char[] { sep });
                     int[] values = new int[tokens.Length];
+
+                    if (values.Length != 2)
+                    {
+                        throw new ArgumentException(
+                            string.Format(
+                                SR.TextParseFailedFormat,
+                                text,
+                                "start, length"));
+                    }
+
                     TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));
                     for (int i = 0; i < values.Length; i++)
                     {
                         values[i] = (int)intConverter.ConvertFromString(context, culture, tokens[i])!;
-                    }
-
-                    if (values.Length != 2)
-                    {
-                        throw new ArgumentException(string.Format(SR.TextParseFailedFormat,
-                                                                    text,
-                                                                    "start, length"));
                     }
 
                     return new LinkArea(values[0], values[1]);
