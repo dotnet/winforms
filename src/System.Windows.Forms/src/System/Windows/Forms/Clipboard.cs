@@ -143,7 +143,7 @@ namespace System.Windows.Forms
             int retry = retryTimes;
             do
             {
-                success = Ole32.OleGetClipboard(out dataObject, out HRESULT hr);
+                success = Ole32.TryOleGetClipboard(out HRESULT hr, out dataObject);
                 if (!success)
                 {
                     if (retry == 0)

@@ -21,7 +21,18 @@ internal partial class Interop
 
             internal IntPtr Instance => _wrappedInstance;
 
+            ~DataObjectWrapper()
+            {
+                this.DisposeInternal();
+            }
+
             public void Dispose()
+            {
+                DisposeInternal();
+                GC.SuppressFinalize(this);
+            }
+
+            private void DisposeInternal()
             {
                 Marshal.Release(_wrappedInstance);
                 _wrappedInstance = IntPtr.Zero;
@@ -40,6 +51,10 @@ internal partial class Interop
                         tymed = mediumRaw.tymed,
                         unionmember = mediumRaw.unionmember,
                     };
+                    if (mediumRaw.pUnkForRelease != IntPtr.Zero)
+                    {
+                        Marshal.Release(mediumRaw.pUnkForRelease);
+                    }
                 }
             }
 
@@ -61,6 +76,10 @@ internal partial class Interop
                         tymed = mediumRaw.tymed,
                         unionmember = mediumRaw.unionmember,
                     };
+                    if (mediumRaw.pUnkForRelease != IntPtr.Zero)
+                    {
+                        Marshal.Release(mediumRaw.pUnkForRelease);
+                    }
                 }
             }
 
@@ -101,6 +120,10 @@ internal partial class Interop
                         tymed = mediumRaw.tymed,
                         unionmember = mediumRaw.unionmember,
                     };
+                    if (mediumRaw.pUnkForRelease != IntPtr.Zero)
+                    {
+                        Marshal.Release(mediumRaw.pUnkForRelease);
+                    }
                 }
             }
 
