@@ -64,7 +64,7 @@ internal partial class Interop
                 {
                     STGMEDIUM_Raw mediumRaw = new()
                     {
-                        pUnkForRelease = medium.pUnkForRelease == null ? IntPtr.Zero : Marshal.GetIUnknownForObject(medium.pUnkForRelease),
+                        pUnkForRelease = medium.pUnkForRelease is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(medium.pUnkForRelease),
                         tymed = medium.tymed,
                         unionmember = medium.unionmember,
                     };
@@ -108,7 +108,7 @@ internal partial class Interop
                 {
                     STGMEDIUM_Raw mediumRaw = new()
                     {
-                        pUnkForRelease = medium.pUnkForRelease == null ? IntPtr.Zero : Marshal.GetIUnknownForObject(medium.pUnkForRelease),
+                        pUnkForRelease = medium.pUnkForRelease is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(medium.pUnkForRelease),
                         tymed = medium.tymed,
                         unionmember = medium.unionmember,
                     };
