@@ -12065,7 +12065,8 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    m.ResultInternal = Oleacc.LresultFromObject(in IID.IAccessible, m.WParamInternal, new HandleRef(accessibleObject, pUnknown));
+                    var accessibleId = IID.IAccessible;
+                    m.ResultInternal = Oleacc.LresultFromObject(in accessibleId, m.WParamInternal, new HandleRef(accessibleObject, pUnknown));
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"LresultFromObject returned {m.ResultInternal}");
                 }
                 finally

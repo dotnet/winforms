@@ -1791,12 +1791,11 @@ namespace System.Windows.Forms
 
         protected void UseStdAccessibleObjects(IntPtr handle, int objid)
         {
-            object? acc = null;
             Guid IID_IAccessible = IID.IAccessible;
             Oleacc.CreateStdAccessibleObject(
                 new HandleRef(this, handle),
                 objid,
-                ref IID.IAccessible,
+                ref IID_IAccessible,
                 out var accessibilePtr);
 
             Guid IID_IEnumVariant = IID.IEnumVariant;
@@ -1812,7 +1811,7 @@ namespace System.Windows.Forms
                     .GetOrCreateObjectForComInstance(enumVariantPtr, CreateObjectFlags.None);
             }
 
-            if (acc is not null)
+            if (accessibilePtr != IntPtr.Zero)
             {
                 var accessible = (WinFormsComWrappers.StandardAccessibleWrapper)WinFormsComWrappers.Instance
                     .GetOrCreateObjectForComInstance(accessibilePtr, CreateObjectFlags.None);
