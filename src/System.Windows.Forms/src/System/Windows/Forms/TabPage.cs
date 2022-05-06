@@ -497,7 +497,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static TabPage? GetTabPageOfComponent(object? comp)
         {
-            if (comp is not Control c)
+            Control? c = comp as Control;
+            if (c is null)
             {
                 return null;
             }
@@ -621,7 +622,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override void RemoveToolTip(ToolTip toolTip)
+        internal override void RemoveToolTip(ToolTip? toolTip)
         {
             if (toolTip is null)
             {
@@ -702,7 +703,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            Control parent = ParentInternal;
+            Control? parent = ParentInternal;
 
             if (parent is TabControl && parent.IsHandleCreated)
             {

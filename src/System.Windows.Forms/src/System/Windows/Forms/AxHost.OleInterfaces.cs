@@ -467,7 +467,7 @@ namespace System.Windows.Forms
                 }
 
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in GetWindow");
-                Control parent = _host.ParentInternal;
+                Control? parent = _host.ParentInternal;
                 *phwnd = parent is not null ? parent.Handle : IntPtr.Zero;
                 return HRESULT.S_OK;
             }
@@ -524,7 +524,7 @@ namespace System.Windows.Forms
                     lpFrameInfo->fMDIApp = BOOL.FALSE;
                     lpFrameInfo->hAccel = IntPtr.Zero;
                     lpFrameInfo->cAccelEntries = 0;
-                    lpFrameInfo->hwndFrame = _host.ParentInternal.Handle;
+                    lpFrameInfo->hwndFrame = _host.ParentInternal?.Handle ?? IntPtr.Zero;
                 }
 
                 return HRESULT.S_OK;

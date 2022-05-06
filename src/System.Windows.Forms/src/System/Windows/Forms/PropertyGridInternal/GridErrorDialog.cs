@@ -319,8 +319,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 int y = _detailsButton.Location.Y + _detailsButton.Height + _detailsButton.Margin.Bottom;
 
                 // Location is relative to its parent.
-                Control parent = _detailsButton.Parent;
-                while (parent is not null && !(parent is Form))
+                Control? parent = _detailsButton.Parent;
+                while (parent is not null && parent is not Form)
                 {
                     y += parent.Location.Y;
                     parent = parent.Parent;

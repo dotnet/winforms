@@ -121,7 +121,7 @@ namespace System.Windows.Forms
                 accessibleObject = null;
 
                 // Get the owning control's parent, if it has one
-                Control parentControl = Owner.ParentInternal;
+                Control? parentControl = Owner.ParentInternal;
 
                 // ctrls[index] will indicate the control at the destination of this navigation operation
                 int index = -1;
@@ -348,7 +348,7 @@ namespace System.Windows.Forms
                 get
                 {
                     // Try to get to the parent of this control.
-                    Control parent = Owner.ParentInternal;
+                    Control? parent = Owner.ParentInternal;
 
                     if (parent is null)
                     {
