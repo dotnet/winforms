@@ -3,3 +3,4 @@ System.Windows.Forms.LinkArea.Equals(System.Windows.Forms.LinkArea other) -> boo
 System.Windows.Forms.TableLayoutPanelCellPosition.Equals(System.Windows.Forms.TableLayoutPanelCellPosition other) -> bool
 override System.Windows.Forms.Form.OnGotFocus(System.EventArgs! e) -> void
 ~override System.Windows.Forms.ToolStripDropDownMenu.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.TextBox.OnEnabledChanged(System.EventArgs! e) -> void
