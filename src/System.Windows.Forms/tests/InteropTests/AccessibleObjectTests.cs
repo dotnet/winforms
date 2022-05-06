@@ -467,8 +467,8 @@ namespace System.Windows.Forms.InteropTests
             var accessible = (Accessibility.IAccessible)accessibleObject;
             Assert.Null(accessible.accName);
             Assert.Null(accessible.accDescription);
-            Assert.Equal(0, accessible.accChildCount);
-            Assert.Null(accessible.accParent);
+            Assert.Equal(3, accessible.accChildCount);
+            Assert.NotNull(accessible.accParent);
         }
 
         [WinFormsTheory]
