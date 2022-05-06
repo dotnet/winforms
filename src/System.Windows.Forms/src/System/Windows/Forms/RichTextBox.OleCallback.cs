@@ -153,11 +153,15 @@ namespace System.Windows.Forms
 
                             if (e.DropImageType > DropImageType.Invalid && _lastComDataObject is not null && owner.IsHandleCreated)
                             {
-                                if (!e.DropImageType.Equals(_lastDropImageType) || !e.Message.Equals(_lastMessage) || !e.MessageReplacementToken.Equals(_lastMessageReplacementToken))
+                                DropImageType dropImageType = Enum.IsDefined(e.DropImageType) ? e.DropImageType : DropImageType.Invalid;
+                                string message = e.Message is not null ? e.Message : string.Empty;
+                                string messageReplacementToken = e.MessageReplacementToken is not null ? e.MessageReplacementToken : string.Empty;
+
+                                if (!dropImageType.Equals(_lastDropImageType) || !message.Equals(_lastMessage) || !messageReplacementToken.Equals(_lastMessageReplacementToken))
                                 {
-                                    _lastDropImageType = !e.DropImageType.Equals(_lastDropImageType) ? e.DropImageType : _lastDropImageType;
-                                    _lastMessage = !e.Message.Equals(_lastMessage) ? e.Message : _lastMessage;
-                                    _lastMessageReplacementToken = !e.MessageReplacementToken.Equals(_lastMessageReplacementToken) ? e.MessageReplacementToken : _lastMessageReplacementToken;
+                                    _lastDropImageType = !dropImageType.Equals(_lastDropImageType) ? dropImageType : _lastDropImageType;
+                                    _lastMessage = !message.Equals(_lastMessage) ? message : _lastMessage;
+                                    _lastMessageReplacementToken = messageReplacementToken.Equals(_lastMessageReplacementToken) ? messageReplacementToken : _lastMessageReplacementToken;
                                     DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                                 }
 
@@ -290,11 +294,15 @@ namespace System.Windows.Forms
 
                             if (e.DropImageType > DropImageType.Invalid && _lastComDataObject is not null && owner.IsHandleCreated)
                             {
-                                if (!e.DropImageType.Equals(_lastDropImageType) || !e.Message!.Equals(_lastMessage) || !e.MessageReplacementToken!.Equals(_lastMessageReplacementToken))
+                                DropImageType dropImageType = Enum.IsDefined(e.DropImageType) ? e.DropImageType : DropImageType.Invalid;
+                                string message = e.Message is not null ? e.Message : string.Empty;
+                                string messageReplacementToken = e.MessageReplacementToken is not null ? e.MessageReplacementToken : string.Empty;
+
+                                if (!dropImageType.Equals(_lastDropImageType) || !message.Equals(_lastMessage) || !messageReplacementToken.Equals(_lastMessageReplacementToken))
                                 {
-                                    _lastDropImageType = !e.DropImageType.Equals(_lastDropImageType) ? e.DropImageType : _lastDropImageType;
-                                    _lastMessage = !e.Message!.Equals(_lastMessage) ? e.Message : _lastMessage;
-                                    _lastMessageReplacementToken = !e.MessageReplacementToken!.Equals(_lastMessageReplacementToken) ? e.MessageReplacementToken : _lastMessageReplacementToken;
+                                    _lastDropImageType = !dropImageType.Equals(_lastDropImageType) ? dropImageType : _lastDropImageType;
+                                    _lastMessage = !message.Equals(_lastMessage) ? message : _lastMessage;
+                                    _lastMessageReplacementToken = messageReplacementToken.Equals(_lastMessageReplacementToken) ? messageReplacementToken : _lastMessageReplacementToken;
                                     DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                                 }
 

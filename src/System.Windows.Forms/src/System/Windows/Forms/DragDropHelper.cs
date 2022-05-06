@@ -262,13 +262,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the drop description into a data object.
         /// </summary>
-        public static unsafe void SetDropDescription(IComDataObject dataObject, DropImageType dropIcon, string message, string insert)
+        public static unsafe void SetDropDescription(IComDataObject dataObject, DropImageType dropImageType, string message, string messageReplacementToken)
         {
             if (dataObject is null
-                || dropIcon < DropImageType.Invalid
-                || dropIcon > DropImageType.NoImage
-                || (message is not null && message.Length >= Kernel32.MAX_PATH)
-                || (insert is not null && insert.Length >= Kernel32.MAX_PATH))
+                || !Enum.IsDefined(dropImageType)
+                || message.Length >= Kernel32.MAX_PATH
+                || messageReplacementToken.Length >= Kernel32.MAX_PATH)
             {
                 return;
             }
@@ -308,9 +307,9 @@ namespace System.Windows.Forms
                 }
 
                 DROPDESCRIPTION* pDropDescription = (DROPDESCRIPTION*)basePtr;
-                pDropDescription->Type = (DROPIMAGETYPE)dropIcon;
+                pDropDescription->Type = (DROPIMAGETYPE)dropImageType;
                 pDropDescription->Message = message;
-                pDropDescription->Insert = insert;
+                pDropDescription->Insert = messageReplacementToken;
                 Kernel32.GlobalUnlock(medium.unionmember);
                 dataObject.SetData(ref formatEtc, ref medium, true);
             }
@@ -440,24 +439,25 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            FORMATETC formatEtc = new()
-            {
-                cfFormat = (short)RegisterClipboardFormatW(format),
-                dwAspect = DVASPECT.DVASPECT_CONTENT,
-                lindex = -1,
-                ptd = IntPtr.Zero,
-                tymed = TYMED.TYMED_HGLOBAL
-            };
-
-            if (dataObject.QueryGetData(ref formatEtc) != (int)HRESULT.S_OK)
-            {
-                return false;
-            }
-
-            STGMEDIUM medium = new();
+            STGMEDIUM medium = default;
 
             try
             {
+                FORMATETC formatEtc = new()
+                {
+                    cfFormat = (short)RegisterClipboardFormatW(format),
+                    dwAspect = DVASPECT.DVASPECT_CONTENT,
+                    lindex = -1,
+                    ptd = IntPtr.Zero,
+                    tymed = TYMED.TYMED_HGLOBAL
+                };
+
+                if (dataObject.QueryGetData(ref formatEtc) != (int)HRESULT.S_OK)
+                {
+                    return false;
+                }
+
+                medium = new();
                 dataObject.GetData(ref formatEtc, out medium);
                 IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
                 if (basePtr == IntPtr.Zero)
@@ -477,13 +477,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the InShellDragLoop format into a data object.
         /// </summary>
-        public static void SetInDragLoop(IComDataObject? dataObject, bool value)
+        public static void SetInDragLoop(IComDataObject? dataObject, bool inDragLoop)
         {
-            SetBooleanFormat(dataObject, CF_INSHELLDRAGLOOP, value);
+            SetBooleanFormat(dataObject, CF_INSHELLDRAGLOOP, inDragLoop);
 
-            if (!value && dataObject is not null)
+            // If drag loop is over, release the drag and drop formats.
+            if (!inDragLoop && dataObject is not null)
             {
-                // The drag loop is over, release the drag and drop formats.
                 ReleaseDragDropFormats(dataObject);
             }
         }
