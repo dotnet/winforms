@@ -8,7 +8,7 @@ using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
-    internal class DropSource : Ole32.IDropSource, Ole32.IDropSourceNotfiy
+    internal class DropSource : Ole32.IDropSource, Ole32.IDropSourceNotify
     {
         private readonly ISupportOleDropSource _peer;
         private readonly IComDataObject? _dataObject;
