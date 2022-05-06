@@ -443,7 +443,7 @@ namespace System.Windows.Forms.InteropTests
             var enumVariant = (IEnumVariant)accessibleObject;
             Assert.Equal(HRESULT.S_OK, enumVariant.Reset());
 
-            VARIANT variantObject;
+            using VARIANT variantObject = new VARIANT();
             uint retreivedCount;
             var result = enumVariant.Next(1, (IntPtr)(void*)&variantObject, &retreivedCount);
             Assert.Equal(HRESULT.S_OK, result);
@@ -451,6 +451,24 @@ namespace System.Windows.Forms.InteropTests
             var retreivedItem = variantObject.ToObject();
 
             Assert.Equal(1, Assert.IsType<int>(retreivedItem));
+        }
+
+        [WinFormsFact]
+        public unsafe void SystemAccessibleObject_AccessibleProperties()
+        {
+            using ComboBox control = new ComboBox
+            {
+                DropDownStyle = ComboBoxStyle.DropDown
+            };
+            control.CreateControl();
+            ComboBox.ComboBoxAccessibleObject accessibleObject = new ComboBox.ComboBoxAccessibleObject(control);
+            accessibleObject.AccessibleObjectId = User32.OBJID.WINDOW;
+
+            var accessible = (Accessibility.IAccessible)accessibleObject;
+            Assert.Null(accessible.accName);
+            Assert.Null(accessible.accDescription);
+            Assert.Equal(0, accessible.accChildCount);
+            Assert.Null(accessible.accParent);
         }
 
         [WinFormsTheory]

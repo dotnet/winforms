@@ -9,6 +9,6 @@ internal static partial class Interop
     internal static partial class Oleacc
     {
         [DllImport(Libraries.Oleacc, ExactSpelling = true)]
-        public static extern int CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, out IntPtr pAcc);
+        public static extern HRESULT CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, out IntPtr pAcc);
     }
 }

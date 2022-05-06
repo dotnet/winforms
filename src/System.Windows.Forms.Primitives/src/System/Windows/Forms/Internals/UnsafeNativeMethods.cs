@@ -53,8 +53,5 @@ namespace System.Windows.Forms
 #pragma warning disable CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
         public static extern void GetTempFileName(string tempDirName, string prefixName, int unique, StringBuilder sb);
 #pragma warning restore CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
-
-        [DllImport(Libraries.Oleacc, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, [In, Out, MarshalAs(UnmanagedType.Interface)] ref object? pAcc);
     }
 }
