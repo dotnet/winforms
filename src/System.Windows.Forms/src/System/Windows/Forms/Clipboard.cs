@@ -138,7 +138,7 @@ namespace System.Windows.Forms
         /// </remarks>
         private static IDataObject? GetDataObject(int retryTimes, int retryDelay)
         {
-            IComDataObject? dataObject = null;
+            IComDataObject? dataObject;
             bool success;
             int retry = retryTimes;
             do

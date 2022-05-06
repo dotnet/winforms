@@ -14,7 +14,7 @@ internal static partial class Interop
 
         public static HRESULT OleSetClipboard(IDataObject? pDataObj)
         {
-            if (pDataObj == null)
+            if (pDataObj is null)
             {
                 return OleSetClipboard(IntPtr.Zero);
             }
