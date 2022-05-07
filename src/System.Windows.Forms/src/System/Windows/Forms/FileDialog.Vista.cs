@@ -144,7 +144,7 @@ namespace System.Windows.Forms
         {
             int saveOptions = _options;
             int saveFilterIndex = FilterIndex;
-            string?[]? saveFileNames = _fileNames;
+            string[]? saveFileNames = _fileNames;
             bool ok = false;
 
             try

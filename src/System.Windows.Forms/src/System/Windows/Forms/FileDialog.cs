@@ -29,7 +29,7 @@ namespace System.Windows.Forms
         private string? _title;
         private string? _initialDirectory;
         private string? _defaultExt;
-        private string?[]? _fileNames;
+        private string[]? _fileNames;
         private string? _filter;
         private bool _ignoreSecondFileOkNotification;
         private int _okNotificationCount;
@@ -171,12 +171,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_fileNames is null || string.IsNullOrEmpty(_fileNames[0]))
+                if (_fileNames is null)
                 {
                     return string.Empty;
                 }
 
-                return _fileNames[0]!;
+                return _fileNames[0];
             }
             set => _fileNames = value is not null ? new string[] { value } : null;
         }
@@ -413,7 +413,7 @@ namespace System.Windows.Forms
             NativeMethods.OPENFILENAME_I ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(lpOFN)!;
             int saveOptions = _options;
             int saveFilterIndex = FilterIndex;
-            string?[]? saveFileNames = _fileNames;
+            string[]? saveFileNames = _fileNames;
             bool ok = false;
             try
             {
@@ -804,7 +804,7 @@ namespace System.Windows.Forms
             try
             {
                 _charBuffer = new UnicodeCharBuffer(FileBufferSize);
-                if (_fileNames is not null && _fileNames[0] is not null)
+                if (_fileNames is not null)
                 {
                     _charBuffer.PutString(_fileNames[0]!);
                 }
