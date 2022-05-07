@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using static Interop;
 
@@ -32,7 +33,7 @@ namespace System.Windows.Forms
         /// </summary>
         public STGMEDIUM GetData()
         {
-            return CopyMedium(_cfFormat, _medium);
+            return CopyData(_cfFormat, _medium);
         }
 
         /// <summary>
@@ -47,24 +48,73 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// Copies a given storage medium.
+        /// </summary>
+        /// <returns>
+        ///  A copy of <paramref name="mediumSource"/>.
+        /// </returns>
+        private static STGMEDIUM CopyData(short cfFormat, STGMEDIUM mediumSource)
+        {
+            STGMEDIUM mediumDestination = new();
+
+            try
+            {
+                switch (mediumSource.tymed)
+                {
+                    case TYMED.TYMED_HGLOBAL:
+                    case TYMED.TYMED_FILE:
+                    case TYMED.TYMED_ENHMF:
+                    case TYMED.TYMED_GDI:
+                    case TYMED.TYMED_MFPICT:
+
+                        mediumDestination.unionmember = Ole32.OleDuplicateData(
+                            mediumSource.unionmember,
+                            cfFormat,
+                            Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
+                        if (mediumDestination.unionmember == IntPtr.Zero)
+                        {
+                            return default;
+                        }
+
+                        break;
+
+                    case TYMED.TYMED_ISTORAGE:
+                    case TYMED.TYMED_ISTREAM:
+
+                        mediumDestination.unionmember = mediumSource.unionmember;
+                        Marshal.AddRef(mediumSource.unionmember);
+                        break;
+
+                    default:
+                    case TYMED.TYMED_NULL:
+
+                        mediumDestination.unionmember = IntPtr.Zero;
+                        break;
+                }
+
+                mediumDestination.tymed = mediumSource.tymed;
+                mediumDestination.pUnkForRelease = mediumSource.pUnkForRelease;
+
+                if (mediumSource.pUnkForRelease is not null)
+                {
+                    Marshal.GetIUnknownForObject(mediumSource.pUnkForRelease);
+                }
+
+                return mediumDestination;
+            }
+            catch
+            {
+                Ole32.ReleaseStgMedium(ref mediumDestination);
+                return default;
+            }
+        }
+
+        /// <summary>
         ///  Handles whether the data object or the caller owns the storage medium.
         /// </summary>
         private static STGMEDIUM HandleOwner(short cfFormat, STGMEDIUM pMedium, bool fRelease)
         {
-            return fRelease ? pMedium : CopyMedium(cfFormat, pMedium);
-        }
-
-        /// <summary>
-        ///  Returns a copy of the specified storage medium.
-        /// </summary>
-        private static STGMEDIUM CopyMedium(short cfFormat, STGMEDIUM medium)
-        {
-            if (DragDropHelper.CopyMedium(cfFormat, ref medium, out STGMEDIUM mediumCopy))
-            {
-                return mediumCopy;
-            }
-
-            return default;
+            return fRelease ? pMedium : CopyData(cfFormat, pMedium);
         }
 
         /// <summary>
