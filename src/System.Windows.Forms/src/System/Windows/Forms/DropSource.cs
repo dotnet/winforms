@@ -80,8 +80,7 @@ namespace System.Windows.Forms
                     _lastUseDefaultDragImage = !gfbevent.UseDefaultDragImage.Equals(_lastUseDefaultDragImage) ? gfbevent.UseDefaultDragImage : _lastUseDefaultDragImage;
                     DragDropHelper.SetDragImage(_dataObject, _lastDragImage, _lastCursorOffset, _lastUseDefaultDragImage);
 
-                    // If a target has already been entered, call DragEnter to effectively display the new drag image.
-                    if (!_lastHwndTarget.Equals(IntPtr.Zero) && Cursor.Position is Point pt)
+                    if (!_lastHwndTarget.Equals(IntPtr.Zero) && (Cursor.Position is Point pt))
                     {
                         DragDropHelper.DragEnter(_lastHwndTarget, _dataObject, ref pt, (uint)gfbevent.Effect);
                     }

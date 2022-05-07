@@ -386,7 +386,7 @@ namespace System.Windows.Forms
                 try
                 {
                     IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
-                    return basePtr == IntPtr.Zero ? false : *(BOOL*)basePtr == BOOL.TRUE;
+                    return (basePtr != IntPtr.Zero) && (*(BOOL*)basePtr == BOOL.TRUE);
                 }
                 finally
                 {
@@ -438,7 +438,7 @@ namespace System.Windows.Forms
                 medium = new();
                 dataObject.GetData(ref formatEtc, out medium);
                 IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
-                return basePtr == IntPtr.Zero ? false : *(BOOL*)basePtr == BOOL.TRUE;
+                return (basePtr != IntPtr.Zero) && (*(BOOL*)basePtr == BOOL.TRUE);
             }
             finally
             {
@@ -520,8 +520,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                BOOL* pValue = (BOOL*)basePtr;
-                *pValue = value.ToBOOL();
+                *(BOOL*)basePtr = value.ToBOOL();
                 Kernel32.GlobalUnlock(medium.unionmember);
                 dataObject.SetData(ref formatEtc, ref medium, true);
             }
