@@ -66,7 +66,9 @@ namespace System.Windows.Forms
 
         public HRESULT GiveFeedback(Ole32.DROPEFFECT dwEffect)
         {
-            var gfbevent = new GiveFeedbackEventArgs((DragDropEffects)dwEffect, _lastDragImage is null, _lastDragImage!, _lastCursorOffset, _lastUseDefaultDragImage);
+            var gfbevent = _lastDragImage is null
+                ? new GiveFeedbackEventArgs((DragDropEffects)dwEffect, true)
+                : new GiveFeedbackEventArgs((DragDropEffects)dwEffect, false, _lastDragImage, _lastCursorOffset, _lastUseDefaultDragImage);
             _peer.OnGiveFeedback(gfbevent);
 
             if (gfbevent.DragImage is not null && _dataObject is not null)

@@ -40,11 +40,6 @@ namespace System.Windows.Forms
         /// </summary>
         public void RefreshData(short cfFormat, STGMEDIUM pMedium, bool fRelease)
         {
-            if (!cfFormat.Equals(_cfFormat))
-            {
-                return;
-            }
-
             ReleaseMedium(_medium);
             _cfFormat = cfFormat;
             _medium = HandleOwner(cfFormat, pMedium, fRelease);
@@ -56,20 +51,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static STGMEDIUM HandleOwner(short cfFormat, STGMEDIUM pMedium, bool fRelease)
         {
-            STGMEDIUM medium;
-
-            if (fRelease)
-            {
-                // Handle when the data object owns the storage medium.
-                medium = pMedium;
-            }
-            else
-            {
-                // Handle when the caller owns the storage medium.
-                medium = CopyMedium(cfFormat, pMedium);
-            }
-
-            return medium;
+            return fRelease ? pMedium : CopyMedium(cfFormat, pMedium);
         }
 
         /// <summary>

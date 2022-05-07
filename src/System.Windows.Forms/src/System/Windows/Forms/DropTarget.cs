@@ -30,8 +30,7 @@ namespace System.Windows.Forms
                 _hwndTarget = control.Handle;
             }
             else if (_owner is ToolStripDropTargetManager toolStripTargetManager
-                && toolStripTargetManager.Owner is not null
-                && toolStripTargetManager.Owner is ToolStrip toolStrip
+                && toolStripTargetManager?.Owner is ToolStrip toolStrip
                 && toolStrip.IsHandleCreated)
             {
                 _hwndTarget = toolStrip.Handle;
@@ -87,11 +86,11 @@ namespace System.Windows.Forms
                 pdwEffect = (uint)drgevent.Effect;
                 _lastEffect = drgevent.Effect;
 
-                if (drgevent.DropImageType > DropImageType.Invalid && drgevent.Data is IComDataObject comDataObject && _hwndTarget != IntPtr.Zero)
+                if ((drgevent.DropImageType > DropImageType.Invalid) && (drgevent.Data is IComDataObject comDataObject) && (_hwndTarget != IntPtr.Zero))
                 {
                     DropImageType dropImageType = Enum.IsDefined(drgevent.DropImageType) ? drgevent.DropImageType : DropImageType.Invalid;
-                    string message = drgevent.Message is not null ? drgevent.Message : string.Empty;
-                    string messageReplacementToken = drgevent.MessageReplacementToken is not null ? drgevent.MessageReplacementToken : string.Empty;
+                    string message = drgevent.Message ?? string.Empty;
+                    string messageReplacementToken = drgevent.MessageReplacementToken ?? string.Empty;
 
                     if (!dropImageType.Equals(_lastDropImageType) || !message.Equals(_lastMessage) || !messageReplacementToken.Equals(_lastMessageReplacementToken))
                     {
@@ -123,11 +122,11 @@ namespace System.Windows.Forms
                 pdwEffect = (uint)drgevent.Effect;
                 _lastEffect = drgevent.Effect;
 
-                if (drgevent.DropImageType > DropImageType.Invalid && drgevent.Data is IComDataObject comDataObject && _hwndTarget != IntPtr.Zero)
+                if ((drgevent.DropImageType > DropImageType.Invalid) && (drgevent.Data is IComDataObject comDataObject) && (_hwndTarget != IntPtr.Zero))
                 {
                     DropImageType dropImageType = Enum.IsDefined(drgevent.DropImageType) ? drgevent.DropImageType : DropImageType.Invalid;
-                    string message = drgevent.Message is not null ? drgevent.Message : string.Empty;
-                    string messageReplacementToken = drgevent.MessageReplacementToken is not null ? drgevent.MessageReplacementToken : string.Empty;
+                    string message = drgevent.Message ?? string.Empty;
+                    string messageReplacementToken = drgevent.MessageReplacementToken ?? string.Empty;
 
                     if (!dropImageType.Equals(_lastDropImageType) || !message.Equals(_lastMessage) || !messageReplacementToken.Equals(_lastMessageReplacementToken))
                     {
@@ -153,7 +152,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragLeave received");
             _owner.OnDragLeave(EventArgs.Empty);
 
-            if (_lastDropImageType > DropImageType.Invalid && _lastDataObject is IComDataObject comDataObject)
+            if ((_lastDropImageType > DropImageType.Invalid) && (_lastDataObject is IComDataObject comDataObject))
             {
                 if (!_lastDropImageType.Equals(DropImageType.Invalid) || !_lastMessage.Equals(string.Empty) || !_lastMessageReplacementToken.Equals(string.Empty))
                 {
@@ -180,7 +179,7 @@ namespace System.Windows.Forms
                 _owner.OnDragDrop(drgevent);
                 pdwEffect = (uint)drgevent.Effect;
 
-                if (_lastDropImageType > DropImageType.Invalid && drgevent.Data is IComDataObject comDataObject)
+                if ((_lastDropImageType > DropImageType.Invalid) && (drgevent.Data is IComDataObject comDataObject))
                 {
                     if (!_lastDropImageType.Equals(DropImageType.Invalid) || !_lastMessage.Equals(string.Empty) || !_lastMessageReplacementToken.Equals(string.Empty))
                     {

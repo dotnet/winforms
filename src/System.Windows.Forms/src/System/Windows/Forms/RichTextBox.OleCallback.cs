@@ -151,11 +151,11 @@ namespace System.Windows.Forms
                             e.Effect = ((keyState & User32.MK.CONTROL) == User32.MK.CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
                             owner.OnDragEnter(e);
 
-                            if (e.DropImageType > DropImageType.Invalid && _lastComDataObject is not null && owner.IsHandleCreated)
+                            if ((e.DropImageType > DropImageType.Invalid) && (_lastComDataObject is not null) && owner.IsHandleCreated)
                             {
                                 DropImageType dropImageType = Enum.IsDefined(e.DropImageType) ? e.DropImageType : DropImageType.Invalid;
-                                string message = e.Message is not null ? e.Message : string.Empty;
-                                string messageReplacementToken = e.MessageReplacementToken is not null ? e.MessageReplacementToken : string.Empty;
+                                string message = e.Message ?? string.Empty;
+                                string messageReplacementToken = e.MessageReplacementToken ?? string.Empty;
 
                                 if (!dropImageType.Equals(_lastDropImageType) || !message.Equals(_lastMessage) || !messageReplacementToken.Equals(_lastMessageReplacementToken))
                                 {
@@ -173,7 +173,7 @@ namespace System.Windows.Forms
                         {
                             owner.OnDragDrop(e);
 
-                            if (_lastDropImageType > DropImageType.Invalid && _lastComDataObject is not null)
+                            if ((_lastDropImageType > DropImageType.Invalid) && (_lastComDataObject is not null))
                             {
                                 if (!_lastDropImageType.Equals(DropImageType.Invalid) || !_lastMessage.Equals(string.Empty) || !_lastMessageReplacementToken.Equals(string.Empty))
                                 {
@@ -292,11 +292,11 @@ namespace System.Windows.Forms
                             owner.OnDragOver(e);
                             lastEffect = e.Effect;
 
-                            if (e.DropImageType > DropImageType.Invalid && _lastComDataObject is not null && owner.IsHandleCreated)
+                            if ((e.DropImageType > DropImageType.Invalid) && (_lastComDataObject is not null) && owner.IsHandleCreated)
                             {
                                 DropImageType dropImageType = Enum.IsDefined(e.DropImageType) ? e.DropImageType : DropImageType.Invalid;
-                                string message = e.Message is not null ? e.Message : string.Empty;
-                                string messageReplacementToken = e.MessageReplacementToken is not null ? e.MessageReplacementToken : string.Empty;
+                                string message = e.Message ?? string.Empty;
+                                string messageReplacementToken = e.MessageReplacementToken ?? string.Empty;
 
                                 if (!dropImageType.Equals(_lastDropImageType) || !message.Equals(_lastMessage) || !messageReplacementToken.Equals(_lastMessageReplacementToken))
                                 {

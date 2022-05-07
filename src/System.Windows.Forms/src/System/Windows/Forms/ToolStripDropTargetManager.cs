@@ -271,7 +271,7 @@ namespace System.Windows.Forms
                     OnDragLeave(EventArgs.Empty);
 
                     // tell the drag image manager you've left
-                    if (e.DropImageType > DropImageType.Invalid && e.Data is IComDataObject comDataObject)
+                    if ((e.DropImageType > DropImageType.Invalid) && (e.Data is IComDataObject comDataObject))
                     {
                         e.DropImageType = DropImageType.Invalid;
                         e.Message = string.Empty;
@@ -296,13 +296,17 @@ namespace System.Windows.Forms
                     OnDragEnter(dragEnterArgs);
 
                     // tell the drag image manager you've entered
-                    if (dragEnterArgs.DropImageType > DropImageType.Invalid && dragEnterArgs.Data is IComDataObject comDataObject && owner is ToolStrip toolStrip && toolStrip.IsHandleCreated)
+                    if ((dragEnterArgs.DropImageType > DropImageType.Invalid) && (dragEnterArgs.Data is IComDataObject comDataObject) && (owner is ToolStrip toolStrip) && toolStrip.IsHandleCreated)
                     {
-                        if (!dragEnterArgs.DropImageType.Equals(e.DropImageType) || !dragEnterArgs.Message.Equals(e.Message) || !dragEnterArgs.MessageReplacementToken.Equals(e.MessageReplacementToken))
+                        DropImageType dropImageType = Enum.IsDefined(dragEnterArgs.DropImageType) ? dragEnterArgs.DropImageType : DropImageType.Invalid;
+                        string message = dragEnterArgs.Message ?? string.Empty;
+                        string messageReplacementToken = dragEnterArgs.MessageReplacementToken ?? string.Empty;
+
+                        if (!dropImageType.Equals(e.DropImageType) || !message.Equals(e.Message) || !messageReplacementToken.Equals(e.MessageReplacementToken))
                         {
-                            e.DropImageType = !dragEnterArgs.DropImageType.Equals(e.DropImageType) ? dragEnterArgs.DropImageType : e.DropImageType;
-                            e.Message = !dragEnterArgs.Message.Equals(e.Message) ? dragEnterArgs.Message : e.Message;
-                            e.MessageReplacementToken = !dragEnterArgs.MessageReplacementToken.Equals(e.MessageReplacementToken) ? dragEnterArgs.MessageReplacementToken : e.MessageReplacementToken;
+                            e.DropImageType = !dropImageType.Equals(e.DropImageType) ? dropImageType : e.DropImageType;
+                            e.Message = !message.Equals(e.Message) ? message : e.Message;
+                            e.MessageReplacementToken = messageReplacementToken.Equals(e.MessageReplacementToken) ? messageReplacementToken : e.MessageReplacementToken;
                             DragDropHelper.SetDropDescription(comDataObject, e.DropImageType, e.Message, e.MessageReplacementToken);
                         }
 

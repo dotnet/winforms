@@ -88,11 +88,7 @@ namespace System.Windows.Forms
 
             try
             {
-                dropTargetHelper.DragEnter(hwndTarget, dataObject, ref ppt, dwEffect).ThrowIfFailed();
-            }
-            catch
-            {
-                return;
+                dropTargetHelper.DragEnter(hwndTarget, dataObject, ref ppt, dwEffect);
             }
             finally
             {
@@ -113,11 +109,7 @@ namespace System.Windows.Forms
 
             try
             {
-                dropTargetHelper.DragOver(ref ppt, dwEffect).ThrowIfFailed();
-            }
-            catch
-            {
-                return;
+                dropTargetHelper.DragOver(ref ppt, dwEffect);
             }
             finally
             {
@@ -137,11 +129,7 @@ namespace System.Windows.Forms
 
             try
             {
-                dropTargetHelper.DragLeave().ThrowIfFailed();
-            }
-            catch
-            {
-                return;
+                dropTargetHelper.DragLeave();
             }
             finally
             {
@@ -162,11 +150,7 @@ namespace System.Windows.Forms
 
             try
             {
-                dropTargetHelper.Drop(dataObject, ref ppt, dwEffect).ThrowIfFailed();
-            }
-            catch
-            {
-                return;
+                dropTargetHelper.Drop(dataObject, ref ppt, dwEffect);
             }
             finally
             {
@@ -195,17 +179,17 @@ namespace System.Windows.Forms
         /// Copies a given STGMEDIUM structure.
         /// </summary>
         /// <returns>
-        /// <see langword="true"/> if <paramref name="mediumSrc"/> was copied into <paramref name="mediumDest"/>
+        /// <see langword="true"/> if <paramref name="mediumSource"/> was copied into <paramref name="mediumDestination"/>
         /// successfully; otherwise <see langword="false"/>.
         /// </returns>
-        public static bool CopyMedium(short cfFormat, ref STGMEDIUM mediumSrc, out STGMEDIUM mediumDest)
+        public static bool CopyMedium(short cfFormat, ref STGMEDIUM mediumSource, out STGMEDIUM mediumDestination)
         {
-            mediumDest = new();
+            mediumDestination = new();
 
             try
             {
                 // Copy the handle.
-                switch (mediumSrc.tymed)
+                switch (mediumSource.tymed)
                 {
                     case TYMED.TYMED_HGLOBAL:
                     case TYMED.TYMED_FILE:
@@ -213,11 +197,11 @@ namespace System.Windows.Forms
                     case TYMED.TYMED_GDI:
                     case TYMED.TYMED_MFPICT:
 
-                        mediumDest.unionmember = Ole32.OleDuplicateData(
-                            mediumSrc.unionmember,
+                        mediumDestination.unionmember = Ole32.OleDuplicateData(
+                            mediumSource.unionmember,
                             cfFormat,
                             Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
-                        if (mediumDest.unionmember == IntPtr.Zero)
+                        if (mediumDestination.unionmember == IntPtr.Zero)
                         {
                             return false;
                         }
@@ -227,34 +211,34 @@ namespace System.Windows.Forms
                     case TYMED.TYMED_ISTORAGE:
                     case TYMED.TYMED_ISTREAM:
 
-                        mediumDest.unionmember = mediumSrc.unionmember;
+                        mediumDestination.unionmember = mediumSource.unionmember;
 
                         // Increment the reference count.
-                        Marshal.AddRef(mediumSrc.unionmember);
+                        Marshal.AddRef(mediumSource.unionmember);
                         break;
 
                     default:
                     case TYMED.TYMED_NULL:
 
-                        mediumDest.unionmember = IntPtr.Zero;
+                        mediumDestination.unionmember = IntPtr.Zero;
                         break;
                 }
 
                 // Copy the storage medium type and release pointer.
-                mediumDest.tymed = mediumSrc.tymed;
-                mediumDest.pUnkForRelease = mediumSrc.pUnkForRelease;
+                mediumDestination.tymed = mediumSource.tymed;
+                mediumDestination.pUnkForRelease = mediumSource.pUnkForRelease;
 
-                if (mediumSrc.pUnkForRelease is not null)
+                if (mediumSource.pUnkForRelease is not null)
                 {
                     // Increment the reference count.
-                    Marshal.GetIUnknownForObject(mediumSrc.pUnkForRelease);
+                    Marshal.GetIUnknownForObject(mediumSource.pUnkForRelease);
                 }
 
                 return true;
             }
             catch
             {
-                Ole32.ReleaseStgMedium(ref mediumDest);
+                Ole32.ReleaseStgMedium(ref mediumDestination);
                 return false;
             }
         }
@@ -402,13 +386,7 @@ namespace System.Windows.Forms
                 try
                 {
                     IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
-                    if (basePtr == IntPtr.Zero)
-                    {
-                        return false;
-                    }
-
-                    BOOL* pValue = (BOOL*)basePtr;
-                    return *pValue == BOOL.TRUE;
+                    return basePtr == IntPtr.Zero ? false : *(BOOL*)basePtr == BOOL.TRUE;
                 }
                 finally
                 {
@@ -460,13 +438,7 @@ namespace System.Windows.Forms
                 medium = new();
                 dataObject.GetData(ref formatEtc, out medium);
                 IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
-                if (basePtr == IntPtr.Zero)
-                {
-                    return false;
-                }
-
-                BOOL* pValue = (BOOL*)basePtr;
-                return *pValue == BOOL.TRUE;
+                return basePtr == IntPtr.Zero ? false : *(BOOL*)basePtr == BOOL.TRUE;
             }
             finally
             {
