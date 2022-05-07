@@ -804,10 +804,7 @@ namespace System.Windows.Forms
             try
             {
                 _charBuffer = new UnicodeCharBuffer(FileBufferSize);
-                if (_fileNames is not null)
-                {
-                    _charBuffer.PutString(_fileNames[0]!);
-                }
+                _charBuffer.PutString(FileName);
 
                 ofn.lStructSize = Marshal.SizeOf<NativeMethods.OPENFILENAME_I>();
                 ofn.hwndOwner = hWndOwner;
