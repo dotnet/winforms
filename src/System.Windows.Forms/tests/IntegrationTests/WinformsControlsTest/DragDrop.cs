@@ -15,6 +15,7 @@ namespace WinformsControlsTest
     {
         private const string DragDropDataDirectory = @"Data\DragDrop";
         private const string NyanCatAsciiTxt = @"NyanCatAscii.txt";
+        private const string DragAcceptRtf = @"DragAccept.rtf";
         private readonly string _nyanCatAscii = string.Empty;
         private readonly Bitmap _dragAcceptBmp = new(@"Data\DragDrop\DragAccept.bmp");
         private readonly Bitmap _nyanCatAscii301Bmp = new(@"Data\DragDrop\NyanCatAscii_301.bmp");
@@ -115,7 +116,7 @@ namespace WinformsControlsTest
                 && e.Data.GetData(DataFormats.FileDrop) is string[] files
                 && files.Length > 0 && files.Length <= 5)
             {
-                if (files.All(file => file.Contains("NyanCat") && file.EndsWith(".bmp")))
+                if (files.All(file => file.Contains("NyanCat") && file.Contains(".bmp")))
                 {
                     // Set the target drop image to a plus sign (+).
                     e.DropImageType = DropImageType.Copy;
@@ -127,7 +128,7 @@ namespace WinformsControlsTest
                     // Set the target drop effect.
                     e.Effect = DragDropEffects.Copy;
                 }
-                else if (files.Length == 1 && files.Any(file => file.EndsWith("DragAccept.rtf")))
+                else if (files.Length == 1 && files.Any(file => file.Contains("DragAccept.rtf")))
                 {
                     // Set the target drop image to a red bisected circle.
                     e.DropImageType = DropImageType.None;
@@ -161,7 +162,7 @@ namespace WinformsControlsTest
                 if (e.Data.GetDataPresent(DataFormats.FileDrop)
                     && e.Data.GetData(DataFormats.FileDrop) is string[] files
                     && files.Length > 0 && files.Length <= 5
-                    && files.All(file => file.Contains("NyanCat") && file.EndsWith(".bmp")))
+                    && files.All(file => file.Contains("NyanCat") && file.Contains(".bmp")))
                 {
                     LoadCats(pictureBox, files);
                 }
@@ -188,10 +189,6 @@ namespace WinformsControlsTest
 
         private void PictureBox_GiveFeedback(object? sender, GiveFeedbackEventArgs e)
         {
-            // Hide the default cursor.
-            Cursor.Current = Cursors.Default;
-            e.UseDefaultCursors = false;
-
             if (e.Effect.Equals(DragDropEffects.Copy))
             {
                 // Specify a new drag image in GiveFeedback.
@@ -255,7 +252,7 @@ namespace WinformsControlsTest
                 }
                 else if (e.Data.GetDataPresent(DataFormats.FileDrop)
                     && e.Data.GetData(DataFormats.FileDrop) is string[] files
-                    && files.Length > 0 && files[0].EndsWith("DragAccept.rtf"))
+                    && files.Length > 0 && files[0].Contains("DragAccept.rtf"))
                 {
                     // Set the target drop image to a red bisected circle.
                     e.DropImageType = DropImageType.None;
@@ -295,7 +292,7 @@ namespace WinformsControlsTest
                 }
                 else if (e.Data.GetDataPresent(DataFormats.FileDrop)
                     && e.Data.GetData(DataFormats.FileDrop) is string[] files
-                    && files.Length > 0 && files[0].EndsWith("DragAccept.rtf"))
+                    && files.Length > 0 && files[0].Contains("DragAccept.rtf"))
                 {
                     // Set the target drop image to a red bisected circle.
                     e.DropImageType = DropImageType.None;
@@ -317,7 +314,7 @@ namespace WinformsControlsTest
                 if (e.Data.GetDataPresent(DataFormats.FileDrop)
                     && e.Data.GetDataPresent("FileName")
                     && e.Data.GetData("FileName") is string[] fileNames
-                    && fileNames.Length > 0 && fileNames[0].EndsWith("DragAccept.rtf"))
+                    && fileNames.Length > 0 && fileNames[0].Contains("DragAccept.rtf"))
                 {
                     e.DropImageType = DropImageType.Link;
                     e.Message = "%1 (shellapi.h)";
@@ -347,7 +344,7 @@ namespace WinformsControlsTest
                 && e.Data.GetDataPresent(DataFormats.FileDrop)
                 && e.Data.GetDataPresent("FileName")
                 && e.Data.GetData("FileName") is string[] fileNames
-                && fileNames.Length > 0 && fileNames[0].EndsWith("DragAccept.rtf"))
+                && fileNames.Length > 0 && fileNames[0].Contains("DragAccept.rtf"))
             {
                 richTextBox.Clear();
                 richTextBox.LoadFile(fileNames[0], RichTextBoxStreamType.RichText);
@@ -484,7 +481,6 @@ namespace WinformsControlsTest
             };
             dragAcceptItem.DragEnter += DragAcceptItem_DragEnter;
             dragAcceptItem.MouseDown += DragAcceptItem_MouseDown;
-            dragAcceptItem.GiveFeedback += DragAcceptItem_GiveFeedback;
 
             ToolStripItem nyanCatItem = new ToolStripMenuItem()
             {
@@ -496,7 +492,6 @@ namespace WinformsControlsTest
             };
             nyanCatItem.DragEnter += NyanCatItem_DragEnter;
             nyanCatItem.MouseDown += NyanCatItem_MouseDown;
-            nyanCatItem.GiveFeedback += NyanCatItem_GiveFeedback;
 
             ToolStripItem asciiCatItem = new ToolStripMenuItem()
             {
@@ -508,7 +503,6 @@ namespace WinformsControlsTest
             };
             asciiCatItem.DragEnter += AsciiCatItem_DragEnter;
             asciiCatItem.MouseDown += AsciiCatItem_MouseDown;
-            asciiCatItem.GiveFeedback += AsciiCatItem_GiveFeedback;
 
             _catContextMenuStrip.Items.Add(dragAcceptItem);
             _catContextMenuStrip.Items.Add(nyanCatItem);
@@ -538,30 +532,18 @@ namespace WinformsControlsTest
             e.Effect = DragDropEffects.Link;
         }
 
-        private void DragAcceptItem_GiveFeedback(object? sender, GiveFeedbackEventArgs e)
-        {
-            Cursor.Current = Cursors.Default;
-            e.UseDefaultCursors = false;
-        }
-
-        private void NyanCatItem_GiveFeedback(object? sender, GiveFeedbackEventArgs e)
-        {
-            Cursor.Current = Cursors.Default;
-            e.UseDefaultCursors = false;
-        }
-
-        private void AsciiCatItem_GiveFeedback(object? sender, GiveFeedbackEventArgs e)
-        {
-            Cursor.Current = Cursors.Default;
-            e.UseDefaultCursors = false;
-        }
-
         private void DragAcceptItem_MouseDown(object? sender, MouseEventArgs e)
         {
             if (sender is ToolStripItem toolStripItem)
             {
-                // Populate the data object with a DragAccept.rtf FileDrop.
-                DataObject data = new(DataFormats.FileDrop, new string[] { @"Data\DragDrop\DragAccept.rtf" });
+                // Create a DragAccept.rtf FileDrop data object.
+                DataObject data = new(DataFormats.FileDrop,
+                    new string[]
+                    {
+                        Path.Combine(Directory.GetCurrentDirectory(),
+                            DragDropDataDirectory,
+                            DragAcceptRtf)
+                    });
 
                 // Call DoDragDrop and set the initial drag image.
                 toolStripItem.DoDragDrop(data, DragDropEffects.All, _dragAcceptBmp, new Point(0, 96), true);

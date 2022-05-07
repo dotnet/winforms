@@ -44,7 +44,6 @@ namespace System.Windows.Forms
             ReleaseMedium(_medium);
             _cfFormat = cfFormat;
             _medium = HandleOwner(cfFormat, pMedium, fRelease);
-            return;
         }
 
         /// <summary>
