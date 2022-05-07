@@ -153,7 +153,7 @@ namespace System.Windows.Forms
                 dialog.GetFileTypeIndex(out uint filterIndexTemp);
                 FilterIndex = unchecked((int)filterIndexTemp);
                 _fileNames = ProcessVistaFiles(dialog);
-                if (ProcessFileNames())
+                if (ProcessFileNames(_fileNames))
                 {
                     CancelEventArgs ceevent = new CancelEventArgs();
                     if (NativeWindow.WndProcShouldBeDebuggable)

@@ -433,7 +433,7 @@ namespace System.Windows.Forms
                     _fileNames = GetMultiselectFiles(_charBuffer);
                 }
 
-                if (ProcessFileNames())
+                if (ProcessFileNames(_fileNames))
                 {
                     CancelEventArgs ceevent = new CancelEventArgs();
                     if (NativeWindow.WndProcShouldBeDebuggable)
@@ -663,14 +663,14 @@ namespace System.Windows.Forms
         ///  of the "addExtension", "checkFileExists", "createPrompt", and
         ///  "overwritePrompt" properties.
         /// </summary>
-        private bool ProcessFileNames()
+        private bool ProcessFileNames(string[] fileNames)
         {
             if ((_options & (int)Comdlg32.OFN.NOVALIDATE) == 0)
             {
                 string[] extensions = FilterExtensions;
-                for (int i = 0; i < _fileNames!.Length; i++)
+                for (int i = 0; i < fileNames.Length; i++)
                 {
-                    string? fileName = _fileNames[i];
+                    string fileName = fileNames[i];
                     if ((_options & AddExtensionOption) != 0 && !Path.HasExtension(fileName))
                     {
                         bool fileMustExist = (_options & (int)Comdlg32.OFN.FILEMUSTEXIST) != 0;
@@ -699,7 +699,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        _fileNames[i] = fileName;
+                        fileNames[i] = fileName;
                     }
 
                     if (!PromptUserIfAppropriate(fileName))
