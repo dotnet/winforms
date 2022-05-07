@@ -35,7 +35,7 @@ public partial class TabControl
             get => this[index];
             set
             {
-                if (!(value is TabPage tabPage))
+                if (value is not TabPage tabPage)
                 {
                     throw new ArgumentException(nameof(value));
                 }

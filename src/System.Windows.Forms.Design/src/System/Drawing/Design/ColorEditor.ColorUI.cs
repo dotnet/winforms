@@ -319,7 +319,7 @@ public partial class ColorEditor
 
         private void OnTabControlSelChange(object? sender, EventArgs e)
         {
-            TabPage selectedPage = tabControl.SelectedTab;
+            TabPage? selectedPage = tabControl.SelectedTab;
 
             if (selectedPage is not null && selectedPage.Controls.Count > 0)
             {

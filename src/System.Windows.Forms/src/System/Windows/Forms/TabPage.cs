@@ -196,7 +196,7 @@ public partial class TabPage : Panel
         }
 
         // Check if the selected page contains the mouse
-        TabPage selectedTab = tabControl.SelectedTab;
+        TabPage? selectedTab = tabControl.SelectedTab;
         if (selectedTab is not null)
         {
             return selectedTab.AccessibilityObject.Bounds.Contains(MousePosition);

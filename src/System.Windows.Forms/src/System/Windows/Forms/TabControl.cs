@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
@@ -32,7 +30,7 @@ public partial class TabControl : Control
     private readonly TabPageCollection _tabCollection;
     private TabAlignment _alignment = TabAlignment.Top;
     private TabDrawMode _drawMode = TabDrawMode.Normal;
-    private ImageList _imageList;
+    private ImageList? _imageList;
     private Size _itemSize = DefaultItemSize;
     private Point _padding = DefaultPaddingPoint;
     private TabSizeMode _sizeMode = TabSizeMode.Normal;
@@ -44,8 +42,8 @@ public partial class TabControl : Control
     private bool _handleInTable;
 
     // Events
-    private EventHandler _onSelectedIndexChanged;
-    private DrawItemEventHandler _onDrawItem;
+    private EventHandler? _onSelectedIndexChanged;
+    private DrawItemEventHandler? _onDrawItem;
 
     private static readonly object s_deselectingEvent = new object();
     private static readonly object s_deselectedEvent = new object();
@@ -68,7 +66,7 @@ public partial class TabControl : Control
     private readonly User32.WM _tabBaseReLayoutMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + TabBaseReLayoutMessageName);
 
     // State
-    private List<TabPage> _tabPages;
+    private List<TabPage>? _tabPages;
     private int _lastSelection;
     private short _windowId;
 
@@ -81,7 +79,7 @@ public partial class TabControl : Control
     ///  Constructs a TabBase object, usually as the base class for a TabStrip or TabControl.
     /// </summary>
     public TabControl()
-    : base()
+        : base()
     {
         _tabControlState = new Collections.Specialized.BitVector32(0x00000000);
 
@@ -184,7 +182,7 @@ public partial class TabControl : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackColorChanged
+    public new event EventHandler? BackColorChanged
     {
         add => base.BackColorChanged += value;
         remove => base.BackColorChanged -= value;
@@ -192,7 +190,7 @@ public partial class TabControl : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override Image BackgroundImage
+    public override Image? BackgroundImage
     {
         get => base.BackgroundImage;
         set => base.BackgroundImage = value;
@@ -200,7 +198,7 @@ public partial class TabControl : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackgroundImageChanged
+    public new event EventHandler? BackgroundImageChanged
     {
         add => base.BackgroundImageChanged += value;
         remove => base.BackgroundImageChanged -= value;
@@ -216,7 +214,7 @@ public partial class TabControl : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackgroundImageLayoutChanged
+    public new event EventHandler? BackgroundImageLayoutChanged
     {
         add => base.BackgroundImageLayoutChanged += value;
         remove => base.BackgroundImageLayoutChanged -= value;
@@ -255,7 +253,7 @@ public partial class TabControl : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler ForeColorChanged
+    public new event EventHandler? ForeColorChanged
     {
         add => base.ForeColorChanged += value;
         remove => base.ForeColorChanged -= value;
@@ -450,7 +448,7 @@ public partial class TabControl : Control
     [RefreshProperties(RefreshProperties.Repaint)]
     [DefaultValue(null)]
     [SRDescription(nameof(SR.TabBaseImageListDescr))]
-    public ImageList ImageList
+    public ImageList? ImageList
     {
         get
         {
@@ -723,7 +721,7 @@ public partial class TabControl : Control
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.TabControlSelectedTabDescr))]
-    public TabPage SelectedTab
+    public TabPage? SelectedTab
     {
         get
         {
@@ -822,6 +820,7 @@ public partial class TabControl : Control
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Bindable(false)]
+    [AllowNull]
     public override string Text
     {
         get => base.Text;
@@ -830,7 +829,7 @@ public partial class TabControl : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler TextChanged
+    public new event EventHandler? TextChanged
     {
         add => base.TextChanged += value;
         remove => base.TextChanged -= value;
@@ -838,7 +837,7 @@ public partial class TabControl : Control
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.drawItemEventDescr))]
-    public event DrawItemEventHandler DrawItem
+    public event DrawItemEventHandler? DrawItem
     {
         add => _onDrawItem += value;
         remove => _onDrawItem -= value;
@@ -846,7 +845,7 @@ public partial class TabControl : Control
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
-    public event EventHandler RightToLeftLayoutChanged
+    public event EventHandler? RightToLeftLayoutChanged
     {
         add => Events.AddHandler(s_rightToLeftLayoutChangedEvent, value);
         remove => Events.RemoveHandler(s_rightToLeftLayoutChangedEvent, value);
@@ -854,7 +853,7 @@ public partial class TabControl : Control
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
-    public event EventHandler SelectedIndexChanged
+    public event EventHandler? SelectedIndexChanged
     {
         add => _onSelectedIndexChanged += value;
         remove => _onSelectedIndexChanged -= value;
@@ -865,7 +864,7 @@ public partial class TabControl : Control
     /// </summary>
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.TabControlSelectingEventDescr))]
-    public event TabControlCancelEventHandler Selecting
+    public event TabControlCancelEventHandler? Selecting
     {
         add => Events.AddHandler(s_selectingEvent, value);
         remove => Events.RemoveHandler(s_selectingEvent, value);
@@ -876,7 +875,7 @@ public partial class TabControl : Control
     /// </summary>
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.TabControlSelectedEventDescr))]
-    public event TabControlEventHandler Selected
+    public event TabControlEventHandler? Selected
     {
         add => Events.AddHandler(s_selectedEvent, value);
         remove => Events.RemoveHandler(s_selectedEvent, value);
@@ -887,7 +886,7 @@ public partial class TabControl : Control
     /// </summary>
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.TabControlDeselectingEventDescr))]
-    public event TabControlCancelEventHandler Deselecting
+    public event TabControlCancelEventHandler? Deselecting
     {
         add => Events.AddHandler(s_deselectingEvent, value);
         remove => Events.RemoveHandler(s_deselectingEvent, value);
@@ -898,7 +897,7 @@ public partial class TabControl : Control
     /// </summary>
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.TabControlDeselectedEventDescr))]
-    public event TabControlEventHandler Deselected
+    public event TabControlEventHandler? Deselected
     {
         add => Events.AddHandler(s_deselectedEvent, value);
         remove => Events.RemoveHandler(s_deselectedEvent, value);
@@ -910,7 +909,7 @@ public partial class TabControl : Control
     /// <hideinheritance/>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event PaintEventHandler Paint
+    public new event PaintEventHandler? Paint
     {
         add => base.Paint += value;
         remove => base.Paint -= value;
@@ -978,7 +977,7 @@ public partial class TabControl : Control
         base.CreateHandle();
     }
 
-    private void DetachImageList(object sender, EventArgs e)
+    private void DetachImageList(object? sender, EventArgs e)
     {
         ImageList = null;
     }
@@ -1020,7 +1019,7 @@ public partial class TabControl : Control
     {
         ArgumentNullException.ThrowIfNull(tabPageName);
 
-        TabPage tabPage = TabPages[tabPageName];
+        TabPage tabPage = TabPages[tabPageName]!;
         DeselectTab(tabPage);
     }
 
@@ -1047,7 +1046,7 @@ public partial class TabControl : Control
         EndUpdateInternal(invalidate);
     }
 
-    internal int FindTabPage(TabPage tabPage)
+    internal int FindTabPage(TabPage? tabPage)
     {
         if (_tabPages is not null)
         {
@@ -1075,7 +1074,7 @@ public partial class TabControl : Control
             throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
         }
 
-        return _tabPages[index];
+        return _tabPages![index];
     }
 
     /// <summary>
@@ -1102,7 +1101,7 @@ public partial class TabControl : Control
         {
             for (int i = 0; i < tabPageCount; i++)
             {
-                result[i] = _tabPages[i];
+                result[i] = _tabPages![i];
             }
         }
 
@@ -1142,7 +1141,7 @@ public partial class TabControl : Control
     {
         ArgumentNullException.ThrowIfNull(item);
 
-        if (!(item is TabPage tabPage))
+        if (item is not TabPage tabPage)
         {
             throw new ArgumentException(SR.TabControlBadControl, nameof(item));
         }
@@ -1150,11 +1149,11 @@ public partial class TabControl : Control
         return tabPage.ToolTipText;
     }
 
-    private void ImageListRecreateHandle(object sender, EventArgs e)
+    private void ImageListRecreateHandle(object? sender, EventArgs e)
     {
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_SETIMAGELIST, 0, ImageList.Handle);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_SETIMAGELIST, 0, ImageList!.Handle);
         }
     }
 
@@ -1213,7 +1212,7 @@ public partial class TabControl : Control
         return base.IsInputKey(keyData);
     }
 
-    private static void NotifyAboutFocusState(TabPage selectedTab, bool focused)
+    private static void NotifyAboutFocusState(TabPage? selectedTab, bool focused)
     {
         if (selectedTab is null)
         {
@@ -1481,7 +1480,7 @@ public partial class TabControl : Control
     /// </summary>
     protected virtual void OnSelecting(TabControlCancelEventArgs e)
     {
-        ((TabControlCancelEventHandler)Events[s_selectingEvent])?.Invoke(this, e);
+        ((TabControlCancelEventHandler?)Events[s_selectingEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -1489,7 +1488,7 @@ public partial class TabControl : Control
     /// </summary>
     protected virtual void OnSelected(TabControlEventArgs e)
     {
-        ((TabControlEventHandler)Events[s_selectedEvent])?.Invoke(this, e);
+        ((TabControlEventHandler?)Events[s_selectedEvent])?.Invoke(this, e);
 
         // Raise the enter event for this tab.
         SelectedTab?.FireEnter(EventArgs.Empty);
@@ -1500,7 +1499,7 @@ public partial class TabControl : Control
     /// </summary>
     protected virtual void OnDeselecting(TabControlCancelEventArgs e)
     {
-        ((TabControlCancelEventHandler)Events[s_deselectingEvent])?.Invoke(this, e);
+        ((TabControlCancelEventHandler?)Events[s_deselectingEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -1508,7 +1507,7 @@ public partial class TabControl : Control
     /// </summary>
     protected virtual void OnDeselected(TabControlEventArgs e)
     {
-        ((TabControlEventHandler)Events[s_deselectedEvent])?.Invoke(this, e);
+        ((TabControlEventHandler?)Events[s_deselectedEvent])?.Invoke(this, e);
 
         // Raise the Leave event for this tab.
         if (SelectedTab is not null)
@@ -1541,7 +1540,6 @@ public partial class TabControl : Control
         // the spin control (left right arrows) won't update without resizing.
         // the most correct thing would be to recreate the handle, but this works
         // and is cheaper.
-        //
         BeginUpdate();
         Size size = Size;
         Size = new Size(size.Width + 1, size.Height);
@@ -1558,7 +1556,6 @@ public partial class TabControl : Control
 
     internal override void RecreateHandleCore()
     {
-        //
         TabPage[] tabPages = GetTabPages();
 
         int index = ((tabPages.Length > 0) && (SelectedIndex == -1)) ? 0 : SelectedIndex;
@@ -1592,7 +1589,6 @@ public partial class TabControl : Control
 
         // The comctl32 TabControl seems to have some painting glitches. Briefly
         // resizing the control seems to fix these.
-        //
         UpdateSize();
     }
 
@@ -1615,7 +1611,7 @@ public partial class TabControl : Control
             throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
         }
 
-        if (index < _tabPages.Count)
+        if (index < _tabPages!.Count)
         {
             _tabPages.RemoveAt(index);
         }
@@ -1683,7 +1679,7 @@ public partial class TabControl : Control
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_SETCURSEL, (WPARAM)index);
         }
 
-        _tabPages[index] = value;
+        _tabPages![index] = value;
     }
 
     /// <summary>
@@ -1716,7 +1712,7 @@ public partial class TabControl : Control
     {
         ArgumentNullException.ThrowIfNull(tabPageName);
 
-        TabPage tabPage = TabPages[tabPageName];
+        TabPage tabPage = TabPages[tabPageName]!;
         SelectTab(tabPage);
     }
 
@@ -1877,7 +1873,7 @@ public partial class TabControl : Control
                         {
                             if (!ContainsFocus)
                             {
-                                IContainerControl c = GetContainerControl();
+                                IContainerControl? c = GetContainerControl();
                                 if (c is not null)
                                 {
                                     while (c.ActiveControl is ContainerControl)
@@ -1891,12 +1887,12 @@ public partial class TabControl : Control
                         }
                         else
                         {
-                            IContainerControl c = GetContainerControl();
+                            IContainerControl? c = GetContainerControl();
                             if (c is not null && !DesignMode)
                             {
-                                if (c is ContainerControl)
+                                if (c is ContainerControl containerControl)
                                 {
-                                    ((ContainerControl)c).SetActiveControl(this);
+                                    containerControl.SetActiveControl(this);
                                 }
                                 else
                                 {
@@ -2003,12 +1999,12 @@ public partial class TabControl : Control
 
     private bool WmSelChanging()
     {
-        IContainerControl c = GetContainerControl();
+        IContainerControl? c = GetContainerControl();
         if (c is not null && !DesignMode)
         {
-            if (c is ContainerControl)
+            if (c is ContainerControl containerControl)
             {
-                ((ContainerControl)c).SetActiveControl(this);
+                containerControl.SetActiveControl(this);
             }
             else
             {

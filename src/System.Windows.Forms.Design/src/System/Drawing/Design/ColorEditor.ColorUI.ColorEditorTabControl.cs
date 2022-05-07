@@ -18,7 +18,7 @@ public partial class ColorEditor
 
             protected override void OnGotFocus(EventArgs e)
             {
-                TabPage selectedTab = SelectedTab;
+                TabPage? selectedTab = SelectedTab;
                 if (selectedTab is not null && selectedTab.Controls.Count > 0)
                 {
                     selectedTab.Controls[0].Focus();
