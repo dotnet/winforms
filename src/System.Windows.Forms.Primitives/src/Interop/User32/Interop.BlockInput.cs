@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern BOOL BlockInput(BOOL fBlockIt);
+        [LibraryImport(Libraries.User32)]
+        public static partial BOOL BlockInput(BOOL fBlockIt);
     }
 }

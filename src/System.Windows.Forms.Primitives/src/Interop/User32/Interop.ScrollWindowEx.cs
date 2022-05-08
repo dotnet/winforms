@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public unsafe static extern int ScrollWindowEx(
+        [LibraryImport(Libraries.User32)]
+        public unsafe static partial int ScrollWindowEx(
             IntPtr hWnd,
             int dx,
             int dy,

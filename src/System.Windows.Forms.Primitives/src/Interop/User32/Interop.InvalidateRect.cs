@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public unsafe static extern BOOL InvalidateRect(IntPtr hWnd, RECT* lpRect, BOOL bErase);
+        [LibraryImport(Libraries.User32)]
+        public unsafe static partial BOOL InvalidateRect(IntPtr hWnd, RECT* lpRect, BOOL bErase);
 
         public unsafe static BOOL InvalidateRect(HandleRef hWnd, RECT* lpRect, BOOL bErase)
         {

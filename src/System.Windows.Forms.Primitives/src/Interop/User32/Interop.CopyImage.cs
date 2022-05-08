@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern IntPtr CopyImage(IntPtr hImage, IMAGE type, int cx, int cy, LR flags);
+        [LibraryImport(Libraries.User32)]
+        public static partial IntPtr CopyImage(IntPtr hImage, IMAGE type, int cx, int cy, LR flags);
 
         public static IntPtr CopyImage(IHandle hImage, IMAGE type, int cx, int cy, LR flags)
         {
