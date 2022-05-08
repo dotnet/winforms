@@ -22,7 +22,7 @@ namespace System.Windows.Forms
         protected bool? PreviousEnabledStatus { get; set; }
         protected void HandleBindableCommandChanged(EventArgs e);
         protected void HandleBindableCommandCanExecuteChanged(object sender, BindableCommandEventArgs e);
-        protected void HandleCommandExecute(BindableCommandEventArgs e);
+        protected void HandleBindableCommandExecute(BindableCommandEventArgs e);
 
         protected static void BindableCommandSetter(
             IBindableCommandProvider commandComponent,
@@ -33,14 +33,11 @@ namespace System.Windows.Forms
         protected static void RequestCommandExecute(IBindableCommandProvider commandComponent)
         {
             BindableCommandEventArgs e = new();
-            commandComponent.HandleCommandExecute(e);
+            commandComponent.HandleBindableCommandExecute(e);
 
-            if (!e.Cancel)
+            if (!e.Cancel && (commandComponent.BindableCommand?.CanExecute(null) ?? false))
             {
-                if (commandComponent.BindableCommand.CanExecute(null))
-                {
-                    commandComponent.BindableCommand.Execute(null);
-                }
+                commandComponent.BindableCommand?.Execute(null);
             }
         }
 
@@ -119,10 +116,10 @@ namespace System.Windows.Forms
         void IBindableCommandProvider.HandleBindableCommandCanExecuteChanged(object sender, BindableCommandEventArgs e)
             => OnBindableCommandCanExecuteChanged(sender, e);
 
-        void IBindableCommandProvider.HandleCommandExecute(BindableCommandEventArgs e)
-            => OnHandleCommandExecute(e);
+        void IBindableCommandProvider.HandleBindableCommandExecute(BindableCommandEventArgs e)
+            => OnBindableCommandExecute(e);
 
-        protected virtual void OnHandleCommandExecute(BindableCommandEventArgs e)
+        protected virtual void OnBindableCommandExecute(BindableCommandEventArgs e)
             => BindableCommandExecute?.Invoke(this, e);
 
         protected override void OnClick(EventArgs e)

@@ -5,6 +5,9 @@ System.Windows.Forms.BindableCommandEventHandler
 System.Windows.Forms.BindingMemberInfo.Equals(System.Windows.Forms.BindingMemberInfo other) -> bool
 System.Windows.Forms.ButtonBase.BindableCommand.get -> System.Windows.Input.ICommand?
 System.Windows.Forms.ButtonBase.BindableCommand.set -> void
+System.Windows.Forms.ButtonBase.BindableCommandCanExecuteChanged -> System.Windows.Forms.BindableCommandEventHandler!
+System.Windows.Forms.ButtonBase.BindableCommandChanged -> System.EventHandler!
+System.Windows.Forms.ButtonBase.BindableCommandExecute -> System.Windows.Forms.BindableCommandEventHandler!
 System.Windows.Forms.IBindableCommandProvider
 System.Windows.Forms.IBindableCommandProvider.BindableCommandCanExecuteChanged -> System.Windows.Forms.BindableCommandEventHandler
 System.Windows.Forms.IBindableCommandProvider.BindableCommandChanged -> System.EventHandler
@@ -17,8 +20,11 @@ System.Windows.Forms.ToolStripItem.BindableCommandCanExecuteChanged -> System.Wi
 System.Windows.Forms.ToolStripItem.BindableCommandChanged -> System.EventHandler
 System.Windows.Forms.ToolStripItem.BindableCommandExecute -> System.Windows.Forms.BindableCommandEventHandler
 System.Windows.Forms.ToolStripItem.BindingContextChanged -> System.EventHandler
+override System.Windows.Forms.ButtonBase.OnClick(System.EventArgs! e) -> void
 override System.Windows.Forms.Form.OnGotFocus(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ButtonBase.OnBindableCommandCanExecuteChanged(object! sender, System.Windows.Forms.BindableCommandEventArgs! e) -> void
 virtual System.Windows.Forms.ButtonBase.OnBindableCommandChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ButtonBase.OnBindableCommandExecute(System.Windows.Forms.BindableCommandEventArgs! e) -> void
 ~System.Windows.Forms.BindableCommandEventArgs.BindableCommandEventArgs(bool cancel, object parameter) -> void
 ~System.Windows.Forms.BindableCommandEventArgs.Parameter.get -> object
 ~System.Windows.Forms.BindableCommandEventArgs.Parameter.set -> void
@@ -32,5 +38,5 @@ virtual System.Windows.Forms.ButtonBase.OnBindableCommandChanged(System.EventArg
 ~override System.Windows.Forms.ToolStripDropDownMenu.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~virtual System.Windows.Forms.ToolStripItem.OnBindableCommandCanExecuteChanged(object sender, System.Windows.Forms.BindableCommandEventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnBindableCommandChanged(System.EventArgs e) -> void
+~virtual System.Windows.Forms.ToolStripItem.OnBindableCommandExecute(System.Windows.Forms.BindableCommandEventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnBindingContextChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnHandleCommandExecute(System.ComponentModel.CancelEventArgs e) -> void

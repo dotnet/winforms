@@ -522,7 +522,6 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRCategory(nameof(SR.CatData))]
-        [SRDescription(nameof(SR.ToolStripItemBindableCommandDescr))]
         public System.Windows.Input.ICommand BindableCommand
         {
             get => _bindableCommand;
@@ -533,10 +532,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the BindableCommand has changed
+        /// Occurs when the BindableCommand.CanExecute status has changed
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
-        [SRDescription(nameof(SR.ToolStripItemOnBindableCommandChangedDescr))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public event BindableCommandEventHandler BindableCommandCanExecuteChanged
         {
@@ -548,7 +546,6 @@ namespace System.Windows.Forms
         /// Occurs when the BindableCommand has changed
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
-        [SRDescription(nameof(SR.ToolStripItemOnBindableCommandChangedDescr))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler BindableCommandChanged
         {
@@ -557,10 +554,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the BindableCommand has changed
+        /// Occurs before the BindableComment gets executed.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
-        [SRDescription(nameof(SR.ToolStripItemOnBindableCommandChangedDescr))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public event BindableCommandEventHandler BindableCommandExecute
         {
@@ -2469,8 +2465,8 @@ namespace System.Windows.Forms
             => OnBindableCommandCanExecuteChanged(sender, e);
 
         // Called by the IBindableCommandProvider's internal DIM-based logic.
-        void IBindableCommandProvider.HandleCommandExecute(BindableCommandEventArgs e)
-            => OnHandleCommandExecute(e);
+        void IBindableCommandProvider.HandleBindableCommandExecute(BindableCommandEventArgs e)
+            => OnBindableCommandExecute(e);
 
         private void HandleClick(EventArgs e)
         {
@@ -2767,16 +2763,25 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Raises the <see cref="ToolStripItem.BindableCommandChanged"/> event.
         ///  Inheriting classes should override this method to handle this event.
-        ///  Call base.OnBindingCommandChanged to send this event to any registered event listeners.
+        ///  Call base.BindableCommandChanged to send this event to any registered event listeners.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindableCommandChanged(EventArgs e)
             => RaiseEvent(s_bindableCommandChangedEvent, e);
 
         /// <summary>
+        ///  Raises the <see cref="ToolStripItem.BindableCommandExecute"/> event.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.BindableCommandExecute to send this event to any registered event listeners.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnBindableCommandExecute(BindableCommandEventArgs e)
+            => RaiseEvent(s_bindableCommandExecuteEvent, e);
+
+        /// <summary>
         ///  Raises the <see cref="ToolStripItem.BindableCommandCanExecuteChanged"/> event.
         ///  Inheriting classes should override this method to handle this event.
-        ///  Call base.OnBindingCommandCanExecuteChanged to send this event to any registered event listeners.
+        ///  Call base.BindableCommandCanExecuteChanged to send this event to any registered event listeners.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindableCommandCanExecuteChanged(object sender, BindableCommandEventArgs e)
@@ -2785,7 +2790,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Raises the <see cref="ToolStripItem.BindingContextChanged"/> event.
         ///  Inheriting classes should override this method to handle this event.
-        ///  Call base.OnBindingCommandChanged to send this event to any registered event listeners.
+        ///  Call base.OnBindingContextChanged to send this event to any registered event listeners.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindingContextChanged(EventArgs e)
@@ -2852,15 +2857,6 @@ namespace System.Windows.Forms
         internal virtual void OnImageScalingSizeChanged(EventArgs e)
         {
         }
-
-        /// <summary>
-        ///  Raises the <see cref="ToolStripItem.BindableCommandChanged"/> event.
-        ///  Inheriting classes should override this method to handle this event.
-        ///  Call base.OnBindingCommandChanged to send this event to any registered event listeners.
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnHandleCommandExecute(CancelEventArgs e)
-            => RaiseEvent(s_bindableCommandChangedEvent, e);
 
         /// <summary>
         ///  Inheriting classes should override this method to handle this event.

@@ -16,7 +16,9 @@ namespace System.Windows.Forms
     ///  Implements the basic functionality required by a button control.
     /// </summary>
     [Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)]
-    public abstract partial class ButtonBase : Control
+    public abstract partial class ButtonBase
+        : Control,
+          IBindableCommandProvider
     {
         private FlatStyle _flatStyle = FlatStyle.Standard;
         private ContentAlignment _imageAlign = ContentAlignment.MiddleCenter;
@@ -50,7 +52,9 @@ namespace System.Windows.Forms
         private ButtonBaseAdapter? _adapter;
         private FlatStyle _cachedAdapterType;
 
-        internal static readonly object s_bindableCommandChangedEvent = new object();
+        internal static readonly object s_bindableCommandChangedEvent = new();
+        internal static readonly object s_bindableCommandCanExecuteChangedEvent = new();
+        internal static readonly object s_bindableCommandExecuteEvent = new();
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="ButtonBase"/> class.
@@ -174,18 +178,43 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRCategory(nameof(SR.CatData))]
-        [SRDescription(nameof(SR.ToolStripItemBindableCommandDescr))]
         public System.Windows.Input.ICommand? BindableCommand
         {
             get => _bindableCommand;
-            set
-            {
-                if (!Equals(_bindableCommand, value))
-                {
-                    _bindableCommand = value;
-                    OnBindableCommandChanged(EventArgs.Empty);
-                }
-            }
+            set => IBindableCommandProvider.BindableCommandSetter(this, value, ref _bindableCommand);
+        }
+
+        /// <summary>
+        /// Occurs when the BindableCommand has changed
+        /// </summary>
+        [SRCategory(nameof(SR.CatData))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event EventHandler BindableCommandChanged
+        {
+            add => Events.AddHandler(s_bindableCommandChangedEvent, value);
+            remove => Events.RemoveHandler(s_bindableCommandChangedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the BindableCommand has changed
+        /// </summary>
+        [SRCategory(nameof(SR.CatData))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event BindableCommandEventHandler BindableCommandCanExecuteChanged
+        {
+            add => Events.AddHandler(s_bindableCommandCanExecuteChangedEvent, value);
+            remove => Events.RemoveHandler(s_bindableCommandCanExecuteChangedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the BindableCommand has changed
+        /// </summary>
+        [SRCategory(nameof(SR.CatData))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event BindableCommandEventHandler BindableCommandExecute
+        {
+            add => Events.AddHandler(s_bindableCommandExecuteEvent, value);
+            remove => Events.RemoveHandler(s_bindableCommandExecuteEvent, value);
         }
 
         /// <summary>
@@ -651,6 +680,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// Provides the previous Enabled value for the IBindableCommandProvider implementation.
+        /// </summary>
+        /// <remarks>
+        /// The interface uses DFI to bring a consistent Command binding implementation along.
+        /// It therefore needs a backing field to save a previous Enabled setting, since
+        /// a components/controls Enabled property is automatically controlled by the Command
+        /// binding through the CanExecute functionality of the Command binding.
+        /// </remarks>
+        bool? IBindableCommandProvider.PreviousEnabledStatus { get; set; }
+
+        /// <summary>
         ///  Indicates whether the tooltip should be shown
         /// </summary>
         internal bool ShowToolTip
@@ -842,6 +882,18 @@ namespace System.Windows.Forms
             base.OnGotFocus(e);
             Invalidate();
         }
+
+        // Called by the IBindableCommandProvider's internal DIM-based logic.
+        void IBindableCommandProvider.HandleBindableCommandChanged(EventArgs e)
+            => OnBindableCommandChanged(e);
+
+        // Called by the IBindableCommandProvider's internal DIM-based logic.
+        void IBindableCommandProvider.HandleBindableCommandCanExecuteChanged(object sender, BindableCommandEventArgs e)
+            => OnBindableCommandCanExecuteChanged(sender, e);
+
+        // Called by the IBindableCommandProvider's internal DIM-based logic.
+        void IBindableCommandProvider.HandleBindableCommandExecute(BindableCommandEventArgs e)
+            => OnBindableCommandExecute(e);
 
         /// <summary>
         ///  Raises the <see cref="OnLostFocus"/> event.
@@ -1065,11 +1117,29 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Raises the <see cref="ToolStripItem.BindableCommandChanged"/> event.
         ///  Inheriting classes should override this method to handle this event.
-        ///  Call base.OnBindingCommandChanged to send this event to any registered event listeners.
+        ///  Call base.BindableCommandChanged to send this event to any registered event listeners.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindableCommandChanged(EventArgs e)
             => ((EventHandler)Events[s_bindableCommandChangedEvent]!)?.Invoke(this, e);
+
+        /// <summary>
+        ///  Raises the <see cref="ToolStripItem.BindableCommandExecute"/> event.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.BindableCommandExecute to send this event to any registered event listeners.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnBindableCommandExecute(BindableCommandEventArgs e)
+            => ((EventHandler)Events[s_bindableCommandExecuteEvent]!)?.Invoke(this, e);
+
+        /// <summary>
+        ///  Raises the <see cref="ToolStripItem.BindableCommandCanExecuteChanged"/> event.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.BindableCommandCanExecuteChanged to send this event to any registered event listeners.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnBindableCommandCanExecuteChanged(object sender, BindableCommandEventArgs e)
+            => ((EventHandler)Events[s_bindableCommandCanExecuteChangedEvent]!)?.Invoke(sender, e);
 
         private void OnFrameChanged(object? o, EventArgs e)
         {
@@ -1085,6 +1155,12 @@ namespace System.Windows.Forms
             }
 
             Invalidate();
+        }
+
+        protected override void OnClick(EventArgs e)
+        {
+            base.OnClick(e);
+            IBindableCommandProvider.RequestCommandExecute(this);
         }
 
         protected override void OnEnabledChanged(EventArgs e)
