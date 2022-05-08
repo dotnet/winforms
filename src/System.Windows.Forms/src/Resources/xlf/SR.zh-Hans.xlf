@@ -9901,6 +9901,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">用于显示控件中文本和图形的背景色。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemBindableCommandDescr">
+        <source>Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</source>
+        <target state="new">Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemBindingContextDescr">
+        <source>Gets or sets the BindingContext for this toolstrip item.</source>
+        <target state="new">Gets or sets the BindingContext for this toolstrip item.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCircularReference">
         <source>Cannot add owner item to the drop-down items collection.</source>
         <target state="translated">无法向下拉项集合添加所有者项。</target>

@@ -22,12 +22,14 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(Click))]
     [ToolboxItem(false)]
     [DefaultProperty(nameof(Text))]
-    public abstract partial class ToolStripItem : Component,
-                              IBindableComponent,
-                              IDropTarget,
-                              ISupportOleDropSource,
-                              IArrangedElement,
-                              IKeyboardToolTip
+    public abstract partial class ToolStripItem
+        : Component,
+          IBindableCommandProvider,
+          IBindableComponent,
+          IDropTarget,
+          ISupportOleDropSource,
+          IArrangedElement,
+          IKeyboardToolTip
     {
 #if DEBUG
         internal static readonly TraceSwitch s_mouseDebugging = new TraceSwitch("MouseDebugging", "Debug ToolStripItem mouse debugging code");
@@ -97,6 +99,8 @@ namespace System.Windows.Forms
         internal static readonly object s_textChangedEvent = new object();
 
         internal static readonly object s_bindableCommandChangedEvent = new object();
+        internal static readonly object s_bindableCommandExecuteEvent = new object();
+        internal static readonly object s_bindableCommandCanExecuteChangedEvent = new object();
         internal static readonly object s_bindingContextChangedEvent = new object();
 
         // Property store keys for properties. The property store allocates most efficiently
@@ -338,6 +342,30 @@ namespace System.Windows.Forms
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DefaultValue(CommonProperties.DefaultAnchor)]
+        public AnchorStyles Anchor
+        {
+            get
+            {
+                // since we don't support DefaultLayout go directly against the CommonProperties
+                return CommonProperties.xGetAnchor(this);
+            }
+            set
+            {
+                if (value != Anchor)
+                {
+                    // since we don't support DefaultLayout go directly against the CommonProperties
+                    CommonProperties.xSetAnchor(this, value);
+                    if (ParentInternal is not null)
+                    {
+                        LayoutTransaction.DoLayout(this, ParentInternal, PropertyNames.Anchor);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         ///  Determines whether we set the ToolStripItem to its preferred size
         /// </summary>
@@ -397,62 +425,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the image that is displayed on a <see cref="Label"/>.
-        /// </summary>
-        [Localizable(true)]
-        [SRCategory(nameof(SR.CatAppearance))]
-        [SRDescription(nameof(SR.ToolStripItemImageDescr))]
-        [DefaultValue(null)]
-        public virtual Image BackgroundImage
-        {
-            get => Properties.GetObject(s_backgroundImageProperty) as Image;
-            set
-            {
-                if (BackgroundImage != value)
-                {
-                    Properties.SetObject(s_backgroundImageProperty, value);
-                    Invalidate();
-                }
-            }
-        }
-
-        // Every ToolStripItem needs to cache its last/current Parent's DeviceDpi
-        // for PerMonitorV2 scaling purposes.
-        internal virtual int DeviceDpi
-        {
-            get => _deviceDpi;
-            set => _deviceDpi = value;
-        }
-
-        [SRCategory(nameof(SR.CatAppearance))]
-        [DefaultValue(ImageLayout.Tile)]
-        [Localizable(true)]
-        [SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))]
-        public virtual ImageLayout BackgroundImageLayout
-        {
-            get
-            {
-                bool found = Properties.ContainsObject(s_backgroundImageLayoutProperty);
-                if (!found)
-                {
-                    return ImageLayout.Tile;
-                }
-
-                return ((ImageLayout)Properties.GetObject(s_backgroundImageLayoutProperty));
-            }
-            set
-            {
-                if (BackgroundImageLayout != value)
-                {
-                    SourceGenerated.EnumValidator.Validate(value);
-
-                    Properties.SetObject(s_backgroundImageLayoutProperty, value);
-                    Invalidate();
-                }
-            }
-        }
-
-        /// <summary>
         ///  The BackColor of the item
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
@@ -490,6 +462,62 @@ namespace System.Windows.Forms
             }
         }
 
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ToolStripItemOnBackColorChangedDescr))]
+        public event EventHandler BackColorChanged
+        {
+            add => Events.AddHandler(s_backColorChangedEvent, value);
+            remove => Events.RemoveHandler(s_backColorChangedEvent, value);
+        }
+
+        /// <summary>
+        ///  Gets or sets the image that is displayed on a <see cref="Label"/>.
+        /// </summary>
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripItemImageDescr))]
+        [DefaultValue(null)]
+        public virtual Image BackgroundImage
+        {
+            get => Properties.GetObject(s_backgroundImageProperty) as Image;
+            set
+            {
+                if (BackgroundImage != value)
+                {
+                    Properties.SetObject(s_backgroundImageProperty, value);
+                    Invalidate();
+                }
+            }
+        }
+
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(ImageLayout.Tile)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))]
+        public virtual ImageLayout BackgroundImageLayout
+        {
+            get
+            {
+                bool found = Properties.ContainsObject(s_backgroundImageLayoutProperty);
+                if (!found)
+                {
+                    return ImageLayout.Tile;
+                }
+
+                return ((ImageLayout)Properties.GetObject(s_backgroundImageLayoutProperty));
+            }
+            set
+            {
+                if (BackgroundImageLayout != value)
+                {
+                    SourceGenerated.EnumValidator.Validate(value);
+
+                    Properties.SetObject(s_backgroundImageLayoutProperty, value);
+                    Invalidate();
+                }
+            }
+        }
+
         [Bindable(true)]
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -498,14 +526,46 @@ namespace System.Windows.Forms
         public System.Windows.Input.ICommand BindableCommand
         {
             get => _bindableCommand;
-            set
-            {
-                if (!Equals(_bindableCommand, value))
-                {
-                    _bindableCommand = value;
-                    OnBindableCommandChanged(EventArgs.Empty);
-                }
-            }
+
+            // The whole event binding/releasing for CanExecuteChange is done in
+            // the background by theDefault Interface Methods of IBindableCommandProvider.
+            set => IBindableCommandProvider.BindableCommandSetter(this, value, ref _bindableCommand);
+        }
+
+        /// <summary>
+        /// Occurs when the BindableCommand has changed
+        /// </summary>
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.ToolStripItemOnBindableCommandChangedDescr))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event BindableCommandEventHandler BindableCommandCanExecuteChanged
+        {
+            add => Events.AddHandler(s_bindableCommandCanExecuteChangedEvent, value);
+            remove => Events.RemoveHandler(s_bindableCommandCanExecuteChangedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the BindableCommand has changed
+        /// </summary>
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.ToolStripItemOnBindableCommandChangedDescr))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event EventHandler BindableCommandChanged
+        {
+            add => Events.AddHandler(s_bindableCommandChangedEvent, value);
+            remove => Events.RemoveHandler(s_bindableCommandChangedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the BindableCommand has changed
+        /// </summary>
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.ToolStripItemOnBindableCommandChangedDescr))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event BindableCommandEventHandler BindableCommandExecute
+        {
+            add => Events.AddHandler(s_bindableCommandExecuteEvent, value);
+            remove => Events.RemoveHandler(s_bindableCommandExecuteEvent, value);
         }
 
         [Browsable(false)]
@@ -515,11 +575,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ToolStripItemBindingContextDescr))]
         public BindingContext BindingContext
         {
-            get
-            {
-                _bindingContext ??= new BindingContext();
-                return _bindingContext;
-            }
+            get => _bindingContext ??= new BindingContext();
             set
             {
                 if (!Equals(_bindingContext, value))
@@ -530,17 +586,48 @@ namespace System.Windows.Forms
             }
         }
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        [RefreshProperties(RefreshProperties.All)]
-        [ParenthesizePropertyName(true)]
-        public ControlBindingsCollection DataBindings
-            => _dataBindings ??= new ControlBindingsCollection(this);
+        /// <summary>
+        /// Occurs when the binding context has changed
+        /// </summary>
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.ToolStripItemOnBindingContextChangedDescr))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event EventHandler BindingContextChanged
+        {
+            add => Events.AddHandler(s_bindingContextChangedEvent, value);
+            remove => Events.RemoveHandler(s_bindingContextChangedEvent, value);
+        }
 
         /// <summary>
-        ///  The bounds of the item
+        /// The bounds of the item
         /// </summary>
         [Browsable(false)]
-        public virtual Rectangle Bounds => _bounds;
+        public virtual Rectangle Bounds
+            => _bounds;
+
+        /// <summary>
+        ///  Determines whether or not the item can be selected.
+        /// </summary>
+        [Browsable(false)]
+        public virtual bool CanSelect
+            => true;
+
+        /// <remarks>
+        ///  Usually the same as can select, but things like the control box in an MDI window are exceptions
+        /// </remarks>
+        internal virtual bool CanKeyboardSelect
+            => CanSelect;
+
+        /// <summary>
+        ///  Occurs when the control is clicked.
+        /// </summary>
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ToolStripItemOnClickDescr))]
+        public event EventHandler Click
+        {
+            add => Events.AddHandler(s_clickEvent, value);
+            remove => Events.RemoveHandler(s_clickEvent, value);
+        }
 
         /// <summary>
         /// Zero-based rectangle, same concept as ClientRect
@@ -566,50 +653,18 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Determines whether or not the item can be selected.
-        /// </summary>
-        [Browsable(false)]
-        public virtual bool CanSelect => true;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [RefreshProperties(RefreshProperties.All)]
+        [ParenthesizePropertyName(true)]
+        public ControlBindingsCollection DataBindings
+            => _dataBindings ??= new ControlBindingsCollection(this);
 
-        /// <remarks>
-        ///  Usually the same as can select, but things like the control box in an MDI window are exceptions
-        /// </remarks>
-        internal virtual bool CanKeyboardSelect => CanSelect;
-
-        /// <summary>
-        ///  Occurs when the control is clicked.
-        /// </summary>
-        [SRCategory(nameof(SR.CatAction))]
-        [SRDescription(nameof(SR.ToolStripItemOnClickDescr))]
-        public event EventHandler Click
+        // Every ToolStripItem needs to cache its last/current Parent's DeviceDpi
+        // for PerMonitorV2 scaling purposes.
+        internal virtual int DeviceDpi
         {
-            add => Events.AddHandler(s_clickEvent, value);
-            remove => Events.RemoveHandler(s_clickEvent, value);
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [DefaultValue(CommonProperties.DefaultAnchor)]
-        public AnchorStyles Anchor
-        {
-            get
-            {
-                // since we don't support DefaultLayout go directly against the CommonProperties
-                return CommonProperties.xGetAnchor(this);
-            }
-            set
-            {
-                if (value != Anchor)
-                {
-                    // since we don't support DefaultLayout go directly against the CommonProperties
-                    CommonProperties.xSetAnchor(this, value);
-                    if (ParentInternal is not null)
-                    {
-                        LayoutTransaction.DoLayout(this, ParentInternal, PropertyNames.Anchor);
-                    }
-                }
-            }
+            get => _deviceDpi;
+            set => _deviceDpi = value;
         }
 
         /// <summary>
@@ -619,11 +674,8 @@ namespace System.Windows.Forms
         [DefaultValue(CommonProperties.DefaultDock)]
         public DockStyle Dock
         {
-            get
-            {
-                // since we don't support DefaultLayout go directly against the CommonProperties
-                return CommonProperties.xGetDock(this);
-            }
+            // since we don't support DefaultLayout go directly against the CommonProperties
+            get => CommonProperties.xGetDock(this);
             set
             {
                 SourceGenerated.EnumValidator.Validate(value);
@@ -643,30 +695,24 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Default setting of auto tooltip when this object is created
         /// </summary>
-        protected virtual bool DefaultAutoToolTip => false;
+        protected virtual bool DefaultAutoToolTip
+            => false;
 
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
         ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected internal virtual Padding DefaultMargin
-        {
-            get
-            {
-                if (Owner is not null && Owner is StatusStrip)
-                {
-                    return _scaledDefaultStatusStripMargin;
-                }
-
-                return _scaledDefaultMargin;
-            }
-        }
+            => Owner is not null && Owner is StatusStrip
+                ? _scaledDefaultStatusStripMargin
+                : _scaledDefaultMargin;
 
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
         ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
-        protected virtual Padding DefaultPadding => Padding.Empty;
+        protected virtual Padding DefaultPadding
+            => Padding.Empty;
 
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
@@ -674,17 +720,19 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual Size DefaultSize
         {
-            get => DpiHelper.IsPerMonitorV2Awareness ?
-                    DpiHelper.LogicalToDeviceUnits(new Size(23, 23), DeviceDpi) :
-                    new Size(23, 23);
+            get => DpiHelper.IsPerMonitorV2Awareness
+                ? DpiHelper.LogicalToDeviceUnits(new Size(23, 23), DeviceDpi)
+                : new Size(23, 23);
         }
 
-        protected virtual ToolStripItemDisplayStyle DefaultDisplayStyle => ToolStripItemDisplayStyle.ImageAndText;
+        protected virtual ToolStripItemDisplayStyle DefaultDisplayStyle
+            => ToolStripItemDisplayStyle.ImageAndText;
 
         /// <summary>
         ///  Specifies the default behavior of these items on ToolStripDropDowns when clicked.
         /// </summary>
-        protected internal virtual bool DismissWhenClicked => true;
+        protected internal virtual bool DismissWhenClicked
+            => true;
 
         /// <summary>
         ///  DisplayStyle specifies whether the image and text are rendered. This is not on the base
@@ -709,38 +757,6 @@ namespace System.Windows.Forms
                     }
                 }
             }
-        }
-
-        [SRCategory(nameof(SR.CatPropertyChanged))]
-        [SRDescription(nameof(SR.ToolStripItemOnBackColorChangedDescr))]
-        public event EventHandler BackColorChanged
-        {
-            add => Events.AddHandler(s_backColorChangedEvent, value);
-            remove => Events.RemoveHandler(s_backColorChangedEvent, value);
-        }
-
-        /// <summary>
-        /// Occurs when the binding context has changed
-        /// </summary>
-        [SRCategory(nameof(SR.CatData))]
-        [SRDescription(nameof(SR.ToolStripItemOnBindingContextChangedDescr))]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler BindingContextChanged
-        {
-            add => Events.AddHandler(s_bindingContextChangedEvent, value);
-            remove => Events.RemoveHandler(s_bindingContextChangedEvent, value);
-        }
-
-        /// <summary>
-        /// Occurs when the BindableCommand has changed
-        /// </summary>
-        [SRCategory(nameof(SR.CatData))]
-        [SRDescription(nameof(SR.ToolStripItemOnBindableCommandChangedDescr))]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler BindableCommandChanged
-        {
-            add => Events.AddHandler(s_bindableCommandChangedEvent, value);
-            remove => Events.RemoveHandler(s_bindableCommandChangedEvent, value);
         }
 
         /// <summary>
@@ -1666,6 +1682,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// Provides the previous Enabled value for the IBindableCommandProvider implementation.
+        /// </summary>
+        /// <remarks>
+        /// The interface uses DFI to bring a consistent Command binding implementation along.
+        /// It therefore needs a backing field to save a previous Enabled setting, since
+        /// a components/controls Enabled property is automatically controlled by the Command
+        /// binding through the CanExecute functionality of the Command binding.
+        /// </remarks>
+        bool? IBindableCommandProvider.PreviousEnabledStatus { get; set; }
+
+        /// <summary>
         ///  Retrieves our internal property storage object. If you have a property
         ///  whose value is not always set, you should store it in here to save
         ///  space.
@@ -2433,6 +2460,18 @@ namespace System.Windows.Forms
 
         protected internal virtual bool IsInputChar(char charCode) => false;
 
+        // Called by the IBindableCommandProvider's internal DIM-based logic.
+        void IBindableCommandProvider.HandleBindableCommandChanged(EventArgs e)
+            => OnBindableCommandChanged(e);
+
+        // Called by the IBindableCommandProvider's internal DIM-based logic.
+        void IBindableCommandProvider.HandleBindableCommandCanExecuteChanged(object sender, BindableCommandEventArgs e)
+            => OnBindableCommandCanExecuteChanged(sender, e);
+
+        // Called by the IBindableCommandProvider's internal DIM-based logic.
+        void IBindableCommandProvider.HandleCommandExecute(BindableCommandEventArgs e)
+            => OnHandleCommandExecute(e);
+
         private void HandleClick(EventArgs e)
         {
             Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] HandleClick");
@@ -2681,10 +2720,7 @@ namespace System.Windows.Forms
         protected virtual void OnClick(EventArgs e)
         {
             RaiseEvent(s_clickEvent, e);
-            if (BindableCommand?.CanExecute(null) ?? false)
-            {
-                BindableCommand.Execute(null);
-            }
+            IBindableCommandProvider.RequestCommandExecute(this);
         }
 
         protected internal virtual void OnLayout(LayoutEventArgs e)
@@ -2736,6 +2772,15 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindableCommandChanged(EventArgs e)
             => RaiseEvent(s_bindableCommandChangedEvent, e);
+
+        /// <summary>
+        ///  Raises the <see cref="ToolStripItem.BindableCommandCanExecuteChanged"/> event.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.OnBindingCommandCanExecuteChanged to send this event to any registered event listeners.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnBindableCommandCanExecuteChanged(object sender, BindableCommandEventArgs e)
+            => ((EventHandler)Events[s_bindableCommandCanExecuteChangedEvent])?.Invoke(sender, e);
 
         /// <summary>
         ///  Raises the <see cref="ToolStripItem.BindingContextChanged"/> event.
@@ -2807,6 +2852,15 @@ namespace System.Windows.Forms
         internal virtual void OnImageScalingSizeChanged(EventArgs e)
         {
         }
+
+        /// <summary>
+        ///  Raises the <see cref="ToolStripItem.BindableCommandChanged"/> event.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.OnBindingCommandChanged to send this event to any registered event listeners.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnHandleCommandExecute(CancelEventArgs e)
+            => RaiseEvent(s_bindableCommandChangedEvent, e);
 
         /// <summary>
         ///  Inheriting classes should override this method to handle this event.

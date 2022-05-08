@@ -9901,6 +9901,16 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Color de fondo utilizado para mostrar texto y gráficos en el control.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemBindableCommandDescr">
+        <source>Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</source>
+        <target state="new">Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemBindingContextDescr">
+        <source>Gets or sets the BindingContext for this toolstrip item.</source>
+        <target state="new">Gets or sets the BindingContext for this toolstrip item.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCircularReference">
         <source>Cannot add owner item to the drop-down items collection.</source>
         <target state="translated">No se puede agregar el elemento Owner a la colección de elementos desplegables.</target>

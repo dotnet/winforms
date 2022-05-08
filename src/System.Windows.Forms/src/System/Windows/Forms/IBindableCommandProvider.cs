@@ -4,37 +4,49 @@
 
 #nullable disable
 
-using System.ComponentModel;
 using System.Windows.Input;
 
 namespace System.Windows.Forms
 {
-    internal interface IBindableCommandProvider
+    public delegate void BindableCommandEventHandler(object sender, BindableCommandEventArgs e);
+
+    public interface IBindableCommandProvider
     {
         event EventHandler BindableCommandChanged;
-        event EventHandler BindableCommandCanExecuteChanged;
-        event CancelEventHandler BindableCommandExecute;
+        event BindableCommandEventHandler BindableCommandCanExecuteChanged;
+        event BindableCommandEventHandler BindableCommandExecute;
 
         ICommand BindableCommand { get; set; }
-        protected bool EnabledStatus {get; set;}
+        bool Enabled { get; set; }
+
         protected bool? PreviousEnabledStatus { get; set; }
         protected void HandleBindableCommandChanged(EventArgs e);
-        protected void HandleBindableCommandCanExecuteChanged(EventArgs e);
-        protected void HandleCommandExecute(CancelEventArgs e);
+        protected void HandleBindableCommandCanExecuteChanged(object sender, BindableCommandEventArgs e);
+        protected void HandleCommandExecute(BindableCommandEventArgs e);
 
         protected static void BindableCommandSetter(
             IBindableCommandProvider commandComponent,
             ICommand newCommand,
-            ICommand bindableCommandBackingField)
-            => commandComponent.BindableCommandSetter(newCommand, bindableCommandBackingField);
+            ref ICommand bindableCommandBackingField)
+            => commandComponent.BindableCommandSetter(newCommand, ref bindableCommandBackingField);
 
         protected static void RequestCommandExecute(IBindableCommandProvider commandComponent)
         {
+            BindableCommandEventArgs e = new();
+            commandComponent.HandleCommandExecute(e);
+
+            if (!e.Cancel)
+            {
+                if (commandComponent.BindableCommand.CanExecute(null))
+                {
+                    commandComponent.BindableCommand.Execute(null);
+                }
+            }
         }
 
         private void BindableCommandSetter(
             ICommand newCommand,
-            ICommand bindableCommandBackingField)
+            ref ICommand bindableCommandBackingField)
         {
             if (!Equals(bindableCommandBackingField, newCommand))
             {
@@ -47,7 +59,7 @@ namespace System.Windows.Forms
                     {
                         if (PreviousEnabledStatus.HasValue)
                         {
-                            EnabledStatus = PreviousEnabledStatus.Value;
+                            Enabled = PreviousEnabledStatus.Value;
                             PreviousEnabledStatus = null;
                         }
                     }
@@ -62,56 +74,55 @@ namespace System.Windows.Forms
                 }
 
                 bindableCommandBackingField.CanExecuteChanged += CommandCanExecuteChanged;
-                PreviousEnabledStatus ??= EnabledStatus;
-                EnabledStatus = bindableCommandBackingField.CanExecute(null);
+                PreviousEnabledStatus ??= Enabled;
+                Enabled = bindableCommandBackingField.CanExecute(null);
             }
         }
 
-        private void CommandCanExecuteChanged(object? sender, EventArgs e)
+        private void CommandCanExecuteChanged(object sender, EventArgs e)
         {
-            EnabledStatus = BindableCommand?.CanExecute(null) ?? false;
-            HandleBindableCommandCanExecuteChanged(EventArgs.Empty);
+            BindableCommandEventArgs bindableCommandEventArgs = new();
+            HandleBindableCommandCanExecuteChanged(sender, bindableCommandEventArgs);
+
+            if (!bindableCommandEventArgs.Cancel)
+            {
+                Enabled = BindableCommand?.CanExecute(bindableCommandEventArgs.Parameter) ?? false;
+            }
         }
     }
 
     internal class BindableCommandControl : Control, IBindableCommandProvider
     {
         public event EventHandler BindableCommandChanged;
-        public event EventHandler BindableCommandCanExecuteChanged;
-        public event CancelEventHandler BindableCommandExecute;
+        public event BindableCommandEventHandler BindableCommandCanExecuteChanged;
+        public event BindableCommandEventHandler BindableCommandExecute;
 
         private ICommand _bindableCommand;
 
         public ICommand BindableCommand
         {
             get => _bindableCommand;
-            set => IBindableCommandProvider.BindableCommandSetter(this, value, _bindableCommand);
-        }
-
-        bool IBindableCommandProvider.EnabledStatus
-        {
-            get => Enabled;
-            set => Enabled = value;
+            set => IBindableCommandProvider.BindableCommandSetter(this, value, ref _bindableCommand);
         }
 
         bool? IBindableCommandProvider.PreviousEnabledStatus { get; set; }
 
-        void IBindableCommandProvider.HandleBindableCommandChanged(EventArgs e)
-            => OnBindableCommandChanged(e);
-
         protected virtual void OnBindableCommandChanged(EventArgs e)
             => BindableCommandChanged?.Invoke(this, e);
 
-        void IBindableCommandProvider.HandleBindableCommandCanExecuteChanged(EventArgs e)
-            => OnBindableCommandCanExecuteChanged(e);
-
-        protected virtual void OnBindableCommandCanExecuteChanged(EventArgs e)
+        protected virtual void OnBindableCommandCanExecuteChanged(object sender, BindableCommandEventArgs e)
             => BindableCommandCanExecuteChanged?.Invoke(this, e);
 
-        void IBindableCommandProvider.HandleCommandExecute(CancelEventArgs e)
+        void IBindableCommandProvider.HandleBindableCommandChanged(EventArgs e)
+            => OnBindableCommandChanged(e);
+
+        void IBindableCommandProvider.HandleBindableCommandCanExecuteChanged(object sender, BindableCommandEventArgs e)
+            => OnBindableCommandCanExecuteChanged(sender, e);
+
+        void IBindableCommandProvider.HandleCommandExecute(BindableCommandEventArgs e)
             => OnHandleCommandExecute(e);
 
-        protected virtual void OnHandleCommandExecute(CancelEventArgs e)
+        protected virtual void OnHandleCommandExecute(BindableCommandEventArgs e)
             => BindableCommandExecute?.Invoke(this, e);
 
         protected override void OnClick(EventArgs e)

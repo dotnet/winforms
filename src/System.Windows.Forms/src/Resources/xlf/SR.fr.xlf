@@ -9901,6 +9901,16 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">La couleur d'arrière-plan utilisée pour afficher le texte et les graphismes dans le contrôle.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemBindableCommandDescr">
+        <source>Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</source>
+        <target state="new">Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemBindingContextDescr">
+        <source>Gets or sets the BindingContext for this toolstrip item.</source>
+        <target state="new">Gets or sets the BindingContext for this toolstrip item.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCircularReference">
         <source>Cannot add owner item to the drop-down items collection.</source>
         <target state="translated">Impossible d'ajouter un élément propriétaire à la collection d'éléments déroulants.</target>

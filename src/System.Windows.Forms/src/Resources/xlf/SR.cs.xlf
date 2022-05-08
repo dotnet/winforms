@@ -9901,6 +9901,16 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Barva pozadí, která je použita k zobrazení textu a grafiky v ovládacím prvku.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemBindableCommandDescr">
+        <source>Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</source>
+        <target state="new">Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemBindingContextDescr">
+        <source>Gets or sets the BindingContext for this toolstrip item.</source>
+        <target state="new">Gets or sets the BindingContext for this toolstrip item.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCircularReference">
         <source>Cannot add owner item to the drop-down items collection.</source>
         <target state="translated">Nelze přidat položku vlastníka do kolekce položek rozbalovací nabídky.</target>
