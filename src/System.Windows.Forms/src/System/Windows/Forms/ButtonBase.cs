@@ -27,6 +27,8 @@ namespace System.Windows.Forms
         private ImageList? _imageList;
         private Image? _image;
 
+        private System.Windows.Input.ICommand? _bindableCommand;
+
         private const int FlagMouseOver = 0x0001;
         private const int FlagMouseDown = 0x0002;
         private const int FlagMousePressed = 0x0004;
@@ -47,6 +49,8 @@ namespace System.Windows.Forms
 
         private ButtonBaseAdapter? _adapter;
         private FlatStyle _cachedAdapterType;
+
+        internal static readonly object s_bindableCommandChangedEvent = new object();
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="ButtonBase"/> class.
@@ -163,6 +167,24 @@ namespace System.Windows.Forms
                 }
 
                 base.BackColor = value;
+            }
+        }
+
+        [Bindable(true)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.ToolStripItemBindableCommandDescr))]
+        public System.Windows.Input.ICommand? BindableCommand
+        {
+            get => _bindableCommand;
+            set
+            {
+                if (!Equals(_bindableCommand, value))
+                {
+                    _bindableCommand = value;
+                    OnBindableCommandChanged(EventArgs.Empty);
+                }
             }
         }
 
@@ -1039,6 +1061,15 @@ namespace System.Windows.Forms
 
             return Adapter.CreateTextFormatFlags();
         }
+
+        /// <summary>
+        ///  Raises the <see cref="ToolStripItem.BindableCommandChanged"/> event.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.OnBindingCommandChanged to send this event to any registered event listeners.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnBindableCommandChanged(EventArgs e)
+            => ((EventHandler)Events[s_bindableCommandChangedEvent]!)?.Invoke(this, e);
 
         private void OnFrameChanged(object? o, EventArgs e)
         {

@@ -6913,4 +6913,10 @@ Stack trace where the illegal operation occurred was:
   <data name="ToolStripItemOnBindingContextChangedDescr" xml:space="preserve">
     <value>Occurs whenever the binding context changes.</value>
   </data>
+  <data name="ToolStripItemBindableCommandDescr" xml:space="preserve">
+    <value>Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</value>
+  </data>
+  <data name="ToolStripItemBindingContextDescr" xml:space="preserve">
+    <value>Gets or sets the BindingContext for this toolstrip item.</value>
+  </data>
 </root>

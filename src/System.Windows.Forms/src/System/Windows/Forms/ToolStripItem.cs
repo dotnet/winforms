@@ -493,6 +493,8 @@ namespace System.Windows.Forms
         [Bindable(true)]
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.ToolStripItemBindableCommandDescr))]
         public System.Windows.Input.ICommand BindableCommand
         {
             get => _bindableCommand;
@@ -509,6 +511,8 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.ToolStripItemBindingContextDescr))]
         public BindingContext BindingContext
         {
             get
