@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -164,10 +162,14 @@ namespace System.Windows.Forms
             return result;
         }
 
-        private protected override string[] ProcessVistaFiles(Interop.WinFormsComWrappers.FileDialogWrapper dialog)
+        private protected override string[] ProcessVistaFiles(WinFormsComWrappers.FileDialogWrapper dialog)
         {
-            var saveDialog = (Interop.WinFormsComWrappers.FileSaveDialogWrapper)dialog;
-            dialog.GetResult(out IShellItem item);
+            dialog.GetResult(out IShellItem? item);
+            if (item is null)
+            {
+                return Array.Empty<string>();
+            }
+
             return new string[] { GetFilePathFromShellItem(item) };
         }
 
@@ -186,7 +188,7 @@ namespace System.Windows.Forms
 
             var obj = WinFormsComWrappers.Instance
                 .GetOrCreateObjectForComInstance(lpDialogUnknownPtr, CreateObjectFlags.None);
-            return (Interop.WinFormsComWrappers.FileDialogWrapper)obj;
+            return (WinFormsComWrappers.FileDialogWrapper)obj;
         }
     }
 }

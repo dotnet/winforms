@@ -684,7 +684,7 @@ namespace System.Windows.Forms
                             Debug.Assert(currentExtension.Length == 0 || currentExtension.StartsWith("."),
                                          "File.GetExtension should return something that starts with '.'");
 
-                            string s = fileName!.Substring(0, fileName.Length - currentExtension.Length);
+                            string s = fileName.Substring(0, fileName.Length - currentExtension.Length);
 
                             // we don't want to append the extension if it contains wild cards
                             if (extensions[j].IndexOfAny(new char[] { '*', '?' }) == -1)
@@ -736,7 +736,7 @@ namespace System.Windows.Forms
         ///  Prompts the user with a <see cref="MessageBox"/> when a
         ///  file does not exist.
         /// </summary>
-        private void PromptFileNotFound(string? fileName)
+        private void PromptFileNotFound(string fileName)
         {
             MessageBoxWithFocusRestore(string.Format(SR.FileDialogFileNotFound, fileName), DialogCaption,
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -746,7 +746,7 @@ namespace System.Windows.Forms
         /// If it's necessary to throw up a "This file exists, are you sure?" kind of MessageBox,
         /// here's where we do it. Return value is whether or not the user hit "okay".
         /// </summary>
-        private protected virtual bool PromptUserIfAppropriate(string? fileName)
+        private protected virtual bool PromptUserIfAppropriate(string fileName)
         {
             if ((_options & (int)Comdlg32.OFN.FILEMUSTEXIST) != 0)
             {

@@ -1613,7 +1613,7 @@ System.Windows.Forms.OpenFileDialog.SafeFileNames.get -> string![]!
 ~System.Windows.Forms.RichTextBox.SelectionTabs.get -> int[]
 ~System.Windows.Forms.RichTextBox.SelectionTabs.set -> void
 ~System.Windows.Forms.RichTextBox.UndoActionName.get -> string
-~System.Windows.Forms.SaveFileDialog.OpenFile() -> System.IO.Stream
+System.Windows.Forms.SaveFileDialog.OpenFile() -> System.IO.Stream!
 ~System.Windows.Forms.TabControl.ControlCollection.ControlCollection(System.Windows.Forms.TabControl owner) -> void
 ~System.Windows.Forms.TabControl.DeselectTab(string tabPageName) -> void
 ~System.Windows.Forms.TabControl.DeselectTab(System.Windows.Forms.TabPage tabPage) -> void
