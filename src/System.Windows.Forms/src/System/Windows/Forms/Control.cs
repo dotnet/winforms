@@ -3081,7 +3081,7 @@ namespace System.Windows.Forms
         {
         }
 
-        internal virtual void RemoveToolTip(ToolTip? toolTip)
+        internal virtual void RemoveToolTip(ToolTip toolTip)
         {
             // Control doesn't have a specific logic after a toolTip is removed
         }

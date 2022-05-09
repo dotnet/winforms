@@ -622,13 +622,8 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override void RemoveToolTip(ToolTip? toolTip)
+        internal override void RemoveToolTip(ToolTip toolTip)
         {
-            if (toolTip is null)
-            {
-                return;
-            }
-
             // If a user used one ToolTIp instance to set a toolTip text before.
             if (_associatedToolTips is null)
             {
