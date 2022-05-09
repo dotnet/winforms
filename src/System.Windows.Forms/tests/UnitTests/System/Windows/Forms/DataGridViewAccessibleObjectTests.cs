@@ -1629,5 +1629,35 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, dataGridView.AccessibilityObject.RowCount);
             Assert.False(dataGridView.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void DataGridViewAccessibleObject_ItemStatusProperty_IsExpected_ForNonSortedDGV()
+        {
+            using DataGridView dataGridView = new();
+            using DataGridViewTextBoxColumn column = new();
+            dataGridView.Columns.Add(column);
+
+            object actual = dataGridView.AccessibilityObject
+                .GetPropertyValue(UiaCore.UIA.ItemStatusPropertyId);
+
+            Assert.Equal(1, dataGridView.RowCount);
+            Assert.Equal(1, dataGridView.ColumnCount);
+            Assert.Equal(SR.NotSortedAccessibleStatus, actual);
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewAccessibleObject_ItemStatusProperty_IsNull_ForEmptyDGV()
+        {
+            using DataGridView dataGridView = new() { AllowUserToAddRows = false };
+
+            object actual = dataGridView.AccessibilityObject
+                .GetPropertyValue(UiaCore.UIA.ItemStatusPropertyId);
+
+            Assert.Equal(0, dataGridView.RowCount);
+            Assert.Equal(0, dataGridView.ColumnCount);
+            Assert.Null(actual);
+            Assert.False(dataGridView.IsHandleCreated);
+        }
     }
 }
