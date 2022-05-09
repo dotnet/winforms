@@ -443,7 +443,7 @@ namespace System.Windows.Forms.InteropTests
             var enumVariant = (IEnumVariant)accessibleObject;
             Assert.Equal(HRESULT.S_OK, enumVariant.Reset());
 
-            using VARIANT variantObject = new VARIANT();
+            using VARIANT variantObject = new();
             uint retreivedCount;
             var result = enumVariant.Next(1, (IntPtr)(void*)&variantObject, &retreivedCount);
             Assert.Equal(HRESULT.S_OK, result);
