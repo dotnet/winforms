@@ -167,6 +167,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [AllowNull]
         public override Font Font
         {
             get => base.Font;

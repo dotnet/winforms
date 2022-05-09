@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 #if DEBUG
 using System.Collections;
 #endif
@@ -168,7 +166,7 @@ namespace System.Windows.Forms.Layout
         ///  clears out the padding from the property store
         internal static void ResetPadding(IArrangedElement element)
         {
-            object value = element.Properties.GetObject(_paddingProperty);
+            object? value = element.Properties.GetObject(_paddingProperty);
             if (value is not null)
             {
                 element.Properties.RemoveObject(_paddingProperty);
@@ -737,7 +735,7 @@ namespace System.Windows.Forms.Layout
                 {
                     foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(element))
                     {
-                        if (propertyHash.ContainsKey(pd.Name) && (propertyHash[pd.Name].ToString() != pd.Converter.ConvertToString(pd.GetValue(element))))
+                        if (propertyHash.ContainsKey(pd.Name) && (propertyHash[pd.Name]!.ToString() != pd.Converter.ConvertToString(pd.GetValue(element))))
                         {
                             diff += "Prop [ " + pd.Name + "] OLD [" + propertyHash[pd.Name] + "] NEW [" + pd.Converter.ConvertToString(pd.GetValue(element)) + "]\r\n";
                         }

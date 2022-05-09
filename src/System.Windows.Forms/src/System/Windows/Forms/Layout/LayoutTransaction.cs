@@ -32,11 +32,12 @@ namespace System.Windows.Forms.Layout
 #if DEBUG
         readonly int _layoutSuspendCount;
 #endif
-        public LayoutTransaction(Control? controlToLayout, IArrangedElement? controlCausingLayout, string? property) : this(controlToLayout, controlCausingLayout, property, true)
+        public LayoutTransaction(Control? controlToLayout, IArrangedElement controlCausingLayout, string? property)
+            : this(controlToLayout, controlCausingLayout, property, true)
         {
         }
 
-        public LayoutTransaction(Control? controlToLayout, IArrangedElement? controlCausingLayout, string? property, bool resumeLayout)
+        public LayoutTransaction(Control? controlToLayout, IArrangedElement controlCausingLayout, string? property, bool resumeLayout)
         {
             CommonProperties.xClearPreferredSizeCache(controlCausingLayout);
             _controlToLayout = controlToLayout;
@@ -74,7 +75,7 @@ namespace System.Windows.Forms.Layout
         // This overload should be used when a property has changed that affects preferred size,
         // but you only want to layout if a certain condition exists (say you want to layout your
         // parent because your preferred size has changed).
-        public static IDisposable CreateTransactionIf(bool condition, Control? controlToLayout, IArrangedElement? elementCausingLayout, string? property)
+        public static IDisposable CreateTransactionIf(bool condition, Control? controlToLayout, IArrangedElement elementCausingLayout, string? property)
         {
             if (condition)
             {

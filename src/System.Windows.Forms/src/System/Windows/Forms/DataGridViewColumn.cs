@@ -936,13 +936,15 @@ namespace System.Windows.Forms
             {
                 if (disposing)
                 {
-                    //
                     lock (this)
                     {
                         Site?.Container?.Remove(this);
                         _disposed?.Invoke(this, EventArgs.Empty);
                     }
                 }
+
+                // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this class type (and all of its subclasses) from DataGridViewElement.s_typesWithEmptyFinalizer!
+                // Also consider to modify ~DataGridViewBand() description.
             }
             finally
             {
