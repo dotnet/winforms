@@ -36,12 +36,6 @@ internal partial class Interop
                 DisposeInternal();
             }
 
-            public void Dispose()
-            {
-                DisposeInternal();
-                GC.SuppressFinalize(this);
-            }
-
             private void DisposeInternal()
             {
                 Marshal.Release(_accessibleInstance);
