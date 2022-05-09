@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -79,7 +77,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            object IList.this[int index]
+            object? IList.this[int index]
             {
                 get
                 {
@@ -99,7 +97,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the child control with the specified key.
             /// </summary>
-            public virtual ListViewItem this[string key]
+            public virtual ListViewItem? this[string? key]
             {
                 get
                 {
@@ -159,7 +157,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public bool Contains(ListViewItem item)
+            public bool Contains(ListViewItem? item)
             {
                 if (owner.VirtualMode)
                 {
@@ -176,16 +174,16 @@ namespace System.Windows.Forms
                 }
             }
 
-            bool IList.Contains(object item)
+            bool IList.Contains(object? item)
             {
                 if (owner.VirtualMode)
                 {
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
-                if (item is ListViewItem)
+                if (item is ListViewItem listViewItem)
                 {
-                    return Contains((ListViewItem)item);
+                    return Contains(listViewItem);
                 }
                 else
                 {
@@ -196,7 +194,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns true if the collection contains an item with the specified key, false otherwise.
             /// </summary>
-            public virtual bool ContainsKey(string key)
+            public virtual bool ContainsKey(string? key)
             {
                 if (owner.VirtualMode)
                 {
@@ -228,7 +226,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
             /// </summary>
-            public virtual int IndexOfKey(string key)
+            public virtual int IndexOfKey(string? key)
             {
                 if (owner.VirtualMode)
                 {
@@ -273,16 +271,16 @@ namespace System.Windows.Forms
                 return (index >= 0) && (index < Count);
             }
 
-            int IList.IndexOf(object item)
+            int IList.IndexOf(object? item)
             {
                 if (owner.VirtualMode)
                 {
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
-                if (item is ListViewItem)
+                if (item is ListViewItem listViewItem)
                 {
-                    return IndexOf((ListViewItem)item);
+                    return IndexOf(listViewItem);
                 }
                 else
                 {
@@ -290,7 +288,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            int IList.Add(object value)
+            int IList.Add(object? value)
             {
                 throw new NotSupportedException();
             }
@@ -300,12 +298,12 @@ namespace System.Windows.Forms
                 throw new NotSupportedException();
             }
 
-            void IList.Insert(int index, object value)
+            void IList.Insert(int index, object? value)
             {
                 throw new NotSupportedException();
             }
 
-            void IList.Remove(object value)
+            void IList.Remove(object? value)
             {
                 throw new NotSupportedException();
             }
@@ -324,7 +322,7 @@ namespace System.Windows.Forms
 
                 if (Count > 0)
                 {
-                    System.Array.Copy(ItemArray, 0, dest, index, Count);
+                    Array.Copy(ItemArray, 0, dest, index, Count);
                 }
             }
 
