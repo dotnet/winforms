@@ -21,6 +21,7 @@ internal partial class Interop
         private static readonly ComInterfaceEntry* s_streamEntry = InitializeIStreamEntry();
         private static readonly ComInterfaceEntry* s_fileDialogEventsEntry = InitializeIFileDialogEventsEntry();
         private static readonly ComInterfaceEntry* s_enumStringEntry = InitializeIEnumStringEntry();
+        private static readonly ComInterfaceEntry* s_enumFormatEtcEntry = InitializeIEnumFORMATETCEntry();
         private static readonly ComInterfaceEntry* s_dropSourceEntry = InitializeIDropSourceEntry();
         private static readonly ComInterfaceEntry* s_dropTargetEntry = InitializeIDropTargetEntry();
         private static readonly ComInterfaceEntry* s_dataObjectEntry = InitializeIDataObjectEntry();
@@ -62,6 +63,18 @@ internal partial class Interop
             ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
             wrapperEntry->IID = IID.IEnumString;
             wrapperEntry->Vtable = iEnumStringVtbl;
+            return wrapperEntry;
+        }
+
+        private static ComInterfaceEntry* InitializeIEnumFORMATETCEntry()
+        {
+            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
+
+            IntPtr iEnumFormatCVtbl = IEnumFORMATETCVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+
+            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
+            wrapperEntry->IID = IID.IEnumFORMATETC;
+            wrapperEntry->Vtable = iEnumFormatCVtbl;
             return wrapperEntry;
         }
 
@@ -133,6 +146,12 @@ internal partial class Interop
                 return s_enumStringEntry;
             }
 
+            if (obj is IEnumFORMATETC)
+            {
+                count = 1;
+                return s_enumFormatEtcEntry;
+            }
+
             if (obj is IDataObject)
             {
                 count = 1;
@@ -160,6 +179,14 @@ internal partial class Interop
             {
                 Marshal.Release(externalComObject);
                 return new ErrorInfoWrapper(errorInfoComObject);
+            }
+
+            Guid enumFormatEtcIID = IID.IEnumFORMATETC;
+            hr = Marshal.QueryInterface(externalComObject, ref enumFormatEtcIID, out IntPtr enumFormatEtcComObject);
+            if (hr == S_OK)
+            {
+                Marshal.Release(externalComObject);
+                return new EnumFORMATETCWrapper(enumFormatEtcComObject);
             }
 
             Guid fileOpenDialogIID = IID.IFileOpenDialog;
