@@ -70,11 +70,15 @@ internal partial class Interop
             GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
 
             IntPtr iDropSourceVtbl = IDropSourceVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+            IntPtr iDropSourceNotifyVtbl = IDropSourceNotifyVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
 
-            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
-            wrapperEntry->IID = IID.IDropSource;
-            wrapperEntry->Vtable = iDropSourceVtbl;
-            return wrapperEntry;
+            int idx = 0;
+            var entries = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry) * 2);
+            entries[idx].IID = IID.IDropSource;
+            entries[idx++].Vtable = iDropSourceVtbl;
+            entries[idx].IID = IID.IDropSourceNotify;
+            entries[idx++].Vtable = iDropSourceNotifyVtbl;
+            return entries;
         }
 
         private static ComInterfaceEntry* InitializeIDropTargetEntry()
@@ -117,7 +121,7 @@ internal partial class Interop
 
             if (obj is Ole32.IDropSource)
             {
-                count = 1;
+                count = 2;
                 return s_dropSourceEntry;
             }
 
