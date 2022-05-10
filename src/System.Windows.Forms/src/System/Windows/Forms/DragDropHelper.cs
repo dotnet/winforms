@@ -224,48 +224,39 @@ namespace System.Windows.Forms
             ArgumentNullException.ThrowIfNull(nameof(dataObject));
             ArgumentException.ThrowIfNullOrEmpty(nameof(format));
 
-            STGMEDIUM medium = default;
-
-            try
+            FORMATETC formatEtc = new()
             {
-                FORMATETC formatEtc = new()
-                {
-                    cfFormat = (short)RegisterClipboardFormatW(format),
-                    dwAspect = DVASPECT.DVASPECT_CONTENT,
-                    lindex = -1,
-                    ptd = IntPtr.Zero,
-                    tymed = TYMED.TYMED_HGLOBAL
-                };
+                cfFormat = (short)RegisterClipboardFormatW(format),
+                dwAspect = DVASPECT.DVASPECT_CONTENT,
+                lindex = -1,
+                ptd = IntPtr.Zero,
+                tymed = TYMED.TYMED_HGLOBAL
+            };
 
-                medium = new()
-                {
-                    pUnkForRelease = null,
-                    tymed = TYMED.TYMED_HGLOBAL,
-                    unionmember = Kernel32.GlobalAlloc(
-                        Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
-                        sizeof(BOOL))
-                };
-                if (medium.unionmember == IntPtr.Zero)
-                {
-                    throw new Win32Exception(Marshal.GetLastPInvokeError(), SR.ExternalException);
-                }
-
-                IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
-                if (basePtr == IntPtr.Zero)
-                {
-                    Kernel32.GlobalFree(medium.unionmember);
-                    medium.unionmember = IntPtr.Zero;
-                    throw new Win32Exception(Marshal.GetLastPInvokeError(), SR.ExternalException);
-                }
-
-                *(BOOL*)basePtr = value.ToBOOL();
-                Kernel32.GlobalUnlock(medium.unionmember);
-                dataObject.SetData(ref formatEtc, ref medium, true);
-            }
-            catch
+            STGMEDIUM medium = new()
             {
-                Ole32.ReleaseStgMedium(ref medium);
+                pUnkForRelease = null,
+                tymed = TYMED.TYMED_HGLOBAL,
+                unionmember = Kernel32.GlobalAlloc(
+                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                    sizeof(BOOL))
+            };
+            if (medium.unionmember == IntPtr.Zero)
+            {
+                throw new Win32Exception(Marshal.GetLastPInvokeError(), SR.ExternalException);
             }
+
+            IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
+            if (basePtr == IntPtr.Zero)
+            {
+                Kernel32.GlobalFree(medium.unionmember);
+                medium.unionmember = IntPtr.Zero;
+                throw new Win32Exception(Marshal.GetLastPInvokeError(), SR.ExternalException);
+            }
+
+            *(BOOL*)basePtr = value.ToBOOL();
+            Kernel32.GlobalUnlock(medium.unionmember);
+            dataObject.SetData(ref formatEtc, ref medium, true);
         }
 
         /// <summary>
@@ -354,53 +345,42 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(messageReplacementToken));
             }
 
-            STGMEDIUM medium = default;
-
-            try
+            FORMATETC formatEtc = new()
             {
-                FORMATETC formatEtc = new()
-                {
-                    cfFormat = (short)RegisterClipboardFormatW(CF_DROPDESCRIPTION),
-                    dwAspect = DVASPECT.DVASPECT_CONTENT,
-                    lindex = -1,
-                    ptd = IntPtr.Zero,
-                    tymed = TYMED.TYMED_HGLOBAL
-                };
+                cfFormat = (short)RegisterClipboardFormatW(CF_DROPDESCRIPTION),
+                dwAspect = DVASPECT.DVASPECT_CONTENT,
+                lindex = -1,
+                ptd = IntPtr.Zero,
+                tymed = TYMED.TYMED_HGLOBAL
+            };
 
-                medium = new()
-                {
-                    pUnkForRelease = null,
-                    tymed = TYMED.TYMED_HGLOBAL,
-                    unionmember = Kernel32.GlobalAlloc(
-                        Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
-                        (uint)sizeof(DROPDESCRIPTION))
-                };
-                if (medium.unionmember == IntPtr.Zero)
-                {
-                    throw new Win32Exception(Marshal.GetLastPInvokeError(), SR.ExternalException);
-                }
-
-                IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
-                if (basePtr == IntPtr.Zero)
-                {
-                    Kernel32.GlobalFree(medium.unionmember);
-                    medium.unionmember = IntPtr.Zero;
-                    throw new Win32Exception(Marshal.GetLastPInvokeError(), SR.ExternalException);
-                }
-
-                DROPDESCRIPTION* pDropDescription = (DROPDESCRIPTION*)basePtr;
-                pDropDescription->Type = (DROPIMAGETYPE)dropImageType;
-                pDropDescription->Message = message;
-                pDropDescription->Insert = messageReplacementToken;
-                Kernel32.GlobalUnlock(medium.unionmember);
-                dataObject.SetData(ref formatEtc, ref medium, true);
-            }
-            catch
+            STGMEDIUM medium = new()
             {
-                Ole32.ReleaseStgMedium(ref medium);
-                return;
+                pUnkForRelease = null,
+                tymed = TYMED.TYMED_HGLOBAL,
+                unionmember = Kernel32.GlobalAlloc(
+                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                    (uint)sizeof(DROPDESCRIPTION))
+            };
+            if (medium.unionmember == IntPtr.Zero)
+            {
+                throw new Win32Exception(Marshal.GetLastPInvokeError(), SR.ExternalException);
             }
 
+            IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
+            if (basePtr == IntPtr.Zero)
+            {
+                Kernel32.GlobalFree(medium.unionmember);
+                medium.unionmember = IntPtr.Zero;
+                throw new Win32Exception(Marshal.GetLastPInvokeError(), SR.ExternalException);
+            }
+
+            DROPDESCRIPTION* pDropDescription = (DROPDESCRIPTION*)basePtr;
+            pDropDescription->Type = (DROPIMAGETYPE)dropImageType;
+            pDropDescription->Message = message;
+            pDropDescription->Insert = messageReplacementToken;
+            Kernel32.GlobalUnlock(medium.unionmember);
+            dataObject.SetData(ref formatEtc, ref medium, true);
             SetIsShowingText(dataObject, true);
         }
 
@@ -429,7 +409,7 @@ namespace System.Windows.Forms
         /// <remarks>
         ///  <para>
         ///  To effectively display the drop description after changing the drag image bitmap, set <paramref name="isShowingText"/>
-        ///  to true, otherwise the drop description will not be displayed.
+        ///  to true, otherwise the drop description text will not be displayed.
         /// </para>
         /// </remarks>
         private static void SetIsShowingText(IComDataObject dataObject, bool isShowingText)
