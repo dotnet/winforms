@@ -10313,12 +10313,12 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="ToolStripScrollButtonDownAccessibleName">
         <source>Line down</source>
-        <target state="new">Line down</target>
+        <target state="translated">Riga sotto</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripScrollButtonUpAccessibleName">
         <source>Line up</source>
-        <target state="new">Line up</target>
+        <target state="translated">Riga sopra</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">

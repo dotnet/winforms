@@ -10313,12 +10313,12 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="ToolStripScrollButtonDownAccessibleName">
         <source>Line down</source>
-        <target state="new">Line down</target>
+        <target state="translated">Satır aşağı</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripScrollButtonUpAccessibleName">
         <source>Line up</source>
-        <target state="new">Line up</target>
+        <target state="translated">Satır yukarı</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">
