@@ -205,6 +205,7 @@ namespace System.Windows.Forms
         private static readonly object s_marginChangedEvent = new object();
         private protected static readonly object s_paddingChangedEvent = new object();
         private static readonly object s_previewKeyDownEvent = new object();
+        private static readonly object s_dataContextEvent = new object();
 
         private static User32.WM s_threadCallbackMessage;
         private static ContextCallback? s_invokeMarshaledCallbackHelperDelegate;
@@ -277,6 +278,8 @@ namespace System.Windows.Forms
         private static readonly int s_cacheTextCountProperty = PropertyStore.CreateKey();
         private static readonly int s_acheTextFieldProperty = PropertyStore.CreateKey();
         private static readonly int s_ambientPropertiesServiceProperty = PropertyStore.CreateKey();
+
+        private static readonly int s_dataContextProperty = PropertyStore.CreateKey();
 
         private static bool s_needToLoadComCtl = true;
 
@@ -887,6 +890,40 @@ namespace System.Windows.Forms
                 Properties.SetObject(s_backBrushProperty, backBrush);
 
                 return backBrush;
+            }
+        }
+
+        public virtual Object? DataContext
+        {
+            get
+            {
+                bool hasOwnDataContext = Properties.ContainsObject(s_dataContextProperty);
+
+                if (!hasOwnDataContext)
+                {
+                    Control parent = ParentInternal;
+                    return parent?.DataContext;
+                }
+
+                return Properties.GetObject(s_dataContextProperty);
+            }
+            set
+            {
+                if (!Equals(value, DataContext))
+                {
+                    bool hasOwnDataContext = Properties.ContainsObject(s_dataContextProperty);
+                    Control parent = ParentInternal;
+
+                    if (hasOwnDataContext && Equals(parent?.DataContext, value))
+                    {
+                        Properties.RemoveObject(s_dataContextProperty);
+                        OnDataContextChanged(EventArgs.Empty);
+                        return;
+                    }
+
+                    Properties.SetObject(s_dataContextProperty, value);
+                    OnDataContextChanged(EventArgs.Empty);
+                }
             }
         }
 
@@ -4072,6 +4109,18 @@ namespace System.Windows.Forms
         {
             add => Events.AddHandler(s_controlRemovedEvent, value);
             remove => Events.RemoveHandler(s_controlRemovedEvent, value);
+        }
+
+        /// <summary>
+        ///  Occurs when a control is removed.
+        /// </summary>
+        [SRCategory(nameof(SR.CatData))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event EventHandler DataContextChanged
+        {
+            add => Events.AddHandler(s_dataContextEvent, value);
+            remove => Events.RemoveHandler(s_dataContextEvent, value);
         }
 
         [SRCategory(nameof(SR.CatDragDrop))]
@@ -7299,6 +7348,32 @@ namespace System.Windows.Forms
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnDataContextChanged(EventArgs e)
+        {
+            if (GetAnyDisposingInHierarchy())
+            {
+                return;
+            }
+
+            if (Events[s_dataContextEvent] is EventHandler eventHandler)
+            {
+                eventHandler(this, e);
+            }
+
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            if (controlsCollection is not null)
+            {
+                // PERFNOTE: This is more efficient than using Foreach.  Foreach
+                // forces the creation of an array subset enum each time we
+                // enumerate
+                for (int i = 0; i < controlsCollection.Count; i++)
+                {
+                    controlsCollection[i].OnParentDataContextChanged(e);
+                }
+            }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDockChanged(EventArgs e)
         {
             if (Events[s_dockEvent] is EventHandler eh)
@@ -7505,6 +7580,19 @@ namespace System.Windows.Forms
             if (Properties.GetObject(s_cursorProperty) is null)
             {
                 OnCursorChanged(e);
+            }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnParentDataContextChanged(EventArgs e)
+        {
+            // We don't test on null here, because a root's (Form's) DataContext 
+            // could be {}, this control's parent then became set to null, and now 
+            // its children in that case _need_ to receive the DataContextChanged event as well.
+            // The parent DataContext value, though, in that case would be null.
+            if (Properties.ContainsObject(s_dataContextProperty))
+            {
+                OnDataContextChanged(e);
             }
         }
 
