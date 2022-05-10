@@ -24,10 +24,10 @@ namespace System.Windows.Forms
         public DropSource(ISupportOleDropSource peer, IComDataObject? dataObject, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
             _peer = peer.OrThrowIfNull();
-            _dataObject = dataObject;
 
-            if (dragImage is not null)
+            if (dragImage is not null && dataObject is not null)
             {
+                _dataObject = dataObject;
                 _lastDragImage = dragImage;
                 _lastCursorOffset = cursorOffset;
                 _lastUseDefaultDragImage = useDefaultDragImage;

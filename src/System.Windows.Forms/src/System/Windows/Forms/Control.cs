@@ -5296,12 +5296,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Begins a drag operation. The allowedEffects determine which
-        ///  drag operations can occur. If the drag operation needs to interop
-        ///  with applications in another process, data should either be
-        ///  a base managed class (String, Bitmap, or Metafile) or some Object
-        ///  that implements System.Runtime.Serialization.ISerializable. data can also be any Object that
-        ///  implements System.Windows.Forms.IDataObject.
+        ///  Begins a drag operation. The allowedEffects determine which drag operations can occur. If the drag operation
+        ///  needs to interop with applications in another process, data should either be a base managed class (String, Bitmap,
+        ///  or Metafile) or some Object that implements System.Runtime.Serialization.ISerializable. data can also be any Object
+        ///  that implements System.Windows.Forms.IDataObject.
         /// </summary>
         public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
@@ -5340,7 +5338,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (DragDropHelper.GetInDragLoop(dataObject))
+                if (DragDropHelper.IsInDragLoop(dataObject))
                 {
                     DragDropHelper.SetInDragLoop(dataObject, false);
                 }

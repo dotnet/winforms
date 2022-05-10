@@ -2168,7 +2168,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (DragDropHelper.GetInDragLoop(dataObject))
+                if (DragDropHelper.IsInDragLoop(dataObject))
                 {
                     DragDropHelper.SetInDragLoop(dataObject, false);
                 }
@@ -2187,7 +2187,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal Ole32.IDropSource CreateDropSource(IComDataObject dataObject, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
-            if ((ParentInternal is not null) && ParentInternal.AllowItemReorder && (ParentInternal.ItemReorderDropSource is not null))
+            if (ParentInternal is not null && ParentInternal.AllowItemReorder && ParentInternal.ItemReorderDropSource is not null)
             {
                 return new DropSource(ParentInternal.ItemReorderDropSource, dataObject, dragImage, cursorOffset, useDefaultDragImage);
             }

@@ -562,7 +562,7 @@ namespace System.Windows.Forms
                 converter.OleDataObject.GetData(ref formatetc, out medium);
                 return;
             }
-            else if (_innerData is IDataObject dataObject && DragDropHelper.GetInDragLoop(dataObject))
+            else if (_innerData is IDataObject dataObject && DragDropHelper.IsInDragLoop(dataObject))
             {
                 medium = new STGMEDIUM();
                 string formatName = DataFormats.GetFormat(formatetc.cfFormat).Name;
@@ -683,7 +683,7 @@ namespace System.Windows.Forms
                 return;
             }
             else if (_innerData is IDataObject dataObject
-                && (DragDropHelper.GetInDragLoopFormat(pFormatetcIn) || DragDropHelper.GetInDragLoop(dataObject)))
+                && (DragDropHelper.IsInDragLoopFormat(pFormatetcIn) || DragDropHelper.IsInDragLoop(dataObject)))
             {
                 string formatName = DataFormats.GetFormat(pFormatetcIn.cfFormat).Name;
                 if (dataObject.GetDataPresent(formatName) && dataObject.GetData(formatName) is DragDropFormat dragDropFormat)

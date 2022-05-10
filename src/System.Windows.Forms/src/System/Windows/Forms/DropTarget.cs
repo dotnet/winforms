@@ -40,7 +40,7 @@ namespace System.Windows.Forms
 #if DEBUG
         ~DropTarget()
         {
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DropTarget destroyed");
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DropTarget destroyed");                              
         }
 #endif
 
