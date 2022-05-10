@@ -72,13 +72,12 @@ internal partial class Interop
             IntPtr iDropSourceVtbl = IDropSourceVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
             IntPtr iDropSourceNotifyVtbl = IDropSourceNotifyVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
 
-            int idx = 0;
-            var entries = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry) * 2);
-            entries[idx].IID = IID.IDropSource;
-            entries[idx++].Vtable = iDropSourceVtbl;
-            entries[idx].IID = IID.IDropSourceNotify;
-            entries[idx++].Vtable = iDropSourceNotifyVtbl;
-            return entries;
+            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry) * 2);
+            wrapperEntry[0].IID = IID.IDropSource;
+            wrapperEntry[0].Vtable = iDropSourceVtbl;
+            wrapperEntry[1].IID = IID.IDropSourceNotify;
+            wrapperEntry[1].Vtable = iDropSourceNotifyVtbl;
+            return wrapperEntry;
         }
 
         private static ComInterfaceEntry* InitializeIDropTargetEntry()
