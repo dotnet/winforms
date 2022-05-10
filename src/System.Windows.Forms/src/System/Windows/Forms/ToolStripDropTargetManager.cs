@@ -306,7 +306,7 @@ namespace System.Windows.Forms
                         {
                             e.DropImageType = !dropImageType.Equals(e.DropImageType) ? dropImageType : e.DropImageType;
                             e.Message = !message.Equals(e.Message) ? message : e.Message;
-                            e.MessageReplacementToken = messageReplacementToken.Equals(e.MessageReplacementToken) ? messageReplacementToken : e.MessageReplacementToken;
+                            e.MessageReplacementToken = !messageReplacementToken.Equals(e.MessageReplacementToken) ? messageReplacementToken : e.MessageReplacementToken;
                             DragDropHelper.SetDropDescription(comDataObject, e.DropImageType, e.Message, e.MessageReplacementToken);
                         }
 

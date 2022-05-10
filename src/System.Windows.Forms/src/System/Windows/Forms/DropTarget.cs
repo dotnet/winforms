@@ -96,7 +96,7 @@ namespace System.Windows.Forms
                     {
                         _lastDropImageType = !dropImageType.Equals(_lastDropImageType) ? dropImageType : _lastDropImageType;
                         _lastMessage = !message.Equals(_lastMessage) ? message : _lastMessage;
-                        _lastMessageReplacementToken = messageReplacementToken.Equals(_lastMessageReplacementToken) ? messageReplacementToken : _lastMessageReplacementToken;
+                        _lastMessageReplacementToken = !messageReplacementToken.Equals(_lastMessageReplacementToken) ? messageReplacementToken : _lastMessageReplacementToken;
                         DragDropHelper.SetDropDescription(comDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                     }
 
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
                     {
                         _lastDropImageType = !dropImageType.Equals(_lastDropImageType) ? dropImageType : _lastDropImageType;
                         _lastMessage = !message.Equals(_lastMessage) ? message : _lastMessage;
-                        _lastMessageReplacementToken = messageReplacementToken.Equals(_lastMessageReplacementToken) ? messageReplacementToken : _lastMessageReplacementToken;
+                        _lastMessageReplacementToken = !messageReplacementToken.Equals(_lastMessageReplacementToken) ? messageReplacementToken : _lastMessageReplacementToken;
                         DragDropHelper.SetDropDescription(comDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                     }
 
