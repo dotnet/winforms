@@ -9901,7 +9901,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Die Hintergrundfarbe, in der Text und Grafiken im Steuerelement angezeigt werden.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ToolStripItemBindableCommandDescr">
+      <trans-unit id="ToolStripItemCommandDescr">
         <source>Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</source>
         <target state="new">Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</target>
         <note />
@@ -10006,7 +10006,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Tritt ein, wenn der Wert der BackColor-Eigenschaft für das Element geändert wird.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ToolStripItemOnBindableCommandChangedDescr">
+      <trans-unit id="ToolStripItemOnCommandChangedDescr">
         <source>Occurs whenever the bindable command changes.</source>
         <target state="new">Occurs whenever the bindable command changes.</target>
         <note />

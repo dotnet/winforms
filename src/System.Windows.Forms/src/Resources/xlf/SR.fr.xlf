@@ -9901,7 +9901,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">La couleur d'arrière-plan utilisée pour afficher le texte et les graphismes dans le contrôle.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ToolStripItemBindableCommandDescr">
+      <trans-unit id="ToolStripItemCommandDescr">
         <source>Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</source>
         <target state="new">Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</target>
         <note />
@@ -10006,7 +10006,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Se produit lorsque la valeur de la propriété BackColor est modifiée sur l'élément.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ToolStripItemOnBindableCommandChangedDescr">
+      <trans-unit id="ToolStripItemOnCommandChangedDescr">
         <source>Occurs whenever the bindable command changes.</source>
         <target state="new">Occurs whenever the bindable command changes.</target>
         <note />

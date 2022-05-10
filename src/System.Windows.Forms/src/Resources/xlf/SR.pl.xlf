@@ -9901,7 +9901,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Kolor tła, na którym wyświetlane są tekst i grafika w formancie.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ToolStripItemBindableCommandDescr">
+      <trans-unit id="ToolStripItemCommandDescr">
         <source>Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</source>
         <target state="new">Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</target>
         <note />
@@ -10006,7 +10006,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Występuje, gdy wartość właściwości BackColor zostanie zmieniona w elemencie.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ToolStripItemOnBindableCommandChangedDescr">
+      <trans-unit id="ToolStripItemOnCommandChangedDescr">
         <source>Occurs whenever the bindable command changes.</source>
         <target state="new">Occurs whenever the bindable command changes.</target>
         <note />

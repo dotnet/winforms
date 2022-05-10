@@ -8,48 +8,48 @@ using System.Windows.Input;
 
 namespace System.Windows.Forms
 {
-    public delegate void BindableCommandEventHandler(object sender, BindableCommandEventArgs e);
+    public delegate void CommandEventHandler(object sender, CommandEventArgs e);
 
-    public interface IBindableCommandProvider
+    public interface ICommandProvider
     {
-        event EventHandler BindableCommandChanged;
-        event BindableCommandEventHandler BindableCommandCanExecuteChanged;
-        event BindableCommandEventHandler BindableCommandExecute;
+        event EventHandler CommandChanged;
+        event CommandEventHandler CommandCanExecuteChanged;
+        event CommandEventHandler CommandExecute;
 
-        ICommand BindableCommand { get; set; }
+        ICommand Command { get; set; }
         bool Enabled { get; set; }
 
         protected bool? PreviousEnabledStatus { get; set; }
-        protected void HandleBindableCommandChanged(EventArgs e);
-        protected void HandleBindableCommandCanExecuteChanged(object sender, BindableCommandEventArgs e);
-        protected void HandleBindableCommandExecute(BindableCommandEventArgs e);
+        protected void HandleCommandChanged(EventArgs e);
+        protected void HandleCommandCanExecuteChanged(object sender, CommandEventArgs e);
+        protected void HandleCommandExecute(CommandEventArgs e);
 
-        protected static void BindableCommandSetter(
-            IBindableCommandProvider commandComponent,
+        protected static void CommandSetter(
+            ICommandProvider commandComponent,
             ICommand newCommand,
-            ref ICommand bindableCommandBackingField)
-            => commandComponent.BindableCommandSetter(newCommand, ref bindableCommandBackingField);
+            ref ICommand commandBackingField)
+            => commandComponent.CommandSetter(newCommand, ref commandBackingField);
 
-        protected static void RequestCommandExecute(IBindableCommandProvider commandComponent)
+        protected static void RequestCommandExecute(ICommandProvider commandComponent)
         {
-            BindableCommandEventArgs e = new();
-            commandComponent.HandleBindableCommandExecute(e);
+            CommandEventArgs e = new();
+            commandComponent.HandleCommandExecute(e);
 
-            if (!e.Cancel && (commandComponent.BindableCommand?.CanExecute(null) ?? false))
+            if (!e.Cancel && (commandComponent.Command?.CanExecute(null) ?? false))
             {
-                commandComponent.BindableCommand?.Execute(null);
+                commandComponent.Command?.Execute(null);
             }
         }
 
-        private void BindableCommandSetter(
+        private void CommandSetter(
             ICommand newCommand,
-            ref ICommand bindableCommandBackingField)
+            ref ICommand commandBackingField)
         {
-            if (!Equals(bindableCommandBackingField, newCommand))
+            if (!Equals(commandBackingField, newCommand))
             {
-                if (bindableCommandBackingField is not null)
+                if (commandBackingField is not null)
                 {
-                    bindableCommandBackingField.CanExecuteChanged -= CommandCanExecuteChanged;
+                    commandBackingField.CanExecuteChanged -= CommandCanExecuteChangedProc;
 
                     // We need to restore Enabled, should we go from a defined Command to an undefined Command.
                     if (newCommand is null)
@@ -62,70 +62,70 @@ namespace System.Windows.Forms
                     }
                 }
 
-                bindableCommandBackingField = newCommand;
-                HandleBindableCommandChanged(EventArgs.Empty);
+                commandBackingField = newCommand;
+                HandleCommandChanged(EventArgs.Empty);
 
-                if (bindableCommandBackingField is null)
+                if (commandBackingField is null)
                 {
                     return;
                 }
 
-                bindableCommandBackingField.CanExecuteChanged += CommandCanExecuteChanged;
+                commandBackingField.CanExecuteChanged += CommandCanExecuteChangedProc;
                 PreviousEnabledStatus ??= Enabled;
-                Enabled = bindableCommandBackingField.CanExecute(null);
+                Enabled = commandBackingField.CanExecute(null);
             }
         }
 
-        private void CommandCanExecuteChanged(object sender, EventArgs e)
+        private void CommandCanExecuteChangedProc(object sender, EventArgs e)
         {
-            BindableCommandEventArgs bindableCommandEventArgs = new();
-            HandleBindableCommandCanExecuteChanged(sender, bindableCommandEventArgs);
+            CommandEventArgs commandEventArgs = new();
+            HandleCommandCanExecuteChanged(sender, commandEventArgs);
 
-            if (!bindableCommandEventArgs.Cancel)
+            if (!commandEventArgs.Cancel)
             {
-                Enabled = BindableCommand?.CanExecute(bindableCommandEventArgs.Parameter) ?? false;
+                Enabled = Command?.CanExecute(commandEventArgs.Parameter) ?? false;
             }
         }
     }
 
-    internal class BindableCommandControl : Control, IBindableCommandProvider
+    internal class CommandControl : Control, ICommandProvider
     {
-        public event EventHandler BindableCommandChanged;
-        public event BindableCommandEventHandler BindableCommandCanExecuteChanged;
-        public event BindableCommandEventHandler BindableCommandExecute;
+        public event EventHandler CommandChanged;
+        public event CommandEventHandler CommandCanExecuteChanged;
+        public event CommandEventHandler CommandExecute;
 
-        private ICommand _bindableCommand;
+        private ICommand _command;
 
-        public ICommand BindableCommand
+        public ICommand Command
         {
-            get => _bindableCommand;
-            set => IBindableCommandProvider.BindableCommandSetter(this, value, ref _bindableCommand);
+            get => _command;
+            set => ICommandProvider.CommandSetter(this, value, ref _command);
         }
 
-        bool? IBindableCommandProvider.PreviousEnabledStatus { get; set; }
+        bool? ICommandProvider.PreviousEnabledStatus { get; set; }
 
-        protected virtual void OnBindableCommandChanged(EventArgs e)
-            => BindableCommandChanged?.Invoke(this, e);
+        protected virtual void OnCommandChanged(EventArgs e)
+            => CommandChanged?.Invoke(this, e);
 
-        protected virtual void OnBindableCommandCanExecuteChanged(object sender, BindableCommandEventArgs e)
-            => BindableCommandCanExecuteChanged?.Invoke(this, e);
+        protected virtual void OnCommandCanExecuteChanged(object sender, CommandEventArgs e)
+            => CommandCanExecuteChanged?.Invoke(this, e);
 
-        void IBindableCommandProvider.HandleBindableCommandChanged(EventArgs e)
-            => OnBindableCommandChanged(e);
+        void ICommandProvider.HandleCommandChanged(EventArgs e)
+            => OnCommandChanged(e);
 
-        void IBindableCommandProvider.HandleBindableCommandCanExecuteChanged(object sender, BindableCommandEventArgs e)
-            => OnBindableCommandCanExecuteChanged(sender, e);
+        void ICommandProvider.HandleCommandCanExecuteChanged(object sender, CommandEventArgs e)
+            => OnCommandCanExecuteChanged(sender, e);
 
-        void IBindableCommandProvider.HandleBindableCommandExecute(BindableCommandEventArgs e)
-            => OnBindableCommandExecute(e);
+        void ICommandProvider.HandleCommandExecute(CommandEventArgs e)
+            => OnCommandExecute(e);
 
-        protected virtual void OnBindableCommandExecute(BindableCommandEventArgs e)
-            => BindableCommandExecute?.Invoke(this, e);
+        protected virtual void OnCommandExecute(CommandEventArgs e)
+            => CommandExecute?.Invoke(this, e);
 
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
-            IBindableCommandProvider.RequestCommandExecute(this);
+            ICommandProvider.RequestCommandExecute(this);
         }
     }
 }

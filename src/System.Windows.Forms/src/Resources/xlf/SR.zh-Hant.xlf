@@ -9901,7 +9901,7 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">用來顯示控制項內文字與圖片的背景色彩。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ToolStripItemBindableCommandDescr">
+      <trans-unit id="ToolStripItemCommandDescr">
         <source>Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</source>
         <target state="new">Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</target>
         <note />
@@ -10006,7 +10006,7 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">當 BackColor 屬性值在項目上變更時發生。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ToolStripItemOnBindableCommandChangedDescr">
+      <trans-unit id="ToolStripItemOnCommandChangedDescr">
         <source>Occurs whenever the bindable command changes.</source>
         <target state="new">Occurs whenever the bindable command changes.</target>
         <note />

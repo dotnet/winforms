@@ -9901,7 +9901,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">A cor da tela de fundo usada para exibir texto e elementos gráficos no controle.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ToolStripItemBindableCommandDescr">
+      <trans-unit id="ToolStripItemCommandDescr">
         <source>Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</source>
         <target state="new">Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</target>
         <note />
@@ -10006,7 +10006,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Ocorre quando o valor da propriedade BackColor property é alterado no item.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ToolStripItemOnBindableCommandChangedDescr">
+      <trans-unit id="ToolStripItemOnCommandChangedDescr">
         <source>Occurs whenever the bindable command changes.</source>
         <target state="new">Occurs whenever the bindable command changes.</target>
         <note />

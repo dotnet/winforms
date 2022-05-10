@@ -9901,7 +9901,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Color de fondo utilizado para mostrar texto y gráficos en el control.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ToolStripItemBindableCommandDescr">
+      <trans-unit id="ToolStripItemCommandDescr">
         <source>Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</source>
         <target state="new">Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</target>
         <note />
@@ -10006,7 +10006,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Tiene lugar cuando el valor de la propiedad BackColor cambia en el elemento.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ToolStripItemOnBindableCommandChangedDescr">
+      <trans-unit id="ToolStripItemOnCommandChangedDescr">
         <source>Occurs whenever the bindable command changes.</source>
         <target state="new">Occurs whenever the bindable command changes.</target>
         <note />

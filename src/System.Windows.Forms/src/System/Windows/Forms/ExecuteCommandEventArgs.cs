@@ -8,17 +8,17 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
-    public class BindableCommandEventArgs : CancelEventArgs
+    public class CommandEventArgs : CancelEventArgs
     {
-        public BindableCommandEventArgs()
+        public CommandEventArgs()
         {
         }
 
-        public BindableCommandEventArgs(bool cancel) : base(cancel)
+        public CommandEventArgs(bool cancel) : base(cancel)
         {
         }
 
-        public BindableCommandEventArgs(bool cancel, object parameter) : base(cancel)
+        public CommandEventArgs(bool cancel, object parameter) : base(cancel)
         {
             Parameter = parameter;
         }
