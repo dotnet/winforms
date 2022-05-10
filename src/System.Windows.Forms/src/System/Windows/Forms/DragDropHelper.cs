@@ -110,7 +110,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets boolean formats from a data object.
+        ///  Gets boolean formats from a data object used to set and display drag images and drop descriptions.
         /// </summary>
         private static unsafe bool GetBooleanFormat(IComDataObject dataObject, string format)
         {
@@ -217,7 +217,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets boolean formats into a data object.
+        ///  Sets boolean formats into a data object used to set and display drag images and drop descriptions.
         /// </summary>
         private static unsafe void SetBooleanFormat(IComDataObject dataObject, string format, bool value)
         {
@@ -317,6 +317,8 @@ namespace System.Windows.Forms
                 Marshal.ReleaseComObject(dragSourceHelper);
             }
 
+            // To effectively display the drop description after changing the drag image bitmap, set IsShowingText to true;
+            // otherwise the drop description text will not be displayed.
             SetIsShowingText(dataObject, true);
             SetUsingDefaultDragImage(dataObject, usingDefaultDragImage);
         }
@@ -409,7 +411,7 @@ namespace System.Windows.Forms
         /// <remarks>
         ///  <para>
         ///  To effectively display the drop description after changing the drag image bitmap, set <paramref name="isShowingText"/>
-        ///  to true, otherwise the drop description text will not be displayed.
+        ///  to true; otherwise the drop description text will not be displayed.
         /// </para>
         /// </remarks>
         private static void SetIsShowingText(IComDataObject dataObject, bool isShowingText)
