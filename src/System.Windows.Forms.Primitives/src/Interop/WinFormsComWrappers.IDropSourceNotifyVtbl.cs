@@ -26,15 +26,29 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT DragEnterTarget(IntPtr thisPtr, IntPtr hwndTarget)
             {
-                var inst = ComInterfaceDispatch.GetInstance<Ole32.IDropSourceNotify>((ComInterfaceDispatch*)thisPtr);
-                return inst.DragEnterTarget(hwndTarget);
+                try
+                {
+                    var inst = ComInterfaceDispatch.GetInstance<Ole32.IDropSourceNotify>((ComInterfaceDispatch*)thisPtr);
+                    return inst.DragEnterTarget(hwndTarget);
+                }
+                catch (Exception ex)
+                {
+                    return (HRESULT)ex.HResult;
+                }
             }
 
             [UnmanagedCallersOnly]
             private static HRESULT DragLeaveTarget(IntPtr thisPtr)
             {
-                var inst = ComInterfaceDispatch.GetInstance<Ole32.IDropSourceNotify>((ComInterfaceDispatch*)thisPtr);
-                return inst.DragLeaveTarget();
+                try
+                {
+                    var inst = ComInterfaceDispatch.GetInstance<Ole32.IDropSourceNotify>((ComInterfaceDispatch*)thisPtr);
+                    return inst.DragLeaveTarget();
+                }
+                catch (Exception ex)
+                {
+                    return (HRESULT)ex.HResult;
+                }
             }
         }
     }
