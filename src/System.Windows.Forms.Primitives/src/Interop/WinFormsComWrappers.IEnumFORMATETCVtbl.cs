@@ -29,21 +29,28 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static int Next(IntPtr thisPtr, int celt, FORMATETC* rgelt, int* pceltFetched)
             {
-                IEnumFORMATETC instance = ComInterfaceDispatch.GetInstance<IEnumFORMATETC>((ComInterfaceDispatch*)thisPtr);
-                FORMATETC[] elt = new FORMATETC[celt];
-                int[] celtFetched = new int[1];
-                var result = instance.Next(celt, elt, pceltFetched == null ? null! : celtFetched);
-                for (var i = 0; i < celt; i++)
+                try
                 {
-                    rgelt[i] = elt[i];
-                }
+                    IEnumFORMATETC instance = ComInterfaceDispatch.GetInstance<IEnumFORMATETC>((ComInterfaceDispatch*)thisPtr);
+                    FORMATETC[] elt = new FORMATETC[celt];
+                    int[] celtFetched = new int[1];
+                    var result = instance.Next(celt, elt, pceltFetched == null ? null! : celtFetched);
+                    for (var i = 0; i < celt; i++)
+                    {
+                        rgelt[i] = elt[i];
+                    }
 
-                if (pceltFetched != null)
+                    if (pceltFetched != null)
+                    {
+                        *pceltFetched = celtFetched[0];
+                    }
+
+                    return result;
+                }
+                catch (Exception ex)
                 {
-                    *pceltFetched = celtFetched[0];
+                    return ex.HResult;
                 }
-
-                return result;
             }
 
             [UnmanagedCallersOnly]
@@ -83,13 +90,12 @@ internal partial class Interop
                     IEnumFORMATETC instance = ComInterfaceDispatch.GetInstance<IEnumFORMATETC>((ComInterfaceDispatch*)thisPtr);
                     instance.Clone(out var cloned);
                     *ppenum = WinFormsComWrappers.Instance.GetComPointer(cloned, IID.IEnumFORMATETC);
+                    return S_OK;
                 }
                 catch (Exception ex)
                 {
                     return ex.HResult;
                 }
-
-                return S_OK;
             }
         }
     }
