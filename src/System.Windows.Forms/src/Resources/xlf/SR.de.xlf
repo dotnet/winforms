@@ -10333,12 +10333,12 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ToolStripScrollButtonDownAccessibleName">
         <source>Line down</source>
-        <target state="new">Line down</target>
+        <target state="translated">Zeile nach unten</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripScrollButtonUpAccessibleName">
         <source>Line up</source>
-        <target state="new">Line up</target>
+        <target state="translated">Zeile nach oben</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">

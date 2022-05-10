@@ -10333,12 +10333,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripScrollButtonDownAccessibleName">
         <source>Line down</source>
-        <target state="new">Line down</target>
+        <target state="translated">1 行下へ</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripScrollButtonUpAccessibleName">
         <source>Line up</source>
-        <target state="new">Line up</target>
+        <target state="translated">1 行上へ</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">

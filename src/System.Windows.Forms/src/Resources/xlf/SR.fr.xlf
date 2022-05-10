@@ -10333,12 +10333,12 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="ToolStripScrollButtonDownAccessibleName">
         <source>Line down</source>
-        <target state="new">Line down</target>
+        <target state="translated">Ligne en bas</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripScrollButtonUpAccessibleName">
         <source>Line up</source>
-        <target state="new">Line up</target>
+        <target state="translated">Ligne en haut</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">

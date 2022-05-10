@@ -1625,22 +1625,22 @@ System.Windows.Forms.NotifyIcon.Text.set -> void
 ~System.Windows.Forms.TabControl.SelectedTab.set -> void
 ~System.Windows.Forms.TabControl.SelectTab(string tabPageName) -> void
 ~System.Windows.Forms.TabControl.SelectTab(System.Windows.Forms.TabPage tabPage) -> void
-~System.Windows.Forms.TabControl.TabPageCollection.Add(string key, string text) -> void
-~System.Windows.Forms.TabControl.TabPageCollection.Add(string key, string text, int imageIndex) -> void
-~System.Windows.Forms.TabControl.TabPageCollection.Add(string key, string text, string imageKey) -> void
-~System.Windows.Forms.TabControl.TabPageCollection.Add(string text) -> void
-~System.Windows.Forms.TabControl.TabPageCollection.Add(System.Windows.Forms.TabPage value) -> void
-~System.Windows.Forms.TabControl.TabPageCollection.AddRange(System.Windows.Forms.TabPage[] pages) -> void
-~System.Windows.Forms.TabControl.TabPageCollection.Contains(System.Windows.Forms.TabPage page) -> bool
-~System.Windows.Forms.TabControl.TabPageCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.TabControl.TabPageCollection.IndexOf(System.Windows.Forms.TabPage page) -> int
-~System.Windows.Forms.TabControl.TabPageCollection.Insert(int index, string key, string text) -> void
-~System.Windows.Forms.TabControl.TabPageCollection.Insert(int index, string key, string text, int imageIndex) -> void
-~System.Windows.Forms.TabControl.TabPageCollection.Insert(int index, string key, string text, string imageKey) -> void
-~System.Windows.Forms.TabControl.TabPageCollection.Insert(int index, string text) -> void
-~System.Windows.Forms.TabControl.TabPageCollection.Insert(int index, System.Windows.Forms.TabPage tabPage) -> void
-~System.Windows.Forms.TabControl.TabPageCollection.Remove(System.Windows.Forms.TabPage value) -> void
-~System.Windows.Forms.TabControl.TabPageCollection.TabPageCollection(System.Windows.Forms.TabControl owner) -> void
+System.Windows.Forms.TabControl.TabPageCollection.Add(string? key, string? text) -> void
+System.Windows.Forms.TabControl.TabPageCollection.Add(string? key, string? text, int imageIndex) -> void
+System.Windows.Forms.TabControl.TabPageCollection.Add(string? key, string? text, string! imageKey) -> void
+System.Windows.Forms.TabControl.TabPageCollection.Add(string? text) -> void
+System.Windows.Forms.TabControl.TabPageCollection.Add(System.Windows.Forms.TabPage! value) -> void
+System.Windows.Forms.TabControl.TabPageCollection.AddRange(System.Windows.Forms.TabPage![]! pages) -> void
+System.Windows.Forms.TabControl.TabPageCollection.Contains(System.Windows.Forms.TabPage! page) -> bool
+System.Windows.Forms.TabControl.TabPageCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.TabControl.TabPageCollection.IndexOf(System.Windows.Forms.TabPage! page) -> int
+System.Windows.Forms.TabControl.TabPageCollection.Insert(int index, string? key, string? text) -> void
+System.Windows.Forms.TabControl.TabPageCollection.Insert(int index, string? key, string? text, int imageIndex) -> void
+System.Windows.Forms.TabControl.TabPageCollection.Insert(int index, string? key, string? text, string! imageKey) -> void
+System.Windows.Forms.TabControl.TabPageCollection.Insert(int index, string? text) -> void
+System.Windows.Forms.TabControl.TabPageCollection.Insert(int index, System.Windows.Forms.TabPage! tabPage) -> void
+System.Windows.Forms.TabControl.TabPageCollection.Remove(System.Windows.Forms.TabPage! value) -> void
+System.Windows.Forms.TabControl.TabPageCollection.TabPageCollection(System.Windows.Forms.TabControl! owner) -> void
 ~System.Windows.Forms.TabControl.TabPages.get -> System.Windows.Forms.TabControl.TabPageCollection
 ~System.Windows.Forms.TableLayoutColumnStyleCollection.Add(System.Windows.Forms.ColumnStyle columnStyle) -> int
 ~System.Windows.Forms.TableLayoutColumnStyleCollection.Contains(System.Windows.Forms.ColumnStyle columnStyle) -> bool
@@ -2446,12 +2446,12 @@ virtual System.Windows.Forms.Control.LayoutEngine.get -> System.Windows.Forms.La
 ~virtual System.Windows.Forms.TabControl.OnSelected(System.Windows.Forms.TabControlEventArgs e) -> void
 ~virtual System.Windows.Forms.TabControl.OnSelectedIndexChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.TabControl.OnSelecting(System.Windows.Forms.TabControlCancelEventArgs e) -> void
-~virtual System.Windows.Forms.TabControl.TabPageCollection.ContainsKey(string key) -> bool
-~virtual System.Windows.Forms.TabControl.TabPageCollection.IndexOfKey(string key) -> int
-~virtual System.Windows.Forms.TabControl.TabPageCollection.RemoveByKey(string key) -> void
-~virtual System.Windows.Forms.TabControl.TabPageCollection.this[int index].get -> System.Windows.Forms.TabPage
-~virtual System.Windows.Forms.TabControl.TabPageCollection.this[int index].set -> void
-~virtual System.Windows.Forms.TabControl.TabPageCollection.this[string key].get -> System.Windows.Forms.TabPage
+virtual System.Windows.Forms.TabControl.TabPageCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.TabControl.TabPageCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.TabControl.TabPageCollection.RemoveByKey(string? key) -> void
+virtual System.Windows.Forms.TabControl.TabPageCollection.this[int index].get -> System.Windows.Forms.TabPage!
+virtual System.Windows.Forms.TabControl.TabPageCollection.this[int index].set -> void
+virtual System.Windows.Forms.TabControl.TabPageCollection.this[string? key].get -> System.Windows.Forms.TabPage?
 ~virtual System.Windows.Forms.TableLayoutControlCollection.Add(System.Windows.Forms.Control control, int column, int row) -> void
 ~virtual System.Windows.Forms.TableLayoutPanel.OnCellPaint(System.Windows.Forms.TableLayoutCellPaintEventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStrip.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
