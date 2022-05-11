@@ -75,9 +75,9 @@ namespace System.Windows.Forms
             {
                 if (!gfbevent.DragImage.Equals(_lastDragImage) || !gfbevent.CursorOffset.Equals(_lastCursorOffset) || !gfbevent.UseDefaultDragImage.Equals(_lastUseDefaultDragImage))
                 {
-                    _lastDragImage = !gfbevent.DragImage.Equals(_lastDragImage) ? gfbevent.DragImage : _lastDragImage;
-                    _lastCursorOffset = !gfbevent.CursorOffset.Equals(_lastCursorOffset) ? gfbevent.CursorOffset : _lastCursorOffset;
-                    _lastUseDefaultDragImage = !gfbevent.UseDefaultDragImage.Equals(_lastUseDefaultDragImage) ? gfbevent.UseDefaultDragImage : _lastUseDefaultDragImage;
+                    _lastDragImage = gfbevent.DragImage;
+                    _lastCursorOffset = gfbevent.CursorOffset;
+                    _lastUseDefaultDragImage = gfbevent.UseDefaultDragImage;
                     DragDropHelper.SetDragImage(_dataObject, _lastDragImage, _lastCursorOffset, _lastUseDefaultDragImage);
 
                     if (!_lastHwndTarget.Equals(IntPtr.Zero) && (Cursor.Position is Point pt))

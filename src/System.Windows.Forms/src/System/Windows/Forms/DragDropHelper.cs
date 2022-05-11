@@ -260,7 +260,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes the drag-image manager and sets the drag image into a data object.
+        /// Initializes the drag-image manager and sets the drag image bitmap into a data object.
         /// </summary>
         /// <remarks>
         ///  <para>
