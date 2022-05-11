@@ -298,18 +298,7 @@ namespace System.Windows.Forms
                     // tell the drag image manager you've entered
                     if ((dragEnterArgs.DropImageType > DropImageType.Invalid) && (dragEnterArgs.Data is IComDataObject comDataObject) && (owner is ToolStrip toolStrip) && toolStrip.IsHandleCreated)
                     {
-                        DropImageType dropImageType = Enum.IsDefined(dragEnterArgs.DropImageType) ? dragEnterArgs.DropImageType : DropImageType.Invalid;
-                        string message = dragEnterArgs.Message ?? string.Empty;
-                        string messageReplacementToken = dragEnterArgs.MessageReplacementToken ?? string.Empty;
-
-                        if (!dropImageType.Equals(e.DropImageType) || !message.Equals(e.Message) || !messageReplacementToken.Equals(e.MessageReplacementToken))
-                        {
-                            e.DropImageType = !dropImageType.Equals(e.DropImageType) ? dropImageType : e.DropImageType;
-                            e.Message = !message.Equals(e.Message) ? message : e.Message;
-                            e.MessageReplacementToken = !messageReplacementToken.Equals(e.MessageReplacementToken) ? messageReplacementToken : e.MessageReplacementToken;
-                            DragDropHelper.SetDropDescription(comDataObject, e.DropImageType, e.Message, e.MessageReplacementToken);
-                        }
-
+                        DragDropHelper.SetDropDescription(comDataObject, dragEnterArgs.DropImageType, dragEnterArgs.Message, dragEnterArgs.MessageReplacementToken);
                         Point pt = new(dragEnterArgs.X, dragEnterArgs.Y);
                         DragDropHelper.DragEnter(toolStrip.Handle, comDataObject, ref pt, (uint)dragEnterArgs.Effect);
                     }
