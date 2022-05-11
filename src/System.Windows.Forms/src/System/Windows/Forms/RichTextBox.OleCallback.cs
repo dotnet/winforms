@@ -153,15 +153,14 @@ namespace System.Windows.Forms
 
                             if ((e.DropImageType > DropImageType.Invalid) && (_lastComDataObject is not null) && owner.IsHandleCreated)
                             {
-                                DropImageType dropImageType = Enum.IsDefined(e.DropImageType) ? e.DropImageType : DropImageType.Invalid;
-                                string message = e.Message ?? string.Empty;
-                                string messageReplacementToken = e.MessageReplacementToken ?? string.Empty;
+                                e.Message ??= string.Empty;
+                                e.MessageReplacementToken ??= string.Empty;
 
-                                if (!dropImageType.Equals(_lastDropImageType) || !message.Equals(_lastMessage) || !messageReplacementToken.Equals(_lastMessageReplacementToken))
+                                if (!e.DropImageType.Equals(_lastDropImageType) || !e.Message.Equals(_lastMessage) || !e.MessageReplacementToken.Equals(_lastMessageReplacementToken))
                                 {
-                                    _lastDropImageType = !dropImageType.Equals(_lastDropImageType) ? dropImageType : _lastDropImageType;
-                                    _lastMessage = !message.Equals(_lastMessage) ? message : _lastMessage;
-                                    _lastMessageReplacementToken = messageReplacementToken.Equals(_lastMessageReplacementToken) ? messageReplacementToken : _lastMessageReplacementToken;
+                                    _lastDropImageType = e.DropImageType;
+                                    _lastMessage = e.Message;
+                                    _lastMessageReplacementToken = e.MessageReplacementToken;
                                     DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                                 }
 
@@ -177,9 +176,9 @@ namespace System.Windows.Forms
                             {
                                 if (!_lastDropImageType.Equals(DropImageType.Invalid) || !_lastMessage.Equals(string.Empty) || !_lastMessageReplacementToken.Equals(string.Empty))
                                 {
-                                    _lastDropImageType = !_lastDropImageType.Equals(DropImageType.Invalid) ? DropImageType.Invalid : _lastDropImageType;
-                                    _lastMessage = !_lastMessage.Equals(string.Empty) ? string.Empty : _lastMessage;
-                                    _lastMessageReplacementToken = !_lastMessageReplacementToken.Equals(string.Empty) ? string.Empty : _lastMessageReplacementToken;
+                                    _lastDropImageType = DropImageType.Invalid;
+                                    _lastMessage = string.Empty;
+                                    _lastMessageReplacementToken = string.Empty;
                                     DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                                 }
 
@@ -294,15 +293,14 @@ namespace System.Windows.Forms
 
                             if ((e.DropImageType > DropImageType.Invalid) && (_lastComDataObject is not null) && owner.IsHandleCreated)
                             {
-                                DropImageType dropImageType = Enum.IsDefined(e.DropImageType) ? e.DropImageType : DropImageType.Invalid;
-                                string message = e.Message ?? string.Empty;
-                                string messageReplacementToken = e.MessageReplacementToken ?? string.Empty;
+                                e.Message ??= string.Empty;
+                                e.MessageReplacementToken ??= string.Empty;
 
-                                if (!dropImageType.Equals(_lastDropImageType) || !message.Equals(_lastMessage) || !messageReplacementToken.Equals(_lastMessageReplacementToken))
+                                if (!e.DropImageType.Equals(_lastDropImageType) || !e.Message.Equals(_lastMessage) || !e.MessageReplacementToken.Equals(_lastMessageReplacementToken))
                                 {
-                                    _lastDropImageType = !dropImageType.Equals(_lastDropImageType) ? dropImageType : _lastDropImageType;
-                                    _lastMessage = !message.Equals(_lastMessage) ? message : _lastMessage;
-                                    _lastMessageReplacementToken = messageReplacementToken.Equals(_lastMessageReplacementToken) ? messageReplacementToken : _lastMessageReplacementToken;
+                                    _lastDropImageType = e.DropImageType;
+                                    _lastMessage = e.Message;
+                                    _lastMessageReplacementToken = e.MessageReplacementToken;
                                     DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                                 }
 
