@@ -177,9 +177,9 @@ internal partial class Interop
 
             internal struct STGMEDIUM_Raw
             {
-                public IntPtr pUnkForRelease;
                 public TYMED tymed;
                 public IntPtr unionmember;
+                public IntPtr pUnkForRelease;
             }
         }
     }
