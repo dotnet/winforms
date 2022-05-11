@@ -88,15 +88,14 @@ namespace System.Windows.Forms
 
                 if ((drgevent.DropImageType > DropImageType.Invalid) && (drgevent.Data is IComDataObject comDataObject) && (_hwndTarget != IntPtr.Zero))
                 {
-                    DropImageType dropImageType = Enum.IsDefined(drgevent.DropImageType) ? drgevent.DropImageType : DropImageType.Invalid;
-                    string message = drgevent.Message ?? string.Empty;
-                    string messageReplacementToken = drgevent.MessageReplacementToken ?? string.Empty;
+                    drgevent.Message ??= string.Empty;
+                    drgevent.MessageReplacementToken ??= string.Empty;
 
-                    if (!dropImageType.Equals(_lastDropImageType) || !message.Equals(_lastMessage) || !messageReplacementToken.Equals(_lastMessageReplacementToken))
+                    if (!drgevent.DropImageType.Equals(_lastDropImageType) || !drgevent.Message.Equals(_lastMessage) || !drgevent.MessageReplacementToken.Equals(_lastMessageReplacementToken))
                     {
-                        _lastDropImageType = !dropImageType.Equals(_lastDropImageType) ? dropImageType : _lastDropImageType;
-                        _lastMessage = !message.Equals(_lastMessage) ? message : _lastMessage;
-                        _lastMessageReplacementToken = !messageReplacementToken.Equals(_lastMessageReplacementToken) ? messageReplacementToken : _lastMessageReplacementToken;
+                        _lastDropImageType = drgevent.DropImageType;
+                        _lastMessage = drgevent.Message;
+                        _lastMessageReplacementToken = drgevent.MessageReplacementToken;
                         DragDropHelper.SetDropDescription(comDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                     }
 
@@ -124,15 +123,14 @@ namespace System.Windows.Forms
 
                 if ((drgevent.DropImageType > DropImageType.Invalid) && (drgevent.Data is IComDataObject comDataObject) && (_hwndTarget != IntPtr.Zero))
                 {
-                    DropImageType dropImageType = Enum.IsDefined(drgevent.DropImageType) ? drgevent.DropImageType : DropImageType.Invalid;
-                    string message = drgevent.Message ?? string.Empty;
-                    string messageReplacementToken = drgevent.MessageReplacementToken ?? string.Empty;
+                    drgevent.Message ??= string.Empty;
+                    drgevent.MessageReplacementToken ??= string.Empty;
 
-                    if (!dropImageType.Equals(_lastDropImageType) || !message.Equals(_lastMessage) || !messageReplacementToken.Equals(_lastMessageReplacementToken))
+                    if (!drgevent.DropImageType.Equals(_lastDropImageType) || !drgevent.Message.Equals(_lastMessage) || !drgevent.MessageReplacementToken.Equals(_lastMessageReplacementToken))
                     {
-                        _lastDropImageType = !dropImageType.Equals(_lastDropImageType) ? dropImageType : _lastDropImageType;
-                        _lastMessage = !message.Equals(_lastMessage) ? message : _lastMessage;
-                        _lastMessageReplacementToken = !messageReplacementToken.Equals(_lastMessageReplacementToken) ? messageReplacementToken : _lastMessageReplacementToken;
+                        _lastDropImageType = drgevent.DropImageType;
+                        _lastMessage = drgevent.Message;
+                        _lastMessageReplacementToken = drgevent.MessageReplacementToken;
                         DragDropHelper.SetDropDescription(comDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                     }
 
@@ -156,9 +154,9 @@ namespace System.Windows.Forms
             {
                 if (!_lastDropImageType.Equals(DropImageType.Invalid) || !_lastMessage.Equals(string.Empty) || !_lastMessageReplacementToken.Equals(string.Empty))
                 {
-                    _lastDropImageType = !_lastDropImageType.Equals(DropImageType.Invalid) ? DropImageType.Invalid : _lastDropImageType;
-                    _lastMessage = !_lastMessage.Equals(string.Empty) ? string.Empty : _lastMessage;
-                    _lastMessageReplacementToken = !_lastMessageReplacementToken.Equals(string.Empty) ? string.Empty : _lastMessageReplacementToken;
+                    _lastDropImageType = DropImageType.Invalid;
+                    _lastMessage = string.Empty;
+                    _lastMessageReplacementToken = string.Empty;
                     DragDropHelper.SetDropDescription(comDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                 }
 
@@ -183,9 +181,9 @@ namespace System.Windows.Forms
                 {
                     if (!_lastDropImageType.Equals(DropImageType.Invalid) || !_lastMessage.Equals(string.Empty) || !_lastMessageReplacementToken.Equals(string.Empty))
                     {
-                        _lastDropImageType = !_lastDropImageType.Equals(DropImageType.Invalid) ? DropImageType.Invalid : _lastDropImageType;
-                        _lastMessage = !_lastMessage.Equals(string.Empty) ? string.Empty : _lastMessage;
-                        _lastMessageReplacementToken = !_lastMessageReplacementToken.Equals(string.Empty) ? string.Empty : _lastMessageReplacementToken;
+                        _lastDropImageType = DropImageType.Invalid;
+                        _lastMessage = string.Empty;
+                        _lastMessageReplacementToken = string.Empty;
                         DragDropHelper.SetDropDescription(comDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
                     }
 
