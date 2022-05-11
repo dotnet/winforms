@@ -71,6 +71,8 @@ namespace System.Windows.Forms
                 }
             }
 
+            internal bool IsAccessibilityObjectCreated => _accessibilityObject is not null;
+
             public Color BackColor
             {
                 get

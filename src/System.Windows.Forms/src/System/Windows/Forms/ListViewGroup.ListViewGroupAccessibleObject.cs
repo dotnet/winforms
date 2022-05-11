@@ -228,7 +228,9 @@ namespace System.Windows.Forms
                         return _owningListViewAccessibilityObject;
                     case UiaCore.NavigateDirection.NextSibling:
                         int childIndex = _owningListViewAccessibilityObject.GetChildIndex(this);
-                        return childIndex == -1 ? null : _owningListViewAccessibilityObject.GetChild(childIndex + 1);
+                        return childIndex == InvalidIndex
+                            ? null
+                            : _owningListViewAccessibilityObject.GetChild(childIndex + 1);
                     case UiaCore.NavigateDirection.PreviousSibling:
                         return _owningListViewAccessibilityObject.GetChild(_owningListViewAccessibilityObject.GetChildIndex(this) - 1);
                     case UiaCore.NavigateDirection.FirstChild:
@@ -262,7 +264,7 @@ namespace System.Windows.Forms
             {
                 if (child is null || !_owningListView.IsHandleCreated || !_owningListView.GroupsDisplayed)
                 {
-                    return -1;
+                    return InvalidIndex;
                 }
 
                 IReadOnlyList<ListViewItem> visibleItems = GetVisibleItems();
@@ -274,14 +276,14 @@ namespace System.Windows.Forms
                     }
                 }
 
-                return -1;
+                return InvalidIndex;
             }
 
             public override int GetChildCount()
             {
                 if (!_owningListView.IsHandleCreated || !_owningListView.GroupsDisplayed)
                 {
-                    return -1;
+                    return InvalidIndex;
                 }
 
                 return GetVisibleItems().Count;
