@@ -171,7 +171,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_fileNames is null || string.IsNullOrEmpty(_fileNames[0]))
+                if (_fileNames is null)
                 {
                     return string.Empty;
                 }
@@ -433,7 +433,7 @@ namespace System.Windows.Forms
                     _fileNames = GetMultiselectFiles(_charBuffer);
                 }
 
-                if (ProcessFileNames())
+                if (ProcessFileNames(_fileNames))
                 {
                     CancelEventArgs ceevent = new CancelEventArgs();
                     if (NativeWindow.WndProcShouldBeDebuggable)
@@ -470,7 +470,7 @@ namespace System.Windows.Forms
             return ok;
         }
 
-        private protected static bool FileExists(string fileName)
+        private protected static bool FileExists(string? fileName)
         {
             try
             {
@@ -663,28 +663,28 @@ namespace System.Windows.Forms
         ///  of the "addExtension", "checkFileExists", "createPrompt", and
         ///  "overwritePrompt" properties.
         /// </summary>
-        private bool ProcessFileNames()
+        private bool ProcessFileNames(string[] fileNames)
         {
             if ((_options & (int)Comdlg32.OFN.NOVALIDATE) == 0)
             {
                 string[] extensions = FilterExtensions;
-                for (int i = 0; i < _fileNames!.Length; i++)
+                for (int i = 0; i < fileNames.Length; i++)
                 {
-                    string fileName = _fileNames[i];
+                    string fileName = fileNames[i];
                     if ((_options & AddExtensionOption) != 0 && !Path.HasExtension(fileName))
                     {
                         bool fileMustExist = (_options & (int)Comdlg32.OFN.FILEMUSTEXIST) != 0;
 
                         for (int j = 0; j < extensions.Length; j++)
                         {
-                            string currentExtension = Path.GetExtension(fileName);
+                            string currentExtension = Path.GetExtension(fileName)!;
 
                             Debug.Assert(!extensions[j].StartsWith("."),
                                          "FileDialog.FilterExtensions should not return things starting with '.'");
                             Debug.Assert(currentExtension.Length == 0 || currentExtension.StartsWith("."),
                                          "File.GetExtension should return something that starts with '.'");
 
-                            string s = fileName.Substring(0, fileName.Length - currentExtension.Length);
+                            string s = fileName!.Substring(0, fileName.Length - currentExtension.Length);
 
                             // we don't want to append the extension if it contains wild cards
                             if (extensions[j].IndexOfAny(new char[] { '*', '?' }) == -1)
@@ -699,7 +699,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        _fileNames[i] = fileName;
+                        fileNames[i] = fileName;
                     }
 
                     if (!PromptUserIfAppropriate(fileName))
@@ -736,7 +736,7 @@ namespace System.Windows.Forms
         ///  Prompts the user with a <see cref="MessageBox"/> when a
         ///  file does not exist.
         /// </summary>
-        private void PromptFileNotFound(string fileName)
+        private void PromptFileNotFound(string? fileName)
         {
             MessageBoxWithFocusRestore(string.Format(SR.FileDialogFileNotFound, fileName), DialogCaption,
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -746,7 +746,7 @@ namespace System.Windows.Forms
         /// If it's necessary to throw up a "This file exists, are you sure?" kind of MessageBox,
         /// here's where we do it. Return value is whether or not the user hit "okay".
         /// </summary>
-        private protected virtual bool PromptUserIfAppropriate(string fileName)
+        private protected virtual bool PromptUserIfAppropriate(string? fileName)
         {
             if ((_options & (int)Comdlg32.OFN.FILEMUSTEXIST) != 0)
             {
@@ -804,10 +804,7 @@ namespace System.Windows.Forms
             try
             {
                 _charBuffer = new UnicodeCharBuffer(FileBufferSize);
-                if (_fileNames is not null)
-                {
-                    _charBuffer.PutString(_fileNames[0]);
-                }
+                _charBuffer.PutString(FileName);
 
                 ofn.lStructSize = Marshal.SizeOf<NativeMethods.OPENFILENAME_I>();
                 ofn.hwndOwner = hWndOwner;

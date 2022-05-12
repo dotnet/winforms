@@ -1552,9 +1552,9 @@ System.Windows.Forms.NotifyIcon.Tag.get -> object?
 System.Windows.Forms.NotifyIcon.Tag.set -> void
 System.Windows.Forms.NotifyIcon.Text.get -> string!
 System.Windows.Forms.NotifyIcon.Text.set -> void
-~System.Windows.Forms.OpenFileDialog.OpenFile() -> System.IO.Stream
-~System.Windows.Forms.OpenFileDialog.SafeFileName.get -> string
-~System.Windows.Forms.OpenFileDialog.SafeFileNames.get -> string[]
+System.Windows.Forms.OpenFileDialog.OpenFile() -> System.IO.Stream!
+System.Windows.Forms.OpenFileDialog.SafeFileName.get -> string!
+System.Windows.Forms.OpenFileDialog.SafeFileNames.get -> string![]!
 ~System.Windows.Forms.PictureBox.ErrorImage.get -> System.Drawing.Image
 ~System.Windows.Forms.PictureBox.ErrorImage.set -> void
 ~System.Windows.Forms.PictureBox.Image.get -> System.Drawing.Image
