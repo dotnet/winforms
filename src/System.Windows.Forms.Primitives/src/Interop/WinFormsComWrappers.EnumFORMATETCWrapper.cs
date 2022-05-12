@@ -27,7 +27,7 @@ internal partial class Interop
                 _wrappedInstance = IntPtr.Zero;
             }
 
-            public int Next(int celt, FORMATETC[] rgelt, int[] pceltFetched)
+            public int Next(int celt, FORMATETC[] rgelt, int[]? pceltFetched)
             {
                 fixed (FORMATETC* rgeltPtr = &MemoryMarshal.GetArrayDataReference(rgelt))
                 {
