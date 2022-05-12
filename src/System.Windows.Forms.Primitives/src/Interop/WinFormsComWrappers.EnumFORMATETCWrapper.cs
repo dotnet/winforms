@@ -23,11 +23,6 @@ internal partial class Interop
 
             ~EnumFORMATETCWrapper()
             {
-                this.DisposeInternal();
-            }
-
-            private void DisposeInternal()
-            {
                 Marshal.Release(_wrappedInstance);
                 _wrappedInstance = IntPtr.Zero;
             }
@@ -36,7 +31,7 @@ internal partial class Interop
             {
                 fixed (FORMATETC* rgeltPtr = &MemoryMarshal.GetArrayDataReference(rgelt))
                 {
-                    if (pceltFetched == null)
+                    if (pceltFetched is null)
                     {
                         return ((delegate* unmanaged<IntPtr, int, FORMATETC*, int*, int>)(*(*(void***)_wrappedInstance + 3)))
                             (_wrappedInstance, celt, rgeltPtr, null);

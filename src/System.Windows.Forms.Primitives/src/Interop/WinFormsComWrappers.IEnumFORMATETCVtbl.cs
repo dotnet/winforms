@@ -40,7 +40,7 @@ internal partial class Interop
                         rgelt[i] = elt[i];
                     }
 
-                    if (pceltFetched != null)
+                    if (pceltFetched is not null)
                     {
                         *pceltFetched = celtFetched[0];
                     }
