@@ -31,7 +31,11 @@ namespace System.Windows.Forms
         /// </summary>
         public static void ClearDropDescription(IDataObject? dataObject)
         {
-            IComDataObject comDataObject = GetDataObject(dataObject);
+            if (dataObject is not IComDataObject comDataObject)
+            {
+                return;
+            }
+
             SetDropDescription(comDataObject, DropImageType.Invalid, string.Empty, string.Empty);
         }
 
@@ -62,9 +66,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DragEnter(IntPtr hwndTarget, DragEventArgs drgevent)
         {
-            IComDataObject dataObject = GetDataObject(drgevent.Data);
-
-            if (!TryGetDragDropHelper(out IDropTargetHelper? dropTargetHelper))
+            if (!TryGetDragDropHelper(out IDropTargetHelper? dropTargetHelper) || drgevent.Data is not IComDataObject dataObject)
             {
                 return;
             }
@@ -128,9 +130,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void Drop(DragEventArgs drgevent)
         {
-            IComDataObject dataObject = GetDataObject(drgevent.Data);
-
-            if (!TryGetDragDropHelper(out IDropTargetHelper? dropTargetHelper))
+            if (!TryGetDragDropHelper(out IDropTargetHelper? dropTargetHelper) || drgevent.Data is not IComDataObject dataObject)
             {
                 return;
             }
@@ -182,31 +182,6 @@ namespace System.Windows.Forms
                 Kernel32.GlobalUnlock(medium.unionmember);
                 Ole32.ReleaseStgMedium(ref medium);
             }
-        }
-
-        /// <summary>
-        ///  Retrieves the data from the specified object.
-        /// </summary>
-        private static IComDataObject GetDataObject(IDataObject? dataObject)
-        {
-            IComDataObject comDataObject;
-
-            if (dataObject is IComDataObject iComData)
-            {
-                comDataObject = iComData;
-            }
-            else if (dataObject is IDataObject iData)
-            {
-                comDataObject = new DataObject(iData);
-            }
-            else
-            {
-                DataObject data = new();
-                data.SetData(dataObject);
-                comDataObject = data;
-            }
-
-            return comDataObject;
         }
 
         /// <summary>
@@ -390,9 +365,13 @@ namespace System.Windows.Forms
         /// </summary>
         public static void SetDropDescription(DragEventArgs drgevent)
         {
+            if (drgevent.Data is not IComDataObject dataObject)
+            {
+                return;
+            }
+
             drgevent.Message ??= string.Empty;
             drgevent.MessageReplacementToken ??= string.Empty;
-            IComDataObject dataObject = GetDataObject(drgevent.Data);
             SetDropDescription(dataObject, drgevent.DropImageType, drgevent.Message, drgevent.MessageReplacementToken);
         }
 
