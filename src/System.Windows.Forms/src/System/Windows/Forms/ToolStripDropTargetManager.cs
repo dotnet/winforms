@@ -10,7 +10,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using static Interop;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
