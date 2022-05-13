@@ -211,8 +211,7 @@ namespace WinformsControlsTest
 
         private void TextBox_DragDrop(object? sender, DragEventArgs e)
         {
-            if (e is not null
-                && e.Data is not null
+            if (e.Data is not null
                 && e.Data.GetDataPresent(nameof(_nyanCatAscii), false)
                 && e.Data.GetData(nameof(_nyanCatAscii)) is string asciiCat)
             {
@@ -229,112 +228,118 @@ namespace WinformsControlsTest
         {
             e.Effect = DragDropEffects.None;
 
-            if (e.Data is not null)
+            if (e.Data is null)
             {
-                if (e.Data.GetDataPresent(nameof(_nyanCatAscii)))
-                {
-                    // Set the target drop image to a plus sign (+).
-                    e.DropImageType = DropImageType.Copy;
+                return;
+            }
 
-                    // Set the target drop text.
-                    e.Message = "Copy cat to %1";
-                    e.MessageReplacementToken = "~=[,,_,,]:3";
+            if (e.Data.GetDataPresent(nameof(_nyanCatAscii)))
+            {
+                // Set the target drop image to a plus sign (+).
+                e.DropImageType = DropImageType.Copy;
 
-                    // Set the target drop effect.
-                    e.Effect = DragDropEffects.Copy;
-                }
-                else if (e.Data.GetDataPresent(nameof(_nyanCatBmp)))
-                {
-                    e.DropImageType = DropImageType.None;
-                    e.Message = "Nyan %1";
-                    e.MessageReplacementToken = "Cat";
-                    e.Effect = DragDropEffects.None;
-                }
-                else if (e.Data.GetDataPresent(DataFormats.FileDrop)
-                    && e.Data.GetData(DataFormats.FileDrop) is string[] files
-                    && files.Length > 0 && files[0].Contains("DragAccept.rtf"))
-                {
-                    // Set the target drop image to a red bisected circle.
-                    e.DropImageType = DropImageType.None;
+                // Set the target drop text.
+                e.Message = "Copy cat to %1";
+                e.MessageReplacementToken = "~=[,,_,,]:3";
 
-                    // Set the target drop text.
-                    e.Message = $"{Path.GetFileNameWithoutExtension(files[0])}%1";
-                    e.MessageReplacementToken = Path.GetExtension(files[0]);
+                // Set the target drop effect.
+                e.Effect = DragDropEffects.Copy;
+            }
+            else if (e.Data.GetDataPresent(nameof(_nyanCatBmp)))
+            {
+                e.DropImageType = DropImageType.None;
+                e.Message = "Nyan %1";
+                e.MessageReplacementToken = "Cat";
+                e.Effect = DragDropEffects.None;
+            }
+            else if (e.Data.GetDataPresent(DataFormats.FileDrop)
+                && e.Data.GetData(DataFormats.FileDrop) is string[] files
+                && files.Length > 0 && files[0].Contains("DragAccept.rtf"))
+            {
+                // Set the target drop image to a red bisected circle.
+                e.DropImageType = DropImageType.None;
 
-                    // Set the target drop effect.
-                    e.Effect = DragDropEffects.None;
-                }
+                // Set the target drop text.
+                e.Message = $"{Path.GetFileNameWithoutExtension(files[0])}%1";
+                e.MessageReplacementToken = Path.GetExtension(files[0]);
+
+                // Set the target drop effect.
+                e.Effect = DragDropEffects.None;
             }
         }
 
         private void TextBox_DragOver(object? sender, DragEventArgs e)
         {
-            if (e.Data is not null)
+            if (e.Data is null)
             {
-                if (e.Data.GetDataPresent(nameof(_nyanCatAscii)))
-                {
-                    // Set the target drop image to a plus sign (+).
-                    e.DropImageType = DropImageType.Copy;
+                return;
+            }
 
-                    // Set the target drop text.
-                    e.Message = "Copy cat to %1";
-                    e.MessageReplacementToken = "~=[,,_,,]:3";
+            if (e.Data.GetDataPresent(nameof(_nyanCatAscii)))
+            {
+                // Set the target drop image to a plus sign (+).
+                e.DropImageType = DropImageType.Copy;
 
-                    // Set the target drop effect.
-                    e.Effect = DragDropEffects.Copy;
-                }
-                else if (e.Data.GetDataPresent(nameof(_nyanCatBmp)))
-                {
-                    e.DropImageType = DropImageType.None;
-                    e.Message = "Nyan %1";
-                    e.MessageReplacementToken = "Cat";
-                    e.Effect = DragDropEffects.None;
-                }
-                else if (e.Data.GetDataPresent(DataFormats.FileDrop)
-                    && e.Data.GetData(DataFormats.FileDrop) is string[] files
-                    && files.Length > 0 && files[0].Contains("DragAccept.rtf"))
-                {
-                    // Set the target drop image to a red bisected circle.
-                    e.DropImageType = DropImageType.None;
+                // Set the target drop text.
+                e.Message = "Copy cat to %1";
+                e.MessageReplacementToken = "~=[,,_,,]:3";
 
-                    // Set the target drop text.
-                    e.Message = $"{Path.GetFileNameWithoutExtension(files[0])}%1";
-                    e.MessageReplacementToken = Path.GetExtension(files[0]);
+                // Set the target drop effect.
+                e.Effect = DragDropEffects.Copy;
+            }
+            else if (e.Data.GetDataPresent(nameof(_nyanCatBmp)))
+            {
+                e.DropImageType = DropImageType.None;
+                e.Message = "Nyan %1";
+                e.MessageReplacementToken = "Cat";
+                e.Effect = DragDropEffects.None;
+            }
+            else if (e.Data.GetDataPresent(DataFormats.FileDrop)
+                && e.Data.GetData(DataFormats.FileDrop) is string[] files
+                && files.Length > 0 && files[0].Contains("DragAccept.rtf"))
+            {
+                // Set the target drop image to a red bisected circle.
+                e.DropImageType = DropImageType.None;
 
-                    // Set the target drop effect.
-                    e.Effect = DragDropEffects.None;
-                }
+                // Set the target drop text.
+                e.Message = $"{Path.GetFileNameWithoutExtension(files[0])}%1";
+                e.MessageReplacementToken = Path.GetExtension(files[0]);
+
+                // Set the target drop effect.
+                e.Effect = DragDropEffects.None;
             }
         }
 
         private void RichTextBox_DragEnter(object? sender, DragEventArgs e)
         {
-            if (e.Data is not null)
+            if (e.Data is null)
             {
-                if (e.Data.GetDataPresent(DataFormats.FileDrop)
-                    && e.Data.GetDataPresent("FileName")
-                    && e.Data.GetData("FileName") is string[] fileNames
-                    && fileNames.Length > 0 && fileNames[0].Contains("DragAccept.rtf"))
-                {
-                    e.DropImageType = DropImageType.Link;
-                    e.Message = "%1 (shellapi.h)";
-                    e.MessageReplacementToken = "DragAcceptFiles";
-                    e.Effect = DragDropEffects.Link;
-                }
-                else if (e.Data.GetDataPresent(nameof(_nyanCatAscii)))
-                {
-                    e.DropImageType = DropImageType.None;
-                    e.Message = "Ascii %1";
-                    e.MessageReplacementToken = "Cat";
-                    e.Effect = DragDropEffects.None;
-                }
-                else if (e.Data.GetDataPresent(nameof(_nyanCatBmp)))
-                {
-                    e.DropImageType = DropImageType.None;
-                    e.Message = "Nyan %1";
-                    e.MessageReplacementToken = "Cat";
-                    e.Effect = DragDropEffects.None;
-                }
+                return;
+            }
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)
+                && e.Data.GetDataPresent("FileName")
+                && e.Data.GetData("FileName") is string[] fileNames
+                && fileNames.Length > 0 && fileNames[0].Contains("DragAccept.rtf"))
+            {
+                e.DropImageType = DropImageType.Link;
+                e.Message = "%1 (shellapi.h)";
+                e.MessageReplacementToken = "DragAcceptFiles";
+                e.Effect = DragDropEffects.Link;
+            }
+            else if (e.Data.GetDataPresent(nameof(_nyanCatAscii)))
+            {
+                e.DropImageType = DropImageType.None;
+                e.Message = "Ascii %1";
+                e.MessageReplacementToken = "Cat";
+                e.Effect = DragDropEffects.None;
+            }
+            else if (e.Data.GetDataPresent(nameof(_nyanCatBmp)))
+            {
+                e.DropImageType = DropImageType.None;
+                e.Message = "Nyan %1";
+                e.MessageReplacementToken = "Cat";
+                e.Effect = DragDropEffects.None;
             }
         }
 
@@ -402,11 +407,6 @@ namespace WinformsControlsTest
                 Directory.GetCurrentDirectory(),
                 DragDropDataDirectory,
                 NyanCatAsciiTxt);
-
-            if (!File.Exists(nyanCatAsciiPath))
-            {
-                return string.Empty;
-            }
 
             try
             {

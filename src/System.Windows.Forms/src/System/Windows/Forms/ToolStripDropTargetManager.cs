@@ -271,12 +271,9 @@ namespace System.Windows.Forms
                     OnDragLeave(EventArgs.Empty);
 
                     // tell the drag image manager you've left
-                    if ((e.DropImageType > DropImageType.Invalid) && (e.Data is IComDataObject comDataObject))
+                    if (e.DropImageType > DropImageType.Invalid)
                     {
-                        e.DropImageType = DropImageType.Invalid;
-                        e.Message = string.Empty;
-                        e.MessageReplacementToken = string.Empty;
-                        DragDropHelper.SetDropDescription(comDataObject, e.DropImageType, e.Message, e.MessageReplacementToken);
+                        DragDropHelper.ClearDropDescription(e.Data);
                         DragDropHelper.DragLeave();
                     }
                 }
@@ -296,11 +293,10 @@ namespace System.Windows.Forms
                     OnDragEnter(dragEnterArgs);
 
                     // tell the drag image manager you've entered
-                    if ((dragEnterArgs.DropImageType > DropImageType.Invalid) && (dragEnterArgs.Data is IComDataObject comDataObject) && (owner is ToolStrip toolStrip) && toolStrip.IsHandleCreated)
+                    if ((dragEnterArgs.DropImageType > DropImageType.Invalid) && (owner is ToolStrip toolStrip) && toolStrip.IsHandleCreated)
                     {
-                        DragDropHelper.SetDropDescription(comDataObject, dragEnterArgs.DropImageType, dragEnterArgs.Message, dragEnterArgs.MessageReplacementToken);
-                        Point pt = new(dragEnterArgs.X, dragEnterArgs.Y);
-                        DragDropHelper.DragEnter(toolStrip.Handle, comDataObject, ref pt, (uint)dragEnterArgs.Effect);
+                        DragDropHelper.SetDropDescription(dragEnterArgs);
+                        DragDropHelper.DragEnter(toolStrip.Handle, dragEnterArgs);
                     }
                 }
             }

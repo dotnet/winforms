@@ -27,6 +27,15 @@ namespace System.Windows.Forms
         private const string CF_USINGDEFAULTDRAGIMAGE = "UsingDefaultDragImage";
 
         /// <summary>
+        ///  Sets the drop object image and accompanying text back to the default.
+        /// </summary>
+        public static void ClearDropDescription(IDataObject? dataObject)
+        {
+            IComDataObject comDataObject = GetDataObject(dataObject);
+            SetDropDescription(comDataObject, DropImageType.Invalid, string.Empty, string.Empty);
+        }
+
+        /// <summary>
         ///  Notifies the drag-image manager that the drop target has been entered, and provides it with the information
         ///  needed to display the drag image.
         /// </summary>
@@ -40,6 +49,30 @@ namespace System.Windows.Forms
             try
             {
                 dropTargetHelper.DragEnter(hwndTarget, dataObject, ref ppt, dwEffect);
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(dropTargetHelper);
+            }
+        }
+
+        /// <summary>
+        ///  Notifies the drag-image manager that the drop target has been entered, and provides it with the information
+        ///  needed to display the drag image.
+        /// </summary>
+        public static void DragEnter(IntPtr hwndTarget, DragEventArgs drgevent)
+        {
+            IComDataObject dataObject = GetDataObject(drgevent.Data);
+
+            if (!TryGetDragDropHelper(out IDropTargetHelper? dropTargetHelper))
+            {
+                return;
+            }
+
+            try
+            {
+                Point point = new(drgevent.X, drgevent.Y);
+                dropTargetHelper.DragEnter(hwndTarget, dataObject, ref point, (uint)drgevent.Effect);
             }
             finally
             {
@@ -71,7 +104,7 @@ namespace System.Windows.Forms
         ///  Notifies the drag-image manager that the cursor position has changed and provides it with the information needed
         ///  to display the drag image.
         /// </summary>
-        public static void DragOver(ref Point ppt, uint dwEffect)
+        public static void DragOver(DragEventArgs drgevent)
         {
             if (!TryGetDragDropHelper(out IDropTargetHelper? dropTargetHelper))
             {
@@ -80,7 +113,8 @@ namespace System.Windows.Forms
 
             try
             {
-                dropTargetHelper.DragOver(ref ppt, dwEffect);
+                Point point = new(drgevent.X, drgevent.Y);
+                dropTargetHelper.DragOver(ref point, (uint)drgevent.Effect);
             }
             finally
             {
@@ -92,8 +126,10 @@ namespace System.Windows.Forms
         ///  Notifies the drag-image manager that the object has been dropped, and provides it with the information needed
         ///  to display the drag image.
         /// </summary>
-        public static void Drop(IComDataObject dataObject, ref Point ppt, uint dwEffect)
+        public static void Drop(DragEventArgs drgevent)
         {
+            IComDataObject dataObject = GetDataObject(drgevent.Data);
+
             if (!TryGetDragDropHelper(out IDropTargetHelper? dropTargetHelper))
             {
                 return;
@@ -101,7 +137,8 @@ namespace System.Windows.Forms
 
             try
             {
-                dropTargetHelper.Drop(dataObject, ref ppt, dwEffect);
+                Point point = new(drgevent.X, drgevent.Y);
+                dropTargetHelper.Drop(dataObject, ref point, (uint)drgevent.Effect);
             }
             finally
             {
@@ -145,6 +182,31 @@ namespace System.Windows.Forms
                 Kernel32.GlobalUnlock(medium.unionmember);
                 Ole32.ReleaseStgMedium(ref medium);
             }
+        }
+
+        /// <summary>
+        ///  Retrieves the data from the specified object.
+        /// </summary>
+        private static IComDataObject GetDataObject(IDataObject? dataObject)
+        {
+            IComDataObject comDataObject;
+
+            if (dataObject is IComDataObject iComData)
+            {
+                comDataObject = iComData;
+            }
+            else if (dataObject is IDataObject iData)
+            {
+                comDataObject = new DataObject(iData);
+            }
+            else
+            {
+                DataObject data = new();
+                data.SetData(dataObject);
+                comDataObject = data;
+            }
+
+            return comDataObject;
         }
 
         /// <summary>
@@ -326,6 +388,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the drop description into a data object. Describes the image and accompanying text for a drop object.
         /// </summary>
+        public static void SetDropDescription(DragEventArgs drgevent)
+        {
+            drgevent.Message ??= string.Empty;
+            drgevent.MessageReplacementToken ??= string.Empty;
+            IComDataObject dataObject = GetDataObject(drgevent.Data);
+            SetDropDescription(dataObject, drgevent.DropImageType, drgevent.Message, drgevent.MessageReplacementToken);
+        }
+
+        /// <summary>
+        ///  Sets the drop description into a data object. Describes the image and accompanying text for a drop object.
+        /// </summary>
         /// <remarks>
         ///  <para>
         ///  Some UI coloring is applied to the text in <paramref name="message"/> if used by specifying %1 in <paramref name="messageReplacementToken"/>.
@@ -450,15 +523,11 @@ namespace System.Windows.Forms
                     dragDropHelper = (TDragDropHelper)obj;
                     return true;
                 }
+            }
+            catch { }
 
-                dragDropHelper = default;
-                return false;
-            }
-            catch
-            {
-                dragDropHelper = default;
-                return false;
-            }
+            dragDropHelper = default;
+            return false;
         }
     }
 }

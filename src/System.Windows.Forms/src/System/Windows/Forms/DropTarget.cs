@@ -73,6 +73,28 @@ namespace System.Windows.Forms
             return drgevent;
         }
 
+        private void ClearDropDescription()
+        {
+            _lastDropImageType = DropImageType.Invalid;
+            _lastMessage = string.Empty;
+            _lastMessageReplacementToken = string.Empty;
+            DragDropHelper.ClearDropDescription(_lastDataObject);
+        }
+
+        private void UpdateDropDescription(DragEventArgs drgevent)
+        {
+            drgevent.Message ??= string.Empty;
+            drgevent.MessageReplacementToken ??= string.Empty;
+
+            if (!drgevent.DropImageType.Equals(_lastDropImageType) || !drgevent.Message.Equals(_lastMessage) || !drgevent.MessageReplacementToken.Equals(_lastMessageReplacementToken))
+            {
+                _lastDropImageType = drgevent.DropImageType;
+                _lastMessage = drgevent.Message;
+                _lastMessageReplacementToken = drgevent.MessageReplacementToken;
+                DragDropHelper.SetDropDescription(drgevent);
+            }
+        }
+
         HRESULT Ole32.IDropTarget.DragEnter(object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragEnter received");
@@ -86,20 +108,10 @@ namespace System.Windows.Forms
                 pdwEffect = (uint)drgevent.Effect;
                 _lastEffect = drgevent.Effect;
 
-                if ((drgevent.DropImageType > DropImageType.Invalid) && (drgevent.Data is IComDataObject comDataObject) && (_hwndTarget != IntPtr.Zero))
+                if (drgevent.DropImageType > DropImageType.Invalid)
                 {
-                    drgevent.Message ??= string.Empty;
-                    drgevent.MessageReplacementToken ??= string.Empty;
-
-                    if (!drgevent.DropImageType.Equals(_lastDropImageType) || !drgevent.Message.Equals(_lastMessage) || !drgevent.MessageReplacementToken.Equals(_lastMessageReplacementToken))
-                    {
-                        _lastDropImageType = drgevent.DropImageType;
-                        _lastMessage = drgevent.Message;
-                        _lastMessageReplacementToken = drgevent.MessageReplacementToken;
-                        DragDropHelper.SetDropDescription(comDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
-                    }
-
-                    DragDropHelper.DragEnter(_hwndTarget, comDataObject, ref pt, pdwEffect);
+                    UpdateDropDescription(drgevent);
+                    DragDropHelper.DragEnter(_hwndTarget, drgevent);
                 }
             }
             else
@@ -121,20 +133,10 @@ namespace System.Windows.Forms
                 pdwEffect = (uint)drgevent.Effect;
                 _lastEffect = drgevent.Effect;
 
-                if ((drgevent.DropImageType > DropImageType.Invalid) && (drgevent.Data is IComDataObject comDataObject) && (_hwndTarget != IntPtr.Zero))
+                if (drgevent.DropImageType > DropImageType.Invalid)
                 {
-                    drgevent.Message ??= string.Empty;
-                    drgevent.MessageReplacementToken ??= string.Empty;
-
-                    if (!drgevent.DropImageType.Equals(_lastDropImageType) || !drgevent.Message.Equals(_lastMessage) || !drgevent.MessageReplacementToken.Equals(_lastMessageReplacementToken))
-                    {
-                        _lastDropImageType = drgevent.DropImageType;
-                        _lastMessage = drgevent.Message;
-                        _lastMessageReplacementToken = drgevent.MessageReplacementToken;
-                        DragDropHelper.SetDropDescription(comDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
-                    }
-
-                    DragDropHelper.DragOver(ref pt, pdwEffect);
+                    UpdateDropDescription(drgevent);
+                    DragDropHelper.DragOver(drgevent);
                 }
             }
             else
@@ -150,16 +152,9 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragLeave received");
             _owner.OnDragLeave(EventArgs.Empty);
 
-            if ((_lastDropImageType > DropImageType.Invalid) && (_lastDataObject is IComDataObject comDataObject))
+            if (_lastDropImageType > DropImageType.Invalid)
             {
-                if (!_lastDropImageType.Equals(DropImageType.Invalid) || !_lastMessage.Equals(string.Empty) || !_lastMessageReplacementToken.Equals(string.Empty))
-                {
-                    _lastDropImageType = DropImageType.Invalid;
-                    _lastMessage = string.Empty;
-                    _lastMessageReplacementToken = string.Empty;
-                    DragDropHelper.SetDropDescription(comDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
-                }
-
+                ClearDropDescription();
                 DragDropHelper.DragLeave();
             }
 
@@ -177,17 +172,10 @@ namespace System.Windows.Forms
                 _owner.OnDragDrop(drgevent);
                 pdwEffect = (uint)drgevent.Effect;
 
-                if ((_lastDropImageType > DropImageType.Invalid) && (drgevent.Data is IComDataObject comDataObject))
+                if (_lastDropImageType > DropImageType.Invalid)
                 {
-                    if (!_lastDropImageType.Equals(DropImageType.Invalid) || !_lastMessage.Equals(string.Empty) || !_lastMessageReplacementToken.Equals(string.Empty))
-                    {
-                        _lastDropImageType = DropImageType.Invalid;
-                        _lastMessage = string.Empty;
-                        _lastMessageReplacementToken = string.Empty;
-                        DragDropHelper.SetDropDescription(comDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
-                    }
-
-                    DragDropHelper.Drop(comDataObject, ref pt, pdwEffect);
+                    ClearDropDescription();
+                    DragDropHelper.Drop(drgevent);
                 }
             }
             else

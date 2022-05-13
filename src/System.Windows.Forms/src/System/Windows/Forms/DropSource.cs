@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         private Point _lastCursorOffset;
         private bool _lastUseDefaultDragImage;
 
-        public DropSource(ISupportOleDropSource peer) : this(peer, null, null, default, false)
+        public DropSource(ISupportOleDropSource peer) : this(peer, dataObject: null, dragImage: null, cursorOffset: default, useDefaultDragImage: false)
         {
         }
 

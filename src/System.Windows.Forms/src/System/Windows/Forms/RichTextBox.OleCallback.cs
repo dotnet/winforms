@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
-using System.Drawing;
 using static Interop;
 using static Interop.Richedit;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
@@ -18,7 +17,6 @@ namespace System.Windows.Forms
             private readonly RichTextBox owner;
             private IDataObject? lastDataObject;
             private DragDropEffects lastEffect;
-            private IComDataObject? _lastComDataObject;
             private DropImageType _lastDropImageType = DropImageType.Invalid;
             private string _lastMessage = string.Empty;
             private string _lastMessageReplacementToken = string.Empty;
@@ -26,6 +24,28 @@ namespace System.Windows.Forms
             internal OleCallback(RichTextBox owner)
             {
                 this.owner = owner;
+            }
+
+            private void ClearDropDescription()
+            {
+                _lastDropImageType = DropImageType.Invalid;
+                _lastMessage = string.Empty;
+                _lastMessageReplacementToken = string.Empty;
+                DragDropHelper.ClearDropDescription(lastDataObject);
+            }
+
+            private void UpdateDropDescription(DragEventArgs drgevent)
+            {
+                drgevent.Message ??= string.Empty;
+                drgevent.MessageReplacementToken ??= string.Empty;
+
+                if (!drgevent.DropImageType.Equals(_lastDropImageType) || !drgevent.Message.Equals(_lastMessage) || !drgevent.MessageReplacementToken.Equals(_lastMessageReplacementToken))
+                {
+                    _lastDropImageType = drgevent.DropImageType;
+                    _lastMessage = drgevent.Message;
+                    _lastMessageReplacementToken = drgevent.MessageReplacementToken;
+                    DragDropHelper.SetDropDescription(drgevent);
+                }
             }
 
             public HRESULT GetNewStorage(out Ole32.IStorage? storage)
@@ -118,7 +138,6 @@ namespace System.Windows.Forms
                         }
 
                         lastDataObject = new DataObject(lpdataobj);
-                        _lastComDataObject = lpdataobj;
 
                         if (!owner.EnableAutoDragDrop)
                         {
@@ -151,43 +170,23 @@ namespace System.Windows.Forms
                             e.Effect = ((keyState & User32.MK.CONTROL) == User32.MK.CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
                             owner.OnDragEnter(e);
 
-                            if ((e.DropImageType > DropImageType.Invalid) && (_lastComDataObject is not null) && owner.IsHandleCreated)
+                            if ((e.DropImageType > DropImageType.Invalid) && owner.IsHandleCreated)
                             {
-                                e.Message ??= string.Empty;
-                                e.MessageReplacementToken ??= string.Empty;
-
-                                if (!e.DropImageType.Equals(_lastDropImageType) || !e.Message.Equals(_lastMessage) || !e.MessageReplacementToken.Equals(_lastMessageReplacementToken))
-                                {
-                                    _lastDropImageType = e.DropImageType;
-                                    _lastMessage = e.Message;
-                                    _lastMessageReplacementToken = e.MessageReplacementToken;
-                                    DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
-                                }
-
-                                Point pt = new(e.X, e.Y);
-                                DragDropHelper.DragEnter(owner.Handle, _lastComDataObject, ref pt, (uint)e.Effect);
+                                UpdateDropDescription(e);
+                                DragDropHelper.DragEnter(owner.Handle, e);
                             }
                         }
                         else
                         {
                             owner.OnDragDrop(e);
 
-                            if ((_lastDropImageType > DropImageType.Invalid) && (_lastComDataObject is not null))
+                            if (_lastDropImageType > DropImageType.Invalid)
                             {
-                                if (!_lastDropImageType.Equals(DropImageType.Invalid) || !_lastMessage.Equals(string.Empty) || !_lastMessageReplacementToken.Equals(string.Empty))
-                                {
-                                    _lastDropImageType = DropImageType.Invalid;
-                                    _lastMessage = string.Empty;
-                                    _lastMessageReplacementToken = string.Empty;
-                                    DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
-                                }
-
-                                Point pt = new(e.X, e.Y);
-                                DragDropHelper.Drop(_lastComDataObject, ref pt, (uint)e.Effect);
+                                ClearDropDescription();
+                                DragDropHelper.Drop(e);
                                 DragDropHelper.DragLeave();
                             }
 
-                            _lastComDataObject = null;
                             lastDataObject = null;
                         }
 
@@ -206,7 +205,6 @@ namespace System.Windows.Forms
                     else
                     {
                         Debug.WriteLineIf(RichTextDbg.TraceVerbose, "\tCancel data, allowdrop == false");
-                        _lastComDataObject = null;
                         lastDataObject = null;
                         return HRESULT.E_FAIL;
                     }
@@ -291,21 +289,10 @@ namespace System.Windows.Forms
                             owner.OnDragOver(e);
                             lastEffect = e.Effect;
 
-                            if ((e.DropImageType > DropImageType.Invalid) && (_lastComDataObject is not null) && owner.IsHandleCreated)
+                            if (e.DropImageType > DropImageType.Invalid)
                             {
-                                e.Message ??= string.Empty;
-                                e.MessageReplacementToken ??= string.Empty;
-
-                                if (!e.DropImageType.Equals(_lastDropImageType) || !e.Message.Equals(_lastMessage) || !e.MessageReplacementToken.Equals(_lastMessageReplacementToken))
-                                {
-                                    _lastDropImageType = e.DropImageType;
-                                    _lastMessage = e.Message;
-                                    _lastMessageReplacementToken = e.MessageReplacementToken;
-                                    DragDropHelper.SetDropDescription(_lastComDataObject, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
-                                }
-
-                                Point pt = new(e.X, e.Y);
-                                DragDropHelper.DragOver(ref pt, (uint)e.Effect);
+                                UpdateDropDescription(e);
+                                DragDropHelper.DragOver(e);
                             }
                         }
                     }
