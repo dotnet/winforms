@@ -164,7 +164,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
-                if (item is not null && item.ListView == _owner && item.Checked)
+                if (item?.ListView == _owner && item.Checked)
                 {
                     return true;
                 }
