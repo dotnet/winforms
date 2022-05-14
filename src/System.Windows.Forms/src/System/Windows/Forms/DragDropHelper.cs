@@ -451,7 +451,7 @@ namespace System.Windows.Forms
             SetBooleanFormat(dataObject, CF_INSHELLDRAGLOOP, inDragLoop);
 
             // If drag loop is over, release the drag and drop formats.
-            if (!inDragLoop && dataObject is not null)
+            if (!inDragLoop)
             {
                 ReleaseDragDropFormats(dataObject);
             }

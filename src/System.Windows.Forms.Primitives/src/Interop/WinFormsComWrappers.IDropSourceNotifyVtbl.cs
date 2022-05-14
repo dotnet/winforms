@@ -28,8 +28,8 @@ internal partial class Interop
             {
                 try
                 {
-                    var inst = ComInterfaceDispatch.GetInstance<Ole32.IDropSourceNotify>((ComInterfaceDispatch*)thisPtr);
-                    return inst.DragEnterTarget(hwndTarget);
+                    var instance = ComInterfaceDispatch.GetInstance<Ole32.IDropSourceNotify>((ComInterfaceDispatch*)thisPtr);
+                    return instance.DragEnterTarget(hwndTarget);
                 }
                 catch (Exception ex)
                 {
@@ -42,8 +42,8 @@ internal partial class Interop
             {
                 try
                 {
-                    var inst = ComInterfaceDispatch.GetInstance<Ole32.IDropSourceNotify>((ComInterfaceDispatch*)thisPtr);
-                    return inst.DragLeaveTarget();
+                    var instance = ComInterfaceDispatch.GetInstance<Ole32.IDropSourceNotify>((ComInterfaceDispatch*)thisPtr);
+                    return instance.DragLeaveTarget();
                 }
                 catch (Exception ex)
                 {
