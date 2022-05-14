@@ -35,6 +35,27 @@ namespace System.Windows.Forms
             }
         }
 
+        private void UpdateDragImage(GiveFeedbackEventArgs gfbevent)
+        {
+            if (_dataObject is null)
+            {
+                return;
+            }
+
+            if (!gfbevent.DragImage.Equals(_lastDragImage) || !gfbevent.CursorOffset.Equals(_lastCursorOffset) || !gfbevent.UseDefaultDragImage.Equals(_lastUseDefaultDragImage))
+            {
+                _lastDragImage = gfbevent.DragImage;
+                _lastCursorOffset = gfbevent.CursorOffset;
+                _lastUseDefaultDragImage = gfbevent.UseDefaultDragImage;
+                DragDropHelper.SetDragImage(_dataObject, _lastDragImage, _lastCursorOffset, _lastUseDefaultDragImage);
+
+                if (!_lastHwndTarget.Equals(IntPtr.Zero) && (Cursor.Position is Point point))
+                {
+                    DragDropHelper.DragEnter(_lastHwndTarget, _dataObject, ref point, (uint)gfbevent.Effect);
+                }
+            }
+        }
+
         public HRESULT QueryContinueDrag(BOOL fEscapePressed, User32.MK grfKeyState)
         {
             bool escapePressed = fEscapePressed != 0;
@@ -71,20 +92,9 @@ namespace System.Windows.Forms
                 : new GiveFeedbackEventArgs((DragDropEffects)dwEffect, false, _lastDragImage, _lastCursorOffset, _lastUseDefaultDragImage);
             _peer.OnGiveFeedback(gfbevent);
 
-            if (gfbevent.DragImage is not null && _dataObject is not null)
+            if (gfbevent.DragImage is not null)
             {
-                if (!gfbevent.DragImage.Equals(_lastDragImage) || !gfbevent.CursorOffset.Equals(_lastCursorOffset) || !gfbevent.UseDefaultDragImage.Equals(_lastUseDefaultDragImage))
-                {
-                    _lastDragImage = gfbevent.DragImage;
-                    _lastCursorOffset = gfbevent.CursorOffset;
-                    _lastUseDefaultDragImage = gfbevent.UseDefaultDragImage;
-                    DragDropHelper.SetDragImage(_dataObject, _lastDragImage, _lastCursorOffset, _lastUseDefaultDragImage);
-
-                    if (!_lastHwndTarget.Equals(IntPtr.Zero) && (Cursor.Position is Point pt))
-                    {
-                        DragDropHelper.DragEnter(_lastHwndTarget, _dataObject, ref pt, (uint)gfbevent.Effect);
-                    }
-                }
+                UpdateDragImage(gfbevent);
             }
 
             if (gfbevent.UseDefaultCursors)
