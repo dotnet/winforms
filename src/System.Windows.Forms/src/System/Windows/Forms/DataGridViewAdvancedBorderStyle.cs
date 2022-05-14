@@ -6,25 +6,31 @@ namespace System.Windows.Forms
 {
     public sealed class DataGridViewAdvancedBorderStyle : ICloneable
     {
-        private readonly DataGridView? owner;
-        private bool all = true;
-        private readonly DataGridViewAdvancedCellBorderStyle banned1, banned2, banned3;
-        private DataGridViewAdvancedCellBorderStyle top = DataGridViewAdvancedCellBorderStyle.None;
-        private DataGridViewAdvancedCellBorderStyle left = DataGridViewAdvancedCellBorderStyle.None;
-        private DataGridViewAdvancedCellBorderStyle right = DataGridViewAdvancedCellBorderStyle.None;
-        private DataGridViewAdvancedCellBorderStyle bottom = DataGridViewAdvancedCellBorderStyle.None;
+        private readonly DataGridView? _owner;
+        private bool _all = true;
+        private readonly DataGridViewAdvancedCellBorderStyle _banned1;
+        private readonly DataGridViewAdvancedCellBorderStyle _banned2;
+        private readonly DataGridViewAdvancedCellBorderStyle _banned3;
+        private DataGridViewAdvancedCellBorderStyle _top = DataGridViewAdvancedCellBorderStyle.None;
+        private DataGridViewAdvancedCellBorderStyle _left = DataGridViewAdvancedCellBorderStyle.None;
+        private DataGridViewAdvancedCellBorderStyle _right = DataGridViewAdvancedCellBorderStyle.None;
+        private DataGridViewAdvancedCellBorderStyle _bottom = DataGridViewAdvancedCellBorderStyle.None;
 
-        public DataGridViewAdvancedBorderStyle() : this(null,
-                                                        DataGridViewAdvancedCellBorderStyle.NotSet,
-                                                        DataGridViewAdvancedCellBorderStyle.NotSet,
-                                                        DataGridViewAdvancedCellBorderStyle.NotSet)
+        public DataGridViewAdvancedBorderStyle()
+            : this(
+                null,
+                DataGridViewAdvancedCellBorderStyle.NotSet,
+                DataGridViewAdvancedCellBorderStyle.NotSet,
+                DataGridViewAdvancedCellBorderStyle.NotSet)
         {
         }
 
-        internal DataGridViewAdvancedBorderStyle(DataGridView owner) : this(owner,
-                                                                            DataGridViewAdvancedCellBorderStyle.NotSet,
-                                                                            DataGridViewAdvancedCellBorderStyle.NotSet,
-                                                                            DataGridViewAdvancedCellBorderStyle.NotSet)
+        internal DataGridViewAdvancedBorderStyle(DataGridView owner)
+            : this(
+                owner,
+                DataGridViewAdvancedCellBorderStyle.NotSet,
+                DataGridViewAdvancedCellBorderStyle.NotSet,
+                DataGridViewAdvancedCellBorderStyle.NotSet)
         {
         }
 
@@ -32,42 +38,43 @@ namespace System.Windows.Forms
         ///  Creates a new DataGridViewAdvancedBorderStyle. The specified owner will
         ///  be notified when the values are changed.
         /// </summary>
-        internal DataGridViewAdvancedBorderStyle(DataGridView? owner,
+        internal DataGridViewAdvancedBorderStyle(
+            DataGridView? owner,
             DataGridViewAdvancedCellBorderStyle banned1,
             DataGridViewAdvancedCellBorderStyle banned2,
             DataGridViewAdvancedCellBorderStyle banned3)
         {
-            this.owner = owner;
-            this.banned1 = banned1;
-            this.banned2 = banned2;
-            this.banned3 = banned3;
+            _owner = owner;
+            _banned1 = banned1;
+            _banned2 = banned2;
+            _banned3 = banned3;
         }
 
         public DataGridViewAdvancedCellBorderStyle All
         {
             get
             {
-                return all ? top : DataGridViewAdvancedCellBorderStyle.NotSet;
+                return _all ? _top : DataGridViewAdvancedCellBorderStyle.NotSet;
             }
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x7
                 SourceGenerated.EnumValidator.Validate(value);
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet ||
-                    value == banned1 ||
-                    value == banned2 ||
-                    value == banned3)
+                    value == _banned1 ||
+                    value == _banned2 ||
+                    value == _banned3)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "All"));
                 }
 
-                if (!all || top != value)
+                if (!_all || _top != value)
                 {
-                    all = true;
-                    top = left = right = bottom = value;
-                    if (owner is not null)
+                    _all = true;
+                    _top = _left = _right = _bottom = value;
+                    if (_owner is not null)
                     {
-                        owner.OnAdvancedBorderStyleChanged(this);
+                        _owner.OnAdvancedBorderStyleChanged(this);
                     }
                 }
             }
@@ -77,12 +84,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (all)
+                if (_all)
                 {
-                    return top;
+                    return _top;
                 }
 
-                return bottom;
+                return _bottom;
             }
             set
             {
@@ -101,21 +108,21 @@ namespace System.Windows.Forms
         {
             set
             {
-                if ((all && top != value) || (!all && bottom != value))
+                if ((_all && _top != value) || (!_all && _bottom != value))
                 {
-                    if (all)
+                    if (_all)
                     {
-                        if (right == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
+                        if (_right == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
                         {
-                            right = DataGridViewAdvancedCellBorderStyle.Outset;
+                            _right = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
                     }
 
-                    all = false;
-                    bottom = value;
-                    if (owner is not null)
+                    _all = false;
+                    _bottom = value;
+                    if (_owner is not null)
                     {
-                        owner.OnAdvancedBorderStyleChanged(this);
+                        _owner.OnAdvancedBorderStyleChanged(this);
                     }
                 }
             }
@@ -125,12 +132,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (all)
+                if (_all)
                 {
-                    return top;
+                    return _top;
                 }
 
-                return left;
+                return _left;
             }
             set
             {
@@ -149,32 +156,32 @@ namespace System.Windows.Forms
         {
             set
             {
-                if ((all && top != value) || (!all && left != value))
+                if ((_all && _top != value) || (!_all && _left != value))
                 {
-                    if ((owner is not null && owner.RightToLeftInternal) &&
+                    if ((_owner is not null && _owner.RightToLeftInternal) &&
                         (value == DataGridViewAdvancedCellBorderStyle.InsetDouble || value == DataGridViewAdvancedCellBorderStyle.OutsetDouble))
                     {
                         throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Left"));
                     }
 
-                    if (all)
+                    if (_all)
                     {
-                        if (right == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
+                        if (_right == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
                         {
-                            right = DataGridViewAdvancedCellBorderStyle.Outset;
+                            _right = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
 
-                        if (bottom == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
+                        if (_bottom == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
                         {
-                            bottom = DataGridViewAdvancedCellBorderStyle.Outset;
+                            _bottom = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
                     }
 
-                    all = false;
-                    left = value;
-                    if (owner is not null)
+                    _all = false;
+                    _left = value;
+                    if (_owner is not null)
                     {
-                        owner.OnAdvancedBorderStyleChanged(this);
+                        _owner.OnAdvancedBorderStyleChanged(this);
                     }
                 }
             }
@@ -184,12 +191,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (all)
+                if (_all)
                 {
-                    return top;
+                    return _top;
                 }
 
-                return right;
+                return _right;
             }
             set
             {
@@ -208,27 +215,27 @@ namespace System.Windows.Forms
         {
             set
             {
-                if ((all && top != value) || (!all && right != value))
+                if ((_all && _top != value) || (!_all && _right != value))
                 {
-                    if ((owner is not null && !owner.RightToLeftInternal) &&
+                    if ((_owner is not null && !_owner.RightToLeftInternal) &&
                         (value == DataGridViewAdvancedCellBorderStyle.InsetDouble || value == DataGridViewAdvancedCellBorderStyle.OutsetDouble))
                     {
                         throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Right"));
                     }
 
-                    if (all)
+                    if (_all)
                     {
-                        if (bottom == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
+                        if (_bottom == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
                         {
-                            bottom = DataGridViewAdvancedCellBorderStyle.Outset;
+                            _bottom = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
                     }
 
-                    all = false;
-                    right = value;
-                    if (owner is not null)
+                    _all = false;
+                    _right = value;
+                    if (_owner is not null)
                     {
-                        owner.OnAdvancedBorderStyleChanged(this);
+                        _owner.OnAdvancedBorderStyleChanged(this);
                     }
                 }
             }
@@ -238,7 +245,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return top;
+                return _top;
             }
             set
             {
@@ -257,26 +264,26 @@ namespace System.Windows.Forms
         {
             set
             {
-                if ((all && top != value) || (!all && top != value))
+                if ((_all && _top != value) || (!_all && _top != value))
                 {
-                    if (all)
+                    if (_all)
                     {
-                        if (right == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
+                        if (_right == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
                         {
-                            right = DataGridViewAdvancedCellBorderStyle.Outset;
+                            _right = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
 
-                        if (bottom == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
+                        if (_bottom == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
                         {
-                            bottom = DataGridViewAdvancedCellBorderStyle.Outset;
+                            _bottom = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
                     }
 
-                    all = false;
-                    top = value;
-                    if (owner is not null)
+                    _all = false;
+                    _top = value;
+                    if (_owner is not null)
                     {
-                        owner.OnAdvancedBorderStyleChanged(this);
+                        _owner.OnAdvancedBorderStyleChanged(this);
                     }
                 }
             }
@@ -289,14 +296,14 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            return dgvabsOther.all == all &&
-                dgvabsOther.top == top &&
-                dgvabsOther.left == left &&
-                dgvabsOther.bottom == bottom &&
-                dgvabsOther.right == right;
+            return dgvabsOther._all == _all &&
+                dgvabsOther._top == _top &&
+                dgvabsOther._left == _left &&
+                dgvabsOther._bottom == _bottom &&
+                dgvabsOther._right == _right;
         }
 
-        public override int GetHashCode() => HashCode.Combine(top, left, bottom, right);
+        public override int GetHashCode() => HashCode.Combine(_top, _left, _bottom, _right);
 
         public override string ToString()
         {
@@ -305,13 +312,13 @@ namespace System.Windows.Forms
 
         object ICloneable.Clone()
         {
-            DataGridViewAdvancedBorderStyle dgvabs = new DataGridViewAdvancedBorderStyle(owner, banned1, banned2, banned3)
+            DataGridViewAdvancedBorderStyle dgvabs = new DataGridViewAdvancedBorderStyle(_owner, _banned1, _banned2, _banned3)
             {
-                all = all,
-                top = top,
-                right = right,
-                bottom = bottom,
-                left = left
+                _all = _all,
+                _top = _top,
+                _right = _right,
+                _bottom = _bottom,
+                _left = _left
             };
             return dgvabs;
         }
