@@ -109,8 +109,8 @@ override System.Windows.Forms.ColumnHeaderConverter.ConvertTo(System.ComponentMo
 ~override System.Windows.Forms.DataGridView.OnVisibleChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.Text.get -> string
 ~override System.Windows.Forms.DataGridView.Text.set -> void
-~override System.Windows.Forms.DataGridViewAdvancedBorderStyle.Equals(object other) -> bool
-~override System.Windows.Forms.DataGridViewAdvancedBorderStyle.ToString() -> string
+override System.Windows.Forms.DataGridViewAdvancedBorderStyle.Equals(object? other) -> bool
+override System.Windows.Forms.DataGridViewAdvancedBorderStyle.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewButtonCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewButtonCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridViewButtonCell.EditType.get -> System.Type

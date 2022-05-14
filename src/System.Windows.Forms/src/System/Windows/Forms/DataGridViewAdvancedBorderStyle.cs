@@ -2,13 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public sealed class DataGridViewAdvancedBorderStyle : ICloneable
     {
-        private readonly DataGridView owner;
+        private readonly DataGridView? owner;
         private bool all = true;
         private readonly DataGridViewAdvancedCellBorderStyle banned1, banned2, banned3;
         private DataGridViewAdvancedCellBorderStyle top = DataGridViewAdvancedCellBorderStyle.None;
@@ -34,7 +32,7 @@ namespace System.Windows.Forms
         ///  Creates a new DataGridViewAdvancedBorderStyle. The specified owner will
         ///  be notified when the values are changed.
         /// </summary>
-        internal DataGridViewAdvancedBorderStyle(DataGridView owner,
+        internal DataGridViewAdvancedBorderStyle(DataGridView? owner,
             DataGridViewAdvancedCellBorderStyle banned1,
             DataGridViewAdvancedCellBorderStyle banned2,
             DataGridViewAdvancedCellBorderStyle banned3)
@@ -284,9 +282,9 @@ namespace System.Windows.Forms
             }
         }
 
-        public override bool Equals(object other)
+        public override bool Equals(object? other)
         {
-            if (!(other is DataGridViewAdvancedBorderStyle dgvabsOther))
+            if (other is not DataGridViewAdvancedBorderStyle dgvabsOther)
             {
                 return false;
             }
