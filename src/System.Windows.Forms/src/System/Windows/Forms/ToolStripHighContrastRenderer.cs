@@ -14,29 +14,29 @@ namespace System.Windows.Forms
     {
         private const int GRIP_PADDING = 4;
 
-        BitVector32 options;
-        private static readonly int optionsDottedBorder = BitVector32.CreateMask();
-        private static readonly int optionsDottedGrip = BitVector32.CreateMask(optionsDottedBorder);
-        private static readonly int optionsFillWhenSelected = BitVector32.CreateMask(optionsDottedGrip);
+        private BitVector32 _options;
+        private static readonly int s_optionsDottedBorder = BitVector32.CreateMask();
+        private static readonly int s_optionsDottedGrip = BitVector32.CreateMask(s_optionsDottedBorder);
+        private static readonly int s_optionsFillWhenSelected = BitVector32.CreateMask(s_optionsDottedGrip);
 
         public ToolStripHighContrastRenderer(bool systemRenderMode)
         {
-            options[optionsDottedBorder | optionsDottedGrip | optionsFillWhenSelected] = !systemRenderMode;
+            _options[s_optionsDottedBorder | s_optionsDottedGrip | s_optionsFillWhenSelected] = !systemRenderMode;
         }
 
         public bool DottedBorder
         {
-            get { return options[optionsDottedBorder]; }
+            get { return _options[s_optionsDottedBorder]; }
         }
 
         public bool DottedGrip
         {
-            get { return options[optionsDottedGrip]; }
+            get { return _options[s_optionsDottedGrip]; }
         }
 
         public bool FillWhenSelected
         {
-            get { return options[optionsFillWhenSelected]; }
+            get { return _options[s_optionsFillWhenSelected]; }
         }
 
         // this is a renderer override, so return null so we don't get into an infinite loop.
