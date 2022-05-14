@@ -2,16 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-#region Using directives
-
 using System.Collections.Specialized;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-
-#endregion
 
 namespace System.Windows.Forms
 {
@@ -46,7 +40,7 @@ namespace System.Windows.Forms
         }
 
         // this is a renderer override, so return null so we don't get into an infinite loop.
-        internal override ToolStripRenderer RendererOverride
+        internal override ToolStripRenderer? RendererOverride
         {
             get { return null; }
         }
@@ -381,7 +375,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
         {
-            Image image = e.Image;
+            Image? image = e.Image;
             if (image is not null)
             {
                 if (Image.GetPixelFormatSize(image.PixelFormat) > 16)
