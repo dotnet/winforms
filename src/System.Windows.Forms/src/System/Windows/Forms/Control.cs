@@ -5314,6 +5314,10 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// </summary>
+        /// <returns>
+        /// A value from the <see cref="DragDropEffects"/> enumeration that represents the final effect that was performed during the drag-and-drop
+        /// operation.
+        /// </returns>
         public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
             IComDataObject dataObject = null;
