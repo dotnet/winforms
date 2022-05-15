@@ -2115,12 +2115,23 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Begins a drag operation. The allowedEffects determine which
-        ///  drag operations can occur. If the drag operation needs to interop
-        ///  with applications in another process, data should either be
-        ///  a base managed class (String, Bitmap, or Metafile) or some Object
-        ///  that implements System.Runtime.Serialization.ISerializable. data can also be any Object that
-        ///  implements System.Windows.Forms.IDataObject.
+        /// Begins a drag operation. The <paramref name="allowedEffects"/> determine which drag operations can occur. If the drag operation
+        /// needs to interop with applications in another process, <paramref name="data"/> should either be a base managed class
+        /// (<see cref="string"/>, <see cref="Bitmap"/>, or <see cref="Drawing.Imaging.Metafile"/>) or some <see cref="object"/> that implements
+        /// <see cref="Runtime.Serialization.ISerializable"/>. <paramref name="data"/> can also be any <see cref="object"/> that implements
+        /// <see cref="IDataObject"/>. <paramref name="dragImage"/> is the bitmap that will be displayed during the  drag operation and
+        /// <paramref name="cursorOffset"/> specifies the location of the cursor within <paramref name="dragImage"/>, which is an offset from the
+        /// upper-left corner. Specify <see langword="true"/> for <paramref name="useDefaultDragImage"/> to use a layered window drag image with a
+        /// size of 96x96; otherwise <see langword="false"/>. Note the outer edges of <paramref name="dragImage"/> are blended out if the image width
+        /// or height exceeds 300 pixels.
+        /// <remarks>
+        /// <para>
+        /// Because <see cref="DoDragDrop(object, DragDropEffects, Bitmap, Point, bool)"/> always performs the RGB multiplication step in calculating
+        /// the alpha value, you should always pass a <see cref="Bitmap"/> without premultiplied alpha blending. Note that no error will result from
+        /// passing a <see cref="Bitmap"/> with premultiplied alpha blending, but this method will multiply it again, doubling the resulting alpha
+        /// value.
+        /// </para>
+        /// </remarks>
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
@@ -2170,7 +2181,7 @@ namespace System.Windows.Forms
             {
                 if (DragDropHelper.IsInDragLoop(dataObject))
                 {
-                    DragDropHelper.SetInDragLoop(dataObject, false);
+                    DragDropHelper.SetInDragLoop(dataObject, inDragLoop: false);
                 }
             }
 

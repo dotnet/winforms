@@ -25,7 +25,7 @@ internal partial class Interop
                 get { fixed (char* c = _szInsert) { return new Span<char>(c, Kernel32.MAX_PATH); } }
             }
 
-            public DROPIMAGETYPE Type
+            public DROPIMAGETYPE type
             {
                 get => _type;
                 set => _type = value;

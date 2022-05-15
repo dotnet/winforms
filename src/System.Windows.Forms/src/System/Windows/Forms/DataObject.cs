@@ -564,12 +564,15 @@ namespace System.Windows.Forms
             }
             else if (_innerData is IDataObject dataObject && DragDropHelper.IsInDragLoop(dataObject))
             {
-                medium = new STGMEDIUM();
                 string formatName = DataFormats.GetFormat(formatetc.cfFormat).Name;
                 if (dataObject.GetDataPresent(formatName) && dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
                 {
                     medium = dragDropFormat.GetData();
                     Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"    drag-and-drop private format retrieved {formatName}");
+                }
+                else
+                {
+                    medium = new STGMEDIUM();
                 }
 
                 return;
@@ -688,12 +691,12 @@ namespace System.Windows.Forms
                 string formatName = DataFormats.GetFormat(pFormatetcIn.cfFormat).Name;
                 if (dataObject.GetDataPresent(formatName) && dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
                 {
-                    dragDropFormat.RefreshData(pFormatetcIn.cfFormat, pmedium, fRelease);
+                    dragDropFormat.RefreshData(pFormatetcIn.cfFormat, pmedium, !fRelease);
                     Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   drag-and-drop private format refreshed {formatName}");
                 }
                 else
                 {
-                    dataObject.SetData(formatName, new DragDropFormat(pFormatetcIn.cfFormat, pmedium, fRelease));
+                    dataObject.SetData(formatName, new DragDropFormat(pFormatetcIn.cfFormat, pmedium, !fRelease));
                     Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   drag-and-drop private format loaded {formatName}");
                 }
 

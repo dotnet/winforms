@@ -13,19 +13,20 @@ namespace System.Windows.Forms
     /// </summary>
     internal class DragDropFormat : IDisposable
     {
-        private short _cfFormat;
+        private short _format;
         private STGMEDIUM _medium;
 
         public STGMEDIUM Medium => _medium;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref="DragDropFormat"/> class using
-        ///  the specified format, storage medium, and owner.
+        ///  Initializes a new instance of the <see cref="DragDropFormat"/> class using the specified format, storage medium, and owner.
         /// </summary>
-        public DragDropFormat(short cfFormat, STGMEDIUM pMedium, bool fRelease)
+        public DragDropFormat(short format, STGMEDIUM medium, bool copyData)
         {
-            _cfFormat = cfFormat;
-            _medium = HandleOwner(cfFormat, pMedium, fRelease);
+            _format = format;
+
+            //  Handle whether the data object or the caller owns the storage medium.
+            _medium = copyData ? CopyData(format, medium) : medium;
         }
 
         /// <summary>
@@ -33,17 +34,19 @@ namespace System.Windows.Forms
         /// </summary>
         public STGMEDIUM GetData()
         {
-            return CopyData(_cfFormat, _medium);
+            return CopyData(_format, _medium);
         }
 
         /// <summary>
         ///  Refreshes the storage medium in this instance.
         /// </summary>
-        public void RefreshData(short cfFormat, STGMEDIUM pMedium, bool fRelease)
+        public void RefreshData(short format, STGMEDIUM medium, bool copyData)
         {
             ReleaseMedium(_medium);
-            _cfFormat = cfFormat;
-            _medium = HandleOwner(cfFormat, pMedium, fRelease);
+            _format = format;
+
+            //  Handle whether the data object or the caller owns the storage medium.
+            _medium = copyData ? CopyData(format, medium) : medium;
         }
 
         /// <summary>
@@ -52,7 +55,7 @@ namespace System.Windows.Forms
         /// <returns>
         ///  A copy of <paramref name="mediumSource"/>.
         /// </returns>
-        private static STGMEDIUM CopyData(short cfFormat, STGMEDIUM mediumSource)
+        private static STGMEDIUM CopyData(short format, STGMEDIUM mediumSource)
         {
             STGMEDIUM mediumDestination = new();
 
@@ -68,7 +71,7 @@ namespace System.Windows.Forms
 
                         mediumDestination.unionmember = Ole32.OleDuplicateData(
                             mediumSource.unionmember,
-                            cfFormat,
+                            format,
                             Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
                         if (mediumDestination.unionmember == IntPtr.Zero)
                         {
@@ -109,15 +112,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Handles whether the data object or the caller owns the storage medium.
-        /// </summary>
-        private static STGMEDIUM HandleOwner(short cfFormat, STGMEDIUM pMedium, bool fRelease)
-        {
-            return fRelease ? pMedium : CopyData(cfFormat, pMedium);
-        }
-
-        /// <summary>
-        ///  Frees the specified the storage medium.
+        ///  Frees the specified storage medium.
         /// </summary>
         private static void ReleaseMedium(STGMEDIUM medium)
         {

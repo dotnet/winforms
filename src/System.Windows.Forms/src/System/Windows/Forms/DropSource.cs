@@ -51,7 +51,7 @@ namespace System.Windows.Forms
 
                 if (!_lastHwndTarget.Equals(IntPtr.Zero) && (Cursor.Position is Point point))
                 {
-                    DragDropHelper.DragEnter(_lastHwndTarget, _dataObject, ref point, (uint)gfbevent.Effect);
+                    DragDropHelper.DragEnter(_lastHwndTarget, _dataObject, ref point, (Ole32.DROPEFFECT)gfbevent.Effect);
                 }
             }
         }
@@ -88,8 +88,8 @@ namespace System.Windows.Forms
         public HRESULT GiveFeedback(Ole32.DROPEFFECT dwEffect)
         {
             var gfbevent = _lastDragImage is null
-                ? new GiveFeedbackEventArgs((DragDropEffects)dwEffect, true)
-                : new GiveFeedbackEventArgs((DragDropEffects)dwEffect, false, _lastDragImage, _lastCursorOffset, _lastUseDefaultDragImage);
+                ? new GiveFeedbackEventArgs((DragDropEffects)dwEffect, useDefaultCursors: true)
+                : new GiveFeedbackEventArgs((DragDropEffects)dwEffect, useDefaultCursors: false, _lastDragImage, _lastCursorOffset, _lastUseDefaultDragImage);
             _peer.OnGiveFeedback(gfbevent);
 
             if (gfbevent.DragImage is not null)

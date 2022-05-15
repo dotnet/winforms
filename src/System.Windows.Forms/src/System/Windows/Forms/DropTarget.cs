@@ -81,17 +81,17 @@ namespace System.Windows.Forms
             DragDropHelper.ClearDropDescription(_lastDataObject);
         }
 
-        private void UpdateDropDescription(DragEventArgs drgevent)
+        private void UpdateDropDescription(DragEventArgs dragEventArgs)
         {
-            drgevent.Message ??= string.Empty;
-            drgevent.MessageReplacementToken ??= string.Empty;
+            dragEventArgs.Message ??= string.Empty;
+            dragEventArgs.MessageReplacementToken ??= string.Empty;
 
-            if (!drgevent.DropImageType.Equals(_lastDropImageType) || !drgevent.Message.Equals(_lastMessage) || !drgevent.MessageReplacementToken.Equals(_lastMessageReplacementToken))
+            if (!dragEventArgs.DropImageType.Equals(_lastDropImageType) || !dragEventArgs.Message.Equals(_lastMessage) || !dragEventArgs.MessageReplacementToken.Equals(_lastMessageReplacementToken))
             {
-                _lastDropImageType = drgevent.DropImageType;
-                _lastMessage = drgevent.Message;
-                _lastMessageReplacementToken = drgevent.MessageReplacementToken;
-                DragDropHelper.SetDropDescription(drgevent);
+                _lastDropImageType = dragEventArgs.DropImageType;
+                _lastMessage = dragEventArgs.Message;
+                _lastMessageReplacementToken = dragEventArgs.MessageReplacementToken;
+                DragDropHelper.SetDropDescription(dragEventArgs);
             }
         }
 

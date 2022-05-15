@@ -18,10 +18,9 @@ internal static partial class Interop
             [PreserveSig]
             HRESULT DragEnter(
                 IntPtr hwndTarget,
-                [MarshalAs(UnmanagedType.Interface)]
                 IComDataObject pDataObj,
                 ref Point ppt,
-                uint dwEffect);
+                Ole32.DROPEFFECT dwEffect);
 
             [PreserveSig]
             HRESULT DragLeave();
@@ -29,14 +28,13 @@ internal static partial class Interop
             [PreserveSig]
             HRESULT DragOver(
                 ref Point ppt,
-                uint dwEffect);
+                Ole32.DROPEFFECT dwEffect);
 
             [PreserveSig]
             HRESULT Drop(
-                [MarshalAs(UnmanagedType.Interface)]
                 IComDataObject pDataObj,
                 ref Point ppt,
-                uint dwEffect);
+                Ole32.DROPEFFECT dwEffect);
 
             [PreserveSig]
             HRESULT Show(
