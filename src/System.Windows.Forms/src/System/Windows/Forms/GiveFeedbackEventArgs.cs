@@ -40,16 +40,30 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the drag image bitmap.
         /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Note the outer edges of <see cref="DragImage"/> are blended out if the image width or height exceeds 300 pixels.</para>
+        /// </remarks>
         public Bitmap DragImage { get; set; }
 
         /// <summary>
         ///  Gets or sets the drag image cursor offset.
         /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Specifies the location of the cursor within <see cref="DragImage"/>, which is an offset from the upper-left corner.
+        /// </para>
+        /// </remarks>
         public Point CursorOffset { get; set; }
 
         /// <summary>
         ///  Gets or sets a value indicating whether a layered window drag image is used.
         /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Specify <see langword="true"/> for <see cref="UseDefaultDragImage"/> to use a layered window drag image with a size of 96x96; otherwise
+        /// <see langword="false"/>.</para>
+        /// </remarks>
         public bool UseDefaultDragImage { get; set; }
     }
 }

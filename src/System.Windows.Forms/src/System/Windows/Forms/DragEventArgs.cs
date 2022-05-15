@@ -87,7 +87,9 @@ namespace System.Windows.Forms
         /// Gets or sets the drop description text such as "Move to %1" when "Documents" is specified in <see cref="MessageReplacementToken"/>.
         /// </summary>
         /// <remarks>
-        /// <para>UI coloring is applied to the text in <see cref="MessageReplacementToken"/> if used by specifying %1 in <see cref="Message"/>.</para>
+        /// <para>
+        /// UI coloring is applied to the text in <see cref="MessageReplacementToken"/> if used by specifying %1 in <see cref="Message"/>.
+        /// </para>
         /// </remarks>
         public string? Message { get; set; }
 
@@ -95,7 +97,9 @@ namespace System.Windows.Forms
         /// Gets or sets the drop description text such as "Documents" when %1 is specified in <see cref="Message"/>.
         /// </summary>
         /// <remarks>
-        /// <para>UI coloring is applied to the text in <see cref="MessageReplacementToken"/> if used by specifying %1 in <see cref="Message"/>.</para>
+        /// <para>
+        /// UI coloring is applied to the text in <see cref="MessageReplacementToken"/> if used by specifying %1 in <see cref="Message"/>.
+        /// </para>
         /// </remarks>
         public string? MessageReplacementToken { get; set; }
     }
