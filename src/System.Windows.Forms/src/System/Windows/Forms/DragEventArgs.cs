@@ -24,6 +24,9 @@ namespace System.Windows.Forms
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DragEventArgs"/> class.
+        /// </summary>
         public DragEventArgs(
             IDataObject? data,
             int keyState,
@@ -84,7 +87,7 @@ namespace System.Windows.Forms
         public DropImageType DropImageType { get; set; }
 
         /// <summary>
-        /// Gets or sets the drop description text such as "Move to %1" when "Documents" is specified in <see cref="MessageReplacementToken"/>.
+        /// Gets or sets the drop description text such as "Move to %1".
         /// </summary>
         /// <remarks>
         /// <para>

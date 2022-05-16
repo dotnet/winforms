@@ -11,7 +11,7 @@ internal partial class Interop
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public unsafe struct DROPDESCRIPTION
         {
-            private DROPIMAGETYPE _type;
+            public DROPIMAGETYPE type;
             private fixed char _szMessage[Kernel32.MAX_PATH];
             private fixed char _szInsert[Kernel32.MAX_PATH];
 
@@ -23,12 +23,6 @@ internal partial class Interop
             private Span<char> szInsert
             {
                 get { fixed (char* c = _szInsert) { return new Span<char>(c, Kernel32.MAX_PATH); } }
-            }
-
-            public DROPIMAGETYPE type
-            {
-                get => _type;
-                set => _type = value;
             }
 
             public ReadOnlySpan<char> Message
