@@ -100,18 +100,23 @@ internal partial class Interop
             string? IAccessible.get_accName(object childID)
             {
                 IntPtr value = IntPtr.Zero;
-                using Oleaut32.VARIANT childIdVar = new Oleaut32.VARIANT();
-                Marshal.GetNativeVariantForObject(childID, (IntPtr)(void*)&childIdVar);
-                ((delegate* unmanaged<IntPtr, Oleaut32.VARIANT, IntPtr*, HRESULT>)(*(*(void***)_accessibleInstance + 10)))
-                    (_accessibleInstance, childIdVar, &value).ThrowIfFailed();
-                if (value == IntPtr.Zero)
+                try
                 {
-                    return null;
-                }
+                    using Oleaut32.VARIANT childIdVar = new Oleaut32.VARIANT();
+                    Marshal.GetNativeVariantForObject(childID, (IntPtr)(void*)&childIdVar);
+                    ((delegate* unmanaged<IntPtr, Oleaut32.VARIANT, IntPtr*, HRESULT>)(*(*(void***)_accessibleInstance + 10)))
+                        (_accessibleInstance, childIdVar, &value).ThrowIfFailed();
+                    if (value == IntPtr.Zero)
+                    {
+                        return null;
+                    }
 
-                var result = Marshal.PtrToStringBSTR(value);
-                Marshal.FreeBSTR(value);
-                return result;
+                    return Marshal.PtrToStringBSTR(value);
+                }
+                finally
+                {
+                    Marshal.FreeBSTR(value);
+                }
             }
 
             /// <summary>
@@ -120,18 +125,23 @@ internal partial class Interop
             string? IAccessible.get_accValue(object childID)
             {
                 IntPtr value = IntPtr.Zero;
-                using Oleaut32.VARIANT childIdVar = new Oleaut32.VARIANT();
-                Marshal.GetNativeVariantForObject(childID, (IntPtr)(void*)&childIdVar);
-                ((delegate* unmanaged<IntPtr, Oleaut32.VARIANT, IntPtr*, HRESULT>)(*(*(void***)_accessibleInstance + 11)))
-                    (_accessibleInstance, childIdVar, &value).ThrowIfFailed();
-                if (value == IntPtr.Zero)
+                try
                 {
-                    return null;
-                }
+                    using Oleaut32.VARIANT childIdVar = new Oleaut32.VARIANT();
+                    Marshal.GetNativeVariantForObject(childID, (IntPtr)(void*)&childIdVar);
+                    ((delegate* unmanaged<IntPtr, Oleaut32.VARIANT, IntPtr*, HRESULT>)(*(*(void***)_accessibleInstance + 11)))
+                        (_accessibleInstance, childIdVar, &value).ThrowIfFailed();
+                    if (value == IntPtr.Zero)
+                    {
+                        return null;
+                    }
 
-                var result = Marshal.PtrToStringBSTR(value);
-                Marshal.FreeBSTR(value);
-                return result;
+                    return Marshal.PtrToStringBSTR(value);
+                }
+                finally
+                {
+                    Marshal.FreeBSTR(value);
+                }
             }
 
             /// <summary>
@@ -140,18 +150,23 @@ internal partial class Interop
             string? IAccessible.get_accDescription(object childID)
             {
                 IntPtr value = IntPtr.Zero;
-                using Oleaut32.VARIANT childIdVar = new Oleaut32.VARIANT();
-                Marshal.GetNativeVariantForObject(childID, (IntPtr)(void*)&childIdVar);
-                ((delegate* unmanaged<IntPtr, Oleaut32.VARIANT, IntPtr*, HRESULT>)(*(*(void***)_accessibleInstance + 12)))
-                    (_accessibleInstance, childIdVar, &value).ThrowIfFailed();
-                if (value == IntPtr.Zero)
+                try
                 {
-                    return null;
-                }
+                    using Oleaut32.VARIANT childIdVar = new Oleaut32.VARIANT();
+                    Marshal.GetNativeVariantForObject(childID, (IntPtr)(void*)&childIdVar);
+                    ((delegate* unmanaged<IntPtr, Oleaut32.VARIANT, IntPtr*, HRESULT>)(*(*(void***)_accessibleInstance + 12)))
+                        (_accessibleInstance, childIdVar, &value).ThrowIfFailed();
+                    if (value == IntPtr.Zero)
+                    {
+                        return null;
+                    }
 
-                var result = Marshal.PtrToStringBSTR(value);
-                Marshal.FreeBSTR(value);
-                return result;
+                    return Marshal.PtrToStringBSTR(value);
+                }
+                finally
+                {
+                    Marshal.FreeBSTR(value);
+                }
             }
 
             /// <summary>
@@ -189,18 +204,23 @@ internal partial class Interop
             string? IAccessible.get_accHelp(object childID)
             {
                 IntPtr value = IntPtr.Zero;
-                using Oleaut32.VARIANT childIdVar = new Oleaut32.VARIANT();
-                Marshal.GetNativeVariantForObject(childID, (IntPtr)(void*)&childIdVar);
-                ((delegate* unmanaged<IntPtr, Oleaut32.VARIANT, IntPtr*, HRESULT>)(*(*(void***)_accessibleInstance + 15)))
-                    (_accessibleInstance, childIdVar, &value).ThrowIfFailed();
-                if (value == IntPtr.Zero)
+                try
                 {
-                    return null;
-                }
+                    using Oleaut32.VARIANT childIdVar = new Oleaut32.VARIANT();
+                    Marshal.GetNativeVariantForObject(childID, (IntPtr)(void*)&childIdVar);
+                    ((delegate* unmanaged<IntPtr, Oleaut32.VARIANT, IntPtr*, HRESULT>)(*(*(void***)_accessibleInstance + 15)))
+                        (_accessibleInstance, childIdVar, &value).ThrowIfFailed();
+                    if (value == IntPtr.Zero)
+                    {
+                        return null;
+                    }
 
-                var result = Marshal.PtrToStringBSTR(value);
-                Marshal.FreeBSTR(value);
-                return result;
+                    return Marshal.PtrToStringBSTR(value);
+                }
+                finally
+                {
+                    Marshal.FreeBSTR(value);
+                }
             }
 
             /// <summary>
@@ -209,20 +229,26 @@ internal partial class Interop
             int IAccessible.get_accHelpTopic(out string? pszHelpFile, object childID)
             {
                 IntPtr value = IntPtr.Zero;
-                int result;
-                using Oleaut32.VARIANT childIdVar = new Oleaut32.VARIANT();
-                Marshal.GetNativeVariantForObject(childID, (IntPtr)(void*)&childIdVar);
-                ((delegate* unmanaged<IntPtr, IntPtr*, Oleaut32.VARIANT, int*, HRESULT>)(*(*(void***)_accessibleInstance + 16)))
-                    (_accessibleInstance, &value, childIdVar, &result).ThrowIfFailed();
-                if (value == IntPtr.Zero)
+                try
                 {
-                    pszHelpFile = null;
+                    int result;
+                    using Oleaut32.VARIANT childIdVar = new Oleaut32.VARIANT();
+                    Marshal.GetNativeVariantForObject(childID, (IntPtr)(void*)&childIdVar);
+                    ((delegate* unmanaged<IntPtr, IntPtr*, Oleaut32.VARIANT, int*, HRESULT>)(*(*(void***)_accessibleInstance + 16)))
+                        (_accessibleInstance, &value, childIdVar, &result).ThrowIfFailed();
+                    if (value == IntPtr.Zero)
+                    {
+                        pszHelpFile = null;
+                        return result;
+                    }
+
+                    pszHelpFile = Marshal.PtrToStringBSTR(value);
                     return result;
                 }
-
-                pszHelpFile = Marshal.PtrToStringBSTR(value);
-                Marshal.FreeBSTR(value);
-                return result;
+                finally
+                {
+                    Marshal.FreeBSTR(value);
+                }
             }
 
             /// <summary>
@@ -231,18 +257,23 @@ internal partial class Interop
             string? IAccessible.get_accKeyboardShortcut(object childID)
             {
                 IntPtr value = IntPtr.Zero;
-                using Oleaut32.VARIANT childIdVar = new Oleaut32.VARIANT();
-                Marshal.GetNativeVariantForObject(childID, (IntPtr)(void*)&childIdVar);
-                ((delegate* unmanaged<IntPtr, Oleaut32.VARIANT, IntPtr*, HRESULT>)(*(*(void***)_accessibleInstance + 17)))
-                    (_accessibleInstance, childIdVar, &value).ThrowIfFailed();
-                if (value == IntPtr.Zero)
+                try
                 {
-                    return null;
-                }
+                    using Oleaut32.VARIANT childIdVar = new Oleaut32.VARIANT();
+                    Marshal.GetNativeVariantForObject(childID, (IntPtr)(void*)&childIdVar);
+                    ((delegate* unmanaged<IntPtr, Oleaut32.VARIANT, IntPtr*, HRESULT>)(*(*(void***)_accessibleInstance + 17)))
+                        (_accessibleInstance, childIdVar, &value).ThrowIfFailed();
+                    if (value == IntPtr.Zero)
+                    {
+                        return null;
+                    }
 
-                var result = Marshal.PtrToStringBSTR(value);
-                Marshal.FreeBSTR(value);
-                return result;
+                    return Marshal.PtrToStringBSTR(value);
+                }
+                finally
+                {
+                    Marshal.FreeBSTR(value);
+                }
             }
 
             /// <summary>
@@ -279,18 +310,23 @@ internal partial class Interop
             string? IAccessible.get_accDefaultAction(object childID)
             {
                 IntPtr value = IntPtr.Zero;
-                using Oleaut32.VARIANT childIdVar = new Oleaut32.VARIANT();
-                Marshal.GetNativeVariantForObject(childID, (IntPtr)(void*)&childIdVar);
-                ((delegate* unmanaged<IntPtr, Oleaut32.VARIANT, IntPtr*, HRESULT>)(*(*(void***)_accessibleInstance + 20)))
-                    (_accessibleInstance, childIdVar, &value).ThrowIfFailed();
-                if (value == IntPtr.Zero)
+                try
                 {
-                    return null;
-                }
+                    using Oleaut32.VARIANT childIdVar = new Oleaut32.VARIANT();
+                    Marshal.GetNativeVariantForObject(childID, (IntPtr)(void*)&childIdVar);
+                    ((delegate* unmanaged<IntPtr, Oleaut32.VARIANT, IntPtr*, HRESULT>)(*(*(void***)_accessibleInstance + 20)))
+                        (_accessibleInstance, childIdVar, &value).ThrowIfFailed();
+                    if (value == IntPtr.Zero)
+                    {
+                        return null;
+                    }
 
-                var result = Marshal.PtrToStringBSTR(value);
-                Marshal.FreeBSTR(value);
-                return result;
+                    return Marshal.PtrToStringBSTR(value);
+                }
+                finally
+                {
+                    Marshal.FreeBSTR(value);
+                }
             }
 
             /// <summary>
