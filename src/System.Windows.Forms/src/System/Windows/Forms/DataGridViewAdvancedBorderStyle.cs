@@ -72,10 +72,7 @@ namespace System.Windows.Forms
                 {
                     _all = true;
                     _top = _left = _right = _bottom = value;
-                    if (_owner is not null)
-                    {
-                        _owner.OnAdvancedBorderStyleChanged(this);
-                    }
+                    _owner?.OnAdvancedBorderStyleChanged(this);
                 }
             }
         }
@@ -120,10 +117,7 @@ namespace System.Windows.Forms
 
                     _all = false;
                     _bottom = value;
-                    if (_owner is not null)
-                    {
-                        _owner.OnAdvancedBorderStyleChanged(this);
-                    }
+                    _owner?.OnAdvancedBorderStyleChanged(this);
                 }
             }
         }
@@ -179,10 +173,7 @@ namespace System.Windows.Forms
 
                     _all = false;
                     _left = value;
-                    if (_owner is not null)
-                    {
-                        _owner.OnAdvancedBorderStyleChanged(this);
-                    }
+                    _owner?.OnAdvancedBorderStyleChanged(this);
                 }
             }
         }
@@ -233,10 +224,7 @@ namespace System.Windows.Forms
 
                     _all = false;
                     _right = value;
-                    if (_owner is not null)
-                    {
-                        _owner.OnAdvancedBorderStyleChanged(this);
-                    }
+                    _owner?.OnAdvancedBorderStyleChanged(this);
                 }
             }
         }
@@ -281,10 +269,7 @@ namespace System.Windows.Forms
 
                     _all = false;
                     _top = value;
-                    if (_owner is not null)
-                    {
-                        _owner.OnAdvancedBorderStyleChanged(this);
-                    }
+                    _owner?.OnAdvancedBorderStyleChanged(this);
                 }
             }
         }
