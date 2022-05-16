@@ -648,10 +648,7 @@ namespace System.Windows.Forms
             // There is a bug in the underlying Win32 control which prevents it from correctly redrawing its borders when switching between enabled and disabled state.
             // The border color is never updated when switching state, so the control will always paint using the color set when the handle was created (either enabled or disabled).
             // The only way to force the control to update its border color is to force a handle creation.
-            if (IsHandleCreated && Application.RenderWithVisualStyles)
-            {
-                RecreateHandle();
-            }
+            RecreateHandle();
         }
 
         protected override void OnKeyUp(KeyEventArgs e)
