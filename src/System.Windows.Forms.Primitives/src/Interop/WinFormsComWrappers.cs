@@ -178,7 +178,9 @@ internal partial class Interop
             if (hr == S_OK)
             {
                 Marshal.Release(externalComObject);
-                return new DataObjectWrapper(dataObjectComObject);
+                var agileReference = Ole32.RoGetAgileReference(Ole32.AgileReferenceOptions.Default, ref dataObjectIID, dataObjectComObject);
+                Marshal.Release(dataObjectComObject);
+                return new AgileDataObjectWrapper(agileReference);
             }
 
             Guid errorInfoIID = IID.IErrorInfo;

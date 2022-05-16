@@ -10,7 +10,7 @@ internal partial class Interop
 {
     internal unsafe partial class WinFormsComWrappers
     {
-        internal class DataObjectWrapper : IDataObject
+        internal sealed class DataObjectWrapper : IDataObject, IDisposable
         {
             private IntPtr _wrappedInstance;
 
