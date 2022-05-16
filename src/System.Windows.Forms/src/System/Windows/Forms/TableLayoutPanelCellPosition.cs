@@ -102,16 +102,22 @@ namespace System.Windows.Forms
 
                 string[] tokens = stringValue.Split(new char[] { culture.TextInfo.ListSeparator[0] });
                 int[] values = new int[tokens.Length];
+
+                if (values.Length != 2)
+                {
+                    throw new ArgumentException(
+                        string.Format(
+                            SR.TextParseFailedFormat,
+                            stringValue,
+                            "column, row"),
+                        nameof(value));
+                }
+
                 TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));
                 for (int i = 0; i < values.Length; i++)
                 {
                     // Note: ConvertFromString will raise exception if value cannot be converted.
                     values[i] = (int)intConverter.ConvertFromString(context, culture, tokens[i]);
-                }
-
-                if (values.Length != 2)
-                {
-                    throw new ArgumentException(string.Format(SR.TextParseFailedFormat, stringValue, "column, row"), nameof(value));
                 }
 
                 return new TableLayoutPanelCellPosition(values[0], values[1]);
