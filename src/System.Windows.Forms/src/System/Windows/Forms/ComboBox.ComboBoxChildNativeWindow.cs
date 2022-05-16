@@ -101,7 +101,7 @@ namespace System.Windows.Forms
 
                         try
                         {
-                            var accessibleId = IID.IAccessible;
+                            Guid accessibleId = IID.IAccessible;
                             m.ResultInternal = Oleacc.LresultFromObject(in accessibleId, m.WParamInternal, new HandleRef(this, pUnknown));
                         }
                         finally

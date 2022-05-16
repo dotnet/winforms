@@ -1796,14 +1796,14 @@ namespace System.Windows.Forms
                 new HandleRef(this, handle),
                 objid,
                 ref IID_IAccessible,
-                out var accessibilePtr);
+                out IntPtr accessibilePtr);
 
             Guid IID_IEnumVariant = IID.IEnumVariant;
             Oleacc.CreateStdAccessibleObject(
                 new HandleRef(this, handle),
                 objid,
                 ref IID_IEnumVariant,
-                out var enumVariantPtr);
+                out IntPtr enumVariantPtr);
 
             if (enumVariantPtr != IntPtr.Zero)
             {
