@@ -33,11 +33,6 @@ internal partial class Interop
 
             ~StandardAccessibleWrapper()
             {
-                DisposeInternal();
-            }
-
-            private void DisposeInternal()
-            {
                 Marshal.Release(_accessibleInstance);
                 _accessibleInstance = IntPtr.Zero;
                 Marshal.Release(_enumVariantComObject);
