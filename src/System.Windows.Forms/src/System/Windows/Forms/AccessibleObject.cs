@@ -1792,31 +1792,29 @@ namespace System.Windows.Forms
         protected void UseStdAccessibleObjects(IntPtr handle, int objid)
         {
             Guid IID_IAccessible = IID.IAccessible;
-            Oleacc.CreateStdAccessibleObject(
+            var result = Oleacc.CreateStdAccessibleObject(
                 new HandleRef(this, handle),
                 objid,
                 ref IID_IAccessible,
                 out IntPtr accessibilePtr);
-
-            Guid IID_IEnumVariant = IID.IEnumVariant;
-            Oleacc.CreateStdAccessibleObject(
-                new HandleRef(this, handle),
-                objid,
-                ref IID_IEnumVariant,
-                out IntPtr enumVariantPtr);
-
-            if (enumVariantPtr != IntPtr.Zero)
-            {
-                _systemIEnumVariant = (WinFormsComWrappers.StandardAccessibleWrapper)WinFormsComWrappers.Instance
-                    .GetOrCreateObjectForComInstance(enumVariantPtr, CreateObjectFlags.None);
-            }
-
-            if (accessibilePtr != IntPtr.Zero)
+            if (result.Succeeded())
             {
                 var accessible = (WinFormsComWrappers.StandardAccessibleWrapper)WinFormsComWrappers.Instance
                     .GetOrCreateObjectForComInstance(accessibilePtr, CreateObjectFlags.None);
                 _systemIAccessible = new SystemIAccessibleWrapper((IAccessible?)accessible);
                 _systemIOleWindow = (Ole32.IOleWindow?)accessible;
+            }
+
+            Guid IID_IEnumVariant = IID.IEnumVariant;
+            result = Oleacc.CreateStdAccessibleObject(
+                new HandleRef(this, handle),
+                objid,
+                ref IID_IEnumVariant,
+                out IntPtr enumVariantPtr);
+            if (result.Succeeded())
+            {
+                _systemIEnumVariant = (WinFormsComWrappers.StandardAccessibleWrapper)WinFormsComWrappers.Instance
+                    .GetOrCreateObjectForComInstance(enumVariantPtr, CreateObjectFlags.None);
             }
         }
 
