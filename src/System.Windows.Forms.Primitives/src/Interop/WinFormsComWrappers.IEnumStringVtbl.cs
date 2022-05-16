@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -29,22 +30,38 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static int Next(IntPtr thisPtr, int celt, IntPtr* rgelt, int* pceltFetched)
             {
-                IEnumString inst = ComInterfaceDispatch.GetInstance<IEnumString>((ComInterfaceDispatch*)thisPtr);
-                string[] elt = new string[celt];
-                var result = inst.Next(celt, elt, (IntPtr)pceltFetched);
-                for (var i = 0; i < *pceltFetched; i++)
+                try
                 {
-                    rgelt[i] = Marshal.StringToCoTaskMemUni(elt[i]);
-                }
+                    IEnumString instance = ComInterfaceDispatch.GetInstance<IEnumString>((ComInterfaceDispatch*)thisPtr);
+                    string[] elt = new string[celt];
+                    var result = instance.Next(celt, elt, (IntPtr)pceltFetched);
+                    for (var i = 0; i < *pceltFetched; i++)
+                    {
+                        rgelt[i] = Marshal.StringToCoTaskMemUni(elt[i]);
+                    }
 
-                return result;
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return ex.HResult;
+                }
             }
 
             [UnmanagedCallersOnly]
             private static int Skip(IntPtr thisPtr, int celt)
             {
-                IEnumString inst = ComInterfaceDispatch.GetInstance<IEnumString>((ComInterfaceDispatch*)thisPtr);
-                return inst.Skip(celt);
+                try
+                {
+                    IEnumString instance = ComInterfaceDispatch.GetInstance<IEnumString>((ComInterfaceDispatch*)thisPtr);
+                    return instance.Skip(celt);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return ex.HResult;
+                }
             }
 
             [UnmanagedCallersOnly]
@@ -52,15 +69,15 @@ internal partial class Interop
             {
                 try
                 {
-                    IEnumString inst = ComInterfaceDispatch.GetInstance<IEnumString>((ComInterfaceDispatch*)thisPtr);
-                    inst.Reset();
+                    IEnumString instance = ComInterfaceDispatch.GetInstance<IEnumString>((ComInterfaceDispatch*)thisPtr);
+                    instance.Reset();
+                    return S_OK;
                 }
                 catch (Exception ex)
                 {
+                    Debug.WriteLine(ex);
                     return ex.HResult;
                 }
-
-                return S_OK;
             }
 
             [UnmanagedCallersOnly]
@@ -68,16 +85,15 @@ internal partial class Interop
             {
                 try
                 {
-                    IEnumString inst = ComInterfaceDispatch.GetInstance<IEnumString>((ComInterfaceDispatch*)thisPtr);
-                    inst.Clone(out var cloned);
+                    IEnumString instance = ComInterfaceDispatch.GetInstance<IEnumString>((ComInterfaceDispatch*)thisPtr);
+                    instance.Clone(out var cloned);
                     *ppenum = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(cloned, CreateComInterfaceFlags.None);
+                    return S_OK;
                 }
                 catch (Exception ex)
                 {
                     return ex.HResult;
                 }
-
-                return S_OK;
             }
         }
     }

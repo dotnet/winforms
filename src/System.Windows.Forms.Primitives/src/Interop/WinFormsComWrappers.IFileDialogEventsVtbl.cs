@@ -33,9 +33,9 @@ internal partial class Interop
             {
                 try
                 {
-                    Shell32.IFileDialogEvents inst = ComInterfaceDispatch.GetInstance<Shell32.IFileDialogEvents>((ComInterfaceDispatch*)thisPtr);
+                    Shell32.IFileDialogEvents instance = ComInterfaceDispatch.GetInstance<Shell32.IFileDialogEvents>((ComInterfaceDispatch*)thisPtr);
                     Shell32.IFileDialog fd = (Shell32.IFileDialog)Instance.GetOrCreateObjectForComInstance(pfd, CreateObjectFlags.Unwrap);
-                    return (int)inst.OnFileOk(fd);
+                    return (int)instance.OnFileOk(fd);
                 }
                 catch (Exception ex)
                 {
@@ -48,10 +48,10 @@ internal partial class Interop
             {
                 try
                 {
-                    Shell32.IFileDialogEvents inst = ComInterfaceDispatch.GetInstance<Shell32.IFileDialogEvents>((ComInterfaceDispatch*)thisPtr);
+                    Shell32.IFileDialogEvents instance = ComInterfaceDispatch.GetInstance<Shell32.IFileDialogEvents>((ComInterfaceDispatch*)thisPtr);
                     Shell32.IFileDialog fd = (Shell32.IFileDialog)Instance.GetOrCreateObjectForComInstance(pfd, CreateObjectFlags.Unwrap);
                     Shell32.IShellItem siFolder = (Shell32.IShellItem)Instance.GetOrCreateObjectForComInstance(psiFolder, CreateObjectFlags.Unwrap);
-                    return (int)inst.OnFolderChanging(fd, siFolder);
+                    return (int)instance.OnFolderChanging(fd, siFolder);
                 }
                 catch (Exception ex)
                 {
@@ -64,9 +64,9 @@ internal partial class Interop
             {
                 try
                 {
-                    Shell32.IFileDialogEvents inst = ComInterfaceDispatch.GetInstance<Shell32.IFileDialogEvents>((ComInterfaceDispatch*)thisPtr);
+                    Shell32.IFileDialogEvents instance = ComInterfaceDispatch.GetInstance<Shell32.IFileDialogEvents>((ComInterfaceDispatch*)thisPtr);
                     Shell32.IFileDialog fd = (Shell32.IFileDialog)Instance.GetOrCreateObjectForComInstance(pfd, CreateObjectFlags.Unwrap);
-                    return (int)inst.OnFolderChange(fd);
+                    return (int)instance.OnFolderChange(fd);
                 }
                 catch (Exception ex)
                 {
@@ -79,9 +79,9 @@ internal partial class Interop
             {
                 try
                 {
-                    Shell32.IFileDialogEvents inst = ComInterfaceDispatch.GetInstance<Shell32.IFileDialogEvents>((ComInterfaceDispatch*)thisPtr);
+                    Shell32.IFileDialogEvents instance = ComInterfaceDispatch.GetInstance<Shell32.IFileDialogEvents>((ComInterfaceDispatch*)thisPtr);
                     Shell32.IFileDialog fd = (Shell32.IFileDialog)Instance.GetOrCreateObjectForComInstance(pfd, CreateObjectFlags.Unwrap);
-                    return (int)inst.OnSelectionChange(fd);
+                    return (int)instance.OnSelectionChange(fd);
                 }
                 catch (Exception ex)
                 {
@@ -94,10 +94,10 @@ internal partial class Interop
             {
                 try
                 {
-                    Shell32.IFileDialogEvents inst = ComInterfaceDispatch.GetInstance<Shell32.IFileDialogEvents>((ComInterfaceDispatch*)thisPtr);
+                    Shell32.IFileDialogEvents instance = ComInterfaceDispatch.GetInstance<Shell32.IFileDialogEvents>((ComInterfaceDispatch*)thisPtr);
                     Shell32.IFileDialog fd = (Shell32.IFileDialog)Instance.GetOrCreateObjectForComInstance(pfd, CreateObjectFlags.Unwrap);
                     Shell32.IShellItem si = (Shell32.IShellItem)Instance.GetOrCreateObjectForComInstance(psi, CreateObjectFlags.Unwrap);
-                    return (int)inst.OnShareViolation(fd, si, pResponse);
+                    return (int)instance.OnShareViolation(fd, si, pResponse);
                 }
                 catch (Exception ex)
                 {
@@ -110,9 +110,9 @@ internal partial class Interop
             {
                 try
                 {
-                    Shell32.IFileDialogEvents inst = ComInterfaceDispatch.GetInstance<Shell32.IFileDialogEvents>((ComInterfaceDispatch*)thisPtr);
+                    Shell32.IFileDialogEvents instance = ComInterfaceDispatch.GetInstance<Shell32.IFileDialogEvents>((ComInterfaceDispatch*)thisPtr);
                     Shell32.IFileDialog fd = (Shell32.IFileDialog)Instance.GetOrCreateObjectForComInstance(pfd, CreateObjectFlags.Unwrap);
-                    return (int)inst.OnTypeChange(fd);
+                    return (int)instance.OnTypeChange(fd);
                 }
                 catch (Exception ex)
                 {
@@ -125,10 +125,10 @@ internal partial class Interop
             {
                 try
                 {
-                    Shell32.IFileDialogEvents inst = ComInterfaceDispatch.GetInstance<Shell32.IFileDialogEvents>((ComInterfaceDispatch*)thisPtr);
+                    Shell32.IFileDialogEvents instance = ComInterfaceDispatch.GetInstance<Shell32.IFileDialogEvents>((ComInterfaceDispatch*)thisPtr);
                     Shell32.IFileDialog fd = (Shell32.IFileDialog)Instance.GetOrCreateObjectForComInstance(pfd, CreateObjectFlags.Unwrap);
                     Shell32.IShellItem si = (Shell32.IShellItem)Instance.GetOrCreateObjectForComInstance(psi, CreateObjectFlags.Unwrap);
-                    return (int)inst.OnOverwrite(fd, si, pResponse);
+                    return (int)instance.OnOverwrite(fd, si, pResponse);
                 }
                 catch (Exception ex)
                 {
