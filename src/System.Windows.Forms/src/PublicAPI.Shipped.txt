@@ -1456,12 +1456,12 @@ System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Owner.set -
 ~System.Windows.Forms.LinkLabel.OverrideCursor.get -> System.Windows.Forms.Cursor
 ~System.Windows.Forms.LinkLabel.OverrideCursor.set -> void
 ~System.Windows.Forms.LinkLabel.PointInLink(int x, int y) -> System.Windows.Forms.LinkLabel.Link
-~System.Windows.Forms.ListView.CheckedListViewItemCollection.CheckedListViewItemCollection(System.Windows.Forms.ListView owner) -> void
-~System.Windows.Forms.ListView.CheckedListViewItemCollection.Contains(System.Windows.Forms.ListViewItem item) -> bool
-~System.Windows.Forms.ListView.CheckedListViewItemCollection.CopyTo(System.Array dest, int index) -> void
-~System.Windows.Forms.ListView.CheckedListViewItemCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ListView.CheckedListViewItemCollection.IndexOf(System.Windows.Forms.ListViewItem item) -> int
-~System.Windows.Forms.ListView.CheckedListViewItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem
+System.Windows.Forms.ListView.CheckedListViewItemCollection.CheckedListViewItemCollection(System.Windows.Forms.ListView! owner) -> void
+System.Windows.Forms.ListView.CheckedListViewItemCollection.Contains(System.Windows.Forms.ListViewItem? item) -> bool
+System.Windows.Forms.ListView.CheckedListViewItemCollection.CopyTo(System.Array! dest, int index) -> void
+System.Windows.Forms.ListView.CheckedListViewItemCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ListView.CheckedListViewItemCollection.IndexOf(System.Windows.Forms.ListViewItem! item) -> int
+System.Windows.Forms.ListView.CheckedListViewItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem!
 ~System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListView.ListViewItemCollection items) -> void
 ~System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListViewItem[] items) -> void
 ~System.Windows.Forms.ListView.ListViewItemCollection.Contains(System.Windows.Forms.ListViewItem item) -> bool
@@ -2387,9 +2387,9 @@ virtual System.Windows.Forms.Control.LayoutEngine.get -> System.Windows.Forms.La
 ~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[int index].set -> void
 ~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[string key].get -> System.Windows.Forms.LinkLabel.Link
 ~virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLabelLinkClickedEventArgs e) -> void
-~virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.ContainsKey(string key) -> bool
-~virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.IndexOfKey(string key) -> int
-~virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.this[string key].get -> System.Windows.Forms.ListViewItem
+virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.this[string? key].get -> System.Windows.Forms.ListViewItem?
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string key, string text, int imageIndex) -> System.Windows.Forms.ListViewItem
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string key, string text, string imageKey) -> System.Windows.Forms.ListViewItem
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string text) -> System.Windows.Forms.ListViewItem

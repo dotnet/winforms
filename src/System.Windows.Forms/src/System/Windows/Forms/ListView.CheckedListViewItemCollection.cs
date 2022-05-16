@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -14,17 +12,17 @@ namespace System.Windows.Forms
         [ListBindable(false)]
         public class CheckedListViewItemCollection : IList
         {
-            private readonly ListView owner;
+            private readonly ListView _owner;
 
             ///  A caching mechanism for key accessor
             ///  We use an index here rather than control so that we don't have lifetime
             ///  issues by holding on to extra references.
-            private int lastAccessedIndex = -1;
+            private int _lastAccessedIndex = -1;
 
             /* C#r: protected */
             public CheckedListViewItemCollection(ListView owner)
             {
-                this.owner = owner;
+                _owner = owner;
             }
 
             /// <summary>
@@ -35,12 +33,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (owner.VirtualMode)
+                    if (_owner.VirtualMode)
                     {
                         throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                     }
 
-                    return owner.CheckedIndices.Count;
+                    return _owner.CheckedIndices.Count;
                 }
             }
 
@@ -50,11 +48,11 @@ namespace System.Windows.Forms
                 {
                     ListViewItem[] items = new ListViewItem[Count];
                     int index = 0;
-                    for (int i = 0; i < owner.Items.Count && index < items.Length; ++i)
+                    for (int i = 0; i < _owner.Items.Count && index < items.Length; ++i)
                     {
-                        if (owner.Items[i].Checked)
+                        if (_owner.Items[i].Checked)
                         {
-                            items[index++] = owner.Items[i];
+                            items[index++] = _owner.Items[i];
                         }
                     }
 
@@ -69,21 +67,21 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (owner.VirtualMode)
+                    if (_owner.VirtualMode)
                     {
                         throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                     }
 
-                    int itemIndex = owner.CheckedIndices[index];
-                    return owner.Items[itemIndex];
+                    int itemIndex = _owner.CheckedIndices[index];
+                    return _owner.Items[itemIndex];
                 }
             }
 
-            object IList.this[int index]
+            object? IList.this[int index]
             {
                 get
                 {
-                    if (owner.VirtualMode)
+                    if (_owner.VirtualMode)
                     {
                         throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                     }
@@ -99,11 +97,11 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the child control with the specified key.
             /// </summary>
-            public virtual ListViewItem this[string key]
+            public virtual ListViewItem? this[string? key]
             {
                 get
                 {
-                    if (owner.VirtualMode)
+                    if (_owner.VirtualMode)
                     {
                         throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                     }
@@ -159,14 +157,14 @@ namespace System.Windows.Forms
                 }
             }
 
-            public bool Contains(ListViewItem item)
+            public bool Contains(ListViewItem? item)
             {
-                if (owner.VirtualMode)
+                if (_owner.VirtualMode)
                 {
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
-                if (item is not null && item.ListView == owner && item.Checked)
+                if (item?.ListView == _owner && item.Checked)
                 {
                     return true;
                 }
@@ -176,16 +174,16 @@ namespace System.Windows.Forms
                 }
             }
 
-            bool IList.Contains(object item)
+            bool IList.Contains(object? item)
             {
-                if (owner.VirtualMode)
+                if (_owner.VirtualMode)
                 {
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
-                if (item is ListViewItem)
+                if (item is ListViewItem listViewItem)
                 {
-                    return Contains((ListViewItem)item);
+                    return Contains(listViewItem);
                 }
                 else
                 {
@@ -196,9 +194,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns true if the collection contains an item with the specified key, false otherwise.
             /// </summary>
-            public virtual bool ContainsKey(string key)
+            public virtual bool ContainsKey(string? key)
             {
-                if (owner.VirtualMode)
+                if (_owner.VirtualMode)
                 {
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
@@ -208,7 +206,7 @@ namespace System.Windows.Forms
 
             public int IndexOf(ListViewItem item)
             {
-                if (owner.VirtualMode)
+                if (_owner.VirtualMode)
                 {
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
@@ -228,9 +226,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
             /// </summary>
-            public virtual int IndexOfKey(string key)
+            public virtual int IndexOfKey(string? key)
             {
-                if (owner.VirtualMode)
+                if (_owner.VirtualMode)
                 {
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
@@ -242,11 +240,11 @@ namespace System.Windows.Forms
                 }
 
                 // step 1 - check the last cached item
-                if (IsValidIndex(lastAccessedIndex))
+                if (IsValidIndex(_lastAccessedIndex))
                 {
-                    if (WindowsFormsUtils.SafeCompareStrings(this[lastAccessedIndex].Name, key, /* ignoreCase = */ true))
+                    if (WindowsFormsUtils.SafeCompareStrings(this[_lastAccessedIndex].Name, key, /* ignoreCase = */ true))
                     {
-                        return lastAccessedIndex;
+                        return _lastAccessedIndex;
                     }
                 }
 
@@ -255,13 +253,13 @@ namespace System.Windows.Forms
                 {
                     if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
                     {
-                        lastAccessedIndex = i;
+                        _lastAccessedIndex = i;
                         return i;
                     }
                 }
 
                 // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
-                lastAccessedIndex = -1;
+                _lastAccessedIndex = -1;
                 return -1;
             }
 
@@ -273,16 +271,16 @@ namespace System.Windows.Forms
                 return (index >= 0) && (index < Count);
             }
 
-            int IList.IndexOf(object item)
+            int IList.IndexOf(object? item)
             {
-                if (owner.VirtualMode)
+                if (_owner.VirtualMode)
                 {
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
-                if (item is ListViewItem)
+                if (item is ListViewItem listViewItem)
                 {
-                    return IndexOf((ListViewItem)item);
+                    return IndexOf(listViewItem);
                 }
                 else
                 {
@@ -290,7 +288,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            int IList.Add(object value)
+            int IList.Add(object? value)
             {
                 throw new NotSupportedException();
             }
@@ -300,12 +298,12 @@ namespace System.Windows.Forms
                 throw new NotSupportedException();
             }
 
-            void IList.Insert(int index, object value)
+            void IList.Insert(int index, object? value)
             {
                 throw new NotSupportedException();
             }
 
-            void IList.Remove(object value)
+            void IList.Remove(object? value)
             {
                 throw new NotSupportedException();
             }
@@ -317,20 +315,20 @@ namespace System.Windows.Forms
 
             public void CopyTo(Array dest, int index)
             {
-                if (owner.VirtualMode)
+                if (_owner.VirtualMode)
                 {
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
                 if (Count > 0)
                 {
-                    System.Array.Copy(ItemArray, 0, dest, index, Count);
+                    Array.Copy(ItemArray, 0, dest, index, Count);
                 }
             }
 
             public IEnumerator GetEnumerator()
             {
-                if (owner.VirtualMode)
+                if (_owner.VirtualMode)
                 {
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
