@@ -92,6 +92,7 @@ internal partial class Interop
                 }
                 catch (Exception ex)
                 {
+                    Debug.WriteLine(ex);
                     return ex.HResult;
                 }
             }
