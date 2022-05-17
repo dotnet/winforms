@@ -568,7 +568,7 @@ namespace System.Windows.Forms
                 if (dataObject.GetDataPresent(formatName) && dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
                 {
                     medium = dragDropFormat.GetData();
-                    Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"    drag-and-drop private format retrieved {formatName}");
+                    Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"    drag-and-drop private format retrieved '{formatName}'");
                 }
                 else
                 {
@@ -692,12 +692,12 @@ namespace System.Windows.Forms
                 if (dataObject.GetDataPresent(formatName) && dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
                 {
                     dragDropFormat.RefreshData(pFormatetcIn.cfFormat, pmedium, !fRelease);
-                    Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   drag-and-drop private format refreshed {formatName}");
+                    Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   drag-and-drop private format refreshed '{formatName}'");
                 }
                 else
                 {
                     dataObject.SetData(formatName, new DragDropFormat(pFormatetcIn.cfFormat, pmedium, !fRelease));
-                    Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   drag-and-drop private format loaded {formatName}");
+                    Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   drag-and-drop private format loaded '{formatName}'");
                 }
 
                 return;

@@ -17,9 +17,7 @@ namespace System.Windows.Forms
             private readonly RichTextBox owner;
             private IDataObject? lastDataObject;
             private DragDropEffects lastEffect;
-            private DropImageType _lastDropImageType = DropImageType.Invalid;
-            private string _lastMessage = string.Empty;
-            private string _lastMessageReplacementToken = string.Empty;
+            private DragEventArgs? _lastDragEventArgs;
 
             internal OleCallback(RichTextBox owner)
             {
@@ -28,23 +26,16 @@ namespace System.Windows.Forms
 
             private void ClearDropDescription()
             {
-                _lastDropImageType = DropImageType.Invalid;
-                _lastMessage = string.Empty;
-                _lastMessageReplacementToken = string.Empty;
+                _lastDragEventArgs = null;
                 DragDropHelper.ClearDropDescription(lastDataObject);
             }
 
             private void UpdateDropDescription(DragEventArgs dragEventArgs)
             {
-                dragEventArgs.Message ??= string.Empty;
-                dragEventArgs.MessageReplacementToken ??= string.Empty;
-
-                if (!dragEventArgs.DropImageType.Equals(_lastDropImageType) || !dragEventArgs.Message.Equals(_lastMessage) || !dragEventArgs.MessageReplacementToken.Equals(_lastMessageReplacementToken))
+                if (!dragEventArgs.Equals(_lastDragEventArgs))
                 {
-                    _lastDropImageType = dragEventArgs.DropImageType;
-                    _lastMessage = dragEventArgs.Message;
-                    _lastMessageReplacementToken = dragEventArgs.MessageReplacementToken;
-                    DragDropHelper.SetDropDescription(dragEventArgs);
+                    _lastDragEventArgs = dragEventArgs;
+                    DragDropHelper.SetDropDescription(_lastDragEventArgs);
                 }
             }
 
@@ -144,22 +135,30 @@ namespace System.Windows.Forms
                             lastEffect = DragDropEffects.None;
                         }
 
-                        var e = new DragEventArgs(lastDataObject,
-                                                  (int)keyState,
-                                                  Control.MousePosition.X,
-                                                  Control.MousePosition.Y,
-                                                  DragDropEffects.All,
-                                                  lastEffect,
-                                                  _lastDropImageType,
-                                                  _lastMessage,
-                                                  _lastMessageReplacementToken);
+                        DragEventArgs e = _lastDragEventArgs is null
+                            ? new DragEventArgs(lastDataObject,
+                                (int)keyState,
+                                MousePosition.X,
+                                MousePosition.Y,
+                                DragDropEffects.All,
+                                lastEffect)
+                            : new DragEventArgs(lastDataObject,
+                                (int)keyState,
+                                MousePosition.X,
+                                MousePosition.Y,
+                                DragDropEffects.All,
+                                lastEffect,
+                                _lastDragEventArgs.DropImageType,
+                                _lastDragEventArgs.Message ?? string.Empty,
+                                _lastDragEventArgs.MessageReplacementToken ?? string.Empty);
+
                         if (fReally == 0)
                         {
                             // we are just querying
 
-                            e.DropImageType = _lastDropImageType = DropImageType.Invalid;
-                            e.Message = _lastMessage = string.Empty;
-                            e.MessageReplacementToken = _lastMessageReplacementToken = string.Empty;
+                            e.DropImageType = DropImageType.Invalid;
+                            e.Message = string.Empty;
+                            e.MessageReplacementToken = string.Empty;
 
                             // We can get here without GetDragDropEffects actually being called first.
                             // This happens when you drag/drop between two rtb's. Say you drag from rtb1 to rtb2.
@@ -180,7 +179,7 @@ namespace System.Windows.Forms
                         {
                             owner.OnDragDrop(e);
 
-                            if (_lastDropImageType > DropImageType.Invalid)
+                            if (e.DropImageType > DropImageType.Invalid)
                             {
                                 ClearDropDescription();
                                 DragDropHelper.Drop(e);
@@ -270,15 +269,22 @@ namespace System.Windows.Forms
                         // When we drop, lastEffect will have the right state
                         if (fDrag.IsFalse() && lastDataObject is not null && grfKeyState != (User32.MK)0)
                         {
-                            DragEventArgs e = new DragEventArgs(lastDataObject,
-                                                                (int)grfKeyState,
-                                                                Control.MousePosition.X,
-                                                                Control.MousePosition.Y,
-                                                                DragDropEffects.All,
-                                                                lastEffect,
-                                                                _lastDropImageType,
-                                                                _lastMessage,
-                                                                _lastMessageReplacementToken);
+                            DragEventArgs e = _lastDragEventArgs is null
+                                ? new DragEventArgs(lastDataObject,
+                                    (int)grfKeyState,
+                                    MousePosition.X,
+                                    MousePosition.Y,
+                                    DragDropEffects.All,
+                                    lastEffect)
+                                : new DragEventArgs(lastDataObject,
+                                    (int)grfKeyState,
+                                    Control.MousePosition.X,
+                                    Control.MousePosition.Y,
+                                    DragDropEffects.All,
+                                    lastEffect,
+                                    _lastDragEventArgs.DropImageType,
+                                    _lastDragEventArgs.Message ?? string.Empty,
+                                    _lastDragEventArgs.MessageReplacementToken ?? string.Empty);
 
                             // Now tell which of the allowable effects we want to use, but only if we are not already none
                             if (lastEffect != DragDropEffects.None)

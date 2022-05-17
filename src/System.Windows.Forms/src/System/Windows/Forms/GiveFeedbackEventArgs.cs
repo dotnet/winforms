@@ -14,12 +14,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Initializes a new instance of the <see cref="GiveFeedbackEventArgs"/> class.
         /// </summary>
-        public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors) : this(effect, useDefaultCursors, dragImage: default!, cursorOffset: default, useDefaultDragImage: false)
+        public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors)
+            : this(effect, useDefaultCursors, dragImage: default!, cursorOffset: default, useDefaultDragImage: false)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GiveFeedbackEventArgs"/> class.
+        ///  Initializes a new instance of the <see cref="GiveFeedbackEventArgs"/> class.
         /// </summary>
         public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
@@ -30,18 +31,33 @@ namespace System.Windows.Forms
             UseDefaultDragImage = useDefaultDragImage;
         }
 
+        internal bool Equals(GiveFeedbackEventArgs? giveFeedbackEventArgs)
+        {
+            if (giveFeedbackEventArgs == this)
+            {
+                return true;
+            }
+
+            return giveFeedbackEventArgs is not null
+                && giveFeedbackEventArgs.Effect == Effect
+                && giveFeedbackEventArgs.UseDefaultCursors == UseDefaultCursors
+                && giveFeedbackEventArgs.DragImage.Equals(DragImage)
+                && giveFeedbackEventArgs.CursorOffset.Equals(CursorOffset)
+                && giveFeedbackEventArgs.UseDefaultDragImage == UseDefaultDragImage;
+        }
+
         /// <summary>
-        /// Gets the type of drag-and-drop operation.
+        ///  Gets the type of drag-and-drop operation.
         /// </summary>
         public DragDropEffects Effect { get; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether a default pointer is used.
+        ///  Gets or sets a value indicating whether a default pointer is used.
         /// </summary>
         public bool UseDefaultCursors { get; set; }
 
         /// <summary>
-        /// Gets or sets the drag image bitmap.
+        ///  Gets or sets the drag image bitmap.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -61,7 +77,7 @@ namespace System.Windows.Forms
         public Point CursorOffset { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether a layered window drag image is used.
+        ///  Gets or sets a value indicating whether a layered window drag image is used.
         /// </summary>
         /// <remarks>
         /// <para>

@@ -14,9 +14,7 @@ namespace System.Windows.Forms
     {
         private IDataObject? _lastDataObject;
         private DragDropEffects _lastEffect = DragDropEffects.None;
-        private DropImageType _lastDropImageType = DropImageType.Invalid;
-        private string _lastMessage = string.Empty;
-        private string _lastMessageReplacementToken = string.Empty;
+        private DragEventArgs? _lastDragEventArgs;
         private readonly IntPtr _hwndTarget;
         private readonly IDropTarget _owner;
 
@@ -40,7 +38,7 @@ namespace System.Windows.Forms
 #if DEBUG
         ~DropTarget()
         {
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DropTarget destroyed");                              
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DropTarget destroyed");
         }
 #endif
 
@@ -68,30 +66,35 @@ namespace System.Windows.Forms
                 }
             }
 
-            DragEventArgs drgevent = new DragEventArgs(data, (int)grfKeyState, pt.X, pt.Y, (DragDropEffects)pdwEffect, _lastEffect, _lastDropImageType, _lastMessage, _lastMessageReplacementToken);
+            DragEventArgs drgevent = _lastDragEventArgs is null
+                ? new DragEventArgs(data, (int)grfKeyState, pt.X, pt.Y, (DragDropEffects)pdwEffect, _lastEffect)
+                : new DragEventArgs(
+                    data,
+                    (int)grfKeyState,
+                    pt.X,
+                    pt.Y,
+                    (DragDropEffects)pdwEffect,
+                    _lastEffect,
+                    _lastDragEventArgs.DropImageType,
+                    _lastDragEventArgs.Message ?? string.Empty,
+                    _lastDragEventArgs.MessageReplacementToken ?? string.Empty);
+
             _lastDataObject = data;
             return drgevent;
         }
 
         private void ClearDropDescription()
         {
-            _lastDropImageType = DropImageType.Invalid;
-            _lastMessage = string.Empty;
-            _lastMessageReplacementToken = string.Empty;
+            _lastDragEventArgs = null;
             DragDropHelper.ClearDropDescription(_lastDataObject);
         }
 
         private void UpdateDropDescription(DragEventArgs dragEventArgs)
         {
-            dragEventArgs.Message ??= string.Empty;
-            dragEventArgs.MessageReplacementToken ??= string.Empty;
-
-            if (!dragEventArgs.DropImageType.Equals(_lastDropImageType) || !dragEventArgs.Message.Equals(_lastMessage) || !dragEventArgs.MessageReplacementToken.Equals(_lastMessageReplacementToken))
+            if (!dragEventArgs.Equals(_lastDragEventArgs))
             {
-                _lastDropImageType = dragEventArgs.DropImageType;
-                _lastMessage = dragEventArgs.Message;
-                _lastMessageReplacementToken = dragEventArgs.MessageReplacementToken;
-                DragDropHelper.SetDropDescription(dragEventArgs);
+                _lastDragEventArgs = dragEventArgs;
+                DragDropHelper.SetDropDescription(_lastDragEventArgs);
             }
         }
 
@@ -152,7 +155,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragLeave received");
             _owner.OnDragLeave(EventArgs.Empty);
 
-            if (_lastDropImageType > DropImageType.Invalid)
+            if (_lastDragEventArgs?.DropImageType > DropImageType.Invalid)
             {
                 ClearDropDescription();
                 DragDropHelper.DragLeave();
@@ -172,7 +175,7 @@ namespace System.Windows.Forms
                 _owner.OnDragDrop(drgevent);
                 pdwEffect = (uint)drgevent.Effect;
 
-                if (_lastDropImageType > DropImageType.Invalid)
+                if (_lastDragEventArgs?.DropImageType > DropImageType.Invalid)
                 {
                     ClearDropDescription();
                     DragDropHelper.Drop(drgevent);

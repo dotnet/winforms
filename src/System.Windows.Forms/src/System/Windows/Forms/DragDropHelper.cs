@@ -300,6 +300,21 @@ namespace System.Windows.Forms
         /// with premultiplied alpha blending, but this method will multiply it again, doubling the resulting alpha value.
         /// </para>
         /// </remarks>
+        public static void SetDragImage(IComDataObject dataObject, GiveFeedbackEventArgs giveFeedbackEventArgs)
+        {
+            SetDragImage(dataObject, giveFeedbackEventArgs.DragImage, giveFeedbackEventArgs.CursorOffset, giveFeedbackEventArgs.UseDefaultDragImage);
+        }
+
+        /// <summary>
+        /// Initializes the drag-image manager and sets the drag image bitmap into a data object.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Because InitializeFromBitmap always performs the RGB multiplication step in calculating the alpha value, you should
+        /// always pass a bitmap without premultiplied alpha blending. Note that no error will result from passing a bitmap
+        /// with premultiplied alpha blending, but this method will multiply it again, doubling the resulting alpha value.
+        /// </para>
+        /// </remarks>
         public static void SetDragImage(IComDataObject dataObject, Bitmap dragImage, Point cursorOffset, bool usingDefaultDragImage)
         {
             ArgumentNullException.ThrowIfNull(nameof(dataObject));
@@ -375,11 +390,15 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// <para>
-        /// Some UI coloring is applied to the text in <paramref name="message"/> if used by specifying %1 in <paramref name="messageReplacementToken"/>.
-        /// The characters %% and %1 are the subset of FormatMessage markers that are processed here.
+        /// Some UI coloring is applied to the text in <paramref name="message"/> if used by specifying %1 in
+        /// <paramref name="messageReplacementToken"/>. The characters %% and %1 are the subset of FormatMessage markers that are processed here.
         /// </para>
         /// </remarks>
-        public static unsafe void SetDropDescription(IComDataObject dataObject, DropImageType dropImageType, string message, string messageReplacementToken)
+        public static unsafe void SetDropDescription(
+            IComDataObject dataObject,
+            DropImageType dropImageType,
+            string message,
+            string messageReplacementToken)
         {
             ArgumentNullException.ThrowIfNull(nameof(dataObject));
             SourceGenerated.EnumValidator.Validate(dropImageType, nameof(dropImageType));

@@ -13,11 +13,10 @@ namespace System.Windows.Forms
         private readonly ISupportOleDropSource _peer;
         private readonly IComDataObject? _dataObject;
         private IntPtr _lastHwndTarget;
-        private Bitmap? _lastDragImage;
-        private Point _lastCursorOffset;
-        private bool _lastUseDefaultDragImage;
+        private GiveFeedbackEventArgs? _lastGiveFeedbacEventArgs;
 
-        public DropSource(ISupportOleDropSource peer) : this(peer, dataObject: null, dragImage: null, cursorOffset: default, useDefaultDragImage: false)
+        public DropSource(ISupportOleDropSource peer)
+            : this(peer, dataObject: null, dragImage: null, cursorOffset: default, useDefaultDragImage: false)
         {
         }
 
@@ -28,10 +27,8 @@ namespace System.Windows.Forms
             if (dragImage is not null && dataObject is not null)
             {
                 _dataObject = dataObject;
-                _lastDragImage = dragImage;
-                _lastCursorOffset = cursorOffset;
-                _lastUseDefaultDragImage = useDefaultDragImage;
-                DragDropHelper.SetDragImage(_dataObject, dragImage, cursorOffset, useDefaultDragImage);
+                _lastGiveFeedbacEventArgs = new(DragDropEffects.None, useDefaultCursors: false, dragImage, cursorOffset, useDefaultDragImage);
+                DragDropHelper.SetDragImage(_dataObject, _lastGiveFeedbacEventArgs);
             }
         }
 
@@ -42,12 +39,10 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (!gfbevent.DragImage.Equals(_lastDragImage) || !gfbevent.CursorOffset.Equals(_lastCursorOffset) || !gfbevent.UseDefaultDragImage.Equals(_lastUseDefaultDragImage))
+            if (!gfbevent.Equals(_lastGiveFeedbacEventArgs))
             {
-                _lastDragImage = gfbevent.DragImage;
-                _lastCursorOffset = gfbevent.CursorOffset;
-                _lastUseDefaultDragImage = gfbevent.UseDefaultDragImage;
-                DragDropHelper.SetDragImage(_dataObject, _lastDragImage, _lastCursorOffset, _lastUseDefaultDragImage);
+                _lastGiveFeedbacEventArgs = gfbevent;
+                DragDropHelper.SetDragImage(_dataObject, _lastGiveFeedbacEventArgs);
 
                 if (!_lastHwndTarget.Equals(IntPtr.Zero) && (Cursor.Position is Point point))
                 {
@@ -87,9 +82,15 @@ namespace System.Windows.Forms
 
         public HRESULT GiveFeedback(Ole32.DROPEFFECT dwEffect)
         {
-            var gfbevent = _lastDragImage is null
+            GiveFeedbackEventArgs gfbevent = _lastGiveFeedbacEventArgs is null
                 ? new GiveFeedbackEventArgs((DragDropEffects)dwEffect, useDefaultCursors: true)
-                : new GiveFeedbackEventArgs((DragDropEffects)dwEffect, useDefaultCursors: false, _lastDragImage, _lastCursorOffset, _lastUseDefaultDragImage);
+                : new GiveFeedbackEventArgs(
+                    (DragDropEffects)dwEffect,
+                    useDefaultCursors: false,
+                    _lastGiveFeedbacEventArgs.DragImage,
+                    _lastGiveFeedbacEventArgs.CursorOffset,
+                    _lastGiveFeedbacEventArgs.UseDefaultDragImage);
+
             _peer.OnGiveFeedback(gfbevent);
 
             if (gfbevent.DragImage is not null)
@@ -113,7 +114,7 @@ namespace System.Windows.Forms
 
         public HRESULT DragLeaveTarget()
         {
-            if (_lastDragImage is not null)
+            if (_lastGiveFeedbacEventArgs?.DragImage is not null)
             {
                 DragDropHelper.DragLeave();
             }

@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DragEventArgs"/> class.
+        ///  Initializes a new instance of the <see cref="DragEventArgs"/> class.
         /// </summary>
         public DragEventArgs(
             IDataObject? data,
@@ -47,6 +47,28 @@ namespace System.Windows.Forms
             DropImageType = dropImageType;
             Message = message;
             MessageReplacementToken = messageReplacementToken;
+        }
+
+        internal bool Equals(DragEventArgs? dragEventArgs)
+        {
+            if (dragEventArgs == this)
+            {
+                return true;
+            }
+
+            return dragEventArgs is not null
+                && dragEventArgs.Data is not null
+                && dragEventArgs.Data.Equals(Data)
+                && dragEventArgs.KeyState == KeyState
+                && dragEventArgs.X == X
+                && dragEventArgs.Y == Y
+                && dragEventArgs.AllowedEffect == AllowedEffect
+                && dragEventArgs.Effect == Effect
+                && dragEventArgs.DropImageType == DropImageType
+                && dragEventArgs.Message is not null
+                && dragEventArgs.Message.Equals(Message)
+                && dragEventArgs.MessageReplacementToken is not null
+                && dragEventArgs.MessageReplacementToken.Equals(MessageReplacementToken);
         }
 
         /// <summary>
@@ -82,12 +104,12 @@ namespace System.Windows.Forms
         public DragDropEffects Effect { get; set; }
 
         /// <summary>
-        /// Gets or sets the drop description image type.
+        ///  Gets or sets the drop description image type.
         /// </summary>
         public DropImageType DropImageType { get; set; }
 
         /// <summary>
-        /// Gets or sets the drop description text such as "Move to %1".
+        ///  Gets or sets the drop description text such as "Move to %1".
         /// </summary>
         /// <remarks>
         /// <para>
@@ -97,7 +119,7 @@ namespace System.Windows.Forms
         public string? Message { get; set; }
 
         /// <summary>
-        /// Gets or sets the drop description text such as "Documents" when %1 is specified in <see cref="Message"/>.
+        ///  Gets or sets the drop description text such as "Documents" when %1 is specified in <see cref="Message"/>.
         /// </summary>
         /// <remarks>
         /// <para>

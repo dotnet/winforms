@@ -87,8 +87,8 @@ namespace System.Windows.Forms
                         Marshal.AddRef(mediumSource.unionmember);
                         break;
 
-                    default:
                     case TYMED.TYMED_NULL:
+                    default:
 
                         mediumDestination.unionmember = IntPtr.Zero;
                         break;
