@@ -522,8 +522,8 @@ override System.Windows.Forms.TabPage.ToString() -> string!
 ~override System.Windows.Forms.ToolStripContainer.Cursor.set -> void
 ~override System.Windows.Forms.ToolStripContainer.OnRightToLeftChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ToolStripContainer.OnSizeChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripContentPanel.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripContentPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
+override System.Windows.Forms.ToolStripContentPanel.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripContentPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
 ~override System.Windows.Forms.ToolStripControlHost.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.ToolStripControlHost.BackgroundImage.set -> void
 ~override System.Windows.Forms.ToolStripControlHost.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -1730,10 +1730,10 @@ System.Windows.Forms.TabPage.ToolTipText.set -> void
 ~System.Windows.Forms.ToolStripContainer.LeftToolStripPanel.get -> System.Windows.Forms.ToolStripPanel
 ~System.Windows.Forms.ToolStripContainer.RightToolStripPanel.get -> System.Windows.Forms.ToolStripPanel
 ~System.Windows.Forms.ToolStripContainer.TopToolStripPanel.get -> System.Windows.Forms.ToolStripPanel
-~System.Windows.Forms.ToolStripContentPanel.Name.get -> string
-~System.Windows.Forms.ToolStripContentPanel.Name.set -> void
-~System.Windows.Forms.ToolStripContentPanel.Renderer.get -> System.Windows.Forms.ToolStripRenderer
-~System.Windows.Forms.ToolStripContentPanel.Renderer.set -> void
+System.Windows.Forms.ToolStripContentPanel.Name.get -> string!
+System.Windows.Forms.ToolStripContentPanel.Name.set -> void
+System.Windows.Forms.ToolStripContentPanel.Renderer.get -> System.Windows.Forms.ToolStripRenderer!
+System.Windows.Forms.ToolStripContentPanel.Renderer.set -> void
 ~System.Windows.Forms.ToolStripControlHost.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c) -> void
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c, string name) -> void
@@ -2476,8 +2476,8 @@ virtual System.Windows.Forms.TabControl.TabPageCollection.this[string? key].get 
 ~virtual System.Windows.Forms.ToolStripComboBox.OnSelectedIndexChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripComboBox.OnSelectionChangeCommitted(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripComboBox.OnTextUpdate(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripContentPanel.OnLoad(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripContentPanel.OnRendererChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripContentPanel.OnLoad(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripContentPanel.OnRendererChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnEnter(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnGotFocus(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnHostedControlResize(System.EventArgs e) -> void
@@ -11084,24 +11084,24 @@ System.Windows.Forms.ToolStripContentPanel.AutoScrollMargin.get -> System.Drawin
 System.Windows.Forms.ToolStripContentPanel.AutoScrollMargin.set -> void
 System.Windows.Forms.ToolStripContentPanel.AutoScrollMinSize.get -> System.Drawing.Size
 System.Windows.Forms.ToolStripContentPanel.AutoScrollMinSize.set -> void
-System.Windows.Forms.ToolStripContentPanel.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.ToolStripContentPanel.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripContentPanel.CausesValidation.get -> bool
 System.Windows.Forms.ToolStripContentPanel.CausesValidation.set -> void
-System.Windows.Forms.ToolStripContentPanel.CausesValidationChanged -> System.EventHandler
-System.Windows.Forms.ToolStripContentPanel.DockChanged -> System.EventHandler
-System.Windows.Forms.ToolStripContentPanel.Load -> System.EventHandler
+System.Windows.Forms.ToolStripContentPanel.CausesValidationChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripContentPanel.DockChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripContentPanel.Load -> System.EventHandler?
 System.Windows.Forms.ToolStripContentPanel.Location.get -> System.Drawing.Point
 System.Windows.Forms.ToolStripContentPanel.Location.set -> void
-System.Windows.Forms.ToolStripContentPanel.LocationChanged -> System.EventHandler
-System.Windows.Forms.ToolStripContentPanel.RendererChanged -> System.EventHandler
+System.Windows.Forms.ToolStripContentPanel.LocationChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripContentPanel.RendererChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripContentPanel.RenderMode.get -> System.Windows.Forms.ToolStripRenderMode
 System.Windows.Forms.ToolStripContentPanel.RenderMode.set -> void
 System.Windows.Forms.ToolStripContentPanel.TabIndex.get -> int
 System.Windows.Forms.ToolStripContentPanel.TabIndex.set -> void
-System.Windows.Forms.ToolStripContentPanel.TabIndexChanged -> System.EventHandler
+System.Windows.Forms.ToolStripContentPanel.TabIndexChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripContentPanel.TabStop.get -> bool
 System.Windows.Forms.ToolStripContentPanel.TabStop.set -> void
-System.Windows.Forms.ToolStripContentPanel.TabStopChanged -> System.EventHandler
+System.Windows.Forms.ToolStripContentPanel.TabStopChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripContentPanel.ToolStripContentPanel() -> void
 System.Windows.Forms.ToolStripContentPanelRenderEventArgs
 System.Windows.Forms.ToolStripContentPanelRenderEventArgs.Graphics.get -> System.Drawing.Graphics!

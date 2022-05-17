@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -17,7 +16,7 @@ namespace System.Windows.Forms
     [ToolboxItem(false)]
     public class ToolStripContentPanel : Panel
     {
-        private ToolStripRendererSwitcher rendererSwitcher;
+        private ToolStripRendererSwitcher? rendererSwitcher;
         private BitVector32 state;
         private static readonly int stateLastDoubleBuffer = BitVector32.CreateMask();
 
@@ -113,7 +112,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new event EventHandler AutoSizeChanged
+        public new event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -130,7 +129,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler CausesValidationChanged
+        public new event EventHandler? CausesValidationChanged
         {
             add => base.CausesValidationChanged += value;
             remove => base.CausesValidationChanged -= value;
@@ -148,7 +147,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new event EventHandler DockChanged
+        public new event EventHandler? DockChanged
         {
             add => base.DockChanged += value;
             remove => base.DockChanged -= value;
@@ -156,7 +155,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ToolStripContentPanelOnLoadDescr))]
-        public event EventHandler Load
+        public event EventHandler? Load
         {
             add => Events.AddHandler(EventLoad, value);
             remove => Events.RemoveHandler(EventLoad, value);
@@ -174,7 +173,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new event EventHandler LocationChanged
+        public new event EventHandler? LocationChanged
         {
             add => base.LocationChanged += value;
             remove => base.LocationChanged -= value;
@@ -201,6 +200,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
+        [AllowNull]
         public new string Name
         {
             get => base.Name;
@@ -218,7 +218,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler TabIndexChanged
+        public new event EventHandler? TabIndexChanged
         {
             add => base.TabIndexChanged += value;
             remove => base.TabIndexChanged -= value;
@@ -235,7 +235,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler TabStopChanged
+        public new event EventHandler? TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
@@ -286,13 +286,13 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ToolStripRendererChanged))]
-        public event EventHandler RendererChanged
+        public event EventHandler? RendererChanged
         {
             add => Events.AddHandler(EventRendererChanged, value);
             remove => Events.RemoveHandler(EventRendererChanged, value);
         }
 
-        private void HandleRendererChanged(object sender, EventArgs e)
+        private void HandleRendererChanged(object? sender, EventArgs e)
         {
             OnRendererChanged(e);
         }
@@ -311,7 +311,7 @@ namespace System.Windows.Forms
         {
             // There is no good way to explain this event except to say
             // that it's just another name for OnControlCreated.
-            ((EventHandler)Events[EventLoad])?.Invoke(this, e);
+            ((EventHandler?)Events[EventLoad])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -346,7 +346,7 @@ namespace System.Windows.Forms
 
             Invalidate();
 
-            ((EventHandler)Events[EventRendererChanged])?.Invoke(this, e);
+            ((EventHandler?)Events[EventRendererChanged])?.Invoke(this, e);
         }
 
         private void ResetRenderMode()
