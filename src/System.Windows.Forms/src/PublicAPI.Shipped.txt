@@ -1474,12 +1474,12 @@ System.Windows.Forms.ListView.CheckedListViewItemCollection.this[int index].get 
 ~System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string text, string imageKey) -> System.Windows.Forms.ListViewItem
 ~System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, System.Windows.Forms.ListViewItem item) -> System.Windows.Forms.ListViewItem
 ~System.Windows.Forms.ListView.ListViewItemCollection.ListViewItemCollection(System.Windows.Forms.ListView owner) -> void
-~System.Windows.Forms.ListView.SelectedListViewItemCollection.Contains(System.Windows.Forms.ListViewItem item) -> bool
-~System.Windows.Forms.ListView.SelectedListViewItemCollection.CopyTo(System.Array dest, int index) -> void
-~System.Windows.Forms.ListView.SelectedListViewItemCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ListView.SelectedListViewItemCollection.IndexOf(System.Windows.Forms.ListViewItem item) -> int
-~System.Windows.Forms.ListView.SelectedListViewItemCollection.SelectedListViewItemCollection(System.Windows.Forms.ListView owner) -> void
-~System.Windows.Forms.ListView.SelectedListViewItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem
+System.Windows.Forms.ListView.SelectedListViewItemCollection.Contains(System.Windows.Forms.ListViewItem? item) -> bool
+System.Windows.Forms.ListView.SelectedListViewItemCollection.CopyTo(System.Array! dest, int index) -> void
+System.Windows.Forms.ListView.SelectedListViewItemCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ListView.SelectedListViewItemCollection.IndexOf(System.Windows.Forms.ListViewItem? item) -> int
+System.Windows.Forms.ListView.SelectedListViewItemCollection.SelectedListViewItemCollection(System.Windows.Forms.ListView! owner) -> void
+System.Windows.Forms.ListView.SelectedListViewItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem!
 System.Windows.Forms.ListViewHitTestInfo.Item.get -> System.Windows.Forms.ListViewItem?
 System.Windows.Forms.ListViewHitTestInfo.ListViewHitTestInfo(System.Windows.Forms.ListViewItem? hitItem, System.Windows.Forms.ListViewItem.ListViewSubItem? hitSubItem, System.Windows.Forms.ListViewHitTestLocations hitLocation) -> void
 System.Windows.Forms.ListViewHitTestInfo.SubItem.get -> System.Windows.Forms.ListViewItem.ListViewSubItem?
@@ -2405,9 +2405,9 @@ virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.this[string?
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.this[int index].set -> void
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.this[string key].get -> System.Windows.Forms.ListViewItem
-~virtual System.Windows.Forms.ListView.SelectedListViewItemCollection.ContainsKey(string key) -> bool
-~virtual System.Windows.Forms.ListView.SelectedListViewItemCollection.IndexOfKey(string key) -> int
-~virtual System.Windows.Forms.ListView.SelectedListViewItemCollection.this[string key].get -> System.Windows.Forms.ListViewItem
+virtual System.Windows.Forms.ListView.SelectedListViewItemCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.ListView.SelectedListViewItemCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.ListView.SelectedListViewItemCollection.this[string? key].get -> System.Windows.Forms.ListViewItem?
 ~virtual System.Windows.Forms.ListViewItem.Clone() -> object
 ~virtual System.Windows.Forms.ListViewItem.Deserialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
 ~virtual System.Windows.Forms.ListViewItem.Serialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
