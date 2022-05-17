@@ -121,6 +121,7 @@ namespace System.Windows.Forms.Tests
             parentItem2.DropDownItems.Add(childItem3);
             parentItem2.DropDownItems.Add(childItem4);
 
+            ownerItem.DropDown.Show();
             AccessibleObject accessibleObject = ownerItem.DropDown.AccessibilityObject;
 
             Assert.Equal(ownerItem.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.Parent));
@@ -134,6 +135,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(accessibleObject, parentItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
             Assert.Equal(accessibleObject, parentItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
 
+            parentItem1.DropDown.Show();
             AccessibleObject accessibleObject1 = parentItem1.DropDown.AccessibilityObject;
 
             Assert.Equal(parentItem1.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.Parent));
@@ -147,6 +149,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(accessibleObject1, childItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
             Assert.Equal(accessibleObject1, childItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
 
+            parentItem2.DropDown.Show();
             AccessibleObject accessibleObject2 = parentItem2.DropDown.AccessibilityObject;
 
             Assert.Equal(parentItem2.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.Parent));
@@ -192,9 +195,6 @@ namespace System.Windows.Forms.Tests
             using ToolStripDropDownItem childItem3 = ReflectionHelper.InvokePublicConstructor<ToolStripDropDownItem>(childType);
             using ToolStripDropDownItem childItem4 = ReflectionHelper.InvokePublicConstructor<ToolStripDropDownItem>(childType);
 
-            toolStrip.Items.Add(parentItem1);
-            toolStrip.Items.Add(parentItem2);
-
             parentItem1.DropDownItems.Add(childItem1);
             parentItem1.DropDownItems.Add(childItem2);
             parentItem2.DropDownItems.Add(childItem3);
@@ -204,6 +204,13 @@ namespace System.Windows.Forms.Tests
             toolStrip.OverflowItems.Add(parentItem1);
             toolStrip.OverflowItems.Add(parentItem2);
 
+            // ToolStripSplitStackLayout does it in runtime when Layout method is working.
+            // Use this way as a workaround in tests.
+            // It should be reset in the end of the test to avoid Dispose method errors.
+            parentItem1.ParentInternal = ownerItem.DropDown;
+            parentItem2.ParentInternal = ownerItem.DropDown;
+
+            ownerItem.DropDown.Show();
             AccessibleObject accessibleObject = ownerItem.DropDown.AccessibilityObject;
 
             Assert.Equal(ownerItem.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.Parent));
@@ -217,6 +224,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(accessibleObject, parentItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
             Assert.Equal(accessibleObject, parentItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
 
+            parentItem1.DropDown.Show();
             AccessibleObject accessibleObject1 = parentItem1.DropDown.AccessibilityObject;
 
             Assert.Equal(parentItem1.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.Parent));
@@ -230,6 +238,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(accessibleObject1, childItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
             Assert.Equal(accessibleObject1, childItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
 
+            parentItem2.DropDown.Show();
             AccessibleObject accessibleObject2 = parentItem2.DropDown.AccessibilityObject;
 
             Assert.Equal(parentItem2.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.Parent));
@@ -242,6 +251,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(accessibleObject2, parentItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
             Assert.Equal(accessibleObject2, childItem3.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
             Assert.Equal(accessibleObject2, childItem4.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+
+            // Reset the parent to avoid errors when disposing.
+            parentItem1.ParentInternal = null;
+            parentItem2.ParentInternal = null;
         }
     }
 }

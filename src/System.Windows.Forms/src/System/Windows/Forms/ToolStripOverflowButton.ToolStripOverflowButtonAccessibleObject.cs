@@ -31,7 +31,10 @@ namespace System.Windows.Forms
                 {
                     case UiaCore.NavigateDirection.FirstChild:
                     case UiaCore.NavigateDirection.LastChild:
-                        return _owningToolStripOverflowButton.ParentToolStrip is not null && _owningToolStripOverflowButton.ParentToolStrip.OverflowItems.Count > 0
+                        // Don't show the inner menu while it is invisible.
+                        // Otherwise it will affect accessibility tree,
+                        // especially for items-controls that have not been created yet.
+                        return _owningToolStripOverflowButton.DropDown.Visible
                             ? _owningToolStripOverflowButton.DropDown.AccessibilityObject
                             : null;
                 }

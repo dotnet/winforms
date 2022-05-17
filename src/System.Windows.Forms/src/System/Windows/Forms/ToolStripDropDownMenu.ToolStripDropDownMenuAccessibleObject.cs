@@ -10,35 +10,16 @@ namespace System.Windows.Forms
     {
         internal class ToolStripDropDownMenuAccessibleObject : ToolStripDropDownAccessibleObject
         {
-            private readonly ToolStripDropDownMenu _owningToolStripDropDownMenu;
-
             public ToolStripDropDownMenuAccessibleObject(ToolStripDropDownMenu owner) : base(owner)
-            {
-                _owningToolStripDropDownMenu = owner;
-            }
+            { }
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
                 => direction switch
                 {
-                    UiaCore.NavigateDirection.Parent => _owningToolStripDropDownMenu.OwnerItem?.AccessibilityObject,
-                    UiaCore.NavigateDirection.FirstChild => GetFirstChild(),
-                    UiaCore.NavigateDirection.LastChild => GetLastChild(),
+                    UiaCore.NavigateDirection.Parent when Owner is ToolStripDropDownMenu menu
+                        => menu.OwnerItem?.AccessibilityObject,
                     _ => base.FragmentNavigate(direction)
                 };
-
-            private AccessibleObject? GetFirstChild()
-                => _owningToolStripDropDownMenu.Items.Count > 0
-                    ? _owningToolStripDropDownMenu.DisplayedItems.Contains(_owningToolStripDropDownMenu.UpScrollButton)
-                        ? _owningToolStripDropDownMenu.UpScrollButton.AccessibilityObject
-                        : _owningToolStripDropDownMenu.Items[0].AccessibilityObject
-                    : null;
-
-            private AccessibleObject? GetLastChild()
-                => _owningToolStripDropDownMenu.Items.Count > 0
-                    ? _owningToolStripDropDownMenu.DisplayedItems.Contains(_owningToolStripDropDownMenu.DownScrollButton)
-                        ? _owningToolStripDropDownMenu.DownScrollButton.AccessibilityObject
-                        : _owningToolStripDropDownMenu.Items[^1].AccessibilityObject
-                    : null;
         }
     }
 }
