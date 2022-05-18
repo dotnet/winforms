@@ -283,10 +283,10 @@ internal partial class Interop
             {
                 get
                 {
-                    IntPtr value = IntPtr.Zero;
-                    ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_accessibleInstance + 18)))
+                    using Oleaut32.VARIANT value = new Oleaut32.VARIANT();
+                    ((delegate* unmanaged<IntPtr, Oleaut32.VARIANT*, HRESULT>)(*(*(void***)_accessibleInstance + 18)))
                         (_accessibleInstance, &value).ThrowIfFailed();
-                    return value == IntPtr.Zero ? null : Marshal.GetObjectForIUnknown(value);
+                    return value.ToObject();
                 }
             }
 
@@ -297,10 +297,10 @@ internal partial class Interop
             {
                 get
                 {
-                    IntPtr value = IntPtr.Zero;
-                    ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_accessibleInstance + 19)))
+                    using Oleaut32.VARIANT value = new Oleaut32.VARIANT();
+                    ((delegate* unmanaged<IntPtr, Oleaut32.VARIANT*, HRESULT>)(*(*(void***)_accessibleInstance + 19)))
                         (_accessibleInstance, &value).ThrowIfFailed();
-                    return value == IntPtr.Zero ? null : Marshal.GetObjectForIUnknown(value);
+                    return value.ToObject();
                 }
             }
 
