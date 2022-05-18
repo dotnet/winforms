@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -26,15 +27,31 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT QueryContinueDrag(IntPtr thisPtr, BOOL fEscapePressed, User32.MK grfKeyState)
             {
-                var inst = ComInterfaceDispatch.GetInstance<Ole32.IDropSource>((ComInterfaceDispatch*)thisPtr);
-                return inst.QueryContinueDrag(fEscapePressed, grfKeyState);
+                try
+                {
+                    var instance = ComInterfaceDispatch.GetInstance<Ole32.IDropSource>((ComInterfaceDispatch*)thisPtr);
+                    return instance.QueryContinueDrag(fEscapePressed, grfKeyState);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return (HRESULT)ex.HResult;
+                }
             }
 
             [UnmanagedCallersOnly]
             private static HRESULT GiveFeedback(IntPtr thisPtr, Ole32.DROPEFFECT dwEffect)
             {
-                var inst = ComInterfaceDispatch.GetInstance<Ole32.IDropSource>((ComInterfaceDispatch*)thisPtr);
-                return inst.GiveFeedback(dwEffect);
+                try
+                {
+                    var instance = ComInterfaceDispatch.GetInstance<Ole32.IDropSource>((ComInterfaceDispatch*)thisPtr);
+                    return instance.GiveFeedback(dwEffect);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return (HRESULT)ex.HResult;
+                }
             }
         }
     }
