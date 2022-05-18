@@ -9,7 +9,14 @@ internal partial class Interop
     internal static partial class UiaCore
     {
         [DllImport(Libraries.UiaCore, ExactSpelling = true)]
-        public static extern HRESULT UiaHostProviderFromHwnd(IntPtr hwnd, out IRawElementProviderSimple ppProvider);
+        public static extern HRESULT UiaHostProviderFromHwnd(IntPtr hwnd, out IntPtr ppProvider);
+
+        public static HRESULT UiaHostProviderFromHwnd(IntPtr hwnd, out IRawElementProviderSimple ppProvider)
+        {
+            var result = UiaHostProviderFromHwnd(hwnd, out IntPtr providerPtr);
+            ppProvider = (IRawElementProviderSimple)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(providerPtr, CreateObjectFlags.Unwrap);
+            return result;
+        }
 
         public static HRESULT UiaHostProviderFromHwnd(HandleRef hwnd, out IRawElementProviderSimple ppProvider)
         {

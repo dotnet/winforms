@@ -9,7 +9,13 @@ internal partial class Interop
     internal static partial class UiaCore
     {
         [DllImport(Libraries.UiaCore, CharSet = CharSet.Unicode)]
-        public static extern nint UiaReturnRawElementProvider(IntPtr hwnd, nint wParam, nint lParam, IRawElementProviderSimple? el);
+        private static extern nint UiaReturnRawElementProvider(IntPtr hwnd, nint wParam, nint lParam, IntPtr el);
+
+        public static nint UiaReturnRawElementProvider(IntPtr hwnd, nint wParam, nint lParam, IRawElementProviderSimple? el)
+        {
+            var providerPtr = el is null ? IntPtr.Zero : WinFormsComWrappers.Instance.GetComPointer(el, IID.IRawElementProviderSimple);
+            return UiaReturnRawElementProvider(hwnd, wParam, lParam, providerPtr);
+        }
 
         public static nint UiaReturnRawElementProvider(IHandle hwnd, nint wParam, nint lParam, IRawElementProviderSimple? el)
         {

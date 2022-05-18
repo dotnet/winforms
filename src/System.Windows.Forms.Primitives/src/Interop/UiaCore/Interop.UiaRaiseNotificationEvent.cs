@@ -10,11 +10,22 @@ internal partial class Interop
     internal static partial class UiaCore
     {
         [DllImport(Libraries.UiaCore, ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern HRESULT UiaRaiseNotificationEvent(
-            IRawElementProviderSimple provider,
+        private static extern HRESULT UiaRaiseNotificationEvent(
+            IntPtr provider,
             AutomationNotificationKind notificationKind,
             AutomationNotificationProcessing notificationProcessing,
             [MarshalAs(UnmanagedType.BStr)] string displayString,
             [MarshalAs(UnmanagedType.BStr)] string activityId);
+
+        public static HRESULT UiaRaiseNotificationEvent(
+            IRawElementProviderSimple provider,
+            AutomationNotificationKind notificationKind,
+            AutomationNotificationProcessing notificationProcessing,
+            string displayString,
+            string activityId)
+        {
+            var providerPtr = WinFormsComWrappers.Instance.GetComPointer(provider, IID.IRawElementProviderSimple);
+            return UiaRaiseNotificationEvent(providerPtr, notificationKind, notificationProcessing, displayString, activityId);
+        }
     }
 }

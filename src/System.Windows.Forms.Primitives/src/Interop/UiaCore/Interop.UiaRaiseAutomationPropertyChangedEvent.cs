@@ -9,6 +9,12 @@ internal partial class Interop
     internal static partial class UiaCore
     {
         [DllImport(Libraries.UiaCore, ExactSpelling = true)]
-        public static extern HRESULT UiaRaiseAutomationPropertyChangedEvent(IRawElementProviderSimple pProvider, UIA id, object? oldValue, object? newValue);
+        public static extern HRESULT UiaRaiseAutomationPropertyChangedEvent(IntPtr pProvider, UIA id, object? oldValue, object? newValue);
+
+        public static HRESULT UiaRaiseAutomationPropertyChangedEvent(IRawElementProviderSimple pProvider, UIA id, object? oldValue, object? newValue)
+        {
+            var providerPtr = WinFormsComWrappers.Instance.GetComPointer(pProvider, IID.IRawElementProviderSimple);
+            return UiaRaiseAutomationPropertyChangedEvent(providerPtr, id, oldValue, newValue);
+        }
     }
 }

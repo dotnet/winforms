@@ -63,7 +63,7 @@ internal partial class Interop
                     IntPtr value = IntPtr.Zero;
                     ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_accessibleInstance + 7)))
                         (_accessibleInstance, &value).ThrowIfFailed();
-                    return value == IntPtr.Zero ? null : Marshal.GetObjectForIUnknown(value);
+                    return value == IntPtr.Zero ? null : Instance.GetOrCreateObjectForComInstance(value, CreateObjectFlags.Unwrap);
                 }
             }
 

@@ -25,6 +25,7 @@ internal partial class Interop
         private static readonly ComInterfaceEntry* s_dropSourceEntry = InitializeIDropSourceEntry();
         private static readonly ComInterfaceEntry* s_dropTargetEntry = InitializeIDropTargetEntry();
         private static readonly ComInterfaceEntry* s_dataObjectEntry = InitializeIDataObjectEntry();
+        private static readonly ComInterfaceEntry* s_accessibleObjectEntry = InitializeAccessibleObjectEntry();
 
         internal static WinFormsComWrappers Instance { get; } = new WinFormsComWrappers();
 
@@ -114,6 +115,26 @@ internal partial class Interop
             return wrapperEntry;
         }
 
+        private static ComInterfaceEntry* InitializeAccessibleObjectEntry()
+        {
+            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
+
+            IntPtr iRawElementProviderSimpleVtbl = IRawElementProviderSimpleVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+            IntPtr iRawElementProviderFragmentVtbl = IRawElementProviderFragmentVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+            IntPtr iRawElementProviderFragmentRootVtbl = IRawElementProviderFragmentRootVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+
+            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(
+                typeof(WinFormsComWrappers),
+                sizeof(ComInterfaceEntry) * 3);
+            wrapperEntry[0].IID = IID.IRawElementProviderSimple;
+            wrapperEntry[0].Vtable = iRawElementProviderSimpleVtbl;
+            wrapperEntry[1].IID = IID.IRawElementProviderFragment;
+            wrapperEntry[1].Vtable = iRawElementProviderFragmentVtbl;
+            wrapperEntry[2].IID = IID.IRawElementProviderFragmentRoot;
+            wrapperEntry[2].Vtable = iRawElementProviderFragmentRootVtbl;
+            return wrapperEntry;
+        }
+
         protected override unsafe ComInterfaceEntry* ComputeVtables(object obj, CreateComInterfaceFlags flags, out int count)
         {
             if (obj is Interop.Ole32.IStream)
@@ -156,6 +177,12 @@ internal partial class Interop
             {
                 count = 1;
                 return s_dataObjectEntry;
+            }
+
+            if (obj is UiaCore.IRawElementProviderSimple)
+            {
+                count = 3;
+                return s_accessibleObjectEntry;
             }
 
             throw new NotImplementedException($"ComWrappers for type {obj.GetType()} not implemented.");
@@ -211,6 +238,14 @@ internal partial class Interop
             {
                 Marshal.Release(externalComObject);
                 return new LockBytesWrapper(lockBytesComObject);
+            }
+
+            Guid rawElementProviderSimpleIID = IID.IRawElementProviderSimple;
+            hr = Marshal.QueryInterface(externalComObject, ref rawElementProviderSimpleIID, out IntPtr rawElementProviderSimpleComObject);
+            if (hr == S_OK)
+            {
+                Marshal.Release(externalComObject);
+                return new RawElementProviderSimpleWrapper(rawElementProviderSimpleComObject);
             }
 
             Guid shellItemIID = IID.IShellItem;
@@ -283,6 +318,7 @@ internal partial class Interop
                 ShellItemWrapper siw => siw.Instance,
                 FileOpenDialogWrapper fodw => fodw.Instance,
                 FileSaveDialogWrapper fsdw => fsdw.Instance,
+                RawElementProviderSimpleWrapper repsw => repsw.Instance,
                 _ => GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None),
             };
         }
