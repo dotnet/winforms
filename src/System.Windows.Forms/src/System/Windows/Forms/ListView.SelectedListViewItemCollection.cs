@@ -25,7 +25,7 @@ namespace System.Windows.Forms
             /* C#r: protected */
             public SelectedListViewItemCollection(ListView owner)
             {
-                _owner = owner;
+                _owner = owner.OrThrowIfNull();
             }
 
             private ListViewItem[] SelectedItemArray
