@@ -32,25 +32,6 @@ namespace System.Windows.Forms
             }
         }
 
-        private void UpdateDragImage(GiveFeedbackEventArgs gfbevent)
-        {
-            if (_dataObject is null)
-            {
-                return;
-            }
-
-            if (!gfbevent.Equals(_lastGiveFeedbacEventArgs))
-            {
-                _lastGiveFeedbacEventArgs = gfbevent;
-                DragDropHelper.SetDragImage(_dataObject, _lastGiveFeedbacEventArgs);
-
-                if (!_lastHwndTarget.Equals(IntPtr.Zero) && (Cursor.Position is Point point))
-                {
-                    DragDropHelper.DragEnter(_lastHwndTarget, _dataObject, ref point, (Ole32.DROPEFFECT)gfbevent.Effect);
-                }
-            }
-        }
-
         public HRESULT QueryContinueDrag(BOOL fEscapePressed, User32.MK grfKeyState)
         {
             bool escapePressed = fEscapePressed != 0;
@@ -93,9 +74,10 @@ namespace System.Windows.Forms
 
             _peer.OnGiveFeedback(gfbevent);
 
-            if (gfbevent.DragImage is not null)
+            if (gfbevent.DragImage is not null && !gfbevent.Equals(_lastGiveFeedbacEventArgs))
             {
-                UpdateDragImage(gfbevent);
+                _lastGiveFeedbacEventArgs = gfbevent.Clone();
+                _lastGiveFeedbacEventArgs.UpdateDragImage(_dataObject, _lastHwndTarget);
             }
 
             if (gfbevent.UseDefaultCursors)

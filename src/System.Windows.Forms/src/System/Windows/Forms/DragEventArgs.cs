@@ -49,28 +49,6 @@ namespace System.Windows.Forms
             MessageReplacementToken = messageReplacementToken;
         }
 
-        internal bool Equals(DragEventArgs? dragEventArgs)
-        {
-            if (dragEventArgs == this)
-            {
-                return true;
-            }
-
-            return dragEventArgs is not null
-                && dragEventArgs.Data is not null
-                && dragEventArgs.Data.Equals(Data)
-                && dragEventArgs.KeyState == KeyState
-                && dragEventArgs.X == X
-                && dragEventArgs.Y == Y
-                && dragEventArgs.AllowedEffect == AllowedEffect
-                && dragEventArgs.Effect == Effect
-                && dragEventArgs.DropImageType == DropImageType
-                && dragEventArgs.Message is not null
-                && dragEventArgs.Message.Equals(Message)
-                && dragEventArgs.MessageReplacementToken is not null
-                && dragEventArgs.MessageReplacementToken.Equals(MessageReplacementToken);
-        }
-
         /// <summary>
         ///  The <see cref="IDataObject"/> that contains the data associated
         ///  with this event.
@@ -127,5 +105,32 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         public string? MessageReplacementToken { get; set; }
+
+        internal DragEventArgs Clone()
+        {
+            return (DragEventArgs)MemberwiseClone();
+        }
+
+        internal bool Equals(DragEventArgs? dragEventArgs)
+        {
+            if (dragEventArgs == this)
+            {
+                return true;
+            }
+
+            return dragEventArgs is not null
+                && dragEventArgs.Data is not null
+                && dragEventArgs.Data.Equals(Data)
+                && dragEventArgs.KeyState == KeyState
+                && dragEventArgs.X == X
+                && dragEventArgs.Y == Y
+                && dragEventArgs.AllowedEffect == AllowedEffect
+                && dragEventArgs.Effect == Effect
+                && dragEventArgs.DropImageType == DropImageType
+                && dragEventArgs.Message is not null
+                && dragEventArgs.Message.Equals(Message)
+                && dragEventArgs.MessageReplacementToken is not null
+                && dragEventArgs.MessageReplacementToken.Equals(MessageReplacementToken);
+        }
     }
 }

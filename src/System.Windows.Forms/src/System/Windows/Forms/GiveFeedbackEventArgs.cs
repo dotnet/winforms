@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using static Interop;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
@@ -29,21 +31,6 @@ namespace System.Windows.Forms
             DragImage = dragImage;
             CursorOffset = cursorOffset;
             UseDefaultDragImage = useDefaultDragImage;
-        }
-
-        internal bool Equals(GiveFeedbackEventArgs? giveFeedbackEventArgs)
-        {
-            if (giveFeedbackEventArgs == this)
-            {
-                return true;
-            }
-
-            return giveFeedbackEventArgs is not null
-                && giveFeedbackEventArgs.Effect == Effect
-                && giveFeedbackEventArgs.UseDefaultCursors == UseDefaultCursors
-                && giveFeedbackEventArgs.DragImage.Equals(DragImage)
-                && giveFeedbackEventArgs.CursorOffset.Equals(CursorOffset)
-                && giveFeedbackEventArgs.UseDefaultDragImage == UseDefaultDragImage;
         }
 
         /// <summary>
@@ -86,5 +73,40 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         public bool UseDefaultDragImage { get; set; }
+
+        internal GiveFeedbackEventArgs Clone()
+        {
+            return (GiveFeedbackEventArgs)MemberwiseClone();
+        }
+
+        internal bool Equals(GiveFeedbackEventArgs? giveFeedbackEventArgs)
+        {
+            if (giveFeedbackEventArgs == this)
+            {
+                return true;
+            }
+
+            return giveFeedbackEventArgs is not null
+                && giveFeedbackEventArgs.Effect == Effect
+                && giveFeedbackEventArgs.UseDefaultCursors == UseDefaultCursors
+                && giveFeedbackEventArgs.DragImage.Equals(DragImage)
+                && giveFeedbackEventArgs.CursorOffset.Equals(CursorOffset)
+                && giveFeedbackEventArgs.UseDefaultDragImage == UseDefaultDragImage;
+        }
+
+        internal void UpdateDragImage(IComDataObject? dataObject, IntPtr lastHwndTarget)
+        {
+            if (dataObject is null)
+            {
+                return;
+            }
+
+            DragDropHelper.SetDragImage(dataObject, this);
+
+            if (!lastHwndTarget.Equals(IntPtr.Zero) && (Cursor.Position is Point point))
+            {
+                DragDropHelper.DragEnter(lastHwndTarget, dataObject, ref point, (Ole32.DROPEFFECT)Effect);
+            }
+        }
     }
 }

@@ -43,15 +43,15 @@ namespace System.Windows.Forms
         /// Notifies the drag-image manager that the drop target has been entered, and provides it with the information
         /// needed to display the drag image.
         /// </summary>
-        public static void DragEnter(IntPtr targetWindowHandle, DragEventArgs dragEventArgs)
+        public static void DragEnter(IntPtr targetWindowHandle, DragEventArgs e)
         {
-            if (dragEventArgs.Data is not IComDataObject dataObject)
+            if (e.Data is not IComDataObject dataObject)
             {
                 return;
             }
 
-            Point point = new(dragEventArgs.X, dragEventArgs.Y);
-            DragEnter(targetWindowHandle, dataObject, ref point, (Ole32.DROPEFFECT)dragEventArgs.Effect);
+            Point point = new(e.X, e.Y);
+            DragEnter(targetWindowHandle, dataObject, ref point, (Ole32.DROPEFFECT)e.Effect);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace System.Windows.Forms
         /// Notifies the drag-image manager that the cursor position has changed and provides it with the information needed
         /// to display the drag image.
         /// </summary>
-        public static void DragOver(DragEventArgs dragEventArgs)
+        public static void DragOver(DragEventArgs e)
         {
             if (!TryGetDragDropHelper(out IDropTargetHelper? dropTargetHelper))
             {
@@ -108,8 +108,8 @@ namespace System.Windows.Forms
 
             try
             {
-                Point point = new(dragEventArgs.X, dragEventArgs.Y);
-                dropTargetHelper.DragOver(ref point, (Ole32.DROPEFFECT)dragEventArgs.Effect);
+                Point point = new(e.X, e.Y);
+                dropTargetHelper.DragOver(ref point, (Ole32.DROPEFFECT)e.Effect);
             }
             finally
             {
@@ -121,17 +121,17 @@ namespace System.Windows.Forms
         /// Notifies the drag-image manager that the object has been dropped, and provides it with the information needed
         /// to display the drag image.
         /// </summary>
-        public static void Drop(DragEventArgs dragEventArgs)
+        public static void Drop(DragEventArgs e)
         {
-            if (!TryGetDragDropHelper(out IDropTargetHelper? dropTargetHelper) || dragEventArgs.Data is not IComDataObject dataObject)
+            if (!TryGetDragDropHelper(out IDropTargetHelper? dropTargetHelper) || e.Data is not IComDataObject dataObject)
             {
                 return;
             }
 
             try
             {
-                Point point = new(dragEventArgs.X, dragEventArgs.Y);
-                dropTargetHelper.Drop(dataObject, ref point, (Ole32.DROPEFFECT)dragEventArgs.Effect);
+                Point point = new(e.X, e.Y);
+                dropTargetHelper.Drop(dataObject, ref point, (Ole32.DROPEFFECT)e.Effect);
             }
             finally
             {
@@ -300,9 +300,9 @@ namespace System.Windows.Forms
         /// with premultiplied alpha blending, but this method will multiply it again, doubling the resulting alpha value.
         /// </para>
         /// </remarks>
-        public static void SetDragImage(IComDataObject dataObject, GiveFeedbackEventArgs giveFeedbackEventArgs)
+        public static void SetDragImage(IComDataObject dataObject, GiveFeedbackEventArgs e)
         {
-            SetDragImage(dataObject, giveFeedbackEventArgs.DragImage, giveFeedbackEventArgs.CursorOffset, giveFeedbackEventArgs.UseDefaultDragImage);
+            SetDragImage(dataObject, e.DragImage, e.CursorOffset, e.UseDefaultDragImage);
         }
 
         /// <summary>
@@ -373,16 +373,16 @@ namespace System.Windows.Forms
         /// <summary>
         /// Sets the drop description into a data object. Describes the image and accompanying text for a drop object.
         /// </summary>
-        public static void SetDropDescription(DragEventArgs dragEventArgs)
+        public static void SetDropDescription(DragEventArgs e)
         {
-            if (dragEventArgs.Data is not IComDataObject dataObject)
+            if (e.Data is not IComDataObject dataObject)
             {
                 return;
             }
 
-            dragEventArgs.Message ??= string.Empty;
-            dragEventArgs.MessageReplacementToken ??= string.Empty;
-            SetDropDescription(dataObject, dragEventArgs.DropImageType, dragEventArgs.Message, dragEventArgs.MessageReplacementToken);
+            e.Message ??= string.Empty;
+            e.MessageReplacementToken ??= string.Empty;
+            SetDropDescription(dataObject, e.DropImageType, e.Message, e.MessageReplacementToken);
         }
 
         /// <summary>

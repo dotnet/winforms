@@ -30,15 +30,6 @@ namespace System.Windows.Forms
                 DragDropHelper.ClearDropDescription(lastDataObject);
             }
 
-            private void UpdateDropDescription(DragEventArgs dragEventArgs)
-            {
-                if (!dragEventArgs.Equals(_lastDragEventArgs))
-                {
-                    _lastDragEventArgs = dragEventArgs;
-                    DragDropHelper.SetDropDescription(_lastDragEventArgs);
-                }
-            }
-
             public HRESULT GetNewStorage(out Ole32.IStorage? storage)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetNewStorage");
@@ -320,6 +311,15 @@ namespace System.Windows.Forms
                 // do nothing, we don't have ContextMenu any longer
                 hmenu = IntPtr.Zero;
                 return HRESULT.S_OK;
+            }
+
+            private void UpdateDropDescription(DragEventArgs e)
+            {
+                if (!e.Equals(_lastDragEventArgs))
+                {
+                    _lastDragEventArgs = e.Clone();
+                    DragDropHelper.SetDropDescription(_lastDragEventArgs);
+                }
             }
         }
     }

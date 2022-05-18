@@ -42,6 +42,12 @@ namespace System.Windows.Forms
         }
 #endif
 
+        private void ClearDropDescription()
+        {
+            _lastDragEventArgs = null;
+            DragDropHelper.ClearDropDescription(_lastDataObject);
+        }
+
         private DragEventArgs? CreateDragEventArgs(object? pDataObj, uint grfKeyState, Point pt, uint pdwEffect)
         {
             IDataObject? data;
@@ -81,21 +87,6 @@ namespace System.Windows.Forms
 
             _lastDataObject = data;
             return drgevent;
-        }
-
-        private void ClearDropDescription()
-        {
-            _lastDragEventArgs = null;
-            DragDropHelper.ClearDropDescription(_lastDataObject);
-        }
-
-        private void UpdateDropDescription(DragEventArgs dragEventArgs)
-        {
-            if (!dragEventArgs.Equals(_lastDragEventArgs))
-            {
-                _lastDragEventArgs = dragEventArgs;
-                DragDropHelper.SetDropDescription(_lastDragEventArgs);
-            }
         }
 
         HRESULT Ole32.IDropTarget.DragEnter(object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
@@ -189,6 +180,15 @@ namespace System.Windows.Forms
             _lastEffect = DragDropEffects.None;
             _lastDataObject = null;
             return HRESULT.S_OK;
+        }
+
+        private void UpdateDropDescription(DragEventArgs e)
+        {
+            if (!e.Equals(_lastDragEventArgs))
+            {
+                _lastDragEventArgs = e.Clone();
+                DragDropHelper.SetDropDescription(_lastDragEventArgs);
+            }
         }
     }
 }
