@@ -16,9 +16,9 @@ namespace System.Windows.Forms
     [ToolboxItem(false)]
     public class ToolStripContentPanel : Panel
     {
-        private ToolStripRendererSwitcher? rendererSwitcher;
-        private BitVector32 state;
-        private static readonly int stateLastDoubleBuffer = BitVector32.CreateMask();
+        private ToolStripRendererSwitcher? _rendererSwitcher;
+        private BitVector32 _state;
+        private static readonly int s_stateLastDoubleBuffer = BitVector32.CreateMask();
 
         private static readonly object EventRendererChanged = new object();
         private static readonly object EventLoad = new object();
@@ -245,14 +245,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (rendererSwitcher is null)
+                if (_rendererSwitcher is null)
                 {
-                    rendererSwitcher = new ToolStripRendererSwitcher(this, ToolStripRenderMode.System);
+                    _rendererSwitcher = new ToolStripRendererSwitcher(this, ToolStripRenderMode.System);
                     HandleRendererChanged(this, EventArgs.Empty);
-                    rendererSwitcher.RendererChanged += new EventHandler(HandleRendererChanged);
+                    _rendererSwitcher.RendererChanged += new EventHandler(HandleRendererChanged);
                 }
 
-                return rendererSwitcher;
+                return _rendererSwitcher;
             }
         }
 
@@ -332,14 +332,14 @@ namespace System.Windows.Forms
             // we don't want to be greedy.... if we're using TSProfessionalRenderer go DBuf, else don't.
             if (Renderer is ToolStripProfessionalRenderer)
             {
-                state[stateLastDoubleBuffer] = DoubleBuffered;
+                _state[s_stateLastDoubleBuffer] = DoubleBuffered;
                 //this.DoubleBuffered = true;
                 SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             }
             else
             {
                 // restore DBuf
-                DoubleBuffered = state[stateLastDoubleBuffer];
+                DoubleBuffered = _state[s_stateLastDoubleBuffer];
             }
 
             Renderer.InitializeContentPanel(this);
