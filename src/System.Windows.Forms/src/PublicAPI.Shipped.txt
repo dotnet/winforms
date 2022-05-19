@@ -465,10 +465,10 @@ override System.Windows.Forms.ListViewItemConverter.ConvertTo(System.ComponentMo
 ~override System.Windows.Forms.TabControl.Text.get -> string
 ~override System.Windows.Forms.TabControl.Text.set -> void
 ~override System.Windows.Forms.TabControl.ToString() -> string
-~override System.Windows.Forms.TableLayoutPanel.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-~override System.Windows.Forms.TableLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
-~override System.Windows.Forms.TableLayoutPanel.OnLayout(System.Windows.Forms.LayoutEventArgs levent) -> void
-~override System.Windows.Forms.TableLayoutPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
+override System.Windows.Forms.TableLayoutPanel.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
+override System.Windows.Forms.TableLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
+override System.Windows.Forms.TableLayoutPanel.OnLayout(System.Windows.Forms.LayoutEventArgs! levent) -> void
+override System.Windows.Forms.TableLayoutPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
 ~override System.Windows.Forms.TableLayoutPanelCellPosition.Equals(object other) -> bool
 ~override System.Windows.Forms.TableLayoutPanelCellPosition.ToString() -> string
 override System.Windows.Forms.TabPage.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
@@ -1651,25 +1651,25 @@ System.Windows.Forms.TabControl.TabPageCollection.TabPageCollection(System.Windo
 ~System.Windows.Forms.TableLayoutColumnStyleCollection.this[int index].set -> void
 ~System.Windows.Forms.TableLayoutControlCollection.Container.get -> System.Windows.Forms.TableLayoutPanel
 ~System.Windows.Forms.TableLayoutControlCollection.TableLayoutControlCollection(System.Windows.Forms.TableLayoutPanel container) -> void
-~System.Windows.Forms.TableLayoutPanel.ColumnStyles.get -> System.Windows.Forms.TableLayoutColumnStyleCollection
-~System.Windows.Forms.TableLayoutPanel.Controls.get -> System.Windows.Forms.TableLayoutControlCollection
-~System.Windows.Forms.TableLayoutPanel.GetCellPosition(System.Windows.Forms.Control control) -> System.Windows.Forms.TableLayoutPanelCellPosition
-~System.Windows.Forms.TableLayoutPanel.GetColumn(System.Windows.Forms.Control control) -> int
-~System.Windows.Forms.TableLayoutPanel.GetColumnSpan(System.Windows.Forms.Control control) -> int
-~System.Windows.Forms.TableLayoutPanel.GetColumnWidths() -> int[]
-~System.Windows.Forms.TableLayoutPanel.GetControlFromPosition(int column, int row) -> System.Windows.Forms.Control
-~System.Windows.Forms.TableLayoutPanel.GetPositionFromControl(System.Windows.Forms.Control control) -> System.Windows.Forms.TableLayoutPanelCellPosition
-~System.Windows.Forms.TableLayoutPanel.GetRow(System.Windows.Forms.Control control) -> int
-~System.Windows.Forms.TableLayoutPanel.GetRowHeights() -> int[]
-~System.Windows.Forms.TableLayoutPanel.GetRowSpan(System.Windows.Forms.Control control) -> int
-~System.Windows.Forms.TableLayoutPanel.LayoutSettings.get -> System.Windows.Forms.TableLayoutSettings
-~System.Windows.Forms.TableLayoutPanel.LayoutSettings.set -> void
-~System.Windows.Forms.TableLayoutPanel.RowStyles.get -> System.Windows.Forms.TableLayoutRowStyleCollection
-~System.Windows.Forms.TableLayoutPanel.SetCellPosition(System.Windows.Forms.Control control, System.Windows.Forms.TableLayoutPanelCellPosition position) -> void
-~System.Windows.Forms.TableLayoutPanel.SetColumn(System.Windows.Forms.Control control, int column) -> void
-~System.Windows.Forms.TableLayoutPanel.SetColumnSpan(System.Windows.Forms.Control control, int value) -> void
-~System.Windows.Forms.TableLayoutPanel.SetRow(System.Windows.Forms.Control control, int row) -> void
-~System.Windows.Forms.TableLayoutPanel.SetRowSpan(System.Windows.Forms.Control control, int value) -> void
+System.Windows.Forms.TableLayoutPanel.ColumnStyles.get -> System.Windows.Forms.TableLayoutColumnStyleCollection!
+System.Windows.Forms.TableLayoutPanel.Controls.get -> System.Windows.Forms.TableLayoutControlCollection!
+System.Windows.Forms.TableLayoutPanel.GetCellPosition(System.Windows.Forms.Control! control) -> System.Windows.Forms.TableLayoutPanelCellPosition
+System.Windows.Forms.TableLayoutPanel.GetColumn(System.Windows.Forms.Control! control) -> int
+System.Windows.Forms.TableLayoutPanel.GetColumnSpan(System.Windows.Forms.Control! control) -> int
+System.Windows.Forms.TableLayoutPanel.GetColumnWidths() -> int[]!
+System.Windows.Forms.TableLayoutPanel.GetControlFromPosition(int column, int row) -> System.Windows.Forms.Control?
+System.Windows.Forms.TableLayoutPanel.GetPositionFromControl(System.Windows.Forms.Control? control) -> System.Windows.Forms.TableLayoutPanelCellPosition
+System.Windows.Forms.TableLayoutPanel.GetRow(System.Windows.Forms.Control! control) -> int
+System.Windows.Forms.TableLayoutPanel.GetRowHeights() -> int[]!
+System.Windows.Forms.TableLayoutPanel.GetRowSpan(System.Windows.Forms.Control! control) -> int
+System.Windows.Forms.TableLayoutPanel.LayoutSettings.get -> System.Windows.Forms.TableLayoutSettings!
+System.Windows.Forms.TableLayoutPanel.LayoutSettings.set -> void
+System.Windows.Forms.TableLayoutPanel.RowStyles.get -> System.Windows.Forms.TableLayoutRowStyleCollection!
+System.Windows.Forms.TableLayoutPanel.SetCellPosition(System.Windows.Forms.Control! control, System.Windows.Forms.TableLayoutPanelCellPosition position) -> void
+System.Windows.Forms.TableLayoutPanel.SetColumn(System.Windows.Forms.Control! control, int column) -> void
+System.Windows.Forms.TableLayoutPanel.SetColumnSpan(System.Windows.Forms.Control! control, int value) -> void
+System.Windows.Forms.TableLayoutPanel.SetRow(System.Windows.Forms.Control! control, int row) -> void
+System.Windows.Forms.TableLayoutPanel.SetRowSpan(System.Windows.Forms.Control! control, int value) -> void
 ~System.Windows.Forms.TableLayoutRowStyleCollection.Add(System.Windows.Forms.RowStyle rowStyle) -> int
 ~System.Windows.Forms.TableLayoutRowStyleCollection.Contains(System.Windows.Forms.RowStyle rowStyle) -> bool
 ~System.Windows.Forms.TableLayoutRowStyleCollection.IndexOf(System.Windows.Forms.RowStyle rowStyle) -> int
@@ -2453,7 +2453,7 @@ virtual System.Windows.Forms.TabControl.TabPageCollection.this[int index].get ->
 virtual System.Windows.Forms.TabControl.TabPageCollection.this[int index].set -> void
 virtual System.Windows.Forms.TabControl.TabPageCollection.this[string? key].get -> System.Windows.Forms.TabPage?
 ~virtual System.Windows.Forms.TableLayoutControlCollection.Add(System.Windows.Forms.Control control, int column, int row) -> void
-~virtual System.Windows.Forms.TableLayoutPanel.OnCellPaint(System.Windows.Forms.TableLayoutCellPaintEventArgs e) -> void
+virtual System.Windows.Forms.TableLayoutPanel.OnCellPaint(System.Windows.Forms.TableLayoutCellPaintEventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStrip.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
 ~virtual System.Windows.Forms.ToolStrip.CreateLayoutSettings(System.Windows.Forms.ToolStripLayoutStyle layoutStyle) -> System.Windows.Forms.LayoutSettings
 ~virtual System.Windows.Forms.ToolStrip.DisplayedItems.get -> System.Windows.Forms.ToolStripItemCollection
@@ -10567,7 +10567,7 @@ System.Windows.Forms.TableLayoutPanel.BorderStyle.get -> System.Windows.Forms.Bo
 System.Windows.Forms.TableLayoutPanel.BorderStyle.set -> void
 System.Windows.Forms.TableLayoutPanel.CellBorderStyle.get -> System.Windows.Forms.TableLayoutPanelCellBorderStyle
 System.Windows.Forms.TableLayoutPanel.CellBorderStyle.set -> void
-System.Windows.Forms.TableLayoutPanel.CellPaint -> System.Windows.Forms.TableLayoutCellPaintEventHandler
+System.Windows.Forms.TableLayoutPanel.CellPaint -> System.Windows.Forms.TableLayoutCellPaintEventHandler?
 System.Windows.Forms.TableLayoutPanel.ColumnCount.get -> int
 System.Windows.Forms.TableLayoutPanel.ColumnCount.set -> void
 System.Windows.Forms.TableLayoutPanel.GrowStyle.get -> System.Windows.Forms.TableLayoutPanelGrowStyle
