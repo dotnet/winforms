@@ -20,7 +20,7 @@ internal static partial class Interop
         [ComImport]
         [Guid("f7063da8-8359-439c-9297-bbc5299a7d87")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IRawElementProviderFragment
+        public interface IRawElementProviderFragment : IRawElementProviderSimple
         {
             /// <summary>
             ///  Returns the element in the specified <paramref name="direction"/>.

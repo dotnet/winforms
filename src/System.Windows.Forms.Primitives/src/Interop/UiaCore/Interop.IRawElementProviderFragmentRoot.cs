@@ -16,7 +16,7 @@ internal static partial class Interop
         [ComImport]
         [Guid("620ce2a5-ab8f-40a9-86cb-de3c75599b58")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IRawElementProviderFragmentRoot
+        public interface IRawElementProviderFragmentRoot : IRawElementProviderFragment
         {
             /// <summary>
             ///  Return the child element at the specified point, if one exists,
