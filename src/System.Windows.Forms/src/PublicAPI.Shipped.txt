@@ -330,7 +330,7 @@ override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Va
 ~override System.Windows.Forms.Design.ComponentEditorForm.OnActivated(System.EventArgs e) -> void
 ~override System.Windows.Forms.Design.ComponentEditorForm.OnHelpRequested(System.Windows.Forms.HelpEventArgs e) -> void
 ~override System.Windows.Forms.Design.ComponentEditorPage.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Equals(object obj) -> bool
+override System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Equals(object? obj) -> bool
 ~override System.Windows.Forms.ErrorProvider.Site.set -> void
 ~override System.Windows.Forms.HelpProvider.ToString() -> string
 ~override System.Windows.Forms.HtmlDocument.Equals(object obj) -> bool
@@ -713,7 +713,7 @@ override System.Windows.Forms.UserControl.Text.set -> void
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Default -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.No -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Yes -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
-~static readonly System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Default -> System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute
+static readonly System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Default -> System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute!
 ~static System.Resources.ResXResourceReader.FromFileContents(string fileContents) -> System.Resources.ResXResourceReader
 ~static System.Resources.ResXResourceReader.FromFileContents(string fileContents, System.ComponentModel.Design.ITypeResolutionService typeResolver) -> System.Resources.ResXResourceReader
 ~static System.Resources.ResXResourceReader.FromFileContents(string fileContents, System.Reflection.AssemblyName[] assemblyNames) -> System.Resources.ResXResourceReader
