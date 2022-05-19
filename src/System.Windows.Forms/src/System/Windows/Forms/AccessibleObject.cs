@@ -1791,11 +1791,11 @@ namespace System.Windows.Forms
 
         protected void UseStdAccessibleObjects(IntPtr handle, int objid)
         {
-            Guid IID_IAccessible = IID.IAccessible;
+            Guid accessibleIID = IID.IAccessible;
             var result = Oleacc.CreateStdAccessibleObject(
                 new HandleRef(this, handle),
                 objid,
-                ref IID_IAccessible,
+                ref accessibleIID,
                 out IntPtr accessibilePtr);
             if (result.Succeeded())
             {
@@ -1805,11 +1805,11 @@ namespace System.Windows.Forms
                 _systemIOleWindow = (Ole32.IOleWindow?)accessible;
             }
 
-            Guid IID_IEnumVariant = IID.IEnumVariant;
+            Guid enumVariantIID = IID.IEnumVariant;
             result = Oleacc.CreateStdAccessibleObject(
                 new HandleRef(this, handle),
                 objid,
-                ref IID_IEnumVariant,
+                ref enumVariantIID,
                 out IntPtr enumVariantPtr);
             if (result.Succeeded())
             {

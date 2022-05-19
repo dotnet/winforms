@@ -461,7 +461,7 @@ namespace System.Windows.Forms.InteropTests
                 DropDownStyle = ComboBoxStyle.DropDown
             };
             control.CreateControl();
-            ComboBox.ComboBoxAccessibleObject accessibleObject = new ComboBox.ComboBoxAccessibleObject(control);
+            ComboBox.ComboBoxAccessibleObject accessibleObject = new(control);
             accessibleObject.AccessibleObjectId = User32.OBJID.WINDOW;
 
             var accessible = (Accessibility.IAccessible)accessibleObject;
