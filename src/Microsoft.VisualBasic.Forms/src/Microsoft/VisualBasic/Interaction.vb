@@ -286,9 +286,9 @@ Namespace Microsoft.VisualBasic
                 ParentWindow = vbhost.GetParentWindow()
             End If
 
-            If String.IsNullOrEmpty(Title) Then
+            If Title Is Nothing Then
                 If vbhost Is Nothing Then
-                    Title = GetTitleFromAssembly(System.Reflection.Assembly.GetCallingAssembly())
+                    Title = GetTitleFromCallingAssembly()
                 Else
                     Title = vbhost.GetWindowTitle()
                 End If
@@ -315,6 +315,28 @@ Namespace Microsoft.VisualBasic
 
         Private Function GetTitleFromAssembly(CallingAssembly As Reflection.Assembly) As String
 
+            'Tries to get the title using the AssemblyProduct attribute, which
+            'can be controlled with the Product property in a project file.
+            Dim attribs = CallingAssembly.GetCustomAttributes(GetType(Reflection.AssemblyProductAttribute), False)
+            If attribs IsNot Nothing AndAlso attribs.Length > 0 Then
+
+                Dim Title = DirectCast(attribs(0), Reflection.AssemblyProductAttribute).Product
+
+                '"Microsoft® .NET" is the default Product name when one is not
+                'explicitly specified, fall back to default case (use assembly name)
+                If Title <> "Microsoft® .NET" Then
+                    Return Title
+                End If
+
+            End If
+
+            'Default case: no assembly product name, fall back to assembly name
+            Return Nothing
+
+        End Function
+
+        Private Function GetNameFromAssembly(CallingAssembly As Reflection.Assembly) As String
+
             Dim Title As String
 
             'Get the Assembly name of the calling assembly 
@@ -338,7 +360,54 @@ Namespace Microsoft.VisualBasic
             End Try
 
             Return Title
+        End Function
 
+        Private Function GetTitleFromCallingAssembly() As String
+            Dim stackTrace As New StackTrace()
+
+            Dim frames = stackTrace.GetFrames()
+
+            Dim Title As String
+
+            'By reading the frames, we maintain the old behavior of using the title / name of the calling
+            'assembly (unless inlined), not necessarily the name of the application as a whole.
+            For i As Integer = 0 To frames.Length - 1
+                Dim frame = frames(i)
+                If frame.HasMethod() Then
+
+                    Dim assembly = frame.GetMethod().DeclaringType.Assembly
+                    Dim name = GetNameFromAssembly(assembly)
+
+                    'The following strings are the assembly names between the public api and here, this
+                    'may break in the future and the list may need to be expanded. This also does not
+                    'account for any of these assemblies using these apis without specifying a title,
+                    'but this it is not likely that the title wouldn't be specified in these calls.
+                    If name <> "Microsoft.VisualBasic.Forms" AndAlso name <> "System.Private.CoreLib" AndAlso name <> "Microsoft.VisualBasic.Core" Then
+                        Title = GetTitleFromAssembly(assembly)
+                        If Title Is Nothing Then
+                            Title = name
+                        End If
+                        Return Title
+                    End If
+
+                End If
+            Next
+
+            'Attempt to fallback to entry assembly, this can fail when GetEntryAssembly() returns
+            'Nothing. This code is only ever called if there is no stack trace outside of the known
+            'excluded assemblies, in which case it fall back to using the entry assembly.
+            Dim entryAssembly = Reflection.Assembly.GetEntryAssembly()
+            If entryAssembly IsNot Nothing Then
+                Title = GetTitleFromAssembly(entryAssembly)
+                If Title Is Nothing Then
+                    Title = GetNameFromAssembly(entryAssembly)
+                End If
+                Return Title
+            End If
+
+            'This can return "Microsoft® .NET" instead of something useful if the product name is not
+            'specified in the project file, this is the fallback for no stack trace and no entry assembly.
+            Return System.Windows.Forms.Application.ProductName
         End Function
 
         Private Function InternalInputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As Windows.Forms.IWin32Window) As String
@@ -387,7 +456,7 @@ Namespace Microsoft.VisualBasic
             Try
                 If Title Is Nothing Then
                     If vbhost Is Nothing Then
-                        sTitle = GetTitleFromAssembly(System.Reflection.Assembly.GetCallingAssembly())
+                        sTitle = GetTitleFromCallingAssembly()
                     Else
                         sTitle = vbhost.GetWindowTitle()
                     End If
