@@ -488,7 +488,7 @@ namespace System.Windows.Forms
             return TableLayout.GetControlFromPosition(Owner, column, row);
         }
 
-        internal TableLayoutPanelCellPosition GetPositionFromControl(IArrangedElement? element)
+        internal TableLayoutPanelCellPosition GetPositionFromControl(IArrangedElement element)
         {
             return TableLayout.GetPositionFromControl(Owner, element);
         }

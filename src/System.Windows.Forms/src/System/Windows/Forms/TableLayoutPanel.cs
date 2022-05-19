@@ -299,7 +299,7 @@ namespace System.Windows.Forms
             return (Control?)_tableLayoutSettings.GetControlFromPosition(column, row);
         }
 
-        public TableLayoutPanelCellPosition GetPositionFromControl(Control? control)
+        public TableLayoutPanelCellPosition GetPositionFromControl(Control control)
         {
             return _tableLayoutSettings.GetPositionFromControl(control);
         }
