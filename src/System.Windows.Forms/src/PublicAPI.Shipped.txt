@@ -1503,7 +1503,7 @@ System.Windows.Forms.TableLayoutPanel.GetColumn(System.Windows.Forms.Control! co
 System.Windows.Forms.TableLayoutPanel.GetColumnSpan(System.Windows.Forms.Control! control) -> int
 System.Windows.Forms.TableLayoutPanel.GetColumnWidths() -> int[]!
 System.Windows.Forms.TableLayoutPanel.GetControlFromPosition(int column, int row) -> System.Windows.Forms.Control?
-System.Windows.Forms.TableLayoutPanel.GetPositionFromControl(System.Windows.Forms.Control! control) -> System.Windows.Forms.TableLayoutPanelCellPosition
+System.Windows.Forms.TableLayoutPanel.GetPositionFromControl(System.Windows.Forms.Control? control) -> System.Windows.Forms.TableLayoutPanelCellPosition
 System.Windows.Forms.TableLayoutPanel.GetRow(System.Windows.Forms.Control! control) -> int
 System.Windows.Forms.TableLayoutPanel.GetRowHeights() -> int[]!
 System.Windows.Forms.TableLayoutPanel.GetRowSpan(System.Windows.Forms.Control! control) -> int
