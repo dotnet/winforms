@@ -4,6 +4,7 @@
 
 using Xunit;
 using Xunit.Abstractions;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.UITests
 {
@@ -20,14 +21,9 @@ namespace System.Windows.Forms.UITests
             await RunSingleControlTestAsync<NumericUpDown>((form, control) =>
             {
                 var accessibleObject = control.AccessibilityObject;
-                form.BringToFront();
+                form.Activate();
                 control.Focus();
 
-                Assert.True(control.Focused, "NumericUpDown should be focused");
-                this.TestOutputHelper.WriteLine($"Textbox state: {accessibleObject.GetChild(0)!.State}");
-                Assert.True(
-                    AccessibleStates.Focused == (accessibleObject.GetChild(0)!.State & AccessibleStates.Focused),
-                    "NumericUpDown's text box accessbile object state should be focused");
                 var focused = accessibleObject.GetFocused();
                 Assert.NotNull(focused);
 
