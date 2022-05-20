@@ -4,7 +4,6 @@
 
 using Xunit;
 using Xunit.Abstractions;
-using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.UITests
 {
