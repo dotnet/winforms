@@ -17,16 +17,15 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public async Task NumericUpDownAccessibleObject_Focused_ReturnsCorrectValueAsync()
         {
-            await RunSingleControlTestAsync<NumericUpDown>((form, control) =>
+            await RunSingleControlTestAsync<NumericUpDown>(async (form, control) =>
             {
                 var accessibleObject = control.AccessibilityObject;
+                await MoveMouseToControlAsync(control);
                 form.Activate();
                 control.Focus();
 
                 var focused = accessibleObject.GetFocused();
                 Assert.NotNull(focused);
-
-                return Task.CompletedTask;
             });
         }
     }
