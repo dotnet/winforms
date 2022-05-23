@@ -1,47 +1,50 @@
-System.Windows.Forms.CommandEventArgs
-System.Windows.Forms.CommandEventArgs.CommandEventArgs() -> void
-System.Windows.Forms.CommandEventArgs.CommandEventArgs(bool cancel) -> void
-System.Windows.Forms.CommandEventHandler
 System.Windows.Forms.BindingMemberInfo.Equals(System.Windows.Forms.BindingMemberInfo other) -> bool
 System.Windows.Forms.ButtonBase.Command.get -> System.Windows.Input.ICommand?
 System.Windows.Forms.ButtonBase.Command.set -> void
-System.Windows.Forms.ButtonBase.CommandCanExecuteChanged -> System.Windows.Forms.CommandEventHandler!
+System.Windows.Forms.ButtonBase.CommandCanExecuteChanged -> System.EventHandler!
 System.Windows.Forms.ButtonBase.CommandChanged -> System.EventHandler!
-System.Windows.Forms.ButtonBase.CommandExecute -> System.Windows.Forms.CommandEventHandler!
+System.Windows.Forms.ButtonBase.CommandExecute -> System.ComponentModel.CancelEventHandler!
+System.Windows.Forms.ButtonBase.CommandParameter.get -> object?
+System.Windows.Forms.ButtonBase.CommandParameter.set -> void
+System.Windows.Forms.ButtonBase.CommandParameterChanged -> System.EventHandler!
 System.Windows.Forms.Control.DataContextChanged -> System.EventHandler
 System.Windows.Forms.ICommandProvider
-System.Windows.Forms.ICommandProvider.CommandCanExecuteChanged -> System.Windows.Forms.CommandEventHandler
+System.Windows.Forms.ICommandProvider.CommandCanExecuteChanged -> System.EventHandler
 System.Windows.Forms.ICommandProvider.CommandChanged -> System.EventHandler
-System.Windows.Forms.ICommandProvider.CommandExecute -> System.Windows.Forms.CommandEventHandler
+System.Windows.Forms.ICommandProvider.CommandExecute -> System.ComponentModel.CancelEventHandler
 System.Windows.Forms.ICommandProvider.Enabled.get -> bool
 System.Windows.Forms.ICommandProvider.Enabled.set -> void
 System.Windows.Forms.LinkArea.Equals(System.Windows.Forms.LinkArea other) -> bool
 System.Windows.Forms.TableLayoutPanelCellPosition.Equals(System.Windows.Forms.TableLayoutPanelCellPosition other) -> bool
-System.Windows.Forms.ToolStripItem.CommandCanExecuteChanged -> System.Windows.Forms.CommandEventHandler
+System.Windows.Forms.ToolStripItem.CommandCanExecuteChanged -> System.EventHandler
 System.Windows.Forms.ToolStripItem.CommandChanged -> System.EventHandler
-System.Windows.Forms.ToolStripItem.CommandExecute -> System.Windows.Forms.CommandEventHandler
 System.Windows.Forms.ToolStripItem.BindingContextChanged -> System.EventHandler
+System.Windows.Forms.ToolStripItem.CommandExecute -> System.ComponentModel.CancelEventHandler
+System.Windows.Forms.ToolStripItem.CommandParameterChanged -> System.EventHandler
 override System.Windows.Forms.ButtonBase.OnClick(System.EventArgs! e) -> void
 override System.Windows.Forms.Form.OnGotFocus(System.EventArgs! e) -> void
-virtual System.Windows.Forms.ButtonBase.OnCommandCanExecuteChanged(object! sender, System.Windows.Forms.CommandEventArgs! e) -> void
+virtual System.Windows.Forms.ButtonBase.OnCommandCanExecuteChanged(object! sender, System.EventArgs! e) -> void
 virtual System.Windows.Forms.ButtonBase.OnCommandChanged(System.EventArgs! e) -> void
-virtual System.Windows.Forms.ButtonBase.OnCommandExecute(System.Windows.Forms.CommandEventArgs! e) -> void
+virtual System.Windows.Forms.ButtonBase.OnCommandExecute(System.ComponentModel.CancelEventArgs! e) -> void
+virtual System.Windows.Forms.ButtonBase.OnCommandParameterChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.DataContext.get -> object?
 virtual System.Windows.Forms.Control.DataContext.set -> void
-~System.Windows.Forms.CommandEventArgs.CommandEventArgs(bool cancel, object parameter) -> void
-~System.Windows.Forms.CommandEventArgs.Parameter.get -> object
-~System.Windows.Forms.CommandEventArgs.Parameter.set -> void
 ~System.Windows.Forms.ICommandProvider.Command.get -> System.Windows.Input.ICommand
 ~System.Windows.Forms.ICommandProvider.Command.set -> void
+~System.Windows.Forms.ICommandProvider.CommandParameter.get -> object
+~System.Windows.Forms.ICommandProvider.CommandParameter.set -> void
 ~System.Windows.Forms.ToolStripItem.Command.get -> System.Windows.Input.ICommand
 ~System.Windows.Forms.ToolStripItem.Command.set -> void
 ~System.Windows.Forms.ToolStripItem.BindingContext.get -> System.Windows.Forms.BindingContext
 ~System.Windows.Forms.ToolStripItem.BindingContext.set -> void
+~System.Windows.Forms.ToolStripItem.CommandParameter.get -> object
+~System.Windows.Forms.ToolStripItem.CommandParameter.set -> void
 ~System.Windows.Forms.ToolStripItem.DataBindings.get -> System.Windows.Forms.ControlBindingsCollection
 ~override System.Windows.Forms.ToolStripDropDownMenu.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~virtual System.Windows.Forms.Control.OnDataContextChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnParentDataContextChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnCommandCanExecuteChanged(object sender, System.Windows.Forms.CommandEventArgs e) -> void
+~virtual System.Windows.Forms.ToolStripItem.OnCommandCanExecuteChanged(object sender, System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnCommandChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnCommandExecute(System.Windows.Forms.CommandEventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnBindingContextChanged(System.EventArgs e) -> void
+~virtual System.Windows.Forms.ToolStripItem.OnCommandExecute(System.ComponentModel.CancelEventArgs e) -> void
+~virtual System.Windows.Forms.ToolStripItem.OnCommandParameterChanged(System.EventArgs e) -> void

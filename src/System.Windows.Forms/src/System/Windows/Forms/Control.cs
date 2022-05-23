@@ -893,16 +893,20 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  An ambient property to hold a data source for binding purposes.
+        ///  Reassignment to BindingSources or other binding mechanism is
+        ///  the responsibility of the control once notified by
+        ///  the <see cref="Control.DataContextChanged"/> event.
+        /// </summary>
+        [SRCategory(nameof(SR.CatData))]
         public virtual Object? DataContext
         {
             get
             {
-                bool hasOwnDataContext = Properties.ContainsObject(s_dataContextProperty);
-
-                if (!hasOwnDataContext)
+                if (!Properties.ContainsObject(s_dataContextProperty))
                 {
-                    Control parent = ParentInternal;
-                    return parent?.DataContext;
+                    return ParentInternal?.DataContext;
                 }
 
                 return Properties.GetObject(s_dataContextProperty);
@@ -911,10 +915,7 @@ namespace System.Windows.Forms
             {
                 if (!Equals(value, DataContext))
                 {
-                    bool hasOwnDataContext = Properties.ContainsObject(s_dataContextProperty);
-                    Control parent = ParentInternal;
-
-                    if (hasOwnDataContext && Equals(parent?.DataContext, value))
+                    if (Properties.ContainsObject(s_dataContextProperty) && Equals(ParentInternal?.DataContext, value))
                     {
                         Properties.RemoveObject(s_dataContextProperty);
                         OnDataContextChanged(EventArgs.Empty);
@@ -926,6 +927,12 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+        private bool ShouldSerializeDataContext()
+            => Properties.ContainsObject(s_dataContextProperty);
+
+        private void ResetDataContext()
+            => Properties.RemoveObject(s_dataContextProperty);
 
         /// <summary>
         ///  The background color of this control. This is an ambient property and

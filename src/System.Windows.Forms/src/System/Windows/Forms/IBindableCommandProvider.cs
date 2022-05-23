@@ -4,25 +4,25 @@
 
 #nullable disable
 
+using System.ComponentModel;
 using System.Windows.Input;
 
 namespace System.Windows.Forms
 {
-    public delegate void CommandEventHandler(object sender, CommandEventArgs e);
-
     public interface ICommandProvider
     {
         event EventHandler CommandChanged;
-        event CommandEventHandler CommandCanExecuteChanged;
-        event CommandEventHandler CommandExecute;
+        event EventHandler CommandCanExecuteChanged;
+        event CancelEventHandler CommandExecute;
 
         ICommand Command { get; set; }
+        object CommandParameter { get; set; }
         bool Enabled { get; set; }
 
         protected bool? PreviousEnabledStatus { get; set; }
         protected void HandleCommandChanged(EventArgs e);
-        protected void HandleCommandCanExecuteChanged(object sender, CommandEventArgs e);
-        protected void HandleCommandExecute(CommandEventArgs e);
+        protected void HandleCommandCanExecuteChanged(object sender, EventArgs e);
+        protected void HandleCommandExecute(CancelEventArgs e);
 
         protected static void CommandSetter(
             ICommandProvider commandComponent,
@@ -32,12 +32,12 @@ namespace System.Windows.Forms
 
         protected static void RequestCommandExecute(ICommandProvider commandComponent)
         {
-            CommandEventArgs e = new();
+            CancelEventArgs e = new();
             commandComponent.HandleCommandExecute(e);
 
-            if (!e.Cancel && (commandComponent.Command?.CanExecute(null) ?? false))
+            if (!e.Cancel && (commandComponent.Command?.CanExecute(commandComponent.CommandParameter) ?? false))
             {
-                commandComponent.Command?.Execute(null);
+                commandComponent.Command?.Execute(commandComponent.CommandParameter);
             }
         }
 
@@ -72,18 +72,18 @@ namespace System.Windows.Forms
 
                 commandBackingField.CanExecuteChanged += CommandCanExecuteChangedProc;
                 PreviousEnabledStatus ??= Enabled;
-                Enabled = commandBackingField.CanExecute(null);
+                Enabled = commandBackingField.CanExecute(CommandParameter);
             }
         }
 
         private void CommandCanExecuteChangedProc(object sender, EventArgs e)
         {
-            CommandEventArgs commandEventArgs = new();
-            HandleCommandCanExecuteChanged(sender, commandEventArgs);
+            CancelEventArgs cancelEventArgs = new();
+            HandleCommandCanExecuteChanged(sender, cancelEventArgs);
 
-            if (!commandEventArgs.Cancel)
+            if (!cancelEventArgs.Cancel)
             {
-                Enabled = Command?.CanExecute(commandEventArgs.Parameter) ?? false;
+                Enabled = Command?.CanExecute(CommandParameter) ?? false;
             }
         }
     }
@@ -91,8 +91,8 @@ namespace System.Windows.Forms
     internal class CommandControl : Control, ICommandProvider
     {
         public event EventHandler CommandChanged;
-        public event CommandEventHandler CommandCanExecuteChanged;
-        public event CommandEventHandler CommandExecute;
+        public event EventHandler CommandCanExecuteChanged;
+        public event CancelEventHandler CommandExecute;
 
         private ICommand _command;
 
@@ -102,24 +102,26 @@ namespace System.Windows.Forms
             set => ICommandProvider.CommandSetter(this, value, ref _command);
         }
 
+        public object CommandParameter { get; set; }
+
         bool? ICommandProvider.PreviousEnabledStatus { get; set; }
 
         protected virtual void OnCommandChanged(EventArgs e)
             => CommandChanged?.Invoke(this, e);
 
-        protected virtual void OnCommandCanExecuteChanged(object sender, CommandEventArgs e)
+        protected virtual void OnCommandCanExecuteChanged(object sender, EventArgs e)
             => CommandCanExecuteChanged?.Invoke(this, e);
 
         void ICommandProvider.HandleCommandChanged(EventArgs e)
             => OnCommandChanged(e);
 
-        void ICommandProvider.HandleCommandCanExecuteChanged(object sender, CommandEventArgs e)
+        void ICommandProvider.HandleCommandCanExecuteChanged(object sender, EventArgs e)
             => OnCommandCanExecuteChanged(sender, e);
 
-        void ICommandProvider.HandleCommandExecute(CommandEventArgs e)
+        void ICommandProvider.HandleCommandExecute(CancelEventArgs e)
             => OnCommandExecute(e);
 
-        protected virtual void OnCommandExecute(CommandEventArgs e)
+        protected virtual void OnCommandExecute(CancelEventArgs e)
             => CommandExecute?.Invoke(this, e);
 
         protected override void OnClick(EventArgs e)

@@ -62,10 +62,11 @@ namespace System.Windows.Forms
 
         private ToolStripItemDisplayStyle _displayStyle = ToolStripItemDisplayStyle.ImageAndText;
 
-        // Backing fields for Infrastructure to make ToolStripItem bindable.
+        // Backing fields for the infrastructure to make ToolStripItem bindable and introduce (bindable) ICommand.
         private BindingContext _bindingContext;
         private ControlBindingsCollection _dataBindings;
         private System.Windows.Input.ICommand _command;
+        private object _commandParameter;
 
         private static readonly ArrangedElementCollection s_emptyChildCollection = new ArrangedElementCollection();
 
@@ -99,6 +100,7 @@ namespace System.Windows.Forms
         internal static readonly object s_textChangedEvent = new object();
 
         internal static readonly object s_commandChangedEvent = new object();
+        internal static readonly object s_commandParameterChangedEvent = new object();
         internal static readonly object s_commandExecuteEvent = new object();
         internal static readonly object s_commandCanExecuteChangedEvent = new object();
         internal static readonly object s_bindingContextChangedEvent = new object();
@@ -424,44 +426,6 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(s_availableChangedEvent, value);
         }
 
-        /// <summary>
-        ///  The BackColor of the item
-        /// </summary>
-        [SRCategory(nameof(SR.CatAppearance))]
-        [SRDescription(nameof(SR.ToolStripItemBackColorDescr))]
-        public virtual Color BackColor
-        {
-            get
-            {
-                Color c = RawBackColor;
-                if (!c.IsEmpty)
-                {
-                    return c;
-                }
-
-                Control p = ParentInternal;
-                if (p is not null)
-                {
-                    return p.BackColor;
-                }
-
-                return Control.DefaultBackColor;
-            }
-            set
-            {
-                Color c = BackColor;
-                if (!value.IsEmpty || Properties.ContainsObject(s_backColorProperty))
-                {
-                    Properties.SetColor(s_backColorProperty, value);
-                }
-
-                if (!c.Equals(BackColor))
-                {
-                    OnBackColorChanged(EventArgs.Empty);
-                }
-            }
-        }
-
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ToolStripItemOnBackColorChangedDescr))]
         public event EventHandler BackColorChanged
@@ -532,18 +496,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the Command.CanExecute status has changed
+        /// Occurs when the Command.CanExecute status has changed.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event CommandEventHandler CommandCanExecuteChanged
+        public event EventHandler CommandCanExecuteChanged
         {
             add => Events.AddHandler(s_commandCanExecuteChangedEvent, value);
             remove => Events.RemoveHandler(s_commandCanExecuteChangedEvent, value);
         }
 
         /// <summary>
-        /// Occurs when the Command has changed
+        /// Occurs when the Command has changed.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -558,10 +522,38 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event CommandEventHandler CommandExecute
+        public event CancelEventHandler CommandExecute
         {
             add => Events.AddHandler(s_commandExecuteEvent, value);
             remove => Events.RemoveHandler(s_commandExecuteEvent, value);
+        }
+
+        [Bindable(true)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatData))]
+        public object CommandParameter
+        {
+            get => _commandParameter;
+            set
+            {
+                if (!Equals(_commandParameter, value))
+                {
+                    _commandParameter = value;
+                    OnCommandParameterChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Occurs when the CommandParameter has changed.
+        /// </summary>
+        [SRCategory(nameof(SR.CatData))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event EventHandler CommandParameterChanged
+        {
+            add => Events.AddHandler(s_commandParameterChangedEvent, value);
+            remove => Events.RemoveHandler(s_commandParameterChangedEvent, value);
         }
 
         [Browsable(false)]
@@ -592,6 +584,44 @@ namespace System.Windows.Forms
         {
             add => Events.AddHandler(s_bindingContextChangedEvent, value);
             remove => Events.RemoveHandler(s_bindingContextChangedEvent, value);
+        }
+
+        /// <summary>
+        ///  The BackColor of the item
+        /// </summary>
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripItemBackColorDescr))]
+        public virtual Color BackColor
+        {
+            get
+            {
+                Color c = RawBackColor;
+                if (!c.IsEmpty)
+                {
+                    return c;
+                }
+
+                Control p = ParentInternal;
+                if (p is not null)
+                {
+                    return p.BackColor;
+                }
+
+                return Control.DefaultBackColor;
+            }
+            set
+            {
+                Color c = BackColor;
+                if (!value.IsEmpty || Properties.ContainsObject(s_backColorProperty))
+                {
+                    Properties.SetColor(s_backColorProperty, value);
+                }
+
+                if (!c.Equals(BackColor))
+                {
+                    OnBackColorChanged(EventArgs.Empty);
+                }
+            }
         }
 
         /// <summary>
@@ -2461,11 +2491,11 @@ namespace System.Windows.Forms
             => OnCommandChanged(e);
 
         // Called by the ICommandProvider's internal DIM-based logic.
-        void ICommandProvider.HandleCommandCanExecuteChanged(object sender, CommandEventArgs e)
+        void ICommandProvider.HandleCommandCanExecuteChanged(object sender, EventArgs e)
             => OnCommandCanExecuteChanged(sender, e);
 
         // Called by the ICommandProvider's internal DIM-based logic.
-        void ICommandProvider.HandleCommandExecute(CommandEventArgs e)
+        void ICommandProvider.HandleCommandExecute(CancelEventArgs e)
             => OnCommandExecute(e);
 
         private void HandleClick(EventArgs e)
@@ -2775,7 +2805,7 @@ namespace System.Windows.Forms
         ///  Call base.CommandExecute to send this event to any registered event listeners.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnCommandExecute(CommandEventArgs e)
+        protected virtual void OnCommandExecute(CancelEventArgs e)
             => RaiseEvent(s_commandExecuteEvent, e);
 
         /// <summary>
@@ -2784,8 +2814,17 @@ namespace System.Windows.Forms
         ///  Call base.CommandCanExecuteChanged to send this event to any registered event listeners.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnCommandCanExecuteChanged(object sender, CommandEventArgs e)
+        protected virtual void OnCommandCanExecuteChanged(object sender, EventArgs e)
             => ((EventHandler)Events[s_commandCanExecuteChangedEvent])?.Invoke(sender, e);
+
+        /// <summary>
+        ///  Raises the <see cref="ToolStripItem.CommandParameterChanged"/> event.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.CommandChanged to send this event to any registered event listeners.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnCommandParameterChanged(EventArgs e)
+            => RaiseEvent(s_commandParameterChangedEvent, e);
 
         /// <summary>
         ///  Raises the <see cref="ToolStripItem.BindingContextChanged"/> event.
