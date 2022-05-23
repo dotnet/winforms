@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31329.18
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32424.78
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinformsControlsTest", "src\System.Windows.Forms\tests\IntegrationTests\WinformsControlsTest\WinformsControlsTest.csproj", "{657472B8-FDA3-49DF-B8BE-0246046A4348}"
 EndProject
@@ -183,6 +183,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeHost.ManagedControl", "src\System.Windows.Forms\tests\IntegrationTests\NativeHost.ManagedControl\NativeHost.ManagedControl.csproj", "{3129970B-A4EB-46AC-B163-18A5557B11BD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDataGridViewTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiDataGridViewTests\MauiDataGridViewTests.csproj", "{2F9A5C52-52AF-48BE-A544-0ECDD7675F77}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.UI.IntegrationTests", "src\System.Windows.Forms\tests\IntegrationTests\UIIntegrationTests\System.Windows.Forms.UI.IntegrationTests.csproj", "{E411F40E-F7DC-41B1-B5B8-88108A1FA296}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1076,6 +1078,22 @@ Global
 		{2F9A5C52-52AF-48BE-A544-0ECDD7675F77}.Release|x64.Build.0 = Release|Any CPU
 		{2F9A5C52-52AF-48BE-A544-0ECDD7675F77}.Release|x86.ActiveCfg = Release|Any CPU
 		{2F9A5C52-52AF-48BE-A544-0ECDD7675F77}.Release|x86.Build.0 = Release|Any CPU
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296}.Debug|arm64.Build.0 = Debug|Any CPU
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296}.Debug|x64.Build.0 = Debug|Any CPU
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296}.Debug|x86.Build.0 = Debug|Any CPU
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296}.Release|arm64.ActiveCfg = Release|Any CPU
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296}.Release|arm64.Build.0 = Release|Any CPU
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296}.Release|x64.ActiveCfg = Release|Any CPU
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296}.Release|x64.Build.0 = Release|Any CPU
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296}.Release|x86.ActiveCfg = Release|Any CPU
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1146,6 +1164,7 @@ Global
 		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{3129970B-A4EB-46AC-B163-18A5557B11BD} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{2F9A5C52-52AF-48BE-A544-0ECDD7675F77} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{E411F40E-F7DC-41B1-B5B8-88108A1FA296} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
