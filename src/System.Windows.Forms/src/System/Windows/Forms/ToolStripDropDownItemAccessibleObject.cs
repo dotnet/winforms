@@ -208,7 +208,9 @@ namespace System.Windows.Forms
                     return null;
                 case UiaCore.NavigateDirection.FirstChild:
                 case UiaCore.NavigateDirection.LastChild:
-                    return _owner.DropDownItems.Count > 0
+                    // Don't add invisible items to the accessibility tree,
+                    // they might not have been created yet.
+                    return _owner.DropDown.Visible
                         ? _owner.DropDown.AccessibilityObject
                         : null;
             }

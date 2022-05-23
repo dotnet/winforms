@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -20,7 +18,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         private readonly Label _titleLabel;
         private readonly Label _descriptionLabel;
-        private string _fullDescription;
+        private string? _fullDescription;
 
         private int _lineHeight;
         private bool _needUpdateUIWithFont = true;

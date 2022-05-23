@@ -109,8 +109,8 @@ override System.Windows.Forms.ColumnHeaderConverter.ConvertTo(System.ComponentMo
 ~override System.Windows.Forms.DataGridView.OnVisibleChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.Text.get -> string
 ~override System.Windows.Forms.DataGridView.Text.set -> void
-~override System.Windows.Forms.DataGridViewAdvancedBorderStyle.Equals(object other) -> bool
-~override System.Windows.Forms.DataGridViewAdvancedBorderStyle.ToString() -> string
+override System.Windows.Forms.DataGridViewAdvancedBorderStyle.Equals(object? other) -> bool
+override System.Windows.Forms.DataGridViewAdvancedBorderStyle.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewButtonCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewButtonCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridViewButtonCell.EditType.get -> System.Type
@@ -330,7 +330,7 @@ override System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Va
 ~override System.Windows.Forms.Design.ComponentEditorForm.OnActivated(System.EventArgs e) -> void
 ~override System.Windows.Forms.Design.ComponentEditorForm.OnHelpRequested(System.Windows.Forms.HelpEventArgs e) -> void
 ~override System.Windows.Forms.Design.ComponentEditorPage.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Equals(object obj) -> bool
+override System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Equals(object? obj) -> bool
 ~override System.Windows.Forms.ErrorProvider.Site.set -> void
 ~override System.Windows.Forms.HelpProvider.ToString() -> string
 ~override System.Windows.Forms.HtmlDocument.Equals(object obj) -> bool
@@ -340,16 +340,16 @@ override System.Windows.Forms.Layout.TableLayoutSettingsTypeConverter.CanConvert
 override System.Windows.Forms.Layout.TableLayoutSettingsTypeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
 override System.Windows.Forms.Layout.TableLayoutSettingsTypeConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
 override System.Windows.Forms.Layout.TableLayoutSettingsTypeConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
-~override System.Windows.Forms.LinkArea.Equals(object o) -> bool
-~override System.Windows.Forms.LinkArea.LinkAreaConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-~override System.Windows.Forms.LinkArea.LinkAreaConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Windows.Forms.LinkArea.LinkAreaConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Windows.Forms.LinkArea.LinkAreaConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Windows.Forms.LinkArea.LinkAreaConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext context, System.Collections.IDictionary propertyValues) -> object
-~override System.Windows.Forms.LinkArea.LinkAreaConverter.GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
-~override System.Windows.Forms.LinkArea.LinkAreaConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext context, object value, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
-~override System.Windows.Forms.LinkArea.LinkAreaConverter.GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
-~override System.Windows.Forms.LinkArea.ToString() -> string
+override System.Windows.Forms.LinkArea.Equals(object? o) -> bool
+override System.Windows.Forms.LinkArea.LinkAreaConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
+override System.Windows.Forms.LinkArea.LinkAreaConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Windows.Forms.LinkArea.LinkAreaConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
+override System.Windows.Forms.LinkArea.LinkAreaConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
+override System.Windows.Forms.LinkArea.LinkAreaConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext? context, System.Collections.IDictionary! propertyValues) -> object!
+override System.Windows.Forms.LinkArea.LinkAreaConverter.GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
+override System.Windows.Forms.LinkArea.LinkAreaConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext? context, object! value, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection!
+override System.Windows.Forms.LinkArea.LinkAreaConverter.GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
+override System.Windows.Forms.LinkArea.ToString() -> string!
 ~override System.Windows.Forms.LinkLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.LinkLabel.OnAutoSizeChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.LinkLabel.OnEnabledChanged(System.EventArgs e) -> void
@@ -522,8 +522,8 @@ override System.Windows.Forms.TabPage.ToString() -> string!
 ~override System.Windows.Forms.ToolStripContainer.Cursor.set -> void
 ~override System.Windows.Forms.ToolStripContainer.OnRightToLeftChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ToolStripContainer.OnSizeChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripContentPanel.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripContentPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
+override System.Windows.Forms.ToolStripContentPanel.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripContentPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
 ~override System.Windows.Forms.ToolStripControlHost.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.ToolStripControlHost.BackgroundImage.set -> void
 ~override System.Windows.Forms.ToolStripControlHost.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -713,7 +713,7 @@ override System.Windows.Forms.UserControl.Text.set -> void
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Default -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.No -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Yes -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
-~static readonly System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Default -> System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute
+static readonly System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Default -> System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute!
 ~static System.Resources.ResXResourceReader.FromFileContents(string fileContents) -> System.Resources.ResXResourceReader
 ~static System.Resources.ResXResourceReader.FromFileContents(string fileContents, System.ComponentModel.Design.ITypeResolutionService typeResolver) -> System.Resources.ResXResourceReader
 ~static System.Resources.ResXResourceReader.FromFileContents(string fileContents, System.Reflection.AssemblyName[] assemblyNames) -> System.Resources.ResXResourceReader
@@ -1456,12 +1456,12 @@ System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Owner.set -
 ~System.Windows.Forms.LinkLabel.OverrideCursor.get -> System.Windows.Forms.Cursor
 ~System.Windows.Forms.LinkLabel.OverrideCursor.set -> void
 ~System.Windows.Forms.LinkLabel.PointInLink(int x, int y) -> System.Windows.Forms.LinkLabel.Link
-~System.Windows.Forms.ListView.CheckedListViewItemCollection.CheckedListViewItemCollection(System.Windows.Forms.ListView owner) -> void
-~System.Windows.Forms.ListView.CheckedListViewItemCollection.Contains(System.Windows.Forms.ListViewItem item) -> bool
-~System.Windows.Forms.ListView.CheckedListViewItemCollection.CopyTo(System.Array dest, int index) -> void
-~System.Windows.Forms.ListView.CheckedListViewItemCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ListView.CheckedListViewItemCollection.IndexOf(System.Windows.Forms.ListViewItem item) -> int
-~System.Windows.Forms.ListView.CheckedListViewItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem
+System.Windows.Forms.ListView.CheckedListViewItemCollection.CheckedListViewItemCollection(System.Windows.Forms.ListView! owner) -> void
+System.Windows.Forms.ListView.CheckedListViewItemCollection.Contains(System.Windows.Forms.ListViewItem? item) -> bool
+System.Windows.Forms.ListView.CheckedListViewItemCollection.CopyTo(System.Array! dest, int index) -> void
+System.Windows.Forms.ListView.CheckedListViewItemCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ListView.CheckedListViewItemCollection.IndexOf(System.Windows.Forms.ListViewItem! item) -> int
+System.Windows.Forms.ListView.CheckedListViewItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem!
 ~System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListView.ListViewItemCollection items) -> void
 ~System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListViewItem[] items) -> void
 ~System.Windows.Forms.ListView.ListViewItemCollection.Contains(System.Windows.Forms.ListViewItem item) -> bool
@@ -1474,12 +1474,12 @@ System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.Owner.set -
 ~System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string text, string imageKey) -> System.Windows.Forms.ListViewItem
 ~System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, System.Windows.Forms.ListViewItem item) -> System.Windows.Forms.ListViewItem
 ~System.Windows.Forms.ListView.ListViewItemCollection.ListViewItemCollection(System.Windows.Forms.ListView owner) -> void
-~System.Windows.Forms.ListView.SelectedListViewItemCollection.Contains(System.Windows.Forms.ListViewItem item) -> bool
-~System.Windows.Forms.ListView.SelectedListViewItemCollection.CopyTo(System.Array dest, int index) -> void
-~System.Windows.Forms.ListView.SelectedListViewItemCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ListView.SelectedListViewItemCollection.IndexOf(System.Windows.Forms.ListViewItem item) -> int
-~System.Windows.Forms.ListView.SelectedListViewItemCollection.SelectedListViewItemCollection(System.Windows.Forms.ListView owner) -> void
-~System.Windows.Forms.ListView.SelectedListViewItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem
+System.Windows.Forms.ListView.SelectedListViewItemCollection.Contains(System.Windows.Forms.ListViewItem? item) -> bool
+System.Windows.Forms.ListView.SelectedListViewItemCollection.CopyTo(System.Array! dest, int index) -> void
+System.Windows.Forms.ListView.SelectedListViewItemCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ListView.SelectedListViewItemCollection.IndexOf(System.Windows.Forms.ListViewItem? item) -> int
+System.Windows.Forms.ListView.SelectedListViewItemCollection.SelectedListViewItemCollection(System.Windows.Forms.ListView! owner) -> void
+System.Windows.Forms.ListView.SelectedListViewItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem!
 System.Windows.Forms.ListViewHitTestInfo.Item.get -> System.Windows.Forms.ListViewItem?
 System.Windows.Forms.ListViewHitTestInfo.ListViewHitTestInfo(System.Windows.Forms.ListViewItem? hitItem, System.Windows.Forms.ListViewItem.ListViewSubItem? hitSubItem, System.Windows.Forms.ListViewHitTestLocations hitLocation) -> void
 System.Windows.Forms.ListViewHitTestInfo.SubItem.get -> System.Windows.Forms.ListViewItem.ListViewSubItem?
@@ -1552,9 +1552,9 @@ System.Windows.Forms.NotifyIcon.Tag.get -> object?
 System.Windows.Forms.NotifyIcon.Tag.set -> void
 System.Windows.Forms.NotifyIcon.Text.get -> string!
 System.Windows.Forms.NotifyIcon.Text.set -> void
-~System.Windows.Forms.OpenFileDialog.OpenFile() -> System.IO.Stream
-~System.Windows.Forms.OpenFileDialog.SafeFileName.get -> string
-~System.Windows.Forms.OpenFileDialog.SafeFileNames.get -> string[]
+System.Windows.Forms.OpenFileDialog.OpenFile() -> System.IO.Stream!
+System.Windows.Forms.OpenFileDialog.SafeFileName.get -> string!
+System.Windows.Forms.OpenFileDialog.SafeFileNames.get -> string![]!
 ~System.Windows.Forms.PictureBox.ErrorImage.get -> System.Drawing.Image
 ~System.Windows.Forms.PictureBox.ErrorImage.set -> void
 ~System.Windows.Forms.PictureBox.Image.get -> System.Drawing.Image
@@ -1613,7 +1613,7 @@ System.Windows.Forms.NotifyIcon.Text.set -> void
 ~System.Windows.Forms.RichTextBox.SelectionTabs.get -> int[]
 ~System.Windows.Forms.RichTextBox.SelectionTabs.set -> void
 ~System.Windows.Forms.RichTextBox.UndoActionName.get -> string
-~System.Windows.Forms.SaveFileDialog.OpenFile() -> System.IO.Stream
+System.Windows.Forms.SaveFileDialog.OpenFile() -> System.IO.Stream!
 ~System.Windows.Forms.TabControl.ControlCollection.ControlCollection(System.Windows.Forms.TabControl owner) -> void
 ~System.Windows.Forms.TabControl.DeselectTab(string tabPageName) -> void
 ~System.Windows.Forms.TabControl.DeselectTab(System.Windows.Forms.TabPage tabPage) -> void
@@ -1730,10 +1730,10 @@ System.Windows.Forms.TabPage.ToolTipText.set -> void
 ~System.Windows.Forms.ToolStripContainer.LeftToolStripPanel.get -> System.Windows.Forms.ToolStripPanel
 ~System.Windows.Forms.ToolStripContainer.RightToolStripPanel.get -> System.Windows.Forms.ToolStripPanel
 ~System.Windows.Forms.ToolStripContainer.TopToolStripPanel.get -> System.Windows.Forms.ToolStripPanel
-~System.Windows.Forms.ToolStripContentPanel.Name.get -> string
-~System.Windows.Forms.ToolStripContentPanel.Name.set -> void
-~System.Windows.Forms.ToolStripContentPanel.Renderer.get -> System.Windows.Forms.ToolStripRenderer
-~System.Windows.Forms.ToolStripContentPanel.Renderer.set -> void
+System.Windows.Forms.ToolStripContentPanel.Name.get -> string!
+System.Windows.Forms.ToolStripContentPanel.Name.set -> void
+System.Windows.Forms.ToolStripContentPanel.Renderer.get -> System.Windows.Forms.ToolStripRenderer!
+System.Windows.Forms.ToolStripContentPanel.Renderer.set -> void
 ~System.Windows.Forms.ToolStripControlHost.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c) -> void
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c, string name) -> void
@@ -2387,9 +2387,9 @@ virtual System.Windows.Forms.Control.LayoutEngine.get -> System.Windows.Forms.La
 ~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[int index].set -> void
 ~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[string key].get -> System.Windows.Forms.LinkLabel.Link
 ~virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLabelLinkClickedEventArgs e) -> void
-~virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.ContainsKey(string key) -> bool
-~virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.IndexOfKey(string key) -> int
-~virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.this[string key].get -> System.Windows.Forms.ListViewItem
+virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.this[string? key].get -> System.Windows.Forms.ListViewItem?
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string key, string text, int imageIndex) -> System.Windows.Forms.ListViewItem
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string key, string text, string imageKey) -> System.Windows.Forms.ListViewItem
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string text) -> System.Windows.Forms.ListViewItem
@@ -2405,9 +2405,9 @@ virtual System.Windows.Forms.Control.LayoutEngine.get -> System.Windows.Forms.La
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.this[int index].set -> void
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.this[string key].get -> System.Windows.Forms.ListViewItem
-~virtual System.Windows.Forms.ListView.SelectedListViewItemCollection.ContainsKey(string key) -> bool
-~virtual System.Windows.Forms.ListView.SelectedListViewItemCollection.IndexOfKey(string key) -> int
-~virtual System.Windows.Forms.ListView.SelectedListViewItemCollection.this[string key].get -> System.Windows.Forms.ListViewItem
+virtual System.Windows.Forms.ListView.SelectedListViewItemCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.ListView.SelectedListViewItemCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.ListView.SelectedListViewItemCollection.this[string? key].get -> System.Windows.Forms.ListViewItem?
 ~virtual System.Windows.Forms.ListViewItem.Clone() -> object
 ~virtual System.Windows.Forms.ListViewItem.Deserialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
 ~virtual System.Windows.Forms.ListViewItem.Serialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
@@ -2476,8 +2476,8 @@ virtual System.Windows.Forms.TabControl.TabPageCollection.this[string? key].get 
 ~virtual System.Windows.Forms.ToolStripComboBox.OnSelectedIndexChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripComboBox.OnSelectionChangeCommitted(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripComboBox.OnTextUpdate(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripContentPanel.OnLoad(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripContentPanel.OnRendererChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripContentPanel.OnLoad(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripContentPanel.OnRendererChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnEnter(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnGotFocus(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnHostedControlResize(System.EventArgs e) -> void
@@ -11084,24 +11084,24 @@ System.Windows.Forms.ToolStripContentPanel.AutoScrollMargin.get -> System.Drawin
 System.Windows.Forms.ToolStripContentPanel.AutoScrollMargin.set -> void
 System.Windows.Forms.ToolStripContentPanel.AutoScrollMinSize.get -> System.Drawing.Size
 System.Windows.Forms.ToolStripContentPanel.AutoScrollMinSize.set -> void
-System.Windows.Forms.ToolStripContentPanel.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.ToolStripContentPanel.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripContentPanel.CausesValidation.get -> bool
 System.Windows.Forms.ToolStripContentPanel.CausesValidation.set -> void
-System.Windows.Forms.ToolStripContentPanel.CausesValidationChanged -> System.EventHandler
-System.Windows.Forms.ToolStripContentPanel.DockChanged -> System.EventHandler
-System.Windows.Forms.ToolStripContentPanel.Load -> System.EventHandler
+System.Windows.Forms.ToolStripContentPanel.CausesValidationChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripContentPanel.DockChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripContentPanel.Load -> System.EventHandler?
 System.Windows.Forms.ToolStripContentPanel.Location.get -> System.Drawing.Point
 System.Windows.Forms.ToolStripContentPanel.Location.set -> void
-System.Windows.Forms.ToolStripContentPanel.LocationChanged -> System.EventHandler
-System.Windows.Forms.ToolStripContentPanel.RendererChanged -> System.EventHandler
+System.Windows.Forms.ToolStripContentPanel.LocationChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripContentPanel.RendererChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripContentPanel.RenderMode.get -> System.Windows.Forms.ToolStripRenderMode
 System.Windows.Forms.ToolStripContentPanel.RenderMode.set -> void
 System.Windows.Forms.ToolStripContentPanel.TabIndex.get -> int
 System.Windows.Forms.ToolStripContentPanel.TabIndex.set -> void
-System.Windows.Forms.ToolStripContentPanel.TabIndexChanged -> System.EventHandler
+System.Windows.Forms.ToolStripContentPanel.TabIndexChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripContentPanel.TabStop.get -> bool
 System.Windows.Forms.ToolStripContentPanel.TabStop.set -> void
-System.Windows.Forms.ToolStripContentPanel.TabStopChanged -> System.EventHandler
+System.Windows.Forms.ToolStripContentPanel.TabStopChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripContentPanel.ToolStripContentPanel() -> void
 System.Windows.Forms.ToolStripContentPanelRenderEventArgs
 System.Windows.Forms.ToolStripContentPanelRenderEventArgs.Graphics.get -> System.Drawing.Graphics!
