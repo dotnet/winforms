@@ -56,7 +56,7 @@ variables:
   - name: PostBuildSign
     value: true
   - name: EnableLoc
-    value: true
+    value: false
   - name: isPublic
     value: ${{ eq(variables['System.TeamProject'], 'public') }}
   - name: isPR
