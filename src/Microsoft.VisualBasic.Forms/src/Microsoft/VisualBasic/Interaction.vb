@@ -369,8 +369,10 @@ Namespace Microsoft.VisualBasic
 
             Dim Title As String
 
-            'By reading the frames, we maintain the old behavior of using the title / name of the calling
-            'assembly (unless inlined), not necessarily the name of the application as a whole.
+            'By reading the frames, we maintain the old behavior of using the name of the calling
+            'assembly (unless inlined), not necessarily the name of the application as a whole. New
+            'behavior is that we try to use an assembly's product name if available, with a fallback
+            'of the dll name (dll name was the old behavior).
             For i As Integer = 0 To frames.Length - 1
                 Dim frame = frames(i)
                 If frame.HasMethod() Then
