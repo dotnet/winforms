@@ -1346,7 +1346,7 @@ namespace System.Windows.Forms.Layout
 
         internal static TableLayoutPanelCellPosition GetPositionFromControl(IArrangedElement container, IArrangedElement child)
         {
-            if (container is null || child is null)
+            if (container is null)
             {
                 return new TableLayoutPanelCellPosition(-1, -1);
             }

@@ -483,7 +483,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Get the element which covers the specified row and column. return null if we can't find one
         /// </summary>
-        internal IArrangedElement GetControlFromPosition(int column, int row)
+        internal IArrangedElement? GetControlFromPosition(int column, int row)
         {
             return TableLayout.GetControlFromPosition(Owner, column, row);
         }
