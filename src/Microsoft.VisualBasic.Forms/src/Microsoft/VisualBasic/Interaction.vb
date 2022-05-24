@@ -317,10 +317,10 @@ Namespace Microsoft.VisualBasic
 
             'Tries to get the title using the AssemblyProduct attribute, which
             'can be controlled with the Product property in a project file.
-            Dim attribs = CallingAssembly.GetCustomAttributes(GetType(Reflection.AssemblyProductAttribute), False)
-            If attribs IsNot Nothing AndAlso attribs.Length > 0 Then
+            Dim attributes = CallingAssembly.GetCustomAttributes(GetType(Reflection.AssemblyProductAttribute), False)
+            If attributes IsNot Nothing AndAlso attributes.Length > 0 Then
 
-                Dim Title = DirectCast(attribs(0), Reflection.AssemblyProductAttribute).Product
+                Dim Title = DirectCast(attributes(0), Reflection.AssemblyProductAttribute).Product
 
                 '"Microsoft® .NET" is the default Product name when one is not
                 'explicitly specified, fall back to default case (use assembly name)
