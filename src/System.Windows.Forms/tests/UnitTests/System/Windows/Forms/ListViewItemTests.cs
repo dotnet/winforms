@@ -1071,11 +1071,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ListViewItem_AccessibilityObject_ReturnsNull_IfListViewNotExists()
+        public void ListViewItem_AccessibilityObject_ThrowsInvalidOperationException_IfListViewNotExists()
         {
             ListViewItem item = new();
 
-            Assert.Null(item.AccessibilityObject);
+            Assert.Throws<InvalidOperationException>(() => item.AccessibilityObject);
         }
 
         [WinFormsFact]
@@ -1086,6 +1086,34 @@ namespace System.Windows.Forms.Tests
             listView.Items.Add(item);
 
             Assert.NotNull(item.AccessibilityObject);
+        }
+
+        [WinFormsFact]
+        public void ListViewItem_AccessibilityObject_ThrowsInvalidOperationException_IfRemoved()
+        {
+            using ListView listView = new();
+            ListViewItem item = new();
+            listView.Items.Add(item);
+
+            Assert.NotNull(item.AccessibilityObject);
+
+            listView.Items.RemoveAt(0);
+
+            Assert.Throws<InvalidOperationException>(() => item.AccessibilityObject);
+        }
+
+        [WinFormsFact]
+        public void ListViewItem_AccessibilityObject_ThrowsInvalidOperationException_IfCleared()
+        {
+            using ListView listView = new();
+            ListViewItem item = new();
+            listView.Items.Add(item);
+
+            Assert.NotNull(item.AccessibilityObject);
+
+            listView.Items.Clear();
+
+            Assert.Throws<InvalidOperationException>(() => item.AccessibilityObject);
         }
     }
 }

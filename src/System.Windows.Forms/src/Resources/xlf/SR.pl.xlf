@@ -6571,6 +6571,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Bieżący obiekt ułatwień dostępu jest przeznaczony tylko dla elementu ListView w widoku {0}, {1} lub {2}</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="new">Cannot get accessiblity object when ListViewItem is not attached to a ListView.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">Zdarzenie wywoływane, gdy zostanie zmieniona zaznaczona właściwość elementu ListView.</target>
