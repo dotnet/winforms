@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -26,15 +27,16 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT ElementProviderFromPoint(IntPtr thisPtr, double x, double y, IntPtr* resultPtr)
             {
-                var inst = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragmentRoot>((ComInterfaceDispatch*)thisPtr);
+                var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragmentRoot>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    var result = inst.ElementProviderFromPoint(x, y);
+                    var result = instance.ElementProviderFromPoint(x, y);
                     *resultPtr = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
                 {
+                    Debug.WriteLine(ex);
                     return (HRESULT)ex.HResult;
                 }
             }
@@ -42,15 +44,16 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT GetFocus(IntPtr thisPtr, IntPtr* resultPtr)
             {
-                var inst = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragmentRoot>((ComInterfaceDispatch*)thisPtr);
+                var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragmentRoot>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    var result = inst.GetFocus();
+                    var result = instance.GetFocus();
                     *resultPtr = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
                 {
+                    Debug.WriteLine(ex);
                     return (HRESULT)ex.HResult;
                 }
             }

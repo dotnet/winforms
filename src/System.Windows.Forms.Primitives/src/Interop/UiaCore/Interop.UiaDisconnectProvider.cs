@@ -10,6 +10,7 @@ internal partial class Interop
     {
         [DllImport(Libraries.UiaCore, ExactSpelling = true)]
         private static extern HRESULT UiaDisconnectProvider(IntPtr provider);
+
         public static HRESULT UiaDisconnectProvider(IRawElementProviderSimple provider)
         {
             var providerPtr = WinFormsComWrappers.Instance.GetComPointer(provider, IID.IRawElementProviderSimple);

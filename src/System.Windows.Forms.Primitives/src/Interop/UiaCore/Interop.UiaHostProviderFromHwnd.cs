@@ -9,7 +9,7 @@ internal partial class Interop
     internal static partial class UiaCore
     {
         [DllImport(Libraries.UiaCore, ExactSpelling = true)]
-        public static extern HRESULT UiaHostProviderFromHwnd(IntPtr hwnd, out IntPtr ppProvider);
+        private static extern HRESULT UiaHostProviderFromHwnd(IntPtr hwnd, out IntPtr ppProvider);
 
         public static HRESULT UiaHostProviderFromHwnd(IntPtr hwnd, out IRawElementProviderSimple ppProvider)
         {

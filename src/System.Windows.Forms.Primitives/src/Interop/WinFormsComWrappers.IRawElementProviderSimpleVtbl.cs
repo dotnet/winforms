@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -28,14 +29,15 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT get_ProviderOptions(IntPtr thisPtr, UiaCore.ProviderOptions* result)
             {
-                var inst = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderSimple>((ComInterfaceDispatch*)thisPtr);
+                var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderSimple>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    *result = inst.ProviderOptions;
+                    *result = instance.ProviderOptions;
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
                 {
+                    Debug.WriteLine(ex);
                     return (HRESULT)ex.HResult;
                 }
             }
@@ -43,15 +45,16 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT GetPropertyValue(IntPtr thisPtr, UiaCore.UIA patternId, IntPtr* resultPtr)
             {
-                var inst = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderSimple>((ComInterfaceDispatch*)thisPtr);
+                var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderSimple>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    var result = inst.GetPropertyValue(patternId);
+                    var result = instance.GetPropertyValue(patternId);
                     *resultPtr = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
                 {
+                    Debug.WriteLine(ex);
                     return (HRESULT)ex.HResult;
                 }
             }
@@ -59,15 +62,16 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT GetPatternProvider(IntPtr thisPtr, UiaCore.UIA patternId, IntPtr* resultPtr)
             {
-                var inst = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderSimple>((ComInterfaceDispatch*)thisPtr);
+                var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderSimple>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    var result = inst.GetPatternProvider(patternId);
+                    var result = instance.GetPatternProvider(patternId);
                     *resultPtr = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
                 {
+                    Debug.WriteLine(ex);
                     return (HRESULT)ex.HResult;
                 }
             }
@@ -75,10 +79,10 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT get_HostRawElementProvider(IntPtr thisPtr, IntPtr* resultPtr)
             {
-                var inst = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderSimple>((ComInterfaceDispatch*)thisPtr);
+                var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderSimple>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    var result = inst.HostRawElementProvider;
+                    var result = instance.HostRawElementProvider;
                     if (result is null)
                     {
                         *resultPtr = IntPtr.Zero;
@@ -100,6 +104,7 @@ internal partial class Interop
                 }
                 catch (Exception ex)
                 {
+                    Debug.WriteLine(ex);
                     return (HRESULT)ex.HResult;
                 }
             }
