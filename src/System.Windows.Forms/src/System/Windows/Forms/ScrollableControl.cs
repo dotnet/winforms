@@ -885,7 +885,13 @@ namespace System.Windows.Forms
             if (activeControl.ParentInternal != this)
             {
                 Debug.WriteLineIf(s_autoScrolling!.TraceVerbose, "not direct child, original bounds: " + bounds);
-                bounds = RectangleToClient(activeControl.ParentInternal?.RectangleToScreen(bounds) ?? Rectangle.Empty);
+
+                if (activeControl.ParentInternal is null)
+                {
+                    return Point.Empty;
+                }
+
+                bounds = RectangleToClient(activeControl.ParentInternal.RectangleToScreen(bounds));
             }
 
             Debug.WriteLineIf(s_autoScrolling!.TraceVerbose, "adjusted bounds: " + bounds);
