@@ -3020,16 +3020,18 @@ namespace System.Windows.Forms
             get => _parent;
             set
             {
-                if (_parent != value)
+                if (_parent == value)
                 {
-                    if (value is not null)
-                    {
-                        value.Controls.Add(this);
-                    }
-                    else
-                    {
-                        _parent!.Controls.Remove(this);
-                    }
+                    return;
+                }
+
+                if (value is not null)
+                {
+                    value.Controls.Add(this);
+                }
+                else if (_parent is not null)
+                {
+                    _parent.Controls.Remove(this);
                 }
             }
         }
