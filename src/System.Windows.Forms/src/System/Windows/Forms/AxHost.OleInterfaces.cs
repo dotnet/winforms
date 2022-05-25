@@ -467,8 +467,7 @@ namespace System.Windows.Forms
                 }
 
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in GetWindow");
-                Control? parent = _host.ParentInternal;
-                *phwnd = parent is not null ? parent.Handle : IntPtr.Zero;
+                *phwnd = _host.ParentInternal?.Handle ?? IntPtr.Zero;
                 return HRESULT.S_OK;
             }
 
