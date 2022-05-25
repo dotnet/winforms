@@ -9,9 +9,9 @@ internal partial class Interop
     internal static partial class UiaCore
     {
         [DllImport(Libraries.UiaCore, ExactSpelling = true)]
-        private static extern HRESULT UiaRaiseStructureChangedEvent(IntPtr pProvider, StructureChangeType structureChangeType, int[] pRuntimeId, int cRuntimeIdLen);
+        private static extern HRESULT UiaRaiseStructureChangedEvent(IntPtr pProvider, StructureChangeType structureChangeType, int[]? pRuntimeId, int cRuntimeIdLen);
 
-        public static HRESULT UiaRaiseStructureChangedEvent(IRawElementProviderSimple pProvider, StructureChangeType structureChangeType, int[] pRuntimeId, int cRuntimeIdLen)
+        public static HRESULT UiaRaiseStructureChangedEvent(IRawElementProviderSimple pProvider, StructureChangeType structureChangeType, int[]? pRuntimeId, int cRuntimeIdLen)
         {
             var providerPtr = WinFormsComWrappers.Instance.GetComPointer(pProvider, IID.IRawElementProviderSimple);
             return UiaRaiseStructureChangedEvent(providerPtr, structureChangeType, pRuntimeId, cRuntimeIdLen);

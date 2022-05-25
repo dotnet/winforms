@@ -456,7 +456,7 @@ namespace System.Windows.Forms.InteropTests
         [WinFormsFact]
         public unsafe void SystemAccessibleObject_AccessibleProperties()
         {
-            using ComboBox control = new ComboBox
+            using ComboBox control = new()
             {
                 DropDownStyle = ComboBoxStyle.DropDown
             };

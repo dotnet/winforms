@@ -126,12 +126,16 @@ internal partial class Interop
             ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(
                 typeof(WinFormsComWrappers),
                 sizeof(ComInterfaceEntry) * 3);
+
             wrapperEntry[0].IID = IID.IRawElementProviderSimple;
             wrapperEntry[0].Vtable = iRawElementProviderSimpleVtbl;
+
             wrapperEntry[1].IID = IID.IRawElementProviderFragment;
             wrapperEntry[1].Vtable = iRawElementProviderFragmentVtbl;
+
             wrapperEntry[2].IID = IID.IRawElementProviderFragmentRoot;
             wrapperEntry[2].Vtable = iRawElementProviderFragmentRootVtbl;
+
             return wrapperEntry;
         }
 

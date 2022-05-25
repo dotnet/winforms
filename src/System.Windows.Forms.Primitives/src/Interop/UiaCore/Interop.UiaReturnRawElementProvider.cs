@@ -13,7 +13,7 @@ internal partial class Interop
 
         public static nint UiaReturnRawElementProvider(IntPtr hwnd, nint wParam, nint lParam, IRawElementProviderSimple? el)
         {
-            var providerPtr = el is null ? IntPtr.Zero : WinFormsComWrappers.Instance.GetComPointer(el, IID.IRawElementProviderSimple);
+            IntPtr providerPtr = el is null ? IntPtr.Zero : WinFormsComWrappers.Instance.GetComPointer(el, IID.IRawElementProviderSimple);
             return UiaReturnRawElementProvider(hwnd, wParam, lParam, providerPtr);
         }
 
