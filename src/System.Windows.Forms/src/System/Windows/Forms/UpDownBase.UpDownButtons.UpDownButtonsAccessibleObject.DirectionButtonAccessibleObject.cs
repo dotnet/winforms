@@ -44,7 +44,7 @@ namespace System.Windows.Forms
                             }
 
                             // Convert to screen coords
-                            return ((UpDownButtons?)_parent.Owner)?.ParentInternal?.RectangleToScreen(bounds) ?? Rectangle.Empty;
+                            return ((UpDownButtons)_parent.Owner).ParentInternal?.RectangleToScreen(bounds) ?? Rectangle.Empty;
                         }
                     }
 
