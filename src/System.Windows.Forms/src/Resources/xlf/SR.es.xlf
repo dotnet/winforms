@@ -6573,7 +6573,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
-        <target state="new">Cannot get accessiblity object when ListViewItem is not attached to a ListView.</target>
+        <target state="translated">No se puede obtener el objeto accessiblity cuando ListViewItem no está asociado a listView.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">

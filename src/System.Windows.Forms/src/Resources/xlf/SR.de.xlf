@@ -6573,7 +6573,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
-        <target state="new">Cannot get accessiblity object when ListViewItem is not attached to a ListView.</target>
+        <target state="translated">Das Accessiblity-Objekt kann nicht abgerufen werden, wenn ListViewItem nicht an eine ListView angefügt ist.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
