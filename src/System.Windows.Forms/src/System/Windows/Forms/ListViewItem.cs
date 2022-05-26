@@ -227,8 +227,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                ListView owningListView = listView ?? Group?.ListView
-                    ?? throw new InvalidOperationException(SR.ListViewItemAccessibilityObjectRequiresListView);
+                ListView owningListView = listView ?? Group?.ListView;
+                if (owningListView is null)
+                {
+                    _accessibilityObject = null;
+                    return _accessibilityObject;
+                }
 
                 if (_accessibilityObject is null || owningListView.View != _accessibilityObjectView)
                 {
