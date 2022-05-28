@@ -32,7 +32,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Gets or sets the accessible Name of ComboBox's child DropDown button. ("Open" or "Close" depending on stat of the DropDown)
+            ///  Gets or sets the accessible Name of ComboBox's child DropDown button. ("Open" or "Close" depending on state of the DropDown)
             /// </summary>
             public override string Name => _owner.DroppedDown ? SR.ComboboxDropDownButtonCloseName : SR.ComboboxDropDownButtonOpenName;
 
