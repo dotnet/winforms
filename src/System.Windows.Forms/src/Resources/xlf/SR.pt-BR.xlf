@@ -8841,6 +8841,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Obtém a barra de rolagem horizontal para ScrollableControl.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlParentInternalNull">
+        <source>ParentInternal cannot be null.</source>
+        <target state="new">ParentInternal cannot be null.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlRaiseMouseEnterLeaveEventsForScrollBarsDescr">
         <source>Property being set to false will not raise MouseEnter and MouseLeave events until the mouse leaves the client area and the scrollbars.</source>
         <target state="translated">A propriedade sendo definida como falsa não gerará eventos MouseEnter e MouseLeave até que o mouse saia da área cliente e das barras de rolagem.</target>

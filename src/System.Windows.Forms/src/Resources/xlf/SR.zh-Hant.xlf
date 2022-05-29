@@ -8841,6 +8841,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">取得此 ScrollableControl 的水平捲軸。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlParentInternalNull">
+        <source>ParentInternal cannot be null.</source>
+        <target state="new">ParentInternal cannot be null.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlRaiseMouseEnterLeaveEventsForScrollBarsDescr">
         <source>Property being set to false will not raise MouseEnter and MouseLeave events until the mouse leaves the client area and the scrollbars.</source>
         <target state="translated">將屬性設定為 false 時，必須等到滑鼠離開工作區和捲軸之後，才會引發 MouseEnter 和 MouseLeave 事件。</target>

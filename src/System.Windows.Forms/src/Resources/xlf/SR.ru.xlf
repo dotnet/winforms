@@ -8842,6 +8842,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Получает горизонтальную полосу прокрутки для данного ScrollableControl.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlParentInternalNull">
+        <source>ParentInternal cannot be null.</source>
+        <target state="new">ParentInternal cannot be null.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlRaiseMouseEnterLeaveEventsForScrollBarsDescr">
         <source>Property being set to false will not raise MouseEnter and MouseLeave events until the mouse leaves the client area and the scrollbars.</source>
         <target state="translated">Если значение свойства равно false, то оно не будет порождать события MouseEnter и MouseLeave, пока указатель мыши не выйдет за пределы клиентской области и полос прокрутки.</target>

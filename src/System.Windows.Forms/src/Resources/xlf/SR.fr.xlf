@@ -8841,6 +8841,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Obtient la barre de défilement horizontale pour ce ScrollableControl.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlParentInternalNull">
+        <source>ParentInternal cannot be null.</source>
+        <target state="new">ParentInternal cannot be null.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlRaiseMouseEnterLeaveEventsForScrollBarsDescr">
         <source>Property being set to false will not raise MouseEnter and MouseLeave events until the mouse leaves the client area and the scrollbars.</source>
         <target state="translated">L'attribution de la valeur false à cette propriété ne déclenchera les événements MouseEnter et MouseLeave que lorsque la souris quitte la zone cliente et les barres de défilement.</target>

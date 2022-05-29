@@ -8841,6 +8841,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Pobiera poziomy pasek przewijania dla tego elementu ScrollableControl.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlParentInternalNull">
+        <source>ParentInternal cannot be null.</source>
+        <target state="new">ParentInternal cannot be null.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlRaiseMouseEnterLeaveEventsForScrollBarsDescr">
         <source>Property being set to false will not raise MouseEnter and MouseLeave events until the mouse leaves the client area and the scrollbars.</source>
         <target state="translated">Właściwość z ustawioną wartością false nie wywoła zdarzeń MouseEnter i MouseLeave dopóki mysz nie opuści obszaru klienckiego i pasków przewijania.</target>

@@ -8841,6 +8841,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Bu ScrollableControl için yatay kaydırma çubuğunu alır.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlParentInternalNull">
+        <source>ParentInternal cannot be null.</source>
+        <target state="new">ParentInternal cannot be null.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlRaiseMouseEnterLeaveEventsForScrollBarsDescr">
         <source>Property being set to false will not raise MouseEnter and MouseLeave events until the mouse leaves the client area and the scrollbars.</source>
         <target state="translated">Fare istemci alanından ve kaydırma çubuklarından uzaklaşana kadar False olarak ayarlanan özellik MouseEnter ve MouseLeave olaylarını harekete geçirmez.</target>

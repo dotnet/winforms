@@ -8841,6 +8841,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">이 ScrollableControl의 가로 스크롤 막대를 가져옵니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlParentInternalNull">
+        <source>ParentInternal cannot be null.</source>
+        <target state="new">ParentInternal cannot be null.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlRaiseMouseEnterLeaveEventsForScrollBarsDescr">
         <source>Property being set to false will not raise MouseEnter and MouseLeave events until the mouse leaves the client area and the scrollbars.</source>
         <target state="translated">속성을 false로 설정하면 마우스가 클라이언트 영역과 스크롤 막대를 벗어날 때까지 MouseEnter 및 MouseLeave 이벤트가 발생하지 않습니다.</target>

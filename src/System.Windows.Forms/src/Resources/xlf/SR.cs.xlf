@@ -8841,6 +8841,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Získá vodorovný posuvník pro tento ovládací prvek ScrollableControl.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlParentInternalNull">
+        <source>ParentInternal cannot be null.</source>
+        <target state="new">ParentInternal cannot be null.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlRaiseMouseEnterLeaveEventsForScrollBarsDescr">
         <source>Property being set to false will not raise MouseEnter and MouseLeave events until the mouse leaves the client area and the scrollbars.</source>
         <target state="translated">Pokud je tato vlastnost nastavena na hodnotu false, nebude aktivována událost MouseEnter ani MouseLeave, dokud bude ukazatel myši v klientské oblasti a na posuvnících.</target>

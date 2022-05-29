@@ -8841,6 +8841,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Obtiene la barra de desplazamiento horizontal para este ScrollableControl.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlParentInternalNull">
+        <source>ParentInternal cannot be null.</source>
+        <target state="new">ParentInternal cannot be null.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlRaiseMouseEnterLeaveEventsForScrollBarsDescr">
         <source>Property being set to false will not raise MouseEnter and MouseLeave events until the mouse leaves the client area and the scrollbars.</source>
         <target state="translated">Si se establece esta propiedad en false no se generarán los eventos MouseEnter ni MouseLeave hasta que el mouse salga del área cliente y de las barras de desplazamiento.</target>

@@ -8841,6 +8841,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">この ScrollableControl に対して、水平方向のスクロール バーを取得します。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlParentInternalNull">
+        <source>ParentInternal cannot be null.</source>
+        <target state="new">ParentInternal cannot be null.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlRaiseMouseEnterLeaveEventsForScrollBarsDescr">
         <source>Property being set to false will not raise MouseEnter and MouseLeave events until the mouse leaves the client area and the scrollbars.</source>
         <target state="translated">このプロパティを false に設定しても、MouseEnter および MouseLeave イベントは、マウス ポインターがクライアント領域およびスクロール バーを離れるまでは発生しません。</target>
