@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Diagnostics;
 using System.Text;
@@ -108,7 +106,7 @@ namespace System.Windows.Forms
 
             foreach (SettingsStub toolStripSettings in toolStripSettingsToApply)
             {
-                object destinationPanel = !string.IsNullOrEmpty(toolStripSettings.ToolStripPanelName) ? toolStripSettings.ToolStripPanelName : null;
+                object? destinationPanel = !string.IsNullOrEmpty(toolStripSettings.ToolStripPanelName) ? toolStripSettings.ToolStripPanelName : null;
 
                 if (destinationPanel is null)
                 {
@@ -186,7 +184,7 @@ namespace System.Windows.Forms
                 toolStrip.Size = settings.Size;
 
                 // Apply the item order changes.
-                string itemNames = settings.ItemOrder;
+                string? itemNames = settings.ItemOrder;
                 if (!string.IsNullOrEmpty(itemNames))
                 {
                     string[] keys = itemNames.Split(',');
