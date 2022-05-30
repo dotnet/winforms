@@ -25,9 +25,9 @@ internal partial class Interop
             }
 
             [UnmanagedCallersOnly]
-            private static HRESULT ElementProviderFromPoint(IntPtr thisPtr, double x, double y, IntPtr* resultPtr)
+            private static HRESULT ElementProviderFromPoint(IntPtr thisPtr, double x, double y, IntPtr* pRetVal)
             {
-                if (resultPtr == null)
+                if (pRetVal == null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -36,7 +36,7 @@ internal partial class Interop
                 try
                 {
                     var result = instance.ElementProviderFromPoint(x, y);
-                    *resultPtr = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
+                    *pRetVal = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
@@ -47,9 +47,9 @@ internal partial class Interop
             }
 
             [UnmanagedCallersOnly]
-            private static HRESULT GetFocus(IntPtr thisPtr, IntPtr* resultPtr)
+            private static HRESULT GetFocus(IntPtr thisPtr, IntPtr* pRetVal)
             {
-                if (resultPtr == null)
+                if (pRetVal == null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -58,7 +58,7 @@ internal partial class Interop
                 try
                 {
                     var result = instance.GetFocus();
-                    *resultPtr = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
+                    *pRetVal = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)

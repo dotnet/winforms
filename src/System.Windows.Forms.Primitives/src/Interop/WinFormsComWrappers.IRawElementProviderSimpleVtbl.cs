@@ -27,9 +27,9 @@ internal partial class Interop
             }
 
             [UnmanagedCallersOnly]
-            private static HRESULT get_ProviderOptions(IntPtr thisPtr, UiaCore.ProviderOptions* result)
+            private static HRESULT get_ProviderOptions(IntPtr thisPtr, UiaCore.ProviderOptions* pRetVal)
             {
-                if (result == null)
+                if (pRetVal == null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -37,7 +37,7 @@ internal partial class Interop
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderSimple>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    *result = instance.ProviderOptions;
+                    *pRetVal = instance.ProviderOptions;
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
@@ -48,9 +48,9 @@ internal partial class Interop
             }
 
             [UnmanagedCallersOnly]
-            private static HRESULT GetPropertyValue(IntPtr thisPtr, UiaCore.UIA patternId, IntPtr* resultPtr)
+            private static HRESULT GetPropertyValue(IntPtr thisPtr, UiaCore.UIA patternId, IntPtr* pRetVal)
             {
-                if (resultPtr == null)
+                if (pRetVal == null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -59,7 +59,7 @@ internal partial class Interop
                 try
                 {
                     var result = instance.GetPropertyValue(patternId);
-                    *resultPtr = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
+                    *pRetVal = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
@@ -70,9 +70,9 @@ internal partial class Interop
             }
 
             [UnmanagedCallersOnly]
-            private static HRESULT GetPatternProvider(IntPtr thisPtr, UiaCore.UIA patternId, IntPtr* resultPtr)
+            private static HRESULT GetPatternProvider(IntPtr thisPtr, UiaCore.UIA patternId, IntPtr* pRetVal)
             {
-                if (resultPtr == null)
+                if (pRetVal == null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -81,7 +81,7 @@ internal partial class Interop
                 try
                 {
                     var result = instance.GetPatternProvider(patternId);
-                    *resultPtr = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
+                    *pRetVal = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
@@ -92,9 +92,9 @@ internal partial class Interop
             }
 
             [UnmanagedCallersOnly]
-            private static HRESULT get_HostRawElementProvider(IntPtr thisPtr, IntPtr* resultPtr)
+            private static HRESULT get_HostRawElementProvider(IntPtr thisPtr, IntPtr* pRetVal)
             {
-                if (resultPtr == null)
+                if (pRetVal == null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -105,18 +105,18 @@ internal partial class Interop
                     var result = instance.HostRawElementProvider;
                     if (result is null)
                     {
-                        *resultPtr = IntPtr.Zero;
+                        *pRetVal = IntPtr.Zero;
                     }
                     else
                     {
                         if (result is RawElementProviderSimpleWrapper wrapper)
                         {
-                            *resultPtr = wrapper.Instance;
+                            *pRetVal = wrapper.Instance;
                             Marshal.AddRef(wrapper.Instance);
                         }
                         else
                         {
-                            *resultPtr = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(result, CreateComInterfaceFlags.None);
+                            *pRetVal = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(result, CreateComInterfaceFlags.None);
                         }
                     }
 

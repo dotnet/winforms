@@ -23,15 +23,15 @@ internal partial class Interop
                 vtblRaw[5] = (IntPtr)(delegate* unmanaged<IntPtr, UiaCore.UiaRect*, HRESULT>)&get_BoundingRectangle;
                 vtblRaw[6] = (IntPtr)(delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)&GetEmbeddedFragmentRoots;
                 vtblRaw[7] = (IntPtr)(delegate* unmanaged<IntPtr, HRESULT>)&SetFocus;
-                vtblRaw[8] = (IntPtr)(delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)&FragmentRoot;
+                vtblRaw[8] = (IntPtr)(delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)&get_FragmentRoot;
 
                 return (IntPtr)vtblRaw;
             }
 
             [UnmanagedCallersOnly]
-            private static HRESULT Navigate(IntPtr thisPtr, UiaCore.NavigateDirection direction, IntPtr* resultPtr)
+            private static HRESULT Navigate(IntPtr thisPtr, UiaCore.NavigateDirection direction, IntPtr* pRetVal)
             {
-                if (resultPtr == null)
+                if (pRetVal == null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -40,7 +40,7 @@ internal partial class Interop
                 try
                 {
                     var result = instance.Navigate(direction);
-                    *resultPtr = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
+                    *pRetVal = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
@@ -51,9 +51,9 @@ internal partial class Interop
             }
 
             [UnmanagedCallersOnly]
-            private static HRESULT get_BoundingRectangle(IntPtr thisPtr, UiaCore.UiaRect* resultPtr)
+            private static HRESULT get_BoundingRectangle(IntPtr thisPtr, UiaCore.UiaRect* pRetVal)
             {
-                if (resultPtr == null)
+                if (pRetVal == null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -61,7 +61,7 @@ internal partial class Interop
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragment>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    *resultPtr = instance.BoundingRectangle;
+                    *pRetVal = instance.BoundingRectangle;
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
@@ -72,9 +72,9 @@ internal partial class Interop
             }
 
             [UnmanagedCallersOnly]
-            private static HRESULT GetEmbeddedFragmentRoots(IntPtr thisPtr, IntPtr* resultPtr)
+            private static HRESULT GetEmbeddedFragmentRoots(IntPtr thisPtr, IntPtr* pRetVal)
             {
-                if (resultPtr == null)
+                if (pRetVal == null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -85,7 +85,7 @@ internal partial class Interop
                     var objects = instance.GetEmbeddedFragmentRoots();
                     if (objects == null)
                     {
-                        *resultPtr = IntPtr.Zero;
+                        *pRetVal = IntPtr.Zero;
                         return HRESULT.S_OK;
                     }
 
@@ -99,9 +99,9 @@ internal partial class Interop
             }
 
             [UnmanagedCallersOnly]
-            private static unsafe HRESULT GetRuntimeId(IntPtr thisPtr, IntPtr* resultPtr)
+            private static unsafe HRESULT GetRuntimeId(IntPtr thisPtr, IntPtr* pRetVal)
             {
-                if (resultPtr == null)
+                if (pRetVal == null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -112,7 +112,7 @@ internal partial class Interop
                     var result = instance.GetRuntimeId();
                     if (result == null)
                     {
-                        *resultPtr = IntPtr.Zero;
+                        *pRetVal = IntPtr.Zero;
                         return HRESULT.S_OK;
                     }
 
@@ -125,7 +125,7 @@ internal partial class Interop
                         }
                     }
 
-                    *resultPtr = (IntPtr)array;
+                    *pRetVal = (IntPtr)array;
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
@@ -151,9 +151,9 @@ internal partial class Interop
             }
 
             [UnmanagedCallersOnly]
-            private static HRESULT FragmentRoot(IntPtr thisPtr, IntPtr* resultPtr)
+            private static HRESULT get_FragmentRoot(IntPtr thisPtr, IntPtr* pRetVal)
             {
-                if (resultPtr == null)
+                if (pRetVal == null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -162,7 +162,7 @@ internal partial class Interop
                 try
                 {
                     var result = instance.FragmentRoot;
-                    *resultPtr = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
+                    *pRetVal = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
