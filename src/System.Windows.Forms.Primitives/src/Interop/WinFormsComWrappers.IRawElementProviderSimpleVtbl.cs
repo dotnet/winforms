@@ -29,6 +29,11 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT get_ProviderOptions(IntPtr thisPtr, UiaCore.ProviderOptions* result)
             {
+                if (resultPtr == null)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderSimple>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
@@ -45,6 +50,11 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT GetPropertyValue(IntPtr thisPtr, UiaCore.UIA patternId, IntPtr* resultPtr)
             {
+                if (resultPtr == null)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderSimple>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
@@ -62,6 +72,11 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT GetPatternProvider(IntPtr thisPtr, UiaCore.UIA patternId, IntPtr* resultPtr)
             {
+                if (resultPtr == null)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderSimple>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
@@ -79,6 +94,11 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT get_HostRawElementProvider(IntPtr thisPtr, IntPtr* resultPtr)
             {
+                if (resultPtr == null)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderSimple>((ComInterfaceDispatch*)thisPtr);
                 try
                 {

@@ -31,6 +31,11 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT Navigate(IntPtr thisPtr, UiaCore.NavigateDirection direction, IntPtr* resultPtr)
             {
+                if (resultPtr == null)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragment>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
@@ -48,6 +53,11 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT get_BoundingRectangle(IntPtr thisPtr, UiaCore.UiaRect* resultPtr)
             {
+                if (resultPtr == null)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragment>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
@@ -64,6 +74,11 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT GetEmbeddedFragmentRoots(IntPtr thisPtr, IntPtr* resultPtr)
             {
+                if (resultPtr == null)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragment>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
@@ -86,6 +101,11 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static unsafe HRESULT GetRuntimeId(IntPtr thisPtr, IntPtr* resultPtr)
             {
+                if (resultPtr == null)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragment>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
@@ -133,6 +153,11 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT FragmentRoot(IntPtr thisPtr, IntPtr* resultPtr)
             {
+                if (resultPtr == null)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragment>((ComInterfaceDispatch*)thisPtr);
                 try
                 {

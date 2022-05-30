@@ -27,6 +27,11 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT ElementProviderFromPoint(IntPtr thisPtr, double x, double y, IntPtr* resultPtr)
             {
+                if (resultPtr == null)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragmentRoot>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
@@ -44,6 +49,11 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT GetFocus(IntPtr thisPtr, IntPtr* resultPtr)
             {
+                if (resultPtr == null)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragmentRoot>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
