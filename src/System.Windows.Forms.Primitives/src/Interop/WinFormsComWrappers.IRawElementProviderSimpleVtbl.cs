@@ -29,7 +29,7 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT get_ProviderOptions(IntPtr thisPtr, UiaCore.ProviderOptions* result)
             {
-                if (resultPtr == null)
+                if (result == null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
