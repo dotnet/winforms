@@ -1,6 +1,6 @@
-# How to troubleshoot the Windows Forms .NET Framework designer
+# How to troubleshoot the Windows Forms Out-Of-Process designer
 
-Whilst the Windows Forms Out-Of-Process Designer (or the OOP designer) is by far and large is a black box to the users, it is still possible to find what more information on its state.
+Whilst the Windows Forms Out-Of-Process Designer (or the OOP designer) is by far and large is a black box to the users, it is still possible to find out more information on its state.
 
 ## Logging 
 
@@ -11,8 +11,6 @@ Once the OOP designer is started, its log is available in the Visual Studio Outp
 The default verbosity is set to  _Warnings_, which includes Warnings and Errors (prior to VS 2022 17.2 was _None_, i.e. logging disabled). You can change the logging level to terser or more verbose under **Tools -> Options -> Windows Forms Designer -> General -> Logging Level**, e.g.:
 
 ![image](https://user-images.githubusercontent.com/4403806/154607481-44fa404a-894e-4656-95b8-efdeced2ace0.png)
-
-> :warning: Some log events are not correctly classified. This is known, and the re-classification work is under way.
 
 ## "Designer never loads" problems and possible ways to resolve those
 
