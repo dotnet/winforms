@@ -1,2 +1,0 @@
-System.Windows.Forms.Message.Equals(System.Windows.Forms.Message other) -> bool
-System.Windows.Forms.Padding.Equals(System.Windows.Forms.Padding other) -> bool

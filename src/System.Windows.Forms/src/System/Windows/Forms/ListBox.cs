@@ -6,6 +6,7 @@ using System.Buffers;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -441,7 +442,7 @@ namespace System.Windows.Forms
         // and the control is resized before the font size is change and the new font size causes
         // the height of all the items to exceed the new height of the control. This is a bug in
         // the control, but can be easily worked around by removing and re-adding all the items.
-
+        [AllowNull]
         public override Font Font
         {
             get => base.Font;

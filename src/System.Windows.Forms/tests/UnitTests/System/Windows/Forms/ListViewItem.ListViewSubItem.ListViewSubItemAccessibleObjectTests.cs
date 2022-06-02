@@ -973,5 +973,17 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, accessibleObject.GetPropertyValue((UiaCore.UIA)propertyId) ?? false);
             Assert.False(listView.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void ListViewSubItemAccessibleObject_State_ReturnsFocusable()
+        {
+            using ListView listview = new();
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem listViewSubItem = new();
+            listViewItem.SubItems.Add(listViewSubItem);
+            listview.Items.Add(listViewItem);
+
+            Assert.Equal(AccessibleStates.Focusable, listViewSubItem.AccessibilityObject.State);
+        }
     }
 }

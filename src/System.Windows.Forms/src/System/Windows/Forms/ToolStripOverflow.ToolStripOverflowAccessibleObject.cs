@@ -10,27 +10,24 @@ namespace System.Windows.Forms
     {
         internal class ToolStripOverflowAccessibleObject : ToolStripDropDownAccessibleObject
         {
-            private readonly ToolStripOverflow _owningToolStripOverflow;
-
             public ToolStripOverflowAccessibleObject(ToolStripOverflow owner) : base(owner)
-            {
-                _owningToolStripOverflow = owner;
-            }
+            { }
 
             public override AccessibleObject? GetChild(int index)
-                => index >= 0 || index < _owningToolStripOverflow.DisplayedItems.Count
-                    ? _owningToolStripOverflow.DisplayedItems[index].AccessibilityObject
+                => Owner is ToolStripOverflow overflow && (index >= 0 || index < overflow.DisplayedItems.Count)
+                    ? overflow.DisplayedItems[index].AccessibilityObject
                     : null;
 
             public override int GetChildCount()
-                => _owningToolStripOverflow.DisplayedItems.Count;
+                => Owner is ToolStripOverflow overflow
+                    ? overflow.DisplayedItems.Count
+                    : 0;
 
-            internal override Interop.UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+            internal override IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
                 => direction switch
                 {
-                    NavigateDirection.Parent => _owningToolStripOverflow.ownerItem.AccessibilityObject,
-                    NavigateDirection.FirstChild => GetChildCount() > 0 ? _owningToolStripOverflow.DisplayedItems[0].AccessibilityObject : null,
-                    NavigateDirection.LastChild => GetChildCount() > 0 ? _owningToolStripOverflow.DisplayedItems[^1].AccessibilityObject : null,
+                    NavigateDirection.Parent when Owner is ToolStripOverflow menu
+                        => menu.OwnerItem?.AccessibilityObject,
                     _ => base.FragmentNavigate(direction),
                 };
         }

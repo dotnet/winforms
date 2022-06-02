@@ -35,7 +35,7 @@ namespace System.Windows.Forms
                         return _parentInternal;
                     case UiaCore.NavigateDirection.NextSibling:
                         int childIndex = _parentInternal.GetChildIndex(this);
-                        return childIndex == -1 ? null : _parentInternal.GetChild(childIndex + 1);
+                        return childIndex == InvalidIndex ? null : _parentInternal.GetChild(childIndex + 1);
                     case UiaCore.NavigateDirection.PreviousSibling:
                         return _parentInternal.GetChild(_parentInternal.GetChildIndex(this) - 1);
                 }

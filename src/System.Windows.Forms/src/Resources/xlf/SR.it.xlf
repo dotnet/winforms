@@ -6571,6 +6571,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">L'oggetto accessibilità corrente viene usato solo per il controllo ListView nella visualizzazione {0}, {1} o {2}</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="new">Cannot get accessiblity object when ListViewItem is not attached to a ListView.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">Evento generato quando la proprietà checked di un elemento di ListView cambia.</target>
@@ -10313,12 +10318,12 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="ToolStripScrollButtonDownAccessibleName">
         <source>Line down</source>
-        <target state="new">Line down</target>
+        <target state="translated">Riga sotto</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripScrollButtonUpAccessibleName">
         <source>Line up</source>
-        <target state="new">Line up</target>
+        <target state="translated">Riga sopra</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">

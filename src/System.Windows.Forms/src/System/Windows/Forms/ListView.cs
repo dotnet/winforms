@@ -6699,7 +6699,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (CheckBoxes)
+                    if (CheckBoxes && !VirtualMode)
                     {
                         NMLVKEYDOWN* lvkd = (NMLVKEYDOWN*)m.LParamInternal;
                         if (lvkd->wVKey == (short)Keys.Space)
@@ -6708,14 +6708,11 @@ namespace System.Windows.Forms
                             if (focusedItem is not null)
                             {
                                 bool check = !focusedItem.Checked;
-                                if (!VirtualMode)
+                                foreach (ListViewItem item in SelectedItems)
                                 {
-                                    foreach (ListViewItem item in SelectedItems)
+                                    if (item != focusedItem)
                                     {
-                                        if (item != focusedItem)
-                                        {
-                                            item.Checked = check;
-                                        }
+                                        item.Checked = check;
                                     }
                                 }
                             }

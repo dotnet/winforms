@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms.Design
 {
     [AttributeUsage(AttributeTargets.Class)]
@@ -26,7 +24,7 @@ namespace System.Windows.Forms.Design
 
         public ToolStripItemDesignerAvailability ItemAdditionVisibility { get; } = ToolStripItemDesignerAvailability.None;
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj == this)
             {

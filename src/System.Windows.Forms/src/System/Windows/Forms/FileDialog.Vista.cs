@@ -138,9 +138,9 @@ namespace System.Windows.Forms
             return ret;
         }
 
-        private protected abstract string[] ProcessVistaFiles(Interop.WinFormsComWrappers.FileDialogWrapper dialog);
+        private protected abstract string[] ProcessVistaFiles(WinFormsComWrappers.FileDialogWrapper dialog);
 
-        private bool HandleVistaFileOk(Interop.WinFormsComWrappers.FileDialogWrapper dialog)
+        private bool HandleVistaFileOk(WinFormsComWrappers.FileDialogWrapper dialog)
         {
             int saveOptions = _options;
             int saveFilterIndex = FilterIndex;
@@ -153,7 +153,7 @@ namespace System.Windows.Forms
                 dialog.GetFileTypeIndex(out uint filterIndexTemp);
                 FilterIndex = unchecked((int)filterIndexTemp);
                 _fileNames = ProcessVistaFiles(dialog);
-                if (ProcessFileNames())
+                if (ProcessFileNames(_fileNames))
                 {
                     CancelEventArgs ceevent = new CancelEventArgs();
                     if (NativeWindow.WndProcShouldBeDebuggable)
@@ -250,11 +250,11 @@ namespace System.Windows.Forms
             return extensions.ToArray();
         }
 
-        private protected static string? GetFilePathFromShellItem(IShellItem item)
+        private protected static string GetFilePathFromShellItem(IShellItem item)
         {
             HRESULT hr = item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING, out string? filename);
             hr.ThrowIfFailed();
-            return filename;
+            return filename!;
         }
 
         private readonly FileDialogCustomPlacesCollection _customPlaces = new();

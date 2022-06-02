@@ -6571,6 +6571,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">目前的協助工具物件僅適用於 {0}、 {1} 或 {2} 檢視中的 ListView</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="new">Cannot get accessiblity object when ListViewItem is not attached to a ListView.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">ListView 項目的核取屬性變更時引發的事件。</target>
@@ -10313,12 +10318,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripScrollButtonDownAccessibleName">
         <source>Line down</source>
-        <target state="new">Line down</target>
+        <target state="translated">下移一行</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripScrollButtonUpAccessibleName">
         <source>Line up</source>
-        <target state="new">Line up</target>
+        <target state="translated">上移一行</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">

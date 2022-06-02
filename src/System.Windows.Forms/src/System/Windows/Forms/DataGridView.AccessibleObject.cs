@@ -276,7 +276,12 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        return SR.NotSortedAccessibleStatus;
+                        if (ColumnCount > 0 && RowCount > 0)
+                        {
+                            return SR.NotSortedAccessibleStatus;
+                        }
+
+                        break;
                 }
 
                 return base.GetPropertyValue(propertyID);

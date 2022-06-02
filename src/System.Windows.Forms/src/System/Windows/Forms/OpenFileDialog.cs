@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -139,10 +137,15 @@ namespace System.Windows.Forms
 
         private protected override string[] ProcessVistaFiles(Interop.WinFormsComWrappers.FileDialogWrapper dialog)
         {
-            var openDialog = (Interop.WinFormsComWrappers.FileOpenDialogWrapper)dialog;
+            var openDialog = (WinFormsComWrappers.FileOpenDialogWrapper)dialog;
             if (Multiselect)
             {
-                openDialog.GetResults(out Interop.WinFormsComWrappers.ShellItemArrayWrapper results);
+                openDialog.GetResults(out WinFormsComWrappers.ShellItemArrayWrapper? results);
+                if (results is null)
+                {
+                    return Array.Empty<string>();
+                }
+
                 try
                 {
                     results.GetCount(out uint count);
@@ -162,12 +165,17 @@ namespace System.Windows.Forms
             }
             else
             {
-                openDialog.GetResult(out IShellItem item);
+                openDialog.GetResult(out IShellItem? item);
+                if (item is null)
+                {
+                    return Array.Empty<string>();
+                }
+
                 return new string[] { GetFilePathFromShellItem(item) };
             }
         }
 
-        private protected override Interop.WinFormsComWrappers.FileDialogWrapper CreateVistaDialog()
+        private protected override WinFormsComWrappers.FileDialogWrapper CreateVistaDialog()
         {
             HRESULT hr = Ole32.CoCreateInstance(
                 in CLSID.FileOpenDialog,
@@ -182,7 +190,7 @@ namespace System.Windows.Forms
 
             var obj = WinFormsComWrappers.Instance
                 .GetOrCreateObjectForComInstance(lpDialogUnknownPtr, CreateObjectFlags.None);
-            return (Interop.WinFormsComWrappers.FileDialogWrapper)obj;
+            return (WinFormsComWrappers.FileDialogWrapper)obj;
         }
 
         [Browsable(false)]
@@ -194,17 +202,16 @@ namespace System.Windows.Forms
                 string fullPath = FileName;
                 if (string.IsNullOrEmpty(fullPath))
                 {
-                    return "";
+                    return string.Empty;
                 }
 
-                string safePath = RemoveSensitivePathInformation(fullPath);
-                return safePath;
+                return RemoveSensitivePathInformation(fullPath);
             }
         }
 
         private static string RemoveSensitivePathInformation(string fullPath)
         {
-            return System.IO.Path.GetFileName(fullPath);
+            return Path.GetFileName(fullPath);
         }
 
         [Browsable(false)]
@@ -215,7 +222,10 @@ namespace System.Windows.Forms
             {
                 string[] fullPaths = FileNames;
                 if (fullPaths is null || 0 == fullPaths.Length)
-                { return Array.Empty<string>(); }
+                {
+                    return Array.Empty<string>();
+                }
+
                 string[] safePaths = new string[fullPaths.Length];
                 for (int i = 0; i < safePaths.Length; ++i)
                 {

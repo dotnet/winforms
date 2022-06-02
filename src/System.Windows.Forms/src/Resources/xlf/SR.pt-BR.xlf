@@ -6571,6 +6571,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">O objeto de acessibilidade atual é apenas para ListView no modo de exibição {0}, {1} ou {2}</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="new">Cannot get accessiblity object when ListViewItem is not attached to a ListView.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">Evento gerado quando a propriedade de ativação de um item ListView é alterada.</target>
@@ -10313,12 +10318,12 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="ToolStripScrollButtonDownAccessibleName">
         <source>Line down</source>
-        <target state="new">Line down</target>
+        <target state="translated">Linha para baixo</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripScrollButtonUpAccessibleName">
         <source>Line up</source>
-        <target state="new">Line up</target>
+        <target state="translated">Linha acima</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -29,31 +30,63 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static int DragEnter(IntPtr thisPtr, IntPtr pDataObj, uint grfKeyState, Point pt, uint* pdwEffect)
             {
-                Ole32.IDropTarget inst = ComInterfaceDispatch.GetInstance<Ole32.IDropTarget>((ComInterfaceDispatch*)thisPtr);
-                var dataObject = WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(pDataObj, CreateObjectFlags.Unwrap);
-                return (int)inst.DragEnter(dataObject, grfKeyState, pt, ref *pdwEffect);
+                try
+                {
+                    Ole32.IDropTarget instance = ComInterfaceDispatch.GetInstance<Ole32.IDropTarget>((ComInterfaceDispatch*)thisPtr);
+                    var dataObject = WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(pDataObj, CreateObjectFlags.Unwrap);
+                    return (int)instance.DragEnter(dataObject, grfKeyState, pt, ref *pdwEffect);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return ex.HResult;
+                }
             }
 
             [UnmanagedCallersOnly]
             private static int DragOver(IntPtr thisPtr, uint grfKeyState, Point pt, uint* pdwEffect)
             {
-                Ole32.IDropTarget inst = ComInterfaceDispatch.GetInstance<Ole32.IDropTarget>((ComInterfaceDispatch*)thisPtr);
-                return (int)inst.DragOver(grfKeyState, pt, ref *pdwEffect);
+                try
+                {
+                    Ole32.IDropTarget instance = ComInterfaceDispatch.GetInstance<Ole32.IDropTarget>((ComInterfaceDispatch*)thisPtr);
+                    return (int)instance.DragOver(grfKeyState, pt, ref *pdwEffect);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return ex.HResult;
+                }
             }
 
             [UnmanagedCallersOnly]
             private static int DragLeave(IntPtr thisPtr)
             {
-                Ole32.IDropTarget inst = ComInterfaceDispatch.GetInstance<Ole32.IDropTarget>((ComInterfaceDispatch*)thisPtr);
-                return (int)inst.DragLeave();
+                try
+                {
+                    Ole32.IDropTarget instance = ComInterfaceDispatch.GetInstance<Ole32.IDropTarget>((ComInterfaceDispatch*)thisPtr);
+                    return (int)instance.DragLeave();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return ex.HResult;
+                }
             }
 
             [UnmanagedCallersOnly]
             private static int Drop(IntPtr thisPtr, IntPtr pDataObj, uint grfKeyState, Point pt, uint* pdwEffect)
             {
-                Ole32.IDropTarget inst = ComInterfaceDispatch.GetInstance<Ole32.IDropTarget>((ComInterfaceDispatch*)thisPtr);
-                var dataObject = WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(pDataObj, CreateObjectFlags.Unwrap);
-                return (int)inst.Drop(dataObject, grfKeyState, pt, ref *pdwEffect);
+                try
+                {
+                    Ole32.IDropTarget instance = ComInterfaceDispatch.GetInstance<Ole32.IDropTarget>((ComInterfaceDispatch*)thisPtr);
+                    var dataObject = WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(pDataObj, CreateObjectFlags.Unwrap);
+                    return (int)instance.Drop(dataObject, grfKeyState, pt, ref *pdwEffect);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return ex.HResult;
+                }
             }
         }
     }
