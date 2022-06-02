@@ -14,9 +14,9 @@
     "version": "7.0.100-preview.3.22154.3"
   },
   "msbuild-sdks": {
-    "Microsoft.DotNet.Arcade.Sdk": "7.0.0-beta.22281.1",
-    "Microsoft.DotNet.CMake.Sdk": "7.0.0-beta.22281.1",
-    "Microsoft.DotNet.Helix.Sdk": "7.0.0-beta.22281.1",
+    "Microsoft.DotNet.Arcade.Sdk": "7.0.0-beta.22301.2",
+    "Microsoft.DotNet.CMake.Sdk": "7.0.0-beta.22301.2",
+    "Microsoft.DotNet.Helix.Sdk": "7.0.0-beta.22301.2",
     "FIX-85B6-MERGE-9C38-CONFLICT": "1.0.0",
     "Microsoft.NET.Sdk.IL": "7.0.0-preview.6.22281.7"
   },
