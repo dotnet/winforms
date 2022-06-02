@@ -127,10 +127,8 @@ namespace System.Windows.Forms
                 && dragEventArgs.AllowedEffect == AllowedEffect
                 && dragEventArgs.Effect == Effect
                 && dragEventArgs.DropImageType == DropImageType
-                && dragEventArgs.Message is not null
-                && dragEventArgs.Message.Equals(Message)
-                && dragEventArgs.MessageReplacementToken is not null
-                && dragEventArgs.MessageReplacementToken.Equals(MessageReplacementToken);
+                && dragEventArgs.Message == Message
+                && dragEventArgs.MessageReplacementToken == MessageReplacementToken;
         }
     }
 }

@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
@@ -24,7 +22,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Initializes a new instance of the <see cref="GiveFeedbackEventArgs"/> class.
         /// </summary>
-        public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
+        public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
             Effect = effect;
             UseDefaultCursors = useDefaultCursors;
@@ -51,7 +49,7 @@ namespace System.Windows.Forms
         /// Note the outer edges of <see cref="DragImage"/> are blended out if the image width or height exceeds 300 pixels.
         /// </para>
         /// </remarks>
-        public Bitmap DragImage { get; set; }
+        public Bitmap? DragImage { get; set; }
 
         /// <summary>
         ///  Gets or sets the drag image cursor offset.
@@ -89,24 +87,10 @@ namespace System.Windows.Forms
             return giveFeedbackEventArgs is not null
                 && giveFeedbackEventArgs.Effect == Effect
                 && giveFeedbackEventArgs.UseDefaultCursors == UseDefaultCursors
-                && giveFeedbackEventArgs.DragImage.Equals(DragImage)
+                && ((giveFeedbackEventArgs.DragImage is null && DragImage is null)
+                    || (giveFeedbackEventArgs.DragImage is not null && giveFeedbackEventArgs.DragImage.Equals(DragImage)))
                 && giveFeedbackEventArgs.CursorOffset.Equals(CursorOffset)
                 && giveFeedbackEventArgs.UseDefaultDragImage == UseDefaultDragImage;
-        }
-
-        internal void UpdateDragImage(IComDataObject? dataObject, IntPtr lastHwndTarget)
-        {
-            if (dataObject is null)
-            {
-                return;
-            }
-
-            DragDropHelper.SetDragImage(dataObject, this);
-
-            if (!lastHwndTarget.Equals(IntPtr.Zero) && (Cursor.Position is Point point))
-            {
-                DragDropHelper.DragEnter(lastHwndTarget, dataObject, ref point, (Ole32.DROPEFFECT)Effect);
-            }
         }
     }
 }

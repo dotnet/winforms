@@ -16,10 +16,10 @@ System.Windows.Forms.DragEventArgs.Message.get -> string?
 System.Windows.Forms.DragEventArgs.Message.set -> void
 System.Windows.Forms.DragEventArgs.MessageReplacementToken.get -> string?
 System.Windows.Forms.DragEventArgs.MessageReplacementToken.set -> void
-System.Windows.Forms.GiveFeedbackEventArgs.GiveFeedbackEventArgs(System.Windows.Forms.DragDropEffects effect, bool useDefaultCursors, System.Drawing.Bitmap! dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> void
+System.Windows.Forms.GiveFeedbackEventArgs.GiveFeedbackEventArgs(System.Windows.Forms.DragDropEffects effect, bool useDefaultCursors, System.Drawing.Bitmap? dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> void
 System.Windows.Forms.GiveFeedbackEventArgs.CursorOffset.get -> System.Drawing.Point
 System.Windows.Forms.GiveFeedbackEventArgs.CursorOffset.set -> void
-System.Windows.Forms.GiveFeedbackEventArgs.DragImage.get -> System.Drawing.Bitmap!
+System.Windows.Forms.GiveFeedbackEventArgs.DragImage.get -> System.Drawing.Bitmap?
 System.Windows.Forms.GiveFeedbackEventArgs.DragImage.set -> void
 System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultDragImage.get -> bool
 System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultDragImage.set -> void

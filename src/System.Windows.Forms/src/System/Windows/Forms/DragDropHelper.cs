@@ -315,7 +315,7 @@ namespace System.Windows.Forms
         /// with premultiplied alpha blending, but this method will multiply it again, doubling the resulting alpha value.
         /// </para>
         /// </remarks>
-        public static void SetDragImage(IComDataObject dataObject, Bitmap dragImage, Point cursorOffset, bool usingDefaultDragImage)
+        public static void SetDragImage(IComDataObject dataObject, Bitmap? dragImage, Point cursorOffset, bool usingDefaultDragImage)
         {
             ArgumentNullException.ThrowIfNull(nameof(dataObject));
 

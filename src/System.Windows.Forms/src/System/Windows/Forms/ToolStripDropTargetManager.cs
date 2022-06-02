@@ -292,7 +292,7 @@ namespace System.Windows.Forms
                     OnDragEnter(dragEnterArgs);
 
                     // tell the drag image manager you've entered
-                    if ((dragEnterArgs.DropImageType > DropImageType.Invalid) && (owner is ToolStrip toolStrip) && toolStrip.IsHandleCreated)
+                    if (dragEnterArgs.DropImageType > DropImageType.Invalid && owner is ToolStrip toolStrip && toolStrip.IsHandleCreated)
                     {
                         DragDropHelper.SetDropDescription(dragEnterArgs);
                         DragDropHelper.DragEnter(toolStrip.Handle, dragEnterArgs);

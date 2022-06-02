@@ -11,22 +11,17 @@ namespace System.Windows.Forms
     internal class DropSource : Ole32.IDropSource, Ole32.IDropSourceNotify
     {
         private readonly ISupportOleDropSource _peer;
-        private readonly IComDataObject? _dataObject;
+        private readonly IComDataObject _dataObject;
         private IntPtr _lastHwndTarget;
         private GiveFeedbackEventArgs? _lastGiveFeedbacEventArgs;
 
-        public DropSource(ISupportOleDropSource peer)
-            : this(peer, dataObject: null, dragImage: null, cursorOffset: default, useDefaultDragImage: false)
-        {
-        }
-
-        public DropSource(ISupportOleDropSource peer, IComDataObject? dataObject, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
+        public DropSource(ISupportOleDropSource peer, IComDataObject dataObject, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
             _peer = peer.OrThrowIfNull();
+            _dataObject = dataObject.OrThrowIfNull();
 
-            if (dragImage is not null && dataObject is not null)
+            if (dragImage is not null)
             {
-                _dataObject = dataObject;
                 _lastGiveFeedbacEventArgs = new(DragDropEffects.None, useDefaultCursors: false, dragImage, cursorOffset, useDefaultDragImage);
                 DragDropHelper.SetDragImage(_dataObject, _lastGiveFeedbacEventArgs);
             }
@@ -74,10 +69,9 @@ namespace System.Windows.Forms
 
             _peer.OnGiveFeedback(gfbevent);
 
-            if (gfbevent.DragImage is not null && !gfbevent.Equals(_lastGiveFeedbacEventArgs))
+            if (gfbevent.DragImage is not null)
             {
-                _lastGiveFeedbacEventArgs = gfbevent.Clone();
-                _lastGiveFeedbacEventArgs.UpdateDragImage(_dataObject, _lastHwndTarget);
+                UpdateDragImage(gfbevent);
             }
 
             if (gfbevent.UseDefaultCursors)
@@ -86,6 +80,20 @@ namespace System.Windows.Forms
             }
 
             return HRESULT.S_OK;
+
+            void UpdateDragImage(GiveFeedbackEventArgs e)
+            {
+                if (!e.Equals(_lastGiveFeedbacEventArgs))
+                {
+                    _lastGiveFeedbacEventArgs = e.Clone();
+                    DragDropHelper.SetDragImage(_dataObject, _lastGiveFeedbacEventArgs);
+
+                    if (!_lastHwndTarget.Equals(IntPtr.Zero) && (Cursor.Position is Point point))
+                    {
+                        DragDropHelper.DragEnter(_lastHwndTarget, _dataObject, ref point, (Ole32.DROPEFFECT)_lastGiveFeedbacEventArgs.Effect);
+                    }
+                }
+            }
         }
 
         public HRESULT DragEnterTarget(IntPtr hwndTarget)
