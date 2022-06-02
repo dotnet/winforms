@@ -179,7 +179,7 @@ namespace System.Windows.Forms
 
         private bool _blockLabelEdit;
 
-        private ListViewLabelEditNativeWindow _labelEdit;
+        private ListViewLabelEditNativeWindow? _labelEdit;
 
         // Background image stuff
         // Because we have to create a temporary file and the OS does not clean up the temporary files from the machine
@@ -6468,9 +6468,12 @@ namespace System.Windows.Forms
 
                 case (int)LVN.BEGINLABELEDITW:
                     {
+                        Debug.Assert(_labelEdit is null,
+                            "A new label editing shouldn't start before the previous one ended");
                         if (_labelEdit is not null)
                         {
-                            throw new InvalidOperationException("A new label editing can't be started before the previous one was ended.");
+                            _labelEdit.ReleaseHandle();
+                            _labelEdit = null;
                         }
 
                         bool cancelEdit;
@@ -6524,9 +6527,10 @@ namespace System.Windows.Forms
 
                 case (int)LVN.ENDLABELEDITW:
                     {
+                        Debug.Assert(_labelEdit is not null, "There is no active label edit to end");
                         if (_labelEdit is null)
                         {
-                            throw new InvalidOperationException("There is no active label edit to end");
+                            break;
                         }
 
                         _labelEdit.ReleaseHandle();

@@ -24,16 +24,14 @@ namespace System.Windows.Forms
         private const int OwnerChildEditLinesCount = 1;
 
         private readonly IHandle _owningChildEdit;
-
         private readonly AccessibleObject _owningChildEditAccessibilityObject;
-
         private readonly ListView _owningListView;
 
         public ListViewLabelEditUiaTextProvider(ListView owner, IHandle childEdit, AccessibleObject childEditAccessibilityObject)
         {
             _owningListView = owner.OrThrowIfNull();
             _owningChildEdit = childEdit;
-            _owningChildEditAccessibilityObject = childEditAccessibilityObject;
+            _owningChildEditAccessibilityObject = childEditAccessibilityObject.OrThrowIfNull();
         }
 
         public override Rectangle BoundingRectangle => GetFormattingRectangle();

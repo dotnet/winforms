@@ -6,7 +6,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        public enum WINEVENT : int
+        public enum WINEVENT : uint
         {
             OUTOFCONTEXT   = 0,
             SKIPOWNTHREAD  = 1,

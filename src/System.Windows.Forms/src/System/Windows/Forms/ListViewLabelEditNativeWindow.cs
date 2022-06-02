@@ -11,23 +11,58 @@ namespace System.Windows.Forms
     {
         private const uint TextSelectionChanged = 0x8014;
 
-        private ListView _owner;
-
+        private readonly ListView _owningListView;
         private AccessibleObject? _accessibilityObject;
-
-        private User32.WINEVENTPROC? _winEventProc;
-
+        private User32.WINEVENTPROC? _winEventProcCallback;
         private nint _valueChangeHook;
         private nint _textSelectionChangedHook;
-
         private bool _winEventHooksInstalled;
 
-        public ListViewLabelEditNativeWindow(ListView owner)
+        public ListViewLabelEditNativeWindow(ListView owningListView)
         {
-            _owner = owner.OrThrowIfNull();
+            _owningListView = owningListView.OrThrowIfNull();
         }
 
-        public AccessibleObject AccessibilityObject => _accessibilityObject ??= new ListViewLabelEditAccessibleObject(_owner, this);
+        public AccessibleObject AccessibilityObject =>
+            _accessibilityObject ??= new ListViewLabelEditAccessibleObject(_owningListView, this);
+
+        private void InstallWinEventHooks()
+        {
+            if (UiaCore.UiaClientsAreListening().IsFalse())
+            {
+                return;
+            }
+
+            _winEventProcCallback = new User32.WINEVENTPROC(WinEventProcCallback);
+            _valueChangeHook = User32.SetWinEventHook((uint)AccessibleEvents.ValueChange, _winEventProcCallback);
+            _textSelectionChangedHook = User32.SetWinEventHook(TextSelectionChanged, _winEventProcCallback);
+
+            _winEventHooksInstalled = true;
+        }
+
+        private bool IsAccessibilityObjectCreated => _accessibilityObject is not null;
+
+        public bool IsHandleCreated => Handle != IntPtr.Zero;
+
+        protected override void OnHandleChange()
+        {
+            base.OnHandleChange();
+
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
+            // Install winevent hooks *only* when the parent ListView has an existing accessible object.
+            // If we don't install hooks at the label edit startup then assistive tech (e.g. Narrator) won't announce the text pattern for it.
+            // By invoking UiaClientsAreListening we will have hooks installed even if the assistive tech isn't currently run.
+            if (!_owningListView.IsAccessibilityObjectCreated)
+            {
+                return;
+            }
+
+            InstallWinEventHooks();
+        }
 
         public override void ReleaseHandle()
         {
@@ -39,88 +74,26 @@ namespace System.Windows.Forms
                 _winEventHooksInstalled = false;
             }
 
-            if (_accessibilityObject is not null)
+            if (IsHandleCreated)
             {
                 // When a window that previously returned providers has been destroyed,
                 // you should notify UI Automation by calling the UiaReturnRawElementProvider
                 // as follows: UiaReturnRawElementProvider(hwnd, 0, 0, NULL). This call tells
                 // UI Automation that it can safely remove all map entries that refer to the specified window.
-                UiaCore.UiaReturnRawElementProvider(Handle, 0, 0, null);
+                UiaCore.UiaReturnRawElementProvider(Handle, wParam: 0, lParam: 0, el: null);
+            }
 
-                if (OsVersion.IsWindows8OrGreater)
-                {
-                    UiaCore.UiaDisconnectProvider(AccessibilityObject);
-                }
+            if (OsVersion.IsWindows8OrGreater && IsAccessibilityObjectCreated)
+            {
+                UiaCore.UiaDisconnectProvider(AccessibilityObject);
             }
 
             base.ReleaseHandle();
         }
 
-        protected override void OnHandleChange()
+        private void WinEventProcCallback(nint hWinEventHook, uint eventId, nint hwnd, int idObject, int idChild, uint idEventThread, uint dwmsEventTime)
         {
-            base.OnHandleChange();
-
-            if (Handle == IntPtr.Zero)
-            {
-                return;
-            }
-
-            // Install winevent hooks only in the case when the parent listview already has an accessible object created.
-            // If we won't install hooks at the label edit startup then Narrator won't announce the text pattern for it.
-            // If we will just check for UiaClientsAreListening then we will have hooks installed even if Narrator isn't currently run.
-            if (!_owner.IsAccessibilityObjectCreated)
-            {
-                return;
-            }
-
-            InstallWinEventHooks();
-        }
-
-        protected override void WndProc(ref Message m)
-        {
-            switch (m.MsgInternal)
-            {
-                case User32.WM.GETOBJECT:
-                    WmGetObject(ref m);
-                    return;
-                default:
-                    base.WndProc(ref m);
-                    return;
-            }
-        }
-
-        private void InstallWinEventHooks()
-        {
-            if (UiaCore.UiaClientsAreListening().IsFalse())
-            {
-                return;
-            }
-
-            _winEventProc = new User32.WINEVENTPROC(WinEventProc);
-            _valueChangeHook = User32.SetWinEventHook((uint)AccessibleEvents.ValueChange, _winEventProc);
-            _textSelectionChangedHook = User32.SetWinEventHook(TextSelectionChanged, _winEventProc);
-
-            _winEventHooksInstalled = true;
-        }
-
-        private AccessibleObject RequestAccessibilityObject()
-        {
-            AccessibleObject result = AccessibilityObject;
-
-            // Accessibility object was likely requested by some accessibility tool (because of WM_GETOBJECT message).
-            // The tool that requested the object may be Narrator in which case we may need to install winevent hooks to
-            // produce the automation events related to the text pattern.
-            if (!_winEventHooksInstalled)
-            {
-                InstallWinEventHooks();
-            }
-
-            return result;
-        }
-
-        private void WinEventProc(nint hWinEventHook, uint eventId, nint hwnd, int idObject, int idChild, uint idEventThread, uint dwmsEventTime)
-        {
-            if (hwnd != Handle || idObject != User32.OBJID.CLIENT)
+            if (hwnd != Handle || idObject != User32.OBJID.CLIENT || !IsAccessibilityObjectCreated)
             {
                 return;
             }
@@ -138,6 +111,20 @@ namespace System.Windows.Forms
 
         private void WmGetObject(ref Message m)
         {
+            AccessibleObject EnsureWinEventHooksInstalledAndGetAccessibilityObject()
+            {
+                AccessibleObject accessibilityObject = AccessibilityObject;
+
+                // Accessibility object was likely requested by an assistive tech (which sent WM_GETOBJECT message).
+                // We may need to install winevent hooks to produce the automation events related to the text pattern.
+                if (!_winEventHooksInstalled)
+                {
+                    InstallWinEventHooks();
+                }
+
+                return accessibilityObject;
+            }
+
             if (m.LParamInternal == NativeMethods.UiaRootObjectId)
             {
                 // If the requested object identifier is UiaRootObjectId,
@@ -146,7 +133,7 @@ namespace System.Windows.Forms
                     this,
                     m.WParamInternal,
                     m.LParamInternal,
-                    RequestAccessibilityObject());
+                    EnsureWinEventHooksInstalledAndGetAccessibilityObject());
 
                 return;
             }
@@ -163,20 +150,33 @@ namespace System.Windows.Forms
             try
             {
                 // Obtain the Lresult.
-                IntPtr pUnknown = Marshal.GetIUnknownForObject(RequestAccessibilityObject());
+                IntPtr pUnknown = Marshal.GetIUnknownForObject(EnsureWinEventHooksInstalledAndGetAccessibilityObject());
 
                 try
                 {
-                    m.ResultInternal = Oleacc.LresultFromObject(ref IID.IAccessible, m.WParamInternal, new HandleRef(this, pUnknown));
+                    m.ResultInternal = Oleacc.LresultFromObject(in IID.IAccessible, m.WParamInternal, new HandleRef(this, pUnknown));
                 }
                 finally
                 {
                     Marshal.Release(pUnknown);
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new InvalidOperationException(SR.RichControlLresult, e);
+                throw new InvalidOperationException(SR.RichControlLresult, ex);
+            }
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            switch (m.MsgInternal)
+            {
+                case User32.WM.GETOBJECT:
+                    WmGetObject(ref m);
+                    return;
+                default:
+                    base.WndProc(ref m);
+                    return;
             }
         }
     }
