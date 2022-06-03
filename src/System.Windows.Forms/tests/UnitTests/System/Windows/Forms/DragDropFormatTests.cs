@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Tests
                     sizeof(BOOL))
             };
 
-            SaveInDragLoopToHandle(medium.unionmember, true);
+            SaveInDragLoopToHandle(medium.unionmember, inDragLoop: true);
             yield return new object[] { formatEtc, medium };
         }
 
@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Tests
 
             try
             {
-                dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, false);
+                dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, copyData: false);
                 int preDisposeHandleSize = Kernel32.GlobalSize(dragDropFormat.Medium.unionmember);
                 dragDropFormat.Dispose();
                 int postDisposeHandleSize = Kernel32.GlobalSize(dragDropFormat.Medium.unionmember);
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Tests
 
             try
             {
-                dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, false);
+                dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, copyData: false);
                 data = dragDropFormat.GetData();
                 IntPtr basePtr = Kernel32.GlobalLock(data.unionmember);
                 bool inShellDragLoop = *(BOOL*)basePtr == BOOL.TRUE;
@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Tests
 
             try
             {
-                dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, false);
+                dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, copyData: false);
                 bool preRefreshInDragLoop = GetInDragLoopFromHandle(dragDropFormat.Medium.unionmember);
                 dataRefresh = new()
                 {
@@ -104,8 +104,8 @@ namespace System.Windows.Forms.Tests
                         sizeof(BOOL))
                 };
 
-                SaveInDragLoopToHandle(dataRefresh.unionmember, false);
-                dragDropFormat.RefreshData(formatEtc.cfFormat, dataRefresh, true);
+                SaveInDragLoopToHandle(dataRefresh.unionmember, inDragLoop: false);
+                dragDropFormat.RefreshData(formatEtc.cfFormat, dataRefresh, copyData: false);
                 data = dragDropFormat.GetData();
                 bool postRefreshInDragLoop = GetInDragLoopFromHandle(data.unionmember);
                 Assert.True(preRefreshInDragLoop);
