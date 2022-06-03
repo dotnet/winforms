@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Reflection;
@@ -1889,6 +1890,7 @@ namespace System.Windows.Forms
         ///  match is based upon the name and DescriptorInfo which describes the signature
         ///  of the method.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder? binder, Type[] types, ParameterModifier[]? modifiers)
             => typeof(IAccessible).GetMethod(name, bindingAttr, binder, types, modifiers);
 
@@ -1897,9 +1899,11 @@ namespace System.Windows.Forms
         ///  match is based upon the name of the method. If the object implemented multiple methods
         ///  with the same name an AmbiguousMatchException is thrown.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr)
             => typeof(IAccessible).GetMethod(name, bindingAttr);
 
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr)
             => typeof(IAccessible).GetMethods(bindingAttr);
 
@@ -1908,9 +1912,11 @@ namespace System.Windows.Forms
         ///  object. The match is based upon a name. There cannot be more than
         ///  a single field with a name.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)]
         FieldInfo? IReflect.GetField(string name, BindingFlags bindingAttr)
             => typeof(IAccessible).GetField(name, bindingAttr);
 
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)]
         FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr)
             => typeof(IAccessible).GetFields(bindingAttr);
 
@@ -1919,6 +1925,7 @@ namespace System.Windows.Forms
         ///  the given name an AmbiguousMatchException will be thrown. Returns
         ///  null if no property is found.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
         PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr)
             => typeof(IAccessible).GetProperty(name, bindingAttr);
 
@@ -1926,6 +1933,7 @@ namespace System.Windows.Forms
         ///  Return the property based upon the name and Descriptor info describing
         ///  the property indexing. Return null if no property is found.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
         PropertyInfo? IReflect.GetProperty(
             string name,
             BindingFlags bindingAttr,
@@ -1939,18 +1947,31 @@ namespace System.Windows.Forms
         ///  Returns an array of PropertyInfos for all the properties defined on
         ///  the Reflection object.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
         PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
             => typeof(IAccessible).GetProperties(bindingAttr);
 
         /// <summary>
         ///  Return an array of members which match the passed in name.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields |
+            DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods |
+            DynamicallyAccessedMemberTypes.PublicEvents | DynamicallyAccessedMemberTypes.NonPublicEvents |
+            DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties |
+            DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors |
+            DynamicallyAccessedMemberTypes.PublicNestedTypes | DynamicallyAccessedMemberTypes.NonPublicNestedTypes)]
         MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
             => typeof(IAccessible).GetMember(name, bindingAttr);
 
         /// <summary>
         ///  Return an array of all of the members defined for this object.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields |
+            DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods |
+            DynamicallyAccessedMemberTypes.PublicEvents | DynamicallyAccessedMemberTypes.NonPublicEvents |
+            DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties |
+            DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors |
+            DynamicallyAccessedMemberTypes.PublicNestedTypes | DynamicallyAccessedMemberTypes.NonPublicNestedTypes)]
         MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
             => typeof(IAccessible).GetMembers(bindingAttr);
 
@@ -1986,6 +2007,7 @@ namespace System.Windows.Forms
         ///  @exception ArgumentException when <var>invokeAttr</var> specifies property set and
         ///  invoke method.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
         object? IReflect.InvokeMember(
             string name,
             BindingFlags invokeAttr,
