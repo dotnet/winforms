@@ -6573,7 +6573,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
-        <target state="new">Cannot get accessiblity object when ListViewItem is not attached to a ListView.</target>
+        <target state="translated">ListViewItem bir ListView'a ekli olmadığında erişilebilirlik nesnesi alınamaz.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">

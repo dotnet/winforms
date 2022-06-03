@@ -6573,7 +6573,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
-        <target state="new">Cannot get accessiblity object when ListViewItem is not attached to a ListView.</target>
+        <target state="translated">Nie można uzyskać obiektu dostępności, gdy element ListViewItem nie jest dołączony do elementu ListView.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">

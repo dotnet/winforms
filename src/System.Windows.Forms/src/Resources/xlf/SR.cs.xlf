@@ -6573,7 +6573,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
-        <target state="new">Cannot get accessiblity object when ListViewItem is not attached to a ListView.</target>
+        <target state="translated">Nelze načíst objekt přístupnosti, pokud položka ListViewItem není připojena k ListView.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">

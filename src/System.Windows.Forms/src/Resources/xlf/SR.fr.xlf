@@ -6573,7 +6573,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
-        <target state="new">Cannot get accessiblity object when ListViewItem is not attached to a ListView.</target>
+        <target state="translated">Impossible d'obtenir un objet d'accessibilité lorsque ListViewItem n'est pas attaché à une ListView</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
