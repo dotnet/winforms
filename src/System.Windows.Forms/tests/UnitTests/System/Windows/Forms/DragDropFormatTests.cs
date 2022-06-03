@@ -7,7 +7,7 @@ namespace System.Windows.Forms.Tests
 {
     public class DragDropFormatTests : IClassFixture<ThreadExceptionFixture>
     {
-        public static IEnumerable<object[]> DragDropFormat_InShellDragLoop_TestData()
+        public static IEnumerable<object[]> DragDropFormat_InDragLoop_TestData()
         {
             FORMATETC formatEtc = new()
             {
@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(DragDropFormat_InShellDragLoop_TestData))]
+        [MemberData(nameof(DragDropFormat_InDragLoop_TestData))]
         public unsafe void DragDropFormat_Set_Dispose_ReturnsExpected(FORMATETC formatEtc, STGMEDIUM medium)
         {
             DragDropFormat dragDropFormat = default;
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(DragDropFormat_InShellDragLoop_TestData))]
+        [MemberData(nameof(DragDropFormat_InDragLoop_TestData))]
         public unsafe void DragDropFormat_Set_GetData_ReturnsExpected(FORMATETC formatEtc, STGMEDIUM medium)
         {
             DragDropFormat dragDropFormat = default;
@@ -68,9 +68,9 @@ namespace System.Windows.Forms.Tests
                 dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, copyData: false);
                 data = dragDropFormat.GetData();
                 IntPtr basePtr = Kernel32.GlobalLock(data.unionmember);
-                bool inShellDragLoop = *(BOOL*)basePtr == BOOL.TRUE;
+                bool inDragLoop = *(BOOL*)basePtr == BOOL.TRUE;
                 Kernel32.GlobalUnlock(data.unionmember);
-                Assert.True(inShellDragLoop);
+                Assert.True(inDragLoop);
                 Assert.Equal(medium.pUnkForRelease, data.pUnkForRelease);
                 Assert.Equal(medium.tymed, data.tymed);
                 Assert.NotEqual(medium.unionmember, data.unionmember);
@@ -84,7 +84,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(DragDropFormat_InShellDragLoop_TestData))]
+        [MemberData(nameof(DragDropFormat_InDragLoop_TestData))]
         public unsafe void DragDropFormat_Set_RefreshData_ReturnsExpected(FORMATETC formatEtc, STGMEDIUM medium)
         {
             DragDropFormat dragDropFormat = default;
