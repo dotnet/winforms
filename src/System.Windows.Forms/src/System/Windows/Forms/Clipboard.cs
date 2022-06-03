@@ -130,8 +130,18 @@ namespace System.Windows.Forms
             }
 
             // We need to retry the GetDataObject() since the clipBoard is busy sometimes and hence the GetDataObject would fail with ClipBoardException.
-            return GetDataObject(retryTimes: 10, retryDelay: 100);
+            if (UseComWrappers)
+            {
+                return GetDataObject(retryTimes: 10, retryDelay: 100);
+            }
+            else
+            {
+                return GetDataObjectWin7(retryTimes: 10, retryDelay: 100); 
+            }
         }
+
+        // If rewrite this property via ILLink, you can get rid of Win7 code.
+        private bool UseComWrappers => OsVersion.IsWindows8OrGreater;
 
         /// <remarks>
         ///  Private method to help accessing clipBoard for know retries before failing.
@@ -159,6 +169,43 @@ namespace System.Windows.Forms
 
             if (dataObject is not null)
             {
+                return new DataObject(dataObject);
+            }
+
+            return null;
+        }
+
+        /// <remarks>
+        ///  Private method to help accessing clipBoard for know retries before failing.
+        /// </remarks>
+        private static IDataObject? GetDataObjectWin7(int retryTimes, int retryDelay)
+        {
+            IComDataObject? dataObject = null;
+            HRESULT hr;
+            int retry = retryTimes;
+            do
+            {
+                hr = Ole32.OleGetClipboard(ref dataObject);
+                if (hr != HRESULT.S_OK)
+                {
+                    if (retry == 0)
+                    {
+                        throw new ExternalException(SR.ClipboardOperationFailed, (int)hr);
+                    }
+
+                    retry--;
+                    Thread.Sleep(millisecondsTimeout: retryDelay);
+                }
+            }
+            while (hr != 0);
+
+            if (dataObject is not null)
+            {
+                if (dataObject is IDataObject ido && !Marshal.IsComObject(dataObject))
+                {
+                    return ido;
+                }
+
                 return new DataObject(dataObject);
             }
 

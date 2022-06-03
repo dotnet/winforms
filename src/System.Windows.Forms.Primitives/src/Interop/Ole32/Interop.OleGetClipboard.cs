@@ -13,6 +13,9 @@ internal static partial class Interop
         [DllImport(Libraries.Ole32, ExactSpelling = true)]
         private static extern HRESULT OleGetClipboard(out IntPtr data);
 
+        [DllImport(Libraries.Ole32, ExactSpelling = true)]
+        public static extern HRESULT OleGetClipboard(ref IDataObject? data);
+
         public static bool TryOleGetClipboard(out HRESULT result, [NotNullWhen(true)] out IDataObject? data)
         {
             result = OleGetClipboard(out IntPtr ptr);
