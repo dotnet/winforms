@@ -15,7 +15,7 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     public partial class DataGridViewComboBoxCell : DataGridViewCell
     {
         private static readonly int s_propComboBoxCellDataSource = PropertyStore.CreateKey();
@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         internal const int DefaultMaxDropDownItems = 8;
 
         private static readonly Type s_defaultFormattedValueType = typeof(string);
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
         private static readonly Type s_defaultEditType = typeof(DataGridViewComboBoxEditingControl);
         private static readonly Type s_defaultValueType = typeof(object);
         private static readonly Type s_cellType = typeof(DataGridViewComboBoxCell);
