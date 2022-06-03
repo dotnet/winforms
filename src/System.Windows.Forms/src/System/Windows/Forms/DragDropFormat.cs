@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         {
             _format = format;
 
-            //  Handle whether the data object or the caller owns the storage medium.
+            // Handle whether the data object or the caller owns the storage medium.
             _medium = copyData ? CopyData(format, medium) : medium;
         }
 
@@ -42,10 +42,10 @@ namespace System.Windows.Forms
         /// </summary>
         public void RefreshData(short format, STGMEDIUM medium, bool copyData)
         {
-            ReleaseMedium(_medium);
+            ReleaseMedium();
             _format = format;
 
-            //  Handle whether the data object or the caller owns the storage medium.
+            // Handle whether the data object or the caller owns the storage medium.
             _medium = copyData ? CopyData(format, medium) : medium;
         }
 
@@ -112,16 +112,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Frees the specified storage medium.
+        ///  Frees the storage medium in this instance.
         /// </summary>
-        private static void ReleaseMedium(STGMEDIUM medium)
+        private void ReleaseMedium()
         {
-            Ole32.ReleaseStgMedium(ref medium);
+            Ole32.ReleaseStgMedium(ref _medium);
+            _medium.unionmember = IntPtr.Zero;
         }
 
         public void Dispose()
         {
-            ReleaseMedium(_medium);
+            ReleaseMedium();
             GC.SuppressFinalize(this);
         }
 
