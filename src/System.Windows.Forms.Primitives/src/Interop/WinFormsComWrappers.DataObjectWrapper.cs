@@ -70,6 +70,8 @@ internal partial class Interop
                     };
                     ((delegate* unmanaged<IntPtr, FORMATETC*, STGMEDIUM_Raw*, HRESULT>)(*(*(void***)_wrappedInstance + 4)))
                         (_wrappedInstance, formatPtr, &mediumRaw).ThrowIfFailed();
+                    // Because we do not know if COM interface implementation change value of mediumRaw.pUnkForRelease during the call,
+                    // unmarshal it again.
                     medium = new()
                     {
                         pUnkForRelease = mediumRaw.pUnkForRelease == IntPtr.Zero ? null : Marshal.GetObjectForIUnknown(mediumRaw.pUnkForRelease),
