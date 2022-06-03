@@ -35,9 +35,9 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT GetData(IntPtr thisPtr, FORMATETC* format, STGMEDIUM_Raw* pMedium)
             {
-                var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
+                    var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
                     instance.GetData(ref *format, out var medium);
                     pMedium->pUnkForRelease = medium.pUnkForRelease == null ? IntPtr.Zero : Marshal.GetIUnknownForObject(medium.pUnkForRelease);
                     pMedium->tymed = medium.tymed;
@@ -54,9 +54,9 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static unsafe HRESULT GetDataHere(IntPtr thisPtr, FORMATETC* format, STGMEDIUM_Raw* pMedium)
             {
-                var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
+                    var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
                     STGMEDIUM medium = new()
                     {
                         pUnkForRelease = pMedium->pUnkForRelease == IntPtr.Zero ? null : Marshal.GetObjectForIUnknown(pMedium->pUnkForRelease),
@@ -80,23 +80,39 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static unsafe HRESULT QueryGetData(IntPtr thisPtr, FORMATETC* format)
             {
-                var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
-                return (HRESULT)instance.QueryGetData(ref *format);
+                try
+                {
+                    var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
+                    return (HRESULT)instance.QueryGetData(ref *format);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return (HRESULT)ex.HResult;
+                }
             }
 
             [UnmanagedCallersOnly]
             private static unsafe HRESULT GetCanonicalFormatEtc(IntPtr thisPtr, FORMATETC* formatIn, FORMATETC* formatOut)
             {
-                var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
-                return (HRESULT)instance.GetCanonicalFormatEtc(ref *formatIn, out *formatOut);
+                try
+                {
+                    var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
+                    return (HRESULT)instance.GetCanonicalFormatEtc(ref *formatIn, out *formatOut);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return (HRESULT)ex.HResult;
+                }
             }
 
             [UnmanagedCallersOnly]
             private static HRESULT SetData(IntPtr thisPtr, FORMATETC* format, STGMEDIUM_Raw* pMedium, int release)
             {
-                var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
+                    var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
                     STGMEDIUM medium = new()
                     {
                         pUnkForRelease = pMedium->pUnkForRelease == IntPtr.Zero ? null : Marshal.GetObjectForIUnknown(pMedium->pUnkForRelease),
@@ -117,9 +133,9 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT EnumFormatEtc(IntPtr thisPtr, DATADIR direction, IntPtr* pEnumFormatC)
             {
-                var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
+                    var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
                     var formatEtc = instance.EnumFormatEtc(direction);
                     if (Marshal.IsComObject(formatEtc))
                     {
@@ -146,17 +162,25 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static unsafe HRESULT DAdvise(IntPtr thisPtr, FORMATETC* pFormatetc, ADVF advf, IntPtr pAdviseSink, int* connection)
             {
-                var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
-                var adviseSink = (IAdviseSink)Marshal.GetObjectForIUnknown(pAdviseSink);
-                return (HRESULT)instance.DAdvise(ref *pFormatetc, advf, adviseSink, out *connection);
+                try
+                {
+                    var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
+                    var adviseSink = (IAdviseSink)Marshal.GetObjectForIUnknown(pAdviseSink);
+                    return (HRESULT)instance.DAdvise(ref *pFormatetc, advf, adviseSink, out *connection);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return (HRESULT)ex.HResult;
+                }
             }
 
             [UnmanagedCallersOnly]
             private static unsafe HRESULT DUnadvise(IntPtr thisPtr, int connection)
             {
-                var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
+                    var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
                     instance.DUnadvise(connection);
                     return HRESULT.S_OK;
                 }
@@ -170,15 +194,23 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static unsafe HRESULT EnumDAdvise(IntPtr thisPtr, IntPtr* pEnumAdvise)
             {
-                var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
-                var result = (HRESULT)instance.EnumDAdvise(out var enumAdvice);
-                if (result.Failed())
+                try
                 {
+                    var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
+                    var result = (HRESULT)instance.EnumDAdvise(out var enumAdvice);
+                    if (result.Failed())
+                    {
+                        return result;
+                    }
+
+                    result = WinFormsComWrappers.Instance.TryGetComPointer(enumAdvice, IID.IEnumSTATDATA, out var enumAdvicePtr);
                     return result;
                 }
-
-                result = WinFormsComWrappers.Instance.TryGetComPointer(enumAdvice, IID.IEnumSTATDATA, out var enumAdvicePtr);
-                return result;
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return (HRESULT)ex.HResult;
+                }
             }
         }
     }
