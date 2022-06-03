@@ -17,6 +17,7 @@ namespace System.Windows.Forms
     [DesignTimeVisible(false)]
     [DefaultProperty(nameof(Text))]
     [TypeConverter(typeof(ColumnHeaderConverter))]
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     public partial class ColumnHeader : Component, ICloneable
     {
         // disable csharp compiler warning #0414: field assigned unused value

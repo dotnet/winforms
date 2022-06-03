@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Text;
 namespace System.Windows.Forms
 {
     [ToolboxBitmap(typeof(DataGridViewButtonColumn), "DataGridViewButtonColumn")]
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     public class DataGridViewButtonColumn : DataGridViewColumn
     {
         private static readonly Type s_columnType = typeof(DataGridViewButtonColumn);

@@ -6,6 +6,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
@@ -18,6 +19,7 @@ namespace System.Windows.Forms
     [TypeConverter(typeof(DataGridViewColumnConverter))]
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     public class DataGridViewColumn : DataGridViewBand, IComponent
     {
         private const float DefaultFillWeight = 100F;

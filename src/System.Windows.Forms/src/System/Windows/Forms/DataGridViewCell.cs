@@ -6,6 +6,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Text;
@@ -17,6 +18,7 @@ namespace System.Windows.Forms
     ///  Identifies a cell in the dataGridView.
     /// </summary>
     [TypeConverter(typeof(DataGridViewCellConverter))]
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable, IDisposable, IKeyboardToolTip
     {
         private const TextFormatFlags TextFormatSupportedFlags = TextFormatFlags.SingleLine
@@ -227,6 +229,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
         public virtual Type EditType
         {
             get
