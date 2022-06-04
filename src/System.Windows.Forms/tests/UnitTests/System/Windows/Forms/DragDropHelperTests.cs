@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(DragDropHelper.IsInDragLoopFormat(formatEtc));
         }
 
-        [StaTheory]
+        [WinFormsTheory(Skip = "Run manually, results in Fatal error 0xC0000005 on Windows_x86 Debug and Release when executed from the command line.")]
         [MemberData(nameof(DragDropHelper_DragImage_TestData))]
         public unsafe void DragDropHelper_SetDragImage_ReturnsExptected(DataObject dataObject, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
