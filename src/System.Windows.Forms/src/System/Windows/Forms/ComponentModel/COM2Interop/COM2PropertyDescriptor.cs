@@ -7,6 +7,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Reflection;
@@ -360,6 +361,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override TypeConverter Converter
         {
+            [RequiresUnreferencedCode(ComNativeDescriptor.PropertyDescriptorPropertyTypeMessage)]
             get
             {
                 if (TypeConverterValid)
@@ -816,6 +818,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Retrieves an editor of the requested type.
         /// </summary>
+        [RequiresUnreferencedCode(ComNativeDescriptor.EditorRequiresUnreferencedCode + " " + ComNativeDescriptor.PropertyDescriptorPropertyTypeMessage)]
         public override object GetEditor(Type editorBaseType)
         {
             if (TypeEditorValid)
@@ -1426,6 +1429,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return baseConversion;
             }
 
+            [RequiresUnreferencedCode("The Type of value cannot be statically discovered. The public parameterless constructor or the 'Default' static field may be trimmed from the Attribute's Type.")]
             public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(value, attributes);

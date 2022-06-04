@@ -7,6 +7,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Reflection;
@@ -1813,6 +1814,8 @@ namespace System.Windows.Forms
         public virtual string Filter
         {
             get => _filter;
+
+            [RequiresUnreferencedCode("Members of types used in the filter expression might be trimmed.")]
             set
             {
                 _filter = value;

@@ -6,6 +6,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -40,6 +41,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override TypeConverter Converter
         {
+            [RequiresUnreferencedCode(ComNativeDescriptor.PropertyDescriptorPropertyTypeMessage)]
             get
             {
                 if (converter is null)
@@ -89,6 +91,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Retrieves an editor of the requested type.
         /// </summary>
+        [RequiresUnreferencedCode(ComNativeDescriptor.EditorRequiresUnreferencedCode + " " + ComNativeDescriptor.PropertyDescriptorPropertyTypeMessage)]
         public override object GetEditor(Type editorBaseType)
         {
             if (editorBaseType == typeof(UITypeEditor))

@@ -7,6 +7,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
@@ -54,6 +55,8 @@ namespace System.Windows.Forms
             string ISite.Name
             {
                 get => _owner.Site.Name;
+
+                [RequiresUnreferencedCode("The Type of components in the container cannot be statically discovered to validate the name.")]
                 set => _owner.Site.Name = value;
             }
 

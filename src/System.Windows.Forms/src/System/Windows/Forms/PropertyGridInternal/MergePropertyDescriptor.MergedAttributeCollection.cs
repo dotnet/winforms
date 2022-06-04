@@ -6,6 +6,7 @@
 
 using System.Collections;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
@@ -23,7 +24,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _owner = owner;
             }
 
-            public override Attribute this[Type attributeType] => GetCommonAttribute(attributeType);
+            public override Attribute this[[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] Type attributeType] => GetCommonAttribute(attributeType);
 
             private Attribute GetCommonAttribute(Type attributeType)
             {

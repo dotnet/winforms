@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     ///  Identifies a cell in the dataGridView.
     /// </summary>
     [TypeConverter(typeof(DataGridViewCellConverter))]
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
     public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable, IDisposable, IKeyboardToolTip
     {
         private const TextFormatFlags TextFormatSupportedFlags = TextFormatFlags.SingleLine

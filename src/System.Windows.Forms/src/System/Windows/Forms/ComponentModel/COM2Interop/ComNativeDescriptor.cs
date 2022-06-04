@@ -7,6 +7,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.Ole32;
@@ -18,6 +19,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// </summary>
     internal class ComNativeDescriptor : TypeDescriptionProvider
     {
+        internal const string FilterRequiresUnreferencedCodeMessage = "The public parameterless constructor or the 'Default' static field may be trimmed from the Attribute's Type.";
+
+        internal const string AttributesRequiresUnreferencedCodeMessage = "Generic TypeConverters may require the generic types to be annotated. For example, NullableConverter requires the underlying type to be DynamicallyAccessedMembers All.";
+
+        internal const string PropertyDescriptorPropertyTypeMessage = "PropertyDescriptor's PropertyType cannot be statically discovered.";
+
+        internal const string EditorRequiresUnreferencedCode = "Editors registered in TypeDescriptor.AddEditorTable may be trimmed.";
+
+        internal const string EventDescriptorRequiresUnreferencedCodeMessage = "The built-in EventDescriptor implementation uses Reflection which requires unreferenced code.";
+
         private static ComNativeDescriptor handler;
 
         private readonly AttributeCollection staticAttrs = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No });
@@ -72,7 +83,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  this method will invoke the parent provider's GetTypeDescriptor
         ///  method.
         /// </summary>
-        public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object instance)
+        public override ICustomTypeDescriptor GetTypeDescriptor([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type objectType, object instance)
         {
             return new ComTypeDescriptor(this, instance);
         }
@@ -516,6 +527,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// <summary>
             ///  ICustomTypeDescriptor implementation.
             /// </summary>
+            [RequiresUnreferencedCode(AttributesRequiresUnreferencedCodeMessage)]
             TypeConverter ICustomTypeDescriptor.GetConverter()
             {
                 return GetConverter();
@@ -524,6 +536,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// <summary>
             ///  ICustomTypeDescriptor implementation.
             /// </summary>
+            [RequiresUnreferencedCode(EventDescriptorRequiresUnreferencedCodeMessage)]
             EventDescriptor ICustomTypeDescriptor.GetDefaultEvent()
             {
                 return GetDefaultEvent();
@@ -532,6 +545,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// <summary>
             ///  ICustomTypeDescriptor implementation.
             /// </summary>
+            [RequiresUnreferencedCode(PropertyDescriptorPropertyTypeMessage)]
             PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty()
             {
                 return _handler.GetDefaultProperty(_instance);
@@ -540,6 +554,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// <summary>
             ///  ICustomTypeDescriptor implementation.
             /// </summary>
+            [RequiresUnreferencedCode("Editors registered in TypeDescriptor.AddEditorTable may be trimmed.")]
             object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
             {
                 return GetEditor(_instance, editorBaseType);
@@ -556,6 +571,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// <summary>
             ///  ICustomTypeDescriptor implementation.
             /// </summary>
+            [RequiresUnreferencedCode(FilterRequiresUnreferencedCodeMessage)]
             EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
             {
                 return GetEvents();
@@ -564,6 +580,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// <summary>
             ///  ICustomTypeDescriptor implementation.
             /// </summary>
+            [RequiresUnreferencedCode(PropertyDescriptorPropertyTypeMessage)]
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
             {
                 return _handler.GetProperties(_instance);
@@ -572,6 +589,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// <summary>
             ///  ICustomTypeDescriptor implementation.
             /// </summary>
+            [RequiresUnreferencedCode(PropertyDescriptorPropertyTypeMessage + " " + FilterRequiresUnreferencedCodeMessage)]
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
             {
                 return _handler.GetProperties(_instance);
