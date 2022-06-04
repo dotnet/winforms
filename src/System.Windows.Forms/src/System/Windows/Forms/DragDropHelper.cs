@@ -21,10 +21,11 @@ namespace System.Windows.Forms
     internal static class DragDropHelper
     {
         private const int DSH_ALLOWDROPDESCRIPTIONTEXT = 0x0001;
-        private const string CF_DROPDESCRIPTION = "DropDescription";
-        private const string CF_INSHELLDRAGLOOP = "InShellDragLoop";
-        private const string CF_ISSHOWINGTEXT = "IsShowingText";
-        private const string CF_USINGDEFAULTDRAGIMAGE = "UsingDefaultDragImage";
+        internal const string CF_DRAGIMAGEBITS = "DragImageBits";
+        internal const string CF_DROPDESCRIPTION = "DropDescription";
+        internal const string CF_INSHELLDRAGLOOP = "InShellDragLoop";
+        internal const string CF_ISSHOWINGTEXT = "IsShowingText";
+        internal const string CF_USINGDEFAULTDRAGIMAGE = "UsingDefaultDragImage";
 
         /// <summary>
         /// Sets the drop object image and accompanying text back to the default.
@@ -230,7 +231,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Releases formats used by the drag-and-drop helper.
         /// </summary>
-        private static void ReleaseDragDropFormats(IComDataObject comDataObject)
+        public static void ReleaseDragDropFormats(IComDataObject comDataObject)
         {
             if (comDataObject is not IDataObject dataObject)
             {
@@ -287,7 +288,7 @@ namespace System.Windows.Forms
 
             *(BOOL*)basePtr = value.ToBOOL();
             Kernel32.GlobalUnlock(medium.unionmember);
-            dataObject.SetData(ref formatEtc, ref medium, true);
+            dataObject.SetData(ref formatEtc, ref medium, release: true);
         }
 
         /// <summary>
@@ -449,7 +450,18 @@ namespace System.Windows.Forms
             pDropDescription->Message = message;
             pDropDescription->Insert = messageReplacementToken;
             Kernel32.GlobalUnlock(medium.unionmember);
-            dataObject.SetData(ref formatEtc, ref medium, true);
+
+            // Set the InShellDragLoop flag to true to facilitate loading and retrieving arbitrary private formats. The
+            // drag-and-drop helper object calls IDataObject::SetData to load private formats--used for cross-process support--into
+            // the data object. It later retrieves these formats by calling IDataObject::GetData. The data object's SetData
+            // and GetData implementations inspect for the InShellDragLoop flag to know when the data object is in a drag-and-drop
+            // loop and needs to load and retrieve the arbitrary private formats.
+            if (!IsInDragLoop(dataObject))
+            {
+                SetInDragLoop(dataObject, inDragLoop: true);
+            }
+
+            dataObject.SetData(ref formatEtc, ref medium, release: true);
             SetIsShowingText(dataObject, isShowingText: true);
         }
 

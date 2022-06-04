@@ -54,7 +54,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(DragDropFormat_TestData))]
-        public unsafe void DragDropFormat_Set_Dispose_ReturnsExpected(FORMATETC formatEtc, STGMEDIUM medium)
+        public void DragDropFormat_Set_Dispose_ReturnsExpected(FORMATETC formatEtc, STGMEDIUM medium)
         {
             DragDropFormat dragDropFormat = default;
 
@@ -62,8 +62,8 @@ namespace System.Windows.Forms.Tests
             {
                 dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, copyData: false);
                 dragDropFormat.Dispose();
-                int postDisposeHandleSize = Kernel32.GlobalSize(dragDropFormat.Medium.unionmember);
-                Assert.Equal(0, postDisposeHandleSize);
+                int handleSize = Kernel32.GlobalSize(dragDropFormat.Medium.unionmember);
+                Assert.Equal(0, handleSize);
                 Assert.Null(dragDropFormat.Medium.pUnkForRelease);
                 Assert.Equal(TYMED.TYMED_NULL, dragDropFormat.Medium.tymed);
                 Assert.Equal(IntPtr.Zero, dragDropFormat.Medium.unionmember);
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(DragDropFormat_TestData))]
-        public unsafe void DragDropFormat_Set_GetData_ReturnsExpected(FORMATETC formatEtc, STGMEDIUM medium)
+        public void DragDropFormat_Set_GetData_ReturnsExpected(FORMATETC formatEtc, STGMEDIUM medium)
         {
             DragDropFormat dragDropFormat = default;
             STGMEDIUM data = default;
@@ -86,7 +86,6 @@ namespace System.Windows.Forms.Tests
             {
                 dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, copyData: false);
                 data = dragDropFormat.GetData();
-
                 Assert.Equal(medium.pUnkForRelease, data.pUnkForRelease);
                 Assert.Equal(medium.tymed, data.tymed);
 
@@ -120,7 +119,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(DragDropFormat_TestData))]
-        public unsafe void DragDropFormat_Set_RefreshData_ReturnsExpected(FORMATETC formatEtc, STGMEDIUM medium)
+        public void DragDropFormat_Set_RefreshData_ReturnsExpected(FORMATETC formatEtc, STGMEDIUM medium)
         {
             DragDropFormat dragDropFormat = default;
             STGMEDIUM data = default;

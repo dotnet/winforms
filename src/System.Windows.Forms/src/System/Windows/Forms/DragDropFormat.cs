@@ -42,7 +42,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void RefreshData(short format, STGMEDIUM medium, bool copyData)
         {
-            ReleaseMedium();
+            ReleaseData();
             _format = format;
 
             // Handle whether the data object or the caller owns the storage medium.
@@ -73,6 +73,7 @@ namespace System.Windows.Forms
                             mediumSource.unionmember,
                             format,
                             Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
+
                         if (mediumDestination.unionmember == IntPtr.Zero)
                         {
                             return default;
@@ -114,15 +115,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Frees the storage medium in this instance.
         /// </summary>
-        private void ReleaseMedium()
+        private void ReleaseData()
         {
             Ole32.ReleaseStgMedium(ref _medium);
+            _medium.pUnkForRelease = null;
+            _medium.tymed = TYMED.TYMED_NULL;
             _medium.unionmember = IntPtr.Zero;
         }
 
         public void Dispose()
         {
-            ReleaseMedium();
+            ReleaseData();
             GC.SuppressFinalize(this);
         }
 
