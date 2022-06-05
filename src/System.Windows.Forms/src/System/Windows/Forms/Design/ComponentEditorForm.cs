@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design
@@ -48,7 +47,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public ComponentEditorForm(object component, Type[] pageTypes) : base()
         {
-            if (!(component is IComponent))
+            if (component is not IComponent)
             {
                 throw new ArgumentException(SR.ComponentEditorFormBadComponent, nameof(component));
             }
@@ -81,7 +80,7 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            if (component.Site.TryGetService(out IComponentChangeService changeService))
+            if (component.Site.TryGetService(out IComponentChangeService? changeService))
             {
                 try
                 {
@@ -131,7 +130,7 @@ namespace System.Windows.Forms.Design
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler AutoSizeChanged
+        new public event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -140,7 +139,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Handles ok/cancel/apply/help button click events
         /// </summary>
-        private void OnButtonClick(object sender, EventArgs e)
+        private void OnButtonClick(object? sender, EventArgs e)
         {
             if (sender == okButton)
             {
@@ -164,15 +163,21 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Lays out the UI of the form.
         /// </summary>
+        [MemberNotNull(nameof(okButton))]
+        [MemberNotNull(nameof(cancelButton))]
+        [MemberNotNull(nameof(applyButton))]
+        [MemberNotNull(nameof(helpButton))]
+        [MemberNotNull(nameof(selectorImageList))]
+        [MemberNotNull(nameof(selector))]
         private void OnConfigureUI()
         {
-            Font uiFont = Control.DefaultFont;
+            Font? uiFont = Control.DefaultFont;
             if (component.Site is not null)
             {
-                IUIService uiService = (IUIService)component.Site.GetService(typeof(IUIService));
+                IUIService? uiService = (IUIService?)component.Site.GetService(typeof(IUIService));
                 if (uiService is not null)
                 {
-                    uiFont = (Font)uiService.Styles["DialogFont"];
+                    uiFont = (Font?)uiService.Styles["DialogFont"];
                 }
             }
 
@@ -224,7 +229,7 @@ namespace System.Windows.Forms.Design
             selectorWidth += SELECTOR_PADDING;
 
             string caption = string.Empty;
-            ISite site = component.Site;
+            ISite? site = component.Site;
             if (site is not null)
             {
                 caption = string.Format(SR.ComponentEditorFormProperties, site.Name);
@@ -338,15 +343,14 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Called to initialize this form with the new component.
         /// </summary>
+        [MemberNotNull(nameof(pageSites))]
         private void OnNewObjects()
         {
-            pageSites = null;
             maxSize = new Size(3 * (BUTTON_WIDTH + BUTTON_PAD), 24 * pageTypes.Length);
 
             pageSites = new ComponentEditorPageSite[pageTypes.Length];
 
             // create sites for them
-            //
             for (int n = 0; n < pageTypes.Length; n++)
             {
                 pageSites[n] = new ComponentEditorPageSite(pageHost, pageTypes[n], component, this);
@@ -365,7 +369,6 @@ namespace System.Windows.Forms.Design
             }
 
             // and set them all to an ideal size
-            //
             for (int n = 0; n < pageSites.Length; n++)
             {
                 pageSites[n].GetPageControl().Size = maxSize;
@@ -375,7 +378,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Handles switching between pages.
         /// </summary>
-        protected virtual void OnSelChangeSelector(object source, TreeViewEventArgs e)
+        protected virtual void OnSelChangeSelector(object? source, TreeViewEventArgs e)
         {
             if (firstActivate == true)
             {
@@ -452,7 +455,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Shows the form with the specified owner.
         /// </summary>
-        public virtual DialogResult ShowForm(IWin32Window owner)
+        public virtual DialogResult ShowForm(IWin32Window? owner)
         {
             return ShowForm(owner, 0);
         }
@@ -460,7 +463,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Shows the form and the specified page with the specified owner.
         /// </summary>
-        public virtual DialogResult ShowForm(IWin32Window owner, int page)
+        public virtual DialogResult ShowForm(IWin32Window? owner, int page)
         {
             initialActivePage = page;
             ShowDialog(owner);

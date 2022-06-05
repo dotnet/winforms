@@ -314,8 +314,8 @@
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates cellState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.PaintBorder(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle bounds, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.ToString() -> string
-~override System.Windows.Forms.Design.ComponentEditorForm.OnActivated(System.EventArgs e) -> void
-~override System.Windows.Forms.Design.ComponentEditorForm.OnHelpRequested(System.Windows.Forms.HelpEventArgs e) -> void
+override System.Windows.Forms.Design.ComponentEditorForm.OnActivated(System.EventArgs! e) -> void
+override System.Windows.Forms.Design.ComponentEditorForm.OnHelpRequested(System.Windows.Forms.HelpEventArgs! e) -> void
 ~override System.Windows.Forms.Design.ComponentEditorPage.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.ErrorProvider.Site.set -> void
 ~override System.Windows.Forms.HelpProvider.ToString() -> string
@@ -1159,7 +1159,7 @@ override System.Windows.Forms.TableLayoutPanel.OnPaintBackground(System.Windows.
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue2.get -> object
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.DataGridViewSortCompareEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, object cellValue1, object cellValue2, int rowIndex1, int rowIndex2) -> void
-~System.Windows.Forms.Design.ComponentEditorForm.ComponentEditorForm(object component, System.Type[] pageTypes) -> void
+System.Windows.Forms.Design.ComponentEditorForm.ComponentEditorForm(object! component, System.Type![]! pageTypes) -> void
 ~System.Windows.Forms.Design.ComponentEditorPage.Component.get -> System.ComponentModel.IComponent
 ~System.Windows.Forms.Design.ComponentEditorPage.Component.set -> void
 ~System.Windows.Forms.Design.ComponentEditorPage.GetSelectedComponent() -> System.ComponentModel.IComponent
@@ -2179,9 +2179,9 @@ System.Windows.Forms.TableLayoutPanel.SetRowSpan(System.Windows.Forms.Control! c
 ~virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlFormattedValue.set -> void
 ~virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingPanelCursor.get -> System.Windows.Forms.Cursor
 ~virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.GetEditingControlFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
-~virtual System.Windows.Forms.Design.ComponentEditorForm.OnSelChangeSelector(object source, System.Windows.Forms.TreeViewEventArgs e) -> void
-~virtual System.Windows.Forms.Design.ComponentEditorForm.ShowForm(System.Windows.Forms.IWin32Window owner) -> System.Windows.Forms.DialogResult
-~virtual System.Windows.Forms.Design.ComponentEditorForm.ShowForm(System.Windows.Forms.IWin32Window owner, int page) -> System.Windows.Forms.DialogResult
+virtual System.Windows.Forms.Design.ComponentEditorForm.OnSelChangeSelector(object? source, System.Windows.Forms.TreeViewEventArgs! e) -> void
+virtual System.Windows.Forms.Design.ComponentEditorForm.ShowForm(System.Windows.Forms.IWin32Window? owner) -> System.Windows.Forms.DialogResult
+virtual System.Windows.Forms.Design.ComponentEditorForm.ShowForm(System.Windows.Forms.IWin32Window? owner, int page) -> System.Windows.Forms.DialogResult
 ~virtual System.Windows.Forms.Design.ComponentEditorPage.GetControl() -> System.Windows.Forms.Control
 ~virtual System.Windows.Forms.Design.ComponentEditorPage.SetComponent(System.ComponentModel.IComponent component) -> void
 ~virtual System.Windows.Forms.Design.ComponentEditorPage.SetSite(System.Windows.Forms.IComponentEditorPageSite site) -> void
@@ -7159,7 +7159,7 @@ System.Windows.Forms.Day.Thursday = 3 -> System.Windows.Forms.Day
 System.Windows.Forms.Day.Tuesday = 1 -> System.Windows.Forms.Day
 System.Windows.Forms.Day.Wednesday = 2 -> System.Windows.Forms.Day
 System.Windows.Forms.Design.ComponentEditorForm
-System.Windows.Forms.Design.ComponentEditorForm.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.Design.ComponentEditorForm.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.Design.ComponentEditorPage
 System.Windows.Forms.Design.ComponentEditorPage.AutoSizeChanged -> System.EventHandler
 System.Windows.Forms.Design.ComponentEditorPage.CommitOnDeactivate.get -> bool
