@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+using System.Drawing;
 using System.Runtime.InteropServices.ComTypes;
 using Xunit;
 using static Interop;
@@ -10,14 +11,33 @@ namespace System.Windows.Forms.Tests
 {
     public class DragDropHelperTests : IClassFixture<ThreadExceptionFixture>
     {
-        public static IEnumerable<object[]> DragDropHelper_DragImage_TestData()
+        public static IEnumerable<object[]> DragImage_DataObject_Bitmap_Point_bool_TestData()
         {
             yield return new object[] { new DataObject(), new Bitmap(1, 1), new Point(1, 1), false };
             yield return new object[] { new DataObject(), null, new Point(1, 1), false };
             yield return new object[] { new DataObject(), new Bitmap(1, 1), new Point(1, 1), true };
         }
 
-        public static IEnumerable<object[]> DragDropHelper_DropDescription_TestData()
+        public static IEnumerable<object[]> DragImage_DataObject_GiveFeedbackEventArgs_TestData()
+        {
+            yield return new object[] { new DataObject(), new GiveFeedbackEventArgs(DragDropEffects.All, false, new Bitmap(1, 1), new Point(0, 0), false) };
+            yield return new object[] { new DataObject(), new GiveFeedbackEventArgs(DragDropEffects.All, false, null, new Point(0, 0), false) };
+            yield return new object[] { new DataObject(), new GiveFeedbackEventArgs(DragDropEffects.All, false, new Bitmap(1, 1), new Point(0, 0), true) };
+        }
+
+        public static IEnumerable<object[]> DropDescription_DragEventArgs_TestData()
+        {
+            yield return new object[] { new DragEventArgs(new DataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Copy, DropImageType.Invalid, string.Empty, string.Empty) };
+            yield return new object[] { new DragEventArgs(new DataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Copy, DropImageType.None, string.Empty, string.Empty) };
+            yield return new object[] { new DragEventArgs(new DataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Copy, DropImageType.Copy, "Copy to %1", "Documents") };
+            yield return new object[] { new DragEventArgs(new DataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Copy, DropImageType.Move, "Move to %1", "Documents") };
+            yield return new object[] { new DragEventArgs(new DataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Copy, DropImageType.Link, "Create link in %1", "Documents") };
+            yield return new object[] { new DragEventArgs(new DataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Copy, DropImageType.Label, "Update metadata in %1", "Document") };
+            yield return new object[] { new DragEventArgs(new DataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Copy, DropImageType.Warning, "A problem has been encountered", string.Empty) };
+            yield return new object[] { new DragEventArgs(new DataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Copy, DropImageType.NoImage, "Copy to %1", "Documents") };
+        }
+
+        public static IEnumerable<object[]> DropDescription_DataObject_DropImageType_string_string_TestData()
         {
             yield return new object[] { new DataObject(), DropImageType.Invalid, string.Empty, string.Empty };
             yield return new object[] { new DataObject(), DropImageType.None, string.Empty, string.Empty };
@@ -29,30 +49,55 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new DataObject(), DropImageType.NoImage, "Copy to %1", "Documents" };
         }
 
-        public static IEnumerable<object[]> DragDropHelper_InDragLoop_TestData()
+        public static IEnumerable<object[]> DropDescription_LengthExceedsMaxPath_TestData()
+        {
+            yield return new object[] { new DataObject(), DropImageType.Copy, new string('*', Kernel32.MAX_PATH), string.Empty };
+            yield return new object[] { new DataObject(), DropImageType.Copy, string.Empty, new string('*', Kernel32.MAX_PATH) };
+        }
+
+        public static IEnumerable<object[]> InDragLoop_TestData()
         {
             yield return new object[] { new DataObject(), true };
             yield return new object[] { new DataObject(), false };
         }
 
         [Fact]
-        public void DragDropHelper_IsInDragLoopFormat_ReturnsExpected()
+        public void IsInDragLoop_NullComDataObject_ThrowsArgumentNullException()
+        {
+            IComDataObject dataObject = null;
+            Assert.Throws<ArgumentNullException>(nameof(dataObject), () => DragDropHelper.IsInDragLoop(dataObject));
+        }
+
+        [Fact]
+        public void IsInDragLoop_NullDataObject_ThrowsArgumentNullException()
+        {
+            IDataObject dataObject = null;
+            Assert.Throws<ArgumentNullException>(nameof(dataObject), () => DragDropHelper.IsInDragLoop(dataObject));
+        }
+
+        [Theory]
+        [InlineData(DragDropHelper.CF_DRAGIMAGEBITS, false)]
+        [InlineData(DragDropHelper.CF_DROPDESCRIPTION, false)]
+        [InlineData(DragDropHelper.CF_INSHELLDRAGLOOP, true)]
+        [InlineData(DragDropHelper.CF_ISSHOWINGTEXT, false)]
+        [InlineData(DragDropHelper.CF_USINGDEFAULTDRAGIMAGE, false)]
+        public void IsInDragLoopFormat_ReturnsExpected(string format, bool expectedIsInDragLoopFormat)
         {
             FORMATETC formatEtc = new()
             {
-                cfFormat = (short)RegisterClipboardFormatW(DragDropHelper.CF_INSHELLDRAGLOOP),
+                cfFormat = (short)RegisterClipboardFormatW(format),
                 dwAspect = DVASPECT.DVASPECT_CONTENT,
                 lindex = -1,
                 ptd = IntPtr.Zero,
                 tymed = TYMED.TYMED_HGLOBAL
             };
 
-            Assert.True(DragDropHelper.IsInDragLoopFormat(formatEtc));
+            Assert.Equal(expectedIsInDragLoopFormat, DragDropHelper.IsInDragLoopFormat(formatEtc));
         }
 
         [WinFormsTheory(Skip = "Run manually, results in Fatal error 0xC0000005 on Windows_x86 Debug and Release when executed from the command line.")]
-        [MemberData(nameof(DragDropHelper_DragImage_TestData))]
-        public unsafe void DragDropHelper_SetDragImage_ReturnsExptected(DataObject dataObject, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
+        [MemberData(nameof(DragImage_DataObject_Bitmap_Point_bool_TestData))]
+        public unsafe void SetDragImage_DataObject_Bitmap_Point_bool_ReturnsExptected(DataObject dataObject, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
             try
             {
@@ -74,9 +119,48 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        [WinFormsTheory(Skip = "Run manually, results in Fatal error 0xC0000005 on Windows_x86 Debug and Release when executed from the command line.")]
+        [MemberData(nameof(DragImage_DataObject_GiveFeedbackEventArgs_TestData))]
+        public unsafe void SetDragImage_DataObject_GiveFeedbackEventArgs_ReturnsExptected(DataObject dataObject, GiveFeedbackEventArgs e)
+        {
+            try
+            {
+                DragDropHelper.SetDragImage(dataObject, e);
+                DragDropFormat dragDropFormat = (DragDropFormat)dataObject.GetData(DragDropHelper.CF_DRAGIMAGEBITS);
+                IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
+                SHDRAGIMAGE* pDragImage = (SHDRAGIMAGE*)basePtr;
+                bool isDragImageNull = pDragImage->hbmpDragImage.IsNull;
+                Size dragImageSize = pDragImage->sizeDragImage;
+                Point offset = pDragImage->ptOffset;
+                Kernel32.GlobalUnlock(dragDropFormat.Medium.unionmember);
+                Assert.False(isDragImageNull);
+                Assert.Equal(e.DragImage is null ? new Size(0, 0) : e.DragImage.Size, dragImageSize);
+                Assert.Equal(e.CursorOffset, offset);
+            }
+            finally
+            {
+                DragDropHelper.ReleaseDragDropFormats(dataObject);
+            }
+        }
+
+        [Fact]
+        public void SetDragImage_NullDataObject_ThrowsArgumentNullException()
+        {
+            DataObject dataObject = null;
+            Assert.Throws<ArgumentNullException>(nameof(dataObject),
+                () => DragDropHelper.SetDragImage(dataObject, new Bitmap(1, 1), new Point(0, 0), false));
+        }
+
+        [Fact]
+        public void SetDragImage_NullGiveFeedbackEventArgs_ThrowsArgumentNullException()
+        {
+            GiveFeedbackEventArgs e = null;
+            Assert.Throws<ArgumentNullException>(nameof(e), () => DragDropHelper.SetDragImage(new DataObject(), e));
+        }
+
         [Theory]
-        [MemberData(nameof(DragDropHelper_DropDescription_TestData))]
-        public unsafe void DragDropHelper_SetDropDescription_ClearDropDescription_ReturnsExpected(DataObject dataObject, DropImageType dropImageType, string message, string messageReplacementToken)
+        [MemberData(nameof(DropDescription_DataObject_DropImageType_string_string_TestData))]
+        public unsafe void SetDropDescription_ClearDropDescription_ReturnsExpected(DataObject dataObject, DropImageType dropImageType, string message, string messageReplacementToken)
         {
             try
             {
@@ -100,8 +184,17 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(DragDropHelper_DropDescription_TestData))]
-        public void DragDropHelper_SetDropDescription_IsInDragLoop_ReturnsExpected(DataObject dataObject, DropImageType dropImageType, string message, string messageReplacementToken)
+        [InlineData(DropImageType.Invalid - 1)]
+        [InlineData(DropImageType.NoImage + 1)]
+        public void SetDropDescription_InvalidDropImageType_ThrowsArgumentNullException(DropImageType dropImageType)
+        {
+            Assert.Throws<InvalidEnumArgumentException>(nameof(dropImageType),
+                () => DragDropHelper.SetDropDescription(new DataObject(), dropImageType, string.Empty, string.Empty));
+        }
+
+        [Theory]
+        [MemberData(nameof(DropDescription_DataObject_DropImageType_string_string_TestData))]
+        public void SetDropDescription_IsInDragLoop_ReturnsExpected(DataObject dataObject, DropImageType dropImageType, string message, string messageReplacementToken)
         {
             try
             {
@@ -116,8 +209,23 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(DragDropHelper_DropDescription_TestData))]
-        public void DragDropHelper_SetDropDescription_ReleaseDragDropFormats_ReturnsExptected(DataObject dataObject, DropImageType dropImageType, string message, string messageReplacementToken)
+        [MemberData(nameof(DropDescription_LengthExceedsMaxPath_TestData))]
+        public void SetDropDescription_LengthExceedsMaxPath_ThrowsArgumentOutOfRangeException(DataObject dataObject, DropImageType dropImageType, string message, string messageReplacementToken)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => DragDropHelper.SetDropDescription(dataObject, dropImageType, message, messageReplacementToken));
+        }
+
+        [Fact]
+        public void SetDropDescription_NullDataObject_ThrowsArgumentNullException()
+        {
+            DataObject dataObject = null;
+            Assert.Throws<ArgumentNullException>(nameof(dataObject),
+                () => DragDropHelper.SetDropDescription(dataObject, DropImageType.Invalid, string.Empty, string.Empty));
+        }
+
+        [Theory]
+        [MemberData(nameof(DropDescription_DataObject_DropImageType_string_string_TestData))]
+        public void SetDropDescription_ReleaseDragDropFormats_ReturnsExptected(DataObject dataObject, DropImageType dropImageType, string message, string messageReplacementToken)
         {
             DragDropHelper.SetDropDescription(dataObject, dropImageType, message, messageReplacementToken);
             DragDropHelper.ReleaseDragDropFormats(dataObject);
@@ -135,8 +243,35 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(DragDropHelper_DropDescription_TestData))]
-        public unsafe void DragDropHelper_SetDropDescription_ReturnsExptected(DataObject dataObject, DropImageType dropImageType, string message, string messageReplacementToken)
+        [MemberData(nameof(DropDescription_DragEventArgs_TestData))]
+        public unsafe void SetDropDescription_DragEventArgs_ReturnsExptected(DragEventArgs e)
+        {
+            try
+            {
+                DragDropHelper.SetDropDescription(e);
+                DragDropFormat dragDropFormat = (DragDropFormat)e.Data.GetData(DragDropHelper.CF_DROPDESCRIPTION);
+                IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
+                DROPDESCRIPTION* pDropDescription = (DROPDESCRIPTION*)basePtr;
+                DROPIMAGETYPE type = pDropDescription->type;
+                string szMessage = pDropDescription->Message.ToString();
+                string szInsert = pDropDescription->Insert.ToString();
+                Kernel32.GlobalUnlock(dragDropFormat.Medium.unionmember);
+                Assert.Equal((DROPIMAGETYPE)e.DropImageType, type);
+                Assert.Equal(e.Message, szMessage);
+                Assert.Equal(e.MessageReplacementToken, szInsert);
+            }
+            finally
+            {
+                if (e.Data is IComDataObject dataObject)
+                {
+                    DragDropHelper.ReleaseDragDropFormats(dataObject);
+                }
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(DropDescription_DataObject_DropImageType_string_string_TestData))]
+        public unsafe void SetDropDescription_DataObject_DropImageType_string_string_ReturnsExptected(DataObject dataObject, DropImageType dropImageType, string message, string messageReplacementToken)
         {
             try
             {
@@ -158,9 +293,16 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        [Fact]
+        public unsafe void SetInDragLoop_NullDataObject_ThrowsArgumentNullException()
+        {
+            DataObject dataObject = null;
+            Assert.Throws<ArgumentNullException>(nameof(dataObject), () => DragDropHelper.SetInDragLoop(dataObject, true));
+        }
+
         [Theory]
-        [MemberData(nameof(DragDropHelper_InDragLoop_TestData))]
-        public unsafe void DragDropHelper_SetInDragLoop_ReturnsExptected(DataObject dataObject, bool inDragLoop)
+        [MemberData(nameof(InDragLoop_TestData))]
+        public unsafe void SetInDragLoop_ReturnsExptected(DataObject dataObject, bool inDragLoop)
         {
             try
             {

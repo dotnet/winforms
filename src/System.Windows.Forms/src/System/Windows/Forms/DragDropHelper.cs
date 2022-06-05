@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     /// </summary>
     internal static class DragDropHelper
     {
-        private const int DSH_ALLOWDROPDESCRIPTIONTEXT = 0x0001;
+        private const int DSH_ALLOWDROPDESCRIPTIONTEXT = 0x0001; 
         internal const string CF_DRAGIMAGEBITS = "DragImageBits";
         internal const string CF_DROPDESCRIPTION = "DropDescription";
         internal const string CF_INSHELLDRAGLOOP = "InShellDragLoop";
@@ -145,8 +145,8 @@ namespace System.Windows.Forms
         /// </summary>
         private static unsafe bool GetBooleanFormat(IComDataObject dataObject, string format)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dataObject));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(format));
+            ArgumentNullException.ThrowIfNull(dataObject);
+            ArgumentException.ThrowIfNullOrEmpty(format);
 
             STGMEDIUM medium = default;
 
@@ -186,9 +186,10 @@ namespace System.Windows.Forms
         /// </returns>
         public static unsafe bool IsInDragLoop(IDataObject dataObject)
         {
+            ArgumentNullException.ThrowIfNull(dataObject);
+
             if (dataObject.GetDataPresent(CF_INSHELLDRAGLOOP)
-                && dataObject.GetData(CF_INSHELLDRAGLOOP) is DragDropFormat dragDropFormat
-                && dragDropFormat.Medium.unionmember != IntPtr.Zero)
+                && dataObject.GetData(CF_INSHELLDRAGLOOP) is DragDropFormat dragDropFormat)
             {
                 try
                 {
@@ -252,8 +253,8 @@ namespace System.Windows.Forms
         /// </summary>
         private static unsafe void SetBooleanFormat(IComDataObject dataObject, string format, bool value)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dataObject));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(format));
+            ArgumentNullException.ThrowIfNull(dataObject);
+            ArgumentException.ThrowIfNullOrEmpty(format);
 
             FORMATETC formatEtc = new()
             {
@@ -303,6 +304,7 @@ namespace System.Windows.Forms
         /// </remarks>
         public static void SetDragImage(IComDataObject dataObject, GiveFeedbackEventArgs e)
         {
+            ArgumentNullException.ThrowIfNull(e);
             SetDragImage(dataObject, e.DragImage, e.CursorOffset, e.UseDefaultDragImage);
         }
 
@@ -318,7 +320,7 @@ namespace System.Windows.Forms
         /// </remarks>
         public static void SetDragImage(IComDataObject dataObject, Bitmap? dragImage, Point cursorOffset, bool usingDefaultDragImage)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dataObject));
+            ArgumentNullException.ThrowIfNull(dataObject);
 
             if (!TryGetDragDropHelper(out IDragSourceHelper2? dragSourceHelper))
             {
@@ -401,7 +403,7 @@ namespace System.Windows.Forms
             string message,
             string messageReplacementToken)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dataObject));
+            ArgumentNullException.ThrowIfNull(dataObject);
             SourceGenerated.EnumValidator.Validate(dropImageType, nameof(dropImageType));
 
             if (message.Length >= Kernel32.MAX_PATH)
