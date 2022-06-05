@@ -1125,13 +1125,13 @@ namespace System.Windows.Forms
         {
             UpdateStateFromListView(displayIndex, checkSelection);
 
-            if (listView is not null && (listView.Site is null || !listView.Site.DesignMode) && group is not null)
-            {
-                group.Items.Remove(this);
-            }
-
             if (listView is not null)
             {
+                if ((listView.Site is null || !listView.Site.DesignMode) && group is not null)
+                {
+                    group.Items.Remove(this);
+                }
+
                 KeyboardToolTipStateMachine.Instance.Unhook(this, listView.KeyboardToolTip);
             }
 

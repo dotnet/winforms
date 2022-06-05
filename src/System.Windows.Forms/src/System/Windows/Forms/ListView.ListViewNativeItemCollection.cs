@@ -266,7 +266,7 @@ namespace System.Windows.Forms
 
                     User32.SendMessageW(_owner, (User32.WM)LVM.DELETEALLITEMS);
 
-                    // There's a problem in the list view that if it's in small icon, it won't pick upo the small icon
+                    // There's a problem in the list view that if it's in small icon, it won't pick up the small icon
                     // sizes until it changes from large icon, so we flip it twice here...
                     if (_owner.View == View.SmallIcon)
                     {

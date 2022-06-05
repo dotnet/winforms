@@ -4744,10 +4744,9 @@ namespace System.Windows.Forms
                 }
 
                 Debug.Assert(_listViewItems is null, "listItemsArray not null, even though handle created");
-                ListViewItem[]? items = null;
                 ListViewItemCollection tempItems = Items;
 
-                items = new ListViewItem[tempItems.Count];
+                ListViewItem[] items = new ListViewItem[tempItems.Count];
                 tempItems.CopyTo(items, 0);
 
                 _listViewItems = new List<ListViewItem>(items.Length);
