@@ -119,7 +119,7 @@ internal partial class Interop
                     var array = Oleaut32.SafeArrayCreateVector(Ole32.VARENUM.I4, 0, (uint)result.Length);
                     fixed (int* pResult = result)
                     {
-                        for (var i = 0; i < result.Length; i++)
+                        for (int i = 0; i < result.Length; i++)
                         {
                             Oleaut32.SafeArrayPutElement(array, in i, (IntPtr)(pResult + i));
                         }

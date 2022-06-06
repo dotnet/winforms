@@ -27,7 +27,7 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT ElementProviderFromPoint(IntPtr thisPtr, double x, double y, IntPtr* pRetVal)
             {
-                if (pRetVal == null)
+                if (pRetVal is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }

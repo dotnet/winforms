@@ -22,11 +22,6 @@ internal partial class Interop
 
             ~RawElementProviderSimpleWrapper()
             {
-                DisposeInternal();
-            }
-
-            private void DisposeInternal()
-            {
                 Marshal.Release(_wrappedInstance);
                 _wrappedInstance = IntPtr.Zero;
             }
