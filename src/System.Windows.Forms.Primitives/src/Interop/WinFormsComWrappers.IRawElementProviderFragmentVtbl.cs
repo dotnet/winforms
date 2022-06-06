@@ -39,7 +39,7 @@ internal partial class Interop
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragment>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    var result = instance.Navigate(direction);
+                    object? result = instance.Navigate(direction);
                     *pRetVal = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
                     return HRESULT.S_OK;
                 }
@@ -82,14 +82,15 @@ internal partial class Interop
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragment>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    var objects = instance.GetEmbeddedFragmentRoots();
+                    object[]? objects = instance.GetEmbeddedFragmentRoots();
                     if (objects is null)
                     {
                         *pRetVal = IntPtr.Zero;
                         return HRESULT.S_OK;
                     }
 
-                    return HRESULT.E_NOTIMPL;
+                    *pRetVal = Marshal.GetIUnknownForObject(objects);
+                    return HRESULT.S_OK;
                 }
                 catch (Exception ex)
                 {
@@ -109,14 +110,14 @@ internal partial class Interop
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragment>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    var result = instance.GetRuntimeId();
+                    int[]? result = instance.GetRuntimeId();
                     if (result is null)
                     {
                         *pRetVal = IntPtr.Zero;
                         return HRESULT.S_OK;
                     }
 
-                    var array = Oleaut32.SafeArrayCreateVector(Ole32.VARENUM.I4, 0, (uint)result.Length);
+                    Oleaut32.SAFEARRAY* array = Oleaut32.SafeArrayCreateVector(Ole32.VARENUM.I4, 0, (uint)result.Length);
                     fixed (int* pResult = result)
                     {
                         for (int i = 0; i < result.Length; i++)
@@ -161,7 +162,7 @@ internal partial class Interop
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragment>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    var result = instance.FragmentRoot;
+                    UiaCore.IRawElementProviderFragmentRoot? result = instance.FragmentRoot;
                     *pRetVal = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
                     return HRESULT.S_OK;
                 }

@@ -58,7 +58,7 @@ internal partial class Interop
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderSimple>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    var result = instance.GetPropertyValue(patternId);
+                    object? result = instance.GetPropertyValue(patternId);
                     *pRetVal = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
                     return HRESULT.S_OK;
                 }
@@ -80,7 +80,7 @@ internal partial class Interop
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderSimple>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    var result = instance.GetPatternProvider(patternId);
+                    object? result = instance.GetPatternProvider(patternId);
                     *pRetVal = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
                     return HRESULT.S_OK;
                 }
@@ -102,7 +102,7 @@ internal partial class Interop
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderSimple>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    var result = instance.HostRawElementProvider;
+                    UiaCore.IRawElementProviderSimple? result = instance.HostRawElementProvider;
                     if (result is null)
                     {
                         *pRetVal = IntPtr.Zero;

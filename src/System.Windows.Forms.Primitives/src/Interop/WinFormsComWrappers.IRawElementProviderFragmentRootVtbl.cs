@@ -35,7 +35,7 @@ internal partial class Interop
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragmentRoot>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    var result = instance.ElementProviderFromPoint(x, y);
+                    object? result = instance.ElementProviderFromPoint(x, y);
                     *pRetVal = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
                     return HRESULT.S_OK;
                 }
@@ -57,7 +57,7 @@ internal partial class Interop
                 var instance = ComInterfaceDispatch.GetInstance<UiaCore.IRawElementProviderFragmentRoot>((ComInterfaceDispatch*)thisPtr);
                 try
                 {
-                    var result = instance.GetFocus();
+                    object? result = instance.GetFocus();
                     *pRetVal = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
                     return HRESULT.S_OK;
                 }
