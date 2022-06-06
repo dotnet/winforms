@@ -441,7 +441,7 @@ internal partial class Interop
 
             HRESULT Oleaut32.IEnumVariant.Clone(Oleaut32.IEnumVariant[]? ppEnum)
             {
-                if (ppEnum == null || ppEnum.Length == 0)
+                if (ppEnum is null || ppEnum.Length == 0)
                 {
                     return HRESULT.E_POINTER;
                 }

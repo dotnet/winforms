@@ -29,7 +29,7 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT get_ProviderOptions(IntPtr thisPtr, UiaCore.ProviderOptions* pRetVal)
             {
-                if (pRetVal == null)
+                if (pRetVal is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -50,7 +50,7 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT GetPropertyValue(IntPtr thisPtr, UiaCore.UIA patternId, IntPtr* pRetVal)
             {
-                if (pRetVal == null)
+                if (pRetVal is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -72,7 +72,7 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT GetPatternProvider(IntPtr thisPtr, UiaCore.UIA patternId, IntPtr* pRetVal)
             {
-                if (pRetVal == null)
+                if (pRetVal is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -94,7 +94,7 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT get_HostRawElementProvider(IntPtr thisPtr, IntPtr* pRetVal)
             {
-                if (pRetVal == null)
+                if (pRetVal is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }

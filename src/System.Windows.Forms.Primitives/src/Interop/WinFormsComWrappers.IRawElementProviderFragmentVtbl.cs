@@ -31,7 +31,7 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT Navigate(IntPtr thisPtr, UiaCore.NavigateDirection direction, IntPtr* pRetVal)
             {
-                if (pRetVal == null)
+                if (pRetVal is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -53,7 +53,7 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT get_BoundingRectangle(IntPtr thisPtr, UiaCore.UiaRect* pRetVal)
             {
-                if (pRetVal == null)
+                if (pRetVal is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -74,7 +74,7 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT GetEmbeddedFragmentRoots(IntPtr thisPtr, IntPtr* pRetVal)
             {
-                if (pRetVal == null)
+                if (pRetVal is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -83,7 +83,7 @@ internal partial class Interop
                 try
                 {
                     var objects = instance.GetEmbeddedFragmentRoots();
-                    if (objects == null)
+                    if (objects is null)
                     {
                         *pRetVal = IntPtr.Zero;
                         return HRESULT.S_OK;
@@ -101,7 +101,7 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static unsafe HRESULT GetRuntimeId(IntPtr thisPtr, IntPtr* pRetVal)
             {
-                if (pRetVal == null)
+                if (pRetVal is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -110,7 +110,7 @@ internal partial class Interop
                 try
                 {
                     var result = instance.GetRuntimeId();
-                    if (result == null)
+                    if (result is null)
                     {
                         *pRetVal = IntPtr.Zero;
                         return HRESULT.S_OK;
@@ -153,7 +153,7 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT get_FragmentRoot(IntPtr thisPtr, IntPtr* pRetVal)
             {
-                if (pRetVal == null)
+                if (pRetVal is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }

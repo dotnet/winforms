@@ -49,7 +49,7 @@ internal partial class Interop
             [UnmanagedCallersOnly]
             private static HRESULT GetFocus(IntPtr thisPtr, IntPtr* pRetVal)
             {
-                if (pRetVal == null)
+                if (pRetVal is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
