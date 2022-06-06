@@ -6571,6 +6571,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Das aktuelle Objekt für Barrierefreiheit gilt nur für ListView in der Ansicht "{0}", "{1}" oder "{2}".</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="translated">Das Accessiblity-Objekt kann nicht abgerufen werden, wenn ListViewItem nicht an eine ListView angefügt ist.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">Das ausgelöste Ereignis, wenn sich die aktivierte Eigenschaft für ein ListView-Element ändert.</target>

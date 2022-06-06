@@ -61,6 +61,7 @@ System.Windows.Forms.HighDpiMode.PerMonitor = 2 -> System.Windows.Forms.HighDpiM
 System.Windows.Forms.HighDpiMode.PerMonitorV2 = 3 -> System.Windows.Forms.HighDpiMode
 System.Windows.Forms.HighDpiMode.SystemAware = 1 -> System.Windows.Forms.HighDpiMode
 System.Windows.Forms.Message
+System.Windows.Forms.Message.Equals(System.Windows.Forms.Message other) -> bool
 System.Windows.Forms.Message.GetLParam(System.Type! cls) -> object?
 System.Windows.Forms.Message.HWnd.get -> System.IntPtr
 System.Windows.Forms.Message.HWnd.set -> void
@@ -78,6 +79,7 @@ System.Windows.Forms.Padding.All.get -> int
 System.Windows.Forms.Padding.All.set -> void
 System.Windows.Forms.Padding.Bottom.get -> int
 System.Windows.Forms.Padding.Bottom.set -> void
+System.Windows.Forms.Padding.Equals(System.Windows.Forms.Padding other) -> bool
 System.Windows.Forms.Padding.Horizontal.get -> int
 System.Windows.Forms.Padding.Left.get -> int
 System.Windows.Forms.Padding.Left.set -> void

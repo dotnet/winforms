@@ -36,7 +36,7 @@ namespace System.Windows.Forms
                     get
                     {
                         int index = ParentInternal.GetChildIndex(this);
-                        if (index == -1)
+                        if (index == InvalidIndex)
                         {
                             return Rectangle.Empty;
                         }
@@ -81,7 +81,10 @@ namespace System.Windows.Forms
                         _ => base.FragmentNavigate(direction)
                     };
 
-                internal override int Column => _owningListView.View == View.Details ? ParentInternal.GetChildIndex(this) : -1;
+                internal override int Column
+                    => _owningListView.View == View.Details
+                        ? ParentInternal.GetChildIndex(this)
+                        : InvalidIndex;
 
                 /// <summary>
                 ///  Gets or sets the accessible name.
@@ -158,7 +161,7 @@ namespace System.Windows.Forms
                 }
 
                 private string AutomationId
-                    => string.Format("{0}-{1}", typeof(ListViewItem.ListViewSubItem).Name, ParentInternal.GetChildIndex(this));
+                    => $"{typeof(ListViewItem.ListViewSubItem).Name}-{ParentInternal.GetChildIndex(this)}";
             }
         }
     }

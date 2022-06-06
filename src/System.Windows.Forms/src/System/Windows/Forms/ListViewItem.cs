@@ -227,12 +227,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                ListView owningListView = listView ?? Group?.ListView;
-                if (owningListView is null)
-                {
-                    _accessibilityObject = null;
-                    return _accessibilityObject;
-                }
+                ListView owningListView = listView ?? Group?.ListView
+                    ?? throw new InvalidOperationException(SR.ListViewItemAccessibilityObjectRequiresListView);
 
                 if (_accessibilityObject is null || owningListView.View != _accessibilityObjectView)
                 {
@@ -251,6 +247,8 @@ namespace System.Windows.Forms
                 return _accessibilityObject;
             }
         }
+
+        private bool IsAccessibilityObjectCreated => _accessibilityObject is not null;
 
         /// <summary>
         ///  The font that this item will be displayed in. If its value is null, it will be displayed
@@ -1133,6 +1131,24 @@ namespace System.Windows.Forms
             if (listView is not null)
             {
                 KeyboardToolTipStateMachine.Instance.Unhook(this, listView.KeyboardToolTip);
+            }
+
+            if (OsVersion.IsWindows8OrGreater)
+            {
+                for (int i = 0; i < SubItemCount; i++)
+                {
+                    if (SubItems[i].IsAccessibilityObjectCreated)
+                    {
+                        HRESULT result = UiaCore.UiaDisconnectProvider(SubItems[i].AccessibilityObject);
+                        Debug.Assert(result == HRESULT.S_OK);
+                    }
+                }
+
+                if (IsAccessibilityObjectCreated)
+                {
+                    HRESULT result = UiaCore.UiaDisconnectProvider(AccessibilityObject);
+                    Debug.Assert(result == HRESULT.S_OK);
+                }
             }
 
             // Make sure you do these last, as the first several lines depends on this information

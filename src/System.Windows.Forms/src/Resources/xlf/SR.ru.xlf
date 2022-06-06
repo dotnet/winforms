@@ -6572,6 +6572,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Текущий объект специальных возможностей предназначен только для ListView в представлениях {0}, {1} или {2}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="translated">Невозможно получить объект доступа, если ListViewItem не присоединен к ListView.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">Событие возникает при изменении отмеченного свойства элемента ListView.</target>

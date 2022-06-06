@@ -6571,6 +6571,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">현재 접근성 개체는 {0}, {1} 또는 {2} 보기의 ListView에만 해당됩니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="translated">ListView 항목이 ListView에 연결되어 있지 않으면 접근성 개체를 가져올 수 없습니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">ListView 항목의 Checked 속성이 변경되면 이벤트가 발생합니다.</target>

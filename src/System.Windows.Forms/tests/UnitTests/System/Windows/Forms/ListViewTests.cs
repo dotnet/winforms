@@ -4400,6 +4400,8 @@ namespace System.Windows.Forms.Tests
             listView.CreateControl();
             listItem1.SetItemIndex(listView, 0);
 
+            Assert.NotNull(listView.AccessibilityObject);
+
             SubListViewItemAccessibleObject customAccessibleObject = new SubListViewItemAccessibleObject(listItem1);
             listItem1.CustomAccessibleObject = customAccessibleObject;
 
@@ -4792,6 +4794,8 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.NotEqual(IntPtr.Zero, listView.Handle);
             }
+
+            Assert.NotNull(listView.AccessibilityObject);
 
             SubListViewItemAccessibleObject customAccessibleObject = new SubListViewItemAccessibleObject(listItem);
             listItem.CustomAccessibleObject = customAccessibleObject;
@@ -5259,6 +5263,7 @@ namespace System.Windows.Forms.Tests
             using SubListView listView = GetSubListViewWithData(view, virtualMode, showGroups, withinGroup, createControl: true);
             ListViewItem listViewItem = listView.Items[0];
 
+            Assert.NotNull(listView.AccessibilityObject);
             Assert.NotNull(listViewItem.AccessibilityObject);
 
             SubListViewItemAccessibleObject accessibleObject = new SubListViewItemAccessibleObject(listViewItem);
@@ -5691,6 +5696,70 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(selectedCount, listView.CheckedItems.Count);
                 Assert.Equal(selectedCount, listView.CheckedIndices.Count);
             }
+        }
+
+        [WinFormsFact]
+        public void ListView_FocusedItem_Reset_Remove()
+        {
+            using ListView listView = new();
+            listView.CreateControl();
+            listView.Items.Add(new ListViewItem("Test 1"));
+            listView.Items.Add(new ListViewItem("Test 2"));
+            listView.Items[0].Focused = true;
+
+            Assert.NotNull(listView.FocusedItem);
+
+            listView.Items.Remove(listView.Items[0]);
+
+            Assert.Null(listView.FocusedItem);
+        }
+
+        [WinFormsFact]
+        public void ListView_FocusedItem_Reset_RemoveAt()
+        {
+            using ListView listView = new();
+            listView.CreateControl();
+            listView.Items.Add(new ListViewItem("Test 1"));
+            listView.Items.Add(new ListViewItem("Test 2"));
+            listView.Items[0].Focused = true;
+
+            Assert.NotNull(listView.FocusedItem);
+
+            listView.Items.RemoveAt(0);
+
+            Assert.Null(listView.FocusedItem);
+        }
+
+        [WinFormsFact]
+        public void ListView_FocusedItem_Reset_RemoveByKey()
+        {
+            using ListView listView = new();
+            listView.CreateControl();
+            listView.Items.Add(new ListViewItem("Test 1") { Name = "Test 1" });
+            listView.Items.Add(new ListViewItem("Test 2"));
+            listView.Items[0].Focused = true;
+
+            Assert.NotNull(listView.FocusedItem);
+
+            listView.Items.RemoveByKey("Test 1");
+
+            Assert.Null(listView.FocusedItem);
+        }
+
+        [WinFormsFact]
+        public void ListView_FocusedItem_Reset_Clear()
+        {
+            using ListView listView = new();
+            listView.CreateControl();
+            listView.Items.Add(new ListViewItem("Test 1"));
+            listView.Items.Add(new ListViewItem("Test 2"));
+            listView.Items[0].Focused = true;
+
+            Assert.NotNull(listView.FocusedItem);
+
+            listView.Items.Clear();
+
+            Assert.Null(listView.FocusedItem);
         }
 
         private class SubListViewItem : ListViewItem

@@ -6919,4 +6919,7 @@ Stack trace where the illegal operation occurred was:
   <data name="ToolStripItemBindingContextDescr" xml:space="preserve">
     <value>Gets or sets the BindingContext for this toolstrip item.</value>
   </data>
+  <data name="ListViewItemAccessibilityObjectRequiresListView" xml:space="preserve">
+    <value>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</value>
+  </data>
 </root>
