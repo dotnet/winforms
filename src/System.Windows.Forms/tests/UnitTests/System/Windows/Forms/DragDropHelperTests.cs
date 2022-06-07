@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedIsInDragLoopFormat, DragDropHelper.IsInDragLoopFormat(formatEtc));
         }
 
-        [WinFormsTheory(Skip = "Run manually, results in Fatal error 0xC0000005 on Windows_x86 Debug and Release when executed from the command line.")]
+        [WinFormsTheory]
         [MemberData(nameof(DragImage_DataObject_Bitmap_Point_bool_TestData))]
         public unsafe void SetDragImage_DataObject_Bitmap_Point_bool_ReturnsExptected(DataObject dataObject, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
@@ -119,7 +119,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [WinFormsTheory(Skip = "Run manually, results in Fatal error 0xC0000005 on Windows_x86 Debug and Release when executed from the command line.")]
+        [WinFormsTheory]
         [MemberData(nameof(DragImage_DataObject_GiveFeedbackEventArgs_TestData))]
         public unsafe void SetDragImage_DataObject_GiveFeedbackEventArgs_ReturnsExptected(DataObject dataObject, GiveFeedbackEventArgs e)
         {
