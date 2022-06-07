@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Drawing;
+using System.Numerics;
 using System.Runtime.InteropServices.ComTypes;
 using Xunit;
 using static Interop;
@@ -105,11 +106,11 @@ namespace System.Windows.Forms.Tests
                 DragDropFormat dragDropFormat = (DragDropFormat)dataObject.GetData(DragDropHelper.CF_DRAGIMAGEBITS);
                 IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
                 SHDRAGIMAGE* pDragImage = (SHDRAGIMAGE*)basePtr;
-                bool isDragImageNull = pDragImage->hbmpDragImage.IsNull;
+                bool isDragImageNull = BitOperations.LeadingZeroCount((uint)pDragImage->hbmpDragImage.Handle.ToInt64()).Equals(32);
                 Size dragImageSize = pDragImage->sizeDragImage;
                 Point offset = pDragImage->ptOffset;
                 Kernel32.GlobalUnlock(dragDropFormat.Medium.unionmember);
-                Assert.False(isDragImageNull);
+                Assert.Equal(dragImage is null, isDragImageNull);
                 Assert.Equal(dragImage is null ? new Size(0, 0) : dragImage.Size, dragImageSize);
                 Assert.Equal(cursorOffset, offset);
             }
@@ -129,11 +130,11 @@ namespace System.Windows.Forms.Tests
                 DragDropFormat dragDropFormat = (DragDropFormat)dataObject.GetData(DragDropHelper.CF_DRAGIMAGEBITS);
                 IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
                 SHDRAGIMAGE* pDragImage = (SHDRAGIMAGE*)basePtr;
-                bool isDragImageNull = pDragImage->hbmpDragImage.IsNull;
+                bool isDragImageNull = BitOperations.LeadingZeroCount((uint)pDragImage->hbmpDragImage.Handle.ToInt64()).Equals(32);
                 Size dragImageSize = pDragImage->sizeDragImage;
                 Point offset = pDragImage->ptOffset;
                 Kernel32.GlobalUnlock(dragDropFormat.Medium.unionmember);
-                Assert.False(isDragImageNull);
+                Assert.Equal(e.DragImage is null, isDragImageNull);
                 Assert.Equal(e.DragImage is null ? new Size(0, 0) : e.DragImage.Size, dragImageSize);
                 Assert.Equal(e.CursorOffset, offset);
             }
