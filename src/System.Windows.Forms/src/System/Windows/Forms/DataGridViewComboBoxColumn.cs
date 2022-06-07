@@ -14,8 +14,8 @@ using System.Text;
 namespace System.Windows.Forms
 {
     [Designer("System.Windows.Forms.Design.DataGridViewComboBoxColumnDesigner, " + AssemblyRef.SystemDesign)]
-    [ToolboxBitmap(typeof(DataGridViewComboBoxColumn), "DataGridViewComboBoxColumn")]
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
+    [ToolboxBitmap(typeof(DataGridViewComboBoxColumn), "DataGridViewComboBoxColumn")]
     public class DataGridViewComboBoxColumn : DataGridViewColumn
     {
         private static readonly Type s_columnType = typeof(DataGridViewComboBoxColumn);

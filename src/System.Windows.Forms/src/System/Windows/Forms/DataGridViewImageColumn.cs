@@ -13,8 +13,8 @@ using System.Text;
 
 namespace System.Windows.Forms
 {
-    [ToolboxBitmap(typeof(DataGridViewImageColumn), "DataGridViewImageColumn")]
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
+    [ToolboxBitmap(typeof(DataGridViewImageColumn), "DataGridViewImageColumn")]
     public class DataGridViewImageColumn : DataGridViewColumn
     {
         private static readonly Type s_columnType = typeof(DataGridViewImageColumn);

@@ -12,8 +12,8 @@ using System.Text;
 
 namespace System.Windows.Forms
 {
-    [ToolboxBitmap(typeof(DataGridViewButtonColumn), "DataGridViewButtonColumn")]
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
+    [ToolboxBitmap(typeof(DataGridViewButtonColumn), "DataGridViewButtonColumn")]
     public class DataGridViewButtonColumn : DataGridViewColumn
     {
         private static readonly Type s_columnType = typeof(DataGridViewButtonColumn);
