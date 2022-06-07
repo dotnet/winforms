@@ -16,12 +16,12 @@ internal static partial class Interop
         public interface IDragSourceHelper2
         {
             HRESULT InitializeFromBitmap(
-                SHDRAGIMAGE pshdi,
+                in SHDRAGIMAGE pshdi,
                 IDataObject dataObject);
 
             HRESULT InitializeFromWindow(
                 IntPtr hwnd,
-                Point ppt,
+                in Point ppt,
                 IDataObject dataObject);
 
             HRESULT SetFlags(
