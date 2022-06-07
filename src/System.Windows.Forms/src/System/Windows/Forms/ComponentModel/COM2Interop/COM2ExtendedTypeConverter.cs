@@ -151,7 +151,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  does not return any properties.  An easy implementation of this method
         ///  can just call TypeDescriptor.GetProperties for the correct data type.
         /// </summary>
-        [RequiresUnreferencedCode(TypeConverterGetPropertiesMessage)]
+        [RequiresUnreferencedCode(TrimmingConstants.TypeConverterGetPropertiesMessage)]
         public override PropertyDescriptorCollection? GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
         {
             if (_innerConverter is not null)

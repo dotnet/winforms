@@ -81,7 +81,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        [RequiresUnreferencedCode(TypeConverterGetPropertiesMessage)]
+        [RequiresUnreferencedCode(TrimmingConstants.TypeConverterGetPropertiesMessage)]
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
         {
             return TypeDescriptor.GetProperties(value, attributes);

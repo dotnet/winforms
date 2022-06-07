@@ -41,7 +41,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override TypeConverter Converter
         {
-            [RequiresUnreferencedCode(ComNativeDescriptor.PropertyDescriptorPropertyTypeMessage)]
+            [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
             get
             {
                 if (converter is null)

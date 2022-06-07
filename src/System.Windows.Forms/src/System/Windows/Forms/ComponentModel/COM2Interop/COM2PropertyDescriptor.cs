@@ -361,7 +361,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override TypeConverter Converter
         {
-            [RequiresUnreferencedCode(ComNativeDescriptor.PropertyDescriptorPropertyTypeMessage)]
+            [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
             get
             {
                 if (TypeConverterValid)
@@ -818,7 +818,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Retrieves an editor of the requested type.
         /// </summary>
-        [RequiresUnreferencedCode(ComNativeDescriptor.EditorRequiresUnreferencedCode + " " + ComNativeDescriptor.PropertyDescriptorPropertyTypeMessage)]
+        [RequiresUnreferencedCode(TrimmingConstants.EditorRequiresUnreferencedCode + " " + TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
         public override object GetEditor(Type editorBaseType)
         {
             if (TypeEditorValid)
@@ -1429,7 +1429,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return baseConversion;
             }
 
-            [RequiresUnreferencedCode(TypeConverterGetPropertiesMessage)]
+            [RequiresUnreferencedCode(TrimmingConstants.TypeConverterGetPropertiesMessage)]
             public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(value, attributes);
