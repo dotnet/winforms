@@ -11,7 +11,7 @@ namespace System.Windows.Forms.UITests;
 public class DragDropTests : ControlTestBase
 {
     public const int DragDropDelayMS = 100;
-    private readonly Bitmap _dragImageArc = new("./Resources/Arc.bmp");
+    private readonly Bitmap _dragImage = new("./Resources/move.bmp");
 
     public DragDropTests(ITestOutputHelper testOutputHelper)
         : base(testOutputHelper)
@@ -55,16 +55,14 @@ public class DragDropTests : ControlTestBase
     {
         await RunFormWithoutControlAsync(() => new DragDropForm(TestOutputHelper), async (form) =>
         {
-            DropImageType dropImageType = DropImageType.Copy;
-            string message = "Copy to %1";
-            string messageReplacementToken = form.ListDragTarget.Name;
-            form.ListDragTarget.Name = "Drop Target";
+            DropImageType dropImageType = DropImageType.Move;
+            string message = "Move to %1";
+            string messageReplacementToken = "Drop Target";
 
             form.ListDragSource.GiveFeedback += (s, e) =>
             {
-                e.DragImage = _dragImageArc;
-                e.CursorOffset = new Point(0, 96);
-                e.UseDefaultDragImage = true;
+                e.DragImage = _dragImage;
+                e.CursorOffset = new Point(0, 48);
                 e.UseDefaultCursors = false;
             };
 
