@@ -10,7 +10,7 @@ using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using static System.Windows.Forms.ComponentModel.Com2Interop.ComNativeDescriptor;
+using static System.TrimmingConstants;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {

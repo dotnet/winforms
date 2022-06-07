@@ -8,6 +8,7 @@ using System.ComponentModel.Design.Serialization;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Windows.Forms.Primitives.Resources;
+using static System.TrimmingConstants;
 
 namespace System.Windows.Forms
 {

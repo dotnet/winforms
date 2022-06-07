@@ -11,6 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.Ole32;
+using static System.TrimmingConstants;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -19,16 +20,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// </summary>
     internal class ComNativeDescriptor : TypeDescriptionProvider
     {
-        internal const string FilterRequiresUnreferencedCodeMessage = "The public parameterless constructor or the 'Default' static field may be trimmed from the Attribute's Type.";
-
-        internal const string AttributesRequiresUnreferencedCodeMessage = "Generic TypeConverters may require the generic types to be annotated. For example, NullableConverter requires the underlying type to be DynamicallyAccessedMembers All.";
-
-        internal const string PropertyDescriptorPropertyTypeMessage = "PropertyDescriptor's PropertyType cannot be statically discovered.";
-
-        internal const string EditorRequiresUnreferencedCode = "Editors registered in TypeDescriptor.AddEditorTable may be trimmed.";
-
-        internal const string EventDescriptorRequiresUnreferencedCodeMessage = "The built-in EventDescriptor implementation uses Reflection which requires unreferenced code.";
-
         private static ComNativeDescriptor handler;
 
         private readonly AttributeCollection staticAttrs = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No });
@@ -554,7 +545,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// <summary>
             ///  ICustomTypeDescriptor implementation.
             /// </summary>
-            [RequiresUnreferencedCode("Editors registered in TypeDescriptor.AddEditorTable may be trimmed.")]
+            [RequiresUnreferencedCode(EditorRequiresUnreferencedCode)]
             object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
             {
                 return GetEditor(_instance, editorBaseType);

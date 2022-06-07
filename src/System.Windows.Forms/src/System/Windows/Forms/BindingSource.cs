@@ -1815,7 +1815,7 @@ namespace System.Windows.Forms
         {
             get => _filter;
 
-            [RequiresUnreferencedCode("Members of types used in the filter expression might be trimmed.")]
+            [RequiresUnreferencedCode(TrimmingConstants.BindingListViewFilterMessage)]
             set
             {
                 _filter = value;

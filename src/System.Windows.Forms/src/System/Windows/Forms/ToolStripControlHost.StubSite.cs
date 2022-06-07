@@ -56,7 +56,7 @@ namespace System.Windows.Forms
             {
                 get => _owner.Site.Name;
 
-                [RequiresUnreferencedCode("The Type of components in the container cannot be statically discovered to validate the name.")]
+                [RequiresUnreferencedCode(TrimmingConstants.SiteNameMessage)]
                 set => _owner.Site.Name = value;
             }
 

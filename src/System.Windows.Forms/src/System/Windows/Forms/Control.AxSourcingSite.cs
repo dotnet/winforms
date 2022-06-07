@@ -63,7 +63,7 @@ namespace System.Windows.Forms
             {
                 get => _name;
 
-                [RequiresUnreferencedCode("The Type of components in the container cannot be statically discovered to validate the name.")]
+                [RequiresUnreferencedCode(TrimmingConstants.SiteNameMessage)]
                 set
                 {
                     if (value is null || _name is null)
