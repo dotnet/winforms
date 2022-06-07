@@ -68,10 +68,12 @@
   </PropertyGroup>
   <!-- Test related -->
   <PropertyGroup>
-    <VerifyXunitVersion>14.2.0</VerifyXunitVersion>
+    <InputSimulatorPlusVersion>1.0.7</InputSimulatorPlusVersion>
+    <MicrosoftVisualStudioThreadingVersion>17.0.15-alpha</MicrosoftVisualStudioThreadingVersion>
     <!-- This is needed for Verify.Xunit to pull correct version of System.Speech -->
     <MicrosoftWindowsCompatibilityVersion>6.0.0-preview.4.21253.7</MicrosoftWindowsCompatibilityVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
+    <VerifyXunitVersion>14.2.0</VerifyXunitVersion>
   </PropertyGroup>
   <!-- Code Coverage -->
   <PropertyGroup>
