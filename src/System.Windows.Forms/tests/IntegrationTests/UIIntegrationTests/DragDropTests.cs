@@ -34,7 +34,7 @@ public class DragDropTests : ControlTestBase
                 form,
                 inputSimulator => inputSimulator.Mouse
                     .LeftButtonDown()
-                    .Sleep(100)
+                    .Sleep(DragDropDelayMS)
                     .MoveMouseTo(targetMousePosition.X - 40, targetMousePosition.Y)
                     .Sleep(DragDropDelayMS)
                     .MoveMouseTo(targetMousePosition.X, targetMousePosition.Y)
@@ -99,7 +99,7 @@ public class DragDropTests : ControlTestBase
                 form,
                 inputSimulator => inputSimulator.Mouse
                     .LeftButtonDown()
-                    .Sleep(100)
+                    .Sleep(DragDropDelayMS)
                     .MoveMouseTo(targetMousePosition.X - 40, targetMousePosition.Y)
                     .Sleep(DragDropDelayMS)
                     .MoveMouseTo(targetMousePosition.X, targetMousePosition.Y)
