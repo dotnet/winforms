@@ -69,9 +69,10 @@ namespace System.Windows.Forms
 
             _peer.OnGiveFeedback(gfbevent);
 
-            if (gfbevent.DragImage is not null)
+            if (gfbevent.DragImage is not null && !gfbevent.Equals(_lastGiveFeedbacEventArgs))
             {
-                UpdateDragImage(gfbevent);
+                _lastGiveFeedbacEventArgs = gfbevent.Clone();
+                UpdateDragImage(_lastGiveFeedbacEventArgs, _dataObject, _lastHwndTarget);
             }
 
             if (gfbevent.UseDefaultCursors)
@@ -81,17 +82,18 @@ namespace System.Windows.Forms
 
             return HRESULT.S_OK;
 
-            void UpdateDragImage(GiveFeedbackEventArgs e)
+            void UpdateDragImage(GiveFeedbackEventArgs e, IComDataObject? dataObject, IntPtr lastHwndTarget)
             {
-                if (!e.Equals(_lastGiveFeedbacEventArgs))
+                if (dataObject is null)
                 {
-                    _lastGiveFeedbacEventArgs = e.Clone();
-                    DragDropHelper.SetDragImage(_dataObject, _lastGiveFeedbacEventArgs);
+                    return;
+                }
 
-                    if (!_lastHwndTarget.Equals(IntPtr.Zero) && (Cursor.Position is Point point))
-                    {
-                        DragDropHelper.DragEnter(_lastHwndTarget, _dataObject, ref point, (Ole32.DROPEFFECT)_lastGiveFeedbacEventArgs.Effect);
-                    }
+                DragDropHelper.SetDragImage(_dataObject, e);
+
+                if (lastHwndTarget != IntPtr.Zero && (Cursor.Position is Point point))
+                {
+                    DragDropHelper.DragEnter(lastHwndTarget, dataObject, ref point, (Ole32.DROPEFFECT)e.Effect);
                 }
             }
         }
