@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true, SetLastError = true)]
-        public static extern IntPtr OpenInputDesktop(DF dwFlags, BOOL fInherit, DESKTOP dwDesiredAccess);
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        public static partial IntPtr OpenInputDesktop(DF dwFlags, BOOL fInherit, DESKTOP dwDesiredAccess);
     }
 }

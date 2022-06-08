@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern nint CallNextHookEx(IntPtr hhook, User32.HC nCode, nint wparam, nint lparam);
+        [LibraryImport(Libraries.User32)]
+        public static partial nint CallNextHookEx(IntPtr hhook, User32.HC nCode, nint wparam, nint lparam);
     }
 }

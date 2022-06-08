@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern IntPtr ActivateKeyboardLayout(IntPtr hkl, uint Flags);
+        [LibraryImport(Libraries.User32)]
+        public static partial IntPtr ActivateKeyboardLayout(IntPtr hkl, uint Flags);
     }
 }
