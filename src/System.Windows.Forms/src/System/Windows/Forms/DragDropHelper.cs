@@ -518,6 +518,11 @@ namespace System.Windows.Forms
         /// </summary>
         private static bool TryGetDragDropHelper<TDragDropHelper>([NotNullWhen(true)] out TDragDropHelper? dragDropHelper)
         {
+            if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != ApartmentState.STA)
+            {
+                throw new InvalidOperationException(SR.ThreadMustBeSTA);
+            }
+
             try
             {
                 HRESULT hr = Ole32.CoCreateInstance(

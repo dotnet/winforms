@@ -144,6 +144,15 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        [WinFormsFact]
+        public void SetDragImage_DifferentThread_ThrowsInvalidOperationException()
+        {
+            Control.CheckForIllegalCrossThreadCalls = true;
+            DataObject dataObject = new();
+            Task separateTask = Task.Run(() => DragDropHelper.SetDragImage(dataObject, new Bitmap(1, 1), new Point(0, 0), false));
+            Assert.Throws<InvalidOperationException>(separateTask.GetAwaiter().GetResult);
+        }
+
         [Fact]
         public void SetDragImage_NullDataObject_ThrowsArgumentNullException()
         {
