@@ -1346,6 +1346,14 @@ namespace System.Windows.Forms
             return Math.Max(oldMax, textSize.Width);
         }
 
+        private void ClearListItemAccessibleObjects()
+        {
+            if (IsAccessibilityObjectCreated && AccessibilityObject is ListBoxAccessibleObject accessibilityObject)
+            {
+                accessibilityObject.ResetListItemAccessibleObjects();
+            }
+        }
+
         /// <summary>
         ///  Deselects all currently selected items.
         /// </summary>
@@ -2089,6 +2097,20 @@ namespace System.Windows.Forms
         protected override void RefreshItem(int index)
         {
             Items.SetItemInternal(index, Items[index]);
+        }
+
+        internal override void ReleaseUiaProvider(IntPtr handle)
+        {
+            base.ReleaseUiaProvider(handle);
+            ClearListItemAccessibleObjects();
+        }
+
+        private void RemoveListItemAccessibleObjectAt(int index)
+        {
+            if (IsAccessibilityObjectCreated && AccessibilityObject is ListBoxAccessibleObject accessibilityObject)
+            {
+                accessibilityObject.RemoveListItemAccessibleObjectAt(index);
+            }
         }
 
         public override void ResetBackColor()
