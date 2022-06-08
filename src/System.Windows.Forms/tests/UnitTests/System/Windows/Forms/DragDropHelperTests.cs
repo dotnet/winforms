@@ -96,7 +96,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedIsInDragLoopFormat, DragDropHelper.IsInDragLoopFormat(formatEtc));
         }
 
-        [WinFormsTheory]
+        [WinFormsTheory(Skip ="Causing issues with other tests on x86 from the command line")]
         [MemberData(nameof(DragImage_DataObject_Bitmap_Point_bool_TestData))]
         public unsafe void SetDragImage_DataObject_Bitmap_Point_bool_ReturnsExptected(DataObject dataObject, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
@@ -120,7 +120,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [WinFormsTheory]
+        [WinFormsTheory(Skip = "Causing issues with other tests on x86 from the command line")]
         [MemberData(nameof(DragImage_DataObject_GiveFeedbackEventArgs_TestData))]
         public unsafe void SetDragImage_DataObject_GiveFeedbackEventArgs_ReturnsExptected(DataObject dataObject, GiveFeedbackEventArgs e)
         {
@@ -144,13 +144,11 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [WinFormsFact]
-        public void SetDragImage_DifferentThread_ThrowsInvalidOperationException()
+        [Fact(Skip = "Causing issues with other tests on x86 from the command line")]
+        public void SetDragImage_NonSTAThread_ThrowsInvalidOperationException()
         {
             Control.CheckForIllegalCrossThreadCalls = true;
-            DataObject dataObject = new();
-            Task separateTask = Task.Run(() => DragDropHelper.SetDragImage(dataObject, new Bitmap(1, 1), new Point(0, 0), false));
-            Assert.Throws<InvalidOperationException>(separateTask.GetAwaiter().GetResult);
+            Assert.Throws<InvalidOperationException>(() => DragDropHelper.SetDragImage(new DataObject(), new Bitmap(1, 1), new Point(0, 0), false));
         }
 
         [Fact]
