@@ -30,7 +30,7 @@
       "choices": [
         {
           "choice": "netcoreapp3.1",
-          "description": "Target netcoreapp3.1"
+          "description": "Target netcoreapp3.1",
           "displayName": ".NET Core 3.1"
         }
       ],
