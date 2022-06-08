@@ -29,35 +29,48 @@ internal static partial class Interop
             public TTOOLINFOW Info;
             public string? Text { get; set; }
             [MaybeNull]
-            private readonly T _handle;
+            private readonly T? _handle;
 
-            public unsafe ToolInfoWrapper(T handle, TTF flags = default, string? text = null)
+            public unsafe ToolInfoWrapper(T? handle, TTF flags = default, string? text = null)
             {
-                Info = new TTOOLINFOW
-                {
-                    hwnd = handle.Handle,
-                    uId = handle.Handle,
-                    uFlags = flags | TTF.IDISHWND
-                };
-                Text = text;
                 _handle = handle;
+                if (_handle is not null)
+                {
+                    Info = new TTOOLINFOW
+                    {
+                        hwnd = _handle.Handle,
+                        uId = _handle.Handle,
+                        uFlags = flags | TTF.IDISHWND
+                    };
+                }
+
+                Text = text;
             }
 
-            public unsafe ToolInfoWrapper(T handle, IntPtr id, TTF flags = default, string? text = null, RECT rect = default)
+            public unsafe ToolInfoWrapper(T? handle, IntPtr id, TTF flags = default, string? text = null, RECT rect = default)
             {
-                Info = new TTOOLINFOW
-                {
-                    hwnd = handle.Handle,
-                    uId = id,
-                    uFlags = flags,
-                    rect = rect
-                };
-                Text = text;
                 _handle = handle;
+                if (_handle is not null)
+                {
+                    Info = new TTOOLINFOW
+                    {
+                        hwnd = _handle.Handle,
+                        uId = id,
+                        uFlags = flags,
+                        rect = rect
+                    };
+                }
+
+                Text = text;
             }
 
             public unsafe nint SendMessage(IHandle sender, User32.WM message, BOOL state = BOOL.FALSE)
             {
+                if (_handle is null)
+                {
+                    return 0;
+                }
+
                 Info.cbSize = (uint)sizeof(TTOOLINFOW);
                 fixed (char* c = Text)
                 fixed (void* i = &Info)
