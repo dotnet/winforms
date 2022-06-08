@@ -123,7 +123,41 @@ public class DragDropTests : ControlTestBase
                     .LeftButtonUp()
                     .Sleep(DragDropDelayMS));
 
-            Assert.Equal(1, form.ListDragTarget.Items.Count);
+            await MoveMouseToControlAsync(form.ListDragSource);
+
+            await InputSimulator.SendAsync(
+                form,
+                inputSimulator => inputSimulator.Mouse.LeftButtonDown());
+
+            await InputSimulator.SendAsync(
+                form,
+                inputSimulator => inputSimulator.Mouse
+                    .LeftButtonDown()
+                    .Sleep(DragDropDelayMS)
+                    .MoveMouseTo(targetMousePosition.X - 40, targetMousePosition.Y)
+                    .Sleep(DragDropDelayMS)
+                    .MoveMouseTo(targetMousePosition.X, targetMousePosition.Y)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4)
+                    .Sleep(DragDropDelayMS)
+                    .LeftButtonUp()
+                    .Sleep(DragDropDelayMS));
+
+            Assert.Equal(2, form.ListDragTarget.Items.Count);
         });
     }
 
