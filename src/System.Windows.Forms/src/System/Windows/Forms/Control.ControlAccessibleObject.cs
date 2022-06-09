@@ -29,7 +29,7 @@ namespace System.Windows.Forms
             private bool _getOwnerControlHandle;
 
             public ControlAccessibleObject(Control ownerControl)
-                : this(ownerControl, default)
+                : this(ownerControl, User32.OBJID.CLIENT)
             {
             }
 
