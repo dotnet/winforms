@@ -11,8 +11,8 @@ internal partial class Interop
     {
         private const int LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800;
 
-        [DllImport(Libraries.Kernel32, CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
-        private static extern IntPtr LoadLibraryExW(string lpModuleName, IntPtr hFile, uint dwFlags);
+        [LibraryImport(Libraries.Kernel32, SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+        private static partial IntPtr LoadLibraryExW(string lpModuleName, IntPtr hFile, uint dwFlags);
 
         /// <summary>
         /// Loads comctl32.dll from either the <paramref name="startupPath"/>, if it is supplied;

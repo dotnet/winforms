@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal partial class Kernel32
     {
-        [DllImport(Libraries.Kernel32, ExactSpelling = true)]
-        public static extern IntPtr GlobalLock(IntPtr hMem);
+        [LibraryImport(Libraries.Kernel32)]
+        public static partial IntPtr GlobalLock(IntPtr hMem);
     }
 }

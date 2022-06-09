@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal partial class Kernel32
     {
-        [DllImport(Libraries.Kernel32, ExactSpelling = true)]
-        public extern static BOOL DeactivateActCtx(uint dwFlags, IntPtr ulCookie);
+        [LibraryImport(Libraries.Kernel32)]
+        public static partial BOOL DeactivateActCtx(uint dwFlags, IntPtr ulCookie);
     }
 }

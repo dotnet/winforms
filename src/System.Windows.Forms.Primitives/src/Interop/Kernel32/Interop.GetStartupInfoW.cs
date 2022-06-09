@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal partial class Kernel32
     {
-        [DllImport(Libraries.Kernel32, ExactSpelling = true)]
-        public static extern void GetStartupInfoW(ref STARTUPINFOW lpStartupInfo);
+        [LibraryImport(Libraries.Kernel32)]
+        public static partial void GetStartupInfoW(ref STARTUPINFOW lpStartupInfo);
     }
 }

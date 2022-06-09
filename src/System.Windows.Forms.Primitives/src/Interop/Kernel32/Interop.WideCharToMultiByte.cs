@@ -8,8 +8,8 @@ internal partial class Interop
 {
     internal partial class Kernel32
     {
-        [DllImport(Libraries.Kernel32, CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
-        public unsafe static extern int WideCharToMultiByte(
+        [LibraryImport(Libraries.Kernel32, SetLastError = true)]
+        public static unsafe partial int WideCharToMultiByte(
             CP CodePage,
             uint dwFlags,
             char* lpWideCharStr,
