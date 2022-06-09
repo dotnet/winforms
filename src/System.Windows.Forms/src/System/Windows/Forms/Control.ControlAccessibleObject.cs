@@ -24,7 +24,7 @@ namespace System.Windows.Forms
             private IntPtr _handle = IntPtr.Zero;
 
             /// <summary>
-            ///  Used to lazily grab the owner control handle if it hasn't been created yet.
+            ///  Used to lazily grab the owner control handle, if it hasn't been created yet.
             /// </summary>
             private bool _getOwnerControlHandle;
 

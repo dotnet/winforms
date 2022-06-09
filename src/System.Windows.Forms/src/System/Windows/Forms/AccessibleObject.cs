@@ -55,7 +55,7 @@ namespace System.Windows.Forms
         ///   This is also set by <see cref="UseStdAccessibleObjects(nint, int)"/>.
         ///  </para>
         /// </remarks>
-        private readonly SystemIAccessibleWrapper _systemIAccessible = new(
+        private SystemIAccessibleWrapper _systemIAccessible = new(
             null /* Prevents throwing exception when call to null-value system IAccessible */);
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace System.Windows.Forms
         ///  When overridden in a derived class, gets or sets the parent of an accessible object.
         /// </summary>
         /// <devdoc>
-        ///  Note that the default behavior for <see cref="Control"/> is that it calls base from it's override in
+        ///  Note that the default behavior for <see cref="Control"/> is that it calls base from its override in
         ///  <see cref="Control.ControlAccessibleObject"/>. <see cref="Control.ControlAccessibleObject"/> always
         ///  creates the Win32 standard accessible objects so it will hit the Windows implementation of
         ///  <see cref="IAccessible.accParent"/>.
