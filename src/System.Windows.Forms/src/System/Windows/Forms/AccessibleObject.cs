@@ -50,7 +50,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies the <see cref="IAccessible"/> interface used by this <see cref="AccessibleObject"/>.
         /// </summary>
-        private SystemIAccessibleWrapper _systemIAccessible = new(
+        /// <remarks>
+        ///  <para>
+        ///   This is also set by <see cref="UseStdAccessibleObjects(nint, int)"/>.
+        ///  </para>
+        /// </remarks>
+        private readonly SystemIAccessibleWrapper _systemIAccessible = new(
             null /* Prevents throwing exception when call to null-value system IAccessible */);
 
         /// <summary>
@@ -151,9 +156,24 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  When overridden in a derived class, gets or sets the parent of an
-        ///  accessible object.
+        ///  When overridden in a derived class, gets or sets the parent of an accessible object.
         /// </summary>
+        /// <devdoc>
+        ///  Note that the default behavior for <see cref="Control"/> is that it calls base from it's override in
+        ///  <see cref="Control.ControlAccessibleObject"/>. <see cref="Control.ControlAccessibleObject"/> always
+        ///  creates the Win32 standard accessible objects so it will hit the Windows implementation of
+        ///  <see cref="IAccessible.accParent"/>.
+        ///
+        ///  For the non-client area (OBJID_WINDOW), the Windows accParent implementation simply calls
+        ///  GetAncestor(GA_PARENT) to find the window it will call WM_GETOBJECT on with OBJID_CLIENT.
+        ///
+        ///  For the client area (OBJID_CLIENT), the Windows accParent implementation calls WM_GETOBJECT directly
+        ///  with OBJID_WINDOW.
+        ///
+        ///  What this means, effectively, is that the non-client area is the parent of the client area, and the parent
+        ///  window's client area is the parent of the non-client area of the current window (at least from an
+        ///  accessiblity object standpoint).
+        /// </devdoc>
         public virtual AccessibleObject? Parent => WrapIAccessible(_systemIAccessible.accParent);
 
         /// <summary>
@@ -922,6 +942,21 @@ namespace System.Windows.Forms
         /// </summary>
         object? IAccessible.accHitTest(int xLeft, int yTop)
         {
+            // When the AccessibleObjectFromPoint() is called it calls WindowFromPhysicalPoint() to find the window
+            // under the given point. It then walks up parent windows with GetAncestor(hwnd, GA_PARENT) until it can't
+            // find a parent, or the parent is the desktop. This "root" window is used to get the initial OBJID_WINDOW
+            // (non client) IAccessible object (via WM_GETOBJECT).
+            //
+            // This starting IAccessible object gets the initial accHitTest call. AccessibleObjectFromPoint() will
+            // keep recursively calling accHitTest on any new IAccessible objects that are returned. Once CHILDID_SELF
+            // is returned from accHitTest, that IAccessible object is returned from AccessibleObjectFromPoint().
+            //
+            // The default Windows IAccessible behavior is for the OBJID_WINDOW object to check to see if the given
+            // point is in the client area of the window and return that IAccessible object (OBJID_CLIENT). The default
+            // OBJID_CLIENT behavior is to look for child windows that have bounds that contain the point and return
+            // the OBJID_WINDOW IAccessible object for any such window. In the process of doing this, transparency is
+            // considered and WM_NCHITTEST is sent to the relevant windows to assist in this check.
+
             if (IsClientObject)
             {
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"AccessibleObject.AccHitTest: this = {ToString()}");
