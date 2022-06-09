@@ -199,15 +199,15 @@ namespace System.Windows.Forms
             public override string? Description => Owner.AccessibleDescription ?? base.Description;
 
             /// <summary>
-            ///  Gets or sets the handle of the accessible object's associated <see cref="Control"/>.
+            ///  Gets or sets the handle of the accessible object's associated <see cref="Owner"/> control.
             /// </summary>
             /// <value>
-            ///  An <see cref="IntPtr"/> that represents the handle of the associated <see cref="Control">control</see>.
+            ///  An <see cref="IntPtr"/> that represents the handle of the associated <see cref="Owner"/> control.
             /// </value>
             /// <remarks>
             ///  <para>
             ///   The value of the <see cref="Handle"/> property for the <see cref="ControlAccessibleObject"/> is equal to
-            ///   the <see cref="Control.Handle">Handle</see> property of the <see cref="Control"/> it is associated with.
+            ///   the <see cref="Control.Handle"/> property of the <see cref="Owner"/> it is associated with.
             ///  </para>
             /// </remarks>
             public IntPtr Handle

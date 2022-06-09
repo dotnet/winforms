@@ -52,7 +52,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         ///  <para>
-        ///   This is also set by <see cref="UseStdAccessibleObjects(nint, int)"/>.
+        ///   This is also set by <see cref="UseStdAccessibleObjects(IntPtr, int)"/>.
         ///  </para>
         /// </remarks>
         private SystemIAccessibleWrapper _systemIAccessible = new(
@@ -953,9 +953,10 @@ namespace System.Windows.Forms
             //
             // The default Windows IAccessible behavior is for the OBJID_WINDOW object to check to see if the given
             // point is in the client area of the window and return that IAccessible object (OBJID_CLIENT). The default
-            // OBJID_CLIENT behavior is to look for child windows that have bounds that contain the point and return
-            // the OBJID_WINDOW IAccessible object for any such window. In the process of doing this, transparency is
-            // considered and WM_NCHITTEST is sent to the relevant windows to assist in this check.
+            // OBJID_CLIENT behavior is to look for child windows that have bounds that contain the point (via
+            // ChildWindowFromPoint()) and return the OBJID_WINDOW IAccessible object for any such window. In the
+            // process of doing this, transparency is considered and WM_NCHITTEST is sent to the relevant windows to
+            // assist in this check.
 
             if (IsClientObject)
             {
