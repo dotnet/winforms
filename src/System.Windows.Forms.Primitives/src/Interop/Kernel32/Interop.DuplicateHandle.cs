@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class Kernel32
     {
-        [DllImport(Libraries.Kernel32, ExactSpelling = true)]
-        public static extern IntPtr DuplicateHandle(
+        [LibraryImport(Libraries.Kernel32)]
+        public static partial IntPtr DuplicateHandle(
             IntPtr hSourceProcessHandle,
             IntPtr hSourceHandle,
             IntPtr hTargetProcessHandle,
