@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal partial class Imm32
     {
-        [DllImport(Libraries.Imm32, ExactSpelling = true)]
-        public static extern BOOL ImmGetOpenStatus(IntPtr hIMC);
+        [LibraryImport(Libraries.Imm32)]
+        public static partial BOOL ImmGetOpenStatus(IntPtr hIMC);
     }
 }
