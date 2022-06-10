@@ -17,7 +17,7 @@ internal static partial class Interop
         }
 
         [SuppressGCTransition]
-        [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern int GetDeviceCaps(HDC hDC, DeviceCapability nIndex);
+        [LibraryImport(Libraries.Gdi32, SetLastError = true)]
+        public static partial int GetDeviceCaps(HDC hDC, DeviceCapability nIndex);
     }
 }

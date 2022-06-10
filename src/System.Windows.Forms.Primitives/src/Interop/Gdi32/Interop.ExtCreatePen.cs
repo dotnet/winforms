@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public unsafe static extern HPEN ExtCreatePen(PS fnStyle, int dwWidth, ref LOGBRUSH lplb, uint dwStyleCount, uint* lpStyle);
+        [LibraryImport(Libraries.Gdi32)]
+        public unsafe static partial HPEN ExtCreatePen(PS fnStyle, int dwWidth, ref LOGBRUSH lplb, uint dwStyleCount, uint* lpStyle);
     }
 }
