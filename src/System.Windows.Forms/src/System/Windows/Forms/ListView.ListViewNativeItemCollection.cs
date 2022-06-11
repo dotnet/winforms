@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Diagnostics;
 using static Interop;
@@ -68,7 +66,7 @@ namespace System.Windows.Forms
                         // if we are showing virtual items, we need to get the item from the user
                         RetrieveVirtualItemEventArgs rVI = new RetrieveVirtualItemEventArgs(displayIndex);
                         owner.OnRetrieveVirtualItem(rVI);
-                        rVI.Item.SetItemIndex(owner, displayIndex);
+                        rVI.Item!.SetItemIndex(owner, displayIndex);
                         return rVI.Item;
                     }
                     else
@@ -152,12 +150,12 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.ListViewCantAddItemsToAVirtualListView);
                 }
 
-                IComparer comparer = owner._listItemSorter;
+                IComparer? comparer = owner._listItemSorter;
                 owner._listItemSorter = null;
 
                 Debug.Assert(!owner.FlipViewToLargeIconAndSmallIcon || Count == 0, "the FlipView... bit is turned off after adding 1 item.");
 
-                bool[] checkedValues = null;
+                bool[]? checkedValues = null;
 
                 if (owner.IsHandleCreated && !owner.CheckBoxes)
                 {
@@ -180,7 +178,7 @@ namespace System.Windows.Forms
                     {
                         for (int i = 0; i < values.Length; i++)
                         {
-                            if (checkedValues[i])
+                            if (checkedValues![i])
                             {
                                 owner.UpdateSavedCheckedItems(values[i], true /*addItem*/);
                             }
@@ -356,7 +354,6 @@ namespace System.Windows.Forms
                 if (index < count)
                 {
                     // if we're not inserting at the end, force the add.
-                    //
                     owner.ApplyUpdateCachedItems();
                 }
 
