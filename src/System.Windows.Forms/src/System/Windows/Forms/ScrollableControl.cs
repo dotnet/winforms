@@ -888,7 +888,7 @@ namespace System.Windows.Forms
 
                 if (activeControl.ParentInternal is null)
                 {
-                    throw new InvalidOperationException(SR.ScrollableControlParentInternalNull);
+                    throw new InvalidOperationException(SR.ScrollableControlActiveControlParentNull);
                 }
 
                 bounds = RectangleToClient(activeControl.ParentInternal.RectangleToScreen(bounds));

@@ -8836,14 +8836,14 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">获取或设置一个控制是否显示滚动条的 Boolean 值。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="new">Parent property of the active control cannot be null.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
         <source>Gets the horizontal scroll bar for this ScrollableControl.</source>
         <target state="translated">获取此 ScrollableControl 的水平滚动条。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ScrollableControlParentInternalNull">
-        <source>ParentInternal cannot be null.</source>
-        <target state="new">ParentInternal cannot be null.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlRaiseMouseEnterLeaveEventsForScrollBarsDescr">
