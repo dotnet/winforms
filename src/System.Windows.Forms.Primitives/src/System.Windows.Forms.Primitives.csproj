@@ -7,6 +7,11 @@
     <Nullable>enable</Nullable>
     <!--the obsolete usage in public surface can't be removed-->
     <NoWarn>$(NoWarn);618</NoWarn>
+    <!-- 
+      IL Trim warnings which should be removed in order to make WinForms trimmable
+      See https://github.com/dotnet/winforms/issues/4649
+    -->
+    <NoWarn>$(NoWarn);IL2026;IL2046;IL2050;IL2067</NoWarn>
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
