@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [DllImport(Libraries.UxTheme, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        public static extern IntPtr OpenThemeData(IntPtr hwnd, string pszClassList);
+        [LibraryImport(Libraries.UxTheme, StringMarshalling = StringMarshalling.Utf16)]
+        public static partial IntPtr OpenThemeData(IntPtr hwnd, string pszClassList);
     }
 }

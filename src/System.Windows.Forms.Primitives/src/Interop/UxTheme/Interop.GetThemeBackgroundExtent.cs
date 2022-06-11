@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [DllImport(Libraries.UxTheme, ExactSpelling = true)]
-        public static extern HRESULT GetThemeBackgroundExtent(IntPtr hTheme, Gdi32.HDC hdc, int iPartId, int iStateId, ref RECT pContentRect, out RECT pExtentRect);
+        [LibraryImport(Libraries.UxTheme)]
+        public static partial HRESULT GetThemeBackgroundExtent(IntPtr hTheme, Gdi32.HDC hdc, int iPartId, int iStateId, ref RECT pContentRect, out RECT pExtentRect);
 
         public static HRESULT GetThemeBackgroundExtent(IHandle hTheme, Gdi32.HDC hdc, int iPartId, int iStateId, ref RECT pContentRect, out RECT pExtentRect)
         {

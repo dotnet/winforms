@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [DllImport(Libraries.UxTheme, ExactSpelling = true)]
-        public static extern BOOL IsThemePartDefined(IntPtr hTheme, int iPartId, int iStateId);
+        [LibraryImport(Libraries.UxTheme)]
+        public static partial BOOL IsThemePartDefined(IntPtr hTheme, int iPartId, int iStateId);
 
         public static BOOL IsThemePartDefined(IHandle hTheme, int iPartId, int iStateId)
         {

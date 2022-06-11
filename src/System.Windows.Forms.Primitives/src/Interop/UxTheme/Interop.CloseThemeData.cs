@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [DllImport(Libraries.UxTheme, ExactSpelling = true)]
-        public static extern HRESULT CloseThemeData(IntPtr hTheme);
+        [LibraryImport(Libraries.UxTheme)]
+        public static partial HRESULT CloseThemeData(IntPtr hTheme);
     }
 }
