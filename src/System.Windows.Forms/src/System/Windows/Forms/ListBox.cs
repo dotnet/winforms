@@ -1088,7 +1088,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Bindable(false)]
-        public override string? Text
+        [AllowNull]
+        public override string Text
         {
             get
             {
@@ -1096,11 +1097,11 @@ namespace System.Windows.Forms
                 {
                     if (FormattingEnabled)
                     {
-                        return GetItemText(SelectedItem);
+                        return GetItemText(SelectedItem) ?? string.Empty;
                     }
                     else
                     {
-                        return FilterItemOnProperty(SelectedItem)?.ToString();
+                        return FilterItemOnProperty(SelectedItem)?.ToString() ?? string.Empty;
                     }
                 }
                 else
