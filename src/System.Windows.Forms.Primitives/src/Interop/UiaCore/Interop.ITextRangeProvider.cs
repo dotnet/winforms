@@ -13,7 +13,7 @@ internal static partial class Interop
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface ITextRangeProvider
         {
-            ITextRangeProvider Clone();
+            ITextRangeProvider? Clone();
 
             BOOL Compare(ITextRangeProvider range);
 
@@ -29,7 +29,7 @@ internal static partial class Interop
 
             double[] GetBoundingRectangles();
 
-            IRawElementProviderSimple GetEnclosingElement();
+            IRawElementProviderSimple? GetEnclosingElement();
 
             string GetText(int maxLength);
 

@@ -98,6 +98,13 @@ namespace System.Windows.Forms.Automation
             return doubles;
         }
 
+        internal event EventHandler? OwnerDisposed;
+
+        private protected void RaiseOwnerDisposedEvent()
+        {
+            OwnerDisposed?.Invoke(null, EventArgs.Empty);
+        }
+
         public int SendInput(int inputs, ref INPUT input, int size)
         {
             Span<INPUT> currentInput = stackalloc INPUT[1];

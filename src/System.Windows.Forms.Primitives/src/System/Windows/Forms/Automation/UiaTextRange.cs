@@ -17,8 +17,8 @@ namespace System.Windows.Forms.Automation
         // This string is a non-localizable string.
         private const string LineSeparator = "\r\n";
 
-        private readonly IRawElementProviderSimple _enclosingElement;
-        private readonly UiaTextProvider _provider;
+        private IRawElementProviderSimple? _enclosingElement;
+        private UiaTextProvider? _provider;
 
         private int _start;
         private int _end;
@@ -38,6 +38,7 @@ namespace System.Windows.Forms.Automation
         {
             _enclosingElement = enclosingElement.OrThrowIfNull();
             _provider = provider.OrThrowIfNull();
+            _provider.OwnerDisposed += ReleaseTextProvider;
 
             if (start > 0)
             {
@@ -122,7 +123,16 @@ namespace System.Windows.Forms.Automation
         /// </remarks>
         private bool IsDegenerate => _start == _end;
 
-        ITextRangeProvider ITextRangeProvider.Clone() => new UiaTextRange(_enclosingElement, _provider, Start, End);
+        ITextRangeProvider? ITextRangeProvider.Clone()
+        {
+            if (_enclosingElement is null || _provider is null)
+            {
+                Debug.Fail("Invalid action. Owning text constrol is disposed.");
+                return null;
+            }
+
+            return new UiaTextRange(_enclosingElement, _provider, Start, End);
+        }
 
         /// <remarks>
         ///  Ranges come from the same element. Only need to compare endpoints.
@@ -148,6 +158,12 @@ namespace System.Windows.Forms.Automation
 
         void ITextRangeProvider.ExpandToEnclosingUnit(TextUnit unit)
         {
+            if (_provider is null)
+            {
+                Debug.Fail("Invalid action. Owning text constrol is disposed.");
+                return;
+            }
+
             switch (unit)
             {
                 case TextUnit.Character:
@@ -249,6 +265,12 @@ namespace System.Windows.Forms.Automation
 
         ITextRangeProvider? ITextRangeProvider.FindText(string text, BOOL backwards, BOOL ignoreCase)
         {
+            if (_enclosingElement is null || _provider is null)
+            {
+                Debug.Fail("Invalid action. Owning text constrol is disposed.");
+                return null;
+            }
+
             if (text is null)
             {
                 Debug.Fail("Invalid text range argument. 'text' should not be null.");
@@ -276,6 +298,12 @@ namespace System.Windows.Forms.Automation
 
         double[] ITextRangeProvider.GetBoundingRectangles()
         {
+            if (_enclosingElement is null || _provider is null)
+            {
+                Debug.Fail("Invalid action. Owning text constrol is disposed.");
+                return Array.Empty<double>();
+            }
+
             Rectangle ownerBounds = Drawing.Rectangle.Empty;
 
             if (_enclosingElement.GetPropertyValue(UIA.BoundingRectanglePropertyId) is Rectangle boundsPropertyValue)
@@ -341,10 +369,16 @@ namespace System.Windows.Forms.Automation
             return UiaTextProvider.RectListToDoubleArray(rectangles);
         }
 
-        IRawElementProviderSimple ITextRangeProvider.GetEnclosingElement() => _enclosingElement;
+        IRawElementProviderSimple? ITextRangeProvider.GetEnclosingElement() => _enclosingElement;
 
         string ITextRangeProvider.GetText(int maxLength)
         {
+            if (_provider is null)
+            {
+                Debug.Fail("Invalid action. Owning text constrol is disposed.");
+                return String.Empty;
+            }
+
             if (maxLength == -1)
             {
                 maxLength = End + 1;
@@ -479,7 +513,7 @@ namespace System.Windows.Forms.Automation
             }
         }
 
-        void ITextRangeProvider.Select() => _provider.SetSelection(Start, End);
+        void ITextRangeProvider.Select() => _provider?.SetSelection(Start, End);
 
         /// <remark>
         ///  Do nothing. Do not throw exception.
@@ -495,6 +529,12 @@ namespace System.Windows.Forms.Automation
 
         void ITextRangeProvider.ScrollIntoView(BOOL alignToTop)
         {
+            if (_provider is null)
+            {
+                Debug.Fail("Invalid action. Owning text constrol is disposed.");
+                return;
+            }
+
             if (_provider.IsMultiline)
             {
                 int newFirstLine = alignToTop.IsTrue()
@@ -575,6 +615,12 @@ namespace System.Windows.Forms.Automation
 
         private object? GetAttributeValue(TextAttributeIdentifier textAttributeIdentifier)
         {
+            if (_provider is null)
+            {
+                Debug.Fail("Invalid action. Owning text constrol is disposed.");
+                return null;
+            }
+
             return textAttributeIdentifier switch
             {
                 TextAttributeIdentifier.BackgroundColorAttributeId => GetBackgroundColor(),
@@ -597,6 +643,14 @@ namespace System.Windows.Forms.Automation
         /// </summary>
         private List<Rectangle> GetMultilineBoundingRectangles(string text, Point mapClientToScreen, Rectangle clippingRectangle)
         {
+            List<Rectangle> rects = new List<Rectangle>();
+
+            if (_provider is null)
+            {
+                Debug.Fail("Invalid action. Owning text constrol is disposed.");
+                return rects;
+            }
+
             // Remember the line height.
             int height = Math.Abs(_provider.Logfont.lfHeight);
 
@@ -624,7 +678,6 @@ namespace System.Windows.Forms.Automation
             }
 
             // Adding a rectangle for each line.
-            List<Rectangle> rects = new List<Rectangle>();
             int nextLineIndex = _provider.GetLineIndex(startLine);
 
             for (int i = startLine; i <= endLine; i++)
@@ -676,7 +729,7 @@ namespace System.Windows.Forms.Automation
 
         private static CapStyle GetCapStyle(ES editStyle) => editStyle.HasFlag(ES.UPPERCASE) ? CapStyle.AllCap : CapStyle.None;
 
-        private bool GetReadOnly() => _provider.IsReadOnly;
+        private bool GetReadOnly() => _provider is not null && _provider.IsReadOnly;
 
         private static COLORREF GetBackgroundColor() => GetSysColor(COLOR.WINDOW);
 
@@ -708,6 +761,13 @@ namespace System.Windows.Forms.Automation
         /// </summary>
         private int MoveEndpointForward(int index, TextUnit unit, int count, out int moved)
         {
+            if (_provider is null)
+            {
+                Debug.Fail("Invalid action. Owning text constrol is disposed.");
+                moved = 0;
+                return -1;
+            }
+
             switch (unit)
             {
                 case TextUnit.Character:
@@ -824,6 +884,13 @@ namespace System.Windows.Forms.Automation
         /// </summary>
         private int MoveEndpointBackward(int index, TextUnit unit, int count, out int moved)
         {
+            if (_provider is null)
+            {
+                Debug.Fail("Invalid action. Owning text constrol is disposed.");
+                moved = 0;
+                return -1;
+            }
+
             switch (unit)
             {
                 case TextUnit.Character:
@@ -958,8 +1025,20 @@ namespace System.Windows.Forms.Automation
             _end = end >= start ? end : throw new ArgumentOutOfRangeException(nameof(end));
         }
 
+        private void ReleaseTextProvider(object? o, EventArgs s)
+        {
+            _enclosingElement = null;
+            _provider = null;
+        }
+
         private void ValidateEndpoints()
         {
+            if (_provider is null)
+            {
+                Debug.Fail("Invalid action. Owning text constrol is disposed.");
+                return;
+            }
+
             int limit = _provider.TextLength;
 
             if (Start > limit && limit > 0)

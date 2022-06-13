@@ -216,9 +216,9 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
             IRawElementProviderSimple enclosingElement = new Mock<IRawElementProviderSimple>(MockBehavior.Strict).Object;
             UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
             UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 3, end: 9);
-            UiaTextRange actual = (UiaTextRange)((ITextRangeProvider)textRange).Clone();
-            Assert.Equal(textRange.Start, actual.Start);
-            Assert.Equal(textRange.End, actual.End);
+            UiaTextRange? actual = (UiaTextRange?)((ITextRangeProvider)textRange).Clone();
+            Assert.Equal(textRange.Start, actual?.Start);
+            Assert.Equal(textRange.End, actual?.End);
         }
 
         [StaTheory]
@@ -646,7 +646,7 @@ Test text on line 2.";
             IRawElementProviderSimple enclosingElement = new Mock<IRawElementProviderSimple>(MockBehavior.Strict).Object;
             UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
             UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 0);
-            IRawElementProviderSimple actual = ((ITextRangeProvider)textRange).GetEnclosingElement();
+            IRawElementProviderSimple? actual = ((ITextRangeProvider)textRange).GetEnclosingElement();
             Assert.Equal(enclosingElement, actual);
         }
 

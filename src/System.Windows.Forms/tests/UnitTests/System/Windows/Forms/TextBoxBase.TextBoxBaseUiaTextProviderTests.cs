@@ -115,9 +115,10 @@ namespace System.Windows.Forms.Tests
         public void TextBoxBaseUiaTextProvider_DocumentRange_IsNotNull()
         {
             using TextBoxBase textBoxBase = new SubTextBoxBase();
+            textBoxBase.CreateControl();
             TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
             Assert.NotNull(provider.DocumentRange);
-            Assert.False(textBoxBase.IsHandleCreated);
+            Assert.True(textBoxBase.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -753,16 +754,24 @@ namespace System.Windows.Forms.Tests
             Assert.False(textBoxBase.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void TextBoxBaseUiaTextProvider_RangeFromAnnotation_DoesntThrowAnException()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TextBoxBaseUiaTextProvider_RangeFromAnnotation_DoesntThrowAnException(bool createControl)
         {
             using TextBoxBase textBoxBase = new SubTextBoxBase();
             TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
 
+            if (createControl)
+            {
+                textBoxBase.CreateControl();
+            }
+
             // RangeFromAnnotation doesn't throw an exception
             UiaCore.ITextRangeProvider range = provider.RangeFromAnnotation(textBoxBase.AccessibilityObject);
             // RangeFromAnnotation implementation can be changed so this test can be changed too
-            Assert.NotNull(range);
+            // Range shouldn't be null if the control is created.
+            Assert.Equal(createControl, range is not null);
         }
 
         [WinFormsFact]

@@ -19,6 +19,13 @@ namespace System.Windows.Forms
             public TextBoxBaseUiaTextProvider(TextBoxBase owner)
             {
                 _owningTextBoxBase = owner.OrThrowIfNull();
+                _owningTextBoxBase.HandleDestroyed += OnOwnerHandleDestroyed;
+            }
+
+            private void OnOwnerHandleDestroyed(object? sender, EventArgs e)
+            {
+                _owningTextBoxBase.HandleDestroyed -= OnOwnerHandleDestroyed;
+                RaiseOwnerDisposedEvent();
             }
 
             public override UiaCore.ITextRangeProvider[]? GetSelection()
@@ -96,7 +103,10 @@ namespace System.Windows.Forms
                 return new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start, start);
             }
 
-            public override UiaCore.ITextRangeProvider DocumentRange => new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start: 0, TextLength);
+            public override UiaCore.ITextRangeProvider? DocumentRange
+                => _owningTextBoxBase.IsHandleCreated
+                    ? new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start: 0, TextLength)
+                    : null;
 
             public override UiaCore.SupportedTextSelection SupportedTextSelection => UiaCore.SupportedTextSelection.Single;
 
@@ -130,10 +140,10 @@ namespace System.Windows.Forms
             /// <returns>
             ///  A text range that contains the annotation target text.
             /// </returns>
-            public override UiaCore.ITextRangeProvider RangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement)
-            {
-                return new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start: 0, end: 0);
-            }
+            public override UiaCore.ITextRangeProvider? RangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement)
+                => _owningTextBoxBase.IsHandleCreated
+                    ? new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start: 0, end: 0)
+                    : null;
 
             public override Rectangle BoundingRectangle
                 => _owningTextBoxBase.IsHandleCreated
