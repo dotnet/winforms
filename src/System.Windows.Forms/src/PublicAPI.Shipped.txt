@@ -302,11 +302,11 @@
 ~override System.Windows.Forms.DataGridViewTextBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell
 ~override System.Windows.Forms.DataGridViewTextBoxColumn.CellTemplate.set -> void
 ~override System.Windows.Forms.DataGridViewTextBoxColumn.ToString() -> string
-~override System.Windows.Forms.DataGridViewTextBoxEditingControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnGotFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnMouseWheel(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnTextChanged(System.EventArgs e) -> void
+override System.Windows.Forms.DataGridViewTextBoxEditingControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnTextChanged(System.EventArgs! e) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.GetErrorIconBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
@@ -1311,13 +1311,13 @@ System.Windows.Forms.Design.ComponentEditorForm.ComponentEditorForm(object! comp
 ~System.Windows.Forms.IDataGridViewEditingCell.EditingCellFormattedValue.get -> object
 ~System.Windows.Forms.IDataGridViewEditingCell.EditingCellFormattedValue.set -> void
 ~System.Windows.Forms.IDataGridViewEditingCell.GetEditingCellFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
-~System.Windows.Forms.IDataGridViewEditingControl.ApplyCellStyleToEditingControl(System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle) -> void
-~System.Windows.Forms.IDataGridViewEditingControl.EditingControlDataGridView.get -> System.Windows.Forms.DataGridView
-~System.Windows.Forms.IDataGridViewEditingControl.EditingControlDataGridView.set -> void
-~System.Windows.Forms.IDataGridViewEditingControl.EditingControlFormattedValue.get -> object
-~System.Windows.Forms.IDataGridViewEditingControl.EditingControlFormattedValue.set -> void
-~System.Windows.Forms.IDataGridViewEditingControl.EditingPanelCursor.get -> System.Windows.Forms.Cursor
-~System.Windows.Forms.IDataGridViewEditingControl.GetEditingControlFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
+System.Windows.Forms.IDataGridViewEditingControl.ApplyCellStyleToEditingControl(System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
+System.Windows.Forms.IDataGridViewEditingControl.EditingControlDataGridView.get -> System.Windows.Forms.DataGridView?
+System.Windows.Forms.IDataGridViewEditingControl.EditingControlDataGridView.set -> void
+System.Windows.Forms.IDataGridViewEditingControl.EditingControlFormattedValue.get -> object!
+System.Windows.Forms.IDataGridViewEditingControl.EditingControlFormattedValue.set -> void
+System.Windows.Forms.IDataGridViewEditingControl.EditingPanelCursor.get -> System.Windows.Forms.Cursor!
+System.Windows.Forms.IDataGridViewEditingControl.GetEditingControlFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object!
 ~System.Windows.Forms.IDropTarget.OnDragDrop(System.Windows.Forms.DragEventArgs e) -> void
 ~System.Windows.Forms.IDropTarget.OnDragEnter(System.Windows.Forms.DragEventArgs e) -> void
 ~System.Windows.Forms.IDropTarget.OnDragLeave(System.EventArgs e) -> void
@@ -2172,13 +2172,13 @@ System.Windows.Forms.TableLayoutPanel.SetRowSpan(System.Windows.Forms.Control! c
 ~virtual System.Windows.Forms.DataGridViewRowCollection.InsertRange(int rowIndex, params System.Windows.Forms.DataGridViewRow[] dataGridViewRows) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.Remove(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
-~virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.ApplyCellStyleToEditingControl(System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle) -> void
-~virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlDataGridView.get -> System.Windows.Forms.DataGridView
-~virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlDataGridView.set -> void
-~virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlFormattedValue.get -> object
-~virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlFormattedValue.set -> void
-~virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingPanelCursor.get -> System.Windows.Forms.Cursor
-~virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.GetEditingControlFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
+virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.ApplyCellStyleToEditingControl(System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
+virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlDataGridView.get -> System.Windows.Forms.DataGridView?
+virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlDataGridView.set -> void
+virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlFormattedValue.get -> object!
+virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlFormattedValue.set -> void
+virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingPanelCursor.get -> System.Windows.Forms.Cursor!
+virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.GetEditingControlFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object!
 virtual System.Windows.Forms.Design.ComponentEditorForm.OnSelChangeSelector(object? source, System.Windows.Forms.TreeViewEventArgs! e) -> void
 virtual System.Windows.Forms.Design.ComponentEditorForm.ShowForm(System.Windows.Forms.IWin32Window? owner) -> System.Windows.Forms.DialogResult
 virtual System.Windows.Forms.Design.ComponentEditorForm.ShowForm(System.Windows.Forms.IWin32Window? owner, int page) -> System.Windows.Forms.DialogResult
