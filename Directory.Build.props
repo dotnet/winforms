@@ -22,8 +22,8 @@
                                   ($(MSBuildProjectName.EndsWith('.Analyzers')) or $(MSBuildProjectName.EndsWith('.Analyzers.CSharp')))"
                                   >true</IsAnalyzerProject>
 
-    <EnableTrimAnalyzer Condition="!$(IsTestProject) and !$(IsAnalyzerProject) and
-                                  !($(MSBuildProjectName.EndsWith('.TestUtilities'))">true</EnableTrimAnalyzer>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <EnableTrimAnalyzer Condition="$(IsTestProject) or $(IsAnalyzerProject) or $(MSBuildProjectDirectory.Contains('\tests\'))">false</EnableTrimAnalyzer>
   </PropertyGroup>
 
   <!--
