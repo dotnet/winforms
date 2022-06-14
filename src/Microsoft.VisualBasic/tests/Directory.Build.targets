@@ -2,6 +2,10 @@
 
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)\..'))"/>
 
+  <PropertyGroup>
+    <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
+  </PropertyGroup>
+
   <!--
     SDK doesn't support conflict resolution with project references (see https://github.com/dotnet/sdk/issues/2674).
     Remove Microsoft.VisualBasic from netcoreapp shared framework to use the project reference instead.

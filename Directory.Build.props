@@ -23,9 +23,7 @@
                                   >true</IsAnalyzerProject>
 
     <EnableTrimAnalyzer Condition="!$(IsTestProject) and !$(IsAnalyzerProject) and
-                                  !($(MSBuildProjectName.EndsWith('.TestUtilities')) or $(MSBuildProjectName.EndsWith('VisualBasicRuntimeTest'))
-                                    or $(MSBuildProjectName.EndsWith('WinformsControlsTest')) or $(MSBuildProjectName.EndsWith('DesignSurfaceExt'))
-                                    or $(MSBuildProjectName.EndsWith('DemoConsole')))">true</EnableTrimAnalyzer>
+                                  !($(MSBuildProjectName.EndsWith('.TestUtilities'))">true</EnableTrimAnalyzer>
   </PropertyGroup>
 
   <!--
