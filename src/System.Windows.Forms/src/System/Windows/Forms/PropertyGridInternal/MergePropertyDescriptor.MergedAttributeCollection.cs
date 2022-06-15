@@ -26,7 +26,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public override Attribute this[[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] Type attributeType] => GetCommonAttribute(attributeType);
 
-            private Attribute GetCommonAttribute(Type attributeType)
+            private Attribute GetCommonAttribute([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)]Type attributeType)
             {
                 if (_attributeCollections is null)
                 {

@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.ComponentModel.Design;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace System.Resources
@@ -28,7 +29,7 @@ namespace System.Resources
             _typeNameConverter = typeNameConverter;
         }
 
-        public override Type BindToType(string assemblyName, string typeName)
+        public override Type BindToType(string assemblyName, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]string typeName)
         {
             if (_typeResolver is null)
             {
