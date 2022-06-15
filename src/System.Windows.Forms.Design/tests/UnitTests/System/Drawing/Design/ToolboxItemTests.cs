@@ -1205,6 +1205,7 @@ namespace System.Drawing.Design.Tests
                 yield return new object[] { null, new AssemblyName(typeof(ToolboxItemTests).Assembly.FullName), "NoSuchType", false, null };
                 yield return new object[] { null, null, string.Empty, false, null };
 
+#pragma warning disable SYSLIB0044 // Type or member is obsolete
                 var validNameWithCodeBase = new AssemblyName(typeof(int).Assembly.FullName)
                 {
                     CodeBase = "System.Windows.Forms.Design.Tests.dll"
@@ -1249,6 +1250,7 @@ namespace System.Drawing.Design.Tests
                 {
                     CodeBase = "ThrowIOException"
                 };
+#pragma warning restore SYSLIB0044 // Type or member is obsolete
                 yield return new object[] { null, ioFormatExceptionCodeBase, "System.Int32", false, typeof(int) };
             }
 
