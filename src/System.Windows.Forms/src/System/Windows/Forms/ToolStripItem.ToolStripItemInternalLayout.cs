@@ -34,8 +34,9 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Rectangle imageRect = LayoutData.ImageBounds;
-                    imageRect.Intersect(_layoutData!.Field);
+                    ButtonBaseAdapter.LayoutData layoutData = LayoutData;
+                    Rectangle imageRect = layoutData.ImageBounds;
+                    imageRect.Intersect(layoutData.Field);
                     return imageRect;
                 }
             }
@@ -57,8 +58,9 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Rectangle textRect = LayoutData.TextBounds;
-                    textRect.Intersect(_layoutData!.Field);
+                    ButtonBaseAdapter.LayoutData layoutData = LayoutData;
+                    Rectangle textRect = layoutData.TextBounds;
+                    textRect.Intersect(layoutData.Field);
                     return textRect;
                 }
             }
