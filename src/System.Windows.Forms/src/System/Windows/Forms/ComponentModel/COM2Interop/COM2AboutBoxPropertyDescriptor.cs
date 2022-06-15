@@ -91,7 +91,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Retrieves an editor of the requested type.
         /// </summary>
-        [RequiresUnreferencedCode(ComNativeDescriptor.EditorRequiresUnreferencedCode + " " + ComNativeDescriptor.PropertyDescriptorPropertyTypeMessage)]
+        [RequiresUnreferencedCode(TrimmingConstants.EditorRequiresUnreferencedCode + " " + TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
         public override object GetEditor(Type editorBaseType)
         {
             if (editorBaseType == typeof(UITypeEditor))

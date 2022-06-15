@@ -9,6 +9,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
@@ -2634,18 +2635,21 @@ namespace System.Windows.Forms
         ///  Retrieves the type converter for this object.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [RequiresUnreferencedCode(TrimmingConstants.AttributesRequiresUnreferencedCodeMessage)]
         TypeConverter ICustomTypeDescriptor.GetConverter()
         {
             return null;
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [RequiresUnreferencedCode(TrimmingConstants.EventDescriptorRequiresUnreferencedCodeMessage)]
         EventDescriptor ICustomTypeDescriptor.GetDefaultEvent()
         {
             return TypeDescriptor.GetDefaultEvent(this, true);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
         PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty()
         {
             return TypeDescriptor.GetDefaultProperty(this, true);
@@ -2655,6 +2659,7 @@ namespace System.Windows.Forms
         ///  Retrieves the an editor for this object.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [RequiresUnreferencedCode(TrimmingConstants.EditorRequiresUnreferencedCode)]
         object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
         {
             if (editorBaseType != typeof(ComponentEditor))
@@ -2680,6 +2685,7 @@ namespace System.Windows.Forms
             => TypeDescriptor.GetEvents(this, noCustomTypeDesc: true);
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [RequiresUnreferencedCode(TrimmingConstants.FilterRequiresUnreferencedCodeMessage)]
         EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
             => TypeDescriptor.GetEvents(this, attributes, noCustomTypeDesc: true);
 
@@ -2880,12 +2886,14 @@ namespace System.Windows.Forms
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
         {
             return FillProperties(null);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage + " " + TrimmingConstants.FilterRequiresUnreferencedCodeMessage)]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
         {
             return FillProperties(attributes);

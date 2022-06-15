@@ -21,5 +21,7 @@ namespace System
         internal const string SiteNameMessage = "The Type of components in the container cannot be statically discovered to validate the name.";
 
         internal const string TypeConverterGetPropertiesMessage = "The Type of value cannot be statically discovered. The public parameterless constructor or the 'Default' static field may be trimmed from the Attribute's Type.";
+
+        internal const string TypeOrValueNotDiscoverableMessage = "The Type of value cannot be statically discovered";
     }
 }
