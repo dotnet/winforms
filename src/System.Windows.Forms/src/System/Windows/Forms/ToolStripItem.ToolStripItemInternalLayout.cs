@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.ButtonInternal;
 
@@ -46,7 +47,7 @@ namespace System.Windows.Forms
                 get
                 {
                     EnsureLayout();
-                    return _layoutData!;
+                    return _layoutData;
                 }
             }
 
@@ -133,6 +134,7 @@ namespace System.Windows.Forms
                 return layoutOptions;
             }
 
+            [MemberNotNull(nameof(_layoutData))]
             private bool EnsureLayout()
             {
                 if (_layoutData is null || _parentLayoutData is null || !_parentLayoutData.IsCurrent(ParentInternal))
@@ -175,6 +177,7 @@ namespace System.Windows.Forms
                 return Size.Empty;
             }
 
+            [MemberNotNull(nameof(_layoutData))]
             internal void PerformLayout()
             {
                 _layoutData = GetLayoutData();
