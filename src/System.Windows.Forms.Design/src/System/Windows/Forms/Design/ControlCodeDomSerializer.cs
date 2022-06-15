@@ -20,16 +20,14 @@ namespace System.Windows.Forms.Design
     internal class ControlCodeDomSerializer : CodeDomSerializer
     {
         /// <summary>
-        ///  Deserilizes the given CodeDom object into a real object.  This
+        ///  Deserializes the given CodeDom object into a real object.  This
         ///  will use the serialization manager to create objects and resolve
         ///  data types.  The root of the object graph is returned.
         /// </summary>
         public override object Deserialize(IDesignerSerializationManager manager, object codeObject)
         {
-            if (manager is null || codeObject is null)
-            {
-                throw new ArgumentNullException(manager is null ? "manager" : "codeObject");
-            }
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(codeObject);
 
             //Attempt to suspend all components within the icontainer
             IContainer container = (IContainer)manager.GetService(typeof(IContainer));
@@ -88,7 +86,7 @@ namespace System.Windows.Forms.Design
             return objectGraphData;
         }
 
-        private bool HasAutoSizedChildren(Control parent)
+        private static bool HasAutoSizedChildren(Control parent)
         {
             foreach (Control child in parent.Controls)
             {
@@ -101,7 +99,7 @@ namespace System.Windows.Forms.Design
             return false;
         }
 
-        private bool HasMixedInheritedChildren(Control parent)
+        private static bool HasMixedInheritedChildren(Control parent)
         {
             bool inheritedChildren = false;
             bool nonInheritedChildren = false;
@@ -139,7 +137,7 @@ namespace System.Windows.Forms.Design
             {
                 if (c.Site != null && c.Site.DesignMode)
                 {
-                    // We only emit Size/Location information for controls that are sited and not inherrited readonly.
+                    // We only emit Size/Location information for controls that are sited and not inherited readonly.
                     InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(c)[typeof(InheritanceAttribute)];
 
                     if (ia != null && ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)
@@ -157,10 +155,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object Serialize(IDesignerSerializationManager manager, object value)
         {
-            if (manager is null || value is null)
-            {
-                throw new ArgumentNullException(manager is null ? "manager" : "value");
-            }
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(value);
 
             // Find our base class's serializer.
             CodeDomSerializer serializer = (CodeDomSerializer)manager.GetSerializer(typeof(Component), typeof(CodeDomSerializer));

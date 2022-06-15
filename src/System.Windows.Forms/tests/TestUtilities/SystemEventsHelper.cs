@@ -1,8 +1,7 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Reflection;
 using Microsoft.Win32;
 using Xunit;
@@ -14,9 +13,11 @@ namespace System
     {
         private static IntPtr GetHWnd()
         {
-            // locate the hwnd used by SystemEvents in this domain
-            FieldInfo windowClassNameField = typeof(SystemEvents).GetField("s_className", BindingFlags.Static | BindingFlags.NonPublic) ??  // runtime
-                                             typeof(SystemEvents).GetField("className", BindingFlags.Static | BindingFlags.NonPublic);      // desktop
+            // Locate the hwnd used by SystemEvents in this domain.
+            FieldInfo windowClassNameField =
+                typeof(SystemEvents).GetField("s_className", BindingFlags.Static | BindingFlags.NonPublic)   // runtime
+                ?? typeof(SystemEvents).GetField("className", BindingFlags.Static | BindingFlags.NonPublic); // desktop
+
             Assert.NotNull(windowClassNameField);
             string windowClassName = windowClassNameField.GetValue(null) as string;
             Assert.NotNull(windowClassName);
@@ -30,11 +31,11 @@ namespace System
             IntPtr window = GetHWnd();
 
             WM msg;
-            IntPtr wParam;
+            nint wParam;
             if (category == UserPreferenceCategory.Color)
             {
                 msg = WM.SYSCOLORCHANGE;
-                wParam = IntPtr.Zero;
+                wParam = 0;
             }
             else
             {
@@ -42,39 +43,39 @@ namespace System
 
                 if (category == UserPreferenceCategory.Accessibility)
                 {
-                    wParam = (IntPtr)SPI.SETHIGHCONTRAST;
+                    wParam = (nint)SPI.SETHIGHCONTRAST;
                 }
                 else if (category == UserPreferenceCategory.Desktop)
                 {
-                    wParam = (IntPtr)SPI.SETDESKWALLPAPER;
+                    wParam = (nint)SPI.SETDESKWALLPAPER;
                 }
                 else if (category == UserPreferenceCategory.Icon)
                 {
-                    wParam = (IntPtr)SPI.ICONHORIZONTALSPACING;
+                    wParam = (nint)SPI.ICONHORIZONTALSPACING;
                 }
                 else if (category == UserPreferenceCategory.Mouse)
                 {
-                    wParam = (IntPtr)SPI.SETDOUBLECLICKTIME;
+                    wParam = (nint)SPI.SETDOUBLECLICKTIME;
                 }
                 else if (category == UserPreferenceCategory.Keyboard)
                 {
-                    wParam = (IntPtr)SPI.SETKEYBOARDDELAY;
+                    wParam = (nint)SPI.SETKEYBOARDDELAY;
                 }
                 else if (category == UserPreferenceCategory.Menu)
                 {
-                    wParam = (IntPtr)SPI.SETMENUDROPALIGNMENT;
+                    wParam = (nint)SPI.SETMENUDROPALIGNMENT;
                 }
                 else if (category == UserPreferenceCategory.Power)
                 {
-                    wParam = (IntPtr)SPI.SETLOWPOWERACTIVE;
+                    wParam = (nint)SPI.SETLOWPOWERACTIVE;
                 }
                 else if (category == UserPreferenceCategory.Screensaver)
                 {
-                    wParam = (IntPtr)SPI.SETMENUDROPALIGNMENT;
+                    wParam = (nint)SPI.SETMENUDROPALIGNMENT;
                 }
                 else if (category == UserPreferenceCategory.Window)
                 {
-                    wParam = (IntPtr)SPI.SETMENUDROPALIGNMENT;
+                    wParam = (nint)SPI.SETMENUDROPALIGNMENT;
                 }
                 else
                 {
@@ -83,7 +84,7 @@ namespace System
             }
 
             // Call with reflect to immediately send the message.
-            SendMessageW(window, msg | WM.REFLECT, wParam, IntPtr.Zero);
+            SendMessageW(window, msg | WM.REFLECT, wParam);
         }
     }
 }

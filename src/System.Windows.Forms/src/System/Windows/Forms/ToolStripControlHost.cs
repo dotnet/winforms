@@ -24,7 +24,7 @@ namespace System.Windows.Forms
         internal static readonly object s_lostFocusEvent = new object();
         internal static readonly object s_keyDownEvent = new object();
         internal static readonly object s_keyPressEvent = new object();
-        internal static readonly object s_keyUpEent = new object();
+        internal static readonly object s_keyUpEvent = new object();
         internal static readonly object s_enterEvent = new object();
         internal static readonly object s_leaveEvent = new object();
         internal static readonly object s_validatedEvent = new object();
@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolStripControlHost(Control c)
         {
-            _control = c ?? throw new ArgumentNullException(nameof(c), SR.ControlCannotBeNull);
+            _control = c.OrThrowIfNullWithMessage(SR.ControlCannotBeNull);
             SyncControlParent();
             c.Visible = true;
             SetBounds(c.Bounds);
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the image that is displayed on a <see cref='Label'/>.
+        ///  Gets or sets the image that is displayed on a <see cref="Label"/>.
         /// </summary>
         [Localizable(true)]
         [SRCategory(nameof(SR.CatAppearance))]
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_control != null)
+                if (_control is not null)
                 {
                     return (DesignMode || Control.CanSelect);
                 }
@@ -115,10 +115,7 @@ namespace System.Windows.Forms
             get => _controlAlign;
             set
             {
-                if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_controlAlign != value)
                 {
@@ -145,10 +142,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Control != null)
+                if (Control is not null)
                 {
                     // When you create the control - it sets up its size as its default size.
-                    // Since the property is protected we dont know for sure, but this is a pretty good guess.
+                    // Since the property is protected we don't know for sure, but this is a pretty good guess.
                     return Control.Size;
                 }
 
@@ -313,8 +310,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnKeyUpDescr))]
         public event KeyEventHandler KeyUp
         {
-            add => Events.AddHandler(s_keyUpEent, value);
-            remove => Events.RemoveHandler(s_keyUpEent, value);
+            add => Events.AddHandler(s_keyUpEvent, value);
+            remove => Events.RemoveHandler(s_keyUpEvent, value);
         }
 
         /// <summary>
@@ -326,7 +323,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_control != null)
+                if (_control is not null)
                 {
                     return _control.RightToLeft;
                 }
@@ -335,7 +332,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (_control != null)
+                if (_control is not null)
                 {
                     _control.RightToLeft = value;
                 }
@@ -351,7 +348,7 @@ namespace System.Windows.Forms
             set => base.RightToLeftAutoMirrorImage = value;
         }
 
-        public override bool Selected => Control != null && Control.Focused;
+        public override bool Selected => Control is not null && Control.Focused;
 
         public override Size Size
         {
@@ -359,9 +356,9 @@ namespace System.Windows.Forms
             set
             {
                 Rectangle specifiedBounds = Rectangle.Empty;
-                if (_control != null)
+                if (_control is not null)
                 {
-                    // we dont normally update the specified bounds, but if someone explicitly sets
+                    // we don't normally update the specified bounds, but if someone explicitly sets
                     // the size we should.
                     specifiedBounds = _control.Bounds;
                     specifiedBounds.Size = value;
@@ -370,7 +367,7 @@ namespace System.Windows.Forms
 
                 base.Size = value;
 
-                if (_control != null)
+                if (_control is not null)
                 {
                     // checking again in case the control has adjusted the size.
                     Rectangle bounds = _control.Bounds;
@@ -392,7 +389,7 @@ namespace System.Windows.Forms
             set
             {
                 base.Site = value;
-                if (value != null)
+                if (value is not null)
                 {
                     Control.Site = new StubSite(Control, this);
                 }
@@ -464,7 +461,7 @@ namespace System.Windows.Forms
             // will be correctly unparented before being disposed.
             base.Dispose(disposing);
 
-            if (disposing && Control != null)
+            if (disposing && Control is not null)
             {
                 OnUnsubscribeControlEvents(Control);
 
@@ -479,7 +476,7 @@ namespace System.Windows.Forms
 
         public override Size GetPreferredSize(Size constrainingSize)
         {
-            if (_control != null)
+            if (_control is not null)
             {
                 return Control.GetPreferredSize(constrainingSize - Padding.Size) + Padding.Size;
             }
@@ -598,7 +595,7 @@ namespace System.Windows.Forms
             {
                 Visible = Control.Visible;
                 // this should fire the OnVisibleChanged and raise events appropriately.
-            };
+            }
         }
 
         private void HandleValidating(object sender, CancelEventArgs e) => OnValidating(e);
@@ -643,7 +640,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnKeyPress(KeyPressEventArgs e) => RaiseKeyPressEvent(s_keyPressEvent, e);
 
-        protected virtual void OnKeyUp(KeyEventArgs e) => RaiseKeyEvent(s_keyUpEent, e);
+        protected virtual void OnKeyUp(KeyEventArgs e) => RaiseKeyEvent(s_keyUpEvent, e);
 
         /// <summary>
         ///  Called when the items bounds are changed.  Here, we update the Control's bounds.
@@ -660,7 +657,7 @@ namespace System.Windows.Forms
             Size size = LayoutUtils.DeflateRect(Bounds, Padding).Size;
             Rectangle bounds = LayoutUtils.Align(size, Bounds, ControlAlign);
 
-            // use BoundsSpecified.None so we dont deal w/specified bounds - this way we can tell what someone has set the size to.
+            // use BoundsSpecified.None so we don't deal w/specified bounds - this way we can tell what someone has set the size to.
             element.SetBounds(bounds, BoundsSpecified.None);
 
             // sometimes a control can ignore the size passed in, use the adjustment
@@ -692,13 +689,13 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnParentChanged(ToolStrip oldParent, ToolStrip newParent)
         {
-            if (oldParent != null && Owner is null && newParent is null && Control != null)
+            if (oldParent is not null && Owner is null && newParent is null && Control is not null)
             {
                 // if we've really been removed from the item collection,
                 // politely remove ourselves from the control collection
                 ReadOnlyControlCollection oldControlCollection
                                 = GetControlCollection(Control.ParentInternal as ToolStrip);
-                if (oldControlCollection != null)
+                if (oldControlCollection is not null)
                 {
                     oldControlCollection.RemoveInternal(Control);
                 }
@@ -718,7 +715,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSubscribeControlEvents(Control control)
         {
-            if (control != null)
+            if (control is not null)
             {
                 // Please keep this alphabetized and in sync with Unsubscribe
                 control.Click += new EventHandler(HandleClick);
@@ -763,7 +760,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnUnsubscribeControlEvents(Control control)
         {
-            if (control != null)
+            if (control is not null)
             {
                 // Please keep this alphabetized and in sync with Subscribe
                 control.Click -= new EventHandler(HandleClick);
@@ -815,7 +812,7 @@ namespace System.Windows.Forms
         private void SyncControlParent()
         {
             ReadOnlyControlCollection newControls = GetControlCollection(ParentInternal);
-            if (newControls != null)
+            if (newControls is not null)
             {
                 newControls.AddInternal(Control);
             }
@@ -831,7 +828,7 @@ namespace System.Windows.Forms
 
         protected internal override bool ProcessMnemonic(char charCode)
         {
-            if (_control != null)
+            if (_control is not null)
             {
                 return _control.ProcessMnemonic(charCode);
             }
@@ -877,7 +874,7 @@ namespace System.Windows.Forms
 
         internal override bool ShouldSerializeBackColor()
         {
-            if (_control != null)
+            if (_control is not null)
             {
                 return _control.ShouldSerializeBackColor();
             }
@@ -887,7 +884,7 @@ namespace System.Windows.Forms
 
         internal override bool ShouldSerializeForeColor()
         {
-            if (_control != null)
+            if (_control is not null)
             {
                 return _control.ShouldSerializeForeColor();
             }
@@ -897,7 +894,7 @@ namespace System.Windows.Forms
 
         internal override bool ShouldSerializeFont()
         {
-            if (_control != null)
+            if (_control is not null)
             {
                 return _control.ShouldSerializeFont();
             }
@@ -907,7 +904,7 @@ namespace System.Windows.Forms
 
         internal override bool ShouldSerializeRightToLeft()
         {
-            if (_control != null)
+            if (_control is not null)
             {
                 return _control.ShouldSerializeRightToLeft();
             }

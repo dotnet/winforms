@@ -2,15 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
+using System.Windows.Forms.TestUtilities;
 using Moq;
-using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
 
@@ -19,7 +16,7 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class ToolStripTests : IClassFixture<ThreadExceptionFixture>
+    public partial class ToolStripTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void ToolStrip_Ctor_Default()
@@ -74,7 +71,18 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.DesignMode);
             Assert.Single(control.DisplayedItems);
             Assert.Same(control.DisplayedItems, control.DisplayedItems);
-            Assert.Equal(new Rectangle(7, 0, 92, 25), control.DisplayRectangle);
+
+            if (Application.UseVisualStyles)
+            {
+                Assert.Equal(new Rectangle(9, 0, 90, 25), control.DisplayRectangle);
+                Assert.Equal(new Size(90, 25), control.MaxItemSize);
+            }
+            else
+            {
+                Assert.Equal(new Rectangle(7, 0, 92, 25), control.DisplayRectangle);
+                Assert.Equal(new Size(92, 25), control.MaxItemSize);
+            }
+
             Assert.Equal(DockStyle.Top, control.Dock);
             Assert.NotNull(control.DockPadding);
             Assert.Same(control.DockPadding, control.DockPadding);
@@ -120,7 +128,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(Padding.Empty, control.Margin);
             Assert.Equal(Size.Empty, control.MaximumSize);
-            Assert.Equal(new Size(92, 25), control.MaxItemSize);
             Assert.Equal(Size.Empty, control.MinimumSize);
             Assert.Equal(Orientation.Horizontal, control.Orientation);
             Assert.NotNull(control.OverflowButton);
@@ -219,7 +226,17 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(100, 25), control.DefaultSize);
             Assert.True(control.DefaultShowItemToolTips);
             Assert.False(control.DesignMode);
-            Assert.Equal(new Rectangle(7, 0, 92, 25), control.DisplayRectangle);
+            if (Application.UseVisualStyles)
+            {
+                Assert.Equal(new Rectangle(9, 0, 90, 25), control.DisplayRectangle);
+                Assert.Equal(new Size(90, 25), control.MaxItemSize);
+            }
+            else
+            {
+                Assert.Equal(new Rectangle(7, 0, 92, 25), control.DisplayRectangle);
+                Assert.Equal(new Size(92, 25), control.MaxItemSize);
+            }
+
             Assert.Equal(DockStyle.Top, control.Dock);
             Assert.NotNull(control.DockPadding);
             Assert.Same(control.DockPadding, control.DockPadding);
@@ -266,7 +283,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(Padding.Empty, control.Margin);
             Assert.Equal(Size.Empty, control.MaximumSize);
-            Assert.Equal(new Size(92, 25), control.MaxItemSize);
             Assert.Equal(Size.Empty, control.MinimumSize);
             Assert.Equal(Orientation.Horizontal, control.Orientation);
             Assert.NotNull(control.OverflowButton);
@@ -341,7 +357,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_AllowDrop_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip
@@ -395,7 +411,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_AllowDrop_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip();
@@ -432,7 +448,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_AllowDrop_SetWithHandleAlreadyRegistered_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip();
@@ -593,7 +609,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_AllowItemReorder_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip
@@ -643,7 +659,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_AllowItemReorder_SetWithHandleSTA_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip();
@@ -694,7 +710,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_AllowMerge_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip
@@ -716,7 +732,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_AllowMerge_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip();
@@ -807,7 +823,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_AutoScroll_Set_ThrowsNotSupportedException(bool value)
         {
             using var control = new ToolStrip();
@@ -873,7 +889,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPointTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetPointTheoryData))]
         public void ToolStrip_AutoScrollPosition_Set_GetReturnsExpected(Point value)
         {
             using var control = new ToolStrip
@@ -890,7 +906,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip();
@@ -936,8 +952,10 @@ namespace System.Windows.Forms.Tests
                 {
                     Assert.Equal("Bounds", e.AffectedProperty);
                 }
+
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -991,6 +1009,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -1200,7 +1219,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_CanOverflow_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip();
@@ -1275,7 +1294,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_CausesValidation_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip
@@ -1335,7 +1354,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void ToolStrip_Cursor_Set_GetReturnsExpected(Cursor value)
         {
             using var control = new ToolStrip
@@ -1444,7 +1463,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ToolStrip_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubToolStrip
@@ -2203,7 +2222,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripDropDownDirection))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripDropDownDirection))]
         public void ToolStrip_DefaultDropDownDirection_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripDropDownDirection value)
         {
             using var control = new ToolStrip();
@@ -2227,6 +2246,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> DisplayRectangle_TestData()
         {
+            int x = Application.UseVisualStyles ? 9 : 7;
+            int width = Application.UseVisualStyles ? 90 : 92;
+            int height = Application.UseVisualStyles ? 16 : 18;
+
             yield return new object[] { ToolStripLayoutStyle.Flow, ToolStripGripStyle.Visible, RightToLeft.Yes, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.Flow, ToolStripGripStyle.Visible, RightToLeft.No, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.Flow, ToolStripGripStyle.Visible, RightToLeft.Inherit, new Rectangle(0, 0, 99, 25) };
@@ -2234,16 +2257,16 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { ToolStripLayoutStyle.Flow, ToolStripGripStyle.Hidden, RightToLeft.No, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.Flow, ToolStripGripStyle.Hidden, RightToLeft.Inherit, new Rectangle(0, 0, 99, 25) };
 
-            yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Yes, new Rectangle(0, 0, 92, 25) };
-            yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.No, new Rectangle(7, 0, 92, 25) };
-            yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Inherit, new Rectangle(7, 0, 92, 25) };
+            yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Yes, new Rectangle(0, 0, width, 25) };
+            yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.No, new Rectangle(x, 0, width, 25) };
+            yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Inherit, new Rectangle(x, 0, width, 25) };
             yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.Yes, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.No, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.Inherit, new Rectangle(0, 0, 99, 25) };
 
-            yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Yes, new Rectangle(0, 0, 92, 25) };
-            yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.No, new Rectangle(7, 0, 92, 25) };
-            yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Inherit, new Rectangle(7, 0, 92, 25) };
+            yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Yes, new Rectangle(0, 0, width, 25) };
+            yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.No, new Rectangle(x, 0, width, 25) };
+            yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Inherit, new Rectangle(x, 0, width, 25) };
             yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.Yes, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.No, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.Inherit, new Rectangle(0, 0, 99, 25) };
@@ -2255,9 +2278,9 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { ToolStripLayoutStyle.Table, ToolStripGripStyle.Hidden, RightToLeft.No, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.Table, ToolStripGripStyle.Hidden, RightToLeft.Inherit, new Rectangle(0, 0, 99, 25) };
 
-            yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Yes, new Rectangle(0, 7, 99, 18) };
-            yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.No, new Rectangle(0, 7, 99, 18) };
-            yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Inherit, new Rectangle(0, 7, 99, 18) };
+            yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Yes, new Rectangle(0, x, 99, height) };
+            yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.No, new Rectangle(0, x, 99, height) };
+            yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Inherit, new Rectangle(0, x, 99, height) };
             yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.Yes, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.No, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.Inherit, new Rectangle(0, 0, 99, 25) };
@@ -2449,6 +2472,7 @@ namespace System.Windows.Forms.Tests
                     parentLayoutCallCount++;
                 }
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -2554,6 +2578,7 @@ namespace System.Windows.Forms.Tests
                     parentLayoutCallCount++;
                 }
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -2622,7 +2647,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DockStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DockStyle))]
         public void ToolStrip_Dock_SetInvalid_ThrowsInvalidEnumArgumentException(DockStyle value)
         {
             using var control = new ToolStrip();
@@ -2630,7 +2655,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void ToolStrip_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new ToolStrip
@@ -2682,7 +2707,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingTheoryData))]
         public void ToolStrip_GripMargin_Set_GetReturnsExpected(Padding value)
         {
             using var control = new ToolStrip();
@@ -2700,7 +2725,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingTheoryData))]
         public void ToolStrip_GripMargin_SetWithGrip_GetReturnsExpected(Padding value)
         {
             using var control = new ToolStrip();
@@ -2819,7 +2844,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripGripStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripGripStyle))]
         public void ToolStrip_GripStyle_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripGripStyle value)
         {
             using var control = new ToolStrip();
@@ -3388,7 +3413,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripRenderMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripRenderMode))]
         public void ToolStrip_RenderMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripRenderMode value)
         {
             using var control = new ToolStrip();
@@ -3431,7 +3456,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void ToolStrip_RightToLeft_SetWithChildren_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var item1 = new SubToolStripItem();
@@ -3455,7 +3480,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void ToolStrip_RightToLeft_SetWithChildrenWithRightToLeft_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var item1 = new SubToolStripItem
@@ -3520,7 +3545,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
         public void ToolStrip_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
             using var control = new ToolStrip();
@@ -3540,7 +3565,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_ShowItemToolTips_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip
@@ -3563,7 +3588,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_ShowItemToolTips_SetWithItems_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip();
@@ -3587,7 +3612,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_ShowItemToolTips_SetWithOverflowButton_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip();
@@ -3612,7 +3637,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_Stretch_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip
@@ -3634,7 +3659,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_Stretch_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip();
@@ -3671,7 +3696,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_TabStop_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubToolStrip
@@ -3696,7 +3721,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_TabStop_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubToolStrip();
@@ -3951,6 +3976,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("TextDirection", e.AffectedProperty);
                 layoutCallCount++;
             }
+
             control.Layout += layoutHandler;
 
             try
@@ -4015,6 +4041,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("TextDirection", e.AffectedProperty);
                 layoutCallCount++;
             }
+
             control.Layout += layoutHandler;
 
             try
@@ -4047,7 +4074,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripTextDirection))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripTextDirection))]
         public void ToolStrip_TextDirection_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripTextDirection value)
         {
             using var control = new ToolStrip();
@@ -4055,7 +4082,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_Visible_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip
@@ -4301,7 +4328,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripLayoutStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripLayoutStyle))]
         [InlineData(ToolStripLayoutStyle.StackWithOverflow)]
         [InlineData(ToolStripLayoutStyle.HorizontalStackWithOverflow)]
         [InlineData(ToolStripLayoutStyle.VerticalStackWithOverflow)]
@@ -4327,7 +4354,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -4380,7 +4408,8 @@ namespace System.Windows.Forms.Tests
                 Assert.False(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -4439,7 +4468,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
             int item1CallCount = 0;
             item1.Disposed += (sender, e) => item1CallCount++;
@@ -4509,7 +4539,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -4605,7 +4636,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
             int item1CallCount = 0;
             item1.Disposed += (sender, e) => item1CallCount++;
@@ -4727,7 +4759,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ArrowDirection))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ArrowDirection))]
         public void ToolStrip_GetNextItem_NoItems_ReturnsNull(ArrowDirection direction)
         {
             using var toolStrip = new ToolStrip();
@@ -4736,12 +4768,94 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ArrowDirection))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ArrowDirection))]
         public void ToolStrip_GetNextItem_InvalidDirection_ThrowsInvalidEnumArgumentException(ArrowDirection direction)
         {
             using var toolStrip = new ToolStrip();
             Assert.Throws<InvalidEnumArgumentException>("direction", () => toolStrip.GetNextItem(new SubToolStripItem(), direction));
             Assert.Throws<InvalidEnumArgumentException>("direction", () => toolStrip.GetNextItem(null, direction));
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void ToolStrip_GetNextItem_ReturnsForwardItem(RightToLeft rightToLeft)
+        {
+            using ToolStrip toolStrip = new()
+            {
+                RightToLeft = rightToLeft,
+                TabStop = false
+            };
+            using ToolStripButton toolStripButton1 = new();
+            using ToolStripButton toolStripButton2 = new();
+            using ToolStripButton toolStripButton3 = new();
+            toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
+            ToolStripItem actual = toolStrip.GetNextItem(toolStrip.Items[0], ArrowDirection.Right);
+
+            Assert.Equal(toolStripButton2, actual);
+            Assert.False(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void ToolStrip_GetNextItem_CyclesForwardExpected(RightToLeft rightToLeft)
+        {
+            using ToolStrip toolStrip = new() { RightToLeft = rightToLeft, TabStop = false };
+            using ToolStripButton toolStripButton1 = new();
+            using ToolStripButton toolStripButton2 = new();
+            using ToolStripButton toolStripButton3 = new();
+            toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
+            ToolStripItem nextToolStripItem1 = toolStrip.GetNextItem(toolStripButton1, ArrowDirection.Right);
+            ToolStripItem nextToolStripItem2 = toolStrip.GetNextItem(toolStripButton2, ArrowDirection.Right);
+            ToolStripItem nextToolStripItem3 = toolStrip.GetNextItem(toolStripButton3, ArrowDirection.Right);
+
+            Assert.Equal(toolStripButton2, nextToolStripItem1);
+            Assert.Equal(toolStripButton3, nextToolStripItem2);
+            Assert.Equal(toolStripButton1, nextToolStripItem3);
+            Assert.False(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void ToolStrip_GetNextItem_ReturnsBackwardItem(RightToLeft rightToLeft)
+        {
+            using ToolStrip toolStrip = new()
+            {
+                RightToLeft = rightToLeft,
+                TabStop = false
+            };
+            using ToolStripButton toolStripButton1 = new();
+            using ToolStripButton toolStripButton2 = new();
+            using ToolStripButton toolStripButton3 = new();
+            toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
+            toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Shift | Keys.Tab;
+            ToolStripItem actual = toolStrip.GetNextItem(toolStrip.Items[0], ArrowDirection.Left);
+
+            Assert.Equal(toolStripButton3, actual);
+            Assert.False(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void ToolStrip_GetNextItem_CyclesBackwardExpected(RightToLeft rightToLeft)
+        {
+            using ToolStrip toolStrip = new() { RightToLeft = rightToLeft, TabStop = false };
+            using ToolStripButton toolStripButton1 = new();
+            using ToolStripButton toolStripButton2 = new();
+            using ToolStripButton toolStripButton3 = new();
+            toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
+            toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Shift | Keys.Tab;
+            ToolStripItem previousToolStripItem1 = toolStrip.GetNextItem(toolStripButton1, ArrowDirection.Left);
+            ToolStripItem previousToolStripItem2 = toolStrip.GetNextItem(toolStripButton3, ArrowDirection.Left);
+            ToolStripItem previousToolStripItem3 = toolStrip.GetNextItem(toolStripButton2, ArrowDirection.Left);
+
+            Assert.Equal(toolStripButton3, previousToolStripItem1);
+            Assert.Equal(toolStripButton2, previousToolStripItem2);
+            Assert.Equal(toolStripButton1, previousToolStripItem3);
+            Assert.False(toolStrip.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -4804,7 +4918,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnBeginDrag_Invoke_CallsBeginDrag(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -4832,7 +4946,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnBeginDrag_InvokeWithHandle_CallsBeginDrag(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -4929,7 +5043,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnDockChanged_Invoke_CallsDockChanged(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -4953,7 +5067,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnEndDrag_Invoke_CallsEndDrag(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -4981,7 +5095,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnEndDrag_InvokeCalledBeginDrag_CallsEndDrag(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5010,7 +5124,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnEndDrag_InvokeWithHandle_CallsEndDrag(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5052,7 +5166,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnEndDrag_InvokeCalledBeginDragWithHandle_CallsEndDrag(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5095,7 +5209,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5123,7 +5237,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnFontChanged_InvokeWithChildren_CallsFontChanged(EventArgs eventArgs)
         {
             using var item1 = new SubToolStripItem();
@@ -5152,7 +5266,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnFontChanged_InvokeWithChildrenWithFont_CallsFontChanged(EventArgs eventArgs)
         {
             using var childFont1 = new Font("Arial", 1);
@@ -5189,7 +5303,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStrip_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5224,7 +5338,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStrip_OnLayout_InvokeWithOverflowButton_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5260,7 +5374,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStrip_OnLayout_InvokeWithOverflowButtonWithDropDown_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5296,7 +5410,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStrip_OnLayout_InvokeWithItems_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var item1 = new SubToolStripItem();
@@ -5350,7 +5464,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStrip_OnLayout_InvokeWithHandle_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5398,7 +5512,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStrip_OnLayout_InvokeWithOverflowButtonWithHandle_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5447,7 +5561,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStrip_OnLayout_InvokeWithOverflowButtonWithDropDownWithHandle_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5496,7 +5610,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStrip_OnLayout_InvokeWithItemsWithHandle_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var item1 = new SubToolStripItem();
@@ -5563,7 +5677,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnLayoutCompleted_Invoke_CallsLayoutCompleted(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5587,7 +5701,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnLayoutStyleChanged_Invoke_CallsLayoutStyleChanged(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5611,7 +5725,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnLeave_Invoke_CallsLeave(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5635,7 +5749,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnLostFocus_Invoke_CallsLostFocus(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5656,6 +5770,32 @@ namespace System.Windows.Forms.Tests
             control.LostFocus -= handler;
             control.OnLostFocus(eventArgs);
             Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStrip_OnMouseLeave_UnselectsToolStripItem(bool toolStripItemEnabled)
+        {
+            using var toolStrip = new SubToolStrip()
+            {
+                GripStyle = ToolStripGripStyle.Hidden
+            };
+            using var item = new SubToolStripItem()
+            {
+                Enabled = toolStripItemEnabled,
+                Parent = toolStrip,
+                SupportsDisabledHotTracking = true
+            };
+
+            item.SetPlacement(ToolStripItemPlacement.Main);
+            toolStrip.Items.Add(item);
+            toolStrip.SetDisplayedItems();
+
+            toolStrip.OnMouseMove(new MouseEventArgs(MouseButtons.Left, 1, item.Bounds.X, item.Bounds.Y, 0));
+            Assert.True(item.Selected);
+
+            toolStrip.OnMouseLeave(new EventArgs());
+            Assert.False(item.Selected);
         }
 
         [WinFormsFact]
@@ -5725,7 +5865,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        public static IEnumerable<object[]> OnPaintBackground_WithParent_TestData()
+        // TODO: unify
+        // Correct the implementation as per ScrollableControlTests.OnPaintBackground_VisualStyles_off_WithParent_TestData
+
+        public static IEnumerable<object[]> OnPaintBackground_VisualStyles_off_WithParent_TestData()
         {
             var control = new Control
             {
@@ -5773,8 +5916,67 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        public static IEnumerable<object[]> OnPaintBackground_VisualStyles_on_WithParent_TestData()
+        {
+            var control = new Control
+            {
+                Bounds = new Rectangle(1, 2, 30, 40)
+            };
+            var tabPage = new TabPage
+            {
+                Bounds = new Rectangle(1, 2, 30, 40)
+            };
+            foreach (Control parent in new Control[] { control, tabPage })
+            {
+                int expected1 = parent == tabPage ? 0 : 1;
+                int expected2 = parent == tabPage ? 0 : 2;
+                int expected3 = parent == tabPage ? 0 : 3;
+
+                foreach (bool hScroll in new bool[] { true, false })
+                {
+                    foreach (bool vScroll in new bool[] { true, false })
+                    {
+                        foreach (Image backgroundImage in new Image[] { null, new Bitmap(10, 10, PixelFormat.Format32bppRgb) })
+                        {
+                            foreach (ImageLayout backgroundImageLayout in Enum.GetValues(typeof(ImageLayout)))
+                            {
+                                yield return new object[] { parent, hScroll, vScroll, true, Color.Empty, backgroundImage, backgroundImageLayout, expected1 };
+                                yield return new object[] { parent, hScroll, vScroll, true, Color.Red, backgroundImage, backgroundImageLayout, expected1 };
+                                yield return new object[] { parent, hScroll, vScroll, false, Color.Empty, backgroundImage, backgroundImageLayout, expected1 };
+                                yield return new object[] { parent, hScroll, vScroll, false, Color.Red, backgroundImage, backgroundImageLayout, expected1 };
+
+                                int expected = parent == tabPage
+                                    ? 0
+                                    : backgroundImage != null
+                                        && (backgroundImageLayout == ImageLayout.Zoom || backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Center)
+                                        && (hScroll || vScroll)
+                                            ? 1
+                                            : 2;
+                                yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };
+                                yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };
+                            }
+                        }
+
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, expected1 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, expected1 };
+                        yield return new object[] { parent, hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, expected1 };
+                        yield return new object[] { parent, hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, expected1 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, expected2 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, expected2 };
+
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected2 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected2 };
+                        yield return new object[] { parent, hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected2 };
+                        yield return new object[] { parent, hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected2 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected3 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected3 };
+                    }
+                }
+            }
+        }
+
         [WinFormsTheory]
-        [MemberData(nameof(OnPaintBackground_WithParent_TestData))]
+        [MemberData(nameof(OnPaintBackground_VisualStyles_on_WithParent_TestData))]
         public void ToolStrip_OnPaintBackground_InvokeWithParent_CallsPaint(Control parent, bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
         {
             using var image = new Bitmap(10, 10);
@@ -5812,7 +6014,7 @@ namespace System.Windows.Forms.Tests
             parent.Paint += parentHandler;
             control.OnPaintBackground(eventArgs);
             Assert.Equal(0, callCount);
-            Assert.Equal(expectedPaintCallCount + 1, parentCallCount);
+            Assert.Equal(expectedPaintCallCount, parentCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Remove handler.
@@ -5820,7 +6022,7 @@ namespace System.Windows.Forms.Tests
             parent.Paint -= parentHandler;
             control.OnPaintBackground(eventArgs);
             Assert.Equal(0, callCount);
-            Assert.Equal(expectedPaintCallCount + 1, parentCallCount);
+            Assert.Equal(expectedPaintCallCount, parentCallCount);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -6067,7 +6269,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnRightToLeftChanged_Invoke_CallsRightToLeftChanged(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -6103,7 +6305,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnRightToLeftChanged_InvokeWithHandle_CallsRightToLeftChanged(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -6156,7 +6358,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnRightToLeftChanged_InvokeWithChildren_CallsRightToLeftChanged(EventArgs eventArgs)
         {
             using var item1 = new SubToolStripItem();
@@ -6206,7 +6408,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnRightToLeftChanged_InvokeWithItemsWithRightToLeft_CallsRightToLeftChanged(EventArgs eventArgs)
         {
             using var item1 = new SubToolStripItem
@@ -6259,7 +6461,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnRightToLeftChanged_InvokeWithOverflowButton_CallsRightToLeftChanged(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -6293,7 +6495,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnRightToLeftChanged_InvokeWithGrip_CallsRightToLeftChanged(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -6427,6 +6629,8 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> OnScroll_WithItems_TestData()
         {
+            int x = Application.UseVisualStyles ? 9 : 7;
+
             foreach (ScrollEventType scrollEventType in Enum.GetValues(typeof(ScrollEventType)))
             {
                 if (scrollEventType == ScrollEventType.ThumbTrack)
@@ -6434,14 +6638,14 @@ namespace System.Windows.Forms.Tests
                     break;
                 }
 
-                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 200), new Point(7, 101), new Point(0, 100) };
-                yield return new object[] { new ScrollEventArgs(scrollEventType, 200, 100), new Point(7, -99), new Point(0, -100) };
-                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 100), new Point(7, 1), new Point(0, 0) };
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 200), new Point(x, 101), new Point(0, 100) };
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 200, 100), new Point(x, -99), new Point(0, -100) };
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 100), new Point(x, 1), new Point(0, 0) };
             }
 
-            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 100, 200), new Point(7, 1), new Point(0, 0) };
-            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 200, 100), new Point(7, 1), new Point(0, 0) };
-            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 0, 0), new Point(7, 1), new Point(0, 0) };
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 100, 200), new Point(x, 1), new Point(0, 0) };
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 200, 100), new Point(x, 1), new Point(0, 0) };
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 0, 0), new Point(x, 1), new Point(0, 0) };
         }
 
         [WinFormsTheory]
@@ -6470,6 +6674,8 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> OnScroll_WithItemsWithHandle_TestData()
         {
+            int x = Application.UseVisualStyles ? 9 : 7;
+
             foreach (ScrollEventType scrollEventType in Enum.GetValues(typeof(ScrollEventType)))
             {
                 if (scrollEventType == ScrollEventType.ThumbTrack)
@@ -6477,14 +6683,14 @@ namespace System.Windows.Forms.Tests
                     break;
                 }
 
-                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 200), new Point(7, 101), new Point(0, 100), 1 };
-                yield return new object[] { new ScrollEventArgs(scrollEventType, 200, 100), new Point(7, -99), new Point(0, -100), 1 };
-                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 100), new Point(7, 1), new Point(0, 0), 0 };
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 200), new Point(x, 101), new Point(0, 100), 1 };
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 200, 100), new Point(x, -99), new Point(0, -100), 1 };
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 100), new Point(x, 1), new Point(0, 0), 0 };
             }
 
-            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 100, 200), new Point(7, 1), new Point(0, 0), 0 };
-            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 200, 100), new Point(7, 1), new Point(0, 0), 0 };
-            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 0, 0), new Point(7, 1), new Point(0, 0), 0 };
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 100, 200), new Point(x, 1), new Point(0, 0), 0 };
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 200, 100), new Point(x, 1), new Point(0, 0), 0 };
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 0, 0), new Point(x, 1), new Point(0, 0), 0 };
         }
 
         [WinFormsTheory]
@@ -6616,7 +6822,8 @@ namespace System.Windows.Forms.Tests
                 control.OnVisibleChanged(EventArgs.Empty);
                 Assert.Equal(1, callCount);
                 disposedCallCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -6631,7 +6838,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnVisibleChanged_InvokeDisposed_CallsVisibleChanged(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -6709,6 +6916,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessCmdKeyAction = action
@@ -6896,7 +7104,10 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<NotSupportedException>(() => control.SetItemLocation(item, Point.Empty));
         }
 
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/6610")]
         [WinFormsFact]
+        [SkipOnArchitecture(TestArchitectures.X86,
+            "Flaky tests, see: https://github.com/dotnet/winforms/issues/6610")]
         public void ToolStrip_WndProc_InvokeMouseActivate_Success()
         {
             using var control = new SubToolStrip();
@@ -6910,7 +7121,8 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.IsHandleCreated);
         }
 
-        [WinFormsFact]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/6610")]
+        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6610")]
         public void ToolStrip_WndProc_InvokeMouseActivateWithHandle_Success()
         {
             using var control = new SubToolStrip();
@@ -6968,6 +7180,67 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        [WinFormsFact]
+        public void ToolStrip_KeyboardAccelerators_ReturnsExpected()
+        {
+            using SubToolStripDropDown toolStrip = new();
+            bool result = true;
+
+            // it needs for correct work of Control.CanProcessMnemonic method
+            toolStrip.Enabled = true;
+            toolStrip.Visible = true;
+
+            result &= !toolStrip.ProcessDialogChar('F');
+            toolStrip.DisplayedItems.Add("&First item");
+            toolStrip.DisplayedItems.Add("&Second item");
+            toolStrip.DisplayedItems.Add("Third item");
+
+            // it needs for correct work of Control.CanProcessMnemonic method
+            toolStrip.Visible = true;
+            result &= toolStrip.ProcessDialogChar('F');
+            result &= toolStrip.ProcessDialogChar('S');
+            result &= !toolStrip.ProcessDialogChar('T');
+
+            Assert.True(result);
+        }
+
+        [WinFormsTheory]
+        [InlineData("ScrollButtonDown", 96, 16)]
+        [InlineData("ScrollButtonDown", 120, 24)]
+        [InlineData("ScrollButtonDown", 144, 24)]
+        [InlineData("ScrollButtonDown", 168, 32)]
+        [InlineData("ScrollButtonDown", 288, 48)]
+        [InlineData("ScrollButtonUp", 96, 16)]
+        [InlineData("ScrollButtonUp", 120, 24)]
+        [InlineData("ScrollButtonUp", 144, 24)]
+        [InlineData("ScrollButtonUp", 168, 32)]
+        [InlineData("ScrollButtonUp", 288, 48)]
+        public void ToolStripScrollButton_Arrows_Size_ReturnsExpected(string resourceName, int dpi, int expectedSide)
+        {
+            Type toolStripScrollButtonType = typeof(ToolStripScrollButton);
+            var accessor = typeof(DpiHelper).TestAccessor();
+            Size defaultSize = new(16, 16);
+            int oldDeviceDpi = DpiHelper.DeviceDpi;
+            DpiTestData dpiTestData = new()
+            {
+                ResourceName = resourceName,
+                Dpi = dpi,
+                ExpectedSide = expectedSide,
+            };
+
+            try
+            {
+                accessor.Dynamic.DeviceDpi = dpiTestData.Dpi;
+                Bitmap bitmap = DpiHelper.GetScaledBitmapFromIcon(toolStripScrollButtonType, dpiTestData.ResourceName, defaultSize);
+                Assert.Equal(dpiTestData.ExpectedSide, bitmap.Width);
+                Assert.Equal(dpiTestData.ExpectedSide, bitmap.Height);
+            }
+            finally
+            {
+                accessor.Dynamic.DeviceDpi = oldDeviceDpi;
+            }
+        }
+
         private class SubAxHost : AxHost
         {
             public SubAxHost(string clsid) : base(clsid)
@@ -6995,6 +7268,22 @@ namespace System.Windows.Forms.Tests
                 Layout?.Invoke(this, e);
                 base.OnLayout(e);
             }
+        }
+
+        private class DpiTestData
+        {
+            public string ResourceName { get; set; }
+
+            public int Dpi { get; set; }
+
+            public int ExpectedSide { get; set; }
+        }
+
+        private class SubToolStripDropDown : ToolStripDropDown
+        {
+            public new ToolStripItemCollection DisplayedItems => base.DisplayedItems;
+
+            public new bool ProcessDialogChar(char charCode) => base.ProcessDialogChar(charCode);
         }
 
         private class SubToolStrip : ToolStrip

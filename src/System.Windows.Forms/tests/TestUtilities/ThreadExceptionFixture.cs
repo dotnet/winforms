@@ -1,9 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.ExceptionServices;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace System
@@ -12,10 +11,12 @@ namespace System
     {
         public ThreadExceptionFixture()
         {
+            Application.EnableVisualStyles();
+
             Application.ThreadException += OnThreadException;
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             Application.ThreadException -= OnThreadException;
         }

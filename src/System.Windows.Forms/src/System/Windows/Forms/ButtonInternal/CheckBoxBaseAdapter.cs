@@ -2,30 +2,30 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms.ButtonInternal
 {
     internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
     {
-        protected const int flatCheckSize = 11;
+        protected const int FlatCheckSize = 11;
 
         [ThreadStatic]
-        private static Bitmap checkImageChecked = null;
+        private static Bitmap? t_checkImageChecked = null;
         [ThreadStatic]
-        private static Color checkImageCheckedBackColor = Color.Empty;
+        private static Color t_checkImageCheckedBackColor = Color.Empty;
 
         [ThreadStatic]
-        private static Bitmap checkImageIndeterminate = null;
+        private static Bitmap? t_checkImageIndeterminate = null;
         [ThreadStatic]
-        private static Color checkImageIndeterminateBackColor = Color.Empty;
+        private static Color t_checkImageIndeterminateBackColor = Color.Empty;
 
-        internal CheckBoxBaseAdapter(ButtonBase control) : base(control) { }
+        internal CheckBoxBaseAdapter(ButtonBase control)
+            : base(control)
+        {
+        }
 
         protected new CheckBox Control
         {
@@ -45,13 +45,13 @@ namespace System.Windows.Forms.ButtonInternal
             Color checkBorder,
             ColorData colors)
         {
-            Rectangle bounds = layout.checkBounds;
+            Rectangle bounds = layout.CheckBounds;
 
             // Removed subtracting one for Width and Height. In Everett we needed to do this,
             // since we were using GDI+ to draw the border. Now that we are using GDI,
             // we should not do before drawing the border.
 
-            if (!layout.options.everettButtonCompat)
+            if (!layout.Options.DotNetOneButtonCompat)
             {
                 bounds.Width--;
                 bounds.Height--;
@@ -63,11 +63,12 @@ namespace System.Windows.Forms.ButtonInternal
                 hdc.DrawRectangle(bounds, hpen);
 
                 // Now subtract, since the rest of the code is like Everett.
-                if (layout.options.everettButtonCompat)
+                if (layout.Options.DotNetOneButtonCompat)
                 {
                     bounds.Width--;
                     bounds.Height--;
                 }
+
                 bounds.Inflate(-1, -1);
             }
 
@@ -75,7 +76,7 @@ namespace System.Windows.Forms.ButtonInternal
             {
                 bounds.Width++;
                 bounds.Height++;
-                DrawDitheredFill(e.Graphics, colors.buttonFace, checkBackground, bounds);
+                DrawDitheredFill(e.Graphics, colors.ButtonFace, checkBackground, bounds);
             }
             else
             {
@@ -137,7 +138,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (Control.CheckState == CheckState.Indeterminate)
             {
-                DrawDitheredFill(e.GraphicsInternal, colors.buttonFace, checkBackground, bounds);
+                DrawDitheredFill(e.GraphicsInternal, colors.ButtonFace, checkBackground, bounds);
             }
             else
             {
@@ -148,7 +149,7 @@ namespace System.Windows.Forms.ButtonInternal
         protected void DrawCheckOnly(PaintEventArgs e, LayoutData layout, ColorData colors, Color checkColor)
         {
             DrawCheckOnly(
-                flatCheckSize,
+                FlatCheckSize,
                 Control.Checked,
                 Control.Enabled,
                 Control.CheckState,
@@ -175,14 +176,14 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (!controlEnabled)
             {
-                checkColor = colors.buttonShadow;
+                checkColor = colors.ButtonShadow;
             }
             else if (controlCheckState == CheckState.Indeterminate)
             {
-                checkColor = SystemInformation.HighContrast ? colors.highlight : colors.buttonShadow;
+                checkColor = SystemInformation.HighContrast ? colors.Highlight : colors.ButtonShadow;
             }
 
-            Rectangle fullSize = layout.checkBounds;
+            Rectangle fullSize = layout.CheckBounds;
 
             if (fullSize.Width == checkSize)
             {
@@ -196,17 +197,17 @@ namespace System.Windows.Forms.ButtonInternal
             Bitmap checkImage;
             if (controlCheckState == CheckState.Checked)
             {
-                checkImage = GetCheckBoxImage(checkColor, fullSize, ref checkImageCheckedBackColor, ref checkImageChecked);
+                checkImage = GetCheckBoxImage(checkColor, fullSize, ref t_checkImageCheckedBackColor, ref t_checkImageChecked);
             }
             else
             {
                 Debug.Assert(
                     controlCheckState == CheckState.Indeterminate,
                     "we want to paint the check box only if the item is checked or indeterminate");
-                checkImage = GetCheckBoxImage(checkColor, fullSize, ref checkImageIndeterminateBackColor, ref checkImageIndeterminate);
+                checkImage = GetCheckBoxImage(checkColor, fullSize, ref t_checkImageIndeterminateBackColor, ref t_checkImageIndeterminate);
             }
 
-            fullSize.Y -= layout.options.everettButtonCompat ? 1 : 2;
+            fullSize.Y -= layout.Options.DotNetOneButtonCompat ? 1 : 2;
 
             ControlPaint.DrawImageColorized(g, checkImage, fullSize, checkColor);
         }
@@ -225,9 +226,9 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal static Rectangle DrawPopupBorder(Gdi32.HDC hdc, Rectangle r, ColorData colors)
         {
-            using var high = new Gdi32.CreatePenScope(colors.highlight);
-            using var shadow = new Gdi32.CreatePenScope(colors.buttonShadow);
-            using var face = new Gdi32.CreatePenScope(colors.buttonFace);
+            using var high = new Gdi32.CreatePenScope(colors.Highlight);
+            using var shadow = new Gdi32.CreatePenScope(colors.ButtonShadow);
+            using var face = new Gdi32.CreatePenScope(colors.ButtonFace);
 
             hdc.DrawLine(high, r.Right - 1, r.Top, r.Right - 1, r.Bottom);
             hdc.DrawLine(high, r.Left, r.Bottom - 1, r.Right, r.Bottom - 1);
@@ -278,13 +279,13 @@ namespace System.Windows.Forms.ButtonInternal
                 {
                     CheckBoxRenderer.DrawCheckBoxWithVisualStyles(
                         e,
-                        new Point(layout.checkBounds.Left, layout.checkBounds.Top),
+                        new Point(layout.CheckBounds.Left, layout.CheckBounds.Top),
                         CheckBoxRenderer.ConvertFromButtonState(style, true, Control.MouseIsOver),
                         Control.HandleInternal);
                 }
                 else
                 {
-                    ControlPaint.DrawMixedCheckBox(e.GraphicsInternal, layout.checkBounds, style);
+                    ControlPaint.DrawMixedCheckBox(e.GraphicsInternal, layout.CheckBounds, style);
                 }
             }
             else
@@ -293,22 +294,22 @@ namespace System.Windows.Forms.ButtonInternal
                 {
                     CheckBoxRenderer.DrawCheckBoxWithVisualStyles(
                         e,
-                        new Point(layout.checkBounds.Left, layout.checkBounds.Top),
+                        new Point(layout.CheckBounds.Left, layout.CheckBounds.Top),
                         CheckBoxRenderer.ConvertFromButtonState(style, false, Control.MouseIsOver),
                         Control.HandleInternal);
                 }
                 else
                 {
-                    ControlPaint.DrawCheckBox(e.GraphicsInternal, layout.checkBounds, style);
+                    ControlPaint.DrawCheckBox(e.GraphicsInternal, layout.CheckBounds, style);
                 }
             }
         }
 
         #endregion
 
-        private static Bitmap GetCheckBoxImage(Color checkColor, Rectangle fullSize, ref Color cacheCheckColor, ref Bitmap cacheCheckImage)
+        private static Bitmap GetCheckBoxImage(Color checkColor, Rectangle fullSize, ref Color cacheCheckColor, ref Bitmap? cacheCheckImage)
         {
-            if (cacheCheckImage != null &&
+            if (cacheCheckImage is not null &&
                 cacheCheckColor.Equals(checkColor) &&
                 cacheCheckImage.Width == fullSize.Width &&
                 cacheCheckImage.Height == fullSize.Height)
@@ -348,17 +349,17 @@ namespace System.Windows.Forms.ButtonInternal
                 // to draw the focus rectangle. So, when AutoSize == true we want the focus rectangle to be rendered
                 // inside the box. Otherwise, it should encircle all the available space next to the box (like it's
                 // done in WPF and ComCtl32).
-                layout.focus = Control.AutoSize ? Rectangle.Inflate(layout.checkBounds, -2, -2) : layout.field;
+                layout.Focus = Control.AutoSize ? Rectangle.Inflate(layout.CheckBounds, -2, -2) : layout.Field;
             }
         }
 
         internal override LayoutOptions CommonLayout()
         {
             LayoutOptions layout = base.CommonLayout();
-            layout.checkAlign = Control.CheckAlign;
-            layout.textOffset = false;
-            layout.shadowedText = !Control.Enabled;
-            layout.layoutRTL = RightToLeft.Yes == Control.RightToLeft;
+            layout.CheckAlign = Control.CheckAlign;
+            layout.TextOffset = false;
+            layout.ShadowedText = !Control.Enabled;
+            layout.LayoutRTL = RightToLeft.Yes == Control.RightToLeft;
 
             return layout;
         }

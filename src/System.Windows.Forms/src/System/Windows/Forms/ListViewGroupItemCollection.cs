@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms
@@ -11,7 +9,7 @@ namespace System.Windows.Forms
     internal class ListViewGroupItemCollection : ListView.ListViewItemCollection.IInnerList
     {
         private readonly ListViewGroup _group;
-        private ArrayList _items;
+        private List<ListViewItem>? _items;
 
         public ListViewGroupItemCollection(ListViewGroup group)
         {
@@ -20,22 +18,22 @@ namespace System.Windows.Forms
 
         public int Count => Items.Count;
 
-        private ArrayList Items => _items ?? (_items = new ArrayList());
+        private List<ListViewItem> Items => _items ??= new List<ListViewItem>();
 
-        public bool OwnerIsVirtualListView => _group.ListView != null && _group.ListView.VirtualMode;
+        public bool OwnerIsVirtualListView => _group.ListView is not null && _group.ListView.VirtualMode;
 
-        public bool OwnerIsDesignMode => _group.ListView?.Site != null && _group.ListView.Site.DesignMode;
+        public bool OwnerIsDesignMode => _group.ListView?.Site is not null && _group.ListView.Site.DesignMode;
 
         public ListViewItem this[int index]
         {
-            get => (ListViewItem)Items[index];
+            get => Items[index];
             set
             {
                 if (value != Items[index])
                 {
-                    MoveToGroup((ListViewItem)Items[index], null);
+                    MoveToGroup(Items[index], null);
                     Items[index] = value;
-                    MoveToGroup((ListViewItem)Items[index], _group);
+                    MoveToGroup(Items[index], _group);
                 }
             }
         }
@@ -66,7 +64,7 @@ namespace System.Windows.Forms
 
         private void CheckListViewItem(ListViewItem item)
         {
-            if (item.ListView != null && item.ListView != _group.ListView)
+            if (item.ListView is not null && item.ListView != _group.ListView)
             {
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, item.Text), nameof(item));
             }
@@ -78,12 +76,13 @@ namespace System.Windows.Forms
             {
                 MoveToGroup(this[i], null);
             }
+
             Items.Clear();
         }
 
         public bool Contains(ListViewItem item) => Items.Contains(item);
 
-        public void CopyTo(Array dest, int index) => Items.CopyTo(dest, index);
+        public void CopyTo(Array dest, int index) => ((ICollection)Items).CopyTo(dest, index);
 
         public IEnumerator GetEnumerator() => Items.GetEnumerator();
 
@@ -98,7 +97,7 @@ namespace System.Windows.Forms
             return item;
         }
 
-        private void MoveToGroup(ListViewItem item, ListViewGroup newGroup)
+        private static void MoveToGroup(ListViewItem item, ListViewGroup? newGroup)
         {
             ListViewGroup oldGroup = item.Group;
             if (oldGroup != newGroup)
@@ -122,9 +121,9 @@ namespace System.Windows.Forms
 
         public void RemoveAt(int index) => Remove(this[index]);
 
-        private void UpdateNativeListViewItem(ListViewItem item)
+        private static void UpdateNativeListViewItem(ListViewItem item)
         {
-            if (item.ListView != null && item.ListView.IsHandleCreated && !item.ListView.InsertingItemsNatively)
+            if (item.ListView is not null && item.ListView.IsHandleCreated && !item.ListView.InsertingItemsNatively)
             {
                 item.UpdateStateToListView(item.Index);
             }

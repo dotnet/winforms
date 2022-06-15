@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.ComponentModel.Com2Interop;
-using System.Windows.Forms.Design;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -19,55 +18,52 @@ namespace System.Windows.Forms
     {
         internal class AxPropertyDescriptor : PropertyDescriptor
         {
-            private readonly PropertyDescriptor baseProp;
-            internal AxHost owner;
-            private readonly DispIdAttribute dispid;
+            private readonly PropertyDescriptor _baseDescriptor;
+            internal AxHost _owner;
+            private readonly DispIdAttribute _dispid;
 
-            private TypeConverter converter;
-            private UITypeEditor editor;
-            private readonly ArrayList updateAttrs = new ArrayList();
-            private int flags;
+            private TypeConverter _converter;
+            private UITypeEditor _editor;
+            private readonly ArrayList _updateAttributes = new();
+            private int _flags;
 
             private const int FlagUpdatedEditorAndConverter = 0x00000001;
             private const int FlagCheckGetter = 0x00000002;
-            private const int FlagGettterThrew = 0x00000004;
+            private const int FlagGetterThrew = 0x00000004;
             private const int FlagIgnoreCanAccessProperties = 0x00000008;
             private const int FlagSettingValue = 0x00000010;
 
-            internal AxPropertyDescriptor(PropertyDescriptor baseProp, AxHost owner) : base(baseProp)
+            internal AxPropertyDescriptor(PropertyDescriptor baseDescriptor, AxHost owner) : base(baseDescriptor)
             {
-                this.baseProp = baseProp;
-                this.owner = owner;
+                _baseDescriptor = baseDescriptor;
+                _owner = owner;
 
                 // Get the category for this dispid.
-                //
-                dispid = (DispIdAttribute)baseProp.Attributes[typeof(DispIdAttribute)];
-                if (dispid != null)
+                _dispid = baseDescriptor.GetAttribute<DispIdAttribute>();
+                if (_dispid is not null)
                 {
                     // Look to see if this property has a property page.
                     // If it does, then it needs to be Browsable(true).
-                    //
                     if (!IsBrowsable && !IsReadOnly)
                     {
-                        Guid g = GetPropertyPage((Ole32.DispatchID)dispid.Value);
+                        Guid g = GetPropertyPage((Ole32.DispatchID)_dispid.Value);
                         if (!Guid.Empty.Equals(g))
                         {
-                            Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "Making property: " + Name + " browsable because we found an property page.");
+                            Debug.WriteLineIf(s_axPropTraceSwitch.TraceVerbose, $"Making property: {Name} browsable because we found an property page.");
                             AddAttribute(new BrowsableAttribute(true));
                         }
                     }
 
                     // Use the CategoryAttribute provided by the OCX.
-                    CategoryAttribute cat = owner.GetCategoryForDispid((Ole32.DispatchID)dispid.Value);
-                    if (cat != null)
+                    CategoryAttribute cat = owner.GetCategoryForDispid((Ole32.DispatchID)_dispid.Value);
+                    if (cat is not null)
                     {
                         AddAttribute(cat);
                     }
 
                     // Check to see if this a DataSource property.
                     // If it is, we can always get and set the value of this property.
-                    //
-                    if (PropertyType.GUID.Equals(dataSource_Guid))
+                    if (PropertyType.GUID.Equals(s_dataSource_Guid))
                     {
                         SetFlag(FlagIgnoreCanAccessProperties, true);
                     }
@@ -78,7 +74,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return baseProp.ComponentType;
+                    return _baseDescriptor.ComponentType;
                 }
             }
 
@@ -86,77 +82,48 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (dispid != null)
+                    if (_dispid is not null)
                     {
-                        UpdateTypeConverterAndTypeEditorInternal(false, Dispid);
+                        UpdateTypeConverterAndTypeEditorInternal(force: false, Dispid);
                     }
-                    return converter ?? base.Converter;
+
+                    return _converter ?? base.Converter;
                 }
             }
 
             internal Ole32.DispatchID Dispid
-            {
-                get
-                {
-                    DispIdAttribute dispid = (DispIdAttribute)baseProp.Attributes[typeof(DispIdAttribute)];
-                    if (dispid != null)
-                    {
-                        return (Ole32.DispatchID)dispid.Value;
-                    }
+                => _baseDescriptor.TryGetAttribute(out DispIdAttribute dispid)
+                    ? (Ole32.DispatchID)dispid.Value
+                    : Ole32.DispatchID.UNKNOWN;
 
-                    return Ole32.DispatchID.UNKNOWN;
-                }
-            }
+            public override bool IsReadOnly => _baseDescriptor.IsReadOnly;
 
-            public override bool IsReadOnly
-            {
-                get
-                {
-                    return baseProp.IsReadOnly;
-                }
-            }
+            public override Type PropertyType => _baseDescriptor.PropertyType;
 
-            public override Type PropertyType
-            {
-                get
-                {
-                    return baseProp.PropertyType;
-                }
-            }
-
-            internal bool SettingValue
-            {
-                get
-                {
-                    return GetFlag(FlagSettingValue);
-                }
-            }
+            internal bool SettingValue => GetFlag(FlagSettingValue);
 
             private void AddAttribute(Attribute attr)
             {
-                updateAttrs.Add(attr);
+                _updateAttributes.Add(attr);
             }
 
             public override bool CanResetValue(object o)
             {
-                return baseProp.CanResetValue(o);
+                return _baseDescriptor.CanResetValue(o);
             }
 
             public override object GetEditor(Type editorBaseType)
             {
-                if (editorBaseType is null)
+                ArgumentNullException.ThrowIfNull(editorBaseType);
+
+                if (_dispid is not null)
                 {
-                    throw new ArgumentNullException(nameof(editorBaseType));
+                    UpdateTypeConverterAndTypeEditorInternal(false, (Ole32.DispatchID)_dispid.Value);
                 }
 
-                if (dispid != null)
+                if (editorBaseType.Equals(typeof(UITypeEditor)) && _editor is not null)
                 {
-                    UpdateTypeConverterAndTypeEditorInternal(false, (Ole32.DispatchID)dispid.Value);
-                }
-
-                if (editorBaseType.Equals(typeof(UITypeEditor)) && editor != null)
-                {
-                    return editor;
+                    return _editor;
                 }
 
                 return base.GetEditor(editorBaseType);
@@ -164,14 +131,14 @@ namespace System.Windows.Forms
 
             private bool GetFlag(int flagValue)
             {
-                return ((flags & flagValue) == flagValue);
+                return ((_flags & flagValue) == flagValue);
             }
 
             private unsafe Guid GetPropertyPage(Ole32.DispatchID dispid)
             {
                 try
                 {
-                    Oleaut32.IPerPropertyBrowsing ippb = owner.GetPerPropertyBrowsing();
+                    Oleaut32.IPerPropertyBrowsing ippb = _owner.GetPerPropertyBrowsing();
                     if (ippb is null)
                     {
                         return Guid.Empty;
@@ -190,12 +157,13 @@ namespace System.Windows.Forms
                 {
                     Debug.Fail(t.ToString());
                 }
+
                 return Guid.Empty;
             }
 
             public override object GetValue(object component)
             {
-                if ((!GetFlag(FlagIgnoreCanAccessProperties) && !owner.CanAccessProperties) || GetFlag(FlagGettterThrew))
+                if ((!GetFlag(FlagIgnoreCanAccessProperties) && !_owner.CanAccessProperties) || GetFlag(FlagGetterThrew))
                 {
                     return null;
                 }
@@ -204,25 +172,28 @@ namespace System.Windows.Forms
                 {
                     // Some controls fire OnChanged() notifications when getting values of some properties.
                     // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
-                    //
-                    owner.NoComponentChangeEvents++;
-                    return baseProp.GetValue(component);
+
+                    _owner.NoComponentChangeEvents++;
+                    return _baseDescriptor.GetValue(component);
                 }
                 catch (Exception e)
                 {
                     if (!GetFlag(FlagCheckGetter))
                     {
-                        Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "Get failed for : " + Name + " with exception: " + e.Message + " .Making property non-browsable.");
+                        Debug.WriteLineIf(
+                            s_axPropTraceSwitch.TraceVerbose,
+                            $"Get failed for : {Name} with exception: {e.Message}. Making property non-browsable.");
                         SetFlag(FlagCheckGetter, true);
                         AddAttribute(new BrowsableAttribute(false));
-                        owner.RefreshAllProperties = true;
-                        SetFlag(FlagGettterThrew, true);
+                        _owner.RefreshAllProperties = true;
+                        SetFlag(FlagGetterThrew, true);
                     }
+
                     throw;
                 }
                 finally
                 {
-                    owner.NoComponentChangeEvents--;
+                    _owner.NoComponentChangeEvents--;
                 }
             }
 
@@ -233,24 +204,24 @@ namespace System.Windows.Forms
 
             public override void ResetValue(object o)
             {
-                baseProp.ResetValue(o);
+                _baseDescriptor.ResetValue(o);
             }
 
             private void SetFlag(int flagValue, bool value)
             {
                 if (value)
                 {
-                    flags |= flagValue;
+                    _flags |= flagValue;
                 }
                 else
                 {
-                    flags &= ~flagValue;
+                    _flags &= ~flagValue;
                 }
             }
 
             public override void SetValue(object component, object value)
             {
-                if (!GetFlag(FlagIgnoreCanAccessProperties) && !owner.CanAccessProperties)
+                if (!GetFlag(FlagIgnoreCanAccessProperties) && !_owner.CanAccessProperties)
                 {
                     return;
                 }
@@ -260,13 +231,13 @@ namespace System.Windows.Forms
                 try
                 {
                     SetFlag(FlagSettingValue, true);
-                    if (PropertyType.IsEnum && value != null && value.GetType() != PropertyType)
+                    if (PropertyType.IsEnum && value is not null && value.GetType() != PropertyType)
                     {
-                        baseProp.SetValue(component, Enum.ToObject(PropertyType, value));
+                        _baseDescriptor.SetValue(component, Enum.ToObject(PropertyType, value));
                     }
                     else
                     {
-                        baseProp.SetValue(component, value);
+                        _baseDescriptor.SetValue(component, value);
                     }
                 }
                 finally
@@ -275,26 +246,26 @@ namespace System.Windows.Forms
                 }
 
                 OnValueChanged(component);
-                if (owner == component)
+                if (_owner == component)
                 {
-                    owner.SetAxState(AxHost.valueChanged, true);
+                    _owner.SetAxState(AxHost.s_valueChanged, true);
                 }
             }
 
             public override bool ShouldSerializeValue(object o)
             {
-                return baseProp.ShouldSerializeValue(o);
+                return _baseDescriptor.ShouldSerializeValue(o);
             }
 
             internal void UpdateAttributes()
             {
-                if (updateAttrs.Count == 0)
+                if (_updateAttributes.Count == 0)
                 {
                     return;
                 }
 
                 ArrayList attributes = new ArrayList(AttributeArray);
-                foreach (Attribute attr in updateAttrs)
+                foreach (Attribute attr in _updateAttributes)
                 {
                     attributes.Add(attr);
                 }
@@ -303,7 +274,7 @@ namespace System.Windows.Forms
                 attributes.CopyTo(temp, 0);
                 AttributeArray = temp;
 
-                updateAttrs.Clear();
+                _updateAttributes.Clear();
             }
 
             /// <summary>
@@ -328,30 +299,21 @@ namespace System.Windows.Forms
             /// </summary>
             internal unsafe void UpdateTypeConverterAndTypeEditorInternal(bool force, Ole32.DispatchID dispid)
             {
-                // check to see if we're being forced here or if the work really
-                // needs to be done.
-                //
-                if (GetFlag(FlagUpdatedEditorAndConverter) && !force)
-                {
-                    return;
-                }
-
-                if (owner.GetOcx() is null)
+                // Check to see if we're being forced here or if the work really needs to be done.
+                if ((GetFlag(FlagUpdatedEditorAndConverter) && !force) || _owner.GetOcx() is null)
                 {
                     return;
                 }
 
                 try
                 {
-                    Oleaut32.IPerPropertyBrowsing ppb = owner.GetPerPropertyBrowsing();
+                    Oleaut32.IPerPropertyBrowsing ppb = _owner.GetPerPropertyBrowsing();
 
-                    if (ppb != null)
+                    if (ppb is not null)
                     {
-                        bool hasStrings = false;
-
-                        // check for enums
-                        var caStrings = new Ole32.CA();
-                        var caCookies = new Ole32.CA();
+                        // Check for enums
+                        Ole32.CALPOLESTR caStrings = default;
+                        Ole32.CADWORD caCookies = default;
 
                         HRESULT hr = HRESULT.S_OK;
                         try
@@ -361,74 +323,64 @@ namespace System.Windows.Forms
                         catch (ExternalException ex)
                         {
                             hr = (HRESULT)ex.ErrorCode;
-                            Debug.Fail("An exception occurred inside IPerPropertyBrowsing::GetPredefinedStrings(dispid=" +
-                                       dispid + "), object type=" + new ComNativeDescriptor().GetClassName(ppb));
+                            Debug.Fail($"An exception occurred inside IPerPropertyBrowsing::GetPredefinedStrings(dispid={dispid}), object type={ComNativeDescriptor.GetClassName(ppb)}");
                         }
 
-                        if (hr != HRESULT.S_OK)
+                        if (hr == HRESULT.S_OK)
                         {
-                            hasStrings = false;
-                            // Destroy the existing editor if we created the current one
-                            // so if the items have disappeared, we don't hold onto the old
-                            // items.
-                            if (converter is Com2EnumConverter)
+                            string[] names = caStrings.ConvertAndFree();
+                            uint[] cookies = caCookies.ConvertAndFree();
+
+                            if (names.Length > 0 && cookies.Length > 0)
                             {
-                                converter = null;
-                            }
-                        }
-                        else
-                        {
-                            hasStrings = true;
-                        }
-
-                        if (hasStrings)
-                        {
-                            OleStrCAMarshaler stringMarshaler = new OleStrCAMarshaler(caStrings);
-                            Int32CAMarshaler intMarshaler = new Int32CAMarshaler(caCookies);
-
-                            if (stringMarshaler.Count > 0 && intMarshaler.Count > 0)
-                            {
-                                if (converter is null)
+                                if (_converter is null)
                                 {
-                                    converter = new AxEnumConverter(this, new AxPerPropertyBrowsingEnum(this, owner, stringMarshaler, intMarshaler, true));
+                                    _converter = new AxEnumConverter(this, new AxPerPropertyBrowsingEnum(
+                                        this,
+                                        _owner,
+                                        names,
+                                        cookies));
                                 }
-                                else if (converter is AxEnumConverter)
+                                else if (_converter is AxEnumConverter enumConverter)
                                 {
-                                    ((AxEnumConverter)converter).RefreshValues();
-                                    if (((AxEnumConverter)converter).com2Enum is AxPerPropertyBrowsingEnum axEnum)
+                                    enumConverter.RefreshValues();
+                                    if (enumConverter._com2Enum is AxPerPropertyBrowsingEnum axEnum)
                                     {
-                                        axEnum.RefreshArrays(stringMarshaler, intMarshaler);
+                                        axEnum.RefreshArrays(names, cookies);
                                     }
                                 }
                             }
-                            else
-                            {
-                                //hasStrings = false;
-                            }
                         }
                         else
                         {
-                            // if we didn't get any strings, try the proppage edtior
+                            // Destroy the existing editor if we created the current one so if the items have
+                            // disappeared, we don't hold onto the old items.
+                            if (_converter is Com2EnumConverter)
+                            {
+                                _converter = null;
+                            }
+
+                            // If we didn't get any strings, try the proppage editor
                             //
                             // Check to see if this is a property that we have already massaged to be a
                             // .Net type. If it is, don't bother with custom property pages. We already
                             // have a .Net Editor for this type.
-                            //
-                            ComAliasNameAttribute comAlias = (ComAliasNameAttribute)baseProp.Attributes[typeof(ComAliasNameAttribute)];
-                            if (comAlias is null)
+
+                            if (_baseDescriptor.GetAttribute<ComAliasNameAttribute>() is null)
                             {
                                 Guid g = GetPropertyPage(dispid);
 
                                 if (!Guid.Empty.Equals(g))
                                 {
-                                    editor = new AxPropertyTypeEditor(this, g);
+                                    _editor = new AxPropertyTypeEditor(this, g);
 
-                                    // Show any non-browsable property that has an editor through a
-                                    // property page.
-                                    //
+                                    // Show any non-browsable property that has an editor through a property page.
                                     if (!IsBrowsable)
                                     {
-                                        Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "Making property: " + Name + " browsable because we found an editor.");
+                                        Debug.WriteLineIf(
+                                            s_axPropTraceSwitch.TraceVerbose,
+                                            $"Making property: {Name} browsable because we found an editor.");
+
                                         AddAttribute(new BrowsableAttribute(true));
                                     }
                                 }
@@ -440,81 +392,8 @@ namespace System.Windows.Forms
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "could not get the type editor for property: " + Name + " Exception: " + e);
+                    Debug.WriteLineIf(s_axPropTraceSwitch.TraceVerbose, $"could not get the type editor for property: {Name} Exception: {e}");
                 }
-            }
-        }
-
-        private class AxPropertyTypeEditor : UITypeEditor
-        {
-            private readonly AxPropertyDescriptor propDesc;
-            private Guid guid;
-
-            public AxPropertyTypeEditor(AxPropertyDescriptor pd, Guid guid)
-            {
-                propDesc = pd;
-                this.guid = guid;
-            }
-
-            /// <summary>
-            ///  Takes the value returned from valueAccess.getValue() and modifies or replaces
-            ///  the value, passing the result into valueAccess.setValue().  This is where
-            ///  an editor can launch a modal dialog or create a drop down editor to allow
-            ///  the user to modify the value.  Host assistance in presenting UI to the user
-            ///  can be found through the valueAccess.getService function.
-            /// </summary>
-            public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
-            {
-                try
-                {
-                    object instance = context.Instance;
-                    propDesc.owner.ShowPropertyPageForDispid(propDesc.Dispid, guid);
-                }
-                catch (Exception ex1)
-                {
-                    if (provider != null)
-                    {
-                        IUIService uiSvc = (IUIService)provider.GetService(typeof(IUIService));
-                        if (uiSvc != null)
-                        {
-                            uiSvc.ShowError(ex1, SR.ErrorTypeConverterFailed);
-                        }
-                    }
-                }
-                return value;
-            }
-
-            /// <summary>
-            ///  Retrieves the editing style of the Edit method.  If the method
-            ///  is not supported, this will return None.
-            /// </summary>
-            public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
-            {
-                return UITypeEditorEditStyle.Modal;
-            }
-        }
-
-        /// <summary>
-        ///  simple derivation of the com2enumconverter that allows us to intercept
-        ///  the call to GetStandardValues so we can on-demand update the enum values.
-        /// </summary>
-        private class AxEnumConverter : Com2EnumConverter
-        {
-            private readonly AxPropertyDescriptor target;
-
-            public AxEnumConverter(AxPropertyDescriptor target, Com2Enum com2Enum) : base(com2Enum)
-            {
-                this.target = target;
-            }
-
-            public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
-            {
-                // make sure the converter has been properly refreshed -- calling
-                // the Converter property does this.
-                //
-                TypeConverter tc = this;
-                tc = target.Converter;
-                return base.GetStandardValues(context);
             }
         }
     }

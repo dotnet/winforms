@@ -7,7 +7,7 @@ internal static partial class Interop
     internal static partial class ComCtl32
     {
         /// <summary>
-        /// Represents MonthCalendar Control styles constatnts.
+        /// Represents MonthCalendar Control styles constants.
         /// Copied form CommCtrl.h
         /// </summary>
         public enum MCS

@@ -2,42 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Diagnostics;
-
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    internal sealed class GridEntryCollection : GridItemCollection
+    internal sealed class GridEntryCollection : NonNullCollection<GridEntry>, IDisposable
     {
-        private readonly GridEntry _owner;
+        private readonly bool _disposeItems;
 
-        public GridEntryCollection(GridEntry owner, GridEntry[] entries) : base(entries)
+        public GridEntryCollection(IEnumerable<GridEntry>? items = null, bool disposeItems = true)
+            : base(items ?? Enumerable.Empty<GridEntry>())
         {
-            _owner = owner;
+            _disposeItems = disposeItems;
         }
-
-        public void AddRange(GridEntry[] value)
-        {
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-
-            Debug.Assert(_entries != null, "Entries is initialized in the base class constructor.");
-            var newArray = new GridEntry[_entries.Length + value.Length];
-            _entries.CopyTo(newArray, 0);
-            value.CopyTo(newArray, _entries.Length);
-            _entries = newArray;
-        }
-
-        public void Clear() => _entries = Array.Empty<GridEntry>();
-
-        public void CopyTo(Array dest, int index) => _entries.CopyTo(dest, index);
-
-        internal GridEntry GetEntry(int index) => (GridEntry)_entries[index];
-
-        internal int GetEntry(GridEntry child) => Array.IndexOf(_entries, child);
 
         public void Dispose()
         {
@@ -47,24 +22,15 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing && _disposeItems)
             {
-                if (_owner != null)
+                foreach (GridEntry entry in this)
                 {
-                    for (int i = 0; i < _entries.Length; i++)
-                    {
-                        if (_entries[i] != null)
-                        {
-                            ((GridEntry)_entries[i]).Dispose();
-                            _entries[i] = null;
-                        }
-                    }
-
-                    _entries = Array.Empty<GridEntry>();
+                    entry.Dispose();
                 }
+
+                Clear();
             }
         }
-
-        ~GridEntryCollection() => Dispose(false);
     }
 }

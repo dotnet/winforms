@@ -25,5 +25,11 @@ namespace System.Windows.Forms
         ///  default button.
         /// </summary>
         Button3 = (int)MB.DEFBUTTON3,
+
+        /// <summary>
+        ///  Specifies that the Help button on the message box should be the
+        ///  default button.
+        /// </summary>
+        Button4 = (int)MB.DEFBUTTON4,
     }
 }

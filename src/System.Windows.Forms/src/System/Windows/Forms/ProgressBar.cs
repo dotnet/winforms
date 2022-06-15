@@ -2,11 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using static Interop;
@@ -19,7 +17,7 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Value))]
     [DefaultBindingProperty(nameof(Value))]
     [SRDescription(nameof(SR.DescriptionProgressBar))]
-    public class ProgressBar : Control
+    public partial class ProgressBar : Control
     {
         // These four values define the range of possible values, how to navigate through them and the
         // current position
@@ -34,11 +32,11 @@ namespace System.Windows.Forms
 
         private ProgressBarStyle _style = ProgressBarStyle.Blocks;
 
-        private EventHandler _onRightToLeftLayoutChanged;
+        private EventHandler? _onRightToLeftLayoutChanged;
         private bool _rightToLeftLayout;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ProgressBar'/> class in its default state.
+        ///  Initializes a new instance of the <see cref="ProgressBar"/> class in its default state.
         /// </summary>
         public ProgressBar() : base()
         {
@@ -83,7 +81,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -104,10 +102,7 @@ namespace System.Windows.Forms
             {
                 if (_style != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)ProgressBarStyle.Blocks, (int)ProgressBarStyle.Marquee))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ProgressBarStyle));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     _style = value;
                     if (IsHandleCreated)
@@ -125,7 +120,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler BackgroundImageChanged
+        public new event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -141,7 +136,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -157,7 +152,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler CausesValidationChanged
+        public new event EventHandler? CausesValidationChanged
         {
             add => base.CausesValidationChanged += value;
             remove => base.CausesValidationChanged -= value;
@@ -176,6 +171,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [AllowNull]
         public override Font Font
         {
             get => base.Font;
@@ -184,7 +180,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler FontChanged
+        public new event EventHandler? FontChanged
         {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
@@ -200,14 +196,14 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged
+        public new event EventHandler? ImeModeChanged
         {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
         }
 
         /// <summary>
-        ///  Gets or sets the marquee animation speed of the <see cref='ProgressBar'/>.
+        ///  Gets or sets the marquee animation speed of the <see cref="ProgressBar"/>.
         ///  Sets the value to a positive number causes the progressBar to move, while setting it to 0
         ///  stops the ProgressBar.
         /// </summary>
@@ -241,17 +237,17 @@ namespace System.Windows.Forms
             {
                 if (_marqueeAnimationSpeed == 0)
                 {
-                    User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETMARQUEE, IntPtr.Zero, (IntPtr)_marqueeAnimationSpeed);
+                    User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETMARQUEE, (nint)BOOL.FALSE, _marqueeAnimationSpeed);
                 }
                 else
                 {
-                    User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETMARQUEE, (IntPtr)1, (IntPtr)_marqueeAnimationSpeed);
+                    User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETMARQUEE, (nint)BOOL.TRUE, _marqueeAnimationSpeed);
                 }
             }
         }
 
         /// <summary>
-        ///  Gets or sets the maximum value of the <see cref='ProgressBar'/>.
+        ///  Gets or sets the maximum value of the <see cref="ProgressBar"/>.
         /// </summary>
         [DefaultValue(100)]
         [SRCategory(nameof(SR.CatBehavior))]
@@ -284,7 +280,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETRANGE32, (IntPtr)_minimum, (IntPtr)_maximum);
+                        User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETRANGE32, _minimum, _maximum);
                         UpdatePos();
                     }
                 }
@@ -292,7 +288,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the minimum value of the <see cref='ProgressBar'/>.
+        ///  Gets or sets the minimum value of the <see cref="ProgressBar"/>.
         /// </summary>
         [DefaultValue(0)]
         [SRCategory(nameof(SR.CatBehavior))]
@@ -325,7 +321,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETRANGE32, (IntPtr)_minimum, (IntPtr)_maximum);
+                        User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETRANGE32, _minimum, _maximum);
                         UpdatePos();
                     }
                 }
@@ -337,7 +333,7 @@ namespace System.Windows.Forms
             base.OnBackColorChanged(e);
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBKCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
+                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBKCOLOR, 0, BackColor.ToWin32());
             }
         }
 
@@ -346,7 +342,7 @@ namespace System.Windows.Forms
             base.OnForeColorChanged(e);
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBARCOLOR, IntPtr.Zero, PARAM.FromColor(ForeColor));
+                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBARCOLOR, 0, ForeColor.ToWin32());
             }
         }
 
@@ -361,7 +357,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler PaddingChanged
+        public new event EventHandler? PaddingChanged
         {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
@@ -394,14 +390,14 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
-        public event EventHandler RightToLeftLayoutChanged
+        public event EventHandler? RightToLeftLayoutChanged
         {
             add => _onRightToLeftLayoutChanged += value;
             remove => _onRightToLeftLayoutChanged -= value;
         }
 
         /// <summary>
-        ///  Gets or sets the amount that a call to <see cref='PerformStep'/> increases the progress
+        ///  Gets or sets the amount that a call to <see cref="PerformStep"/> increases the progress
         ///  bar's current position.
         /// </summary>
         [DefaultValue(10)]
@@ -415,7 +411,7 @@ namespace System.Windows.Forms
                 _step = value;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETSTEP, (IntPtr)_step);
+                    User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETSTEP, _step);
                 }
             }
         }
@@ -430,7 +426,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler TabStopChanged
+        public new event EventHandler? TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
@@ -447,14 +443,14 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler TextChanged
+        public new event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
 
         /// <summary>
-        ///  Gets or sets the current position of the <see cref='ProgressBar'/>.
+        ///  Gets or sets the current position of the <see cref="ProgressBar"/>.
         /// </summary>
         [DefaultValue(0)]
         [SRCategory(nameof(SR.CatBehavior))]
@@ -480,7 +476,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler DoubleClick
+        public new event EventHandler? DoubleClick
         {
             add => base.DoubleClick += value;
             remove => base.DoubleClick -= value;
@@ -488,7 +484,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseDoubleClick
+        public new event MouseEventHandler? MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
             remove => base.MouseDoubleClick -= value;
@@ -496,7 +492,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler KeyUp
+        public new event KeyEventHandler? KeyUp
         {
             add => base.KeyUp += value;
             remove => base.KeyUp -= value;
@@ -504,7 +500,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler KeyDown
+        public new event KeyEventHandler? KeyDown
         {
             add => base.KeyDown += value;
             remove => base.KeyDown -= value;
@@ -512,7 +508,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyPressEventHandler KeyPress
+        public new event KeyPressEventHandler? KeyPress
         {
             add => base.KeyPress += value;
             remove => base.KeyPress -= value;
@@ -520,7 +516,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler Enter
+        public new event EventHandler? Enter
         {
             add => base.Enter += value;
             remove => base.Enter -= value;
@@ -528,7 +524,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler Leave
+        public new event EventHandler? Leave
         {
             add => base.Leave += value;
             remove => base.Leave -= value;
@@ -536,7 +532,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event PaintEventHandler Paint
+        public new event PaintEventHandler? Paint
         {
             add => base.Paint += value;
             remove => base.Paint -= value;
@@ -565,7 +561,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Advances the current position of the <see cref='ProgressBar'/> by the specified increment
+        ///  Advances the current position of the <see cref="ProgressBar"/> by the specified increment
         ///  and redraws the control to reflect the new position.
         /// </summary>
         public void Increment(int value)
@@ -574,6 +570,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.ProgressBarIncrementMarqueeException);
             }
+
             _value += value;
 
             // Enforce that value is within the range (minimum, maximum)
@@ -581,6 +578,7 @@ namespace System.Windows.Forms
             {
                 _value = _minimum;
             }
+
             if (_value > _maximum)
             {
                 _value = _maximum;
@@ -597,12 +595,13 @@ namespace System.Windows.Forms
             base.OnHandleCreated(e);
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETRANGE32, (IntPtr)_minimum, (IntPtr)_maximum);
-                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETSTEP, (IntPtr)_step);
-                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETPOS, (IntPtr)_value);
-                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBKCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
-                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBARCOLOR, IntPtr.Zero, PARAM.FromColor(ForeColor));
+                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETRANGE32, _minimum, _maximum);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETSTEP, _step);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETPOS, _value);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBKCOLOR, 0, BackColor.ToWin32());
+                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBARCOLOR, 0, ForeColor.ToWin32());
             }
+
             StartMarquee();
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
         }
@@ -633,8 +632,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Advances the current position of the <see cref='ProgressBar'/> by the amount of the
-        ///  <see cref='Step'/> property, and redraws the control to reflect the new position.
+        ///  Advances the current position of the <see cref="ProgressBar"/> by the amount of the
+        ///  <see cref="Step"/> property, and redraws the control to reflect the new position.
         /// </summary>
         public void PerformStep()
         {
@@ -674,106 +673,37 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Sends the underlying window a PBM_SETPOS message to update the current value of the
-        ///  <see cref='ProgressBar'/>.
+        ///  <see cref="ProgressBar"/>.
         /// </summary>
         private void UpdatePos()
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETPOS, (IntPtr)_value);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETPOS, _value);
             }
         }
 
         /// <remarks>
-        ///  Note: <see cref='ProgressBar'/> doesn't work like other controls as far as setting ForeColor/BackColor.
+        ///  Note: <see cref="ProgressBar"/> doesn't work like other controls as far as setting ForeColor/BackColor.
         ///  You need to send messages to update the colors.
         /// </remarks>
         private void UserPreferenceChangedHandler(object o, UserPreferenceChangedEventArgs e)
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBARCOLOR, IntPtr.Zero, PARAM.FromColor(ForeColor));
-                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBKCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
+                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBARCOLOR, 0, ForeColor.ToWin32());
+                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBKCOLOR, 0, BackColor.ToWin32());
             }
         }
 
         /// <summary>
-        ///  Creates a new AccessibleObject for this <see cref='ProgressBar'/> instance.
+        ///  Creates a new AccessibleObject for this <see cref="ProgressBar"/> instance.
         ///  The AccessibleObject instance returned by this method supports ControlType UIA property.
         /// </summary>
         /// <returns>
-        ///  AccessibleObject for this <see cref='ProgressBar'/> instance.
+        ///  AccessibleObject for this <see cref="ProgressBar"/> instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance()
             => new ProgressBarAccessibleObject(this);
-
-        internal class ProgressBarAccessibleObject : ControlAccessibleObject
-        {
-            internal ProgressBarAccessibleObject(ProgressBar owner) : base(owner)
-            {
-            }
-
-            public override string Name
-            {
-                get => base.Name ?? SR.ProgressBarDefaultAccessibleName;
-                set => base.Name = value;
-            }
-
-            private ProgressBar OwningProgressBar => Owner as ProgressBar;
-
-            internal override bool IsIAccessibleExSupported() => true;
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.ValuePatternId ||
-                    patternId == UiaCore.UIA.RangeValuePatternId)
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.ProgressBarControlTypeId;
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        // This is necessary for compatibility with MSAA proxy:
-                        // IsKeyboardFocusable = true regardless the control is enabled/disabled.
-                        return true;
-                    case UiaCore.UIA.IsRangeValuePatternAvailablePropertyId:
-                    case UiaCore.UIA.IsValuePatternAvailablePropertyId:
-                    case UiaCore.UIA.RangeValueIsReadOnlyPropertyId:
-                        return true;
-                    case UiaCore.UIA.RangeValueLargeChangePropertyId:
-                    case UiaCore.UIA.RangeValueSmallChangePropertyId:
-                        return double.NaN;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
-
-            internal override void SetValue(double newValue)
-            {
-                throw new InvalidOperationException("Progress Bar is read-only.");
-            }
-
-            internal override double LargeChange => double.NaN;
-
-            internal override double Maximum => OwningProgressBar?.Maximum ?? double.NaN;
-
-            internal override double Minimum => OwningProgressBar?.Minimum ?? double.NaN;
-
-            internal override double SmallChange => double.NaN;
-
-            internal override double RangeValue => OwningProgressBar?.Value ?? double.NaN;
-
-            internal override bool IsReadOnly => true;
-        }
     }
 }

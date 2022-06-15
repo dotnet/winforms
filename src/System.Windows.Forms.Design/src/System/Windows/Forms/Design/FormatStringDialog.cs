@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Design
     internal class FormatStringDialog : Form
     {
         // we need the context for the HELP service provider
-        private ITypeDescriptorContext _context;
+        private readonly ITypeDescriptorContext _context;
         private Button _cancelButton;
         private Button _okButton;
         private FormatControl _formatControl1;
@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Design
             _context = context;
             InitializeComponent();
 
-            // Set right to left property according to SR.GetString(SR.RTL) value.
+            // Set right to left property according to SR.RTL value.
             string rtlString = SR.RTL;
 
             if (rtlString.Equals("RTL_False"))
@@ -152,7 +152,7 @@ namespace System.Windows.Forms.Design
             _formatControl1.NullValue = nullValue != null ? nullValue.ToString() : "";
         }
 
-        public void End()
+        public static void End()
         {
             // clear the tree nodes collection
         }
@@ -183,7 +183,7 @@ namespace System.Windows.Forms.Design
             _cancelButton.Size = new Drawing.Size(87, 23);
             _cancelButton.TabIndex = 2;
             _cancelButton.Text = SR.DataGridView_Cancel;
-            _cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            _cancelButton.DialogResult = DialogResult.Cancel;
             _cancelButton.Click += new EventHandler(cancelButton_Click);
             //
             // okButton
@@ -193,12 +193,12 @@ namespace System.Windows.Forms.Design
             _okButton.Size = new Drawing.Size(87, 23);
             _okButton.TabIndex = 1;
             _okButton.Text = SR.DataGridView_OK;
-            _okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            _okButton.DialogResult = DialogResult.OK;
             _okButton.Click += new EventHandler(okButton_Click);
             //
             // Form1
             //
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.Font;
             AutoScaleDimensions = new Drawing.SizeF(6, 13);
             ClientSize = new Drawing.Size(396, 295);
             AutoSize = true;

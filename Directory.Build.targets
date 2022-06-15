@@ -16,10 +16,22 @@
     <CoverletOutput>$(TargetDir)coverage\$(MSBuildProjectName).coverage</CoverletOutput>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
-    <Platforms Condition="'$(Platform)' == 'x86'">AnyCPU;x86</Platforms>
-    <TestArchitectures Condition="'$(Platform)' == 'x86'">x86</TestArchitectures>
-    <TestArchitectures Condition="'$(Platform)' != 'x86'">x64;x86</TestArchitectures>
+  <!-- Turn on single-file publishing analysis for everything except the test projects -->
+  <PropertyGroup Condition="'$(IsTestProject)' != 'true'">
+    <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+  </PropertyGroup>
+
+  <!-- Mark all projects located under **\tests\* folders as non-shipping -->
+  <PropertyGroup>
+    <_ProjectDirectoryRelativePath>$([MSBuild]::MakeRelative($(RepoRoot), $(MSBuildProjectDirectory)))</_ProjectDirectoryRelativePath>
+    <_IsUnderTestsFolder>$(_ProjectDirectoryRelativePath.Contains("\tests\"))</_IsUnderTestsFolder>
+    <IsShipping Condition="$(_IsUnderTestsFolder)">false</IsShipping>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true' ">
+    <TargetArchitecture Condition="'$(TargetArchitecture)' == ''">x64</TargetArchitecture>
+    <Platform Condition="'$(Platform)' == 'AnyCPU' or '$(Platform)' == 'Any CPU'">$(TargetArchitecture)</Platform>
+    <TestArchitectures>$(TargetArchitecture)</TestArchitectures>
   </PropertyGroup>
 
   <Target Name="InstrumentModulesNoBuild" BeforeTargets="RunTests" Condition="'$(IsUnitTestProject)' == 'true'">
@@ -52,18 +64,18 @@
 
   <ItemGroup>
     <!-- Set TargetingPackVersion -->
-    <FrameworkReference Update="Microsoft.NETCore.App" 
-      Condition=" '$(MicrosoftNETCoreAppPackageVersion)'!='' And $(TargetFramework.StartsWith('netcoreapp5.')) ">
-    <TargetingPackVersion>$(MicrosoftNETCoreAppPackageVersion)</TargetingPackVersion>
+    <FrameworkReference Update="Microsoft.NETCore.App"
+      Condition=" '$(VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion)'!='' And $(TargetFramework.StartsWith('net7.')) ">
+    <TargetingPackVersion>$(VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion)</TargetingPackVersion>
     </FrameworkReference>
   </ItemGroup>
 
   <PropertyGroup>
-    <!-- Set RuntimeFrameworkVersion to MicrosoftNETCoreAppPackageVersion from Core Setup to prevent large SDK cycle -->
-    <RuntimeFrameworkVersion Condition="'$(MicrosoftNETCoreAppPackageVersion)'!='' And $(TargetFramework.StartsWith('netcoreapp5.')) ">$(MicrosoftNETCoreAppPackageVersion)</RuntimeFrameworkVersion>
+    <!-- Set RuntimeFrameworkVersion to VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion from Core Setup to prevent large SDK cycle -->
+    <RuntimeFrameworkVersion Condition="'$(VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion)'!='' And $(TargetFramework.StartsWith('net7.')) ">$(VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion)</RuntimeFrameworkVersion>
 
-    <!-- If TargetFramework is not netcoreapp5.x, then reset RuntimeFrameworkVersion -->
-    <RuntimeFrameworkVersion Condition="!$(TargetFramework.StartsWith('netcoreapp5.'))" />
+    <!-- If TargetFramework is not net6.x, then reset RuntimeFrameworkVersion -->
+    <RuntimeFrameworkVersion Condition="!$(TargetFramework.StartsWith('net7.'))" />
   </PropertyGroup>
 
 </Project>

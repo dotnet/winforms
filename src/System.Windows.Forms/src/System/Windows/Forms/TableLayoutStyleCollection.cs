@@ -28,10 +28,7 @@ namespace System.Windows.Forms
 
         int IList.Add(object style)
         {
-            if (style is null)
-            {
-                throw new ArgumentNullException(nameof(style));
-            }
+            ArgumentNullException.ThrowIfNull(style);
 
             EnsureNotOwned((TableLayoutStyle)style);
             ((TableLayoutStyle)style).Owner = Owner;
@@ -47,10 +44,7 @@ namespace System.Windows.Forms
 
         void IList.Insert(int index, object style)
         {
-            if (style is null)
-            {
-                throw new ArgumentNullException(nameof(style));
-            }
+            ArgumentNullException.ThrowIfNull(style);
 
             EnsureNotOwned((TableLayoutStyle)style);
             ((TableLayoutStyle)style).Owner = Owner;
@@ -63,10 +57,7 @@ namespace System.Windows.Forms
             get => _innerList[index];
             set
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 TableLayoutStyle style = (TableLayoutStyle)value;
                 EnsureNotOwned(style);
@@ -131,13 +122,14 @@ namespace System.Windows.Forms
 
         IEnumerator IEnumerable.GetEnumerator() => _innerList.GetEnumerator();
 
-        private void EnsureNotOwned(TableLayoutStyle style)
+        private static void EnsureNotOwned(TableLayoutStyle style)
         {
-            if (style.Owner != null)
+            if (style.Owner is not null)
             {
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, style.GetType().Name), nameof(style));
             }
         }
+
         internal void EnsureOwnership(IArrangedElement owner)
         {
             _owner = owner;
@@ -146,9 +138,10 @@ namespace System.Windows.Forms
                 this[i].Owner = owner;
             }
         }
+
         private void PerformLayoutIfOwned()
         {
-            if (Owner != null)
+            if (Owner is not null)
             {
                 LayoutTransaction.DoLayout(Owner, Owner, PropertyName);
             }

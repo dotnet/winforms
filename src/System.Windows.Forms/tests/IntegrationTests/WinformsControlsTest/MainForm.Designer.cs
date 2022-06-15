@@ -32,34 +32,34 @@ namespace WinformsControlsTest
         /// </summary>
         private void InitializeComponent()
         {
-            this.flowLayoutPanelUITypeEditors = new System.Windows.Forms.FlowLayoutPanel();
-            this.flowLayoutPanelUITypeEditors.SuspendLayout();
+            this.overarchingFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.overarchingFlowLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // flowLayoutPanelUITypeEditors
+            // overarchingFlowLayoutPanel
             // 
-            this.flowLayoutPanelUITypeEditors.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanelUITypeEditors.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanelUITypeEditors.Location = new System.Drawing.Point(8, 8);
-            this.flowLayoutPanelUITypeEditors.Name = "flowLayoutPanelUITypeEditors";
-            this.flowLayoutPanelUITypeEditors.TabIndex = 0;
+            this.overarchingFlowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.overarchingFlowLayoutPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.overarchingFlowLayoutPanel.Location = new System.Drawing.Point(8, 8);
+            this.overarchingFlowLayoutPanel.Name = "flowLayoutPanelUITypeEditors";
+            this.overarchingFlowLayoutPanel.TabIndex = 0;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(570, 30);
-            this.Controls.Add(this.flowLayoutPanelUITypeEditors);
+            this.Controls.Add(this.overarchingFlowLayoutPanel);
             this.Name = "MainForm";
             this.Padding = new System.Windows.Forms.Padding(8);
             this.Text = "MenuForm";
-            this.flowLayoutPanelUITypeEditors.ResumeLayout(false);
+            this.overarchingFlowLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
         }
 
         #endregion
 
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelUITypeEditors;
+        private System.Windows.Forms.FlowLayoutPanel overarchingFlowLayoutPanel;
     }
 }
 

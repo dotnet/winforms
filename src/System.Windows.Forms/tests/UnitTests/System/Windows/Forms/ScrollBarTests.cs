@@ -2,11 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -132,7 +130,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubScrollBar();
@@ -196,7 +194,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ScrollBar_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new SubScrollBar
@@ -248,7 +246,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void ScrollBar_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new SubScrollBar
@@ -307,7 +305,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void ScrollBar_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new SubScrollBar
@@ -359,7 +357,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
         public void ScrollBar_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
         {
             using var control = new SubScrollBar();
@@ -367,7 +365,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_Enabled_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubScrollBar
@@ -389,7 +387,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_Enabled_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubScrollBar();
@@ -484,7 +482,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ScrollBar_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubScrollBar
@@ -545,7 +543,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void ScrollBar_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new SubScrollBar
@@ -626,7 +624,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void ScrollBar_ImeMode_Set_GetReturnsExpected(ImeMode value)
         {
             using var control = new SubScrollBar
@@ -678,7 +676,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
         public void ScrollBar_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
             using var control = new SubScrollBar();
@@ -1086,7 +1084,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.Minimum);
             Assert.Equal(5, control.Value);
             Assert.Equal(10, control.LargeChange);
-            Assert.Equal(1, control.SmallChange);si = new User32.SCROLLINFO
+            Assert.Equal(1, control.SmallChange);
+            si = new User32.SCROLLINFO
             {
                 cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
@@ -1183,7 +1182,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void ScrollBar_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var control = new SubScrollBar
@@ -1235,7 +1234,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
         public void ScrollBar_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
             using var control = new SubScrollBar();
@@ -1243,7 +1242,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_ScaleScrollBarForDpiChange_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubScrollBar
@@ -1380,7 +1379,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_TabStop_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubScrollBar
@@ -1402,7 +1401,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_TabStop_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubScrollBar();
@@ -1477,7 +1476,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ScrollBar_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubScrollBar
@@ -1494,7 +1493,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ScrollBar_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubScrollBar();
@@ -1752,7 +1751,10 @@ namespace System.Windows.Forms.Tests
         public void ScrollBar_Value_SetOutOfRange_ThrowsArgumentOutOfRangeException(int value)
         {
             using var control = new SubScrollBar();
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => control.Value = value);
+            var paramName = "value";
+            ArgumentOutOfRangeException ex = Assert.Throws<ArgumentOutOfRangeException>(paramName, () => control.Value = value);
+            string expectedMessage = new ArgumentOutOfRangeException(paramName, string.Format(SR.InvalidBoundArgument, nameof(control.Value), value, $"'{nameof(control.Minimum)}'", $"'{nameof(control.Maximum)}'")).Message;
+            Assert.Equal(expectedMessage, ex.Message);
             Assert.Equal(0, control.Value);
         }
 
@@ -1897,7 +1899,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnClick_Invoke_CallsClick(EventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -1921,7 +1923,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -1945,7 +1947,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnEnabledChanged_Invoke_CallsEnabled(EventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -1971,7 +1973,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnEnabledChanged_InvokeWithHandle_CallsEnabledChanged(EventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2010,7 +2012,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2036,7 +2038,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2063,7 +2065,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseClick_Invoke_CallsMouseClick(MouseEventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2087,7 +2089,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseDoubleClick_Invoke_CallsMouseDoubleClick(MouseEventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2111,7 +2113,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseDown_Invoke_CallsMouseDown(MouseEventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2135,7 +2137,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseMove_Invoke_CallsMouseMove(MouseEventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2159,7 +2161,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseUp_Invoke_CallsMouseUp(MouseEventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2183,7 +2185,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseWheel_Invoke_CallsMouseWheel(MouseEventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2496,7 +2498,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void ScrollBar_OnPaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2550,7 +2552,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnValueChanged_Invoke_CallsValueChanged(EventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2635,7 +2637,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_UpdateScrollInfo_NoHandle_Success(bool enabled)
         {
             using var control = new SubScrollBar
@@ -2647,7 +2649,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_UpdateScrollInfo_WithHandle_Success(bool enabled)
         {
             using var control = new SubScrollBar
@@ -2670,7 +2672,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_UpdateScrollInfo_WithHandleRightToLeft_Success(bool enabled)
         {
             using var control = new SubScrollBar
@@ -2738,7 +2740,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> WndProc_Scroll_TestData()
         {
-            foreach (User32.WM msg in new User32.WM[] { User32.WM.REFLECT | User32.WM.HSCROLL, User32.WM.REFLECT | User32.WM.VSCROLL  })
+            foreach (User32.WM msg in new User32.WM[] { User32.WM.REFLECT | User32.WM.HSCROLL, User32.WM.REFLECT | User32.WM.VSCROLL })
             {
                 yield return new object[] { msg, RightToLeft.No, 100, ScrollEventType.SmallIncrement, 91, ScrollEventType.SmallIncrement };
                 yield return new object[] { msg, RightToLeft.No, 99, ScrollEventType.SmallIncrement, 91, ScrollEventType.SmallIncrement };
@@ -2958,6 +2960,220 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Yes, 0)]
+        [InlineData(RightToLeft.Yes, 50)]
+        [InlineData(RightToLeft.No, 50)]
+        [InlineData(RightToLeft.No, 100)]
+        public void HScrollBarFirstPageButtonAccessibleObject_Bounds_ReturnRectangle(RightToLeft rightToLeft, int value)
+        {
+            using HScrollBar hScrollBar = new();
+            SetHScrollBar(hScrollBar, rightToLeft, minimum: 0, maximum: 100, value);
+
+            Assert.True(HFirstPageButton(hScrollBar).Bounds.Width > 0);
+            Assert.True(HFirstPageButton(hScrollBar).Bounds.Height > 0);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Yes, 100, 100)]
+        [InlineData(RightToLeft.No, 0, 0)]
+        [InlineData(RightToLeft.Yes, 0, 0)]
+        [InlineData(RightToLeft.No, 100, 0)]
+        public void HScrollBarFirstPageButtonAccessibleObject_Bounds_ReturnEmptyRectangle(RightToLeft rightToLeft, int maximum, int value)
+        {
+            using HScrollBar hScrollBar = new();
+            SetHScrollBar(hScrollBar, rightToLeft, minimum: 0, maximum, value);
+
+            Assert.True(HFirstPageButton(hScrollBar).Bounds.Width == 0 || HFirstPageButton(hScrollBar).Bounds.Height == 0);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 100, 0, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.No, 100, 50, AccessibleStates.None)]
+        [InlineData(RightToLeft.No, 100, 100, AccessibleStates.None)]
+        [InlineData(RightToLeft.Yes, 100, 0, AccessibleStates.None)]
+        [InlineData(RightToLeft.Yes, 100, 50, AccessibleStates.None)]
+        [InlineData(RightToLeft.Yes, 100, 100, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.No, 0, 0, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.Yes, 0, 0, AccessibleStates.Invisible)]
+        public void HScrollBarFirstPageButtonAccessibleObject_State_ReturnExpected(RightToLeft rightToLeft, int maximum, int value, AccessibleStates accessibleState)
+        {
+            using HScrollBar hScrollBar = new();
+            SetHScrollBar(hScrollBar, rightToLeft, minimum: 0, maximum, value);
+
+            Assert.Equal(accessibleState, HFirstPageButton(hScrollBar).State);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 0)]
+        [InlineData(RightToLeft.No, 50)]
+        [InlineData(RightToLeft.Yes, 100)]
+        [InlineData(RightToLeft.Yes, 50)]
+        public void HScrollBarLastPageButtonAccessibleObject_Bounds_ReturnRectangle(RightToLeft rightToLeft, int value)
+        {
+            using HScrollBar hScrollBar = new();
+            SetHScrollBar(hScrollBar, rightToLeft, minimum: 0, maximum: 100, value);
+
+            Assert.True(HLastPageButton(hScrollBar).Bounds.Width > 0);
+            Assert.True(HLastPageButton(hScrollBar).Bounds.Height > 0);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 100, 100)]
+        [InlineData(RightToLeft.Yes, 100, 0)]
+        [InlineData(RightToLeft.No, 0, 0)]
+        [InlineData(RightToLeft.Yes, 0, 0)]
+        public void HScrollBarLastPageButtonAccessibleObject_Bounds_ReturnEmptyRectangle(RightToLeft rightToLeft, int maximum, int value)
+        {
+            using HScrollBar hScrollBar = new();
+            SetHScrollBar(hScrollBar, rightToLeft, minimum: 0, maximum, value);
+
+            Assert.True(HLastPageButton(hScrollBar).Bounds.Width == 0 || HLastPageButton(hScrollBar).Bounds.Height == 0);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 100, 0, AccessibleStates.None)]
+        [InlineData(RightToLeft.No, 100, 50, AccessibleStates.None)]
+        [InlineData(RightToLeft.No, 100, 100, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.Yes, 100, 0, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.Yes, 100, 50, AccessibleStates.None)]
+        [InlineData(RightToLeft.Yes, 100, 100, AccessibleStates.None)]
+        [InlineData(RightToLeft.No, 0, 0, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.Yes, 0, 0, AccessibleStates.Invisible)]
+        public void HScrollBarLastPageButtonAccessibleObject_State_ReturnExpected(RightToLeft rightToLeft, int maximum, int value, AccessibleStates accessibleState)
+        {
+            using HScrollBar hScrollBar = new();
+            SetHScrollBar(hScrollBar, rightToLeft, minimum: 0, maximum, value);
+
+            Assert.Equal(accessibleState, HLastPageButton(hScrollBar).State);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 100, 0)]
+        [InlineData(RightToLeft.Yes, 100, 0)]
+        [InlineData(RightToLeft.No, 0, 0)]
+        [InlineData(RightToLeft.Yes, 0, 0)]
+        public void VScrollBarFirstPageButtonAccessibleObject_Bounds_ReturnEmptyRectangle(RightToLeft rightToLeft, int maximum, int value)
+        {
+            using VScrollBar vScrollBar = new();
+            SetVScrollBar(vScrollBar, rightToLeft, minimum: 0, maximum, value);
+
+            Assert.True(VFirstPageButton(vScrollBar).Bounds.Width == 0 || VFirstPageButton(vScrollBar).Bounds.Height == 0);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 0)]
+        [InlineData(RightToLeft.No, 50)]
+        [InlineData(RightToLeft.Yes, 0)]
+        [InlineData(RightToLeft.Yes, 50)]
+        public void VScrollBarLastPageButtonAccessibleObject_Bounds_ReturnRectangle(RightToLeft rightToLeft, int value)
+        {
+            using VScrollBar vScrollBar = new();
+            SetVScrollBar(vScrollBar, rightToLeft, minimum: 0, maximum: 100, value);
+
+            Assert.True(VLastPageButton(vScrollBar).Bounds.Width > 0);
+            Assert.True(VLastPageButton(vScrollBar).Bounds.Height > 0);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 100, 100)]
+        [InlineData(RightToLeft.Yes, 100, 100)]
+        [InlineData(RightToLeft.No, 0, 0)]
+        [InlineData(RightToLeft.Yes, 0, 0)]
+        public void VScrollBarLastPageButtonAccessibleObject_Bounds_ReturnEmptyRectangle(RightToLeft rightToLeft, int maximum, int value)
+        {
+            using VScrollBar vScrollBar = new();
+            SetVScrollBar(vScrollBar, rightToLeft, minimum: 0, maximum, value);
+
+            Assert.True(VLastPageButton(vScrollBar).Bounds.Width == 0 || VLastPageButton(vScrollBar).Bounds.Height == 0);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 100, 0, AccessibleStates.None)]
+        [InlineData(RightToLeft.No, 100, 50, AccessibleStates.None)]
+        [InlineData(RightToLeft.No, 100, 100, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.Yes, 100, 0, AccessibleStates.None)]
+        [InlineData(RightToLeft.Yes, 100, 50, AccessibleStates.None)]
+        [InlineData(RightToLeft.Yes, 100, 100, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.No, 0, 0, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.Yes, 0, 0, AccessibleStates.Invisible)]
+        public void VScrollBarLastPageButtonAccessibleObject_State_ReturnsExpected(RightToLeft rightToLeft, int maximum, int value, AccessibleStates accessibleState)
+        {
+            using VScrollBar vScrollBar = new();
+            SetVScrollBar(vScrollBar, rightToLeft, minimum: 0, maximum, value);
+
+            Assert.Equal(accessibleState, VLastPageButton(vScrollBar).State);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 50)]
+        [InlineData(RightToLeft.Yes, 50)]
+        [InlineData(RightToLeft.No, 100)]
+        [InlineData(RightToLeft.Yes, 100)]
+        public void VScrollBarFirstPageButtonAccessibleObject_Bounds_ReturnRectangle(RightToLeft rightToLeft, int value)
+        {
+            using VScrollBar vScrollBar = new();
+            SetVScrollBar(vScrollBar, rightToLeft, minimum: 0, maximum: 100, value);
+
+            Assert.True(VFirstPageButton(vScrollBar).Bounds.Width > 0);
+            Assert.True(VFirstPageButton(vScrollBar).Bounds.Height > 0);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 100, 0, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.No, 100, 50, AccessibleStates.None)]
+        [InlineData(RightToLeft.No, 100, 100, AccessibleStates.None)]
+        [InlineData(RightToLeft.Yes, 100, 0, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.Yes, 100, 50, AccessibleStates.None)]
+        [InlineData(RightToLeft.Yes, 100, 100, AccessibleStates.None)]
+        [InlineData(RightToLeft.No, 0, 0, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.Yes, 0, 0, AccessibleStates.Invisible)]
+        public void VScrollBarFirstPageButtonAccessibleObject_State_ReturnsExpected(RightToLeft rightToLeft, int maximum, int value, AccessibleStates accessibleState)
+        {
+            using VScrollBar vScrollBar = new();
+            SetVScrollBar(vScrollBar, rightToLeft, minimum: 0, maximum, value);
+
+            Assert.Equal(accessibleState, VFirstPageButton(vScrollBar).State);
+        }
+
+        private void SetVScrollBar(VScrollBar vScrollBar, RightToLeft rightToLeft, int minimum, int maximum, int value)
+        {
+            Form form = new();
+            form.Show();
+            vScrollBar.RightToLeft = rightToLeft;
+            vScrollBar.Minimum = minimum;
+            vScrollBar.Maximum = maximum;
+            vScrollBar.Value = value;
+            vScrollBar.Size = new(50, 200);
+            vScrollBar.Parent = form;
+            Application.DoEvents();
+        }
+
+        private ScrollBar.ScrollBarFirstPageButtonAccessibleObject VFirstPageButton(VScrollBar vScrollBar)
+            => ((VScrollBar.ScrollBarAccessibleObject)vScrollBar.AccessibilityObject).FirstPageButtonAccessibleObject;
+
+        private ScrollBar.ScrollBarLastPageButtonAccessibleObject VLastPageButton(VScrollBar vScrollBar)
+            => ((VScrollBar.ScrollBarAccessibleObject)vScrollBar.AccessibilityObject).LastPageButtonAccessibleObject;
+
+        private void SetHScrollBar(HScrollBar hScrollBar, RightToLeft rightToLeft, int minimum, int maximum, int value)
+        {
+            Form form = new();
+            form.Show();
+            hScrollBar.RightToLeft = rightToLeft;
+            hScrollBar.Minimum = minimum;
+            hScrollBar.Maximum = maximum;
+            hScrollBar.Value = value;
+            hScrollBar.Size = new(200, 50);
+            hScrollBar.Parent = form;
+            Application.DoEvents();
+        }
+
+        private ScrollBar.ScrollBarFirstPageButtonAccessibleObject HFirstPageButton(HScrollBar hScrollBar)
+            => ((VScrollBar.ScrollBarAccessibleObject)hScrollBar.AccessibilityObject).FirstPageButtonAccessibleObject;
+
+        private ScrollBar.ScrollBarLastPageButtonAccessibleObject HLastPageButton(HScrollBar hScrollBar)
+            => ((VScrollBar.ScrollBarAccessibleObject)hScrollBar.AccessibilityObject).LastPageButtonAccessibleObject;
 
         private class VerticalScrollBar : ScrollBar
         {

@@ -24,12 +24,13 @@ namespace System.ComponentModel.Design
         /// </summary>
         IExtenderProvider[] IExtenderListService.GetExtenderProviders()
         {
-            if (_providers != null)
+            if (_providers is not null)
             {
                 IExtenderProvider[] providers = new IExtenderProvider[_providers.Count];
                 _providers.CopyTo(providers, 0);
                 return providers;
             }
+
             return Array.Empty<IExtenderProvider>();
         }
 
@@ -38,10 +39,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         void IExtenderProviderService.AddExtenderProvider(IExtenderProvider provider)
         {
-            if (provider is null)
-            {
-                throw new ArgumentNullException(nameof(provider));
-            }
+            ArgumentNullException.ThrowIfNull(provider);
 
             if (_providers is null)
             {
@@ -61,10 +59,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         void IExtenderProviderService.RemoveExtenderProvider(IExtenderProvider provider)
         {
-            if (provider is null)
-            {
-                throw new ArgumentNullException(nameof(provider));
-            }
+            ArgumentNullException.ThrowIfNull(provider);
 
             _providers?.Remove(provider);
         }

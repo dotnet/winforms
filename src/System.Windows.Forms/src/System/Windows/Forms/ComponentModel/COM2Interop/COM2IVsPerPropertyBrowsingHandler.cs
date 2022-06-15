@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using static Interop;
@@ -49,12 +47,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  In this method, the handler will add listeners to the events that
         ///  the Com2PropertyDescriptor surfaces that it cares about.
         /// </summary>
-        public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc)
+        public override void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc)
         {
             if (propDesc is null)
             {
                 return;
             }
+
             for (int i = 0; i < propDesc.Length; i++)
             {
                 propDesc[i].QueryGetDynamicAttributes += new GetAttributesEventHandler(OnGetDynamicAttributes);
@@ -80,7 +79,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             // should we localize this?
             string[] pHelpString = new string[1];
             HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, Kernel32.GetThreadLocale(), null, pHelpString);
-            if (hr == HRESULT.S_OK && pHelpString[0] != null)
+            if (hr == HRESULT.S_OK && pHelpString[0] is not null)
             {
                 attrEvent.Add(new DescriptionAttribute(pHelpString[0]));
             }
@@ -99,11 +98,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // we want to avoid allowing clients to force a bad property to be browsable,
                 // so we don't allow things that are marked as non browsable to become browsable,
                 // only the other way around.
-                //
                 if (sender.CanShow)
                 {
                     // should we hide this?
-                    BOOL pfHide = sender.Attributes[typeof(BrowsableAttribute)].Equals(BrowsableAttribute.No) ? BOOL.TRUE : BOOL.FALSE;
+                    BOOL pfHide = sender.Attributes[typeof(BrowsableAttribute)] is Attribute browsableAttribute
+                                && browsableAttribute.Equals(BrowsableAttribute.No) ? BOOL.TRUE : BOOL.FALSE;
                     hr = vsObj.HideProperty(sender.DISPID, &pfHide);
                     if (hr == HRESULT.S_OK)
                     {
@@ -122,6 +121,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
             }
+
             Debug.Assert(sender.TargetObject is null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
@@ -150,7 +150,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // get the localized name, if applicable
                 string[] pNameString = new string[1];
                 HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, Kernel32.GetThreadLocale(), pNameString, null);
-                if (hr == HRESULT.S_OK && pNameString[0] != null)
+                if (hr == HRESULT.S_OK && pNameString[0] is not null)
                 {
                     nameItem.Name = pNameString[0];
                 }
@@ -193,14 +193,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     HRESULT hr = vsObj.DisplayChildProperties(sender.DISPID, &pfResult);
                     if (gveevent.TypeConverter is Com2IDispatchConverter)
                     {
-                        gveevent.TypeConverter = new Com2IDispatchConverter(sender, (hr == HRESULT.S_OK && pfResult.IsTrue()));
+                        gveevent.TypeConverter = new Com2IDispatchConverter(sender, hr == HRESULT.S_OK && pfResult.IsTrue());
                     }
                     else
                     {
-                        gveevent.TypeConverter = new Com2IDispatchConverter(sender, (hr == HRESULT.S_OK && pfResult.IsTrue()), gveevent.TypeConverter);
+                        gveevent.TypeConverter = new Com2IDispatchConverter(hr == HRESULT.S_OK && pfResult.IsTrue(), gveevent.TypeConverter);
                     }
                 }
             }
+
             Debug.Assert(sender.TargetObject is null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 

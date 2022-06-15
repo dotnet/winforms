@@ -29,7 +29,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the culture of the current input language.
         /// </summary>
-        public CultureInfo Culture => new CultureInfo((int)_handle & 0xFFFF);
+        public CultureInfo Culture => new CultureInfo(PARAM.ToInt(_handle) & 0xFFFF);
 
         /// <summary>
         ///  Gets or sets the input language for the current thread.
@@ -50,6 +50,7 @@ namespace System.Windows.Forms
                 {
                     value = DefaultInputLanguage;
                 }
+
                 IntPtr handleOld = User32.ActivateKeyboardLayout(value.Handle, 0);
                 if (handleOld == IntPtr.Zero)
                 {
@@ -86,7 +87,7 @@ namespace System.Windows.Forms
                 int size = User32.GetKeyboardLayoutList(0, null);
 
                 var handles = new IntPtr[size];
-                fixed (IntPtr *pHandles = handles)
+                fixed (IntPtr* pHandles = handles)
                 {
                     User32.GetKeyboardLayoutList(size, pHandles);
                 }
@@ -168,7 +169,7 @@ namespace System.Windows.Forms
                 // Look for a substitution
                 RegistryKey? substitutions = Registry.CurrentUser.OpenSubKey("Keyboard Layout\\Substitutes");
                 string[]? encodings = null;
-                if (substitutions != null)
+                if (substitutions is not null)
                 {
                     encodings = substitutions.GetValueNames();
 
@@ -196,7 +197,7 @@ namespace System.Windows.Forms
                 }
 
                 using RegistryKey? layouts = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts");
-                if (layouts != null)
+                if (layouts is not null)
                 {
                     encodings = layouts.GetSubKeyNames();
 
@@ -222,7 +223,7 @@ namespace System.Windows.Forms
                                 layoutName = (string?)key.GetValue("Layout Text");
                             }
 
-                            if (layoutName != null)
+                            if (layoutName is not null)
                             {
                                 return layoutName;
                             }
@@ -262,7 +263,7 @@ namespace System.Windows.Forms
                                     layoutName = (string?)key.GetValue("Layout Text");
                                 }
 
-                                if (layoutName != null)
+                                if (layoutName is not null)
                                 {
                                     return layoutName;
                                 }
@@ -282,7 +283,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static string? GetLocalizedKeyboardLayoutName(string? layoutDisplayName)
         {
-            if (layoutDisplayName != null)
+            if (layoutDisplayName is not null)
             {
                 var sb = new StringBuilder(512);
                 HRESULT res = Shlwapi.SHLoadIndirectString(layoutDisplayName, sb, (uint)sb.Capacity, IntPtr.Zero);
@@ -300,7 +301,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static InputLanguageChangedEventArgs CreateInputLanguageChangedEventArgs(Message m)
         {
-            return new InputLanguageChangedEventArgs(new InputLanguage(m.LParam), unchecked((byte)(long)m.WParam));
+            return new InputLanguageChangedEventArgs(new InputLanguage(m.LParamInternal), (byte)m.WParamInternal);
         }
 
         /// <summary>
@@ -308,10 +309,10 @@ namespace System.Windows.Forms
         /// </summary>
         internal static InputLanguageChangingEventArgs CreateInputLanguageChangingEventArgs(Message m)
         {
-            var inputLanguage = new InputLanguage(m.LParam);
+            var inputLanguage = new InputLanguage(m.LParamInternal);
 
             // NOTE: by default we should allow any locale switch
-            bool localeSupportedBySystem = m.WParam != IntPtr.Zero;
+            bool localeSupportedBySystem = m.WParamInternal != 0;
             return new InputLanguageChangingEventArgs(inputLanguage, localeSupportedBySystem);
         }
 
@@ -326,10 +327,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static InputLanguage? FromCulture(CultureInfo culture)
         {
-            if (culture is null)
-            {
-                throw new ArgumentNullException(nameof(culture));
-            }
+            ArgumentNullException.ThrowIfNull(culture);
 
             // KeyboardLayoutId is the LCID for built-in cultures, but it
             // is the CU-preferred keyboard language for custom cultures.
@@ -353,7 +351,7 @@ namespace System.Windows.Forms
 
         private static string PadWithZeroes(string input, int length)
         {
-            return "0000000000000000".Substring(0, length - input.Length) + input;
+            return string.Concat("0000000000000000".AsSpan(0, length - input.Length), input);
         }
     }
 }

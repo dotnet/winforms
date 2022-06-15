@@ -12,23 +12,23 @@ namespace System.Drawing.Design
     public partial class ContentAlignmentEditor
     {
         /// <summary>
-        /// Control we use to provide the content alignment UI.
+        ///  Control we use to provide the content alignment UI.
         /// </summary>
         private class ContentUI : Control
         {
-            private IWindowsFormsEditorService _edSvc;
+            private IWindowsFormsEditorService _editorService;
             private double _pixelFactor;
             private bool _allowExit = true;
 
-            private readonly RadioButton _topLeft = new RadioButton();
-            private readonly RadioButton _topCenter = new RadioButton();
-            private readonly RadioButton _topRight = new RadioButton();
-            private readonly RadioButton _middleLeft = new RadioButton();
-            private readonly RadioButton _middleCenter = new RadioButton();
-            private readonly RadioButton _middleRight = new RadioButton();
-            private readonly RadioButton _bottomLeft = new RadioButton();
-            private readonly RadioButton _bottomCenter = new RadioButton();
-            private readonly RadioButton _bottomRight = new RadioButton();
+            private readonly RadioButton _topLeft = new();
+            private readonly RadioButton _topCenter = new();
+            private readonly RadioButton _topRight = new();
+            private readonly RadioButton _middleLeft = new();
+            private readonly RadioButton _middleCenter = new();
+            private readonly RadioButton _middleRight = new();
+            private readonly RadioButton _bottomLeft = new();
+            private readonly RadioButton _bottomCenter = new();
+            private readonly RadioButton _bottomRight = new();
 
             public ContentUI()
             {
@@ -121,7 +121,7 @@ namespace System.Drawing.Design
 
             public void End()
             {
-                _edSvc = null;
+                _editorService = null;
                 Value = null;
             }
 
@@ -158,7 +158,7 @@ namespace System.Drawing.Design
                     // This is to invoke parent changed message that help rescaling the controls based on parent font (when it changed)
                     Controls.Clear();
 
-                    //local cache.
+                    // Local cache.
                     var pixel_24 = DpiHelper.ConvertToGivenDpiPixel(24, _pixelFactor);
                     var pixel_25 = DpiHelper.ConvertToGivenDpiPixel(25, _pixelFactor);
                     var pixel_32 = DpiHelper.ConvertToGivenDpiPixel(32, _pixelFactor);
@@ -305,7 +305,7 @@ namespace System.Drawing.Design
                 if (_allowExit)
                 {
                     Value = Align;
-                    _edSvc.CloseDropDown();
+                    _editorService.CloseDropDown();
                 }
             }
 
@@ -319,14 +319,14 @@ namespace System.Drawing.Design
 
             public void Start(IWindowsFormsEditorService edSvc, object value)
             {
-                _edSvc = edSvc;
+                _editorService = edSvc;
                 Value = value;
 
                 Align = (value is null) ? ContentAlignment.MiddleLeft : (ContentAlignment)value;
             }
 
             /// <summary>
-            /// Here, we handle the return, tab, and escape keys appropriately
+            ///  Here we handle the return, tab, and escape keys appropriately.
             /// </summary>
             protected override bool ProcessDialogKey(Keys keyData)
             {
@@ -360,14 +360,16 @@ namespace System.Drawing.Design
                             OptionClick(this, EventArgs.Empty);
                             return true;
                         }
+
                         goto default;
 
                     case Keys.Escape:
                         if ((keyData & (Keys.Alt | Keys.Control)) == 0)
                         {
-                            _edSvc.CloseDropDown();
+                            _editorService.CloseDropDown();
                             return true;
                         }
+
                         goto default;
 
                     case Keys.Tab:
@@ -385,15 +387,16 @@ namespace System.Drawing.Design
 
                             for (int i = 0; i < Controls.Count; i++)
                             {
-                                if (Controls[i] is RadioButton && Controls[i].TabIndex == nextTabIndex)
+                                if (Controls[i] is RadioButton button && Controls[i].TabIndex == nextTabIndex)
                                 {
-                                    CheckedControl = (RadioButton)Controls[i];
+                                    CheckedControl = button;
                                     return true;
                                 }
                             }
 
                             return true;
                         }
+
                         goto default;
 
                     default:
@@ -402,14 +405,15 @@ namespace System.Drawing.Design
             }
 
             /// <summary>
-            /// Imagine the grid to choose alignment:
-            /// [TL] [TC] [TR]
-            /// [ML] [MC] [MR]
-            /// [BL] [BC] [BR]
-            /// Pressing Down on any of these will lead to the same column but
-            /// a lower row; and pressing Down on the bottom row is meaningless
+            ///  Imagine a grid to choose alignment:
+            ///
+            ///   [TL] [TC] [TR]
+            ///   [ML] [MC] [MR]
+            ///   [BL] [BC] [BR]
+            ///
+            ///  Pressing Down on any of these will lead to the same column but
+            ///  a lower row; and pressing Down on the bottom row is meaningless
             /// </summary>
-            /// <param name="checkedControl"></param>
             private void ProcessDownKey(RadioButton checkedControl)
             {
                 if (checkedControl == _topRight)
@@ -439,14 +443,15 @@ namespace System.Drawing.Design
             }
 
             /// <summary>
-            /// Imagine the grid to choose alignment:
-            /// [TL] [TC] [TR]
-            /// [ML] [MC] [MR]
-            /// [BL] [BC] [BR]
-            /// Pressing Up on any of these will lead to the same column but
-            /// a higher row; and pressing Up on the top row is meaningless
+            ///  Imagine a grid to choose alignment:
+            ///
+            ///   [TL] [TC] [TR]
+            ///   [ML] [MC] [MR]
+            ///   [BL] [BC] [BR]
+            ///
+            ///  Pressing Up on any of these will lead to the same column but
+            ///  a higher row; and pressing Up on the top row is meaningless
             /// </summary>
-            /// <param name="checkedControl"></param>
             private void ProcessUpKey(RadioButton checkedControl)
             {
                 if (checkedControl == _bottomRight)
@@ -476,14 +481,15 @@ namespace System.Drawing.Design
             }
 
             /// <summary>
-            /// Imagine the grid to choose alignment:
-            /// [TL] [TC] [TR]
-            /// [ML] [MC] [MR]
-            /// [BL] [BC] [BR]
-            /// Pressing Right on any of these will lead to the same row but
-            /// a farther Right column; and pressing right on the right-most column is meaningless
+            ///  Imagine a grid to choose alignment:
+            ///
+            ///   [TL] [TC] [TR]
+            ///   [ML] [MC] [MR]
+            ///   [BL] [BC] [BR]
+            ///
+            ///  Pressing Right on any of these will lead to the same row but a farther Right column;
+            ///  and pressing right on the right-most column is meaningless.
             /// </summary>
-            /// <param name="checkedControl"></param>
             private void ProcessRightKey(RadioButton checkedControl)
             {
                 if (checkedControl == _bottomLeft)
@@ -513,14 +519,15 @@ namespace System.Drawing.Design
             }
 
             /// <summary>
-            /// Imagine the grid to choose alignment:
-            /// [TL] [TC] [TR]
-            /// [ML] [MC] [MR]
-            /// [BL] [BC] [BR]
-            /// Pressing Left on any of these will lead to the same row but
-            /// a farther left column; and pressing Left on the left-most column is meaningless
+            ///  Imagine a grid to choose alignment:
+            ///
+            ///   [TL] [TC] [TR]
+            ///   [ML] [MC] [MR]
+            ///   [BL] [BC] [BR]
+            ///
+            ///  Pressing Left on any of these will lead to the same row but a farther left column; and pressing Left
+            ///  on the left-most column is meaningless
             /// </summary>
-            /// <param name="checkedControl"></param>
             private void ProcessLeftKey(RadioButton checkedControl)
             {
                 if (checkedControl == _bottomRight)
@@ -550,7 +557,7 @@ namespace System.Drawing.Design
             }
 
             /// <summary>
-            /// Gets/Sets the checked control value of our editor
+            ///  Gets/Sets the checked control value of our editor
             /// </summary>
             private RadioButton CheckedControl
             {
@@ -563,6 +570,7 @@ namespace System.Drawing.Design
                             return radioButton;
                         }
                     }
+
                     return _middleLeft;
                 }
                 set

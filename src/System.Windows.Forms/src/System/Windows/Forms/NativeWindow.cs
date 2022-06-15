@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -36,6 +33,7 @@ namespace System.Windows.Forms
 
         [ThreadStatic]
         private static byte t_wndProcFlags = 0;
+
         [ThreadStatic]
         private static byte t_userSetProcFlags = 0;
         private static byte s_userSetProcFlagsForApp;
@@ -48,7 +46,7 @@ namespace System.Windows.Forms
         private static readonly object s_createWindowSyncObject = new object();
 
         // Our window procedure delegate
-        private User32.WNDPROC _windowProc;
+        private User32.WNDPROC? _windowProc;
 
         // The native handle for our delegate
         private IntPtr _windowProcHandle;
@@ -59,7 +57,7 @@ namespace System.Windows.Forms
         private IntPtr _priorWindowProcHandle;
         private bool _suppressedGC;
         private bool _ownHandle;
-        private NativeWindow _nextWindow;
+        private NativeWindow? _nextWindow;
         private readonly WeakReference _weakThisPtr;
 
         static NativeWindow()
@@ -73,11 +71,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Cache window DpiContext awareness information that helps to create handle with right context at the later time.
+        /// Cache window DpiContext awareness information that helps to create handle with right context at the later time.
         /// </summary>
-        internal IntPtr DpiAwarenessContext { get; } = DpiHelper.IsScalingRequirementMet
-            ? User32.GetThreadDpiAwarenessContext()
-            : User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT;
+        internal IntPtr DpiAwarenessContext { get; } = User32.GetThreadDpiAwarenessContext();
 
         /// <summary>
         ///  Override's the base object's finalize method.
@@ -159,7 +155,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This returns the prior NativeWindow created with the same native handle, if any.
         /// </summary>
-        internal NativeWindow PreviousWindow { get; private set; }
+        internal NativeWindow? PreviousWindow { get; private set; }
 
         /// <summary>
         ///  Address of the Windows default WNDPROC (DefWindowProcW).
@@ -274,6 +270,7 @@ namespace System.Windows.Forms
                             Debug.Assert(window.PreviousWindow._nextWindow is null, "Last window in chain should have null next ptr");
                             window.PreviousWindow._nextWindow = window;
                         }
+
                         oldRoot.Free();
                     }
                 }
@@ -367,7 +364,7 @@ namespace System.Windows.Forms
 
             try
             {
-                if (_weakThisPtr.IsAlive && _weakThisPtr.Target != null)
+                if (_weakThisPtr.IsAlive && _weakThisPtr.Target is not null)
                 {
                     WndProc(ref m);
                 }
@@ -382,6 +379,7 @@ namespace System.Windows.Forms
                 {
                     throw;
                 }
+
                 OnThreadException(e);
             }
             finally
@@ -397,7 +395,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            return m.Result;
+            return m.ResultInternal;
         }
 
         /// <summary>
@@ -434,7 +432,7 @@ namespace System.Windows.Forms
                     IntPtr createResult = IntPtr.Zero;
                     int lastWin32Error = 0;
 
-                    NativeWindow prevTargetWindow = windowClass._targetWindow;
+                    NativeWindow? prevTargetWindow = windowClass._targetWindow;
                     try
                     {
                         windowClass._targetWindow = this;
@@ -452,7 +450,7 @@ namespace System.Windows.Forms
                                 // CreateWindowEx throws if WindowText is greater than the max
                                 // length of a 16 bit int (32767).
                                 // If it exceeds the max, we should take the substring....
-                                if (cp.Caption != null && cp.Caption.Length > short.MaxValue)
+                                if (cp.Caption is not null && cp.Caption.Length > short.MaxValue)
                                 {
                                     cp.Caption = cp.Caption.Substring(0, short.MaxValue);
                                 }
@@ -490,6 +488,7 @@ namespace System.Windows.Forms
                     {
                         throw new Win32Exception(lastWin32Error, SR.ErrorCreatingHandle);
                     }
+
                     _ownHandle = true;
                 }
             }
@@ -509,14 +508,15 @@ namespace System.Windows.Forms
 
                     // At this point, there isn't much we can do.  There's a small chance the following
                     // line will allow the rest of the program to run, but don't get your hopes up.
-                    m.Result = User32.DefWindowProcW(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
+                    m.ResultInternal = User32.DefWindowProcW(m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return;
                 }
-                m.Result = User32.CallWindowProcW(_priorWindowProcHandle, m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
+
+                m.ResultInternal = User32.CallWindowProcW(_priorWindowProcHandle, m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
             }
             else
             {
-                m.Result = PreviousWindow.Callback(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
+                m.ResultInternal = PreviousWindow.Callback(m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
             }
         }
 
@@ -550,19 +550,20 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the window associated with the specified <paramref name="handle"/>.
         /// </summary>
-        public static NativeWindow FromHandle(IntPtr handle)
+        public static NativeWindow? FromHandle(IntPtr handle)
             => handle != IntPtr.Zero ? GetWindowFromTable(handle) : null;
 
         /// <summary>
         ///  Returns the native window for the given handle, or null if
         ///  the handle is not in our hash table.
         /// </summary>
-        private static NativeWindow GetWindowFromTable(IntPtr handle)
+        private static NativeWindow? GetWindowFromTable(IntPtr handle)
         {
             if (s_windowHandles.TryGetValue(handle, out GCHandle value) && value.IsAllocated)
             {
-                return (NativeWindow)value.Target;
+                return (NativeWindow?)value.Target;
             }
+
             return null;
         }
 
@@ -570,7 +571,7 @@ namespace System.Windows.Forms
         ///  Returns the handle from the given <paramref name="id"/> if found, otherwise returns
         ///  <see cref="IntPtr.Zero"/>.
         /// </summary>
-        internal IntPtr GetHandleFromWindowId(short id)
+        internal static IntPtr GetHandleFromWindowId(short id)
         {
             if (!s_windowIds.TryGetValue(id, out IntPtr handle))
             {
@@ -599,12 +600,12 @@ namespace System.Windows.Forms
 #pragma warning disable SYSLIB0004 // Type or member is obsolete
         [PrePrepareMethod]
 #pragma warning restore SYSLIB0004 // Type or member is obsolete
-        private static void OnShutdown(object sender, EventArgs e)
+        private static void OnShutdown(object? sender, EventArgs e)
         {
             // If we still have windows allocated, we must sling them to userDefWindowProc
             // or else they will AV if they get a message after the managed code has been
             // removed.  In debug builds, we assert and give the "ToString" of the native
-            // window. In retail we just detatch the window proc and let it go.  Note that
+            // window. In retail we just detach the window proc and let it go.  Note that
             // we cannot call DestroyWindow because this API will fail if called from
             // an incorrect thread.
 
@@ -627,8 +628,8 @@ namespace System.Windows.Forms
                             // way the rest of WinForms won't think the handle is still valid here.
                             if (entry.Value.IsAllocated)
                             {
-                                NativeWindow w = (NativeWindow)entry.Value.Target;
-                                if (w != null)
+                                NativeWindow? w = (NativeWindow?)entry.Value.Target;
+                                if (w is not null)
                                 {
                                     w.Handle = IntPtr.Zero;
                                 }
@@ -691,7 +692,7 @@ namespace System.Windows.Forms
 
                 Handle = IntPtr.Zero;
 
-                if (_weakThisPtr.IsAlive && _weakThisPtr.Target != null)
+                if (_weakThisPtr.IsAlive && _weakThisPtr.Target is not null)
                 {
                     // We're not already finalizing.
                     OnHandleChange();
@@ -714,13 +715,13 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (window.PreviousWindow != null)
+                if (window.PreviousWindow is not null)
                 {
                     // Connect the prior window directly to the next window (if any)
                     window.PreviousWindow._nextWindow = window._nextWindow;
                 }
 
-                if (window._nextWindow != null)
+                if (window._nextWindow is not null)
                 {
                     // Connect the next window to the prior window
                     window._nextWindow._priorWindowProcHandle = window._priorWindowProcHandle;
@@ -737,7 +738,7 @@ namespace System.Windows.Forms
                         root.Free();
                     }
 
-                    if (window.PreviousWindow != null)
+                    if (window.PreviousWindow is not null)
                     {
                         s_windowHandles[handle] = GCHandle.Alloc(window.PreviousWindow, GCHandleType.Weak);
                     }
@@ -785,6 +786,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.ApplicationCannotChangeApplicationExceptionMode);
             }
+
             if (threadScope && t_anyHandleCreated)
             {
                 throw new InvalidOperationException(SR.ApplicationCannotChangeThreadExceptionMode);
@@ -801,6 +803,7 @@ namespace System.Windows.Forms
                     {
                         s_userSetProcFlagsForApp = 0;
                     }
+
                     break;
                 case UnhandledExceptionMode.ThrowException:
                     if (threadScope)
@@ -811,6 +814,7 @@ namespace System.Windows.Forms
                     {
                         s_userSetProcFlagsForApp = UseDebuggableWndProc | InitializedFlags;
                     }
+
                     break;
                 case UnhandledExceptionMode.CatchException:
                     if (threadScope)
@@ -821,6 +825,7 @@ namespace System.Windows.Forms
                     {
                         s_userSetProcFlagsForApp = InitializedFlags;
                     }
+
                     break;
                 default:
                     throw new InvalidEnumArgumentException(nameof(mode), (int)mode, typeof(UnhandledExceptionMode));
@@ -838,7 +843,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void UnSubclass()
         {
-            bool finalizing = (!_weakThisPtr.IsAlive || _weakThisPtr.Target is null);
+            bool finalizing = !_weakThisPtr.IsAlive || _weakThisPtr.Target is null;
 
             // Don't touch if the current window proc is not ours.
 
@@ -868,7 +873,7 @@ namespace System.Windows.Forms
                         // Here we are not finalizing so we use the windowProc for our previous window.  This may
                         // DIFFER from the value we are currently storing in defWindowProc because someone may
                         // have re-subclassed.
-                        User32.SetWindowLong(this, User32.GWL.WNDPROC, PreviousWindow._windowProc);
+                        User32.SetWindowLong(this, User32.GWL.WNDPROC, PreviousWindow._windowProc!);
                     }
                 }
             }

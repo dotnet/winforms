@@ -13,7 +13,7 @@ namespace System.Drawing.Design
     public class ToolboxComponentsCreatingEventArgs : EventArgs
     {
         /// <summary>
-        ///  Initializes a new instance of the <see cref='System.Drawing.Design.ToolboxComponentsCreatingEventArgs'/> object.
+        ///  Initializes a new instance of the <see cref="ToolboxComponentsCreatingEventArgs"/> object.
         /// </summary>
         public ToolboxComponentsCreatingEventArgs(IDesignerHost host)
         {

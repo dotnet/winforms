@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
@@ -18,12 +16,13 @@ namespace System.Windows.Forms.Layout
         ///  Determines if this converter can convert an object in the given source
         ///  type to the native type of the converter.
         /// </summary>
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
             if (sourceType == typeof(string))
             {
                 return true;
             }
+
             return base.CanConvertFrom(context, sourceType);
         }
 
@@ -31,24 +30,25 @@ namespace System.Windows.Forms.Layout
         ///  Gets a value indicating whether this converter can
         ///  convert an object to the given destination type using the context.
         /// </summary>
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
         {
             if (destinationType == typeof(InstanceDescriptor) || destinationType == typeof(string))
             {
                 return true;
             }
+
             return base.CanConvertTo(context, destinationType);
         }
 
         /// <summary>
         ///  Converts the given object to the converter's native type.
         /// </summary>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
-            if (value is string)
+            if (value is string valueAsString)
             {
                 XmlDocument tableLayoutSettingsXml = new XmlDocument();
-                tableLayoutSettingsXml.LoadXml(value as string);
+                tableLayoutSettingsXml.LoadXml(valueAsString);
 
                 TableLayoutSettings settings = new TableLayoutSettings();
 
@@ -57,22 +57,19 @@ namespace System.Windows.Forms.Layout
                 ParseStyles(settings, tableLayoutSettingsXml.GetElementsByTagName("Rows"), /*isColumn=*/false);
                 return settings;
             }
+
             return base.ConvertFrom(context, culture, value);
         }
 
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
-            if (value is TableLayoutSettings && (destinationType == typeof(string)))
+            if (value is TableLayoutSettings tableLayoutSettings && (destinationType == typeof(string)))
             {
-                TableLayoutSettings tableLayoutSettings = value as TableLayoutSettings;
-
                 StringBuilder xmlStringBuilder = new StringBuilder();
                 XmlWriter xmlWriter = XmlWriter.Create(xmlStringBuilder);
                 xmlWriter.WriteStartElement("TableLayoutSettings");
 
-                //
                 // write controls
-                //
                 xmlWriter.WriteStartElement("Controls");
 
                 foreach (TableLayoutSettings.ControlInformation c in tableLayoutSettings.GetControlsInformation())
@@ -92,37 +89,38 @@ namespace System.Windows.Forms.Layout
 
                     xmlWriter.WriteEndElement();
                 }
+
                 xmlWriter.WriteEndElement(); // end Controls
 
-                //
                 // write columns
-                //
                 xmlWriter.WriteStartElement("Columns");
                 StringBuilder columnStyles = new StringBuilder();
                 foreach (ColumnStyle colStyle in tableLayoutSettings.ColumnStyles)
                 {
                     columnStyles.AppendFormat("{0},{1},", colStyle.SizeType, colStyle.Width);
                 }
+
                 if (columnStyles.Length > 0)
                 {
                     columnStyles.Remove(columnStyles.Length - 1, 1);
                 }
+
                 xmlWriter.WriteAttributeString("Styles", columnStyles.ToString());
                 xmlWriter.WriteEndElement(); // end columns
 
-                //
                 // write rows
-                //
                 xmlWriter.WriteStartElement("Rows");
                 StringBuilder rowStyles = new StringBuilder();
                 foreach (RowStyle rowStyle in tableLayoutSettings.RowStyles)
                 {
                     rowStyles.AppendFormat("{0},{1},", rowStyle.SizeType, rowStyle.Height);
                 }
+
                 if (rowStyles.Length > 0)
                 {
                     rowStyles.Remove(rowStyles.Length - 1, 1);
                 }
+
                 xmlWriter.WriteAttributeString("Styles", rowStyles.ToString());
                 xmlWriter.WriteEndElement(); // end Rows
 
@@ -131,44 +129,36 @@ namespace System.Windows.Forms.Layout
                 xmlWriter.Close();
                 return xmlStringBuilder.ToString();
             }
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        private string GetAttributeValue(XmlNode node, string attribute)
+        private static string? GetAttributeValue(XmlNode node, string attribute)
         {
-            XmlAttribute attr = node.Attributes[attribute];
-            if (attr != null)
-            {
-                return attr.Value;
-            }
-            return null;
+            XmlAttribute? attr = node.Attributes?[attribute];
+
+            return attr?.Value;
         }
 
-        private int GetAttributeValue(XmlNode node, string attribute, int valueIfNotFound)
+        private static int GetAttributeValue(XmlNode node, string attribute, int valueIfNotFound)
         {
-            string attributeValue = GetAttributeValue(node, attribute);
-            if (!string.IsNullOrEmpty(attributeValue))
-            {
-                if (int.TryParse(attributeValue, out int result))
-                {
-                    return result;
-                }
-            }
-            return valueIfNotFound;
+            string? attributeValue = GetAttributeValue(node, attribute);
+
+            return int.TryParse(attributeValue, out int result) ? result : valueIfNotFound;
         }
 
-        private void ParseControls(TableLayoutSettings settings, XmlNodeList controlXmlFragments)
+        private static void ParseControls(TableLayoutSettings settings, XmlNodeList controlXmlFragments)
         {
             foreach (XmlNode controlXmlNode in controlXmlFragments)
             {
-                string name = GetAttributeValue(controlXmlNode, "Name");
+                string? name = GetAttributeValue(controlXmlNode, "Name");
 
                 if (!string.IsNullOrEmpty(name))
                 {
                     int row = GetAttributeValue(controlXmlNode, "Row",       /*default*/-1);
                     int rowSpan = GetAttributeValue(controlXmlNode, "RowSpan",   /*default*/1);
                     int column = GetAttributeValue(controlXmlNode, "Column",    /*default*/-1);
-                    int columnSpan = GetAttributeValue(controlXmlNode, "ColumnSpan",/*default*/1);
+                    int columnSpan = GetAttributeValue(controlXmlNode, "ColumnSpan", /*default*/1);
 
                     settings.SetRow(name, row);
                     settings.SetColumn(name, column);
@@ -178,11 +168,11 @@ namespace System.Windows.Forms.Layout
             }
         }
 
-        private void ParseStyles(TableLayoutSettings settings, XmlNodeList controlXmlFragments, bool columns)
+        private static void ParseStyles(TableLayoutSettings settings, XmlNodeList controlXmlFragments, bool columns)
         {
             foreach (XmlNode styleXmlNode in controlXmlFragments)
             {
-                string styleString = GetAttributeValue(styleXmlNode, "Styles");
+                string? styleString = GetAttributeValue(styleXmlNode, "Styles");
                 Type sizeTypeType = typeof(SizeType);
 
                 // styleString will consist of N Column/Row styles serialized in the following format
@@ -204,7 +194,8 @@ namespace System.Windows.Forms.Layout
                         {
                             nextIndex++;
                         }
-                        SizeType type = (SizeType)Enum.Parse(sizeTypeType, styleString.Substring(currentIndex, nextIndex - currentIndex), true);
+
+                        SizeType type = (SizeType)Enum.Parse(sizeTypeType, styleString.AsSpan(currentIndex, nextIndex - currentIndex), true);
 
                         // ----- Float Parsing --------------
                         // Find the next Digit (start of the float)
@@ -212,6 +203,7 @@ namespace System.Windows.Forms.Layout
                         {
                             nextIndex++;
                         }
+
                         // Append digits left of the decimal delimiter(s)
                         StringBuilder floatStringBuilder = new StringBuilder();
                         while ((nextIndex < styleString.Length) && (char.IsDigit(styleString[nextIndex])))
@@ -219,6 +211,7 @@ namespace System.Windows.Forms.Layout
                             floatStringBuilder.Append(styleString[nextIndex]);
                             nextIndex++;
                         }
+
                         // Append culture invariant delimiter
                         floatStringBuilder.Append('.');
                         // Append digits right of the decimal delimiter(s)
@@ -228,8 +221,10 @@ namespace System.Windows.Forms.Layout
                             {
                                 floatStringBuilder.Append(styleString[nextIndex]);
                             }
+
                             nextIndex++;
                         }
+
                         string floatString = floatStringBuilder.ToString();
                         if (!float.TryParse(floatString, NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat, out float width))
                         {

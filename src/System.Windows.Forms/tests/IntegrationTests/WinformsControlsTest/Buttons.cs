@@ -2,64 +2,102 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Windows.Forms;
 
 namespace WinformsControlsTest
 {
     public partial class Buttons : Form
     {
+        private readonly FlatStyle[] _styles =
+        {
+            FlatStyle.Flat,
+            FlatStyle.Popup,
+            FlatStyle.Standard,
+            FlatStyle.System
+        };
+
         public Buttons()
         {
             InitializeComponent();
         }
 
-        private readonly FlatStyle[] styles = { FlatStyle.Flat, FlatStyle.Popup, FlatStyle.Standard, FlatStyle.System };
-        private void Test1_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
-            RadioButton r;
-            for (int i = 0; i < styles.Length; i++)
+            var table = new TableLayoutPanel
             {
-                r = new RadioButton
+                Dock = DockStyle.Fill,
+                ColumnCount = 3
+            };
+            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            Controls.Add(table);
+
+            var panel = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                FlowDirection = FlowDirection.TopDown
+            };
+            table.Controls.Add(panel, column: 0, row: 0);
+
+            RadioButton radioButton;
+            foreach (FlatStyle style in _styles)
+            {
+                radioButton = new RadioButton
                 {
-                    Location = new System.Drawing.Point(20, 20 + 60 * i),
-                    AutoSize = false,
-                    Size = new System.Drawing.Size(100, 20),
-                    FlatStyle = styles[i],
-                    Text = styles[i].ToString(),
+                    AutoSize = true,
+                    FlatStyle = style,
+                    Text = style.ToString(),
                     Checked = true
                 };
-                Controls.Add(r);
+
+                panel.Controls.Add(radioButton);
             }
 
-            CheckBox c;
-            for (int i = 0; i < styles.Length; i++)
+            panel = new FlowLayoutPanel
             {
-                c = new CheckBox
+                Dock = DockStyle.Fill,
+                FlowDirection = FlowDirection.TopDown
+            };
+            table.Controls.Add(panel, column: 1, row: 0);
+
+            CheckBox checkBox;
+            foreach (FlatStyle style in _styles)
+            {
+                checkBox = new CheckBox
                 {
-                    Location = new System.Drawing.Point(120, 20 + 60 * i),
-                    AutoSize = false,
-                    Size = new System.Drawing.Size(100, 20),
-                    FlatStyle = styles[i],
-                    Text = styles[i].ToString(),
+                    AutoSize = true,
+                    FlatStyle = style,
+                    Text = style.ToString(),
                     Checked = true
                 };
-                Controls.Add(c);
+
+                panel.Controls.Add(checkBox);
             }
 
-            Button b;
-            for (int i = 0; i < styles.Length; i++)
+            panel = new FlowLayoutPanel
             {
-                b = new Button
+                Dock = DockStyle.Fill,
+                FlowDirection = FlowDirection.TopDown
+            };
+            table.Controls.Add(panel, column: 2, row: 0);
+
+            Button button;
+            foreach (FlatStyle style in _styles)
+            {
+                button = new Button
                 {
-                    Location = new System.Drawing.Point(220, 20 + 60 * i),
-                    AutoSize = false,
-                    Size = new System.Drawing.Size(100, 20),
-                    FlatStyle = styles[i],
-                    Text = styles[i].ToString()
+                    AutoSize = true,
+                    FlatStyle = style,
+                    Text = style.ToString()
                 };
-                Controls.Add(b);
+
+                toolTip1.SetToolTip(button, $"{style}.");
+
+                panel.Controls.Add(button);
             }
+
+            base.OnLoad(e);
         }
     }
 }

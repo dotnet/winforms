@@ -23,21 +23,20 @@ namespace System.Windows.Forms
         /// </summary>
         internal ListManagerBindingsCollection(BindingManagerBase bindingManagerBase) : base()
         {
-            Debug.Assert(bindingManagerBase != null, "How could a listmanagerbindingscollection not have a bindingManagerBase associated with it!");
+            Debug.Assert(bindingManagerBase is not null, "How could a listmanagerbindingscollection not have a bindingManagerBase associated with it!");
             _bindingManagerBase = bindingManagerBase;
         }
 
         protected override void AddCore(Binding dataBinding)
         {
-            if (dataBinding is null)
-            {
-                throw new ArgumentNullException(nameof(dataBinding));
-            }
+            ArgumentNullException.ThrowIfNull(dataBinding);
+
             if (dataBinding.BindingManagerBase == _bindingManagerBase)
             {
                 throw new ArgumentException(SR.BindingsCollectionAdd1, nameof(dataBinding));
             }
-            if (dataBinding.BindingManagerBase != null)
+
+            if (dataBinding.BindingManagerBase is not null)
             {
                 throw new ArgumentException(SR.BindingsCollectionAdd2, nameof(dataBinding));
             }
@@ -59,10 +58,8 @@ namespace System.Windows.Forms
 
         protected override void RemoveCore(Binding dataBinding)
         {
-            if (dataBinding is null)
-            {
-                throw new ArgumentNullException(nameof(dataBinding));
-            }
+            ArgumentNullException.ThrowIfNull(dataBinding);
+
             if (dataBinding.BindingManagerBase != _bindingManagerBase)
             {
                 throw new ArgumentException(SR.BindingsCollectionForeign, nameof(dataBinding));

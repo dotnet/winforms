@@ -1,10 +1,7 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -56,8 +53,8 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    AccessibleObject controlAccessibleObject  = _ownerItem.ControlAccessibilityObject;
-                    if (controlAccessibleObject != null)
+                    AccessibleObject controlAccessibleObject = _ownerItem.ControlAccessibilityObject;
+                    if (controlAccessibleObject is not null)
                     {
                         return controlAccessibleObject.Role;
                     }
@@ -71,7 +68,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (direction == UiaCore.NavigateDirection.FirstChild ||
                     direction == UiaCore.NavigateDirection.LastChild)

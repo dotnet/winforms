@@ -25,9 +25,9 @@ namespace System.Windows.Forms.Design
     internal interface IEventHandlerService
     {
         /// <summary>
-            ///  Gets the control that handles focus changes
+        ///  Gets the control that handles focus changes
         ///  for this event handler service.
-            /// </summary>
+        /// </summary>
         Control FocusWindow { get; }
 
         event EventHandler EventHandlerChanged;
@@ -38,9 +38,9 @@ namespace System.Windows.Forms.Design
         object GetHandler(Type handlerType);
 
         /// <summary>
-            ///  Pops
+        ///  Pops
         ///  the given handler off of the stack.
-            /// </summary>
+        /// </summary>
         void PopHandler(object handler);
 
         /// <summary>

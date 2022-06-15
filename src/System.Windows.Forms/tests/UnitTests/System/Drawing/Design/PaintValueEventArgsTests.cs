@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using Moq;
 using Xunit;
@@ -22,7 +21,7 @@ namespace System.Drawing.Design.Tests
         [MemberData(nameof(Ctor_ITypeDescriptorContext_Object_Rectangle_TestData))]
         public void PaintValueEventArgs_Ctor_ITypeDescriptorContext_Object_Graphics_Rectangle(ITypeDescriptorContext context, object value, Rectangle bounds)
         {
-            using var image = new Bitmap (10, 10);
+            using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
 
             var e = new PaintValueEventArgs(context, value, graphics, bounds);

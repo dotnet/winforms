@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design
@@ -117,9 +116,10 @@ namespace System.Windows.Forms.Design
                         imageTransProperty.SetValue(component, Color.Magenta);
                     }
                 }
+
                 Debug.Assert(dummyIndex != -1, "Why is the index of the Item negative?");
                 parent.Items.Insert(dummyIndex, (ToolStripItem)component);
-                // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionServive from new Component
+                // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionService from new Component
                 ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
                 if (selSvc != null)
                 {
@@ -133,6 +133,7 @@ namespace System.Windows.Forms.Design
                     newItemTransaction.Cancel();
                     newItemTransaction = null;
                 }
+
                 if (ClientUtils.IsCriticalException(ex))
                 {
                     throw;
@@ -143,8 +144,8 @@ namespace System.Windows.Forms.Design
                 if (newItemTransaction != null)
                 {
                     newItemTransaction.Commit();
-                    newItemTransaction = null;
                 }
+
                 // turn off Adding/Added events listened to by the ToolStripDesigner...
                 ToolStripDesigner.s_autoAddNewItems = true;
                 // Add the glyphs if the parent is DropDown.

@@ -4,7 +4,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -145,38 +145,29 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        /// <summary>
-        ///  Data for the AppearanceGetSet test
-        /// </summary>
-        public static TheoryData<Appearance> AppearanceGetSetData =>
-            CommonTestHelper.GetEnumTheoryData<Appearance>();
-
         [WinFormsTheory]
-        [MemberData(nameof(AppearanceGetSetData))]
-        public void CheckBox_AutoSizeModeGetSet(Appearance expected)
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(Appearance))]
+        public void CheckBox_Appearance_Set_GetReturnsExpected(Appearance value)
         {
-            using var box = new CheckBox
+            using var control = new CheckBox
             {
-                Appearance = expected
+                Appearance = value
             };
+            Assert.Equal(value, control.Appearance);
+            Assert.False(control.IsHandleCreated);
 
-            Assert.Equal(expected, box.Appearance);
+            // Set same.
+            control.Appearance = value;
+            Assert.Equal(value, control.Appearance);
+            Assert.False(control.IsHandleCreated);
         }
 
-        /// <summary>
-        ///  Data for the AppearanceGetSetInvalid test
-        /// </summary>
-        public static TheoryData<Appearance> AppearanceGetSetInvalidData =>
-            CommonTestHelper.GetEnumTheoryDataInvalid<Appearance>();
-
         [WinFormsTheory]
-        [MemberData(nameof(AppearanceGetSetInvalidData))]
-        public void CheckBox_AppearanceGetSetInvalid(Appearance expected)
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(Appearance))]
+        public void CheckBox_Appearance_SetInvalidValue_ThrowsInvalidEnumArgumentException(Appearance value)
         {
-            using var box = new CheckBox();
-
-            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.Appearance = expected);
-            Assert.Equal("value", ex.ParamName);
+            using var control = new CheckBox();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.Appearance = value);
         }
 
         /// <summary>
@@ -197,40 +188,29 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, box.AutoCheck);
         }
 
-        /// <summary>
-        ///  Data for the ContentAlignmentGetSet test
-        /// </summary>
-        public static TheoryData<ContentAlignment> ContentAlignmentGetSetData =>
-            CommonTestHelper.GetEnumTheoryData<ContentAlignment>();
-
         [WinFormsTheory]
-        [MemberData(nameof(ContentAlignmentGetSetData))]
-        public void CheckBox_ContentAlignmentGetSet(ContentAlignment expected)
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ContentAlignment))]
+        public void CheckBox_CheckAlign_Set_GetReturnsExpected(ContentAlignment value)
         {
-            using var box = new CheckBox
+            using var control = new CheckBox
             {
-                CheckAlign = expected,
-                TextAlign = expected
+                CheckAlign = value
             };
+            Assert.Equal(value, control.CheckAlign);
+            Assert.False(control.IsHandleCreated);
 
-            Assert.Equal(expected, box.CheckAlign);
-            Assert.Equal(expected, box.TextAlign);
+            // Set same.
+            control.CheckAlign = value;
+            Assert.Equal(value, control.CheckAlign);
+            Assert.False(control.IsHandleCreated);
         }
 
-        /// <summary>
-        ///  Data for the ContentAlignmentGetSetInvalid test
-        /// </summary>
-        public static TheoryData<ContentAlignment> ContentAlignmentGetSetInvalidData =>
-            CommonTestHelper.GetEnumTheoryDataInvalid<ContentAlignment>();
-
         [WinFormsTheory]
-        [MemberData(nameof(ContentAlignmentGetSetInvalidData))]
-        public void CheckBox_ContentAlignmentGetSetInvalid(ContentAlignment expected)
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
+        public void CheckBox_CheckAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(ContentAlignment value)
         {
-            using var box = new CheckBox();
-
-            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.CheckAlign = expected);
-            Assert.Equal("value", ex.ParamName);
+            using var control = new CheckBox();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.CheckAlign = value);
         }
 
         [WinFormsTheory]
@@ -290,38 +270,54 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedCheckState, box.CheckState);
         }
 
-        /// <summary>
-        ///  Data for the CheckStateGetSet test
-        /// </summary>
-        public static TheoryData<CheckState> CheckStateGetSetData =>
-            CommonTestHelper.GetEnumTheoryData<CheckState>();
-
         [WinFormsTheory]
-        [MemberData(nameof(CheckStateGetSetData))]
-        public void CheckBox_CheckStateGetSet(CheckState expected)
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(CheckState))]
+        public void CheckBox_CheckState_Set_GetReturnsExpected(CheckState value)
         {
-            using var box = new CheckBox
+            using var control = new CheckBox
             {
-                CheckState = expected
+                CheckState = value
             };
+            Assert.Equal(value, control.CheckState);
+            Assert.False(control.IsHandleCreated);
 
-            Assert.Equal(expected, box.CheckState);
+            // Set same.
+            control.CheckState = value;
+            Assert.Equal(value, control.CheckState);
+            Assert.False(control.IsHandleCreated);
         }
 
-        /// <summary>
-        ///  Data for the CheckStateGetSetInvalid test
-        /// </summary>
-        public static TheoryData<CheckState> CheckStateGetSetInvalidData =>
-            CommonTestHelper.GetEnumTheoryDataInvalid<CheckState>();
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(CheckState))]
+        public void CheckBox_CheckState_SetInvalidValue_ThrowsInvalidEnumArgumentException(CheckState value)
+        {
+            using var control = new CheckBox();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.CheckState = value);
+        }
 
         [WinFormsTheory]
-        [MemberData(nameof(CheckStateGetSetInvalidData))]
-        public void CheckBox_CheckStateGetSetInvalid(CheckState expected)
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ContentAlignment))]
+        public void CheckBox_TextAlign_Set_GetReturnsExpected(ContentAlignment value)
         {
-            using var box = new CheckBox();
+            using var control = new CheckBox
+            {
+                TextAlign = value
+            };
+            Assert.Equal(value, control.TextAlign);
+            Assert.False(control.IsHandleCreated);
 
-            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.CheckState = expected);
-            Assert.Equal("value", ex.ParamName);
+            // Set same.
+            control.TextAlign = value;
+            Assert.Equal(value, control.TextAlign);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
+        public void CheckBox_TextAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(ContentAlignment value)
+        {
+            using var control = new CheckBox();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.TextAlign = value);
         }
 
         /// <summary>
@@ -430,8 +426,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(1, accessibleObject.RaiseAutomationEventCallsCount);
             Assert.Equal(1, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(checkBox.IsHandleCreated);
+            Assert.False(checkBox.IsHandleCreated);
         }
 
         // the zero here may be an issue with cultural variance

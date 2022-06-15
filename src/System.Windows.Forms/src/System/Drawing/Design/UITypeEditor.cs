@@ -2,14 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing.Imaging;
-using System.IO;
 
 namespace System.Drawing.Design
 {
@@ -24,27 +21,27 @@ namespace System.Drawing.Design
             Hashtable intrinsicEditors = new Hashtable
             {
                 // System.ComponentModel type Editors
-                [typeof(DateTime)] = "System.ComponentModel.Design.DateTimeEditor, " + AssemblyRef.SystemDesign,
-                [typeof(Array)] = "System.ComponentModel.Design.ArrayEditor, " + AssemblyRef.SystemDesign,
-                [typeof(IList)] = "System.ComponentModel.Design.CollectionEditor, " + AssemblyRef.SystemDesign,
-                [typeof(ICollection)] = "System.ComponentModel.Design.CollectionEditor, " + AssemblyRef.SystemDesign,
-                [typeof(byte[])] = "System.ComponentModel.Design.BinaryEditor, " + AssemblyRef.SystemDesign,
-                [typeof(Stream)] = "System.ComponentModel.Design.BinaryEditor, " + AssemblyRef.SystemDesign,
+                [typeof(DateTime)] = $"System.ComponentModel.Design.DateTimeEditor, {AssemblyRef.SystemDesign}",
+                [typeof(Array)] = $"System.ComponentModel.Design.ArrayEditor, {AssemblyRef.SystemDesign}",
+                [typeof(IList)] = $"System.ComponentModel.Design.CollectionEditor, {AssemblyRef.SystemDesign}",
+                [typeof(ICollection)] = $"System.ComponentModel.Design.CollectionEditor, {AssemblyRef.SystemDesign}",
+                [typeof(byte[])] = $"System.ComponentModel.Design.BinaryEditor, {AssemblyRef.SystemDesign}",
+                [typeof(Stream)] = $"System.ComponentModel.Design.BinaryEditor, {AssemblyRef.SystemDesign}",
 
                 // System.Windows.Forms type Editors
-                [typeof(string[])] = "System.Windows.Forms.Design.StringArrayEditor, " + AssemblyRef.SystemDesign,
-                [typeof(Collection<string>)] = "System.Windows.Forms.Design.StringCollectionEditor, " + AssemblyRef.SystemDesign,
-                [typeof(StringCollection)] = "System.Windows.Forms.Design.StringCollectionEditor, " + AssemblyRef.SystemDesign,
+                [typeof(string[])] = $"System.Windows.Forms.Design.StringArrayEditor, {AssemblyRef.SystemDesign}",
+                [typeof(Collection<string>)] = $"System.Windows.Forms.Design.StringCollectionEditor, {AssemblyRef.SystemDesign}",
+                [typeof(StringCollection)] = $"System.Windows.Forms.Design.StringCollectionEditor, {AssemblyRef.SystemDesign}",
 
                 // System.Drawing.Design type Editors
-                [typeof(Bitmap)] = "System.Drawing.Design.BitmapEditor, " + AssemblyRef.SystemDrawingDesign,
-                [typeof(Color)] = "System.Drawing.Design.ColorEditor, " + AssemblyRef.SystemDrawingDesign,
-                [typeof(ContentAlignment)] = "System.Drawing.Design.ContentAlignmentEditor, " + AssemblyRef.SystemDrawingDesign,
-                [typeof(Font)] = "System.Drawing.Design.FontEditor, " + AssemblyRef.SystemDrawingDesign,
-                // no way to add Font.Name and associate it with FontNameEditor
-                [typeof(Icon)] = "System.Drawing.Design.IconEditor, " + AssemblyRef.SystemDrawingDesign,
-                [typeof(Image)] = "System.Drawing.Design.ImageEditor, " + AssemblyRef.SystemDrawingDesign,
-                [typeof(Metafile)] = "System.Drawing.Design.MetafileEditor, " + AssemblyRef.SystemDrawingDesign,
+                [typeof(Bitmap)] = $"System.Drawing.Design.BitmapEditor, {AssemblyRef.SystemDrawingDesign}",
+                [typeof(Color)] = $"System.Drawing.Design.ColorEditor, {AssemblyRef.SystemDrawingDesign}",
+                [typeof(ContentAlignment)] = $"System.Drawing.Design.ContentAlignmentEditor, {AssemblyRef.SystemDrawingDesign}",
+                [typeof(Font)] = $"System.Drawing.Design.FontEditor, {AssemblyRef.SystemDrawingDesign}",
+                // No way to add Font.Name and associate it with FontNameEditor.
+                [typeof(Icon)] = $"System.Drawing.Design.IconEditor, {AssemblyRef.SystemDrawingDesign}",
+                [typeof(Image)] = $"System.Drawing.Design.ImageEditor, {AssemblyRef.SystemDrawingDesign}",
+                [typeof(Metafile)] = $"System.Drawing.Design.MetafileEditor, {AssemblyRef.SystemDrawingDesign}",
             };
 
             // Add our intrinsic editors to TypeDescriptor.
@@ -57,22 +54,22 @@ namespace System.Drawing.Design
         public virtual bool IsDropDownResizable => false;
 
         /// <summary>
-        ///  Edits the specified value using the editor style provided by <see cref='UITypeEditor.GetEditStyle()'/>.
+        ///  Edits the specified value using the editor style provided by <see cref="UITypeEditor.GetEditStyle()"/>.
         /// </summary>
         /// <param name="provider">An <see cref="IServiceProvider" /> that this editor can use to obtain services.</param>
         /// <param name="value">The object to edit.</param>
-        public object EditValue(IServiceProvider provider, object value) => EditValue(null, provider, value);
+        public object? EditValue(IServiceProvider provider, object? value) => EditValue(null, provider, value);
 
         /// <summary>
-        ///  Edits the specified value using the editor style provided by <see cref='UITypeEditor.GetEditStyle()'/>.
+        ///  Edits the specified value using the editor style provided by <see cref="UITypeEditor.GetEditStyle()"/>.
         /// </summary>
         /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
         /// <param name="provider">The <see cref="IServiceProvider" /> that this editor can use to obtain services.</param>
         /// <param name="value">The object to edit.</param>
-        public virtual object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) => value;
+        public virtual object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value) => value;
 
         /// <summary>
-        ///  Gets the <see cref='UITypeEditorEditStyle'/> of the Edit method.
+        ///  Gets the <see cref="UITypeEditorEditStyle"/> of the Edit method.
         /// </summary>
         public UITypeEditorEditStyle GetEditStyle() => GetEditStyle(null);
 
@@ -84,14 +81,14 @@ namespace System.Drawing.Design
         /// <summary>
         ///  Gets a value indicating whether this editor supports painting a representation of an object's value.
         /// </summary>
-        /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information. </param>
-        public virtual bool GetPaintValueSupported(ITypeDescriptorContext context) => false;
+        /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
+        public virtual bool GetPaintValueSupported(ITypeDescriptorContext? context) => false;
 
         /// <summary>
         ///  Gets the editing style of the Edit method.
         /// </summary>
-        /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information. </param>
-        public virtual UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.None;
+        /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
+        public virtual UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.None;
 
         /// <summary>
         ///  Paints a representative value of the specified object to the specified canvas.
@@ -99,7 +96,8 @@ namespace System.Drawing.Design
         /// <param name="value">The object whose value this type editor will display. </param>
         /// <param name="canvas">A drawing canvas on which to paint the representation of the object's value. </param>
         /// <param name="rectangle">A <see cref="Rectangle" /> within whose boundaries to paint the value. </param>
-        public void PaintValue(object value, Graphics canvas, Rectangle rectangle) => PaintValue(new PaintValueEventArgs(null, value, canvas, rectangle));
+        public void PaintValue(object? value, Graphics canvas, Rectangle rectangle)
+            => PaintValue(new PaintValueEventArgs(null, value, canvas, rectangle));
 
         /// <summary>
         ///  Paints a representative value of the specified object to the specified canvas.

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace System.ComponentModel.Design
@@ -75,13 +74,13 @@ namespace System.ComponentModel.Design
             return returnValue;
         }
 
-        private object GetCustomAttribute(MemberInfo info, Type attributeType)
+        private static object GetCustomAttribute(MemberInfo info, Type attributeType)
         {
             object[] attributes = info.GetCustomAttributes(attributeType, true);
             return attributes.Length > 0 ? attributes[0] : null;
         }
 
-        private void GetMemberDisplayProperties(MemberInfo info, out string displayName, out string description, out string category)
+        private static void GetMemberDisplayProperties(MemberInfo info, out string displayName, out string description, out string category)
         {
             displayName = string.Empty;
             description = string.Empty;
@@ -93,13 +92,13 @@ namespace System.ComponentModel.Design
             }
 
             DisplayNameAttribute dispNameAttr = GetCustomAttribute(info, typeof(DisplayNameAttribute)) as DisplayNameAttribute;
-            if (dispNameAttr != null)
+            if (dispNameAttr is not null)
             {
                 displayName = dispNameAttr.DisplayName;
             }
 
             CategoryAttribute catAttr = GetCustomAttribute(info, typeof(CategoryAttribute)) as CategoryAttribute;
-            if (dispNameAttr != null)
+            if (dispNameAttr is not null)
             {
                 category = catAttr.Category;
             }

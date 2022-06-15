@@ -71,7 +71,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // Only incriment if we have not removed the item
+                    // Only increment if we have not removed the item
                     currentIndex++;
                 }
             }
@@ -116,7 +116,7 @@ namespace System.Windows.Forms
             return hash.ToHashCode();
         }
 
-        private WeakRefObject? CreateWeakRefObject(object? value)
+        private static WeakRefObject? CreateWeakRefObject(object? value)
         {
             if (value is null)
             {
@@ -175,7 +175,7 @@ namespace System.Windows.Forms
 
             internal WeakRefObject(object obj)
             {
-                Debug.Assert(obj != null, "Unexpected null object!");
+                Debug.Assert(obj is not null, "Unexpected null object!");
                 weakHolder = new WeakReference(obj);
                 _hash = obj.GetHashCode();
             }

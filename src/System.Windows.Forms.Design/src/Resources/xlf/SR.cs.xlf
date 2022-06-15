@@ -2,6 +2,21 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="cs" original="../SR.resx">
     <body>
+      <trans-unit id="AXNotRegistered">
+        <source>Could not create ActiveX control '{0}' because it is not properly registered.</source>
+        <target state="translated">Ovládací prvek {0} typu ActiveX nelze vytvořit, protože prvek není správně registrován.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccessibleActionCheck">
+        <source>Check</source>
+        <target state="translated">Zaškrtnutí</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccessibleActionUncheck">
+        <source>Uncheck</source>
+        <target state="translated">Zrušení zaškrtnutí</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AnchorEditorAccName">
         <source>Anchor Editor</source>
         <target state="translated">Editor ukotvení</target>
@@ -25,6 +40,16 @@
       <trans-unit id="AnchorEditorTopAccName">
         <source>Top</source>
         <target state="translated">Nahoře</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AxImportFailed">
+        <source>Failed to import the ActiveX control.  Please ensure it is properly registered.</source>
+        <target state="translated">Import ovládacího prvku ActiveX se nezdařil. Zkontrolujte, zda je prvek správně registrován.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Ax_Control">
+        <source>ActiveX Control</source>
+        <target state="translated">Ovládací prvek ActiveX</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
@@ -202,6 +227,21 @@
         <target state="translated">Náhled na vybrané položky</target>
         <note />
       </trans-unit>
+      <trans-unit id="ChooseImageDescription">
+        <source>Select the image displayed in the PictureBox</source>
+        <target state="translated">Vyberte obrázek zobrazený v ovládacím prvku PictureBox</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ChooseImageDisplayName">
+        <source>Choose Image...</source>
+        <target state="translated">Vybrat obrázek...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardError">
+        <source>Requested Clipboard operation did not succeed.</source>
+        <target state="translated">Požadovaná operace se schránkou se nezdařila.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
         <source>The serialization store is closed.  New objects cannot be added to a closed store.</source>
         <target state="translated">Úložiště serializace je zavřeno. Do zavřeného úložiště nelze přidávat nové objekty.</target>
@@ -354,6 +394,11 @@
         <target state="translated">Zarovnání součástí do mřížky (počet: {0})</target>
         <note />
       </trans-unit>
+      <trans-unit id="CommandSetBringToFront">
+        <source>Bring {0} controls to front</source>
+        <target state="translated">Přenesení ovládacích prvků do popředí (počet: {0})</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandSetCutMultiple">
         <source>Cut {0} Components</source>
         <target state="translated">Vyjmutí součástí (počet: {0})</target>
@@ -376,9 +421,19 @@
         <target state="translated">Formátování (určení rozestupů) součástí (počet: {0})</target>
         <note />
       </trans-unit>
+      <trans-unit id="CommandSetLockControls">
+        <source>Lock {0} components</source>
+        <target state="translated">Počet součástí k uzamčení: {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandSetPaste">
         <source>Paste components</source>
         <target state="translated">Vložení součástí</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetSendToBack">
+        <source>Send {0} controls to back</source>
+        <target state="translated">Přenesení ovládacích prvků do pozadí (počet: {0})</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetSize">
@@ -601,9 +656,19 @@
         <target state="translated">Při nastavování hodnoty {0} vlastnosti {1} došlo k chybě. Podrobnosti: {2}</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerBatchCreateTool">
+        <source>Creating components in tool '{0}'</source>
+        <target state="translated">Vytvoření součástí v nástroji {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerBeginDragNotCalled">
         <source>Call to BeginDrag must succeed before calling drag functions.</source>
         <target state="translated">Před voláním přetahovacích funkcí musí být úspěšně vyvolána funkce BeginDrag.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerCantParentType">
+        <source>Cannot add component of type '{0}' to container of type '{1}'</source>
+        <target state="translated">Součást typu {0} nelze přidat do kontejneru typu {1}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerInherited">
@@ -800,6 +865,11 @@
         <target state="translated">Určuje, zda mají být v návrháři použity vodicí čáry. Pokud je tato vlastnost nastavena na hodnotu True, vodicí čáry budou použity jako vodítka. Pokud je tato vlastnost nastavena na hodnotu False, budou použity čáry mřížky.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerPropName">
+        <source>Indicates the name used in code to identify the object.</source>
+        <target state="translated">Určuje název použitý v kódu k identifikaci objektu.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerShortcutDockInParent">
         <source>Dock in Parent Container</source>
         <target state="translated">Ukotvit v nadřazeném kontejneru</target>
@@ -855,6 +925,11 @@
         <target state="translated">Počet přetažených součástí: {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="DragDropDropComponents">
+        <source>Drop components</source>
+        <target state="translated">Přetažené součásti</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DragDropMoveComponent">
         <source>Move {0}</source>
         <target state="translated">Přesunout: {0}</target>
@@ -878,6 +953,16 @@
       <trans-unit id="DragDropSizeComponents">
         <source>Size {0} components</source>
         <target state="translated">Změna velikosti součástí (počet: {0})</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="EditLinesDescription">
+        <source>Opens the Lines collection editor</source>
+        <target state="translated">Otevře editor kolekce Lines.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="EditLinesDisplayName">
+        <source>Edit Text Lines...</source>
+        <target state="translated">Upravit textové řádky...</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceBadArgType">
@@ -910,6 +995,11 @@
         <target state="translated">Zprostředkovatel rozšířeného objektu {0} již byl přidán jako rozšiřující objekt. V případě přidání dalšího by došlo k duplicitě vlastností.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FailedToCreateComponent">
+        <source>Failed to create component '{0}'.  The error message follows:\r\n '{1}'</source>
+        <target state="translated">Vytvoření součásti {0} se nezdařilo. Chybová zpráva:\r\n {1}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormatStringDialogTitle">
         <source>Format String Dialog</source>
         <target state="translated">Dialogové okno formátovacího řetězce</target>
@@ -940,9 +1030,24 @@
         <target state="translated">Editor kolekce Images</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListDescription">
+        <source>Chooses an ImageList to use with this TreeView</source>
+        <target state="translated">Vybere třídu ImageList, která má být použita s tímto prvkem TreeView.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageListDisplayName">
+        <source>ImageList:</source>
+        <target state="translated">ImageList:</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
         <source>Read-Only</source>
         <target state="translated">Jen pro čtení</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InitialDirectoryEditorLabel">
+        <source>Select the directory that will initially be opened in the dialog.</source>
+        <target state="translated">Vyberte adresář, který se otevře v dialogu jako první.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">
@@ -953,6 +1058,21 @@
       <trans-unit id="InvalidBoundArgument">
         <source>'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</source>
         <target state="translated">Hodnota {1} není platnou hodnotou pro argument {0}. Hodnota {0} musí být v rozsahu od {2} do {3}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvokeNodesDialogDescription">
+        <source>Opens the Nodes collection editor</source>
+        <target state="translated">Otevře editor kolekce Nodes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvokeNodesDialogDisplayName">
+        <source>Edit Nodes...</source>
+        <target state="translated">Upravit uzly...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ItemsCategoryName">
+        <source>Items</source>
+        <target state="translated">Položky</target>
         <note />
       </trans-unit>
       <trans-unit id="LinkAreaEditorCancel">
@@ -975,6 +1095,81 @@
         <target state="translated">OK</target>
         <note />
       </trans-unit>
+      <trans-unit id="LinksCategoryName">
+        <source>Links</source>
+        <target state="translated">Odkazy</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListControlUnboundActionListEditItemsDescription">
+        <source>Opens the Items collection editor</source>
+        <target state="translated">Otevře editor kolekce Items.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListControlUnboundActionListEditItemsDisplayName">
+        <source>Edit Items...</source>
+        <target state="translated">Upravit položky...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListEditColumnsDescription">
+        <source>Opens the Columns collection editor</source>
+        <target state="translated">Otevře editor kolekce Columns.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListEditColumnsDisplayName">
+        <source>Edit Columns...</source>
+        <target state="translated">Upravit sloupce...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListEditGroupsDescription">
+        <source>Opens the Groups collection editor</source>
+        <target state="translated">Otevře editor kolekce Groups.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListEditGroupsDisplayName">
+        <source>Edit Groups...</source>
+        <target state="translated">Upravit skupiny...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListEditItemsDescription">
+        <source>Opens the Items collection editor</source>
+        <target state="translated">Otevře editor kolekce Items.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListEditItemsDisplayName">
+        <source>Edit Items...</source>
+        <target state="translated">Upravit položky...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListLargeImagesDescription">
+        <source>Selects an ImageList to use with LargeIcon mode</source>
+        <target state="translated">Vybere třídu ImageList, která má být použita s režimem LargeIcon.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListLargeImagesDisplayName">
+        <source>Large ImageList:</source>
+        <target state="translated">ImageList - velká:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListSmallImagesDescription">
+        <source>Selects an ImageList to use with SmallIcon mode</source>
+        <target state="translated">Vybere třídu ImageList, která má být použita s režimem SmallIcon.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListSmallImagesDisplayName">
+        <source>Small ImageList:</source>
+        <target state="translated">ImageList - malá:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListViewDescription">
+        <source>Changes the type of View this ListView shows</source>
+        <target state="translated">Změní typ objektu View těchto zobrazení ListView.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListViewDisplayName">
+        <source>View:</source>
+        <target state="translated">Zobrazení:</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewSubItemBaseName">
         <source>ListViewSubItem</source>
         <target state="translated">ListViewSubItem</target>
@@ -988,6 +1183,11 @@
       <trans-unit id="LocalizationProviderMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
         <target state="translated">Služba {0} je požadována, ale nebyla nalezena. Pokud jste tuto službu odebrali, zajistěte její náhradu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LocalizingCannotAdd">
+        <source>Components cannot be added in localization mode.  Select (Default) in the Language property to return to the default form and add components.</source>
+        <target state="translated">V režimu lokalizace nelze přidávat součásti. Výběrem možnosti (Výchozí) ve vlastnosti Language se vraťte na výchozí formulář a přidejte součásti.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNotMaskFullErrorMsg">
@@ -1100,6 +1300,16 @@
         <target state="translated">Pro příkaz nabídky {0} již existuje obslužná rutina příkazu.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MultiLineDescription">
+        <source>Puts the TextBox in a mode where it can display multiple lines of text</source>
+        <target state="translated">Převede prvek TextBox do režimu, v němž v něm lze zobrazit více řádků textu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MultiLineDisplayName">
+        <source>MultiLine</source>
+        <target state="translated">Více řádků</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
         <source>Press Enter to begin a new line.
 Press Ctrl+Enter to accept Text.</source>
@@ -1122,9 +1332,24 @@ Stisknutím kombinace kláves Ctrl+Enter text přijměte.</target>
         <target state="translated">Tuto metodu nebo objekt návrh neimplementuje.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ParentControlDesignerGridSizeDescr">
+        <source>Determines the size of the positioning grid.</source>
+        <target state="translated">Určuje velikost mřížky.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ParentControlDesignerLassoShortcutRedo">
+        <source>Place existing controls in new container, '{0}'.</source>
+        <target state="translated">Umístit existující ovládací prvky do nového kontejneru {0}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
         <target state="translated">Winforms Designer není na této platformě podporován.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertiesCategoryName">
+        <source>Properties</source>
+        <target state="translated">Vlastnosti</target>
         <note />
       </trans-unit>
       <trans-unit id="RTL">
@@ -1137,7 +1362,7 @@ Stisknutím kombinace kláves Ctrl+Enter text přijměte.</target>
         <target state="translated">Vyberte cestu ke složce, která bude standardně vybrána v dialogovém okně FolderBrowserDialog.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SerializationManagerAreadyInSession">
+      <trans-unit id="SerializationManagerAlreadyInSession">
         <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
         <target state="translated">Nelze vytvořit novou relaci, protože tento správce serializace již obsahuje aktivní relaci serializace.</target>
         <note />
@@ -1262,6 +1487,16 @@ Stisknutím kombinace kláves Ctrl+Enter text přijměte.</target>
         <target state="translated">(Neznámý)</target>
         <note />
       </trans-unit>
+      <trans-unit id="SizeModeDescription">
+        <source>Changes the sizing mode of the Image displayed in the PictureBox</source>
+        <target state="translated">Změní režim změny velikosti obrázku zobrazeného v prvku PictureBox.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SizeModeDisplayName">
+        <source>Size Mode:</source>
+        <target state="translated">Režim velikosti:</target>
+        <note />
+      </trans-unit>
       <trans-unit id="StandardMenuAbout">
         <source>&amp;About...</source>
         <target state="translated">&amp;O aplikaci...</target>
@@ -1309,7 +1544,7 @@ Stisknutím kombinace kláves Ctrl+Enter text přijměte.</target>
       </trans-unit>
       <trans-unit id="StandardMenuHelp">
         <source>&amp;Help</source>
-        <target state="translated">&amp;Nápověda</target>
+        <target state="translated">Nápo&amp;věda</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuIndex">
@@ -1660,6 +1895,11 @@ Stisknutím kombinace kláves Ctrl+Enter text přijměte.</target>
       <trans-unit id="WindowsFormsCommandCenterY">
         <source>Vertical center of {0} component(s)</source>
         <target state="translated">Svislé zarovnání součástí na střed (počet: {0})</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsFormsTabOrderReadOnly">
+        <source>- Read Only</source>
+        <target state="translated">- jen pro čtení</target>
         <note />
       </trans-unit>
       <trans-unit id="bitmapFileDescription">

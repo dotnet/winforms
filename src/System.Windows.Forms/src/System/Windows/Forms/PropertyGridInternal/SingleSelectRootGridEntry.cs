@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -12,53 +11,55 @@ using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
+    /// <summary>
+    ///  Root <see cref="GridEntry"/> for the <see cref="PropertyGrid"/> when there is only one object
+    ///  in <see cref="PropertyGrid.SelectedObjects"/>.
+    /// </summary>
     internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
     {
-        protected object objValue;
-        protected string objValueClassName;
-        protected GridEntry propDefault;
-        protected IDesignerHost host;
-        protected IServiceProvider baseProvider;
-        protected PropertyTab tab;
-        protected PropertyGridView gridEntryHost;
-        protected AttributeCollection browsableAttributes;
-        private IComponentChangeService changeService;
-        protected bool forceReadOnlyChecked;
+        private string _valueClassName;
+        private GridEntry _defaultEntry;
+        private IDesignerHost _host;
+        private IServiceProvider _baseProvider;
+        private PropertyTab _ownerTab;
+        private PropertyGridView _ownerGridView;
+        private AttributeCollection _browsableAttributes;
+        private IComponentChangeService _changeService;
+        protected bool _forceReadOnlyChecked;
 
-        internal SingleSelectRootGridEntry(PropertyGridView gridEntryHost, object value, GridEntry parent, IServiceProvider baseProvider, IDesignerHost host, PropertyTab tab, PropertySort sortType)
-        : base(gridEntryHost.OwnerGrid, parent)
+        internal SingleSelectRootGridEntry(
+            PropertyGridView ownerGridView,
+            object target,
+            IServiceProvider baseProvider,
+            IDesignerHost host,
+            PropertyTab ownerTab,
+            PropertySort sortType)
+            : base(ownerGridView.OwnerGrid, parent: null)
         {
-            Debug.Assert(value != null, "Can't browse a null object!");
-            this.host = host;
-            this.gridEntryHost = gridEntryHost;
-            this.baseProvider = baseProvider;
-            this.tab = tab;
-            objValue = value;
-            objValueClassName = TypeDescriptor.GetClassName(objValue);
+            Debug.Assert(target is not null, "Can't browse a null object!");
+            _host = host;
+            _ownerGridView = ownerGridView;
+            _baseProvider = baseProvider;
+            _ownerTab = ownerTab;
+            Target = target;
+            _valueClassName = TypeDescriptor.GetClassName(Target);
 
             IsExpandable = true;
-            // default to categories
-            PropertySort = sortType;
+
+            // Default to categories.
+            _propertySort = sortType;
             InternalExpanded = true;
         }
 
-        internal SingleSelectRootGridEntry(PropertyGridView view, object value, IServiceProvider baseProvider, IDesignerHost host, PropertyTab tab, PropertySort sortType) : this(view, value, null, baseProvider, host, tab, sortType)
-        {
-        }
-
         /// <summary>
-        ///  The set of attributes that will be used for browse filtering
+        ///  The target object for this root entry. This is either a single object or an array of objects from
+        ///  <see cref="PropertyGrid.SelectedObjects" />
         /// </summary>
+        protected object Target { get; private set; }
+
         public override AttributeCollection BrowsableAttributes
         {
-            get
-            {
-                if (browsableAttributes is null)
-                {
-                    browsableAttributes = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes });
-                }
-                return browsableAttributes;
-            }
+            get => _browsableAttributes ??= new(BrowsableAttribute.Yes);
             set
             {
                 if (value is null)
@@ -69,19 +70,19 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 bool same = true;
 
-                if (browsableAttributes != null && value != null && browsableAttributes.Count == value.Count)
+                if (_browsableAttributes is not null && value is not null && _browsableAttributes.Count == value.Count)
                 {
-                    Attribute[] attr1 = new Attribute[browsableAttributes.Count];
-                    Attribute[] attr2 = new Attribute[value.Count];
+                    var currentAttributes = new Attribute[_browsableAttributes.Count];
+                    var newAttributes = new Attribute[value.Count];
 
-                    browsableAttributes.CopyTo(attr1, 0);
-                    value.CopyTo(attr2, 0);
+                    _browsableAttributes.CopyTo(currentAttributes, 0);
+                    value.CopyTo(newAttributes, 0);
 
-                    Array.Sort(attr1, GridEntry.AttributeTypeSorter);
-                    Array.Sort(attr2, GridEntry.AttributeTypeSorter);
-                    for (int i = 0; i < attr1.Length; i++)
+                    Array.Sort(currentAttributes, AttributeTypeSorter);
+                    Array.Sort(newAttributes, AttributeTypeSorter);
+                    for (int i = 0; i < currentAttributes.Length; i++)
                     {
-                        if (!attr1[i].Equals(attr2[i]))
+                        if (!currentAttributes[i].Equals(newAttributes[i]))
                         {
                             same = false;
                             break;
@@ -93,9 +94,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                     same = false;
                 }
 
-                browsableAttributes = value;
+                _browsableAttributes = value;
 
-                if (!same && Children != null && Children.Count > 0)
+                if (!same && ChildCount > 0)
                 {
                     DisposeChildren();
                 }
@@ -103,114 +104,61 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         protected override IComponentChangeService ComponentChangeService
+            => _changeService ?? this.GetService<IComponentChangeService>();
+
+        public override PropertyTab OwnerTab => _ownerTab;
+
+        internal sealed override GridEntry DefaultChild
         {
-            get
-            {
-                if (changeService is null)
-                {
-                    changeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                }
-                return changeService;
-            }
+            get => _defaultEntry;
+            set => _defaultEntry = value;
         }
 
-        internal override bool AlwaysAllowExpand
+        internal sealed override IDesignerHost DesignerHost
         {
-            get
-            {
-                return true;
-            }
-        }
-
-        public override PropertyTab CurrentTab
-        {
-            get
-            {
-                return tab;
-            }
-            set
-            {
-                tab = value;
-            }
-        }
-
-        internal override GridEntry DefaultChild
-        {
-            get
-            {
-                return propDefault;
-            }
-            set
-            {
-                propDefault = value;
-            }
-        }
-
-        internal override IDesignerHost DesignerHost
-        {
-            get
-            {
-                return host;
-            }
-            set
-            {
-                host = value;
-            }
+            get => _host;
+            set => _host = value;
         }
 
         internal override bool ForceReadOnly
         {
             get
             {
-                if (!forceReadOnlyChecked)
+                if (!_forceReadOnlyChecked)
                 {
-                    ReadOnlyAttribute readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(objValue)[typeof(ReadOnlyAttribute)];
-                    if ((readOnlyAttr != null && !readOnlyAttr.IsDefaultAttribute()) || TypeDescriptor.GetAttributes(objValue).Contains(InheritanceAttribute.InheritedReadOnly))
+                    if ((TypeDescriptorHelper.TryGetAttribute(Target, out ReadOnlyAttribute readOnlyAttribute)
+                        && !readOnlyAttribute.IsDefaultAttribute())
+                        || TypeDescriptor.GetAttributes(Target).Contains(InheritanceAttribute.InheritedReadOnly))
                     {
-                        flags |= FLAG_FORCE_READONLY;
+                        SetForceReadOnlyFlag();
                     }
-                    forceReadOnlyChecked = true;
+
+                    _forceReadOnlyChecked = true;
                 }
-                return base.ForceReadOnly || (GridEntryHost != null && !GridEntryHost.Enabled);
+
+                return base.ForceReadOnly || (OwnerGridView is not null && !OwnerGridView.Enabled);
             }
         }
 
-        internal override PropertyGridView GridEntryHost
+        internal override PropertyGridView OwnerGridView
         {
-            get
-            {
-                return gridEntryHost;
-            }
-            set
-            {
-                gridEntryHost = value;
-            }
+            get => _ownerGridView;
+            set => _ownerGridView = value;
         }
 
-        public override GridItemType GridItemType
-        {
-            get
-            {
-                return GridItemType.Root;
-            }
-        }
+        public override GridItemType GridItemType => GridItemType.Root;
 
-        /// <summary>
-        ///  Retrieves the keyword that the VS help dynamic help window will
-        ///  use when this IPE is selected.
-        /// </summary>
         public override string HelpKeyword
         {
             get
             {
-                HelpKeywordAttribute helpAttribute = (HelpKeywordAttribute)TypeDescriptor.GetAttributes(objValue)[typeof(HelpKeywordAttribute)];
-
-                if (helpAttribute != null && !helpAttribute.IsDefaultAttribute())
+                if (TypeDescriptorHelper.TryGetAttribute(Target, out HelpKeywordAttribute helpAttribute)
+                    && !helpAttribute.IsDefaultAttribute())
                 {
                     return helpAttribute.HelpKeyword;
                 }
 
-                return objValueClassName;
+                return _valueClassName;
             }
         }
 
@@ -218,182 +166,114 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (objValue is IComponent)
+                if (Target is IComponent component)
                 {
-                    ISite site = ((IComponent)objValue).Site;
-                    if (site is null)
-                    {
-                        return objValue.GetType().Name;
-                    }
-                    else
-                    {
-                        return site.Name;
-                    }
+                    return component.Site?.Name ?? Target.GetType().Name;
                 }
-                else if (objValue != null)
-                {
-                    return objValue.ToString();
-                }
-                return null;
+
+                return Target?.ToString();
             }
         }
 
-        /// <summary>
-        ///  Gets or sets the value for the property that is represented
-        ///  by this GridEntry.
-        /// </summary>
         public override object PropertyValue
         {
-            get
-            {
-                return objValue;
-            }
+            get => Target;
             set
             {
-                object old = objValue;
-                objValue = value;
-                objValueClassName = TypeDescriptor.GetClassName(objValue);
-                ownerGrid.ReplaceSelectedObject(old, value);
+                object old = Target;
+                Target = value;
+                _valueClassName = TypeDescriptor.GetClassName(Target);
+                OwnerGrid.ReplaceSelectedObject(old, value);
             }
         }
 
-        protected override bool CreateChildren()
+        protected override bool CreateChildren(bool diffOldChildren = false)
         {
-            bool fReturn = base.CreateChildren();
-            CategorizePropEntries();
-            return fReturn;
+            bool expandable = base.CreateChildren(diffOldChildren);
+            CategorizePropertyEntries();
+            return expandable;
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                host = null;
-                baseProvider = null;
-                tab = null;
-                gridEntryHost = null;
-                changeService = null;
-            }
-            objValue = null;
-            objValueClassName = null;
-            propDefault = null;
+            _host = null;
+            _baseProvider = null;
+            _ownerTab = null;
+            _ownerGridView = null;
+            _changeService = null;
+
+            Target = null;
+            _valueClassName = null;
+            _defaultEntry = null;
             base.Dispose(disposing);
         }
 
         public override object GetService(Type serviceType)
-        {
-            object service = null;
+            => _host?.GetService(serviceType) ?? _baseProvider?.GetService(serviceType);
 
-            if (host != null)
-            {
-                service = host.GetService(serviceType);
-            }
-            if (service is null && baseProvider != null)
-            {
-                service = baseProvider.GetService(serviceType);
-            }
-            return service;
-        }
+        public void ResetBrowsableAttributes() => _browsableAttributes = new(BrowsableAttribute.Yes);
 
-        /// <summary>
-        ///  Reset the Browsable attributes to the default (BrowsableAttribute.Yes)
-        /// </summary>
-        public void ResetBrowsableAttributes()
+        public virtual void ShowCategories(bool sortByCategories)
         {
-            browsableAttributes = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes });
-        }
-
-        /// <summary>
-        ///  Sets the value of this GridEntry from text
-        /// </summary>
-        public virtual void ShowCategories(bool fCategories)
-        {
-            if (((PropertySort &= PropertySort.Categorized) != 0) != fCategories)
+            if (((_propertySort &= PropertySort.Categorized) != 0) != sortByCategories)
             {
-                if (fCategories)
+                if (sortByCategories)
                 {
-                    PropertySort |= PropertySort.Categorized;
+                    _propertySort |= PropertySort.Categorized;
                 }
                 else
                 {
-                    PropertySort &= ~PropertySort.Categorized;
+                    _propertySort &= ~PropertySort.Categorized;
                 }
 
-                // recreate the children
-                if (Expandable && ChildCollection != null)
+                // Recreate the children.
+                if (Expandable && ChildCollection is not null)
                 {
                     CreateChildren();
                 }
             }
         }
 
-        internal void CategorizePropEntries()
+        /// <summary>
+        ///  Groups all children under category grid entries.
+        /// </summary>
+        protected void CategorizePropertyEntries()
         {
-            if (Children.Count > 0)
+            if (Children.Count == 0 || (_propertySort & PropertySort.Categorized) == 0)
             {
-                GridEntry[] childEntries = new GridEntry[Children.Count];
-                Children.CopyTo(childEntries, 0);
+                return;
+            }
 
-                if ((PropertySort & PropertySort.Categorized) != 0)
+            // First, walk through all the entries and group them by their category.
+
+            Dictionary<string, List<GridEntry>> categories = new();
+            foreach (var child in Children)
+            {
+                string category = child.PropertyCategory;
+                if (!categories.TryGetValue(category, out var gridEntries))
                 {
-                    // first, walk through all the entires and
-                    // group them by their category by adding
-                    // them to a hashtable of arraylists.
-                    //
-                    Hashtable bins = new Hashtable();
-                    for (int i = 0; i < childEntries.Length; i++)
-                    {
-                        GridEntry pe = childEntries[i];
-                        Debug.Assert(pe != null);
-                        if (pe != null)
-                        {
-                            string category = pe.PropertyCategory;
-                            ArrayList bin = (ArrayList)bins[category];
-                            if (bin is null)
-                            {
-                                bin = new ArrayList();
-                                bins[category] = bin;
-                            }
-                            bin.Add(pe);
-                        }
-                    }
+                    gridEntries = new List<GridEntry>();
+                    categories[category] = gridEntries;
+                }
 
-                    // now walk through the hashtable
-                    // and create a categorygridentry for each
-                    // category that holds all the properties
-                    // of that category.
-                    //
-                    ArrayList propList = new ArrayList();
-                    IDictionaryEnumerator enumBins = (IDictionaryEnumerator)bins.GetEnumerator();
-                    while (enumBins.MoveNext())
-                    {
-                        ArrayList bin = (ArrayList)enumBins.Value;
-                        if (bin != null)
-                        {
-                            string category = (string)enumBins.Key;
-                            if (bin.Count > 0)
-                            {
-                                GridEntry[] rgpes = new GridEntry[bin.Count];
-                                bin.CopyTo(rgpes, 0);
-                                try
-                                {
-                                    propList.Add(new CategoryGridEntry(ownerGrid, this, category, rgpes));
-                                }
-                                catch
-                                {
-                                }
-                            }
-                        }
-                    }
+                gridEntries.Add(child);
+            }
 
-                    childEntries = new GridEntry[propList.Count];
-                    propList.CopyTo(childEntries, 0);
-                    Array.Sort(childEntries, GridEntryComparer.Default);
+            // Now walk through and create a CategoryGridEntry that holds all the properties for each category.
 
-                    ChildCollection.Clear();
-                    ChildCollection.AddRange(childEntries);
+            List<GridEntry> categoryGridEntries = new();
+            foreach (var entry in categories)
+            {
+                var gridEntries = entry.Value;
+                if (gridEntries.Count > 0)
+                {
+                    categoryGridEntries.Add(new CategoryGridEntry(OwnerGrid, this, entry.Key, entry.Value));
                 }
             }
+
+            categoryGridEntries.Sort(GridEntryComparer.Default);
+            ChildCollection.Clear();
+            ChildCollection.AddRange(categoryGridEntries);
         }
     }
 }

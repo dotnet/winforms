@@ -26,7 +26,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///
         ///  5 minutes -- ticks are 1/10,000,000th of a second
         /// </summary>
-        private const long AGE_THRESHHOLD = (long)(10000000L * 60L * 5L);
+        private const long AGE_THRESHOLD = (long)(10000000L * 60L * 5L);
 
         /// <summary>
         ///  This is the object that gave us the properties.  We hold a WeakRef so we don't addref the object.
@@ -78,12 +78,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  These are the classes of handlers corresponding to the extended
         ///  interfaces above.
         /// </summary>
-        private static readonly Type[] extendedInterfaceHandlerTypes = new Type[]{
-                                                        typeof(Com2ICategorizePropertiesHandler),
-                                                        typeof(Com2IProvidePropertyBuilderHandler),
-                                                        typeof(Com2IPerPropertyBrowsingHandler),
-                                                        typeof(Com2IVsPerPropertyBrowsingHandler),
-                                                        typeof(Com2IManagedPerPropertyBrowsingHandler)};
+        private static readonly Type[] extendedInterfaceHandlerTypes = new Type[]
+        {
+            typeof(Com2ICategorizePropertiesHandler),
+            typeof(Com2IProvidePropertyBuilderHandler),
+            typeof(Com2IPerPropertyBrowsingHandler),
+            typeof(Com2IVsPerPropertyBrowsingHandler),
+            typeof(Com2IManagedPerPropertyBrowsingHandler)
+        };
 
         public event EventHandler Disposed;
 
@@ -94,16 +96,18 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
 #if DEBUG
             ComNativeDescriptor cnd = new ComNativeDescriptor();
-            dbgObjName = cnd.GetName(obj);
+            dbgObjName = ComNativeDescriptor.GetName(obj);
             if (dbgObjName is null)
             {
                 dbgObjName = "(null)";
             }
-            dbgObjClass = cnd.GetClassName(obj);
+
+            dbgObjClass = ComNativeDescriptor.GetClassName(obj);
             if (dbgObjClass is null)
             {
                 dbgObjClass = "(null)";
             }
+
             if (DbgCom2PropertiesSwitch.TraceVerbose)
             {
                 Debug.WriteLine("Creating Com2Properties for object " + dbgObjName + ", class=" + dbgObjClass);
@@ -135,6 +139,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         return;
                     }
+
                     alwaysValid++;
                 }
                 else
@@ -158,6 +163,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     return null;
                 }
+
                 if (defaultIndex == -1)
                 {
                     if (props.Length > 0)
@@ -169,6 +175,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         return null;
                     }
                 }
+
                 Debug.Assert(defaultIndex < props.Length, "Whoops! default index is > props.Length");
                 return props[defaultIndex];
             }
@@ -192,6 +199,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 #endif
                     return null;
                 }
+
                 return weakObjRef.Target;
             }
         }
@@ -207,6 +215,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     return 0;
                 }
+
                 return DateTime.Now.Ticks - touchedTime;
             }
         }
@@ -223,6 +232,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     return null;
                 }
+
                 touchedTime = DateTime.Now.Ticks;
 
                 // refresh everyone!
@@ -254,12 +264,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     return false;
                 }
-                return TicksSinceTouched > AGE_THRESHHOLD;
+
+                return TicksSinceTouched > AGE_THRESHOLD;
             }
         }
 
         /// <summary>
-        ///  Checks the source object for eache extended browsing inteface
+        ///  Checks the source object for each extended browsing inteface
         ///  listed in extendedInterfaces and creates a handler from extendedInterfaceHandlerTypes
         ///  to handle it.
         /// </summary>
@@ -322,7 +333,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 #endif
 
-            if (props != null)
+            if (props is not null)
             {
                 Disposed?.Invoke(this, EventArgs.Empty);
 
@@ -361,6 +372,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 versions[i] = GetTypeInfoVersion(pTypeInfos[i]);
             }
+
             return versions;
         }
 
@@ -390,7 +402,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return true;
             }
 
-            bool valid = weakObjRef != null && weakObjRef.IsAlive;
+            bool valid = weakObjRef is not null && weakObjRef.IsAlive;
 
             // check the version information for each ITypeInfo the object exposes.
             if (valid && checkVersions)
@@ -445,7 +457,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         internal void SetProps(Com2PropertyDescriptor[] props)
         {
             this.props = props;
-            if (props != null)
+            if (props is not null)
             {
                 for (int i = 0; i < props.Length; i++)
                 {

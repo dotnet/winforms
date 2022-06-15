@@ -7,13 +7,12 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
 
 namespace System.Windows.Forms
 {
-    public class DataGridViewTopLeftHeaderCell : DataGridViewColumnHeaderCell
+    public partial class DataGridViewTopLeftHeaderCell : DataGridViewColumnHeaderCell
     {
-        private static readonly VisualStyleElement HeaderElement = VisualStyleElement.Header.Item.Normal;
+        private static readonly VisualStyleElement s_headerElement = VisualStyleElement.Header.Item.Normal;
 
         private const byte DATAGRIDVIEWTOPLEFTHEADERCELL_horizontalTextMarginLeft = 1;
         private const byte DATAGRIDVIEWTOPLEFTHEADERCELL_horizontalTextMarginRight = 2;
@@ -30,10 +29,7 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             if (rowIndex != -1)
             {
@@ -101,10 +97,7 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
@@ -156,10 +149,7 @@ namespace System.Windows.Forms
                 return new Size(-1, -1);
             }
 
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             Rectangle borderWidthsRect = BorderWidths(DataGridView.AdjustedTopLeftHeaderBorderStyle);
             int borderAndPaddingWidths = borderWidthsRect.Left + borderWidthsRect.Width + cellStyle.Padding.Horizontal;
@@ -172,6 +162,7 @@ namespace System.Windows.Forms
             {
                 val = null;
             }
+
             return DataGridViewUtilities.GetPreferredRowHeaderSize(graphics,
                                                                    (string)val,
                                                                    cellStyle,
@@ -195,10 +186,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             PaintPrivate(graphics,
                 clipBounds,
@@ -243,7 +231,7 @@ namespace System.Windows.Forms
             Debug.Assert(!paint || !computeContentBounds || !computeErrorIconBounds);
             Debug.Assert(!computeContentBounds || !computeErrorIconBounds || !paint);
             Debug.Assert(!computeErrorIconBounds || !paint || !computeContentBounds);
-            Debug.Assert(cellStyle != null);
+            Debug.Assert(cellStyle is not null);
 
             // If computeContentBounds == TRUE then resultBounds will be the contentBounds.
             // If computeErrorIconBounds == TRUE then resultBounds will be the error icon bounds.
@@ -288,7 +276,7 @@ namespace System.Windows.Forms
 
                     if (!brushColor.HasTransparency())
                     {
-                        using var brush = brushColor.GetCachedSolidBrushScope();
+                        using RefCountedCache<SolidBrush, Color, Color>.Scope brush = brushColor.GetCachedSolidBrushScope();
                         graphics.FillRectangle(brush, valBounds);
                     }
                 }
@@ -309,6 +297,7 @@ namespace System.Windows.Forms
                 {
                     valBounds.Offset(cellStyle.Padding.Left, cellStyle.Padding.Top);
                 }
+
                 valBounds.Width -= cellStyle.Padding.Horizontal;
                 valBounds.Height -= cellStyle.Padding.Vertical;
             }
@@ -334,6 +323,7 @@ namespace System.Windows.Forms
                 {
                     textColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
                 }
+
                 TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
                 if (paint)
                 {
@@ -343,6 +333,7 @@ namespace System.Windows.Forms
                         {
                             flags |= TextFormatFlags.EndEllipsis;
                         }
+
                         TextRenderer.DrawText(graphics,
                                               formattedValueStr,
                                               cellStyle.Font,
@@ -390,19 +381,19 @@ namespace System.Windows.Forms
 
                 if (DataGridView.AdvancedColumnHeadersBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Inset)
                 {
-                    using var penControlDark = darkColor.GetCachedPenScope();
+                    using RefCountedCache<Pen, Color, Color>.Scope penControlDark = darkColor.GetCachedPenScope();
                     graphics.DrawLine(penControlDark, bounds.X, bounds.Y, bounds.X, bounds.Bottom - 1);
                     graphics.DrawLine(penControlDark, bounds.X, bounds.Y, bounds.Right - 1, bounds.Y);
                 }
                 else if (DataGridView.AdvancedColumnHeadersBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Outset)
                 {
-                    using var penControlLightLight = lightColor.GetCachedPenScope();
+                    using RefCountedCache<Pen, Color, Color>.Scope penControlLightLight = lightColor.GetCachedPenScope();
                     graphics.DrawLine(penControlLightLight, bounds.X, bounds.Y, bounds.X, bounds.Bottom - 1);
                     graphics.DrawLine(penControlLightLight, bounds.X, bounds.Y, bounds.Right - 1, bounds.Y);
                 }
                 else if (DataGridView.AdvancedColumnHeadersBorderStyle.All == DataGridViewAdvancedCellBorderStyle.InsetDouble)
                 {
-                    using var penControlDark = darkColor.GetCachedPenScope();
+                    using RefCountedCache<Pen, Color, Color>.Scope penControlDark = darkColor.GetCachedPenScope();
                     graphics.DrawLine(penControlDark, bounds.X + 1, bounds.Y + 1, bounds.X + 1, bounds.Bottom - 1);
                     graphics.DrawLine(penControlDark, bounds.X + 1, bounds.Y + 1, bounds.Right - 1, bounds.Y + 1);
                 }
@@ -410,280 +401,5 @@ namespace System.Windows.Forms
         }
 
         public override string ToString() => "DataGridViewTopLeftHeaderCell";
-
-        private class DataGridViewTopLeftHeaderCellRenderer
-        {
-            private static VisualStyleRenderer visualStyleRenderer;
-
-            private DataGridViewTopLeftHeaderCellRenderer()
-            {
-            }
-
-            public static VisualStyleRenderer VisualStyleRenderer
-            {
-                get
-                {
-                    if (visualStyleRenderer is null)
-                    {
-                        visualStyleRenderer = new VisualStyleRenderer(HeaderElement);
-                    }
-
-                    return visualStyleRenderer;
-                }
-            }
-
-            public static void DrawHeader(Graphics g, Rectangle bounds, int headerState)
-            {
-                VisualStyleRenderer.SetParameters(HeaderElement.ClassName, HeaderElement.Part, headerState);
-                VisualStyleRenderer.DrawBackground(g, bounds, Rectangle.Truncate(g.ClipBounds));
-            }
-        }
-
-        protected class DataGridViewTopLeftHeaderCellAccessibleObject : DataGridViewColumnHeaderCellAccessibleObject
-        {
-            public DataGridViewTopLeftHeaderCellAccessibleObject(DataGridViewTopLeftHeaderCell owner) : base(owner)
-            {
-            }
-
-            public override Rectangle Bounds
-            {
-                get
-                {
-                    Rectangle cellRect = Owner.DataGridView.GetCellDisplayRectangle(-1, -1, false /*cutOverflow*/);
-                    return Owner.DataGridView.RectangleToScreen(cellRect);
-                }
-            }
-
-            public override string DefaultAction
-            {
-                get
-                {
-                    if (Owner.DataGridView.MultiSelect)
-                    {
-                        return SR.DataGridView_AccTopLeftColumnHeaderCellDefaultAction;
-                    }
-                    else
-                    {
-                        return string.Empty;
-                    }
-                }
-            }
-
-            public override string Name
-            {
-                get
-                {
-                    object value = Owner.Value;
-                    if (value != null && !(value is string))
-                    {
-                        // The user set the Value on the DataGridViewTopLeftHeaderCell and it did not set it to a string.
-                        // Then the name of the DataGridViewTopLeftHeaderAccessibleObject is String.Empty;
-                        //
-                        return string.Empty;
-                    }
-                    string strValue = value as string;
-                    if (string.IsNullOrEmpty(strValue))
-                    {
-                        if (Owner.DataGridView != null)
-                        {
-                            if (Owner.DataGridView.RightToLeft == RightToLeft.No)
-                            {
-                                return SR.DataGridView_AccTopLeftColumnHeaderCellName;
-                            }
-                            else
-                            {
-                                return SR.DataGridView_AccTopLeftColumnHeaderCellNameRTL;
-                            }
-                        }
-                        else
-                        {
-                            return string.Empty;
-                        }
-                    }
-                    else
-                    {
-                        return string.Empty;
-                    }
-                }
-            }
-
-            public override AccessibleStates State
-            {
-                get
-                {
-                    AccessibleStates resultState = AccessibleStates.Selectable;
-
-                    // get the Offscreen state from the base method.
-                    AccessibleStates state = base.State;
-                    if ((state & AccessibleStates.Offscreen) == AccessibleStates.Offscreen)
-                    {
-                        resultState |= AccessibleStates.Offscreen;
-                    }
-
-                    // If all the cells are selected, then the top left header cell accessible object is considered to be selected as well.
-                    if (Owner.DataGridView.AreAllCellsSelected(false /*includeInvisibleCells*/))
-                    {
-                        resultState |= AccessibleStates.Selected;
-                    }
-
-                    return resultState;
-                }
-            }
-
-            public override string Value
-            {
-                get
-                {
-                    // We changed DataGridViewTopLeftHeaderCellAccessibleObject::Name to return a string
-                    // However, DataGridViewTopLeftHeaderCellAccessibleObject::Value should still return String.Empty.
-                    return string.Empty;
-                }
-            }
-
-            public override void DoDefaultAction()
-            {
-                Owner.DataGridView.SelectAll();
-            }
-
-            public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
-            {
-                Debug.Assert(Owner.DataGridView.RowHeadersVisible, "if the row headers are not visible how did you get the top left header cell acc object?");
-                switch (navigationDirection)
-                {
-                    case AccessibleNavigation.Previous:
-                        return null;
-                    case AccessibleNavigation.Left:
-                        if (Owner.DataGridView.RightToLeft == RightToLeft.No)
-                        {
-                            return null;
-                        }
-                        else
-                        {
-                            return NavigateForward();
-                        }
-                    case AccessibleNavigation.Next:
-                        return NavigateForward();
-                    case AccessibleNavigation.Right:
-                        if (Owner.DataGridView.RightToLeft == RightToLeft.No)
-                        {
-                            return NavigateForward();
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    default:
-                        return null;
-                }
-            }
-
-            private AccessibleObject NavigateForward()
-            {
-                if (Owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible) == 0)
-                {
-                    return null;
-                }
-
-                // return the acc object for the first visible column
-                return Owner.DataGridView.AccessibilityObject.GetChild(0).GetChild(1);
-            }
-
-            public override void Select(AccessibleSelection flags)
-            {
-                if (Owner is null)
-                {
-                    throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
-                }
-
-                // AccessibleSelection.TakeFocus should focus the grid and then focus the first data grid view data cell
-                if ((flags & AccessibleSelection.TakeFocus) == AccessibleSelection.TakeFocus)
-                {
-                    // Focus the grid
-                    Owner.DataGridView.Focus();
-                    if (Owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible) > 0 &&
-                        Owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible) > 0)
-                    {
-                        // This means that there are visible rows and columns.
-                        // Focus the first data cell.
-                        DataGridViewRow row = Owner.DataGridView.Rows[Owner.DataGridView.Rows.GetFirstRow(DataGridViewElementStates.Visible)];
-                        DataGridViewColumn col = Owner.DataGridView.Columns.GetFirstColumn(DataGridViewElementStates.Visible);
-
-                        // DataGridView::set_CurrentCell clears the previous selection.
-                        // So use SetCurrenCellAddressCore directly.
-                        Owner.DataGridView.SetCurrentCellAddressCoreInternal(col.Index, row.Index, false /*setAnchorCellAddress*/, true /*validateCurrentCell*/, false /*thoughMouseClick*/);
-                    }
-                }
-
-                // AddSelection selects the entire grid.
-                if ((flags & AccessibleSelection.AddSelection) == AccessibleSelection.AddSelection)
-                {
-                    if (Owner.DataGridView.MultiSelect)
-                    {
-                        Owner.DataGridView.SelectAll();
-                    }
-                }
-
-                // RemoveSelection clears the selection on the entire grid.
-                // But only if AddSelection is not set.
-                if ((flags & AccessibleSelection.RemoveSelection) == AccessibleSelection.RemoveSelection &&
-                    (flags & AccessibleSelection.AddSelection) == 0)
-                {
-                    Owner.DataGridView.ClearSelection();
-                }
-            }
-
-            #region IRawElementProviderFragment Implementation
-
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
-            {
-                DataGridView dataGridView = Owner.DataGridView;
-
-                switch (direction)
-                {
-                    case UiaCore.NavigateDirection.Parent:
-                        return dataGridView.AccessibilityObject.GetChild(0);
-                    case UiaCore.NavigateDirection.PreviousSibling:
-                        return null;
-                    case UiaCore.NavigateDirection.NextSibling:
-                        if (dataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible) == 0)
-                        {
-                            return null;
-                        }
-
-                        return NavigateForward();
-                    default:
-                        return null;
-                }
-            }
-
-            #endregion
-
-            #region IRawElementProviderSimple Implementation
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyId)
-            {
-                switch (propertyId)
-                {
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.HeaderControlTypeId;
-                    case UiaCore.UIA.IsEnabledPropertyId:
-                        return Owner.DataGridView.Enabled;
-                    case UiaCore.UIA.HelpTextPropertyId:
-                        return Help ?? string.Empty;
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                    case UiaCore.UIA.IsPasswordPropertyId:
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return false;
-                    case UiaCore.UIA.AccessKeyPropertyId:
-                        return string.Empty;
-                }
-
-                return base.GetPropertyValue(propertyId);
-            }
-
-            #endregion
-        }
     }
 }

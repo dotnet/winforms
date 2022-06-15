@@ -57,7 +57,7 @@ namespace System.Windows.Forms
         ///  Draws lines with the <paramref name="pen"/> using points defined in <paramref name="lines"/>.
         /// </summary>
         /// <param name="lines">
-        ///  MUST be a mulitple of 4. Each group of 4 represents x1, y1, x2, y2.
+        ///  MUST be a multiple of 4. Each group of 4 represents x1, y1, x2, y2.
         /// </param>
         internal static void DrawLines(this Graphics graphics, Pen pen, ReadOnlySpan<int> lines)
         {

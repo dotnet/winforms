@@ -33,8 +33,8 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewPaintPartsCombination, nameof(paintParts)), nameof(paintParts));
             }
 
-            _dataGridView = dataGridView ?? throw new ArgumentNullException(nameof(dataGridView));
-            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            _dataGridView = dataGridView.OrThrowIfNull();
+            Graphics = graphics.OrThrowIfNull();
             ClipBounds = clipBounds;
             CellBounds = cellBounds;
             RowIndex = rowIndex;
@@ -43,14 +43,14 @@ namespace System.Windows.Forms
             Value = value;
             FormattedValue = formattedValue;
             ErrorText = errorText;
-            CellStyle = cellStyle ?? throw new ArgumentNullException(nameof(cellStyle));
+            CellStyle = cellStyle.OrThrowIfNull();
             AdvancedBorderStyle = advancedBorderStyle;
             PaintParts = paintParts;
         }
 
         internal DataGridViewCellPaintingEventArgs(DataGridView dataGridView)
         {
-            Debug.Assert(dataGridView != null);
+            Debug.Assert(dataGridView is not null);
             _dataGridView = dataGridView;
         }
 
@@ -84,6 +84,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
+
             if (ColumnIndex < -1 || ColumnIndex >= _dataGridView.Columns.Count)
             {
                 throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange);
@@ -108,6 +109,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
+
             if (ColumnIndex < -1 || ColumnIndex >= _dataGridView.Columns.Count)
             {
                 throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange);
@@ -118,6 +120,7 @@ namespace System.Windows.Forms
             {
                 paintParts |= DataGridViewPaintParts.SelectionBackground;
             }
+
             _dataGridView.GetCellInternal(ColumnIndex, RowIndex).PaintInternal(Graphics,
                                                                                clipBounds,
                                                                                CellBounds,
@@ -137,6 +140,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
+
             if (ColumnIndex < -1 || ColumnIndex >= _dataGridView.Columns.Count)
             {
                 throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange);
@@ -168,7 +172,7 @@ namespace System.Windows.Forms
                                     DataGridViewAdvancedBorderStyle advancedBorderStyle,
                                     DataGridViewPaintParts paintParts)
         {
-            Debug.Assert(graphics != null);
+            Debug.Assert(graphics is not null);
 
             Graphics = graphics;
             ClipBounds = clipBounds;

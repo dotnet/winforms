@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -16,27 +14,27 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates a new DrawListViewSubItemEventArgs with the given parameters.
         /// </summary>
-        public DrawListViewSubItemEventArgs(Graphics graphics, Rectangle bounds, ListViewItem item,
-                        ListViewItem.ListViewSubItem subItem, int itemIndex, int columnIndex,
-                        ColumnHeader header, ListViewItemStates itemState)
+        public DrawListViewSubItemEventArgs(
+            Graphics graphics,
+            Rectangle bounds,
+            ListViewItem? item,
+            ListViewItem.ListViewSubItem? subItem,
+            int itemIndex,
+            int columnIndex,
+            ColumnHeader? header,
+            ListViewItemStates itemState)
         {
-            if (graphics is null)
-            {
-                throw new ArgumentNullException(nameof(graphics));
-            }
+            Graphics = graphics.OrThrowIfNull();
+
             if (itemIndex == -1)
             {
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item);
             }
-            else if (subItem is null)
+            else
             {
-                throw new ArgumentNullException(nameof(subItem));
+                ArgumentNullException.ThrowIfNull(subItem);
             }
 
-            Graphics = graphics;
             Bounds = bounds;
             Item = item;
             SubItem = subItem;
@@ -59,12 +57,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The parent item.
         /// </summary>
-        public ListViewItem Item { get; }
+        public ListViewItem? Item { get; }
 
         /// <summary>
         ///  The parent item.
         /// </summary>
-        public ListViewItem.ListViewSubItem SubItem { get; }
+        public ListViewItem.ListViewSubItem? SubItem { get; }
 
         /// <summary>
         ///  The index in the ListView of the parent item.
@@ -79,7 +77,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The header of this sub-item's column
         /// </summary>
-        public ColumnHeader Header { get; }
+        public ColumnHeader? Header { get; }
 
         /// <summary>
         ///  Miscellaneous state information pertaining to the parent item.
@@ -96,7 +94,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawBackground()
         {
-            Color backColor = (ItemIndex == -1) ? Item.BackColor : SubItem.BackColor;
+            Color backColor = ItemIndex == -1 ? Item!.BackColor : SubItem!.BackColor;
             using var backBrush = backColor.GetCachedSolidBrushScope();
             Graphics.FillRectangle(backBrush, Bounds);
         }
@@ -137,9 +135,9 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawText(TextFormatFlags flags)
         {
-            string text = (ItemIndex == -1) ? Item.Text : SubItem.Text;
-            Font font = (ItemIndex == -1) ? Item.Font : SubItem.Font;
-            Color color = (ItemIndex == -1) ? Item.ForeColor : SubItem.ForeColor;
+            string text = ItemIndex == -1 ? Item!.Text : SubItem!.Text;
+            Font font = ItemIndex == -1 ? Item!.Font : SubItem!.Font;
+            Color color = ItemIndex == -1 ? Item!.ForeColor : SubItem!.ForeColor;
             int padding = TextRenderer.MeasureText(" ", font).Width;
             Rectangle newBounds = Rectangle.Inflate(Bounds, -padding, 0);
 

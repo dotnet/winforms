@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Drawing;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -48,8 +47,6 @@ namespace System.Windows.Forms
 
         public const int UiaRootObjectId = -25;
         public const int UiaAppendRuntimeId = 3;
-
-        public const string uuid_IAccessible = "{618736E0-3C3D-11CF-810C-00AA00389B71}";
 
         public const string WinFormFrameworkId = "WinForm";
 
@@ -125,41 +122,7 @@ namespace System.Windows.Forms
             public int FlagsEx;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class ENLINK
-        {
-            public User32.NMHDR nmhdr;
-            public int msg;
-            public IntPtr wParam = IntPtr.Zero;
-            public IntPtr lParam = IntPtr.Zero;
-            public Richedit.CHARRANGE charrange;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class ENLINK64
-        {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 56)]
-            public byte[] contents = new byte[56];
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class ENPROTECTED
-        {
-            public User32.NMHDR nmhdr;
-            public int msg;
-            public IntPtr wParam;
-            public IntPtr lParam;
-            public Richedit.CHARRANGE chrg;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class ENPROTECTED64
-        {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 56)]
-            public byte[] contents = new byte[56];
-        }
-
-        public class ActiveX
+        public static class ActiveX
         {
             public const int ALIGN_MIN = 0x0;
             public const int ALIGN_NO_CHANGE = 0x0;
@@ -170,10 +133,6 @@ namespace System.Windows.Forms
             public const int ALIGN_MAX = 0x4;
 
             public static Guid IID_IUnknown = new Guid("{00000000-0000-0000-C000-000000000046}");
-
-            private ActiveX()
-            {
-            }
         }
 
         /// <summary>
@@ -183,7 +142,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static string GetLocalPath(string fileName)
         {
-            System.Diagnostics.Debug.Assert(fileName != null && fileName.Length > 0, "Cannot get local path, fileName is not valid");
+            System.Diagnostics.Debug.Assert(fileName is not null && fileName.Length > 0, "Cannot get local path, fileName is not valid");
 
             Uri uri = new Uri(fileName);
             return uri.LocalPath + uri.Fragment;

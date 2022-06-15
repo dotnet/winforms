@@ -15,15 +15,15 @@ namespace System.Windows.Forms
     ///  This is the toolstrip used for merging the [:)]    [_][#][X] buttons onto an
     ///  mdi parent when an MDI child is maximized.
     /// </summary>
-    internal class MdiControlStrip : MenuStrip
+    internal partial class MdiControlStrip : MenuStrip
     {
-        private readonly ToolStripMenuItem system;
-        private readonly ToolStripMenuItem close;
-        private readonly ToolStripMenuItem minimize;
-        private readonly ToolStripMenuItem restore;
-        private MenuStrip mergedMenu;
+        private readonly ToolStripMenuItem _system;
+        private readonly ToolStripMenuItem _close;
+        private readonly ToolStripMenuItem _minimize;
+        private readonly ToolStripMenuItem _restore;
+        private MenuStrip _mergedMenu;
 
-        private IWin32Window target;
+        private IWin32Window _target;
 
         /// <summary> target is ideally the MDI Child to send the system commands to.
         ///  although there's nothing MDI child specific to it... you could have this
@@ -32,15 +32,15 @@ namespace System.Windows.Forms
         public MdiControlStrip(IWin32Window target)
         {
             IntPtr hMenu = User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(target)), bRevert: BOOL.FALSE);
-            this.target = target;
+            _target = target;
 
             // The menu item itself takes care of enabledness and sending WM_SYSCOMMAND messages to the target.
-            minimize = new ControlBoxMenuItem(hMenu, User32.SC.MINIMIZE, target);
-            close = new ControlBoxMenuItem(hMenu, User32.SC.CLOSE, target);
-            restore = new ControlBoxMenuItem(hMenu, User32.SC.RESTORE, target);
+            _minimize = new ControlBoxMenuItem(hMenu, User32.SC.MINIMIZE, target);
+            _close = new ControlBoxMenuItem(hMenu, User32.SC.CLOSE, target);
+            _restore = new ControlBoxMenuItem(hMenu, User32.SC.RESTORE, target);
 
             // The dropDown of the system menu is the one that talks to native.
-            system = new SystemMenuItem();
+            _system = new SystemMenuItem();
 
             // However in the event that the target handle changes we have to push the new handle into everyone.
             if (target is Control controlTarget)
@@ -50,7 +50,8 @@ namespace System.Windows.Forms
             }
 
             // add in opposite order to how you want it merged
-            Items.AddRange(new ToolStripItem[] { minimize, restore, close, system });
+            Items.AddRange(new ToolStripItem[] { _minimize, _restore, _close, _system });
+
             SuspendLayout();
             foreach (ToolStripItem item in Items)
             {
@@ -64,46 +65,56 @@ namespace System.Windows.Forms
                 item.ImageScaling = ToolStripItemImageScaling.SizeToFit;
             }
 
-            // set up the sytem menu
+            // set up the system menu
 
-            system.Image = GetTargetWindowIcon();
-            system.Alignment = ToolStripItemAlignment.Left;
-            system.DropDownOpening += new EventHandler(OnSystemMenuDropDownOpening);
-            system.ImageScaling = ToolStripItemImageScaling.None;
-            system.DoubleClickEnabled = true;
-            system.DoubleClick += new EventHandler(OnSystemMenuDoubleClick);
-            system.Padding = Padding.Empty;
-            system.ShortcutKeys = Keys.Alt | Keys.OemMinus;
+            _system.Image = GetTargetWindowIcon();
+            _system.Visible = GetTargetWindowIconVisibility();
+            _system.Alignment = ToolStripItemAlignment.Left;
+            _system.DropDownOpening += new EventHandler(OnSystemMenuDropDownOpening);
+            _system.ImageScaling = ToolStripItemImageScaling.None;
+            _system.DoubleClickEnabled = true;
+            _system.DoubleClick += new EventHandler(OnSystemMenuDoubleClick);
+            _system.Padding = Padding.Empty;
+            _system.ShortcutKeys = Keys.Alt | Keys.OemMinus;
             ResumeLayout(false);
         }
 
         public ToolStripMenuItem Close
         {
-            get { return close; }
+            get { return _close; }
         }
 
         internal MenuStrip MergedMenu
         {
             get
             {
-                return mergedMenu;
+                return _mergedMenu;
             }
             set
             {
-                mergedMenu = value;
+                _mergedMenu = value;
             }
         }
 
         private Image GetTargetWindowIcon()
         {
-            IntPtr hIcon = User32.SendMessageW(new HandleRef(this, GetSafeHandle(target)), User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+            IntPtr hIcon = User32.SendMessageW(GetSafeHandle(_target), User32.WM.GETICON, (nint)User32.ICON.SMALL);
             Icon icon = hIcon != IntPtr.Zero ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
             Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
 
             Image systemIcon = smallIcon.ToBitmap();
             smallIcon.Dispose();
+            GC.KeepAlive(_target);
 
             return systemIcon;
+        }
+
+        private bool GetTargetWindowIconVisibility() => _target is not Form formTarget || formTarget.ShowIcon;
+
+        public void updateIcon()
+        {
+            _system.Image = GetTargetWindowIcon();
+            _system.Visible = GetTargetWindowIconVisibility();
         }
 
         protected internal override void OnItemAdded(ToolStripItemEventArgs e)
@@ -115,7 +126,7 @@ namespace System.Windows.Forms
         private void OnTargetWindowDisposed(object sender, EventArgs e)
         {
             UnhookTarget();
-            target = null;
+            _target = null;
         }
 
         private void OnTargetWindowHandleRecreated(object sender, EventArgs e)
@@ -123,37 +134,38 @@ namespace System.Windows.Forms
             // in the case that the handle for the form is recreated we need to set
             // up the handles to point to the new window handle for the form.
 
-            system.SetNativeTargetWindow(target);
-            minimize.SetNativeTargetWindow(target);
-            close.SetNativeTargetWindow(target);
-            restore.SetNativeTargetWindow(target);
+            _system.SetNativeTargetWindow(_target);
+            _minimize.SetNativeTargetWindow(_target);
+            _close.SetNativeTargetWindow(_target);
+            _restore.SetNativeTargetWindow(_target);
 
-            IntPtr hMenu = User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(target)), bRevert: BOOL.FALSE);
-            system.SetNativeTargetMenu(hMenu);
-            minimize.SetNativeTargetMenu(hMenu);
-            close.SetNativeTargetMenu(hMenu);
-            restore.SetNativeTargetMenu(hMenu);
+            IntPtr hMenu = User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(_target)), bRevert: BOOL.FALSE);
+            _system.SetNativeTargetMenu(hMenu);
+            _minimize.SetNativeTargetMenu(hMenu);
+            _close.SetNativeTargetMenu(hMenu);
+            _restore.SetNativeTargetMenu(hMenu);
 
             // clear off the System DropDown.
-            if (system.HasDropDownItems)
+            if (_system.HasDropDownItems)
             {
                 // next time we need one we'll just fetch it fresh.
-                system.DropDown.Items.Clear();
-                system.DropDown.Dispose();
+                _system.DropDown.Items.Clear();
+                _system.DropDown.Dispose();
             }
 
-            system.Image = GetTargetWindowIcon();
+            _system.Image = GetTargetWindowIcon();
+            _system.Visible = GetTargetWindowIconVisibility();
         }
 
         private void OnSystemMenuDropDownOpening(object sender, EventArgs e)
         {
-            if (!system.HasDropDownItems && (target != null))
+            if (!_system.HasDropDownItems && (_target is not null))
             {
-                system.DropDown = ToolStripDropDownMenu.FromHMenu(User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(target)), bRevert: BOOL.FALSE), target);
+                _system.DropDown = ToolStripDropDownMenu.FromHMenu(User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(_target)), bRevert: BOOL.FALSE), _target);
             }
             else if (MergedMenu is null)
             {
-                system.DropDown.Dispose();
+                _system.DropDown.Dispose();
             }
         }
 
@@ -167,59 +179,23 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 UnhookTarget();
-                target = null;
+                _target = null;
             }
+
             base.Dispose(disposing);
         }
 
         private void UnhookTarget()
         {
-            if (target != null)
+            if (_target is not null)
             {
-                if (target is Control controlTarget)
+                if (_target is Control controlTarget)
                 {
                     controlTarget.HandleCreated -= new EventHandler(OnTargetWindowHandleRecreated);
                     controlTarget.Disposed -= new EventHandler(OnTargetWindowDisposed);
                 }
-                target = null;
-            }
-        }
 
-        // when the system menu item shortcut is evaluated - pop the dropdown
-        internal class ControlBoxMenuItem : ToolStripMenuItem
-        {
-            internal ControlBoxMenuItem(IntPtr hMenu, User32.SC nativeMenuCommandId, IWin32Window targetWindow) :
-                base(hMenu, (int)nativeMenuCommandId, targetWindow)
-            {
-            }
-
-            internal override bool CanKeyboardSelect => false;
-        }
-
-        // when the system menu item shortcut is evaluated - pop the dropdown
-        internal class SystemMenuItem : ToolStripMenuItem
-        {
-            public SystemMenuItem()
-            {
-                AccessibleName = SR.MDIChildSystemMenuItemAccessibleName;
-            }
-            protected internal override bool ProcessCmdKey(ref Message m, Keys keyData)
-            {
-                if (Visible && ShortcutKeys == keyData)
-                {
-                    ShowDropDown();
-                    DropDown.SelectNextToolStripItem(null, true);
-                    return true;
-                }
-                return base.ProcessCmdKey(ref m, keyData);
-            }
-            protected override void OnOwnerChanged(EventArgs e)
-            {
-                if (HasDropDownItems && DropDown.Visible)
-                {
-                    HideDropDown();
-                }
-                base.OnOwnerChanged(e);
+                _target = null;
             }
         }
     }

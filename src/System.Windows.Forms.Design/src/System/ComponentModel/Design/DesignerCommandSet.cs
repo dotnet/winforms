@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.ComponentModel.Design;
 
 namespace System.ComponentModel.Design
 {

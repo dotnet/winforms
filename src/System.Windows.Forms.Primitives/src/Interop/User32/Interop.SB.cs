@@ -10,7 +10,7 @@ internal static partial class Interop
         {
             HORZ = 0,
             VERT = 1,
-            CTL =  2,
+            CTL = 2,
             BOTH = 3,
         }
     }

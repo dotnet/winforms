@@ -2,12 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Buffers;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
-using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 using static Interop;
@@ -34,12 +32,30 @@ namespace System.Windows.Forms
         // Folder picked by the user.
         private string _selectedPath;
 
+        // Initial folder.
+        private string _initialDirectory;
+
+        // Win32 file dialog FOS_* option flags.
+        private int _options;
+
         /// <summary>
-        ///  Initializes a new instance of the <see cref='FolderBrowserDialog'/> class.
+        ///  Initializes a new instance of the <see cref="FolderBrowserDialog"/> class.
         /// </summary>
         public FolderBrowserDialog()
         {
             Reset();
+        }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether the dialog box adds the folder being selected to the recent list.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FolderBrowserDialogAddToRecent))]
+        public bool AddToRecent
+        {
+            get => !GetOption((int)FOS.DONTADDTORECENT);
+            set => SetOption((int)FOS.DONTADDTORECENT, !value);
         }
 
         /// <summary>
@@ -50,10 +66,53 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler HelpRequest
+        public new event EventHandler? HelpRequest
         {
             add => base.HelpRequest += value;
             remove => base.HelpRequest -= value;
+        }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether the OK button of the dialog box is
+        ///  disabled until the user navigates the view or edits the filename (if applicable).
+        /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///  Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.
+        ///  </para>
+        /// </remarks>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FolderBrowserDialogOkRequiresInteraction))]
+        public bool OkRequiresInteraction
+        {
+            get => GetOption((int)FOS.OKBUTTONNEEDSINTERACTION);
+            set => SetOption((int)FOS.OKBUTTONNEEDSINTERACTION, value);
+        }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether the dialog box displays hidden and system files.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FolderBrowserDialogShowHiddenFiles))]
+        public bool ShowHiddenFiles
+        {
+            get => GetOption((int)FOS.FORCESHOWHIDDEN);
+            set => SetOption((int)FOS.FORCESHOWHIDDEN, value);
+        }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether the items shown by default in the view's
+        ///  navigation pane are shown.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FolderBrowserDialogShowPinnedPlaces))]
+        public bool ShowPinnedPlaces
+        {
+            get => !GetOption((int)FOS.HIDEPINNEDPLACES);
+            set => SetOption((int)FOS.HIDEPINNEDPLACES, !value);
         }
 
         /// <summary>
@@ -66,6 +125,24 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatFolderBrowsing))]
         [SRDescription(nameof(SR.FolderBrowserDialogShowNewFolderButton))]
         public bool ShowNewFolderButton { get; set; }
+
+        /// <summary>
+        /// <para>
+        /// Gets or sets the GUID to associate with this dialog state. Typically, state such
+        /// as the last visited folder and the position and size of the dialog is persisted
+        /// based on the name of the executable file. By specifying a GUID, an application can
+        /// have different persisted states for different versions of the dialog within the
+        /// same application (for example, an import dialog and an open dialog).
+        /// </para>
+        /// <para>
+        /// This functionality is not available if an application is not using visual styles
+        /// or if <see cref="FolderBrowserDialog.AutoUpgradeEnabled"/> is set to <see langword="false"/>.
+        /// </para>
+        /// </summary>
+        [Localizable(false)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public Guid? ClientGuid { get; set; }
 
         /// <summary>
         ///  Gets the directory path of the folder the user picked.
@@ -81,6 +158,19 @@ namespace System.Windows.Forms
         {
             get => _selectedPath;
             set => _selectedPath = value ?? string.Empty;
+        }
+
+        /// <summary>
+        ///  Gets or sets the initial directory displayed by the folder browser dialog.
+        /// </summary>
+        [SRCategory(nameof(SR.CatFolderBrowsing))]
+        [DefaultValue("")]
+        [Editor("System.Windows.Forms.Design.InitialDirectoryEditor, System.Windows.Forms.Design, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", typeof(UITypeEditor))]
+        [SRDescription(nameof(SR.FDinitialDirDescr))]
+        public string InitialDirectory
+        {
+            get => _initialDirectory;
+            set => _initialDirectory = value ?? string.Empty;
         }
 
         /// <summary>
@@ -131,7 +221,7 @@ namespace System.Windows.Forms
         [DefaultValue(false)]
         [Localizable(true)]
         [SRCategory(nameof(SR.CatFolderBrowsing))]
-        [Description(nameof(SR.FolderBrowserDialogUseDescriptionForTitle))]
+        [SRDescription(nameof(SR.FolderBrowserDialogUseDescriptionForTitle))]
         public bool UseDescriptionForTitle { get; set; }
 
         private bool UseVistaDialogInternal
@@ -142,12 +232,18 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Resets all properties to their default values.
         /// </summary>
+        [MemberNotNull(nameof(_descriptionText))]
+        [MemberNotNull(nameof(_selectedPath))]
+        [MemberNotNull(nameof(_initialDirectory))]
         public override void Reset()
         {
+            _options = (int)(FOS.PICKFOLDERS | FOS.FORCEFILESYSTEM | FOS.FILEMUSTEXIST);
             _rootFolder = Environment.SpecialFolder.Desktop;
             _descriptionText = string.Empty;
             _selectedPath = string.Empty;
+            _initialDirectory = string.Empty;
             ShowNewFolderButton = true;
+            ClientGuid = null;
         }
 
         /// <summary>
@@ -169,12 +265,25 @@ namespace System.Windows.Forms
 
         private bool TryRunDialogVista(IntPtr owner, out bool returnValue)
         {
-            OpenFileDialog.NativeFileOpenDialog dialog;
+            Interop.WinFormsComWrappers.FileOpenDialogWrapper dialog;
             try
             {
                 // Creating the Vista dialog can fail on Windows Server Core, even if the
                 // Server Core App Compatibility FOD is installed.
-                dialog = new OpenFileDialog.NativeFileOpenDialog();
+                HRESULT hr = Ole32.CoCreateInstance(
+                    in CLSID.FileOpenDialog,
+                    IntPtr.Zero,
+                    Ole32.CLSCTX.INPROC_SERVER | Ole32.CLSCTX.LOCAL_SERVER | Ole32.CLSCTX.REMOTE_SERVER,
+                    in NativeMethods.ActiveX.IID_IUnknown,
+                    out IntPtr lpDialogUnknownPtr);
+                if (!hr.Succeeded())
+                {
+                    Marshal.ThrowExceptionForHR((int)hr);
+                }
+
+                var obj = WinFormsComWrappers.Instance
+                    .GetOrCreateObjectForComInstance(lpDialogUnknownPtr, CreateObjectFlags.UniqueInstance);
+                dialog = (Interop.WinFormsComWrappers.FileOpenDialogWrapper)obj;
             }
             catch (COMException)
             {
@@ -194,7 +303,7 @@ namespace System.Windows.Forms
                         return true;
                     }
 
-                    throw Marshal.GetExceptionForHR((int)hr);
+                    throw Marshal.GetExceptionForHR((int)hr)!;
                 }
 
                 GetResult(dialog);
@@ -203,15 +312,19 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (dialog != null)
-                {
-                    Marshal.FinalReleaseComObject(dialog);
-                }
+                dialog.Dispose();
             }
         }
 
         private void SetDialogProperties(IFileDialog dialog)
         {
+            if (ClientGuid is { } clientGuid)
+            {
+                // IFileDialog::SetClientGuid should be called immediately after creation of the dialog object.
+                // https://docs.microsoft.com/windows/win32/api/shobjidl_core/nf-shobjidl_core-ifiledialog-setclientguid#remarks
+                dialog.SetClientGuid(clientGuid);
+            }
+
             // Description
             if (!string.IsNullOrEmpty(_descriptionText))
             {
@@ -221,17 +334,31 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    IFileDialogCustomize customize = (IFileDialogCustomize)dialog;
+                    var customize = (WinFormsComWrappers.FileOpenDialogWrapper)dialog;
                     customize.AddText(0, _descriptionText);
                 }
             }
 
-            dialog.SetOptions(FOS.PICKFOLDERS | FOS.FORCEFILESYSTEM | FOS.FILEMUSTEXIST);
+            dialog.SetOptions((FOS)_options);
+
+            if (!string.IsNullOrEmpty(_initialDirectory))
+            {
+                try
+                {
+                    IShellItem initialDirectory = GetShellItemForPath(_initialDirectory);
+
+                    dialog.SetDefaultFolder(initialDirectory);
+                    dialog.SetFolder(initialDirectory);
+                }
+                catch (FileNotFoundException)
+                {
+                }
+            }
 
             if (!string.IsNullOrEmpty(_selectedPath))
             {
-                string parent = Path.GetDirectoryName(_selectedPath);
-                if (parent is null || !Directory.Exists(parent))
+                string? parent = Path.GetDirectoryName(_selectedPath);
+                if (parent is null || !string.IsNullOrEmpty(_initialDirectory) || !Directory.Exists(parent))
                 {
                     dialog.SetFileName(_selectedPath);
                 }
@@ -244,25 +371,30 @@ namespace System.Windows.Forms
             }
         }
 
-        private static IShellItem CreateItemFromParsingName(string path)
-        {
-            Guid guid = typeof(IShellItem).GUID;
-            HRESULT hr = SHCreateItemFromParsingName(path, IntPtr.Zero, ref guid, out object item);
-            if (hr != HRESULT.S_OK)
-            {
-                throw new Win32Exception((int)hr);
-            }
+        private bool GetOption(int option) => (_options & option) != 0;
 
-            return (IShellItem)item;
+        /// <summary>
+        ///  Sets the given option to the given boolean value.
+        /// </summary>
+        private void SetOption(int option, bool value)
+        {
+            if (value)
+            {
+                _options |= option;
+            }
+            else
+            {
+                _options &= ~option;
+            }
         }
 
         private void GetResult(IFileDialog dialog)
         {
-            dialog.GetResult(out IShellItem item);
-            HRESULT hr = item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath);
-            if (!hr.Succeeded())
+            dialog.GetResult(out IShellItem? item);
+            if (item is not null)
             {
-                throw Marshal.GetExceptionForHR((int)hr);
+                HRESULT hr = item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath!);
+                hr.ThrowIfFailed();
             }
         }
 
@@ -292,7 +424,7 @@ namespace System.Windows.Forms
                 // under the MTA threading model (...dialog does appear under MTA, but is totally non-functional).
                 if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != System.Threading.ApartmentState.STA)
                 {
-                    throw new Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
+                    throw new ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
                 }
 
                 var callback = new BrowseCallbackProc(FolderBrowserDialog_BrowseCallbackProc);
@@ -322,7 +454,7 @@ namespace System.Windows.Forms
                             }
 
                             // Retrieve the path from the IDList.
-                            SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath);
+                            SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath!);
                             GC.KeepAlive(callback);
                             return true;
                         }
@@ -345,11 +477,19 @@ namespace System.Windows.Forms
             {
                 case BFFM.INITIALIZED:
                     // Indicates the browse dialog box has finished initializing. The lpData value is zero.
+
+                    if (_initialDirectory.Length != 0)
+                    {
+                        // Try to expand the folder specified by initialDir
+                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETEXPANDED, (nint)BOOL.TRUE, _initialDirectory);
+                    }
+
                     if (_selectedPath.Length != 0)
                     {
                         // Try to select the folder specified by selectedPath
-                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETSELECTIONW, PARAM.FromBool(true), _selectedPath);
+                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETSELECTIONW, (nint)BOOL.TRUE, _selectedPath);
                     }
+
                     break;
                 case BFFM.SELCHANGED:
                     // Indicates the selection has changed. The lpData parameter points to the item identifier list for the newly selected item.
@@ -358,8 +498,9 @@ namespace System.Windows.Forms
                     {
                         // Try to retrieve the path from the IDList
                         bool isFileSystemFolder = SHGetPathFromIDListLongPath(selectedPidl, out _);
-                        User32.SendMessageW(hwnd, (User32.WM)BFFM.ENABLEOK, IntPtr.Zero, PARAM.FromBool(isFileSystemFolder));
+                        User32.SendMessageW(hwnd, (User32.WM)BFFM.ENABLEOK, 0, (nint)isFileSystemFolder.ToBOOL());
                     }
+
                     break;
             }
 

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-
 internal static partial class Interop
 {
     internal static partial class Gdi32
@@ -17,6 +15,7 @@ internal static partial class Interop
             public bool IsNull => Handle == IntPtr.Zero;
 
             public static explicit operator IntPtr(HENHMETAFILE hmetafile) => hmetafile.Handle;
+            public static explicit operator HENHMETAFILE(IntPtr hmetafile) => new HENHMETAFILE(hmetafile);
         }
     }
 }

@@ -7,6 +7,11 @@
         <target state="translated">Nezpracovaná hodnota VT: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="General_MissingService">
+        <source>The service '{0}' must be installed for this feature to work.  Ensure that this service is available.</source>
+        <target state="translated">Pro využití této funkce musí být nainstalovaná služba {0}. Zkontrolujte, jestli je tato služba dostupná.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
         <target state="translated">Nejméně jedna položka není platná v parametru IDictionary. Ověřte, zda všechny hodnoty odpovídají vlastnostem objektu.</target>

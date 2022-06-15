@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.VisualStyles.Tests
@@ -13,20 +12,20 @@ namespace System.Windows.Forms.VisualStyles.Tests
     // NB: doesn't require thread affinity
     public class VisualStyleRendererTests : IClassFixture<ThreadExceptionFixture>
     {
-        public static IEnumerable<object[]> Ctor_VisualStyleEement_TestData()
+        public static IEnumerable<object[]> Ctor_VisualStyleElement_TestData()
         {
             yield return new object[] { VisualStyleElement.Button.PushButton.Hot };
             yield return new object[] { VisualStyleElement.Button.PushButton.Normal };
             yield return new object[] { VisualStyleElement.Button.RadioButton.CheckedHot };
             yield return new object[] { VisualStyleElement.Button.RadioButton.CheckedNormal };
             yield return new object[] { VisualStyleElement.ComboBox.DropDownButton.Hot };
-            yield return new object[] { VisualStyleElement.ComboBox.DropDownButton.Normal};
+            yield return new object[] { VisualStyleElement.ComboBox.DropDownButton.Normal };
             yield return new object[] { VisualStyleElement.CreateElement("BUTTON", 0, int.MinValue) };
             yield return new object[] { VisualStyleElement.CreateElement("BUTTON", 0, int.MaxValue) };
         }
 
         [Theory]
-        [MemberData(nameof(Ctor_VisualStyleEement_TestData))]
+        [MemberData(nameof(Ctor_VisualStyleElement_TestData))]
         public void VisualStyleRenderer_Ctor_String_Int_Int(VisualStyleElement element)
         {
             var renderer = new VisualStyleRenderer(element.ClassName, element.Part, element.State);
@@ -60,7 +59,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [MemberData(nameof(Ctor_VisualStyleEement_TestData))]
+        [MemberData(nameof(Ctor_VisualStyleElement_TestData))]
         public void VisualStyleRenderer_Ctor_VisualStyleElement(VisualStyleElement element)
         {
             var renderer = new VisualStyleRenderer(element);
@@ -91,6 +90,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
             Assert.True(result);
             Assert.Equal(result, VisualStyleRenderer.IsSupported);
         }
+
         public static IEnumerable<object[]> IsElementDefined_TestData()
         {
             yield return new object[] { VisualStyleElement.Button.PushButton.Hot, true };
@@ -137,7 +137,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
             // Don't verify anything, just make sure the interop call succeeds.
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
             using var bitmap = new Bitmap(10, 10);
-            using  Graphics graphics = Graphics.FromImage(bitmap);
+            using Graphics graphics = Graphics.FromImage(bitmap);
             renderer.DrawBackground(graphics, bounds);
             Assert.Equal(0, renderer.LastHResult);
         }
@@ -219,7 +219,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalidMasked), typeof(Edges))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalidMasked), typeof(Edges))]
         public void VisualStyleRenderer_DrawEdge_InvalidEdges_ThrowsInvalidEnumArgumentException(Edges edges)
         {
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
@@ -229,7 +229,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalidMasked), typeof(EdgeStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalidMasked), typeof(EdgeStyle))]
         public void VisualStyleRenderer_DrawEdge_InvalidStyle_ThrowsInvalidEnumArgumentException(EdgeStyle style)
         {
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
@@ -239,7 +239,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalidMasked), typeof(EdgeEffects))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalidMasked), typeof(EdgeEffects))]
         public void VisualStyleRenderer_DrawEdge_InvalidEffects_ThrowsInvalidEnumArgumentException(EdgeEffects effects)
         {
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
@@ -512,7 +512,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [MemberData(nameof(Ctor_VisualStyleEement_TestData))]
+        [MemberData(nameof(Ctor_VisualStyleElement_TestData))]
         public void VisualStyleRenderer_SetParameters_InvokeStringIntInt_Success(VisualStyleElement element)
         {
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Hot);
@@ -533,7 +533,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [MemberData(nameof(Ctor_VisualStyleEement_TestData))]
+        [MemberData(nameof(Ctor_VisualStyleElement_TestData))]
         public void VisualStyleRenderer_SetParameters_InvokeVisualStyleElement_Success(VisualStyleElement element)
         {
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Hot);
@@ -576,6 +576,17 @@ namespace System.Windows.Forms.VisualStyles.Tests
             using Font font = renderer.GetFont(graphics, FontProperty.TextFont);
 
             Assert.NotNull(font);
+        }
+
+        [Theory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FontProperty))]
+        public void VisualStyleRenderer_GetFont_for_InvalidFontProperty(FontProperty value)
+        {
+            var renderer = new VisualStyleRenderer("TEXTSTYLE", 1, 0);
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+
+            Assert.Throws<InvalidEnumArgumentException>("prop", () => renderer.GetFont(graphics, value));
         }
     }
 }

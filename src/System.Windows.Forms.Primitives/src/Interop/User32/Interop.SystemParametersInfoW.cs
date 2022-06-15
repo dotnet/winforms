@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -28,10 +27,10 @@ internal static partial class Interop
             return value;
         }
 
-        public unsafe static bool SystemParametersInfoW(SPI uiAction, ref bool value)
+        public unsafe static bool SystemParametersInfoW(SPI uiAction, ref bool value, uint fWinIni = 0)
         {
             BOOL nativeBool = value ? BOOL.TRUE : BOOL.FALSE;
-            bool result = SystemParametersInfoW(uiAction, 0, &nativeBool, 0);
+            bool result = SystemParametersInfoW(uiAction, 0, &nativeBool, fWinIni);
             value = nativeBool.IsTrue();
             return result;
         }

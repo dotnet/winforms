@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
@@ -18,7 +17,7 @@ namespace System.Windows.Forms
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer t_visualStyleRenderer = null;
+        private static VisualStyleRenderer? t_visualStyleRenderer = null;
         private static readonly VisualStyleElement s_checkBoxElement = VisualStyleElement.Button.CheckBox.UncheckedNormal;
 
         /// <summary>
@@ -110,8 +109,8 @@ namespace System.Windows.Forms
             Graphics g,
             Point glyphLocation,
             Rectangle textBounds,
-            string checkBoxText,
-            Font font,
+            string? checkBoxText,
+            Font? font,
             bool focused,
             CheckBoxState state)
         {
@@ -133,8 +132,8 @@ namespace System.Windows.Forms
             Graphics g,
             Point glyphLocation,
             Rectangle textBounds,
-            string checkBoxText,
-            Font font,
+            string? checkBoxText,
+            Font? font,
             TextFormatFlags flags,
             bool focused,
             CheckBoxState state)
@@ -146,8 +145,8 @@ namespace System.Windows.Forms
             Graphics g,
             Point glyphLocation,
             Rectangle textBounds,
-            string checkBoxText,
-            Font font,
+            string? checkBoxText,
+            Font? font,
             TextFormatFlags flags,
             bool focused,
             CheckBoxState state,
@@ -188,7 +187,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a CheckBox control.
         /// </summary>
-        public static void DrawCheckBox(Graphics g, Point glyphLocation, Rectangle textBounds, string checkBoxText, Font font, Image image, Rectangle imageBounds, bool focused, CheckBoxState state)
+        public static void DrawCheckBox(Graphics g, Point glyphLocation, Rectangle textBounds, string? checkBoxText, Font? font, Image image, Rectangle imageBounds, bool focused, CheckBoxState state)
         {
             DrawCheckBox(g, glyphLocation, textBounds, checkBoxText, font,
                        TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
@@ -202,8 +201,8 @@ namespace System.Windows.Forms
             Graphics g,
             Point glyphLocation,
             Rectangle textBounds,
-            string checkBoxText,
-            Font font,
+            string? checkBoxText,
+            Font? font,
             TextFormatFlags flags,
             Image image,
             Rectangle imageBounds,
@@ -389,6 +388,7 @@ namespace System.Windows.Forms
             }
         }
 
+        [MemberNotNull(nameof(t_visualStyleRenderer))]
         private static void InitializeRenderer(int state)
         {
             int part = s_checkBoxElement.Part;

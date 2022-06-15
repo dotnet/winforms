@@ -4,22 +4,40 @@
 
 using System.CodeDom;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text.RegularExpressions;
 using System.Windows.Forms.Design;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Serialization.Tests
 {
     public class CodeDomComponentSerializationServiceTests : IClassFixture<ThreadExceptionFixture>
     {
+        private Mock<ISite> GetDefaultMockSite(string name)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns(name);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns(default(Container));
+            mockSite
+                .Setup(s => s.GetService(typeof(IDictionaryService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IExtenderListService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
+                .Returns(null);
+
+            return mockSite;
+        }
+
         public static IEnumerable<object[]> Ctor_IServiceProvider_TestData()
         {
             yield return new object[] { null };
@@ -77,38 +95,14 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var service = new CodeDomComponentSerializationService();
             SerializationStore store = service.CreateStore();
             ISerializable serializable = Assert.IsAssignableFrom<ISerializable>(store);
-            var mockSite1 = new Mock<ISite>(MockBehavior.Strict);
-            mockSite1
-                .Setup(s => s.Name)
-                .Returns("name1");
-            mockSite1
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite1
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite1
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
+            var mockSite1 = GetDefaultMockSite("name1");
             var value1 = new DataClass
             {
                 IntValue = 1,
                 StringValue = "Value",
                 Site = mockSite1.Object
             };
-            var mockSite2 = new Mock<ISite>(MockBehavior.Strict);
-            mockSite2
-                .Setup(s => s.Name)
-                .Returns("name2");
-            mockSite2
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite2
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite2
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
+            var mockSite2 = GetDefaultMockSite("name2");
             var value2 = new DataClass
             {
                 IntValue = 2,
@@ -217,19 +211,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var service = new CodeDomComponentSerializationService(mockServiceProvider.Object);
             SerializationStore store = service.CreateStore();
             ISerializable serializable = Assert.IsAssignableFrom<ISerializable>(store);
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.Name)
-                .Returns("name");
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
+            var mockSite = GetDefaultMockSite("name");
             var value = new DataClass
             {
                 IntValue = 1,
@@ -334,19 +316,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var service = new CodeDomComponentSerializationService(mockServiceProvider.Object);
             SerializationStore store = service.CreateStore();
             ISerializable serializable = Assert.IsAssignableFrom<ISerializable>(store);
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.Name)
-                .Returns("name");
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
+            var mockSite = GetDefaultMockSite("name");
             var value = new DataClass
             {
                 IntValue = 1,
@@ -403,19 +373,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var service = new CodeDomComponentSerializationService();
             SerializationStore store = service.CreateStore();
             ISerializable serializable = Assert.IsAssignableFrom<ISerializable>(store);
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.Name)
-                .Returns("name");
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
+            var mockSite = GetDefaultMockSite("name");
             var value = new DataClass
             {
                 IntValue = 1,
@@ -468,19 +426,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             MemberDescriptor member2 = TypeDescriptor.GetProperties(typeof(DataClass))[nameof(DataClass.DefaultStringValue)];
             MemberDescriptor member3 = TypeDescriptor.GetEvents(typeof(DataClass))[nameof(DataClass.Event)];
             ISerializable serializable = Assert.IsAssignableFrom<ISerializable>(store);
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.Name)
-                .Returns("name");
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
+            var mockSite = GetDefaultMockSite("name");
             var value = new DataClass
             {
                 IntValue = 1,
@@ -531,19 +477,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             MemberDescriptor member2 = TypeDescriptor.GetProperties(typeof(DataClass))[nameof(DataClass.DefaultStringValue)];
             MemberDescriptor member3 = TypeDescriptor.GetEvents(typeof(DataClass))[nameof(DataClass.Event)];
             ISerializable serializable = Assert.IsAssignableFrom<ISerializable>(store);
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.Name)
-                .Returns("name");
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
+            var mockSite = GetDefaultMockSite("name");
             var value = new DataClass
             {
                 IntValue = 1,
@@ -593,19 +527,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             MemberDescriptor member1 = TypeDescriptor.GetProperties(typeof(DataClass))[nameof(DataClass.IntValue)];
             MemberDescriptor member2 = TypeDescriptor.GetProperties(typeof(DataClass))[nameof(DataClass.DefaultStringValue)];
             ISerializable serializable = Assert.IsAssignableFrom<ISerializable>(store);
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.Name)
-                .Returns("name");
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
+            var mockSite = GetDefaultMockSite("name");
             var value = new DataClass
             {
                 IntValue = 1,
@@ -659,19 +581,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             MemberDescriptor member1 = TypeDescriptor.GetProperties(typeof(DataClass))[nameof(DataClass.IntValue)];
             MemberDescriptor member2 = TypeDescriptor.GetProperties(typeof(DataClass))[nameof(DataClass.DefaultStringValue)];
             ISerializable serializable = Assert.IsAssignableFrom<ISerializable>(store);
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.Name)
-                .Returns("name");
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
+            var mockSite = GetDefaultMockSite("name");
             var value = new DataClass
             {
                 IntValue = 1,
@@ -770,7 +680,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Fact]
-        public void CreateStore_ISerializableGetObjectDataSeriaized_Success()
+        public void CreateStore_ISerializableGetObjectDataSerialized_Success()
         {
             var service = new CodeDomComponentSerializationService();
             SerializationStore store = service.CreateStore();
@@ -804,9 +714,9 @@ namespace System.ComponentModel.Design.Serialization.Tests
             using (var stream = new MemoryStream())
             {
                 var formatter = new BinaryFormatter();
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 Assert.Throws<SerializationException>(() => formatter.Serialize(stream, store));
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
         }
 
@@ -1805,6 +1715,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
                 remove { }
             }
         }
+
         private static void DumpState(Hashtable state)
         {
             Console.WriteLine("---- DUMPING ----");

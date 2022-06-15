@@ -1,13 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.IO;
-using Moq;
-using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -80,21 +75,12 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("e", () => renderer.DrawArrow(null));
         }
 
-        [WinFormsFact]
-        public void ToolStripRenderer_DrawArrow_NullEGraphics_ThrowsNullReferenceException()
-        {
-            var renderer = new SubToolStripRenderer();
-            var e = new ToolStripArrowRenderEventArgs(null, new SubToolStripItem(), Rectangle.Empty, Color.Red, ArrowDirection.Up);
-            Assert.Throws<NullReferenceException>(() => renderer.DrawArrow(e));
-        }
-
         public static IEnumerable<object[]> ToolStripItemRenderEventArgs_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new ToolStripItemRenderEventArgs(null, null) };
 
-            using var image = new Bitmap(10, 10);
-            using Graphics graphics = Graphics.FromImage(image);
+            var image = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(image);
             yield return new object[] { new ToolStripItemRenderEventArgs(graphics, new SubToolStripItem()) };
         }
 
@@ -149,10 +135,9 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ToolStripGripRenderEventArgs_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new ToolStripGripRenderEventArgs(null, new ToolStrip()) };
 
-            using var image = new Bitmap(10, 10);
-            using Graphics graphics = Graphics.FromImage(image);
+            var image = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(image);
             yield return new object[] { new ToolStripGripRenderEventArgs(graphics, new ToolStrip()) };
         }
 
@@ -206,10 +191,6 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> ToolStripItemImageRenderEventArgs_TestData()
         {
-            yield return new object[] { null, null, null, Rectangle.Empty };
-            yield return new object[] { null, null, null, new Rectangle(1, 2, 3, 4) };
-            yield return new object[] { null, null, new Bitmap(10, 10), Rectangle.Empty };
-
             var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
             yield return new object[] { graphics, new SubToolStripItem(), new Bitmap(10, 10), new Rectangle(1, 2, 3, 4) };
@@ -254,16 +235,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("e", () => renderer.DrawItemCheck(null));
         }
 
-        [WinFormsFact]
-        public void ToolStripRenderer_DrawItemCheck_NullEGraphics_ThrowsNullReferenceException()
-        {
-            var renderer = new SubToolStripRenderer();
-            using var image = new Bitmap(10, 10);
-            using var item = new SubToolStripItem();
-            var e = new ToolStripItemImageRenderEventArgs(null, item, image, new Rectangle(1, 2, 3, 4));
-            Assert.Throws<NullReferenceException>(() => renderer.DrawItemCheck(e));
-        }
-
         [WinFormsTheory]
         [MemberData(nameof(ToolStripItemImageRenderEventArgs_TestData))]
         public void ToolStripRenderer_DrawItemImage_Invoke_CallsRenderItemImage(Graphics graphics, ToolStripItem item, Image image, Rectangle imageRectangle)
@@ -295,16 +266,6 @@ namespace System.Windows.Forms.Tests
         {
             var renderer = new SubToolStripRenderer();
             Assert.Throws<ArgumentNullException>("e", () => renderer.DrawItemImage(null));
-        }
-
-        [WinFormsFact]
-        public void ToolStripRenderer_DrawItemImage_NullEGraphics_ThrowsNullReferenceException()
-        {
-            var renderer = new SubToolStripRenderer();
-            using var image = new Bitmap(10, 10);
-            using var item = new SubToolStripItem();
-            var e = new ToolStripItemImageRenderEventArgs(null, item, image, new Rectangle(1, 2, 3, 4));
-            Assert.Throws<NullReferenceException>(() => renderer.DrawItemImage(e));
         }
 
         [WinFormsTheory]
@@ -382,15 +343,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("e", () => renderer.DrawItemText(null));
         }
 
-        [WinFormsFact]
-        public void ToolStripRenderer_DrawItemText_NullEGraphics_ThrowsNullReferenceException()
-        {
-            var renderer = new SubToolStripRenderer();
-            using var item = new SubToolStripItem();
-            var e = new ToolStripItemTextRenderEventArgs(null, item, string.Empty, Rectangle.Empty, Color.Red, SystemFonts.MenuFont, TextFormatFlags.Left);
-            Assert.Throws<ArgumentNullException>("dc", () => renderer.DrawItemText(e));
-        }
-
         [WinFormsTheory]
         [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
         public void ToolStripRenderer_DrawLabelBackground_Invoke_CallsRenderLabelBackground(ToolStripItemRenderEventArgs eventArgs)
@@ -466,13 +418,9 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ToolStripSeparatorRenderEventArgs_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new ToolStripSeparatorRenderEventArgs(null, null, true) };
-            yield return new object[] { new ToolStripSeparatorRenderEventArgs(null, null, false) };
 
-            using var image = new Bitmap(10, 10);
-            using Graphics graphics = Graphics.FromImage(image);
-            yield return new object[] { new ToolStripSeparatorRenderEventArgs(graphics, null, true) };
-            yield return new object[] { new ToolStripSeparatorRenderEventArgs(graphics, null, false) };
+            var image = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(image);
             yield return new object[] { new ToolStripSeparatorRenderEventArgs(graphics, new ToolStripSeparator(), true) };
             yield return new object[] { new ToolStripSeparatorRenderEventArgs(graphics, new ToolStripSeparator(), false) };
         }
@@ -568,23 +516,13 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("e", () => renderer.DrawStatusStripSizingGrip(null));
         }
 
-        [WinFormsFact]
-        public void DrawStatusStripSizingGrip_NullEGraphics_ThrowsNullReferenceException()
-        {
-            var renderer = new SubToolStripRenderer();
-            var e = new ToolStripRenderEventArgs(null, new StatusStrip());
-            Assert.Throws<NullReferenceException>(() => renderer.DrawStatusStripSizingGrip(e));
-        }
-
         public static IEnumerable<object[]> ToolStripRenderEventArgs_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new ToolStripRenderEventArgs(null, new ToolStrip()) };
 
-            using var image = new Bitmap(10, 10);
-            using Graphics graphics = Graphics.FromImage(image);
+            var image = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(image);
             yield return new object[] { new ToolStripRenderEventArgs(graphics, new ToolStrip()) };
-
             yield return new object[] { new ToolStripRenderEventArgs(graphics, new StatusStrip()) };
         }
 
@@ -663,11 +601,9 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ToolStripPanelRenderEventArgs_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new ToolStripPanelRenderEventArgs(null, null) };
 
-            using var image = new Bitmap(10, 10);
-            using Graphics graphics = Graphics.FromImage(image);
-            yield return new object[] { new ToolStripPanelRenderEventArgs(graphics, null) };
+            var image = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(image);
             yield return new object[] { new ToolStripPanelRenderEventArgs(graphics, new ToolStripPanel()) };
         }
 
@@ -722,11 +658,9 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ToolStripContentPanelRenderEventArgs_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new ToolStripContentPanelRenderEventArgs(null, null) };
 
-            using var image = new Bitmap(10, 10);
-            using Graphics graphics = Graphics.FromImage(image);
-            yield return new object[] { new ToolStripContentPanelRenderEventArgs(graphics, null) };
+            var image = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(image);
             yield return new object[] { new ToolStripContentPanelRenderEventArgs(graphics, new ToolStripContentPanel()) };
         }
 
@@ -808,14 +742,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderArrow(null));
         }
 
-        [WinFormsFact]
-        public void ToolStripRenderer_OnRenderArrow_NullEGraphics_ThrowsNullReferenceException()
-        {
-            var renderer = new SubToolStripRenderer();
-            var e = new ToolStripArrowRenderEventArgs(null, new SubToolStripItem(), Rectangle.Empty, Color.Red, ArrowDirection.Up);
-            Assert.Throws<NullReferenceException>(() => renderer.OnRenderArrow(e));
-        }
-
         [WinFormsTheory]
         [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
         public void ToolStripRenderer_OnRenderButtonBackground_Invoke_Nop(ToolStripItemRenderEventArgs e)
@@ -891,16 +817,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderItemCheck(null));
         }
 
-        [WinFormsFact]
-        public void ToolStripRenderer_OnRenderItemCheck_NullEGraphics_ThrowsNullReferenceException()
-        {
-            var renderer = new SubToolStripRenderer();
-            using var image = new Bitmap(10, 10);
-            using var item = new SubToolStripItem();
-            var e = new ToolStripItemImageRenderEventArgs(null, item, image, new Rectangle(1, 2, 3, 4));
-            Assert.Throws<NullReferenceException>(() => renderer.OnRenderItemCheck(e));
-        }
-
         [WinFormsTheory]
         [MemberData(nameof(ToolStripItemImageRenderEventArgs_TestData))]
         public void ToolStripRenderer_OnRenderItemImage_Invoke_Nop(Graphics graphics, ToolStripItem item, Image image, Rectangle imageRectangle)
@@ -919,26 +835,6 @@ namespace System.Windows.Forms.Tests
         {
             var renderer = new SubToolStripRenderer();
             Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderItemImage(null));
-        }
-
-        [WinFormsFact]
-        public void ToolStripRenderer_OnRenderItemImage_NullEGraphics_ThrowsNullReferenceException()
-        {
-            var renderer = new SubToolStripRenderer();
-            using var image = new Bitmap(10, 10);
-            using var item = new SubToolStripItem();
-            var e = new ToolStripItemImageRenderEventArgs(null, item, image, new Rectangle(1, 2, 3, 4));
-            Assert.Throws<NullReferenceException>(() => renderer.OnRenderItemImage(e));
-        }
-
-        [WinFormsFact]
-        public void ToolStripRenderer_OnRenderItemImage_NullEItem_ThrowsNullReferenceException()
-        {
-            var renderer = new SubToolStripRenderer();
-            using var image = new Bitmap(10, 10);
-            Graphics graphics = Graphics.FromImage(image);
-            var e = new ToolStripItemImageRenderEventArgs(graphics, null, image, new Rectangle(1, 2, 3, 4));
-            Assert.Throws<NullReferenceException>(() => renderer.OnRenderItemImage(e));
         }
 
         [WinFormsTheory]
@@ -961,15 +857,6 @@ namespace System.Windows.Forms.Tests
         {
             var renderer = new SubToolStripRenderer();
             Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderItemText(null));
-        }
-
-        [WinFormsFact]
-        public void ToolStripRenderer_OnRenderItemText_NullEGraphics_ThrowsNullReferenceException()
-        {
-            var renderer = new SubToolStripRenderer();
-            using var item = new SubToolStripItem();
-            var e = new ToolStripItemTextRenderEventArgs(null, item, string.Empty, Rectangle.Empty, Color.Red, SystemFonts.MenuFont, TextFormatFlags.Left);
-            Assert.Throws<ArgumentNullException>("dc", () => renderer.OnRenderItemText(e));
         }
 
         [WinFormsTheory]
@@ -1047,14 +934,6 @@ namespace System.Windows.Forms.Tests
         {
             var renderer = new SubToolStripRenderer();
             Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderStatusStripSizingGrip(null));
-        }
-
-        [WinFormsFact]
-        public void ToolStripRenderer_OnRenderStatusStripSizingGrip_NullEGraphics_ThrowsNullReferenceException()
-        {
-            var renderer = new SubToolStripRenderer();
-            var e = new ToolStripRenderEventArgs(null, new StatusStrip());
-            Assert.Throws<NullReferenceException>(() => renderer.OnRenderStatusStripSizingGrip(e));
         }
 
         [WinFormsTheory]

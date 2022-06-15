@@ -2,19 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public partial class DataGridView
     {
         private class DataGridViewSelectedCellsAccessibleObject : AccessibleObject
         {
-            private readonly DataGridView _owner;
+            private readonly DataGridView _ownerDataGridView;
 
             public DataGridViewSelectedCellsAccessibleObject(DataGridView owner)
             {
-                _owner = owner;
+                _ownerDataGridView = owner;
             }
 
             public override string Name
@@ -29,7 +27,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return _owner.AccessibilityObject;
+                    return _ownerDataGridView.AccessibilityObject;
                 }
             }
 
@@ -57,11 +55,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject GetChild(int index)
+            internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode() };
+
+            public override AccessibleObject? GetChild(int index)
             {
-                if (index >= 0 && index < _owner.GetCellCount(DataGridViewElementStates.Selected))
+                if (index >= 0 && index < _ownerDataGridView.GetCellCount(DataGridViewElementStates.Selected))
                 {
-                    return _owner.SelectedCell(index).AccessibilityObject;
+                    return _ownerDataGridView.SelectedCell(index).AccessibilityObject;
                 }
                 else
                 {
@@ -71,7 +71,7 @@ namespace System.Windows.Forms
 
             public override int GetChildCount()
             {
-                return _owner.GetCellCount(DataGridViewElementStates.Selected);
+                return _ownerDataGridView.GetCellCount(DataGridViewElementStates.Selected);
             }
 
             public override AccessibleObject GetSelected()
@@ -79,11 +79,11 @@ namespace System.Windows.Forms
                 return this;
             }
 
-            public override AccessibleObject GetFocused()
+            public override AccessibleObject? GetFocused()
             {
-                if (_owner.CurrentCell != null && _owner.CurrentCell.Selected)
+                if (_ownerDataGridView.CurrentCell is not null && _ownerDataGridView.CurrentCell.Selected)
                 {
-                    return _owner.CurrentCell.AccessibilityObject;
+                    return _ownerDataGridView.CurrentCell.AccessibilityObject;
                 }
                 else
                 {
@@ -91,28 +91,30 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
+            public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
             {
                 switch (navigationDirection)
                 {
                     case AccessibleNavigation.FirstChild:
-                        if (_owner.GetCellCount(DataGridViewElementStates.Selected) > 0)
+                        if (_ownerDataGridView.GetCellCount(DataGridViewElementStates.Selected) > 0)
                         {
-                            return _owner.SelectedCell(0).AccessibilityObject;
+                            return _ownerDataGridView.SelectedCell(0).AccessibilityObject;
                         }
                         else
                         {
                             return null;
                         }
+
                     case AccessibleNavigation.LastChild:
-                        if (_owner.GetCellCount(DataGridViewElementStates.Selected) > 0)
+                        if (_ownerDataGridView.GetCellCount(DataGridViewElementStates.Selected) > 0)
                         {
-                            return _owner.SelectedCell(_owner.GetCellCount(DataGridViewElementStates.Selected) - 1).AccessibilityObject;
+                            return _ownerDataGridView.SelectedCell(_ownerDataGridView.GetCellCount(DataGridViewElementStates.Selected) - 1).AccessibilityObject;
                         }
                         else
                         {
                             return null;
                         }
+
                     default:
                         {
                             return null;

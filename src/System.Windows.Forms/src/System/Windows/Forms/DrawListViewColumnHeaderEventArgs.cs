@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
@@ -18,11 +16,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates a new DrawListViewColumnHeaderEventArgs with the given parameters.
         /// </summary>
-        public DrawListViewColumnHeaderEventArgs(Graphics graphics, Rectangle bounds, int columnIndex,
-                                                 ColumnHeader header, ListViewItemStates state,
-                                                 Color foreColor, Color backColor, Font font)
+        public DrawListViewColumnHeaderEventArgs(
+            Graphics graphics,
+            Rectangle bounds,
+            int columnIndex,
+            ColumnHeader? header,
+            ListViewItemStates state,
+            Color foreColor,
+            Color backColor,
+            Font? font)
         {
-            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            Graphics = graphics.OrThrowIfNull();
             Bounds = bounds;
             ColumnIndex = columnIndex;
             Header = header;
@@ -50,7 +54,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The header object.
         /// </summary>
-        public ColumnHeader Header { get; }
+        public ColumnHeader? Header { get; }
 
         /// <summary>
         ///  State information pertaining to the header.
@@ -70,7 +74,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Font used to render the header's text.
         /// </summary>
-        public Font Font { get; }
+        public Font? Font { get; }
 
         /// <summary>
         ///  Causes the item do be drawn by the system instead of owner drawn.
@@ -135,7 +139,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawText(TextFormatFlags flags)
         {
-            string text = Header?.Text;
+            string? text = Header?.Text;
             int padding = TextRenderer.MeasureText(" ", Font).Width;
             Rectangle newBounds = Rectangle.Inflate(Bounds, -padding, 0);
 

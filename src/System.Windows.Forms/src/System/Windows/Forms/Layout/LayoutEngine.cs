@@ -2,17 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms.Layout
 {
     public abstract class LayoutEngine
     {
-        internal IArrangedElement CastToArrangedElement(object obj)
+        internal static IArrangedElement CastToArrangedElement(object obj)
         {
-            if (!(obj is IArrangedElement element))
+            if (obj is not IArrangedElement element)
             {
                 throw new NotSupportedException(string.Format(SR.LayoutEngineUnsupportedType, obj.GetType()));
             }
@@ -27,10 +25,7 @@ namespace System.Windows.Forms.Layout
 
         public virtual void InitLayout(object child, BoundsSpecified specified)
         {
-            if (child is null)
-            {
-                throw new ArgumentNullException(nameof(child));
-            }
+            ArgumentNullException.ThrowIfNull(child);
 
             InitLayoutCore(CastToArrangedElement(child), specified);
         }
@@ -45,11 +40,7 @@ namespace System.Windows.Forms.Layout
 
         public virtual bool Layout(object container, LayoutEventArgs layoutEventArgs)
         {
-            if (container is null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
-
+            ArgumentNullException.ThrowIfNull(container);
             return LayoutCore(CastToArrangedElement(container), layoutEventArgs);
         }
 

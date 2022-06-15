@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
+#nullable enable
+
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -12,8 +13,8 @@ internal static partial class Interop
         [DllImport(Libraries.Gdi32, ExactSpelling = true, CharSet = CharSet.Unicode)]
         public unsafe static extern HDC CreateEnhMetaFileW(
             HDC hdc,
-            string lpFilename,
+            string? lpFilename,
             RECT* lprc,
-            string lpDesc);
+            string? lpDesc);
     }
 }

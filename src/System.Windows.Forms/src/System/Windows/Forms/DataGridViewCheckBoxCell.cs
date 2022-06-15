@@ -70,12 +70,14 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(SR.DataGridViewCell_FormattedValueTypeNull);
                 }
+
                 if (value is null || !FormattedValueType.IsAssignableFrom(value.GetType()))
                 {
                     // Assigned formatted value may not be of the good type, in cases where the app
                     // is feeding wrong values to the cell in virtual / databound mode.
                     throw new ArgumentException(SR.DataGridViewCheckBoxCell_InvalidValueType);
                 }
+
                 if (value is CheckState)
                 {
                     if (((CheckState)value) == System.Windows.Forms.CheckState.Checked)
@@ -139,6 +141,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridViewCell_FormattedValueTypeNull);
             }
+
             if (FormattedValueType.IsAssignableFrom(defaultCheckStateType))
             {
                 if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0x00)
@@ -147,6 +150,7 @@ namespace System.Windows.Forms
                     {
                         return SR.DataGridViewCheckBoxCell_ClipboardChecked;
                     }
+
                     return System.Windows.Forms.CheckState.Checked;
                 }
                 else if ((flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0x00)
@@ -155,6 +159,7 @@ namespace System.Windows.Forms
                     {
                         return SR.DataGridViewCheckBoxCell_ClipboardIndeterminate;
                     }
+
                     return System.Windows.Forms.CheckState.Indeterminate;
                 }
                 else
@@ -163,6 +168,7 @@ namespace System.Windows.Forms
                     {
                         return SR.DataGridViewCheckBoxCell_ClipboardUnchecked;
                     }
+
                     return System.Windows.Forms.CheckState.Unchecked;
                 }
             }
@@ -173,6 +179,7 @@ namespace System.Windows.Forms
                 {
                     return ret ? SR.DataGridViewCheckBoxCell_ClipboardTrue : SR.DataGridViewCheckBoxCell_ClipboardFalse;
                 }
+
                 return ret;
             }
             else
@@ -194,6 +201,7 @@ namespace System.Windows.Forms
                 {
                     return (ButtonState)buttonState;
                 }
+
                 return ButtonState.Normal;
             }
             set
@@ -227,10 +235,10 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null || Properties.ContainsObject(PropFalseValue))
+                if (value is not null || Properties.ContainsObject(PropFalseValue))
                 {
                     Properties.SetObject(PropFalseValue, value);
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -249,7 +257,7 @@ namespace System.Windows.Forms
         {
             set
             {
-                if (value != null || Properties.ContainsObject(PropFalseValue))
+                if (value is not null || Properties.ContainsObject(PropFalseValue))
                 {
                     Properties.SetObject(PropFalseValue, value);
                 }
@@ -266,15 +274,13 @@ namespace System.Windows.Forms
                 {
                     return (FlatStyle)flatStyle;
                 }
+
                 return FlatStyle.Standard;
             }
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value != FlatStyle)
                 {
                     Properties.SetInteger(PropFlatStyle, (int)value);
@@ -319,10 +325,10 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null || Properties.ContainsObject(PropIndeterminateValue))
+                if (value is not null || Properties.ContainsObject(PropIndeterminateValue))
                 {
                     Properties.SetObject(PropIndeterminateValue, value);
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -341,7 +347,7 @@ namespace System.Windows.Forms
         {
             set
             {
-                if (value != null || Properties.ContainsObject(PropIndeterminateValue))
+                if (value is not null || Properties.ContainsObject(PropIndeterminateValue))
                 {
                     Properties.SetObject(PropIndeterminateValue, value);
                 }
@@ -360,7 +366,7 @@ namespace System.Windows.Forms
                 if (ThreeState != value)
                 {
                     ThreeStateInternal = value;
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -402,10 +408,10 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null || Properties.ContainsObject(PropTrueValue))
+                if (value is not null || Properties.ContainsObject(PropTrueValue))
                 {
                     Properties.SetObject(PropTrueValue, value);
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -424,7 +430,7 @@ namespace System.Windows.Forms
         {
             set
             {
-                if (value != null || Properties.ContainsObject(PropTrueValue))
+                if (value is not null || Properties.ContainsObject(PropTrueValue))
                 {
                     Properties.SetObject(PropTrueValue, value);
                 }
@@ -436,7 +442,7 @@ namespace System.Windows.Forms
             get
             {
                 Type valueType = base.ValueType;
-                if (valueType != null)
+                if (valueType is not null)
                 {
                     return valueType;
                 }
@@ -453,7 +459,7 @@ namespace System.Windows.Forms
             set
             {
                 base.ValueType = value;
-                ThreeState = (value != null && defaultCheckStateType.IsAssignableFrom(value));
+                ThreeState = (value is not null && defaultCheckStateType.IsAssignableFrom(value));
             }
         }
 
@@ -471,6 +477,7 @@ namespace System.Windows.Forms
 
                 dataGridViewCell = (DataGridViewCheckBoxCell)System.Activator.CreateInstance(thisType);
             }
+
             base.CloneInternal(dataGridViewCell);
             dataGridViewCell.ThreeStateInternal = ThreeState;
             dataGridViewCell.TrueValueInternal = TrueValue;
@@ -505,10 +512,7 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             if (DataGridView is null || rowIndex < 0 || OwningColumn is null)
             {
@@ -564,10 +568,7 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             if (DataGridView is null ||
                 rowIndex < 0 ||
@@ -613,7 +614,7 @@ namespace System.Windows.Forms
                                                     TypeConverter formattedValueTypeConverter,
                                                     DataGridViewDataErrorContexts context)
         {
-            if (value != null)
+            if (value is not null)
             {
                 if (ThreeState)
                 {
@@ -649,7 +650,7 @@ namespace System.Windows.Forms
             }
 
             object ret = base.GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context);
-            if (ret != null && (context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
+            if (ret is not null && (context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
             {
                 if (ret is bool retBool)
                 {
@@ -679,6 +680,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return ret;
         }
 
@@ -689,10 +691,7 @@ namespace System.Windows.Forms
                 return new Size(-1, -1);
             }
 
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             DataGridViewFreeDimension freeDimension = DataGridViewCell.GetFreeDimensionFromConstraint(constraintSize);
             Rectangle borderWidthsRect = StdBorderWidths;
@@ -725,11 +724,13 @@ namespace System.Windows.Forms
                             preferredSize = new Size(checkBoxSize.Width + borderAndPaddingWidths + 2 * DATAGRIDVIEWCHECKBOXCELL_margin, 0);
                             break;
                         }
+
                     case DataGridViewFreeDimension.Height:
                         {
                             preferredSize = new Size(0, checkBoxSize.Height + borderAndPaddingHeights + 2 * DATAGRIDVIEWCHECKBOXCELL_margin);
                             break;
                         }
+
                     default:
                         {
                             preferredSize = new Size(checkBoxSize.Width + borderAndPaddingWidths + 2 * DATAGRIDVIEWCHECKBOXCELL_margin,
@@ -761,11 +762,13 @@ namespace System.Windows.Forms
                             preferredSize = new Size(checkBoxSize + borderAndPaddingWidths, 0);
                             break;
                         }
+
                     case DataGridViewFreeDimension.Height:
                         {
                             preferredSize = new Size(0, checkBoxSize + borderAndPaddingHeights);
                             break;
                         }
+
                     default:
                         {
                             preferredSize = new Size(checkBoxSize + borderAndPaddingWidths, checkBoxSize + borderAndPaddingHeights);
@@ -789,12 +792,14 @@ namespace System.Windows.Forms
                     preferredSize.Width = Math.Max(preferredSize.Width,
                                                    borderAndPaddingWidths + IconMarginWidth * 2 + s_iconsWidth);
                 }
+
                 if (freeDimension != DataGridViewFreeDimension.Width)
                 {
                     preferredSize.Height = Math.Max(preferredSize.Height,
                                                     borderAndPaddingHeights + IconMarginHeight * 2 + s_iconsHeight);
                 }
             }
+
             return preferredSize;
         }
 
@@ -840,6 +845,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             Point ptCurrentCell = DataGridView.CurrentCellAddress;
             if (ptCurrentCell.X == ColumnIndex &&
                 ptCurrentCell.Y == e.RowIndex &&
@@ -848,6 +854,7 @@ namespace System.Windows.Forms
                 if (SwitchFormattedValue())
                 {
                     NotifyDataGridViewOfValueChange();
+                    NotifyUiaClient();
                 }
             }
         }
@@ -868,6 +875,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (e.KeyCode == Keys.Space && !e.Alt && !e.Control && !e.Shift)
             {
                 UpdateButtonState(ButtonState | ButtonState.Checked, rowIndex);
@@ -881,21 +889,24 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (e.KeyCode == Keys.Space)
             {
                 UpdateButtonState(ButtonState & ~ButtonState.Checked, rowIndex);
                 if (!e.Alt && !e.Control && !e.Shift)
                 {
                     RaiseCellClick(new DataGridViewCellEventArgs(ColumnIndex, rowIndex));
-                    if (DataGridView != null &&
+                    if (DataGridView is not null &&
                         ColumnIndex < DataGridView.Columns.Count &&
                         rowIndex < DataGridView.Rows.Count)
                     {
                         RaiseCellContentClick(new DataGridViewCellEventArgs(ColumnIndex, rowIndex));
                     }
+
                     e.Handled = true;
                 }
-                NotifyMASSClient(new Point(ColumnIndex, rowIndex));
+
+                NotifyMSAAClient(ColumnIndex, rowIndex);
             }
         }
 
@@ -905,6 +916,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (ButtonState != ButtonState.Normal)
             {
                 Debug.Assert(RowIndex >= 0); // Cell is not in a shared row.
@@ -918,6 +930,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (e.Button == MouseButtons.Left && mouseInContentBounds)
             {
                 Debug.Assert(DataGridView.CellMouseDownInContentBounds);
@@ -993,20 +1006,49 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (e.Button == MouseButtons.Left)
             {
                 UpdateButtonState(ButtonState & ~ButtonState.Pushed, e.RowIndex);
-                NotifyMASSClient(new Point(e.ColumnIndex, e.RowIndex));
+                NotifyMSAAClient(e.ColumnIndex, e.RowIndex);
             }
         }
 
-        private void NotifyMASSClient(Point position)
+        private void NotifyUiaClient()
         {
-            Debug.Assert((position.X >= 0) && (position.X < DataGridView.Columns.Count));
-            Debug.Assert((position.Y >= 0) && (position.Y < DataGridView.Rows.Count));
+            bool isCheckboxChecked = false;
+            switch (EditingCellFormattedValue)
+            {
+                case string stringValue:
+                    isCheckboxChecked = stringValue == SR.DataGridViewCheckBoxCell_ClipboardChecked;
+                    break;
+                case CheckState checkStateValue:
+                    isCheckboxChecked = checkStateValue == CheckState.Checked;
+                    break;
+                case bool boolValue:
+                    isCheckboxChecked = boolValue;
+                    break;
+            }
 
-            int visibleRowIndex = DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, position.Y);
-            int visibleColumnIndex = DataGridView.Columns.ColumnIndexToActualDisplayIndex(position.X, DataGridViewElementStates.Visible);
+            if (IsParentAccessibilityObjectCreated)
+            {
+                var cellName = AccessibilityObject.Name ?? string.Empty;
+                AccessibilityObject.InternalRaiseAutomationNotification(
+                    Automation.AutomationNotificationKind.Other,
+                    Automation.AutomationNotificationProcessing.MostRecent,
+                    isCheckboxChecked
+                        ? string.Format(SR.DataGridViewCheckBoxCellCheckedStateDescription, cellName)
+                        : string.Format(SR.DataGridViewCheckBoxCellUncheckedStateDescription, cellName));
+            }
+        }
+
+        private void NotifyMSAAClient(int columnIndex, int rowIndex)
+        {
+            Debug.Assert((columnIndex >= 0) && (columnIndex < DataGridView.Columns.Count));
+            Debug.Assert((rowIndex >= 0) && (rowIndex < DataGridView.Rows.Count));
+
+            int visibleRowIndex = DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, rowIndex);
+            int visibleColumnIndex = DataGridView.Columns.ColumnIndexToActualDisplayIndex(columnIndex, DataGridViewElementStates.Visible);
 
             int topHeaderRowIncrement = DataGridView.ColumnHeadersVisible ? 1 : 0;
             int rowHeaderIncrement = DataGridView.RowHeadersVisible ? 1 : 0;
@@ -1017,7 +1059,10 @@ namespace System.Windows.Forms
             int childID = visibleColumnIndex + rowHeaderIncrement;  // + 1 because the column header cell is at index 0 in top header row acc obj
                                                                     //     same thing for the row header cell in the data grid view row acc obj
 
-            (DataGridView.AccessibilityObject as Control.ControlAccessibleObject).NotifyClients(AccessibleEvents.StateChange, objectID, childID);
+            if (DataGridView.IsAccessibilityObjectCreated && DataGridView.AccessibilityObject is Control.ControlAccessibleObject accessibleObject)
+            {
+                accessibleObject.NotifyClients(AccessibleEvents.StateChange, objectID, childID);
+            }
         }
 
         protected override void Paint(Graphics graphics,
@@ -1032,10 +1077,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             PaintPrivate(graphics,
                 clipBounds,
@@ -1081,7 +1123,7 @@ namespace System.Windows.Forms
             Debug.Assert(!paint || !computeContentBounds || !computeErrorIconBounds);
             Debug.Assert(!computeContentBounds || !computeErrorIconBounds || !paint);
             Debug.Assert(!computeErrorIconBounds || !paint || !computeContentBounds);
-            Debug.Assert(cellStyle != null);
+            Debug.Assert(cellStyle is not null);
 
             Rectangle resultBounds;
 
@@ -1106,13 +1148,13 @@ namespace System.Windows.Forms
                 drawErrorText = false;
             }
 
-            if (formattedValue != null && formattedValue is CheckState)
+            if (formattedValue is not null && formattedValue is CheckState)
             {
                 checkState = (CheckState)formattedValue;
                 bs = (checkState == CheckState.Unchecked) ? ButtonState.Normal : ButtonState.Checked;
                 drawAsMixedCheckBox = (checkState == CheckState.Indeterminate);
             }
-            else if (formattedValue != null && formattedValue is bool)
+            else if (formattedValue is not null && formattedValue is bool)
             {
                 if ((bool)formattedValue)
                 {
@@ -1157,6 +1199,7 @@ namespace System.Windows.Forms
                 {
                     valBounds.Offset(cellStyle.Padding.Left, cellStyle.Padding.Top);
                 }
+
                 valBounds.Width -= cellStyle.Padding.Horizontal;
                 valBounds.Height -= cellStyle.Padding.Vertical;
             }
@@ -1368,7 +1411,7 @@ namespace System.Windows.Forms
 
                                 if (checkImage is null || checkImage.Width != fullSize.Width || checkImage.Height != fullSize.Height)
                                 {
-                                    if (checkImage != null)
+                                    if (checkImage is not null)
                                     {
                                         checkImage.Dispose();
                                         checkImage = null;
@@ -1388,6 +1431,7 @@ namespace System.Windows.Forms
                                             User32.DFC.MENU,
                                             User32.DFCS.MENUCHECK);
                                     }
+
                                     bitmap.MakeTransparent();
                                     checkImage = bitmap;
                                 }
@@ -1429,7 +1473,7 @@ namespace System.Windows.Forms
                                 DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                 DataGridView.RightToLeft);
 
-                            options.everettButtonCompat = false;
+                            options.DotNetOneButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
                             if (paint && PaintContentForeground(paintParts))
@@ -1443,10 +1487,10 @@ namespace System.Windows.Forms
                                     DataGridView.Enabled,
                                     checkState,
                                     g,
-                                    layout.checkBounds,
-                                    colors.buttonFace,
+                                    layout.CheckBounds,
+                                    colors.ButtonFace,
                                     disabledColors: true);
-                                CheckBoxBaseAdapter.DrawPopupBorder(g, layout.checkBounds, colors);
+                                CheckBoxBaseAdapter.DrawPopupBorder(g, layout.CheckBounds, colors);
                                 CheckBoxBaseAdapter.DrawCheckOnly(
                                     checkBoxSize.Width,
                                     checkState == CheckState.Checked || checkState == CheckState.Indeterminate,
@@ -1455,10 +1499,10 @@ namespace System.Windows.Forms
                                     g,
                                     layout,
                                     colors,
-                                    colors.windowText);
+                                    colors.WindowText);
                             }
 
-                            resultBounds = layout.checkBounds;
+                            resultBounds = layout.CheckBounds;
                         }
                         else if (DataGridView.MouseEnteredCellAddress.Y == rowIndex
                             && DataGridView.MouseEnteredCellAddress.X == ColumnIndex
@@ -1478,7 +1522,7 @@ namespace System.Windows.Forms
                                 DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                 DataGridView.RightToLeft);
 
-                            options.everettButtonCompat = false;
+                            options.DotNetOneButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
                             if (paint && PaintContentForeground(paintParts))
@@ -1492,11 +1536,11 @@ namespace System.Windows.Forms
                                     DataGridView.Enabled,
                                     checkState,
                                     g,
-                                    layout.checkBounds,
-                                    colors.options.HighContrast ? colors.buttonFace : colors.highlight,
+                                    layout.CheckBounds,
+                                    colors.Options.HighContrast ? colors.ButtonFace : colors.Highlight,
                                     disabledColors: true);
 
-                                CheckBoxBaseAdapter.DrawPopupBorder(g, layout.checkBounds, colors);
+                                CheckBoxBaseAdapter.DrawPopupBorder(g, layout.CheckBounds, colors);
                                 CheckBoxBaseAdapter.DrawCheckOnly(
                                     checkBoxSize.Width,
                                     checkState == CheckState.Checked || checkState == CheckState.Indeterminate,
@@ -1505,9 +1549,10 @@ namespace System.Windows.Forms
                                     g,
                                     layout,
                                     colors,
-                                    colors.windowText);
+                                    colors.WindowText);
                             }
-                            resultBounds = layout.checkBounds;
+
+                            resultBounds = layout.CheckBounds;
                         }
                         else
                         {
@@ -1524,7 +1569,7 @@ namespace System.Windows.Forms
                                 DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                 DataGridView.RightToLeft);
 
-                            options.everettButtonCompat = false;
+                            options.DotNetOneButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
                             if (paint && PaintContentForeground(paintParts))
@@ -1538,11 +1583,11 @@ namespace System.Windows.Forms
                                     DataGridView.Enabled,
                                     checkState,
                                     g,
-                                    layout.checkBounds,
-                                    colors.options.HighContrast ? colors.buttonFace : colors.highlight,
+                                    layout.CheckBounds,
+                                    colors.Options.HighContrast ? colors.ButtonFace : colors.Highlight,
                                     disabledColors: true);
 
-                                ControlPaint.DrawBorderSimple(g, layout.checkBounds, colors.buttonShadow);
+                                ControlPaint.DrawBorderSimple(g, layout.CheckBounds, colors.ButtonShadow);
                                 CheckBoxBaseAdapter.DrawCheckOnly(
                                     checkBoxSize.Width,
                                     checkState == CheckState.Checked || checkState == CheckState.Indeterminate,
@@ -1551,10 +1596,10 @@ namespace System.Windows.Forms
                                     g,
                                     layout,
                                     colors,
-                                    colors.windowText);
+                                    colors.WindowText);
                             }
 
-                            resultBounds = layout.checkBounds;
+                            resultBounds = layout.CheckBounds;
                         }
                     }
                 }
@@ -1592,36 +1637,36 @@ namespace System.Windows.Forms
         {
             Debug.Assert(formattedValue is null || FormattedValueType is null || FormattedValueType.IsAssignableFrom(formattedValue.GetType()));
 
-            if (formattedValue != null)
+            if (formattedValue is not null)
             {
                 if (formattedValue is bool boolean)
                 {
                     if (boolean)
                     {
-                        if (TrueValue != null)
+                        if (TrueValue is not null)
                         {
                             return TrueValue;
                         }
-                        else if (ValueType != null && ValueType.IsAssignableFrom(defaultBooleanType))
+                        else if (ValueType is not null && ValueType.IsAssignableFrom(defaultBooleanType))
                         {
                             return true;
                         }
-                        else if (ValueType != null && ValueType.IsAssignableFrom(defaultCheckStateType))
+                        else if (ValueType is not null && ValueType.IsAssignableFrom(defaultCheckStateType))
                         {
                             return CheckState.Checked;
                         }
                     }
                     else
                     {
-                        if (FalseValue != null)
+                        if (FalseValue is not null)
                         {
                             return FalseValue;
                         }
-                        else if (ValueType != null && ValueType.IsAssignableFrom(defaultBooleanType))
+                        else if (ValueType is not null && ValueType.IsAssignableFrom(defaultBooleanType))
                         {
                             return false;
                         }
-                        else if (ValueType != null && ValueType.IsAssignableFrom(defaultCheckStateType))
+                        else if (ValueType is not null && ValueType.IsAssignableFrom(defaultCheckStateType))
                         {
                             return CheckState.Unchecked;
                         }
@@ -1632,47 +1677,51 @@ namespace System.Windows.Forms
                     switch (state)
                     {
                         case CheckState.Checked:
-                            if (TrueValue != null)
+                            if (TrueValue is not null)
                             {
                                 return TrueValue;
                             }
-                            else if (ValueType != null && ValueType.IsAssignableFrom(defaultBooleanType))
+                            else if (ValueType is not null && ValueType.IsAssignableFrom(defaultBooleanType))
                             {
                                 return true;
                             }
-                            else if (ValueType != null && ValueType.IsAssignableFrom(defaultCheckStateType))
+                            else if (ValueType is not null && ValueType.IsAssignableFrom(defaultCheckStateType))
                             {
                                 return CheckState.Checked;
                             }
+
                             break;
                         case CheckState.Unchecked:
-                            if (FalseValue != null)
+                            if (FalseValue is not null)
                             {
                                 return FalseValue;
                             }
-                            else if (ValueType != null && ValueType.IsAssignableFrom(defaultBooleanType))
+                            else if (ValueType is not null && ValueType.IsAssignableFrom(defaultBooleanType))
                             {
                                 return false;
                             }
-                            else if (ValueType != null && ValueType.IsAssignableFrom(defaultCheckStateType))
+                            else if (ValueType is not null && ValueType.IsAssignableFrom(defaultCheckStateType))
                             {
                                 return CheckState.Unchecked;
                             }
+
                             break;
                         case CheckState.Indeterminate:
-                            if (IndeterminateValue != null)
+                            if (IndeterminateValue is not null)
                             {
                                 return IndeterminateValue;
                             }
-                            else if (ValueType != null && ValueType.IsAssignableFrom(defaultCheckStateType))
+                            else if (ValueType is not null && ValueType.IsAssignableFrom(defaultCheckStateType))
                             {
                                 return CheckState.Indeterminate;
                             }
+
                             /* case where this.ValueType.IsAssignableFrom(defaultBooleanType) is treated in base.ParseFormattedValue */
                             break;
                     }
                 }
             }
+
             return base.ParseFormattedValue(formattedValue, cellStyle, formattedValueTypeConverter, valueTypeConverter);
         }
 
@@ -1682,6 +1731,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             IDataGridViewEditingCell editingCell = (IDataGridViewEditingCell)this;
             if (FormattedValueType.IsAssignableFrom(typeof(CheckState)))
             {
@@ -1702,6 +1752,7 @@ namespace System.Windows.Forms
             {
                 editingCell.EditingCellFormattedValue = !((bool)editingCell.GetEditingCellFormattedValue(DataGridViewDataErrorContexts.Formatting));
             }
+
             return true;
         }
 

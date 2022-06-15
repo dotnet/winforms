@@ -126,4 +126,7 @@
   <data name="PropertyValueInvalidEntry" xml:space="preserve">
     <value>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</value>
   </data>
+  <data name="General_MissingService" xml:space="preserve">
+    <value>The service '{0}' must be installed for this feature to work.  Ensure that this service is available.</value>
+  </data>
 </root>

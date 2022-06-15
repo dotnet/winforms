@@ -10,49 +10,56 @@ using System.Diagnostics;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    internal class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridEntry
+    internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridEntry
     {
-        private readonly MergePropertyDescriptor mergedPd;
-        private readonly object[] objs;
+        private readonly MergePropertyDescriptor _mergedDescriptor;
+        private readonly object[] _objects;
 
-        public MultiPropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry peParent, object[] objectArray, PropertyDescriptor[] propInfo, bool hide)
-        : base(ownerGrid, peParent, hide)
+        public MultiPropertyDescriptorGridEntry(
+            PropertyGrid ownerGrid,
+            GridEntry parent,
+            object[] objectArray,
+            PropertyDescriptor[] propertyDescriptors,
+            bool hide)
+            : base(ownerGrid, parent, hide)
         {
-            mergedPd = new MergePropertyDescriptor(propInfo);
-            objs = objectArray;
-            base.Initialize(mergedPd);
+            _mergedDescriptor = new MergePropertyDescriptor(propertyDescriptors);
+            _objects = objectArray;
+            Initialize(_mergedDescriptor);
         }
 
         public override IContainer Container
         {
             get
             {
-                IContainer c = null;
+                IContainer container = null;
 
-                foreach (object o in objs)
+                foreach (object o in _objects)
                 {
-                    if (!(o is IComponent comp))
+                    if (o is not IComponent component)
                     {
-                        c = null;
+                        container = null;
                         break;
                     }
 
-                    if (comp.Site != null)
+                    if (component.Site is not null)
                     {
-                        if (c is null)
+                        if (container is null)
                         {
-                            c = comp.Site.Container;
+                            container = component.Site.Container;
                             continue;
                         }
-                        else if (c == comp.Site.Container)
+                        else if (container == component.Site.Container)
                         {
                             continue;
                         }
                     }
-                    c = null;
+
+                    container = null;
                     break;
                 }
-                return c;
+
+                return container;
             }
         }
 
@@ -60,35 +67,35 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                bool fExpandable = GetFlagSet(FL_EXPANDABLE);
+                bool expandable = GetFlagSet(Flags.Expandable);
 
-                if (fExpandable && ChildCollection.Count > 0)
+                if (expandable && ChildCollection.Count > 0)
                 {
                     return true;
                 }
 
-                if (GetFlagSet(FL_EXPANDABLE_FAILED))
+                if (GetFlagSet(Flags.ExpandableFailed))
                 {
                     return false;
                 }
 
                 try
                 {
-                    foreach (object o in mergedPd.GetValues(objs))
+                    foreach (object o in _mergedDescriptor.GetValues(_objects))
                     {
                         if (o is null)
                         {
-                            fExpandable = false;
+                            expandable = false;
                             break;
                         }
                     }
                 }
                 catch
                 {
-                    fExpandable = false;
+                    expandable = false;
                 }
 
-                return fExpandable;
+                return expandable;
             }
         }
 
@@ -101,245 +108,220 @@ namespace System.Windows.Forms.PropertyGridInternal
                 RecreateChildren();
                 if (Expanded)
                 {
-                    GridEntryHost.Refresh(false);
+                    OwnerGridView.Refresh(false);
                 }
             }
         }
 
-        protected override bool CreateChildren()
-        {
-            return CreateChildren(false);
-        }
-
-        protected override bool CreateChildren(bool diffOldChildren)
+        protected override bool CreateChildren(bool diffOldChildren = false)
         {
             try
             {
-                if (mergedPd.PropertyType.IsValueType || (Flags & GridEntry.FLAG_IMMUTABLE) != 0)
+                if (_mergedDescriptor.PropertyType.IsValueType || EntryFlags.HasFlag(Flags.Immutable))
                 {
                     return base.CreateChildren(diffOldChildren);
                 }
 
                 ChildCollection.Clear();
 
-                MultiPropertyDescriptorGridEntry[] mergedProps = MultiSelectRootGridEntry.PropertyMerger.GetMergedProperties(mergedPd.GetValues(objs), this, PropertySort, CurrentTab);
+                var mergedProperties = MultiSelectRootGridEntry.PropertyMerger.GetMergedProperties(
+                    _mergedDescriptor.GetValues(_objects),
+                    this,
+                    _propertySort,
+                    OwnerTab);
 
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProps is null, "PropertyGridView: MergedProps returned null!");
+                Debug.WriteLineIf(
+                    CompModSwitches.DebugGridView.TraceVerbose && mergedProperties is null,
+                    "PropertyGridView: MergedProps returned null!");
 
-                if (mergedProps != null)
+                if (mergedProperties is not null)
                 {
-                    ChildCollection.AddRange(mergedProps);
+                    ChildCollection.AddRange(mergedProperties);
                 }
-                bool fExpandable = Children.Count > 0;
-                if (!fExpandable)
+
+                bool expandable = Children.Count > 0;
+                if (!expandable)
                 {
-                    SetFlag(GridEntry.FL_EXPANDABLE_FAILED, true);
+                    SetFlag(Flags.ExpandableFailed, true);
                 }
-                return fExpandable;
+
+                return expandable;
             }
-            catch
+            catch (Exception e)
             {
+                Debug.Fail(e.Message);
                 return false;
             }
         }
 
-        public override object GetChildValueOwner(GridEntry childEntry)
-        {
-            if (mergedPd.PropertyType.IsValueType || (Flags & GridEntry.FLAG_IMMUTABLE) != 0)
-            {
-                return base.GetChildValueOwner(childEntry);
-            }
-            return mergedPd.GetValues(objs);
-        }
+        internal override object GetValueOwnerInternal()
+            => _mergedDescriptor.PropertyType.IsValueType || EntryFlags.HasFlag(Flags.Immutable)
+                ? base.GetValueOwnerInternal()
+                : _mergedDescriptor.GetValues(_objects);
 
         public override IComponent[] GetComponents()
         {
-            IComponent[] temp = new IComponent[objs.Length];
-            Array.Copy(objs, 0, temp, 0, objs.Length);
-            return temp;
+            var copy = new IComponent[_objects.Length];
+            Array.Copy(_objects, 0, copy, 0, _objects.Length);
+            return copy;
         }
 
-        /// <summary>
-        ///  Returns the text value of this property.
-        /// </summary>
         public override string GetPropertyTextValue(object value)
         {
-            bool allEqual = true;
             try
             {
-                if (value is null && mergedPd.GetValue(objs, out allEqual) is null)
+                if (value is null && _mergedDescriptor.GetValue(_objects, out bool allEqual) is null && !allEqual)
                 {
-                    if (!allEqual)
-                    {
-                        return "";
-                    }
+                    return string.Empty;
                 }
             }
             catch
             {
-                return "";
+                return string.Empty;
             }
+
             return base.GetPropertyTextValue(value);
         }
 
-        internal override bool NotifyChildValue(GridEntry pe, int type)
+        internal override bool SendNotification(GridEntry entry, Notify notification)
         {
-            bool success = false;
+            DesignerTransaction transaction = DesignerHost?.CreateTransaction();
 
-            IDesignerHost host = DesignerHost;
-            DesignerTransaction trans = null;
-
-            if (host != null)
-            {
-                trans = host.CreateTransaction();
-            }
             try
             {
-                success = base.NotifyChildValue(pe, type);
+                return base.SendNotification(entry, notification);
             }
             finally
             {
-                if (trans != null)
-                {
-                    trans.Commit();
-                }
+                transaction?.Commit();
             }
-            return success;
         }
 
-        protected override void NotifyParentChange(GridEntry ge)
+        protected override void NotifyParentsOfChanges(GridEntry entry)
         {
-            // now see if we need to notify the parent(s) up the chain
-            while (ge != null &&
-                   ge is PropertyDescriptorGridEntry &&
-                   ((PropertyDescriptorGridEntry)ge)._propertyInfo.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
+            // Now see if we need to notify the parent(s) up the chain.
+            while (entry is PropertyDescriptorGridEntry propertyEntry
+                && propertyEntry.PropertyDescriptor.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
             {
-                // find the next parent property with a differnet value owner
-                object owner = ge.GetValueOwner();
+                // Find the next parent property with a different value owner.
+                object owner = entry.GetValueOwner();
 
-                // find the next property descriptor with a different parent
-                while (!(ge is PropertyDescriptorGridEntry) || OwnersEqual(owner, ge.GetValueOwner()))
+                // Find the next property descriptor with a different parent.
+                while (entry is not PropertyDescriptorGridEntry || OwnersEqual(owner, entry.GetValueOwner()))
                 {
-                    ge = ge.ParentGridEntry;
-                    if (ge is null)
+                    entry = entry.ParentGridEntry;
+                    if (entry is null)
                     {
                         break;
                     }
                 }
 
-                // fire the change on that owner
-                if (ge != null)
+                // Fire the change on the owner.
+                if (entry is null)
                 {
-                    owner = ge.GetValueOwner();
+                    continue;
+                }
 
-                    IComponentChangeService changeService = ComponentChangeService;
+                owner = entry.GetValueOwner();
 
-                    if (changeService != null)
+                IComponentChangeService changeService = ComponentChangeService;
+
+                if (changeService is null)
+                {
+                    continue;
+                }
+
+                if (owner is Array ownerArray)
+                {
+                    for (int i = 0; i < ownerArray.Length; i++)
                     {
-                        if (owner is Array ownerArray)
+                        PropertyDescriptor propertyInfo = propertyEntry.PropertyDescriptor;
+
+                        if (propertyInfo is MergePropertyDescriptor descriptor)
                         {
-                            for (int i = 0; i < ownerArray.Length; i++)
-                            {
-                                PropertyDescriptor pd = ((PropertyDescriptorGridEntry)ge)._propertyInfo;
-                                ;
-
-                                if (pd is MergePropertyDescriptor)
-                                {
-                                    pd = ((MergePropertyDescriptor)pd)[i];
-                                }
-
-                                if (pd != null)
-                                {
-                                    changeService.OnComponentChanging(ownerArray.GetValue(i), pd);
-                                    changeService.OnComponentChanged(ownerArray.GetValue(i), pd, null, null);
-                                }
-                            }
+                            propertyInfo = descriptor[i];
                         }
-                        else
+
+                        if (propertyInfo is not null)
                         {
-                            changeService.OnComponentChanging(owner, ((PropertyDescriptorGridEntry)ge)._propertyInfo);
-                            changeService.OnComponentChanged(owner, ((PropertyDescriptorGridEntry)ge)._propertyInfo, null, null);
+                            changeService.OnComponentChanging(ownerArray.GetValue(i), propertyInfo);
+                            changeService.OnComponentChanged(ownerArray.GetValue(i), propertyInfo);
                         }
                     }
+                }
+                else
+                {
+                    changeService.OnComponentChanging(owner, propertyEntry.PropertyDescriptor);
+                    changeService.OnComponentChanged(owner, propertyEntry.PropertyDescriptor);
                 }
             }
         }
 
-        internal override bool NotifyValueGivenParent(object obj, int type)
+        protected override bool SendNotification(object owner, Notify notification)
         {
-            if (obj is ICustomTypeDescriptor)
+            if (owner is ICustomTypeDescriptor descriptor)
             {
-                obj = ((ICustomTypeDescriptor)obj).GetPropertyOwner(_propertyInfo);
+                owner = descriptor.GetPropertyOwner(PropertyDescriptor);
             }
 
-            switch (type)
+            switch (notification)
             {
-                case NOTIFY_RESET:
+                case Notify.Reset:
 
-                    object[] objects = (object[])obj;
+                    object[] objects = (object[])owner;
 
-                    if (objects != null && objects.Length > 0)
+                    if (objects is null || objects.Length == 0)
                     {
-                        IDesignerHost host = DesignerHost;
-                        DesignerTransaction trans = null;
-
-                        if (host != null)
-                        {
-                            trans = host.CreateTransaction(string.Format(SR.PropertyGridResetValue, PropertyName));
-                        }
-                        try
-                        {
-                            bool needChangeNotify = !(objects[0] is IComponent) || ((IComponent)objects[0]).Site is null;
-                            if (needChangeNotify)
-                            {
-                                if (!OnComponentChanging())
-                                {
-                                    if (trans != null)
-                                    {
-                                        trans.Cancel();
-                                        trans = null;
-                                    }
-                                    return false;
-                                }
-                            }
-
-                            mergedPd.ResetValue(obj);
-
-                            if (needChangeNotify)
-                            {
-                                OnComponentChanged();
-                            }
-                            NotifyParentChange(this);
-                        }
-                        finally
-                        {
-                            if (trans != null)
-                            {
-                                trans.Commit();
-                            }
-                        }
+                        return false;
                     }
-                    return false;
-                case NOTIFY_DBL_CLICK:
-                case NOTIFY_RETURN:
-                    Debug.Assert(_propertyInfo is MergePropertyDescriptor, "Did not get a MergePropertyDescriptor!!!");
-                    Debug.Assert(obj is object[], "Did not get an array of objects!!");
 
-                    if (_propertyInfo is MergePropertyDescriptor mpd)
+                    IDesignerHost host = DesignerHost;
+                    DesignerTransaction transaction = host?.CreateTransaction(string.Format(SR.PropertyGridResetValue, PropertyName));
+
+                    try
                     {
-                        object[] objs = (object[])obj;
-
-                        if (_eventBindings is null)
+                        bool needChangeNotify = objects[0] is not IComponent component || component.Site is null;
+                        if (needChangeNotify)
                         {
-                            _eventBindings = (IEventBindingService)GetService(typeof(IEventBindingService));
+                            if (!OnComponentChanging())
+                            {
+                                transaction?.Cancel();
+                                transaction = null;
+
+                                return false;
+                            }
                         }
 
-                        if (_eventBindings != null)
+                        _mergedDescriptor.ResetValue(owner);
+
+                        if (needChangeNotify)
                         {
-                            EventDescriptor descriptor = _eventBindings.GetEvent(mpd[0]);
-                            if (descriptor != null)
+                            OnComponentChanged();
+                        }
+
+                        NotifyParentsOfChanges(this);
+                    }
+                    finally
+                    {
+                        transaction?.Commit();
+                    }
+
+                    return false;
+                case Notify.DoubleClick:
+                case Notify.Return:
+                    Debug.Assert(PropertyDescriptor is MergePropertyDescriptor, "Did not get a MergePropertyDescriptor!!!");
+                    Debug.Assert(owner is object[], "Did not get an array of objects!!");
+
+                    if (PropertyDescriptor is MergePropertyDescriptor mergeDescriptor)
+                    {
+                        _eventBindings ??= this.GetService<IEventBindingService>();
+
+                        if (_eventBindings is not null)
+                        {
+                            EventDescriptor eventDescriptor = _eventBindings.GetEvent(mergeDescriptor[0]);
+                            if (eventDescriptor is not null)
                             {
-                                return ViewEvent(obj, null, descriptor, true);
+                                return ViewEvent(owner, null, eventDescriptor, true);
                             }
                         }
 
@@ -347,16 +329,16 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                     else
                     {
-                        return base.NotifyValueGivenParent(obj, type);
+                        return base.SendNotification(owner, notification);
                     }
             }
 
-            return base.NotifyValueGivenParent(obj, type);
+            return base.SendNotification(owner, notification);
         }
 
-        private bool OwnersEqual(object owner1, object owner2)
+        private static bool OwnersEqual(object owner1, object owner2)
         {
-            if (!(owner1 is Array))
+            if (owner1 is not Array)
             {
                 return owner1 == owner2;
             }
@@ -371,44 +353,45 @@ namespace System.Windows.Forms.PropertyGridInternal
                             return false;
                         }
                     }
+
                     return true;
                 }
+
                 return false;
             }
         }
 
         public override bool OnComponentChanging()
         {
-            if (ComponentChangeService != null)
+            if (ComponentChangeService is null)
             {
-                int cLength = objs.Length;
-                for (int i = 0; i < cLength; i++)
+                return true;
+            }
+
+            int length = _objects.Length;
+            for (int i = 0; i < length; i++)
+            {
+                try
                 {
-                    try
-                    {
-                        ComponentChangeService.OnComponentChanging(objs[i], mergedPd[i]);
-                    }
-                    catch (CheckoutException co)
-                    {
-                        if (co == CheckoutException.Canceled)
-                        {
-                            return false;
-                        }
-                        throw;
-                    }
+                    ComponentChangeService.OnComponentChanging(_objects[i], _mergedDescriptor[i]);
+                }
+                catch (CheckoutException co) when (co == CheckoutException.Canceled)
+                {
+                    return false;
                 }
             }
+
             return true;
         }
 
         public override void OnComponentChanged()
         {
-            if (ComponentChangeService != null)
+            if (ComponentChangeService is not null)
             {
-                int cLength = objs.Length;
-                for (int i = 0; i < cLength; i++)
+                int length = _objects.Length;
+                for (int i = 0; i < length; i++)
                 {
-                    ComponentChangeService.OnComponentChanged(objs[i], mergedPd[i], null, null);
+                    ComponentChangeService.OnComponentChanged(_objects[i], _mergedDescriptor[i]);
                 }
             }
         }

@@ -2,15 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
     public class ColumnReorderedEventArgs : CancelEventArgs
     {
-        public ColumnReorderedEventArgs(int oldDisplayIndex, int newDisplayIndex, ColumnHeader header) : base()
+        public ColumnReorderedEventArgs(int oldDisplayIndex, int newDisplayIndex, ColumnHeader? header) : base()
         {
             OldDisplayIndex = oldDisplayIndex;
             NewDisplayIndex = newDisplayIndex;
@@ -21,6 +19,6 @@ namespace System.Windows.Forms
 
         public int NewDisplayIndex { get; }
 
-        public ColumnHeader Header { get; }
+        public ColumnHeader? Header { get; }
     }
 }

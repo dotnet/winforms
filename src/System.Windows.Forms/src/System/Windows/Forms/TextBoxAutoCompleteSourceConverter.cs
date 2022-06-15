@@ -32,6 +32,7 @@ namespace System.Windows.Forms
                     list.Add(values[i]);
                 }
             }
+
             return new StandardValuesCollection(list);
         }
     }

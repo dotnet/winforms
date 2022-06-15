@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using static Interop;
@@ -18,19 +17,16 @@ namespace System.Windows.Forms
         // compressed magic header.  If we see this, the image stream is compressed.
         // (unicode for MSFT).
         private static readonly byte[] HEADER_MAGIC = new byte[] { 0x4D, 0x53, 0x46, 0X74 };
-        private static readonly object internalSyncObject = new object();
+        private static readonly object s_syncObject = new object();
 
-        private readonly ImageList imageList;
-        private ImageList.NativeImageList nativeImageList;
+        private readonly ImageList _imageList;
+        private ImageList.NativeImageList _nativeImageList;
 
         internal ImageListStreamer(ImageList il)
         {
-            imageList = il;
+            _imageList = il;
         }
 
-        /**
-         * Constructor used in deserialization
-         */
         private ImageListStreamer(SerializationInfo info, StreamingContext context)
         {
             SerializationInfoEnumerator sie = info.GetEnumerator();
@@ -38,6 +34,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             while (sie.MoveNext())
             {
                 if (string.Equals(sie.Name, "Data", StringComparison.OrdinalIgnoreCase))
@@ -46,29 +43,10 @@ namespace System.Windows.Forms
                     try
                     {
 #endif
-                        byte[] dat = (byte[])sie.Value;
-                        if (dat != null)
+                        byte[] data = (byte[])sie.Value;
+                        if (data is not null)
                         {
-                            // We enclose this imagelist handle create in a theming scope.
-                            IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
-
-                            try
-                            {
-                                using MemoryStream ms = new MemoryStream(Decompress(dat));
-                                lock (internalSyncObject)
-                                {
-                                    ComCtl32.InitCommonControls();
-                                    nativeImageList = new ImageList.NativeImageList(new Ole32.GPStream(ms));
-                                }
-                            }
-                            finally
-                            {
-                                ThemingScope.Deactivate(userCookie);
-                            }
-                            if (nativeImageList.Handle == IntPtr.Zero)
-                            {
-                                throw new InvalidOperationException(SR.ImageListStreamerLoadFailed);
-                            }
+                            Deserialize(data);
                         }
 #if DEBUG
                     }
@@ -82,11 +60,28 @@ namespace System.Windows.Forms
             }
         }
 
+        internal ImageListStreamer(Stream stream)
+        {
+            if (stream is MemoryStream ms
+                && ms.TryGetBuffer(out ArraySegment<byte> buffer)
+                && buffer.Offset == 0)
+            {
+                Deserialize(buffer.Array);
+            }
+            else
+            {
+                stream.Position = 0;
+                using MemoryStream copyStream = new(checked((int)stream.Length));
+                stream.CopyTo(copyStream);
+                Deserialize(copyStream.GetBuffer());
+            }
+        }
+
         /// <summary>
         ///  Compresses the given input, returning a new array that represents
         ///  the compressed data.
         /// </summary>
-        private byte[] Compress(byte[] input)
+        private static byte[] Compress(byte[] input)
         {
             int finalLength = 0;
             int idx = 0;
@@ -151,7 +146,7 @@ namespace System.Windows.Forms
         ///  Decompresses the given input, returning a new array that represents
         ///  the uncompressed data.
         /// </summary>
-        private byte[] Decompress(byte[] input)
+        private static byte[] Decompress(byte[] input)
         {
             int finalLength = 0;
             int idx = 0;
@@ -204,21 +199,35 @@ namespace System.Windows.Forms
             return output;
         }
 
-        public void /*cpr: ISerializable*/GetObjectData(SerializationInfo si, StreamingContext context)
+        private void Deserialize(byte[] data)
         {
-            MemoryStream stream = new MemoryStream();
+            // We enclose this imagelist handle create in a theming scope.
+            IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
 
-            IntPtr handle = IntPtr.Zero;
-            if (imageList != null)
+            try
             {
-                handle = imageList.Handle;
+                using MemoryStream ms = new MemoryStream(Decompress(data));
+                lock (s_syncObject)
+                {
+                    ComCtl32.InitCommonControls();
+                    _nativeImageList = new ImageList.NativeImageList(new Ole32.GPStream(ms));
+                }
             }
-            else if (nativeImageList != null)
+            finally
             {
-                handle = nativeImageList.Handle;
+                ThemingScope.Deactivate(userCookie);
             }
 
-            if (handle == IntPtr.Zero || !WriteImageList(handle, stream))
+            if (_nativeImageList.Handle == IntPtr.Zero)
+            {
+                throw new InvalidOperationException(SR.ImageListStreamerLoadFailed);
+            }
+        }
+
+        public void GetObjectData(SerializationInfo si, StreamingContext context)
+        {
+            using MemoryStream stream = new MemoryStream();
+            if (!WriteImageList(stream))
             {
                 throw new InvalidOperationException(SR.ImageListStreamerSaveFailed);
             }
@@ -226,20 +235,43 @@ namespace System.Windows.Forms
             si.AddValue("Data", Compress(stream.ToArray()));
         }
 
-        internal ImageList.NativeImageList GetNativeImageList()
+        internal void GetObjectData(Stream stream)
         {
-            return nativeImageList;
+            if (!WriteImageList(stream))
+            {
+                throw new InvalidOperationException(SR.ImageListStreamerSaveFailed);
+            }
         }
 
-        private bool WriteImageList(IntPtr imagelistHandle, Stream stream)
+        internal ImageList.NativeImageList GetNativeImageList()
         {
+            return _nativeImageList;
+        }
+
+        private bool WriteImageList(Stream stream)
+        {
+            IntPtr handle = IntPtr.Zero;
+            if (_imageList is not null)
+            {
+                handle = _imageList.Handle;
+            }
+            else if (_nativeImageList is not null)
+            {
+                handle = _nativeImageList.Handle;
+            }
+
+            if (handle == IntPtr.Zero)
+            {
+                return false;
+            }
+
             // What we need to do here is use WriteEx if comctl 6 or above, and Write otherwise. However, till we can fix
             // There isn't a reliable way to tell which version of comctl fusion is binding to.
             // So for now, we try to bind to WriteEx, and if that entry point isn't found, we use Write.
 
             try
             {
-                HRESULT hr = ComCtl32.ImageList.WriteEx(new HandleRef(this, imagelistHandle), ComCtl32.ILP.DOWNLEVEL, new Ole32.GPStream(stream));
+                HRESULT hr = ComCtl32.ImageList.WriteEx(new HandleRef(this, handle), ComCtl32.ILP.DOWNLEVEL, new Ole32.GPStream(stream));
                 return hr == HRESULT.S_OK;
             }
             catch (EntryPointNotFoundException)
@@ -247,7 +279,7 @@ namespace System.Windows.Forms
                 // WriteEx wasn't found - that's fine - we will use Write.
             }
 
-            return ComCtl32.ImageList.Write(new HandleRef(this, imagelistHandle), new Ole32.GPStream(stream)).IsTrue();
+            return ComCtl32.ImageList.Write(new HandleRef(this, handle), new Ole32.GPStream(stream)).IsTrue();
         }
 
         /// <summary>
@@ -263,10 +295,10 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (nativeImageList != null)
+                if (_nativeImageList is not null)
                 {
-                    nativeImageList.Dispose();
-                    nativeImageList = null;
+                    _nativeImageList.Dispose();
+                    _nativeImageList = null;
                 }
             }
         }

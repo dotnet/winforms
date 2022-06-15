@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -12,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class TreeNodeCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNodeCollection_Add_String_Success(string text, string expectedText)
         {
             using var treeView = new TreeView();
@@ -78,6 +77,63 @@ namespace System.Windows.Forms.Tests
             TreeNodeCollection collection = treeView.Nodes;
             collection.Add("text");
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = new TreeNode());
+        }
+
+        [WinFormsFact]
+        public void TreeNodeCollection_Item_SetNullTreeNode_ThrowsArgumentNullException()
+        {
+            using var treeView = new TreeView();
+            TreeNodeCollection collection = treeView.Nodes;
+            TreeNode node = new TreeNode("Node 0");
+            collection.Add(node);
+            Assert.Throws<ArgumentNullException>(() => collection[0] = null);
+        }
+
+        [WinFormsFact]
+        public void TreeNodeCollection_Item_SetTreeNodeAlreadyAdded_Noop()
+        {
+            using var treeView = new TreeView();
+            TreeNodeCollection collection = treeView.Nodes;
+            TreeNode node = new TreeNode("Node 0");
+            collection.Add(node);
+            collection[0] = node;
+            Assert.Equal(1, collection.Count);
+        }
+
+        [WinFormsFact]
+        public void TreeNodeCollection_Item_SetExistentTreeNodeDifferentIndex_ThrowsArgumentException()
+        {
+            using var treeView = new TreeView();
+            TreeNodeCollection collection = treeView.Nodes;
+            collection.Add("Node 0");
+            collection.Add("Node 1");
+            TreeNode node = collection[0];
+            Assert.Throws<ArgumentException>(() => collection[1] = node);
+        }
+
+        [WinFormsFact]
+        public void TreeNodeCollection_Item_SetTreeNodeBoundToAnotherTreeView_ThrowsArgumentException()
+        {
+            using var anotherTreeView = new TreeView();
+            anotherTreeView.Nodes.Add("Node 0");
+
+            using var treeView = new TreeView();
+            TreeNodeCollection collection = treeView.Nodes;
+            collection.Add("Node 1");
+            TreeNode nodeOfAnotherTreeView = anotherTreeView.Nodes[0];
+            Assert.Throws<ArgumentException>(() => collection[0] = nodeOfAnotherTreeView);
+        }
+
+        [WinFormsFact]
+        public void TreeNodeCollection_Item_SetTreeNodeReplacesExistingOne()
+        {
+            using var treeView = new TreeView();
+            IntPtr forcedHandle = treeView.Handle;
+            TreeNodeCollection collection = treeView.Nodes;
+            collection.Add("Node 1");
+            collection[0] = new TreeNode("New node 1");
+            Assert.Equal(1, treeView._nodesByHandle.Count);
+            Assert.Equal(1, collection.Count);
         }
 
         [WinFormsTheory]
@@ -162,7 +218,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void TreeNodeCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
         {
             using var treeView = new TreeView();

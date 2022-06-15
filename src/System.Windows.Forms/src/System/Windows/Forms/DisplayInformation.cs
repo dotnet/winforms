@@ -2,13 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using Microsoft.Win32;
 
 namespace System.Windows.Forms
 {
-    internal class DisplayInformation
+    internal static class DisplayInformation
     {
         private static bool s_highContrast;               // whether we are under hight contrast mode
         private static bool s_lowRes;                     // whether we are under low resolution mode
@@ -30,15 +28,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_bitsPerPixel == 0)
+                if (s_bitsPerPixel == 0 && Screen.PrimaryScreen is not null)
                 {
                     // we used to iterate through all screens, but
-                    // for some reason unused screens can temparily appear
+                    // for some reason unused screens can temporarily appear
                     // in the AllScreens collection - we would honor the display
                     // setting of an unused screen.
                     // According to EnumDisplayMonitors, a primary screen check should be sufficient
                     s_bitsPerPixel = (short)Screen.PrimaryScreen.BitsPerPixel;
                 }
+
                 return s_bitsPerPixel;
             }
         }
@@ -54,7 +53,8 @@ namespace System.Windows.Forms
                 {
                     return s_lowRes;
                 }
-                // dont cache if we're in low resolution.
+
+                // don't cache if we're in low resolution.
                 s_lowRes = BitsPerPixel <= 8;
                 s_lowResSettingValid = true;
                 return s_lowRes;
@@ -72,6 +72,7 @@ namespace System.Windows.Forms
                 {
                     return s_highContrast;
                 }
+
                 s_highContrast = SystemInformation.HighContrast;
                 s_highContrastSettingValid = true;
                 return s_highContrast;
@@ -86,6 +87,7 @@ namespace System.Windows.Forms
                 {
                     return s_dropShadowEnabled;
                 }
+
                 s_dropShadowEnabled = SystemInformation.IsDropShadowEnabled;
                 s_dropShadowSettingValid = true;
                 return s_dropShadowEnabled;
@@ -101,6 +103,7 @@ namespace System.Windows.Forms
                 {
                     return s_menuAccessKeysUnderlined;
                 }
+
                 s_menuAccessKeysUnderlined = SystemInformation.MenuAccessKeysUnderlined;
                 s_menuAccessKeysUnderlinedValid = true;
                 return s_menuAccessKeysUnderlined;
@@ -110,7 +113,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///event handler for change in display setting
         /// </summary>
-        private static void DisplaySettingsChanging(object obj, EventArgs ea)
+        private static void DisplaySettingsChanging(object? obj, EventArgs ea)
         {
             s_highContrastSettingValid = false;
             s_lowResSettingValid = false;

@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.Design
 {
@@ -33,14 +32,17 @@ namespace System.Windows.Forms.Design
                 {
                     value.Width = MinGridSize;
                 }
+
                 if (value.Height < MinGridSize)
                 {
                     value.Height = MinGridSize;
                 }
+
                 if (value.Width > MaxGridSize)
                 {
                     value.Width = MaxGridSize;
                 }
+
                 if (value.Height > MaxGridSize)
                 {
                     value.Height = MaxGridSize;

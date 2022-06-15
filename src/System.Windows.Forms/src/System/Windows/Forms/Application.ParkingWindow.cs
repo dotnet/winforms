@@ -55,6 +55,7 @@ namespace System.Windows.Forms
                     Debug.Fail("How did parkingwindow childcount go negative???");
                     _childCount = 0;
                 }
+
                 _childCount++;
             }
 
@@ -149,20 +150,20 @@ namespace System.Windows.Forms
 
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == (int)User32.WM.SHOWWINDOW)
+                if (m.MsgInternal == User32.WM.SHOWWINDOW)
                     return;
 
                 base.WndProc(ref m);
-                switch (m.Msg)
+                switch (m.MsgInternal)
                 {
-                    case (int)User32.WM.PARENTNOTIFY:
-                        if (PARAM.LOWORD(m.WParam) == (int)User32.WM.DESTROY)
+                    case User32.WM.PARENTNOTIFY:
+                        if ((User32.WM)PARAM.LOWORD(m.WParamInternal) == User32.WM.DESTROY)
                         {
                             User32.PostMessageW(this, (User32.WM)WM_CHECKDESTROY);
                         }
 
                         break;
-                    case WM_CHECKDESTROY:
+                    case (User32.WM)WM_CHECKDESTROY:
                         CheckDestroy();
                         break;
                 }

@@ -42,14 +42,14 @@ namespace System.ComponentModel.Design
         internal void OnActivateDesigner(DesignSurface surface)
         {
             IDesignerHost host = null;
-            if (surface != null)
+            if (surface is not null)
             {
                 host = surface.GetService(typeof(IDesignerHost)) as IDesignerHost;
-                Debug.Assert(host != null, "Design surface did not provide us with a designer host");
+                Debug.Assert(host is not null, "Design surface did not provide us with a designer host");
             }
 
             // If the designer host is not in our collection, add it.
-            if (host != null && (_designerList is null || !_designerList.Contains(host)))
+            if (host is not null && (_designerList is null || !_designerList.Contains(host)))
             {
                 OnCreateDesigner(surface);
             }
@@ -62,17 +62,17 @@ namespace System.ComponentModel.Design
             IDesignerHost oldDesigner = _activeDesigner;
             _activeDesigner = host;
 
-            if (oldDesigner != null)
+            if (oldDesigner is not null)
             {
                 SinkChangeEvents(oldDesigner, false);
             }
 
-            if (_activeDesigner != null)
+            if (_activeDesigner is not null)
             {
                 SinkChangeEvents(_activeDesigner, true);
             }
 
-            if (_events != null)
+            if (_events is not null)
             {
                 (_events[s_eventActiveDesignerChanged] as ActiveDesignerEventHandler)?.Invoke(this, new ActiveDesignerEventArgs(oldDesigner, host));
             }
@@ -91,7 +91,7 @@ namespace System.ComponentModel.Design
             if (ce.Component is IComponent comp)
             {
                 ISite site = comp.Site;
-                if (site != null)
+                if (site is not null)
                 {
                     if (site.Container is IDesignerHost host && host.Loading)
                     {
@@ -135,9 +135,9 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal void OnCreateDesigner(DesignSurface surface)
         {
-            Debug.Assert(surface != null, "DesignerApplication should not pass null here");
+            Debug.Assert(surface is not null, "DesignerApplication should not pass null here");
             IDesignerHost host = surface.GetService(typeof(IDesignerHost)) as IDesignerHost;
-            Debug.Assert(host != null, "Design surface did not provide us with a designer host");
+            Debug.Assert(host is not null, "Design surface did not provide us with a designer host");
 
             if (_designerList is null)
             {
@@ -168,17 +168,17 @@ namespace System.ComponentModel.Design
             DesignSurface surface = (DesignSurface)sender;
             surface.Disposed -= new EventHandler(OnDesignerDisposed);
 
-            // Detatch the selection change and add/remove events, if we were monitoring such events
+            // Detach the selection change and add/remove events, if we were monitoring such events
             SinkChangeEvents(surface, false);
 
             IDesignerHost host = surface.GetService(typeof(IDesignerHost)) as IDesignerHost;
-            Debug.Assert(host != null, "Design surface removed host too early in dispose");
+            Debug.Assert(host is not null, "Design surface removed host too early in dispose");
             if (host is null)
             {
                 return;
             }
 
-            if (_events != null)
+            if (_events is not null)
             {
                 if (_events[s_eventDesignerDisposed] is DesignerEventHandler eh)
                 {
@@ -186,7 +186,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            if (_designerList != null)
+            if (_designerList is not null)
             {
                 _designerList.Remove(host);
             }
@@ -279,12 +279,12 @@ namespace System.ComponentModel.Design
 
             if (sink)
             {
-                if (ss != null)
+                if (ss is not null)
                 {
                     ss.SelectionChanged += new EventHandler(OnSelectionChanged);
                 }
 
-                if (cs != null)
+                if (cs is not null)
                 {
                     ComponentEventHandler ce = new ComponentEventHandler(OnComponentAddedRemoved);
                     cs.ComponentAdded += ce;
@@ -292,7 +292,7 @@ namespace System.ComponentModel.Design
                     cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
                 }
 
-                if (host != null)
+                if (host is not null)
                 {
                     host.TransactionOpened += new EventHandler(OnTransactionOpened);
                     host.TransactionClosed += new DesignerTransactionCloseEventHandler(OnTransactionClosed);
@@ -305,12 +305,12 @@ namespace System.ComponentModel.Design
             }
             else
             {
-                if (ss != null)
+                if (ss is not null)
                 {
                     ss.SelectionChanged -= new EventHandler(OnSelectionChanged);
                 }
 
-                if (cs != null)
+                if (cs is not null)
                 {
                     ComponentEventHandler ce = new ComponentEventHandler(OnComponentAddedRemoved);
                     cs.ComponentAdded -= ce;
@@ -318,7 +318,7 @@ namespace System.ComponentModel.Design
                     cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
                 }
 
-                if (host != null)
+                if (host is not null)
                 {
                     host.TransactionOpened -= new EventHandler(OnTransactionOpened);
                     host.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
@@ -371,7 +371,7 @@ namespace System.ComponentModel.Design
                     _events = new EventHandlerList();
                 }
 
-                _events[s_eventActiveDesignerChanged] = Delegate.Combine((Delegate)_events[s_eventActiveDesignerChanged], value);
+                _events[s_eventActiveDesignerChanged] = Delegate.Combine(_events[s_eventActiveDesignerChanged], value);
             }
             remove
             {
@@ -380,7 +380,7 @@ namespace System.ComponentModel.Design
                     return;
                 }
 
-                _events[s_eventActiveDesignerChanged] = Delegate.Remove((Delegate)_events[s_eventActiveDesignerChanged], value);
+                _events[s_eventActiveDesignerChanged] = Delegate.Remove(_events[s_eventActiveDesignerChanged], value);
             }
         }
 
@@ -396,7 +396,7 @@ namespace System.ComponentModel.Design
                     _events = new EventHandlerList();
                 }
 
-                _events[s_eventDesignerCreated] = Delegate.Combine((Delegate)_events[s_eventDesignerCreated], value);
+                _events[s_eventDesignerCreated] = Delegate.Combine(_events[s_eventDesignerCreated], value);
             }
             remove
             {
@@ -405,7 +405,7 @@ namespace System.ComponentModel.Design
                     return;
                 }
 
-                _events[s_eventDesignerCreated] = Delegate.Remove((Delegate)_events[s_eventDesignerCreated], value);
+                _events[s_eventDesignerCreated] = Delegate.Remove(_events[s_eventDesignerCreated], value);
             }
         }
 
@@ -421,7 +421,7 @@ namespace System.ComponentModel.Design
                     _events = new EventHandlerList();
                 }
 
-                _events[s_eventDesignerDisposed] = Delegate.Combine((Delegate)_events[s_eventDesignerDisposed], value);
+                _events[s_eventDesignerDisposed] = Delegate.Combine(_events[s_eventDesignerDisposed], value);
             }
             remove
             {
@@ -430,7 +430,7 @@ namespace System.ComponentModel.Design
                     return;
                 }
 
-                _events[s_eventDesignerDisposed] = Delegate.Remove((Delegate)_events[s_eventDesignerDisposed], value);
+                _events[s_eventDesignerDisposed] = Delegate.Remove(_events[s_eventDesignerDisposed], value);
             }
         }
 
@@ -446,7 +446,7 @@ namespace System.ComponentModel.Design
                     _events = new EventHandlerList();
                 }
 
-                _events[s_eventSelectionChanged] = Delegate.Combine((Delegate)_events[s_eventSelectionChanged], value);
+                _events[s_eventSelectionChanged] = Delegate.Combine(_events[s_eventSelectionChanged], value);
             }
             remove
             {
@@ -455,7 +455,7 @@ namespace System.ComponentModel.Design
                     return;
                 }
 
-                _events[s_eventSelectionChanged] = Delegate.Remove((Delegate)_events[s_eventSelectionChanged], value);
+                _events[s_eventSelectionChanged] = Delegate.Remove(_events[s_eventSelectionChanged], value);
             }
         }
     }

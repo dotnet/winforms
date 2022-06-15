@@ -14,7 +14,7 @@
       </trans-unit>
       <trans-unit id="caption.Text">
         <source>Select a &amp;range of text to make your link:</source>
-        <target state="translated">&amp;Bağlantı haline getireceğiniz metin aralığını seçin:</target>
+        <target state="translated">Bağlantı haline getireceğiniz metin &amp;aralığını seçin:</target>
         <note />
       </trans-unit>
       <trans-unit id="okButton.Text">

@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using static Interop;
@@ -21,12 +18,11 @@ namespace System.Windows.Forms
     /// </remarks>
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
-    public sealed class MdiClient : Control
+    public sealed partial class MdiClient : Control
     {
         // kept in add order, not ZOrder. Need to return the correct
         // array of items...
-        //
-        private readonly ArrayList children = new ArrayList();
+        private readonly List<Form> _children = new List<Form>();
 
         /// <summary>
         ///  Creates a new MdiClient.
@@ -43,12 +39,12 @@ namespace System.Windows.Forms
         /// </summary>
         /// <value>The image to display in the background of the control.</value>
         [Localizable(true)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get
             {
-                Image result = base.BackgroundImage;
-                if (result is null && ParentInternal != null)
+                Image? result = base.BackgroundImage;
+                if (result is null && ParentInternal is not null)
                 {
                     result = ParentInternal.BackgroundImage;
                 }
@@ -64,8 +60,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                Image backgroundImage = BackgroundImage;
-                if (backgroundImage != null && ParentInternal != null)
+                Image? backgroundImage = BackgroundImage;
+                if (backgroundImage is not null && ParentInternal is not null)
                 {
                     ImageLayout imageLayout = base.BackgroundImageLayout;
                     if (imageLayout != ParentInternal.BackgroundImageLayout)
@@ -74,6 +70,7 @@ namespace System.Windows.Forms
                         return ParentInternal.BackgroundImageLayout;
                     }
                 }
+
                 return base.BackgroundImageLayout;
             }
             set => base.BackgroundImageLayout = value;
@@ -104,14 +101,14 @@ namespace System.Windows.Forms
                 {
                     idFirstChild = 1
                 };
-                ISite site = ParentInternal?.Site;
-                if (site != null && site.DesignMode)
+                ISite? site = ParentInternal?.Site;
+                if (site is not null && site.DesignMode)
                 {
                     cp.Style |= (int)User32.WS.DISABLED;
                     SetState(States.Enabled, false);
                 }
 
-                if (RightToLeft == RightToLeft.Yes && ParentInternal != null && ParentInternal.IsMirrored)
+                if (RightToLeft == RightToLeft.Yes && ParentInternal is not null && ParentInternal.IsMirrored)
                 {
                     //We want to turn on mirroring for MdiClient explicitly.
                     cp.ExStyle |= (int)(User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT);
@@ -132,9 +129,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Form[] temp = new Form[children.Count];
-                children.CopyTo(temp, 0);
-                return temp;
+                return _children.ToArray();
             }
         }
 
@@ -160,10 +155,10 @@ namespace System.Windows.Forms
                     User32.SendMessageW(this, User32.WM.MDICASCADE);
                     break;
                 case MdiLayout.TileVertical:
-                    User32.SendMessageW(this, User32.WM.MDITILE, (IntPtr)User32.MDITILE.VERTICAL);
+                    User32.SendMessageW(this, User32.WM.MDITILE, (nint)User32.MDITILE.VERTICAL);
                     break;
                 case MdiLayout.TileHorizontal:
-                    User32.SendMessageW(this, User32.WM.MDITILE, (IntPtr)User32.MDITILE.HORIZONTAL);
+                    User32.SendMessageW(this, User32.WM.MDITILE, (nint)User32.MDITILE.HORIZONTAL);
                     break;
                 case MdiLayout.ArrangeIcons:
                     User32.SendMessageW(this, User32.WM.MDIICONARRANGE);
@@ -177,11 +172,12 @@ namespace System.Windows.Forms
         /// <param name="e">The event data.</param>
         protected override void OnResize(EventArgs e)
         {
-            ISite site = ParentInternal?.Site;
-            if (site != null && site.DesignMode && Handle != IntPtr.Zero)
+            ISite? site = ParentInternal?.Site;
+            if (site is not null && site.DesignMode && Handle != IntPtr.Zero)
             {
                 SetWindowRgn();
             }
+
             base.OnResize(e);
         }
 
@@ -194,7 +190,6 @@ namespace System.Windows.Forms
         protected override void ScaleCore(float dx, float dy)
         {
             // Don't scale child forms...
-            //
 
             SuspendLayout();
             try
@@ -235,52 +230,50 @@ namespace System.Windows.Forms
         /// <param name="specified">A bitwise combination of the enumeration values that specifies the bounds of the control to use.</param>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            ISite site = ParentInternal?.Site;
-            if (IsHandleCreated && (site is null || !site.DesignMode))
+            if (!IsHandleCreated || (ParentInternal as Form)?.MdiChildrenMinimizedAnchorBottom == false || ParentInternal?.Site?.DesignMode == true)
             {
-                Rectangle oldBounds = Bounds;
                 base.SetBoundsCore(x, y, width, height, specified);
-                Rectangle newBounds = Bounds;
+                return;
+            }
 
-                int yDelta = oldBounds.Height - newBounds.Height;
-                if (yDelta != 0)
+            Rectangle oldBounds = Bounds;
+            base.SetBoundsCore(x, y, width, height, specified);
+            Rectangle newBounds = Bounds;
+
+            int yDelta = oldBounds.Height - newBounds.Height;
+            if (yDelta != 0)
+            {
+                // NOTE: This logic is to keep minimized MDI children anchored to
+                // the bottom left of the client area, normally they are anchored
+                // to the top left which just looks weird!
+                for (int i = 0; i < Controls.Count; i++)
                 {
-                    // NOTE: This logic is to keep minimized MDI children anchored to
-                    // the bottom left of the client area, normally they are anchored
-                    // to the top right which just looks weird!
-                    for (int i = 0; i < Controls.Count; i++)
+                    Control ctl = Controls[i];
+                    if (ctl is not null && ctl is Form child)
                     {
-                        Control ctl = Controls[i];
-                        if (ctl != null && ctl is Form)
+                        // Only adjust the window position for visible MDI Child windows to prevent
+                        // them from being re-displayed.
+                        if (child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized)
                         {
-                            Form child = (Form)ctl;
-                            // Only adjust the window position for visible MDI Child windows to prevent
-                            // them from being re-displayed.
-                            if (child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized)
+                            User32.GetWindowPlacement(child, out User32.WINDOWPLACEMENT wp);
+                            wp.ptMinPosition.Y -= yDelta;
+                            if (wp.ptMinPosition.Y == -1)
                             {
-                                User32.GetWindowPlacement(child, out User32.WINDOWPLACEMENT wp);
-                                wp.ptMinPosition.Y -= yDelta;
-                                if (wp.ptMinPosition.Y == -1)
+                                if (yDelta < 0)
                                 {
-                                    if (yDelta < 0)
-                                    {
-                                        wp.ptMinPosition.Y = 0;
-                                    }
-                                    else
-                                    {
-                                        wp.ptMinPosition.Y = -2;
-                                    }
+                                    wp.ptMinPosition.Y = 0;
                                 }
-                                wp.flags = User32.WPF.SETMINPOSITION;
-                                User32.SetWindowPlacement(child, ref wp);
+                                else
+                                {
+                                    wp.ptMinPosition.Y = -2;
+                                }
                             }
+
+                            wp.flags = User32.WPF.SETMINPOSITION;
+                            User32.SetWindowPlacement(child, ref wp);
                         }
                     }
                 }
-            }
-            else
-            {
-                base.SetBoundsCore(x, y, width, height, specified);
             }
         }
 
@@ -294,7 +287,7 @@ namespace System.Windows.Forms
             RECT rect = new RECT();
             CreateParams cp = CreateParams;
 
-            AdjustWindowRectEx(ref rect, cp.Style, false, cp.ExStyle);
+            AdjustWindowRectExForControlDpi(ref rect, cp.Style, false, cp.ExStyle);
 
             Rectangle bounds = Bounds;
             using var rgn1 = new Gdi32.RegionScope(0, 0, bounds.Width, bounds.Height);
@@ -330,7 +323,7 @@ namespace System.Windows.Forms
             return BackColor != SystemColors.AppWorkspace;
         }
 
-        private bool ShouldSerializeLocation()
+        private static bool ShouldSerializeLocation()
         {
             return false;
         }
@@ -349,24 +342,27 @@ namespace System.Windows.Forms
             switch ((User32.WM)m.Msg)
             {
                 case User32.WM.CREATE:
-                    if (ParentInternal != null && ParentInternal.Site != null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero)
+                    if (ParentInternal is not null && ParentInternal.Site is not null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero)
                     {
                         SetWindowRgn();
                     }
+
                     break;
 
                 case User32.WM.SETFOCUS:
                     InvokeGotFocus(ParentInternal, EventArgs.Empty);
-                    Form childForm = null;
-                    if (ParentInternal is Form)
+                    Form? childForm = null;
+                    if (ParentInternal is Form parentInternalAsForm)
                     {
-                        childForm = ((Form)ParentInternal).ActiveMdiChildInternal;
+                        childForm = parentInternalAsForm.ActiveMdiChildInternal;
                     }
+
                     if (childForm is null && MdiChildren.Length > 0 && MdiChildren[0].IsMdiChildFocusable)
                     {
                         childForm = MdiChildren[0];
                     }
-                    if (childForm != null && childForm.Visible)
+
+                    if (childForm is not null && childForm.Visible)
                     {
                         childForm.Active = true;
                     }
@@ -381,6 +377,7 @@ namespace System.Windows.Forms
                     InvokeLostFocus(ParentInternal, EventArgs.Empty);
                     break;
             }
+
             base.WndProc(ref m);
         }
 
@@ -389,67 +386,10 @@ namespace System.Windows.Forms
             Application.Idle += new EventHandler(OnIdle); //do this on idle (it must be mega-delayed).
         }
 
-        private void OnIdle(object sender, EventArgs e)
+        private void OnIdle(object? sender, EventArgs e)
         {
             Application.Idle -= new EventHandler(OnIdle);
             base.OnInvokedSetScrollPosition(sender, e);
-        }
-
-        /// <summary>
-        ///  Collection of controls...
-        /// </summary>
-        new public class ControlCollection : Control.ControlCollection
-        {
-            private readonly MdiClient owner;
-
-            /*C#r: protected*/
-
-            public ControlCollection(MdiClient owner)
-            : base(owner)
-            {
-                this.owner = owner;
-            }
-
-            /// <summary>
-            ///  Adds a control to the MDI Container. This child must be
-            ///  a Form that is marked as an MDI Child to be added to the
-            ///  container. You should not call this directly, but rather
-            ///  set the child form's (ctl) MDIParent property:
-            /// <code>
-            ///  //     wrong
-            ///  Form child = new ChildForm();
-            ///  this.getMdiClient().add(child);
-            ///  //     right
-            ///  Form child = new ChildForm();
-            ///  child.setMdiParent(this);
-            /// </code>
-            /// </summary>
-            public override void Add(Control value)
-            {
-                if (value is null)
-                {
-                    return;
-                }
-                if (!(value is Form) || !((Form)value).IsMdiChild)
-                {
-                    throw new ArgumentException(SR.MDIChildAddToNonMDIParent, nameof(value));
-                }
-                if (owner.CreateThreadId != value.CreateThreadId)
-                {
-                    throw new ArgumentException(SR.AddDifferentThreads, nameof(value));
-                }
-                owner.children.Add((Form)value);
-                base.Add(value);
-            }
-
-            /// <summary>
-            ///  Removes a child control.
-            /// </summary>
-            public override void Remove(Control value)
-            {
-                owner.children.Remove(value);
-                base.Remove(value);
-            }
         }
     }
 }

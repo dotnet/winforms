@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Windows.Forms.Design;
 
@@ -11,72 +9,54 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     public class PropertiesTab : PropertyTab
     {
-        public override string TabName
-        {
-            get
-            {
-                return SR.PBRSToolTipProperties;
-            }
-        }
+        public override string TabName => SR.PBRSToolTipProperties;
 
-        public override string HelpKeyword
-        {
-            get
-            {
-                return "vs.properties"; // do not localize.
-            }
-        }
+        public override string HelpKeyword => "vs.properties"; // do not localize.
 
-        public override PropertyDescriptor GetDefaultProperty(object obj)
+#pragma warning disable CA1725 // Parameter names should match base declaration - publicly shipped API
+        public override PropertyDescriptor? GetDefaultProperty(object obj)
+#pragma warning restore CA1725
         {
-            PropertyDescriptor def = base.GetDefaultProperty(obj);
+            PropertyDescriptor? defaultProperty = base.GetDefaultProperty(obj);
 
-            if (def is null)
+            if (defaultProperty is null)
             {
-                PropertyDescriptorCollection props = GetProperties(obj);
-                if (props != null)
+                PropertyDescriptorCollection? properties = GetProperties(obj);
+                if (properties is not null)
                 {
-                    for (int i = 0; i < props.Count; i++)
+                    for (int i = 0; i < properties.Count; i++)
                     {
-                        if ("Name".Equals(props[i].Name))
+                        if ("Name".Equals(properties[i].Name))
                         {
-                            def = props[i];
+                            defaultProperty = properties[i];
                             break;
                         }
                     }
                 }
             }
-            return def;
+
+            return defaultProperty;
         }
 
-        public override PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes)
-        {
-            return GetProperties(null, component, attributes);
-        }
+        public override PropertyDescriptorCollection? GetProperties(object component, Attribute[]? attributes)
+            => GetProperties(context: null, component, attributes);
 
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object component, Attribute[] attributes)
+        public override PropertyDescriptorCollection? GetProperties(ITypeDescriptorContext? context, object component, Attribute[]? attributes)
         {
-            if (attributes is null)
-            {
-                attributes = new Attribute[] { BrowsableAttribute.Yes };
-            }
+            attributes ??= new Attribute[] { BrowsableAttribute.Yes };
 
             if (context is null)
             {
                 return TypeDescriptor.GetProperties(component, attributes);
             }
-            else
-            {
-                TypeConverter tc = (context.PropertyDescriptor is null ? TypeDescriptor.GetConverter(component) : context.PropertyDescriptor.Converter);
-                if (tc is null || !tc.GetPropertiesSupported(context))
-                {
-                    return TypeDescriptor.GetProperties(component, attributes);
-                }
-                else
-                {
-                    return tc.GetProperties(context, component, attributes);
-                }
-            }
+
+            TypeConverter typeConverter = context.PropertyDescriptor is null
+                ? TypeDescriptor.GetConverter(component)
+                : context.PropertyDescriptor.Converter;
+
+            return typeConverter is null || !typeConverter.GetPropertiesSupported(context)
+                ? TypeDescriptor.GetProperties(component, attributes)
+                : typeConverter.GetProperties(context, component, attributes);
         }
     }
 }

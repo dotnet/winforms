@@ -80,7 +80,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_host != null)
+                if (_host is not null)
                 {
                     return _host;
                 }
@@ -97,8 +97,8 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Returns true when the designer is in the process of loading.
         ///  Clients that are sinking notifications from the designer often
-        ///  want to ignore them while the desingner is loading
-        ///  and only respond to them if they result from user interatcions.
+        ///  want to ignore them while the designer is loading
+        ///  and only respond to them if they result from user interactions.
         /// </summary>
         public override bool Loading => _loadDependencyCount > 0 || _loading;
 
@@ -143,10 +143,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void BeginLoad(IDesignerLoaderHost host)
         {
-            if (host is null)
-            {
-                throw new ArgumentNullException(nameof(host));
-            }
+            ArgumentNullException.ThrowIfNull(host);
 
             if (_state[s_stateLoaded])
             {
@@ -156,7 +153,7 @@ namespace System.ComponentModel.Design.Serialization
                 throw ex;
             }
 
-            if (_host != null && _host != host)
+            if (_host is not null && _host != host)
             {
                 Exception ex = new InvalidOperationException(SR.BasicDesignerLoaderDifferentHost);
                 ex.HelpLink = SR.BasicDesignerLoaderDifferentHost;
@@ -177,7 +174,7 @@ namespace System.ComponentModel.Design.Serialization
                 // it is not something the user can replace.
                 DesignSurfaceServiceContainer dsc = GetService(typeof(DesignSurfaceServiceContainer)) as DesignSurfaceServiceContainer;
 
-                if (dsc != null)
+                if (dsc is not null)
                 {
                     dsc.AddFixedService(typeof(IDesignerSerializationManager), _serializationManager);
                 }
@@ -210,7 +207,7 @@ namespace System.ComponentModel.Design.Serialization
 
             try
             {
-                if (ls != null)
+                if (ls is not null)
                 {
                     ls.AddLoadDependency();
                 }
@@ -234,7 +231,7 @@ namespace System.ComponentModel.Design.Serialization
                 successful = false;
             }
 
-            if (ls != null)
+            if (ls is not null)
             {
                 ls.DependentLoadComplete(successful, localErrorList);
             }
@@ -263,7 +260,7 @@ namespace System.ComponentModel.Design.Serialization
             UnloadDocument();
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
 
-            if (cs != null)
+            if (cs is not null)
             {
                 cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
                 cs.ComponentAdding -= new ComponentEventHandler(OnComponentAdding);
@@ -274,7 +271,7 @@ namespace System.ComponentModel.Design.Serialization
                 cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
             }
 
-            if (_host != null)
+            if (_host is not null)
             {
                 _host.RemoveService(typeof(IDesignerLoaderService));
                 _host.Activated -= new EventHandler(OnDesignerActivate);
@@ -307,13 +304,13 @@ namespace System.ComponentModel.Design.Serialization
             try
             {
                 IDesignerLoaderHost host = _host;
-                Debug.Assert(host != null, "designer loader was asked to flush after it has been disposed.");
+                Debug.Assert(host is not null, "designer loader was asked to flush after it has been disposed.");
 
                 // If the host has a null root component, it probably failed
                 // its last load.  In that case, there is nothing to flush.
                 bool shouldChangeModified = true;
 
-                if (host != null && host.RootComponent != null)
+                if (host is not null && host.RootComponent is not null)
                 {
                     using (_serializationManager.CreateSession())
                     {
@@ -333,7 +330,7 @@ namespace System.ComponentModel.Design.Serialization
 
                         ICollection errors = _serializationManager.Errors;
 
-                        if (errors != null && errors.Count > 0)
+                        if (errors is not null && errors.Count > 0)
                         {
                             ReportFlushErrors(errors);
                         }
@@ -359,7 +356,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             object service = null;
 
-            if (_host != null)
+            if (_host is not null)
             {
                 service = _host.GetService(serviceType);
             }
@@ -369,7 +366,7 @@ namespace System.ComponentModel.Design.Serialization
 
         /// <summary>
         ///  This method is called immediately after the first time
-        ///  BeginLoad is invoked.  This is an appopriate place to
+        ///  BeginLoad is invoked.  This is an appropriate place to
         ///  add custom services to the loader host.  Remember to
         ///  remove any custom services you add here by overriding
         ///  Dispose.
@@ -381,7 +378,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  logic to determine if a reload is required.  This method is
         ///  called when someone requests a reload but doesn't force
         ///  the reload.  It gives the loader an opportunity to scan
-        ///  the underlying storage to determine if a reload is acutually
+        ///  the underlying storage to determine if a reload is actually
         ///  needed.  The default implementation of this method always
         ///  returns true.
         /// </summary>
@@ -629,9 +626,9 @@ namespace System.ComponentModel.Design.Serialization
                 if (!successful && (lh2 is null || !lh2.IgnoreErrorsDuringReload))
                 {
                     // Can we even show the Continue Ignore errors in DTEL?
-                    if (lh2 != null)
+                    if (lh2 is not null)
                     {
-                        lh2.CanReloadWithErrors = LoaderHost.RootComponent != null;
+                        lh2.CanReloadWithErrors = LoaderHost.RootComponent is not null;
                     }
 
                     UnloadDocument();
@@ -644,7 +641,7 @@ namespace System.ComponentModel.Design.Serialization
                 // Inform the serialization manager that we are all done.  The serialization
                 // manager clears state at this point to help enforce a stateless serialization
                 // mechanism.
-                if (errors != null)
+                if (errors is not null)
                 {
                     foreach (object err in errors)
                     {
@@ -666,7 +663,7 @@ namespace System.ComponentModel.Design.Serialization
                 // to make the loader modified.
                 IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
 
-                if (cs != null)
+                if (cs is not null)
                 {
                     cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
                     cs.ComponentAdding += new ComponentEventHandler(OnComponentAdding);
@@ -684,7 +681,7 @@ namespace System.ComponentModel.Design.Serialization
 
             // if we got errors in the load, set ourselves as modified so we'll regen code.  If this fails, we don't
             // care; the Modified bit was only a hint.
-            if (_state[s_stateModifyIfErrors] && errors != null && errors.Count > 0)
+            if (_state[s_stateModifyIfErrors] && errors is not null && errors.Count > 0)
             {
                 try
                 {
@@ -705,7 +702,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  This method is called in response to a component changing, adding or removing event to indicate
         ///  that the designer is about to be modified.  Those interested in implementing source code
         ///  control may do so by overriding this method.  A call to OnModifying does not mean that the
-        ///  Modified property will later be set to true; it is merly an intention to do so.
+        ///  Modified property will later be set to true; it is merely an intention to do so.
         /// </summary>
         protected virtual void OnModifying()
         { }
@@ -729,11 +726,11 @@ namespace System.ComponentModel.Design.Serialization
             //check to see if we are actually the active document.
             DesignSurfaceManager mgr = (DesignSurfaceManager)GetService(typeof(DesignSurfaceManager));
             DesignSurface thisSurface = (DesignSurface)GetService(typeof(DesignSurface));
-            Debug.Assert(mgr != null && thisSurface != null);
+            Debug.Assert(mgr is not null && thisSurface is not null);
 
-            if (mgr != null && thisSurface != null)
+            if (mgr is not null && thisSurface is not null)
             {
-                if (!object.ReferenceEquals(mgr.ActiveDesignSurface, thisSurface))
+                if (!ReferenceEquals(mgr.ActiveDesignSurface, thisSurface))
                 {
                     //somehow, we got deactivated and weren't told.
                     _state[s_stateActiveDocument] = false;
@@ -797,7 +794,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  underlying code dom tree has changed in a way that
         ///  would affect the form.
         ///  If flush is true, the designer is flushed before performing
-        ///  a reload.  If false, any designer changes are abandonded.
+        ///  a reload.  If false, any designer changes are abandoned.
         ///  If ModifyOnError is true, the designer loader will be put
         ///  in the modified state if any errors happened during the
         ///  load.
@@ -848,7 +845,7 @@ namespace System.ComponentModel.Design.Serialization
                 lastError = e;
             }
 
-            Debug.Assert(lastError != null, "Someone embedded a null in the error collection");
+            Debug.Assert(lastError is not null, "Someone embedded a null in the error collection");
 
             if (lastError is null)
             {
@@ -874,10 +871,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SetBaseComponentClassName(string name)
         {
-            if (name is null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentNullException.ThrowIfNull(name);
 
             _baseComponentClassName = name;
         }
@@ -887,7 +881,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  to it.  You should only throw for missing services that are absolutely essential for
         ///  operation.  If there is a way to gracefully degrade, then you should do it.
         /// </summary>
-        private void ThrowMissingService(Type serviceType)
+        private static void ThrowMissingService(Type serviceType)
         {
             Exception ex = new InvalidOperationException(string.Format(SR.BasicDesignerLoaderMissingService, serviceType.Name));
             ex.HelpLink = SR.BasicDesignerLoaderMissingService;

@@ -2,22 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms.Design
 {
     /// <summary>
     ///  Provides a base class for editors that support any type of
-    /// <see cref='IComponent'/> objects.
+    /// <see cref="IComponent"/> objects.
     /// </summary>
     public abstract class WindowsFormsComponentEditor : ComponentEditor
     {
         /// <summary>
         ///  Activates a UI used to edit the component.
         /// </summary>
-        public override bool EditComponent(ITypeDescriptorContext context, object component)
+        public override bool EditComponent(ITypeDescriptorContext? context, object component)
         {
             return EditComponent(context, component, null);
         }
@@ -25,7 +23,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Activates the advanced UI used to edit the component.
         /// </summary>
-        public bool EditComponent(object component, IWin32Window owner)
+        public bool EditComponent(object component, IWin32Window? owner)
         {
             return EditComponent(null, component, owner);
         }
@@ -33,9 +31,9 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Activates the advanced UI used to edit the component.
         /// </summary>
-        public virtual bool EditComponent(ITypeDescriptorContext context, object component, IWin32Window owner)
+        public virtual bool EditComponent(ITypeDescriptorContext? context, object component, IWin32Window? owner)
         {
-            Type[] pageControlTypes = GetComponentEditorPages();
+            Type[]? pageControlTypes = GetComponentEditorPages();
             if (pageControlTypes is null || pageControlTypes.Length == 0)
             {
                 return false;
@@ -46,12 +44,12 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Gets the set of <see cref='ComponentEditorPage'/> pages to be used.
+        ///  Gets the set of <see cref="ComponentEditorPage"/> pages to be used.
         /// </summary>
-        protected virtual Type[] GetComponentEditorPages() => null;
+        protected virtual Type[]? GetComponentEditorPages() => null;
 
         /// <summary>
-        ///  Gets the index of the <see cref='ComponentEditorPage'/>
+        ///  Gets the index of the <see cref="ComponentEditorPage"/>
         ///  to be shown by default as the first active page.
         /// </summary>
         protected virtual int GetInitialComponentEditorPageIndex() => 0;

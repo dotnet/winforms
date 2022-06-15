@@ -6,15 +6,14 @@ Option Explicit On
 Option Strict On
 Imports System.ComponentModel
 Imports System.Net
-Imports NetInfoAlias = System.Net.NetworkInformation
 Imports System.Security
-Imports System.Security.Permissions
 Imports System.Threading
-Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Imports Microsoft.VisualBasic.CompilerServices.Utils
+Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
+Imports NetInfoAlias = System.Net.NetworkInformation
 
 Namespace Microsoft.VisualBasic.Devices
 
@@ -335,7 +334,6 @@ Namespace Microsoft.VisualBasic.Devices
 
         End Sub
 
-#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         ''' Downloads a file from the network to the specified path
         ''' </summary>
@@ -354,8 +352,6 @@ Namespace Microsoft.VisualBasic.Devices
                     connectionTimeout As Integer,
                     overwrite As Boolean,
                     onUserCancel As UICancelOption)
-#Enable Warning CA1822 ' Mark members as static
-
             If connectionTimeout <= 0 Then
                 Throw GetArgumentExceptionWithArgName("connectionTimeOut", SR.Network_BadConnectionTimeout)
             End If
@@ -391,12 +387,6 @@ Namespace Microsoft.VisualBasic.Devices
 
                 Dim dialog As ProgressDialog = Nothing
                 If showUI AndAlso System.Environment.UserInteractive Then
-                    ' Do UI demand here rather than waiting for form.show so that exception is thrown as early as possible
-#Disable Warning BC40000 ' Type or member is obsolete
-                    Dim UIPermission As New UIPermission(UIPermissionWindow.SafeSubWindows)
-#Enable Warning BC40000 ' Type or member is obsolete
-                    UIPermission.Demand()
-
                     dialog = New ProgressDialog With {
                         .Text = GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
                         .LabelText = GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
@@ -588,7 +578,6 @@ Namespace Microsoft.VisualBasic.Devices
             UploadFile(sourceFileName, address, networkCredentials, showUI, connectionTimeout, UICancelOption.ThrowException)
         End Sub
 
-#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         ''' Uploads a file from the local machine to the specified host
         ''' </summary>
@@ -604,8 +593,6 @@ Namespace Microsoft.VisualBasic.Devices
                               showUI As Boolean,
                               connectionTimeout As Integer,
                               onUserCancel As UICancelOption)
-#Enable Warning CA1822 ' Mark members as static
-
             sourceFileName = FileSystemUtils.NormalizeFilePath(sourceFileName, "sourceFileName")
 
             'Make sure the file exists
@@ -701,7 +688,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' </summary>
         ''' <param name="address">The remote file address</param>
         ''' <returns>A Uri if successful, otherwise it throws an exception</returns>
-        Private Function GetUri(address As String) As Uri
+        Private Shared Function GetUri(address As String) As Uri
             Try
                 Return New Uri(address)
             Catch ex As UriFormatException
@@ -716,7 +703,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user</param>
         ''' <param name="password">The password of the user</param>
         ''' <returns>A NetworkCredentials</returns>
-        Private Function GetNetworkCredentials(userName As String, password As String) As ICredentials
+        Private Shared Function GetNetworkCredentials(userName As String, password As String) As ICredentials
 
             ' Make sure all nulls are empty strings
             If userName Is Nothing Then
@@ -819,8 +806,10 @@ Namespace Microsoft.VisualBasic.Devices
             Return request
         End Function
 
+#Disable Warning BC41004 ' First statement of this 'Sub New' should be an explicit call to 'MyBase.New' or 'MyClass.New' because the constructor in the base class is marked obsolete
         Friend Sub New()
         End Sub
+#Enable Warning BC41004 ' First statement of this 'Sub New' should be an explicit call to 'MyBase.New' or 'MyClass.New' because the constructor in the base class is marked obsolete
 
         ' The Timeout value to be used by WebClient's WebRequest for Downloading or Uploading a file
         Private _timeout As Integer = 100000

@@ -1,8 +1,7 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel.Design;
 using Xunit;
 
@@ -59,7 +58,7 @@ namespace System.Windows.Forms.Design.Tests
 
         [Theory]
         [MemberData(nameof(Commands_TestData))]
-        public void MenuCommands_Commands_Get_ReturnsExected(CommandID command, CommandID expected)
+        public void MenuCommands_Commands_Get_ReturnsExpected(CommandID command, CommandID expected)
         {
             Assert.Equal(expected, command);
         }

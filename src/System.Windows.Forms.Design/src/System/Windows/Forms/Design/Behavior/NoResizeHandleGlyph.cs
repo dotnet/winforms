@@ -2,12 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///  The NoResizeHandleGlyph represents the handle for a non-resizeable control in our new seleciton model.  Note that the pen and brush are created once per instance of this class and re-used in our painting logic for perf. reasonse.
+    ///  The NoResizeHandleGlyph represents the handle for a non-resizeable control in our new selection model.
+    ///  Note that the pen and brush are created once per instance of this class and re-used in our painting logic
+    ///  for perf reasons.
     /// </summary>
     internal class NoResizeHandleGlyph : SelectionGlyphBase
     {
@@ -17,7 +21,8 @@ namespace System.Windows.Forms.Design.Behavior
         ///  NoResizeHandleGlyph's constructor takes additional parameters: 'type' and 'primary selection'.
         ///  Also, we create/cache our pen and brush here to avoid this action with every paint message.
         /// </summary>
-        internal NoResizeHandleGlyph(Rectangle controlBounds, SelectionRules selRules, bool primarySelection, Behavior behavior) : base(behavior)
+        internal NoResizeHandleGlyph(Rectangle controlBounds, SelectionRules selRules, bool primarySelection, Behavior? behavior)
+            : base(behavior)
         {
             _isPrimary = primarySelection;
             hitTestCursor = Cursors.Default;
@@ -27,8 +32,13 @@ namespace System.Windows.Forms.Design.Behavior
                 rules = SelectionRules.Moveable;
                 hitTestCursor = Cursors.SizeAll;
             }
+
             // The handle is always upperleft
-            bounds = new Rectangle(controlBounds.X - DesignerUtils.NORESIZEHANDLESIZE, controlBounds.Y - DesignerUtils.NORESIZEHANDLESIZE, DesignerUtils.NORESIZEHANDLESIZE, DesignerUtils.NORESIZEHANDLESIZE);
+            bounds = new Rectangle(
+                controlBounds.X - DesignerUtils.NORESIZEHANDLESIZE,
+                controlBounds.Y - DesignerUtils.NORESIZEHANDLESIZE,
+                DesignerUtils.NORESIZEHANDLESIZE,
+                DesignerUtils.NORESIZEHANDLESIZE);
             hitBounds = bounds;
         }
 

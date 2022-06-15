@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -22,7 +21,7 @@ internal partial class Interop
 
             [PreserveSig]
             HRESULT GetClientSite(
-                out IOleClientSite ppClientSite);
+                out IOleClientSite? ppClientSite);
 
             [PreserveSig]
             HRESULT SetHostNames(
@@ -53,7 +52,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT GetClipboardData(
                 uint dwReserved,
-                out IDataObject ppDataObject);
+                out IDataObject? ppDataObject);
 
             [PreserveSig]
             HRESULT DoVerb(
@@ -104,7 +103,7 @@ internal partial class Interop
 
             [PreserveSig]
             HRESULT EnumAdvise(
-                out IEnumSTATDATA e);
+                out IEnumSTATDATA? e);
 
             [PreserveSig]
             HRESULT GetMiscStatus(

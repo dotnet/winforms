@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Design
             {
                 ArrayList snapLines = base.SnapLines as ArrayList;
 
-                int baseline = DesignerUtils.GetTextBaseline(Control, System.Drawing.ContentAlignment.TopLeft);
+                int baseline = DesignerUtils.GetTextBaseline(Control, Drawing.ContentAlignment.TopLeft);
 
                 BorderStyle borderStyle = BorderStyle.Fixed3D;
                 PropertyDescriptor prop = TypeDescriptor.GetProperties(Component)["BorderStyle"];
@@ -115,7 +115,8 @@ namespace System.Windows.Forms.Design
 
             // Handle shadowed properties
             //
-            string[] shadowProps = new string[] {
+            string[] shadowProps = new string[]
+            {
                 "Text",
             };
 
@@ -148,13 +149,13 @@ namespace System.Windows.Forms.Design
                 PropertyDescriptor prop = TypeDescriptor.GetProperties(component)["Multiline"];
                 if (prop != null)
                 {
-                    Object value = prop.GetValue(component);
+                    object value = prop.GetValue(component);
                     if (value is bool && (bool)value == false)
                     {
                         PropertyDescriptor propAuto = TypeDescriptor.GetProperties(component)["AutoSize"];
                         if (propAuto != null)
                         {
-                            Object auto = propAuto.GetValue(component);
+                            object auto = propAuto.GetValue(component);
                             if (auto is bool && (bool)auto == true)
                             {
                                 rules &= ~(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);

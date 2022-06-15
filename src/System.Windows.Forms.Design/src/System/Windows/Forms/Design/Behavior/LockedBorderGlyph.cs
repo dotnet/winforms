@@ -2,19 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///  The LockedBorderGlyph draws one side (depending on type) of a SelectionBorder in the 'Locked' mode  The constructor will initialize and cache the pen and brush objects to avoid unnecessary recreations.
+    ///  The LockedBorderGlyph draws one side (depending on type) of a SelectionBorder in the 'Locked' mode.
+    ///  The constructor will initialize and cache the pen and brush objects to avoid unnecessary recreations.
     /// </summary>
     internal class LockedBorderGlyph : SelectionGlyphBase
     {
         /// <summary>
-        ///  This constructor extends from the standard SelectionGlyphBase constructor. Note that a primarySelection flag is passed in - this will be used when determining the colors of the borders.
+        ///  This constructor extends from the standard SelectionGlyphBase constructor.
+        ///  Note that a primarySelection flag is passed in - this will be used when determining the colors of the borders.
         /// </summary>
-        internal LockedBorderGlyph(Rectangle controlBounds, SelectionBorderGlyphType type) : base(null)
+        internal LockedBorderGlyph(Rectangle controlBounds, SelectionBorderGlyphType type)
+            : base(null)
         {
             InitializeGlyph(controlBounds, type);
         }

@@ -60,10 +60,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public BindingNavigator(IContainer container) : this(false)
         {
-            if (container is null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
+            ArgumentNullException.ThrowIfNull(container);
 
             container.Add(this);
         }
@@ -220,19 +217,20 @@ namespace System.Windows.Forms
             // Add items to strip
             //
 
-            Items.AddRange(new ToolStripItem[] {
-                                MoveFirstItem,
-                                MovePreviousItem,
-                                separator1,
-                                PositionItem,
-                                CountItem,
-                                separator2,
-                                MoveNextItem,
-                                MoveLastItem,
-                                separator3,
-                                AddNewItem,
-                                DeleteItem,
-                                });
+            Items.AddRange(new ToolStripItem[]
+            {
+                MoveFirstItem,
+                MovePreviousItem,
+                separator1,
+                PositionItem,
+                CountItem,
+                separator2,
+                MoveNextItem,
+                MoveLastItem,
+                separator3,
+                AddNewItem,
+                DeleteItem,
+            });
         }
 
         /// <summary>
@@ -265,10 +263,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_moveFirstItem != null && _moveFirstItem.IsDisposed)
+                if (_moveFirstItem is not null && _moveFirstItem.IsDisposed)
                 {
                     _moveFirstItem = null;
                 }
+
                 return _moveFirstItem;
             }
 
@@ -288,7 +287,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_movePreviousItem != null && _movePreviousItem.IsDisposed)
+                if (_movePreviousItem is not null && _movePreviousItem.IsDisposed)
                 {
                     _movePreviousItem = null;
                 }
@@ -312,10 +311,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_moveNextItem != null && _moveNextItem.IsDisposed)
+                if (_moveNextItem is not null && _moveNextItem.IsDisposed)
                 {
                     _moveNextItem = null;
                 }
+
                 return _moveNextItem;
             }
 
@@ -335,10 +335,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_moveLastItem != null && _moveLastItem.IsDisposed)
+                if (_moveLastItem is not null && _moveLastItem.IsDisposed)
                 {
                     _moveLastItem = null;
                 }
+
                 return _moveLastItem;
             }
 
@@ -358,20 +359,22 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_addNewItem != null && _addNewItem.IsDisposed)
+                if (_addNewItem is not null && _addNewItem.IsDisposed)
                 {
                     _addNewItem = null;
                 }
+
                 return _addNewItem;
             }
 
             set
             {
-                if (_addNewItem != value && value != null)
+                if (_addNewItem != value && value is not null)
                 {
                     value.InternalEnabledChanged += new EventHandler(OnAddNewItemEnabledChanged);
                     _addNewItemUserEnabled = value.Enabled;
                 }
+
                 WireUpButton(ref _addNewItem, value, new EventHandler(OnAddNew));
             }
         }
@@ -386,20 +389,22 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_deleteItem != null && _deleteItem.IsDisposed)
+                if (_deleteItem is not null && _deleteItem.IsDisposed)
                 {
                     _deleteItem = null;
                 }
+
                 return _deleteItem;
             }
 
             set
             {
-                if (_deleteItem != value && value != null)
+                if (_deleteItem != value && value is not null)
                 {
                     value.InternalEnabledChanged += new EventHandler(OnDeleteItemEnabledChanged);
                     _deleteItemUserEnabled = value.Enabled;
                 }
+
                 WireUpButton(ref _deleteItem, value, new EventHandler(OnDelete));
             }
         }
@@ -414,10 +419,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_positionItem != null && _positionItem.IsDisposed)
+                if (_positionItem is not null && _positionItem.IsDisposed)
                 {
                     _positionItem = null;
                 }
+
                 return _positionItem;
             }
 
@@ -437,10 +443,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_countItem != null && _countItem.IsDisposed)
+                if (_countItem is not null && _countItem.IsDisposed)
                 {
                     _countItem = null;
                 }
+
                 return _countItem;
             }
 
@@ -512,27 +519,27 @@ namespace System.Windows.Forms
             // Enable or disable items (except when in design mode)
             if (!DesignMode)
             {
-                if (MoveFirstItem != null)
+                if (MoveFirstItem is not null)
                 {
                     _moveFirstItem.Enabled = (position > 1);
                 }
 
-                if (MovePreviousItem != null)
+                if (MovePreviousItem is not null)
                 {
                     _movePreviousItem.Enabled = (position > 1);
                 }
 
-                if (MoveNextItem != null)
+                if (MoveNextItem is not null)
                 {
                     _moveNextItem.Enabled = (position < count);
                 }
 
-                if (MoveLastItem != null)
+                if (MoveLastItem is not null)
                 {
                     _moveLastItem.Enabled = (position < count);
                 }
 
-                if (AddNewItem != null)
+                if (AddNewItem is not null)
                 {
                     EventHandler handler = new EventHandler(OnAddNewItemEnabledChanged);
                     _addNewItem.InternalEnabledChanged -= handler;
@@ -540,7 +547,7 @@ namespace System.Windows.Forms
                     _addNewItem.InternalEnabledChanged += handler;
                 }
 
-                if (DeleteItem != null)
+                if (DeleteItem is not null)
                 {
                     EventHandler handler = new EventHandler(OnDeleteItemEnabledChanged);
                     _deleteItem.InternalEnabledChanged -= handler;
@@ -548,25 +555,25 @@ namespace System.Windows.Forms
                     _deleteItem.InternalEnabledChanged += handler;
                 }
 
-                if (PositionItem != null)
+                if (PositionItem is not null)
                 {
                     _positionItem.Enabled = (position > 0 && count > 0);
                 }
 
-                if (CountItem != null)
+                if (CountItem is not null)
                 {
                     _countItem.Enabled = (count > 0);
                 }
             }
 
             // Update current position indicator
-            if (_positionItem != null)
+            if (_positionItem is not null)
             {
                 _positionItem.Text = position.ToString(CultureInfo.CurrentCulture);
             }
 
             // Update record count indicator
-            if (_countItem != null)
+            if (_countItem is not null)
             {
                 _countItem.Text = DesignMode ? CountItemFormat : string.Format(CultureInfo.CurrentCulture, CountItemFormat, count);
             }
@@ -574,7 +581,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Called when the state of the tool strip items needs to be refreshed to reflect the current state of the data.
-        ///  Calls <see cref='RefreshItemsCore'/> to refresh the state of the standard items, then raises the RefreshItems event.
+        ///  Calls <see cref="RefreshItemsCore"/> to refresh the state of the standard items, then raises the RefreshItems event.
         /// </summary>
         protected virtual void OnRefreshItems()
         {
@@ -652,7 +659,7 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (_bindingSource != null)
+                if (_bindingSource is not null)
                 {
                     _bindingSource.MoveFirst();
                     RefreshItemsInternal();
@@ -667,7 +674,7 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (_bindingSource != null)
+                if (_bindingSource is not null)
                 {
                     _bindingSource.MovePrevious();
                     RefreshItemsInternal();
@@ -682,7 +689,7 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (_bindingSource != null)
+                if (_bindingSource is not null)
                 {
                     _bindingSource.MoveNext();
                     RefreshItemsInternal();
@@ -697,7 +704,7 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (_bindingSource != null)
+                if (_bindingSource is not null)
                 {
                     _bindingSource.MoveLast();
                     RefreshItemsInternal();
@@ -712,7 +719,7 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (_bindingSource != null)
+                if (_bindingSource is not null)
                 {
                     _bindingSource.AddNew();
                     RefreshItemsInternal();
@@ -727,7 +734,7 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (_bindingSource != null)
+                if (_bindingSource is not null)
                 {
                     _bindingSource.RemoveCurrent();
                     RefreshItemsInternal();
@@ -768,6 +775,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Refresh tool strip items when the BindingSource is disposed.
+        /// </summary>
+        private void OnBindingSourceDisposed(object sender, EventArgs e)
+        {
+            BindingSource = null;
+        }
+
+        /// <summary>
         ///  Refresh tool strip items when something changes in the BindingSource's list.
         /// </summary>
         private void OnBindingSourceListChanged(object sender, ListChangedEventArgs e)
@@ -802,7 +817,7 @@ namespace System.Windows.Forms
 
         private void OnAddNewItemEnabledChanged(object sender, EventArgs e)
         {
-            if (AddNewItem != null)
+            if (AddNewItem is not null)
             {
                 _addNewItemUserEnabled = _addNewItem.Enabled;
             }
@@ -810,7 +825,7 @@ namespace System.Windows.Forms
 
         private void OnDeleteItemEnabledChanged(object sender, EventArgs e)
         {
-            if (DeleteItem != null)
+            if (DeleteItem is not null)
             {
                 _deleteItemUserEnabled = _deleteItem.Enabled;
             }
@@ -827,12 +842,12 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (oldButton != null)
+            if (oldButton is not null)
             {
                 oldButton.Click -= clickHandler;
             }
 
-            if (newButton != null)
+            if (newButton is not null)
             {
                 newButton.Click += clickHandler;
             }
@@ -887,7 +902,7 @@ namespace System.Windows.Forms
         {
             if (oldBindingSource != newBindingSource)
             {
-                if (oldBindingSource != null)
+                if (oldBindingSource is not null)
                 {
                     oldBindingSource.PositionChanged -= new EventHandler(OnBindingSourceStateChanged);
                     oldBindingSource.CurrentChanged -= new EventHandler(OnBindingSourceStateChanged);
@@ -895,9 +910,10 @@ namespace System.Windows.Forms
                     oldBindingSource.DataSourceChanged -= new EventHandler(OnBindingSourceStateChanged);
                     oldBindingSource.DataMemberChanged -= new EventHandler(OnBindingSourceStateChanged);
                     oldBindingSource.ListChanged -= new ListChangedEventHandler(OnBindingSourceListChanged);
+                    oldBindingSource.Disposed -= new EventHandler(OnBindingSourceDisposed);
                 }
 
-                if (newBindingSource != null)
+                if (newBindingSource is not null)
                 {
                     newBindingSource.PositionChanged += new EventHandler(OnBindingSourceStateChanged);
                     newBindingSource.CurrentChanged += new EventHandler(OnBindingSourceStateChanged);
@@ -905,6 +921,7 @@ namespace System.Windows.Forms
                     newBindingSource.DataSourceChanged += new EventHandler(OnBindingSourceStateChanged);
                     newBindingSource.DataMemberChanged += new EventHandler(OnBindingSourceStateChanged);
                     newBindingSource.ListChanged += new ListChangedEventHandler(OnBindingSourceListChanged);
+                    newBindingSource.Disposed += new EventHandler(OnBindingSourceDisposed);
                 }
 
                 oldBindingSource = newBindingSource;

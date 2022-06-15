@@ -31,7 +31,7 @@ internal partial class Interop
             void Close();
             void SetOpener([In] object p);
             [return: MarshalAs(UnmanagedType.IDispatch)] object GetOpener();
-            [return: MarshalAs(UnmanagedType.Interface)] IOmNavigator GetNavigator();
+            IntPtr GetNavigator();
             void SetName([In] string p);
             string GetName();
             [return: MarshalAs(UnmanagedType.Interface)] IHTMLWindow2 GetParent();
@@ -63,7 +63,7 @@ internal partial class Interop
             object Get_newEnum();
             object ShowModalDialog([In] string dialog, [In] ref object varArgIn, [In] ref object varOptions);
             void ShowHelp([In] string helpURL, [In] object helpArg, [In] string features);
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLScreen GetScreen();
+            IntPtr GetScreen();
             object GetOption();
             void Focus();
             bool GetClosed();

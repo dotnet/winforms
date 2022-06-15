@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -93,13 +93,36 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void ToolStripItemCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
         {
             using ToolStripMenuItem toolStrip = new ToolStripMenuItem();
             var collection = toolStrip.DropDown.DisplayedItems;
             Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: true));
             Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: false));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItemCollection_AddRange_ToolStripItemCollection_Success()
+        {
+            using var contextMenuStrip = new ContextMenuStrip();
+            using var toolStripDropDownButton = new ToolStripDropDownButton();
+
+            // Add 0 items.
+            contextMenuStrip.Items.AddRange(toolStripDropDownButton.DropDownItems);
+            Assert.Equal(0, contextMenuStrip.Items.Count);
+
+            // Add 3 items.
+            toolStripDropDownButton.DropDownItems.Add("a");
+            toolStripDropDownButton.DropDownItems.Add("b");
+            toolStripDropDownButton.DropDownItems.Add("c");
+            contextMenuStrip.Items.AddRange(toolStripDropDownButton.DropDownItems);
+            Assert.Equal(3, contextMenuStrip.Items.Count);
+
+            // Validate order.
+            Assert.Equal("a", contextMenuStrip.Items[0].Text);
+            Assert.Equal("b", contextMenuStrip.Items[1].Text);
+            Assert.Equal("c", contextMenuStrip.Items[2].Text);
         }
     }
 }

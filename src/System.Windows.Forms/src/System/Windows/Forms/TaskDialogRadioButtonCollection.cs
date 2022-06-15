@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace System.Windows.Forms
@@ -57,10 +56,7 @@ namespace System.Windows.Forms
         /// </exception>
         protected override void SetItem(int index, TaskDialogRadioButton item)
         {
-            if (item is null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            ArgumentNullException.ThrowIfNull(item);
 
             // Disallow collection modification, so that we don't need to copy it
             // when binding the TaskDialogPage.
@@ -100,10 +96,7 @@ namespace System.Windows.Forms
         /// </exception>
         protected override void InsertItem(int index, TaskDialogRadioButton item)
         {
-            if (item is null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            ArgumentNullException.ThrowIfNull(item);
 
             // Disallow collection modification, so that we don't need to copy it
             // when binding the TaskDialogPage.
@@ -156,7 +149,7 @@ namespace System.Windows.Forms
 
         private void DenyIfHasOtherCollection(TaskDialogRadioButton item)
         {
-            if (item.Collection != null && item.Collection != this)
+            if (item.Collection is not null && item.Collection != this)
             {
                 throw new InvalidOperationException(SR.TaskDialogControlIsPartOfOtherCollection);
             }

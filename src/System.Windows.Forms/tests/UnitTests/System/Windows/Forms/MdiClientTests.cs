@@ -1,18 +1,17 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
     using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
 
     public class MdiClientTests : IClassFixture<ThreadExceptionFixture>
     {
@@ -65,7 +64,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Padding(3), control.Margin);
             Assert.Equal(Size.Empty, control.MaximumSize);
             Assert.Empty(control.MdiChildren);
-            Assert.NotSame(control.MdiChildren, control.MdiChildren);
+            Assert.Same(control.MdiChildren, control.MdiChildren);
             Assert.Equal(Size.Empty, control.MinimumSize);
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
@@ -92,7 +91,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void MdiClient_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new MdiClient
@@ -176,7 +175,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void MdiClient_BackgroundImage_GetWithParent_GetReturnsExpected(Image parentBackgroundImage)
         {
             using var image = new Bitmap(10, 10);
@@ -196,7 +195,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void MdiClient_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new MdiClient
@@ -255,7 +254,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void MdiClient_BackgroundImageLayout_GetWithParent_GetReturnsExpected(ImageLayout parentBackgroundImageLayout)
         {
             using var image = new Bitmap(10, 10);
@@ -275,7 +274,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void MdiClient_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new MdiClient
@@ -327,7 +326,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(RightToLeft))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(RightToLeft))]
         public void MdiClient_Handle_Get_Success(RightToLeft rightToLeft)
         {
             using var control = new MdiClient
@@ -754,7 +753,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -905,7 +905,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -1066,7 +1067,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -1192,8 +1194,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(MdiLayout))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(MdiLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(MdiLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(MdiLayout))]
         public void MdiClient_LayoutMdi_InvokeWithoutHandle_Nop(MdiLayout value)
         {
             using var control = new MdiClient();
@@ -1202,8 +1204,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(MdiLayout))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(MdiLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(MdiLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(MdiLayout))]
         public void MdiClient_LayoutMdi_InvokeWithHandle_Success(MdiLayout value)
         {
             using var control = new MdiClient();

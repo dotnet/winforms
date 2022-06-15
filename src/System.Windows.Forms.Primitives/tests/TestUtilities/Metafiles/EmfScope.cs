@@ -2,46 +2,71 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+#nullable enable
+
+using System.ComponentModel;
+using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Text;
 using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
-    internal ref struct EmfScope
+    internal class EmfScope : DisposalTracking.Tracker, IDisposable
     {
         public Gdi32.HDC HDC { get; }
-        private Gdi32.HENHMETAFILE _hmf;
+        private Gdi32.HENHMETAFILE _hemf;
+
+        public unsafe EmfScope()
+            : this(CreateEnhMetaFile())
+        {
+        }
 
         public EmfScope(Gdi32.HDC hdc)
         {
             HDC = hdc;
-            _hmf = default;
+            _hemf = default;
         }
 
-        public unsafe static EmfScope Create()
-            => new EmfScope(Gdi32.CreateEnhMetaFileW(default, null, null, null));
+        public EmfScope(Gdi32.HENHMETAFILE hemf)
+        {
+            _hemf = hemf;
+        }
+
+        private unsafe static Gdi32.HDC CreateEnhMetaFile(
+            Gdi32.HDC hdc = default,
+            string? lpFilename = null,
+            RECT* lprc = null,
+            string? lpDesc = null)
+        {
+            Gdi32.HDC metafileHdc = Gdi32.CreateEnhMetaFileW(hdc, lpFilename, lprc, lpDesc);
+            if (metafileHdc.IsNull)
+            {
+                throw new Win32Exception("Could not create metafile");
+            }
+
+            return metafileHdc;
+        }
+
+        public unsafe static EmfScope Create() => new EmfScope();
 
         public Gdi32.HENHMETAFILE HENHMETAFILE
         {
             get
             {
-                if (HDC.IsNull)
+                if (_hemf.IsNull)
                 {
-                    return default;
+                    if (HDC.IsNull)
+                    {
+                        return default;
+                    }
+
+                    _hemf = Gdi32.CloseEnhMetaFile(HDC);
                 }
 
-                if (_hmf.IsNull)
-                {
-                    _hmf = Gdi32.CloseEnhMetaFile(HDC);
-                }
-
-                return _hmf;
+                return _hemf;
             }
         }
-
-        public delegate bool ProcessRecordDelegate(ref EmfRecord record);
 
         public unsafe void Enumerate(ProcessRecordDelegate enumerator)
         {
@@ -60,20 +85,25 @@ namespace System.Windows.Forms.Metafiles
             }
         }
 
-        public delegate bool ProcessRecordWithStateDelegate(ref EmfRecord record, DeviceContextState state);
-
         /// <summary>
         ///  Allows enumerating the metafile records while tracking state. <paramref name="state"/> should be
         ///  initialized to the metafile DC state before any drawing has begun.
         /// </summary>
+        /// <remarks>
+        ///  State is whatever is current *before* the current record is "applied" as it is necessary to understand
+        ///  what delta the actual record makes.
+        /// </remarks>
         public unsafe void EnumerateWithState(ProcessRecordWithStateDelegate enumerator, DeviceContextState state)
         {
-            List<EmfRecord> gdiObjects = new List<EmfRecord>();
             Enumerate(stateTracker);
 
             bool stateTracker(ref EmfRecord record)
             {
-                int index;
+                bool result = enumerator(ref record, state);
+
+                // This must come *after* calling the nested enumerator so that the record reflects what is *about*
+                // to be applied. If we invert the model you wouldn't be able to tell what things like LineTo actually
+                // do as they only contain the destination point.
                 switch (record.Type)
                 {
                     // Not all records are handled yet. Backfilling in as we write specific tests.
@@ -86,6 +116,9 @@ namespace System.Windows.Forms.Metafiles
                     case Gdi32.EMR.SETBKMODE:
                         state.BackgroundMode = record.SetBkModeRecord->iMode;
                         break;
+                    case Gdi32.EMR.SETROP2:
+                        state.Rop2Mode = record.SetROP2Record->iMode;
+                        break;
                     case Gdi32.EMR.SETTEXTCOLOR:
                         state.TextColor = record.SetTextColorRecord->crColor;
                         break;
@@ -94,59 +127,94 @@ namespace System.Windows.Forms.Metafiles
                         break;
                     case Gdi32.EMR.MOVETOEX:
                         state.BrushOrigin = record.MoveToExRecord->point;
+                        // The documentation indicates that the last MoveTo will be where CloseFigure draws a line to.
+                        state.LastBeginPathBrushOrigin = state.BrushOrigin;
+                        break;
+                    case Gdi32.EMR.LINETO:
+                        state.BrushOrigin = record.LineToRecord->point;
+                        break;
+                    case Gdi32.EMR.BEGINPATH:
+                        state.LastBeginPathBrushOrigin = state.BrushOrigin;
+                        state.InPath = true;
+                        break;
+                    case Gdi32.EMR.ABORTPATH:
+                    case Gdi32.EMR.ENDPATH:
+                    case Gdi32.EMR.CLOSEFIGURE:
+                        state.InPath = false;
                         break;
                     case Gdi32.EMR.EXTCREATEFONTINDIRECTW:
-                        index = (int)record.ExtCreateFontIndirectWRecord->ihFont;
-                        AddGdiObject(ref record, index);
+                    case Gdi32.EMR.CREATEPALETTE:
+                    case Gdi32.EMR.CREATEPEN:
+                    case Gdi32.EMR.EXTCREATEPEN:
+                    case Gdi32.EMR.CREATEMONOBRUSH:
+                    case Gdi32.EMR.CREATEBRUSHINDIRECT:
+                    case Gdi32.EMR.CREATEDIBPATTERNBRUSHPT:
+                        // All of these records have their index as the first "parameter".
+                        state.AddGdiObject(ref record, (int)record.Params[0]);
                         break;
                     case Gdi32.EMR.SELECTOBJECT:
-                        SelectGdiObject((int)record.SelectObjectRecord->index);
+                        state.SelectGdiObject(record.SelectObjectRecord);
+                        break;
+                    case Gdi32.EMR.DELETEOBJECT:
+                        state.GdiObjects[(int)record.DeleteObjectRecord->index] = default;
+                        break;
+                    case Gdi32.EMR.EXTSELECTCLIPRGN:
+                        state.ClipRegion = record.ExtSelectClipRgnRecord->ClippingRectangles;
+                        break;
+                    case Gdi32.EMR.SETWORLDTRANSFORM:
+                        state.Transform = record.SetWorldTransformRecord->xform;
+                        break;
+                    case Gdi32.EMR.MODIFYWORLDTRANSFORM:
+                        var transform = record.ModifyWorldTransformRecord;
+                        switch (transform->iMode)
+                        {
+                            case Gdi32.MWT.IDENTITY:
+                                state.Transform = Matrix3x2.Identity;
+                                break;
+                            case Gdi32.MWT.LEFTMULTIPLY:
+                                state.Transform = transform->xform * state.Transform;
+                                break;
+                            case Gdi32.MWT.RIGHTMULTIPLY:
+                                state.Transform = state.Transform * transform->xform;
+                                break;
+                        }
+
+                        break;
+                    case Gdi32.EMR.SAVEDC:
+                        state.SaveDC();
+                        break;
+                    case Gdi32.EMR.RESTOREDC:
+                        state.RestoreDC(record.RestoreDCRecord->iRelative);
                         break;
                 }
 
-                return enumerator(ref record, state);
-            }
-
-            void AddGdiObject(ref EmfRecord record, int index)
-            {
-                if (gdiObjects.Capacity <= index)
-                {
-                    gdiObjects.Capacity = index + 1;
-                }
-
-                while (gdiObjects.Count <= index)
-                {
-                    gdiObjects.Add(default);
-                }
-
-                gdiObjects[index] = record;
-            }
-
-            void SelectGdiObject(int index)
-            {
-                // WARNING: You can not use fields that index out of the struct's contents here.
-
-                // Not all records are handled yet. Backfilling in as we write specific tests.
-                EmfRecord record = gdiObjects[index];
-                switch (record.Type)
-                {
-                    case Gdi32.EMR.EXTCREATEFONTINDIRECTW:
-                        state.SelectedFont = record.ExtCreateFontIndirectWRecord->elfw.elfLogFont.FaceName.ToString();
-                        break;
-                }
+                return result;
             }
         }
 
-        public List<string> RecordsToString()
+        public string RecordsToString()
         {
-            var strings = new List<string>();
+            StringBuilder sb = new StringBuilder(1024);
             Enumerate((ref EmfRecord record) =>
             {
-                strings.Add(record.ToString());
+                sb.AppendLine(record.ToString());
                 return true;
             });
 
-            return strings;
+            return sb.ToString();
+        }
+
+        public string RecordsToStringWithState(DeviceContextState state)
+        {
+            StringBuilder sb = new StringBuilder(1024);
+            EnumerateWithState((ref EmfRecord record, DeviceContextState state) =>
+            {
+                sb.AppendLine(record.ToString(state));
+                return true;
+            },
+            state);
+
+            return sb.ToString();
         }
 
         private static unsafe BOOL CallBack(
@@ -156,9 +224,9 @@ namespace System.Windows.Forms.Metafiles
             int nHandles,
             IntPtr data)
         {
-            // Note that the record pointer is *only* valid during the callback
+            // Note that the record pointer is *only* valid during the callback.
             GCHandle enumeratorHandle = GCHandle.FromIntPtr(data);
-            ProcessRecordDelegate enumerator = enumeratorHandle.Target as ProcessRecordDelegate;
+            ProcessRecordDelegate enumerator = (ProcessRecordDelegate)enumeratorHandle.Target!;
             var record = new EmfRecord(hdc, lpht, lpmr, nHandles, data);
             return enumerator(ref record).ToBOOL();
         }
@@ -171,6 +239,8 @@ namespace System.Windows.Forms.Metafiles
             {
                 Gdi32.DeleteEnhMetaFile(HENHMETAFILE);
             }
+
+            GC.SuppressFinalize(this);
         }
     }
 }

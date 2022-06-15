@@ -3,12 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -17,7 +16,7 @@ namespace System.Windows.Forms.Tests
     public class PaddingConverterTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetConvertFromTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetConvertFromTheoryData))]
         [InlineData(typeof(Padding), false)]
         [InlineData(typeof(string), true)]
         public void PaddingConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)
@@ -147,13 +146,12 @@ namespace System.Windows.Forms.Tests
             Padding padding = Assert.IsType<Padding>(converter.CreateInstance(
                 mockContext.Object, new Dictionary<string, object>
                 {
-                    {nameof(Padding.All), all},
-                    {nameof(Padding.Left), 1},
-                    {nameof(Padding.Top), 2},
-                    {nameof(Padding.Right), 3},
-                    {nameof(Padding.Bottom), 4}
-                })
-            );
+                    { nameof(Padding.All), all },
+                    { nameof(Padding.Left), 1 },
+                    { nameof(Padding.Top), 2 },
+                    { nameof(Padding.Right), 3 },
+                    { nameof(Padding.Bottom), 4 }
+                }));
             Assert.Equal(result, padding);
         }
 
@@ -165,13 +163,12 @@ namespace System.Windows.Forms.Tests
             Padding padding = Assert.IsType<Padding>(converter.CreateInstance(
                 null, new Dictionary<string, object>
                 {
-                    {nameof(Padding.All), expected.All},
-                    {nameof(Padding.Left), expected.Left},
-                    {nameof(Padding.Top), expected.Top},
-                    {nameof(Padding.Right), expected.Right},
-                    {nameof(Padding.Bottom), expected.Bottom}
-                })
-            );
+                    { nameof(Padding.All), expected.All },
+                    { nameof(Padding.Left), expected.Left },
+                    { nameof(Padding.Top), expected.Top },
+                    { nameof(Padding.Right), expected.Right },
+                    { nameof(Padding.Bottom), expected.Bottom }
+                }));
             Assert.Equal(expected, padding);
         }
 
@@ -188,65 +185,32 @@ namespace System.Windows.Forms.Tests
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(Padding.All), new object()},
-                    {nameof(Padding.Left), 2},
-                    {nameof(Padding.Top), 2},
-                    {nameof(Padding.Right), 3},
-                    {nameof(Padding.Bottom), 4}
+                    { nameof(Padding.All), new object() },
+                    { nameof(Padding.Left), 2 },
+                    { nameof(Padding.Top), 2 },
+                    { nameof(Padding.Right), 3 },
+                    { nameof(Padding.Bottom), 4 }
                 }
             };
             yield return new object[]
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(Padding.All), null},
-                    {nameof(Padding.Left), 2},
-                    {nameof(Padding.Top), 2},
-                    {nameof(Padding.Right), 3},
-                    {nameof(Padding.Bottom), 4}
+                    { nameof(Padding.All), null },
+                    { nameof(Padding.Left), 2 },
+                    { nameof(Padding.Top), 2 },
+                    { nameof(Padding.Right), 3 },
+                    { nameof(Padding.Bottom), 4 }
                 }
             };
             yield return new object[]
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(Padding.Left), 2},
-                    {nameof(Padding.Top), 2},
-                    {nameof(Padding.Right), 3},
-                    {nameof(Padding.Bottom), 4}
-                }
-            };
-
-            yield return new object[]
-            {
-                new Dictionary<string, object>
-                {
-                    {nameof(Padding.All), 1},
-                    {nameof(Padding.Left), new object()},
-                    {nameof(Padding.Top), 2},
-                    {nameof(Padding.Right), 3},
-                    {nameof(Padding.Bottom), 4}
-                }
-            };
-            yield return new object[]
-            {
-                new Dictionary<string, object>
-                {
-                    {nameof(Padding.All), 1},
-                    {nameof(Padding.Left), null},
-                    {nameof(Padding.Top), 2},
-                    {nameof(Padding.Right), 3},
-                    {nameof(Padding.Bottom), 4}
-                }
-            };
-            yield return new object[]
-            {
-                new Dictionary<string, object>
-                {
-                    {nameof(Padding.All), 1},
-                    {nameof(Padding.Top), 2},
-                    {nameof(Padding.Right), 3},
-                    {nameof(Padding.Bottom), 4}
+                    { nameof(Padding.Left), 2 },
+                    { nameof(Padding.Top), 2 },
+                    { nameof(Padding.Right), 3 },
+                    { nameof(Padding.Bottom), 4 }
                 }
             };
 
@@ -254,65 +218,32 @@ namespace System.Windows.Forms.Tests
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(Padding.All), 1},
-                    {nameof(Padding.Left), 2},
-                    {nameof(Padding.Top), new object()},
-                    {nameof(Padding.Right), 3},
-                    {nameof(Padding.Bottom), 4}
+                    { nameof(Padding.All), 1 },
+                    { nameof(Padding.Left), new object() },
+                    { nameof(Padding.Top), 2 },
+                    { nameof(Padding.Right), 3 },
+                    { nameof(Padding.Bottom), 4 }
                 }
             };
             yield return new object[]
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(Padding.All), 1},
-                    {nameof(Padding.Left), 2},
-                    {nameof(Padding.Top), null},
-                    {nameof(Padding.Right), 3},
-                    {nameof(Padding.Bottom), 4}
+                    { nameof(Padding.All), 1 },
+                    { nameof(Padding.Left), null },
+                    { nameof(Padding.Top), 2 },
+                    { nameof(Padding.Right), 3 },
+                    { nameof(Padding.Bottom), 4 }
                 }
             };
             yield return new object[]
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(Padding.All), 1},
-                    {nameof(Padding.Left), 2},
-                    {nameof(Padding.Right), 3},
-                    {nameof(Padding.Bottom), 4}
-                }
-            };
-
-            yield return new object[]
-            {
-                new Dictionary<string, object>
-                {
-                    {nameof(Padding.All), 1},
-                    {nameof(Padding.Left), 2},
-                    {nameof(Padding.Top), 2},
-                    {nameof(Padding.Right), new object()},
-                    {nameof(Padding.Bottom), 4}
-                }
-            };
-            yield return new object[]
-            {
-                new Dictionary<string, object>
-                {
-                    {nameof(Padding.All), 1},
-                    {nameof(Padding.Left), 2},
-                    {nameof(Padding.Top), 2},
-                    {nameof(Padding.Right), null},
-                    {nameof(Padding.Bottom), 4}
-                }
-            };
-            yield return new object[]
-            {
-                new Dictionary<string, object>
-                {
-                    {nameof(Padding.All), 1},
-                    {nameof(Padding.Left), 2},
-                    {nameof(Padding.Top), 2},
-                    {nameof(Padding.Bottom), 4}
+                    { nameof(Padding.All), 1 },
+                    { nameof(Padding.Top), 2 },
+                    { nameof(Padding.Right), 3 },
+                    { nameof(Padding.Bottom), 4 }
                 }
             };
 
@@ -320,32 +251,98 @@ namespace System.Windows.Forms.Tests
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(Padding.All), 1},
-                    {nameof(Padding.Left), 2},
-                    {nameof(Padding.Top), 2},
-                    {nameof(Padding.Right), 3},
-                    {nameof(Padding.Bottom), new object()}
+                    { nameof(Padding.All), 1 },
+                    { nameof(Padding.Left), 2 },
+                    { nameof(Padding.Top), new object() },
+                    { nameof(Padding.Right), 3 },
+                    { nameof(Padding.Bottom), 4 }
                 }
             };
             yield return new object[]
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(Padding.All), 1},
-                    {nameof(Padding.Left), 2},
-                    {nameof(Padding.Top), 2},
-                    {nameof(Padding.Right), 3},
-                    {nameof(Padding.Bottom), null}
+                    { nameof(Padding.All), 1 },
+                    { nameof(Padding.Left), 2 },
+                    { nameof(Padding.Top), null },
+                    { nameof(Padding.Right), 3 },
+                    { nameof(Padding.Bottom), 4 }
                 }
             };
             yield return new object[]
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(Padding.All), 1},
-                    {nameof(Padding.Left), 2},
-                    {nameof(Padding.Top), 2},
-                    {nameof(Padding.Right), 3}
+                    { nameof(Padding.All), 1 },
+                    { nameof(Padding.Left), 2 },
+                    { nameof(Padding.Right), 3 },
+                    { nameof(Padding.Bottom), 4 }
+                }
+            };
+
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    { nameof(Padding.All), 1 },
+                    { nameof(Padding.Left), 2 },
+                    { nameof(Padding.Top), 2 },
+                    { nameof(Padding.Right), new object() },
+                    { nameof(Padding.Bottom), 4 }
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    { nameof(Padding.All), 1 },
+                    { nameof(Padding.Left), 2 },
+                    { nameof(Padding.Top), 2 },
+                    { nameof(Padding.Right), null },
+                    { nameof(Padding.Bottom), 4 }
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    { nameof(Padding.All), 1 },
+                    { nameof(Padding.Left), 2 },
+                    { nameof(Padding.Top), 2 },
+                    { nameof(Padding.Bottom), 4 }
+                }
+            };
+
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    { nameof(Padding.All), 1 },
+                    { nameof(Padding.Left), 2 },
+                    { nameof(Padding.Top), 2 },
+                    { nameof(Padding.Right), 3 },
+                    { nameof(Padding.Bottom), new object() }
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    { nameof(Padding.All), 1 },
+                    { nameof(Padding.Left), 2 },
+                    { nameof(Padding.Top), 2 },
+                    { nameof(Padding.Right), 3 },
+                    { nameof(Padding.Bottom), null }
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    { nameof(Padding.All), 1 },
+                    { nameof(Padding.Left), 2 },
+                    { nameof(Padding.Top), 2 },
+                    { nameof(Padding.Right), 3 }
                 }
             };
         }
@@ -380,11 +377,11 @@ namespace System.Windows.Forms.Tests
 
             var propertyValues = new Dictionary<string, object>
             {
-                {nameof(Padding.All), 1},
-                {nameof(Padding.Left), 2},
-                {nameof(Padding.Top), 2},
-                {nameof(Padding.Right), 3},
-                {nameof(Padding.Bottom), 4},
+                { nameof(Padding.All), 1 },
+                { nameof(Padding.Left), 2 },
+                { nameof(Padding.Top), 2 },
+                { nameof(Padding.Right), 3 },
+                { nameof(Padding.Bottom), 4 },
             };
 
             Padding expected = new Padding(2, 2, 3, 4);

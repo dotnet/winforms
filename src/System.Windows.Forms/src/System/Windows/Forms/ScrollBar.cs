@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -29,7 +29,7 @@ namespace System.Windows.Forms
         private bool _scaleScrollBarForDpiChange = true;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ScrollBar'/> class.
+        ///  Initializes a new instance of the <see cref="ScrollBar"/> class.
         /// </summary>
         public ScrollBar() : base()
         {
@@ -159,6 +159,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [AllowNull]
         public override Font Font
         {
             get => base.Font;
@@ -190,7 +191,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets a value to be added or subtracted to the <see cref='Value'/>
+        ///  Gets or sets a value to be added or subtracted to the <see cref="Value"/>
         ///  property when the scroll box is moved a large distance.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -240,6 +241,7 @@ namespace System.Windows.Forms
                     {
                         _minimum = value;
                     }
+
                     if (value < _value)
                     {
                         Value = value;
@@ -269,6 +271,7 @@ namespace System.Windows.Forms
                     {
                         _maximum = value;
                     }
+
                     if (value > _value)
                     {
                         _value = value;
@@ -281,7 +284,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the value to be added or subtracted to the <see cref='Value'/>
+        ///  Gets or sets the value to be added or subtracted to the <see cref="Value"/>
         ///  property when the scroll box is moved a small distance.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -310,6 +313,8 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+        internal override bool SupportsUiaProviders => true;
 
         [DefaultValue(false)]
         public new bool TabStop
@@ -353,7 +358,7 @@ namespace System.Windows.Forms
                 {
                     if (value < _minimum || value > _maximum)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", "'{nameof(Maximum)}'"));
+                        throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", $"'{nameof(Maximum)}'"));
                     }
 
                     _value = value;
@@ -453,9 +458,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the <see cref='Value'/> property has
-        ///  changed, either by a <see cref='OnScroll'/> event
-        ///  or programatically.
+        ///  Occurs when the <see cref="Value"/> property has
+        ///  changed, either by a <see cref="OnScroll"/> event
+        ///  or programmatically.
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.valueChangedEventDescr))]
@@ -510,7 +515,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ValueChanged'/> event.
+        ///  Raises the <see cref="ValueChanged"/> event.
         /// </summary>
         protected virtual void OnScroll(ScrollEventArgs se)
             => ((ScrollEventHandler?)Events[s_scrollEvent])?.Invoke(this, se);
@@ -524,7 +529,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            if (e != null)
+            if (e is not null)
             {
                 _wheelDelta += e.Delta;
 
@@ -564,7 +569,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ValueChanged'/> event.
+        ///  Raises the <see cref="ValueChanged"/> event.
         /// </summary>
         protected virtual void OnValueChanged(EventArgs e)
             => ((EventHandler?)Events[s_valueChangedEvent])?.Invoke(this, e);
@@ -585,42 +590,44 @@ namespace System.Windows.Forms
             return s + ", Minimum: " + Minimum + ", Maximum: " + Maximum + ", Value: " + Value;
         }
 
-        protected void UpdateScrollInfo()
+        protected unsafe void UpdateScrollInfo()
         {
-            if (IsHandleCreated && Enabled)
+            if (!IsHandleCreated || !Enabled)
             {
-                var si = new User32.SCROLLINFO
-                {
-                    cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
-                    fMask = User32.SIF.ALL,
-                    nMin = _minimum,
-                    nMax = _maximum,
-                    nPage = (uint)LargeChange
-                };
-
-                if (RightToLeft == RightToLeft.Yes)
-                {
-                    // Reflect the scrollbar position horizontally on an Rtl system
-                    si.nPos = ReflectPosition(_value);
-                }
-                else
-                {
-                    si.nPos = _value;
-                }
-
-                si.nTrackPos = 0;
-
-                User32.SetScrollInfo(this, User32.SB.CTL, ref si, BOOL.TRUE);
+                return;
             }
+
+            User32.SCROLLINFO si = new()
+            {
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
+                fMask = User32.SIF.ALL,
+                nMin = _minimum,
+                nMax = _maximum,
+                nPage = (uint)LargeChange
+            };
+
+            if (RightToLeft == RightToLeft.Yes)
+            {
+                // Reflect the scrollbar position horizontally on an Rtl system
+                si.nPos = ReflectPosition(_value);
+            }
+            else
+            {
+                si.nPos = _value;
+            }
+
+            si.nTrackPos = 0;
+
+            User32.SetScrollInfo(this, User32.SB.CTL, ref si, BOOL.TRUE);
         }
 
         private void WmReflectScroll(ref Message m)
         {
-            ScrollEventType type = (ScrollEventType)PARAM.LOWORD(m.WParam);
+            ScrollEventType type = (ScrollEventType)PARAM.LOWORD(m.WParamInternal);
             DoScroll(type);
         }
 
-        private void DoScroll(ScrollEventType type)
+        private unsafe void DoScroll(ScrollEventType type)
         {
             // For Rtl systems we need to swap increment and decrement
             if (RightToLeft == RightToLeft.Yes)
@@ -687,11 +694,12 @@ namespace System.Windows.Forms
 
                 case ScrollEventType.ThumbPosition:
                 case ScrollEventType.ThumbTrack:
-                    var si = new User32.SCROLLINFO
+                    User32.SCROLLINFO si = new()
                     {
-                        cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                        cbSize = (uint)sizeof(User32.SCROLLINFO),
                         fMask = User32.SIF.TRACKPOS
                     };
+
                     User32.GetScrollInfo(this, User32.SB.CTL, ref si);
 
                     if (RightToLeft == RightToLeft.Yes)
@@ -731,6 +739,7 @@ namespace System.Windows.Forms
                         User32.SendMessageW(this, User32.WM.KILLFOCUS);
                         User32.SendMessageW(this, User32.WM.SETFOCUS);
                     }
+
                     break;
 
                 default:
@@ -740,11 +749,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Creates a new AccessibleObject for this <see cref='ScrollBar'/> instance.
+        ///  Creates a new AccessibleObject for this <see cref="ScrollBar"/> instance.
         ///  The AccessibleObject instance returned by this method supports ControlType UIA property.
         /// </summary>
         /// <returns>
-        ///  AccessibleObject for this <see cref='ScrollBar'/> instance.
+        ///  AccessibleObject for this <see cref="ScrollBar"/> instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance()
             => new ScrollBarAccessibleObject(this);

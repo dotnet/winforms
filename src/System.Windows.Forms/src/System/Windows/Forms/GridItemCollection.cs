@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms
@@ -13,11 +11,13 @@ namespace System.Windows.Forms
     /// </summary>
     public class GridItemCollection : ICollection
     {
-        public static GridItemCollection Empty = new GridItemCollection(Array.Empty<GridItem>());
+#pragma warning disable IDE1006 // Naming Styles - this is public API
+        public static GridItemCollection Empty = new(entries: null);
+#pragma warning restore IDE1006
 
-        private protected GridItem[] _entries;
+        private protected IReadOnlyList<GridItem> _entries;
 
-        internal GridItemCollection(GridItem[] entries)
+        internal GridItemCollection(IReadOnlyList<GridItem>? entries)
         {
             _entries = entries ?? Array.Empty<GridItem>();
         }
@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the number of member attributes.
         /// </summary>
-        public int Count => _entries.Length;
+        public int Count => _entries.Count;
 
         object ICollection.SyncRoot => this;
 
@@ -36,15 +36,15 @@ namespace System.Windows.Forms
         /// </summary>
         public GridItem this[int index] => _entries[index];
 
-        public GridItem this[string label]
+        public GridItem? this[string label]
         {
             get
             {
-                foreach (GridItem g in _entries)
+                foreach (GridItem item in _entries)
                 {
-                    if (g.Label == label)
+                    if (item.Label == label)
                     {
-                        return g;
+                        return item;
                     }
                 }
 
@@ -54,9 +54,12 @@ namespace System.Windows.Forms
 
         void ICollection.CopyTo(Array dest, int index)
         {
-            if (_entries.Length > 0)
+            if (_entries.Count > 0)
             {
-                Array.Copy(_entries, 0, dest, index, _entries.Length);
+                for (int i = 0; i < _entries.Count; i++)
+                {
+                    ((IList)dest)[index + i] = _entries[i];
+                }
             }
         }
 

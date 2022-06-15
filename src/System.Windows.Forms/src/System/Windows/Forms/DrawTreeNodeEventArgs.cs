@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -16,9 +14,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates a new DrawTreeNodeEventArgs with the given parameters.
         /// </summary>
-        public DrawTreeNodeEventArgs(Graphics graphics, TreeNode node, Rectangle bounds, TreeNodeStates state)
+        public DrawTreeNodeEventArgs(
+            Graphics graphics,
+            TreeNode? node,
+            Rectangle bounds,
+            TreeNodeStates state)
         {
-            Graphics = graphics;
+            Graphics = graphics.OrThrowIfNull();
             Node = node;
             Bounds = bounds;
             State = state;
@@ -32,7 +34,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The node to be painted.
         /// </summary>
-        public TreeNode Node { get; }
+        public TreeNode? Node { get; }
 
         /// <summary>
         ///  The rectangle outlining the area in which the painting should be done.

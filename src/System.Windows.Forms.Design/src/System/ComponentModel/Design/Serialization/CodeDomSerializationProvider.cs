@@ -14,7 +14,7 @@ namespace System.ComponentModel.Design.Serialization
     {
         /// <summary>
         ///  This will be called by the serialization manager when it
-        ///  is trying to locate a serialzer for an object type.
+        ///  is trying to locate a serializer for an object type.
         ///  If this serialization provider can provide a serializer
         ///  that is of the correct type, it should return it.
         ///  Otherwise, it should return null.
@@ -40,11 +40,11 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Returns a code dom serializer
         /// </summary>
-        private object GetCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
+        private static object GetCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
         {
             // If this isn't a serializer type we recognize, do nothing.  Also, if metadata specified
             // a custom serializer, then use it.
-            if (currentSerializer != null)
+            if (currentSerializer is not null)
             {
                 return null;
             }
@@ -103,10 +103,10 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Returns a code dom serializer for members
         /// </summary>
-        private object GetMemberCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
+        private static object GetMemberCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
         {
             // Don't provide our serializer if someone else already had one
-            if (currentSerializer != null)
+            if (currentSerializer is not null)
             {
                 return null;
             }
@@ -127,10 +127,10 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Returns a code dom serializer for types
         /// </summary>
-        private object GetTypeCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
+        private static object GetTypeCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
         {
             // Don't provide our serializer if someone else already had one
-            if (currentSerializer != null)
+            if (currentSerializer is not null)
             {
                 return null;
             }

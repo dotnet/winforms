@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
-  <file datatype="xml" source-language="en" target-language="zh-HANT" original="../SR.resx">
+  <file datatype="xml" source-language="en" target-language="zh-Hant" original="../SR.resx">
     <body>
       <trans-unit id="AXAddInvalidEvent">
         <source>Event {0} is not valid on this ActiveX control.</source>
@@ -194,7 +194,7 @@
       </trans-unit>
       <trans-unit id="AccessibleActionDoubleClick">
         <source>Double Click</source>
-        <target state="new">Double Click</target>
+        <target state="translated">按兩下</target>
         <note />
       </trans-unit>
       <trans-unit id="AccessibleActionExpand">
@@ -215,6 +215,11 @@
       <trans-unit id="AccessibleObjectLiveRegionNotSupported">
         <source>The corresponding UI element is not a live region.</source>
         <target state="translated">對應的 UI 元素不是即時區域。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
+        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
+        <target state="translated">{0} 不支援 {1} 屬性。必須在衍生類別中加以覆寫。</target>
         <note />
       </trans-unit>
       <trans-unit id="AddDifferentThreads">
@@ -677,6 +682,21 @@
         <target state="translated">未處理的 VT: {0}。</target>
         <note />
       </trans-unit>
+      <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
+        <source>Go to next time frame</source>
+        <target state="translated">移至下一個時間範圍</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
+        <source>Go to previous time frame</source>
+        <target state="translated">移至上一個時間範圍</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
+        <source>Go to and select today's date</source>
+        <target state="translated">移至並選取今天的日期</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CancelCaption">
         <source>Cancel</source>
         <target state="translated">取消</target>
@@ -800,6 +820,11 @@
       <trans-unit id="CatWindowStyle">
         <source>Window Style</source>
         <target state="translated">視窗樣式</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CategoryPropertyGridLocalizedControlType">
+        <source>PropertyGrid category</source>
+        <target state="translated">PropertyGrid 類別</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckBoxAppearanceDescr">
@@ -1112,6 +1137,16 @@
         <target state="translated">已選取 {0} </target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonCloseName">
+        <source>Close</source>
+        <target state="translated">關閉</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonOpenName">
+        <source>Open</source>
+        <target state="translated">開啟</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">無法配置新的命令 ID。</target>
@@ -1217,7 +1252,7 @@
         <target state="translated">造成顯示此內容功能表區域的最後控制項。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">控制項的可存取物件的狀態無效。</target>
         <note />
@@ -2037,6 +2072,16 @@
         <target state="translated">如果螢幕無限大時的控制項大小。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlsCollectionShouldNotBeEmptyInGetNextControl">
+        <source>{0} collection shouldn't be empty for {1}.</source>
+        <target state="translated">{1} 的 {0} 集合不得為空白。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlsPropertyNotSetInGetNextControl">
+        <source>{0} property should be set for {1}.</source>
+        <target state="translated">應為 {1} 設定 {0} 屬性。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CurrencyManagerCantAddNew">
         <source>The list must be an IBindingList to AddNew.</source>
         <target state="translated">清單必須是 AddNew 的 IBindingList。</target>
@@ -2210,6 +2255,16 @@
       <trans-unit id="DataGridViewCell_ValueTypeNull">
         <source>ValueType property of a cell in a grid cannot be null.</source>
         <target state="translated">方格中儲存格的 ValueType 屬性不可為 null。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellCheckedStateDescription">
+        <source>{0} check box checked</source>
+        <target state="translated">已核取 {0} 核取方塊</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
+        <source>{0} check box unchecked</source>
+        <target state="translated">已取消核取 {0} 核取方塊</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardChecked">
@@ -3699,6 +3754,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">表示使用者是否可編輯 DataGridView 控制項的儲存格。</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridView_RowAddedNotification">
+        <source>Row {0} is added</source>
+        <target state="translated">資料列 {0} 已新增</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
         <source>Row provided already belongs to a DataGridView control.</source>
         <target state="translated">提供的資料列已經屬於 DataGridView 控制項。</target>
@@ -4219,11 +4279,6 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">編輯</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -4539,6 +4594,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">DragDrop 登錄失敗。</target>
         <note />
       </trans-unit>
+      <trans-unit id="EditDefaultAccessibleName">
+        <source>Spinner</source>
+        <target state="translated">微調按鈕</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorBadInputLanguage">
         <source>inputLanguage is not recognized by the system.</source>
         <target state="translated">系統無法辨識此 inputLanguage。</target>
@@ -4720,7 +4780,7 @@ just-in-time (JIT) debugging instead of this dialog box.
         <target state="translated">{0}
     組件版本: {1}
     Win32 版本: {2}
-    程式碼庫: {3}
+    程式碼基底: {3}
 </target>
         <note />
       </trans-unit>
@@ -4729,7 +4789,7 @@ just-in-time (JIT) debugging instead of this dialog box.
         <target state="translated">已載入的組件</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4738,7 +4798,7 @@ just-in-time (JIT) debugging instead of this dialog box.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -4886,6 +4946,11 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">控制對話方塊是否要確認檔名並未包含無效的字元或逸出字元。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogAddToRecentDescr">
+        <source>Controls whether to add the file being opened or saved to the recent list.</source>
+        <target state="translated">控制是否新增開啟或儲存至最近使用之清單的檔案。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogBufferTooSmall">
         <source>Too many files selected. Select fewer files and try again.</source>
         <target state="translated">選取太多檔案。請少選一點檔案再試一次。</target>
@@ -4920,11 +4985,26 @@ Verify that the correct file name was given.</source>
         <target state="translated">篩選條件索引無效。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogOkRequiresInteractionDescr">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="translated">控制是否在使用者巡覽檢視或編輯檔案名稱 (如適用) 之前，停用對話方塊的 [確定] 按鈕。請注意: 停用 [確定] 按鈕無法防止透過 Enter 鍵送出對話方塊。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
         <target state="translated">檔案 {0} 已經存在。
 您要取代它嗎?</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowHiddenFilesDescr">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="translated">控制對話方塊是否顯示隱藏與系統檔案。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowPinnedPlacesDescr">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="translated">控制是否顯示在檢視瀏覽窗格中根據預設所顯示的項目。</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5032,6 +5112,11 @@ Do you want to replace it?</source>
         <target state="translated">控制是否顯示 [說明] 按鈕。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogAddToRecent">
+        <source>Controls whether the dialog box adds the folder being selected to the recent list.</source>
+        <target state="translated">控制對話方塊是否將所選資料夾新增至最近使用的清單。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogDescription">
         <source>The string that is displayed above the tree view control in the dialog box. This string can be used to specify instructions to the user.</source>
         <target state="translated">顯示在對話方塊中樹狀檢視控制項上方的字串。這個字串可以用來指定對使用者的指示。</target>
@@ -5040,6 +5125,11 @@ Do you want to replace it?</source>
       <trans-unit id="FolderBrowserDialogNoRootFolder">
         <source>Unable to retrieve the root folder.</source>
         <target state="translated">無法擷取根資料夾。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="translated">控制是否在使用者巡覽檢視或編輯檔案名稱 (如適用) 之前，停用對話方塊的 [確定] 按鈕。請注意: 停用 [確定] 按鈕無法防止透過 Enter 鍵送出對話方塊。</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogRootFolder">
@@ -5052,9 +5142,19 @@ Do you want to replace it?</source>
         <target state="translated">對話方塊中第一個選取的資料夾或使用者選取的最後一個資料夾的路徑。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogShowHiddenFiles">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="translated">控制對話方塊是否顯示隱藏與系統檔案。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogShowNewFolderButton">
         <source>Include the New Folder button in the dialog box.</source>
         <target state="translated">在對話方塊中包括 [新增資料夾] 按鈕。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogShowPinnedPlaces">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="translated">控制是否顯示在檢視瀏覽窗格中根據預設所顯示的項目。</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogUseDescriptionForTitle">
@@ -5185,6 +5285,11 @@ Do you want to replace it?</source>
       <trans-unit id="FormMaximumSizeDescr">
         <source>The maximum size the form can be resized to.</source>
         <target state="translated">可以重新調整表單的最大值。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
+        <source>Gets or sets the anchoring for minimized MDI children.</source>
+        <target state="translated">為最小化的 MDI 子項目獲得或設定錨定。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormMenuStripDescr">
@@ -5686,6 +5791,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">傳送到 {0} 的 Win32 控制代碼無效或是錯誤的類型。</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="translated">無效的 HDC 類型: {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
         <target state="translated">'{1}' 不是 '{0}' 的有效值。'{0}' 必須小於 {2}。</target>
@@ -5799,11 +5909,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">組合鍵無效。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">按鍵名稱無效。</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
@@ -6246,6 +6351,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">通知虛擬 ListView 控制項的使用者應該準備快取區。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
+        <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
+        <target state="translated">當 ListView 處於虛擬模式時，您無法將群組新增至 ListView 群組集合。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
         <source>Cannot access the checked items collection when the ListView is in virtual mode.</source>
         <target state="translated">當 ListView 處於虛擬模式時，無法存取已核取的項目集合。</target>
@@ -6371,6 +6481,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">ListViewGroup 的 CollapsedState 屬性變更時引發的事件。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateName">
+        <source>{0}, group, collapsed</source>
+        <target state="translated">{0}，群組，已摺疊</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">參數的類型必須為 ListViewGroup。</target>
@@ -6384,6 +6499,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ListViewGroupDefaultHeader">
         <source>ListViewGroup</source>
         <target state="translated">ListViewGroup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupExpandedStateName">
+        <source>{0}, group, expanded</source>
+        <target state="translated">{0}，群組，已展開</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
@@ -6439,6 +6559,21 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ListViewInsertionMarkDescr">
         <source>Allows insertion mark attributes to be changed.</source>
         <target state="translated">允許變更插入標記屬性。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
+        <source>The current accessibility object is only for the ListView in {0} view</source>
+        <target state="translated">目前的協助工具物件僅適用於 {0} 檢視中的 ListView</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
+        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
+        <target state="translated">目前的協助工具物件僅適用於 {0}、 {1} 或 {2} 檢視中的 ListView</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="translated">當 ListViewItem 未附加到 ListView 時，無法取得 accessiblity 物件。</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -7051,6 +7186,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">用來顯示出現於月曆上之前與之後月份的色彩。</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarWeekNumberDescription">
+        <source>Week {0}</source>
+        <target state="translated">第 {0} 週</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
         <source>Year {0} to {1} selected.</source>
         <target state="translated">選取了 {0} 年到 {1} 年。</target>
@@ -7261,6 +7401,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">無法將項目 '{0}' 加入或插入一個以上的位置。必須先將其從目前位置移除或複製。</target>
         <note />
       </trans-unit>
+      <trans-unit id="OpenFileDialogSelectReadOnlyDescr">
+        <source>Controls whether the dialog box allows to select read-only files.</source>
+        <target state="translated">控制對話方塊是否允許選取唯讀檔案。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OpenFileDialogShowPreviewDescr">
+        <source>Controls whether the dialog box shows a preview for selected files.</source>
+        <target state="translated">控制對話方塊是否顯示所選檔案的預覽。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">
         <source>This operation requires an IBindingList.</source>
         <target state="translated">這項作業需要有 IBindingList。</target>
@@ -7284,11 +7434,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="OwnsSelfOrOwner">
         <source>Form {0} tried to set an ineligible form as its owner. Forms cannot own themselves or their owners.</source>
         <target state="translated">表單 {0} 嘗試將不合資格的表單設為擁有人。表單不能擁有本身或其擁有人。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description</source>
-        <target state="translated">描述</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -7476,6 +7621,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">表示面板是否要有框線。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ParentPropertyNotSetInGetNextControl">
+        <source>{0} property should be set for {1}.</source>
+        <target state="translated">應為 {1} 設定 {0} 屬性。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PictureBoxBorderStyleDescr">
         <source>Controls what type of border the PictureBox should have.</source>
         <target state="translated">控制 PictureBox 應該有哪種邊框類型。</target>
@@ -7549,6 +7699,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PictureBoxOnSizeModeChangedDescr">
         <source>Event raised when the value of the SizeMode property is changed on the PictureBox.</source>
         <target state="translated">SizeMode 屬性值在 PictureBox 上變更時引發的事件。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PictureBoxRemoteLocationNotSupported">
+        <source>Loading from remote location not supported.</source>
+        <target state="translated">不支援從遠端位置載入。</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
@@ -7713,7 +7868,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ProfessionalColorsButtonSelectedBorderDescr">
         <source>Border color to use with the selected button gradient colors (ButtonCheckedGradient*).</source>
-        <target state="translated">與已選取的按鈕漸層色彩  (ButtonCheckedGradient*) 搭配使用的框線色彩。</target>
+        <target state="translated">與已選取的按鈕漸層色彩 (ButtonCheckedGradient*) 搭配使用的框線色彩。</target>
         <note />
       </trans-unit>
       <trans-unit id="ProfessionalColorsButtonSelectedGradientBeginDescr">
@@ -7879,6 +8034,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ProfessionalColorsSeparatorLightDescr">
         <source>Color to use to for highlight effects on the separator.</source>
         <target state="translated">分隔符號醒目提示效果所使用的色彩。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
+        <source>Border color to use on the top edge of the StatusStrip.</source>
+        <target state="translated">要用於 StatusStrip 上邊緣的框線色彩。</target>
         <note />
       </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
@@ -8111,11 +8271,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">方格區域中停用文字的前景色彩。</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
-        <source>{0} Description</source>
-        <target state="translated">{0} 描述</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
         <source>Browse...</source>
         <target state="translated">瀏覽...</target>
@@ -8154,6 +8309,16 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PropertyGridHelpForeColorDesc">
         <source>The foreground color of the description pane.</source>
         <target state="translated">描述窗格的前景色彩。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="translated">{0} 描述</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridHelpPaneTitle">
+        <source>Description</source>
+        <target state="translated">描述</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">
@@ -8299,6 +8464,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PropertyGridViewBorderColorDesc">
         <source>The color of the border surrounding the grid area.</source>
         <target state="translated">圍繞方格區域的框線色彩。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="translated">下拉式控制項預留位置</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
@@ -8601,9 +8771,19 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">{1} - {0} - {2}</target>
         <note />
       </trans-unit>
+      <trans-unit id="SaveFileDialogCheckWriteAccess">
+        <source>Controls whether the dialog box verifies if the creation of the specified file will be successful.</source>
+        <target state="translated">控制對話方塊是否確認將成功建立指定的檔案。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SaveFileDialogCreatePrompt">
         <source>Controls whether to prompt the user when a new file is about to be created. It is only applicable if 'ValidateNames' is set to true.</source>
         <target state="translated">控制在建立新檔案時是否要提示使用者。只有當 'ValidateNames' 設定為 true 時才適用。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SaveFileDialogExpandedMode">
+        <source>Controls whether the dialog box is always opened in the expanded mode.</source>
+        <target state="translated">控制是否一律以展開的模式開啟對話方塊。</target>
         <note />
       </trans-unit>
       <trans-unit id="SaveFileDialogOverWritePrompt">
@@ -8744,11 +8924,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="SortedDescendingAccessibleStatus">
         <source>Sorted descending.</source>
         <target state="translated">已遞減排序。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">進度環</target>
         <note />
       </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">
@@ -9408,7 +9583,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
         <source>TextFormatFlags.ModifyString is not allowed.</source>
-        <target state="new">TextFormatFlags.ModifyString is not allowed.</target>
+        <target state="translated">不允許 TextFormatFlags.ModifyString。</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
@@ -10141,6 +10316,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">指定 ToolStrip 是否應該透過 IPersistComponentSettings 保存使用者設定。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="translated">下移一行</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="translated">上移一行</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">
         <source>Specifies the settings key to use to save settings.</source>
         <target state="translated">指定儲存設定時所要使用的設定索引鍵。</target>
@@ -10346,6 +10531,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">LargeChange: 值 '{0}' 必須大於或等於 0。</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrackBarLargeDecreaseButtonName">
+        <source>Large decrease</source>
+        <target state="translated">大幅減少</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarLargeIncreaseButtonName">
+        <source>Large increase</source>
+        <target state="translated">大幅增加</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
         <source>The maximum value for the position of the slider on the TrackBar.</source>
         <target state="translated">TrackBar 上滑桿位置的最大值。</target>
@@ -10364,6 +10559,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TrackBarOrientationDescr">
         <source>The orientation of the control.</source>
         <target state="translated">控制項的方向。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarPositionButtonName">
+        <source>Position</source>
+        <target state="translated">位置</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">
@@ -10397,8 +10597,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
-        <source>Text length must be less than 64 characters long.</source>
-        <target state="translated">文字長度必須少於 64 個字元。</target>
+        <source>Text length must be less than 128 characters long.</source>
+        <target state="translated">文字長度必須少於 128 個字元。</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
@@ -10409,6 +10609,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TreeNodeBeginEditFailed">
         <source>BeginEdit did not succeed because LabelEdit property is false.</source>
         <target state="translated">因為 LabelEdit 屬性為 false，所以 BeginEdit 失敗。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="translated">TreeNode 已繫結到另一個 TreeView。您必須先將其從目前的位置移除，或加以複製。</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
@@ -10791,6 +10996,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">向上鍵</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="translated">編輯</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">指定文字呈現是否應與 Windows Form 以前的版本相容。</target>
@@ -10997,8 +11207,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">在應用程式中建立第一個 IWin32Window 物件之前，必須先呼叫 SetCompatibleTextRenderingDefault。</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="translated">在應用程式中建立第一個 IWin32Window 物件之前，必須先呼叫 {0}。</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

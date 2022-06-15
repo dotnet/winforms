@@ -29,11 +29,11 @@ namespace System.Windows.Forms.Design
             if (valuesToSerialize.Count > 0)
             {
                 bool isTargetInherited = false;
-                ExpressionContext cxt = manager.Context[typeof(ExpressionContext)] as ExpressionContext;
+                ExpressionContext ctx = manager.Context[typeof(ExpressionContext)] as ExpressionContext;
 
-                if (cxt != null && cxt.Expression == targetExpression)
+                if (ctx != null && ctx.Expression == targetExpression)
                 {
-                    IComponent comp = cxt.Owner as IComponent;
+                    IComponent comp = ctx.Owner as IComponent;
 
                     if (comp != null)
                     {

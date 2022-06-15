@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Design
             {
                 if (item.Site != null && toolStrip.Site != null && item.Site.Container == toolStrip.Site.Container)
                 {
-                    // We only emit Size/Location information for controls that are sited and not inherrited readonly.
+                    // We only emit Size/Location information for controls that are sited and not inherited readonly.
                     InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(item)[typeof(InheritanceAttribute)];
 
                     if (ia != null && ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)

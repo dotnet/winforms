@@ -3,17 +3,16 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
     using Size = System.Drawing.Size;
 
+    [Collection("Sequential")] // ImageList doesn't appear to behave well under stress in multi-threaded env
     public class ImageCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -45,7 +44,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ColorDepth))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ColorDepth))]
         public void ImageCollection_Item_GetInt_InvokeWithoutHandle_ReturnsExpected(ColorDepth depth)
         {
             using var list = new ImageList
@@ -93,7 +92,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ColorDepth))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ColorDepth))]
         public void ImageCollection_Item_GetInt_InvokeWithHandle_ReturnsExpected(ColorDepth depth)
         {
             using var list = new ImageList
@@ -140,122 +139,79 @@ namespace System.Windows.Forms.Tests
             Assert.True(list.HandleCreated);
         }
 
-        [WinFormsFact]
-        public void ImageCollection_Item_Get32bppColorDepth_Success()
+        public static IEnumerable<object[]> ImageCollection_VisualStyles_off_Item_Get32bppColorDepth_TestData()
         {
+            var pixelFormats = new[]
+            {
+                PixelFormat.Format1bppIndexed,
+                PixelFormat.Format24bppRgb,
+                PixelFormat.Format32bppRgb,
+                PixelFormat.Format32bppArgb,
+                PixelFormat.Format32bppPArgb,
+            };
+
+            // SetPixel is not supported for images with indexed pixel formats.
+
+            foreach (PixelFormat pixelFormat in pixelFormats)
+            {
+                yield return new object[] { pixelFormat, Color.Empty, Color.Empty };
+                yield return new object[] { PixelFormat.Format24bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100) };
+            }
+        }
+
+        public static IEnumerable<object[]> ImageCollection_VisualStyles_on_Item_Get32bppColorDepth_TestData()
+        {
+            // SetPixel is not supported for images with indexed pixel formats.
+            yield return new object[] { PixelFormat.Format1bppIndexed, Color.Empty, Color.Empty, Color.FromArgb(255, 0, 0, 0) };
+
+            // The actual colours are visually close to the originals, but no colour fidelity
+            if (ArchitectureDetection.Is64bit)
+            {
+                yield return new object[] { PixelFormat.Format24bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 50, 75, 100) };
+                yield return new object[] { PixelFormat.Format32bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 50, 75, 100) };
+                yield return new object[] { PixelFormat.Format32bppArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 67, 81, 96) };
+                yield return new object[] { PixelFormat.Format32bppPArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 67, 81, 96) };
+            }
+            else
+            {
+                yield return new object[] { PixelFormat.Format24bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 49, 74, 99) };
+                yield return new object[] { PixelFormat.Format32bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 49, 74, 99) };
+                yield return new object[] { PixelFormat.Format32bppArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 66, 81, 95) };
+                yield return new object[] { PixelFormat.Format32bppPArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 66, 81, 95) };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ImageCollection_VisualStyles_on_Item_Get32bppColorDepth_TestData))]
+        public void ImageCollection_Item_Get32bppColorDepth_Success(PixelFormat pixelFormat, Color pixel00Color, Color givenPixel10Color, Color expectedPixel10Color)
+        {
+            using var imageFiller1 = new Bitmap(16, 16, pixelFormat);
+            using var imageFiller2 = new Bitmap(16, 16, pixelFormat);
+
+            using var image = new Bitmap(16, 16, pixelFormat);
+            if (pixel00Color != Color.Empty)
+                image.SetPixel(0, 0, pixel00Color);
+            if (givenPixel10Color != Color.Empty)
+                image.SetPixel(1, 0, givenPixel10Color);
+
             using var list = new ImageList
             {
                 ColorDepth = ColorDepth.Depth32Bit
             };
             ImageList.ImageCollection collection = list.Images;
+            collection.Add(imageFiller1);
+            collection.Add(image);
+            collection.Add(imageFiller2);
 
-            using var image1bppIndexedEmpty = new Bitmap(16, 16, PixelFormat.Format1bppIndexed);
-            collection.Add(image1bppIndexedEmpty);
+            // By getting a bitmap from the ImageListcollection ImageList will clone the original bitmap.
+            // Assert that the new bitmap contains all the same properties.
 
-            using var image1bppIndexedCustom = new Bitmap(16, 16, PixelFormat.Format1bppIndexed);
-            collection.Add(image1bppIndexedCustom);
+            Bitmap resultImage = Assert.IsType<Bitmap>(collection[1]);
 
-            using var image24bppRgbEmpty = new Bitmap(16, 16, PixelFormat.Format24bppRgb);
-            collection.Add(image24bppRgbEmpty);
-
-            using var image24bppRgbCustom = new Bitmap(16, 16, PixelFormat.Format24bppRgb);
-            image24bppRgbCustom.SetPixel(0, 0, Color.Red);
-            image24bppRgbCustom.SetPixel(1, 0, Color.FromArgb(200, 50, 75, 100));
-            collection.Add(image24bppRgbCustom);
-
-            using var image32bppRgbEmpty = new Bitmap(16, 16, PixelFormat.Format32bppRgb);
-            collection.Add(image32bppRgbEmpty);
-
-            using var image32bppRgbCustom = new Bitmap(16, 16, PixelFormat.Format32bppRgb);
-            image32bppRgbCustom.SetPixel(0, 0, Color.Red);
-            image32bppRgbCustom.SetPixel(1, 0, Color.FromArgb(200, 50, 75, 100));
-            collection.Add(image32bppRgbCustom);
-
-            using var image32bppArgbEmpty = new Bitmap(16, 16, PixelFormat.Format32bppArgb);
-            collection.Add(image32bppArgbEmpty);
-
-            using var image32bppArgbCustom = new Bitmap(16, 16, PixelFormat.Format32bppArgb);
-            image32bppArgbCustom.SetPixel(0, 0, Color.Red);
-            image32bppArgbCustom.SetPixel(1, 0, Color.FromArgb(200, 50, 75, 100));
-            collection.Add(image32bppArgbCustom);
-
-            using var image32bppPargbEmpty = new Bitmap(16, 16, PixelFormat.Format32bppPArgb);
-            collection.Add(image32bppPargbEmpty);
-
-            using var image32bppPargbCustom = new Bitmap(16, 16, PixelFormat.Format32bppPArgb);
-            image32bppPargbCustom.SetPixel(0, 0, Color.Red);
-            image32bppPargbCustom.SetPixel(1, 0, Color.FromArgb(200, 50, 75, 100));
-            collection.Add(image32bppPargbCustom);
-
-            using Bitmap resultImage1bppEmpty = Assert.IsType<Bitmap>(collection[0]);
-            Assert.NotSame(image1bppIndexedEmpty, resultImage1bppEmpty);
-            Assert.Equal(new Size(16, 16), resultImage1bppEmpty.Size);
-            Assert.Equal(PixelFormat.Format32bppArgb, resultImage1bppEmpty.PixelFormat);
-            Assert.Equal(Color.FromArgb(0xFF, 0x00, 0x00, 0x00), resultImage1bppEmpty.GetPixel(0, 0));
-            Assert.Equal(Color.FromArgb(0xFF, 0x00, 0x00, 0x00), resultImage1bppEmpty.GetPixel(1, 0));
-
-            using Bitmap resultImage1bppRgbCustom = Assert.IsType<Bitmap>(collection[1]);
-            Assert.NotSame(image1bppIndexedCustom, resultImage1bppRgbCustom);
-            Assert.Equal(new Size(16, 16), resultImage1bppRgbCustom.Size);
-            Assert.Equal(PixelFormat.Format32bppArgb, resultImage1bppRgbCustom.PixelFormat);
-            Assert.Equal(Color.FromArgb(0xFF, 0x00, 0x00, 0x00), resultImage1bppRgbCustom.GetPixel(0, 0));
-            Assert.Equal(Color.FromArgb(0xFF, 0x00, 0x00, 0x00), resultImage1bppRgbCustom.GetPixel(1, 0));
-
-            using Bitmap resultImage24bppEmpty = Assert.IsType<Bitmap>(collection[4]);
-            Assert.NotSame(image24bppRgbEmpty, resultImage24bppEmpty);
-            Assert.Equal(new Size(16, 16), resultImage24bppEmpty.Size);
-            Assert.Equal(PixelFormat.Format32bppArgb, resultImage24bppEmpty.PixelFormat);
-            Assert.Equal(Color.FromArgb(0xFF, 0x00, 0x00, 0x00), resultImage24bppEmpty.GetPixel(0, 0));
-            Assert.Equal(Color.FromArgb(0xFF, 0x00, 0x00, 0x00), resultImage24bppEmpty.GetPixel(1, 0));
-
-            using Bitmap resultImage24bppRgbCustom = Assert.IsType<Bitmap>(collection[5]);
-            Assert.NotSame(image24bppRgbCustom, resultImage24bppRgbCustom);
-            Assert.Equal(new Size(16, 16), resultImage24bppRgbCustom.Size);
-            Assert.Equal(PixelFormat.Format32bppArgb, resultImage24bppRgbCustom.PixelFormat);
-            Assert.Equal(Color.FromArgb(0xFF, 0xFF, 0x00, 0x00), resultImage24bppRgbCustom.GetPixel(0, 0));
-            Assert.Equal(Color.FromArgb(0xFF, 50, 75, 100), resultImage24bppRgbCustom.GetPixel(1, 0));
-
-            using Bitmap resultImage32bppEmpty = Assert.IsType<Bitmap>(collection[4]);
-            Assert.NotSame(image32bppRgbEmpty, resultImage32bppEmpty);
-            Assert.Equal(new Size(16, 16), resultImage32bppEmpty.Size);
-            Assert.Equal(PixelFormat.Format32bppArgb, resultImage32bppEmpty.PixelFormat);
-            Assert.Equal(Color.FromArgb(0xFF, 0x00, 0x00, 0x00), resultImage32bppEmpty.GetPixel(0, 0));
-            Assert.Equal(Color.FromArgb(0xFF, 0x00, 0x00, 0x00), resultImage32bppEmpty.GetPixel(1, 0));
-
-            using Bitmap resultImage32bppRgbCustom = Assert.IsType<Bitmap>(collection[5]);
-            Assert.NotSame(image32bppRgbCustom, resultImage32bppRgbCustom);
-            Assert.Equal(new Size(16, 16), resultImage32bppRgbCustom.Size);
-            Assert.Equal(PixelFormat.Format32bppArgb, resultImage32bppRgbCustom.PixelFormat);
-            Assert.Equal(Color.FromArgb(0xFF, 0xFF, 0x00, 0x00), resultImage32bppRgbCustom.GetPixel(0, 0));
-            Assert.Equal(Color.FromArgb(0xFF, 50, 75, 100), resultImage32bppRgbCustom.GetPixel(1, 0));
-
-            using Bitmap resultImage32bppArgbEmpty = Assert.IsType<Bitmap>(collection[6]);
-            Assert.NotSame(image32bppArgbEmpty, resultImage32bppArgbEmpty);
-            Assert.Equal(new Size(16, 16), resultImage32bppArgbEmpty.Size);
-            Assert.Equal(PixelFormat.Format32bppArgb, resultImage32bppArgbEmpty.PixelFormat);
-            Assert.Equal(Color.FromArgb(0x00, 0x00, 0x00, 0x00), resultImage32bppArgbEmpty.GetPixel(0, 0));
-            Assert.Equal(Color.FromArgb(0x00, 0x00, 0x00, 0x00), resultImage32bppArgbEmpty.GetPixel(1, 0));
-
-            using Bitmap resultImage32bppArgbCustom = Assert.IsType<Bitmap>(collection[7]);
-            Assert.NotSame(image32bppArgbCustom, resultImage32bppArgbCustom);
-            Assert.Equal(new Size(16, 16), resultImage32bppArgbCustom.Size);
-            Assert.Equal(PixelFormat.Format32bppArgb, resultImage32bppArgbCustom.PixelFormat);
-            Assert.Equal(Color.FromArgb(0xFF, 0xFF, 0x00, 0x00), resultImage32bppArgbCustom.GetPixel(0, 0));
-            Assert.Equal(Color.FromArgb(0xC8, 0x55, 0x68, 0x7B), resultImage32bppArgbCustom.GetPixel(1, 0));
-
-            using Bitmap resultImage32bppPargbEmpty = Assert.IsType<Bitmap>(collection[8]);
-            Assert.NotSame(image32bppPargbEmpty, resultImage32bppPargbEmpty);
-            Assert.Equal(new Size(16, 16), resultImage32bppPargbEmpty.Size);
-            Assert.Equal(PixelFormat.Format32bppArgb, resultImage32bppPargbEmpty.PixelFormat);
-            Assert.Equal(Color.FromArgb(0x00, 0x00, 0x00, 0x00), resultImage32bppPargbEmpty.GetPixel(0, 0));
-            Assert.Equal(Color.FromArgb(0x00, 0x00, 0x00, 0x00), resultImage32bppPargbEmpty.GetPixel(1, 0));
-
-            using Bitmap resultImage32bppPargbCustom = Assert.IsType<Bitmap>(collection[9]);
-            Assert.NotSame(image32bppPargbCustom, resultImage32bppPargbCustom);
-            Assert.Equal(new Size(16, 16), resultImage32bppPargbCustom.Size);
-            Assert.Equal(PixelFormat.Format32bppArgb, resultImage32bppPargbCustom.PixelFormat);
-            Assert.Equal(Color.FromArgb(0xFF, 0xFF, 0x00, 0x00), resultImage32bppPargbCustom.GetPixel(0, 0));
-            Assert.Equal(Color.FromArgb(0xC8, 0x55, 0x68, 0x7B), resultImage32bppPargbCustom.GetPixel(1, 0));
+            Assert.Equal(image.Size, resultImage.Size);
+            Assert.Equal(PixelFormat.Format32bppArgb, resultImage.PixelFormat);
+            Assert.Equal(image.GetPixel(0, 0), resultImage.GetPixel(0, 0));
+            Assert.Equal(expectedPixel10Color, resultImage.GetPixel(1, 0));
         }
 
         [WinFormsTheory]
@@ -439,7 +395,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ImageCollection_Item_GetStringEmpty_ReturnsNull(string key)
         {
             using var list = new ImageList();
@@ -935,7 +891,7 @@ namespace System.Windows.Forms.Tests
             foreach (Color transparentColor in new Color[] { Color.Transparent, Color.FromArgb(0x12, 0x34, 0x56, 0x78), Color.Empty, Color.Black })
             {
                 yield return new object[] { transparentColor, new Bitmap(16, 16), 1 };
-                yield return new object[] { transparentColor, new Bitmap(32, 16), 2};
+                yield return new object[] { transparentColor, new Bitmap(32, 16), 2 };
                 yield return new object[] { transparentColor, new Bitmap(256, 16), 16 };
 
                 var bitmap = new Bitmap(16, 16);
@@ -1142,7 +1098,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ImageCollection_ContainsKey_InvokeEmpty_ReturnsExpected(string key)
         {
             using var list = new ImageList();
@@ -1298,7 +1254,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ImageCollection_IndexOfKey_InvokeEmpty_ReturnsExpected(string key)
         {
             using var list = new ImageList();

@@ -1,8 +1,6 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -24,7 +22,7 @@ namespace System.Windows.Forms
                 Ole32.VarFormatFirstWeekOfYear sFirstWeekOfYear,
                 ushort* rcb)
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in Format");
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in Format");
                 if (rcb is null)
                 {
                     return HRESULT.E_INVALIDARG;
@@ -56,6 +54,7 @@ namespace System.Windows.Forms
                             Marshal.WriteInt16(lpBuffer, i * 2, ch);
                         }
                     }
+
                     Marshal.WriteInt16(lpBuffer, i * 2, (short)0);
                     *rcb = i;
                 }

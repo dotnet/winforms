@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Design
         private Rectangle _bounds;
         private readonly ToolStripItemDesigner _itemDesigner;
 
-        public ToolStripItemGlyph(ToolStripItem item, ToolStripItemDesigner itemDesigner, Rectangle bounds, System.Windows.Forms.Design.Behavior.Behavior b) : base(bounds, Cursors.Default, item, b)
+        public ToolStripItemGlyph(ToolStripItem item, ToolStripItemDesigner itemDesigner, Rectangle bounds, Behavior.Behavior b) : base(bounds, Cursors.Default, item, b)
         {
             _item = item;
             _bounds = bounds;
@@ -47,21 +47,23 @@ namespace System.Windows.Forms.Design
             {
                 return Cursors.Default;
             }
+
             return null;
         }
 
         /// <summary>
-        ///  Control host dont draw on Invalidation...
+        ///  Control host don't draw on Invalidation...
         /// </summary>
         public override void Paint(PaintEventArgs pe)
         {
             if (_item is ToolStripControlHost && _item.IsOnDropDown)
             {
-                if (_item is System.Windows.Forms.ToolStripComboBox && VisualStyles.VisualStyleRenderer.IsSupported)
+                if (_item is ToolStripComboBox && VisualStyles.VisualStyleRenderer.IsSupported)
                 {
                     // When processing WM_PAINT and the OS has a theme enabled, the native ComboBox sends a WM_PAINT  message to its parent when a theme is enabled in the OS forcing a repaint in the AdornerWindow  generating an infinite WM_PAINT message processing loop. We guard against this here.
                     return;
                 }
+
                 _item.Invalidate();
             }
         }

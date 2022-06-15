@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
             Icon errorIcon = SystemIcons.Error;
 
             var mock = new Mock<IPicture>(MockBehavior.Strict);
-            mock.Setup(m => m.Handle).Returns((int)errorIcon.Handle);
+            mock.Setup(m => m.Handle).Returns(PARAM.ToInt(errorIcon.Handle));
             mock.Setup(m => m.Type).Returns((short)PICTYPE.ICON);
 
             using Icon icon = (Icon)Instance.ConvertNativeToManaged(mock.Object, null);
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
             try
             {
                 var mock = new Mock<IPicture>(MockBehavior.Strict);
-                mock.Setup(m => m.Handle).Returns((int)hBitmap);
+                mock.Setup(m => m.Handle).Returns(PARAM.ToInt(hBitmap));
                 mock.Setup(m => m.Type).Returns((short)PICTYPE.BITMAP);
 
                 using Bitmap bitmap = (Bitmap)Instance.ConvertNativeToManaged(mock.Object, null);
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
             }
             finally
             {
-                Gdi32.DeleteObject(hBitmap);
+                Gdi32.DeleteObject((Gdi32.HGDIOBJ)hBitmap);
             }
         }
 

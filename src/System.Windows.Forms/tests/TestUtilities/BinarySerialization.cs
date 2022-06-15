@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization.Formatters;
@@ -23,7 +20,7 @@ namespace System
 
                 if (!attributes.Any(a => a is SerializableAttribute))
                 {
-                    // the type isn't marked as serialisable, verify it is not one of the types
+                    // the type isn't marked as serializable, verify it is not one of the types
                     // that we expect to be serializable
                     if (serializableTypes.Contains(type.FullName))
                     {
@@ -42,7 +39,7 @@ namespace System
                 // Ensure SerializableAttribute is not added to any types not in the known list.
                 if (serializableTypes.Contains(type.FullName))
                 {
-                    // we have marked the type as serialisable, all good
+                    // we have marked the type as serializable, all good
                     continue;
                 }
 
@@ -81,9 +78,9 @@ namespace System
 
             using (var serializedStream = new MemoryStream(raw))
             {
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 return binaryFormatter.Deserialize(serializedStream);
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
         }
 
@@ -97,9 +94,9 @@ namespace System
 
             using (MemoryStream ms = new MemoryStream())
             {
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 binaryFormatter.Serialize(ms, obj);
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
                 return ms.ToArray();
             }
         }

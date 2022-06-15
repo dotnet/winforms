@@ -1,12 +1,9 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -43,7 +40,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BoundsSpecified))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BoundsSpecified))]
         public void Control_RequiredScaling_Set_GetReturnsExpected(BoundsSpecified value)
         {
             using var control = new Control
@@ -58,7 +55,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_RequiredScalingEnabled_Get_ReturnsExpected(bool value)
         {
             using var control = new Control
@@ -77,7 +74,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_TabStopInternal_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -96,7 +93,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_TabStopInternal_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -221,7 +218,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetSizeTheoryData))]
         public void Control_ApplySizeConstraintsSize_Invoke_ReturnsExpected(Size expectedSize)
         {
             using var control = new Control();
@@ -456,22 +453,6 @@ namespace System.Windows.Forms.Tests
             control.NotifyLeave();
 
             Assert.True(wasChanged);
-        }
-
-        [WinFormsTheory]
-        [InlineData(10.0f)]
-        [InlineData(0.1f)]
-        [InlineData(float.Epsilon)]
-        public void Control_ScaleFont(float expected)
-        {
-            using var control = new Control
-            {
-                Font = new Font(new FontFamily(Drawing.Text.GenericFontFamilies.Serif), 1.0f)
-            };
-
-            control.ScaleFont(expected);
-
-            Assert.Equal(expected, control.Font.Size);
         }
     }
 }

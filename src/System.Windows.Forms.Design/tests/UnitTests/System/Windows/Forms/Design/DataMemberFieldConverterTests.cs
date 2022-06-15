@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Design.Tests
         [InlineData("", "")]
         [InlineData(null, null)]
         [InlineData("(None)", "")]
-        public static void ConvertFrom( object actual, object expected)
+        public static void ConvertFrom(object actual, object expected)
         {
             Assert.Equal(expected, s_converter.ConvertFrom(s_context, CultureInfo.CurrentCulture, actual));
         }

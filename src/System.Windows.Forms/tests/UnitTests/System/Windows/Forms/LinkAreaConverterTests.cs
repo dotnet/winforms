@@ -3,12 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
-using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -17,7 +15,7 @@ namespace System.Windows.Forms.Tests
     public class LinkAreaConverterTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetConvertFromTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetConvertFromTheoryData))]
         [InlineData(typeof(LinkArea), false)]
         [InlineData(typeof(string), true)]
         public void LinkAreaConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)
@@ -122,10 +120,9 @@ namespace System.Windows.Forms.Tests
             LinkArea area = Assert.IsType<LinkArea>(converter.CreateInstance(
                 null, new Dictionary<string, object>
                 {
-                    {nameof(LinkArea.Start), 1},
-                    {nameof(LinkArea.Length), 2}
-                })
-            );
+                    { nameof(LinkArea.Start), 1 },
+                    { nameof(LinkArea.Length), 2 }
+                }));
             Assert.Equal(new LinkArea(1, 2), area);
         }
 
@@ -142,23 +139,23 @@ namespace System.Windows.Forms.Tests
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(LinkArea.Start), new object()},
-                    {nameof(LinkArea.Length), 2},
+                    { nameof(LinkArea.Start), new object() },
+                    { nameof(LinkArea.Length), 2 },
                 }
             };
             yield return new object[]
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(LinkArea.Start), null},
-                    {nameof(LinkArea.Length), 2},
+                    { nameof(LinkArea.Start), null },
+                    { nameof(LinkArea.Length), 2 },
                 }
             };
             yield return new object[]
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(LinkArea.Length), 2}
+                    { nameof(LinkArea.Length), 2 }
                 }
             };
 
@@ -166,23 +163,23 @@ namespace System.Windows.Forms.Tests
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(LinkArea.Start), 1},
-                    {nameof(LinkArea.Length), new object()}
+                    { nameof(LinkArea.Start), 1 },
+                    { nameof(LinkArea.Length), new object() }
                 }
             };
             yield return new object[]
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(LinkArea.Start), 1},
-                    {nameof(LinkArea.Length), null}
+                    { nameof(LinkArea.Start), 1 },
+                    { nameof(LinkArea.Length), null }
                 }
             };
             yield return new object[]
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(LinkArea.Start), 1}
+                    { nameof(LinkArea.Start), 1 }
                 }
             };
         }

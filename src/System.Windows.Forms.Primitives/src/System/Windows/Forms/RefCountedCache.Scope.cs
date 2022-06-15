@@ -39,7 +39,7 @@ namespace System.Windows.Forms
 
             public Scope(CacheEntry entry)
             {
-                Debug.Assert(entry != null);
+                Debug.Assert(entry is not null);
                 _object = default!;
                 Entry = entry;
                 Entry.AddRef();

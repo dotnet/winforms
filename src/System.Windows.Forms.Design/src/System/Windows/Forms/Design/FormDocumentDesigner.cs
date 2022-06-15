@@ -19,7 +19,6 @@ namespace System.Windows.Forms.Design
     internal class FormDocumentDesigner : DocumentDesigner
     {
         private Size _autoScaleBaseSize = Size.Empty;
-        private bool _inAutoscale;
         private bool _initializing;
         private bool _autoSize;
         private ToolStripAdornerWindowService _toolStripAdornerWindowService;
@@ -58,9 +57,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 // we don't want to get inherited value from a base form that might have been designed in a different DPI so we recalculate the thing instead of getting  AutoScaleBaseSize (QFE 2280)
-#pragma warning disable 618
                 SizeF real = Form.GetAutoScaleSize(((Form)Component).Font);
-#pragma warning restore 618
                 return new Size((int)Math.Round(real.Width), (int)Math.Round(real.Height));
             }
             set
@@ -83,10 +80,8 @@ namespace System.Windows.Forms.Design
         private bool ShouldSerializeAutoScaleBaseSize()
         {
             // Never serialize this unless AutoScale is turned on
-#pragma warning disable 618
             return _initializing ? false
                 : ((Form)Component).AutoScale && ShadowProperties.Contains(nameof(AutoScaleBaseSize));
-#pragma warning restore 618
         }
 
         /// <summary>
@@ -111,17 +106,19 @@ namespace System.Windows.Forms.Design
                         {
                             size.Height += SystemInformation.HorizontalScrollBarHeight;
                         }
+
                         if (form.VerticalScroll.Visible)
                         {
                             size.Width += SystemInformation.VerticalScrollBarWidth;
                         }
                     }
+
                     return size;
                 }
             }
             set
             {
-                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+                GetService<IDesignerHost>();
                 ((Form)Component).ClientSize = value;
             }
         }
@@ -138,6 +135,7 @@ namespace System.Windows.Forms.Design
                 {
                     UnhookChildControls(Control);
                 }
+
                 ((Form)Control).IsMdiContainer = value;
                 if (value)
                 {
@@ -159,6 +157,7 @@ namespace System.Windows.Forms.Design
                     throw new ArgumentException(string.Format(SR.InvalidBoundArgument, "value", value.ToString(CultureInfo.CurrentCulture),
                                                                     (0.0f).ToString(CultureInfo.CurrentCulture), (1.0f).ToString(CultureInfo.CurrentCulture)), nameof(value));
                 }
+
                 ShadowProperties[nameof(Opacity)] = value;
             }
         }
@@ -171,7 +170,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 ArrayList snapLines = null;
-                base.AddPaddingSnapLines(ref snapLines);
+                AddPaddingSnapLines(ref snapLines);
                 if (snapLines is null)
                 {
                     Debug.Fail("why did base.AddPaddingSnapLines return null?");
@@ -201,11 +200,12 @@ namespace System.Windows.Forms.Design
 
                             if (paddingsFound == 4)
                             {
-                                break;//we adjusted all of our paddings
+                                break; //we adjusted all of our paddings
                             }
                         }
                     }
                 }
+
                 return snapLines;
             }
         }
@@ -215,18 +215,12 @@ namespace System.Windows.Forms.Design
             get => Control.Size;
             set
             {
-                IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
+                IComponentChangeService changeService = GetService<IComponentChangeService>();
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
-                if (cs != null)
-                {
-                    cs.OnComponentChanging(Component, props["ClientSize"]);
-                }
+                changeService?.OnComponentChanging(Component, props["ClientSize"]);
 
                 Control.Size = value;
-                if (cs != null)
-                {
-                    cs.OnComponentChanged(Component, props["ClientSize"], null, null);
-                }
+                changeService?.OnComponentChanged(Component, props["ClientSize"]);
             }
         }
 
@@ -248,14 +242,12 @@ namespace System.Windows.Forms.Design
             set => ShadowProperties[nameof(WindowState)] = value;
         }
 
-        private void ApplyAutoScaling(SizeF baseVar, Form form)
+        private static void ApplyAutoScaling(SizeF baseVar, Form form)
         {
             // We also don't do this if the property is empty.  Otherwise we will perform two GetAutoScaleBaseSize calls only to find that they returned the same value.
             if (!baseVar.IsEmpty)
             {
-#pragma warning disable 618
                 SizeF newVarF = Form.GetAutoScaleSize(form.Font);
-#pragma warning restore 618
                 Size newVar = new Size((int)Math.Round(newVarF.Width), (int)Math.Round(newVarF.Height));
                 // We save a significant amount of time by bailing early if there's no work to be done
                 if (baseVar.Equals(newVar))
@@ -263,19 +255,9 @@ namespace System.Windows.Forms.Design
                     return;
                 }
 
-                float percY = ((float)newVar.Height) / ((float)baseVar.Height);
-                float percX = ((float)newVar.Width) / ((float)baseVar.Width);
-                try
-                {
-                    _inAutoscale = true;
-#pragma warning disable 618
-                    form.Scale(percX, percY);
-#pragma warning restore 618
-                }
-                finally
-                {
-                    _inAutoscale = false;
-                }
+                float percY = newVar.Height / ((float)baseVar.Height);
+                float percX = newVar.Width / ((float)baseVar.Width);
+                form.Scale(percX, percY);
             }
         }
 
@@ -286,18 +268,30 @@ namespace System.Windows.Forms.Design
         {
             if (disposing)
             {
-                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+                IDesignerHost host = GetService<IDesignerHost>();
                 Debug.Assert(host != null, "Must have a designer host on dispose");
+
+                if (host != null)
+                {
+                    host.LoadComplete -= new EventHandler(OnLoadComplete);
+                    host.Activated -= new EventHandler(OnDesignerActivate);
+                    host.Deactivated -= new EventHandler(OnDesignerDeactivate);
+                }
+
+                IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
+                if (cs != null)
+                {
+                    cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
+                    cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+                }
             }
+
             base.Dispose(disposing);
         }
 
         private void EnsureToolStripWindowAdornerService()
         {
-            if (_toolStripAdornerWindowService is null)
-            {
-                _toolStripAdornerWindowService = (ToolStripAdornerWindowService)GetService(typeof(ToolStripAdornerWindowService));
-            }
+            _toolStripAdornerWindowService ??= GetService<ToolStripAdornerWindowService>();
         }
 
         /// <summary>
@@ -316,26 +310,41 @@ namespace System.Windows.Forms.Design
             base.Initialize(component);
             _initializing = false;
             AutoResizeHandles = true;
+
             Debug.Assert(component is Form, "FormDocumentDesigner expects its component to be a form.");
+
+            IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+            if (host != null)
+            {
+                host.LoadComplete += new EventHandler(OnLoadComplete);
+                host.Activated += new EventHandler(OnDesignerActivate);
+                host.Deactivated += new EventHandler(OnDesignerDeactivate);
+            }
 
             Form form = (Form)Control;
             form.WindowState = FormWindowState.Normal;
             ShadowProperties[nameof(AcceptButton)] = form.AcceptButton;
             ShadowProperties[nameof(CancelButton)] = form.CancelButton;
+
+            // Monitor component/remove add events for our tray
+            //
+            IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
+            if (cs != null)
+            {
+                cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
+                cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+            }
         }
 
         /// <summary>
-        ///  Called when a component is added to the design container. If the component isn't a control, this will demand create the component tray and add the component to it.
+        ///  Called when a component is added to the design container. If the component isn't a control, this will
+        ///  demand create the component tray and add the component to it.
         /// </summary>
         private void OnComponentAdded(object source, ComponentEventArgs ce)
         {
-            if (ce.Component is ToolStrip && _toolStripAdornerWindowService is null)
+            if (ce.Component is ToolStrip && _toolStripAdornerWindowService is null && TryGetService(out IDesignerHost _))
             {
-                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null)
-                {
-                    EnsureToolStripWindowAdornerService();
-                }
+                EnsureToolStripWindowAdornerService();
             }
         }
 
@@ -348,12 +357,14 @@ namespace System.Windows.Forms.Design
             {
                 _toolStripAdornerWindowService = null;
             }
+
             if (ce.Component is IButtonControl)
             {
                 if (ce.Component == ShadowProperties[nameof(AcceptButton)])
                 {
                     AcceptButton = null;
                 }
+
                 if (ce.Component == ShadowProperties[nameof(CancelButton)])
                 {
                     CancelButton = null;
@@ -368,8 +379,8 @@ namespace System.Windows.Forms.Design
             Control control = Control;
             if (control != null && control.IsHandleCreated)
             {
-                User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE, (IntPtr)1, IntPtr.Zero);
-                User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
+                User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE, (nint)BOOL.TRUE);
+                User32.RedrawWindow(control.Handle, flags: User32.RDW.FRAME);
             }
         }
 
@@ -381,8 +392,8 @@ namespace System.Windows.Forms.Design
             Control control = Control;
             if (control != null && control.IsHandleCreated)
             {
-                User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE, IntPtr.Zero, IntPtr.Zero);
-                User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
+                User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE, (nint)BOOL.FALSE);
+                User32.RedrawWindow(control.Handle, flags: User32.RDW.FRAME);
             }
         }
 
@@ -400,19 +411,18 @@ namespace System.Windows.Forms.Design
                 {
                     clientHeight += SystemInformation.HorizontalScrollBarHeight;
                 }
+
                 if (form.VerticalScroll.Visible && form.AutoScroll)
                 {
                     clientWidth += SystemInformation.VerticalScrollBarWidth;
                 }
 
-                // ApplyAutoScaling causes WmWindowPosChanging to be called and there we calculate if we need to compensate for a menu being visible we were causing that calculation to fail if we set ClientSize too early. we now do the right thing AND check again if we need to compensate for the menu.
+                // ApplyAutoScaling causes WmWindowPosChanging to be called and there we calculate if we need to
+                // compensate for a menu being visible we were causing that calculation to fail if we set ClientSize
+                // too early. We now do the right thing and check again if we need to compensate for the menu.
                 ApplyAutoScaling(_autoScaleBaseSize, form);
                 ClientSize = new Size(clientWidth, clientHeight);
-                BehaviorService svc = (BehaviorService)GetService(typeof(BehaviorService));
-                if (svc != null)
-                {
-                    svc.SyncSelection();
-                }
+                GetService<BehaviorService>()?.SyncSelection();
 
                 form.PerformLayout();
             }
@@ -450,37 +460,6 @@ namespace System.Windows.Forms.Design
             {
                 properties["ClientSize"] = TypeDescriptor.CreateProperty(typeof(FormDocumentDesigner), prop, new DefaultValueAttribute(new Size(-1, -1)));
             }
-        }
-
-        /// <summary>
-        ///  Handles the WM_WINDOWPOSCHANGING message
-        /// </summary>
-        private unsafe void WmWindowPosChanging(ref Message m)
-        {
-            User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParam;
-            bool updateSize = _inAutoscale;
-            if (!updateSize)
-            {
-                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null)
-                {
-                    updateSize = host.Loading;
-                }
-            }
-        }
-
-        /// <summary>
-        ///  Overrides our base class WndProc to provide support for the menu editor service.
-        /// </summary>
-        protected override void WndProc(ref Message m)
-        {
-            switch ((User32.WM)m.Msg)
-            {
-                case User32.WM.WINDOWPOSCHANGING:
-                    WmWindowPosChanging(ref m);
-                    break;
-            }
-            base.WndProc(ref m);
         }
     }
 }

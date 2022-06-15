@@ -4,7 +4,6 @@
 
 using System.CodeDom;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace System.ComponentModel.Design.Serialization
 {
@@ -63,21 +62,23 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     if (object.ReferenceEquals(_table[idx].Owner, statementOwner))
                     {
-                        if (_table[idx].Statements != null)
+                        if (_table[idx].Statements is not null)
                         {
                             throw new InvalidOperationException();
                         }
                         else
                         {
-                            if (statements != null)
+                            if (statements is not null)
                             {
                                 _table[idx] = new TableEntry(statementOwner, statements);
                             }
+
                             return;
                         }
                     }
                 }
             }
+
             _table.Add(new TableEntry(statementOwner, statements));
             _version++;
         }
@@ -90,12 +91,9 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (statementOwner is null)
-                {
-                    throw new ArgumentNullException(nameof(statementOwner));
-                }
+                ArgumentNullException.ThrowIfNull(statementOwner);
 
-                if (_table != null)
+                if (_table is not null)
                 {
                     for (int idx = 0; idx < _table.Count; idx++)
                     {
@@ -105,9 +103,11 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 _table[idx] = new TableEntry(statementOwner, new CodeStatementCollection());
                             }
+
                             return _table[idx].Statements;
                         }
                     }
+
                     foreach (TableEntry e in _table)
                     {
                         if (object.ReferenceEquals(e.Owner, statementOwner))
@@ -116,6 +116,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
                 }
+
                 return null;
             }
         }
@@ -125,15 +126,13 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public bool ContainsKey(object statementOwner)
         {
-            if (statementOwner is null)
+            ArgumentNullException.ThrowIfNull(statementOwner);
+
+            if (_table is not null)
             {
-                throw new ArgumentNullException(nameof(statementOwner));
+                return (this[statementOwner] is not null);
             }
 
-            if (_table != null)
-            {
-                return (this[statementOwner] != null);
-            }
             return false;
         }
 
@@ -150,10 +149,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public void Populate(ICollection statementOwners)
         {
-            if (statementOwners is null)
-            {
-                throw new ArgumentNullException(nameof(statementOwners));
-            }
+            ArgumentNullException.ThrowIfNull(statementOwners);
+
             foreach (object o in statementOwners)
             {
                 Populate(o);
@@ -165,10 +162,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public void Populate(object owner)
         {
-            if (owner is null)
-            {
-                throw new ArgumentNullException(nameof(owner));
-            }
+            ArgumentNullException.ThrowIfNull(owner);
+
             AddOwner(owner, null);
         }
 
@@ -217,6 +212,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         throw new InvalidOperationException();
                     }
+
                     if (_position < 0 || _table._table is null || _position >= _table._table.Count)
                     {
                         throw new InvalidOperationException();
@@ -244,11 +240,12 @@ namespace System.ComponentModel.Design.Serialization
 
             public bool MoveNext()
             {
-                if (_table._table != null && (_position + 1) < _table._table.Count)
+                if (_table._table is not null && (_position + 1) < _table._table.Count)
                 {
                     _position++;
                     return true;
                 }
+
                 return false;
             }
 

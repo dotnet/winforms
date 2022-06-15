@@ -2,13 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
-using System.Linq;
-using System.IO;
 using System.Reflection;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -17,7 +14,7 @@ namespace System.Windows.Forms.Tests
     public class CursorConverterTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetConvertFromTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetConvertFromTheoryData))]
         [InlineData(typeof(string), true)]
         [InlineData(typeof(byte[]), true)]
         [InlineData(typeof(Cursor), false)]
@@ -189,6 +186,15 @@ namespace System.Windows.Forms.Tests
         public void CursorConverter_GetStandardValues_Invoke_ReturnsExpected()
         {
             var converter = new CursorConverter();
+
+            // The static accessors only provide a weak guarantee about their return values, when multiple threads
+            // are involved it is possible that return values differ between calls. We need a dry run and memory barrier
+            // to ensure the fields backing the property are all initialized and visible to the current thread,
+            // failing to do so means that the very first call to a static cursor accessor may return a different
+            // cursor instance than subsequent calls.
+            converter.GetStandardValues();
+            Threading.Thread.MemoryBarrier();
+
             ICollection<Cursor> values = converter.GetStandardValues().Cast<Cursor>().ToArray();
             Assert.Equal(28, values.Count);
             Assert.Contains(Cursors.AppStarting, values);

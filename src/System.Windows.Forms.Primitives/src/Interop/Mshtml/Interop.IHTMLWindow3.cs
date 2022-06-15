@@ -17,8 +17,8 @@ internal partial class Interop
             int GetScreenTop();
             bool AttachEvent(string ev, [In, MarshalAs(UnmanagedType.IDispatch)] object pdisp);
             void DetachEvent(string ev, [In, MarshalAs(UnmanagedType.IDispatch)] object pdisp);
-            int SetTimeout([In]ref object expression, int msec, [In] ref object language);
-            int SetInterval([In]ref object expression, int msec, [In] ref object language);
+            int SetTimeout([In] ref object expression, int msec, [In] ref object language);
+            int SetInterval([In] ref object expression, int msec, [In] ref object language);
             void Print();
             void SetBeforePrint(object o);
             object GetBeforePrint();

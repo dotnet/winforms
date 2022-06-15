@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
@@ -31,9 +30,11 @@ namespace System.Windows.Forms.Design
                 {
                     _groups = new ContextMenuStripGroupCollection();
                 }
+
                 return _groups;
             }
         }
+
         public StringCollection GroupOrdering
         {
             get
@@ -42,6 +43,7 @@ namespace System.Windows.Forms.Design
                 {
                     _groupOrdering = new StringCollection();
                 }
+
                 return _groupOrdering;
             }
         }
@@ -60,12 +62,14 @@ namespace System.Windows.Forms.Design
                     {
                         Items.Add(new ToolStripSeparator());
                     }
+
                     foreach (ToolStripItem item in items)
                     {
                         Items.Add(item);
                     }
                 }
             }
+
             _populated = true;
         }
 
@@ -76,6 +80,7 @@ namespace System.Windows.Forms.Design
             {
                 Populate();
             }
+
             RefreshItems();
             ResumeLayout(true);
             PerformLayout();

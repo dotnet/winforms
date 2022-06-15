@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -153,7 +152,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BorderStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BorderStyle))]
         public void TableLayoutPanel_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
         {
             using var control = new TableLayoutPanel()
@@ -201,7 +200,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle))]
         public void TableLayoutPanel_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
         {
             using var control = new TableLayoutPanel();
@@ -294,11 +293,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TableLayoutPanelCellBorderStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TableLayoutPanelCellBorderStyle))]
         public void TableLayoutPanel_CellBorderStyle_SetInvalid_ThrowsArgumentOutOfRangeException(TableLayoutPanelCellBorderStyle value)
         {
             using var control = new TableLayoutPanel();
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => control.CellBorderStyle = value);
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.CellBorderStyle = value);
         }
 
         [WinFormsTheory]
@@ -404,11 +403,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TableLayoutPanelGrowStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TableLayoutPanelGrowStyle))]
         public void TableLayoutPanel_GrowStyle_SetInvalid_ThrowsArgumentOutOfRangeException(TableLayoutPanelGrowStyle value)
         {
             using var control = new TableLayoutPanel();
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => control.GrowStyle = value);
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.GrowStyle = value);
         }
 
         [WinFormsFact]
@@ -512,7 +511,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("LayoutSettings", e.AffectedProperty);
                 layoutCallCount++;
-            };
+            }
+
             control.Layout += layoutHandler;
 
             try
@@ -708,7 +708,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TableLayoutPanel_GetColumnWidths_NoColumns_ReturnsExpectd()
+        public void TableLayoutPanel_GetColumnWidths_NoColumns_ReturnsExpected()
         {
             var panel = new TableLayoutPanel();
             Assert.Empty(panel.GetColumnWidths());
@@ -946,7 +946,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TableLayoutPanel_GetRowHeights_NoRows_ReturnsExpectd()
+        public void TableLayoutPanel_GetRowHeights_NoRows_ReturnsExpected()
         {
             using var control = new TableLayoutPanel();
             Assert.Empty(control.GetRowHeights());
@@ -1239,7 +1239,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TableLayoutPanel_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubTableLayoutPanel();
@@ -1266,7 +1266,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TableLayoutPanel_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubTableLayoutPanel();
@@ -1292,7 +1292,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TableLayoutPanel_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubTableLayoutPanel();
@@ -1495,6 +1495,7 @@ namespace System.Windows.Forms.Tests
                 {
                     Assert.Equal(1, e.Row);
                 }
+
                 cellPaintCallCount++;
             };
             int callCount = 0;
@@ -1609,6 +1610,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("TableIndex", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -1714,6 +1716,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("TableIndex", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -1822,6 +1825,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ColumnSpan", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -1939,6 +1943,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("TableIndex", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -2047,6 +2052,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("RowSpan", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try

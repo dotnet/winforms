@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace System.Windows.Forms.Design
@@ -13,8 +12,8 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class MaskDescriptorComparer : IComparer<MaskDescriptor>
     {
-        private SortOrder _sortOrder;
-        private SortType _sortType;
+        private readonly SortOrder _sortOrder;
+        private readonly SortType _sortType;
 
         public enum SortType
         {
@@ -67,7 +66,7 @@ namespace System.Windows.Forms.Design
             return _sortOrder == SortOrder.Descending ? -retVal : retVal;
         }
 
-        public int GetHashCode(MaskDescriptor maskDescriptor)
+        public static int GetHashCode(MaskDescriptor maskDescriptor)
         {
             if (maskDescriptor != null)
             {
@@ -78,7 +77,7 @@ namespace System.Windows.Forms.Design
             return 0;
         }
 
-        public bool Equals(MaskDescriptor maskDescriptorA, MaskDescriptor maskDescriptorB)
+        public static bool Equals(MaskDescriptor maskDescriptorA, MaskDescriptor maskDescriptorB)
         {
             if (!MaskDescriptor.IsValidMaskDescriptor(maskDescriptorA) || !MaskDescriptor.IsValidMaskDescriptor(maskDescriptorB))
             {

@@ -47,10 +47,22 @@ namespace System.Windows.Forms
             /// </summary>
             ClearLayoutArgs = 0x00000040,
 
+            /// <summary>
+            ///  Used to flag that <see cref="IsInputKey(Keys)"/> returned true in <see cref="PreProcessMessage(ref Message)" />
+            ///  so that <see cref="PreProcessControlMessageInternal(Control, ref Message)"/> doesn't call it again.
+            /// </summary>
             InputKey = 0x00000080,
 
+            /// <summary>
+            ///  Used to flag that <see cref="IsInputChar(char)"/> returned true in <see cref="PreProcessMessage(ref Message)" />
+            ///  so that <see cref="PreProcessControlMessageInternal(Control, ref Message)"/> doesn't call it again.
+            /// </summary>
             InputChar = 0x00000100,
 
+            /// <summary>
+            ///  Used by <see cref="PreProcessControlMessageInternal(Control, ref Message)"/> to avoid calling
+            ///  <see cref="ProcessUICues(ref Message)"/> multiple times.
+            /// </summary>
             UiCues = 0x00000200,
 
             IsActiveX = 0x00000400,

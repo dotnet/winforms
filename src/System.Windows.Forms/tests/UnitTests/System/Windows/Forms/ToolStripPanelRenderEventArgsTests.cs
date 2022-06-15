@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
 using Xunit;
 
@@ -10,22 +9,32 @@ namespace System.Windows.Forms.Tests
 {
     public class ToolStripPanelRenderEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
-        public static IEnumerable<object[]> Ctor_Graphics_ToolStripPanel_TestData()
+        public static IEnumerable<object[]> Ctor_Null_Graphics_ToolStripPanel_TestData()
         {
             var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
 
             yield return new object[] { null, null };
-            yield return new object[] { graphics, new ToolStripPanel() };
+            yield return new object[] { graphics, null };
+            yield return new object[] { null, new ToolStripPanel() };
         }
 
         [WinFormsTheory]
-        [MemberData(nameof(Ctor_Graphics_ToolStripPanel_TestData))]
-        public void Ctor_Graphics_ToolStripPanel(Graphics g, ToolStripPanel panel)
+        [MemberData(nameof(Ctor_Null_Graphics_ToolStripPanel_TestData))]
+        public void ToolStripPanelRenderEventArgs_Null_Graphics_ToolStripPanel_ThrowsArgumentNullException(Graphics g, ToolStripPanel toolStripPanel)
         {
-            var e = new ToolStripPanelRenderEventArgs(g, panel);
-            Assert.Equal(g, e.Graphics);
-            Assert.Equal(panel, e.ToolStripPanel);
+            Assert.Throws<ArgumentNullException>(() => new ToolStripPanelRenderEventArgs(g, toolStripPanel));
+        }
+
+        [WinFormsFact]
+        public void Ctor_Graphics_ToolStripPanel()
+        {
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            using var toolStripPanel = new ToolStripPanel();
+            var e = new ToolStripPanelRenderEventArgs(graphics, toolStripPanel);
+            Assert.Equal(graphics, e.Graphics);
+            Assert.Equal(toolStripPanel, e.ToolStripPanel);
             Assert.False(e.Handled);
         }
 

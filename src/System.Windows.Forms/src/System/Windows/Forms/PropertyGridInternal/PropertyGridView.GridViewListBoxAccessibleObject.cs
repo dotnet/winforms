@@ -2,11 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -26,12 +21,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <param name="owningGridViewListBox">The owning GridViewListBox.</param>
             public GridViewListBoxAccessibleObject(GridViewListBox owningGridViewListBox) : base(owningGridViewListBox)
             {
-                if (owningGridViewListBox.OwningPropertyGridView is null)
+                if (owningGridViewListBox.OwningPropertyGridView is not PropertyGridView owningPropertyGridView)
                 {
-                    throw new ArgumentNullException(nameof(owningGridViewListBox.OwningPropertyGridView));
+                    throw new ArgumentException(null, nameof(owningGridViewListBox));
                 }
 
-                _owningPropertyGridView = owningGridViewListBox.OwningPropertyGridView;
+                _owningPropertyGridView = owningPropertyGridView;
             }
 
             /// <summary>
@@ -41,22 +36,22 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (direction == UiaCore.NavigateDirection.Parent && _owningPropertyGridView.SelectedGridEntry != null)
+                if (!_owningPropertyGridView.DropDownVisible || _owningPropertyGridView.SelectedGridEntry is null
+                    || _owningPropertyGridView.DropDownControlHolder.Component != Owner)
                 {
-                    return _owningPropertyGridView.SelectedGridEntry.AccessibilityObject;
-                }
-                else if (direction == UiaCore.NavigateDirection.NextSibling)
-                {
-                    return _owningPropertyGridView.Edit.AccessibilityObject;
+                    return null;
                 }
 
-                return base.FragmentNavigate(direction);
+                return direction switch
+                {
+                    UiaCore.NavigateDirection.Parent => _owningPropertyGridView.DropDownControlHolder.AccessibilityObject,
+                    _ => base.FragmentNavigate(direction)
+                };
             }
 
             public override string? Name
             {
                 get => base.Name ?? SR.PropertyGridEntryValuesListDefaultAccessibleName;
-                set => base.Name = value;
             }
 
             /// <summary>

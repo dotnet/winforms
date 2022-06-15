@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -661,7 +661,7 @@
   <data name="ContextMenuViewCode" xml:space="preserve">
     <value>View &amp;Code</value>
   </data>
-  <data name="SerializationManagerAreadyInSession" xml:space="preserve">
+  <data name="SerializationManagerAlreadyInSession" xml:space="preserve">
     <value>You cannot create a new session because this serialization manager already has an active serialization session.</value>
   </data>
   <data name="SerializationManagerNoMatchingCtor" xml:space="preserve">
@@ -1068,5 +1068,149 @@ Press Ctrl+Enter to accept Text.</value>
   </data>
   <data name="CellStyleBuilderSelectedPreviewAccName" xml:space="preserve">
     <value>Selected Preview</value>
+  </data>
+  <data name="InitialDirectoryEditorLabel" xml:space="preserve">
+    <value>Select the directory that will initially be opened in the dialog.</value>
+  </data>
+  <data name="Ax_Control" xml:space="preserve">
+    <value>ActiveX Control</value>
+  </data>
+  <data name="AxImportFailed" xml:space="preserve">
+    <value>Failed to import the ActiveX control.  Please ensure it is properly registered.</value>
+  </data>
+  <data name="AXNotRegistered" xml:space="preserve">
+    <value>Could not create ActiveX control '{0}' because it is not properly registered.</value>
+  </data>
+  <data name="ChooseImageDescription" xml:space="preserve">
+    <value>Select the image displayed in the PictureBox</value>
+  </data>
+  <data name="ChooseImageDisplayName" xml:space="preserve">
+    <value>Choose Image...</value>
+  </data>
+  <data name="ClipboardError" xml:space="preserve">
+    <value>Requested Clipboard operation did not succeed.</value>
+  </data>
+  <data name="CommandSetBringToFront" xml:space="preserve">
+    <value>Bring {0} controls to front</value>
+  </data>
+  <data name="CommandSetLockControls" xml:space="preserve">
+    <value>Lock {0} components</value>
+  </data>
+  <data name="CommandSetSendToBack" xml:space="preserve">
+    <value>Send {0} controls to back</value>
+  </data>
+  <data name="DesignerBatchCreateTool" xml:space="preserve">
+    <value>Creating components in tool '{0}'</value>
+  </data>
+  <data name="DesignerPropName" xml:space="preserve">
+    <value>Indicates the name used in code to identify the object.</value>
+  </data>
+  <data name="DesignerCantParentType" xml:space="preserve">
+    <value>Cannot add component of type '{0}' to container of type '{1}'</value>
+  </data>
+  <data name="DragDropDropComponents" xml:space="preserve">
+    <value>Drop components</value>
+  </data>
+  <data name="EditLinesDescription" xml:space="preserve">
+    <value>Opens the Lines collection editor</value>
+  </data>
+  <data name="EditLinesDisplayName" xml:space="preserve">
+    <value>Edit Text Lines...</value>
+  </data>
+  <data name="FailedToCreateComponent" xml:space="preserve">
+    <value>Failed to create component '{0}'.  The error message follows:\r\n '{1}'</value>
+  </data>
+  <data name="ImageListDisplayName" xml:space="preserve">
+    <value>ImageList:</value>
+  </data>
+  <data name="ImageListDescription" xml:space="preserve">
+    <value>Chooses an ImageList to use with this TreeView</value>
+  </data>
+  <data name="InvokeNodesDialogDisplayName" xml:space="preserve">
+    <value>Edit Nodes...</value>
+  </data>
+  <data name="InvokeNodesDialogDescription" xml:space="preserve">
+    <value>Opens the Nodes collection editor</value>
+  </data>
+  <data name="ItemsCategoryName" xml:space="preserve">
+    <value>Items</value>
+  </data>
+  <data name="LinksCategoryName" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="ListViewActionListEditItemsDescription" xml:space="preserve">
+    <value>Opens the Items collection editor</value>
+  </data>
+  <data name="ListViewActionListEditItemsDisplayName" xml:space="preserve">
+    <value>Edit Items...</value>
+  </data>
+  <data name="ListViewActionListEditColumnsDisplayName" xml:space="preserve">
+    <value>Edit Columns...</value>
+  </data>
+  <data name="ListViewActionListEditColumnsDescription" xml:space="preserve">
+    <value>Opens the Columns collection editor</value>
+  </data>
+  <data name="ListViewActionListEditGroupsDisplayName" xml:space="preserve">
+    <value>Edit Groups...</value>
+  </data>
+  <data name="ListViewActionListEditGroupsDescription" xml:space="preserve">
+    <value>Opens the Groups collection editor</value>
+  </data>
+  <data name="ListViewActionListViewDisplayName" xml:space="preserve">
+    <value>View:</value>
+  </data>
+  <data name="ListViewActionListViewDescription" xml:space="preserve">
+    <value>Changes the type of View this ListView shows</value>
+  </data>
+  <data name="ListViewActionListSmallImagesDisplayName" xml:space="preserve">
+    <value>Small ImageList:</value>
+  </data>
+  <data name="ListViewActionListSmallImagesDescription" xml:space="preserve">
+    <value>Selects an ImageList to use with SmallIcon mode</value>
+  </data>
+  <data name="ListViewActionListLargeImagesDisplayName" xml:space="preserve">
+    <value>Large ImageList:</value>
+  </data>
+  <data name="ListViewActionListLargeImagesDescription" xml:space="preserve">
+    <value>Selects an ImageList to use with LargeIcon mode</value>
+  </data>
+  <data name="ListControlUnboundActionListEditItemsDisplayName" xml:space="preserve">
+    <value>Edit Items...</value>
+  </data>
+  <data name="ListControlUnboundActionListEditItemsDescription" xml:space="preserve">
+    <value>Opens the Items collection editor</value>
+  </data>
+   <data name="LocalizingCannotAdd" xml:space="preserve">
+    <value>Components cannot be added in localization mode.  Select (Default) in the Language property to return to the default form and add components.</value>
+  </data>
+  <data name="MultiLineDescription" xml:space="preserve">
+    <value>Puts the TextBox in a mode where it can display multiple lines of text</value>
+  </data>
+  <data name="MultiLineDisplayName" xml:space="preserve">
+    <value>MultiLine</value>
+  </data>
+  <data name="ParentControlDesignerGridSizeDescr" xml:space="preserve">
+    <value>Determines the size of the positioning grid.</value>
+  </data>
+  <data name="ParentControlDesignerLassoShortcutRedo" xml:space="preserve">
+    <value>Place existing controls in new container, '{0}'.</value>
+  </data>
+  <data name="PropertiesCategoryName" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="SizeModeDescription" xml:space="preserve">
+    <value>Changes the sizing mode of the Image displayed in the PictureBox</value>
+  </data>
+  <data name="SizeModeDisplayName" xml:space="preserve">
+    <value>Size Mode:</value>
+  </data>
+  <data name="WindowsFormsTabOrderReadOnly" xml:space="preserve">
+    <value>- Read Only</value>
+  </data>
+  <data name="AccessibleActionCheck" xml:space="preserve">
+    <value>Check</value>
+  </data>
+  <data name="AccessibleActionUncheck" xml:space="preserve">
+    <value>Uncheck</value>
   </data>
 </root>

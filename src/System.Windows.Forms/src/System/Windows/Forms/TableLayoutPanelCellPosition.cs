@@ -12,7 +12,7 @@ using System.Globalization;
 namespace System.Windows.Forms
 {
     [TypeConverter(typeof(TableLayoutPanelCellPositionTypeConverter))]
-    public struct TableLayoutPanelCellPosition
+    public struct TableLayoutPanelCellPosition : IEquatable<TableLayoutPanelCellPosition>
     {
         public TableLayoutPanelCellPosition(int column, int row)
         {
@@ -20,6 +20,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(row), row, string.Format(SR.InvalidArgument, nameof(row), row));
             }
+
             if (column < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(column), column, string.Format(SR.InvalidArgument, nameof(column), column));
@@ -35,13 +36,16 @@ namespace System.Windows.Forms
 
         public override bool Equals(object other)
         {
-            if (!(other is TableLayoutPanelCellPosition otherCellPosition))
+            if (other is not TableLayoutPanelCellPosition otherCellPosition)
             {
                 return false;
             }
 
-            return this == otherCellPosition;
+            return Equals(otherCellPosition);
         }
+
+        public bool Equals(TableLayoutPanelCellPosition other)
+            => Row == other.Row && Column == other.Column;
 
         public static bool operator ==(TableLayoutPanelCellPosition p1, TableLayoutPanelCellPosition p2)
         {
@@ -98,16 +102,22 @@ namespace System.Windows.Forms
 
                 string[] tokens = stringValue.Split(new char[] { culture.TextInfo.ListSeparator[0] });
                 int[] values = new int[tokens.Length];
+
+                if (values.Length != 2)
+                {
+                    throw new ArgumentException(
+                        string.Format(
+                            SR.TextParseFailedFormat,
+                            stringValue,
+                            "column, row"),
+                        nameof(value));
+                }
+
                 TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));
                 for (int i = 0; i < values.Length; i++)
                 {
                     // Note: ConvertFromString will raise exception if value cannot be converted.
                     values[i] = (int)intConverter.ConvertFromString(context, culture, tokens[i]);
-                }
-
-                if (values.Length != 2)
-                {
-                    throw new ArgumentException(string.Format(SR.TextParseFailedFormat, stringValue, "column, row"), nameof(value));
                 }
 
                 return new TableLayoutPanelCellPosition(values[0], values[1]);
@@ -122,25 +132,21 @@ namespace System.Windows.Forms
             {
                 return new InstanceDescriptor(
                     typeof(TableLayoutPanelCellPosition).GetConstructor(new Type[] { typeof(int), typeof(int) }),
-                    new object[] { cellPosition.Column, cellPosition.Row }
-                );
+                    new object[] { cellPosition.Column, cellPosition.Row });
             }
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
         public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
         {
-            if (propertyValues is null)
-            {
-                throw new ArgumentNullException(nameof(propertyValues));
-            }
+            ArgumentNullException.ThrowIfNull(propertyValues);
 
             try
             {
                 return new TableLayoutPanelCellPosition(
                     (int)propertyValues[nameof(TableLayoutPanelCellPosition.Column)],
-                    (int)propertyValues[nameof(TableLayoutPanelCellPosition.Row)]
-                );
+                    (int)propertyValues[nameof(TableLayoutPanelCellPosition.Row)]);
             }
             catch (InvalidCastException invalidCast)
             {

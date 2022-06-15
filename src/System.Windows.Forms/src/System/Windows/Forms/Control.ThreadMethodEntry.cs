@@ -2,10 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Threading;
-
 namespace System.Windows.Forms
 {
     public partial class Control
@@ -17,23 +13,23 @@ namespace System.Windows.Forms
         {
             internal Control _caller;
             internal Control _marshaler;
-            internal Delegate _method;
-            internal object[] _args;
-            internal object _retVal;
-            internal Exception _exception;
+            internal Delegate? _method;
+            internal object[]? _args;
+            internal object? _retVal;
+            internal Exception? _exception;
             internal bool _synchronous;
-            private ManualResetEvent _resetEvent;
+            private ManualResetEvent? _resetEvent;
             private readonly object _invokeSyncObject = new object();
 
             // Store the execution context associated with the caller thread, and
             // information about which thread actually got the stack applied to it.
-            internal ExecutionContext _executionContext;
+            internal ExecutionContext? _executionContext;
 
             // Optionally store the synchronization context associated with the callee thread.
             // This overrides the sync context in the execution context of the caller thread.
-            internal SynchronizationContext _syncContext;
+            internal SynchronizationContext? _syncContext;
 
-            internal ThreadMethodEntry(Control caller, Control marshaler, Delegate method, object[] args, bool synchronous, ExecutionContext executionContext)
+            internal ThreadMethodEntry(Control caller, Control marshaler, Delegate? method, object[]? args, bool synchronous, ExecutionContext? executionContext)
             {
                 _caller = caller;
                 _marshaler = marshaler;
@@ -49,13 +45,13 @@ namespace System.Windows.Forms
 
             ~ThreadMethodEntry()
             {
-                if (_resetEvent != null)
+                if (_resetEvent is not null)
                 {
                     _resetEvent.Close();
                 }
             }
 
-            public object AsyncState
+            public object? AsyncState
             {
                 get
                 {
@@ -85,6 +81,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     return (WaitHandle)_resetEvent;
                 }
             }
@@ -109,7 +106,7 @@ namespace System.Windows.Forms
                 lock (_invokeSyncObject)
                 {
                     IsCompleted = true;
-                    if (_resetEvent != null)
+                    if (_resetEvent is not null)
                     {
                         _resetEvent.Set();
                     }

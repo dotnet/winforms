@@ -2,21 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 
 namespace System.Windows.Forms
 {
     internal class Command : WeakReference
     {
-        private static Command[] cmds;
-        private static int icmdTry;
-        private static readonly object internalSyncObject = new object();
-        private const int idMin = 0x00100;
-        private const int idLim = 0x10000;
+        private static Command?[]? s_cmds;
+        private static int s_icmdTry;
+        private static readonly object s_internalSyncObject = new object();
+        private const int IdMin = 0x00100;
+        private const int IdLim = 0x10000;
 
-        internal int id;
+        internal int _id;
 
         public Command(ICommandExecutor target)
             : base(target, false)
@@ -28,45 +26,45 @@ namespace System.Windows.Forms
         {
             get
             {
-                return id;
+                return _id;
             }
         }
 
         protected static void AssignID(Command cmd)
         {
-            lock (internalSyncObject)
+            lock (s_internalSyncObject)
             {
                 int icmd;
 
-                if (null == cmds)
+                if (s_cmds is null)
                 {
-                    cmds = new Command[20];
+                    s_cmds = new Command[20];
                     icmd = 0;
                 }
                 else
                 {
-                    Debug.Assert(cmds.Length > 0, "why is cmds.Length zero?");
-                    Debug.Assert(icmdTry >= 0, "why is icmdTry negative?");
+                    Debug.Assert(s_cmds.Length > 0, "why is cmds.Length zero?");
+                    Debug.Assert(s_icmdTry >= 0, "why is icmdTry negative?");
 
-                    int icmdLim = cmds.Length;
+                    int icmdLim = s_cmds.Length;
 
-                    if (icmdTry >= icmdLim)
+                    if (s_icmdTry >= icmdLim)
                     {
-                        icmdTry = 0;
+                        s_icmdTry = 0;
                     }
 
                     // First look for an empty slot (starting at icmdTry).
-                    for (icmd = icmdTry; icmd < icmdLim; icmd++)
+                    for (icmd = s_icmdTry; icmd < icmdLim; icmd++)
                     {
-                        if (null == cmds[icmd])
+                        if (s_cmds[icmd] is null)
                         {
                             goto FindSlotComplete;
                         }
                     }
 
-                    for (icmd = 0; icmd < icmdTry; icmd++)
+                    for (icmd = 0; icmd < s_icmdTry; icmd++)
                     {
-                        if (null == cmds[icmd])
+                        if (s_cmds[icmd] is null)
                         {
                             goto FindSlotComplete;
                         }
@@ -76,15 +74,15 @@ namespace System.Windows.Forms
                     // with a null referent.
                     for (icmd = 0; icmd < icmdLim; icmd++)
                     {
-                        if (null == cmds[icmd].Target)
+                        if (s_cmds[icmd]!.Target is null)
                         {
                             goto FindSlotComplete;
                         }
                     }
 
                     // Grow the array.
-                    icmd = cmds.Length;
-                    icmdLim = Math.Min(idLim - idMin, 2 * icmd);
+                    icmd = s_cmds.Length;
+                    icmdLim = Math.Min(IdLim - IdMin, 2 * icmd);
 
                     if (icmdLim <= icmd)
                     {
@@ -92,35 +90,36 @@ namespace System.Windows.Forms
                         GC.Collect();
                         for (icmd = 0; icmd < icmdLim; icmd++)
                         {
-                            if (null == cmds[icmd] || null == cmds[icmd].Target)
+                            if (s_cmds[icmd] is null || s_cmds[icmd]!.Target is null)
                             {
                                 goto FindSlotComplete;
                             }
                         }
+
                         throw new ArgumentException(SR.CommandIdNotAllocated);
                     }
                     else
                     {
                         Command[] newCmds = new Command[icmdLim];
-                        Array.Copy(cmds, 0, newCmds, 0, icmd);
-                        cmds = newCmds;
+                        Array.Copy(s_cmds, 0, newCmds, 0, icmd);
+                        s_cmds = newCmds;
                     }
                 }
 
             FindSlotComplete:
 
-                cmd.id = icmd + idMin;
-                Debug.Assert(cmd.id >= idMin && cmd.id < idLim, "generated command id out of range");
+                cmd._id = icmd + IdMin;
+                Debug.Assert(cmd._id >= IdMin && cmd._id < IdLim, "generated command id out of range");
 
-                cmds[icmd] = cmd;
-                icmdTry = icmd + 1;
+                s_cmds[icmd] = cmd;
+                s_icmdTry = icmd + 1;
             }
         }
 
         public static bool DispatchID(int id)
         {
-            Command cmd = GetCommandFromID(id);
-            if (null == cmd)
+            Command? cmd = GetCommandFromID(id);
+            if (cmd is null)
             {
                 return false;
             }
@@ -130,52 +129,52 @@ namespace System.Windows.Forms
 
         protected static void Dispose(Command cmd)
         {
-            lock (internalSyncObject)
+            lock (s_internalSyncObject)
             {
-                if (cmd.id >= idMin)
+                if (cmd._id >= IdMin)
                 {
                     cmd.Target = null;
-                    if (cmds[cmd.id - idMin] == cmd)
+                    if (s_cmds![cmd._id - IdMin] == cmd)
                     {
-                        cmds[cmd.id - idMin] = null;
+                        s_cmds[cmd._id - IdMin] = null;
                     }
 
-                    cmd.id = 0;
+                    cmd._id = 0;
                 }
             }
         }
 
         public virtual void Dispose()
         {
-            if (id >= idMin)
+            if (_id >= IdMin)
             {
                 Dispose(this);
             }
         }
 
-        public static Command GetCommandFromID(int id)
+        public static Command? GetCommandFromID(int id)
         {
-            lock (internalSyncObject)
+            lock (s_internalSyncObject)
             {
-                if (null == cmds)
+                if (s_cmds is null)
                 {
                     return null;
                 }
 
-                int i = id - idMin;
-                if (i < 0 || i >= cmds.Length)
+                int i = id - IdMin;
+                if (i < 0 || i >= s_cmds.Length)
                 {
                     return null;
                 }
 
-                return cmds[i];
+                return s_cmds[i];
             }
         }
 
         public virtual bool Invoke()
         {
-            object target = Target;
-            if (!(target is ICommandExecutor executor))
+            object? target = Target;
+            if (target is not ICommandExecutor executor)
             {
                 return false;
             }

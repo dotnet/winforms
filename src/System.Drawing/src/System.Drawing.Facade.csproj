@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>System.Drawing</AssemblyName>
+    <NoWarn>$(NoWarn);SYSLIB0003</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,11 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
-using System.Globalization;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -47,7 +45,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void TableLayoutPanelCellPosition_Column_Set_GetReturnsExpected(int value)
         {
             var style = new TableLayoutPanelCellPosition
@@ -58,7 +56,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void TableLayoutPanelCellPosition_Row_Set_GetReturnsExpected(int value)
         {
             var style = new TableLayoutPanelCellPosition
@@ -88,6 +86,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expected, position == otherPosition);
                 Assert.Equal(!expected, position != otherPosition);
             }
+
             Assert.Equal(expected, position.Equals(other));
         }
 
@@ -211,8 +210,8 @@ namespace System.Windows.Forms.Tests
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
             TableLayoutPanelCellPosition position = Assert.IsType<TableLayoutPanelCellPosition>(converter.CreateInstance(null, new Dictionary<string, object>
             {
-                {nameof(TableLayoutPanelCellPosition.Column), 1},
-                {nameof(TableLayoutPanelCellPosition.Row), 2}
+                { nameof(TableLayoutPanelCellPosition.Column), 1 },
+                { nameof(TableLayoutPanelCellPosition.Row), 2 }
             }));
             Assert.Equal(new TableLayoutPanelCellPosition(1, 2), position);
         }
@@ -223,29 +222,30 @@ namespace System.Windows.Forms.Tests
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
             Assert.Throws<ArgumentNullException>("propertyValues", () => converter.CreateInstance(null, null));
         }
+
         public static IEnumerable<object[]> CreateInstance_InvalidPropertyValueType_TestData()
         {
             yield return new object[]
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(TableLayoutPanelCellPosition.Row), new object()},
-                    {nameof(TableLayoutPanelCellPosition.Column), 2},
+                    { nameof(TableLayoutPanelCellPosition.Row), new object() },
+                    { nameof(TableLayoutPanelCellPosition.Column), 2 },
                 }
             };
             yield return new object[]
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(TableLayoutPanelCellPosition.Row), null},
-                    {nameof(TableLayoutPanelCellPosition.Column), 2},
+                    { nameof(TableLayoutPanelCellPosition.Row), null },
+                    { nameof(TableLayoutPanelCellPosition.Column), 2 },
                 }
             };
             yield return new object[]
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(TableLayoutPanelCellPosition.Column), 2}
+                    { nameof(TableLayoutPanelCellPosition.Column), 2 }
                 }
             };
 
@@ -253,23 +253,23 @@ namespace System.Windows.Forms.Tests
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(TableLayoutPanelCellPosition.Row), 1},
-                    {nameof(TableLayoutPanelCellPosition.Column), new object()}
+                    { nameof(TableLayoutPanelCellPosition.Row), 1 },
+                    { nameof(TableLayoutPanelCellPosition.Column), new object() }
                 }
             };
             yield return new object[]
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(TableLayoutPanelCellPosition.Row), 1},
-                    {nameof(TableLayoutPanelCellPosition.Column), null}
+                    { nameof(TableLayoutPanelCellPosition.Row), 1 },
+                    { nameof(TableLayoutPanelCellPosition.Column), null }
                 }
             };
             yield return new object[]
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(TableLayoutPanelCellPosition.Row), 1}
+                    { nameof(TableLayoutPanelCellPosition.Row), 1 }
                 }
             };
         }
@@ -288,8 +288,8 @@ namespace System.Windows.Forms.Tests
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
             Assert.Throws<ArgumentOutOfRangeException>("column", () => converter.CreateInstance(null, new Dictionary<string, object>
             {
-                {nameof(TableLayoutPanelCellPosition.Column), -2},
-                {nameof(TableLayoutPanelCellPosition.Row), 2}
+                { nameof(TableLayoutPanelCellPosition.Column), -2 },
+                { nameof(TableLayoutPanelCellPosition.Row), 2 }
             }));
         }
 
@@ -299,8 +299,8 @@ namespace System.Windows.Forms.Tests
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
             Assert.Throws<ArgumentOutOfRangeException>("row", () => converter.CreateInstance(null, new Dictionary<string, object>
             {
-                {nameof(TableLayoutPanelCellPosition.Column), 1},
-                {nameof(TableLayoutPanelCellPosition.Row), -2}
+                { nameof(TableLayoutPanelCellPosition.Column), 1 },
+                { nameof(TableLayoutPanelCellPosition.Row), -2 }
             }));
         }
 

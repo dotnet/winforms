@@ -2,12 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
@@ -38,22 +36,20 @@ namespace System.Windows.Forms
         private static int s_maxImageHeight = MaxDimension;
         private static bool s_isScalingInitialized;
 
-        private NativeImageList _nativeImageList;
+        private NativeImageList? _nativeImageList;
 
         private ColorDepth _colorDepth = ColorDepth.Depth8Bit;
         private Size _imageSize = s_defaultImageSize;
 
-        private ImageCollection _imageCollection;
+        private ImageCollection? _imageCollection;
 
         // The usual handle virtualization problem, with a new twist: image
         // lists are lossy. At runtime, we delay handle creation as long as possible, and store
         // away the original images until handle creation (and hope no one disposes of the images!). At design time, we keep the originals around indefinitely.
         // This variable will become null when the original images are lost.
-        private IList _originals = new ArrayList();
-        private EventHandler _recreateHandler;
-        private EventHandler _changeHandler;
-
-        private bool _inAddRange;
+        private List<Original>? _originals = new List<Original>();
+        private EventHandler? _recreateHandler;
+        private EventHandler? _changeHandler;
 
         /// <summary>
         ///  Creates a new ImageList Control with a default image size of 16x16
@@ -68,6 +64,7 @@ namespace System.Windows.Forms
                     s_maxImageWidth = DpiHelper.LogicalToDeviceUnitsX(MaxDimension);
                     s_maxImageHeight = DpiHelper.LogicalToDeviceUnitsY(MaxDimension);
                 }
+
                 s_isScalingInitialized = true;
             }
         }
@@ -78,10 +75,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ImageList(IContainer container) : this()
         {
-            if (container is null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
+            ArgumentNullException.ThrowIfNull(container);
 
             container.Add(this);
         }
@@ -96,17 +90,7 @@ namespace System.Windows.Forms
             get => _colorDepth;
             set
             {
-                // ColorDepth is not conitguous - list the members instead.
-                if (!ClientUtils.IsEnumValid_NotSequential(value,
-                                                     (int)value,
-                                                    (int)ColorDepth.Depth4Bit,
-                                                    (int)ColorDepth.Depth8Bit,
-                                                    (int)ColorDepth.Depth16Bit,
-                                                    (int)ColorDepth.Depth24Bit,
-                                                    (int)ColorDepth.Depth32Bit))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ColorDepth));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_colorDepth == value)
                 {
@@ -138,19 +122,9 @@ namespace System.Windows.Forms
                 {
                     CreateHandle();
                 }
+
                 return _nativeImageList.Handle;
             }
-        }
-
-        internal IntPtr CreateUniqueHandle()
-        {
-            if (_nativeImageList is null)
-            {
-                CreateHandle();
-            }
-
-            using var iml = _nativeImageList.Duplicate();
-            return iml.TransferOwnership();
         }
 
         /// <summary>
@@ -160,7 +134,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ImageListHandleCreatedDescr))]
-        public bool HandleCreated => _nativeImageList != null;
+        [MemberNotNullWhen(true, nameof(_nativeImageList))]
+        public bool HandleCreated => _nativeImageList is not null;
 
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(null)]
@@ -215,7 +190,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DefaultValue(null)]
         [SRDescription(nameof(SR.ImageListImageStreamDescr))]
-        public ImageListStreamer ImageStream
+        public ImageListStreamer? ImageStream
         {
             get
             {
@@ -238,7 +213,7 @@ namespace System.Windows.Forms
                 }
 
                 NativeImageList himl = value.GetNativeImageList();
-                if (himl != null && himl != _nativeImageList)
+                if (himl is not null && himl != _nativeImageList)
                 {
                     bool recreatingHandle = HandleCreated; // We only need to fire RecreateHandle if there was a previous handle
                     DestroyHandle();
@@ -274,13 +249,17 @@ namespace System.Windows.Forms
             }
         }
 
+#if DEBUG
+        internal bool IsDisposed { get; private set; }
+#endif
+
         [SRCategory(nameof(SR.CatData))]
         [Localizable(false)]
         [Bindable(true)]
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         /// <summary>
         ///  The color to treat as transparent.
@@ -294,13 +273,13 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SRDescription(nameof(SR.ImageListOnRecreateHandleDescr))]
-        public event EventHandler RecreateHandle
+        public event EventHandler? RecreateHandle
         {
             add => _recreateHandler += value;
             remove => _recreateHandler -= value;
         }
 
-        internal event EventHandler ChangeHandle
+        internal event EventHandler? ChangeHandle
         {
             add => _changeHandler += value;
             remove => _changeHandler -= value;
@@ -320,9 +299,9 @@ namespace System.Windows.Forms
             {
                 bitmap = (Bitmap)original._image;
             }
-            else if (original._image is Icon)
+            else if (original._image is Icon originalIcon)
             {
-                bitmap = ((Icon)original._image).ToBitmap();
+                bitmap = originalIcon.ToBitmap();
                 ownsBitmap = true;
             }
             else
@@ -435,6 +414,7 @@ namespace System.Windows.Forms
         ///  appropriate values with it. Inheriting classes overriding this method
         ///  should not forget to call base.createHandle();
         /// </summary>
+        [MemberNotNull(nameof(_nativeImageList))]
         private void CreateHandle()
         {
             Debug.Assert(_nativeImageList is null, "Handle already created, this may be a source of temporary GDI leaks");
@@ -469,7 +449,7 @@ namespace System.Windows.Forms
             {
                 ComCtl32.InitCommonControls();
 
-                if (_nativeImageList != null)
+                if (_nativeImageList is not null)
                 {
                     _nativeImageList.Dispose();
                     _nativeImageList = null;
@@ -484,13 +464,13 @@ namespace System.Windows.Forms
 
             ComCtl32.ImageList.SetBkColor(this, ComCtl32.CLR.NONE);
 
-            Debug.Assert(_originals != null, "Handle not yet created, yet original images are gone");
+            Debug.Assert(_originals is not null, "Handle not yet created, yet original images are gone");
             for (int i = 0; i < _originals.Count; i++)
             {
-                Original original = (Original)_originals[i];
-                if (original._image is Icon)
+                Original original = _originals[i];
+                if (original._image is Icon originalIcon)
                 {
-                    AddIconToHandle(original, (Icon)original._image);
+                    AddIconToHandle(original, originalIcon);
                     // NOTE: if we own the icon (it's been created by us) this WILL dispose the icon to avoid a GDI leak
                     // **** original.image is NOT LONGER VALID AFTER THIS POINT ***
                 }
@@ -504,6 +484,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             _originals = null;
         }
 
@@ -514,7 +495,7 @@ namespace System.Windows.Forms
             {
                 _nativeImageList.Dispose();
                 _nativeImageList = null;
-                _originals = new ArrayList();
+                _originals = new List<Original>();
             }
         }
 
@@ -530,7 +511,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (_originals != null)
+                if (_originals is not null)
                 {
                     // we might own some of the stuff that's not been created yet
                     foreach (Original original in _originals)
@@ -542,10 +523,13 @@ namespace System.Windows.Forms
                     }
                 }
 
-                ImageStream?.Dispose();
-
                 DestroyHandle();
             }
+
+#if DEBUG
+            // At this stage we've released all resources, and the component is essentially disposed
+            IsDisposed = true;
+#endif
 
             base.Dispose(disposing);
         }
@@ -595,7 +579,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private unsafe void CopyBitmapData(BitmapData sourceData, BitmapData targetData)
+        private static unsafe void CopyBitmapData(BitmapData sourceData, BitmapData targetData)
         {
             Debug.Assert(Image.GetPixelFormatSize(sourceData.PixelFormat) == 32);
             Debug.Assert(Image.GetPixelFormatSize(sourceData.PixelFormat) == Image.GetPixelFormatSize(targetData.PixelFormat));
@@ -623,6 +607,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             bool hasAlpha = false;
             unsafe
             {
@@ -642,6 +627,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
             Found:
                 return hasAlpha;
             }
@@ -660,7 +646,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            Bitmap result = null;
+            Bitmap? result = null;
 
             // if the imagelist is 32bpp, if the image slot at index
             // has valid alpha information (not all zero... which is cause by windows just painting RGB values
@@ -674,9 +660,9 @@ namespace System.Windows.Forms
                 var imageInfo = new ComCtl32.IMAGEINFO();
                 if (ComCtl32.ImageList.GetImageInfo(new HandleRef(this, Handle), index, ref imageInfo).IsTrue())
                 {
-                    Bitmap tmpBitmap = null;
-                    BitmapData bmpData = null;
-                    BitmapData targetData = null;
+                    Bitmap? tmpBitmap = null;
+                    BitmapData? bmpData = null;
+                    BitmapData? targetData = null;
                     try
                     {
                         tmpBitmap = Bitmap.FromHbitmap((IntPtr)imageInfo.hbmImage);
@@ -694,16 +680,17 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        if (tmpBitmap != null)
+                        if (tmpBitmap is not null)
                         {
-                            if (bmpData != null)
+                            if (bmpData is not null)
                             {
                                 tmpBitmap.UnlockBits(bmpData);
                             }
 
                             tmpBitmap.Dispose();
                         }
-                        if (result != null && targetData != null)
+
+                        if (result is not null && targetData is not null)
                         {
                             result.UnlockBits(targetData);
                         }
@@ -792,7 +779,7 @@ namespace System.Windows.Forms
             if (_originals is null || Images.Empty)
             {
                 // spoof it into thinking this is the first CreateHandle
-                _originals = new ArrayList();
+                _originals = new List<Original>();
             }
 
             DestroyHandle();
@@ -812,7 +799,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            if (Images != null)
+            if (Images is not null)
             {
                 return s + " Images.Count: " + Images.Count.ToString(CultureInfo.CurrentCulture) + ", ImageSize: " + ImageSize.ToString();
             }

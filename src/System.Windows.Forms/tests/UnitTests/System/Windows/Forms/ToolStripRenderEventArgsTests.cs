@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
 using Xunit;
 
@@ -10,26 +9,21 @@ namespace System.Windows.Forms.Tests
 {
     public class ToolStripRenderEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
-        public static IEnumerable<object[]> Ctor_ToolStrip_TestData()
+        public static IEnumerable<object[]> Ctor_Null_Graphics_ToolStrip_TestData()
         {
             var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
 
-            yield return new object[] { null, Rectangle.Empty, SystemColors.Control };
-            yield return new object[] { new ToolStrip(), new Rectangle(0, 0, 100, 25), SystemColors.Control };
-            yield return new object[] { new ToolStrip(), new Rectangle(0, 0, 100, 25), SystemColors.Control };
+            yield return new object[] { null, null };
+            yield return new object[] { null, new ToolStrip() };
+            yield return new object[] { graphics, null };
         }
 
         [WinFormsTheory]
-        [MemberData(nameof(Ctor_ToolStrip_TestData))]
-        public void ToolStripRenderEventArgs_Ctor_ToolStrip(ToolStrip toolStrip, Rectangle expectedAffectedBounds, Color expectedBackColor)
+        [MemberData(nameof(Ctor_Null_Graphics_ToolStrip_TestData))]
+        public void ToolStripRenderEventArgs_Null_Graphics_ToolStrip_ThrowsArgumentNullException(Graphics g, ToolStrip toolStrip)
         {
-            var e = new ToolStripRenderEventArgs(null, toolStrip);
-
-            Assert.Null(e.Graphics);
-            Assert.Same(toolStrip, e.ToolStrip);
-            Assert.Equal(expectedAffectedBounds, e.AffectedBounds);
-            Assert.Equal(expectedBackColor, e.BackColor);
+            Assert.Throws<ArgumentNullException>(() => new ToolStripRenderEventArgs(g, toolStrip));
         }
 
         public static IEnumerable<object[]> Ctor_Graphics_ToolStrip_TestData()
@@ -52,25 +46,6 @@ namespace System.Windows.Forms.Tests
             Assert.Same(graphics, e.Graphics);
             Assert.Same(toolStrip, e.ToolStrip);
             Assert.Equal(expectedAffectedBounds, e.AffectedBounds);
-            Assert.Equal(expectedBackColor, e.BackColor);
-        }
-
-        public static IEnumerable<object[]> Ctor_ToolStrip_Rectangle_Color_TestData()
-        {
-            yield return new object[] { null, Rectangle.Empty, Color.Empty, SystemColors.Control };
-            yield return new object[] { null, Rectangle.Empty, Color.Red, Color.Red };
-            yield return new object[] { new ToolStrip(), Rectangle.Empty, Color.Empty, SystemColors.Control };
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(Ctor_ToolStrip_Rectangle_Color_TestData))]
-        public void ToolStripRenderEventArgs_Ctor_null_ToolStrip_Rectangle_Color(ToolStrip toolStrip, Rectangle affectedBounds, Color backColor, Color expectedBackColor)
-        {
-            var e = new ToolStripRenderEventArgs(null, toolStrip, affectedBounds, backColor);
-
-            Assert.Null(e.Graphics);
-            Assert.Same(toolStrip, e.ToolStrip);
-            Assert.Equal(affectedBounds, e.AffectedBounds);
             Assert.Equal(expectedBackColor, e.BackColor);
         }
 
@@ -100,7 +75,6 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> ConnectedArea_Empty_TestData()
         {
-            yield return new object[] { null };
             yield return new object[] { new ToolStrip() };
             yield return new object[] { new ToolStripDropDown() };
             yield return new object[] { new ToolStripOverflow(new ToolStripButton()) };

@@ -110,7 +110,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the value of the <see cref='CheckBox.Checked'/> property changes.
+        ///  Occurs when the value of the <see cref="CheckBox.Checked"/> property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the value of the <see cref='CheckBox.CheckState'/> property changes.
+        ///  Occurs when the value of the <see cref="CheckBox.CheckState"/> property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
         public event EventHandler CheckStateChanged
@@ -172,13 +172,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ToolStripMenuItem.CheckedChanged'/> event.
+        ///  Raises the <see cref="ToolStripMenuItem.CheckedChanged"/> event.
         /// </summary>
         protected virtual void OnCheckedChanged(EventArgs e)
             => ((EventHandler)Events[s_checkedChangedEvent])?.Invoke(this, e);
 
         /// <summary>
-        ///  Raises the <see cref='ToolStripMenuItem.CheckStateChanged'/> event.
+        ///  Raises the <see cref="ToolStripMenuItem.CheckStateChanged"/> event.
         /// </summary>
         protected virtual void OnCheckStateChanged(EventArgs e)
         {

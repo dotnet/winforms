@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -13,7 +11,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='Control.Paint'/> event.
+    ///  Provides data for the <see cref="Control.Paint"/> event.
     /// </summary>
     /// <remarks>
     ///  Please keep this class consistent with <see cref="PrintPageEventArgs"/>.
@@ -31,7 +29,7 @@ namespace System.Windows.Forms
         ///  We can potentially optimize further by skipping the save when we only use <see cref="GraphicsInternal"/>
         ///  as we shouldn't have messed with the clipping there.
         /// </remarks>
-        private GraphicsState _savedGraphicsState;
+        private GraphicsState? _savedGraphicsState;
 
         public PaintEventArgs(Graphics graphics, Rectangle clipRect) : this(
             graphics,
@@ -79,12 +77,12 @@ namespace System.Windows.Forms
         public Rectangle ClipRectangle => _event.ClipRectangle;
 
         /// <summary>
-        ///  Gets the <see cref='Drawing.Graphics'/> object used to paint.
+        ///  Gets the <see cref="Drawing.Graphics"/> object used to paint.
         /// </summary>
         public Graphics Graphics => _event.Graphics;
 
         /// <summary>
-        ///  Disposes of the resources (other than memory) used by the <see cref='PaintEventArgs'/>.
+        ///  Disposes of the resources (other than memory) used by the <see cref="PaintEventArgs"/>.
         /// </summary>
         public void Dispose()
         {
@@ -92,7 +90,7 @@ namespace System.Windows.Forms
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing) => _event.Dispose(disposing);
+        protected virtual void Dispose(bool disposing) => _event?.Dispose(disposing);
 
         /// <summary>
         ///  If ControlStyles.AllPaintingInWmPaint, we call this method after OnPaintBackground so it appears to
@@ -102,10 +100,10 @@ namespace System.Windows.Forms
         /// </summary>
         internal void ResetGraphics()
         {
-            Graphics graphics = _event.GetGraphics(create: false);
-            if (_event.Flags.HasFlag(DrawingEventFlags.SaveState) && graphics != null)
+            Graphics? graphics = _event.GetGraphics(create: false);
+            if (_event.Flags.HasFlag(DrawingEventFlags.SaveState) && graphics is not null)
             {
-                if (_savedGraphicsState != null)
+                if (_savedGraphicsState is not null)
                 {
                     graphics.Restore(_savedGraphicsState);
                     _savedGraphicsState = null;
@@ -133,7 +131,7 @@ namespace System.Windows.Forms
         IntPtr IDeviceContext.GetHdc() => Graphics?.GetHdc() ?? IntPtr.Zero;
         void IDeviceContext.ReleaseHdc() => Graphics?.ReleaseHdc();
         Gdi32.HDC IGraphicsHdcProvider.GetHDC() => _event.GetHDC();
-        Graphics IGraphicsHdcProvider.GetGraphics(bool create) => _event.GetGraphics(create);
+        Graphics? IGraphicsHdcProvider.GetGraphics(bool create) => _event.GetGraphics(create);
         bool IGraphicsHdcProvider.IsGraphicsStateClean => _event.IsStateClean;
     }
 }

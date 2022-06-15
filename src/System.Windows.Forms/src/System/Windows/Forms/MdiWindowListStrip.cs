@@ -28,6 +28,7 @@ namespace System.Windows.Forms
             {
                 mdiParent = null;
             }
+
             base.Dispose(disposing);
         }
 
@@ -47,6 +48,7 @@ namespace System.Windows.Forms
                 {
                     Items.Add(mergeItem);
                 }
+
                 return mergeItem;
             }
         }
@@ -83,7 +85,7 @@ namespace System.Windows.Forms
                 mergeItem.Text = mdiMergeItem.Text;
 
                 Form[] forms = mdiParent.MdiChildren;
-                if (forms != null && forms.Length != 0)
+                if (forms is not null && forms.Length != 0)
                 {
                     if (includeSeparator)
                     {
@@ -111,10 +113,8 @@ namespace System.Windows.Forms
                         {
                             visibleChildren++;
                             if ((activeFormAdded && (formsAddedToMenu < maxMenuForms)) ||   // don't exceed max
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-                                (!activeFormAdded && (formsAddedToMenu < (maxMenuForms - 1)) ||   // save room for active if it's not in yet
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
-                                (forms[i].Equals(activeMdiChild))))
+                                (!activeFormAdded && (formsAddedToMenu < (maxMenuForms - 1))) ||   // save room for active if it's not in yet
+                                forms[i].Equals(activeMdiChild))
                             {
                                 // there's always room for activeMdiChild
                                 string text = WindowsFormsUtils.EscapeTextWithAmpersands(mdiParent.MdiChildren[i].Text);
@@ -131,6 +131,7 @@ namespace System.Windows.Forms
                                     windowListItem.Checked = true;
                                     activeFormAdded = true;
                                 }
+
                                 accel++;
                                 formsAddedToMenu++;
                                 Debug.WriteLineIf(ToolStrip.s_mdiMergeDebug.TraceVerbose, "\tPopulateItems: Added " + windowListItem.Text);
@@ -155,7 +156,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                // this is an invisible toolstrip dont even bother doing layout.
+                // this is an invisible toolstrip don't even bother doing layout.
                 ResumeLayout(false);
                 MergeItem.DropDown.ResumeLayout(false);
             }
@@ -166,7 +167,7 @@ namespace System.Windows.Forms
         {
             Form[] forms = mdiParent.MdiChildren;
 
-            if (forms != null)
+            if (forms is not null)
             {
                 using (MdiWindowDialog dialog = new MdiWindowDialog())
                 {
@@ -177,7 +178,7 @@ namespace System.Windows.Forms
                         // AllWindows Assert above allows this...
                         //
                         dialog.ActiveChildForm.Activate();
-                        if (dialog.ActiveChildForm.ActiveControl != null && !dialog.ActiveChildForm.ActiveControl.Focused)
+                        if (dialog.ActiveChildForm.ActiveControl is not null && !dialog.ActiveChildForm.ActiveControl.Focused)
                         {
                             dialog.ActiveChildForm.ActiveControl.Focus();
                         }
@@ -193,10 +194,10 @@ namespace System.Windows.Forms
             {
                 Form boundForm = windowListItem.MdiForm;
 
-                if (boundForm != null)
+                if (boundForm is not null)
                 {
                     boundForm.Activate();
-                    if (boundForm.ActiveControl != null && !boundForm.ActiveControl.Focused)
+                    if (boundForm.ActiveControl is not null && !boundForm.ActiveControl.Focused)
                     {
                         boundForm.ActiveControl.Focus();
                     }

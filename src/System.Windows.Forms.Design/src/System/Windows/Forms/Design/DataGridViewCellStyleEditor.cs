@@ -15,30 +15,26 @@ namespace System.Windows.Forms.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider is null)
+            ArgumentNullException.ThrowIfNull(provider);
+
+            if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
             {
-                throw new ArgumentNullException(nameof(provider));
+                throw new InvalidOperationException($"Service provider couldn't fetch {nameof(IWindowsFormsEditorService)}.");
             }
 
-            IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-            if (edSvc is null)
-            {
-                throw new InvalidOperationException("Service provider couldn't fetch " + nameof(edSvc));
-            }
-
-            IUIService uiService = (IUIService)provider.GetService(typeof(IUIService));
-            IComponent comp = context.Instance as IComponent;
+            IUIService uiService = provider.GetService<IUIService>();
+            IComponent component = context.Instance as IComponent;
             using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
             {
-                _builderDialog ??= new DataGridViewCellStyleBuilder(provider, comp);
-                if (uiService != null)
+                _builderDialog ??= new DataGridViewCellStyleBuilder(provider, component);
+                if (uiService is not null)
                 {
                     _builderDialog.Font = (Font)uiService.Styles["DialogFont"];
                 }
 
-                if (value is DataGridViewCellStyle dgvcs)
+                if (value is DataGridViewCellStyle style)
                 {
-                    _builderDialog.CellStyle = dgvcs;
+                    _builderDialog.CellStyle = style;
                 }
 
                 _builderDialog.Context = context;
@@ -47,12 +43,11 @@ namespace System.Windows.Forms.Design
                     value = _builderDialog.CellStyle;
                 }
             }
+
             return value;
         }
 
-        /// <summary>
-        /// Retrieves the editing style of the Edit method. If the method is not supported, this will return None.
-        /// </summary>
+        /// <inheritdoc />
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.Modal;
     }
 }

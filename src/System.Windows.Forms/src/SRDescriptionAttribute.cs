@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
@@ -11,17 +9,18 @@ namespace System.Windows.Forms
     [AttributeUsage(AttributeTargets.All)]
     internal sealed class SRDescriptionAttribute : DescriptionAttribute
     {
-        private bool replaced;
+        private bool _replaced;
 
         public override string Description
         {
             get
             {
-                if (!replaced)
+                if (!_replaced)
                 {
-                    replaced = true;
+                    _replaced = true;
                     base.DescriptionValue = SR.GetResourceString(base.Description);
                 }
+
                 return base.Description;
             }
         }

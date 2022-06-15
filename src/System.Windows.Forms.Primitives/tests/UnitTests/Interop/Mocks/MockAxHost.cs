@@ -12,8 +12,8 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
 {
     internal class MockAxHost
     {
-        private static Guid ipictureDisp_Guid = typeof(IPictureDisp).GUID;
-        private static Guid ipicture_Guid = typeof(IPicture).GUID;
+        private static readonly Guid s_ipictureDisp_Guid = typeof(IPictureDisp).GUID;
+        private static readonly Guid s_ipicture_Guid = typeof(IPicture).GUID;
 
         public MockAxHost(string clsidString)
         {
@@ -22,19 +22,19 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
         public static IPictureDisp GetIPictureDispFromPicture(Image image)
         {
             PICTDESC desc = GetPICTDESCFromPicture(image);
-            return (IPictureDisp)OleCreatePictureIndirect(ref desc, ref ipictureDisp_Guid, fOwn: BOOL.TRUE);
+            return (IPictureDisp)OleCreatePictureIndirect(ref desc, in s_ipictureDisp_Guid, fOwn: BOOL.TRUE);
         }
 
         public static IPicture GetIPictureFromCursor(IntPtr cursorHandle)
         {
             PICTDESC desc = PICTDESC.FromIcon(Icon.FromHandle(cursorHandle), copy: true);
-            return (IPicture)OleCreatePictureIndirect(ref desc, ref ipicture_Guid, fOwn: BOOL.TRUE);
+            return (IPicture)OleCreatePictureIndirect(ref desc, in s_ipicture_Guid, fOwn: BOOL.TRUE);
         }
 
         public static IPicture GetIPictureFromPicture(Image image)
         {
             PICTDESC desc = GetPICTDESCFromPicture(image);
-            return (IPicture)OleCreatePictureIndirect(ref desc, ref ipicture_Guid, fOwn: BOOL.TRUE);
+            return (IPicture)OleCreatePictureIndirect(ref desc, in s_ipicture_Guid, fOwn: BOOL.TRUE);
         }
 
         public static Image? GetPictureFromIPicture(object picture)
@@ -119,11 +119,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
                     {
                         return (Image)metafile.Clone();
                     }
+
                 case PICTYPE.ENHMETAFILE:
                     using (var metafile = new Metafile((IntPtr)handle, deleteEmf: false))
                     {
                         return (Image)metafile.Clone();
                     }
+
                 case PICTYPE.BITMAP:
                     return Image.FromHbitmap((IntPtr)handle, (IntPtr)paletteHandle);
                 case PICTYPE.NONE:

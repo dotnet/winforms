@@ -13,7 +13,7 @@ using static Interop;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///  The ResizeBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The ResizeBehavior simply tracks the MouseMove messages and updates the bounds of the relatd control based on the new mouse location and the resize Rules.
+    ///  The ResizeBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The ResizeBehavior simply tracks the MouseMove messages and updates the bounds of the related control based on the new mouse location and the resize Rules.
     /// </summary>
     internal class ResizeBehavior : Behavior
     {
@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Design.Behavior
             public object resizeControl;
             public Rectangle resizeBounds;
             public SelectionRules resizeRules;
-        };
+        }
 
         private ResizeComponent[] _resizeComponents;
         private readonly IServiceProvider _serviceProvider;
@@ -74,6 +74,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     _behaviorService = (BehaviorService)_serviceProvider.GetService(typeof(BehaviorService));
                 }
+
                 return _behaviorService;
             }
         }
@@ -216,6 +217,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     components.Add(_resizeComponents[i].resizeControl);
                 }
+
                 if (_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost designerHost)
                 {
                     if (designerHost.GetDesigner(_resizeComponents[i].resizeControl as Component) is ControlDesigner designer)
@@ -244,12 +246,14 @@ namespace System.Windows.Forms.Design.Behavior
                     {
                         name = _resizeComponents[0].resizeControl.GetType().Name;
                     }
+
                     locString = string.Format(SR.BehaviorServiceResizeControl, name);
                 }
                 else
                 {
                     locString = string.Format(SR.BehaviorServiceResizeControls, _resizeComponents.Length);
                 }
+
                 _resizeTransaction = host.CreateTransaction(locString);
             }
 
@@ -279,6 +283,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
             }
+
             _captureLost = false;
         }
 
@@ -293,6 +298,7 @@ namespace System.Windows.Forms.Design.Behavior
                 //pass any other mouse click along - unless we've already started our resize in which case we'll ignore it
                 return _pushedBehavior;
             }
+
             //start with no selection rules and try to obtain this info from the glyph
             _targetResizeRules = SelectionRules.None;
             if (g is SelectionGlyphBase sgb)
@@ -332,6 +338,7 @@ namespace System.Windows.Forms.Design.Behavior
                             continue;
                         }
                     }
+
                     components.Add(o);
                 }
             }
@@ -383,13 +390,16 @@ namespace System.Windows.Forms.Design.Behavior
                                         newRegion.Exclude(Rectangle.Inflate(borderRect, -BorderSize, -BorderSize));
                                         BehaviorService.Invalidate(newRegion);
                                     }
+
                                     graphics.ResetClip();
                                 }
                             }
                         }
+
                         //re-enable all glyphs in all adorners
                         BehaviorService.EnableAllAdorners(true);
                     }
+
                     BehaviorService.PopBehavior(this);
 
                     if (_lastResizeRegion != null)
@@ -437,6 +447,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
             }
+
             //if the control does not have the IntegralHeight property, then the pixels moved are fine
             return pixelsMoved;
         }
@@ -463,8 +474,8 @@ namespace System.Windows.Forms.Design.Behavior
                 return true;
             }
 
-            // When DesignerWindowPane has scrollbars and we resize, shrinking the the DesignerWindowPane makes it look like the mouse has moved to the BS.  To compensate for that we keep track of the mouse's previous position in screen coordinates, and use that to compare if the mouse has really moved.
-            if (_lastMouseAbs != null)
+            // When DesignerWindowPane has scrollbars and we resize, shrinking the DesignerWindowPane makes it look like the mouse has moved to the BS.  To compensate for that we keep track of the mouse's previous position in screen coordinates, and use that to compare if the mouse has really moved.
+            if (_lastMouseAbs != Point.Empty)
             {
                 var mouseLocAbs = new Point(mouseLoc.X, mouseLoc.Y);
                 User32.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), ref mouseLocAbs);
@@ -491,6 +502,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 return false;
             }
+
             // we do these separately so as not to disturb the cached sizes for values we're not actually changing.  For example, if a control is docked top and we modify the height, the width shouldn't be modified.
             PropertyDescriptor propWidth = null;
             PropertyDescriptor propHeight = null;
@@ -572,7 +584,7 @@ namespace System.Windows.Forms.Design.Behavior
                 }
                 else
                 {
-                    _dragManager.OnMouseMove(new Rectangle(-100, -100, 0, 0));/*just an invalid rect - so we won't snap*///);
+                    _dragManager.OnMouseMove(new Rectangle(-100, -100, 0, 0)); /*just an invalid rect - so we won't snap*///);
                 }
 
                 // If there's a line to snap to, the offset will come back non-zero. In that case we should adjust the mouse position with the offset such that the size calculation below takes that offset into account. If there's no line, then the offset is 0, and there's no harm in adding the offset.
@@ -601,12 +613,12 @@ namespace System.Windows.Forms.Design.Behavior
                 Control control = _resizeComponents[i].resizeControl as Control;
                 Rectangle bounds = control.Bounds;
                 Rectangle oldBounds = bounds;
-                // We need to compute the offset beased on the original cached Bounds ... ListBox doesnt allow drag on the top boundary if this is not done when it is "IntegralHeight"
+                // We need to compute the offset based on the original cached Bounds ... ListBox doesnt allow drag on the top boundary if this is not done when it is "IntegralHeight"
                 Rectangle baseBounds = _resizeComponents[i].resizeBounds;
                 Rectangle oldBorderRect = BehaviorService.ControlRectInAdornerWindow(control);
                 bool needToUpdate = true;
                 // The ResizeBehavior can easily get into a situation where we are fighting with a layout engine. E.g., We resize control to 50px, LayoutEngine lays out and finds 50px was too small and resized back to 100px.  This is what should happen, but it looks bad in the designer.  To avoid the flicker we temporarily turn off painting while we do the resize.
-                User32.SendMessageW(control, User32.WM.SETREDRAW, PARAM.FromBool(false));
+                User32.SendMessageW(control, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
                 try
                 {
                     bool fRTL = false;
@@ -615,6 +627,7 @@ namespace System.Windows.Forms.Design.Behavior
                     {
                         fRTL = true;
                     }
+
                     // figure out which ones we're actually changing so we don't blow away the controls cached sizing state.  This is important if things are docked we don't want to destroy their "pre-dock" size.
                     BoundsSpecified specified = BoundsSpecified.None;
                     // When we check if we should change height, width, location,  we first have to check if the targetControl allows resizing, and then if the control we are currently resizing allows it as well.
@@ -669,6 +682,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             xOffset = !fRTL ? controlBounds.Right : controlBounds.Left;
                         }
+
                         bounds.Width = Math.Max(minWidth, baseBounds.Width + (!fRTL ? (mouseLoc.X - xOffset) : (xOffset - mouseLoc.X)));
                     }
 
@@ -742,6 +756,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             needToUpdate = false;
                         }
+
                         // We would expect the bounds now to be what we set it to above, but this might not be the case. If the control is hosted with e.g. a FLP, then setting the bounds above actually might force a re-layout, and the control will get moved to another spot. In this case, we don't really want to draw a snapline. Even if we snapped to a snapline, if the control got moved, the snapline would be in the wrong place.
                         if (control.Bounds != bounds)
                         {
@@ -751,13 +766,13 @@ namespace System.Windows.Forms.Design.Behavior
 
                     if (control == _primaryControl && _statusCommandUI != null)
                     {
-                        _statusCommandUI.SetStatusInformation(control as Component);
+                        _statusCommandUI.SetStatusInformation(control);
                     }
                 }
                 finally
                 {
                     // While we were resizing we discarded painting messages to reduce flicker.  We now turn painting back on and manually refresh the controls.
-                    User32.SendMessageW(control, User32.WM.SETREDRAW, PARAM.FromBool(true));
+                    User32.SendMessageW(control, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
                     //update the control
                     if (needToUpdate)
                     {
@@ -805,8 +820,10 @@ namespace System.Windows.Forms.Design.Behavior
                                             _lastResizeRegion = null;
                                         }
                                     }
+
                                     DesignerUtils.DrawResizeBorder(graphics, newRegion, backColor);
                                 }
+
                                 if (_lastResizeRegion is null)
                                 {
                                     _lastResizeRegion = newRegion.Clone(); //we will need to dispose it later.
@@ -856,6 +873,7 @@ namespace System.Windows.Forms.Design.Behavior
                             {
                                 propWidth.SetValue(_resizeComponents[i].resizeControl, ((Control)_resizeComponents[i].resizeControl).Width);
                             }
+
                             if (propHeight != null && ((Control)_resizeComponents[i].resizeControl).Height != _resizeComponents[i].resizeBounds.Height)
                             {
                                 propHeight.SetValue(_resizeComponents[i].resizeControl, ((Control)_resizeComponents[i].resizeControl).Height);
@@ -865,6 +883,7 @@ namespace System.Windows.Forms.Design.Behavior
                             {
                                 propTop.SetValue(_resizeComponents[i].resizeControl, ((Control)_resizeComponents[i].resizeControl).Top);
                             }
+
                             if (propLeft != null && ((Control)_resizeComponents[i].resizeControl).Left != _resizeComponents[i].resizeBounds.X)
                             {
                                 propLeft.SetValue(_resizeComponents[i].resizeControl, ((Control)_resizeComponents[i].resizeControl).Left);
@@ -872,7 +891,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                             if (_resizeComponents[i].resizeControl == _primaryControl && _statusCommandUI != null)
                             {
-                                _statusCommandUI.SetStatusInformation(_primaryControl as Component);
+                                _statusCommandUI.SetStatusInformation(_primaryControl);
                             }
                         }
                     }
@@ -893,6 +912,7 @@ namespace System.Windows.Forms.Design.Behavior
                 // This pops us off the stack, re-enables adorners and clears the "dragging" flag.
                 OnLoseCapture(g, EventArgs.Empty);
             }
+
             return false;
         }
     }

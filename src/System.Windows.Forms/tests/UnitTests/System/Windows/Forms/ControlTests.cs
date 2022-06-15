@@ -2,16 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
     using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
 
     public partial class ControlTests : IClassFixture<ThreadExceptionFixture>
     {
@@ -104,7 +103,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_Ctor_String(string text, string expectedText)
         {
             using var control = new SubControl(text);
@@ -722,6 +721,318 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void Control_GetNextItem_Buttons_CycleForwardExpected(RightToLeft rightToLeft)
+        {
+            using SubControl control = new() { RightToLeft = rightToLeft };
+            using Button button1 = new();
+            using Button button2 = new();
+            using Button button3 = new();
+            control.Controls.AddRange(new Button[] { button1, button2, button3 });
+            Control nextControl1 = control.GetNextControl(button1, forward: true);
+            Control nextControl2 = control.GetNextControl(button2, forward: true);
+            Control nextControl3 = control.GetNextControl(button3, forward: true);
+
+            Assert.Equal(button2, nextControl1);
+            Assert.Equal(button3, nextControl2);
+            Assert.Null(nextControl3);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void Control_GetNextItem_Buttons_CycleBackwardExpected(RightToLeft rightToLeft)
+        {
+            using SubControl control = new() { RightToLeft = rightToLeft };
+            using Button button1 = new();
+            using Button button2 = new();
+            using Button button3 = new();
+            control.Controls.AddRange(new Button[] { button1, button2, button3 });
+            Control previousControl1 = control.GetNextControl(button1, forward: false);
+            Control previousControl2 = control.GetNextControl(button2, forward: false);
+            Control previousControl3 = control.GetNextControl(button3, forward: false);
+
+            Assert.Null(previousControl1);
+            Assert.Equal(button1, previousControl2);
+            Assert.Equal(button2, previousControl3);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void Control_GetNextSelectableControl_Buttons_CycleForwardExpected(RightToLeft rightToLeft)
+        {
+            using SubControl control = new() { RightToLeft = rightToLeft };
+            using Button button1 = new();
+            using Button button2 = new();
+            using Button button3 = new();
+            control.Controls.AddRange(new Button[] { button1, button2, button3 });
+            Control nextControl1 = control.GetNextSelectableControl(button1, forward: true, tabStopOnly: true, nested: true, wrap: true);
+            Control nextControl2 = control.GetNextSelectableControl(button2, forward: true, tabStopOnly: true, nested: true, wrap: true);
+            Control nextControl3 = control.GetNextSelectableControl(button3, forward: true, tabStopOnly: true, nested: true, wrap: true);
+            Control nextControl4 = control.GetNextSelectableControl(button1, forward: true, tabStopOnly: true, nested: true, wrap: true);
+
+            Assert.Equal(button2, nextControl1);
+            Assert.Equal(button3, nextControl2);
+            Assert.Equal(button1, nextControl3);
+            Assert.Equal(button2, nextControl4);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void Control_GetNextSelectableControl_Buttons_CycleBackwardExpected(RightToLeft rightToLeft)
+        {
+            using SubControl control = new() { RightToLeft = rightToLeft };
+            using Button button1 = new();
+            using Button button2 = new();
+            using Button button3 = new();
+            control.Controls.AddRange(new Button[] { button1, button2, button3 });
+            Control previousControl1 = control.GetNextSelectableControl(button1, forward: false, tabStopOnly: true, nested: true, wrap: true);
+            Control previousControl2 = control.GetNextSelectableControl(button3, forward: false, tabStopOnly: true, nested: true, wrap: true);
+            Control previousControl3 = control.GetNextSelectableControl(button2, forward: false, tabStopOnly: true, nested: true, wrap: true);
+            Control previousControl4 = control.GetNextSelectableControl(button1, forward: false, tabStopOnly: true, nested: true, wrap: true);
+
+            Assert.Equal(button3, previousControl1);
+            Assert.Equal(button2, previousControl2);
+            Assert.Equal(button1, previousControl3);
+            Assert.Equal(button3, previousControl4);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void Control_GetNextSelectableControl_MultipleComplexControls_CycleBackwardExpected(RightToLeft rightToLeft)
+        {
+            using SubControl control = new() { RightToLeft = rightToLeft };
+            using TableLayoutPanel table = new() { Dock = DockStyle.Fill, ColumnCount = 3 };
+            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            control.Controls.Add(table);
+            using FlowLayoutPanel panelRadioButtons = new()
+            {
+                Dock = DockStyle.Fill,
+                FlowDirection = FlowDirection.TopDown
+            };
+
+            table.Controls.Add(panelRadioButtons, column: 0, row: 0);
+            using RadioButton radioButton1 = new() { Checked = true };
+            panelRadioButtons.Controls.Add(radioButton1);
+            using RadioButton radioButton2 = new() { Checked = false };
+            panelRadioButtons.Controls.Add(radioButton2);
+            using FlowLayoutPanel panelCheckBoxes = new()
+            {
+                Dock = DockStyle.Fill,
+                FlowDirection = FlowDirection.TopDown
+            };
+
+            table.Controls.Add(panelCheckBoxes, column: 1, row: 0);
+            using CheckBox checkBox1 = new() { Checked = true };
+            panelCheckBoxes.Controls.Add(checkBox1);
+            using CheckBox checkBox2 = new() { Checked = true };
+            panelCheckBoxes.Controls.Add(checkBox2);
+            using FlowLayoutPanel panelButtons = new()
+            {
+                Dock = DockStyle.Fill,
+                FlowDirection = FlowDirection.TopDown
+            };
+
+            table.Controls.Add(panelButtons, column: 2, row: 0);
+            using Button button1 = new();
+            panelButtons.Controls.Add(button1);
+            using Button button2 = new();
+            panelButtons.Controls.Add(button2);
+            Control previousControl1 = control.GetNextSelectableControl(button2, forward: false, tabStopOnly: true, nested: true, wrap: true);
+            Control previousControl2 = control.GetNextSelectableControl(button1, forward: false, tabStopOnly: true, nested: true, wrap: true);
+            Control previousControl3 = control.GetNextSelectableControl(checkBox2, forward: false, tabStopOnly: true, nested: true, wrap: true);
+            Control previousControl4 = control.GetNextSelectableControl(checkBox1, forward: false, tabStopOnly: true, nested: true, wrap: true);
+            Control previousControl5 = control.GetNextSelectableControl(radioButton1, forward: false, tabStopOnly: true, nested: true, wrap: true);
+            Control previousControl6 = control.GetNextSelectableControl(button2, forward: false, tabStopOnly: true, nested: true, wrap: true);
+
+            Assert.Equal(button1, previousControl1);
+            Assert.Equal(checkBox2, previousControl2);
+            Assert.Equal(checkBox1, previousControl3);
+            Assert.Equal(radioButton1, previousControl4);
+            Assert.Equal(button2, previousControl5);
+            Assert.Equal(button1, previousControl6);
+        }
+
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/6730")]
+        [WinFormsTheory]
+        [SkipOnArchitecture(TestArchitectures.X64,
+            "Flaky tests, see: https://github.com/dotnet/winforms/issues/6730")]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void Control_SelectNextControl_ToolStrips_CycleForwardExpected(RightToLeft rightToLeft)
+        {
+            using Form form = new() { RightToLeft = rightToLeft, };
+            using ToolStrip toolStrip1 = new() { TabStop = true, };
+            using ToolStrip toolStrip2 = new() { TabStop = true, };
+            toolStrip1.CreateControl();
+            toolStrip2.CreateControl();
+            form.CreateControl();
+            using ToolStripButton toolStrip1_Button1 = new();
+            using ToolStripTextBox toolStrip1_TextBox1 = new();
+            using ToolStripComboBox toolStrip1_ComboBox1 = new();
+            using ToolStripSplitButton toolStrip1_SplitButton1 = new();
+            toolStrip1.Items.AddRange(new ToolStripItem[]
+            {
+                toolStrip1_Button1, toolStrip1_TextBox1, toolStrip1_ComboBox1, toolStrip1_SplitButton1
+            });
+
+            using ToolStripComboBox toolStrip2_ComboBox1 = new();
+            using ToolStripSplitButton toolStrip2_SplitButton1 = new();
+            using ToolStripLabel toolStrip2_Label1 = new();
+            using ToolStripSplitButton toolStrip2_DropDownButton1 = new();
+            using ToolStripComboBox toolStrip2_ComboBox2 = new();
+            toolStrip2.Items.AddRange(new ToolStripItem[]
+            {
+                toolStrip2_ComboBox1,
+                toolStrip2_SplitButton1,
+                toolStrip2_Label1,
+                toolStrip2_DropDownButton1,
+                toolStrip2_ComboBox2
+            });
+
+            form.Controls.AddRange(new ToolStrip[] { toolStrip1, toolStrip2 });
+            toolStrip1.ParentInternal.Visible = true;
+            toolStrip2.ParentInternal.Visible = true;
+            toolStrip1_ComboBox1.ParentInternal.Visible = true;
+            toolStrip1_TextBox1.ParentInternal.Visible = true;
+            toolStrip1_ComboBox1.ComboBox.AssignParent(toolStrip1);
+            toolStrip1_TextBox1.Control.AssignParent(toolStrip1);
+
+            var result = form.SelectNextControl(toolStrip1_ComboBox1.ComboBox, forward: true, tabStopOnly: true, nested: true, wrap: true);
+            Assert.True(result);
+            Assert.True(toolStrip2_ComboBox1.Focused);
+            Assert.True(toolStrip2.Items[0].Selected);
+
+            result = form.SelectNextControl(toolStrip1_TextBox1.Control, forward: true, tabStopOnly: true, nested: true, wrap: true);
+            Assert.True(result);
+            Assert.True(toolStrip2_ComboBox1.Focused);
+            Assert.True(toolStrip2.Items[0].Selected);
+
+            Assert.True(form.IsHandleCreated);
+            Assert.True(toolStrip1.IsHandleCreated);
+            Assert.True(toolStrip2.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void Control_SelectNextControl_ToolStrips_CycleBackwardExpected(RightToLeft rightToLeft)
+        {
+            using Form form = new() { RightToLeft = rightToLeft };
+            using ToolStrip toolStrip1 = new() { TabStop = true };
+            using ToolStrip toolStrip2 = new() { TabStop = true };
+            toolStrip1.CreateControl();
+            toolStrip2.CreateControl();
+            form.CreateControl();
+            using ToolStripButton toolStrip1_Button1 = new();
+            using ToolStripLabel toolStrip1_Label1 = new();
+            using ToolStripTextBox toolStrip1_TextBox1 = new();
+            using ToolStripSplitButton toolStrip1_SplitButton1 = new();
+            toolStrip1.Items.AddRange(new ToolStripItem[]
+            {
+                toolStrip1_Button1, toolStrip1_Label1, toolStrip1_TextBox1, toolStrip1_SplitButton1
+            });
+
+            using ToolStripComboBox toolStrip2_ComboBox1 = new();
+            using ToolStripSplitButton toolStrip2_SplitButton1 = new();
+            using ToolStripLabel toolStrip2_Label1 = new();
+            using ToolStripSplitButton toolStrip2_DropDownButton1 = new();
+            using ToolStripComboBox toolStrip2_ComboBox2 = new();
+            toolStrip2.Items.AddRange(new ToolStripItem[]
+            {
+                toolStrip2_ComboBox1,
+                toolStrip2_SplitButton1,
+                toolStrip2_Label1,
+                toolStrip2_DropDownButton1,
+                toolStrip2_ComboBox2
+            });
+
+            form.Controls.AddRange(new ToolStrip[] { toolStrip1, toolStrip2 });
+            toolStrip1.ParentInternal.Visible = true;
+            toolStrip2.ParentInternal.Visible = true;
+            toolStrip2_ComboBox1.ParentInternal.Visible = true;
+            toolStrip2_ComboBox2.ParentInternal.Visible = true;
+            toolStrip2_ComboBox1.ComboBox.AssignParent(toolStrip2);
+            toolStrip2_ComboBox2.ComboBox.AssignParent(toolStrip2);
+
+            var result = form.SelectNextControl(toolStrip2_ComboBox2.ComboBox, forward: false, tabStopOnly: true, nested: true, wrap: true);
+            Assert.True(result);
+            Assert.True(toolStrip1.Focused);
+            Assert.True(toolStrip1.Items[0].Selected);
+
+            result = form.SelectNextControl(toolStrip2_ComboBox1.ComboBox, forward: false, tabStopOnly: true, nested: true, wrap: true);
+            Assert.True(result);
+            Assert.True(toolStrip1.Focused);
+            Assert.True(toolStrip1.Items[0].Selected);
+
+            Assert.True(form.IsHandleCreated);
+            Assert.True(toolStrip1.IsHandleCreated);
+            Assert.True(toolStrip2.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void Control_RecreateHandleCore_invokes_OnParentHandleRecreated_for_children()
+        {
+            using Form form = new();
+            SubCheckedListBox checkedListBox1 = new();
+            SubButton button1 = new();
+            SubListBox listBox1 = new();
+            SubListView listView1 = new();
+
+            checkedListBox1.Items.AddRange(new object[] { "Foo", "Foo", "Foo" });
+            checkedListBox1.Location = new Point(10, 10);
+            checkedListBox1.Size = new Size(103, 64);
+
+            button1.Location = new Point(12, 166);
+            button1.Size = new Size(213, 20);
+
+            listBox1.Items.AddRange(new object[] { "Foo", "Foo", "Foo" });
+            listBox1.Location = new Point(12, 80);
+            listBox1.Size = new Size(101, 69);
+
+            listView1.Items.AddRange(new ListViewItem[] { new("Foo"), new("Foo"), new("Foo") });
+            listView1.Location = new Point(130, 10);
+            listView1.Size = new Size(121, 64);
+            listView1.View = View.List;
+
+            form.Controls.Add(checkedListBox1);
+            form.Controls.Add(button1);
+            form.Controls.Add(listBox1);
+            form.Controls.Add(listView1);
+
+            form.Show();
+
+            // This will recreate the handle.
+            form.ShowInTaskbar = false;
+
+            try
+            {
+                AssertHandler(button1);
+                AssertHandler(listView1);
+                AssertHandler(checkedListBox1);
+                AssertHandler(listBox1);
+            }
+            finally
+            {
+                form.Close();
+            }
+
+            return;
+
+            static void AssertHandler(IParentHandleRecreationHandler handler)
+            {
+                Assert.Equal(1, handler.OnParentHandleRecreatedCalled);
+                Assert.Equal(1, handler.OnParentHandleRecreatingCalled);
+            }
+        }
+
         private class SubControl : Control
         {
             public SubControl() : base()
@@ -743,6 +1054,9 @@ namespace System.Windows.Forms.Tests
             public SubControl(Control parent, string text, int left, int top, int width, int height) : base(parent, text, left, top, width, height)
             {
             }
+
+            public Control GetNextSelectableControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
+                => this.TestAccessor().Dynamic.GetNextSelectableControl(ctl, forward, tabStopOnly, nested, wrap);
 
             public new bool CanEnableIme => base.CanEnableIme;
 
@@ -1045,6 +1359,84 @@ namespace System.Windows.Forms.Tests
             public new void UpdateZOrder() => base.UpdateZOrder();
 
             public new void WndProc(ref Message m) => base.WndProc(ref m);
+        }
+
+        private class SubCheckedListBox : CheckedListBox, IParentHandleRecreationHandler
+        {
+            public int OnParentHandleRecreatedCalled { get; private set; }
+            public int OnParentHandleRecreatingCalled { get; private set; }
+
+            internal override void OnParentHandleRecreated()
+            {
+                OnParentHandleRecreatedCalled++;
+                base.OnParentHandleRecreated();
+            }
+
+            internal override void OnParentHandleRecreating()
+            {
+                OnParentHandleRecreatingCalled++;
+                base.OnParentHandleRecreating();
+            }
+        }
+
+        private class SubListBox : ListBox, IParentHandleRecreationHandler
+        {
+            public int OnParentHandleRecreatedCalled { get; private set; }
+            public int OnParentHandleRecreatingCalled { get; private set; }
+
+            internal override void OnParentHandleRecreated()
+            {
+                OnParentHandleRecreatedCalled++;
+                base.OnParentHandleRecreated();
+            }
+
+            internal override void OnParentHandleRecreating()
+            {
+                OnParentHandleRecreatingCalled++;
+                base.OnParentHandleRecreating();
+            }
+        }
+
+        private class SubButton : Button, IParentHandleRecreationHandler
+        {
+            public int OnParentHandleRecreatedCalled { get; private set; }
+            public int OnParentHandleRecreatingCalled { get; private set; }
+
+            internal override void OnParentHandleRecreated()
+            {
+                OnParentHandleRecreatedCalled++;
+                base.OnParentHandleRecreated();
+            }
+
+            internal override void OnParentHandleRecreating()
+            {
+                OnParentHandleRecreatingCalled++;
+                base.OnParentHandleRecreating();
+            }
+        }
+
+        private class SubListView : ListView, IParentHandleRecreationHandler
+        {
+            public int OnParentHandleRecreatedCalled { get; private set; }
+            public int OnParentHandleRecreatingCalled { get; private set; }
+
+            internal override void OnParentHandleRecreated()
+            {
+                OnParentHandleRecreatedCalled++;
+                base.OnParentHandleRecreated();
+            }
+
+            internal override void OnParentHandleRecreating()
+            {
+                OnParentHandleRecreatingCalled++;
+                base.OnParentHandleRecreating();
+            }
+        }
+
+        private interface IParentHandleRecreationHandler
+        {
+            int OnParentHandleRecreatedCalled { get; }
+            int OnParentHandleRecreatingCalled { get; }
         }
     }
 }

@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
+using System.Data;
 using Moq;
 using Xunit;
 
@@ -128,6 +127,87 @@ namespace System.Windows.Forms.Tests
             Assert.IsType<ToolStripSeparator>(bn.Items[index++]);
             Assert.Equal(bn.AddNewItem, bn.Items[index++]);
             Assert.Equal(bn.DeleteItem, bn.Items[index++]);
+        }
+
+        [WinFormsFact]
+        public void BindingNavigator_UpdatesItsItems_AfterDataSourceDisposing()
+        {
+            using BindingNavigator control = new BindingNavigator(true);
+            int rowsCount = 5;
+            BindingSource bindingSource = GetTestBindingSource(rowsCount);
+            control.BindingSource = bindingSource;
+
+            Assert.Equal("1", control.PositionItem.Text);
+            Assert.Equal($"of {rowsCount}", control.CountItem.Text);
+
+            bindingSource.Dispose();
+
+            // The BindingNavigator updates its PositionItem and CountItem values
+            // after its BindingSource is disposed
+            Assert.Equal("0", control.PositionItem.Text);
+            Assert.Equal("of 0", control.CountItem.Text);
+        }
+
+        [WinFormsFact]
+        public void BindingNavigator_BindingSource_IsNull_AfterDisposing()
+        {
+            using BindingNavigator control = new BindingNavigator();
+            BindingSource bindingSource = GetTestBindingSource(5);
+            control.BindingSource = bindingSource;
+
+            Assert.Equal(bindingSource, control.BindingSource);
+
+            bindingSource.Dispose();
+
+            Assert.Null(control.BindingSource);
+        }
+
+        [WinFormsFact]
+        public void BindingNavigator_BindingSource_IsActual_AfterOldOneIsDisposed()
+        {
+            using BindingNavigator control = new BindingNavigator(true);
+            int rowsCount1 = 3;
+            BindingSource bindingSource1 = GetTestBindingSource(rowsCount1);
+            int rowsCount2 = 5;
+            BindingSource bindingSource2 = GetTestBindingSource(rowsCount2);
+            control.BindingSource = bindingSource1;
+
+            Assert.Equal(bindingSource1, control.BindingSource);
+            Assert.Equal("1", control.PositionItem.Text);
+            Assert.Equal($"of {rowsCount1}", control.CountItem.Text);
+
+            control.BindingSource = bindingSource2;
+
+            Assert.Equal(bindingSource2, control.BindingSource);
+            Assert.Equal("1", control.PositionItem.Text);
+            Assert.Equal($"of {rowsCount2}", control.CountItem.Text);
+
+            bindingSource1.Dispose();
+
+            // bindingSource2 is actual for the BindingNavigator
+            // so it will contain correct PositionItem and CountItem values
+            // even after bindingSource1 is disposed.
+            // This test checks that Disposed events unsubscribed correctly
+            Assert.Equal(bindingSource2, control.BindingSource);
+            Assert.Equal("1", control.PositionItem.Text);
+            Assert.Equal($"of {rowsCount2}", control.CountItem.Text);
+        }
+
+        private BindingSource GetTestBindingSource(int rowsCount)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Name");
+            dt.Columns.Add("Age");
+
+            for (int i = 0; i < rowsCount; i++)
+            {
+                DataRow dr = dt.NewRow();
+                dr[0] = $"User{i}";
+                dr[1] = i * 3;
+                dt.Rows.Add(dr);
+            }
+
+            return new() { DataSource = dt };
         }
     }
 }

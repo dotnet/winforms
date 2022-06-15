@@ -63,13 +63,13 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     ISite site = c.Site;
 
-                    if (site != null)
+                    if (site is not null)
                     {
                         _host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
                     }
                 }
 
-                if (_host != null)
+                if (_host is not null)
                 {
                     baseComponent = _host.RootComponent;
                 }
@@ -80,7 +80,7 @@ namespace System.ComponentModel.Design.Serialization
             /// <summary>
             ///  This is an extender property that we offer to all components
             ///  on the form.  It implements the "Modifiers" property, which
-            ///  is an enum represneing the "public/protected/private" scope
+            ///  is an enum representing the "public/protected/private" scope
             ///  of a component.
             /// </summary>
             [DesignOnly(true)]
@@ -92,7 +92,7 @@ namespace System.ComponentModel.Design.Serialization
             public MemberAttributes GetModifiers(IComponent comp)
             {
                 IComponent baseComponent = GetBaseComponent(comp);
-                Debug.Assert(baseComponent != null, "Root component was null");
+                Debug.Assert(baseComponent is not null, "Root component was null");
                 Type baseType = baseComponent.GetType();
                 ISite site = comp.Site;
 
@@ -110,7 +110,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 FieldInfo field = TypeDescriptor.GetReflectionType(baseType).GetField(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
 
-                if (field != null)
+                if (field is not null)
                 {
                     if (field.IsPrivate)
                         return MemberAttributes.Private;

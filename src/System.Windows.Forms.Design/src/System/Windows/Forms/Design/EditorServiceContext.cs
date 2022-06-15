@@ -36,7 +36,8 @@ namespace System.Windows.Forms.Design
                     _targetProperty = prop;
                 }
             }
-            Debug.Assert(_targetProperty != null, "Need PropertyDescriptor for ICollection property to associate collectoin edtior with.");
+
+            Debug.Assert(_targetProperty != null, "Need PropertyDescriptor for ICollection property to associate collection editor with.");
         }
 
         internal EditorServiceContext(ComponentDesigner designer, PropertyDescriptor prop, string newVerbText) : this(designer, prop)
@@ -68,6 +69,7 @@ namespace System.Windows.Forms.Design
                 {
                 }
             }
+
             return newValue;
         }
 
@@ -82,13 +84,12 @@ namespace System.Windows.Forms.Design
                 {
                     _componentChangeSvc = (IComponentChangeService)((IServiceProvider)this).GetService(typeof(IComponentChangeService));
                 }
+
                 return _componentChangeSvc;
             }
         }
 
-        /// <summary>
-        ///  Self-explanitory interface impl.
-        /// </summary>
+        /// <inheritdoc />
         IContainer ITypeDescriptorContext.Container
         {
             get
@@ -97,47 +98,32 @@ namespace System.Windows.Forms.Design
                 {
                     return _designer.Component.Site.Container;
                 }
+
                 return null;
             }
         }
 
-        /// <summary>
-        ///  Self-explanitory interface impl.
-        /// </summary>
+        /// <inheritdoc />
         void ITypeDescriptorContext.OnComponentChanged()
-        {
-            ChangeService.OnComponentChanged(_designer.Component, _targetProperty, null, null);
-        }
+            => ChangeService.OnComponentChanged(_designer.Component, _targetProperty);
 
-        /// <summary>
-        ///  Self-explanitory interface impl.
-        /// </summary>
+        /// <inheritdoc />
         bool ITypeDescriptorContext.OnComponentChanging()
         {
             try
             {
                 ChangeService.OnComponentChanging(_designer.Component, _targetProperty);
+                return true;
             }
-            catch (CheckoutException checkoutException)
+            catch (CheckoutException checkoutException) when (checkoutException == CheckoutException.Canceled)
             {
-                if (checkoutException == CheckoutException.Canceled)
-                {
-                    return false;
-                }
-                throw;
+                return false;
             }
-            return true;
         }
 
-        object ITypeDescriptorContext.Instance
-        {
-            get => _designer.Component;
-        }
+        object ITypeDescriptorContext.Instance => _designer.Component;
 
-        PropertyDescriptor ITypeDescriptorContext.PropertyDescriptor
-        {
-            get => _targetProperty;
-        }
+        PropertyDescriptor ITypeDescriptorContext.PropertyDescriptor => _targetProperty;
 
         object IServiceProvider.GetService(Type serviceType)
         {
@@ -145,10 +131,12 @@ namespace System.Windows.Forms.Design
             {
                 return this;
             }
+
             if (_designer.Component != null && _designer.Component.Site != null)
             {
                 return _designer.Component.Site.GetService(serviceType);
             }
+
             return null;
         }
 
@@ -165,7 +153,7 @@ namespace System.Windows.Forms.Design
             return;
         }
 
-        System.Windows.Forms.DialogResult IWindowsFormsEditorService.ShowDialog(Form dialog)
+        DialogResult IWindowsFormsEditorService.ShowDialog(Form dialog)
         {
             IUIService uiSvc = (IUIService)((IServiceProvider)this).GetService(typeof(IUIService));
             if (uiSvc != null)
@@ -188,6 +176,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             CollectionEditor itemsEditor = TypeDescriptor.GetEditor(propertyValue, typeof(UITypeEditor)) as CollectionEditor;
 
             Debug.Assert(itemsEditor != null, "Didn't get a collection editor for type '" + _targetProperty.PropertyType.FullName + "'");

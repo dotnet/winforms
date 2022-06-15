@@ -3,18 +3,17 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='Control.MouseUp'/>, <see cref='Control.MouseDown'/> and
-    /// <see cref='Control.MouseMove'/> events.
+    ///  Provides data for the <see cref="Control.MouseUp"/>, <see cref="Control.MouseDown"/> and
+    /// <see cref="Control.MouseMove"/> events.
     /// </summary>
     public class MouseEventArgs : EventArgs
     {
         /// <summary>
-        ///  Initializes a new instance of the <see cref='MouseEventArgs'/> class.
+        ///  Initializes a new instance of the <see cref="MouseEventArgs"/> class.
         /// </summary>
         public MouseEventArgs(MouseButtons button, int clicks, int x, int y, int delta)
         {
@@ -22,6 +21,18 @@ namespace System.Windows.Forms
             Clicks = clicks;
             X = x;
             Y = y;
+            Delta = delta;
+        }
+
+        /// <summary>
+        ///  Initializes a new instance of the <see cref="MouseEventArgs"/> class.
+        /// </summary>
+        internal MouseEventArgs(MouseButtons button, int clicks, Point location, int delta = 0)
+        {
+            Button = button;
+            Clicks = clicks;
+            X = location.X;
+            Y = location.Y;
             Delta = delta;
         }
 

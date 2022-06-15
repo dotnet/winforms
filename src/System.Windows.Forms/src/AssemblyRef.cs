@@ -1,11 +1,11 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 internal static class FXAssembly
 {
+    // NB: this must never-ever change to facilitate type-forwarding from
+    // .NET Framework, if those are referenced in .NET project.
     internal const string Version = "4.0.0.0";
 }
 

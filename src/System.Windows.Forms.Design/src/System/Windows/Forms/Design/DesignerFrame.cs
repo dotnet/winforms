@@ -15,7 +15,7 @@ using static Interop;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  This class implements our design time document. This is the outer window that encompases a designer. It maintains a control hierarchy that looks like this:
+    ///  This class implements our design time document. This is the outer window that encompasses a designer. It maintains a control hierarchy that looks like this:
     ///  DesignerFrame
     ///  ScrollableControl
     ///  Designer
@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Design
         private readonly IUIService _uiService;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='System.Windows.Forms.Design.DesignerFrame'/> class.
+        ///  Initializes a new instance of the <see cref="DesignerFrame"/> class.
         /// </summary>
         public DesignerFrame(ISite site)
         {
@@ -49,6 +49,7 @@ namespace System.Windows.Forms.Design
                     BackColor = (Color)_uiService.Styles["ArtboardBackground"];
                 }
             }
+
             Controls.Add(_designerRegion);
             // Now we must configure our designer to be at the correct location, and setup the autoscrolling for its container.
             _designerRegion.AutoScroll = true;
@@ -74,6 +75,7 @@ namespace System.Windows.Forms.Design
                 {
                     _behaviorService = _designerSite.GetService(typeof(BehaviorService)) as BehaviorService;
                 }
+
                 return _behaviorService;
             }
         }
@@ -89,11 +91,13 @@ namespace System.Windows.Forms.Design
                     designerHolder.Visible = false;
                     designerHolder.Parent = null;
                 }
+
                 if (_splitter != null)
                 {
                     _splitter.SplitterMoved -= new SplitterEventHandler(OnSplitterMoved);
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -101,8 +105,8 @@ namespace System.Windows.Forms.Design
         {
             if (_designer != null && _designer.IsHandleCreated)
             {
-                User32.SendMessageW(_designer.Handle, User32.WM.NCACTIVATE, PARAM.FromBool(focus), IntPtr.Zero);
-                User32.RedrawWindow(_designer.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
+                User32.SendMessageW(_designer.Handle, User32.WM.NCACTIVATE, (nint)focus.ToBOOL());
+                User32.RedrawWindow(_designer.Handle, flags: User32.RDW.FRAME);
             }
         }
 
@@ -116,6 +120,7 @@ namespace System.Windows.Forms.Design
             {
                 form.TopLevel = false;
             }
+
             _designerRegion.Controls.Add(_designer);
             SyncDesignerUI();
             _designer.Visible = true;
@@ -149,14 +154,14 @@ namespace System.Windows.Forms.Design
         void OnSplitterMoved(object sender, SplitterEventArgs e)
         {
             // Dirty the designer.
-            if (_designerSite.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
+            if (_designerSite.TryGetService(out IComponentChangeService changeService))
             {
                 try
                 {
-                    cs.OnComponentChanging(_designerSite.Component, null);
-                    cs.OnComponentChanged(_designerSite.Component, null, null, null);
+                    changeService.OnComponentChanging(_designerSite.Component);
+                    changeService.OnComponentChanged(_designerSite.Component);
                 }
-                catch
+                catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
                 {
                 }
             }
@@ -202,16 +207,17 @@ namespace System.Windows.Forms.Design
                     if (!_designerRegion._messageMouseWheelProcessed)
                     {
                         _designerRegion._messageMouseWheelProcessed = true;
-                        User32.SendMessageW(_designerRegion.Handle, User32.WM.MOUSEWHEEL, m.WParam, m.LParam);
+                        User32.SendMessageW(_designerRegion.Handle, User32.WM.MOUSEWHEEL, m.WParamInternal, m.LParamInternal);
                         return;
                     }
+
                     break;
                 // Provide keyboard access for scrolling
                 case User32.WM.KEYDOWN:
                     User32.SBV wScrollNotify = 0;
                     User32.WM msg = User32.WM.NULL;
-                    int keycode = unchecked((int)(long)m.WParam) & 0xFFFF;
-                    switch ((Keys)keycode)
+                    Keys keycode = (Keys)(m.WParamInternal & 0xFFFF);
+                    switch (keycode)
                     {
                         case Keys.Up:
                             wScrollNotify = User32.SBV.LINEUP;
@@ -246,17 +252,20 @@ namespace System.Windows.Forms.Design
                             msg = User32.WM.HSCROLL;
                             break;
                     }
+
                     if ((msg == User32.WM.VSCROLL) || (msg == User32.WM.HSCROLL))
                     {
                         // Send a message to ourselves to scroll
-                        User32.SendMessageW(_designerRegion.Handle, (User32.WM)msg, (IntPtr)PARAM.ToInt((int)wScrollNotify, 0), IntPtr.Zero);
+                        User32.SendMessageW(_designerRegion.Handle, msg, PARAM.ToInt((int)wScrollNotify, 0));
                         return;
                     }
+
                     break;
                 case User32.WM.CONTEXTMENU:
-                    User32.SendMessageW(_designer.Handle, (User32.WM)m.Msg, m.WParam, m.LParam);
+                    User32.SendMessageW(_designer.Handle, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return;
             }
+
             base.WndProc(ref m);
         }
 
@@ -313,11 +322,13 @@ namespace System.Windows.Forms.Design
                 {
                     _splitter.BackColor = SystemColors.Control;
                 }
+
                 _splitter.BorderStyle = BorderStyle.Fixed3D;
                 _splitter.Height = 7;
                 _splitter.Dock = DockStyle.Bottom;
                 _splitter.SplitterMoved += new SplitterEventHandler(OnSplitterMoved);
             }
+
             SuspendLayout();
             window.Dock = DockStyle.Bottom;
             // Compute a minimum height for this window.
@@ -326,6 +337,7 @@ namespace System.Windows.Forms.Design
             {
                 window.Height = minHeight;
             }
+
             Controls.Add(_splitter);
             Controls.Add(window);
             ResumeLayout();
@@ -343,7 +355,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Returns IEnumerable of all windows which need to be themed when running inside VS We don't know how to do theming here but we know which windows need to be themed.  The two ScrollableControls that hold the designer and the tray need to be themed, all of the children of the designed form should not be themed. The tray contains only conrols which are not visible in the user app but are visible inside VS. As a result, we want to theme all windows within the tray but only the top window for the designer pane.
+        ///  Returns IEnumerable of all windows which need to be themed when running inside VS We don't know how to do theming here but we know which windows need to be themed.  The two ScrollableControls that hold the designer and the tray need to be themed, all of the children of the designed form should not be themed. The tray contains only controls which are not visible in the user app but are visible inside VS. As a result, we want to theme all windows within the tray but only the top window for the designer pane.
         /// </summary>
         IEnumerable IContainsThemedScrollbarWindows.ThemedScrollbarWindows()
         {
@@ -359,8 +371,10 @@ namespace System.Windows.Forms.Design
                 {
                     windowInfo.Mode = ThemedScrollbarMode.All;
                 }
+
                 windows.Add(windowInfo);
             }
+
             return windows;
         }
 
@@ -401,6 +415,7 @@ namespace System.Windows.Forms.Design
                     {
                         _behaviorService = _provider.GetService(typeof(BehaviorService)) as BehaviorService;
                     }
+
                     return _behaviorService;
                 }
             }
@@ -470,6 +485,7 @@ namespace System.Windows.Forms.Design
                     ParentOverlay(control);
                     control.Bounds = DisplayRectangle;
                 }
+
                 return _overlayList.IndexOf(control);
             }
 
@@ -539,20 +555,21 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             /// <summary>
             ///  Need to know when child windows are created so we can properly set the Z-order
             /// </summary>
             protected override void WndProc(ref Message m)
             {
                 base.WndProc(ref m);
-                if (m.Msg == (int)User32.WM.PARENTNOTIFY && PARAM.LOWORD(m.WParam) == (short)User32.WM.CREATE)
+                if (m.MsgInternal == User32.WM.PARENTNOTIFY && (User32.WM)PARAM.LOWORD(m.WParamInternal) == User32.WM.CREATE)
                 {
                     if (_overlayList != null)
                     {
                         bool ourWindow = false;
                         foreach (Control c in _overlayList)
                         {
-                            if (c.IsHandleCreated && m.LParam == c.Handle)
+                            if (c.IsHandleCreated && m.LParamInternal == c.Handle)
                             {
                                 ourWindow = true;
                                 break;
@@ -585,7 +602,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            public class OverlayControlAccessibleObject : Control.ControlAccessibleObject
+            public class OverlayControlAccessibleObject : ControlAccessibleObject
             {
                 public OverlayControlAccessibleObject(OverlayControl owner) : base(owner)
                 {
@@ -605,6 +622,7 @@ namespace System.Windows.Forms.Design
                             return cao;
                         }
                     }
+
                     return base.HitTest(x, y);
                 }
             }

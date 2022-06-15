@@ -2,99 +2,89 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern IntPtr SendMessageW(
+        [LibraryImport(Libraries.User32)]
+        public static partial nint SendMessageW(
             IntPtr hWnd,
             WM Msg,
-            IntPtr wParam = default,
-            IntPtr lParam = default);
+            nint wParam = default,
+            nint lParam = default);
 
-        public static IntPtr SendMessageW(
-            HandleRef hWnd,
-            WM Msg,
-            IntPtr wParam = default,
-            IntPtr lParam = default)
-        {
-            IntPtr result = SendMessageW(hWnd.Handle, Msg, wParam, lParam);
-            GC.KeepAlive(hWnd.Wrapper);
-            return result;
-        }
-
-        public static IntPtr SendMessageW(
+        public static nint SendMessageW(
             IHandle hWnd,
             WM Msg,
-            IntPtr wParam = default,
-            IntPtr lParam = default)
+            nint wParam = default,
+            nint lParam = default)
         {
-            IntPtr result = SendMessageW(hWnd.Handle, Msg, wParam, lParam);
+            nint result = SendMessageW(hWnd.Handle, Msg, wParam, lParam);
             GC.KeepAlive(hWnd);
             return result;
         }
 
-        public unsafe static IntPtr SendMessageW(
+        public unsafe static nint SendMessageW(
             IntPtr hWnd,
             WM Msg,
-            IntPtr wParam,
-            string lParam)
+            nint wParam,
+            string? lParam)
         {
             fixed (char* c = lParam)
             {
-                return SendMessageW(hWnd, Msg, wParam, (IntPtr)(void*)c);
+                return SendMessageW(hWnd, Msg, wParam, (nint)c);
             }
         }
 
-        public unsafe static IntPtr SendMessageW(
-            HandleRef hWnd,
-            WM Msg,
-            IntPtr wParam,
-            string lParam)
-        {
-            fixed (char* c = lParam)
-            {
-                return SendMessageW(hWnd, Msg, wParam, (IntPtr)(void*)c);
-            }
-        }
-
-        public unsafe static IntPtr SendMessageW(
+        public unsafe static nint SendMessageW(
             IHandle hWnd,
             WM Msg,
-            IntPtr wParam,
-            string lParam)
+            nint wParam,
+            string? lParam)
         {
             fixed (char* c = lParam)
             {
-                return SendMessageW(hWnd, Msg, wParam, (IntPtr)(void*)c);
+                return SendMessageW(hWnd, Msg, wParam, (nint)c);
             }
         }
 
-        public unsafe static IntPtr SendMessageW<T>(
+        public unsafe static nint SendMessageW<T>(
             IntPtr hWnd,
             WM Msg,
-            IntPtr wParam,
+            nint wParam,
             ref T lParam) where T : unmanaged
         {
             fixed (void* l = &lParam)
             {
-                return SendMessageW(hWnd, Msg, wParam, (IntPtr)l);
+                return SendMessageW(hWnd, Msg, wParam, (nint)l);
             }
         }
 
-        public unsafe static IntPtr SendMessageW<T>(
+        public unsafe static nint SendMessageW<T>(
             IHandle hWnd,
             WM Msg,
-            IntPtr wParam,
+            nint wParam,
             ref T lParam) where T : unmanaged
         {
             fixed (void* l = &lParam)
             {
-                return SendMessageW(hWnd, Msg, wParam, (IntPtr)l);
+                return SendMessageW(hWnd, Msg, wParam, (nint)l);
+            }
+        }
+
+        public unsafe static nint SendMessageW<TWParam, TLParam>(
+            IHandle hWnd,
+            WM Msg,
+            ref TWParam wParam,
+            ref TLParam lParam)
+            where TWParam : unmanaged
+            where TLParam : unmanaged
+        {
+            fixed (void* w = &wParam, l = &lParam)
+            {
+                return SendMessageW(hWnd, Msg, (nint)w, (nint)l);
             }
         }
     }

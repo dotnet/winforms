@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Xunit;
@@ -45,9 +43,9 @@ namespace System.ComponentModel.Design.Tests
             {
                 var formatter = new BinaryFormatter();
                 var collection = new ExceptionCollection(new ArrayList());
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 Assert.Throws<SerializationException>(() => formatter.Serialize(stream, collection));
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
         }
 

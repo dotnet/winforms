@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Design
         void HandleKeyChar();
 
         /// <summary>
-        ///  Returns the Window Handle that gets all the Keyboarf messages once in InSitu.
+        ///  Returns the Window Handle that gets all the Keyboard messages once in InSitu.
         /// </summary>
         IntPtr GetEditWindow();
     }

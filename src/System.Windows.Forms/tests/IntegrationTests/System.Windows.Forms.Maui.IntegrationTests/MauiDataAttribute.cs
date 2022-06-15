@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Xunit;
 using Xunit.Sdk;
@@ -51,11 +49,15 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         /// <returns>The test data</returns>
         public override IEnumerable<object[]> GetData(MethodInfo testMethod)
         {
+#if MAUI
             // get the scenarios
             var scenarios = MauiTestHelper.GetScenarios(_projectName);
 
             // convert the data to the expected format
             return scenarios.Select(x => new object[] { x });
+#else
+            return Enumerable.Empty<object[]>();
+#endif
         }
 
         /// <summary>

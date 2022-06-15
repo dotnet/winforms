@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -22,19 +20,19 @@ namespace System.Windows.Forms
 
             private AccessibleStates _additionalState = AccessibleStates.None; // Test hook for the designer
 
-            private int[] _runtimeId;
+            private int[]? _runtimeId;
 
             public ToolStripItemAccessibleObject(ToolStripItem ownerItem)
             {
-                _ownerItem = ownerItem ?? throw new ArgumentNullException(nameof(ownerItem));
+                _ownerItem = ownerItem.OrThrowIfNull();
             }
 
             public override string DefaultAction
             {
                 get
                 {
-                    string defaultAction = _ownerItem.AccessibleDefaultActionDescription;
-                    if (defaultAction != null)
+                    string? defaultAction = _ownerItem.AccessibleDefaultActionDescription;
+                    if (defaultAction is not null)
                     {
                         return defaultAction;
                     }
@@ -43,12 +41,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string Description
+            public override string? Description
             {
                 get
                 {
-                    string description = _ownerItem.AccessibleDescription;
-                    if (description != null)
+                    string? description = _ownerItem.AccessibleDescription;
+                    if (description is not null)
                     {
                         return description;
                     }
@@ -57,12 +55,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string Help
+            public override string? Help
             {
                 get
                 {
-                    QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[ToolStripItem.s_queryAccessibilityHelpEvent];
-                    if (handler != null)
+                    QueryAccessibilityHelpEventHandler? handler = (QueryAccessibilityHelpEventHandler?)Owner.Events[s_queryAccessibilityHelpEvent];
+                    if (handler is not null)
                     {
                         QueryAccessibilityHelpEventArgs args = new QueryAccessibilityHelpEventArgs();
                         handler(Owner, args);
@@ -90,74 +88,56 @@ namespace System.Windows.Forms
                 }
             }
 
+            // We need to provide a unique ID. Others are implementing this in the same manner. First item should be UiaAppendRuntimeId
+            // since this is not a top-level element of the fragment. Second item can be anything, but here it is a hash.
+            // For toolstrip hash is unique even with child controls. Hwnd  is not.
             internal override int[] RuntimeId
-            {
-                get
+                => _runtimeId ??= new int[]
                 {
-                    if (_runtimeId is null)
-                    {
-                        // we need to provide a unique ID
-                        // others are implementing this in the same manner
-                        // first item should be UiaAppendRuntimeId since this is not a top-level element of the fragment.
-                        // second item can be anything, but here it is a hash. For toolstrip hash is unique even with child controls. Hwnd  is not.
-
-                        _runtimeId = new int[]
-                        {
-                            NativeMethods.UiaAppendRuntimeId,
-                            _ownerItem.GetHashCode()
-                        };
-                    }
-
-                    return _runtimeId;
-                }
-            }
+                    NativeMethods.UiaAppendRuntimeId,
+                    _ownerItem.GetHashCode()
+                };
 
             /// <summary>
             ///  Gets the accessible property value.
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
-                    case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:
-                        return (object)IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
+                    // "ControlType" value depends on owner's AccessibleRole value.
+                    // See: docs/accessibility/accessible-role-controltype.md
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return AccessibleRoleControlTypeMap.GetControlType(Role);
                     case UiaCore.UIA.IsEnabledPropertyId:
                         return _ownerItem.Enabled;
                     case UiaCore.UIA.IsOffscreenPropertyId:
-                        return _ownerItem.Placement != ToolStripItemPlacement.Main;
+                        return GetIsOffscreenPropertyValue(_ownerItem.Placement, Bounds);
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return _ownerItem.CanSelect;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return _ownerItem.Selected;
-                    case UiaCore.UIA.AccessKeyPropertyId:
-                        return KeyboardShortcut;
-                    case UiaCore.UIA.IsPasswordPropertyId:
-                        return false;
-                    case UiaCore.UIA.HelpTextPropertyId:
-                        return Help ?? string.Empty;
                 }
 
                 return base.GetPropertyValue(propertyID);
             }
 
-            public override string Name
+            public override string? Name
             {
                 get
                 {
                     string name = _ownerItem.AccessibleName;
-                    if (name != null)
+                    if (name is not null)
                     {
                         return name;
                     }
 
-                    string baseName = base.Name;
+                    string? baseName = base.Name;
                     if (string.IsNullOrEmpty(baseName))
                     {
-                        return WindowsFormsUtils.TextWithoutMnemonics(_ownerItem.Text);
+                        return WindowsFormsUtils.TextWithoutMnemonics(_ownerItem.Text)!;
                     }
 
                     return baseName;
@@ -212,6 +192,7 @@ namespace System.Windows.Forms
                     {
                         accState |= AccessibleStates.Focused | AccessibleStates.HotTracked;
                     }
+
                     if (_ownerItem.Pressed)
                     {
                         accState |= AccessibleStates.Pressed;
@@ -223,31 +204,26 @@ namespace System.Windows.Forms
 
             public override void DoDefaultAction()
             {
-                if (Owner != null)
+                if (Owner is not null)
                 {
-                    ((ToolStripItem)Owner).PerformClick();
+                    Owner.PerformClick();
                 }
             }
-            public override int GetHelpTopic(out string fileName)
+
+            public override int GetHelpTopic(out string? fileName)
             {
                 int topic = 0;
 
-                QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[ToolStripItem.s_queryAccessibilityHelpEvent];
+                QueryAccessibilityHelpEventHandler? handler = (QueryAccessibilityHelpEventHandler?)Owner.Events[s_queryAccessibilityHelpEvent];
 
-                if (handler != null)
+                if (handler is not null)
                 {
                     QueryAccessibilityHelpEventArgs args = new QueryAccessibilityHelpEventArgs();
                     handler(Owner, args);
 
                     fileName = args.HelpNamespace;
 
-                    try
-                    {
-                        topic = int.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);
-                    }
-                    catch
-                    {
-                    }
+                    int.TryParse(args.HelpKeyword, NumberStyles.Integer, CultureInfo.InvariantCulture, out topic);
 
                     return topic;
                 }
@@ -255,11 +231,11 @@ namespace System.Windows.Forms
                 return base.GetHelpTopic(out fileName);
             }
 
-            public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
+            public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
             {
-                ToolStripItem nextItem = null;
+                ToolStripItem? nextItem = null;
 
-                if (Owner != null)
+                if (Owner is not null)
                 {
                     ToolStrip parent = Owner.ParentInternal;
                     if (parent is null)
@@ -267,14 +243,13 @@ namespace System.Windows.Forms
                         return null;
                     }
 
-                    bool forwardInCollection = (parent.RightToLeft == RightToLeft.No);
                     switch (navigationDirection)
                     {
                         case AccessibleNavigation.FirstChild:
                             nextItem = parent.GetNextItem(null, ArrowDirection.Right, /*RTLAware=*/true);
                             break;
                         case AccessibleNavigation.LastChild:
-                            nextItem = parent.GetNextItem(null, ArrowDirection.Left,/*RTLAware=*/true);
+                            nextItem = parent.GetNextItem(null, ArrowDirection.Left, /*RTLAware=*/true);
                             break;
                         case AccessibleNavigation.Previous:
                         case AccessibleNavigation.Left:
@@ -312,7 +287,7 @@ namespace System.Windows.Forms
 
             public override string ToString()
             {
-                if (Owner != null)
+                if (Owner is not null)
                 {
                     return "ToolStripItemAccessibleObject: Owner = " + Owner.ToString();
                 }
@@ -328,7 +303,8 @@ namespace System.Windows.Forms
                 get
                 {
                     Rectangle bounds = Owner.Bounds;
-                    if (Owner.ParentInternal != null && Owner.ParentInternal.Visible)
+
+                    if (Owner.ParentInternal is not null && Owner.ParentInternal.Visible)
                     {
                         return new Rectangle(Owner.ParentInternal.PointToScreen(bounds.Location), bounds.Size);
                     }
@@ -340,7 +316,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  When overridden in a derived class, gets or sets the parent of an accessible object.
             /// </summary>
-            public override AccessibleObject Parent
+            public override AccessibleObject? Parent
             {
                 get
                 {
@@ -351,14 +327,14 @@ namespace System.Windows.Forms
                         return dropDown.AccessibilityObject;
                     }
 
-                    return (Owner.Parent != null) ? Owner.Parent.AccessibilityObject : base.Parent;
+                    return (Owner.Parent is not null) ? Owner.Parent.AccessibilityObject : base.Parent;
                 }
             }
 
             /// <summary>
             ///  Gets the top level element.
             /// </summary>
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
                 => _ownerItem.RootToolStrip?.AccessibilityObject;
 
             /// <summary>
@@ -366,7 +342,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
@@ -381,14 +357,12 @@ namespace System.Windows.Forms
                             return null;
                         }
 
-                        int increment = direction == UiaCore.NavigateDirection.NextSibling ? 1 : -1;
-                        AccessibleObject sibling = null;
-
-                        index += increment;
+                        AccessibleObject? sibling = null;
+                        index += direction == UiaCore.NavigateDirection.NextSibling ? 1 : -1;
                         int itemsCount = GetChildFragmentCount();
                         if (index >= 0 && index < itemsCount)
                         {
-                            sibling = GetChildFragment(index);
+                            sibling = GetChildFragment(index, direction);
                         }
 
                         return sibling;
@@ -397,11 +371,11 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            private AccessibleObject GetChildFragment(int index)
+            private AccessibleObject? GetChildFragment(int index, UiaCore.NavigateDirection direction)
             {
                 if (Parent is ToolStrip.ToolStripAccessibleObject toolStripParent)
                 {
-                    return toolStripParent.GetChildFragment(index);
+                    return toolStripParent.GetChildFragment(index, direction);
                 }
 
                 // ToolStripOverflowButtonAccessibleObject is derived from ToolStripDropDownItemAccessibleObject
@@ -411,13 +385,13 @@ namespace System.Windows.Forms
                 {
                     if (toolStripOverflowButtonParent.Parent is ToolStrip.ToolStripAccessibleObject toolStripGrandParent)
                     {
-                        return toolStripGrandParent.GetChildFragment(index, true);
+                        return toolStripGrandParent.GetChildFragment(index, direction, true);
                     }
                 }
 
                 if (Parent is ToolStripDropDownItemAccessibleObject dropDownItemParent)
                 {
-                    return dropDownItemParent.GetChildFragment(index);
+                    return dropDownItemParent.GetChildFragment(index, direction);
                 }
 
                 return null;
@@ -484,7 +458,7 @@ namespace System.Windows.Forms
             internal void RaiseFocusChanged()
             {
                 ToolStrip root = _ownerItem.RootToolStrip;
-                if (root != null && root.IsHandleCreated && root.SupportsUiaProviders)
+                if (root is not null && root.IsHandleCreated && root.SupportsUiaProviders)
                 {
                     RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                 }

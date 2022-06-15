@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
-using System.Linq;
 using Moq;
 using Xunit;
 
@@ -29,7 +27,7 @@ namespace System.ComponentModel.Design.Tests
                 return mockSite.Object;
             }
 
-            foreach (ISite site in new ISite[] { null, CreateSite(null )})
+            foreach (ISite site in new ISite[] { null, CreateSite(null) })
             {
                 yield return new object[] { site, null, null, null };
                 yield return new object[] { site, null, string.Empty, string.Empty };
@@ -99,6 +97,7 @@ namespace System.ComponentModel.Design.Tests
             {
                 Assert.Equal(componentName, component1.Site.Name);
             }
+
             Assert.Equal(new IComponent[] { component1, component2 }, container.Components.Cast<IComponent>());
             Assert.Empty(host.Container.Components);
         }
@@ -427,6 +426,7 @@ namespace System.ComponentModel.Design.Tests
                 Assert.Same(component, Assert.Single(container.Components));
                 Assert.Null(component.Site.Name);
             }
+
             mockServiceProvider.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Never());
             mockExtenderProviderService.Verify(s => s.AddExtenderProvider(component as IExtenderProvider), Times.Never());
 
@@ -441,6 +441,7 @@ namespace System.ComponentModel.Design.Tests
             {
                 Assert.Null(component.Site.Name);
             }
+
             mockServiceProvider.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Never());
             mockExtenderProviderService.Verify(s => s.AddExtenderProvider(component as IExtenderProvider), Times.Never());
         }
@@ -576,8 +577,9 @@ namespace System.ComponentModel.Design.Tests
             using var surface = new DesignSurface();
             using var owningComponent = new Component();
             using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
-            Assert.Throws<Exception>(() => container.Add(component));
-            Assert.Throws<Exception>(() => container.Add(component, "name"));
+
+            Assert.Throws<NotImplementedException>(() => container.Add(component));
+            Assert.Throws<NotImplementedException>(() => container.Add(component, "name"));
             Assert.Empty(container.Components);
         }
 
@@ -639,6 +641,7 @@ namespace System.ComponentModel.Design.Tests
             {
                 threwCheckoutException = true;
             }
+
             Assert.True(threwCheckoutException);
             Assert.Same(container, component.Container);
             Assert.Null(component.Site.Name);
@@ -648,9 +651,9 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(component.Site.Name);
         }
 
-         [Fact(Skip = "Unstable test. See https://github.com/dotnet/winforms/issues/1151")]
-         public void SiteNestedContainer_Add_Unloading_Nop()
-         {
+        [Fact(Skip = "Unstable test. See https://github.com/dotnet/winforms/issues/1151")]
+        public void SiteNestedContainer_Add_Unloading_Nop()
+        {
             using var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
             surface.BeginLoad(typeof(RootDesignerComponent));
@@ -1092,7 +1095,7 @@ namespace System.ComponentModel.Design.Tests
         [Designer(typeof(RootDesigner), typeof(IRootDesigner))]
         private class RootExtenderProviderDesignerComponent : Component, IExtenderProvider
         {
-            public bool CanExtend(object extendee) => throw new NotImplementedException();
+            public bool CanExtend(object extendee) => false;
         }
 
         private class NonInitializingDesigner : RootDesigner

@@ -17,6 +17,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Automation.AutomationLiveSetting))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Automation.AutomationNotificationKind))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Automation.AutomationNotificationProcessing))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Automation.IAutomationLiveRegion))]
 
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.VisualStyles.TextMetrics))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.VisualStyles.TextMetricsCharacterSet))]

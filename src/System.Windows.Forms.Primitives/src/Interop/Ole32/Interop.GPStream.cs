@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Buffers;
-using System.IO;
 
 internal static partial class Interop
 {
@@ -82,10 +80,10 @@ internal static partial class Interop
 
                 ArrayPool<byte>.Shared.Return(buffer);
 
-                if (pcbRead != null)
+                if (pcbRead is not null)
                     *pcbRead = totalRead;
 
-                if (pcbWritten != null)
+                if (pcbWritten is not null)
                     *pcbWritten = totalWritten;
             }
 
@@ -96,7 +94,7 @@ internal static partial class Interop
                 Span<byte> buffer = new Span<byte>(pv, checked((int)cb));
                 int read = _dataStream.Read(buffer);
 
-                if (pcbRead != null)
+                if (pcbRead is not null)
                     *pcbRead = (uint)read;
             }
 
@@ -126,6 +124,7 @@ internal static partial class Interop
                         {
                             _virtualPosition = dlibMove;
                         }
+
                         break;
                     case SeekOrigin.End:
                         if (dlibMove <= 0)
@@ -137,6 +136,7 @@ internal static partial class Interop
                         {
                             _virtualPosition = length + dlibMove;
                         }
+
                         break;
                     case SeekOrigin.Current:
                         if (dlibMove + position <= length)
@@ -148,6 +148,7 @@ internal static partial class Interop
                         {
                             _virtualPosition = dlibMove + position;
                         }
+
                         break;
                 }
 
@@ -198,7 +199,7 @@ internal static partial class Interop
                 var buffer = new ReadOnlySpan<byte>(pv, checked((int)cb));
                 _dataStream.Write(buffer);
 
-                if (pcbWritten != null)
+                if (pcbWritten is not null)
                     *pcbWritten = cb;
             }
 

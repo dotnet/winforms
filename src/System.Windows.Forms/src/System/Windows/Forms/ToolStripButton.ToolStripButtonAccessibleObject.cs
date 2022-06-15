@@ -1,10 +1,7 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -23,12 +20,14 @@ namespace System.Windows.Forms
                 _ownerItem = ownerItem;
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
-                switch (propertyID)
+                // If we don't set a default role for the accessible object
+                // it will be retrieved from Windows.
+                // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                if (propertyID == UiaCore.UIA.ControlTypePropertyId && _ownerItem.CheckOnClick)
                 {
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.ButtonControlTypeId;
+                    return UiaCore.UIA.ButtonControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);

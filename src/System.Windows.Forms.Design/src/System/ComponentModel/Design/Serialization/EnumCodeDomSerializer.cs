@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -25,6 +25,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     s_defaultSerializer = new EnumCodeDomSerializer();
                 }
+
                 return s_defaultSerializer;
             }
         }
@@ -44,7 +45,7 @@ namespace System.ComponentModel.Design.Serialization
                     bool needCast = false;
                     Enum[] values;
                     TypeConverter converter = TypeDescriptor.GetConverter(value);
-                    if (converter != null && converter.CanConvertTo(typeof(Enum[])))
+                    if (converter is not null && converter.CanConvertTo(typeof(Enum[])))
                     {
                         values = (Enum[])converter.ConvertTo(value, typeof(Enum[]));
                         needCast = (values.Length > 1);
@@ -75,9 +76,9 @@ namespace System.ComponentModel.Design.Serialization
                     foreach (Enum term in values)
                     {
                         string termString = enumConverter?.ConvertToString(term);
-                        CodeExpression newExpression = !String.IsNullOrEmpty(termString) ? new CodeFieldReferenceExpression(enumType, termString) : null;
+                        CodeExpression newExpression = !string.IsNullOrEmpty(termString) ? new CodeFieldReferenceExpression(enumType, termString) : null;
 
-                        if (newExpression != null)
+                        if (newExpression is not null)
                         {
                             if (expression is null)
                             {
@@ -92,7 +93,7 @@ namespace System.ComponentModel.Design.Serialization
 
                     // If we had to combine multiple names, wrap the result in an appropriate cast.
                     //
-                    if (expression != null && needCast)
+                    if (expression is not null && needCast)
                     {
                         expression = new CodeCastExpression(value.GetType(), expression);
                     }

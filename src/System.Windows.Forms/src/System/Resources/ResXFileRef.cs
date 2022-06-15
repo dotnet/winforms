@@ -6,8 +6,8 @@
 
 using System.ComponentModel;
 using System.Globalization;
-using System.IO;
 using System.Text;
+using System.Windows.Forms;
 
 namespace System.Resources
 {
@@ -26,8 +26,8 @@ namespace System.Resources
         /// </summary>
         public ResXFileRef(string fileName, string typeName)
         {
-            FileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
-            TypeName = typeName ?? throw new ArgumentNullException(nameof(typeName));
+            FileName = fileName.OrThrowIfNull();
+            TypeName = typeName.OrThrowIfNull();
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace System.Resources
                 }
             }
 
-            return relPath.ToString() + path2.Substring(si + 1);
+            return string.Concat(relPath.ToString(), path2.AsSpan(si + 1));
         }
 
         internal void MakeFilePathRelative(string basePath)
@@ -122,7 +122,7 @@ namespace System.Resources
             }
 
             result += TypeName;
-            if (TextFileEncoding != null)
+            if (TextFileEncoding is not null)
             {
                 result += (";" + TextFileEncoding.WebName);
             }

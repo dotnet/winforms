@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace System.Windows.Forms.Design
 {
@@ -45,10 +43,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public object GetHandler(Type handlerType)
         {
-            if (handlerType is null)
-            {
-                throw new ArgumentNullException(nameof(handlerType));
-            }
+            ArgumentNullException.ThrowIfNull(handlerType);
 
             if (_lastHandlerType is null)
             {
@@ -78,10 +73,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void PopHandler(object handler)
         {
-            if (handler is null)
-            {
-                throw new ArgumentNullException(nameof(handler));
-            }
+            ArgumentNullException.ThrowIfNull(handler);
 
             var node = _handlers.Find(handler);
             if (node != null)
@@ -98,10 +90,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void PushHandler(object handler)
         {
-            if (handler is null)
-            {
-                throw new ArgumentNullException(nameof(handler));
-            }
+            ArgumentNullException.ThrowIfNull(handler);
 
             _handlers.AddFirst(handler);
             _lastHandlerType = handler.GetType();

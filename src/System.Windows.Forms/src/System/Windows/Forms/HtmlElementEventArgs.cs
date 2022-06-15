@@ -18,7 +18,7 @@ namespace System.Windows.Forms
         internal HtmlElementEventArgs(HtmlShimManager shimManager, IHTMLEventObj eventObj)
         {
             NativeHTMLEventObj = eventObj;
-            Debug.Assert(NativeHTMLEventObj != null, "The event object should implement IHTMLEventObj");
+            Debug.Assert(NativeHTMLEventObj is not null, "The event object should implement IHTMLEventObj");
 
             _shimManager = shimManager;
         }
@@ -35,14 +35,17 @@ namespace System.Windows.Forms
                 {
                     buttons |= MouseButtons.Left;
                 }
+
                 if ((nButtons & 2) != 0)
                 {
                     buttons |= MouseButtons.Right;
                 }
+
                 if ((nButtons & 4) != 0)
                 {
                     buttons |= MouseButtons.Middle;
                 }
+
                 return buttons;
             }
         }

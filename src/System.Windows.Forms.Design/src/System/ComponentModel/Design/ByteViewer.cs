@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using static Interop;
@@ -54,7 +53,7 @@ namespace System.ComponentModel.Design
         private DisplayMode _realDisplayMode;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ByteViewer'/> class.
+        ///  Initializes a new instance of the <see cref="ByteViewer"/> class.
         /// </summary>
         public ByteViewer()
             : base()
@@ -78,8 +77,8 @@ namespace System.ComponentModel.Design
             SetStyle(ControlStyles.ResizeRedraw, true);
         }
 
-        // Stole this code from  XmlSanner
-        private static int AnalizeByteOrderMark(byte[] buffer, int index)
+        // Stole this code from  XmlScanner
+        private static int AnalyzeByteOrderMark(byte[] buffer, int index)
         {
             int c1 = buffer[index + 0] << 8 | buffer[index + 1];
             int c2 = buffer[index + 2] << 8 | buffer[index + 3];
@@ -96,22 +95,25 @@ namespace System.ComponentModel.Design
             //values on column are first two bytes and
             //values on rows are 3rd and 4th byte
 
-            int[,] encodings = {
+#pragma warning disable SA1001 // Commas should be spaced correctly
+            int[,] encodings =
+            {
                    //Unknown 0000 feff fffe efbb  3c00 003c 3f00 003f  3c3f 786d  4c6f  a794
-           /*Unknown*/ {1   ,5   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   },
-              /*0000*/ {1   ,1   ,1   ,11   ,1   ,10  ,4   ,1   ,1    ,1    ,1    ,1    ,1   },
-              /*feff*/ {2   ,9   ,5   ,2    ,2   ,2   ,2   ,2   ,2    ,2    ,2    ,2    ,2   },
-              /*fffe*/ {3   ,7   ,3   ,7    ,3   ,3   ,3   ,3   ,3    ,3    ,3    ,3    ,3   },
-              /*efbb*/ {14  ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   },
-              /*3c00*/ {1   ,6   ,1   ,1    ,1   ,1   ,1   ,3   ,1    ,1    ,1    ,1    ,1   },
-              /*003c*/ {1   ,8   ,1   ,1    ,1   ,1   ,1   ,1   ,2    ,1    ,1    ,1    ,1   },
-              /*3f00*/ {1   ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   },
-              /*003f*/ {1   ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   },
-              /*3c3f*/ {1   ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,13   ,1    ,1   },
-              /*786d*/ {1   ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   },
-              /*4c6f*/ {1   ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,12  },
-              /*a794*/ {1   ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   }
+           /*Unknown*/ { 1   ,5   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   },
+              /*0000*/ { 1   ,1   ,1   ,11   ,1   ,10  ,4   ,1   ,1    ,1    ,1    ,1    ,1   },
+              /*feff*/ { 2   ,9   ,5   ,2    ,2   ,2   ,2   ,2   ,2    ,2    ,2    ,2    ,2   },
+              /*fffe*/ { 3   ,7   ,3   ,7    ,3   ,3   ,3   ,3   ,3    ,3    ,3    ,3    ,3   },
+              /*efbb*/ { 14  ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   },
+              /*3c00*/ { 1   ,6   ,1   ,1    ,1   ,1   ,1   ,3   ,1    ,1    ,1    ,1    ,1   },
+              /*003c*/ { 1   ,8   ,1   ,1    ,1   ,1   ,1   ,1   ,2    ,1    ,1    ,1    ,1   },
+              /*3f00*/ { 1   ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   },
+              /*003f*/ { 1   ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   },
+              /*3c3f*/ { 1   ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,13   ,1    ,1   },
+              /*786d*/ { 1   ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   },
+              /*4c6f*/ { 1   ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,12  },
+              /*a794*/ { 1   ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   }
             };
+#pragma warning restore SA1001 // Commas should be spaced correctly
 
             return encodings[c4, c5];
         }
@@ -150,7 +152,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Draws an adress part in the HEXDUMP view
+        ///  Draws an address part in the HEXDUMP view
         /// </summary>
         private void DrawAddress(Graphics g, int startLine, int line)
         {
@@ -163,7 +165,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///     Draws the client background and frames
+        ///  Draws the client background and frames
         /// </summary>
         /// <internalonly/>
         private void DrawClient(Graphics g)
@@ -193,7 +195,7 @@ namespace System.ComponentModel.Design
         // Copied code here to preserve semantics.  -- BrianGru, 10/3/2000
         private static bool CharIsPrintable(char c)
         {
-            UnicodeCategory uc = Char.GetUnicodeCategory(c);
+            UnicodeCategory uc = char.GetUnicodeCategory(c);
             return (!(uc == UnicodeCategory.Control) || (uc == UnicodeCategory.Format) ||
                     (uc == UnicodeCategory.LineSeparator) || (uc == UnicodeCategory.ParagraphSeparator) ||
                     (uc == UnicodeCategory.OtherNotAssigned));
@@ -226,7 +228,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///     Draws the "HEX" part in the HEXDUMP view
+        ///  Draws the "HEX" part in the HEXDUMP view
         /// </summary>
         /// <internalonly/>
         private void DrawHex(Graphics g, byte[] lineBuffer, int line)
@@ -275,11 +277,11 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Establishes the display mode for the control based on the contents of the buffer.
         ///  This is based on the following algorithm:
-        ///  * Count number of zeros, prinables and other characters in the half of the dataBuffer
+        ///  * Count number of zeros, printables and other characters in the half of the dataBuffer
         ///  * Base on the following table establish the mode:
-        ///     - 80% Characters or digits -> ANSI
-        ///     - 80% Valid Unicode chars -> Unicode
-        ///     - All other cases -> HEXDUMP
+        ///  - 80% Characters or digits -> ANSI
+        ///  - 80% Valid Unicode chars -> Unicode
+        ///  - All other cases -> HEXDUMP
         ///  Also for the buffer of size [0..5] it returns the HEXDUMP mode
         /// </summary>
         /// <internalonly/>
@@ -294,7 +296,7 @@ namespace System.ComponentModel.Design
                 return DisplayMode.Hexdump;
             }
 
-            switch (AnalizeByteOrderMark(_dataBuf, 0))
+            switch (AnalyzeByteOrderMark(_dataBuf, 0))
             {
                 case 2:
                     //_Encoding = Encoding.BigEndianUnicode;
@@ -340,11 +342,12 @@ namespace System.ComponentModel.Design
                     for (int i = 0; i < size; i++)
                     {
                         char c = (char)_dataBuf[i]; //OK we do not care for Unicode now
-                        if (Char.IsLetterOrDigit(c) || Char.IsWhiteSpace(c))
+                        if (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c))
                         {
                             printablesCount++;
                         }
                     }
+
                     for (int i = 0; i < size; i += 2)
                     {
                         char[] unicodeChars = new char[1];
@@ -385,7 +388,7 @@ namespace System.ComponentModel.Design
             return _displayMode;
         }
 
-        // Stole this code from  XmlSanner
+        // Stole this code from  XmlScanner
         private static int GetEncodingIndex(int c1)
         {
             switch (c1)
@@ -435,6 +438,7 @@ namespace System.ComponentModel.Design
                     size = Kernel32.MultiByteToWideChar(Kernel32.CP.ACP, 0, pDataBuff, size, pText, size);
                 }
             }
+
             text[size] = '\0';
 
             for (int i = 0; i < size; i++)
@@ -449,7 +453,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Initializes the Unicode string varible that will be assigned to the edit box
+        ///  Initializes the Unicode string variable that will be assigned to the edit box
         /// </summary>
         private void InitUnicode()
         {
@@ -525,6 +529,7 @@ namespace System.ComponentModel.Design
                 _scrollBar.Show();
                 _scrollBar.Enabled = false;
             }
+
             _scrollBar.Select();
             Invalidate();
         }
@@ -591,7 +596,7 @@ namespace System.ComponentModel.Design
                                 2 * (BORDER_GAP + INSET_GAP) + _rowCount * (CELL_HEIGHT));
             }
 
-            if (_scrollBar != null)
+            if (_scrollBar is not null)
             {
                 if (_linesCount > _rowCount)
                 {
@@ -649,12 +654,9 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void SetBytes(byte[] bytes)
         {
-            if (bytes is null)
-            {
-                throw new ArgumentNullException(nameof(bytes));
-            }
+            ArgumentNullException.ThrowIfNull(bytes);
 
-            if (_dataBuf != null)
+            if (_dataBuf is not null)
             {
                 _dataBuf = null;
             }
@@ -669,10 +671,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void SetDisplayMode(DisplayMode mode)
         {
-            if (!ClientUtils.IsEnumValid(mode, (int)mode, (int)DisplayMode.Hexdump, (int)DisplayMode.Auto))
-            {
-                throw new InvalidEnumArgumentException("mode", (int)mode, typeof(DisplayMode));
-            }
+            SourceGenerated.EnumValidator.Validate(mode, nameof(mode));
 
             _displayMode = mode;
             _realDisplayMode = (mode == DisplayMode.Auto) ? GetAutoDisplayMode() : mode;
@@ -718,6 +717,7 @@ namespace System.ComponentModel.Design
                     {
                         ResumeLayout();
                     }
+
                     break;
             }
         }

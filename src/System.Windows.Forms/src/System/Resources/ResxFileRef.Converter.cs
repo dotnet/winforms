@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Text;
 
@@ -52,7 +51,7 @@ namespace System.Resources
             internal static string[] ParseResxFileRefString(string stringValue)
             {
                 string[] result = null;
-                if (stringValue != null)
+                if (stringValue is not null)
                 {
                     stringValue = stringValue.Trim();
                     string fileName;
@@ -139,7 +138,7 @@ namespace System.Resources
 
                     using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
-                        Debug.Assert(fileStream != null, "Couldn't open " + fileName);
+                        Debug.Assert(fileStream is not null, "Couldn't open " + fileName);
                         temp = new byte[fileStream.Length];
                         fileStream.Read(temp, 0, (int)fileStream.Length);
                     }
@@ -154,6 +153,7 @@ namespace System.Resources
                     {
                         return memStream;
                     }
+
                     if (toCreate == typeof(Bitmap) && fileName.EndsWith(".ico"))
                     {
                         // we special case the .ico bitmaps because GDI+ destroy the alpha channel component and

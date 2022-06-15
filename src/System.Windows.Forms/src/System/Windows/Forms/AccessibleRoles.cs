@@ -405,7 +405,7 @@ namespace System.Windows.Forms
         Clock = 0x3d,
 
         /// <summary>
-        ///  A toolbar button that jas a drop-down list icon directly adjacent to
+        ///  A toolbar button that has a drop-down list icon directly adjacent to
         ///  the button.
         /// </summary>
         SplitButton = 0x3e,

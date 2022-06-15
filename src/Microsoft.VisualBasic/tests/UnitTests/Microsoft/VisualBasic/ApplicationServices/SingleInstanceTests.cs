@@ -2,15 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO.Pipes;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Microsoft.VisualBasic.ApplicationServices.Tests
@@ -73,6 +68,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
             {
                 return false;
             }
+
             return true;
         }
 
@@ -115,10 +111,12 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
                 {
                     Interlocked.Increment(ref created);
                 }
+
                 using (pipeServer)
                 {
                     Thread.Sleep(10);
                 }
+
                 Interlocked.Increment(ref completed);
             }, cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default)).ToArray();
             Task.WaitAll(tasks);
@@ -141,6 +139,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
                 {
                     Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, sentArgs[i]));
                 }
+
                 FlushLastConnection(pipeName);
                 Assert.Equal(sentArgs, receivedArgs.Freeze());
             }
@@ -202,6 +201,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
                 {
                     builder.Append((char)('a' + r.Next(26)));
                 }
+
                 return builder.ToString();
             }
         }
@@ -268,6 +268,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
                 {
                     return;
                 }
+
                 using (pipeClient)
                 {
                     var serializer = new DataContractSerializer(typeof(T));
@@ -319,6 +320,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
                 {
                     return;
                 }
+
                 using (pipeClient)
                 {
                     pipeClient.Write(new byte[] { 1, 2, 3 }, 0, 3);
@@ -341,6 +343,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
                     WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
                     pipeClient = CreateClientConnection(pipeName, SendTimeout);
                 }
+
                 Thread.Sleep(500);
                 Assert.Empty(receivedArgs.Freeze());
             }
@@ -374,6 +377,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
                 pipeClient.Dispose();
                 return null;
             }
+
             return pipeClient;
         }
     }

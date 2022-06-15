@@ -2,12 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -273,7 +270,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ListViewSubItem_Font_Set_GetReturnsExpected(Font value)
         {
             var subItem = new ListViewItem.ListViewSubItem
@@ -288,7 +285,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ListViewSubItem_Font_SetWithListViewItemWithListView_GetReturnsExpected(Font value)
         {
             using var listView = new ListView
@@ -312,7 +309,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ListViewSubItem_Font_SetWithListViewItem_GetReturnsExpected(Font value)
         {
             var item = new ListViewItem
@@ -406,6 +403,7 @@ namespace System.Windows.Forms.Tests
             subItem.ForeColor = value;
             Assert.Equal(expected, subItem.ForeColor);
         }
+
         public static IEnumerable<object[]> ForeColor_SetWithListView_TestData()
         {
             yield return new object[] { Color.Green, Color.Green };
@@ -456,7 +454,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListViewSubItem_Name_SetWithOwner_GetReturnsExpected(string value, string expected)
         {
             var item = new ListViewItem();
@@ -472,7 +470,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListViewSubItem_Name_SetWithoutOwner_GetReturnsExpected(string value, string expected)
         {
             var subItem = new ListViewItem.ListViewSubItem
@@ -487,7 +485,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ListViewSubItem_Tag_Set_GetReturnsExpected(string value)
         {
             var subItem = new ListViewItem.ListViewSubItem
@@ -502,7 +500,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListViewSubItem_Text_SetWithOwner_GetReturnsExpected(string value, string expected)
         {
             var item = new ListViewItem();
@@ -518,7 +516,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListViewSubItem_Text_SetWithoutOwner_GetReturnsExpected(string value, string expected)
         {
             var subItem = new ListViewItem.ListViewSubItem
@@ -584,12 +582,12 @@ namespace System.Windows.Forms.Tests
             using (var stream = new MemoryStream())
             {
                 var formatter = new BinaryFormatter();
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 formatter.Serialize(stream, subItem);
                 stream.Seek(0, SeekOrigin.Begin);
 
                 ListViewItem.ListViewSubItem result = Assert.IsType<ListViewItem.ListViewSubItem>(formatter.Deserialize(stream));
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
                 Assert.Equal(subItem.BackColor, result.BackColor);
                 Assert.Equal(subItem.Font, result.Font);
                 Assert.Equal(subItem.ForeColor, result.ForeColor);
@@ -600,7 +598,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ListViewSubItem_ToString_Invoke_ReturnsExpected(string text)
         {
             var subItem = new ListViewItem.ListViewSubItem(null, text);

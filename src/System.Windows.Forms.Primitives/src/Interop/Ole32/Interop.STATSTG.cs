@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 
@@ -74,7 +73,7 @@ internal static partial class Interop
             }
 
             /// <summary>
-            ///  Callee is repsonsible for allocating the name memory.
+            ///  Callee is responsible for allocating the name memory.
             /// </summary>
             public void AllocName(string? name)
             {

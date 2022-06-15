@@ -1,8 +1,7 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -68,6 +67,7 @@ internal static partial class Interop
                     {
                         return ToVector(thisVariant->data.ca, vt);
                     }
+
                     if ((vt & VARENUM.ARRAY) != 0)
                     {
                         return ToArray(*(SAFEARRAY**)data, vt);
@@ -180,22 +180,23 @@ internal static partial class Interop
                     case VARENUM.VOID:
                         return null;
                     case VARENUM.RECORD:
-                    {
-                        VARIANTRecord* record = (VARIANTRecord*)data;
-                        if (record->pRecInfo == IntPtr.Zero)
                         {
-                            throw new ArgumentException("Specified OLE variant is invalid.");
-                        }
-                        if (record->pvRecord is null)
-                        {
-                            return null;
-                        }
+                            VARIANTRecord* record = (VARIANTRecord*)data;
+                            if (record->pRecInfo == IntPtr.Zero)
+                            {
+                                throw new ArgumentException("Specified OLE variant is invalid.");
+                            }
 
-                        // TODO: cast IntPtr to IRecordInfo. Not that much of a concern
-                        // as .NET Core doesn't support records anyway.
-                        // Type recordType = GetRecordElementType(record->pvRecord);
-                        throw new ArgumentException("Record marshalling doesn't actually work in .NET Core. Matching that behaviour.");
-                    }
+                            if (record->pvRecord is null)
+                            {
+                                return null;
+                            }
+
+                            // TODO: cast IntPtr to IRecordInfo. Not that much of a concern
+                            // as .NET Core doesn't support records anyway.
+                            // Type recordType = GetRecordElementType(record->pvRecord);
+                            throw new ArgumentException("Record marshalling doesn't actually work in .NET Core. Matching that behaviour.");
+                        }
                 }
 
                 throw new ArgumentException(string.Format(SR.COM2UnhandledVT, type));
@@ -205,10 +206,7 @@ internal static partial class Interop
             {
                 Guid guid;
                 HRESULT hr = record.GetGuid(&guid);
-                if (!hr.Succeeded())
-                {
-                    throw Marshal.GetExceptionForHR((int)hr)!;
-                }
+                hr.ThrowIfFailed();
 
                 Type? t = System.Type.GetTypeFromCLSID(guid);
                 if (t is null || !t.IsValueType)
@@ -282,83 +280,97 @@ internal static partial class Interop
                                     .CopyTo(GetSpan<double>(array));
                                 break;
                             case VARENUM.BOOL:
-                            {
-                                var data = new Span<VARIANT_BOOL>(psa->pvData, array.Length);
-                                var result = GetSpan<bool>(array);
-                                for (int i = 0; i < data.Length; i++)
                                 {
-                                    result[i] = data[i] != VARIANT_BOOL.FALSE;
+                                    var data = new Span<VARIANT_BOOL>(psa->pvData, array.Length);
+                                    var result = GetSpan<bool>(array);
+                                    for (int i = 0; i < data.Length; i++)
+                                    {
+                                        result[i] = data[i] != VARIANT_BOOL.FALSE;
+                                    }
+
+                                    break;
                                 }
-                                break;
-                            }
+
                             case VARENUM.DECIMAL:
-                            {
-                                var data = new Span<DECIMAL>(psa->pvData, array.Length);
-                                var result = GetSpan<decimal>(array);
-                                for (int i = 0; i < data.Length; i++)
                                 {
-                                    result[i] = data[i].ToDecimal();
+                                    var data = new Span<DECIMAL>(psa->pvData, array.Length);
+                                    var result = GetSpan<decimal>(array);
+                                    for (int i = 0; i < data.Length; i++)
+                                    {
+                                        result[i] = data[i].ToDecimal();
+                                    }
+
+                                    break;
                                 }
-                                break;
-                            }
+
                             case VARENUM.CY:
-                            {
-                                var data = new Span<long>(psa->pvData, array.Length);
-                                var result = GetSpan<decimal>(array);
-                                for (int i = 0; i < data.Length; i++)
                                 {
-                                    result[i] = decimal.FromOACurrency(data[i]);
+                                    var data = new Span<long>(psa->pvData, array.Length);
+                                    var result = GetSpan<decimal>(array);
+                                    for (int i = 0; i < data.Length; i++)
+                                    {
+                                        result[i] = decimal.FromOACurrency(data[i]);
+                                    }
+
+                                    break;
                                 }
-                                break;
-                            }
+
                             case VARENUM.DATE:
-                            {
-                                var data = new Span<double>(psa->pvData, array.Length);
-                                var result = GetSpan<DateTime>(array);
-                                for (int i = 0; i < data.Length; i++)
                                 {
-                                    result[i] = DateTime.FromOADate(data[i]);
+                                    var data = new Span<double>(psa->pvData, array.Length);
+                                    var result = GetSpan<DateTime>(array);
+                                    for (int i = 0; i < data.Length; i++)
+                                    {
+                                        result[i] = DateTime.FromOADate(data[i]);
+                                    }
+
+                                    break;
                                 }
-                                break;
-                            }
+
                             case VARENUM.BSTR:
-                            {
-                                var data = new Span<IntPtr>(psa->pvData, array.Length);
-                                var result = GetSpan<string?>(array);
-                                for (int i = 0; i < data.Length; i++)
                                 {
-                                    result[i] = Marshal.PtrToStringUni(data[i]);
+                                    var data = new Span<IntPtr>(psa->pvData, array.Length);
+                                    var result = GetSpan<string?>(array);
+                                    for (int i = 0; i < data.Length; i++)
+                                    {
+                                        result[i] = Marshal.PtrToStringUni(data[i]);
+                                    }
+
+                                    break;
                                 }
-                                break;
-                            }
+
                             case VARENUM.DISPATCH:
                             case VARENUM.UNKNOWN:
-                            {
-                                var data = new Span<IntPtr>(psa->pvData, array.Length);
-                                var result = GetSpan<object?>(array);
-                                for (int i = 0; i < data.Length; i++)
                                 {
-                                    if (data[i] == IntPtr.Zero)
+                                    var data = new Span<IntPtr>(psa->pvData, array.Length);
+                                    var result = GetSpan<object?>(array);
+                                    for (int i = 0; i < data.Length; i++)
                                     {
-                                        result[i] = null;
+                                        if (data[i] == IntPtr.Zero)
+                                        {
+                                            result[i] = null;
+                                        }
+                                        else
+                                        {
+                                            result[i] = Marshal.GetObjectForIUnknown(data[i]);
+                                        }
                                     }
-                                    else
-                                    {
-                                        result[i] = Marshal.GetObjectForIUnknown(data[i]);
-                                    }
+
+                                    break;
                                 }
-                                break;
-                            }
+
                             case VARENUM.VARIANT:
-                            {
-                                var data = new Span<VARIANT>(psa->pvData, array.Length);
-                                var result = GetSpan<object?>(array);
-                                for (int i = 0; i < data.Length; i++)
                                 {
-                                    result[i] = data[i].ToObject();
+                                    var data = new Span<VARIANT>(psa->pvData, array.Length);
+                                    var result = GetSpan<object?>(array);
+                                    for (int i = 0; i < data.Length; i++)
+                                    {
+                                        result[i] = data[i].ToObject();
+                                    }
+
+                                    break;
                                 }
-                                break;
-                            }
+
                             case VARENUM.RECORD:
                                 throw new NotImplementedException();
                             default:
@@ -425,7 +437,7 @@ internal static partial class Interop
                     // Loop through all the indices.
                     while (true)
                     {
-                        BeginMainLoop:
+                    BeginMainLoop:
 
                         SetArrayValue(psa, array, indices, lower, arrayType);
 
@@ -504,55 +516,63 @@ internal static partial class Interop
                         SetValue(array, psa->GetValue<double>(indices), indices, lowerBounds);
                         break;
                     case VARENUM.BOOL:
-                    {
-                        VARIANT_BOOL data = psa->GetValue<VARIANT_BOOL>(indices);
-                        SetValue(array, data != VARIANT_BOOL.FALSE, indices, lowerBounds);
-                        break;
-                    }
+                        {
+                            VARIANT_BOOL data = psa->GetValue<VARIANT_BOOL>(indices);
+                            SetValue(array, data != VARIANT_BOOL.FALSE, indices, lowerBounds);
+                            break;
+                        }
+
                     case VARENUM.DECIMAL:
-                    {
-                        DECIMAL data = psa->GetValue<DECIMAL>(indices);
-                        SetValue(array, data.ToDecimal(), indices, lowerBounds);
-                        break;
-                    }
+                        {
+                            DECIMAL data = psa->GetValue<DECIMAL>(indices);
+                            SetValue(array, data.ToDecimal(), indices, lowerBounds);
+                            break;
+                        }
+
                     case VARENUM.CY:
-                    {
-                        long data = psa->GetValue<long>(indices);
-                        SetValue(array, decimal.FromOACurrency(data), indices, lowerBounds);
-                        break;
-                    }
+                        {
+                            long data = psa->GetValue<long>(indices);
+                            SetValue(array, decimal.FromOACurrency(data), indices, lowerBounds);
+                            break;
+                        }
+
                     case VARENUM.DATE:
-                    {
-                        double data = psa->GetValue<double>(indices);
-                        SetValue(array, DateTime.FromOADate(data), indices, lowerBounds);
-                        break;
-                    }
+                        {
+                            double data = psa->GetValue<double>(indices);
+                            SetValue(array, DateTime.FromOADate(data), indices, lowerBounds);
+                            break;
+                        }
+
                     case VARENUM.BSTR:
-                    {
-                        IntPtr data = psa->GetValue<IntPtr>(indices);
-                        SetValue(array, Marshal.PtrToStringUni(data), indices, lowerBounds);
-                        break;
-                    }
+                        {
+                            IntPtr data = psa->GetValue<IntPtr>(indices);
+                            SetValue(array, Marshal.PtrToStringUni(data), indices, lowerBounds);
+                            break;
+                        }
+
                     case VARENUM.DISPATCH:
                     case VARENUM.UNKNOWN:
-                    {
-                        IntPtr data = psa->GetValue<IntPtr>(indices);
-                        if (data == IntPtr.Zero)
                         {
-                            SetValue<object?>(array, null, indices, lowerBounds);
+                            IntPtr data = psa->GetValue<IntPtr>(indices);
+                            if (data == IntPtr.Zero)
+                            {
+                                SetValue<object?>(array, null, indices, lowerBounds);
+                            }
+                            else
+                            {
+                                SetValue(array, Marshal.GetObjectForIUnknown(data), indices, lowerBounds);
+                            }
+
+                            break;
                         }
-                        else
-                        {
-                            SetValue(array, Marshal.GetObjectForIUnknown(data), indices, lowerBounds);
-                        }
-                        break;
-                    }
+
                     case VARENUM.VARIANT:
-                    {
-                        VARIANT data = psa->GetValue<VARIANT>(indices);
-                        SetValue(array, data.ToObject(), indices, lowerBounds);
-                        break;
-                    }
+                        {
+                            VARIANT data = psa->GetValue<VARIANT>(indices);
+                            SetValue(array, data.ToObject(), indices, lowerBounds);
+                            break;
+                        }
+
                     case VARENUM.RECORD:
                         throw new NotImplementedException();
                     default:
@@ -567,13 +587,11 @@ internal static partial class Interop
                 {
                     throw new InvalidOleVariantTypeException();
                 }
+
                 if (vt == VARENUM.RECORD)
                 {
                     HRESULT hr = SafeArrayGetRecordInfo(psa, out IRecordInfo record);
-                    if (!hr.Succeeded())
-                    {
-                        throw Marshal.GetExceptionForHR((int)hr)!;
-                    }
+                    hr.ThrowIfFailed();
 
                     elementType = GetRecordElementType(record);
                 }
@@ -586,6 +604,7 @@ internal static partial class Interop
                         throw new SafeArrayTypeMismatchException();
                     }
                 }
+
                 // Allow limited conversion between arrays of different but related types.
                 else if (arrayVarType != vt
                     && !(vt == VARENUM.INT && arrayVarType == VARENUM.I4)
@@ -744,15 +763,17 @@ internal static partial class Interop
                     case VARENUM.UI2:
                         return new Span<ushort>(ca.pElems, (int)ca.cElems).ToArray();
                     case VARENUM.BOOL:
-                    {
-                        var data = new Span<VARIANT_BOOL>(ca.pElems, (int)ca.cElems);
-                        var result = new bool[data.Length];
-                        for (int i = 0; i < data.Length; i++)
                         {
-                            result[i] = data[i] != VARIANT_BOOL.FALSE;
+                            var data = new Span<VARIANT_BOOL>(ca.pElems, (int)ca.cElems);
+                            var result = new bool[data.Length];
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                result[i] = data[i] != VARIANT_BOOL.FALSE;
+                            }
+
+                            return result;
                         }
-                        return result;
-                    }
+
                     case VARENUM.I4:
                     case VARENUM.INT: // Not explicitly mentioned in the docs but trivial to implement.
                         return new Span<int>(ca.pElems, (int)ca.cElems).ToArray();
@@ -769,68 +790,80 @@ internal static partial class Interop
                     case VARENUM.R8:
                         return new Span<double>(ca.pElems, (int)ca.cElems).ToArray();
                     case VARENUM.CY:
-                    {
-                        var data = new Span<long>(ca.pElems, (int)ca.cElems);
-                        var result = new decimal[data.Length];
-                        for (int i = 0; i < data.Length; i++)
                         {
-                            result[i] = decimal.FromOACurrency(data[i]);
+                            var data = new Span<long>(ca.pElems, (int)ca.cElems);
+                            var result = new decimal[data.Length];
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                result[i] = decimal.FromOACurrency(data[i]);
+                            }
+
+                            return result;
                         }
-                        return result;
-                    }
+
                     case VARENUM.DATE:
-                    {
-                        var data = new Span<double>(ca.pElems, (int)ca.cElems);
-                        var result = new DateTime[data.Length];
-                        for (int i = 0; i < data.Length; i++)
                         {
-                            result[i] = DateTime.FromOADate(data[i]);
+                            var data = new Span<double>(ca.pElems, (int)ca.cElems);
+                            var result = new DateTime[data.Length];
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                result[i] = DateTime.FromOADate(data[i]);
+                            }
+
+                            return result;
                         }
-                        return result;
-                    }
+
                     case VARENUM.FILETIME:
-                    {
-                        var data = new Span<Kernel32.FILETIME>(ca.pElems, (int)ca.cElems);
-                        var result = new DateTime[data.Length];
-                        for (int i = 0; i < data.Length; i++)
                         {
-                            result[i] = data[i].ToDateTime();
+                            var data = new Span<Kernel32.FILETIME>(ca.pElems, (int)ca.cElems);
+                            var result = new DateTime[data.Length];
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                result[i] = data[i].ToDateTime();
+                            }
+
+                            return result;
                         }
-                        return result;
-                    }
+
                     case VARENUM.CLSID:
                         return new Span<Guid>(ca.pElems, (int)ca.cElems).ToArray();
                     case VARENUM.BSTR:
                     case VARENUM.LPWSTR:
-                    {
-                        var data = new Span<IntPtr>(ca.pElems, (int)ca.cElems);
-                        var result = new string?[data.Length];
-                        for (int i = 0; i < data.Length; i++)
                         {
-                            result[i] = Marshal.PtrToStringUni(data[i]);
+                            var data = new Span<IntPtr>(ca.pElems, (int)ca.cElems);
+                            var result = new string?[data.Length];
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                result[i] = Marshal.PtrToStringUni(data[i]);
+                            }
+
+                            return result;
                         }
-                        return result;
-                    }
+
                     case VARENUM.LPSTR:
-                    {
-                        var data = new Span<IntPtr>(ca.pElems, (int)ca.cElems);
-                        var result = new string?[data.Length];
-                        for (int i = 0; i < data.Length; i++)
                         {
-                            result[i] = Marshal.PtrToStringAnsi(data[i]);
+                            var data = new Span<IntPtr>(ca.pElems, (int)ca.cElems);
+                            var result = new string?[data.Length];
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                result[i] = Marshal.PtrToStringAnsi(data[i]);
+                            }
+
+                            return result;
                         }
-                        return result;
-                    }
+
                     case VARENUM.VARIANT:
-                    {
-                        var data = new Span<VARIANT>(ca.pElems, (int)ca.cElems);
-                        var result = new object?[data.Length];
-                        for (int i = 0; i < data.Length; i++)
                         {
-                            result[i] = data[i].ToObject();
+                            var data = new Span<VARIANT>(ca.pElems, (int)ca.cElems);
+                            var result = new object?[data.Length];
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                result[i] = data[i].ToObject();
+                            }
+
+                            return result;
                         }
-                        return result;
-                    }
+
                     case VARENUM.CF: // Not implemented.
                     case VARENUM.BSTR_BLOB: // System use only.
                     default: // Documentation does not specify any other types that are supported.

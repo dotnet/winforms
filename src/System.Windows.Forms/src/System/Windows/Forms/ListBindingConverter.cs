@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -15,8 +13,8 @@ namespace System.Windows.Forms
 {
     public class ListBindingConverter : TypeConverter
     {
-        private static Type[] ctorTypes;  // the list of type of our ctor parameters.
-        private static string[] ctorParamProps; // the name of each property to check to see if we need to init with a ctor.
+        private static Type[]? s_ctorTypes;  // the list of type of our ctor parameters.
+        private static string?[]? s_ctorParamProps; // the name of each property to check to see if we need to init with a ctor.
 
         /// <summary>
         ///  Creates our array of types on demand.
@@ -25,26 +23,28 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ctorTypes is null)
+                if (s_ctorTypes is null)
                 {
-                    ctorTypes = new Type[] { typeof(string), typeof(object), typeof(string), typeof(bool), typeof(DataSourceUpdateMode), typeof(object), typeof(string), typeof(IFormatProvider) };
+                    s_ctorTypes = new Type[] { typeof(string), typeof(object), typeof(string), typeof(bool), typeof(DataSourceUpdateMode), typeof(object), typeof(string), typeof(IFormatProvider) };
                 }
-                return ctorTypes;
+
+                return s_ctorTypes;
             }
         }
 
         /// <summary>
         ///  Creates our array of param names on demand.
         /// </summary>
-        private static string[] ConstructorParameterProperties
+        private static string?[] ConstructorParameterProperties
         {
             get
             {
-                if (ctorParamProps is null)
+                if (s_ctorParamProps is null)
                 {
-                    ctorParamProps = new string[] { null, null, null, "FormattingEnabled", "DataSourceUpdateMode", "NullValue", "FormatString", "FormatInfo", };
+                    s_ctorParamProps = new string?[] { null, null, null, "FormattingEnabled", "DataSourceUpdateMode", "NullValue", "FormatString", "FormatInfo", };
                 }
-                return ctorParamProps;
+
+                return s_ctorParamProps;
             }
         }
 
@@ -52,12 +52,13 @@ namespace System.Windows.Forms
         ///  Gets a value indicating whether this converter can
         ///  convert an object to the given destination type using the context.
         /// </summary>
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
         {
             if (destinationType == typeof(InstanceDescriptor))
             {
                 return true;
             }
+
             return base.CanConvertTo(context, destinationType);
         }
 
@@ -65,15 +66,12 @@ namespace System.Windows.Forms
         ///  Converts the given object to another type.  The most common types to convert
         ///  are to and from a string object.  The default implementation will make a call
         ///  to ToString on the object if the object is valid and if the destination
-        ///  type is string.  If this cannot convert to the desitnation type, this will
+        ///  type is string.  If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
-            if (destinationType is null)
-            {
-                throw new ArgumentNullException(nameof(destinationType));
-            }
+            ArgumentNullException.ThrowIfNull(destinationType);
 
             if (destinationType == typeof(InstanceDescriptor) && value is Binding)
             {
@@ -89,13 +87,14 @@ namespace System.Windows.Forms
         ///  for the object.  This is useful for objects that are immutable, but still
         ///  want to provide changable properties.
         /// </summary>
-        public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
+        public override object CreateInstance(ITypeDescriptorContext? context, IDictionary propertyValues)
         {
             try
             {
-                return new Binding((string)propertyValues["PropertyName"],
-                                           propertyValues["DataSource"],
-                                   (string)propertyValues["DataMember"]);
+                return new Binding(
+                    (string)propertyValues["PropertyName"]!,
+                    propertyValues["DataSource"],
+                    (string)propertyValues["DataMember"]!);
             }
             catch (InvalidCastException invalidCast)
             {
@@ -111,7 +110,7 @@ namespace System.Windows.Forms
         ///  Determines if changing a value on this object should require a call to
         ///  CreateInstance to create a new value.
         /// </summary>
-        public override bool GetCreateInstanceSupported(ITypeDescriptorContext context)
+        public override bool GetCreateInstanceSupported(ITypeDescriptorContext? context)
         {
             return true;
         }
@@ -120,7 +119,7 @@ namespace System.Windows.Forms
         ///  Gets the best matching ctor for a given binding and fills it out, based on the
         ///  state of the Binding and the optimal ctor.
         /// </summary>
-        private InstanceDescriptor GetInstanceDescriptorFromValues(Binding b)
+        private static InstanceDescriptor GetInstanceDescriptorFromValues(Binding b)
         {
             // The BindingFormattingDialog turns on Binding::FormattingEnabled property.
             // however, when the user data binds a property using the PropertyBrowser, Binding::FormattingEnabled is set to false
@@ -134,46 +133,49 @@ namespace System.Windows.Forms
             for (; lastItem >= 0; lastItem--)
             {
                 // null means no prop is available, we quit here.
-                //
                 if (ConstructorParameterProperties[lastItem] is null)
                 {
                     break;
                 }
 
                 // get the property and see if it needs to be serialized.
-                //
-                PropertyDescriptor prop = TypeDescriptor.GetProperties(b)[ConstructorParameterProperties[lastItem]];
-                if (prop != null && prop.ShouldSerializeValue(b))
+                var constructorParameterProperty = ConstructorParameterProperties[lastItem];
+                if (constructorParameterProperty is null)
+                {
+                    break;
+                }
+
+                PropertyDescriptor? prop = TypeDescriptor.GetProperties(b)[constructorParameterProperty];
+                if (prop is not null && prop.ShouldSerializeValue(b))
                 {
                     break;
                 }
             }
 
             // now copy the type array up to the point we quit.
-            //
             Type[] ctorParams = new Type[lastItem + 1];
             Array.Copy(ConstructorParamaterTypes, 0, ctorParams, 0, ctorParams.Length);
 
             // Get the ctor info.
-            //
-            ConstructorInfo ctor = typeof(Binding).GetConstructor(ctorParams);
-            Debug.Assert(ctor != null, "Failed to find Binding ctor for types!");
+            ConstructorInfo? ctor = typeof(Binding).GetConstructor(ctorParams);
+            Debug.Assert(ctor is not null, "Failed to find Binding ctor for types!");
             if (ctor is null)
             {
                 isComplete = false;
-                ctor = typeof(Binding).GetConstructor(new Type[] {
-                   typeof(string),
-                   typeof(object),
-                   typeof(string)});
+                ctor = typeof(Binding).GetConstructor(new Type[]
+                {
+                    typeof(string),
+                    typeof(object),
+                    typeof(string)
+                });
             }
 
             // now fill in the values.
-            //
-            object[] values = new object[ctorParams.Length];
+            object?[] values = new object[ctorParams.Length];
 
             for (int i = 0; i < values.Length; i++)
             {
-                object val = null;
+                object? val = null;
                 switch (i)
                 {
                     case 0:
@@ -186,11 +188,18 @@ namespace System.Windows.Forms
                         val = b.BindingMemberInfo.BindingMember;
                         break;
                     default:
-                        val = TypeDescriptor.GetProperties(b)[ConstructorParameterProperties[i]].GetValue(b);
+                        var constructorParameterProperty = ConstructorParameterProperties[i];
+                        if (constructorParameterProperty is not null)
+                        {
+                            val = TypeDescriptor.GetProperties(b)[constructorParameterProperty]?.GetValue(b);
+                        }
+
                         break;
                 }
+
                 values[i] = val;
             }
+
             return new InstanceDescriptor(ctor, values, isComplete);
         }
     }

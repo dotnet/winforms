@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using Xunit;
 
@@ -14,6 +13,8 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_GridItem_Object_TestData()
         {
             yield return new object[] { null, null };
+            yield return new object[] { new SubGridItem(), null };
+            yield return new object[] { null, new SubGridItem() };
             yield return new object[] { new SubGridItem(), new SubGridItem() };
         }
 

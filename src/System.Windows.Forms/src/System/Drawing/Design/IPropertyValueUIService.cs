@@ -14,7 +14,7 @@ namespace System.Drawing.Design
     public interface IPropertyValueUIService
     {
         ///  <summary>
-        ///  Adds or removes an <see cref='EventHandler'/> that will be invoked when the global list of <see cref="PropertyValueUIItem"/> is modified.
+        ///  Adds or removes an <see cref="EventHandler"/> that will be invoked when the global list of <see cref="PropertyValueUIItem"/> is modified.
         ///  </summary>
         event EventHandler PropertyUIValueItemsChanged;
 
@@ -38,7 +38,7 @@ namespace System.Drawing.Design
         void NotifyPropertyValueUIItemsChanged();
 
         /// <summary>
-        ///  Removes a <see cref='PropertyValueUIHandler'/> from this service.
+        ///  Removes a <see cref="PropertyValueUIHandler"/> from this service.
         /// </summary>
         /// <param name="newHandler">The handler to remove.</param>
         void RemovePropertyValueUIHandler(PropertyValueUIHandler newHandler);

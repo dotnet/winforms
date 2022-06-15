@@ -3,13 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing.Imaging;
-using System.IO;
 
 namespace System.Drawing.Design
 {
     /// <summary>
-    ///  Extends Image's editor class to provide default file searching for metafile (.emf)
-    ///  files.
+    ///  Extends Image's editor class to provide default file searching for metafile (.emf) files.
     /// </summary>
     [CLSCompliant(false)]
     public class MetafileEditor : ImageEditor

@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -191,6 +190,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var control = new CustomGetEditingControlFormattedValueDataGridViewTextBoxEditingControl
             {
                 GetEditingControlFormattedValueAction = action
@@ -310,7 +310,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_EditingControlValueChanged_Set_GetReturnsExpected(bool value)
         {
             using var control = new DataGridViewTextBoxEditingControl
@@ -973,14 +973,23 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("dataGridViewCellStyle", () => control.ApplyCellStyleToEditingControl(null));
         }
 
-        [WinFormsFact]
-        public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_CreateAccessibilityInstance_Invoke_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.Text)]
+        [InlineData(false, AccessibleRole.None)]
+        public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_CreateAccessibilityInstance_Invoke_ReturnsExpected(bool createControl, AccessibleRole expectedAccessibleRole)
         {
             using var control = new SubDataGridViewTextBoxEditingControl();
+            if (createControl)
+            {
+                control.CreateControl();
+            }
+
+            Assert.Equal(createControl, control.IsHandleCreated);
             Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
+            Assert.Equal(createControl, control.IsHandleCreated);
             Assert.NotNull(instance);
             Assert.Same(control, instance.Owner);
-            Assert.Equal(AccessibleRole.Text, instance.Role);
+            Assert.Equal(expectedAccessibleRole, instance.Role);
             Assert.NotSame(control.CreateAccessibilityInstance(), instance);
             Assert.NotSame(control.Text, instance);
         }
@@ -1069,8 +1078,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewDataErrorContexts))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewDataErrorContexts))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewDataErrorContexts))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewDataErrorContexts))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_GetEditingControlFormattedValue_Invoke_ReturnsExpected(DataGridViewDataErrorContexts context)
         {
             using var control = new SubDataGridViewTextBoxEditingControl();
@@ -1078,8 +1087,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewDataErrorContexts))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewDataErrorContexts))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewDataErrorContexts))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewDataErrorContexts))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_GetEditingControlFormattedValue_InvokeWithText_ReturnsExpected(DataGridViewDataErrorContexts context)
         {
             using var control = new SubDataGridViewTextBoxEditingControl
@@ -1127,7 +1136,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnGotFocus_Invoke_CallsGotFocus(EventArgs eventArgs)
         {
             using var control = new SubDataGridViewTextBoxEditingControl();
@@ -1144,20 +1153,18 @@ namespace System.Windows.Forms.Tests
             control.OnGotFocus(eventArgs);
             Assert.Equal(1, callCount);
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.GotFocus -= handler;
             control.OnGotFocus(eventArgs);
             Assert.Equal(1, callCount);
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnGotFocus_InvokeWithHandle_CallsGotFocus(EventArgs eventArgs)
         {
             using var control = new SubDataGridViewTextBoxEditingControl();
@@ -1196,7 +1203,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingControl_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubDataGridViewTextBoxEditingControl();
@@ -1224,7 +1231,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingControl_OnHandleCreated_InvokeWithDataGridView_CallsHandleCreated(EventArgs eventArgs)
         {
             using var dataGridView = new DataGridView();
@@ -1296,7 +1303,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnMouseWheel_Invoke_CallsMouseWheel(MouseEventArgs eventArgs)
         {
             using var control = new SubDataGridViewTextBoxEditingControl();
@@ -1315,7 +1322,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnMouseWheel_InvokeWithDataGridView_CallsMouseWheel(MouseEventArgs eventArgs)
         {
             using var dataGridView = new DataGridView();
@@ -1347,7 +1354,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnTextChanged_Invoke_CallsTextChanged(EventArgs eventArgs)
         {
             using var control = new SubDataGridViewTextBoxEditingControl();
@@ -1375,7 +1382,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnTextChanged_InvokeWithDataGridView_CallsTextChanged(EventArgs eventArgs)
         {
             using var dataGridView = new DataGridView
@@ -1407,7 +1414,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnTextChanged_InvokeWithDataGridViewNoColumns_CallsTextChanged(EventArgs eventArgs)
         {
             using var dataGridView = new DataGridView();
@@ -1552,7 +1559,7 @@ namespace System.Windows.Forms.Tests
             control.KeyDown += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyDownCallCount++;
             };
@@ -1560,7 +1567,7 @@ namespace System.Windows.Forms.Tests
             control.KeyUp += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyUpCallCount++;
             };
@@ -1599,7 +1606,7 @@ namespace System.Windows.Forms.Tests
             control.KeyDown += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyDownCallCount++;
             };
@@ -1607,7 +1614,7 @@ namespace System.Windows.Forms.Tests
             control.KeyUp += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyUpCallCount++;
             };
@@ -1634,6 +1641,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return true;
             }
+
             using var parent = new CustomProcessKeyEventArgsControl
             {
                 ProcessKeyEventArgsAction = action
@@ -1655,7 +1663,7 @@ namespace System.Windows.Forms.Tests
             control.KeyDown += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyDownCallCount++;
             };
@@ -1663,7 +1671,7 @@ namespace System.Windows.Forms.Tests
             control.KeyUp += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyUpCallCount++;
             };
@@ -1842,7 +1850,7 @@ namespace System.Windows.Forms.Tests
             control.KeyDown += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyDownCallCount++;
             };
@@ -1850,7 +1858,7 @@ namespace System.Windows.Forms.Tests
             control.KeyUp += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyUpCallCount++;
             };
@@ -1889,7 +1897,7 @@ namespace System.Windows.Forms.Tests
             control.KeyDown += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyDownCallCount++;
             };
@@ -1897,7 +1905,7 @@ namespace System.Windows.Forms.Tests
             control.KeyUp += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyUpCallCount++;
             };
@@ -1924,6 +1932,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return true;
             }
+
             using var parent = new CustomProcessKeyEventArgsControl
             {
                 ProcessKeyEventArgsAction = action
@@ -1945,7 +1954,7 @@ namespace System.Windows.Forms.Tests
             control.KeyDown += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyDownCallCount++;
             };
@@ -1953,7 +1962,7 @@ namespace System.Windows.Forms.Tests
             control.KeyUp += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyUpCallCount++;
             };
@@ -1972,7 +1981,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewTextBoxEditingControl_ProcessKeyMessage_InvokeWithCustomParentProcessKeyPreview_ReturnsExpected(bool result)
         {
             int callCount = 0;
@@ -1982,6 +1991,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessKeyPreviewAction = action
@@ -2000,7 +2010,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewTextBoxEditingControl_ProcessKeyMessage_InvokeWithCustomProcessKeyEventArgs_ReturnsExpected(bool result)
         {
             int callCount = 0;
@@ -2010,6 +2020,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var control = new CustomProcessKeyEventArgsControl
             {
                 ProcessKeyEventArgsAction = action
@@ -2037,6 +2048,7 @@ namespace System.Windows.Forms.Tests
                 parentCallCount++;
                 return parentResult;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessKeyPreviewAction = parentAction
@@ -2048,6 +2060,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var control = new CustomProcessKeyEventArgsControl
             {
                 Parent = parent,
@@ -2136,6 +2149,8 @@ namespace System.Windows.Forms.Tests
                 set => base.ImeModeBase = value;
             }
 
+            public new bool IsHandleCreated => base.IsHandleCreated;
+
             public new bool ResizeRedraw
             {
                 get => base.ResizeRedraw;
@@ -2149,6 +2164,8 @@ namespace System.Windows.Forms.Tests
             public new AccessibleObject CreateAccessibilityInstance() => base.CreateAccessibilityInstance();
 
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
+
+            public new void CreateControl() => base.CreateControl();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 

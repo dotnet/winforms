@@ -5,10 +5,8 @@
 #nullable disable
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.IO;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace System.Resources
@@ -32,6 +30,7 @@ namespace System.Resources
             return GetAssembly(name, true);
         }
 
+        [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Handles single file case")]
         public Assembly GetAssembly(AssemblyName name, bool throwOnError)
         {
             Assembly result = null;
@@ -49,18 +48,18 @@ namespace System.Resources
             if (result is null)
             {
                 result = Assembly.Load(name.FullName);
-                if (result != null)
+                if (result is not null)
                 {
                     _cachedAssemblies[name] = result;
                 }
-                else if (_names != null)
+                else if (_names is not null)
                 {
                     foreach (AssemblyName asmName in _names.Where(an => an.Equals(name)))
                     {
                         try
                         {
                             result = Assembly.LoadFrom(GetPathOfAssembly(asmName));
-                            if (result != null)
+                            if (result is not null)
                             {
                                 _cachedAssemblies[asmName] = result;
                             }
@@ -79,6 +78,7 @@ namespace System.Resources
             return result;
         }
 
+        [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Returns null if in a single file")]
         public string GetPathOfAssembly(AssemblyName name)
         {
             return name.CodeBase;
@@ -116,7 +116,7 @@ namespace System.Resources
                 result = Type.GetType(name, false, ignoreCase);
             }
 
-            if (result is null && _names != null)
+            if (result is null && _names is not null)
             {
                 // If the type is assembly qualified name, we sort the assembly names
                 // to put assemblies with same name in the front so that they can
@@ -134,12 +134,12 @@ namespace System.Resources
                     {
                     }
 
-                    if (assemblyName != null)
+                    if (assemblyName is not null)
                     {
                         List<AssemblyName> assemblyList = new List<AssemblyName>(_names.Length);
                         foreach (AssemblyName asmName in _names)
                         {
-                            if (string.Compare(assemblyName.Name, asmName.Name, StringComparison.OrdinalIgnoreCase) == 0)
+                            if (string.Equals(assemblyName.Name, asmName.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 assemblyList.Insert(0, asmName);
                             }
@@ -148,6 +148,7 @@ namespace System.Resources
                                 assemblyList.Add(asmName);
                             }
                         }
+
                         _names = assemblyList.ToArray();
                     }
                 }
@@ -156,7 +157,7 @@ namespace System.Resources
                 foreach (AssemblyName asmName in _names)
                 {
                     Assembly asm = GetAssembly(asmName, false);
-                    if (asm != null)
+                    if (asm is not null)
                     {
                         result = asm.GetType(name, false, ignoreCase);
                         if (result is null)
@@ -170,7 +171,7 @@ namespace System.Resources
                         }
                     }
 
-                    if (result != null)
+                    if (result is not null)
                     {
                         break;
                     }
@@ -182,7 +183,7 @@ namespace System.Resources
                 throw new ArgumentException(string.Format(SR.InvalidResXNoType, name));
             }
 
-            if (result != null)
+            if (result is not null)
             {
                 // Only cache types from the shared framework  because they don't need to update.
                 // For simplicity, don't cache custom types
@@ -198,9 +199,9 @@ namespace System.Resources
         /// <summary>
         ///  This is matching %windir%\Microsoft.NET\Framework*, so both 32bit and 64bit framework will be covered.
         /// </summary>
-        private bool IsDotNetAssembly(string assemblyPath)
+        private static bool IsDotNetAssembly(string assemblyPath)
         {
-            return assemblyPath != null && (assemblyPath.StartsWith(s_dotNetPath, StringComparison.OrdinalIgnoreCase) || assemblyPath.StartsWith(s_dotNetPathX86, StringComparison.OrdinalIgnoreCase));
+            return assemblyPath is not null && (assemblyPath.StartsWith(s_dotNetPath, StringComparison.OrdinalIgnoreCase) || assemblyPath.StartsWith(s_dotNetPathX86, StringComparison.OrdinalIgnoreCase));
         }
 
         public void ReferenceAssembly(AssemblyName name)

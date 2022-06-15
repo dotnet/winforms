@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Windows.Forms;
+
 namespace System.ComponentModel.Design
 {
     /// <summary>
@@ -19,7 +21,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public DesignSurfaceEventArgs(DesignSurface surface)
         {
-            Surface = surface ?? throw new ArgumentNullException(nameof(surface));
+            Surface = surface.OrThrowIfNull();
         }
 
         /// <summary>

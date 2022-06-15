@@ -34,14 +34,13 @@ namespace System.Windows.Forms
             // Check parenting first for consistency
             Control.CheckParentingCycle(_ownerControl, value);
 
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value);
+
             if (IsReadOnly)
             {
                 throw new NotSupportedException(SR.ReadonlyControlsCollection);
             }
+
             if (!_typeOfControl.IsAssignableFrom(value.GetType()))
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, _typeOfControl.Name)), value.GetType().Name);

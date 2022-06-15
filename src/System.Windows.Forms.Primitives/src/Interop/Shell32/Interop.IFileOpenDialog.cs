@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -51,17 +50,17 @@ internal static partial class Interop
                 IShellItem psi);
 
             void GetFolder(
-                out IShellItem ppsi);
+                out IShellItem? ppsi);
 
             [PreserveSig]
             HRESULT GetCurrentSelection(
-                out IShellItem ppsi);
+                out IShellItem? ppsi);
 
             void SetFileName(
                 [MarshalAs(UnmanagedType.LPWStr)] string pszName);
 
             void GetFileName(
-                [MarshalAs(UnmanagedType.LPWStr)] out string pszName);
+                [MarshalAs(UnmanagedType.LPWStr)] out string? pszName);
 
             void SetTitle(
                 [MarshalAs(UnmanagedType.LPWStr)] string pszTitle);
@@ -75,7 +74,7 @@ internal static partial class Interop
                 [MarshalAs(UnmanagedType.LPWStr)] string pszLabel);
 
             void GetResult(
-                out IShellItem ppsi);
+                out IShellItem? ppsi);
 
             [PreserveSig]
             HRESULT AddPlace(
@@ -99,11 +98,11 @@ internal static partial class Interop
                 IntPtr pFilter);
 
             void GetResults(
-                out IShellItemArray ppenum);
+                out IShellItemArray? ppenum);
 
             [PreserveSig]
             HRESULT GetSelectedItems(
-                out IShellItemArray ppsai);
+                out IShellItemArray? ppsai);
         }
 #pragma warning restore CS0108
     }

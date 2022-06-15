@@ -194,7 +194,7 @@
       </trans-unit>
       <trans-unit id="AccessibleActionDoubleClick">
         <source>Double Click</source>
-        <target state="new">Double Click</target>
+        <target state="translated">Çift Tıklama</target>
         <note />
       </trans-unit>
       <trans-unit id="AccessibleActionExpand">
@@ -215,6 +215,11 @@
       <trans-unit id="AccessibleObjectLiveRegionNotSupported">
         <source>The corresponding UI element is not a live region.</source>
         <target state="translated">Karşılık gelen kullanıcı arabirimi öğesi canlı bir bölge değil.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
+        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
+        <target state="translated">{0}, {1} özelliğini desteklemez. Türetilmiş sınıfta geçersiz kılınmalıdır.</target>
         <note />
       </trans-unit>
       <trans-unit id="AddDifferentThreads">
@@ -677,6 +682,21 @@
         <target state="translated">İşlenmemiş VT: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
+        <source>Go to next time frame</source>
+        <target state="translated">Sonraki zaman dilimine git</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
+        <source>Go to previous time frame</source>
+        <target state="translated">Önceki zaman dilimine git</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
+        <source>Go to and select today's date</source>
+        <target state="translated">Bugünün tarihine git ve seç</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CancelCaption">
         <source>Cancel</source>
         <target state="translated">İptal</target>
@@ -800,6 +820,11 @@
       <trans-unit id="CatWindowStyle">
         <source>Window Style</source>
         <target state="translated">Pencere Stili</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CategoryPropertyGridLocalizedControlType">
+        <source>PropertyGrid category</source>
+        <target state="translated">PropertyGrid kategorisi</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckBoxAppearanceDescr">
@@ -949,7 +974,7 @@
       </trans-unit>
       <trans-unit id="CombinationOfAccessibilitySwitchesNotSupported">
         <source>Desktop applications are required to opt in to all earlier accessibility improvements to get the later improvements. To do this, ensure that if the AppContext switch 'Switch.UseLegacyAccessibilityFeatures.N' is set to 'false', then 'Switch.UseLegacyAccessibilityFeatures' and all 'Switch.UseLegacyAccessibilityFeatures.M' switches, when M &lt; N, evaluate to false as well. Note that, if a switch for a particular set of accessibility improvements is not present, its value is determined by the target framework version. You can remedy this by adding these switches and setting their value to false.</source>
-        <target state="translated">Masaüstü uygulamalarının sonraki geliştirmeleri alabilmesi için önceki tüm erken erişilebilirlik geliştirmelerinin kabul edilmesi gerekir. Bunu yapmak için, 'Switch.UseLegacyAccessibilityFeatures.N' AppContext anahtarı 'false' olarak ayarlandıysa, M &lt; N durumunda 'Switch.UseLegacyAccessibilityFeatures' ve tüm 'Switch.UseLegacyAccessibilityFeatures.M' anahtarlarının da false olarak değerlendirildiğinden emin olun. Belirli bir erişilebilirlik geliştirmeleri kümesi için bir anahtarın mevcut olmaması durumunda, değerinin hedef çerçeve sürümü tarafından belirlendiğini unutmayın. Bu sorunu, bu anahtarları ekleyip değerlerini false olarak ayarlayarak düzeltebilirsiniz.</target>
+        <target state="translated">Masaüstü uygulamalarının sonraki geliştirmeleri alabilmesi için önceki tüm erken erişilebilirlik geliştirmelerinin kabul edilmesi gerekir. Bunu yapmak için, 'Switch.UseLegacyAccessibilityFeatures.N' AppContext anahtarı 'false' olarak ayarlandıysa, M &lt;N durumunda 'Switch.UseLegacyAccessibilityFeatures' ve tüm 'Switch.UseLegacyAccessibilityFeatures.M' anahtarlarının da false olarak değerlendirildiğinden emin olun. Belirli bir erişilebilirlik geliştirmeleri kümesi için bir anahtarın mevcut olmaması durumunda, değerinin hedef çerçeve sürümü tarafından belirlendiğini unutmayın. Bu sorunu, bu anahtarları ekleyip değerlerini false olarak ayarlayarak düzeltebilirsiniz.</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboBoxAutoCompleteCustomSourceDescr">
@@ -1112,6 +1137,16 @@
         <target state="translated">{0} seçildi</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonCloseName">
+        <source>Close</source>
+        <target state="translated">Kapat</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonOpenName">
+        <source>Open</source>
+        <target state="translated">Aç</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">Yeni komut kimliği ayrılamıyor.</target>
@@ -1217,7 +1252,7 @@
         <target state="translated">Bu içerik menüsü şeridinin görüntülenmesine neden olan en son denetim.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">Denetimin erişilebilir nesnesi geçersiz bir durumda.</target>
         <note />
@@ -2037,6 +2072,16 @@
         <target state="translated">Ekran sonsuz büyüklükte olsaydı denetimin boyutu.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlsCollectionShouldNotBeEmptyInGetNextControl">
+        <source>{0} collection shouldn't be empty for {1}.</source>
+        <target state="translated">{1} için {0} koleksiyonu boş olmamalıdır.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlsPropertyNotSetInGetNextControl">
+        <source>{0} property should be set for {1}.</source>
+        <target state="translated">{1} için {0} özelliği ayarlanmalıdır.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CurrencyManagerCantAddNew">
         <source>The list must be an IBindingList to AddNew.</source>
         <target state="translated">AddNew için listenin IbindingList olması gerekir.</target>
@@ -2210,6 +2255,16 @@
       <trans-unit id="DataGridViewCell_ValueTypeNull">
         <source>ValueType property of a cell in a grid cannot be null.</source>
         <target state="translated">Kılavuzdaki bir hücrenin ValueType özelliği null olamaz.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellCheckedStateDescription">
+        <source>{0} check box checked</source>
+        <target state="translated">{0} onay kutusu işaretli</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
+        <source>{0} check box unchecked</source>
+        <target state="translated">{0} onay kutusu işaretlenmemiş</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardChecked">
@@ -3699,6 +3754,11 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
         <target state="translated">Kullanıcının DataGridView denetiminin hücrelerini düzenleyip düzenleyemeyeceğini gösterir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridView_RowAddedNotification">
+        <source>Row {0} is added</source>
+        <target state="translated">{0}. satır eklendi</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
         <source>Row provided already belongs to a DataGridView control.</source>
         <target state="translated">Sağlanan satır zaten bir DataGridView denetimine ait.</target>
@@ -4219,11 +4279,6 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
         <target state="translated">Düzenle</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -4539,6 +4594,11 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
         <target state="translated">DragDrop kaydı yapılamadı.</target>
         <note />
       </trans-unit>
+      <trans-unit id="EditDefaultAccessibleName">
+        <source>Spinner</source>
+        <target state="translated">Değer Değiştirici</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorBadInputLanguage">
         <source>inputLanguage is not recognized by the system.</source>
         <target state="translated">inputLanguage sistem tarafından tanınmıyor.</target>
@@ -4729,7 +4789,7 @@ hakkında detaylı bilgi için bu iletinin sonuna bakın.
         <target state="translated">Yüklü Derlemeler</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4738,7 +4798,7 @@ hakkında detaylı bilgi için bu iletinin sonuna bakın.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -4886,6 +4946,11 @@ Devam'a tıkladığınızda uygulama bu hatayı yoksayar ve işlemi sürdürmeye
         <target state="translated">İletişim kutusunun dosya adlarında geçersiz karakterler ve sıralar içermediğinden emin olup olmayacağını denetler.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogAddToRecentDescr">
+        <source>Controls whether to add the file being opened or saved to the recent list.</source>
+        <target state="translated">Açılmakta olan veya kaydedilen dosyanın son listeye eklenip eklenmeyeceğini kontrol eder.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogBufferTooSmall">
         <source>Too many files selected. Select fewer files and try again.</source>
         <target state="translated">Çok fazla dosya seçildi. Daha az dosya seçin ve yeniden deneyin.</target>
@@ -4920,11 +4985,26 @@ Doğru dosya adının verildiğinden emin olun.</target>
         <target state="translated">Filtre dizini geçerli değil.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogOkRequiresInteractionDescr">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="translated">Kullanıcı görünümde gezinene veya dosya adını düzenleyene (yapabiliyorsa) kadar iletişim kutusunun Tamam düğmesinin devre dışı bırakılıp bırakılmadığını kontrol eder. Not: Tamam düğmesinin devre dışı bırakılması, iletişim kutusunun Enter tuşuyla gönderilmesini engellemez.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
         <target state="translated">{0} dosyası zaten var.
 Bunu değiştirmek istiyor musunuz?</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowHiddenFilesDescr">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="translated">İletişim kutusunun gizli ve sistem dosyalarını gösterip göstermediğini kontrol eder.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowPinnedPlacesDescr">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="translated">Görünümün gezinme bölmesinde varsayılan olarak gösterilen öğelerin gösterilip gösterilmediğini kontrol eder.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5032,6 +5112,11 @@ Bunu değiştirmek istiyor musunuz?</target>
         <target state="translated">Yardım düğmesinin gösterilip gösterilmeyeceğini denetler.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogAddToRecent">
+        <source>Controls whether the dialog box adds the folder being selected to the recent list.</source>
+        <target state="translated">İletişim kutusunun seçilen klasörü son kullanılan listeye ekleyip eklemediğini kontrol eder.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogDescription">
         <source>The string that is displayed above the tree view control in the dialog box. This string can be used to specify instructions to the user.</source>
         <target state="translated">İletişim kutusundaki ağaç görünümü denetiminin üstünde görüntülenen dize. Bu dize kullanıcıya yönergeleri bildirmek için kullanılabilir.</target>
@@ -5040,6 +5125,11 @@ Bunu değiştirmek istiyor musunuz?</target>
       <trans-unit id="FolderBrowserDialogNoRootFolder">
         <source>Unable to retrieve the root folder.</source>
         <target state="translated">Kök klasör alınamıyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="translated">Kullanıcı görünümde gezinene veya dosya adını düzenleyene (yapabiliyorsa) kadar iletişim kutusunun Tamam düğmesinin devre dışı bırakılıp bırakılmadığını kontrol eder. Not: Tamam düğmesinin devre dışı bırakılması, iletişim kutusunun Enter tuşuyla gönderilmesini engellemez.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogRootFolder">
@@ -5052,9 +5142,19 @@ Bunu değiştirmek istiyor musunuz?</target>
         <target state="translated">İletişim kutusunda ilk seçili olan klasörün veya kullanıcı tarafından son seçilen klasörün yolu.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogShowHiddenFiles">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="translated">İletişim kutusunun gizli ve sistem dosyalarını gösterip göstermediğini kontrol eder.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogShowNewFolderButton">
         <source>Include the New Folder button in the dialog box.</source>
         <target state="translated">İletişim kutusuna Yeni Klasör düğmesini ekle.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogShowPinnedPlaces">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="translated">Görünümün gezinme bölmesinde varsayılan olarak gösterilen öğelerin gösterilip gösterilmediğini kontrol eder.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogUseDescriptionForTitle">
@@ -5185,6 +5285,11 @@ Bunu değiştirmek istiyor musunuz?</target>
       <trans-unit id="FormMaximumSizeDescr">
         <source>The maximum size the form can be resized to.</source>
         <target state="translated">Formun yeniden boyutlandırılabileceği en büyük boyut.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
+        <source>Gets or sets the anchoring for minimized MDI children.</source>
+        <target state="translated">Simge durumuna küçültülmüş MDI alt öğeleri için bağlamayı alır veya ayarlar.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormMenuStripDescr">
@@ -5686,6 +5791,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">{0} öğesine geçirilen Win32 işleyicisi geçerli değil veya yanlış türde.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="translated">Geçersiz HDC türü: {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
         <target state="translated">'{1}' değeri '{0}' için geçerli değil. '{0}' değerinin {2} değerinden küçük olması gerekir.</target>
@@ -5799,11 +5909,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">Anahtar birleşimi geçerli değil.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">Anahtar adı geçerli değil.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
@@ -6246,6 +6351,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Sanal ListView denetimlerinin kullanıcılarına önbelleklerini hazırlamaları gerektiğini bildirir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
+        <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
+        <target state="translated">ListView sanal moddayken ListView grupları koleksiyonuna grup ekleyemezsiniz.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
         <source>Cannot access the checked items collection when the ListView is in virtual mode.</source>
         <target state="translated">ListView sanal moddayken işaretlenmiş öğeler koleksiyonuna erişilemiyor.</target>
@@ -6371,6 +6481,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">ListViewGroup öğesinin CollapsedState özelliği değiştiğinde tetiklenen olay.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateName">
+        <source>{0}, group, collapsed</source>
+        <target state="translated">{0}, grup, daraltılmış</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">Parametre ListViewGroup türünde olmalıdır.</target>
@@ -6384,6 +6499,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="ListViewGroupDefaultHeader">
         <source>ListViewGroup</source>
         <target state="translated">ListViewGroup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupExpandedStateName">
+        <source>{0}, group, expanded</source>
+        <target state="translated">{0}, grup, genişletilmiş</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
@@ -6439,6 +6559,21 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="ListViewInsertionMarkDescr">
         <source>Allows insertion mark attributes to be changed.</source>
         <target state="translated">Ekleme işareti özniteliklerinin değiştirilmesine olanak tanır.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
+        <source>The current accessibility object is only for the ListView in {0} view</source>
+        <target state="translated">Geçerli erişilebilirlik nesnesi yalnızca {0} görünümündeki ListView içindir</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
+        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
+        <target state="translated">Geçerli erişilebilirlik nesnesi yalnızca {0}, {1} veya {2} görünümündeki ListView içindir</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="translated">ListViewItem bir ListView'a ekli olmadığında erişilebilirlik nesnesi alınamaz.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -7051,6 +7186,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Aylık takvimde görünen önceki ve sonraki ayları görüntülemek için kullanılacak renk.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarWeekNumberDescription">
+        <source>Week {0}</source>
+        <target state="translated">Hafta {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
         <source>Year {0} to {1} selected.</source>
         <target state="translated">{0} - {1} yıl aralığı seçildi.</target>
@@ -7261,6 +7401,16 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">'{0}' öğesi birden fazla yere eklenemez. Öğeyi önce bulunduğu yerden kaldırmalı veya kopyasını oluşturmalısınız.</target>
         <note />
       </trans-unit>
+      <trans-unit id="OpenFileDialogSelectReadOnlyDescr">
+        <source>Controls whether the dialog box allows to select read-only files.</source>
+        <target state="translated">İletişim kutusunun salt okunur dosyaları seçmeye izin verip vermediğini kontrol eder.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OpenFileDialogShowPreviewDescr">
+        <source>Controls whether the dialog box shows a preview for selected files.</source>
+        <target state="translated">İletişim kutusunun seçili dosyalar için bir önizleme gösterip göstermediğini kontrol eder.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">
         <source>This operation requires an IBindingList.</source>
         <target state="translated">Bu işlem bir IBindingList gerektiriyor.</target>
@@ -7284,11 +7434,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="OwnsSelfOrOwner">
         <source>Form {0} tried to set an ineligible form as its owner. Forms cannot own themselves or their owners.</source>
         <target state="translated">{0} formu, geçersiz bir formu sahip olarak ayarlamaya çalıştı. Formlar kendilerinin veya sahiplerinin sahibi olamaz.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description</source>
-        <target state="translated">Açıklama</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -7476,6 +7621,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Bölmenin kenarlığı olup olmayacağını gösterir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ParentPropertyNotSetInGetNextControl">
+        <source>{0} property should be set for {1}.</source>
+        <target state="translated">{1} için {0} özelliği ayarlanmalıdır.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PictureBoxBorderStyleDescr">
         <source>Controls what type of border the PictureBox should have.</source>
         <target state="translated">PictureBox'ın ne tür kenarlığı olacağını denetler.</target>
@@ -7549,6 +7699,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="PictureBoxOnSizeModeChangedDescr">
         <source>Event raised when the value of the SizeMode property is changed on the PictureBox.</source>
         <target state="translated">PictureBox'da SizeMode özelliğinin değeri değiştiğinde harekete geçirilen olay.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PictureBoxRemoteLocationNotSupported">
+        <source>Loading from remote location not supported.</source>
+        <target state="translated">Uzak konumdan yükleme desteklenmiyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
@@ -7881,6 +8036,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Ayırıcıdaki vurgu efektleri için kullanılacak renk.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
+        <source>Border color to use on the top edge of the StatusStrip.</source>
+        <target state="translated">StatusStrip’in üst kenarı üzerinde kullanmak için kenar rengi</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
         <source>Starting color of the gradient used in the StatusStrip.</source>
         <target state="translated">StatusStrip'te kullanılan geçişin başlangıç rengi.</target>
@@ -8111,11 +8271,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Kılavuz alanındaki devre dışı metnin ön plan rengi.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
-        <source>{0} Description</source>
-        <target state="translated">{0} Açıklaması</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
         <source>Browse...</source>
         <target state="translated">Gözat...</target>
@@ -8154,6 +8309,16 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="PropertyGridHelpForeColorDesc">
         <source>The foreground color of the description pane.</source>
         <target state="translated">Açıklama bölmesinin ön plan rengi.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="translated">{0} Açıklaması</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridHelpPaneTitle">
+        <source>Description</source>
+        <target state="translated">Açıklama</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">
@@ -8299,6 +8464,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="PropertyGridViewBorderColorDesc">
         <source>The color of the border surrounding the grid area.</source>
         <target state="translated">Kılavuz alanını çevreleyen kenarlığın rengi.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="translated">Açılır denetim tutucusu</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
@@ -8601,9 +8771,19 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">{1} - {0} - {2}</target>
         <note />
       </trans-unit>
+      <trans-unit id="SaveFileDialogCheckWriteAccess">
+        <source>Controls whether the dialog box verifies if the creation of the specified file will be successful.</source>
+        <target state="translated">İletişim kutusunun, belirtilen dosyanın oluşturulmasının başarılı olup olmayacağını doğrulayıp doğrulamadığını kontrol eder.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SaveFileDialogCreatePrompt">
         <source>Controls whether to prompt the user when a new file is about to be created. It is only applicable if 'ValidateNames' is set to true.</source>
         <target state="translated">Yeni bir dosya oluşturulmak üzere olduğunda kullanıcıya sorulup sorulmayacağını denetler. Bu yalnızca 'ValidateNames' True olarak ayarlanmışsa geçerlidir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SaveFileDialogExpandedMode">
+        <source>Controls whether the dialog box is always opened in the expanded mode.</source>
+        <target state="translated">İletişim kutusunun her zaman genişletilmiş modda açılıp açılmadığını kontrol eder.</target>
         <note />
       </trans-unit>
       <trans-unit id="SaveFileDialogOverWritePrompt">
@@ -8744,11 +8924,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="SortedDescendingAccessibleStatus">
         <source>Sorted descending.</source>
         <target state="translated">Azalan düzende sıralı.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Değer Değiştirici</target>
         <note />
       </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">
@@ -9408,7 +9583,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
         <source>TextFormatFlags.ModifyString is not allowed.</source>
-        <target state="new">TextFormatFlags.ModifyString is not allowed.</target>
+        <target state="translated">TextFormatFlags.ModifyString öğesine izin verilmez.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
@@ -10141,6 +10316,16 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">ToolStrip'in kullanıcı ayarlarını IPersistComponentSettings aracılığıyla kalıcı yapıp yapmayacağını belirtir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="translated">Satır aşağı</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="translated">Satır yukarı</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">
         <source>Specifies the settings key to use to save settings.</source>
         <target state="translated">Ayarları kaydetmek üzere kullanılacak ayarlar anahtarını belirtir.</target>
@@ -10346,6 +10531,16 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">LargeChange: '{0}' değeri sıfırdan büyük veya eşit olmalıdır.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrackBarLargeDecreaseButtonName">
+        <source>Large decrease</source>
+        <target state="translated">Büyük azalma</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarLargeIncreaseButtonName">
+        <source>Large increase</source>
+        <target state="translated">Büyük artış</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
         <source>The maximum value for the position of the slider on the TrackBar.</source>
         <target state="translated">TrackBar üzerinde kaydırıcının en büyük konum değeri.</target>
@@ -10364,6 +10559,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="TrackBarOrientationDescr">
         <source>The orientation of the control.</source>
         <target state="translated">Denetimin yönlendirmesi.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarPositionButtonName">
+        <source>Position</source>
+        <target state="translated">Konum</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">
@@ -10397,8 +10597,8 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <note />
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
-        <source>Text length must be less than 64 characters long.</source>
-        <target state="translated">Metin uzunluğu 64 karakterden az olmalı.</target>
+        <source>Text length must be less than 128 characters long.</source>
+        <target state="translated">Metin uzunluğu 128 karakterden az olmalıdır.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
@@ -10409,6 +10609,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="TreeNodeBeginEditFailed">
         <source>BeginEdit did not succeed because LabelEdit property is false.</source>
         <target state="translated">LabelEdit özelliği False olduğundan BeginEdit özelliği başarılı olmadı.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="translated">TreeNode zaten başka bir TreeView'a bağlı. Önce onu geçerli konumundan kaldırmalı ya da kopyalamalısınız.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
@@ -10791,6 +10996,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Yukarı</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="translated">Düzenle</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">Metin işlemenin Windows Forms'un derlemeleriyle uyumlu olması gerekip gerekmediğini belirtir.</target>
@@ -10997,8 +11207,8 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">Uygulamada ilk IWin32Window nesnesi oluşturulmadan önce SetCompatibleTextRenderingDefault çağrılmalıdır.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="translated">Uygulamada ilk IWin32Window nesnesi oluşturulmadan önce {0} çağrılmalıdır.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

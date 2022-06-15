@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
@@ -48,7 +46,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null && value.IsStub)
+                if (value is not null && value.IsStub)
                 {
                     // WINRES only scenario.
                     // we only support table layout settings that have been created from a type converter.
@@ -90,11 +88,12 @@ namespace System.Windows.Forms
             {
                 _tableLayoutSettings.CellBorderStyle = value;
 
-                // PERF: dont turn on ResizeRedraw unless we know we need it.
+                // PERF: don't turn on ResizeRedraw unless we know we need it.
                 if (value != TableLayoutPanelCellBorderStyle.None)
                 {
                     SetStyle(ControlStyles.ResizeRedraw, true);
                 }
+
                 Invalidate();
                 Debug.Assert(CellBorderStyle == value, "CellBorderStyle should be the same as we set it");
             }
@@ -198,7 +197,7 @@ namespace System.Windows.Forms
         private bool ShouldSerializeControls()
         {
             TableLayoutControlCollection collection = Controls;
-            return collection != null && collection.Count > 0;
+            return collection is not null && collection.Count > 0;
         }
 
         #region Extended Properties
@@ -295,12 +294,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  get the control which covers the specified row and column. return null if we can't find one
         /// </summary>
-        public Control GetControlFromPosition(int column, int row)
+        public Control? GetControlFromPosition(int column, int row)
         {
-            return (Control)_tableLayoutSettings.GetControlFromPosition(column, row);
+            return (Control?)_tableLayoutSettings.GetControlFromPosition(column, row);
         }
 
-        public TableLayoutPanelCellPosition GetPositionFromControl(Control control)
+        public TableLayoutPanelCellPosition GetPositionFromControl(Control? control)
         {
             return _tableLayoutSettings.GetPositionFromControl(control);
         }
@@ -323,6 +322,7 @@ namespace System.Windows.Forms
             {
                 cw[i] = containerInfo.Columns[i].MinSize;
             }
+
             return cw;
         }
 
@@ -344,6 +344,7 @@ namespace System.Windows.Forms
             {
                 rh[i] = containerInfo.Rows[i].MinSize;
             }
+
             return rh;
         }
 
@@ -353,7 +354,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.TableLayoutPanelOnPaintCellDescr))]
-        public event TableLayoutCellPaintEventHandler CellPaint
+        public event TableLayoutCellPaintEventHandler? CellPaint
         {
             add => Events.AddHandler(s_eventCellPaint, value);
             remove => Events.RemoveHandler(s_eventCellPaint, value);
@@ -372,7 +373,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnCellPaint(TableLayoutCellPaintEventArgs e)
         {
-            ((TableLayoutCellPaintEventHandler)Events[s_eventCellPaint])?.Invoke(this, e);
+            ((TableLayoutCellPaintEventHandler?)Events[s_eventCellPaint])?.Invoke(this, e);
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)
@@ -455,6 +456,7 @@ namespace System.Windows.Forms
                         // Paint the table border on top.
                         ControlPaint.PaintTableCellBorder(cellBorderStyle, g, outsideCellBounds);
                     }
+
                     starty += rowStrips[j].MinSize;
 
                     // Only sum this up once...
@@ -580,6 +582,7 @@ namespace System.Windows.Forms
                         cs.Width = (float)Math.Round(cs.Width * factor.Width);
                     }
                 }
+
                 i++;
             }
 

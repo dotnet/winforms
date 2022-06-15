@@ -3,9 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.CodeDom;
-using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
-using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Moq;
@@ -95,9 +93,9 @@ namespace System.Windows.Forms.Design.Serialization.Tests
             {
                 var formatter = new BinaryFormatter();
                 var exception = new CodeDomSerializerException("message", new CodeLinePragma("fileName.cs", 11));
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 Assert.Throws<SerializationException>(() => formatter.Serialize(stream, exception));
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
         }
 

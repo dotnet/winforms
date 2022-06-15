@@ -25,6 +25,7 @@ namespace System.ComponentModel.Design.Serialization
                     GetReflectionTypeFromTypeHelper(manager, typeof(IContainer))
                 };
             }
+
             return _containerConstructor;
         }
 
@@ -36,10 +37,10 @@ namespace System.ComponentModel.Design.Serialization
             get
             {
                 ComponentCodeDomSerializer defaultSerializer;
-                if (s_defaultSerializerRef != null)
+                if (s_defaultSerializerRef is not null)
                 {
                     defaultSerializer = s_defaultSerializerRef.Target as ComponentCodeDomSerializer;
-                    if (defaultSerializer != null)
+                    if (defaultSerializer is not null)
                     {
                         return defaultSerializer;
                     }
@@ -54,11 +55,11 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Determines if we can cache the results of serializing a component.
         /// </summary>
-        private bool CanCacheComponent(IDesignerSerializationManager manager, object value, PropertyDescriptorCollection props)
+        private static bool CanCacheComponent(IDesignerSerializationManager manager, object value, PropertyDescriptorCollection props)
         {
             if (value is IComponent comp)
             {
-                if (comp.Site != null)
+                if (comp.Site is not null)
                 {
                     if (comp.Site is INestedSite nestedSite && !string.IsNullOrEmpty(nestedSite.FullName))
                     {
@@ -70,6 +71,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     props = TypeDescriptor.GetProperties(comp);
                 }
+
                 foreach (PropertyDescriptor property in props)
                 {
                     if (typeof(IComponent).IsAssignableFrom(property.PropertyType) &&
@@ -77,7 +79,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         MemberCodeDomSerializer memberSerializer = (MemberCodeDomSerializer)manager.GetSerializer(property.GetType(), typeof(MemberCodeDomSerializer));
 
-                        if (memberSerializer != null && memberSerializer.ShouldSerialize(manager, value, property))
+                        if (memberSerializer is not null && memberSerializer.ShouldSerialize(manager, value, property))
                         {
                             return false;
                         }
@@ -97,7 +99,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             object instance = base.DeserializeInstance(manager, type, parameters, name, addToContainer);
 
-            if (instance != null)
+            if (instance is not null)
             {
                 Trace("Deserializing design time properties for {0}", manager.GetName(instance));
                 DeserializePropertiesFromResources(manager, instance, _designTimeFilter);
@@ -115,10 +117,8 @@ namespace System.ComponentModel.Design.Serialization
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(value);
             using (TraceScope("ComponentCodeDomSerializer::Serialize"))
             {
-                if (manager is null || value is null)
-                {
-                    throw new ArgumentNullException(manager is null ? "manager" : "value");
-                }
+                ArgumentNullException.ThrowIfNull(manager);
+                ArgumentNullException.ThrowIfNull(value);
 
                 if (IsSerialized(manager, value))
                 {
@@ -131,7 +131,7 @@ namespace System.ComponentModel.Design.Serialization
                 InheritanceLevel inheritanceLevel = InheritanceLevel.NotInherited;
                 InheritanceAttribute inheritanceAttribute = (InheritanceAttribute)TypeDescriptor.GetAttributes(value)[typeof(InheritanceAttribute)];
 
-                if (inheritanceAttribute != null)
+                if (inheritanceAttribute is not null)
                 {
                     inheritanceLevel = inheritanceAttribute.InheritanceLevel;
                 }
@@ -155,7 +155,7 @@ namespace System.ComponentModel.Design.Serialization
 
                     statements = new CodeStatementCollection();
                     CodeTypeDeclaration typeDecl = manager.Context[typeof(CodeTypeDeclaration)] as CodeTypeDeclaration;
-                    RootContext rootCxt = manager.Context[typeof(RootContext)] as RootContext;
+                    RootContext rootCtx = manager.Context[typeof(RootContext)] as RootContext;
                     CodeExpression assignLhs = null;
                     CodeExpression assignRhs;
 
@@ -167,7 +167,7 @@ namespace System.ComponentModel.Design.Serialization
 
                     assignLhs = GetExpression(manager, value);
 
-                    if (assignLhs != null)
+                    if (assignLhs is not null)
                     {
                         Trace("Existing expression for LHS of value");
                         generateLocal = false;
@@ -183,7 +183,7 @@ namespace System.ComponentModel.Design.Serialization
                             // property and would still serialize it.  This code reverses what the
                             // outer if block does for this specific case.  We also need this
                             // for Everett / 1.0 backwards compat.
-                            if (!(manager.Context[typeof(ExpressionContext)] is ExpressionContext expCxt) || expCxt.PresetValue != value)
+                            if (!(manager.Context[typeof(ExpressionContext)] is ExpressionContext expCtx) || expCtx.PresetValue != value)
                             {
                                 isComplete = true;
                             }
@@ -198,7 +198,7 @@ namespace System.ComponentModel.Design.Serialization
                             // we might want to generate a local variable.  Otherwise,
                             // we want to generate a field.
                             PropertyDescriptor generateProp = props["GenerateMember"];
-                            if (generateProp != null && generateProp.PropertyType == typeof(bool) && !(bool)generateProp.GetValue(value))
+                            if (generateProp is not null && generateProp.PropertyType == typeof(bool) && !(bool)generateProp.GetValue(value))
                             {
                                 Trace("Object GenerateMember property wants a local variable");
                                 generateLocal = true;
@@ -210,7 +210,7 @@ namespace System.ComponentModel.Design.Serialization
                             generateObject = false;
                         }
 
-                        if (rootCxt is null)
+                        if (rootCtx is null)
                         {
                             generateLocal = true;
                             generateField = false;
@@ -229,7 +229,7 @@ namespace System.ComponentModel.Design.Serialization
                         string typeName = TypeDescriptor.GetClassName(value);
 
                         // Output variable / field declarations if we need to
-                        if ((generateField || generateLocal) && name != null)
+                        if ((generateField || generateLocal) && name is not null)
                         {
                             if (generateField)
                             {
@@ -238,17 +238,17 @@ namespace System.ComponentModel.Design.Serialization
                                     // We need to generate the field declaration.  See if there is a modifiers property on
                                     // the object.  If not, look for a DefaultModifies, and finally assume it's private.
                                     CodeMemberField field = new CodeMemberField(typeName, name);
-                                    PropertyDescriptor modifersProp = props["Modifiers"];
+                                    PropertyDescriptor modifiersProp = props["Modifiers"];
                                     MemberAttributes fieldAttrs;
 
-                                    if (modifersProp is null)
+                                    if (modifiersProp is null)
                                     {
-                                        modifersProp = props["DefaultModifiers"];
+                                        modifiersProp = props["DefaultModifiers"];
                                     }
 
-                                    if (modifersProp != null && modifersProp.PropertyType == typeof(MemberAttributes))
+                                    if (modifiersProp is not null && modifiersProp.PropertyType == typeof(MemberAttributes))
                                     {
-                                        fieldAttrs = (MemberAttributes)modifersProp.GetValue(value);
+                                        fieldAttrs = (MemberAttributes)modifiersProp.GetValue(value);
                                     }
                                     else
                                     {
@@ -262,7 +262,7 @@ namespace System.ComponentModel.Design.Serialization
                                 }
 
                                 // Next, create a nice LHS for our pending assign statement, when we hook up the variable.
-                                assignLhs = new CodeFieldReferenceExpression(rootCxt.Expression, name);
+                                assignLhs = new CodeFieldReferenceExpression(rootCtx.Expression, name);
                             }
                             else
                             {
@@ -289,12 +289,12 @@ namespace System.ComponentModel.Design.Serialization
                             // that we can get to an actual IContainer.
                             IContainer container = manager.GetService(typeof(IContainer)) as IContainer;
                             ConstructorInfo ctor = null;
-                            if (container != null)
+                            if (container is not null)
                             {
                                 ctor = GetReflectionTypeHelper(manager, value).GetConstructor(BindingFlags.ExactBinding | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly, null, GetContainerConstructor(manager), null);
                             }
 
-                            if (ctor != null)
+                            if (ctor is not null)
                             {
                                 Trace("Component has IContainer constructor.");
                                 assignRhs = new CodeObjectCreateExpression(typeName, new CodeExpression[]
@@ -310,7 +310,7 @@ namespace System.ComponentModel.Design.Serialization
                             }
 
                             TraceErrorIf(assignRhs is null, "No RHS code assign for object {0}", value);
-                            if (assignRhs != null)
+                            if (assignRhs is not null)
                             {
                                 if (assignLhs is null)
                                 {
@@ -334,14 +334,14 @@ namespace System.ComponentModel.Design.Serialization
                             }
                         }
 
-                        if (assignLhs != null)
+                        if (assignLhs is not null)
                         {
                             SetExpression(manager, value, assignLhs);
                         }
 
                         // It should practically be an assert that isComplete is false, but someone may
                         // have an unusual component.
-                        if (assignLhs != null && !isComplete)
+                        if (assignLhs is not null && !isComplete)
                         {
                             // .NET CF needs us to verify that the ISupportInitialize interface exists
                             // (they do not support this interface and will modify their DSM to resolve the type to null).
@@ -350,8 +350,9 @@ namespace System.ComponentModel.Design.Serialization
                             if (supportInitialize)
                             {
                                 string fullName = typeof(ISupportInitialize).FullName;
-                                supportInitialize = manager.GetType(fullName) != null;
+                                supportInitialize = manager.GetType(fullName) is not null;
                             }
+
                             Type reflectionType = null;
                             if (supportInitialize)
                             {
@@ -369,13 +370,15 @@ namespace System.ComponentModel.Design.Serialization
                             if (persistSettings)
                             {
                                 string fullName = typeof(IPersistComponentSettings).FullName;
-                                persistSettings = manager.GetType(fullName) != null;
+                                persistSettings = manager.GetType(fullName) is not null;
                             }
+
                             if (persistSettings)
                             {
                                 reflectionType = reflectionType ?? GetReflectionTypeHelper(manager, value);
                                 persistSettings = GetReflectionTypeFromTypeHelper(manager, typeof(IPersistComponentSettings)).IsAssignableFrom(reflectionType);
                             }
+
                             // We implement statement caching only for the main code generation phase.  We don't implement it for other
                             // serialization managers.  How do we tell the difference?  The main serialization manager exists as a service.
                             IDesignerSerializationManager mainManager = manager.GetService(typeof(IDesignerSerializationManager)) as IDesignerSerializationManager;
@@ -423,7 +426,7 @@ namespace System.ComponentModel.Design.Serialization
                                     // might have dependencies that will be lost.
                                     // we need to make sure we copy over any dependencies that are also tracked.
                                     ComponentCache.Entry oldEntry = cache?.GetEntryAll(value);
-                                    if (oldEntry != null && oldEntry.Dependencies != null && oldEntry.Dependencies.Count > 0)
+                                    if (oldEntry is not null && oldEntry.Dependencies is not null && oldEntry.Dependencies.Count > 0)
                                     {
                                         foreach (object dependency in oldEntry.Dependencies)
                                         {
@@ -431,17 +434,18 @@ namespace System.ComponentModel.Design.Serialization
                                         }
                                     }
                                 }
+
                                 entry.Component = value;
                                 // we need to link the cached entry with its corresponding component right away, before it's put in the context
                                 // see CodeDomSerializerBase.cs::GetExpression for usage
 
                                 // This entry will only be used if the valid bit is set.
-                                // This is useful because we still need to setup depedency relationships
+                                // This is useful because we still need to setup dependency relationships
                                 // between components even if they are not cached.  See VSWhidbey 263053.
                                 bool correctManager = manager == mainManager;
                                 entry.Valid = correctManager && CanCacheComponent(manager, value, props);
 
-                                if (correctManager && cache != null && cache.Enabled)
+                                if (correctManager && cache is not null && cache.Enabled)
                                 {
                                     manager.Context.Push(cache);
                                     manager.Context.Push(entry);
@@ -472,8 +476,8 @@ namespace System.ComponentModel.Design.Serialization
 
                                         //
                                         // cache the statements for future usage if possible. We only do this for the main serialization manager, not
-                                        // for any other seriallization managers that may be calling us for undo or clipboard functions.
-                                        if (correctManager && cache != null && cache.Enabled)
+                                        // for any other serialization managers that may be calling us for undo or clipboard functions.
+                                        if (correctManager && cache is not null && cache.Enabled)
                                         {
                                             cache[value] = entry;
                                         }
@@ -481,7 +485,7 @@ namespace System.ComponentModel.Design.Serialization
                                 }
                                 finally
                                 {
-                                    if (correctManager && cache != null && cache.Enabled)
+                                    if (correctManager && cache is not null && cache.Enabled)
                                     {
                                         Debug.Assert(manager.Context.Current == entry, "Context stack corrupted");
                                         manager.Context.Pop();
@@ -493,14 +497,14 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 // If we got a cache entry, we will need to take all the resources out of
                                 // it and apply them too.
-                                if ((entry.Resources != null || entry.Metadata != null) && cache != null && cache.Enabled)
+                                if ((entry.Resources is not null || entry.Metadata is not null) && cache is not null && cache.Enabled)
                                 {
                                     ResourceCodeDomSerializer res = ResourceCodeDomSerializer.Default;
-                                    res.ApplyCacheEntry(manager, entry);
+                                    ResourceCodeDomSerializer.ApplyCacheEntry(manager, entry);
                                 }
                             }
 
-                            // Regarless, apply statements.  Either we created them or we got them
+                            // Regardless, apply statements.  Either we created them or we got them
                             // out of the cache.
                             statements.AddRange(entry.Statements);
 
@@ -538,7 +542,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  This emits a method invoke to IPersistComponentSettings.LoadComponentSettings.
         /// </summary>
-        private void SerializeLoadComponentSettings(IDesignerSerializationManager manager, CodeStatementCollection statements, CodeExpression valueExpression, object value)
+        private static void SerializeLoadComponentSettings(IDesignerSerializationManager manager, CodeStatementCollection statements, CodeExpression valueExpression, object value)
         {
             Trace("Emitting LoadComponentSettings");
 
@@ -559,7 +563,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  This emits a method invoke to ISupportInitialize.
         /// </summary>
-        private void SerializeSupportInitialize(IDesignerSerializationManager manager, CodeStatementCollection statements, CodeExpression valueExpression, object value, string methodName)
+        private static void SerializeSupportInitialize(IDesignerSerializationManager manager, CodeStatementCollection statements, CodeExpression valueExpression, object value, string methodName)
         {
             Trace("Emitting {0}", methodName);
 

@@ -8,10 +8,10 @@ using System.ComponentModel.Design.Serialization;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  The Reason for having a CustomSerializer for ToolStripMenuItem is the existance of Dummy ToolStripMenuItem for ContextMenuStrips.
+    ///  The Reason for having a CustomSerializer for ToolStripMenuItem is the existence of Dummy ToolStripMenuItem for ContextMenuStrips.
     ///  We add this Dummy ToolStripMenuItem on the "Non Site" ToolStrip to Host the DropDown which facilitates the entry of New MenuItems.
     ///  These items are then added to the ContextMenuStrip that we are designing.
-    ///  But we dont want the Dummy ToolStripMenuItem to Serialize and hence the need for this Custom Serializer.
+    ///  But we don't want the Dummy ToolStripMenuItem to Serialize and hence the need for this Custom Serializer.
     /// </summary>
     internal class ToolStripMenuItemCodeDomSerializer : CodeDomSerializer
     {
@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// This is a small helper method that returns the serializer for base Class
         /// </summary>
-        private CodeDomSerializer GetBaseSerializer(IDesignerSerializationManager manager)
+        private static CodeDomSerializer GetBaseSerializer(IDesignerSerializationManager manager)
         {
             return (CodeDomSerializer)manager.GetSerializer(typeof(Component), typeof(CodeDomSerializer));
         }
@@ -38,12 +38,12 @@ namespace System.Windows.Forms.Design
         public override object Serialize(IDesignerSerializationManager manager, object value)
         {
             ToolStripMenuItem item = value as ToolStripMenuItem;
-            ToolStrip parent = item.GetCurrentParent() as ToolStrip;
+            ToolStrip parent = item.GetCurrentParent();
 
-            //Dont Serialize if we are Dummy Item ...
+            // Don't Serialize if we are Dummy Item ...
             if ((item != null) && !(item.IsOnDropDown) && (parent != null) && (parent.Site is null))
             {
-                //dont serialize anything...
+                //don't serialize anything...
                 return null;
             }
             else

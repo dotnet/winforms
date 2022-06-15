@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design
             return GetBaseSerializer(manager).Deserialize(manager, codeObject);
         }
 
-        private CodeDomSerializer GetBaseSerializer(IDesignerSerializationManager manager)
+        private static CodeDomSerializer GetBaseSerializer(IDesignerSerializationManager manager)
         {
             return (CodeDomSerializer)manager.GetSerializer(typeof(TableLayoutPanel).BaseType, typeof(CodeDomSerializer));
         }
@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Design
             return codeObject;
         }
 
-        private bool IsLocalizable(IDesignerHost host)
+        private static bool IsLocalizable(IDesignerHost host)
         {
             if (host != null)
             {

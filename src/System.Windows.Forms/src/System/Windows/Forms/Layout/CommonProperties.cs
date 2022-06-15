@@ -2,11 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+#if DEBUG
 using System.Collections;
+#endif
 using System.Collections.Specialized;
+#if DEBUG
 using System.ComponentModel;
+#endif
 using System.Diagnostics;
 using System.Drawing;
 
@@ -17,7 +19,7 @@ namespace System.Windows.Forms.Layout
     // to another.  (For example, set BoxStretchInternal on a control in FlowPanel and then move
     // the control to GridPanel.)  CommonProperties is a place to define keys and
     // accessors for such properties.
-    internal class CommonProperties
+    internal partial class CommonProperties
     {
         private static readonly int _layoutStateProperty = PropertyStore.CreateKey();
         private static readonly int _specifiedBoundsProperty = PropertyStore.CreateKey();
@@ -57,12 +59,6 @@ namespace System.Windows.Forms.Layout
         private static readonly BitVector32.Section _flowBreakSection = BitVector32.CreateSection(0x01, _anchorNeverShrinksSection);
         private static readonly BitVector32.Section _selfAutoSizingSection = BitVector32.CreateSection(0x01, _flowBreakSection);
         private static readonly BitVector32.Section _autoSizeModeSection = BitVector32.CreateSection(0x01, _selfAutoSizingSection);
-
-        private enum DockAnchorMode
-        {
-            Anchor = 0,
-            Dock = 1
-        }
 
         #region AppliesToAllLayouts
 
@@ -105,6 +101,7 @@ namespace System.Windows.Forms.Layout
             {
                 return padding;
             }
+
             return DefaultMargin;
         }
 
@@ -117,6 +114,7 @@ namespace System.Windows.Forms.Layout
             {
                 return size;
             }
+
             return defaultMaximumSize;
         }
 
@@ -129,6 +127,7 @@ namespace System.Windows.Forms.Layout
             {
                 return size;
             }
+
             return defaultMinimumSize;
         }
 
@@ -137,7 +136,7 @@ namespace System.Windows.Forms.Layout
         ///  Typically the padding is accounted for in either the DisplayRectangle calculation
         ///  and/or the GetPreferredSize calculation of a control.
         ///
-        ///  NOTE:  LayoutEngines should never read this property.  Padding gets incorperated into
+        ///  NOTE:  LayoutEngines should never read this property.  Padding gets incorporated into
         ///  layout by modifying what the control reports for preferred size.
         internal static Padding GetPadding(IArrangedElement element, Padding defaultPadding)
         {
@@ -146,6 +145,7 @@ namespace System.Windows.Forms.Layout
             {
                 return padding;
             }
+
             return defaultPadding;
         }
 
@@ -154,10 +154,11 @@ namespace System.Windows.Forms.Layout
         internal static Rectangle GetSpecifiedBounds(IArrangedElement element)
         {
             Rectangle rectangle = element.Properties.GetRectangle(_specifiedBoundsProperty, out bool found);
-            if (found && rectangle != LayoutUtils.MaxRectangle)
+            if (found && rectangle != LayoutUtils.s_maxRectangle)
             {
                 return rectangle;
             }
+
             return element.Bounds;
         }
 
@@ -165,8 +166,8 @@ namespace System.Windows.Forms.Layout
         ///  clears out the padding from the property store
         internal static void ResetPadding(IArrangedElement element)
         {
-            object value = element.Properties.GetObject(_paddingProperty);
-            if (value != null)
+            object? value = element.Properties.GetObject(_paddingProperty);
+            if (value is not null)
             {
                 element.Properties.RemoveObject(_paddingProperty);
             }
@@ -248,7 +249,7 @@ namespace System.Windows.Forms.Layout
         }
 
         ///  SetPadding
-        ///  Sets the padding (interior space) for an element. See GetPadding for more detiails.
+        ///  Sets the padding (interior space) for an element. See GetPadding for more details.
         ///  NOTE: It is the callers responsibility to do layout.  See Control.Padding for details.
         internal static void SetPadding(IArrangedElement element, Padding value)
         {
@@ -319,7 +320,7 @@ namespace System.Windows.Forms.Layout
                 if (element.Properties.ContainsObject(_specifiedBoundsProperty))
                 {
                     // use MaxRectangle instead of null so we can reuse the SizeWrapper in the property store.
-                    element.Properties.SetRectangle(_specifiedBoundsProperty, LayoutUtils.MaxRectangle);
+                    element.Properties.SetRectangle(_specifiedBoundsProperty, LayoutUtils.s_maxRectangle);
                 }
             }
         }
@@ -338,7 +339,7 @@ namespace System.Windows.Forms.Layout
         ///
         internal static void xClearPreferredSizeCache(IArrangedElement element)
         {
-            element.Properties.SetSize(_preferredSizeCacheProperty, LayoutUtils.InvalidSize);
+            element.Properties.SetSize(_preferredSizeCacheProperty, LayoutUtils.s_invalidSize);
 #if DEBUG
             Debug_ClearProperties(element);
 #endif
@@ -371,10 +372,11 @@ namespace System.Windows.Forms.Layout
         internal static Size xGetPreferredSizeCache(IArrangedElement element)
         {
             Size size = element.Properties.GetSize(_preferredSizeCacheProperty, out bool found);
-            if (found && (size != LayoutUtils.InvalidSize))
+            if (found && (size != LayoutUtils.s_invalidSize))
             {
                 return size;
             }
+
             return Size.Empty;
         }
 
@@ -494,11 +496,13 @@ namespace System.Windows.Forms.Layout
                         return GetSelfAutoSizeInDefaultLayout(element);
                     }
                 }
+
                 // else
                 //   - unknown element type
                 //   - new LayoutEngine which should set the size to the preferredSize anyways.
                 return false;
             }
+
             // autosize false things should selfsize.
             return true;
         }
@@ -544,6 +548,7 @@ namespace System.Windows.Forms.Layout
             {
                 return false;
             }
+
             bool result = (state[_autoSizeSection] != 0) && (state[_dockModeSection] == (int)DockAnchorMode.Anchor);
             Debug.Assert(result == (GetAutoSize(element) && xGetDock(element) == DockStyle.None),
                 "Error detected in xGetAutoSizeAndAnchored.");
@@ -562,7 +567,7 @@ namespace System.Windows.Forms.Layout
 
             // If we are anchored we return DefaultDock
             value = mode == DockAnchorMode.Dock ? value : DefaultDock;
-            Debug.Assert(ClientUtils.IsEnumValid(value, (int)value, (int)DockStyle.None, (int)DockStyle.Fill), "Illegal value returned form xGetDock.");
+            SourceGenerated.EnumValidator.Validate(value);
 
             Debug.Assert(mode == DockAnchorMode.Dock || value == DefaultDock,
                 "xGetDock needs to return the DefaultDock style when not docked.");
@@ -595,7 +600,7 @@ namespace System.Windows.Forms.Layout
         internal static void xSetDock(IArrangedElement element, DockStyle value)
         {
             Debug.Assert(value != xGetDock(element), "PERF: Caller should guard against setting Dock to original value.");
-            Debug.Assert(ClientUtils.IsEnumValid(value, (int)value, (int)DockStyle.None, (int)DockStyle.Fill), "Illegal value passed to xSetDock.");
+            SourceGenerated.EnumValidator.Validate(value);
 
             BitVector32 state = GetLayoutState(element);
 
@@ -611,7 +616,7 @@ namespace System.Windows.Forms.Layout
 
         /// <summary>
         ///  Helper method for xGetAnchor / xSetAnchor.
-        ///  We store anchor DefualtAnchor as None and vice versa.
+        ///  We store anchor DefaultAnchor as None and vice versa.
         ///  We either had to do this or map Dock.None to DefaultAnchor (Dock and Anchor share the same section
         ///  in LayoutState.) Mapping DefaultAnchor to 0 is nicer because we do not need to allocate anything in
         ///  the PropertyStore to get a 0 back from PropertyStore.GetInteger().
@@ -625,6 +630,7 @@ namespace System.Windows.Forms.Layout
                 case DefaultAnchor:
                     return AnchorStyles.None;
             }
+
             return anchor;
         }
 
@@ -653,7 +659,7 @@ namespace System.Windows.Forms.Layout
 
             LayoutTransaction.DoLayout(element.Container, element, PropertyNames.FlowBreak);
 
-            Debug.Assert(GetFlowBreak(element) == value, "Error detected setitng SetFlowBreak.");
+            Debug.Assert(GetFlowBreak(element) == value, "Error detected setting SetFlowBreak.");
         }
         #endregion
         #region AutoScrollSpecific
@@ -670,6 +676,7 @@ namespace System.Windows.Forms.Layout
             {
                 return size;
             }
+
             return Size.Empty;
         }
 
@@ -728,7 +735,7 @@ namespace System.Windows.Forms.Layout
                 {
                     foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(element))
                     {
-                        if (propertyHash.ContainsKey(pd.Name) && (propertyHash[pd.Name].ToString() != pd.Converter.ConvertToString(pd.GetValue(element))))
+                        if (propertyHash.ContainsKey(pd.Name) && (propertyHash[pd.Name]!.ToString() != pd.Converter.ConvertToString(pd.GetValue(element))))
                         {
                             diff += "Prop [ " + pd.Name + "] OLD [" + propertyHash[pd.Name] + "] NEW [" + pd.Converter.ConvertToString(pd.GetValue(element)) + "]\r\n";
                         }
@@ -739,6 +746,7 @@ namespace System.Windows.Forms.Layout
             {
                 diff = "For more info, try enabling PreferredSize trace switch";
             }
+
             return diff;
         }
 
@@ -747,6 +755,7 @@ namespace System.Windows.Forms.Layout
             // DEBUG - store off the old state so we can figure out what has changed in a GPS assert
             element.Properties.SetObject(_lastKnownStateProperty, Debug_GetCurrentPropertyState(element));
         }
+
         internal static void Debug_ClearProperties(IArrangedElement element)
         {
             // DEBUG - clear off the old state so we can figure out what has changed in a GPS assert
@@ -764,6 +773,7 @@ namespace System.Windows.Forms.Layout
                     {
                         continue;  // avoid accidentally forcing a call to GetPreferredSize
                     }
+
                     try
                     {
                         if (pd.IsBrowsable && !pd.IsReadOnly && pd.SerializationVisibility != DesignerSerializationVisibility.Hidden)
@@ -776,6 +786,7 @@ namespace System.Windows.Forms.Layout
                     }
                 }
             }
+
             return propertyHash;
         }
 

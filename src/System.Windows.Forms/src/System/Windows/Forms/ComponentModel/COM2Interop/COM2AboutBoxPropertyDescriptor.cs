@@ -17,10 +17,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private TypeConverter converter;
         private UITypeEditor editor;
 
-        public Com2AboutBoxPropertyDescriptor() : base(Ole32.DispatchID.ABOUTBOX, "About", new Attribute[]{new DispIdAttribute((int)Ole32.DispatchID.ABOUTBOX),
-                                                                                      DesignerSerializationVisibilityAttribute.Hidden,
-                                                                                      new DescriptionAttribute(SR.AboutBoxDesc),
-                                                                                      new ParenthesizePropertyNameAttribute(true)}, true, typeof(string), null, false)
+        public Com2AboutBoxPropertyDescriptor()
+            : base(Ole32.DispatchID.ABOUTBOX, "About",
+                  new Attribute[]
+                  {
+                      new DispIdAttribute((int)Ole32.DispatchID.ABOUTBOX),
+                      DesignerSerializationVisibilityAttribute.Hidden,
+                      new DescriptionAttribute(SR.AboutBoxDesc),
+                      new ParenthesizePropertyNameAttribute(true)
+                  },
+                  true, typeof(string), null, false)
         {
         }
 
@@ -40,9 +46,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     converter = new TypeConverter();
                 }
+
                 return converter;
             }
         }
+
         /// <summary>
         ///  Indicates whether this property is read only.
         /// </summary>
@@ -134,7 +142,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  other words, it indicates whether the state of the property is distinct
         ///  from when the component is first instantiated. If there is a default
         ///  value specified in this PropertyDescriptor, it will be compared against the
-        ///  property's current value to determine this.  If there is't, the
+        ///  property's current value to determine this.  If there isn't, the
         ///  shouldPersistXXX method is looked for and invoked if found.  If both
         ///  these routes fail, true will be returned.
         ///

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Drawing.Imaging;
 
@@ -11,16 +9,22 @@ namespace System.Windows.Forms
 {
     public class ToolStripItemImageRenderEventArgs : ToolStripItemRenderEventArgs
     {
-        public ToolStripItemImageRenderEventArgs(Graphics g, ToolStripItem item, Rectangle imageRectangle) : base(g, item)
+        public ToolStripItemImageRenderEventArgs(Graphics g, ToolStripItem item, Rectangle imageRectangle)
+            : base(g, item)
         {
-            Image = (item != null && item.RightToLeftAutoMirrorImage && item.RightToLeft == RightToLeft.Yes) ? item.MirroredImage : item?.Image;
+            Image = (item.RightToLeftAutoMirrorImage && item.RightToLeft == RightToLeft.Yes) ? item.MirroredImage : item.Image;
             ImageRectangle = imageRectangle;
         }
 
         /// <summary>
         ///  This class represents all the information to render the ToolStrip
         /// </summary>
-        public ToolStripItemImageRenderEventArgs(Graphics g, ToolStripItem item, Image image, Rectangle imageRectangle) : base(g, item)
+        public ToolStripItemImageRenderEventArgs(
+            Graphics g,
+            ToolStripItem item,
+            Image? image,
+            Rectangle imageRectangle)
+            : base(g, item)
         {
             Image = image;
             ImageRectangle = imageRectangle;
@@ -29,7 +33,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The image to draw
         /// </summary>
-        public Image Image { get; }
+        public Image? Image { get; }
 
         /// <summary>
         ///  The rectangle to draw the Image in
@@ -44,6 +48,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Not public as it currently pertains to ToolStripRenderer.
         /// </summary>
-        internal ImageAttributes ImageAttributes { get; set; }
+        internal ImageAttributes? ImageAttributes { get; set; }
     }
 }

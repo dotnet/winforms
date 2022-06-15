@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public class DataGridViewEditingControlShowingEventArgs : EventArgs
@@ -12,8 +10,8 @@ namespace System.Windows.Forms
 
         public DataGridViewEditingControlShowingEventArgs(Control control, DataGridViewCellStyle cellStyle)
         {
-            Control = control;
-            _cellStyle = cellStyle;
+            Control = control.OrThrowIfNull();
+            _cellStyle = cellStyle.OrThrowIfNull();
         }
 
         public Control Control { get; }
@@ -21,7 +19,7 @@ namespace System.Windows.Forms
         public DataGridViewCellStyle CellStyle
         {
             get => _cellStyle;
-            set => _cellStyle = value ?? throw new ArgumentNullException(nameof(value));
+            set => _cellStyle = value.OrThrowIfNull();
         }
     }
 }

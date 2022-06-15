@@ -1,0 +1,7 @@
+﻿{
+  "version": "1.0.0.0",
+  "strings": {
+    "name": "Libreria di classi Windows Form",
+    "description": "Modello di progetto per la creazione di una libreria di classi destinata a Windows Forms (WinForms) .NET."
+  }
+}

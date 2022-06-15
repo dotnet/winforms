@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -13,6 +12,7 @@ internal static partial class Interop
         ///  Implemented by providers which want to provide information about or want to
         ///  reposition contained HWND-based elements.
         /// </summary>
+        [ComImport]
         [Guid("1d5df27c-8947-4425-b8d9-79787bb460b8")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IRawElementProviderHwndOverride

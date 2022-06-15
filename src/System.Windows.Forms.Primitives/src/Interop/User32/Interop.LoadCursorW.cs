@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -32,7 +31,7 @@ internal static partial class Interop
             public const int IDC_HELP = 32651;
         }
 
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern IntPtr LoadCursorW(IntPtr hInstance, IntPtr lpCursorName);
+        [LibraryImport(Libraries.User32)]
+        public static partial IntPtr LoadCursorW(IntPtr hInstance, IntPtr lpCursorName);
     }
 }

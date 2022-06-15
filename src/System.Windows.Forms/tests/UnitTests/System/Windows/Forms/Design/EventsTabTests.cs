@@ -1,13 +1,11 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Drawing;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
@@ -27,7 +25,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void EventsTab_CanExtend_Invoke_ReturnsTrue(object extendee)
         {
             var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
@@ -111,7 +109,12 @@ namespace System.Windows.Forms.Design.Tests
                 .Setup(s => s.GetService(typeof(IEventBindingService)))
                 .Returns(mockEventBindingService.Object);
 
-            foreach (ActiveDesignerEventArgs e in new object[] { null, new ActiveDesignerEventArgs(null, nullMockDesignerHost.Object), new ActiveDesignerEventArgs(null, invalidMockDesignerHost.Object), new ActiveDesignerEventArgs(null, mockDesignerHost.Object) })
+            foreach (ActiveDesignerEventArgs e in new object[]
+                {
+                    new ActiveDesignerEventArgs(null, nullMockDesignerHost.Object),
+                    new ActiveDesignerEventArgs(null, invalidMockDesignerHost.Object),
+                    new ActiveDesignerEventArgs(null, mockDesignerHost.Object)
+                })
             {
                 yield return new object[] { null, e, null };
                 yield return new object[] { new object(), e, null };

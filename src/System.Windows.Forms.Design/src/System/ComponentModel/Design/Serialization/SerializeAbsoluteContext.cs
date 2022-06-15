@@ -19,7 +19,7 @@ namespace System.ComponentModel.Design.Serialization
     public sealed class SerializeAbsoluteContext
     {
         /// <summary>
-        ///  Creeates a new SerializeAbsoluteContext. Member can be null or
+        ///  Creates a new SerializeAbsoluteContext. Member can be null or
         ///  omitted to indicate this context should be used for all members.
         /// </summary>
         public SerializeAbsoluteContext()
@@ -27,7 +27,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Creeates a new SerializeAbsoluteContext. Member can be null or
+        ///  Creates a new SerializeAbsoluteContext. Member can be null or
         ///  omitted to indicate this context should be used for all members.
         /// </summary>
         public SerializeAbsoluteContext(MemberDescriptor member)

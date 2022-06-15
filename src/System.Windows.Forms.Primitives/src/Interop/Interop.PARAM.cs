@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Drawing;
 
 internal partial class Interop
@@ -12,16 +11,14 @@ internal partial class Interop
     /// </summary>
     internal static class PARAM
     {
-        public static IntPtr FromLowHigh(int low, int high)
-            => (IntPtr)ToInt(low, high);
+        public static nint FromLowHigh(int low, int high) => ToInt(low, high);
 
-        public static unsafe IntPtr FromLowHighUnsigned(int low, int high)
+        public static nint FromLowHighUnsigned(int low, int high)
             // Convert the int to an uint before converting it to a pointer type,
             // which ensures the high dword being zero for 64-bit pointers.
             // This corresponds to the logic of the MAKELPARAM/MAKEWPARAM/MAKELRESULT
             // macros.
-            // TODO: Use nint (with 'unchecked') instead of void* when it is available.
-            => (IntPtr)(void*)unchecked((uint)ToInt(low, high));
+            => (nint)(uint)ToInt(low, high);
 
         public static int ToInt(int low, int high)
             => (high << 16) | (low & 0xffff);
@@ -32,51 +29,47 @@ internal partial class Interop
         public static int LOWORD(int n)
             => n & 0xffff;
 
-        public static int LOWORD(IntPtr n)
-            => LOWORD(unchecked((int)(long)n));
+        public static int LOWORD(nint n)
+            => LOWORD((int)n);
 
-        public static int HIWORD(IntPtr n)
-            => HIWORD(unchecked((int)(long)n));
+        public static int HIWORD(nint n)
+            => HIWORD((int)n);
 
-        public static int SignedHIWORD(IntPtr n)
-            => SignedHIWORD(unchecked((int)(long)n));
+        public static int SignedHIWORD(nint n)
+            => SignedHIWORD((int)n);
 
-        public static int SignedLOWORD(IntPtr n)
-            => SignedLOWORD(unchecked((int)(long)n));
+        public static int SignedLOWORD(nint n)
+            => SignedLOWORD(unchecked((int)n));
 
         public static int SignedHIWORD(int n)
-            => (int)(short)HIWORD(n);
+            => (short)HIWORD(n);
 
         public static int SignedLOWORD(int n)
-            => (int)(short)LOWORD(n);
+            => (short)LOWORD(n);
 
-        public static IntPtr FromBool(bool value)
-            => (IntPtr)(value ? BOOL.TRUE : BOOL.FALSE);
-
-        public static IntPtr FromColor(Color color)
-            => (IntPtr)ColorTranslator.ToWin32(color);
+        public static nint FromBool(bool value)
+            => (nint)(value ? BOOL.TRUE : BOOL.FALSE);
 
         /// <summary>
         ///  Hard casts to <see langword="int" /> without bounds checks.
         /// </summary>
-        public static int ToInt(IntPtr param) => (int)(long)param;
+        public static int ToInt(nint param) => (int)param;
 
         /// <summary>
         ///  Hard casts to <see langword="uint" /> without bounds checks.
         /// </summary>
-        public static uint ToUInt(IntPtr param) => (uint)(long)param;
+        public static uint ToUInt(nint param) => (uint)param;
 
         /// <summary>
-        ///  Hard casts to <see langword="long" /> without bounds checks.
+        ///  Packs a <see cref="Point"/> into a PARAM.
         /// </summary>
-        /// <remarks>
-        ///  Technically not needed, but here for completeness.
-        /// </remarks>
-        public static long ToLong(IntPtr param) => (long)param;
+        public static nint FromPoint(Point point)
+            => PARAM.FromLowHigh(point.X, point.Y);
 
         /// <summary>
-        ///  Hard casts to <see langword="ulong" /> without bounds checks.
+        ///  Unpacks a <see cref="Point"/> from a PARAM.
         /// </summary>
-        public static ulong ToULong(IntPtr param) => (ulong)(long)param;
+        public static Point ToPoint(nint param)
+            => new(SignedLOWORD(param), SignedHIWORD(param));
     }
 }

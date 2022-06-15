@@ -19,52 +19,44 @@ namespace System.Drawing.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            // Even though we don't use the editor service this is historically what we did.
+            if (!provider.TryGetService(out IWindowsFormsEditorService _))
             {
-                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
+                return value;
+            }
+
+            _fontDialog ??= new FontDialog
+            {
+                ShowApply = false,
+                ShowColor = false,
+                AllowVerticalFonts = false
+            };
+
+            if (value is Font fontValue)
+            {
+                _fontDialog.Font = fontValue;
+            }
+
+            IntPtr hwndFocus = User32.GetFocus();
+            try
+            {
+                if (_fontDialog.ShowDialog() == DialogResult.OK)
                 {
-                    if (_fontDialog is null)
-                    {
-                        _fontDialog = new FontDialog
-                        {
-                            ShowApply = false,
-                            ShowColor = false,
-                            AllowVerticalFonts = false
-                        };
-                    }
-
-                    if (value is Font fontValue)
-                    {
-                        _fontDialog.Font = fontValue;
-                    }
-
-                    IntPtr hwndFocus = User32.GetFocus();
-                    try
-                    {
-                        if (_fontDialog.ShowDialog() == DialogResult.OK)
-                        {
-                            return _fontDialog.Font;
-                        }
-                    }
-                    finally
-                    {
-                        if (hwndFocus != IntPtr.Zero)
-                        {
-                            User32.SetFocus(hwndFocus);
-                        }
-                    }
+                    return _fontDialog.Font;
+                }
+            }
+            finally
+            {
+                if (hwndFocus != IntPtr.Zero)
+                {
+                    User32.SetFocus(hwndFocus);
                 }
             }
 
             return value;
         }
 
-        /// <summary>
-        ///  Retrieves the editing style of the Edit method.false
-        /// </summary>
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
-        {
-            return UITypeEditorEditStyle.Modal;
-        }
+        /// <inheritdoc />
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.Modal;
     }
 }

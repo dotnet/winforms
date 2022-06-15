@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -56,7 +53,7 @@ namespace System.Windows.Forms
         /// </para>
         /// <para>
         ///   See documentation/repro in
-        ///   /Documentation/src/System/Windows/Forms/TaskDialog/Issue_ButtonClickHandlerCalledTwice.md
+        ///   /docs/src/System/Windows/Forms/TaskDialog/Issue_ButtonClickHandlerCalledTwice.md
         /// </para>
         /// <para>
         ///   Note: We use a WM_APP message with a high value (WM_USER is not
@@ -68,28 +65,10 @@ namespace System.Windows.Forms
         /// </remarks>
         private const User32.WM ContinueButtonClickHandlingMessage = User32.WM.APP + 0x3FFF;
 
-        /// <summary>
-        ///   The delegate for <see cref="HandleTaskDialogNativeCallback"/> which is
-        ///   marshaled as native callback.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        ///   This delegate must be kept alive (protecting it from garbage collection)
-        ///   to ensure the native function pointer doesn't become invalid.
-        /// </para>
-        /// </remarks>
-        // Because marshaling a delegate this will allocate some memory required
-        // to store the native code for the function pointer, we only do this
-        // once by using a static function, and then identify the actual TaskDialog
-        // instance by using a GCHandle in the reference data field (like an
-        // object pointer).
-        private static readonly ComCtl32.PFTASKDIALOGCALLBACK s_callbackProcDelegate =
-            HandleTaskDialogNativeCallback;
-
         private TaskDialogPage? _boundPage;
 
         /// <summary>
-        ///   A qeueue of <see cref="TaskDialogPage"/>s that have been bound by
+        ///   A queue of <see cref="TaskDialogPage"/>s that have been bound by
         ///   navigating the dialog, but don't yet reflect the state of the
         ///   native dialog because the corresponding
         ///   <see cref="ComCtl32.TDN.NAVIGATED"/> notification was
@@ -282,6 +261,7 @@ namespace System.Windows.Forms
 
         private static void FreeConfig(IntPtr ptrToFree) => Marshal.FreeHGlobal(ptrToFree);
 
+        [UnmanagedCallersOnly]
         private static HRESULT HandleTaskDialogNativeCallback(
             IntPtr hwnd,
             ComCtl32.TDN msg,
@@ -342,7 +322,7 @@ namespace System.Windows.Forms
         public static TaskDialogButton ShowDialog(TaskDialogPage page,
                                                   TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
             => ShowDialog(IntPtr.Zero,
-                          page ?? throw new ArgumentNullException(nameof(page)),
+                          page.OrThrowIfNull(),
                           startupLocation);
 
         /// <summary>
@@ -374,8 +354,8 @@ namespace System.Windows.Forms
         /// </exception>
         public static TaskDialogButton ShowDialog(IWin32Window owner, TaskDialogPage page,
                                                   TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
-            => ShowDialog(owner?.Handle ?? throw new ArgumentNullException(nameof(owner)),
-                          page ?? throw new ArgumentNullException(nameof(page)),
+            => ShowDialog(owner.OrThrowIfNull().Handle,
+                          page.OrThrowIfNull(),
                           startupLocation);
 
         /// <summary>
@@ -409,10 +389,7 @@ namespace System.Windows.Forms
         public static unsafe TaskDialogButton ShowDialog(IntPtr hwndOwner, TaskDialogPage page,
                                                   TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
         {
-            if (page is null)
-            {
-                throw new ArgumentNullException(nameof(page));
-            }
+            ArgumentNullException.ThrowIfNull(page);
 
             TaskDialog dialog = new TaskDialog();
             return dialog.ShowDialogInternal(hwndOwner, page, startupLocation);
@@ -470,7 +447,7 @@ namespace System.Windows.Forms
                     // problems because the callback delegate for the subclassed
                     // WndProc might already have been freed).
                     //
-                    // Therefore, we neeed to catch all exceptions in the
+                    // Therefore, we need to catch all exceptions in the
                     // native -> managed transition, and when one occurs, call
                     // Application.OnThreadException().
                     //
@@ -519,7 +496,7 @@ namespace System.Windows.Forms
 
                     // Normally, the returned button ID should always equal the cached
                     // result button ID. However, in some cases when the dialog is closed
-                    // abormally (e.g. when closing the main window while a modeless task
+                    // abnormally (e.g. when closing the main window while a modeless task
                     // dialog is displayed), the dialog returns IDCANCEL (2) without
                     // priorly raising the TDN_BUTTON_CLICKED notification.
                     // Therefore, in that case we need to retrieve the button ourselves.
@@ -578,21 +555,6 @@ namespace System.Windows.Forms
                     }
 
                     _waitingNavigationPages.Clear();
-
-                    // We need to ensure the callback delegate is not garbage-collected
-                    // as long as TaskDialogIndirect doesn't return, by calling
-                    // GC.KeepAlive().
-                    //
-                    // This is not an exaggeration, as the comment for GC.KeepAlive()
-                    // says the following:
-                    // The JIT is very aggressive about keeping an
-                    // object's lifetime to as small a window as possible, to the point
-                    // where a 'this' pointer isn't considered live in an instance method
-                    // unless you read a value from the instance.
-                    //
-                    // Note: As this is a static field, the call to GC.KeepAlive() might be
-                    // superfluous here, but we still do it to be safe.
-                    GC.KeepAlive(s_callbackProcDelegate);
                 }
             }
             finally
@@ -690,6 +652,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(min));
             }
+
             if (max < 0 || max > ushort.MaxValue)
             {
                 throw new ArgumentOutOfRangeException(nameof(max));
@@ -843,7 +806,7 @@ namespace System.Windows.Forms
             ComCtl32.TDN notification,
             IntPtr wParam)
         {
-            Debug.Assert(_boundPage != null);
+            Debug.Assert(_boundPage is not null);
 
             // Set the hWnd as this may be the first time that we get it.
             bool isFirstNotification = _handle == IntPtr.Zero;
@@ -874,6 +837,7 @@ namespace System.Windows.Forms
                             _raisedPageCreated = true;
                             _boundPage.OnCreated(EventArgs.Empty);
                         }
+
                         break;
 
                     case ComCtl32.TDN.NAVIGATED:
@@ -942,6 +906,7 @@ namespace System.Windows.Forms
                             // with the 'Destroyed' notification.
                             _handle = IntPtr.Zero;
                         }
+
                         break;
 
                     case ComCtl32.TDN.BUTTON_CLICKED:
@@ -996,7 +961,7 @@ namespace System.Windows.Forms
                             // the native TaskDialog.
                             //
                             // See documentation/repro in
-                            // /Documentation/src/System/Windows/Forms/TaskDialog/Issue_AccessViolation_NavigationInButtonClicked.md
+                            // /docs/src/System/Windows/Forms/TaskDialog/Issue_AccessViolation_NavigationInButtonClicked.md
                             //
                             // To fix the memory access problems, we simply always return
                             // S_FALSE when the callback received a TDN_NAVIGATED
@@ -1005,6 +970,7 @@ namespace System.Windows.Forms
                             {
                                 _buttonClickNavigationCounter.stackCount++;
                             }
+
                             try
                             {
                                 applyButtonResult = button.HandleButtonClicked();
@@ -1042,7 +1008,7 @@ namespace System.Windows.Forms
                             // override the previously set result, which would mean the
                             // button returned from Show() would not match one specified
                             // in the "Closing" event's args.
-                            if (_resultButton != null)
+                            if (_resultButton is not null)
                             {
                                 applyButtonResult = false;
                             }
@@ -1072,6 +1038,7 @@ namespace System.Windows.Forms
                         {
                             RadioButtonClickedStackCount++;
                         }
+
                         try
                         {
                             radioButton.HandleRadioButtonClicked();
@@ -1117,7 +1084,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal unsafe void Navigate(TaskDialogPage page)
         {
-            // We allow to nagivate the dialog even if the previous navigation did
+            // We allow to navigate the dialog even if the previous navigation did
             // not complete yet, as this seems to work in the native implementation.
             DenyIfDialogNotUpdatable(checkWaitingForNavigation: false);
 
@@ -1134,7 +1101,7 @@ namespace System.Windows.Forms
             // until we receive the TDN_NAVIGATED notification).
             // See:
             // https://github.com/dotnet/winforms/issues/146#issuecomment-466784079
-            // and /Documentation/src/System/Windows/Forms/TaskDialog/Issue_AccessViolation_NavigationInRadioButtonClicked.md
+            // and /docs/src/System/Windows/Forms/TaskDialog/Issue_AccessViolation_NavigationInRadioButtonClicked.md
             if (RadioButtonClickedStackCount > 0)
             {
                 throw new InvalidOperationException(string.Format(
@@ -1157,7 +1124,7 @@ namespace System.Windows.Forms
             // the dialog was closed abnormally without a prior TDN_BUTTON_CLICKED
             // notification (e.g. when closing the main application window while a modeless
             // task dialog is showing).
-            if (_resultButton != null || _receivedDestroyedNotification)
+            if (_resultButton is not null || _receivedDestroyedNotification)
             {
                 throw new InvalidOperationException(SR.TaskDialogCannotNavigateClosedDialog);
             }
@@ -1180,7 +1147,7 @@ namespace System.Windows.Forms
                     // button click that closed the dialog.
                     // TODO: Another option would be to disallow button clicks while
                     // within the event handler.
-                    if (_resultButton != null)
+                    if (_resultButton is not null)
                     {
                         throw new InvalidOperationException(SR.TaskDialogCannotNavigateClosedDialog);
                     }
@@ -1387,7 +1354,7 @@ namespace System.Windows.Forms
                             pszFooter = MarshalString(page.Footnote?.Text),
                             nDefaultButton = defaultButtonID,
                             nDefaultRadioButton = defaultRadioButtonID,
-                            pfCallback = Marshal.GetFunctionPointerForDelegate(s_callbackProcDelegate),
+                            pfCallback = &HandleTaskDialogNativeCallback,
                             lpCallbackData = _instanceHandlePtr
                         };
 
@@ -1491,10 +1458,8 @@ namespace System.Windows.Forms
 
                 // Align the pointer to the next align size. If not specified,
                 // we will use the pointer (register) size.
-                // TODO: Use nuint (System.UIntN) once available instead of
-                // ulong to avoid the overhead for 32-bit platforms.
-                ulong add = (ulong)(alignment ?? IntPtr.Size) - 1;
-                currentPtr = (byte*)(((ulong)currentPtr + add) & ~add);
+                nuint add = (nuint)(alignment ?? IntPtr.Size) - 1;
+                currentPtr = (byte*)(((nuint)currentPtr + add) & ~add);
             }
 
             static long SizeOfString(string? str)
@@ -1505,7 +1470,7 @@ namespace System.Windows.Forms
 
         private void SubclassWindow()
         {
-            if (_windowSubclassHandler != null)
+            if (_windowSubclassHandler is not null)
             {
                 throw new InvalidOperationException();
             }
@@ -1517,7 +1482,7 @@ namespace System.Windows.Forms
 
         private void UnsubclassWindow()
         {
-            if (_windowSubclassHandler != null)
+            if (_windowSubclassHandler is not null)
             {
                 try
                 {
@@ -1537,7 +1502,7 @@ namespace System.Windows.Forms
 
         private void DenyIfBound()
         {
-            if (_boundPage != null)
+            if (_boundPage is not null)
             {
                 throw new InvalidOperationException(SR.TaskDialogCannotSetPropertyOfShownDialog);
             }
@@ -1569,7 +1534,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool CanCatchCallbackException()
+        private static bool CanCatchCallbackException()
         {
             // Catch all exceptions, except when the NativeWindow indicates
             // that a debuggable WndProc callback should be used, in which
@@ -1583,7 +1548,7 @@ namespace System.Windows.Forms
         ///   Called when an exception occurs in dispatching messages through
         ///   the task dialog callback or its window procedure.
         /// </summary>
-        private void HandleCallbackException(Exception e) => Application.OnThreadException(e);
+        private static void HandleCallbackException(Exception e) => Application.OnThreadException(e);
 
         private void SendTaskDialogMessage(
             ComCtl32.TDM message,

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
@@ -12,21 +10,21 @@ namespace System.Windows.Forms
 {
     public abstract class BindingManagerBase
     {
-        private BindingsCollection _bindings;
+        private BindingsCollection? _bindings;
         private bool _pullingData;
 
-        protected EventHandler onCurrentChangedHandler; // Don't rename (breaking change)
+        protected EventHandler? onCurrentChangedHandler; // Don't rename (breaking change)
 
-        protected EventHandler onPositionChangedHandler; // Don't rename (breaking change)
+        protected EventHandler? onPositionChangedHandler; // Don't rename (breaking change)
 
         // Hook BindingComplete events on all owned Binding objects, and propagate those events through our own BindingComplete event
-        private BindingCompleteEventHandler _onBindingCompleteHandler;
+        private BindingCompleteEventHandler? _onBindingCompleteHandler;
 
         // same deal about the new currentItemChanged event
-        private protected EventHandler _onCurrentItemChangedHandler;
+        private protected EventHandler? _onCurrentItemChangedHandler;
 
         // Event handler for the DataError event
-        private BindingManagerDataErrorEventHandler _onDataErrorHandler;
+        private BindingManagerDataErrorEventHandler? _onDataErrorHandler;
 
         public BindingsCollection Bindings
         {
@@ -72,17 +70,18 @@ namespace System.Windows.Forms
 
         internal abstract Type BindType { get; }
 
-        internal abstract PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors);
+        internal abstract PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[]? listAccessors);
 
         public virtual PropertyDescriptorCollection GetItemProperties() => GetItemProperties(null);
 
-        protected internal virtual PropertyDescriptorCollection GetItemProperties(ArrayList dataSources, ArrayList listAccessors)
+        protected internal virtual PropertyDescriptorCollection? GetItemProperties(ArrayList dataSources, ArrayList listAccessors)
         {
-            IList list = null;
+            IList? list = null;
             if (this is CurrencyManager currencyManager)
             {
                 list = currencyManager.List;
             }
+
             if (list is ITypedList typedList)
             {
                 PropertyDescriptor[] properties = new PropertyDescriptor[listAccessors.Count];
@@ -93,7 +92,7 @@ namespace System.Windows.Forms
             return GetItemProperties(BindType, 0, dataSources, listAccessors);
         }
 
-        protected virtual PropertyDescriptorCollection GetItemProperties(Type listType, int offset, ArrayList dataSources, ArrayList listAccessors)
+        protected virtual PropertyDescriptorCollection? GetItemProperties(Type listType, int offset, ArrayList dataSources, ArrayList listAccessors)
         {
             if (listAccessors.Count < offset)
             {
@@ -118,7 +117,7 @@ namespace System.Windows.Forms
                 // return the properties on the type of the first element in the list
                 if (dataSources[offset - 1] is IList list && list.Count > 0)
                 {
-                    return TypeDescriptor.GetProperties(list[0]);
+                    return TypeDescriptor.GetProperties(list[0]!);
                 }
 
                 return null;
@@ -126,7 +125,7 @@ namespace System.Windows.Forms
 
             if (typeof(IList).IsAssignableFrom(listType))
             {
-                PropertyDescriptorCollection itemProps = null;
+                PropertyDescriptorCollection? itemProps = null;
                 foreach (PropertyInfo property in listType.GetProperties())
                 {
                     if (property.Name == "Item" && property.PropertyType != typeof(object))
@@ -142,7 +141,7 @@ namespace System.Windows.Forms
                     // if offset == 0, then this means that the first dataSource did not have a strongly typed Item property.
                     // the dataSources are added only for relatedCurrencyManagers, so in this particular case
                     // we need to use the dataSource in the currencyManager.
-                    IList list;
+                    IList? list;
                     if (offset == 0)
                     {
                         list = DataSource as IList;
@@ -151,13 +150,14 @@ namespace System.Windows.Forms
                     {
                         list = dataSources[offset - 1] as IList;
                     }
-                    if (list != null && list.Count > 0)
+
+                    if (list is not null && list.Count > 0)
                     {
-                        itemProps = TypeDescriptor.GetProperties(list[0]);
+                        itemProps = TypeDescriptor.GetProperties(list[0]!);
                     }
                 }
 
-                if (itemProps != null)
+                if (itemProps is not null)
                 {
                     for (int j = 0; j < itemProps.Count; j++)
                     {
@@ -172,7 +172,7 @@ namespace System.Windows.Forms
             {
                 foreach (PropertyInfo property in listType.GetProperties())
                 {
-                    if (property.Name.Equals(((PropertyDescriptor)listAccessors[offset]).Name))
+                    if (property.Name.Equals(((PropertyDescriptor)listAccessors[offset]!).Name))
                     {
                         return GetItemProperties(property.PropertyType, offset + 1, dataSources, listAccessors);
                     }
@@ -223,7 +223,7 @@ namespace System.Windows.Forms
 
         protected abstract void UpdateIsBinding();
 
-        protected internal abstract string GetListName(ArrayList listAccessors);
+        protected internal abstract string GetListName(ArrayList? listAccessors);
 
         public abstract void SuspendBinding();
 
@@ -291,41 +291,45 @@ namespace System.Windows.Forms
         ///  items that were in the collection before the change, then adding handlers for whatever items are
         ///  in the collection after the change.
         /// </summary>
-        private void OnBindingsCollectionChanged(object sender, CollectionChangeEventArgs e)
+        private void OnBindingsCollectionChanged(object? sender, CollectionChangeEventArgs e)
         {
-            Binding b = e.Element as Binding;
+            if (e.Element is not Binding binding)
+            {
+                return;
+            }
 
             switch (e.Action)
             {
                 case CollectionChangeAction.Add:
-                    b.BindingComplete += new BindingCompleteEventHandler(Binding_BindingComplete);
+                    binding.BindingComplete += new BindingCompleteEventHandler(Binding_BindingComplete);
                     break;
                 case CollectionChangeAction.Remove:
-                    b.BindingComplete -= new BindingCompleteEventHandler(Binding_BindingComplete);
+                    binding.BindingComplete -= new BindingCompleteEventHandler(Binding_BindingComplete);
                     break;
                 case CollectionChangeAction.Refresh:
-                    foreach (Binding bi in _bindings)
+                    foreach (Binding bi in Bindings)
                     {
                         bi.BindingComplete += new BindingCompleteEventHandler(Binding_BindingComplete);
                     }
+
                     break;
             }
         }
 
-        private void OnBindingsCollectionChanging(object sender, CollectionChangeEventArgs e)
+        private void OnBindingsCollectionChanging(object? sender, CollectionChangeEventArgs e)
         {
             if (e.Action != CollectionChangeAction.Refresh)
             {
                 return;
             }
 
-            foreach (Binding bi in _bindings)
+            foreach (Binding bi in Bindings)
             {
                 bi.BindingComplete -= new BindingCompleteEventHandler(Binding_BindingComplete);
             }
         }
 
-        private void Binding_BindingComplete(object sender, BindingCompleteEventArgs args)
+        private void Binding_BindingComplete(object? sender, BindingCompleteEventArgs args)
         {
             OnBindingComplete(args);
         }

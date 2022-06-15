@@ -3,13 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using static Interop.User32;
@@ -167,7 +165,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true, 0x562110C1)]
         [InlineData(false, 0x562100C1)]
-        public void ListBox_CreateParams_GetScrolAlwaysVisible_ReturnsExpected(bool scrollAlwaysVisible, int expectedStyle)
+        public void ListBox_CreateParams_GetScrollAlwaysVisible_ReturnsExpected(bool scrollAlwaysVisible, int expectedStyle)
         {
             using var control = new SubListBox
             {
@@ -479,7 +477,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void ListBox_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new ListBox
@@ -538,7 +536,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void ListBox_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new ListBox
@@ -590,7 +588,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
         public void ListBox_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
         {
             using var control = new ListBox();
@@ -598,7 +596,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BorderStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BorderStyle))]
         public void ListBox_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
         {
             using var control = new ListBox()
@@ -650,7 +648,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle))]
         public void ListBox_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
         {
             using var control = new ListBox();
@@ -775,7 +773,7 @@ namespace System.Windows.Forms.Tests
             control.ColumnWidth = 123;
 
             RECT rc = default;
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)LB.GETITEMRECT, (IntPtr)0, ref rc));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETITEMRECT, 0, ref rc));
             Assert.Equal(123, ((Rectangle)rc).Width);
         }
 
@@ -950,7 +948,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("DrawMode", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -1028,7 +1027,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DrawMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DrawMode))]
         public void ListBox_DrawMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(DrawMode value)
         {
             using var control = new ListBox();
@@ -1467,10 +1466,10 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             Assert.Equal(0, control.HorizontalExtent);
-            Assert.Equal((IntPtr)0, SendMessageW(control.Handle, (WM)LB.GETHORIZONTALEXTENT));
+            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETHORIZONTALEXTENT));
 
             control.HorizontalExtent = 10;
-            Assert.Equal((IntPtr)expected, SendMessageW(control.Handle, (WM)LB.GETHORIZONTALEXTENT));
+            Assert.Equal(expected, SendMessageW(control.Handle, (WM)LB.GETHORIZONTALEXTENT));
         }
 
         public static IEnumerable<object[]> HorizontalScrollbar_Set_TestData()
@@ -1643,7 +1642,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ListBox_IntegralHeight_Set_GetReturnsExpected(bool value)
         {
             using var control = new ListBox
@@ -1806,7 +1805,7 @@ namespace System.Windows.Forms.Tests
             };
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(expected, SendMessageW(control.Handle, (WM)LB.GETITEMHEIGHT) == (IntPtr)25);
+            Assert.Equal(expected, SendMessageW(control.Handle, (WM)LB.GETITEMHEIGHT) == 25);
         }
 
         [WinFormsTheory]
@@ -1970,7 +1969,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void ListBox_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new ListBox
@@ -1987,7 +1986,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void ListBox_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new ListBox();
@@ -2178,7 +2177,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void ListBox_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var control = new ListBox
@@ -2230,7 +2229,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
         public void ListBox_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
             using var control = new ListBox();
@@ -2238,7 +2237,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ListBox_ScrollAlwaysVisible_Set_GetReturnsExpected(bool value)
         {
             using var control = new ListBox
@@ -2298,7 +2297,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SelectionMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SelectionMode))]
         public void ListBox_SelectedIndex_GetEmptyWithHandle_ReturnsMinusOne(SelectionMode selectionMode)
         {
             using var control = new ListBox
@@ -2311,7 +2310,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SelectionMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SelectionMode))]
         public void ListBox_SelectedIndex_GetNotEmptyWithHandle_ReturnsMinusOne(SelectionMode selectionMode)
         {
             using var control = new ListBox
@@ -2634,15 +2633,15 @@ namespace System.Windows.Forms.Tests
             // Select last.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.SelectedIndex = 1;
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
 
             // Select first.
             control.SelectedIndex = 0;
-            Assert.Equal((IntPtr)0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
 
             // Clear selection.
             control.SelectedIndex = -1;
-            Assert.Equal((IntPtr)(-1), SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(-1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
         }
 
         [WinFormsTheory]
@@ -2661,21 +2660,21 @@ namespace System.Windows.Forms.Tests
             // Select last.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.SelectedIndex = 1;
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
             Span<int> buffer = stackalloc int[5];
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, (IntPtr)buffer.Length, ref buffer[0]));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, buffer.Length, ref buffer[0]));
             Assert.Equal(new int[] { 1, 0, 0, 0, 0 }, buffer.ToArray());
 
             // Select first.
             control.SelectedIndex = 0;
-            Assert.Equal((IntPtr)0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
-            Assert.Equal((IntPtr)2, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, (IntPtr)buffer.Length, ref buffer[0]));
+            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(2, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, buffer.Length, ref buffer[0]));
             Assert.Equal(new int[] { 0, 1, 0, 0, 0 }, buffer.ToArray());
 
             // Clear selection.
             control.SelectedIndex = -1;
-            Assert.Equal((IntPtr)0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
-            Assert.Equal((IntPtr)0, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, (IntPtr)buffer.Length, ref buffer[0]));
+            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, buffer.Length, ref buffer[0]));
             Assert.Equal(new int[] { 0, 1, 0, 0, 0 }, buffer.ToArray());
         }
 
@@ -2761,7 +2760,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SelectionMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SelectionMode))]
         public void ListBox_SelectedItem_GetEmptyWithHandle_ReturnsNull(SelectionMode selectionMode)
         {
             using var control = new ListBox
@@ -2774,7 +2773,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SelectionMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SelectionMode))]
         public void ListBox_SelectedItem_GetNotEmptyWithHandle_ReturnsNull(SelectionMode selectionMode)
         {
             using var control = new ListBox
@@ -3147,19 +3146,19 @@ namespace System.Windows.Forms.Tests
             // Select last.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.SelectedItem = "item2";
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
 
             // Select invalid.
             control.SelectedItem = "NoSuchItem";
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
 
             // Select first.
             control.SelectedItem = "item1";
-            Assert.Equal((IntPtr)0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
 
             // Clear selection.
             control.SelectedItem = null;
-            Assert.Equal((IntPtr)(-1), SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(-1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
         }
 
         [WinFormsTheory]
@@ -3178,28 +3177,28 @@ namespace System.Windows.Forms.Tests
             // Select last.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.SelectedItem = "item2";
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
             Span<int> buffer = stackalloc int[5];
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, (IntPtr)buffer.Length, ref buffer[0]));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, buffer.Length, ref buffer[0]));
             Assert.Equal(new int[] { 1, 0, 0, 0, 0 }, buffer.ToArray());
 
             // Select invalid.
             control.SelectedItem = "NoSuchItem";
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
             buffer = stackalloc int[5];
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, (IntPtr)buffer.Length, ref buffer[0]));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, buffer.Length, ref buffer[0]));
             Assert.Equal(new int[] { 1, 0, 0, 0, 0 }, buffer.ToArray());
 
             // Select first.
             control.SelectedItem = "item1";
-            Assert.Equal((IntPtr)0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
-            Assert.Equal((IntPtr)2, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, (IntPtr)buffer.Length, ref buffer[0]));
+            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(2, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, buffer.Length, ref buffer[0]));
             Assert.Equal(new int[] { 0, 1, 0, 0, 0 }, buffer.ToArray());
 
             // Clear selection.
             control.SelectedItem = null;
-            Assert.Equal((IntPtr)0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
-            Assert.Equal((IntPtr)0, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, (IntPtr)buffer.Length, ref buffer[0]));
+            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, buffer.Length, ref buffer[0]));
             Assert.Equal(new int[] { 0, 1, 0, 0, 0 }, buffer.ToArray());
         }
 
@@ -3360,7 +3359,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SelectionMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SelectionMode))]
         public void ListBox_SelectionMode_SetEmpty_GetReturnsExpected(SelectionMode value)
         {
             using var control = new ListBox
@@ -3905,7 +3904,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SelectionMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SelectionMode))]
         public void ListBox_SelectionMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(SelectionMode value)
         {
             using var control = new ListBox();
@@ -3913,7 +3912,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ListBox_Sorted_SetWithoutItems_GetReturnsExpected(bool value)
         {
             using var control = new ListBox
@@ -3938,7 +3937,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ListBox_Sorted_SetWithEmptyItems_GetReturnsExpected(bool value)
         {
             using var control = new ListBox();
@@ -3995,7 +3994,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ListBox_Sorted_SetWithoutItemsWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new ListBox();
@@ -4035,7 +4034,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ListBox_Sorted_SetWithEmptyItemsWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new ListBox();
@@ -4118,7 +4117,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListBox_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new ListBox
@@ -4237,7 +4236,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListBox_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new ListBox();
@@ -4435,11 +4434,11 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.TopIndex = 1;
-            Assert.Equal((IntPtr)0, SendMessageW(control.Handle, (WM)LB.GETTOPINDEX));
+            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETTOPINDEX));
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ListBox_UseCustomTabOffsets_Set_GetReturnsExpected(bool value)
         {
             using var control = new ListBox
@@ -4499,7 +4498,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ListBox_UseTabStops_Set_GetReturnsExpected(bool value)
         {
             using var control = new ListBox
@@ -4752,16 +4751,25 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [WinFormsFact]
-        public void ListBox_CreateAccessibilityInstance_Invoke_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.List)]
+        [InlineData(false, AccessibleRole.None)]
+        public void ListBox_CreateAccessibilityInstance_Invoke_ReturnsExpected(bool createControl, AccessibleRole accessibleRole)
         {
             using var control = new SubListBox();
+
+            if (createControl)
+            {
+                control.CreateControl();
+            }
+
             Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
             Assert.NotNull(instance);
             Assert.Same(control, instance.Owner);
-            Assert.Equal(AccessibleRole.List, instance.Role);
+            Assert.Equal(accessibleRole, instance.Role);
             Assert.NotSame(control.CreateAccessibilityInstance(), instance);
             Assert.NotSame(control.AccessibilityObject, instance);
+            Assert.Equal(createControl, control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -5137,7 +5145,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DrawMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DrawMode))]
         public void ListBox_GetItemHeight_InvokeEmptyWithoutHandle_ReturnsExpected(DrawMode drawMode)
         {
             using var control = new ListBox
@@ -5486,7 +5494,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ListBox_OnClick_Invoke_CallsClick(EventArgs eventArgs)
         {
             using var control = new SubListBox();
@@ -5511,9 +5519,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> OnDrawItem_TestData()
         {
-            using var bitmap = new Bitmap(10, 10);
-            using Graphics graphics = Graphics.FromImage(bitmap);
             yield return new object[] { null };
+
+            var bitmap = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(bitmap);
             yield return new object[] { new DrawItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), 0, DrawItemState.Checked) };
         }
 
@@ -5542,7 +5551,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ListBox_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
         {
             using var control = new SubListBox();
@@ -5568,7 +5577,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ListBox_OnGotFocus_Invoke_CallsGotFocus(EventArgs eventArgs)
         {
             using var control = new SubListBox();
@@ -5594,7 +5603,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ListBox_OnGotFocus_InvokeWithHandle_CallsGotFocus(EventArgs eventArgs)
         {
             using var control = new SubListBox();
@@ -5664,7 +5673,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ListBox_OnMouseClick_Invoke_CallsMouseClick(MouseEventArgs eventArgs)
         {
             using var control = new SubListBox();
@@ -5688,7 +5697,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void ListBox_OnPaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
         {
             using var control = new SubListBox();
@@ -5712,7 +5721,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ListBox_OnSelectedIndexChanged_Invoke_CallsSelectedIndexChanged(EventArgs eventArgs)
         {
             using var control = new SubListBox();
@@ -5748,7 +5757,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ListBox_OnSelectedIndexChanged_InvokeWithHandle_CallsSelectedIndexChanged(EventArgs eventArgs)
         {
             using var control = new SubListBox();
@@ -5853,7 +5862,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ListBox_OnSelectedValueChanged_Invoke_CallsSelectedValueChanged(EventArgs eventArgs)
         {
             using var control = new SubListBox();
@@ -6101,6 +6110,158 @@ namespace System.Windows.Forms.Tests
             control.Items.Add(item1);
             control.Items.Add("item2");
             Assert.Equal(expected, control.ToString());
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListBox_Remove_NotSelectedItems_IfOneItemSelected(bool createControl)
+        {
+            using ListBox listBox = new();
+
+            if (createControl)
+            {
+                listBox.CreateControl();
+            }
+
+            listBox.Items.AddRange(new object[] { "1", "2", "3" });
+            listBox.SelectedItem = listBox.Items[0];
+
+            Assert.Equal(3, listBox.Items.Count);
+            Assert.Equal(listBox.Items[0], listBox.SelectedItem);
+            Assert.Equal(0, listBox.SelectedIndex);
+            Assert.Equal(1, listBox.SelectedIndices.Count);
+            Assert.Equal(1, listBox.SelectedItems.Count);
+
+            listBox.Items.Remove(listBox.Items[2]);
+
+            Assert.Equal(2, listBox.Items.Count);
+            Assert.Equal(listBox.Items[0], listBox.SelectedItem);
+            Assert.Equal(0, listBox.SelectedIndex);
+            Assert.Equal(1, listBox.SelectedIndices.Count);
+            Assert.Equal(1, listBox.SelectedItems.Count);
+
+            listBox.Items.Remove(listBox.Items[1]);
+
+            Assert.Equal(1, listBox.Items.Count);
+            Assert.Equal(listBox.Items[0], listBox.SelectedItem);
+            Assert.Equal(0, listBox.SelectedIndex);
+            Assert.Equal(1, listBox.SelectedIndices.Count);
+            Assert.Equal(1, listBox.SelectedItems.Count);
+            Assert.Equal(createControl, listBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(SelectionMode.MultiSimple, true)]
+        [InlineData(SelectionMode.MultiSimple, false)]
+        [InlineData(SelectionMode.MultiExtended, true)]
+        [InlineData(SelectionMode.MultiExtended, false)]
+        public void ListBox_Remove_NotSelectedItems_IfSeveralItemsSelected(SelectionMode mode, bool createControl)
+        {
+            using ListBox listBox = new() { SelectionMode = mode };
+
+            if (createControl)
+            {
+                listBox.CreateControl();
+            }
+
+            listBox.Items.AddRange(new object[] { "1", "2", "3", "4" });
+            listBox.SelectedItems.Add(listBox.Items[0]);
+            listBox.SelectedItems.Add(listBox.Items[1]);
+
+            Assert.Equal(4, listBox.Items.Count);
+            Assert.Equal(listBox.Items[0], listBox.SelectedItem);
+            Assert.Equal(0, listBox.SelectedIndex);
+            Assert.Equal(2, listBox.SelectedIndices.Count);
+            Assert.Equal(2, listBox.SelectedItems.Count);
+
+            listBox.Items.Remove(listBox.Items[3]);
+
+            Assert.Equal(3, listBox.Items.Count);
+            Assert.Equal(listBox.Items[0], listBox.SelectedItem);
+            Assert.Equal(0, listBox.SelectedIndex);
+            Assert.Equal(2, listBox.SelectedIndices.Count);
+            Assert.Equal(2, listBox.SelectedItems.Count);
+
+            listBox.Items.Remove(listBox.Items[2]);
+
+            Assert.Equal(2, listBox.Items.Count);
+            Assert.Equal(listBox.Items[0], listBox.SelectedItem);
+            Assert.Equal(0, listBox.SelectedIndex);
+            Assert.Equal(2, listBox.SelectedIndices.Count);
+            Assert.Equal(2, listBox.SelectedItems.Count);
+            Assert.Equal(createControl, listBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListBox_Remove_SelectedItem(bool createControl)
+        {
+            using ListBox listBox = new();
+
+            if (createControl)
+            {
+                listBox.CreateControl();
+            }
+
+            listBox.Items.AddRange(new object[] { "1", "2", "3" });
+
+            for (int count = listBox.Items.Count; count > 1; count -= 1)
+            {
+                listBox.SelectedItem = listBox.Items[0];
+
+                Assert.Equal(listBox.Items[0], listBox.SelectedItem);
+                Assert.Equal(0, listBox.SelectedIndex);
+                Assert.Equal(1, listBox.SelectedIndices.Count);
+                Assert.Equal(1, listBox.SelectedItems.Count);
+
+                listBox.Items.Remove(listBox.Items[0]);
+                count -= 1;
+
+                Assert.Equal(count, listBox.Items.Count);
+                Assert.Null(listBox.SelectedItem);
+                Assert.Equal(-1, listBox.SelectedIndex);
+                Assert.Equal(0, listBox.SelectedIndices.Count);
+                Assert.Equal(0, listBox.SelectedItems.Count);
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(SelectionMode.MultiSimple, true)]
+        [InlineData(SelectionMode.MultiSimple, false)]
+        [InlineData(SelectionMode.MultiExtended, true)]
+        [InlineData(SelectionMode.MultiExtended, false)]
+        public void ListBox_Remove_SelectedItems(SelectionMode mode, bool createControl)
+        {
+            using ListBox listBox = new() { SelectionMode = mode };
+
+            if (createControl)
+            {
+                listBox.CreateControl();
+            }
+
+            listBox.Items.AddRange(new object[] { "1", "2", "3" });
+
+            for (int count = listBox.Items.Count; count > 1; count -= 1)
+            {
+                listBox.SelectedItems.Add(listBox.Items[0]);
+
+                Assert.Equal(listBox.Items[0], listBox.SelectedItem);
+                Assert.Equal(0, listBox.SelectedIndex);
+                Assert.Equal(1, listBox.SelectedIndices.Count);
+                Assert.Equal(1, listBox.SelectedItems.Count);
+
+                listBox.Items.Remove(listBox.Items[0]);
+
+                count -= 1;
+
+                Assert.Equal(count, listBox.Items.Count);
+                Assert.Null(listBox.SelectedItem);
+                Assert.Equal(-1, listBox.SelectedIndex);
+                Assert.Equal(0, listBox.SelectedIndices.Count);
+                Assert.Equal(0, listBox.SelectedItems.Count);
+            }
         }
 
         private class SubListBox : ListBox

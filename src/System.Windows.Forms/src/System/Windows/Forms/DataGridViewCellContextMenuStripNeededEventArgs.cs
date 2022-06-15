@@ -2,21 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public class DataGridViewCellContextMenuStripNeededEventArgs : DataGridViewCellEventArgs
     {
-        public DataGridViewCellContextMenuStripNeededEventArgs(int columnIndex, int rowIndex) : base(columnIndex, rowIndex)
+        public DataGridViewCellContextMenuStripNeededEventArgs(int columnIndex, int rowIndex)
+            : base(columnIndex, rowIndex)
         {
         }
 
-        internal DataGridViewCellContextMenuStripNeededEventArgs(int columnIndex, int rowIndex, ContextMenuStrip contextMenuStrip) : base(columnIndex, rowIndex)
+        internal DataGridViewCellContextMenuStripNeededEventArgs(int columnIndex, int rowIndex, ContextMenuStrip? contextMenuStrip)
+            : base(columnIndex, rowIndex)
         {
             ContextMenuStrip = contextMenuStrip;
         }
 
-        public ContextMenuStrip ContextMenuStrip { get; set; }
+        public ContextMenuStrip? ContextMenuStrip { get; set; }
     }
 }

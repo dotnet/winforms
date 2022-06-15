@@ -2,13 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static Interop;
 using static Interop.ComCtl32;
@@ -27,7 +24,7 @@ namespace System.Windows.Forms
     [DefaultBindingProperty(nameof(Value))]
     [Designer("System.Windows.Forms.Design.TrackBarDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionTrackBar))]
-    public class TrackBar : Control, ISupportInitialize
+    public partial class TrackBar : Control, ISupportInitialize
     {
         private static readonly object s_scrollEvent = new object();
         private static readonly object s_valueChangedEvent = new object();
@@ -109,7 +106,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public new event EventHandler AutoSizeChanged
+        public new event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -117,7 +114,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -125,7 +122,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler BackgroundImageChanged
+        public new event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -141,7 +138,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -204,6 +201,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [AllowNull]
         public override Font Font
         {
             get => base.Font;
@@ -212,7 +210,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler FontChanged
+        public new event EventHandler? FontChanged
         {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
@@ -232,7 +230,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ForeColorChanged
+        public new event EventHandler? ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -248,7 +246,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged
+        public new event EventHandler? ImeModeChanged
         {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
@@ -281,7 +279,7 @@ namespace System.Windows.Forms
                 _largeChange = value;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, IntPtr.Zero, (IntPtr)value);
+                    User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, 0, value);
                 }
             }
         }
@@ -398,7 +396,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler PaddingChanged
+        public new event EventHandler? PaddingChanged
         {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
@@ -407,7 +405,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Little private routine that helps with auto-sizing.
         /// </summary>
-        private int PreferredDimension
+        private static int PreferredDimension
         {
             get
             {
@@ -426,7 +424,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, PARAM.FromBool(true), (IntPtr)_maximum);
+            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)BOOL.TRUE, _maximum);
             Invalidate();
         }
 
@@ -484,10 +482,12 @@ namespace System.Windows.Forms
                 _smallChange = value;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, IntPtr.Zero, (IntPtr)value);
+                    User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, 0, value);
                 }
             }
         }
+
+        internal override bool SupportsUiaProviders => true;
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -500,7 +500,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler TextChanged
+        public new event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -558,7 +558,7 @@ namespace System.Windows.Forms
                 _tickFrequency = value;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, (IntPtr)value);
+                    User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, value);
                     Invalidate();
                 }
             }
@@ -599,7 +599,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler Click
+        public new event EventHandler? Click
         {
             add => base.Click += value;
             remove => base.Click -= value;
@@ -607,7 +607,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler DoubleClick
+        public new event EventHandler? DoubleClick
         {
             add => base.DoubleClick += value;
             remove => base.DoubleClick -= value;
@@ -615,7 +615,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseClick
+        public new event MouseEventHandler? MouseClick
         {
             add => base.MouseClick += value;
             remove => base.MouseClick -= value;
@@ -623,7 +623,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseDoubleClick
+        public new event MouseEventHandler? MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
             remove => base.MouseDoubleClick -= value;
@@ -631,7 +631,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
-        public event EventHandler RightToLeftLayoutChanged
+        public event EventHandler? RightToLeftLayoutChanged
         {
             add => Events.AddHandler(s_rightToLeftChangedEvent, value);
             remove => Events.RemoveHandler(s_rightToLeftChangedEvent, value);
@@ -639,7 +639,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.TrackBarOnScrollDescr))]
-        public event EventHandler Scroll
+        public event EventHandler? Scroll
         {
             add => Events.AddHandler(s_scrollEvent, value);
             remove => Events.RemoveHandler(s_scrollEvent, value);
@@ -647,7 +647,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event PaintEventHandler Paint
+        public new event PaintEventHandler? Paint
         {
             add => base.Paint += value;
             remove => base.Paint -= value;
@@ -655,7 +655,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.valueChangedEventDescr))]
-        public event EventHandler ValueChanged
+        public event EventHandler? ValueChanged
         {
             add => Events.AddHandler(s_valueChangedEvent, value);
             remove => Events.RemoveHandler(s_valueChangedEvent, value);
@@ -712,11 +712,14 @@ namespace System.Windows.Forms
             {
                 Value = _minimum;
             }
+
             if (Value > _maximum)
             {
                 Value = _maximum;
             }
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance() => new TrackBarAccessibleObject(this);
 
         protected override void CreateHandle()
         {
@@ -755,7 +758,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                _value = PARAM.ToInt(User32.SendMessageW(this, (User32.WM)TBM.GETPOS));
+                _value = (int)User32.SendMessageW(this, (User32.WM)TBM.GETPOS);
 
                 // See SetTrackBarValue() for a description of why we sometimes reflect the trackbar value
                 if (_orientation == Orientation.Vertical)
@@ -803,11 +806,11 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, PARAM.FromBool(false), (IntPtr)_minimum);
-            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, PARAM.FromBool(false), (IntPtr)_maximum);
-            User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, (IntPtr)_tickFrequency);
-            User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, IntPtr.Zero, (IntPtr)_largeChange);
-            User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, IntPtr.Zero, (IntPtr)_smallChange);
+            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, (nint)BOOL.FALSE, _minimum);
+            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)BOOL.FALSE, _maximum);
+            User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, _tickFrequency);
+            User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, 0, _largeChange);
+            User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, 0, _smallChange);
             SetTrackBarPosition();
             AdjustSize();
         }
@@ -838,7 +841,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnScroll(EventArgs e)
         {
-            ((EventHandler)Events[s_scrollEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_scrollEvent])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -913,7 +916,13 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnValueChanged(EventArgs e)
         {
-            ((EventHandler)Events[s_valueChangedEvent])?.Invoke(this, e);
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ValueValuePropertyId, Name, Name);
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
+            }
+
+            ((EventHandler?)Events[s_valueChangedEvent])?.Invoke(this, e);
         }
 
         protected override void OnBackColorChanged(EventArgs e)
@@ -959,7 +968,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Lets you set the the entire range for the TrackBar control at once.
+        ///  Lets you set the entire range for the TrackBar control at once.
         ///  The values passed are both the lower and upper limits to the range
         ///  with which the control will work.
         /// </summary>
@@ -982,10 +991,10 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, PARAM.FromBool(false), (IntPtr)_minimum);
+                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, (nint)BOOL.FALSE, _minimum);
 
                     // We must repaint the trackbar after changing the range.
-                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, PARAM.FromBool(true), (IntPtr)_maximum);
+                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)BOOL.TRUE, _maximum);
 
                     Invalidate();
                 }
@@ -997,6 +1006,7 @@ namespace System.Windows.Forms
                 {
                     _value = _minimum;
                 }
+
                 if (_value > _maximum)
                 {
                     _value = _maximum;
@@ -1029,23 +1039,19 @@ namespace System.Windows.Forms
                     reflectedValue = Minimum + Maximum - _value;
                 }
 
-                User32.SendMessageW(this, (User32.WM)TBM.SETPOS, PARAM.FromBool(true), (IntPtr)reflectedValue);
+                User32.SendMessageW(this, (User32.WM)TBM.SETPOS, (nint)BOOL.TRUE, reflectedValue);
             }
         }
 
-        public override string ToString()
-        {
-            string s = base.ToString();
-            return s + ", Minimum: " + Minimum.ToString(CultureInfo.CurrentCulture) + ", Maximum: " + Maximum.ToString(CultureInfo.CurrentCulture) + ", Value: " + _value;
-        }
+        public override string ToString() => $"{base.ToString()}, Minimum: {Minimum}, Maximum: {Maximum}, Value: {_value}";
 
         protected override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            switch (m.MsgInternal)
             {
                 case User32.WM.REFLECT_HSCROLL:
                 case User32.WM.REFLECT_VSCROLL:
-                    switch (PARAM.LOWORD(m.WParam))
+                    switch (PARAM.LOWORD(m.WParamInternal))
                     {
                         case NativeMethods.TB_LINEUP:
                         case NativeMethods.TB_LINEDOWN:
@@ -1060,8 +1066,10 @@ namespace System.Windows.Forms
                                 OnScroll(EventArgs.Empty);
                                 OnValueChanged(EventArgs.Empty);
                             }
+
                             break;
                     }
+
                     break;
                 default:
                     base.WndProc(ref m);

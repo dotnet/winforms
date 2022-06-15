@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-
 internal static partial class Interop
 {
     internal static partial class User32
@@ -21,7 +19,7 @@ internal static partial class Interop
         internal readonly ref struct BeginPaintScope
 #endif
         {
-            public readonly PAINTSTRUCT _paintStruct;
+            private readonly PAINTSTRUCT _paintStruct;
 
             public Gdi32.HDC HDC { get; }
             public IntPtr HWND { get; }

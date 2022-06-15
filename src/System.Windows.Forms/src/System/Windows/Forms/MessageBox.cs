@@ -32,29 +32,6 @@ namespace System.Windows.Forms
         {
         }
 
-        private static DialogResult Win32ToDialogResult(ID value)
-        {
-            switch (value)
-            {
-                case ID.OK:
-                    return DialogResult.OK;
-                case ID.CANCEL:
-                    return DialogResult.Cancel;
-                case ID.ABORT:
-                    return DialogResult.Abort;
-                case ID.RETRY:
-                    return DialogResult.Retry;
-                case ID.IGNORE:
-                    return DialogResult.Ignore;
-                case ID.YES:
-                    return DialogResult.Yes;
-                case ID.NO:
-                    return DialogResult.No;
-                default:
-                    return DialogResult.No;
-            }
-        }
-
         internal static HelpInfo HelpInfo
         {
             get
@@ -62,7 +39,7 @@ namespace System.Windows.Forms
                 // unfortunately, there's no easy way to obtain handle of a message box.
                 // we'll have to rely on the fact that modal message loops have to pop off in an orderly way.
 
-                if (helpInfoTable != null && helpInfoTable.Length > 0)
+                if (helpInfoTable is not null && helpInfoTable.Length > 0)
                 {
                     // the top of the stack is actually at the end of the array.
                     return helpInfoTable[helpInfoTable.Length - 1];
@@ -70,6 +47,34 @@ namespace System.Windows.Forms
 
                 return null;
             }
+        }
+
+        private static MB GetMessageBoxStyle(IWin32Window owner, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options, bool showHelp)
+        {
+            SourceGenerated.EnumValidator.Validate(buttons, nameof(buttons));
+            SourceGenerated.EnumValidator.Validate(icon, nameof(icon));
+            SourceGenerated.EnumValidator.Validate(defaultButton, nameof(defaultButton));
+
+            // options intentionally not verified because we don't expose all the options Win32 supports.
+
+            if (!SystemInformation.UserInteractive && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) == 0)
+            {
+                throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
+            }
+
+            if (owner is not null && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
+            {
+                throw new ArgumentException(SR.CantShowMBServiceWithOwner, nameof(options));
+            }
+
+            if (showHelp && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
+            {
+                throw new ArgumentException(SR.CantShowMBServiceWithHelp, nameof(options));
+            }
+
+            MB style = (showHelp) ? MB.HELP : 0;
+            style |= (MB)buttons | (MB)icon | (MB)defaultButton | (MB)options;
+            return style;
         }
 
         private static void PopHelpInfo()
@@ -97,6 +102,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         private static void PushHelpInfo(HelpInfo hpi)
         {
             // we roll our own stack here because we want a pretty lightweight implementation.
@@ -118,6 +124,7 @@ namespace System.Windows.Forms
                 newTable = new HelpInfo[lastCount + 1];
                 Array.Copy(helpInfoTable, newTable, lastCount);
             }
+
             newTable[lastCount] = hpi;
             helpInfoTable = newTable;
         }
@@ -333,46 +340,21 @@ namespace System.Windows.Forms
             {
                 PopHelpInfo();
             }
+
             return result;
         }
 
-        private static DialogResult ShowCore(IWin32Window owner, string text, string caption,
-                                             MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton,
-                                             MessageBoxOptions options, bool showHelp)
+        private static DialogResult ShowCore(
+            IWin32Window owner,
+            string text,
+            string caption,
+            MessageBoxButtons buttons,
+            MessageBoxIcon icon,
+            MessageBoxDefaultButton defaultButton,
+            MessageBoxOptions options,
+            bool showHelp)
         {
-            if (!ClientUtils.IsEnumValid(buttons, (int)buttons, (int)MessageBoxButtons.OK, (int)MessageBoxButtons.RetryCancel))
-            {
-                throw new InvalidEnumArgumentException(nameof(buttons), (int)buttons, typeof(MessageBoxButtons));
-            }
-
-            // valid values are 0x0 0x10 0x20 0x30 0x40, chop off the last 4 bits and check that it's between 0 and 4.
-            if (!WindowsFormsUtils.EnumValidator.IsEnumWithinShiftedRange(icon, /*numBitsToShift*/4, /*min*/0x0,/*max*/0x4))
-            {
-                throw new InvalidEnumArgumentException(nameof(icon), (int)icon, typeof(MessageBoxIcon));
-            }
-            // valid values are 0x0 0x100, 0x200, chop off the last 8 bits and check that it's between 0 and 2.
-            if (!WindowsFormsUtils.EnumValidator.IsEnumWithinShiftedRange(defaultButton, /*numBitsToShift*/8, /*min*/0x0,/*max*/0x2))
-            {
-                throw new InvalidEnumArgumentException(nameof(defaultButton), (int)defaultButton, typeof(DialogResult));
-            }
-
-            // options intentionally not verified because we don't expose all the options Win32 supports.
-
-            if (!SystemInformation.UserInteractive && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) == 0)
-            {
-                throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
-            }
-            if (owner != null && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
-            {
-                throw new ArgumentException(SR.CantShowMBServiceWithOwner, nameof(options));
-            }
-            if (showHelp && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
-            {
-                throw new ArgumentException(SR.CantShowMBServiceWithHelp, nameof(options));
-            }
-
-            MB style = (showHelp) ? MB.HELP : 0;
-            style |= (MB)buttons | (MB)icon | (MB)defaultButton | (MB)options;
+            MB style = GetMessageBoxStyle(owner, buttons, icon, defaultButton, options, showHelp);
 
             IntPtr handle = IntPtr.Zero;
             if (showHelp || ((options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) == 0))
@@ -407,22 +389,21 @@ namespace System.Windows.Forms
             }
 
             Application.BeginModalMessageLoop();
-            DialogResult result;
             try
             {
-                result = Win32ToDialogResult(MessageBoxW(new HandleRef(owner, handle), text, caption, style));
+                return (DialogResult)MessageBoxW(handle, text, caption, style);
             }
             finally
             {
                 Application.EndModalMessageLoop();
                 ThemingScope.Deactivate(userCookie);
-            }
 
-            // Right after the dialog box is closed, Windows sends WM_SETFOCUS back to the previously active control
-            // but since we have disabled this thread main window the message is lost. So we have to send it again after
-            // we enable the main window.
-            User32.SendMessageW(new HandleRef(owner, handle), User32.WM.SETFOCUS);
-            return result;
+                // Right after the dialog box is closed, Windows sends WM_SETFOCUS back to the previously active control
+                // but since we have disabled this thread main window the message is lost. So we have to send it again after
+                // we enable the main window.
+                User32.SendMessageW(handle, User32.WM.SETFOCUS);
+                GC.KeepAlive(owner);
+            }
         }
     }
 }

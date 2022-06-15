@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms.Layout
@@ -29,9 +27,9 @@ namespace System.Windows.Forms.Layout
 
         private protected ArrayList InnerList { get; }
 
-        internal virtual IArrangedElement this[int index] => (IArrangedElement)InnerList[index];
+        internal virtual IArrangedElement this[int index] => (IArrangedElement)InnerList[index]!;
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (!(obj is ArrangedElementCollection other) || Count != other.Count)
             {
@@ -76,8 +74,8 @@ namespace System.Windows.Forms.Layout
                     break;
 
                 default:
-                    int start = 0;
-                    int dest = 0;
+                    int start;
+                    int dest;
 
                     // Which direction are we moving?
                     if (delta > 0)
@@ -131,21 +129,21 @@ namespace System.Windows.Forms.Layout
 
         bool IList.IsFixedSize => InnerList.IsFixedSize;
 
-        bool IList.Contains(object value) => InnerList.Contains(value);
+        bool IList.Contains(object? value) => InnerList.Contains(value);
 
         public virtual bool IsReadOnly => InnerList.IsReadOnly;
 
         void IList.RemoveAt(int index) => InnerList.RemoveAt(index);
 
-        void IList.Remove(object value) => InnerList.Remove(value);
+        void IList.Remove(object? value) => InnerList.Remove(value);
 
-        int IList.Add(object value) => InnerList.Add(value);
+        int IList.Add(object? value) => InnerList.Add(value);
 
-        int IList.IndexOf(object value) => InnerList.IndexOf(value);
+        int IList.IndexOf(object? value) => InnerList.IndexOf(value);
 
-        void IList.Insert(int index, object value) => throw new NotSupportedException();
+        void IList.Insert(int index, object? value) => throw new NotSupportedException();
 
-        object IList.this[int index]
+        object? IList.this[int index]
         {
             get => InnerList[index];
             set => throw new NotSupportedException();

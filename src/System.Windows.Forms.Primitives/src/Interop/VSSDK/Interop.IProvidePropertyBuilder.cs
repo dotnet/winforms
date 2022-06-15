@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 
 internal partial class Interop
@@ -25,9 +24,9 @@ internal partial class Interop
             HRESULT ExecuteBuilder(
                 Ole32.DispatchID dispid,
                 [MarshalAs(UnmanagedType.BStr)] string bstrGuidBldr,
-                [MarshalAs(UnmanagedType.Interface)] object pdispApp,
+                [MarshalAs(UnmanagedType.Interface)] object? pdispApp,
                 IntPtr hwndBldrOwner,
-                [In, Out, MarshalAs(UnmanagedType.Struct)] ref object pvarValue,
+                [In, Out, MarshalAs(UnmanagedType.Struct)] ref object? pvarValue,
                 BOOL* actionCommitted);
         }
     }

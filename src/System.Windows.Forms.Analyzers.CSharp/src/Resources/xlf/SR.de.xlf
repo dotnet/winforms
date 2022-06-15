@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="de" original="../SR.resx">
+    <body>
+      <trans-unit id="GdiplusFontFamilyNotFound">
+        <source>Font '{0}' cannot be found.</source>
+        <target state="translated">Die Schriftart {0} kann nicht gefunden werden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="GdiplusNotTrueTypeFont">
+        <source>Only TrueType fonts are supported. '{0}' is not a TrueType font.</source>
+        <target state="translated">Es werden nur TrueType-Schriftarten unterstützt. {0} ist keine TrueType-Schriftart.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidArgumentValueFontConverter">
+        <source>Value of '{0}' is not valid for font size unit.</source>
+        <target state="translated">Der Wert von "{0}" ist für die Schriftgradeinheit ungültig.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TextParseFailedFormat">
+        <source>Text "{0}" cannot be parsed. The expected text format is "{1}".</source>
+        <target state="translated">Der Text {0} kann nicht analysiert werden. Textformat {1} erwartet.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC001Message">
+        <source>Only projects with 'OutputType={0}' supported</source>
+        <target state="translated">Nur Projekte mit "OutputType={0}" werden unterstützt.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC001Title">
+        <source>Unsupported project type</source>
+        <target state="translated">Nicht unterstützter Projekttyp</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC002Message">
+        <source>ArgumentException: Project property '{0}' cannot be set to '{1}'</source>
+        <target state="translated">ArgumentException: Die Projekteigenschaft "{0}" kann nicht auf "{1}" festgelegt werden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC002MessageWithReason">
+        <source>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}</source>
+        <target state="translated">ArgumentException: Die Projekteigenschaft "{0}" kann nicht auf "{1}" festgelegt werden. Grund: {2}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC002Title">
+        <source>Unsupported property value</source>
+        <target state="translated">Nicht unterstützter Eigenschaftswert</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

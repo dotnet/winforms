@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -16,10 +14,15 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates a new DrawListViewItemEventArgs with the given parameters.
         /// </summary>
-        public DrawListViewItemEventArgs(Graphics graphics, ListViewItem item, Rectangle bounds, int itemIndex, ListViewItemStates state)
+        public DrawListViewItemEventArgs(
+            Graphics graphics,
+            ListViewItem item,
+            Rectangle bounds,
+            int itemIndex,
+            ListViewItemStates state)
         {
-            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
-            Item = item ?? throw new ArgumentNullException(nameof(item));
+            Graphics = graphics.OrThrowIfNull();
+            Item = item.OrThrowIfNull();
             Bounds = bounds;
             ItemIndex = itemIndex;
             State = state;
@@ -92,7 +95,7 @@ namespace System.Windows.Forms
         private Rectangle UpdateBounds(Rectangle originalBounds, bool drawText)
         {
             Rectangle resultBounds = originalBounds;
-            if (Item.ListView != null && Item.ListView.View == View.Details)
+            if (Item.ListView is not null && Item.ListView.View == View.Details)
             {
                 // Note: this logic will compute the bounds so they align w/ the system drawn bounds only
                 // for the default font.

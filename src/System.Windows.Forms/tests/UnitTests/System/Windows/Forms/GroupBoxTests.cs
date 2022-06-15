@@ -2,12 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
-using Microsoft.DotNet.RemoteExecutor;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -158,7 +156,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ProgressBar_AllowDrop_Set_GetReturnsExpected(bool value)
         {
             using var control = new GroupBox
@@ -180,7 +178,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void GroupBox_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new GroupBox();
@@ -244,7 +242,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
         public void GroupBox_AutoSizeMode_Set_GetReturnsExpected(AutoSizeMode value)
         {
             using var control = new SubGroupBox();
@@ -284,7 +282,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -332,7 +331,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             try
             {
@@ -381,7 +381,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
         public void GroupBox_AutoSizeMode_SetWithHandle_GetReturnsExpected(AutoSizeMode value)
         {
             using var control = new SubGroupBox();
@@ -430,7 +430,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -502,7 +503,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -556,7 +558,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]
         public void GroupBox_AutoSizeMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoSizeMode value)
         {
             using var control = new GroupBox();
@@ -678,8 +680,13 @@ namespace System.Windows.Forms.Tests
         [InlineData(FlatStyle.Popup, true, true, true, 1, 0)]
         [InlineData(FlatStyle.Standard, false, true, false, 0, 0)]
         [InlineData(FlatStyle.System, true, false, false, 0, 1)]
-        public void GroupBox_FlatStyle_SetWithHandle_GetReturnsExpected(FlatStyle value, bool containerControl, bool ownerDraw, bool userMouse, int expectedInvalidatedCallCount, int expectedCreatedCallCount)
+        public void GroupBox_FlatStyle_VisualStyles_off_SetWithHandle_GetReturnsExpected(FlatStyle value, bool containerControl, bool ownerDraw, bool userMouse, int expectedInvalidatedCallCount, int expectedCreatedCallCount)
         {
+            if (Application.UseVisualStyles)
+            {
+                return;
+            }
+
             using var control = new SubGroupBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
@@ -716,62 +723,52 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedCreatedCallCount, createdCallCount);
         }
 
-        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsTheory]
         [InlineData(FlatStyle.Flat, true, true, true, 1, 0)]
         [InlineData(FlatStyle.Popup, true, true, true, 1, 0)]
         [InlineData(FlatStyle.Standard, false, true, false, 0, 0)]
         [InlineData(FlatStyle.System, true, false, false, 1, 1)]
-        public void GroupBox_FlatStyle_SetWithHandleWithVisualStyles_GetReturnsExpected(FlatStyle valueParam, bool containerControlParam, bool ownerDrawParam, bool userMouseParam, int expectedInvalidatedCallCountParam, int expectedCreatedCallCountParam)
+        public void GroupBox_FlatStyle_VisualStyles_on_SetWithHandle_GetReturnsExpected(FlatStyle value, bool containerControl, bool ownerDraw, bool userMouse, int expectedInvalidatedCallCount, int expectedCreatedCallCount)
         {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((valueString, boolStrings, intStrings) =>
+            if (!Application.UseVisualStyles)
             {
-                FlatStyle value = (FlatStyle)Enum.Parse(typeof(FlatStyle), valueString);
-                string[] bools = boolStrings.Split(',');
-                bool containerControl = bool.Parse(bools[0]);
-                bool ownerDraw = bool.Parse(bools[1]);
-                bool userMouse = bool.Parse(bools[2]);
-                string[] ints = intStrings.Split(',');
-                int expectedInvalidatedCallCount = int.Parse(ints[0]);
-                int expectedCreatedCallCount = int.Parse(ints[1]);
+                return;
+            }
 
-                Application.EnableVisualStyles();
+            using var control = new SubGroupBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            control.SetStyle(ControlStyles.ContainerControl, false);
 
-                using var control = new SubGroupBox();
-                Assert.NotEqual(IntPtr.Zero, control.Handle);
-                int invalidatedCallCount = 0;
-                control.Invalidated += (sender, e) => invalidatedCallCount++;
-                int styleChangedCallCount = 0;
-                control.StyleChanged += (sender, e) => styleChangedCallCount++;
-                int createdCallCount = 0;
-                control.HandleCreated += (sender, e) => createdCallCount++;
-                control.SetStyle(ControlStyles.ContainerControl, false);
+            control.FlatStyle = value;
+            Assert.Equal(value, control.FlatStyle);
+            Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
+            Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.SupportsTransparentBackColor));
+            Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.UserPaint));
+            Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
+            Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
 
-                control.FlatStyle = value;
-                Assert.Equal(value, control.FlatStyle);
-                Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.SupportsTransparentBackColor));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.UserPaint));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
-                Assert.Equal(containerControl && ownerDraw, control.GetStyle(ControlStyles.UserMouse));
-                Assert.True(control.IsHandleCreated);
-                Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
-                Assert.Equal(0, styleChangedCallCount);
-                Assert.Equal(expectedCreatedCallCount, createdCallCount);
-
-                // Set same.
-                control.FlatStyle = value;
-                Assert.Equal(value, control.FlatStyle);
-                Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.SupportsTransparentBackColor));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.UserPaint));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
-                Assert.Equal(containerControl && ownerDraw, control.GetStyle(ControlStyles.UserMouse));
-                Assert.True(control.IsHandleCreated);
-                Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
-                Assert.Equal(0, styleChangedCallCount);
-                Assert.Equal(expectedCreatedCallCount, createdCallCount);
-            }, valueParam.ToString(), $"{containerControlParam},{ownerDrawParam},{userMouseParam}", $"{expectedInvalidatedCallCountParam},{expectedCreatedCallCountParam}").Dispose();
+            // Set same.
+            control.FlatStyle = value;
+            Assert.Equal(value, control.FlatStyle);
+            Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
+            Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.SupportsTransparentBackColor));
+            Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.UserPaint));
+            Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
+            Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
         }
 
         [WinFormsTheory]
@@ -791,8 +788,13 @@ namespace System.Windows.Forms.Tests
         [InlineData(FlatStyle.System, FlatStyle.Popup, true, true, true, 0, 1)]
         [InlineData(FlatStyle.System, FlatStyle.Standard, true, true, true, 0, 1)]
         [InlineData(FlatStyle.System, FlatStyle.System, false, false, false, 0, 0)]
-        public void GroupBox_FlatStyle_SetWithCustomOldValueWithHandle_GetReturnsExpected(FlatStyle oldValue, FlatStyle value, bool containerControl, bool ownerDraw, bool userMouse, int expectedInvalidatedCallCount, int expectedCreatedCallCount)
+        public void GroupBox_FlatStyle_VisualStyles_off_SetWithCustomOldValueWithHandle_GetReturnsExpected(FlatStyle oldValue, FlatStyle value, bool containerControl, bool ownerDraw, bool userMouse, int expectedInvalidatedCallCount, int expectedCreatedCallCount)
         {
+            if (Application.UseVisualStyles)
+            {
+                return;
+            }
+
             using var control = new SubGroupBox
             {
                 FlatStyle = oldValue
@@ -832,78 +834,68 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedCreatedCallCount, createdCallCount);
         }
 
-        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsTheory]
         [InlineData(FlatStyle.Flat, FlatStyle.Flat, false, true, true, 0, 0)]
         [InlineData(FlatStyle.Flat, FlatStyle.Popup, true, true, true, 1, 0)]
         [InlineData(FlatStyle.Flat, FlatStyle.Standard, true, true, true, 1, 0)]
-        [InlineData(FlatStyle.Flat, FlatStyle.System, true, false, false, 1, 1)]
+        [InlineData(FlatStyle.Flat, FlatStyle.System, true, false, false, 0, 1)]
         [InlineData(FlatStyle.Popup, FlatStyle.Flat, true, true, true, 1, 0)]
         [InlineData(FlatStyle.Popup, FlatStyle.Popup, false, true, true, 0, 0)]
         [InlineData(FlatStyle.Popup, FlatStyle.Standard, true, true, true, 1, 0)]
-        [InlineData(FlatStyle.Popup, FlatStyle.System, true, false, false, 1, 1)]
+        [InlineData(FlatStyle.Popup, FlatStyle.System, true, false, false, 0, 1)]
         [InlineData(FlatStyle.Standard, FlatStyle.Flat, true, true, true, 1, 0)]
         [InlineData(FlatStyle.Standard, FlatStyle.Popup, true, true, true, 1, 0)]
         [InlineData(FlatStyle.Standard, FlatStyle.Standard, false, true, false, 0, 0)]
-        [InlineData(FlatStyle.Standard, FlatStyle.System, true, false, false, 1, 1)]
+        [InlineData(FlatStyle.Standard, FlatStyle.System, true, false, false, 0, 1)]
         [InlineData(FlatStyle.System, FlatStyle.Flat, true, true, true, 0, 1)]
         [InlineData(FlatStyle.System, FlatStyle.Popup, true, true, true, 0, 1)]
         [InlineData(FlatStyle.System, FlatStyle.Standard, true, true, true, 0, 1)]
         [InlineData(FlatStyle.System, FlatStyle.System, false, false, false, 0, 0)]
-        public void GroupBox_FlatStyle_SetWithCustomOldValueWithHandleWithVisualStyles_GetReturnsExpected(FlatStyle oldValueParam, FlatStyle valueParam, bool containerControlParam, bool ownerDrawParam, bool userMouseParam, int expectedInvalidatedCallCountParam, int expectedCreatedCallCountParam)
+        public void GroupBox_FlatStyle_VisualStyles_on_SetWithCustomOldValue_GetReturnsExpected(FlatStyle oldValue, FlatStyle value, bool containerControl, bool ownerDraw, bool userMouse, int expectedInvalidatedCallCount, int expectedCreatedCallCount)
         {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((oldValueString, valueString, boolStrings, intStrings) =>
+            if (!Application.UseVisualStyles)
             {
-                FlatStyle oldValue = (FlatStyle)Enum.Parse(typeof(FlatStyle), oldValueString);
-                FlatStyle value = (FlatStyle)Enum.Parse(typeof(FlatStyle), valueString);
-                string[] bools = boolStrings.Split(',');
-                bool containerControl = bool.Parse(bools[0]);
-                bool ownerDraw = bool.Parse(bools[1]);
-                bool userMouse = bool.Parse(bools[2]);
-                string[] ints = intStrings.Split(',');
-                int expectedInvalidatedCallCount = int.Parse(ints[0]);
-                int expectedCreatedCallCount = int.Parse(ints[1]);
+                return;
+            }
 
-                Application.EnableVisualStyles();
+            using var control = new SubGroupBox
+            {
+                FlatStyle = oldValue
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
 
-                using var control = new SubGroupBox
-                {
-                    FlatStyle = oldValue
-                };
-                Assert.NotEqual(IntPtr.Zero, control.Handle);
-                int invalidatedCallCount = 0;
-                control.Invalidated += (sender, e) => invalidatedCallCount++;
-                int styleChangedCallCount = 0;
-                control.StyleChanged += (sender, e) => styleChangedCallCount++;
-                int createdCallCount = 0;
-                control.HandleCreated += (sender, e) => createdCallCount++;
-                control.SetStyle(ControlStyles.ContainerControl, false);
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            control.SetStyle(ControlStyles.ContainerControl, false);
 
-                control.FlatStyle = value;
-                Assert.Equal(value, control.FlatStyle);
-                Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.SupportsTransparentBackColor));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.UserPaint));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
-                Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
-                Assert.True(control.IsHandleCreated);
-                Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
-                Assert.Equal(0, styleChangedCallCount);
-                Assert.Equal(expectedCreatedCallCount, createdCallCount);
+            control.FlatStyle = value;
+            Assert.Equal(value, control.FlatStyle);
+            Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
+            Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.SupportsTransparentBackColor));
+            Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.UserPaint));
+            Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
+            Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
+            Assert.True(control.IsHandleCreated);
+            Assert.True(invalidatedCallCount >= expectedInvalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
 
-                // Set same.
-                control.FlatStyle = value;
-                Assert.Equal(value, control.FlatStyle);
-                Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.SupportsTransparentBackColor));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.UserPaint));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
-                Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
-                Assert.True(control.IsHandleCreated);
-                Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
-                Assert.Equal(0, styleChangedCallCount);
-                Assert.Equal(expectedCreatedCallCount, createdCallCount);
-            }, oldValueParam.ToString(), valueParam.ToString(), $"{containerControlParam},{ownerDrawParam},{userMouseParam}", $"{expectedInvalidatedCallCountParam},{expectedCreatedCallCountParam}").Dispose();
+            // Set same.
+            control.FlatStyle = value;
+            Assert.Equal(value, control.FlatStyle);
+            Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
+            Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.SupportsTransparentBackColor));
+            Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.UserPaint));
+            Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
+            Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
+            Assert.True(control.IsHandleCreated);
+            Assert.True(invalidatedCallCount >= expectedInvalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
         }
 
         [WinFormsFact]
@@ -943,7 +935,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void GroupBox_TabStop_Set_GetReturnsExpected(bool value)
         {
             using var control = new GroupBox
@@ -965,7 +957,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void GroupBox_TabStop_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new GroupBox();
@@ -1040,7 +1032,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void GroupBox_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new GroupBox
@@ -1057,7 +1049,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void GroupBox_Text_SetInvisible_GetReturnsExpected(string value, string expected)
         {
             using var control = new GroupBox
@@ -1075,7 +1067,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void GroupBox_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new GroupBox();
@@ -1104,7 +1096,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void GroupBox_Text_SetInvisibleWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new GroupBox
@@ -1218,7 +1210,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("UseCompatibleTextRendering", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -1321,7 +1314,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("UseCompatibleTextRendering", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -1433,7 +1427,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void GroupBox_OnClick_Invoke_CallsClick(EventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1457,7 +1451,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void GroupBox_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1481,7 +1475,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void GroupBox_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1565,7 +1559,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void GroupBox_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1589,7 +1583,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyPressEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
         public void GroupBox_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1613,7 +1607,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void GroupBox_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1637,7 +1631,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void GroupBox_OnMouseClick_Invoke_CallsMouseClick(MouseEventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1661,7 +1655,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void GroupBox_OnMouseDoubleClick_Invoke_CallsMouseDoubleClick(MouseEventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1685,7 +1679,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void GroupBox_OnMouseDown_Invoke_CallsMouseDown(MouseEventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1709,7 +1703,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void GroupBox_OnMouseEnter_Invoke_CallsMouseEnter(EventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1733,7 +1727,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void GroupBox_OnMouseLeave_Invoke_CallsMouseLeave(EventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1757,7 +1751,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void GroupBox_OnMouseMove_Invoke_CallsMouseMove(MouseEventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1781,7 +1775,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void GroupBox_OnMouseUp_Invoke_CallsMouseUp(MouseEventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1816,11 +1810,11 @@ namespace System.Windows.Forms.Tests
                         {
                             foreach (string text in new string[] { null, string.Empty, "text" })
                             {
-                                yield return new object [] { new Size(100, 200), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
-                                yield return new object [] { new Size(10, 10), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
-                                yield return new object [] { new Size(9, 10), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
-                                yield return new object [] { new Size(10, 9), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
-                                yield return new object [] { new Size(9, 9), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
+                                yield return new object[] { new Size(100, 200), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
+                                yield return new object[] { new Size(10, 10), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
+                                yield return new object[] { new Size(9, 10), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
+                                yield return new object[] { new Size(10, 9), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
+                                yield return new object[] { new Size(9, 9), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
                             }
                         }
                     }
@@ -1919,8 +1913,25 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void GroupBox_OnPaint_NullE_ThrowsNullReferenceException()
+        public void GroupBox_OnPaint_VisualStyles_on_NullE_ThrowsArgumentNullException()
         {
+            if (!Application.RenderWithVisualStyles)
+            {
+                return;
+            }
+
+            using var control = new SubGroupBox();
+            Assert.Throws<ArgumentNullException>(() => control.OnPaint(null));
+        }
+
+        [WinFormsFact]
+        public void GroupBox_OnPaint_VisualStyles_off_NullE_ThrowsNullReferenceException()
+        {
+            if (Application.RenderWithVisualStyles)
+            {
+                return;
+            }
+
             using var control = new SubGroupBox();
             Assert.Throws<NullReferenceException>(() => control.OnPaint(null));
         }
@@ -2225,7 +2236,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void GroupBox_WndProc_InvokeMouseHoverWithHandle_Success(FlatStyle flatStyle)
         {
             using var control = new SubGroupBox

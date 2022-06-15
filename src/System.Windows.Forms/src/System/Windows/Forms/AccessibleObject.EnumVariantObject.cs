@@ -13,30 +13,30 @@ namespace System.Windows.Forms
     {
         private class EnumVariantObject : Oleaut32.IEnumVariant
         {
-            private uint currentChild;
-            private readonly AccessibleObject owner;
+            private uint _currentChild;
+            private readonly AccessibleObject _owner;
 
             public EnumVariantObject(AccessibleObject owner)
             {
-                Debug.Assert(owner != null, "Cannot create EnumVariantObject with a null owner");
-                this.owner = owner;
+                Debug.Assert(owner is not null, "Cannot create EnumVariantObject with a null owner");
+                _owner = owner;
             }
 
             public EnumVariantObject(AccessibleObject owner, uint currentChild)
             {
-                Debug.Assert(owner != null, "Cannot create EnumVariantObject with a null owner");
-                this.owner = owner;
-                this.currentChild = currentChild;
+                Debug.Assert(owner is not null, "Cannot create EnumVariantObject with a null owner");
+                _owner = owner;
+                _currentChild = currentChild;
             }
 
             HRESULT Oleaut32.IEnumVariant.Clone(Oleaut32.IEnumVariant[]? ppEnum)
             {
                 if (ppEnum is null)
                 {
-                    return HRESULT.E_INVALIDARG;
+                    return HRESULT.E_POINTER;
                 }
 
-                ppEnum[0] = new EnumVariantObject(owner, currentChild);
+                ppEnum[0] = new EnumVariantObject(_owner, _currentChild);
                 return HRESULT.S_OK;
             }
 
@@ -45,8 +45,8 @@ namespace System.Windows.Forms
             /// </summary>
             HRESULT Oleaut32.IEnumVariant.Reset()
             {
-                currentChild = 0;
-                owner.systemIEnumVariant?.Reset();
+                _currentChild = 0;
+                _owner._systemIEnumVariant?.Reset();
                 return HRESULT.S_OK;
             }
 
@@ -55,8 +55,8 @@ namespace System.Windows.Forms
             /// </summary>
             HRESULT Oleaut32.IEnumVariant.Skip(uint celt)
             {
-                currentChild += celt;
-                owner.systemIEnumVariant?.Skip(celt);
+                _currentChild += celt;
+                _owner._systemIEnumVariant?.Skip(celt);
                 return HRESULT.S_OK;
             }
 
@@ -66,24 +66,24 @@ namespace System.Windows.Forms
             unsafe HRESULT Oleaut32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
             {
                 // NOTE: rgvar is a pointer to an array of variants
-                if (owner.IsClientObject)
+                if (_owner.IsClientObject)
                 {
-                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "EnumVariantObject: owner = " + owner.ToString() + ", celt = " + celt);
+                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"EnumVariantObject: owner = {_owner}, celt = {celt}");
 
                     Debug.Indent();
 
                     int childCount;
                     int[]? newOrder;
 
-                    if ((childCount = owner.GetChildCount()) >= 0)
+                    if ((childCount = _owner.GetChildCount()) >= 0)
                     {
                         NextFromChildCollection(celt, rgVar, pCeltFetched, childCount);
                     }
-                    else if (owner.systemIEnumVariant is null)
+                    else if (_owner._systemIEnumVariant is null)
                     {
                         NextEmpty(celt, rgVar, pCeltFetched);
                     }
-                    else if ((newOrder = owner.GetSysChildOrder()) != null)
+                    else if ((newOrder = _owner.GetSysChildOrder()) is not null)
                     {
                         NextFromSystemReordered(celt, rgVar, pCeltFetched, newOrder);
                     }
@@ -117,10 +117,10 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe void NextFromSystem(uint celt, IntPtr rgVar, uint* pCeltFetched)
             {
-                owner.systemIEnumVariant?.Next(celt, rgVar, pCeltFetched);
-                if (pCeltFetched != null)
+                _owner._systemIEnumVariant?.Next(celt, rgVar, pCeltFetched);
+                if (pCeltFetched is not null)
                 {
-                    currentChild += *pCeltFetched;
+                    _currentChild += *pCeltFetched;
                 }
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: Delegating to systemIEnumVariant");
@@ -145,24 +145,26 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe void NextFromSystemReordered(uint celt, IntPtr rgVar, uint* pCeltFetched, int[] newOrder)
             {
-                if (owner.systemIEnumVariant is null)
+                if (_owner._systemIEnumVariant is null)
                 {
                     return;
                 }
 
                 uint i;
-                for (i = 0; i < celt && currentChild < newOrder.Length; ++i)
+                for (i = 0; i < celt && _currentChild < newOrder.Length; ++i)
                 {
-                    if (!GotoItem(owner.systemIEnumVariant, newOrder[currentChild], GetAddressOfVariantAtIndex(rgVar, i)))
+                    if (!GotoItem(_owner._systemIEnumVariant, newOrder[_currentChild], GetAddressOfVariantAtIndex(rgVar, i)))
                     {
                         break;
                     }
 
-                    currentChild++;
-                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: adding sys child " + currentChild + " of " + newOrder.Length);
+                    _currentChild++;
+                    Debug.WriteLineIf(
+                        CompModSwitches.MSAA.TraceInfo,
+                         $"AccessibleObject.IEV.Next: adding sys child {_currentChild} of {newOrder.Length}");
                 }
 
-                if (pCeltFetched != null)
+                if (pCeltFetched is not null)
                 {
                     *pCeltFetched = i;
                 }
@@ -176,14 +178,19 @@ namespace System.Windows.Forms
             private unsafe void NextFromChildCollection(uint celt, IntPtr rgVar, uint* pCeltFetched, int childCount)
             {
                 uint i;
-                for (i = 0; i < celt && currentChild < childCount; ++i)
+                for (i = 0; i < celt && _currentChild < childCount; ++i)
                 {
-                    ++currentChild;
-                    Marshal.GetNativeVariantForObject(((object)currentChild), GetAddressOfVariantAtIndex(rgVar, i));
-                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: adding own child " + currentChild + " of " + childCount);
+                    ++_currentChild;
+                    // Using "currentChild" as uint type leads to incorrect object boxing and converting an object to a COM VARIANT.
+                    // Because of this, controls without UIA support build an incorrect Accessibility tree.
+                    // It needs to cast "currentChild" to int type before converting to get a correct object argument
+                    Marshal.GetNativeVariantForObject(((object)(int)_currentChild), GetAddressOfVariantAtIndex(rgVar, i));
+                    Debug.WriteLineIf(
+                        CompModSwitches.MSAA.TraceInfo,
+                        $"AccessibleObject.IEV.Next: adding own child {_currentChild} of {childCount}");
                 }
 
-                if (pCeltFetched != null)
+                if (pCeltFetched is not null)
                 {
                     *pCeltFetched = i;
                 }
@@ -196,7 +203,7 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe void NextEmpty(uint celt, IntPtr rgvar, uint* pCeltFetched)
             {
-                if (pCeltFetched != null)
+                if (pCeltFetched is not null)
                 {
                     *pCeltFetched = 0;
                 }
@@ -225,7 +232,7 @@ namespace System.Windows.Forms
             private static IntPtr GetAddressOfVariantAtIndex(IntPtr variantArrayPtr, uint index)
             {
                 int variantSize = 8 + (IntPtr.Size * 2);
-                return (IntPtr)((ulong)variantArrayPtr + ((ulong)index) * ((ulong)variantSize));
+                return (IntPtr)((ulong)variantArrayPtr + index * ((ulong)variantSize));
             }
         }
     }

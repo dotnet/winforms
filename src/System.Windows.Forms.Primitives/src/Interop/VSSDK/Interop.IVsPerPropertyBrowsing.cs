@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 
 internal partial class Interop
@@ -16,7 +15,7 @@ internal partial class Interop
         {
             /// <summary>
             ///  Hides the property at the given dispid from the properties window
-            ///  implmentors should can return E_NOTIMPL to show all properties that
+            ///  implementers should can return E_NOTIMPL to show all properties that
             ///  are otherwise browsable.
             /// </summary>
             [PreserveSig]
@@ -41,12 +40,12 @@ internal partial class Interop
             HRESULT GetLocalizedPropertyInfo(
                 Ole32.DispatchID dispid,
                 Kernel32.LCID localeID,
-                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pbstrLocalizedName,
-                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pbstrLocalizeDescription);
+                [Out, MarshalAs(UnmanagedType.LPArray)] string[]? pbstrLocalizedName,
+                [Out, MarshalAs(UnmanagedType.LPArray)] string[]? pbstrLocalizeDescription);
 
             /// <summary>
             ///  Determines if the given (usually current) value for a property is the default.  If it is not default,
-            ///  the property will be shown as bold in the browser to indcate that it has been modified from the default.
+            ///  the property will be shown as bold in the browser to indicate that it has been modified from the default.
             /// </summary>
             [PreserveSig]
             HRESULT HasDefaultValue(

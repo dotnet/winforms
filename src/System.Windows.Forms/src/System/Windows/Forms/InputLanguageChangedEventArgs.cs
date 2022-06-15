@@ -7,12 +7,12 @@ using System.Globalization;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='Form.InputLanguageChanged'/> event.
+    ///  Provides data for the <see cref="Form.InputLanguageChanged"/> event.
     /// </summary>
     public class InputLanguageChangedEventArgs : EventArgs
     {
         /// <summary>
-        ///  Initializes a new instance of the <see cref='InputLanguageChangedEventArgs'/> class with the
+        ///  Initializes a new instance of the <see cref="InputLanguageChangedEventArgs"/> class with the
         ///  specified locale and character set.
         /// </summary>
         public InputLanguageChangedEventArgs(CultureInfo culture, byte charSet)
@@ -29,12 +29,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='InputLanguageChangedEventArgs'/> class with the specified input language and
+        ///  Initializes a new instance of the <see cref="InputLanguageChangedEventArgs"/> class with the specified input language and
         ///  character set.
         /// </summary>
         public InputLanguageChangedEventArgs(InputLanguage inputLanguage, byte charSet)
         {
-            InputLanguage = inputLanguage ?? throw new ArgumentNullException(nameof(inputLanguage));
+            InputLanguage = inputLanguage.OrThrowIfNull();
             Culture = inputLanguage.Culture;
             CharSet = charSet;
         }

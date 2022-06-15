@@ -139,7 +139,7 @@ namespace System.Windows.Forms
                     // all other buttons to False.
                     // Note that this does not handle buttons that are added later
                     // to the collection.
-                    if (_collection != null && value)
+                    if (_collection is not null && value)
                     {
                         foreach (TaskDialogRadioButton radioButton in _collection)
                         {
@@ -199,10 +199,10 @@ namespace System.Windows.Forms
                 // endless loop of TDN_RADIO_BUTTON_CLICKED notifications even
                 // when we don't send any further messages to the dialog.
                 // See documentation/repro in
-                // /Documentation/src/System/Windows/Forms/TaskDialog/Issue_RadioButton_InfiniteLoop.md
+                // /docs/src/System/Windows/Forms/TaskDialog/Issue_RadioButton_InfiniteLoop.md
                 //
                 // See also:
-                // /Documentation/src/System/Windows/Forms/TaskDialog/Issue_RadioButton_WeirdBehavior.md
+                // /docs/src/System/Windows/Forms/TaskDialog/Issue_RadioButton_WeirdBehavior.md
                 if (BoundPage.BoundDialog!.RadioButtonClickedStackCount > 0)
                 {
                     throw new InvalidOperationException(string.Format(
@@ -239,6 +239,7 @@ namespace System.Windows.Forms
                 {
                     boundDialog.RadioButtonClickedStackCount++;
                 }
+
                 try
                 {
                     HandleRadioButtonClicked();

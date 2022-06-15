@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
@@ -15,7 +13,7 @@ namespace System.Windows.Forms
         {
         }
 
-        protected override string GetLocalizedString(string value)
+        protected override string? GetLocalizedString(string value)
         {
             return SR.GetResourceString(value);
         }

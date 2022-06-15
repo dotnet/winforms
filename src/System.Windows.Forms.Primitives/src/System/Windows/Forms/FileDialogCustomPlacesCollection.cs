@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.ObjectModel;
-using System.IO;
 using static Interop.Shell32;
 
 namespace System.Windows.Forms
@@ -20,7 +19,7 @@ namespace System.Windows.Forms
                 try
                 {
                     IShellItem? shellItem = customPlace.GetNativePath();
-                    if (shellItem != null)
+                    if (shellItem is not null)
                     {
                         dialog.AddPlace(shellItem, 0);
                     }

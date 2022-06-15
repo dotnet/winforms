@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms</AssemblyName>
@@ -14,12 +14,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\System\Windows\Forms\XPThemes.manifest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\System.Windows.Forms.PrivateSourceGenerators\src\System.Windows.Forms.PrivateSourceGenerators.csproj" 
+                      ReferenceOutputAssembly="false"
+                      OutputItemType="Analyzer" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Accessibility\src\Accessibility.ilproj" />
     <ProjectReference Include="..\..\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Win32.Registry" Version="$(MicrosoftWin32RegistryPackageVersion)" />
     <PackageReference Include="Microsoft.Win32.SystemEvents" Version="$(MicrosoftWin32SystemEventsPackageVersion)" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="$(SystemConfigurationConfigurationManagerPackageVersion)" />
     <PackageReference Include="System.Drawing.Common" Version="$(SystemDrawingCommonPackageVersion)" />
@@ -42,6 +51,9 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\System\Windows\Forms\PrintPreviewDialog.resx">
       <LogicalName>System.Windows.Forms.PrintPreviewDialog.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ILLink.Substitutions.xml">
+      <LogicalName>ILLink.Substitutions.xml</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
 
@@ -403,8 +415,8 @@
     <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PBAlpha.ico">
       <LogicalName>System.Windows.Forms.PBAlpha</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PBCatego.ico">
-      <LogicalName>System.Windows.Forms.PBCatego</LogicalName>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PBCategory.ico">
+      <LogicalName>System.Windows.Forms.PBCategory</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PBEvent.ico">
       <LogicalName>System.Windows.Forms.PBEvent</LogicalName>
@@ -628,5 +640,59 @@
     <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\BlankToolstrip.ico">
       <LogicalName>System.Windows.Forms.blank</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\XPThemes.manifest">
+      <LogicalName>System.Windows.Forms.XPThemes.manifest</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="System\Windows\Forms\ComboBox.ChildAccessibleObject.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ObjectCollection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.FlatComboAdapter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.AutoCompleteDropDownFinder.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ACNativeWindow.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ComboBoxChildDropDownButtonUiaProvider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ComboBoxChildTextUiaProvider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ComboBoxChildListUiaProvider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ComboBoxChildEditUiaProvider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ComboBoxAccessibleObject.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ComboBoxItemAccessibleObjectCollection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ComboBoxItemAccessibleObject.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ItemComparer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ComboBoxChildNativeWindow.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('comctl32.dll')">
+    <None Update="comctl32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

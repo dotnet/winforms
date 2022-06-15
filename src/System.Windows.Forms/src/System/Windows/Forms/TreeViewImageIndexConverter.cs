@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     using System.ComponentModel;
@@ -26,19 +24,20 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Converts the given value object to a 32-bit signed integer object.
         /// </summary>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
             if (value is string strValue)
             {
                 if (string.Compare(strValue, SR.toStringDefault, true, culture) == 0)
                 {
-                    return -1;
+                    return ImageList.Indexer.DefaultIndex;
                 }
                 else if (string.Compare(strValue, SR.toStringNone, true, culture) == 0)
                 {
-                    return -2;
+                    return ImageList.Indexer.NoneIndex;
                 }
             }
+
             return base.ConvertFrom(context, culture, value);
         }
 
@@ -46,24 +45,20 @@ namespace System.Windows.Forms
         ///  Converts the given object to another type.  The most common types to convert
         ///  are to and from a string object.  The default implementation will make a call
         ///  to ToString on the object if the object is valid and if the destination
-        ///  type is string.  If this cannot convert to the desitnation type, this will
+        ///  type is string.  If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
-            if (destinationType is null)
-            {
-                throw new ArgumentNullException(nameof(destinationType));
-            }
+            ArgumentNullException.ThrowIfNull(destinationType);
 
-            if (destinationType == typeof(string) && value is int)
+            if (destinationType == typeof(string) && value is int index)
             {
-                int intValue = (int)value;
-                if (intValue == -1)
+                if (index == ImageList.Indexer.DefaultIndex)
                 {
                     return SR.toStringDefault;
                 }
-                else if (intValue == -2)
+                else if (index == ImageList.Indexer.NoneIndex)
                 {
                     return SR.toStringNone;
                 }
@@ -78,15 +73,15 @@ namespace System.Windows.Forms
         ///  will return null if the data type does not support a
         ///  standard set of values.
         /// </summary>
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
-            if (context != null && context.Instance != null)
+            if (context is not null && context.Instance is not null)
             {
-                object instance = context.Instance;
+                object? instance = context.Instance;
 
-                PropertyDescriptor imageListProp = ImageListUtils.GetImageListProperty(context.PropertyDescriptor, ref instance);
+                PropertyDescriptor? imageListProp = ImageListUtils.GetImageListProperty(context.PropertyDescriptor, ref instance);
 
-                while (instance != null && imageListProp is null)
+                while (instance is not null && imageListProp is null)
                 {
                     PropertyDescriptorCollection props = TypeDescriptor.GetProperties(instance);
 
@@ -103,47 +98,48 @@ namespace System.Windows.Forms
                     {
                         // We didn't find the image list in this component.  See if the
                         // component has a "parent" property.  If so, walk the tree...
-                        //
-                        PropertyDescriptor parentProp = props[ParentImageListProperty];
-                        if (parentProp != null)
+                        PropertyDescriptor? parentProp = props[ParentImageListProperty];
+                        if (parentProp is not null)
                         {
                             instance = parentProp.GetValue(instance);
                         }
                         else
                         {
                             // Stick a fork in us, we're done.
-                            //
                             instance = null;
                         }
                     }
                 }
 
-                if (imageListProp != null)
+                if (imageListProp is not null)
                 {
-                    ImageList imageList = (ImageList)imageListProp.GetValue(instance);
+                    ImageList? imageList = (ImageList?)imageListProp.GetValue(instance);
 
-                    if (imageList != null)
+                    if (imageList is not null)
                     {
                         // Create array to contain standard values
-                        //
-                        object[] values;
                         int nImages = imageList.Images.Count + 2;
-                        values = new object[nImages];
-                        values[nImages - 2] = -1;
+                        object[] values = new object[nImages];
+                        values[nImages - 2] = ImageList.Indexer.DefaultIndex;
                         values[nImages - 1] = -2;
 
                         // Fill in the array
-                        //
                         for (int i = 0; i < nImages - 2; i++)
                         {
                             values[i] = i;
                         }
+
                         return new StandardValuesCollection(values);
                     }
                 }
             }
 
-            return new StandardValuesCollection(new object[] { -1, -2 });
+            return new StandardValuesCollection(
+                new object[]
+                {
+                    ImageList.Indexer.DefaultIndex,
+                    ImageList.Indexer.NoneIndex
+                });
         }
     }
-} // Namespace system.windows.forms
+}

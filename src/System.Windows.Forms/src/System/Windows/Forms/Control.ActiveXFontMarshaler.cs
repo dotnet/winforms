@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -17,7 +15,7 @@ namespace System.Windows.Forms
         /// </summary>
         private class ActiveXFontMarshaler : ICustomMarshaler
         {
-            private static ActiveXFontMarshaler s_instance;
+            private static ActiveXFontMarshaler? s_instance;
 
             public void CleanUpManagedData(object obj)
             {
@@ -48,7 +46,7 @@ namespace System.Windows.Forms
                     fStrikethrough = font.Strikeout.ToBOOL(),
                 };
                 Guid iid = typeof(Ole32.IFont).GUID;
-                Ole32.IFont oleFont = Oleaut32.OleCreateFontIndirect(ref fontDesc, ref iid);
+                Ole32.IFont oleFont = Oleaut32.OleCreateFontIndirect(ref fontDesc, in iid);
                 IntPtr pFont = Marshal.GetIUnknownForObject(oleFont);
 
                 int hr = Marshal.QueryInterface(pFont, ref iid, out IntPtr pIFont);

@@ -22,6 +22,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     _expressions = new Hashtable(new ReferenceComparer());
                 }
+
                 return _expressions;
             }
         }
@@ -38,6 +39,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 expression = info.Expression;
             }
+
             return expression;
         }
 
@@ -79,15 +81,16 @@ namespace System.ComponentModel.Design.Serialization
         {
             bool IEqualityComparer.Equals(object x, object y)
             {
-                return object.ReferenceEquals(x, y);
+                return ReferenceEquals(x, y);
             }
 
             int IEqualityComparer.GetHashCode(object x)
             {
-                if (x != null)
+                if (x is not null)
                 {
                     return x.GetHashCode();
                 }
+
                 return 0;
             }
         }

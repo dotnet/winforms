@@ -11,7 +11,7 @@ using System.Diagnostics;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents a collection of selected <see cref='DataGridViewCell'/> objects in the <see cref='DataGridView'/>
+    ///  Represents a collection of selected <see cref="DataGridViewCell"/> objects in the <see cref="DataGridView"/>
     ///  control.
     /// </summary>
     [ListBindable(false)]
@@ -116,7 +116,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Adds a <see cref='DataGridViewCell'/> to this collection.
+        ///  Adds a <see cref="DataGridViewCell"/> to this collection.
         /// </summary>
         internal int Add(DataGridViewCell dataGridViewCell)
         {
@@ -125,11 +125,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Adds all the <see cref='DataGridViewCell'/> objects from the provided linked list to this collection.
+        ///  Adds all the <see cref="DataGridViewCell"/> objects from the provided linked list to this collection.
         /// </summary>
         internal void AddCellLinkedList(DataGridViewCellLinkedList dataGridViewCells)
         {
-            Debug.Assert(dataGridViewCells != null);
+            Debug.Assert(dataGridViewCells is not null);
             foreach (DataGridViewCell dataGridViewCell in dataGridViewCells)
             {
                 Debug.Assert(!Contains(dataGridViewCell));

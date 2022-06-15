@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Diagnostics;
-
 internal static partial class Interop
 {
     internal static partial class Gdi32
@@ -50,7 +47,7 @@ internal static partial class Interop
 
             public static implicit operator HDC(in CreateDcScope dcScope) => dcScope.HDC;
             public static implicit operator HGDIOBJ(in CreateDcScope dcScope) => dcScope.HDC;
-            public static explicit operator IntPtr(in CreateDcScope dcScope) => dcScope.HDC.Handle;
+            public static implicit operator nint(in CreateDcScope dcScope) => dcScope.HDC.Handle;
 
             public bool IsNull => HDC.IsNull;
 

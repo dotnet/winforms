@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     {
         private ToolStrip _wrappedToolStrip;
         private ToolStripPanelRow _parent;
-        private Size _maxSize = LayoutUtils.MaxSize;
+        private Size _maxSize = LayoutUtils.s_maxSize;
         private bool _currentlySizing;
         private bool _currentlyDragging;
         private bool _restoreOnVisibleChanged;
@@ -37,6 +37,7 @@ namespace System.Windows.Forms
         public ToolStripPanelCell(Control control) : this(null, control)
         {
         }
+
         public ToolStripPanelCell(ToolStripPanelRow parent, Control control)
         {
 #if DEBUG
@@ -48,14 +49,12 @@ namespace System.Windows.Forms
 
             ToolStripPanelRow = parent;
             _wrappedToolStrip = control as ToolStrip;
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
-            else if (_wrappedToolStrip is null)
+            ArgumentNullException.ThrowIfNull(control);
+            if (_wrappedToolStrip is null)
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name)), control.GetType().Name);
             }
+
             CommonProperties.SetAutoSize(this, true);
             _wrappedToolStrip.LocationChanging += new ToolStripLocationCancelEventHandler(OnToolStripLocationChanging);
             _wrappedToolStrip.VisibleChanged += new EventHandler(OnToolStripVisibleChanged);
@@ -81,7 +80,7 @@ namespace System.Windows.Forms
         // during a drag operation.
         public bool ControlInDesignMode
         {
-            get { return (_wrappedToolStrip != null && _wrappedToolStrip.IsInDesignMode); }
+            get { return (_wrappedToolStrip is not null && _wrappedToolStrip.IsInDesignMode); }
         }
 
         public IArrangedElement InnerElement
@@ -101,10 +100,11 @@ namespace System.Windows.Forms
             {
                 if (_parent != value)
                 {
-                    if (_parent != null)
+                    if (_parent is not null)
                     {
                         ((IList)_parent.Cells).Remove(this);
                     }
+
                     _parent = value;
                     Margin = Padding.Empty;
                 }
@@ -115,10 +115,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Control != null && Control.ParentInternal == ToolStripPanelRow.ToolStripPanel)
+                if (Control is not null && Control.ParentInternal == ToolStripPanelRow.ToolStripPanel)
                 {
                     return InnerElement.ParticipatesInLayout;
                 }
+
                 return false;
             }
             set
@@ -171,7 +172,7 @@ namespace System.Windows.Forms
             if (MaximumSize.Height + growBy >= Control.PreferredSize.Height)
             {
                 int freed = Control.PreferredSize.Height - MaximumSize.Height;
-                _maxSize = LayoutUtils.MaxSize;
+                _maxSize = LayoutUtils.s_maxSize;
                 return freed;
             }
 
@@ -183,6 +184,7 @@ namespace System.Windows.Forms
                 _maxSize.Height += growBy;
                 return growBy;
             }
+
             return 0;
         }
 
@@ -203,7 +205,7 @@ namespace System.Windows.Forms
             if (MaximumSize.Width + growBy >= Control.PreferredSize.Width)
             {
                 int freed = Control.PreferredSize.Width - MaximumSize.Width;
-                _maxSize = LayoutUtils.MaxSize;
+                _maxSize = LayoutUtils.s_maxSize;
                 return freed;
             }
 
@@ -215,15 +217,17 @@ namespace System.Windows.Forms
                 _maxSize.Width += growBy;
                 return growBy;
             }
+
             return 0;
         }
+
         protected override void Dispose(bool disposing)
         {
             try
             {
                 if (disposing)
                 {
-                    if (_wrappedToolStrip != null)
+                    if (_wrappedToolStrip is not null)
                     {
 #if DEBUG
                         t_cellCount--;
@@ -231,11 +235,13 @@ namespace System.Windows.Forms
                         _wrappedToolStrip.LocationChanging -= new ToolStripLocationCancelEventHandler(OnToolStripLocationChanging);
                         _wrappedToolStrip.VisibleChanged -= new EventHandler(OnToolStripVisibleChanged);
                     }
+
                     _wrappedToolStrip = null;
-                    if (_parent != null)
+                    if (_parent is not null)
                     {
                         ((IList)_parent.Cells).Remove(this);
                     }
+
                     _parent = null;
                 }
 #if DEBUG
@@ -314,6 +320,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     Debug.WriteLineIf(ToolStripPanelRow.ToolStripPanelMouseDebug.TraceVerbose, "[CELL] DRAGGING calling SetBounds " + bounds.ToString());
                     base.SetBoundsCore(bounds, specified);
                     InnerElement.SetBounds(bounds, specified);
@@ -346,19 +353,19 @@ namespace System.Windows.Forms
             }
         }
 
-        private int ShrinkHorizontal(int shrinkBy)
+        private static int ShrinkHorizontal(int shrinkBy)
         {
             return 0;
         }
 
-        private int ShrinkVertical(int shrinkBy)
+        private static int ShrinkVertical(int shrinkBy)
         {
             return 0;
         }
 
         /// <summary>
         ///  New EventHandler for The LocationChanging so that ToolStripPanelCell Listens to the Location Property on the ToolStrips's being changed.
-        ///  The ToolStrip needs to Raft (Join) to the approriate Location Depending on the new Location w.r.t to the oldLocation ...
+        ///  The ToolStrip needs to Raft (Join) to the appropriate Location Depending on the new Location w.r.t to the oldLocation ...
         ///  Hence the need for this event listener.
         /// </summary>
         private void OnToolStripLocationChanging(object sender, ToolStripLocationCancelEventArgs e)
@@ -367,19 +374,21 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (!_currentlySizing && !_currentlyDragging)
             {
                 try
                 {
                     _currentlyDragging = true;
                     Point newloc = e.NewLocation;
-                    // detect if we havent yet performed a layout - force one so we can
+                    // detect if we haven't yet performed a layout - force one so we can
                     // properly join to the row.
-                    if (ToolStripPanelRow != null && ToolStripPanelRow.Bounds == Rectangle.Empty)
+                    if (ToolStripPanelRow is not null && ToolStripPanelRow.Bounds == Rectangle.Empty)
                     {
                         ToolStripPanelRow.ToolStripPanel.PerformUpdate(true);
                     }
-                    if (_wrappedToolStrip != null)
+
+                    if (_wrappedToolStrip is not null)
                     {
                         ToolStripPanelRow.ToolStripPanel.Join(_wrappedToolStrip, newloc);
                     }
@@ -394,7 +403,7 @@ namespace System.Windows.Forms
 
         private void OnToolStripVisibleChanged(object sender, EventArgs e)
         {
-            if (_wrappedToolStrip != null
+            if (_wrappedToolStrip is not null
                 && !_wrappedToolStrip.IsInDesignMode
 
                 && !_wrappedToolStrip.IsCurrentlyDragging
@@ -402,19 +411,19 @@ namespace System.Windows.Forms
                 && !_wrappedToolStrip.Disposing)
             {
                 // Rejoin the row when visibility is toggled.
-                // we dont want to do this logic at DT, as the DropSourceBehavior
+                // we don't want to do this logic at DT, as the DropSourceBehavior
                 // will set the toolstrip visible = false.
                 if (!Control.Visible)
                 {
                     // if we are becoming visible = false, remember if we were in a toolstrippanelrow at the time.
-                    _restoreOnVisibleChanged = (ToolStripPanelRow != null && ((IList)ToolStripPanelRow.Cells).Contains(this));
+                    _restoreOnVisibleChanged = (ToolStripPanelRow is not null && ((IList)ToolStripPanelRow.Cells).Contains(this));
                 }
                 else if (_restoreOnVisibleChanged)
                 {
                     try
                     {
                         // if we are becoming visible = true, and we ARE in a toolstrippanelrow, rejoin.
-                        if (ToolStripPanelRow != null && ((IList)ToolStripPanelRow.Cells).Contains(this))
+                        if (ToolStripPanelRow is not null && ((IList)ToolStripPanelRow.Cells).Contains(this))
                         {
                             ToolStripPanelRow.ToolStripPanel.Join(_wrappedToolStrip, _wrappedToolStrip.Location);
                         }

@@ -2,15 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms.Layout
 {
     // LayoutEventArgs takes a string for AffectedProperty.  This class contains const
     // strings to use as property names.  Doing this allows us to use reference comparisons
     // which is advantageous because 1) pref and 2) we will not accidently collide with
     // names that extenders provide.
-    internal class PropertyNames
+    internal static class PropertyNames
     {
         public const string Alignment = "Alignment";
         public const string Anchor = "Anchor";

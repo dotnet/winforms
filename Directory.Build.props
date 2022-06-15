@@ -1,22 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
-  <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />  
+  <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />
   <Import Project="$(RepositoryEngineeringDir)FacadeAssemblies.props" />
   <Import Project="$(RepositoryEngineeringDir)ApiCompatibility\PublicApiAnalyzer.props" />
 
   <PropertyGroup>
-    <TargetFrameworkName>netcoreapp</TargetFrameworkName>
-    <TargetFrameworkVersion>5.0</TargetFrameworkVersion>
+    <TargetFrameworkName>net</TargetFrameworkName>
+    <TargetFrameworkVersion>7.0</TargetFrameworkVersion>
     <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
     <Product>Microsoft&#xAE; .NET</Product>
     <Copyright>$(CopyrightNetFoundation)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <LangVersion>preview</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
+    <IsAnalyzerProject>false</IsAnalyzerProject>
+    <IsAnalyzerProject Condition="!$(IsTestProject) and
+                                  ($(MSBuildProjectName.EndsWith('.Analyzers')) or $(MSBuildProjectName.EndsWith('.Analyzers.CSharp')))"
+                                  >true</IsAnalyzerProject>
   </PropertyGroup>
 
-  <!-- Allow SourceLink to work for strongly types resource files (SR) by embeddeding generated files into the PDBs -->
+  <!--
+    Set assembly version to align with major and minor version, as for the patches and revisions should be manually
+    updated per assembly if it is serviced.
+
+    Note, any components that aren't exposed as references in the targeting pack (like analyzers/generators) those should rev
+    so that they can exist SxS, as the compiler relies on different version to change assembly version for caching purposes.
+    -->
+  <PropertyGroup Condition="'$(IsAnalyzerProject)' != 'true'">
+    <AssemblyVersion>$(MajorVersion).$(MinorVersion).0.0</AssemblyVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsAnalyzerProject)' == 'true'">
+    <IsRoslynComponent>true</IsRoslynComponent>
+
+    <!-- Mark it so eng/packageContent.targets knows how to correctly package it -->
+    <DefineConstants>WINFORMS_ANALYZERS</DefineConstants>
+  </PropertyGroup>
+
+  <!-- ApplicationConfiguration specific settings -->
+  <PropertyGroup>
+    <ApplicationDefaultFont>Calibri, 11pt, style=regular</ApplicationDefaultFont>
+  </PropertyGroup>
+
+  <!-- SDK flipped to 'true' by default https://github.com/dotnet/sdk/pull/12720 -->
+  <PropertyGroup>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+  </PropertyGroup>
+
+  <!-- Allow SourceLink to work for strongly types resource files (SR) by embedding generated files into the PDBs -->
   <PropertyGroup>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>

@@ -61,7 +61,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null || Properties.ContainsObject(PropTextBoxCellEditingTextBox))
+                if (value is not null || Properties.ContainsObject(PropTextBoxCellEditingTextBox))
                 {
                     Properties.SetObject(PropTextBoxCellEditingTextBox, value);
                 }
@@ -87,6 +87,7 @@ namespace System.Windows.Forms
                 {
                     return maxInputLength;
                 }
+
                 return DATAGRIDVIEWTEXTBOXCELL_maxInputLength;
             }
             set
@@ -109,10 +110,11 @@ namespace System.Windows.Forms
             get
             {
                 Type valueType = base.ValueType;
-                if (valueType != null)
+                if (valueType is not null)
                 {
                     return valueType;
                 }
+
                 return defaultValueType;
             }
         }
@@ -137,6 +139,7 @@ namespace System.Windows.Forms
 
                 dataGridViewCell = (DataGridViewTextBoxCell)System.Activator.CreateInstance(thisType);
             }
+
             CloneInternal(dataGridViewCell);
             dataGridViewCell.MaxInputLength = MaxInputLength;
             return dataGridViewCell;
@@ -164,7 +167,7 @@ namespace System.Windows.Forms
         private Rectangle GetAdjustedEditingControlBounds(Rectangle editingControlBounds, DataGridViewCellStyle cellStyle)
         {
             Debug.Assert(cellStyle.WrapMode != DataGridViewTriState.NotSet);
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
 
             int originalWidth = editingControlBounds.Width;
             if (DataGridView.EditingControl is TextBox txtEditingControl)
@@ -185,6 +188,7 @@ namespace System.Windows.Forms
                             editingControlBounds.X += DATAGRIDVIEWTEXTBOXCELL_horizontalTextOffsetLeft;
                             editingControlBounds.Width = Math.Max(0, editingControlBounds.Width - DATAGRIDVIEWTEXTBOXCELL_horizontalTextOffsetLeft - 1);
                         }
+
                         break;
 
                     case DataGridViewContentAlignment.TopCenter:
@@ -208,6 +212,7 @@ namespace System.Windows.Forms
                             editingControlBounds.X += 1;
                             editingControlBounds.Width = Math.Max(0, editingControlBounds.Width - DATAGRIDVIEWTEXTBOXCELL_horizontalTextOffsetRight - 1);
                         }
+
                         break;
                 }
 
@@ -245,11 +250,13 @@ namespace System.Windows.Forms
                     {
                         editedFormattedValue = " ";
                     }
+
                     TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
 
                     using var screen = GdiCache.GetScreenDCGraphics();
                     preferredHeight = MeasureTextHeight(screen, editedFormattedValue, cellStyle.Font, originalWidth, flags);
                 }
+
                 if (preferredHeight < editingControlBounds.Height)
                 {
                     switch (cellStyle.Alignment)
@@ -278,10 +285,7 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             if (DataGridView is null || rowIndex < 0 || OwningColumn is null)
             {
@@ -339,10 +343,7 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             if (DataGridView is null ||
                 rowIndex < 0 ||
@@ -399,10 +400,7 @@ namespace System.Windows.Forms
                 return new Size(-1, -1);
             }
 
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             Size preferredSize;
             Rectangle borderWidthsRect = StdBorderWidths;
@@ -415,6 +413,7 @@ namespace System.Windows.Forms
             {
                 formattedString = " ";
             }
+
             TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
             if (cellStyle.WrapMode == DataGridViewTriState.True && formattedString.Length > 1)
             {
@@ -430,6 +429,7 @@ namespace System.Windows.Forms
                                                      0);
                             break;
                         }
+
                     case DataGridViewFreeDimension.Height:
                         {
                             preferredSize = new Size(0,
@@ -440,6 +440,7 @@ namespace System.Windows.Forms
                                                                                         flags));
                             break;
                         }
+
                     default:
                         {
                             preferredSize = DataGridViewCell.MeasureTextPreferredSize(graphics,
@@ -461,12 +462,14 @@ namespace System.Windows.Forms
                                                      0);
                             break;
                         }
+
                     case DataGridViewFreeDimension.Height:
                         {
                             preferredSize = new Size(0,
                                                      DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Height);
                             break;
                         }
+
                     default:
                         {
                             preferredSize = DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags);
@@ -484,6 +487,7 @@ namespace System.Windows.Forms
                     preferredSize.Width = Math.Max(preferredSize.Width, borderAndPaddingWidths + IconMarginWidth * 2 + s_iconsWidth);
                 }
             }
+
             if (freeDimension != DataGridViewFreeDimension.Width)
             {
                 int verticalTextMarginTop = cellStyle.WrapMode == DataGridViewTriState.True ? DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginTopWithWrapping : DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginTopWithoutWrapping;
@@ -494,14 +498,15 @@ namespace System.Windows.Forms
                     preferredSize.Height = Math.Max(preferredSize.Height, borderAndPaddingHeights + IconMarginHeight * 2 + s_iconsHeight);
                 }
             }
+
             return preferredSize;
         }
 
         public override void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
         {
-            Debug.Assert(DataGridView != null &&
-                         DataGridView.EditingPanel != null &&
-                         DataGridView.EditingControl != null);
+            Debug.Assert(DataGridView is not null &&
+                         DataGridView.EditingPanel is not null &&
+                         DataGridView.EditingControl is not null);
             Debug.Assert(!ReadOnly);
             base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
             if (DataGridView.EditingControl is TextBox textBox)
@@ -533,6 +538,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.KeyEntersEditMode(e);
         }
 
@@ -542,6 +548,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (throughMouseClick)
             {
                 flagsState |= (byte)DATAGRIDVIEWTEXTBOXCELL_ignoreNextMouseClick;
@@ -554,6 +561,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             flagsState = (byte)(flagsState & ~DATAGRIDVIEWTEXTBOXCELL_ignoreNextMouseClick);
         }
 
@@ -563,6 +571,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             Debug.Assert(e.ColumnIndex == ColumnIndex);
             Point ptCurrentCell = DataGridView.CurrentCellAddress;
             if (ptCurrentCell.X == e.ColumnIndex && ptCurrentCell.Y == e.RowIndex && e.Button == MouseButtons.Left)
@@ -580,7 +589,7 @@ namespace System.Windows.Forms
 
         private bool OwnsEditingTextBox(int rowIndex)
         {
-            return rowIndex != -1 && EditingTextBox != null && rowIndex == ((IDataGridViewEditingControl)EditingTextBox).EditingControlRowIndex;
+            return rowIndex != -1 && EditingTextBox is not null && rowIndex == ((IDataGridViewEditingControl)EditingTextBox).EditingControlRowIndex;
         }
 
         protected override void Paint(Graphics graphics,
@@ -595,10 +604,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             PaintPrivate(graphics,
                 clipBounds,
@@ -642,7 +648,7 @@ namespace System.Windows.Forms
             Debug.Assert(!paint || !computeContentBounds || !computeErrorIconBounds);
             Debug.Assert(!computeContentBounds || !computeErrorIconBounds || !paint);
             Debug.Assert(!computeErrorIconBounds || !paint || !computeContentBounds);
-            Debug.Assert(cellStyle != null);
+            Debug.Assert(cellStyle is not null);
 
             // If computeContentBounds == TRUE then resultBounds will be the contentBounds.
             // If computeErrorIconBounds == TRUE then resultBounds will be the error icon bounds.
@@ -662,7 +668,7 @@ namespace System.Windows.Forms
 
             Point ptCurrentCell = DataGridView.CurrentCellAddress;
             bool cellCurrent = ptCurrentCell.X == ColumnIndex && ptCurrentCell.Y == rowIndex;
-            bool cellEdited = cellCurrent && DataGridView.EditingControl != null;
+            bool cellEdited = cellCurrent && DataGridView.EditingControl is not null;
             bool cellSelected = (cellState & DataGridViewElementStates.Selected) != 0;
             bool notCollapsed = valBounds.Width > 0 && valBounds.Height > 0;
 
@@ -686,6 +692,7 @@ namespace System.Windows.Forms
                 {
                     valBounds.Offset(cellStyle.Padding.Left, cellStyle.Padding.Top);
                 }
+
                 valBounds.Width -= cellStyle.Padding.Horizontal;
                 valBounds.Height -= cellStyle.Padding.Vertical;
             }
@@ -702,7 +709,7 @@ namespace System.Windows.Forms
             Rectangle errorBounds = valBounds;
             string formattedString = formattedValue as string;
 
-            if (formattedString != null && ((paint && !cellEdited) || computeContentBounds))
+            if (formattedString is not null && ((paint && !cellEdited) || computeContentBounds))
             {
                 // Font independent margins
                 int verticalTextMarginTop = cellStyle.WrapMode == DataGridViewTriState.True

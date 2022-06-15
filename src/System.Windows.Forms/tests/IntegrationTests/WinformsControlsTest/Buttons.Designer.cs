@@ -47,12 +47,11 @@ namespace WinformsControlsTest
             this.ClientSize = new System.Drawing.Size(419, 271);
             this.Name = "Buttons";
             this.Text = "Buttons";
-            this.Load += new System.EventHandler(this.Test1_Load);
             this.ResumeLayout(false);
-
         }
 
         #endregion
+
         private System.Windows.Forms.ToolTip toolTip1;
     }
 }

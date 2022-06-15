@@ -2,12 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
     ///  Handler for the ListView's DrawColumnHeader event.
     /// </summary>
-    public delegate void DrawListViewColumnHeaderEventHandler(object sender, DrawListViewColumnHeaderEventArgs e);
+    public delegate void DrawListViewColumnHeaderEventHandler(object? sender, DrawListViewColumnHeaderEventArgs e);
 }

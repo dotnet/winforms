@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -14,11 +12,11 @@ namespace System.Windows.Forms
         internal sealed class ControlNativeWindow : NativeWindow, IWindowTarget
         {
             private readonly Control _control;
-            private GCHandle _rootRef;   // We will root the control when we do not want to be elligible for garbage collection.
+            private GCHandle _rootRef;   // We will root the control when we do not want to be eligible for garbage collection.
 
             internal ControlNativeWindow(Control control)
             {
-                _control = control;
+                _control = control.OrThrowIfNull();
                 WindowTarget = this;
             }
 
@@ -58,7 +56,7 @@ namespace System.Windows.Forms
 
             protected override void OnThreadException(Exception e)
             {
-                _control.WndProcException(e);
+                WndProcException(e);
             }
 
             // IWindowTarget method
@@ -74,11 +72,7 @@ namespace System.Windows.Forms
             // non-released controls will show what control wasn't released.
             public override string ToString()
             {
-                if (_control != null)
-                {
-                    return _control.GetType().FullName;
-                }
-                return base.ToString();
+                return _control.GetType().FullName!;
             }
 #endif
 
@@ -107,6 +101,7 @@ namespace System.Windows.Forms
                                 _control.SetState(States.MouseEnterPending, false);
                             }
                         }
+
                         break;
 
                     case User32.WM.MOUSEWHEEL:

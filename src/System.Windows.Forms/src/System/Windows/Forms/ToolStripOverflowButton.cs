@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Design;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -15,7 +14,7 @@ namespace System.Windows.Forms
     ///  ToolStripOverflowButton
     /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.None)]
-    public class ToolStripOverflowButton : ToolStripDropDownButton
+    public partial class ToolStripOverflowButton : ToolStripDropDownButton
     {
         // we need to cache this away as the Parent property gets reset a lot.
         private readonly ToolStrip parentToolStrip;
@@ -102,7 +101,7 @@ namespace System.Windows.Forms
         public override Size GetPreferredSize(Size constrainingSize)
         {
             Size preferredSize = constrainingSize;
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 if (ParentInternal.Orientation == Orientation.Horizontal)
                 {
@@ -113,13 +112,14 @@ namespace System.Windows.Forms
                     preferredSize.Height = Math.Min(constrainingSize.Height, maxHeight);
                 }
             }
+
             return preferredSize + Padding.Size;
         }
 
         // make sure the Overflow button extends from edge-edge. (Ignore Padding/Margin).
         internal protected override void SetBounds(Rectangle bounds)
         {
-            if (ParentInternal != null && ParentInternal.LayoutEngine is ToolStripSplitStackLayout)
+            if (ParentInternal is not null && ParentInternal.LayoutEngine is ToolStripSplitStackLayout)
             {
                 if (ParentInternal.Orientation == Orientation.Horizontal)
                 {
@@ -132,52 +132,16 @@ namespace System.Windows.Forms
                     bounds.X = 0;
                 }
             }
+
             base.SetBounds(bounds);
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 ToolStripRenderer renderer = ParentInternal.Renderer;
                 renderer.DrawOverflowButtonBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));
-            }
-        }
-
-        internal class ToolStripOverflowButtonAccessibleObject : ToolStripDropDownItemAccessibleObject
-        {
-            private string stockName;
-
-            public ToolStripOverflowButtonAccessibleObject(ToolStripOverflowButton owner) : base(owner)
-            {
-            }
-
-            public override string Name
-            {
-                get
-                {
-                    string name = Owner.AccessibleName;
-                    if (name != null)
-                    {
-                        return name;
-                    }
-                    if (string.IsNullOrEmpty(stockName))
-                    {
-                        stockName = SR.ToolStripOptions;
-                    }
-                    return stockName;
-                }
-                set => base.Name = value;
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.MenuItemControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
             }
         }
     }

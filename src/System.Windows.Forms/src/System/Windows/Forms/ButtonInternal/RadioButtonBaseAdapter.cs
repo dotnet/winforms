@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using static Interop;
@@ -23,8 +21,8 @@ namespace System.Windows.Forms.ButtonInternal
             Color checkBackground,
             Color checkBorder)
         {
-            DrawCheckBackgroundFlat(e, layout.checkBounds, checkBorder, checkBackground);
-            DrawCheckOnly(e, layout, checkColor, checkBackground, true);
+            DrawCheckBackgroundFlat(e, layout.CheckBounds, checkBorder, checkBackground);
+            DrawCheckOnly(e, layout, checkColor, true);
         }
 
         protected void DrawCheckBackground3DLite(
@@ -43,9 +41,9 @@ namespace System.Windows.Forms.ButtonInternal
             }
 
             using var fieldBrush = field.GetCachedSolidBrushScope();
-            using var dark = colors.buttonShadow.GetCachedPenScope();
-            using var light = colors.buttonFace.GetCachedPenScope();
-            using var lightlight = colors.highlight.GetCachedPenScope();
+            using var dark = colors.ButtonShadow.GetCachedPenScope();
+            using var light = colors.ButtonFace.GetCachedPenScope();
+            using var lightlight = colors.Highlight.GetCachedPenScope();
 
             bounds.Width--;
             bounds.Height--;
@@ -135,7 +133,7 @@ namespace System.Windows.Forms.ButtonInternal
             return (int)(n * scale);
         }
 
-        protected void DrawCheckOnly(PaintEventArgs e, LayoutData layout, Color checkColor, Color checkBackground, bool disabledColors)
+        protected void DrawCheckOnly(PaintEventArgs e, LayoutData layout, Color checkColor, bool disabledColors)
         {
             if (!Control.Checked)
             {
@@ -155,15 +153,15 @@ namespace System.Windows.Forms.ButtonInternal
             int offset = 5;
 
             Rectangle vCross = new Rectangle(
-                layout.checkBounds.X + GetScaledNumber(offset, scale),
-                layout.checkBounds.Y + GetScaledNumber(offset - 1, scale),
+                layout.CheckBounds.X + GetScaledNumber(offset, scale),
+                layout.CheckBounds.Y + GetScaledNumber(offset - 1, scale),
                 GetScaledNumber(2, scale),
                 GetScaledNumber(4, scale));
             hdc.FillRectangle(vCross, brush);
 
             Rectangle hCross = new Rectangle(
-                layout.checkBounds.X + GetScaledNumber(offset - 1, scale),
-                layout.checkBounds.Y + GetScaledNumber(offset, scale),
+                layout.CheckBounds.X + GetScaledNumber(offset - 1, scale),
+                layout.CheckBounds.Y + GetScaledNumber(offset, scale),
                 GetScaledNumber(4, scale), GetScaledNumber(2, scale));
             hdc.FillRectangle(hCross, brush);
         }
@@ -196,7 +194,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         protected void DrawCheckBox(PaintEventArgs e, LayoutData layout)
         {
-            Rectangle check = layout.checkBounds;
+            Rectangle check = layout.CheckBounds;
             if (!Application.RenderWithVisualStyles)
             {
                 check.X--;      // compensate for Windows drawing slightly offset to right
@@ -227,14 +225,14 @@ namespace System.Windows.Forms.ButtonInternal
                 // and thus there's no place around which to draw the focus rectangle.
                 // So, when AutoSize == true we want the focus rectangle to be rendered around the circle area.
                 // Otherwise, it should encircle all the available space next to the box (like it's done in WPF and ComCtl32).
-                layout.focus = Control.AutoSize ? layout.checkBounds : layout.field;
+                layout.Focus = Control.AutoSize ? layout.CheckBounds : layout.Field;
             }
         }
 
         internal override LayoutOptions CommonLayout()
         {
             LayoutOptions layout = base.CommonLayout();
-            layout.checkAlign = Control.CheckAlign;
+            layout.CheckAlign = Control.CheckAlign;
 
             return layout;
         }

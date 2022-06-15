@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design
         {
             serviceProvider = provider;
             this.component = component;
-            // Now initialiaze the contextMenu
+            // Now initialize the contextMenu
             InitializeContextMenu();
         }
 
@@ -77,6 +77,7 @@ namespace System.Windows.Forms.Design
                 Groups[StandardGroups.Selection].Items.Remove(selectionMenuItem);
                 Items.Remove(selectionMenuItem);
             }
+
             ArrayList parentControls = new ArrayList();
             int nParentControls = 0;
 
@@ -95,10 +96,12 @@ namespace System.Windows.Forms.Design
                             parentControls.Add(parentControl);
                             nParentControls++;
                         }
+
                         if (parentControl == root)
                         {
                             break;
                         }
+
                         parentControl = parentControl.Parent;
                     }
                 }
@@ -112,6 +115,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             if (nParentControls > 0)
             {
                 selectionMenuItem = new ToolStripMenuItem();
@@ -133,6 +137,7 @@ namespace System.Windows.Forms.Design
                     ToolStripMenuItem selectListItem = new SelectToolStripMenuItem(parent, serviceProvider);
                     selectionMenuItem.DropDownItems.Add(selectListItem);
                 }
+
                 Groups[StandardGroups.Selection].Items.Add(selectionMenuItem);
                 // Re add the newly refreshed item..
                 if (index != -1)
@@ -201,6 +206,7 @@ namespace System.Windows.Forms.Design
                     ForeColor = (Color)uis.Styles["VsColorPanelText"];
                 }
             }
+
             GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.ZORder, StandardGroups.Grid, StandardGroups.Lock, StandardGroups.Verbs, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
             // ADD MENUITEMS
             AddCodeMenuItem();
@@ -230,6 +236,7 @@ namespace System.Windows.Forms.Design
                     stdItem.RefreshItem();
                 }
             }
+
             RefreshSelectionMenuItem();
         }
 
@@ -266,6 +273,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
+
                 Text = string.Format(SR.ToolStripSelectMenuItem, compName);
                 _itemType = c.GetType();
             }
@@ -290,6 +298,7 @@ namespace System.Windows.Forms.Design
                             _image = ToolboxBitmapAttribute.GetImageFromResource(_comp.GetType(), null, false);
                         }
                     }
+
                     return _image;
                 }
                 set
@@ -302,7 +311,7 @@ namespace System.Windows.Forms.Design
             /// <summary>
             ///  Items OnClick event, to select the Parent Control.
             /// </summary>
-            protected override void OnClick(System.EventArgs e)
+            protected override void OnClick(EventArgs e)
             {
                 if (_serviceProvider.GetService(typeof(ISelectionService)) is ISelectionService selectionService)
                 {

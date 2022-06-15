@@ -84,7 +84,7 @@ namespace System.Windows.Forms.Tests
             try
             {
                 // We get the same HDC out
-                Assert.Equal(dcScope.HDC.Handle, hdc);
+                Assert.Equal(dcScope.HDC.Handle, (nint)hdc);
                 current = Gdi32.GetCurrentObject(dcScope, Gdi32.OBJ.BRUSH);
                 Assert.Equal(blueBrush.HBrush.Handle, current.Handle);
                 Gdi32.SelectObject(dcScope, redBrush);

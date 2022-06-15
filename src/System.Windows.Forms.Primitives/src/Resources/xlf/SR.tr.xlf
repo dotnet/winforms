@@ -7,6 +7,11 @@
         <target state="translated">İşlenmemiş VT: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="General_MissingService">
+        <source>The service '{0}' must be installed for this feature to work.  Ensure that this service is available.</source>
+        <target state="translated">Bu özelliğin çalışması için '{0}' hizmetinin yüklenmesi gerekiyor. Bu hizmetin kullanılabildiğinden emin olun.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
         <target state="translated">IDictionary parametresindeki bir veya daha fazla girdi geçerli değil. Tüm değerlerin nesnenin özellikleriyle eşleştiğini doğrulayın.</target>

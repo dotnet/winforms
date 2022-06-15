@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     ///  It tries to optimize for size first, "get" access second, and
     ///  "set" access third.
     /// </summary>
-    internal class PropertyStore
+    internal partial class PropertyStore
     {
         private static int s_currentKey;
 
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
                     return wrapper.Color;
                 }
 
-                Debug.Assert(storedObject is null, $"Have non-null object that isnt a color wrapper stored in a color entry!{Environment.NewLine}Did someone SetObject instead of SetColor?");
+                Debug.Assert(storedObject is null, $"Have non-null object that isn't a color wrapper stored in a color entry!{Environment.NewLine}Did someone SetObject instead of SetColor?");
             }
 
             found = false;
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
                     return wrapper.Padding;
                 }
 
-                Debug.Assert(storedObject is null, $"Have non-null object that isnt a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
+                Debug.Assert(storedObject is null, $"Have non-null object that isn't a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
             }
 
             found = false;
@@ -107,7 +107,7 @@ namespace System.Windows.Forms
                     return wrapper.Size;
                 }
 
-                Debug.Assert(storedObject is null, $"Have non-null object that isnt a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
+                Debug.Assert(storedObject is null, $"Have non-null object that isn't a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
             }
 
             found = false;
@@ -127,7 +127,7 @@ namespace System.Windows.Forms
                     return wrapper.Rectangle;
                 }
 
-                Debug.Assert(storedObject is null, $"Have non-null object that isnt a Rectangle wrapper stored in a Rectangle entry!{Environment.NewLine}Did someone SetObject instead of SetRectangle?");
+                Debug.Assert(storedObject is null, $"Have non-null object that isn't a Rectangle wrapper stored in a Rectangle entry!{Environment.NewLine}Did someone SetObject instead of SetRectangle?");
             }
 
             found = false;
@@ -353,7 +353,7 @@ namespace System.Windows.Forms
         [MemberNotNullWhen(true, nameof(_objEntries))]
         private bool LocateObjectEntry(short entryKey, out int index)
         {
-            if (_objEntries != null)
+            if (_objEntries is not null)
             {
                 int length = _objEntries.Length;
                 Debug.Assert(length > 0);
@@ -490,6 +490,7 @@ namespace System.Windows.Forms
                 {
                     Array.Copy(_intEntries, 0, newEntries, 0, index);
                 }
+
                 if (index < newEntries.Length)
                 {
                     Debug.Assert(_intEntries.Length - index - 1 > 0);
@@ -562,11 +563,13 @@ namespace System.Windows.Forms
                     {
                         Array.Copy(_objEntries, 0, newEntries, 0, index);
                     }
+
                     if (index < newEntries.Length)
                     {
                         Debug.Assert(_objEntries.Length - index - 1 > 0);
                         Array.Copy(_objEntries, index + 1, newEntries, index, _objEntries.Length - index - 1);
                     }
+
                     _objEntries = newEntries;
                 }
             }
@@ -695,7 +698,7 @@ namespace System.Windows.Forms
             if (!LocateIntegerEntry(entryKey, out int index))
             {
                 // We must allocate a new entry.
-                if (_intEntries != null)
+                if (_intEntries is not null)
                 {
                     IntegerEntry[] newEntries = new IntegerEntry[_intEntries.Length + 1];
 
@@ -756,7 +759,7 @@ namespace System.Windows.Forms
             if (!LocateObjectEntry(entryKey, out int index))
             {
                 // We must allocate a new entry.
-                if (_objEntries != null)
+                if (_objEntries is not null)
                 {
                     ObjectEntry[] newEntries = new ObjectEntry[_objEntries.Length + 1];
 
@@ -811,7 +814,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Takes the given key and splits it into an index and an element.
         /// </summary>
-        private short SplitKey(int key, out short element)
+        private static short SplitKey(int key, out short element)
         {
             element = (short)(key & 0x00000003);
             return (short)(key & 0xFFFFFFFC);
@@ -849,6 +852,7 @@ namespace System.Windows.Forms
             {
                 idx++;
             }
+
             Debug.Assert(index == idx, "GetIntegerEntry in property store broken. index is " + index + " while it should be " + idx + "length of the array is " + length);
         }
 
@@ -883,6 +887,7 @@ namespace System.Windows.Forms
             {
                 idx++;
             }
+
             Debug.Assert(index == idx, "GetObjEntry in property store broken. index is " + index + " while is should be " + idx + "length of the array is " + length);
         }
 
@@ -918,46 +923,6 @@ namespace System.Windows.Forms
             public object? Value2;
             public object? Value3;
             public object? Value4;
-        }
-
-        private sealed class ColorWrapper
-        {
-            public Color Color;
-
-            public ColorWrapper(Color color)
-            {
-                Color = color;
-            }
-        }
-
-        private sealed class PaddingWrapper
-        {
-            public Padding Padding;
-
-            public PaddingWrapper(Padding padding)
-            {
-                Padding = padding;
-            }
-        }
-
-        private sealed class RectangleWrapper
-        {
-            public Rectangle Rectangle;
-
-            public RectangleWrapper(Rectangle rectangle)
-            {
-                Rectangle = rectangle;
-            }
-        }
-
-        private sealed class SizeWrapper
-        {
-            public Size Size;
-
-            public SizeWrapper(Size size)
-            {
-                Size = size;
-            }
         }
     }
 }

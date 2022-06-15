@@ -11,7 +11,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///  The DragAssistanceManager, for lack of a better name, is responsible for integrating SnapLines into the DragBehavior.  At the beginning of a DragBehavior this class is instantiated and at every mouse move this class is called and given the opportunity to adjust the position of the drag.  The DragAssistanceManager needs to work as fast as possible - so not to interupt a drag operation.  Because of this, this class has many global variables that are re-used, in hopes to limit the # of allocations per mouse move / drag operation.  Also, for loops are used extensively (instead of foreach calls) to eliminate the creation of an enumerator.
+    ///  The DragAssistanceManager, for lack of a better name, is responsible for integrating SnapLines into the DragBehavior.  At the beginning of a DragBehavior this class is instantiated and at every mouse move this class is called and given the opportunity to adjust the position of the drag.  The DragAssistanceManager needs to work as fast as possible - so not to interrupt a drag operation.  Because of this, this class has many global variables that are re-used, in hopes to limit the # of allocations per mouse move / drag operation.  Also, for loops are used extensively (instead of foreach calls) to eliminate the creation of an enumerator.
     /// </summary>
     internal sealed class DragAssistanceManager
     {
@@ -24,18 +24,18 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly Pen _edgePen = SystemPens.Highlight;
         private readonly bool _disposeEdgePen;
         private readonly Pen _baselinePen = new Pen(Color.Fuchsia);
-        // These are global lists of all the existing vertical and hoirizontal snaplineson the designer's surface excluding the targetControl.  All SnapLine coords in theselists have been properly adjusted for the AdornerWindow coords.
+        // These are global lists of all the existing vertical and horizontal snaplineson the designer's surface excluding the targetControl.  All SnapLine coords in these lists have been properly adjusted for the AdornerWindow coords.
         private readonly ArrayList _verticalSnapLines = new ArrayList();
         private readonly ArrayList _horizontalSnapLines = new ArrayList();
         // These are SnapLines that represent our target control.
         private readonly ArrayList _targetVerticalSnapLines = new ArrayList();
         private readonly ArrayList _targetHorizontalSnapLines = new ArrayList();
-        // This is a list of all the different type of SnapLines our target controlhas.  When compiling our global SnapLine lists, if we see a SnapLineTypethat doesn't exist on our target - we can safely ignore it
+        // This is a list of all the different type of SnapLines our target control has.  When compiling our global SnapLine lists, if we see a SnapLineType that doesn't exist on our target - we can safely ignore it
         private readonly ArrayList _targetSnapLineTypes = new ArrayList();
         // These are created in our init() method (so we don't have to recreate them for every mousemove). These arrays represent the closest distance to any snap point on our target control.  Once these are calculated - we can: 1) remove anything > than snapDistance and 2) determine the smallest distanceoverall
         private int[] _verticalDistances;
         private int[] _horizontalDistances;
-        //T hese are cleared and populated on every mouse move.  These lists contain all the new vertical and horizontal lines we need to draw.  At the end of each mouse move - these lines are stored off in the vertLines and horzLines arrays.  This way - we can keep track of old snap lines and can avoid erasing and redrawing the same line.  HA.
+        // These are cleared and populated on every mouse move.  These lists contain all the new vertical and horizontal lines we need to draw.  At the end of each mouse move - these lines are stored off in the vertLines and horzLines arrays.  This way - we can keep track of old snap lines and can avoid erasing and redrawing the same line.  HA.
         private readonly ArrayList _tempVertLines = new ArrayList();
         private readonly ArrayList _tempHorzLines = new ArrayList();
         private Line[] _vertLines = Array.Empty<Line>();
@@ -52,21 +52,21 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly bool _ctrlDrag; // Are we in a ctrl-drag?
 
         /// <summary>
-        ///  Internal constructor called that only takes a service provider.  Here it is assumed that all painting will be done to the AdornerWindow and that there are no target controsl to exclude from snapping.
+        ///  Internal constructor called that only takes a service provider.  Here it is assumed that all painting will be done to the AdornerWindow and that there are no target controls to exclude from snapping.
         /// </summary>
         internal DragAssistanceManager(IServiceProvider serviceProvider) : this(serviceProvider, null, null, null, false, false)
         {
         }
 
         /// <summary>
-        ///  Internal constructor that takes the service provider and the list of dragCompoents.
+        ///  Internal constructor that takes the service provider and the list of dragComponents.
         /// </summary>
         internal DragAssistanceManager(IServiceProvider serviceProvider, ArrayList dragComponents) : this(serviceProvider, null, dragComponents, null, false, false)
         {
         }
 
         /// <summary>
-        ///  Internal constructor that takes the service provider, the list of dragCompoents, and a boolean
+        ///  Internal constructor that takes the service provider, the list of dragComponents, and a boolean
         ///  indicating that we are resizing.
         /// </summary>
         internal DragAssistanceManager(IServiceProvider serviceProvider, ArrayList dragComponents, bool resizing) : this(serviceProvider, null, dragComponents, null, resizing, false)
@@ -117,6 +117,7 @@ namespace System.Windows.Forms.Design.Behavior
                     _baselinePen = new Pen((Color)uiService.Styles["VsColorSnaplinesTextBaseline"]);
                 }
             }
+
             _backgroundImage = backgroundImage;
             _rootComponentHandle = host.RootComponent is Control ? ((Control)host.RootComponent).Handle : IntPtr.Zero;
             _resizing = resizing;
@@ -168,6 +169,7 @@ namespace System.Windows.Forms.Design.Behavior
                     {
                         continue;
                     }
+
                     // store off the bounds in our hashtable, so if we draw snaplines we know the length of the line we need to remember different bounds based on what type of snapline this is.
                     if ((snapLine.Filter != null) && snapLine.Filter.StartsWith(SnapLine.Padding))
                     {
@@ -230,7 +232,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                 distances[i] = smallestDelta;
                 int pri = (int)((SnapLine)snapLines[i]).Priority;
-                //save off this delta for the overall smallest delta! Need to check the priority here as well if the distance is the same. E.g. smallestDistance so far is 1, for a Low snapline. We now find another distance of -1, for a Medium snapline. The old check if (Math.Abs(smallestDelta) < Math.Abs(smallestDistance)) would not set smallestDistance to -1, since the ABSOLUTE values are the same. Since the return value is used to phycially move the control, we would move the control in the direction of the Low snapline, but draw the Medium snapline in the opposite direction.
+                //save off this delta for the overall smallest delta! Need to check the priority here as well if the distance is the same. E.g. smallestDistance so far is 1, for a Low snapline. We now find another distance of -1, for a Medium snapline. The old check if (Math.Abs(smallestDelta) < Math.Abs(smallestDistance)) would not set smallestDistance to -1, since the ABSOLUTE values are the same. Since the return value is used to physically move the control, we would move the control in the direction of the Low snapline, but draw the Medium snapline in the opposite direction.
                 if ((Math.Abs(smallestDelta) < Math.Abs(smallestDistance)) ||
                     ((Math.Abs(smallestDelta) == Math.Abs(smallestDistance)) && (pri > highestPriority)))
                 {
@@ -241,6 +243,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
             }
+
             return smallestDistance;
         }
 
@@ -253,9 +256,9 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    Rectangle invalidRect = Rectangle.Empty;
                     bool foundMatch = false;
                     Line line = lines[i];
+                    Rectangle invalidRect;
                     if (tempLines != null)
                     {
                         for (int j = 0; j < tempLines.Count; j++)
@@ -265,6 +268,7 @@ namespace System.Windows.Forms.Design.Behavior
                                 // If the lines are not the same type, then we should forcefully try to remove it. Say you have a Panel with a Button in it. By default Panel.Padding = 0, and Button.Margin = 3. As you move the button to the left, you will first get the combined LEFT margin+padding snap line. If you keep moving the button, you will now snap to the Left edge, and you will get the Blue snapline. You now move the button back to the right, and you will immediately snap to the LEFT Padding snapline. But what's gonna happen. Both the old (Left) snapline, and the LEFT Padding snapline (remember these are the panels) have the same coordinates, since Panel.Padding is 0. Thus Line.GetDiffs will return a non-null diffs. BUT e.g the first line will result in an invalidRect of (x1,y1,0,0), this we end up invalidating only a small portion of the existing Blue (left) Snapline. That's actually not okay since VERTICAL (e.g. LEFT) padding snaplines actually end up getting drawn HORIZONTALLY - thus we didn't really invalidate correctly.
                                 continue;
                             }
+
                             Line[] diffs = Line.GetDiffs(line, (Line)tempLines[j]);
                             if (diffs != null)
                             {
@@ -282,6 +286,7 @@ namespace System.Windows.Forms.Design.Behavior
                                         _behaviorService.Invalidate(invalidRect);
                                     }
                                 }
+
                                 foundMatch = true;
                                 break;
                             }
@@ -314,6 +319,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 lines = Array.Empty<Line>();
             }
+
             return lines;
         }
 
@@ -332,6 +338,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 return _recentLines;
             }
+
             return Array.Empty<Line>();
         }
 
@@ -368,7 +375,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             if (!(comp is Control control) || //has to be a control to get snaplines
                (dragComponents != null && dragComponents.Contains(comp) && !_ctrlDrag) || //cannot be something that we are dragging, unless we are in a ctrlDrag
-               IsChildOfParent(control, targetControl) ||//cannot be a child of the control we will drag
+               IsChildOfParent(control, targetControl) || //cannot be a child of the control we will drag
                !clipBounds.IntersectsWith(control.Bounds) || //has to be partially visible on the rootcomp's surface
                control.Parent is null || // control must have a parent.
                !control.Visible)
@@ -387,6 +394,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
             }
+
             return true;
         }
 
@@ -403,6 +411,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 return false;
             }
+
             return true;
         }
 
@@ -417,6 +426,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 targetControl = dragComponents[0] as Control;
             }
+
             Control rootControl = host.RootComponent as Control;
             // the clipping bounds will be used to ignore all controls that are completely outside of our rootcomponent's bounds -this way we won't end up snapping to controls that are not visible on the form's surface
             Rectangle clipBounds = new Rectangle(0, 0, rootControl.ClientRectangle.Width, rootControl.ClientRectangle.Height);
@@ -450,6 +460,7 @@ namespace System.Windows.Forms.Design.Behavior
                         disposeDesigner = true;
                     }
                 }
+
                 AddSnapLines(designer, _targetHorizontalSnapLines, _targetVerticalSnapLines, true, targetControl != null);
                 if (disposeDesigner)
                 {
@@ -501,6 +512,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 return false;
             }
+
             Control currentParent = child.Parent;
             while (currentParent != null)
             {
@@ -508,8 +520,10 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     return true;
                 }
+
                 currentParent = currentParent.Parent;
             }
+
             return false;
         }
 
@@ -540,6 +554,7 @@ namespace System.Windows.Forms.Design.Behavior
                     _targetVerticalSnapLines.Add(snapline);
                 }
             }
+
             return OffsetToNearestSnapLocation(targetControl, directionOffset);
         }
 
@@ -568,6 +583,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
             }
+
             if (directionOffset.Y != 0)
             {//movement somewhere in the y dir
                 //first, build up our distance array
@@ -597,6 +613,7 @@ namespace System.Windows.Forms.Design.Behavior
                     _vertLines = new Line[_tempVertLines.Count];
                     _tempVertLines.CopyTo(_vertLines);
                 }
+
                 if (offset.Y != 0)
                 {
                     _horzLines = new Line[_tempHorzLines.Count];
@@ -609,19 +626,19 @@ namespace System.Windows.Forms.Design.Behavior
 
         private static int FindSmallestValidDistance(ArrayList snapLines, int[] distances, int min, int max, int direction)
         {
-            int distanceValue = 0;
-            int snapLineIndex = 0;
             // loop while we still have valid distance to check and try to find the smallest valid distance
             while (true)
             {
+                int distanceValue;
                 // get the next smallest snapline index
-                snapLineIndex = SmallestDistanceIndex(distances, direction, out distanceValue);
+                int snapLineIndex = SmallestDistanceIndex(distances, direction, out distanceValue);
 
                 if (snapLineIndex == INVALID_VALUE)
                 {
                     // ran out of valid distances
                     break;
                 }
+
                 if (IsWithinValidRange(((SnapLine)snapLines[snapLineIndex]).Offset, min, max))
                 {
                     // found it - make sure we restore the original value for rendering the snap line in the future
@@ -629,6 +646,7 @@ namespace System.Windows.Forms.Design.Behavior
                     return distanceValue;
                 }
             }
+
             return 0;
         }
 
@@ -667,6 +685,7 @@ namespace System.Windows.Forms.Design.Behavior
                 //return and clear the smallest one we found
                 distances[smallestIndex] = INVALID_VALUE;
             }
+
             return smallestIndex;
         }
 
@@ -702,6 +721,7 @@ namespace System.Windows.Forms.Design.Behavior
                             lines[i].x1 = dragRect.Right;
                             lines[i].x2 = lines[i].OriginalBounds.Right;
                         }
+
                         lines[i].x2--; //off by 1 adjust
                     }
                     else
@@ -725,6 +745,7 @@ namespace System.Windows.Forms.Design.Behavior
                             lines[i].y1 = dragRect.Bottom;
                             lines[i].y2 = lines[i].OriginalBounds.Bottom;
                         }
+
                         lines[i].y2--; //off by 1 adjust
                     }
                 }
@@ -746,6 +767,7 @@ namespace System.Windows.Forms.Design.Behavior
                         lines[i].x2--; //off by 1 adjustment
                     }
                 }
+
                 _graphics.DrawLine(currentPen, lines[i].x1, lines[i].y1, lines[i].x2, lines[i].y2);
             }
         }
@@ -766,6 +788,7 @@ namespace System.Windows.Forms.Design.Behavior
                     merged = true;
                 }
             }
+
             if (!merged)
             {
                 currentLines.Add(snapLine);
@@ -778,12 +801,13 @@ namespace System.Windows.Forms.Design.Behavior
         private void StoreSnapLine(SnapLine snapLine, Rectangle dragBounds)
         {
             Rectangle bounds = (Rectangle)_snapLineToBounds[snapLine];
-            // In order for CombineSnapelines to work correctly, we have to determine the type first
+            // In order for CombineSnaplines to work correctly, we have to determine the type first
             LineType type = LineType.Standard;
             if (IsMarginOrPaddingSnapLine(snapLine))
             {
                 type = snapLine.Filter.StartsWith(SnapLine.Margin) ? LineType.Margin : LineType.Padding;
             }
+
             //propagate the baseline through to the linetype
             else if (snapLine.SnapLineType == SnapLineType.Baseline)
             {
@@ -874,6 +898,7 @@ namespace System.Windows.Forms.Design.Behavior
                     return false;
                 }
             }
+
             //valid overlapping margin line
             return true;
         }
@@ -893,6 +918,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 return Point.Empty;
             }
+
             _targetHorizontalSnapLines.Clear();
             _targetVerticalSnapLines.Clear();
             //manually add our snaplines as targets
@@ -907,6 +933,7 @@ namespace System.Windows.Forms.Design.Behavior
                     _targetVerticalSnapLines.Add(snapline);
                 }
             }
+
             return OnMouseMove(dragBounds, false, ref didSnap, shouldSnapHorizontally);
         }
 
@@ -944,19 +971,21 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     ((SnapLine)_targetHorizontalSnapLines[i]).AdjustOffset(_dragOffset.Y);
                 }
+
                 for (int i = 0; i < _targetVerticalSnapLines.Count; i++)
                 {
                     ((SnapLine)_targetVerticalSnapLines[i]).AdjustOffset(_dragOffset.X);
                 }
             }
 
-            //First pass - build up a distance array of all same-type-alignment pts to theclosest point on our targetControl.  Also, keep track of the smallestdistance overall
+            //First pass - build up a distance array of all same-type-alignment pts to the closest point on our targetControl.  Also, keep track of the smallestdistance overall
             int smallestDistanceVert = BuildDistanceArray(_verticalSnapLines, _targetVerticalSnapLines, _verticalDistances, dragBounds);
             int smallestDistanceHorz = INVALID_VALUE;
             if (shouldSnapHorizontally)
             {
                 smallestDistanceHorz = BuildDistanceArray(_horizontalSnapLines, _targetHorizontalSnapLines, _horizontalDistances, dragBounds);
             }
+
             //Second Pass!  We only need to do a second pass if the smallest delta is <= SnapDistance. If this is the case - then we draw snap lines for every line equal to the smallest distance available in the distance array
             _snapPointX = (Math.Abs(smallestDistanceVert) <= SnapDistance) ? -smallestDistanceVert : INVALID_VALUE;
             _snapPointY = (Math.Abs(smallestDistanceHorz) <= SnapDistance) ? -smallestDistanceHorz : INVALID_VALUE;
@@ -1000,7 +1029,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  Called by the DropSourceBehavior after it finished drawing its' draging images so that we can draw our lines on top of everything.
+        ///  Called by the DropSourceBehavior after it finished drawing its' dragging images so that we can draw our lines on top of everything.
         /// </summary>
         internal void RenderSnapLinesInternal()
         {
@@ -1025,8 +1054,10 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     lines[i] = recent[i].ToString();
                 }
+
                 _behaviorService.RecentSnapLines = lines;
             }
+
             EraseSnapLines();
             _graphics.Dispose();
             if (_disposeEdgePen && _edgePen != null)
@@ -1096,16 +1127,23 @@ namespace System.Windows.Forms.Design.Behavior
                 //x's align
                 if (l1.x1 == l1.x2 && l1.x1 == l2.x1)
                 {
-                    return new Line[2] {new Line(l1.x1, Math.Min(l1.y1, l2.y1), l1.x1, Math.Max(l1.y1, l2.y1)),
-                                        new Line(l1.x1, Math.Min(l1.y2, l2.y2), l1.x1, Math.Max(l1.y2, l2.y2))};
+                    return new Line[2]
+                    {
+                        new Line(l1.x1, Math.Min(l1.y1, l2.y1), l1.x1, Math.Max(l1.y1, l2.y1)),
+                        new Line(l1.x1, Math.Min(l1.y2, l2.y2), l1.x1, Math.Max(l1.y2, l2.y2))
+                    };
                 }
 
                 //y's align
                 if (l1.y1 == l1.y2 && l1.y1 == l2.y1)
                 {
-                    return new Line[2] {new Line(Math.Min(l1.x1, l2.x1), l1.y1, Math.Max(l1.x1, l2.x1), l1.y1),
-                                        new Line(Math.Min(l1.x2, l2.x2), l1.y1, Math.Max(l1.x2, l2.x2), l1.y1)};
+                    return new Line[2]
+                    {
+                        new Line(Math.Min(l1.x1, l2.x1), l1.y1, Math.Max(l1.x1, l2.x1), l1.y1),
+                        new Line(Math.Min(l1.x2, l2.x2), l1.y1, Math.Max(l1.x2, l2.x2), l1.y1)
+                    };
                 }
+
                 return null;
             }
 
@@ -1134,6 +1172,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     return new Line(Math.Min(l1.x1, l2.x1), l1.y1, Math.Max(l1.x2, l2.x2), l1.y2, l1.LineType);
                 }
+
                 return null;
             }
 

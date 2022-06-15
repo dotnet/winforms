@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design
@@ -58,7 +57,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     // Get OleDragHandler ...
-                    ToolboxItem tbi = new ToolboxItem(typeof(System.Windows.Forms.ToolStripContainer));
+                    ToolboxItem tbi = new ToolboxItem(typeof(ToolStripContainer));
                     OleDragDropHandler ddh = rootDesigner.GetOleDragHandler();
                     if (ddh != null)
                     {
@@ -67,29 +66,29 @@ namespace System.Windows.Forms.Design
                         {
                             if (toolStrip != null)
                             {
-                                IComponentChangeService changeSvc = _provider.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                                var changeService = _provider.GetService<IComponentChangeService>();
                                 Control newParent = GetParent(tsc, toolStrip);
                                 PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(newParent)["Controls"];
                                 Control oldParent = toolStrip.Parent;
                                 if (oldParent != null)
                                 {
-                                    changeSvc.OnComponentChanging(oldParent, controlsProp);
+                                    changeService.OnComponentChanging(oldParent, controlsProp);
                                     //remove control from the old parent
                                     oldParent.Controls.Remove(toolStrip);
                                 }
 
                                 if (newParent != null)
                                 {
-                                    changeSvc.OnComponentChanging(newParent, controlsProp);
+                                    changeService.OnComponentChanging(newParent, controlsProp);
                                     //finally add & relocate the control with the new parent
                                     newParent.Controls.Add(toolStrip);
                                 }
 
                                 //fire our comp changed events
-                                if (changeSvc != null && oldParent != null && newParent != null)
+                                if (changeService != null && oldParent != null && newParent != null)
                                 {
-                                    changeSvc.OnComponentChanged(oldParent, controlsProp, null, null);
-                                    changeSvc.OnComponentChanged(newParent, controlsProp, null, null);
+                                    changeService.OnComponentChanged(oldParent, controlsProp);
+                                    changeService.OnComponentChanged(newParent, controlsProp);
                                 }
 
                                 //Set the Selection on the new Parent ... so that the selection is restored to the new item,
@@ -104,7 +103,7 @@ namespace System.Windows.Forms.Design
             }
             catch (Exception e)
             {
-                if (e is System.InvalidOperationException)
+                if (e is InvalidOperationException)
                 {
                     IUIService uiService = (IUIService)_provider.GetService(typeof(IUIService));
                     uiService.ShowError(e.Message);
@@ -121,13 +120,13 @@ namespace System.Windows.Forms.Design
                 if (changeParent != null)
                 {
                     changeParent.Commit();
-                    changeParent = null;
                 }
+
                 Cursor.Current = current;
             }
         }
 
-        private Control GetParent(ToolStripContainer container, Control c)
+        private static Control GetParent(ToolStripContainer container, Control c)
         {
             Control newParent = container.ContentPanel;
             DockStyle dock = c.Dock;
@@ -135,6 +134,7 @@ namespace System.Windows.Forms.Design
             {
                 dock = c.Parent.Dock;
             }
+
             foreach (Control panel in container.Controls)
             {
                 if (panel is ToolStripPanel)
@@ -146,6 +146,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return newParent;
         }
     }

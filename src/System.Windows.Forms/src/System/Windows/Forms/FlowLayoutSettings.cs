@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms.Layout;
@@ -47,12 +45,9 @@ namespace System.Windows.Forms
 
         public void SetFlowBreak(object child, bool value)
         {
-            if (child is null)
-            {
-                throw new ArgumentNullException(nameof(child));
-            }
+            ArgumentNullException.ThrowIfNull(child);
 
-            IArrangedElement element = FlowLayout.Instance.CastToArrangedElement(child);
+            IArrangedElement element = LayoutEngine.CastToArrangedElement(child);
             if (GetFlowBreak(child) != value)
             {
                 CommonProperties.SetFlowBreak(element, value);
@@ -61,12 +56,9 @@ namespace System.Windows.Forms
 
         public bool GetFlowBreak(object child)
         {
-            if (child is null)
-            {
-                throw new ArgumentNullException(nameof(child));
-            }
+            ArgumentNullException.ThrowIfNull(child);
 
-            IArrangedElement element = FlowLayout.Instance.CastToArrangedElement(child);
+            IArrangedElement element = LayoutEngine.CastToArrangedElement(child);
             return CommonProperties.GetFlowBreak(element);
         }
     }

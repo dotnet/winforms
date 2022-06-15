@@ -25,14 +25,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     ///  This class only knows how to process things that are natively in the typeinfo.  Other property
     ///  information such as IPerPropertyBrowsing is handled elsewhere.
     /// </summary>
-    internal class Com2TypeInfoProcessor
+    internal static class Com2TypeInfoProcessor
     {
         private static readonly TraceSwitch DbgTypeInfoProcessorSwitch = new TraceSwitch("DbgTypeInfoProcessor", "Com2TypeInfoProcessor: debug Com2 type info processing");
-
-        private Com2TypeInfoProcessor()
-        {
-        }
-
         private static ModuleBuilder moduleBuilder;
 
         private static ModuleBuilder ModuleBuilder
@@ -48,6 +43,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     AssemblyBuilder aBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
                     moduleBuilder = aBuilder.DefineDynamicModule("COM2Interop.Emit");
                 }
+
                 return moduleBuilder;
             }
         }
@@ -89,8 +85,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///  Given an Object, this attempts to locate its type info. If it implementes IProvideMultipleClassInfo
-        ///  all available type infos will be returned, otherwise the primary one will be alled.
+        ///  Given an Object, this attempts to locate its type info. If it implements IProvideMultipleClassInfo
+        ///  all available type infos will be returned, otherwise the primary one will be called.
         /// </summary>
         public unsafe static ITypeInfo[] FindTypeInfos(object obj, bool wantCoClass)
         {
@@ -107,7 +103,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             continue;
                         }
 
-                        Debug.Assert(result != null, "IProvideMultipleClassInfo::GetInfoOfIndex returned S_OK for ITypeInfo index " + i + ", this is a issue in the object that's being browsed, NOT the property browser.");
+                        Debug.Assert(result is not null, "IProvideMultipleClassInfo::GetInfoOfIndex returned S_OK for ITypeInfo index " + i + ", this is a issue in the object that's being browsed, NOT the property browser.");
                         typeInfos[i] = result;
                     }
 
@@ -116,7 +112,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             ITypeInfo temp = FindTypeInfo(obj, wantCoClass);
-            if (temp != null)
+            if (temp is not null)
             {
                 return new ITypeInfo[] { temp };
             }
@@ -137,7 +133,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             bool succeeded = false;
 
             // first try to find one with a valid value
-            cnd.GetPropertyValue(obj, "__id", ref succeeded);
+            ComNativeDescriptor.GetPropertyValue(obj, "__id", ref succeeded);
 
             if (succeeded)
             {
@@ -145,14 +141,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
             else
             {
-                cnd.GetPropertyValue(obj, DispatchID.Name, ref succeeded);
+                ComNativeDescriptor.GetPropertyValue(obj, DispatchID.Name, ref succeeded);
                 if (succeeded)
                 {
                     dispid = DispatchID.Name;
                 }
                 else
                 {
-                    cnd.GetPropertyValue(obj, "Name", ref succeeded);
+                    ComNativeDescriptor.GetPropertyValue(obj, "Name", ref succeeded);
                     if (succeeded)
                     {
                         names = new string[] { "Name" };
@@ -161,7 +157,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             // now get the dispid of the one that worked...
-            if (names != null)
+            if (names is not null)
             {
                 DispatchID pDispid = DispatchID.UNKNOWN;
                 Guid g = Guid.Empty;
@@ -216,7 +212,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 uint[] versions = new uint[2];
                 Guid typeGuid = GetGuidForTypeInfo(ti, versions);
                 PropertyDescriptor[] props = null;
-                bool dontProcess = typeGuid != Guid.Empty && processedLibraries != null && processedLibraries.Contains(typeGuid);
+                bool dontProcess = typeGuid != Guid.Empty && processedLibraries is not null && processedLibraries.Contains(typeGuid);
 
                 if (dontProcess)
                 {
@@ -257,7 +253,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
 
-                if (props != null)
+                if (props is not null)
                 {
                     propList.AddRange(props);
                 }
@@ -283,7 +279,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                if (versions != null)
+                if (versions is not null)
                 {
                     versions[0] = pTypeAttr->wMajorVerNum;
                     versions[1] = pTypeAttr->wMinorVerNum;
@@ -300,7 +296,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Resolves a value type for a property from a TYPEDESC.  Value types can be
         ///  user defined, which and may be aliased into other type infos.  This function
-        ///  will recusively walk the ITypeInfos to resolve the type to a clr Type.
+        ///  will recursively walk the ITypeInfos to resolve the type to a clr Type.
         /// </summary>
         private unsafe static Type GetValueTypeFromTypeDesc(in TYPEDESC typeDesc, ITypeInfo typeInfo, object[] typeData)
         {
@@ -328,7 +324,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 case VARENUM.PTR:
                     // we'll need to recurse into a user defined reference typeinfo
-                    Debug.Assert(typeDesc.union.lptdesc != null, "typeDesc doesn't contain an refTypeDesc!");
+                    Debug.Assert(typeDesc.union.lptdesc is not null, "typeDesc doesn't contain an refTypeDesc!");
                     if (typeDesc.union.lptdesc->vt == VARENUM.VARIANT)
                     {
                         return VTToType(typeDesc.union.lptdesc->vt);
@@ -350,7 +346,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // here is where we look at the next level type info.
                 // if we get an enum, process it, otherwise we will recurse
                 // or get a dispatch.
-                if (refTypeInfo != null)
+                if (refTypeInfo is not null)
                 {
                     TYPEATTR* pTypeAttr = null;
                     hr = refTypeInfo.GetTypeAttr(&pTypeAttr);
@@ -395,6 +391,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 refTypeInfo = null;
             }
+
             return null;
         }
 
@@ -450,7 +447,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             object[] pvar = new object[1];
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
 
-            // for each item in uur list, create the descriptor an check
+            // for each item in our list, create the descriptor an check
             // if it's the default one.
             foreach (PropInfo pi in propInfos.Values)
             {
@@ -461,13 +458,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     try
                     {
-                        hr = cnd.GetPropertyValue(obj, pi.DispId, pvar);
+                        hr = ComNativeDescriptor.GetPropertyValue(obj, pi.DispId, pvar);
                     }
                     catch (ExternalException ex)
                     {
                         hr = (HRESULT)ex.ErrorCode;
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "IDispatch::Invoke(PROPGET, " + pi.Name + ") threw an exception :" + ex.ToString());
                     }
+
                     if (!hr.Succeeded())
                     {
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Adding Browsable(false) to property '" + pi.Name + "' because Invoke(dispid=0x{0:X} ,DISPATCH_PROPERTYGET) returned hr=0x{1:X}.  Properties that do not return S_OK are hidden by default.", pi.DispId, hr));
@@ -493,6 +491,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 props[props.Length - 1] = new Com2AboutBoxPropertyDescriptor();
             }
+
             return props;
         }
 
@@ -505,13 +504,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
             if (!hr.Succeeded())
             {
-                throw new COMException(string.Format(SR.TYPEINFOPROCESSORGetDocumentationFailed, dispid, hr, cnd.GetClassName(typeInfo)), (int)hr);
+                throw new COMException(string.Format(SR.TYPEINFOPROCESSORGetDocumentationFailed, dispid, hr, ComNativeDescriptor.GetClassName(typeInfo)), (int)hr);
             }
 
             string name = nameBstr.String.ToString();
             if (string.IsNullOrEmpty(name))
             {
-                Debug.Fail(string.Format(CultureInfo.CurrentCulture, "ITypeInfo::GetDocumentation didn't return a name for DISPID 0x{0:X} but returned SUCEEDED(hr),  Component=" + cnd.GetClassName(typeInfo), dispid));
+                Debug.Fail(string.Format(CultureInfo.CurrentCulture, "ITypeInfo::GetDocumentation didn't return a name for DISPID 0x{0:X} but returned SUCCEEDED(hr),  Component=" + ComNativeDescriptor.GetClassName(typeInfo), dispid));
                 return null;
             }
 
@@ -562,7 +561,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     flags |= VARFLAGS.FNONBROWSABLE;
                 }
 
-                if (pTypeData[0] != null)
+                if (pTypeData[0] is not null)
                 {
                     pi.TypeData = pTypeData[0];
                 }
@@ -639,6 +638,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             {
                                 addAboutBox = true;
                             }
+
                             continue;
                         }
 
@@ -661,7 +661,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         }
                         else
                         {
-                            Debug.Assert(pFuncDesc->lprgelemdescParam != null, "ELEMDESC param is null!");
+                            Debug.Assert(pFuncDesc->lprgelemdescParam is not null, "ELEMDESC param is null!");
                             if (pFuncDesc->lprgelemdescParam is null || pFuncDesc->cParams != 1)
                             {
                                 continue;
@@ -672,10 +672,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 typeDesc = pFuncDesc->lprgelemdescParam->tdesc;
                             }
                         }
+
                         pi = ProcessDataCore(typeInfo, propInfoList, pFuncDesc->memid, nameDispID, in typeDesc, (VARFLAGS)pFuncDesc->wFuncFlags);
 
                         // if we got a setmethod, it's not readonly
-                        if (pi != null && !isPropGet)
+                        if (pi is not null && !isPropGet)
                         {
                             pi.ReadOnly = PropInfo.ReadOnlyFalse;
                         }
@@ -786,9 +787,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             }
                             else
                             {
-                                Debug.Assert(name != null, "No name for VARDESC member, but GetDocumentation returned S_OK!");
+                                Debug.Assert(name is not null, "No name for VARDESC member, but GetDocumentation returned S_OK!");
                                 nameString = name;
                             }
+
                             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: adding name value=" + nameString);
                             strs.Add(nameString);
                         }
@@ -821,7 +823,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                             Type enumType = typeof(int);
 
-                            if (vars.Count > 0 && vars[0] != null)
+                            if (vars.Count > 0 && vars[0] is not null)
                             {
                                 enumType = vars[0].GetType();
                             }
@@ -831,6 +833,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             {
                                 enumBuilder.DefineLiteral((string)strs[i], vars[i]);
                             }
+
                             Type t = enumBuilder.CreateTypeInfo().AsType();
                             builtEnums[enumName] = t;
                             return t;
@@ -852,6 +855,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             catch
             {
             }
+
             return null;
         }
 
@@ -1013,7 +1017,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            private PropertyDescriptor[] ClonePropertyDescriptors(PropertyDescriptor[] props)
+            private static PropertyDescriptor[] ClonePropertyDescriptors(PropertyDescriptor[] props)
             {
                 PropertyDescriptor[] retProps = new PropertyDescriptor[props.Length];
                 for (int i = 0; i < props.Length; i++)
@@ -1028,6 +1032,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         retProps[i] = props[i];
                     }
                 }
+
                 return retProps;
             }
         }

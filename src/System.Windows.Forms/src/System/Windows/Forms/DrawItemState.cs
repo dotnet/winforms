@@ -18,7 +18,7 @@ namespace System.Windows.Forms
         Checked = (int)User32.ODS.CHECKED,
 
         /// <summary>
-        ///  The item is the editing portion of a <see cref='ComboBox'/> .
+        ///  The item is the editing portion of a <see cref="ComboBox"/> .
         /// </summary>
         ComboBoxEdit = (int)User32.ODS.COMBOBOXEDIT,
 
@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         Inactive = (int)User32.ODS.INACTIVE,
 
         /// <summary>
-        ///  The item displays without a keyboard accelarator.
+        ///  The item displays without a keyboard accelerator.
         /// </summary>
         NoAccelerator = (int)User32.ODS.NOACCEL,
 

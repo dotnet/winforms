@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -18,34 +16,8 @@ namespace System.Windows.Forms
     ///  It also has types that make sense only for ActiveX hosting classes.
     ///  In other words, this is a helper class for the ActiveX hosting classes.
     /// </summary>
-    internal static class WebBrowserHelper
+    internal static partial class WebBrowserHelper
     {
-        // Enumeration of the different states of the ActiveX control
-        internal enum AXState
-        {
-            Passive = 0,        // Not loaded
-            Loaded = 1,         // Loaded, but no server   [ocx created]
-            Running = 2,        // Server running, invisible [depersisted]
-            InPlaceActive = 4,  // Server in-place active [visible]
-            UIActive = 8        // Used only by WebBrowserSiteBase
-        }
-
-        // Enumeration of the different Edit modes
-        internal enum AXEditMode
-        {
-            None = 0,       // object not being edited
-            Object = 1,     // object provided an edit verb and we invoked it
-            Host = 2        // we invoked our own edit verb
-        };
-
-        // Enumeration of Selection Styles
-        internal enum SelectionStyle
-        {
-            NotSelected = 0,
-            Selected = 1,
-            Active = 2
-        };
-
         //
         // Static members:
         //
@@ -99,6 +71,7 @@ namespace System.Windows.Forms
                     using var dc = User32.GetDcScope.ScreenDC;
                     logPixelsX = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
                 }
+
                 return logPixelsX;
             }
         }
@@ -113,23 +86,23 @@ namespace System.Windows.Forms
                     using var dc = User32.GetDcScope.ScreenDC;
                     logPixelsY = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
                 }
+
                 return logPixelsY;
             }
         }
 
         // Gets the selection service from the control's site
-        internal static ISelectionService GetSelectionService(Control ctl)
+        internal static ISelectionService? GetSelectionService(Control ctl)
         {
-            ISite site = ctl.Site;
-            if (site != null)
+            ISite? site = ctl.Site;
+            if (site is not null)
             {
-                object o = site.GetService(typeof(ISelectionService));
-                Debug.Assert(o is null || o is ISelectionService, "service must implement ISelectionService");
-                if (o is ISelectionService)
-                {
-                    return (ISelectionService)o;
-                }
+                ISelectionService? selectionService = site.GetService<ISelectionService>();
+                Debug.Assert(selectionService is not null, "service must implement ISelectionService");
+
+                return selectionService;
             }
+
             return null;
         }
 

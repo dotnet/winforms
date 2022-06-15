@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
@@ -12,16 +10,18 @@ namespace System.Windows.Forms
     public class ToolStripSystemRenderer : ToolStripRenderer
     {
         [ThreadStatic()]
-        private static VisualStyleRenderer renderer = null;
-        private ToolStripRenderer toolStripHighContrastRenderer;
+        private static VisualStyleRenderer? t_renderer = null;
+        private ToolStripRenderer? _toolStripHighContrastRenderer;
 
         public ToolStripSystemRenderer()
         {
         }
+
         internal ToolStripSystemRenderer(bool isDefault) : base(isDefault)
         {
         }
-        internal override ToolStripRenderer RendererOverride
+
+        internal override ToolStripRenderer? RendererOverride
         {
             get
             {
@@ -29,6 +29,7 @@ namespace System.Windows.Forms
                 {
                     return HighContrastRenderer;
                 }
+
                 return null;
             }
         }
@@ -37,33 +38,36 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (toolStripHighContrastRenderer is null)
+                if (_toolStripHighContrastRenderer is null)
                 {
-                    toolStripHighContrastRenderer = new ToolStripHighContrastRenderer(/*renderLikeSystem*/true);
+                    // If system in high contrast mode 'false' flag should be passed to render filled selected button background. This is in consistence with ToolStripProfessionalRenderer.
+                    _toolStripHighContrastRenderer = new ToolStripHighContrastRenderer(systemRenderMode: false);
                 }
-                return toolStripHighContrastRenderer;
+
+                return _toolStripHighContrastRenderer;
             }
         }
 
         /// <summary>
         ///  Draw the background color
         /// </summary>
-        private static VisualStyleRenderer VisualStyleRenderer
+        private static VisualStyleRenderer? VisualStyleRenderer
         {
             get
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    if (renderer is null && VisualStyleRenderer.IsElementDefined(VisualStyleElement.ToolBar.Button.Normal))
+                    if (t_renderer is null && VisualStyleRenderer.IsElementDefined(VisualStyleElement.ToolBar.Button.Normal))
                     {
-                        renderer = new VisualStyleRenderer(VisualStyleElement.ToolBar.Button.Normal);
+                        t_renderer = new VisualStyleRenderer(VisualStyleElement.ToolBar.Button.Normal);
                     }
                 }
                 else
                 {
-                    renderer = null;
+                    t_renderer = null;
                 }
-                return renderer;
+
+                return t_renderer;
             }
         }
 
@@ -88,7 +92,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  translates the ToolStrip item state into a toolbar state, which is something the renderer understands
         /// </summary>
-        private static int GetSplitButtonDropDownItemState(ToolStripSplitButton item)
+        private static int GetSplitButtonDropDownItemState(ToolStripSplitButton? item)
         {
             return (int)GetSplitButtonToolBarState(item, true);
         }
@@ -96,18 +100,19 @@ namespace System.Windows.Forms
         /// <summary>
         ///  translates the ToolStrip item state into a toolbar state, which is something the renderer understands
         /// </summary>
-        private static int GetSplitButtonItemState(ToolStripSplitButton item)
+        private static int GetSplitButtonItemState(ToolStripSplitButton? item)
         {
             return (int)GetSplitButtonToolBarState(item, false);
         }
+
         /// <summary>
         ///  translates the ToolStrip item state into a toolbar state, which is something the renderer understands
         /// </summary>
-        private static ToolBarState GetSplitButtonToolBarState(ToolStripSplitButton button, bool dropDownButton)
+        private static ToolBarState GetSplitButtonToolBarState(ToolStripSplitButton? button, bool dropDownButton)
         {
             ToolBarState state = ToolBarState.Normal;
 
-            if (button != null)
+            if (button is not null)
             {
                 if (!button.Enabled)
                 {
@@ -136,6 +141,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return state;
         }
 
@@ -145,32 +151,32 @@ namespace System.Windows.Forms
         private static ToolBarState GetToolBarState(ToolStripItem item)
         {
             ToolBarState state = ToolBarState.Normal;
-            if (item != null)
+
+            if (!item.Enabled)
             {
-                if (!item.Enabled)
+                state = ToolBarState.Disabled;
+            }
+
+            if (item is ToolStripButton toolStripButton && toolStripButton.Checked)
+            {
+                if (toolStripButton.Selected)
                 {
-                    state = ToolBarState.Disabled;
+                    state = ToolBarState.Hot; // we'd prefer HotChecked here, but Color Theme uses the same color as Checked
                 }
-                if (item is ToolStripButton && ((ToolStripButton)item).Checked)
+                else
                 {
-                    if (((ToolStripButton)item).Selected)
-                    {
-                        state = ToolBarState.Hot; // we'd prefer HotChecked here, but Color Theme uses the same color as Checked
-                    }
-                    else
-                    {
-                        state = ToolBarState.Checked;
-                    }
-                }
-                else if (item.Pressed)
-                {
-                    state = ToolBarState.Pressed;
-                }
-                else if (item.Selected)
-                {
-                    state = ToolBarState.Hot;
+                    state = ToolBarState.Checked;
                 }
             }
+            else if (item.Pressed)
+            {
+                state = ToolBarState.Pressed;
+            }
+            else if (item.Selected)
+            {
+                state = ToolBarState.Hot;
+            }
+
             return state;
         }
 
@@ -214,8 +220,7 @@ namespace System.Windows.Forms
                 }
                 else if (ToolStripManager.VisualStylesEnabled && VisualStyleRenderer.IsElementDefined(VisualStyleElement.Rebar.Band.Normal))
                 {
-                    VisualStyleRenderer vsRenderer = VisualStyleRenderer;
-
+                    VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
                     vsRenderer.SetParameters(VisualStyleElement.ToolBar.Bar.Normal);
                     vsRenderer.DrawBackground(g, bounds);
                 }
@@ -233,17 +238,14 @@ namespace System.Windows.Forms
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
         {
             ToolStrip toolStrip = e.ToolStrip;
-            Graphics g = e.Graphics;
-            Rectangle bounds = e.ToolStrip.ClientRectangle;
+            Rectangle bounds = toolStrip.ClientRectangle;
 
             if (toolStrip is StatusStrip)
             {
                 RenderStatusStripBorder(e);
             }
-            else if (toolStrip is ToolStripDropDown)
+            else if (toolStrip is ToolStripDropDown toolStripDropDown)
             {
-                ToolStripDropDown toolStripDropDown = toolStrip as ToolStripDropDown;
-
                 // Paint the border for the window depending on whether or not we have a drop shadow effect.
                 if (toolStripDropDown.DropShadowEnabled && ToolStripManager.VisualStylesEnabled)
                 {
@@ -282,7 +284,7 @@ namespace System.Windows.Forms
 
             if (ToolStripManager.VisualStylesEnabled && VisualStyleRenderer.IsElementDefined(VisualStyleElement.Rebar.Gripper.Normal))
             {
-                VisualStyleRenderer vsRenderer = VisualStyleRenderer;
+                VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
 
                 if (verticalGrip)
                 {
@@ -295,11 +297,12 @@ namespace System.Windows.Forms
                 {
                     vsRenderer.SetParameters(VisualStyleElement.Rebar.GripperVertical.Normal);
                 }
+
                 vsRenderer.DrawBackground(g, bounds);
             }
             else
             {
-                // do some fixup so that we dont paint from end to end.
+                // do some fixup so that we don't paint from end to end.
                 Color backColor = e.ToolStrip.BackColor;
                 FillBackground(g, bounds, backColor);
 
@@ -309,6 +312,7 @@ namespace System.Windows.Forms
                     {
                         bounds.Inflate(0, -2);     // scoot down 2PX and start drawing
                     }
+
                     bounds.Width = 3;
                 }
                 else
@@ -317,10 +321,11 @@ namespace System.Windows.Forms
                     {
                         bounds.Inflate(-2, 0);        // scoot over 2PX and start drawing
                     }
+
                     bounds.Height = 3;
                 }
 
-                RenderSmall3DBorderInternal(g, bounds, ToolBarState.Hot, (e.ToolStrip.RightToLeft == RightToLeft.Yes));
+                RenderSmall3DBorderInternal(g, bounds, ToolBarState.Hot, e.ToolStrip.RightToLeft == RightToLeft.Yes);
             }
         }
 
@@ -337,11 +342,20 @@ namespace System.Windows.Forms
         protected override void OnRenderImageMargin(ToolStripRenderEventArgs e)
         {
         }
+
         /// <summary>
         ///  Draw the button background
         /// </summary>
         protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
         {
+            // If system in high contrast mode and specific renderer override is defined, use that.
+            // For ToolStripSystemRenderer in High Contrast mode the RendererOverride property will be ToolStripHighContrastRenderer.
+            if (RendererOverride is not null)
+            {
+                base.OnRenderButtonBackground(e);
+                return;
+            }
+
             RenderItemInternal(e);
         }
 
@@ -350,6 +364,14 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e)
         {
+            // If system in high contrast mode and specific renderer override is defined, use that.
+            // For ToolStripSystemRenderer in High Contrast mode the RendererOverride property will be ToolStripHighContrastRenderer.
+            if (RendererOverride is not null)
+            {
+                base.OnRenderDropDownButtonBackground(e);
+                return;
+            }
+
             RenderItemInternal(e);
         }
 
@@ -364,7 +386,7 @@ namespace System.Windows.Forms
             if (ToolStripManager.VisualStylesEnabled && VisualStyleRenderer.IsElementDefined(VisualStyleElement.Rebar.Chevron.Normal))
             {
                 VisualStyleElement chevronElement = VisualStyleElement.Rebar.Chevron.Normal;
-                VisualStyleRenderer vsRenderer = VisualStyleRenderer;
+                VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
                 vsRenderer.SetParameters(chevronElement.ClassName, chevronElement.Part, GetItemState(item));
                 vsRenderer.DrawBackground(g, new Rectangle(Point.Empty, item.Size));
             }
@@ -372,7 +394,6 @@ namespace System.Windows.Forms
             {
                 RenderItemInternal(e);
                 Color arrowColor = item.Enabled ? SystemColors.ControlText : SystemColors.ControlDark;
-
                 DrawArrow(new ToolStripArrowRenderEventArgs(g, item, new Rectangle(Point.Empty, item.Size), arrowColor, ArrowDirection.Down));
             }
         }
@@ -384,12 +405,13 @@ namespace System.Windows.Forms
         {
             RenderLabelInternal(e);
         }
+
         /// <summary>
         ///  Draw the items background
         /// </summary>
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
         {
-            ToolStripMenuItem item = e.Item as ToolStripMenuItem;
+            ToolStripMenuItem? item = e.Item as ToolStripMenuItem;
             Graphics g = e.Graphics;
 
             if (item is MdiControlStrip.SystemMenuItem)
@@ -397,16 +419,14 @@ namespace System.Windows.Forms
                 return; // no highlights are painted behind a system menu item
             }
 
-            //
-
-            if (item != null)
+            if (item is not null)
             {
                 Rectangle bounds = new Rectangle(Point.Empty, item.Size);
                 if (item.IsTopLevel && !ToolStripManager.VisualStylesEnabled)
                 {
                     // Classic Mode (3D edges)
                     // Draw box highlight for toplevel items in downlevel platforms
-                    if (item.BackgroundImage != null)
+                    if (item.BackgroundImage is not null)
                     {
                         ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, item.ContentRectangle, item.ContentRectangle);
                     }
@@ -414,6 +434,7 @@ namespace System.Windows.Forms
                     {
                         FillBackground(g, item.ContentRectangle, item.BackColor);
                     }
+
                     // Toplevel menu items do 3D borders.
                     ToolBarState state = GetToolBarState(item);
                     RenderSmall3DBorderInternal(g, bounds, state, (item.RightToLeft == RightToLeft.Yes));
@@ -440,8 +461,9 @@ namespace System.Windows.Forms
                             g.FillRectangle(SystemBrushes.Highlight, fillRect);
                         }
 
-                        Color borderColor = ToolStripManager.VisualStylesEnabled ?
-                            SystemColors.Highlight : ProfessionalColors.MenuItemBorder;
+                        Color borderColor = ToolStripManager.VisualStylesEnabled
+                            ? SystemColors.Highlight
+                            : ProfessionalColors.MenuItemBorder;
 
                         // Draw selection border - always drawn regardless of Enabled.
                         using var pen = borderColor.GetCachedPenScope();
@@ -449,7 +471,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        if (item.BackgroundImage != null)
+                        if (item.BackgroundImage is not null)
                         {
                             ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, item.ContentRectangle, fillRect);
                         }
@@ -474,9 +496,11 @@ namespace System.Windows.Forms
         protected override void OnRenderToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e)
         {
             RenderLabelInternal(e);
-            ToolStripStatusLabel item = e.Item as ToolStripStatusLabel;
-
-            ControlPaint.DrawBorder3D(e.Graphics, new Rectangle(0, 0, item.Width - 1, item.Height - 1), item.BorderStyle, (Border3DSide)item.BorderSides);
+            ToolStripStatusLabel? item = e.Item as ToolStripStatusLabel;
+            if (item is not null)
+            {
+                ControlPaint.DrawBorder3D(e.Graphics, new Rectangle(0, 0, item.Width - 1, item.Height - 1), item.BorderStyle, (Border3DSide)item.BorderSides);
+            }
         }
 
         /// <summary>
@@ -484,22 +508,36 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e)
         {
-            ToolStripSplitButton splitButton = e.Item as ToolStripSplitButton;
+            // If system in high contrast mode and specific renderer override is defined, use that.
+            // For ToolStripSystemRenderer in High Contrast mode the RendererOverride property will be ToolStripHighContrastRenderer.
+            if (RendererOverride is not null)
+            {
+                base.OnRenderSplitButtonBackground(e);
+                return;
+            }
+
+            ToolStripSplitButton? splitButton = e.Item as ToolStripSplitButton;
+            if (splitButton is null)
+            {
+                return;
+            }
+
             Graphics g = e.Graphics;
 
-            bool rightToLeft = (splitButton.RightToLeft == RightToLeft.Yes);
+            bool rightToLeft = splitButton.RightToLeft == RightToLeft.Yes;
             Color arrowColor = splitButton.Enabled ? SystemColors.ControlText : SystemColors.ControlDark;
 
-            // in right to left - we need to swap the parts so we dont draw  v][ toolStripSplitButton
-            VisualStyleElement splitButtonDropDownPart = (rightToLeft) ? VisualStyleElement.ToolBar.SplitButton.Normal : VisualStyleElement.ToolBar.SplitButtonDropDown.Normal;
-            VisualStyleElement splitButtonPart = (rightToLeft) ? VisualStyleElement.ToolBar.DropDownButton.Normal : VisualStyleElement.ToolBar.SplitButton.Normal;
+            // in right to left - we need to swap the parts so we don't draw  v][ toolStripSplitButton
+            VisualStyleElement splitButtonDropDownPart = rightToLeft ? VisualStyleElement.ToolBar.SplitButton.Normal : VisualStyleElement.ToolBar.SplitButtonDropDown.Normal;
+            VisualStyleElement splitButtonPart = rightToLeft ? VisualStyleElement.ToolBar.DropDownButton.Normal : VisualStyleElement.ToolBar.SplitButton.Normal;
 
             Rectangle bounds = new Rectangle(Point.Empty, splitButton.Size);
+
             if (ToolStripManager.VisualStylesEnabled
                 && VisualStyleRenderer.IsElementDefined(splitButtonDropDownPart)
                 && VisualStyleRenderer.IsElementDefined(splitButtonPart))
             {
-                VisualStyleRenderer vsRenderer = VisualStyleRenderer;
+                VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
 
                 // Draw the SplitButton Button portion of it.
                 vsRenderer.SetParameters(splitButtonPart.ClassName, splitButtonPart.Part, GetSplitButtonItemState(splitButton));
@@ -513,9 +551,10 @@ namespace System.Windows.Forms
                 Rectangle splitButtonBounds = splitButton.ButtonBounds;
                 if (rightToLeft)
                 {
-                    // scoot to the left so we dont draw double shadow like so: ][
+                    // scoot to the left so we don't draw double shadow like so: ][
                     splitButtonBounds.Inflate(2, 0);
                 }
+
                 // Draw the button portion of it.
                 vsRenderer.DrawBackground(g, splitButtonBounds);
 
@@ -527,7 +566,7 @@ namespace System.Windows.Forms
 
                 // fill in the background image
                 Rectangle fillRect = splitButton.ContentRectangle;
-                if (splitButton.BackgroundImage != null)
+                if (splitButton.BackgroundImage is not null)
                 {
                     ControlPaint.DrawBackgroundImage(g, splitButton.BackgroundImage, splitButton.BackColor, splitButton.BackgroundImageLayout, fillRect, fillRect);
                 }
@@ -537,7 +576,7 @@ namespace System.Windows.Forms
 
                 // and of course, now if we're in RTL we now need to paint the arrow
                 // because we're no longer using a part that has it built in.
-                if (rightToLeft || splitButton.BackgroundImage != null)
+                if (rightToLeft || splitButton.BackgroundImage is not null)
                 {
                     DrawArrow(new ToolStripArrowRenderEventArgs(g, splitButton, splitButton.DropDownButtonBounds, arrowColor, ArrowDirection.Down));
                 }
@@ -547,11 +586,11 @@ namespace System.Windows.Forms
                 // Draw the split button button
                 Rectangle splitButtonButtonRect = splitButton.ButtonBounds;
 
-                if (splitButton.BackgroundImage != null)
+                if (splitButton.BackgroundImage is not null)
                 {
                     // fill in the background image
-                    Rectangle fillRect = (splitButton.Selected) ? splitButton.ContentRectangle : bounds;
-                    if (splitButton.BackgroundImage != null)
+                    Rectangle fillRect = splitButton.Selected ? splitButton.ContentRectangle : bounds;
+                    if (splitButton.BackgroundImage is not null)
                     {
                         ControlPaint.DrawBackgroundImage(g, splitButton.BackgroundImage, splitButton.BackColor, splitButton.BackgroundImageLayout, bounds, fillRect);
                     }
@@ -594,7 +633,7 @@ namespace System.Windows.Forms
         ///  everyone should just call this private shared method.  Users need to override each item they want
         ///  to change the look and feel of.
         ///  </summary>
-        private void RenderItemInternal(ToolStripItemRenderEventArgs e)
+        private static void RenderItemInternal(ToolStripItemRenderEventArgs e)
         {
             ToolStripItem item = e.Item;
             Graphics g = e.Graphics;
@@ -603,11 +642,19 @@ namespace System.Windows.Forms
             VisualStyleElement toolBarElement = VisualStyleElement.ToolBar.Button.Normal;
 
             if (ToolStripManager.VisualStylesEnabled
-                && (VisualStyleRenderer.IsElementDefined(toolBarElement)))
+                && VisualStyleRenderer.IsElementDefined(toolBarElement))
             {
-                VisualStyleRenderer vsRenderer = VisualStyleRenderer;
+                VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
                 vsRenderer.SetParameters(toolBarElement.ClassName, toolBarElement.Part, (int)state);
                 vsRenderer.DrawBackground(g, new Rectangle(Point.Empty, item.Size));
+
+                if (!SystemInformation.HighContrast &&
+                    (state == ToolBarState.Hot || state == ToolBarState.Pressed || state == ToolBarState.Checked))
+                {
+                    var bounds = item.ClientBounds;
+                    bounds.Height -= 1;
+                    ControlPaint.DrawBorderSimple(g, bounds, SystemColors.Highlight);
+                }
             }
             else
             {
@@ -616,14 +663,14 @@ namespace System.Windows.Forms
 
             Rectangle fillRect = item.ContentRectangle;
 
-            if (item.BackgroundImage != null)
+            if (item.BackgroundImage is not null)
             {
                 ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, fillRect, fillRect);
             }
             else
             {
                 ToolStrip parent = item.GetCurrentParent();
-                if ((parent != null) && (state != ToolBarState.Checked) && (item.BackColor != parent.BackColor))
+                if ((parent is not null) && (state != ToolBarState.Checked) && (item.BackColor != parent.BackColor))
                 {
                     FillBackground(g, fillRect, item.BackColor);
                 }
@@ -632,7 +679,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  </summary>
-        private void RenderSeparatorInternal(Graphics g, ToolStripItem item, Rectangle bounds, bool vertical)
+        private static void RenderSeparatorInternal(Graphics g, ToolStripItem item, Rectangle bounds, bool vertical)
         {
             VisualStyleElement separator = (vertical)
                 ? VisualStyleElement.ToolBar.SeparatorHorizontal.Normal
@@ -641,8 +688,7 @@ namespace System.Windows.Forms
             if (ToolStripManager.VisualStylesEnabled
                 && (VisualStyleRenderer.IsElementDefined(separator)))
             {
-                VisualStyleRenderer vsRenderer = VisualStyleRenderer;
-
+                VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
                 vsRenderer.SetParameters(separator.ClassName, separator.Part, GetItemState(item));
                 vsRenderer.DrawBackground(g, bounds);
             }
@@ -671,7 +717,6 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    //
                     // horizontal separator
                     if (bounds.Width >= 4)
                     {
@@ -689,7 +734,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void RenderSmall3DBorderInternal(Graphics g, Rectangle bounds, ToolBarState state, bool rightToLeft)
+        private static void RenderSmall3DBorderInternal(Graphics g, Rectangle bounds, ToolBarState state, bool rightToLeft)
         {
             if ((state == ToolBarState.Hot) || (state == ToolBarState.Pressed) || (state == ToolBarState.Checked))
             {
@@ -707,7 +752,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void RenderStatusStripBorder(ToolStripRenderEventArgs e)
+        private static void RenderStatusStripBorder(ToolStripRenderEventArgs e)
         {
             if (!Application.RenderWithVisualStyles)
             {
@@ -719,7 +764,7 @@ namespace System.Windows.Forms
         {
             if (Application.RenderWithVisualStyles)
             {
-                VisualStyleRenderer vsRenderer = VisualStyleRenderer;
+                VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
                 vsRenderer.SetParameters(VisualStyleElement.Status.Bar.Normal);
                 vsRenderer.DrawBackground(e.Graphics, new Rectangle(0, 0, e.ToolStrip.Width - 1, e.ToolStrip.Height - 1));
             }
@@ -734,19 +779,19 @@ namespace System.Windows.Forms
 
         private static void RenderLabelInternal(ToolStripItemRenderEventArgs e)
         {
-            // dont call RenderItemInternal, as we NEVER want to paint hot.
+            // don't call RenderItemInternal, as we NEVER want to paint hot.
             ToolStripItem item = e.Item;
             Graphics g = e.Graphics;
 
             Rectangle fillRect = item.ContentRectangle;
 
-            if (item.BackgroundImage != null)
+            if (item.BackgroundImage is not null)
             {
                 ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, fillRect, fillRect);
             }
             else
             {
-                VisualStyleRenderer vsRenderer = VisualStyleRenderer;
+                VisualStyleRenderer? vsRenderer = VisualStyleRenderer;
 
                 if (vsRenderer is null || (item.BackColor != SystemColors.Control))
                 {

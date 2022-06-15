@@ -22,7 +22,7 @@ In the command prompt of your choice run the following command:
     ```
     > dotnet new -u
     ```
-    ![templates-check-installed](../../Documentation/images/templates-check-installed.png)
+    ![image](../../docs/images/templates-check-installed.png)
 
 3. Create an app from your template:
     ```

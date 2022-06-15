@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
 using Xunit;
 
@@ -10,12 +9,28 @@ namespace System.Windows.Forms.Tests
 {
     public class ToolStripGripRenderEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
+        public static IEnumerable<object[]> Ctor_Null_Graphics_ToolStrip_TestData()
+        {
+            var image = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(image);
+
+            yield return new object[] { null, null };
+            yield return new object[] { null, new ToolStrip() };
+            yield return new object[] { graphics, null };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Ctor_Null_Graphics_ToolStrip_TestData))]
+        public void ToolStripGripRenderEventArgs_Null_Graphics_ToolStrip_ThrowsArgumentNullException(Graphics g, ToolStrip toolStrip)
+        {
+            Assert.Throws<ArgumentNullException>(() => new ToolStripGripRenderEventArgs(g, toolStrip));
+        }
+
         public static IEnumerable<object[]> Ctor_Graphics_ToolStrip_TestData()
         {
             var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
 
-            yield return new object[] { null, new ToolStrip() };
             yield return new object[] { graphics, new ToolStrip() };
             yield return new object[]
             {

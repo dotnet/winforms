@@ -13,18 +13,33 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
         public unsafe void MCGRIDINFO_x32_Size()
         {
+            if (Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             Assert.Equal(84, sizeof(MCGRIDINFO));
         }
 
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
         public unsafe void MCGRIDINFO_x32_Marshal_Size()
         {
+            if (Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             Assert.Equal(84, Marshal.SizeOf<MCGRIDINFO>());
         }
 
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
         public unsafe void MCGRIDINFO_x32_ensure_layout()
         {
+            if (Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             MCGRIDINFO sut = new MCGRIDINFO();
             byte* addr = (byte*)&sut;
 
@@ -45,6 +60,11 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
         public void MCGRIDINFO_x32_Marshal_OffsetOf_IsCorrect()
         {
+            if (Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             Assert.Equal(0, (int)Marshal.OffsetOf<MCGRIDINFO>(nameof(MCGRIDINFO.cbSize)));            // 4, UINT
             Assert.Equal(4, (int)Marshal.OffsetOf<MCGRIDINFO>(nameof(MCGRIDINFO.dwPart)));            // 4, DWORD
             Assert.Equal(8, (int)Marshal.OffsetOf<MCGRIDINFO>(nameof(MCGRIDINFO.dwFlags)));           // 4, DWORD
@@ -62,18 +82,33 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
         public unsafe void MCGRIDINFO_x64_Size()
         {
+            if (!Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             Assert.Equal(96, sizeof(MCGRIDINFO));
         }
 
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
         public void MCGRIDINFO_x64_Marshal_Size()
         {
+            if (!Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             Assert.Equal(96, Marshal.SizeOf<MCGRIDINFO>());
         }
 
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
         public unsafe void MCGRIDINFO_x64_ensure_layout()
         {
+            if (!Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             MCGRIDINFO sut = new MCGRIDINFO();
             byte* addr = (byte*)&sut;
 
@@ -95,6 +130,11 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
         public void MCGRIDINFO_x64_Marshal_OffsetOf_IsCorrect()
         {
+            if (!Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             Assert.Equal(0, (int)Marshal.OffsetOf<MCGRIDINFO>(nameof(MCGRIDINFO.cbSize)));            // 4, UINT
             Assert.Equal(4, (int)Marshal.OffsetOf<MCGRIDINFO>(nameof(MCGRIDINFO.dwPart)));            // 4, DWORD
             Assert.Equal(8, (int)Marshal.OffsetOf<MCGRIDINFO>(nameof(MCGRIDINFO.dwFlags)));           // 4, DWORD

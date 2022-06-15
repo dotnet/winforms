@@ -2,14 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace System.Drawing.Design
 {
     /// <summary>
-    ///  Object passed as an argument to <see cref='UITypeEditor.PaintValue(PaintValueEventArgs)'/> containing information needed by the editor to paint the given value.
+    ///  Object passed as an argument to <see cref="UITypeEditor.PaintValue(PaintValueEventArgs)"/> containing information needed by the editor to paint the given value.
     /// </summary>
     public class PaintValueEventArgs : EventArgs
     {
@@ -20,11 +19,11 @@ namespace System.Drawing.Design
         /// <param name="value">The value to paint.</param>
         /// <param name="graphics">The <see cref="Drawing.Graphics"/> object with which drawing should be done.</param>
         /// <param name="bounds">The <see cref="Rectangle"/> that indicates the area in which the drawing should be done.</param>
-        public PaintValueEventArgs(ITypeDescriptorContext context, object value, Graphics graphics, Rectangle bounds)
+        public PaintValueEventArgs(ITypeDescriptorContext? context, object? value, Graphics graphics, Rectangle bounds)
         {
             Context = context;
             Value = value;
-            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            Graphics = graphics.OrThrowIfNull();
             Bounds = bounds;
         }
 
@@ -36,7 +35,7 @@ namespace System.Drawing.Design
         /// <summary>
         /// <see cref="ITypeDescriptorContext"/> object for additional information about the context this value appears in.
         /// </summary>
-        public ITypeDescriptorContext Context { get; }
+        public ITypeDescriptorContext? Context { get; }
 
         /// <summary>
         /// <see cref="Drawing.Graphics"/> object with which painting should be done.
@@ -46,6 +45,6 @@ namespace System.Drawing.Design
         /// <summary>
         ///  Value to paint.
         /// </summary>
-        public object Value { get; }
+        public object? Value { get; }
     }
 }

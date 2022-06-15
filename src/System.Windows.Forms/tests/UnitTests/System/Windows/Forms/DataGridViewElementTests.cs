@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -314,7 +313,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void DataGridViewElement_RaiseMouseWheel_Invoke_Nop(MouseEventArgs eventArgs)
         {
             var element = new SubDataGridViewElement();
@@ -322,7 +321,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void DataGridViewElement_RaiseMouseWheel_InvokeWithDataGridView_Success(MouseEventArgs eventArgs)
         {
             using var control = new DataGridView
@@ -350,6 +349,20 @@ namespace System.Windows.Forms.Tests
             control.MouseWheel -= handler;
             element.RaiseMouseWheel(eventArgs);
             Assert.Equal(1, callCount);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewElement_Subclasses_SuppressFinalizeCall()
+        {
+            TestAccessor<DataGridViewElement> testAccessor = new(null);
+            var typesWithEmptyFinalizer = testAccessor.Dynamic.s_typesWithEmptyFinalizer as HashSet<Type>;
+
+            foreach (var type in typeof(DataGridViewElement).Assembly.GetTypes().Where(type => type == typeof(DataGridViewBand) || type == typeof(DataGridViewCell) ||
+                type.IsSubclassOf(typeof(DataGridViewBand)) || type.IsSubclassOf(typeof(DataGridViewCell))))
+            {
+                Assert.True(typesWithEmptyFinalizer.Contains(type), $"Type {type} is not present in the DataGridViewElement.s_typesWithEmptyFinalizer collection. " +
+                    $"Consider adding it or add exclusion to this test (if a new class really needs a finalizer).");
+            }
         }
 
         private class SubDataGridViewCell : DataGridViewCell

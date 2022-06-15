@@ -23,57 +23,54 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override object CreateInstance(Type itemType)
         {
-            ListViewGroup lvg = (ListViewGroup)base.CreateInstance(itemType);
+            ListViewGroup group = (ListViewGroup)base.CreateInstance(itemType);
 
             // Create an unique name for the list view group.
-            lvg.Name = CreateListViewGroupName((ListViewGroupCollection)_editValue);
+            group.Name = CreateListViewGroupName((ListViewGroupCollection)_editValue);
 
-            return lvg;
+            return group;
         }
 
-        private string CreateListViewGroupName(ListViewGroupCollection lvgCollection)
+        private string CreateListViewGroupName(ListViewGroupCollection collection)
         {
-            string lvgName = "ListViewGroup";
-            string resultName;
-            INameCreationService ncs = GetService(typeof(INameCreationService)) as INameCreationService;
-            IContainer container = GetService(typeof(IContainer)) as IContainer;
+            ReadOnlySpan<char> listViewGroupName = nameof(ListViewGroup);
 
-            if (ncs != null && container != null)
+            if (Context.TryGetService(out INameCreationService nameService)
+                && Context.TryGetService(out IContainer container))
             {
-                lvgName = ncs.CreateName(container, typeof(ListViewGroup));
+                listViewGroupName = nameService.CreateName(container, typeof(ListViewGroup));
             }
 
-            // strip the digits from the end.
-            while (char.IsDigit(lvgName[lvgName.Length - 1]))
+            // Strip the digits from the end.
+            while (char.IsDigit(listViewGroupName[^1]))
             {
-                lvgName = lvgName.Substring(0, lvgName.Length - 1);
+                listViewGroupName = listViewGroupName[0..^1];
             }
 
             int i = 1;
-            resultName = lvgName + i.ToString(System.Globalization.CultureInfo.CurrentCulture);
+            string result = $"{listViewGroupName}{i}";
 
-            while (lvgCollection[resultName] != null)
+            while (collection[result] is not null)
             {
                 i++;
-                resultName = lvgName + i.ToString(System.Globalization.CultureInfo.CurrentCulture);
+                result = $"{listViewGroupName}{i}";
             }
 
-            return resultName;
+            return result;
         }
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             _editValue = value;
-            object ret;
+            object result;
 
             // This will block while the ListViewGroupCollectionDialog is running.
-            ret = base.EditValue(context, provider, value);
+            result = base.EditValue(context, provider, value);
 
-            // The user is done w/ the ListViewGroupCollectionDialog.
-            // Don't need the edit value any longer
+            // The user is done with the ListViewGroupCollectionDialog, don't need the edit value any longer.
             _editValue = null;
 
-            return ret;
+            return result;
         }
     }
 }

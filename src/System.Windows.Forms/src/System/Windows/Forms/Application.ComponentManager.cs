@@ -4,8 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -17,7 +15,7 @@ namespace System.Windows.Forms
     public sealed partial class Application
     {
         /// <summary>
-        ///  This is our implementation of the MSO ComponentManager.  The Componoent Manager is
+        ///  This is our implementation of the MSO ComponentManager.  The Component Manager is
         ///  an object that is responsible for handling all message loop activity in a process.
         ///  The idea is that someone in the process implements the component manager and then
         ///  anyone who wants access to the message loop can get to it.  We implement this
@@ -60,10 +58,11 @@ namespace System.Windows.Forms
                 Guid* iid,
                 void** ppvObj)
             {
-                if (ppvObj != null)
+                if (ppvObj is not null)
                 {
                     *ppvObj = null;
                 }
+
                 return HRESULT.E_NOINTERFACE;
             }
 
@@ -112,7 +111,7 @@ namespace System.Windows.Forms
 
                 if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
                 {
-                    Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Compoenent not registered.");
+                    Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Component not registered.");
                     return BOOL.FALSE;
                 }
 
@@ -120,6 +119,7 @@ namespace System.Windows.Forms
                 {
                     _activeComponent = null;
                 }
+
                 if (entry.component == _trackingComponent)
                 {
                     _trackingComponent = null;
@@ -321,7 +321,7 @@ namespace System.Windows.Forms
 
                                     if (uReason != msoloop.Main)
                                     {
-                                        User32.PostQuitMessage((int)msg.wParam);
+                                        User32.PostQuitMessage(PARAM.ToInt(msg.wParam));
                                     }
 
                                     continueLoop = BOOL.FALSE;
@@ -358,13 +358,10 @@ namespace System.Windows.Forms
                             // Nothing is on the message queue. Perform idle processing and then do a WaitMessage.
                             bool continueIdle = false;
 
-                            if (OleComponents != null)
+                            if (OleComponents is not null)
                             {
-                                IEnumerator enumerator = OleComponents.Values.GetEnumerator();
-
-                                while (enumerator.MoveNext())
+                                foreach (ComponentHashtableEntry idleEntry in OleComponents.Values)
                                 {
-                                    ComponentHashtableEntry idleEntry = (ComponentHashtableEntry)enumerator.Current;
                                     continueIdle |= idleEntry.component.FDoIdle(msoidlef.All).IsTrue();
                                 }
                             }
@@ -422,10 +419,11 @@ namespace System.Windows.Forms
                 void** ppvObj)
             {
                 // We do not support sub component managers.
-                if (ppvObj != null)
+                if (ppvObj is not null)
                 {
                     *ppvObj = null;
                 }
+
                 return BOOL.FALSE;
             }
 
@@ -433,10 +431,11 @@ namespace System.Windows.Forms
             BOOL IMsoComponentManager.FGetParentComponentManager(void** ppicm)
             {
                 // We have no parent.
-                if (ppicm != null)
+                if (ppicm is not null)
                 {
                     *ppicm = null;
                 }
+
                 return BOOL.FALSE;
             }
 
@@ -458,7 +457,7 @@ namespace System.Windows.Forms
                 if (component is null)
                     return BOOL.FALSE;
 
-                if (pcrinfo != null)
+                if (pcrinfo is not null)
                 {
                     if (pcrinfo->cbSize < sizeof(MSOCRINFO))
                     {
@@ -475,7 +474,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (ppic != null)
+                if (ppic is not null)
                 {
                     // This will addref the interface
                     *ppic = (void*)Marshal.GetComInterfaceForObject<IMsoComponent, IMsoComponent>(component);

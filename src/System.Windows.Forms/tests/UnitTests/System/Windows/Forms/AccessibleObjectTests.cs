@@ -2,12 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using Accessibility;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
+using static Interop;
+using System.Reflection;
 
 namespace System.Windows.Forms.Tests
 {
@@ -30,7 +32,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void AccessibleObject_Name_Set_GetReturnsNull(string value)
         {
             var accessibleObject = new AccessibleObject
@@ -45,7 +47,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void AccessibleObject_Value_Set_GetReturnsEmpty(string value)
         {
             var accessibleObject = new AccessibleObject
@@ -406,8 +408,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleNavigation))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AccessibleNavigation))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleNavigation))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AccessibleNavigation))]
         public void AccessibleObject_Navigate_InvokeDefault_ReturnsNull(AccessibleNavigation navdir)
         {
             var accessibleObject = new AccessibleObject();
@@ -500,7 +502,7 @@ namespace System.Windows.Forms.Tests
                 .Setup(a => a.Navigate(navdir))
                 .CallBase();
             Assert.Null(mockAccessibleObject.Object.Navigate(navdir));
-            mockAccessibleObject.Verify(a => a.Parent, Times.Once());;
+            mockAccessibleObject.Verify(a => a.Parent, Times.Once());
             mockParentAccessibleObject.Verify(a => a.GetChildCount(), Times.Once());
         }
 
@@ -528,8 +530,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleSelection))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AccessibleSelection))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleSelection))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AccessibleSelection))]
         public void AccessibleObject_Navigate_InvokeDefault_Nop(AccessibleSelection flags)
         {
             var accessibleObject = new AccessibleObject();
@@ -852,7 +854,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(accFocus_TestData))]
-        public void AccessibleObject_IAccessiblget_accFocus_InvokeDefault_ReturnsExpected(AccessibleObject result)
+        public void AccessibleObject_IAccessibleget_accFocus_InvokeDefault_ReturnsExpected(AccessibleObject result)
         {
             var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
             mockAccessibleObject
@@ -1317,7 +1319,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(accSelection_TestData))]
-        public void AccessibleObject_IAccessiblget_accSelection_InvokeDefault_ReturnsExpected(AccessibleObject result)
+        public void AccessibleObject_IAccessibleget_accSelection_InvokeDefault_ReturnsExpected(AccessibleObject result)
         {
             var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
             mockAccessibleObject
@@ -2318,8 +2320,8 @@ namespace System.Windows.Forms.Tests
         [InlineData(3, "value")]
         public void AccessibleObject_IAccessibleset_accName_InvokeDefaultChild_ReturnsExpected(object varChild, string value)
         {
-            var childAccesibleObject1 = new AccessibleObject();
-            var childAccesibleObject2 = new AccessibleObject();
+            var childAccessibleObject1 = new AccessibleObject();
+            var childAccessibleObject2 = new AccessibleObject();
 
             var mockAccessibleObject = new Mock<AccessibleObject>
             {
@@ -2330,10 +2332,10 @@ namespace System.Windows.Forms.Tests
                 .Returns((AccessibleObject)null);
             mockAccessibleObject
                 .Setup(a => a.GetChild(1))
-                .Returns(childAccesibleObject1);
+                .Returns(childAccessibleObject1);
             mockAccessibleObject
                 .Setup(a => a.GetChild(2))
-                .Returns(childAccesibleObject2);
+                .Returns(childAccessibleObject2);
             mockAccessibleObject
                 .Setup(a => a.GetChildCount())
                 .Returns(3);
@@ -2341,8 +2343,8 @@ namespace System.Windows.Forms.Tests
             IAccessible iAccessible = mockAccessibleObject.Object;
             iAccessible.set_accName(varChild, value);
             Assert.Null(iAccessible.get_accName(varChild));
-            Assert.Null(childAccesibleObject1.Name);
-            Assert.Null(childAccesibleObject2.Name);
+            Assert.Null(childAccessibleObject1.Name);
+            Assert.Null(childAccessibleObject2.Name);
         }
 
         [WinFormsTheory]
@@ -2354,8 +2356,8 @@ namespace System.Windows.Forms.Tests
         [InlineData(4, "value")]
         public void AccessibleObject_IAccessibleset_accName_InvokeDefaultNoSuchChild_ReturnsNull(object varChild, string value)
         {
-            var childAccesibleObject1 = new AccessibleObject();
-            var childAccesibleObject2 = new AccessibleObject();
+            var childAccessibleObject1 = new AccessibleObject();
+            var childAccessibleObject2 = new AccessibleObject();
 
             var mockAccessibleObject = new Mock<AccessibleObject>
             {
@@ -2366,10 +2368,10 @@ namespace System.Windows.Forms.Tests
                 .Returns((AccessibleObject)null);
             mockAccessibleObject
                 .Setup(a => a.GetChild(1))
-                .Returns(childAccesibleObject1);
+                .Returns(childAccessibleObject1);
             mockAccessibleObject
                 .Setup(a => a.GetChild(2))
-                .Returns(childAccesibleObject2);
+                .Returns(childAccessibleObject2);
             mockAccessibleObject
                 .Setup(a => a.GetChildCount())
                 .Returns(3);
@@ -2377,8 +2379,8 @@ namespace System.Windows.Forms.Tests
             IAccessible iAccessible = mockAccessibleObject.Object;
             iAccessible.set_accName(varChild, value);
             Assert.Null(iAccessible.get_accName(varChild));
-            Assert.Null(childAccesibleObject1.Name);
-            Assert.Null(childAccesibleObject2.Name);
+            Assert.Null(childAccessibleObject1.Name);
+            Assert.Null(childAccessibleObject2.Name);
         }
 
         [WinFormsTheory]
@@ -2412,8 +2414,8 @@ namespace System.Windows.Forms.Tests
         [InlineData(3, "value")]
         public void AccessibleObject_IAccessibleset_accValue_InvokeDefaultChild_ReturnsExpected(object varChild, string value)
         {
-            var childAccesibleObject1 = new AccessibleObject();
-            var childAccesibleObject2 = new AccessibleObject();
+            var childAccessibleObject1 = new AccessibleObject();
+            var childAccessibleObject2 = new AccessibleObject();
 
             var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
             mockAccessibleObject
@@ -2421,10 +2423,10 @@ namespace System.Windows.Forms.Tests
                 .Returns((AccessibleObject)null);
             mockAccessibleObject
                 .Setup(a => a.GetChild(1))
-                .Returns(childAccesibleObject1);
+                .Returns(childAccessibleObject1);
             mockAccessibleObject
                 .Setup(a => a.GetChild(2))
-                .Returns(childAccesibleObject2);
+                .Returns(childAccessibleObject2);
             mockAccessibleObject
                 .Setup(a => a.GetChildCount())
                 .Returns(3);
@@ -2432,8 +2434,8 @@ namespace System.Windows.Forms.Tests
             IAccessible iAccessible = mockAccessibleObject.Object;
             iAccessible.set_accValue(varChild, value);
             Assert.Empty(iAccessible.get_accValue(varChild));
-            Assert.Empty(childAccesibleObject1.Value);
-            Assert.Empty(childAccesibleObject2.Value);
+            Assert.Empty(childAccessibleObject1.Value);
+            Assert.Empty(childAccessibleObject2.Value);
         }
 
         [WinFormsTheory]
@@ -2445,8 +2447,8 @@ namespace System.Windows.Forms.Tests
         [InlineData(4, "value")]
         public void AccessibleObject_IAccessibleset_accValue_InvokeDefaultNoSuchChild_ReturnsNull(object varChild, string value)
         {
-            var childAccesibleObject1 = new AccessibleObject();
-            var childAccesibleObject2 = new AccessibleObject();
+            var childAccessibleObject1 = new AccessibleObject();
+            var childAccessibleObject2 = new AccessibleObject();
 
             var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
             mockAccessibleObject
@@ -2454,10 +2456,10 @@ namespace System.Windows.Forms.Tests
                 .Returns((AccessibleObject)null);
             mockAccessibleObject
                 .Setup(a => a.GetChild(1))
-                .Returns(childAccesibleObject1);
+                .Returns(childAccessibleObject1);
             mockAccessibleObject
                 .Setup(a => a.GetChild(2))
-                .Returns(childAccesibleObject2);
+                .Returns(childAccessibleObject2);
             mockAccessibleObject
                 .Setup(a => a.GetChildCount())
                 .Returns(3);
@@ -2465,8 +2467,180 @@ namespace System.Windows.Forms.Tests
             IAccessible iAccessible = mockAccessibleObject.Object;
             iAccessible.set_accValue(varChild, value);
             Assert.Null(iAccessible.get_accValue(varChild));
-            Assert.Empty(childAccesibleObject1.Value);
-            Assert.Empty(childAccesibleObject2.Value);
+            Assert.Empty(childAccessibleObject1.Value);
+            Assert.Empty(childAccessibleObject2.Value);
+        }
+
+        [WinFormsFact]
+        public void AccessibleObject_GetSystemIAccessibleInternal_Invoke_DoesntReturnWrapper()
+        {
+            using Button button = new Button();
+            button.CreateControl();
+            var accessibleObject = button.AccessibilityObject;
+            var wrapper = accessibleObject.TestAccessor().Dynamic._systemIAccessible;
+            Assert.NotSame(wrapper, accessibleObject.GetSystemIAccessibleInternal());
+        }
+
+        [WinFormsFact]
+        public void AccessibleObject_WrapIAccessible_Invoke_DoesntReturnWrapper()
+        {
+            using Button button = new Button();
+            button.CreateControl();
+            var accessibleObject = button.AccessibilityObject;
+            var wrapper = accessibleObject.TestAccessor().Dynamic._systemIAccessible;
+            var wrapIAccessibleResult = accessibleObject.TestAccessor().Dynamic.WrapIAccessible(accessibleObject.GetSystemIAccessibleInternal());
+
+            Assert.Same(accessibleObject, wrapIAccessibleResult);
+            Assert.NotSame(wrapper, accessibleObject.GetSystemIAccessibleInternal());
+        }
+
+        [DllImport("Oleacc.dll")]
+        internal unsafe static extern HRESULT AccessibleObjectFromPoint(
+            Point ptScreen,
+            [MarshalAs(UnmanagedType.Interface)]
+            out object ppacc,
+            out object pvarChild);
+
+        [WinFormsFact(Skip = "This test needs to be run manually as it depends on the form being unobstructed.")]
+        public unsafe void TestAccessibleObjectFromPoint_Button()
+        {
+            using Form form = new Form();
+            using Button button = new Button
+            {
+                Text = "MSAA Button"
+            };
+
+            form.Controls.Add(button);
+            form.Show();
+            var bounds = button.Bounds;
+            Point point = button.Location;
+            point.Offset(bounds.Width / 2, bounds.Height / 2);
+            point = button.PointToScreen(point);
+            var result = AccessibleObjectFromPoint(
+                point,
+                out object ppacc,
+                out object varItem);
+
+            Assert.Equal(HRESULT.S_OK, result);
+            Assert.NotNull(ppacc);
+            Assert.True(varItem is int);
+
+            IAccessible accessible = ppacc as IAccessible;
+            Assert.NotNull(accessible);
+            Assert.Equal("MSAA Button", accessible.accName);
+            Assert.True(((int)accessible.accState & 0x100000) != 0);    // STATE_SYSTEM_FOCUSABLE
+            Assert.Equal(0x2b, accessible.accRole);                     // ROLE_SYSTEM_PUSHBUTTON
+            Assert.Equal("Press", accessible.accDefaultAction);
+        }
+
+        [WinFormsFact(Skip = "This test needs to be run manually as it depends on the form being unobstructed.")]
+        public unsafe void TestAccessibleObjectFromPoint_ComboBox()
+        {
+            using Form form = new Form();
+            using ComboBox comboBox = new ComboBox();
+            comboBox.Items.Add("Item One");
+            comboBox.Items.Add("Item Two");
+
+            form.Controls.Add(comboBox);
+            form.Show();
+            var bounds = comboBox.Bounds;
+            Point point = comboBox.Location;
+            point.Offset(bounds.Width / 2, bounds.Height / 2);
+            point = comboBox.PointToScreen(point);
+            var result = AccessibleObjectFromPoint(
+                point,
+                out object ppacc,
+                out object varItem);
+
+            Assert.Equal(HRESULT.S_OK, result);
+            Assert.NotNull(ppacc);
+            Assert.True(varItem is int);
+
+            IAccessible accessible = ppacc as IAccessible;
+            Assert.NotNull(accessible);
+            Assert.Null(accessible.accName);
+            Assert.True(((int)accessible.accState & 0x100000) != 0);    // STATE_SYSTEM_FOCUSABLE
+            Assert.Equal(0x2a, accessible.accRole);                     // ROLE_SYSTEM_TEXT
+            Assert.Null(accessible.accDefaultAction);
+
+            var parent = accessible.accParent as IAccessible;
+            Assert.Equal(0x09, parent.accRole);                         // ROLE_SYSTEM_WINDOW
+            Assert.Equal(7, parent.accChildCount);
+        }
+
+        [WinFormsFact]
+        public void AccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsNull()
+        {
+            AccessibleObject accessibleObject = new AccessibleObject();
+
+            Assert.Null(accessibleObject.GetPropertyValue(Interop.UiaCore.UIA.ControlTypePropertyId));
+        }
+
+        public static IEnumerable<object[]> AccessibleObject_RuntimeId_IsOverriden_TestData()
+        {
+            Assembly assembly = typeof(AccessibleObject).Assembly;
+            foreach (Type type in assembly.GetTypes())
+            {
+                // ComboBox.ChildAccessibleObject is more like an abstract class, so we should check its direct inheritors instead of it
+                if (type.BaseType != typeof(AccessibleObject) && type.BaseType != typeof(ComboBox.ChildAccessibleObject))
+                {
+                    continue;
+                }
+
+                if (type == typeof(ComboBox.ChildAccessibleObject))
+                {
+                    continue;
+                }
+
+                yield return new object[] { type };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(AccessibleObject_RuntimeId_IsOverriden_TestData))]
+        public void AccessibleObject_RuntimeId_IsOverriden(Type type)
+        {
+            PropertyInfo runtimeIdProperty = type.GetProperty(nameof(AccessibleObject.RuntimeId), BindingFlags.NonPublic | BindingFlags.Instance);
+
+            Assert.Equal(type, runtimeIdProperty.DeclaringType);
+        }
+
+        [WinFormsFact]
+        public unsafe void AccessibleObject_GetIAccessiblePair_Invoke_ReturnsExpected()
+        {
+            const int expectedIdChild = NativeMethods.CHILDID_SELF;
+
+            AccessibleObject accessibleObject = new();
+
+            // Use some number different from the expected to ensure that the value is changed
+            int idChild = unchecked((int)0xdeadbeef);
+            Assert.NotEqual(expectedIdChild, idChild);
+
+            HRESULT result = ((UiaCore.IAccessibleEx)accessibleObject).GetIAccessiblePair(out object pAcc, &idChild);
+
+            Assert.Equal(HRESULT.S_OK, result);
+            Assert.Equal(accessibleObject, pAcc);
+            Assert.Equal(expectedIdChild, idChild);
+        }
+
+        [WinFormsFact]
+        public unsafe void AccessibleObject_GetIAccessiblePair_InvokeWithInvalidArgument_ReturnsError()
+        {
+            AccessibleObject accessibleObject = new();
+
+            HRESULT result = ((UiaCore.IAccessibleEx)accessibleObject).GetIAccessiblePair(out object pAcc, null);
+
+            Assert.Equal(HRESULT.E_INVALIDARG, result);
+            Assert.Null(pAcc);
+        }
+
+        [WinFormsFact]
+        public void AccessibleObject_SystemWrapper_RuntimeId_IsValid()
+        {
+            AccessibleObject accessibleObject =
+                (AccessibleObject)Activator.CreateInstance(typeof(AccessibleObject), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { null }, null);
+
+            Assert.NotEmpty(accessibleObject.TestAccessor().Dynamic.RuntimeId);
         }
 
         private class SubAccessibleObject : AccessibleObject

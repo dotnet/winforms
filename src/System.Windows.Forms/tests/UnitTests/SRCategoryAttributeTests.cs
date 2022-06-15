@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Tests
         public void VerifyCategoryForValidCategoryAttribute()
         {
             SRCategoryAttribute srCategoryAttribute = new SRCategoryAttribute(nameof(SR.CatAccessibility));
-            Assert.True(string.Compare(srCategoryAttribute.Category, SR.CatAccessibility, StringComparison.Ordinal) == 0);
+            Assert.True(string.Equals(srCategoryAttribute.Category, SR.CatAccessibility, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Tests
         {
             const string fakeCategory = "fakeCategory";
             SRCategoryAttribute srCategoryAttribute = new SRCategoryAttribute(fakeCategory);
-            Assert.True(string.Compare(srCategoryAttribute.Category, fakeCategory, StringComparison.Ordinal) == 0);
+            Assert.True(string.Equals(srCategoryAttribute.Category, fakeCategory, StringComparison.Ordinal));
         }
     }
 }

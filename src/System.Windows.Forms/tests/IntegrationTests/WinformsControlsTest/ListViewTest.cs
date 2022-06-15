@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -22,7 +21,6 @@ namespace WinformsControlsTest
             var random = new Random();
             int i = random.Next(100, 300);
 
-            Debug.WriteLine(listView1.TileSize);
             listView1.TileSize = new Size(200, 50);
             listView1.Items[0].ImageIndex = 0;
             listView1.Items[1].ImageIndex = 1;
@@ -66,18 +64,12 @@ namespace WinformsControlsTest
                 VirtualMode = true,
                 VirtualListSize = 3,
             };
+
             listView2.SelectedIndexChanged += listView2_SelectedIndexChanged;
             listView2.Click += listView2_Click;
 
-            ListViewGroup listViewGroup1 = new ListViewGroup("ListViewGroup", HorizontalAlignment.Left)
-            {
-                Header = "ListViewGroup",
-                Name = "listViewGroup1"
-            };
-            listView2.Groups.AddRange(new ListViewGroup[] { listViewGroup1 });
-
             // Create three items and three sets of subitems for each item.
-            ListViewItem item1 = new ListViewItem("item1", 0)
+            ListViewItem item1 = new("item1", 0)
             {
                 // Place a check mark next to the item.
                 Checked = true
@@ -85,11 +77,11 @@ namespace WinformsControlsTest
             item1.SubItems.Add("1");
             item1.SubItems.Add("2");
             item1.SubItems.Add("3");
-            ListViewItem item2 = new ListViewItem("item2", 1);
+            ListViewItem item2 = new("item2", 1);
             item2.SubItems.Add("4");
             item2.SubItems.Add("5");
             item2.SubItems.Add("6");
-            ListViewItem item3 = new ListViewItem("item3", 0)
+            ListViewItem item3 = new("item3", 0)
             {
                 // Place a check mark next to the item.
                 Checked = true
@@ -121,26 +113,22 @@ namespace WinformsControlsTest
             listView2.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
             // Create two ImageList objects.
-            ImageList imageListSmall = new ImageList();
-            ImageList imageListLarge = new ImageList();
+            ImageList imageListSmall = new(components);
+            ImageList imageListLarge = new(components);
 
-            // Initialize the ImageList objects with bitmaps.\
+            // Initialize the ImageList objects with bitmaps.
             imageListSmall.Images.Add(Bitmap.FromFile("Images\\SmallA.bmp"));
             imageListSmall.Images.Add(Bitmap.FromFile("Images\\SmallABlue.bmp"));
             imageListLarge.Images.Add(Bitmap.FromFile("Images\\LargeA.bmp"));
             imageListLarge.Images.Add(Bitmap.FromFile("Images\\LargeABlue.bmp"));
 
-            //Assign the ImageList objects to the ListView.
+            // Assign the ImageList objects to the ListView.
             listView2.LargeImageList = imageListLarge;
             listView2.SmallImageList = imageListSmall;
 
             // Add the ListView to the control collection.
             Controls.Add(listView2);
             listView2.Dock = DockStyle.Bottom;
-
-            // Change a ListViewGroup's header.
-            listView2.Groups[0].HeaderAlignment = HorizontalAlignment.Center;
-            listView2.Groups[0].Header = "NewText";
         }
 
         private void AddCollapsibleGroupToListView()
@@ -154,7 +142,7 @@ namespace WinformsControlsTest
             listView1.Groups.Add(lvgroup1);
             listView1.Items.Add(new ListViewItem
             {
-                Text = "Item",
+                Text = "Item4",
                 Group = lvgroup1
             });
 
@@ -167,7 +155,7 @@ namespace WinformsControlsTest
             listView1.Groups.Add(lvgroup2);
             listView1.Items.Add(new ListViewItem
             {
-                Text = "Item",
+                Text = "Item5",
                 Group = lvgroup2
             });
 
@@ -193,7 +181,7 @@ namespace WinformsControlsTest
             listView1.Groups.Add(lvgroup1);
             listView1.Items.Add(new ListViewItem
             {
-                Text = "Item",
+                Text = "Item6",
                 Group = lvgroup1
             });
         }
@@ -206,7 +194,7 @@ namespace WinformsControlsTest
         private void listView2_Click(object sender, System.EventArgs e)
         {
             Debug.WriteLine(listView1.TileSize);
-            MessageBox.Show(this, "listView1_Click", "event");
+            MessageBox.Show(this, "listView2_Click", "event");
         }
 
         private void listView2_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -221,6 +209,61 @@ namespace WinformsControlsTest
 
             var random = new Random();
             listView2.Columns[random.Next(0, listView2.Columns.Count)].ImageIndex = random.Next(0, 2);
+        }
+
+        private void btnClearListView1_Click(object sender, EventArgs e)
+        {
+            listView1.Clear();
+            LargeImageList.Images.Clear();
+
+            listView1.LargeImageList = LargeImageList;
+            listView1.View = View.LargeIcon;
+        }
+
+        private void btnLoadImagesListView1_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            foreach (string file in openFileDialog1.FileNames)
+            {
+                Bitmap bitmap = (Bitmap)Bitmap.FromFile(file);
+                LargeImageList.Images.Add(file, bitmap);
+
+                ListViewItem item = new ListViewItem
+                {
+                    Text = Path.GetFileName(file),
+                    Name = file,
+                    ImageKey = file,
+                    Checked = true
+                };
+                listView1.Items.Add(item);
+            }
+        }
+
+        private void btnReplaceImageListView1_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedIndices.Count != 1)
+            {
+                return;
+            }
+
+            openFileDialog1.Multiselect = false;
+            DialogResult result = openFileDialog1.ShowDialog();
+            openFileDialog1.Multiselect = true;
+
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+
+            string file = openFileDialog1.FileName;
+            Bitmap bitmap = (Bitmap)Bitmap.FromFile(file);
+            LargeImageList.Images[listView1.SelectedIndices[0]] = bitmap;
+
+            listView1.Refresh();
         }
     }
 }

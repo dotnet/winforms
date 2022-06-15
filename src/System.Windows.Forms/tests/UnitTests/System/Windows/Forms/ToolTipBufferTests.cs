@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -12,14 +12,14 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ToolTipBuffer_Buffer_GetEmpty_ReturnsZero()
         {
-            using var buffer = new ToolTipBuffer();
+            var buffer = new ToolTipBuffer();
             Assert.Equal(IntPtr.Zero, buffer.Buffer);
         }
 
         [WinFormsFact]
         public void ToolTipBuffer_SetText_NoBuffer_Success()
         {
-            using var buffer = new ToolTipBuffer();
+            var buffer = new ToolTipBuffer();
             IntPtr memory1 = buffer.Buffer;
             Assert.Null(Marshal.PtrToStringUni(memory1));
 
@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("")]
         public void ToolTipBuffer_SetText_EmptyNoBuffer_Success(string empty)
         {
-            using var buffer = new ToolTipBuffer();
+            var buffer = new ToolTipBuffer();
             IntPtr memory1 = buffer.Buffer;
             Assert.Null(Marshal.PtrToStringUni(memory1));
 
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("abcdef")]
         public void ToolTipBuffer_SetTextLonger_Success(string longer)
         {
-            using var buffer = new ToolTipBuffer();
+            var buffer = new ToolTipBuffer();
             buffer.SetText("text");
             IntPtr memory1 = buffer.Buffer;
             Assert.Equal("text", Marshal.PtrToStringUni(buffer.Buffer));
@@ -69,7 +69,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("abc", "abc")]
         public void ToolTipBuffer_SetTextShorter_Success(string shorter, string expected)
         {
-            using var buffer = new ToolTipBuffer();
+            var buffer = new ToolTipBuffer();
             buffer.SetText("text");
             IntPtr memory1 = buffer.Buffer;
             Assert.Equal("text", Marshal.PtrToStringUni(buffer.Buffer));
@@ -86,7 +86,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("abcd")]
         public void ToolTipBuffer_SetTextSameLength_Success(string sameLength)
         {
-            using var buffer = new ToolTipBuffer();
+            var buffer = new ToolTipBuffer();
             buffer.SetText("text");
             IntPtr memory1 = buffer.Buffer;
             Assert.Equal("text", Marshal.PtrToStringUni(buffer.Buffer));
@@ -96,31 +96,6 @@ namespace System.Windows.Forms.Tests
             IntPtr memory2 = buffer.Buffer;
             Assert.Equal(memory1, memory2);
             Assert.Equal(sameLength, Marshal.PtrToStringUni(memory2));
-        }
-
-        [WinFormsFact]
-        public void ToolTipBuffer_DisposeNoBuffer_Success()
-        {
-            using var buffer = new ToolTipBuffer();
-            buffer.Dispose();
-            Assert.Equal(IntPtr.Zero, buffer.Buffer);
-
-            // Call again.
-            buffer.Dispose();
-            Assert.Equal(IntPtr.Zero, buffer.Buffer);
-        }
-
-        [WinFormsFact]
-        public void ToolTipBuffer_DisposeWithBuffer_Success()
-        {
-            using var buffer = new ToolTipBuffer();
-            buffer.SetText("text");
-            buffer.Dispose();
-            Assert.Equal(IntPtr.Zero, buffer.Buffer);
-
-            // Call again.
-            buffer.Dispose();
-            Assert.Equal(IntPtr.Zero, buffer.Buffer);
         }
     }
 }

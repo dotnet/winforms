@@ -20,6 +20,7 @@ namespace System.Windows.Forms.Design
                 {
                     InnerHashtable[key] = new ContextMenuStripGroup(key);
                 }
+
                 return InnerHashtable[key] as ContextMenuStripGroup;
             }
         }
@@ -28,12 +29,14 @@ namespace System.Windows.Forms.Design
         {
             return InnerHashtable.ContainsKey(key);
         }
+
         protected override void OnInsert(object key, object value)
         {
             if (!(value is ContextMenuStripGroup))
             {
                 throw new NotSupportedException();
             }
+
             base.OnInsert(key, value);
         }
 
@@ -43,6 +46,7 @@ namespace System.Windows.Forms.Design
             {
                 throw new NotSupportedException();
             }
+
             base.OnSet(key, oldValue, newValue);
         }
     }

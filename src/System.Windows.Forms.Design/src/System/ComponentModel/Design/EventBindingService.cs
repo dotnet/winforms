@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
@@ -16,7 +15,7 @@ namespace System.ComponentModel.Design
     /// </summary>
     public abstract partial class EventBindingService : IEventBindingService
     {
-        private IServiceProvider _provider;
+        private readonly IServiceProvider _provider;
         private IComponent _showCodeComponent;
         private EventDescriptor _showCodeEventDescriptor;
         private string _showCodeMethodName;
@@ -28,7 +27,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected EventBindingService(IServiceProvider provider)
         {
-            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _provider = provider.OrThrowIfNull();
         }
 
         /// <summary>
@@ -111,15 +110,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         string IEventBindingService.CreateUniqueMethodName(IComponent component, EventDescriptor e)
         {
-            if (component is null)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
-
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
+            ArgumentNullException.ThrowIfNull(component);
+            ArgumentNullException.ThrowIfNull(e);
 
             return CreateUniqueMethodName(component, e);
         }
@@ -130,10 +122,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         ICollection IEventBindingService.GetCompatibleMethods(EventDescriptor e)
         {
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
+            ArgumentNullException.ThrowIfNull(e);
 
             return GetCompatibleMethods(e);
         }
@@ -155,7 +144,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Returns true if the given event has a generic argument or return value in its raise method.
         /// </summary>
-        private bool HasGenericArgument(EventDescriptor ed)
+        private static bool HasGenericArgument(EventDescriptor ed)
         {
             if (ed is null || ed.ComponentType is null)
             {
@@ -171,7 +160,7 @@ namespace System.ComponentModel.Design
 
             Type[] args = evInfo.EventHandlerType.GetGenericArguments();
 
-            if (args != null && args.Length > 0)
+            if (args is not null && args.Length > 0)
             {
                 for (int i = 0; i < args.Length; i++)
                 {
@@ -190,10 +179,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         PropertyDescriptorCollection IEventBindingService.GetEventProperties(EventDescriptorCollection events)
         {
-            if (events is null)
-            {
-                throw new ArgumentNullException(nameof(events));
-            }
+            ArgumentNullException.ThrowIfNull(events);
 
             List<PropertyDescriptor> props = new List<PropertyDescriptor>(events.Count);
 
@@ -218,10 +204,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         PropertyDescriptor IEventBindingService.GetEventProperty(EventDescriptor e)
         {
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
+            ArgumentNullException.ThrowIfNull(e);
 
             PropertyDescriptor prop = new EventPropertyDescriptor(e, this);
 
@@ -252,15 +235,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool IEventBindingService.ShowCode(IComponent component, EventDescriptor e)
         {
-            if (component is null)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
-
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
+            ArgumentNullException.ThrowIfNull(component);
+            ArgumentNullException.ThrowIfNull(e);
 
             PropertyDescriptor prop = ((IEventBindingService)this).GetEventProperty(e);
             string methodName = (string)prop.GetValue(component);

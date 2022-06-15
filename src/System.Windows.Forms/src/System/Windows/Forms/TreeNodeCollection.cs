@@ -53,6 +53,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
+
                 return owner.children[index];
             }
             set
@@ -62,6 +63,29 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
+                ArgumentNullException.ThrowIfNull(value);
+
+                TreeView tv = owner.treeView;
+                TreeNode actual = owner.children[index];
+
+                if (value.treeView is not null && value.treeView.Handle != tv.Handle)
+                {
+                    throw new ArgumentException(string.Format(SR.TreeNodeBoundToAnotherTreeView), nameof(value));
+                }
+
+                if (tv._nodesByHandle.ContainsKey(value.Handle) && value.index != index)
+                {
+                    throw new ArgumentException(string.Format(SR.OnlyOneControl, value.Text), nameof(value));
+                }
+
+                if (tv._nodesByHandle.ContainsKey(value.Handle)
+                    && value.Handle == actual.Handle
+                    && value.index == index)
+                {
+                    return;
+                }
+
+                tv._nodesByHandle.Remove(actual._handle);
                 value.parent = owner;
                 value.index = index;
                 owner.children[index] = value;
@@ -113,6 +137,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         // Make this property available to Intellisense. (Removed the EditorBrowsable attribute.)
         [Browsable(false)]
         public int Count
@@ -240,28 +265,28 @@ namespace System.Windows.Forms
 
         public virtual void AddRange(TreeNode[] nodes)
         {
-            if (nodes is null)
-            {
-                throw new ArgumentNullException(nameof(nodes));
-            }
+            ArgumentNullException.ThrowIfNull(nodes);
+
             if (nodes.Length == 0)
             {
                 return;
             }
 
             TreeView tv = owner.TreeView;
-            if (tv != null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
+            if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
             {
                 tv.BeginUpdate();
             }
+
             owner.Nodes.FixedIndex = owner.childCount;
             owner.EnsureCapacity(nodes.Length);
             for (int i = nodes.Length - 1; i >= 0; i--)
             {
                 AddInternal(nodes[i], i);
             }
+
             owner.Nodes.FixedIndex = -1;
-            if (tv != null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
+            if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
             {
                 tv.EndUpdate();
             }
@@ -269,30 +294,17 @@ namespace System.Windows.Forms
 
         public TreeNode[] Find(string key, bool searchAllChildren)
         {
-            if (string.IsNullOrEmpty(key))
-            {
-                throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
-            }
+            key.ThrowIfNullOrEmptyWithMessage(SR.FindKeyMayNotBeEmptyOrNull);
 
-            ArrayList foundNodes = FindInternal(key, searchAllChildren, this, new ArrayList());
+            List<TreeNode> foundNodes = FindInternal(key, searchAllChildren, this, new List<TreeNode>());
 
-            //
-            TreeNode[] stronglyTypedFoundNodes = new TreeNode[foundNodes.Count];
-            foundNodes.CopyTo(stronglyTypedFoundNodes, 0);
-
-            return stronglyTypedFoundNodes;
+            return foundNodes.ToArray();
         }
 
-        private ArrayList FindInternal(string key, bool searchAllChildren, TreeNodeCollection treeNodeCollectionToLookIn, ArrayList foundTreeNodes)
+        private List<TreeNode> FindInternal(string key, bool searchAllChildren, TreeNodeCollection treeNodeCollectionToLookIn, List<TreeNode> foundTreeNodes)
         {
-            if ((treeNodeCollectionToLookIn is null) || (foundTreeNodes is null))
-            {
-                return null;
-            }
-
             // Perform breadth first search - as it's likely people will want tree nodes belonging
             // to the same parent close to each other.
-
             for (int i = 0; i < treeNodeCollectionToLookIn.Count; i++)
             {
                 if (treeNodeCollectionToLookIn[i] is null)
@@ -300,14 +312,13 @@ namespace System.Windows.Forms
                     continue;
                 }
 
-                if (WindowsFormsUtils.SafeCompareStrings(treeNodeCollectionToLookIn[i].Name, key, /* ignoreCase = */ true))
+                if (WindowsFormsUtils.SafeCompareStrings(treeNodeCollectionToLookIn[i].Name, key, ignoreCase: true))
                 {
                     foundTreeNodes.Add(treeNodeCollectionToLookIn[i]);
                 }
             }
 
-            // Optional recurive search for controls in child collections.
-
+            // Optional recursive search for controls in child collections.
             if (searchAllChildren)
             {
                 for (int i = 0; i < treeNodeCollectionToLookIn.Count; i++)
@@ -316,13 +327,15 @@ namespace System.Windows.Forms
                     {
                         continue;
                     }
-                    if ((treeNodeCollectionToLookIn[i].Nodes != null) && treeNodeCollectionToLookIn[i].Nodes.Count > 0)
+
+                    if ((treeNodeCollectionToLookIn[i].Nodes is not null) && treeNodeCollectionToLookIn[i].Nodes.Count > 0)
                     {
-                        // if it has a valid child collecion, append those results to our collection
+                        // If it has a valid child collection, append those results to our collection.
                         foundTreeNodes = FindInternal(key, searchAllChildren, treeNodeCollectionToLookIn[i].Nodes, foundTreeNodes);
                     }
                 }
             }
+
             return foundTreeNodes;
         }
 
@@ -336,11 +349,9 @@ namespace System.Windows.Forms
 
         private int AddInternal(TreeNode node, int delta)
         {
-            if (node is null)
-            {
-                throw new ArgumentNullException(nameof(node));
-            }
-            if (node.handle != IntPtr.Zero)
+            ArgumentNullException.ThrowIfNull(node);
+
+            if (node._handle != IntPtr.Zero)
             {
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), nameof(node));
             }
@@ -350,10 +361,20 @@ namespace System.Windows.Forms
 
             // If the TreeView is sorted, index is ignored
             TreeView tv = owner.TreeView;
-            if (tv != null && tv.Sorted)
+
+            if (tv is not null)
+            {
+                foreach (TreeNode treeNode in node.GetSelfAndChildNodes())
+                {
+                    KeyboardToolTipStateMachine.Instance.Hook(treeNode, tv.KeyboardToolTip);
+                }
+            }
+
+            if (tv is not null && tv.Sorted)
             {
                 return owner.AddSorted(node);
             }
+
             node.parent = owner;
             int fixedIndex = owner.Nodes.FixedIndex;
             if (fixedIndex != -1)
@@ -367,16 +388,17 @@ namespace System.Windows.Forms
                 owner.EnsureCapacity(1);
                 node.index = owner.childCount;
             }
+
             owner.children[node.index] = node;
             owner.childCount++;
             node.Realize(false);
 
-            if (tv != null && node == tv.selectedNode)
+            if (tv is not null && node == tv.selectedNode)
             {
                 tv.SelectedNode = node; // communicate this to the handle
             }
 
-            if (tv != null && tv.TreeViewNodeSorter != null)
+            if (tv is not null && tv.TreeViewNodeSorter is not null)
             {
                 tv.Sort();
             }
@@ -386,11 +408,9 @@ namespace System.Windows.Forms
 
         int IList.Add(object node)
         {
-            if (node is null)
-            {
-                throw new ArgumentNullException(nameof(node));
-            }
-            else if (node is TreeNode)
+            ArgumentNullException.ThrowIfNull(node);
+
+            if (node is TreeNode)
             {
                 return Add((TreeNode)node);
             }
@@ -434,6 +454,7 @@ namespace System.Windows.Forms
                     return index;
                 }
             }
+
             return -1;
         }
 
@@ -457,7 +478,7 @@ namespace System.Windows.Forms
             // Step 0 - Arg validation
             if (string.IsNullOrEmpty(key))
             {
-                return -1; // we dont support empty or null keys.
+                return -1; // we don't support empty or null keys.
             }
 
             // step 1 - check the last cached item
@@ -489,7 +510,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void Insert(int index, TreeNode node)
         {
-            if (node.handle != IntPtr.Zero)
+            if (node._handle != IntPtr.Zero)
             {
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), nameof(node));
             }
@@ -499,7 +520,16 @@ namespace System.Windows.Forms
 
             // If the TreeView is sorted, index is ignored
             TreeView tv = owner.TreeView;
-            if (tv != null && tv.Sorted)
+
+            if (tv is not null)
+            {
+                foreach (TreeNode treeNode in node.GetSelfAndChildNodes())
+                {
+                    KeyboardToolTipStateMachine.Instance.Hook(treeNode, tv.KeyboardToolTip);
+                }
+            }
+
+            if (tv is not null && tv.Sorted)
             {
                 owner.AddSorted(node);
                 return;
@@ -669,7 +699,14 @@ namespace System.Windows.Forms
 
         public IEnumerator GetEnumerator()
         {
-            return new ArraySubsetEnumerator(owner.children, owner.childCount);
+            if (owner.children is not null)
+            {
+                return new ArraySubsetEnumerator(owner.children, owner.childCount);
+            }
+            else
+            {
+                return Array.Empty<TreeNode>().GetEnumerator();
+            }
         }
     }
 }

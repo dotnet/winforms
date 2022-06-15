@@ -49,17 +49,12 @@
       </trans-unit>
       <trans-unit id="secondRowLabel.Text">
         <source>&amp;Decimal places</source>
-        <target state="translated">小数点以下表示桁数(&amp;D)</target>
+        <target state="translated">小数点以下の桁数(&amp;D)</target>
         <note />
       </trans-unit>
       <trans-unit id="thirdRowLabel.Text">
         <source>Note: Custom format strings are not guaranteed  to successfully complete a round trip between the data source and the bound control. In order to ensure that a custom-formatted value successfully displays in the control and is persisted to the data base, handle the parse or format event for the binding.</source>
-        <target state="translated">メモ: カスタム形式の文字列は、データ ソースとバイン
-ドされたコントロール間の往復が正常に完了すること
-を保証されていません。カスタム形式の値がコントロー
-ルで正常に表示され、データ ベースに保存されるよう
-にするには、バインドの解析または形式イベントをハン
-ドルします。</target>
+        <target state="translated">メモ: カスタム形式の文字列は、データ ソースとバイン ドされたコントロール間の往復が正常に完了すること を保証されていません。カスタム形式の値がコントロー ルで正常に表示され、データ ベースに保存されるよう にするには、バインドの解析または形式イベントをハン ドルします。</target>
         <note />
       </trans-unit>
     </body>

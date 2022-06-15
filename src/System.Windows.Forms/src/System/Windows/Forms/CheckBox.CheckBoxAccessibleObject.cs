@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -23,9 +22,9 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    string defaultAction = Owner.AccessibleDefaultActionDescription;
+                    string? defaultAction = Owner.AccessibleDefaultActionDescription;
 
-                    if (defaultAction != null)
+                    if (defaultAction is not null)
                     {
                         return defaultAction;
                     }
@@ -71,14 +70,8 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.NamePropertyId
-                        => Name,
                     UiaCore.UIA.AutomationIdPropertyId
                         => Owner.Name,
-                    UiaCore.UIA.IsTogglePatternAvailablePropertyId
-                        => IsPatternSupported(UiaCore.UIA.TogglePatternId),
-                    UiaCore.UIA.ControlTypePropertyId
-                        => UiaCore.UIA.CheckBoxControlTypeId,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
                         =>
                         // This is necessary for compatibility with MSAA proxy:

@@ -2,34 +2,34 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
 {
     public class ToolStripRenderEventArgs : EventArgs
     {
-        private Color _backColor = Color.Empty;
+        private Color _backColor;
 
         /// <summary>
         ///  This class represents all the information to render the toolStrip
         /// </summary>
         public ToolStripRenderEventArgs(Graphics g, ToolStrip toolStrip)
+            : this(g, toolStrip, new Rectangle(Point.Empty, toolStrip.OrThrowIfNull().Size), Color.Empty)
         {
-            Graphics = g;
-            ToolStrip = toolStrip;
-            AffectedBounds = new Rectangle(Point.Empty, toolStrip?.Size ?? Size.Empty);
         }
 
         /// <summary>
         ///  This class represents all the information to render the toolStrip
         /// </summary>
-        public ToolStripRenderEventArgs(Graphics g, ToolStrip toolStrip, Rectangle affectedBounds, Color backColor)
+        public ToolStripRenderEventArgs(
+            Graphics g,
+            ToolStrip toolStrip,
+            Rectangle affectedBounds,
+            Color backColor)
         {
-            Graphics = g;
+            Graphics = g.OrThrowIfNull();
+            ToolStrip = toolStrip.OrThrowIfNull();
             AffectedBounds = affectedBounds;
-            ToolStrip = toolStrip;
             _backColor = backColor;
         }
 
@@ -96,14 +96,15 @@ namespace System.Windows.Forms
             {
                 if (ToolStrip is ToolStripDropDown dropDown)
                 {
-                    ToolStripDropDownItem ownerItem = dropDown.OwnerItem as ToolStripDropDownItem;
+                    ToolStripDropDownItem? ownerItem = dropDown.OwnerItem as ToolStripDropDownItem;
 
                     if (ownerItem is MdiControlStrip.SystemMenuItem)
                     {
                         // there's no connected rect between a system menu item and a dropdown.
                         return Rectangle.Empty;
                     }
-                    if (ownerItem != null && ownerItem.ParentInternal != null && !ownerItem.IsOnDropDown)
+
+                    if (ownerItem is not null && ownerItem.ParentInternal is not null && !ownerItem.IsOnDropDown)
                     {
                         // translate the item into our coordinate system.
                         Rectangle itemBounds = new Rectangle(ToolStrip.PointToClient(ownerItem.TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords)), ownerItem.Size);

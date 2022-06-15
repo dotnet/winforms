@@ -85,7 +85,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         /// <summary>
         ///  Copies the Behavior.GlyphCollection values to a one-dimensional
-        ///  <see cref='System.Array'/> instance at the specified index.
+        ///  <see cref="Array"/> instance at the specified index.
         /// </summary>
         public void CopyTo(Glyph[] array, int index)
         {

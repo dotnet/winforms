@@ -4,9 +4,7 @@
 
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.Globalization;
-using System.Reflection;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
@@ -21,7 +19,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void FolderNameEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
         {
             var editor = new FolderNameEditor();
@@ -29,7 +27,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void FolderNameEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
         {
             var editor = new FolderNameEditor();
@@ -56,7 +54,7 @@ namespace System.Windows.Forms.Design.Tests
             }
 
             [Theory]
-            [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+            [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
             public void FolderBrowser_Description_Set_GetReturnsExpected(string value, string expected)
             {
                 var browser = new FolderBrowser
@@ -71,8 +69,8 @@ namespace System.Windows.Forms.Design.Tests
             }
 
             [Theory]
-            [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FolderBrowserFolder))]
-            [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FolderBrowserFolder))]
+            [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FolderBrowserFolder))]
+            [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FolderBrowserFolder))]
             protected void FolderBrowser_StartLocation_Set_GetReturnsExpected(FolderBrowserFolder value)
             {
                 var browser = new FolderBrowser
@@ -87,8 +85,8 @@ namespace System.Windows.Forms.Design.Tests
             }
 
             [Theory]
-            [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FolderBrowserStyles))]
-            [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FolderBrowserStyles))]
+            [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FolderBrowserStyles))]
+            [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FolderBrowserStyles))]
             protected void FolderBrowser_Style_Set_GetReturnsExpected(FolderBrowserStyles value)
             {
                 var browser = new FolderBrowser

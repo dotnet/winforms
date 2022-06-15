@@ -2,13 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms
 {
-    public class ProfessionalColorTable
+    public partial class ProfessionalColorTable
     {
         private Dictionary<KnownColors, Color>? _professionalRGB;
         private bool _usingSystemColors;
@@ -230,6 +229,10 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ProfessionalColorsSeparatorLightDescr))]
         public virtual Color SeparatorLight => FromKnownColor(KnownColors.msocbvcrCBSplitterLineLight);
 
+        [SRDescription(nameof(SR.ProfessionalColorsStatusStripBorderDescr))]
+        // Note: the color is retained for backwards compatibility
+        public virtual Color StatusStripBorder => SystemColors.ButtonHighlight;
+
         [SRDescription(nameof(SR.ProfessionalColorsStatusStripGradientBeginDescr))]
         public virtual Color StatusStripGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin);
 
@@ -331,10 +334,10 @@ namespace System.Windows.Forms
             return graphics.FindNearestColor(Color.FromArgb(r, g, b));
         }
 
-        private void InitCommonColors(ref Dictionary<KnownColors, Color> rgbTable)
+        private static void InitCommonColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
             // We need to calculate our own alpha blended color based on the Highlight and Window
-            // colors on the system. Since terminalserver + alphablending doesnt work we cant just do a
+            // colors on the system. Since terminalserver + alphablending doesnt work we can't just do a
             // FromARGB here. So we have a simple function which calculates the blending for us.
             if (!DisplayInformation.LowResolution)
             {
@@ -365,7 +368,7 @@ namespace System.Windows.Forms
 
             InitCommonColors(ref rgbTable);
 
-            // use locals so we arent fetching again and again.
+            // use locals so we aren't fetching again and again.
             Color buttonFace = SystemColors.ButtonFace;
             Color buttonShadow = SystemColors.ButtonShadow;
             Color highlight = SystemColors.Highlight;
@@ -431,6 +434,7 @@ namespace System.Windows.Forms
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuBkgd] = GetAlphaBlendedColorHighRes(null, buttonFace, window, 143);
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBSplitterLine] = GetAlphaBlendedColorHighRes(null, buttonShadow, window, 70);
             }
+
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBkgdSelected] = (lowResolution) ? SystemColors.ControlLight : highlight;
 
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = buttonFace;
@@ -662,7 +666,7 @@ namespace System.Windows.Forms
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrXLFormulaBarBkgd] = buttonFace;
         }
 
-        private void InitOliveLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
+        private static void InitOliveLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(81, 94, 51);
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(81, 94, 51);
@@ -908,7 +912,7 @@ namespace System.Windows.Forms
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrXLFormulaBarBkgd] = Color.FromArgb(217, 217, 167);
         }
 
-        private void InitSilverLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
+        private static void InitSilverLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(173, 174, 193);
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterFloating] = Color.FromArgb(122, 121, 153);
@@ -1150,7 +1154,7 @@ namespace System.Windows.Forms
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrXLFormulaBarBkgd] = Color.FromArgb(215, 215, 229);
         }
 
-        private void InitRoyaleColors(ref Dictionary<KnownColors, Color> rgbTable)
+        private static void InitRoyaleColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBkgd] = Color.FromArgb(238, 237, 240); // msocbvcrCBBkgd
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBDragHandle] = Color.FromArgb(189, 188, 191); // msocbvcrCBDragHandle -> Needs to equal VSCOLOR_COMMANDBAR_DRAGHANDLE in vscolors.cpp
@@ -1432,7 +1436,7 @@ namespace System.Windows.Forms
             InitCommonColors(ref rgbTable);
         }
 
-        private void InitBlueLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
+        private static void InitBlueLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(196, 205, 218);
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(196, 205, 218);
@@ -1676,224 +1680,6 @@ namespace System.Windows.Forms
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPTitleTextActive] = Color.FromArgb(0, 0, 0);
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPTitleTextInactive] = Color.FromArgb(0, 0, 0);
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrXLFormulaBarBkgd] = Color.FromArgb(158, 190, 245);
-        }
-
-        private enum KnownColors
-        {
-            msocbvcrCBBdrOuterDocked,
-            msocbvcrCBBdrOuterFloating,
-            msocbvcrCBBkgd,
-            msocbvcrCBCtlBdrMouseDown,
-            msocbvcrCBCtlBdrMouseOver,
-            msocbvcrCBCtlBdrSelected,
-            msocbvcrCBCtlBdrSelectedMouseOver,
-            msocbvcrCBCtlBkgd,
-            msocbvcrCBCtlBkgdLight,
-            msocbvcrCBCtlBkgdMouseDown,
-            msocbvcrCBCtlBkgdMouseOver,
-            msocbvcrCBCtlBkgdSelected,
-            msocbvcrCBCtlBkgdSelectedMouseOver,
-            msocbvcrCBCtlText,
-            msocbvcrCBCtlTextDisabled,
-            msocbvcrCBCtlTextLight,
-            msocbvcrCBCtlTextMouseDown,
-            msocbvcrCBCtlTextMouseOver,
-            msocbvcrCBDockSeparatorLine,
-            msocbvcrCBDragHandle,
-            msocbvcrCBDragHandleShadow,
-            msocbvcrCBDropDownArrow,
-            msocbvcrCBGradMainMenuHorzBegin,
-            msocbvcrCBGradMainMenuHorzEnd,
-            msocbvcrCBGradMenuIconBkgdDroppedBegin,
-            msocbvcrCBGradMenuIconBkgdDroppedEnd,
-            msocbvcrCBGradMenuIconBkgdDroppedMiddle,
-            msocbvcrCBGradMenuTitleBkgdBegin,
-            msocbvcrCBGradMenuTitleBkgdEnd,
-            msocbvcrCBGradMouseDownBegin,
-            msocbvcrCBGradMouseDownEnd,
-            msocbvcrCBGradMouseDownMiddle,
-            msocbvcrCBGradMouseOverBegin,
-            msocbvcrCBGradMouseOverEnd,
-            msocbvcrCBGradMouseOverMiddle,
-            msocbvcrCBGradOptionsBegin,
-            msocbvcrCBGradOptionsEnd,
-            msocbvcrCBGradOptionsMiddle,
-            msocbvcrCBGradOptionsMouseOverBegin,
-            msocbvcrCBGradOptionsMouseOverEnd,
-            msocbvcrCBGradOptionsMouseOverMiddle,
-            msocbvcrCBGradOptionsSelectedBegin,
-            msocbvcrCBGradOptionsSelectedEnd,
-            msocbvcrCBGradOptionsSelectedMiddle,
-            msocbvcrCBGradSelectedBegin,
-            msocbvcrCBGradSelectedEnd,
-            msocbvcrCBGradSelectedMiddle,
-            msocbvcrCBGradVertBegin,
-            msocbvcrCBGradVertEnd,
-            msocbvcrCBGradVertMiddle,
-            msocbvcrCBIconDisabledDark,
-            msocbvcrCBIconDisabledLight,
-            msocbvcrCBLabelBkgnd,
-            msocbvcrCBLowColorIconDisabled,
-            msocbvcrCBMainMenuBkgd,
-            msocbvcrCBMenuBdrOuter,
-            msocbvcrCBMenuBkgd,
-            msocbvcrCBMenuCtlText,
-            msocbvcrCBMenuCtlTextDisabled,
-            msocbvcrCBMenuIconBkgd,
-            msocbvcrCBMenuIconBkgdDropped,
-            msocbvcrCBMenuShadow,
-            msocbvcrCBMenuSplitArrow,
-            msocbvcrCBOptionsButtonShadow,
-            msocbvcrCBShadow,
-            msocbvcrCBSplitterLine,
-            msocbvcrCBSplitterLineLight,
-            msocbvcrCBTearOffHandle,
-            msocbvcrCBTearOffHandleMouseOver,
-            msocbvcrCBTitleBkgd,
-            msocbvcrCBTitleText,
-            msocbvcrDisabledFocuslessHighlightedText,
-            msocbvcrDisabledHighlightedText,
-            msocbvcrDlgGroupBoxText,
-            msocbvcrDocTabBdr,
-            msocbvcrDocTabBdrDark,
-            msocbvcrDocTabBdrDarkMouseDown,
-            msocbvcrDocTabBdrDarkMouseOver,
-            msocbvcrDocTabBdrLight,
-            msocbvcrDocTabBdrLightMouseDown,
-            msocbvcrDocTabBdrLightMouseOver,
-            msocbvcrDocTabBdrMouseDown,
-            msocbvcrDocTabBdrMouseOver,
-            msocbvcrDocTabBdrSelected,
-            msocbvcrDocTabBkgd,
-            msocbvcrDocTabBkgdMouseDown,
-            msocbvcrDocTabBkgdMouseOver,
-            msocbvcrDocTabBkgdSelected,
-            msocbvcrDocTabText,
-            msocbvcrDocTabTextMouseDown,
-            msocbvcrDocTabTextMouseOver,
-            msocbvcrDocTabTextSelected,
-            msocbvcrDWActiveTabBkgd,
-            msocbvcrDWActiveTabText,
-            msocbvcrDWActiveTabTextDisabled,
-            msocbvcrDWInactiveTabBkgd,
-            msocbvcrDWInactiveTabText,
-            msocbvcrDWTabBkgdMouseDown,
-            msocbvcrDWTabBkgdMouseOver,
-            msocbvcrDWTabTextMouseDown,
-            msocbvcrDWTabTextMouseOver,
-            msocbvcrFocuslessHighlightedBkgd,
-            msocbvcrFocuslessHighlightedText,
-            msocbvcrGDHeaderBdr,
-            msocbvcrGDHeaderBkgd,
-            msocbvcrGDHeaderCellBdr,
-            msocbvcrGDHeaderCellBkgd,
-            msocbvcrGDHeaderCellBkgdSelected,
-            msocbvcrGDHeaderSeeThroughSelection,
-            msocbvcrGSPDarkBkgd,
-            msocbvcrGSPGroupContentDarkBkgd,
-            msocbvcrGSPGroupContentLightBkgd,
-            msocbvcrGSPGroupContentText,
-            msocbvcrGSPGroupContentTextDisabled,
-            msocbvcrGSPGroupHeaderDarkBkgd,
-            msocbvcrGSPGroupHeaderLightBkgd,
-            msocbvcrGSPGroupHeaderText,
-            msocbvcrGSPGroupline,
-            msocbvcrGSPHyperlink,
-            msocbvcrGSPLightBkgd,
-            msocbvcrHyperlink,
-            msocbvcrHyperlinkFollowed,
-            msocbvcrJotNavUIBdr,
-            msocbvcrJotNavUIGradBegin,
-            msocbvcrJotNavUIGradEnd,
-            msocbvcrJotNavUIGradMiddle,
-            msocbvcrJotNavUIText,
-            msocbvcrListHeaderArrow,
-            msocbvcrNetLookBkgnd,
-            msocbvcrOABBkgd,
-            msocbvcrOBBkgdBdr,
-            msocbvcrOBBkgdBdrContrast,
-            msocbvcrOGMDIParentWorkspaceBkgd,
-            msocbvcrOGRulerActiveBkgd,
-            msocbvcrOGRulerBdr,
-            msocbvcrOGRulerBkgd,
-            msocbvcrOGRulerInactiveBkgd,
-            msocbvcrOGRulerTabBoxBdr,
-            msocbvcrOGRulerTabBoxBdrHighlight,
-            msocbvcrOGRulerTabStopTicks,
-            msocbvcrOGRulerText,
-            msocbvcrOGTaskPaneGroupBoxHeaderBkgd,
-            msocbvcrOGWorkspaceBkgd,
-            msocbvcrOLKFlagNone,
-            msocbvcrOLKFolderbarDark,
-            msocbvcrOLKFolderbarLight,
-            msocbvcrOLKFolderbarText,
-            msocbvcrOLKGridlines,
-            msocbvcrOLKGroupLine,
-            msocbvcrOLKGroupNested,
-            msocbvcrOLKGroupShaded,
-            msocbvcrOLKGroupText,
-            msocbvcrOLKIconBar,
-            msocbvcrOLKInfoBarBkgd,
-            msocbvcrOLKInfoBarText,
-            msocbvcrOLKPreviewPaneLabelText,
-            msocbvcrOLKTodayIndicatorDark,
-            msocbvcrOLKTodayIndicatorLight,
-            msocbvcrOLKWBActionDividerLine,
-            msocbvcrOLKWBButtonDark,
-            msocbvcrOLKWBButtonLight,
-            msocbvcrOLKWBDarkOutline,
-            msocbvcrOLKWBFoldersBackground,
-            msocbvcrOLKWBHoverButtonDark,
-            msocbvcrOLKWBHoverButtonLight,
-            msocbvcrOLKWBLabelText,
-            msocbvcrOLKWBPressedButtonDark,
-            msocbvcrOLKWBPressedButtonLight,
-            msocbvcrOLKWBSelectedButtonDark,
-            msocbvcrOLKWBSelectedButtonLight,
-            msocbvcrOLKWBSplitterDark,
-            msocbvcrOLKWBSplitterLight,
-            msocbvcrPlacesBarBkgd,
-            msocbvcrPPOutlineThumbnailsPaneTabAreaBkgd,
-            msocbvcrPPOutlineThumbnailsPaneTabBdr,
-            msocbvcrPPOutlineThumbnailsPaneTabInactiveBkgd,
-            msocbvcrPPOutlineThumbnailsPaneTabText,
-            msocbvcrPPSlideBdrActiveSelected,
-            msocbvcrPPSlideBdrActiveSelectedMouseOver,
-            msocbvcrPPSlideBdrInactiveSelected,
-            msocbvcrPPSlideBdrMouseOver,
-            msocbvcrPubPrintDocScratchPageBkgd,
-            msocbvcrPubWebDocScratchPageBkgd,
-            msocbvcrSBBdr,
-            msocbvcrScrollbarBkgd,
-            msocbvcrToastGradBegin,
-            msocbvcrToastGradEnd,
-            msocbvcrWPBdrInnerDocked,
-            msocbvcrWPBdrOuterDocked,
-            msocbvcrWPBdrOuterFloating,
-            msocbvcrWPBkgd,
-            msocbvcrWPCtlBdr,
-            msocbvcrWPCtlBdrDefault,
-            msocbvcrWPCtlBdrDisabled,
-            msocbvcrWPCtlBkgd,
-            msocbvcrWPCtlBkgdDisabled,
-            msocbvcrWPCtlText,
-            msocbvcrWPCtlTextDisabled,
-            msocbvcrWPCtlTextMouseDown,
-            msocbvcrWPGroupline,
-            msocbvcrWPInfoTipBkgd,
-            msocbvcrWPInfoTipText,
-            msocbvcrWPNavBarBkgnd,
-            msocbvcrWPText,
-            msocbvcrWPTextDisabled,
-            msocbvcrWPTitleBkgdActive,
-            msocbvcrWPTitleBkgdInactive,
-            msocbvcrWPTitleTextActive,
-            msocbvcrWPTitleTextInactive,
-            msocbvcrXLFormulaBarBkgd,
-            ButtonSelectedHighlight, // not actually from MSO tables
-            ButtonPressedHighlight,// not actually from MSO tables
-            ButtonCheckedHighlight,// not actually from MSO tables
-            lastKnownColor = ButtonCheckedHighlight
         }
     }
 }

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -10,7 +9,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  This class provides static methods to create, activate and deactivate the theming scope.
     /// </summary>
-    internal class ThemingScope
+    internal static class ThemingScope
     {
         private static Kernel32.ACTCTXW s_enableThemingActivationContext;
         private static IntPtr s_hActCtx;
@@ -59,25 +58,68 @@ namespace System.Windows.Forms
             return userCookie;
         }
 
-        public unsafe static bool CreateActivationContext(string dllPath, int nativeResourceManifestID)
+        public unsafe static bool CreateActivationContext(IntPtr module, int nativeResourceManifestID)
         {
             lock (typeof(ThemingScope))
             {
                 if (!s_contextCreationSucceeded)
                 {
-                    fixed (char* pDllPath = dllPath)
+                    s_enableThemingActivationContext = new Kernel32.ACTCTXW
+                    {
+                        cbSize = (uint)sizeof(Kernel32.ACTCTXW),
+                        lpResourceName = (IntPtr)nativeResourceManifestID,
+                        dwFlags = Kernel32.ACTCTX_FLAG.HMODULE_VALID | Kernel32.ACTCTX_FLAG.RESOURCE_NAME_VALID,
+                        hModule = module
+                    };
+
+                    s_hActCtx = Kernel32.CreateActCtxW(ref s_enableThemingActivationContext);
+
+                    s_contextCreationSucceeded = (s_hActCtx != new IntPtr(-1));
+                }
+
+                return s_contextCreationSucceeded;
+            }
+        }
+
+        public unsafe static bool CreateActivationContext(Stream manifest)
+        {
+            lock (typeof(ThemingScope))
+            {
+                if (!s_contextCreationSucceeded)
+                {
+                    string tempFilePath = Path.Join(Path.GetTempPath(), Path.GetRandomFileName());
+                    using FileStream tempFileStream = new FileStream(
+                        tempFilePath,
+                        FileMode.CreateNew,
+                        FileAccess.ReadWrite,
+                        FileShare.Delete | FileShare.ReadWrite);
+
+                    manifest.CopyTo(tempFileStream);
+
+                    // CreateActCtxW gives a sharing violation if we have the handle open
+                    tempFileStream.Close();
+
+                    fixed (char* p = tempFilePath)
                     {
                         s_enableThemingActivationContext = new Kernel32.ACTCTXW
                         {
-                            cbSize = (uint)Marshal.SizeOf<Kernel32.ACTCTXW>(),
-                            lpSource = pDllPath,
-                            lpResourceName = (IntPtr)nativeResourceManifestID,
-                            dwFlags = Kernel32.ACTCTX_FLAG.RESOURCE_NAME_VALID
+                            cbSize = (uint)sizeof(Kernel32.ACTCTXW),
+                            lpSource = p
                         };
 
                         s_hActCtx = Kernel32.CreateActCtxW(ref s_enableThemingActivationContext);
                     }
+
                     s_contextCreationSucceeded = (s_hActCtx != new IntPtr(-1));
+
+                    try
+                    {
+                        File.Delete(tempFilePath);
+                    }
+                    catch (Exception e) when (e is UnauthorizedAccessException or IOException)
+                    {
+                        // Don't want to take down WinForms if we can't delete is file
+                    }
                 }
 
                 return s_contextCreationSucceeded;

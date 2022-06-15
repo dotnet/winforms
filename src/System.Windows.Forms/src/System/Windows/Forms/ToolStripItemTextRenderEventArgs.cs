@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -19,12 +17,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This class represents all the information to render the ToolStrip
         /// </summary>
-        public ToolStripItemTextRenderEventArgs(Graphics g, ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, TextFormatFlags format) : base(g, item)
+        public ToolStripItemTextRenderEventArgs(
+            Graphics g,
+            ToolStripItem item,
+            string? text,
+            Rectangle textRectangle,
+            Color textColor,
+            Font? textFont,
+            TextFormatFlags format)
+            : base(g, item)
         {
-            if (item is null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            ArgumentNullException.ThrowIfNull(item);
 
             Text = text;
             TextRectangle = textRectangle;
@@ -37,12 +40,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This class represents all the information to render the ToolStrip
         /// </summary>
-        public ToolStripItemTextRenderEventArgs(Graphics g, ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, ContentAlignment textAlign) : base(g, item)
+        public ToolStripItemTextRenderEventArgs(
+            Graphics g,
+            ToolStripItem item,
+            string? text,
+            Rectangle textRectangle,
+            Color textColor,
+            Font? textFont,
+            ContentAlignment textAlign)
+            : base(g, item)
         {
-            if (item is null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            ArgumentNullException.ThrowIfNull(item);
 
             Text = text;
             TextRectangle = textRectangle;
@@ -56,7 +64,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The string to draw
         /// </summary>
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
         /// <summary>
         ///  The color to draw the text
@@ -76,7 +84,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The font to draw the text
         /// </summary>
-        public Font TextFont { get; set; }
+        public Font? TextFont { get; set; }
 
         /// <summary>
         ///  The rectangle to draw the text in

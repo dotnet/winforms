@@ -5,22 +5,20 @@
 #nullable disable
 
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  Provides a base implementation for a <see cref='ComponentEditorPage'/>.
+    ///  Provides a base implementation for a <see cref="ComponentEditorPage"/>.
     /// </summary>
     public abstract class ComponentEditorPage : Panel
     {
         private Icon _icon;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ComponentEditorPage'/> class.
+        ///  Initializes a new instance of the <see cref="ComponentEditorPage"/> class.
         /// </summary>
         public ComponentEditorPage() : base()
         {
@@ -95,7 +93,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public Icon Icon
         {
-            get =>_icon ??= new Icon(typeof(ComponentEditorPage), "ComponentEditorPage");
+            get => _icon ??= new Icon(typeof(ComponentEditorPage), "ComponentEditorPage");
             set => _icon = value;
         }
 
@@ -189,7 +187,7 @@ namespace System.Windows.Forms.Design
         public virtual void OnApplyComplete() => ReloadComponent();
 
         /// <summary>
-        ///  Called when the current component may have changed elsewhere and needs to be reloded into the UI
+        ///  Called when the current component may have changed elsewhere and needs to be reloaded into the UI
         /// </summary>
         protected virtual void ReloadComponent()
         {
@@ -209,7 +207,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected virtual void SetDirty()
         {
-            if (!IsLoading() && PageSite != null)
+            if (!IsLoading() && PageSite is not null)
             {
                 PageSite.SetDirty();
             }

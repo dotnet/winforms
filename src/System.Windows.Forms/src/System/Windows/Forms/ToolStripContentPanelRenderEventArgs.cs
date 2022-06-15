@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -15,8 +13,8 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolStripContentPanelRenderEventArgs(Graphics g, ToolStripContentPanel contentPanel)
         {
-            Graphics = g;
-            ToolStripContentPanel = contentPanel;
+            Graphics = g.OrThrowIfNull();
+            ToolStripContentPanel = contentPanel.OrThrowIfNull();
         }
 
         /// <summary>

@@ -2,14 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents a method that will handle the <see cref='Control.MouseDown'/>,
-    ///  <see cref='Control.MouseUp'/> or <see cref='Control.MouseMove'/> events of a form,
+    ///  Represents a method that will handle the <see cref="Control.MouseDown"/>,
+    ///  <see cref="Control.MouseUp"/> or <see cref="Control.MouseMove"/> events of a form,
     ///  control or other component.
     /// </summary>
-    public delegate void ToolStripItemClickedEventHandler(object sender, ToolStripItemClickedEventArgs e);
+    public delegate void ToolStripItemClickedEventHandler(object? sender, ToolStripItemClickedEventArgs e);
 }

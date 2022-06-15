@@ -61,10 +61,8 @@ namespace System.ComponentModel.Design
         /// <param name="parentProvider"> The parent service provider.  If there is no parent used to resolve services this can be null. </param>
         public DesignSurface(IServiceProvider parentProvider, Type rootComponentType) : this(parentProvider)
         {
-            if (rootComponentType is null)
-            {
-                throw new ArgumentNullException(nameof(rootComponentType));
-            }
+            ArgumentNullException.ThrowIfNull(rootComponentType);
+
             BeginLoad(rootComponentType);
         }
 
@@ -79,6 +77,7 @@ namespace System.ComponentModel.Design
                 {
                     throw new ObjectDisposedException(GetType().FullName);
                 }
+
                 return ((IDesignerHost)_host).Container;
             }
         }
@@ -101,10 +100,11 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_loadErrors != null)
+                if (_loadErrors is not null)
                 {
                     return _loadErrors;
                 }
+
                 return Array.Empty<object>();
             }
         }
@@ -129,6 +129,7 @@ namespace System.ComponentModel.Design
                 {
                     throw new ObjectDisposedException(GetType().FullName);
                 }
+
                 return _serviceContainer;
             }
         }
@@ -152,7 +153,7 @@ namespace System.ComponentModel.Design
                 if (rootComponent is null)
                 {
                     // Check to see if we have any load errors.  If so, use them.
-                    if (_loadErrors != null)
+                    if (_loadErrors is not null)
                     {
                         foreach (object o in _loadErrors)
                         {
@@ -160,12 +161,13 @@ namespace System.ComponentModel.Design
                             {
                                 throw new InvalidOperationException(ex.Message, ex);
                             }
-                            else if (o != null)
+                            else if (o is not null)
                             {
                                 throw new InvalidOperationException(o.ToString());
                             }
                         }
                     }
+
                     // loader didn't provide any help.  Just generally fail.
                     throw new InvalidOperationException(SR.DesignSurfaceNoRootComponent)
                     {
@@ -236,10 +238,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void BeginLoad(DesignerLoader loader)
         {
-            if (loader is null)
-            {
-                throw new ArgumentNullException(nameof(loader));
-            }
+            ArgumentNullException.ThrowIfNull(loader);
 
             if (_host is null)
             {
@@ -256,15 +255,13 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void BeginLoad(Type rootComponentType)
         {
-            if (rootComponentType is null)
-            {
-                throw new ArgumentNullException(nameof(rootComponentType));
-            }
+            ArgumentNullException.ThrowIfNull(rootComponentType);
 
             if (_host is null)
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
+
             BeginLoad(new DefaultDesignerLoader(rootComponentType));
         }
 
@@ -282,10 +279,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected internal virtual IDesigner CreateDesigner(IComponent component, bool rootDesigner)
         {
-            if (component is null)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
+            ArgumentNullException.ThrowIfNull(component);
 
             if (_host is null)
             {
@@ -301,6 +295,7 @@ namespace System.ComponentModel.Design
             {
                 designer = TypeDescriptor.CreateDesigner(component, typeof(IDesigner));
             }
+
             return designer;
         }
 
@@ -310,15 +305,12 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected internal virtual object CreateInstance(Type type)
         {
-            if (type is null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
+            ArgumentNullException.ThrowIfNull(type);
 
             // Locate an appropriate constructor for IComponents.
             object instance = null;
             ConstructorInfo ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(Array.Empty<Type>());
-            if (ctor != null)
+            if (ctor is not null)
             {
                 instance = TypeDescriptor.CreateInstance(this, type, Array.Empty<Type>(), Array.Empty<object>());
             }
@@ -328,7 +320,8 @@ namespace System.ComponentModel.Design
                 {
                     ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(BindingFlags.Public | BindingFlags.Instance | BindingFlags.ExactBinding, null, new Type[] { typeof(IContainer) }, null);
                 }
-                if (ctor != null)
+
+                if (ctor is not null)
                 {
                     instance = TypeDescriptor.CreateInstance(this, type, new Type[] { typeof(IContainer) }, new object[] { ComponentContainer });
                 }
@@ -338,11 +331,12 @@ namespace System.ComponentModel.Design
             {
                 instance = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.CreateInstance, null, null, null);
             }
+
             return instance;
         }
 
         /// <summary>
-        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its doesigner and makes it elligble for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
+        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its designer and makes it eligible for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
         /// </summary>
         public INestedContainer CreateNestedContainer(IComponent owningComponent)
         {
@@ -350,7 +344,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its doesigner and makes it elligble for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
+        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its designer and makes it eligible for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
         /// </summary>
         public INestedContainer CreateNestedContainer(IComponent owningComponent, string containerName)
         {
@@ -359,10 +353,8 @@ namespace System.ComponentModel.Design
                 throw new ObjectDisposedException(GetType().FullName);
             }
 
-            if (owningComponent is null)
-            {
-                throw new ArgumentNullException(nameof(owningComponent));
-            }
+            ArgumentNullException.ThrowIfNull(owningComponent);
+
             return new SiteNestedContainer(owningComponent, containerName, _host);
         }
 
@@ -382,7 +374,7 @@ namespace System.ComponentModel.Design
         {
             if (disposing)
             {
-                // technically we should raise this after we've destroyed ourselves.  Unfortunately, too many things query us for services so they can detatch.
+                // technically we should raise this after we've destroyed ourselves.  Unfortunately, too many things query us for services so they can detach.
                 Disposed?.Invoke(this, EventArgs.Empty);
 
                 // Destroying the host also destroys all components. In most cases destroying the root component will destroy its designer which also kills the view. So, we destroy the view below last (remember, this view is a "view container" so we are destroying the innermost view first and then destroying our own view).
@@ -390,14 +382,14 @@ namespace System.ComponentModel.Design
                 {
                     try
                     {
-                        if (_host != null)
+                        if (_host is not null)
                         {
                             _host.DisposeHost();
                         }
                     }
                     finally
                     {
-                        if (_serviceContainer != null)
+                        if (_serviceContainer is not null)
                         {
                             _serviceContainer.RemoveService(typeof(DesignSurface));
                             _serviceContainer.Dispose();
@@ -417,7 +409,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Flush()
         {
-            if (_host != null)
+            if (_host is not null)
             {
                 _host.Flush();
             }
@@ -432,10 +424,11 @@ namespace System.ComponentModel.Design
         /// <returns> An instance of the requested service or null if the service could not be found. </returns>
         public object GetService(Type serviceType)
         {
-            if (_serviceContainer != null)
+            if (_serviceContainer is not null)
             {
                 return _serviceContainer.GetService(serviceType);
             }
+
             return null;
         }
 
@@ -498,14 +491,16 @@ namespace System.ComponentModel.Design
                         HelpLink = SR.DesignSurfaceNoRootComponent
                     };
                     newErrors.Add(ex);
-                    if (errors != null)
+                    if (errors is not null)
                     {
                         newErrors.AddRange(errors);
                     }
+
                     errors = newErrors;
                     successful = false;
                 }
             }
+
             OnLoaded(new LoadedEventArgs(successful, errors));
         }
 
@@ -592,6 +587,7 @@ namespace System.ComponentModel.Design
                 loaderHost.CreateComponent(_type);
                 loaderHost.EndLoad(_type.FullName, true, null);
             }
+
             public override void Dispose()
             {
             }

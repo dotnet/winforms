@@ -13,7 +13,7 @@ namespace System.Drawing.Design
     /// </summary>
     [ComImport]
     [Guid("4BACD258-DE64-4048-BC4E-FEDBEF9ACB76")]
-    [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IToolboxService
     {
         /// <summary>
@@ -87,7 +87,7 @@ namespace System.Drawing.Design
         ToolboxItemCollection GetToolboxItems(IDesignerHost host);
 
         /// <summary>
-        ///  Gets all .NET tools on the toolbox fopr specific category.
+        ///  Gets all .NET tools on the toolbox for specific category.
         /// </summary>
         ToolboxItemCollection GetToolboxItems(string category);
 

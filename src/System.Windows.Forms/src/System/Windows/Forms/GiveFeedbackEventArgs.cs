@@ -2,17 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
-
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='Control.GiveFeedback'/> event.
+    ///  Provides data for the <see cref="Control.GiveFeedback"/> event.
     /// </summary>
     public class GiveFeedbackEventArgs : EventArgs
     {
         /// <summary>
-        ///  Initializes a new instance of the <see cref='GiveFeedbackEventArgs'/> class.
+        ///  Initializes a new instance of the <see cref="GiveFeedbackEventArgs"/> class.
         /// </summary>
         public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors)
         {

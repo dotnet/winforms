@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using static Interop;
@@ -11,8 +9,8 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents an internal class that is used bu ComboBox and TextBox AutoCompleteCustomSource property.
-    ///  This class is reponsible for initializing the SHAutoComplete COM object and setting options in it.
+    ///  Represents an internal class that is used by ComboBox and TextBox AutoCompleteCustomSource property.
+    ///  This class is responsible for initializing the SHAutoComplete COM object and setting options in it.
     ///  The StringSource contains an array of Strings which is passed to the COM object as the custom source.
     /// </summary>
     internal class StringSource : IEnumString
@@ -20,12 +18,7 @@ namespace System.Windows.Forms
         private string[] strings;
         private int current;
         private int size;
-        private Shell32.IAutoComplete2 _autoCompleteObject2;
-
-        /// <summary>
-        ///  SHAutoComplete COM object CLSID.
-        /// </summary>
-        private static Guid autoCompleteClsid = new Guid("{00BB2763-6A77-11D0-A535-00C04FD7D062}");
+        private WinFormsComWrappers.AutoCompleteWrapper? _autoCompleteObject2;
 
         /// <summary>
         ///  Constructor.
@@ -33,27 +26,22 @@ namespace System.Windows.Forms
         public StringSource(string[] strings)
         {
             Array.Clear(strings, 0, size);
+            this.strings = strings;
 
-            if (strings != null)
-            {
-                this.strings = strings;
-            }
             current = 0;
-            size = (strings is null) ? 0 : strings.Length;
+            size = strings.Length;
 
-            Guid iid_iunknown = typeof(Shell32.IAutoComplete2).GUID;
-            HRESULT hr = Ole32.CoCreateInstance(
-                ref autoCompleteClsid,
+            var autoCompleteIID = IID.IAutoComplete2;
+            Ole32.CoCreateInstance(
+                in CLSID.AutoComplete,
                 IntPtr.Zero,
                 Ole32.CLSCTX.INPROC_SERVER,
-                ref iid_iunknown,
-                out object obj);
-            if (!hr.Succeeded())
-            {
-                throw Marshal.GetExceptionForHR((int)hr);
-            }
+                in autoCompleteIID,
+                out IntPtr autoComplete2Ptr).ThrowIfFailed();
 
-            _autoCompleteObject2 = (Shell32.IAutoComplete2)obj;
+            var obj = WinFormsComWrappers.Instance
+                .GetOrCreateObjectForComInstance(autoComplete2Ptr, CreateObjectFlags.UniqueInstance);
+            _autoCompleteObject2 = (WinFormsComWrappers.AutoCompleteWrapper)obj;
         }
 
         /// <summary>
@@ -66,21 +54,22 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             if (!_autoCompleteObject2.SetOptions(options).Succeeded())
             {
                 return false;
             }
 
-            HRESULT hr = _autoCompleteObject2.Init(edit.Handle, (IEnumString)this, null, null);
+            HRESULT hr = _autoCompleteObject2.Init(edit.Handle, this, IntPtr.Zero, IntPtr.Zero);
             GC.KeepAlive(edit.Wrapper);
             return hr.Succeeded();
         }
 
         public void ReleaseAutoComplete()
         {
-            if (_autoCompleteObject2 != null)
+            if (_autoCompleteObject2 is not null)
             {
-                Marshal.ReleaseComObject(_autoCompleteObject2);
+                _autoCompleteObject2.Dispose();
                 _autoCompleteObject2 = null;
             }
         }
@@ -88,13 +77,9 @@ namespace System.Windows.Forms
         public void RefreshList(string[] newSource)
         {
             Array.Clear(strings, 0, size);
-
-            if (strings != null)
-            {
-                strings = newSource;
-            }
+            strings = newSource;
             current = 0;
-            size = (strings is null) ? 0 : strings.Length;
+            size = strings.Length;
         }
 
         #region IEnumString Members
@@ -110,6 +95,7 @@ namespace System.Windows.Forms
             {
                 return (int)HRESULT.E_INVALIDARG;
             }
+
             int fetched = 0;
 
             while (current < size && celt > 0)
@@ -124,6 +110,7 @@ namespace System.Windows.Forms
             {
                 Marshal.WriteInt32(pceltFetched, fetched);
             }
+
             return celt == 0 ? (int)HRESULT.S_OK : (int)HRESULT.S_FALSE;
         }
 
@@ -139,6 +126,7 @@ namespace System.Windows.Forms
             {
                 return (int)HRESULT.S_FALSE;
             }
+
             return (int)HRESULT.S_OK;
         }
 

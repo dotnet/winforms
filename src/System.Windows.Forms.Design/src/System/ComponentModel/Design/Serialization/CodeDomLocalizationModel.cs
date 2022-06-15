@@ -17,7 +17,7 @@ namespace System.ComponentModel.Design.Serialization
         None = 0,
 
         /// <summary>
-        ///  Indicates that the localization provider will write out localizaed properties by assigning a resource to
+        ///  Indicates that the localization provider will write out localized properties by assigning a resource to
         ///  each property.  This model is fast when the number of properties is small, but scales poorly
         ///  as the number of properties containing default values grows.
         /// </summary>

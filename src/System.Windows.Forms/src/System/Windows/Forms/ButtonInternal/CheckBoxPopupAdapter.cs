@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Layout;
@@ -12,7 +10,10 @@ namespace System.Windows.Forms.ButtonInternal
 {
     internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
     {
-        internal CheckBoxPopupAdapter(ButtonBase control) : base(control) { }
+        internal CheckBoxPopupAdapter(ButtonBase control)
+            : base(control)
+        {
+        }
 
         internal override void PaintUp(PaintEventArgs e, CheckState state)
         {
@@ -32,18 +33,18 @@ namespace System.Windows.Forms.ButtonInternal
 
                 DrawCheckBackground(
                     e,
-                    layout.checkBounds,
-                    colors.options.HighContrast ? colors.buttonFace : colors.highlight,
+                    layout.CheckBounds,
+                    colors.Options.HighContrast ? colors.ButtonFace : colors.Highlight,
                     disabledColors: true,
                     colors);
                 ControlPaint.DrawBorderSimple(
                     e,
-                    layout.checkBounds,
-                    (colors.options.HighContrast && !Control.Enabled) ? colors.windowFrame : colors.buttonShadow);
-                DrawCheckOnly(e, layout, colors, colors.windowText);
+                    layout.CheckBounds,
+                    (colors.Options.HighContrast && !Control.Enabled) ? colors.WindowFrame : colors.ButtonShadow);
+                DrawCheckOnly(e, layout, colors, colors.WindowText);
 
                 AdjustFocusRectangle(layout);
-                PaintField(e, layout, colors, colors.windowText, true);
+                PaintField(e, layout, colors, colors.WindowText, true);
             }
         }
 
@@ -65,25 +66,25 @@ namespace System.Windows.Forms.ButtonInternal
 
                 DrawCheckBackground(
                     e,
-                    layout.checkBounds,
-                    colors.options.HighContrast ? colors.buttonFace : colors.highlight,
+                    layout.CheckBounds,
+                    colors.Options.HighContrast ? colors.ButtonFace : colors.Highlight,
                     disabledColors: true,
                     colors);
 
-                DrawPopupBorder(e, layout.checkBounds, colors);
-                DrawCheckOnly(e, layout, colors, colors.windowText);
+                DrawPopupBorder(e, layout.CheckBounds, colors);
+                DrawCheckOnly(e, layout, colors, colors.WindowText);
 
-                Region originalClip = null;
+                Region? originalClip = null;
                 if (!string.IsNullOrEmpty(Control.Text))
                 {
                     originalClip = e.GraphicsInternal.Clip;
-                    e.GraphicsInternal.ExcludeClip(layout.checkArea);
+                    e.GraphicsInternal.ExcludeClip(layout.CheckArea);
                 }
 
                 AdjustFocusRectangle(layout);
-                PaintField(e, layout, colors, colors.windowText, drawFocus: true);
+                PaintField(e, layout, colors, colors.WindowText, drawFocus: true);
 
-                if (originalClip != null)
+                if (originalClip is not null)
                 {
                     e.GraphicsInternal.Clip = originalClip;
                 }
@@ -106,12 +107,12 @@ namespace System.Windows.Forms.ButtonInternal
 
                 PaintImage(e, layout);
 
-                DrawCheckBackground(e, layout.checkBounds, colors.buttonFace, true, colors);
-                DrawPopupBorder(e, layout.checkBounds, colors);
-                DrawCheckOnly(e, layout, colors, colors.windowText);
+                DrawCheckBackground(e, layout.CheckBounds, colors.ButtonFace, true, colors);
+                DrawPopupBorder(e, layout.CheckBounds, colors);
+                DrawCheckOnly(e, layout, colors, colors.WindowText);
 
                 AdjustFocusRectangle(layout);
-                PaintField(e, layout, colors, colors.windowText, true);
+                PaintField(e, layout, colors, colors.WindowText, true);
             }
         }
 
@@ -125,8 +126,8 @@ namespace System.Windows.Forms.ButtonInternal
         protected override LayoutOptions Layout(PaintEventArgs e)
         {
             LayoutOptions layout = PaintPopupLayout(show3D: true);
-            Debug.Assert(layout.GetPreferredSizeCore(LayoutUtils.MaxSize)
-                == PaintPopupLayout(show3D: false).GetPreferredSizeCore(LayoutUtils.MaxSize),
+            Debug.Assert(layout.GetPreferredSizeCore(LayoutUtils.s_maxSize)
+                == PaintPopupLayout(show3D: false).GetPreferredSizeCore(LayoutUtils.s_maxSize),
                 "The state of show3D should not effect PreferredSize");
             return layout;
         }
@@ -142,35 +143,37 @@ namespace System.Windows.Forms.ButtonInternal
             bool enabled,
             ContentAlignment textAlign,
             RightToLeft rtl,
-            Control control = null)
+            Control? control = null)
         {
             LayoutOptions layout = CommonLayout(clientRectangle, padding, isDefault, font, text, enabled, textAlign, rtl);
-            layout.shadowedText = false;
+            layout.ShadowedText = false;
             if (show3D)
             {
-                layout.checkSize = (int)(checkSize * GetDpiScaleRatio(control) + 1);
+                layout.CheckSize = (int)(checkSize * GetDpiScaleRatio(control) + 1);
             }
             else
             {
-                layout.checkSize = (int)(checkSize * GetDpiScaleRatio(control));
-                layout.checkPaddingSize = 1;
+                layout.CheckSize = (int)(checkSize * GetDpiScaleRatio(control));
+                layout.CheckPaddingSize = 1;
             }
+
             return layout;
         }
 
         private LayoutOptions PaintPopupLayout(bool show3D)
         {
             LayoutOptions layout = CommonLayout();
-            layout.shadowedText = false;
+            layout.ShadowedText = false;
             if (show3D)
             {
-                layout.checkSize = (int)(flatCheckSize * GetDpiScaleRatio() + 1);
+                layout.CheckSize = (int)(FlatCheckSize * GetDpiScaleRatio() + 1);
             }
             else
             {
-                layout.checkSize = (int)(flatCheckSize * GetDpiScaleRatio());
-                layout.checkPaddingSize = 1;
+                layout.CheckSize = (int)(FlatCheckSize * GetDpiScaleRatio());
+                layout.CheckPaddingSize = 1;
             }
+
             return layout;
         }
 

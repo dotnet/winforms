@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace System.Windows.Forms.Design
 {
     /// <summary>
@@ -24,7 +22,7 @@ namespace System.Windows.Forms.Design
         Moveable = 0x10000000,
 
         /// <summary>
-        ///  Indicates the given component has some form of visible user interface and the selection service is drawing a selection border around this user interface. If a selected component has this rule set, you can assume that the component implements <see cref='System.ComponentModel.IComponent' /> and that it is associated with a corresponding design instance.
+        ///  Indicates the given component has some form of visible user interface and the selection service is drawing a selection border around this user interface. If a selected component has this rule set, you can assume that the component implements <see cref="System.ComponentModel.IComponent"/> and that it is associated with a corresponding design instance.
         /// </summary>
         Visible = 0x40000000,
 

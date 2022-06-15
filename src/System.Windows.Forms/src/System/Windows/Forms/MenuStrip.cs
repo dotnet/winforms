@@ -7,13 +7,12 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
 {
     [SRDescription(nameof(SR.DescriptionMenuStrip))]
-    public class MenuStrip : ToolStrip
+    public partial class MenuStrip : ToolStrip
     {
         private ToolStripMenuItem mdiWindowListItem;
 
@@ -86,6 +85,7 @@ namespace System.Windows.Forms
                            DpiHelper.LogicalToDeviceUnits(new Padding(3, 2, 0, 2), DeviceDpi) :
                            new Padding(3, 2, 0, 2);
                 }
+
                 return DpiHelper.IsPerMonitorV2Awareness ?
                        DpiHelper.LogicalToDeviceUnits(new Padding(6, 2, 0, 2), DeviceDpi) :
                        new Padding(6, 2, 0, 2);
@@ -166,6 +166,7 @@ namespace System.Windows.Forms
             {
                 nextItem = base.GetNextItem(nextItem, direction, rtlAware);
             }
+
             return nextItem;
         }
 
@@ -214,6 +215,7 @@ namespace System.Windows.Forms
 
                 return true;
             }
+
             return false;
         }
 
@@ -239,6 +241,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return base.ProcessCmdKey(ref m, keyData);
         }
 
@@ -249,49 +252,15 @@ namespace System.Windows.Forms
                 // call menu activate before we actually take focus.
                 Point pt = PointToClient(WindowsFormsUtils.LastCursorPoint);
                 ToolStripItem item = GetItemAt(pt);
-                if (item != null && !(item is ToolStripControlHost))
+                if (item is not null && !(item is ToolStripControlHost))
                 {
                     // verify the place where we've clicked is a place where we have to do "fake" focus
-                    // e.g. an item that isnt a control.
+                    // e.g. an item that isn't a control.
                     KeyboardActive = true;
                 }
             }
 
             base.WndProc(ref m);
-        }
-
-        internal class MenuStripAccessibleObject : ToolStripAccessibleObject
-        {
-            public MenuStripAccessibleObject(MenuStrip owner)
-                : base(owner)
-            {
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-                    return AccessibleRole.MenuBar;
-                }
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.MenuBarControlTypeId;
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
-            }
-
-                return base.GetPropertyValue(propertyID);
-            }
         }
     }
 }

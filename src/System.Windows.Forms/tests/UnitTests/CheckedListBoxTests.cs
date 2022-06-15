@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Xunit;
 using System.ComponentModel;
-using System.Collections.Generic;
-using WinForms.Common.Tests;
 using System.Drawing;
+using System.Windows.Forms.TestUtilities;
+using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
@@ -109,20 +108,12 @@ namespace System.Windows.Forms.Tests
             ArgumentException ex = Assert.Throws<ArgumentException>(() => box.SelectionMode = expected);
         }
 
-        /// <summary>
-        ///  Data for the SelectionModeGetSetInvalid test
-        /// </summary>
-        public static TheoryData<SelectionMode> SelectionModeGetSetInvalidData =>
-            CommonTestHelper.GetEnumTheoryDataInvalid<SelectionMode>();
-
         [WinFormsTheory]
-        [MemberData(nameof(SelectionModeGetSetInvalidData))]
-        public void CheckedListBox_CheckStateGetSetInvalid(SelectionMode expected)
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SelectionMode))]
+        public void CheckedListBox_SelectionMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(SelectionMode value)
         {
-            using var box = new CheckedListBox();
-
-            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.SelectionMode = expected);
-            Assert.Equal("value", ex.ParamName);
+            using var control = new CheckedListBox();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.SelectionMode = value);
         }
 
         /// <summary>
@@ -162,7 +153,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void CheckedListBox_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new CheckedListBox
@@ -264,6 +255,95 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("index", ex.ParamName);
         }
 
+        [WinFormsFact]
+        public void CheckedListBox_RefreshItems_InvokeEmpty_Success()
+        {
+            using var control = new SubCheckedListBox();
+            control.RefreshItems();
+            Assert.Empty(control.Items);
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.RefreshItems();
+            Assert.Empty(control.Items);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CheckedListBox_RefreshItems_InvokeNotEmpty_Success()
+        {
+            using var control = new SubCheckedListBox();
+            control.Items.Add("item1");
+            control.Items.Add("item2");
+
+            control.RefreshItems();
+            Assert.Equal(new object[] { "item1", "item2" }, control.Items.Cast<object>());
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.RefreshItems();
+            Assert.Equal(new object[] { "item1", "item2" }, control.Items.Cast<object>());
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CheckedListBox_RefreshItems_InvokeEmptyWithHandle_Success()
+        {
+            using var control = new SubCheckedListBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.RefreshItems();
+            Assert.Empty(control.Items);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            control.RefreshItems();
+            Assert.Empty(control.Items);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void CheckedListBox_RefreshItems_InvokeNotEmptyWithHandle_Success()
+        {
+            using var control = new SubCheckedListBox();
+            control.Items.Add("item1");
+            control.Items.Add("item2");
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.RefreshItems();
+            Assert.Equal(new object[] { "item1", "item2" }, control.Items.Cast<object>());
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            control.RefreshItems();
+            Assert.Equal(new object[] { "item1", "item2" }, control.Items.Cast<object>());
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
         [WinFormsTheory]
         [InlineData(1)]
         [InlineData(-1)]
@@ -276,39 +356,30 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("index", ex.ParamName);
         }
 
-        /// <summary>
-        ///  Data for the SetItemCheckState test
-        /// </summary>
-        public static TheoryData<CheckState> SetItemCheckStateData =>
-            CommonTestHelper.GetEnumTheoryData<CheckState>();
-
         [WinFormsTheory]
-        [MemberData(nameof(SetItemCheckStateData))]
-        public void CheckedListBox_SetItemCheckState(CheckState expected)
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(CheckState))]
+        public void CheckedListBox_SetItemCheckState_Invoke_GetReturnsExpected(CheckState value)
         {
-            using var box = new CheckedListBox();
-            box.Items.Add(new CheckBox(), false);
+            using var control = new CheckedListBox();
+            control.Items.Add(new CheckBox(), false);
 
-            box.SetItemCheckState(0, expected);
+            control.SetItemCheckState(0, value);
+            Assert.Equal(value, control.GetItemCheckState(0));
+            Assert.False(control.IsHandleCreated);
 
-            Assert.Equal(expected, box.GetItemCheckState(0));
+            // Set same.
+            control.SetItemCheckState(0, value);
+            Assert.Equal(value, control.GetItemCheckState(0));
+            Assert.False(control.IsHandleCreated);
         }
 
-        /// <summary>
-        ///  Data for the SetItemCheckStateInvalid test
-        /// </summary>
-        public static TheoryData<CheckState> SetItemCheckStateInvalidData =>
-            CommonTestHelper.GetEnumTheoryDataInvalid<CheckState>();
-
         [WinFormsTheory]
-        [MemberData(nameof(SetItemCheckStateInvalidData))]
-        public void CheckedListBox_SetItemCheckStateInvalid(CheckState expected)
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(CheckState))]
+        public void CheckedListBox_SetItemCheckState_InvokeInvalidValue_ThrowsInvalidEnumArgumentException(CheckState value)
         {
-            using var box = new CheckedListBox();
-            box.Items.Add(new CheckBox(), false);
-
-            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.SetItemCheckState(0, expected));
-            Assert.Equal("value", ex.ParamName);
+            using var control = new CheckedListBox();
+            control.Items.Add(new CheckBox(), false);
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.SetItemCheckState(0, value));
         }
 
         [WinFormsTheory]
@@ -414,8 +485,145 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.IsHandleCreated);
         }
 
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void CheckedListBox_Remove_NotSelectedItems(bool createControl)
+        {
+            using CheckedListBox checkedListBox = new();
+
+            if (createControl)
+            {
+                checkedListBox.CreateControl();
+            }
+
+            checkedListBox.Items.AddRange(new object[] { "1", "2", "3" });
+            checkedListBox.SelectedItem = checkedListBox.Items[0];
+
+            Assert.Equal(3, checkedListBox.Items.Count);
+            Assert.Equal(checkedListBox.Items[0], checkedListBox.SelectedItem);
+            Assert.Equal(0, checkedListBox.SelectedIndex);
+            Assert.Equal(1, checkedListBox.SelectedIndices.Count);
+            Assert.Equal(1, checkedListBox.SelectedItems.Count);
+
+            checkedListBox.Items.Remove(checkedListBox.Items[2]);
+
+            Assert.Equal(2, checkedListBox.Items.Count);
+            Assert.Equal(checkedListBox.Items[0], checkedListBox.SelectedItem);
+            Assert.Equal(0, checkedListBox.SelectedIndex);
+            Assert.Equal(1, checkedListBox.SelectedIndices.Count);
+            Assert.Equal(1, checkedListBox.SelectedItems.Count);
+
+            checkedListBox.Items.Remove(checkedListBox.Items[1]);
+
+            Assert.Equal(1, checkedListBox.Items.Count);
+            Assert.Equal(checkedListBox.Items[0], checkedListBox.SelectedItem);
+            Assert.Equal(0, checkedListBox.SelectedIndex);
+            Assert.Equal(1, checkedListBox.SelectedIndices.Count);
+            Assert.Equal(1, checkedListBox.SelectedItems.Count);
+            Assert.Equal(createControl, checkedListBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void CheckedListBox_Remove_SelectedItem(bool createControl)
+        {
+            using CheckedListBox checkedListBox = new();
+
+            if (createControl)
+            {
+                checkedListBox.CreateControl();
+            }
+
+            checkedListBox.Items.AddRange(new object[] { "1", "2", "3" });
+
+            for (int count = checkedListBox.Items.Count; count > 1; count -= 1)
+            {
+                checkedListBox.SelectedItem = checkedListBox.Items[0];
+
+                Assert.Equal(checkedListBox.Items[0], checkedListBox.SelectedItem);
+                Assert.Equal(0, checkedListBox.SelectedIndex);
+                Assert.Equal(1, checkedListBox.SelectedIndices.Count);
+                Assert.Equal(1, checkedListBox.SelectedItems.Count);
+
+                checkedListBox.Items.Remove(checkedListBox.Items[0]);
+                count -= 1;
+
+                Assert.Equal(count, checkedListBox.Items.Count);
+                Assert.Null(checkedListBox.SelectedItem);
+                Assert.Equal(-1, checkedListBox.SelectedIndex);
+                Assert.Equal(0, checkedListBox.SelectedIndices.Count);
+                Assert.Equal(0, checkedListBox.SelectedItems.Count);
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void CheckedListBox_Remove_UncheckedItems(bool createControl)
+        {
+            using CheckedListBox checkedListBox = new();
+
+            if (createControl)
+            {
+                checkedListBox.CreateControl();
+            }
+
+            checkedListBox.Items.AddRange(new object[] { "1", "2", "3" });
+
+            checkedListBox.SetItemChecked(0, true);
+
+            for (int count = checkedListBox.Items.Count; count > 1; count -= 1)
+            {
+                Assert.Equal(1, checkedListBox.CheckedIndices.Count);
+                Assert.Equal(1, checkedListBox.CheckedItems.Count);
+
+                checkedListBox.Items.Remove(checkedListBox.Items[2]);
+
+                count -= 1;
+
+                Assert.Equal(count, checkedListBox.Items.Count);
+                Assert.Equal(1, checkedListBox.CheckedIndices.Count);
+                Assert.Equal(1, checkedListBox.CheckedItems.Count);
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void CheckedListBox_Remove_CheckedItems(bool createControl)
+        {
+            using CheckedListBox checkedListBox = new();
+
+            if (createControl)
+            {
+                checkedListBox.CreateControl();
+            }
+
+            checkedListBox.Items.AddRange(new object[] { "1", "2", "3" });
+
+            for (int count = checkedListBox.Items.Count; count > 1; count -= 1)
+            {
+                checkedListBox.SetItemChecked(0, true);
+
+                Assert.Equal(1, checkedListBox.CheckedIndices.Count);
+                Assert.Equal(1, checkedListBox.CheckedItems.Count);
+
+                checkedListBox.Items.Remove(checkedListBox.Items[0]);
+
+                count -= 1;
+
+                Assert.Equal(count, checkedListBox.Items.Count);
+                Assert.Equal(0, checkedListBox.CheckedIndices.Count);
+                Assert.Equal(0, checkedListBox.CheckedItems.Count);
+            }
+        }
+
         private class SubCheckedListBox : CheckedListBox
         {
+            public new void RefreshItems() => base.RefreshItems();
+
             public new void OnDrawItem(DrawItemEventArgs e) => base.OnDrawItem(e);
         }
     }

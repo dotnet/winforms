@@ -4,7 +4,6 @@
 
 using System.CodeDom;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
@@ -37,14 +36,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected virtual object DeserializeInstance(IDesignerSerializationManager manager, Type type, object[] parameters, string name, bool addToContainer)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-            if (type is null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(type);
 
             return manager.CreateInstance(type, parameters, name, addToContainer);
         }
@@ -63,17 +56,19 @@ namespace System.ComponentModel.Design.Serialization
 
             return GetTypeNameFromCodeTypeReferenceHelper(manager, typeref);
         }
+
         private static string GetTypeNameFromCodeTypeReferenceHelper(IDesignerSerializationManager manager, CodeTypeReference typeref)
         {
             if (typeref.TypeArguments is null || typeref.TypeArguments.Count == 0)
             {
                 Type t = manager.GetType(typeref.BaseType);
                 //we use the assemblyqualifiedname where we can so that GetType will find it correctly.
-                if (t != null)
+                if (t is not null)
                 {
                     // get type which exists in the target framework if any
                     return GetReflectionTypeFromTypeHelper(manager, t).AssemblyQualifiedName;
                 }
+
                 return typeref.BaseType;
             }
 
@@ -84,6 +79,7 @@ namespace System.ComponentModel.Design.Serialization
                 typename.Append('`');
                 typename.Append(typeref.TypeArguments.Count);
             }
+
             typename.Append('[');
 
             bool first = true;
@@ -95,11 +91,13 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     typename.Append(',');
                 }
+
                 typename.Append('[');
                 typename.Append(GetTypeNameFromCodeTypeReferenceHelper(manager, childref));
                 typename.Append(']');
                 first = false;
             }
+
             typename.Append(']');
 
             //otherwise, we have a generic and we need to format it.
@@ -116,12 +114,13 @@ namespace System.ComponentModel.Design.Serialization
             {
                 return service.GetProvider(instance);
             }
+
             return null;
         }
 
         /// <summary>
         ///  Get a faux type which is generated from the metadata, which is
-        ///  looked up on the target framerwork assembly. Be careful to not use mix
+        ///  looked up on the target framework assembly. Be careful to not use mix
         ///  this type with runtime types in comparisons!
         /// </summary>
         protected static Type GetReflectionTypeFromTypeHelper(IDesignerSerializationManager manager, Type type)
@@ -133,31 +132,27 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             TypeDescriptionProvider targetProvider = GetTargetFrameworkProviderForType(manager, type);
-            if (targetProvider != null)
+            if (targetProvider is not null)
             {
                 if (targetProvider.IsSupportedType(type))
                 {
                     return targetProvider.GetReflectionType(type);
                 }
+
                 Error(manager, string.Format(SR.TypeNotFoundInTargetFramework, type.FullName), SR.SerializerUndeclaredName);
             }
+
             return TypeDescriptor.GetReflectionType(type);
         }
 
         internal static void Error(IDesignerSerializationManager manager, string exceptionText, string helpLink)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-            if (exceptionText is null)
-            {
-                throw new ArgumentNullException(nameof(exceptionText));
-            }
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(exceptionText);
 
             CodeStatement statement = (CodeStatement)manager.Context[typeof(CodeStatement)];
             CodeLinePragma linePragma = null;
-            if (statement != null)
+            if (statement is not null)
             {
                 linePragma = statement.LinePragma;
             }
@@ -176,6 +171,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 return service.GetProvider(type);
             }
+
             return null;
         }
 
@@ -197,12 +193,13 @@ namespace System.ComponentModel.Design.Serialization
             if (type.IsValueType)
             {
                 TypeDescriptionProvider targetProvider = GetTargetFrameworkProvider(manager, instance);
-                if (targetProvider != null)
+                if (targetProvider is not null)
                 {
                     if (targetProvider.IsSupportedType(type))
                     {
                         return targetProvider.GetReflectionType(instance);
                     }
+
                     Error(manager, string.Format(SR.TypeNotFoundInTargetFramework, instance.GetType().FullName), SR.SerializerUndeclaredName);
                 }
             }
@@ -224,18 +221,19 @@ namespace System.ComponentModel.Design.Serialization
             if (instance.GetType().IsValueType)
             {
                 TypeDescriptionProvider targetProvider = GetTargetFrameworkProvider(manager, instance);
-                if (targetProvider != null)
+                if (targetProvider is not null)
                 {
                     // target framework provider is null at runtime
                     if (targetProvider.IsSupportedType(instance.GetType()))
                     {
                         ICustomTypeDescriptor targetAwareDescriptor = targetProvider.GetTypeDescriptor(instance);
-                        if (targetAwareDescriptor != null)
+                        if (targetAwareDescriptor is not null)
                         {
                             if (attributes is null)
                             {
                                 return targetAwareDescriptor.GetProperties();
                             }
+
                             return targetAwareDescriptor.GetProperties(attributes);
                         }
                     }
@@ -250,6 +248,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 return TypeDescriptor.GetProperties(instance);
             }
+
             return TypeDescriptor.GetProperties(instance, attributes);
         }
 
@@ -267,17 +266,18 @@ namespace System.ComponentModel.Design.Serialization
             if (instance.GetType().IsValueType)
             {
                 TypeDescriptionProvider targetProvider = GetTargetFrameworkProvider(manager, instance);
-                if (targetProvider != null)
+                if (targetProvider is not null)
                 {
                     if (targetProvider.IsSupportedType(instance.GetType()))
                     {
                         ICustomTypeDescriptor targetAwareDescriptor = targetProvider.GetTypeDescriptor(instance);
-                        if (targetAwareDescriptor != null)
+                        if (targetAwareDescriptor is not null)
                         {
                             if (attributes is null)
                             {
                                 return targetAwareDescriptor.GetEvents();
                             }
+
                             return targetAwareDescriptor.GetEvents(attributes);
                         }
                     }
@@ -306,15 +306,16 @@ namespace System.ComponentModel.Design.Serialization
                 Debug.Fail("GetAttributesHelper does not accept null arguments.");
                 return null;
             }
+
             if (instance.GetType().IsValueType)
             {
                 TypeDescriptionProvider targetProvider = GetTargetFrameworkProvider(manager, instance);
-                if (targetProvider != null)
+                if (targetProvider is not null)
                 {
                     if (targetProvider.IsSupportedType(instance.GetType()))
                     {
                         ICustomTypeDescriptor targetAwareDescriptor = targetProvider.GetTypeDescriptor(instance);
-                        if (targetAwareDescriptor != null)
+                        if (targetAwareDescriptor is not null)
                         {
                             return targetAwareDescriptor.GetAttributes();
                         }
@@ -325,6 +326,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return TypeDescriptor.GetAttributes(instance);
         }
 
@@ -342,12 +344,12 @@ namespace System.ComponentModel.Design.Serialization
             if (type.IsValueType)
             {
                 TypeDescriptionProvider targetProvider = GetTargetFrameworkProviderForType(manager, type);
-                if (targetProvider != null)
+                if (targetProvider is not null)
                 {
                     if (targetProvider.IsSupportedType(type))
                     {
                         ICustomTypeDescriptor targetAwareDescriptor = targetProvider.GetTypeDescriptor(type);
-                        if (targetAwareDescriptor != null)
+                        if (targetAwareDescriptor is not null)
                         {
                             return targetAwareDescriptor.GetAttributes();
                         }
@@ -358,6 +360,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return TypeDescriptor.GetAttributes(type);
         }
 
@@ -371,13 +374,13 @@ namespace System.ComponentModel.Design.Serialization
             using (TraceScope("ComponentCodeDomSerializerBase::DeserializePropertiesFromResources"))
             {
                 // It is much faster to dig through the resources first, and then map these resources to properties than it is to filter properties at each turn.  Why?  Because filtering properties requires a separate filter call for each object (because designers get a chance to filter, the cache is per-component), while resources are loaded once per document.
-                IDictionaryEnumerator de = ResourceCodeDomSerializer.Default.GetMetadataEnumerator(manager);
+                IDictionaryEnumerator de = ResourceCodeDomSerializer.GetMetadataEnumerator(manager);
                 if (de is null)
                 {
-                    de = ResourceCodeDomSerializer.Default.GetEnumerator(manager, CultureInfo.InvariantCulture);
+                    de = ResourceCodeDomSerializer.GetEnumerator(manager, CultureInfo.InvariantCulture);
                 }
 
-                if (de != null)
+                if (de is not null)
                 {
                     string ourObjectName;
                     if (manager.Context[typeof(RootContext)] is RootContext root && root.Value == value)
@@ -393,7 +396,7 @@ namespace System.ComponentModel.Design.Serialization
                     while (de.MoveNext())
                     {
                         string resourceName = de.Key as string;
-                        Debug.Assert(resourceName != null, "non-string keys in dictionary entry");
+                        Debug.Assert(resourceName is not null, "non-string keys in dictionary entry");
                         int dotIndex = resourceName.IndexOf('.');
                         if (dotIndex == -1)
                         {
@@ -418,7 +421,7 @@ namespace System.ComponentModel.Design.Serialization
 
                         // This property must have matching attributes.
                         bool passFilter = true;
-                        if (filter != null)
+                        if (filter is not null)
                         {
                             AttributeCollection propAttributes = property.Attributes;
                             foreach (Attribute a in filter)
@@ -449,6 +452,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
         }
+
         internal static IDisposable TraceScope(string name)
         {
 #if DEBUG
@@ -480,7 +484,7 @@ namespace System.ComponentModel.Design.Serialization
                 int indent = 0;
                 int oldIndent = Debug.IndentLevel;
 
-                if (traceScope != null)
+                if (traceScope is not null)
                 {
                     indent = traceScope.Count;
                 }
@@ -501,7 +505,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             public void Dispose()
             {
-                if (traceScope != null)
+                if (traceScope is not null)
                 {
                     traceScope.Pop();
                 }
@@ -522,7 +526,7 @@ namespace System.ComponentModel.Design.Serialization
                 manager.Context.Push(statement);
                 try
                 {
-                    // Perf: is -> as changes, change ordering based on possibility of occurance
+                    // Perf: is -> as changes, change ordering based on possibility of occurrence
                     // Please excuse the bad formatting, but I think it is more readable this way than nested indenting.
                     if (statement is CodeAssignStatement cas)
                     {
@@ -536,12 +540,12 @@ namespace System.ComponentModel.Design.Serialization
                         }
                         else if (statement is CodeCommentStatement)
                         {
-                            // do nothing for comments.  This just supresses the debug warning
+                            // do nothing for comments.  This just suppresses the debug warning
                         }
                         else
                         {
                             CodeExpressionStatement ces = statement as CodeExpressionStatement;
-                            if (ces != null)
+                            if (ces is not null)
                             {
                                 DeserializeExpression(manager, null, ces.Expression);
                             }
@@ -592,7 +596,7 @@ namespace System.ComponentModel.Design.Serialization
                         e = e.InnerException;
                     }
 
-                    if (!(e is CodeDomSerializerException) && statement.LinePragma != null)
+                    if (!(e is CodeDomSerializerException) && statement.LinePragma is not null)
                     {
                         e = new CodeDomSerializerException(e, statement.LinePragma);
                     }
@@ -611,7 +615,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             using (TraceScope("CodeDomSerializerBase::" + nameof(DeserializeVariableDeclarationStatement)))
             {
-                if (statement.InitExpression != null)
+                if (statement.InitExpression is not null)
                 {
                     Trace("Processing init expression");
                     DeserializeExpression(manager, statement.Name, statement.InitExpression);
@@ -630,7 +634,7 @@ namespace System.ComponentModel.Design.Serialization
                     // We only support binding methods to the root object.
                     object eventAttachObject = DeserializeExpression(manager, null, delegateCreate.TargetObject);
                     RootContext rootExp = (RootContext)manager.Context[typeof(RootContext)];
-                    bool isRoot = rootExp is null || (rootExp != null && rootExp.Value == eventAttachObject);
+                    bool isRoot = rootExp is null || (rootExp is not null && rootExp.Value == eventAttachObject);
                     TraceWarningIf(!isRoot, "Event is bound to an object other than the root.  We do not support this.");
                     if (isRoot)
                     {
@@ -640,10 +644,10 @@ namespace System.ComponentModel.Design.Serialization
                         if (!(targetObject is CodeExpression))
                         {
                             EventDescriptor evt = GetEventsHelper(manager, targetObject, null)[statement.Event.EventName];
-                            if (evt != null)
+                            if (evt is not null)
                             {
                                 IEventBindingService evtSvc = (IEventBindingService)manager.GetService(typeof(IEventBindingService));
-                                if (evtSvc != null)
+                                if (evtSvc is not null)
                                 {
                                     PropertyDescriptor prop = evtSvc.GetEventProperty(evt);
                                     prop.SetValue(targetObject, null);
@@ -677,11 +681,11 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     Trace("LHS is field : {0}", fieldReferenceEx.FieldName);
                     object lhs = DeserializeExpression(manager, fieldReferenceEx.FieldName, fieldReferenceEx.TargetObject);
-                    if (lhs != null)
+                    if (lhs is not null)
                     {
                         RootContext root = (RootContext)manager.Context[typeof(RootContext)];
 
-                        if (root != null && root.Value == lhs)
+                        if (root is not null && root.Value == lhs)
                         {
                             Trace("Processing RHS");
                             object rhs = DeserializeExpression(manager, fieldReferenceEx.FieldName, statement.Right);
@@ -697,7 +701,7 @@ namespace System.ComponentModel.Design.Serialization
                             object instance;
                             Type type = lhs as Type;
 
-                            if (type != null)
+                            if (type is not null)
                             {
                                 instance = null;
                                 f = GetReflectionTypeFromTypeHelper(manager, type).GetField(fieldReferenceEx.FieldName, BindingFlags.GetField | BindingFlags.Static | BindingFlags.Public);
@@ -708,7 +712,7 @@ namespace System.ComponentModel.Design.Serialization
                                 f = GetReflectionTypeHelper(manager, lhs).GetField(fieldReferenceEx.FieldName, BindingFlags.GetField | BindingFlags.Instance | BindingFlags.Public);
                             }
 
-                            if (f != null)
+                            if (f is not null)
                             {
                                 Trace("Processing RHS");
                                 object rhs = DeserializeExpression(manager, fieldReferenceEx.FieldName, statement.Right);
@@ -725,10 +729,11 @@ namespace System.ComponentModel.Design.Serialization
                                     // If TargetFrameworkProvider is not available, then we are working with runtime types.
                                     Type fieldType = f.FieldType;
                                     TypeDescriptionProvider tdp = GetTargetFrameworkProviderForType(manager, fieldType);
-                                    if (tdp != null)
+                                    if (tdp is not null)
                                     {
                                         fieldType = tdp.GetRuntimeType(fieldType);
                                     }
+
                                     if (fieldType != rhs.GetType())
                                     {
                                         try
@@ -775,6 +780,7 @@ namespace System.ComponentModel.Design.Serialization
                         TraceError("Unable to simplify statement to anything better than: {0}", rhs.GetType().Name);
                         return;
                     }
+
                     manager.SetName(rhs, variableReferenceEx.VariableName);
                 }
                 else if (expression is CodeArrayIndexerExpression arrayIndexerEx)
@@ -810,11 +816,12 @@ namespace System.ComponentModel.Design.Serialization
                             TraceError("Unable to simplify statement to anything better than: {0}", rhs.GetType().Name);
                             return;
                         }
+
                         arr.SetValue(rhs, indexes);
                     }
                     else
                     {
-                        TraceErrorIf(!(array is Array), "Array resovled to something other than an array: {0}", (array is null ? "(null)" : array.GetType().Name));
+                        TraceErrorIf(!(array is Array), "Array resolved to something other than an array: {0}", (array is null ? "(null)" : array.GetType().Name));
                         TraceErrorIf(!indexesOK, "Indexes to array could not be converted to int32.");
                     }
                 }
@@ -827,7 +834,7 @@ namespace System.ComponentModel.Design.Serialization
             if (traceSerialization.TraceError)
             {
                 string scope = string.Empty;
-                if (traceScope != null)
+                if (traceScope is not null)
                 {
                     foreach (string scopeName in traceScope)
                     {
@@ -835,6 +842,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             scope = "/" + scope;
                         }
+
                         scope = scopeName + scope;
                     }
                 }
@@ -856,7 +864,7 @@ namespace System.ComponentModel.Design.Serialization
             object result = expression;
             using (TraceScope("CodeDomSerializerBase::" + nameof(DeserializeExpression)))
             {
-                // Perf: is -> as changes, change ordering based on possibility of occurance
+                // Perf: is -> as changes, change ordering based on possibility of occurrence
                 // If you are adding to this, use as instead of is + cast and order new expressions in order of frequency in typical user code.
                 CodePropertyReferenceExpression propertyReferenceEx;
                 CodeTypeReferenceExpression typeReferenceEx;
@@ -875,7 +883,7 @@ namespace System.ComponentModel.Design.Serialization
                 CodeParameterDeclarationExpression parameterDeclaration;
                 CodeTypeOfExpression typeOfExpression;
 
-                while (result != null)
+                while (result is not null)
                 {
                     if (result is CodePrimitiveExpression primitiveEx)
                     {
@@ -883,7 +891,7 @@ namespace System.ComponentModel.Design.Serialization
                         result = primitiveEx.Value;
                         break;
                     }
-                    else if ((propertyReferenceEx = result as CodePropertyReferenceExpression) != null)
+                    else if ((propertyReferenceEx = result as CodePropertyReferenceExpression) is not null)
                     {
                         result = DeserializePropertyReferenceExpression(manager, propertyReferenceEx, true);
                         break;
@@ -892,13 +900,13 @@ namespace System.ComponentModel.Design.Serialization
                     { //(is -> as doesn't help here, since the cast is different)
                         Trace("'this' reference");
                         RootContext rootExp = (RootContext)manager.Context[typeof(RootContext)];
-                        if (rootExp != null)
+                        if (rootExp is not null)
                         {
                             result = rootExp.Value;
                         }
                         else
                         {
-                            // Last ditch effort.  Some things have to code gen against "this", such as event wireups.  Those are always bounda against the root component.
+                            // Last ditch effort.  Some things have to code gen against "this", such as event wireups.  Those are always bound against the root component.
                             if (manager.GetService(typeof(IDesignerHost)) is IDesignerHost host)
                             {
                                 result = host.RootComponent;
@@ -913,18 +921,18 @@ namespace System.ComponentModel.Design.Serialization
 
                         break;
                     }
-                    else if ((typeReferenceEx = result as CodeTypeReferenceExpression) != null)
+                    else if ((typeReferenceEx = result as CodeTypeReferenceExpression) is not null)
                     {
                         Trace("TypeReference : {0}", typeReferenceEx.Type.BaseType);
                         result = manager.GetType(GetTypeNameFromCodeTypeReference(manager, typeReferenceEx.Type));
                         break;
                     }
-                    else if ((objectCreateEx = result as CodeObjectCreateExpression) != null)
+                    else if ((objectCreateEx = result as CodeObjectCreateExpression) is not null)
                     {
                         Trace("Object create");
                         result = null;
                         Type type = manager.GetType(GetTypeNameFromCodeTypeReference(manager, objectCreateEx.CreateType));
-                        if (type != null)
+                        if (type is not null)
                         {
                             object[] parameters = new object[objectCreateEx.Parameters.Count];
                             bool paramsOk = true;
@@ -946,7 +954,7 @@ namespace System.ComponentModel.Design.Serialization
                                             {
                                                 // Search for a matching method sig.  Must be public since we don't own this object
                                                 MethodInfo delegateInvoke = type.GetMethod("Invoke");
-                                                if (delegateInvoke != null)
+                                                if (delegateInvoke is not null)
                                                 {
                                                     ParameterInfo[] delegateParams = delegateInvoke.GetParameters();
                                                     Type[] paramTypes = new Type[delegateParams.Length];
@@ -954,8 +962,9 @@ namespace System.ComponentModel.Design.Serialization
                                                     {
                                                         paramTypes[idx] = delegateParams[i].ParameterType;
                                                     }
+
                                                     MethodInfo mi = GetReflectionTypeHelper(manager, target).GetMethod(methodRef.MethodName, paramTypes);
-                                                    if (mi != null)
+                                                    if (mi is not null)
                                                     {
                                                         // MethodInfo from the reflection Universe might not implement MethodHandle property, once we know that the method is available, get it from the runtime type.
                                                         mi = target.GetType().GetMethod(methodRef.MethodName, paramTypes);
@@ -965,7 +974,8 @@ namespace System.ComponentModel.Design.Serialization
                                             }
                                         }
                                     }
-                                    // Technically, the paramters are not OK.  Our special case above, if successful, would have produced a "result" object for us.
+
+                                    // Technically, the parameters are not OK.  Our special case above, if successful, would have produced a "result" object for us.
                                     paramsOk = false;
                                     break;
                                 }
@@ -974,7 +984,7 @@ namespace System.ComponentModel.Design.Serialization
                             if (paramsOk)
                             {
                                 // Create an instance of the object.  If the caller provided a name, then ask the manager to add this object to the container.
-                                result = DeserializeInstance(manager, type, parameters, name, (name != null));
+                                result = DeserializeInstance(manager, type, parameters, name, (name is not null));
                             }
                         }
                         else
@@ -982,9 +992,10 @@ namespace System.ComponentModel.Design.Serialization
                             TraceError("Type {0} could not be loaded", objectCreateEx.CreateType.BaseType);
                             Error(manager, string.Format(SR.SerializerTypeNotFound, objectCreateEx.CreateType.BaseType), SR.SerializerTypeNotFound);
                         }
+
                         break;
                     }
-                    else if ((argumentReferenceEx = result as CodeArgumentReferenceExpression) != null)
+                    else if ((argumentReferenceEx = result as CodeArgumentReferenceExpression) is not null)
                     {
                         Trace("Named argument reference : {0}", argumentReferenceEx.ParameterName);
                         result = manager.GetInstance(argumentReferenceEx.ParameterName);
@@ -993,20 +1004,21 @@ namespace System.ComponentModel.Design.Serialization
                             TraceError("Parameter {0} does not exist", argumentReferenceEx.ParameterName);
                             Error(manager, string.Format(SR.SerializerUndeclaredName, argumentReferenceEx.ParameterName), SR.SerializerUndeclaredName);
                         }
+
                         break;
                     }
-                    else if ((fieldReferenceEx = result as CodeFieldReferenceExpression) != null)
+                    else if ((fieldReferenceEx = result as CodeFieldReferenceExpression) is not null)
                     {
                         Trace("Field reference : {0}", fieldReferenceEx.FieldName);
                         object target = DeserializeExpression(manager, null, fieldReferenceEx.TargetObject);
-                        if (target != null && !(target is CodeExpression))
+                        if (target is not null && !(target is CodeExpression))
                         {
                             // If the target is the root object, then this won't be found through reflection.  Instead, ask the manager for the field by name.
                             RootContext rootExp = (RootContext)manager.Context[typeof(RootContext)];
-                            if (rootExp != null && rootExp.Value == target)
+                            if (rootExp is not null && rootExp.Value == target)
                             {
                                 object namedObject = manager.GetInstance(fieldReferenceEx.FieldName);
-                                if (namedObject != null)
+                                if (namedObject is not null)
                                 {
                                     result = namedObject;
                                 }
@@ -1021,7 +1033,7 @@ namespace System.ComponentModel.Design.Serialization
                                 FieldInfo field;
                                 object instance;
                                 Type t = target as Type;
-                                if (t != null)
+                                if (t is not null)
                                 {
                                     instance = null;
                                     field = GetReflectionTypeFromTypeHelper(manager, t).GetField(fieldReferenceEx.FieldName, BindingFlags.GetField | BindingFlags.Static | BindingFlags.Public);
@@ -1032,7 +1044,7 @@ namespace System.ComponentModel.Design.Serialization
                                     field = GetReflectionTypeHelper(manager, target).GetField(fieldReferenceEx.FieldName, BindingFlags.GetField | BindingFlags.Instance | BindingFlags.Public);
                                 }
 
-                                if (field != null)
+                                if (field is not null)
                                 {
                                     result = field.GetValue(instance);
                                 }
@@ -1061,13 +1073,13 @@ namespace System.ComponentModel.Design.Serialization
                         TraceWarningIf(result == fieldReferenceEx, "Could not resolve field {0} to an object instance.", fieldReferenceEx.FieldName);
                         break;
                     }
-                    else if ((methodInvokeEx = result as CodeMethodInvokeExpression) != null)
+                    else if ((methodInvokeEx = result as CodeMethodInvokeExpression) is not null)
                     {
                         Trace("Method invoke : {0}", methodInvokeEx.Method.MethodName);
 
                         object targetObject = DeserializeExpression(manager, null, methodInvokeEx.Method.TargetObject);
 
-                        if (targetObject != null)
+                        if (targetObject is not null)
                         {
                             object[] parameters = new object[methodInvokeEx.Parameters.Count];
                             bool paramsOk = true;
@@ -1084,19 +1096,16 @@ namespace System.ComponentModel.Design.Serialization
 
                             if (paramsOk)
                             {
-                                IComponentChangeService compChange = (IComponentChangeService)manager.GetService(typeof(IComponentChangeService));
+                                var changeService = manager.GetService<IComponentChangeService>();
                                 Type t = targetObject as Type;
 
-                                if (t != null)
+                                if (t is not null)
                                 {
                                     result = GetReflectionTypeFromTypeHelper(manager, t).InvokeMember(methodInvokeEx.Method.MethodName, BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null, null, parameters, null, null, null);
                                 }
                                 else
                                 {
-                                    if (compChange != null)
-                                    {
-                                        compChange.OnComponentChanging(targetObject, null);
-                                    }
+                                    changeService?.OnComponentChanging(targetObject, null);
 
                                     try
                                     {
@@ -1112,7 +1121,7 @@ namespace System.ComponentModel.Design.Serialization
                                         {
                                             Type castType = manager.GetType(GetTypeNameFromCodeTypeReference(manager, castExpr.TargetType));
 
-                                            if (castType != null && castType.IsInterface)
+                                            if (castType is not null && castType.IsInterface)
                                             {
                                                 result = GetReflectionTypeFromTypeHelper(manager, castType).InvokeMember(methodInvokeEx.Method.MethodName, BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance, null, targetObject, parameters, null, null, null);
                                             }
@@ -1126,10 +1135,8 @@ namespace System.ComponentModel.Design.Serialization
                                             throw;
                                         }
                                     }
-                                    if (compChange != null)
-                                    {
-                                        compChange.OnComponentChanged(targetObject, null, null, null);
-                                    }
+
+                                    changeService?.OnComponentChanged(targetObject);
                                 }
                             }
                             else if (parameters.Length == 1 && parameters[0] is CodeDelegateCreateExpression)
@@ -1147,7 +1154,7 @@ namespace System.ComponentModel.Design.Serialization
 
                         break;
                     }
-                    else if ((variableReferenceEx = result as CodeVariableReferenceExpression) != null)
+                    else if ((variableReferenceEx = result as CodeVariableReferenceExpression) is not null)
                     {
                         Trace("Variable reference : {0}", variableReferenceEx.VariableName);
                         result = manager.GetInstance(variableReferenceEx.VariableName);
@@ -1159,24 +1166,25 @@ namespace System.ComponentModel.Design.Serialization
 
                         break;
                     }
-                    else if ((castEx = result as CodeCastExpression) != null)
+                    else if ((castEx = result as CodeCastExpression) is not null)
                     {
                         Trace("Cast : {0}", castEx.TargetType.BaseType);
                         result = DeserializeExpression(manager, name, castEx.Expression);
                         if (result is IConvertible ic)
                         {
                             Type targetType = manager.GetType(GetTypeNameFromCodeTypeReference(manager, castEx.TargetType));
-                            if (targetType != null)
+                            if (targetType is not null)
                             {
                                 result = ic.ToType(targetType, null);
                             }
                         }
+
                         break;
                     }
                     else if (result is CodeBaseReferenceExpression)
                     { //(is -> as doesn't help here, since the cast is different)
                         RootContext rootExp = (RootContext)manager.Context[typeof(RootContext)];
-                        if (rootExp != null)
+                        if (rootExp is not null)
                         {
                             result = rootExp.Value;
                         }
@@ -1184,15 +1192,16 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             result = null;
                         }
+
                         break;
                     }
-                    else if ((arrayCreateEx = result as CodeArrayCreateExpression) != null)
+                    else if ((arrayCreateEx = result as CodeArrayCreateExpression) is not null)
                     {
                         Trace("Array create : {0}", arrayCreateEx.CreateType.BaseType);
                         Type arrayType = manager.GetType(GetTypeNameFromCodeTypeReference(manager, arrayCreateEx.CreateType));
                         Array array = null;
 
-                        if (arrayType != null)
+                        if (arrayType is not null)
                         {
                             if (arrayCreateEx.Initializers.Count > 0)
                             {
@@ -1225,7 +1234,7 @@ namespace System.ComponentModel.Design.Serialization
                                 array = Array.CreateInstance(arrayType, arrayList.Count);
                                 arrayList.CopyTo(array, 0);
                             }
-                            else if (arrayCreateEx.SizeExpression != null)
+                            else if (arrayCreateEx.SizeExpression is not null)
                             {
                                 object o = DeserializeExpression(manager, name, arrayCreateEx.SizeExpression);
                                 Debug.Assert(o is IConvertible, "Array size expression could not be resolved to IConvertible: " + (o is null ? "(null)" : o.GetType().Name));
@@ -1250,14 +1259,14 @@ namespace System.ComponentModel.Design.Serialization
                         }
 
                         result = array;
-                        if (result != null && name != null)
+                        if (result is not null && name is not null)
                         {
                             manager.SetName(result, name);
                         }
 
                         break;
                     }
-                    else if ((arrayIndexerEx = result as CodeArrayIndexerExpression) != null)
+                    else if ((arrayIndexerEx = result as CodeArrayIndexerExpression) is not null)
                     {
                         Trace("Array indexer");
 
@@ -1281,7 +1290,7 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 IConvertible index = DeserializeExpression(manager, name, arrayIndexerEx.Indices[i]) as IConvertible;
 
-                                if (index != null)
+                                if (index is not null)
                                 {
                                     indexes[i] = index.ToInt32(null);
                                     Trace("[{0}] == {1}", i, indexes[i]);
@@ -1302,7 +1311,7 @@ namespace System.ComponentModel.Design.Serialization
 
                         break;
                     }
-                    else if ((binaryOperatorEx = result as CodeBinaryOperatorExpression) != null)
+                    else if ((binaryOperatorEx = result as CodeBinaryOperatorExpression) is not null)
                     {
                         Trace("Binary operator : {0}", binaryOperatorEx.Operator);
 
@@ -1322,9 +1331,10 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             TraceWarning("Could not simplify left and right binary operators to IConvertible.");
                         }
+
                         break;
                     }
-                    else if ((delegateInvokeEx = result as CodeDelegateInvokeExpression) != null)
+                    else if ((delegateInvokeEx = result as CodeDelegateInvokeExpression) is not null)
                     {
                         Trace("Delegate invoke");
                         object targetObject = DeserializeExpression(manager, null, delegateInvokeEx.TargetObject);
@@ -1351,19 +1361,19 @@ namespace System.ComponentModel.Design.Serialization
 
                         break;
                     }
-                    else if ((directionEx = result as CodeDirectionExpression) != null)
+                    else if ((directionEx = result as CodeDirectionExpression) is not null)
                     {
                         Trace("Direction operator");
                         result = DeserializeExpression(manager, name, directionEx.Expression);
                         break;
                     }
-                    else if ((indexerEx = result as CodeIndexerExpression) != null)
+                    else if ((indexerEx = result as CodeIndexerExpression) is not null)
                     {
                         Trace("Indexer");
                         // For this, assume in any error we return a null.  The only errors here should come from a mal-formed expression.
                         result = null;
                         object targetObject = DeserializeExpression(manager, null, indexerEx.TargetObject);
-                        if (targetObject != null)
+                        if (targetObject is not null)
                         {
                             object[] indexes = new object[indexerEx.Indices.Count];
                             Trace("Indexes: {0}", indexes.Length);
@@ -1384,6 +1394,7 @@ namespace System.ComponentModel.Design.Serialization
                                 result = GetReflectionTypeHelper(manager, targetObject).InvokeMember("Item", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, targetObject, indexes, null, null, null);
                             }
                         }
+
                         break;
                     }
                     else if (result is CodeSnippetExpression)
@@ -1392,13 +1403,13 @@ namespace System.ComponentModel.Design.Serialization
                         result = null;
                         break;
                     }
-                    else if ((parameterDeclaration = result as CodeParameterDeclarationExpression) != null)
+                    else if ((parameterDeclaration = result as CodeParameterDeclarationExpression) is not null)
                     {
                         Trace("Parameter declaration");
                         result = manager.GetType(GetTypeNameFromCodeTypeReference(manager, parameterDeclaration.Type));
                         break;
                     }
-                    else if ((typeOfExpression = result as CodeTypeOfExpression) != null)
+                    else if ((typeOfExpression = result as CodeTypeOfExpression) is not null)
                     {
                         Trace("Typeof({0})", typeOfExpression.Type.BaseType);
                         string type = GetTypeNameFromCodeTypeReference(manager, typeOfExpression.Type);
@@ -1414,6 +1425,7 @@ namespace System.ComponentModel.Design.Serialization
                             TraceError("Type could not be resolved: {0}", type);
                             Error(manager, string.Format(SR.SerializerTypeNotFound, type), SR.SerializerTypeNotFound);
                         }
+
                         break;
                     }
                     else if (result is CodeEventReferenceExpression || result is CodeMethodReferenceExpression || result is CodeDelegateCreateExpression)
@@ -1423,12 +1435,13 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else
                     {
-                        // All expression evaluation happens above.  This codepath indicates that we got some sort of junk in the evalualtor,  or that someone assigned result to a value without breaking out of the loop.
+                        // All expression evaluation happens above.  This codepath indicates that we got some sort of junk in the evaluator,  or that someone assigned result to a value without breaking out of the loop.
                         Debug.Fail("Unrecognized expression type: " + result.GetType().Name);
                         break;
                     }
                 }
             }
+
             return result;
         }
 
@@ -1442,8 +1455,8 @@ namespace System.ComponentModel.Design.Serialization
                 // Get the target information
                 object targetObject = DeserializeExpression(manager, null, statement.Event.TargetObject);
                 string eventName = statement.Event.EventName;
-                Debug.Assert(targetObject != null, "Failed to get target object for event attach");
-                Debug.Assert(eventName != null, "Failed to get eventName for event attach");
+                Debug.Assert(targetObject is not null, "Failed to get target object for event attach");
+                Debug.Assert(eventName is not null, "Failed to get eventName for event attach");
                 if (eventName is null || targetObject is null)
                 {
                     return;
@@ -1477,7 +1490,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 RootContext rootExp = (RootContext)manager.Context[typeof(RootContext)];
-                bool isRoot = rootExp is null || (rootExp != null && rootExp.Value == eventAttachObject);
+                bool isRoot = rootExp is null || (rootExp is not null && rootExp.Value == eventAttachObject);
 
                 if (handlerMethodName is null)
                 {
@@ -1498,11 +1511,11 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             EventDescriptor evt = GetEventsHelper(manager, targetObject, null)[eventName];
 
-                            if (evt != null)
+                            if (evt is not null)
                             {
                                 IEventBindingService evtSvc = (IEventBindingService)manager.GetService(typeof(IEventBindingService));
 
-                                if (evtSvc != null)
+                                if (evtSvc is not null)
                                 {
                                     PropertyDescriptor prop = evtSvc.GetEventProperty(evt);
 
@@ -1521,7 +1534,7 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        private object ExecuteBinaryExpression(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
+        private static object ExecuteBinaryExpression(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
         {
             // "Binary" operator type is actually a combination of several types of operators: boolean, binary  and math.  Group them into categories here.
             CodeBinaryOperatorType[] booleanOperators = new CodeBinaryOperatorType[]
@@ -1580,7 +1593,8 @@ namespace System.ComponentModel.Design.Serialization
             Debug.Fail("Unsupported binary operator type: " + op.ToString());
             return left;
         }
-        private object ExecuteBinaryOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
+
+        private static object ExecuteBinaryOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
         {
             TypeCode leftType = left.GetTypeCode();
             TypeCode rightType = right.GetTypeCode();
@@ -1607,10 +1621,12 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     leftTypeIndex = i;
                 }
+
                 if (rightType == compatibleTypes[i])
                 {
                     rightTypeIndex = i;
                 }
+
                 if (leftTypeIndex != -1 && rightTypeIndex != -1)
                 {
                     break;
@@ -1639,8 +1655,10 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             result = leftValue & rightValue;
                         }
+
                         break;
                     }
+
                 case TypeCode.Char:
                     {
                         char leftValue = left.ToChar(null);
@@ -1653,8 +1671,10 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             result = leftValue & rightValue;
                         }
+
                         break;
                     }
+
                 case TypeCode.Int16:
                     {
                         short leftValue = left.ToInt16(null);
@@ -1667,8 +1687,10 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             result = leftValue & rightValue;
                         }
+
                         break;
                     }
+
                 case TypeCode.UInt16:
                     {
                         ushort leftValue = left.ToUInt16(null);
@@ -1681,8 +1703,10 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             result = leftValue & rightValue;
                         }
+
                         break;
                     }
+
                 case TypeCode.Int32:
                     {
                         int leftValue = left.ToInt32(null);
@@ -1695,8 +1719,10 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             result = leftValue & rightValue;
                         }
+
                         break;
                     }
+
                 case TypeCode.UInt32:
                     {
                         uint leftValue = left.ToUInt32(null);
@@ -1709,8 +1735,10 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             result = leftValue & rightValue;
                         }
+
                         break;
                     }
+
                 case TypeCode.Int64:
                     {
                         long leftValue = left.ToInt64(null);
@@ -1723,8 +1751,10 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             result = leftValue & rightValue;
                         }
+
                         break;
                     }
+
                 case TypeCode.UInt64:
                     {
                         ulong leftValue = left.ToUInt64(null);
@@ -1737,6 +1767,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             result = leftValue & rightValue;
                         }
+
                         break;
                     }
             }
@@ -1746,10 +1777,11 @@ namespace System.ComponentModel.Design.Serialization
                 // For enums, try to convert back to the original type
                 result = Enum.ToObject(left.GetType(), result);
             }
+
             return result;
         }
 
-        private object ExecuteBooleanOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
+        private static object ExecuteBooleanOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
         {
             bool result = false;
             switch (op)
@@ -1789,24 +1821,24 @@ namespace System.ComponentModel.Design.Serialization
             return result;
         }
 
-        private object ExecuteMathOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
+        private static object ExecuteMathOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
         {
             if (op == CodeBinaryOperatorType.Add)
             {
                 string leftString = left as string;
                 string rightString = right as string;
 
-                if (leftString is null && left is Char)
+                if (leftString is null && left is char)
                 {
                     leftString = left.ToString();
                 }
 
-                if (rightString is null && right is Char)
+                if (rightString is null && right is char)
                 {
                     rightString = right.ToString();
                 }
 
-                if (leftString != null && rightString != null)
+                if (leftString is not null && rightString is not null)
                 {
                     return leftString + rightString;
                 }
@@ -1819,6 +1851,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 Debug.Fail("Math operators are not supported");
             }
+
             return left;
         }
 
@@ -1827,13 +1860,13 @@ namespace System.ComponentModel.Design.Serialization
             object result = propertyReferenceEx;
             Trace("Property reference : {0}", propertyReferenceEx.PropertyName);
             object target = DeserializeExpression(manager, null, propertyReferenceEx.TargetObject);
-            if (target != null && !(target is CodeExpression))
+            if (target is not null && !(target is CodeExpression))
             {
                 // if it's a type, then we've got ourselves a static field...
                 if (!(target is Type))
                 {
                     PropertyDescriptor prop = GetPropertiesHelper(manager, target, null)[propertyReferenceEx.PropertyName];
-                    if (prop != null)
+                    if (prop is not null)
                     {
                         result = prop.GetValue(target);
                     }
@@ -1843,7 +1876,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (GetExpression(manager, target) is CodeThisReferenceExpression)
                         {
                             PropertyInfo propInfo = GetReflectionTypeHelper(manager, target).GetProperty(propertyReferenceEx.PropertyName, BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                            if (propInfo != null)
+                            if (propInfo is not null)
                             {
                                 result = propInfo.GetValue(target, null);
                             }
@@ -1853,7 +1886,7 @@ namespace System.ComponentModel.Design.Serialization
                 else
                 {
                     PropertyInfo prop = GetReflectionTypeFromTypeHelper(manager, (Type)target).GetProperty(propertyReferenceEx.PropertyName, BindingFlags.GetProperty | BindingFlags.Static | BindingFlags.Public);
-                    if (prop != null)
+                    if (prop is not null)
                     {
                         result = prop.GetValue(null, null);
                     }
@@ -1865,6 +1898,7 @@ namespace System.ComponentModel.Design.Serialization
                     Error(manager, string.Format(SR.SerializerNoSuchProperty, typeName, propertyReferenceEx.PropertyName), SR.SerializerNoSuchProperty);
                 }
             }
+
             TraceWarningIf(result == propertyReferenceEx, "Could not resolve property {0} to an object instance.", propertyReferenceEx.PropertyName);
             return result;
         }
@@ -1893,7 +1927,7 @@ namespace System.ComponentModel.Design.Serialization
             if (traceSerialization.TraceWarning)
             {
                 string scope = string.Empty;
-                if (traceScope != null)
+                if (traceScope is not null)
                 {
                     foreach (string scopeName in traceScope)
                     {
@@ -1901,6 +1935,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             scope = "/" + scope;
                         }
+
                         scope = scopeName + scope;
                     }
                 }
@@ -1918,12 +1953,12 @@ namespace System.ComponentModel.Design.Serialization
             Trace("LHS is property : {0}", propertyReferenceEx.PropertyName);
             object lhs = DeserializeExpression(manager, null, propertyReferenceEx.TargetObject);
 
-            if (lhs != null && !(lhs is CodeExpression))
+            if (lhs is not null && !(lhs is CodeExpression))
             {
                 // Property assignments must go through our type descriptor system. However, we do not support parameterized properties.  If there are any parameters on the property, we do not perform the assignment.
                 PropertyDescriptorCollection properties = GetPropertiesHelper(manager, lhs, runTimeProperties);
                 PropertyDescriptor p = properties[propertyReferenceEx.PropertyName];
-                if (p != null)
+                if (p is not null)
                 {
                     Trace("Processing RHS");
                     object rhs = DeserializeExpression(manager, null, statement.Right);
@@ -1948,7 +1983,7 @@ namespace System.ComponentModel.Design.Serialization
                     //So if we ever assign a property value to a Type -- we make sure that the Type is a
                     // real System.Type.
                     Type rhsType = rhs as Type;
-                    if (rhsType != null && rhsType.UnderlyingSystemType != null)
+                    if (rhsType is not null && rhsType.UnderlyingSystemType is not null)
                     {
                         rhs = rhsType.UnderlyingSystemType; //unwrap this "type" that came because it was not actually a real bcl type.
                     }
@@ -1961,18 +1996,18 @@ namespace System.ComponentModel.Design.Serialization
                     // relationship, which isn't a problem during normal serialization (since it not very
                     // likely the property has already been assigned to), but it does affect undo.
                     MemberRelationship oldRelation = MemberRelationship.Empty;
-                    MemberRelationshipService relationships = null;
+                    MemberRelationshipService relationships;
                     if (statement.Right is CodePropertyReferenceExpression)
                     {
                         relationships = manager.GetService(typeof(MemberRelationshipService)) as MemberRelationshipService;
 
-                        if (relationships != null)
+                        if (relationships is not null)
                         {
                             CodePropertyReferenceExpression rhsPropRef = (CodePropertyReferenceExpression)statement.Right;
                             object rhsPropTarget = DeserializeExpression(manager, null, rhsPropRef.TargetObject);
                             PropertyDescriptor rhsProp = GetPropertiesHelper(manager, rhsPropTarget, null)[rhsPropRef.PropertyName];
 
-                            if (rhsProp != null)
+                            if (rhsProp is not null)
                             {
                                 MemberRelationship source = new MemberRelationship(lhs, p);
                                 MemberRelationship target = new MemberRelationship(rhsPropTarget, rhsProp);
@@ -1990,7 +2025,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         relationships = manager.GetService(typeof(MemberRelationshipService)) as MemberRelationshipService;
 
-                        if (relationships != null)
+                        if (relationships is not null)
                         {
                             oldRelation = relationships[lhs, p];
                             relationships[lhs, p] = MemberRelationship.Empty;
@@ -2003,12 +2038,14 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     catch
                     {
-                        if (relationships != null)
+                        if (relationships is not null)
                         {
                             relationships[lhs, p] = oldRelation;
                         }
+
                         throw;
                     }
+
                     return true;
                 }
                 else
@@ -2024,6 +2061,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 TraceWarning("Could not find target object for property {0}", propertyReferenceEx.PropertyName);
             }
+
             return false;
         }
 
@@ -2038,7 +2076,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  is a name for the given object.  If the expression service returns a valid name, it checks to see if
         ///  there is a '.' in the name.  This indicates that the expression service found this object as the return
         ///  value of a read only property on another object.  If there is a '.', GetExpression will split the reference
-        ///  into sub-parts.  The leftmost part is a name that will be evalulated via manager.GetInstance.  For each
+        ///  into sub-parts.  The leftmost part is a name that will be evaluated via manager.GetInstance.  For each
         ///  subsequent part, a property reference expression will be built.  The final expression will then be returned.
         ///  If the object did not have an expression set, or the object was not found in the reference service, null will
         ///  be returned from GetExpression, indicating there is no existing expression for the object.
@@ -2047,15 +2085,8 @@ namespace System.ComponentModel.Design.Serialization
         {
             CodeExpression expression = null;
 
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(value);
 
             Trace("GetExpression called for object {0}", value.ToString());
 
@@ -2064,16 +2095,16 @@ namespace System.ComponentModel.Design.Serialization
             if (manager.Context[typeof(ExpressionTable)] is ExpressionTable table)
             {
                 expression = table.GetExpression(value);
-                TraceIf(expression != null, "Resolved through expression table : {0}", expression);
+                TraceIf(expression is not null, "Resolved through expression table : {0}", expression);
             }
 
             // Check to see if this object represents the root context.
             if (expression is null)
             {
-                if (manager.Context[typeof(RootContext)] is RootContext rootEx && object.ReferenceEquals(rootEx.Value, value))
+                if (manager.Context[typeof(RootContext)] is RootContext rootEx && ReferenceEquals(rootEx.Value, value))
                 {
                     expression = rootEx.Expression;
-                    TraceIf(expression != null, "Resolved through root expression context : {0}", expression);
+                    TraceIf(expression is not null, "Resolved through root expression context : {0}", expression);
                 }
             }
 
@@ -2090,7 +2121,7 @@ namespace System.ComponentModel.Design.Serialization
                     if (manager.GetService(typeof(IReferenceService)) is IReferenceService refSvc)
                     {
                         objectName = refSvc.GetName(value);
-                        if (objectName != null && objectName.IndexOf('.') != -1)
+                        if (objectName is not null && objectName.IndexOf('.') != -1)
                         {
                             Trace("Resolving through IReferenceService : {0}", objectName);
 
@@ -2102,12 +2133,12 @@ namespace System.ComponentModel.Design.Serialization
                             object baseInstance = manager.GetInstance(nameParts[0]);
 
                             TraceWarningIf(baseInstance is null, "Manager can't return an instance for object {0}", nameParts[0]);
-                            if (baseInstance != null)
+                            if (baseInstance is not null)
                             {
                                 CodeExpression baseExpression = SerializeToExpression(manager, baseInstance);
 
                                 TraceWarningIf(baseExpression is null, "Unable to serialize object {0} to an expression.", baseInstance);
-                                if (baseExpression != null)
+                                if (baseExpression is not null)
                                 {
                                     for (int idx = 1; idx < nameParts.Length; idx++)
                                     {
@@ -2125,13 +2156,13 @@ namespace System.ComponentModel.Design.Serialization
             // Finally, the expression context.
             if (expression is null)
             {
-                if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt && object.ReferenceEquals(cxt.PresetValue, value))
+                if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx && ReferenceEquals(ctx.PresetValue, value))
                 {
-                    expression = cxt.Expression;
+                    expression = ctx.Expression;
                 }
             }
 
-            if (expression != null)
+            if (expression is not null)
             {
                 // set up cache dependencies
                 // we check to see if there is anything on the stack
@@ -2139,11 +2170,10 @@ namespace System.ComponentModel.Design.Serialization
                 ComponentCache.Entry parentEntry = (ComponentCache.Entry)manager.Context[typeof(ComponentCache.Entry)];
                 ComponentCache cache = (ComponentCache)manager.Context[typeof(ComponentCache)];
 
-                if (parentEntry != null && parentEntry.Component != value /* don't make ourselves dependent with ourselves */ && cache != null)
+                if (parentEntry is not null && parentEntry.Component != value /* don't make ourselves dependent with ourselves */ && cache is not null)
                 {
-                    ComponentCache.Entry entry = null;
-                    entry = cache.GetEntryAll(value);
-                    if (entry != null && parentEntry.Component != null)
+                    ComponentCache.Entry entry = cache.GetEntryAll(value);
+                    if (entry is not null && parentEntry.Component is not null)
                     {
                         entry.AddDependency(parentEntry.Component);
                     }
@@ -2161,11 +2191,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected CodeDomSerializer GetSerializer(IDesignerSerializationManager manager, object value)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-            if (value != null)
+            ArgumentNullException.ThrowIfNull(manager);
+
+            if (value is not null)
             {
                 AttributeCollection valueAttributes = GetAttributesHelper(manager, value);
                 AttributeCollection typeAttributes = GetAttributesFromTypeHelper(manager, value.GetType());
@@ -2181,7 +2209,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (a is DesignerSerializerAttribute da)
                         {
                             Type realSerializerType;
-                            if (vsManager != null)
+                            if (vsManager is not null)
                             {
                                 realSerializerType = vsManager.GetRuntimeType(da.SerializerBaseTypeName);
                             }
@@ -2199,14 +2227,14 @@ namespace System.ComponentModel.Design.Serialization
                     }
 
                     // If we got a value serializer, we've got to do the same thing here for the type serializer.  We only care if the two are different
-                    if (valueSerializerTypeName != null)
+                    if (valueSerializerTypeName is not null)
                     {
                         foreach (Attribute a in typeAttributes)
                         {
                             if (a is DesignerSerializerAttribute da)
                             {
                                 Type realSerializerType;
-                                if (vsManager != null)
+                                if (vsManager is not null)
                                 {
                                     realSerializerType = vsManager.GetRuntimeType(da.SerializerBaseTypeName);
                                 }
@@ -2214,6 +2242,7 @@ namespace System.ComponentModel.Design.Serialization
                                 {
                                     realSerializerType = manager.GetType(da.SerializerBaseTypeName);
                                 }
+
                                 if (realSerializerType == desiredSerializerType)
                                 {
                                     // Ok, we found a serializer. If it matches the one we found for the value, then we can still use the default implementation.
@@ -2221,6 +2250,7 @@ namespace System.ComponentModel.Design.Serialization
                                     {
                                         valueSerializerTypeName = null;
                                     }
+
                                     break;
                                 }
                             }
@@ -2228,11 +2258,11 @@ namespace System.ComponentModel.Design.Serialization
                     }
 
                     // Finally, if we got a value serializer, we need to create it and use it.
-                    if (valueSerializerTypeName != null)
+                    if (valueSerializerTypeName is not null)
                     {
-                        Type serializerType = vsManager != null ? vsManager.GetRuntimeType(valueSerializerTypeName) :
+                        Type serializerType = vsManager is not null ? vsManager.GetRuntimeType(valueSerializerTypeName) :
                                                                   manager.GetType(valueSerializerTypeName);
-                        if (serializerType != null && desiredSerializerType.IsAssignableFrom(serializerType))
+                        if (serializerType is not null && desiredSerializerType.IsAssignableFrom(serializerType))
                         {
                             return (CodeDomSerializer)Activator.CreateInstance(serializerType);
                         }
@@ -2242,10 +2272,11 @@ namespace System.ComponentModel.Design.Serialization
 
             // for serializing null, we pass null to the serialization manager otherwise, external IDesignerSerializationProviders wouldn't be given a chance to  serialize null their own special way.
             Type t = null;
-            if (value != null)
+            if (value is not null)
             {
                 t = value.GetType();
             }
+
             return (CodeDomSerializer)manager.GetSerializer(t, typeof(CodeDomSerializer));
         }
 
@@ -2273,21 +2304,15 @@ namespace System.ComponentModel.Design.Serialization
         protected bool IsSerialized(IDesignerSerializationManager manager, object value, bool honorPreset)
         {
             bool hasExpression = false;
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(value);
 
             // Is the expression part of a prior SetExpression call?
-            if (manager.Context[typeof(ExpressionTable)] is ExpressionTable table && table.GetExpression(value) != null && (!honorPreset || !table.ContainsPresetExpression(value)))
+            if (manager.Context[typeof(ExpressionTable)] is ExpressionTable table && table.GetExpression(value) is not null && (!honorPreset || !table.ContainsPresetExpression(value)))
             {
                 hasExpression = true;
             }
+
             Trace("IsSerialized called for object {0} : {1}", value, hasExpression);
             return hasExpression;
         }
@@ -2300,48 +2325,42 @@ namespace System.ComponentModel.Design.Serialization
         protected CodeExpression SerializeCreationExpression(IDesignerSerializationManager manager, object value, out bool isComplete)
         {
             isComplete = false;
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(value);
 
             TypeConverter converter = TypeDescriptor.GetConverter(value);
             // See if there is an ExpressionContext with a preset value we're interested in.  If so, that will dictate our creation expression.
-            if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt && object.ReferenceEquals(cxt.PresetValue, value))
+            if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx && ReferenceEquals(ctx.PresetValue, value))
             {
-                CodeExpression expression = cxt.Expression;
+                CodeExpression expression = ctx.Expression;
                 //Okay, we found a preset creation expression. We just need to find if it isComplete.
                 if (converter.CanConvertTo(typeof(InstanceDescriptor)))
                 {
-                    if (converter.ConvertTo(value, typeof(InstanceDescriptor)) is InstanceDescriptor descriptor && descriptor.MemberInfo != null)
+                    if (converter.ConvertTo(value, typeof(InstanceDescriptor)) is InstanceDescriptor descriptor && descriptor.MemberInfo is not null)
                     {
                         isComplete = descriptor.IsComplete;
                     }
                 }
+
                 return expression;
             }
 
             // See if there is an instance descriptor for this type.
             if (converter.CanConvertTo(typeof(InstanceDescriptor)))
             {
-                if (converter.ConvertTo(value, typeof(InstanceDescriptor)) is InstanceDescriptor descriptor && descriptor.MemberInfo != null)
+                if (converter.ConvertTo(value, typeof(InstanceDescriptor)) is InstanceDescriptor descriptor && descriptor.MemberInfo is not null)
                 {
                     isComplete = descriptor.IsComplete;
                     return SerializeInstanceDescriptor(manager, value, descriptor);
                 }
             }
 
-            // see if this thing is serialiable
-            if (GetReflectionTypeHelper(manager, value).IsSerializable && !(value is IComponent && ((IComponent)value).Site != null))
+            // see if this thing is serializable
+            if (GetReflectionTypeHelper(manager, value).IsSerializable && !(value is IComponent && ((IComponent)value).Site is not null))
             {
                 CodeExpression expression = SerializeToResourceExpression(manager, value);
-                TraceIf(expression != null, "Serialized value as a resource.");
-                if (expression != null)
+                TraceIf(expression is not null, "Serialized value as a resource.");
+                if (expression is not null)
                 {
                     isComplete = true;
                     return expression;
@@ -2350,11 +2369,12 @@ namespace System.ComponentModel.Design.Serialization
 
             // No instance descriptor. See if we can get to a public constructor that takes no arguments
             ConstructorInfo ctor = GetReflectionTypeHelper(manager, value).GetConstructor(Array.Empty<Type>());
-            if (ctor != null)
+            if (ctor is not null)
             {
                 isComplete = false;
                 return new CodeObjectCreateExpression(TypeDescriptor.GetClassName(value), Array.Empty<CodeExpression>());
             }
+
             // Nothing worked.
             return null;
         }
@@ -2374,7 +2394,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     descriptor.Arguments.CopyTo(argumentValues, 0);
                     MethodBase mi = descriptor.MemberInfo as MethodBase;
-                    if (mi != null)
+                    if (mi is not null)
                     {
                         parameters = mi.GetParameters();
                     }
@@ -2383,16 +2403,16 @@ namespace System.ComponentModel.Design.Serialization
                 bool paramsOk = true;
                 for (int i = 0; i < arguments.Length; i++)
                 {
-                    Debug.Assert(argumentValues != null && parameters != null, "These should have been allocated when the argument array was created.");
+                    Debug.Assert(argumentValues is not null && parameters is not null, "These should have been allocated when the argument array was created.");
                     object arg = argumentValues[i];
                     CodeExpression exp = null;
-                    ExpressionContext newCxt = null;
+                    ExpressionContext newCtx = null;
 
                     // If there is an ExpressionContext on the stack, we need to fix up its type to be the parameter type, so the argument objects get serialized correctly.
-                    if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt)
+                    if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx)
                     {
-                        newCxt = new ExpressionContext(cxt.Expression, parameters[i].ParameterType, cxt.Owner);
-                        manager.Context.Push(newCxt);
+                        newCtx = new ExpressionContext(ctx.Expression, parameters[i].ParameterType, ctx.Owner);
+                        manager.Context.Push(newCtx);
                     }
 
                     try
@@ -2401,20 +2421,21 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     finally
                     {
-                        if (newCxt != null)
+                        if (newCtx is not null)
                         {
-                            Debug.Assert(manager.Context.Current == newCxt, "Context stack corrupted.");
+                            Debug.Assert(manager.Context.Current == newCtx, "Context stack corrupted.");
                             manager.Context.Pop();
                         }
                     }
 
-                    if (exp != null)
+                    if (exp is not null)
                     {
                         // Assign over.  See if we need a cast first.
-                        if (arg != null && !parameters[i].ParameterType.IsAssignableFrom(arg.GetType()))
+                        if (arg is not null && !parameters[i].ParameterType.IsAssignableFrom(arg.GetType()))
                         {
                             exp = new CodeCastExpression(parameters[i].ParameterType, exp);
                         }
+
                         arguments[i] = exp;
                     }
                     else
@@ -2475,6 +2496,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return expression;
         }
 
@@ -2488,14 +2510,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected string GetUniqueName(IDesignerSerializationManager manager, object value)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(value);
 
             string name = manager.GetName(value);
             if (name is null)
@@ -2504,7 +2520,7 @@ namespace System.ComponentModel.Design.Serialization
                 Type targetType = GetReflectionTypeHelper(manager, value);
                 INameCreationService ns = manager.GetService(typeof(INameCreationService)) as INameCreationService;
                 TraceWarningIf(ns is null, "Need to generate a unique name but we have no name creation service.");
-                if (ns != null)
+                if (ns is not null)
                 {
                     baseName = ns.CreateName(null, targetType);
                 }
@@ -2526,11 +2542,14 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             entry.AddLocalName(name);
                         }
+
                         break;
                     }
+
                     suffixIndex++;
                 }
             }
+
             return name;
         }
 
@@ -2539,25 +2558,10 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SerializeEvent(IDesignerSerializationManager manager, CodeStatementCollection statements, object value, EventDescriptor descriptor)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (statements is null)
-            {
-                throw new ArgumentNullException(nameof(statements));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-
-            if (descriptor is null)
-            {
-                throw new ArgumentNullException(nameof(descriptor));
-            }
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(statements);
+            ArgumentNullException.ThrowIfNull(value);
+            ArgumentNullException.ThrowIfNull(descriptor);
 
             using (TraceScope("CodeDomSerializerBase::" + nameof(SerializeEvent)))
             {
@@ -2570,7 +2574,7 @@ namespace System.ComponentModel.Design.Serialization
                     MemberCodeDomSerializer memberSerializer = (MemberCodeDomSerializer)manager.GetSerializer(descriptor.GetType(), typeof(MemberCodeDomSerializer));
 
                     TraceErrorIf(memberSerializer is null, "Event {0} cannot be serialized because it has no serializer.", descriptor.Name);
-                    if (memberSerializer != null && memberSerializer.ShouldSerialize(manager, value, descriptor))
+                    if (memberSerializer is not null && memberSerializer.ShouldSerialize(manager, value, descriptor))
                     {
                         memberSerializer.Serialize(manager, value, descriptor, statements);
                     }
@@ -2625,12 +2629,13 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 finally
                 {
-                    Debug.Assert(manager.Context.Current == inheritance, "Sombody messed up our context stack.");
+                    Debug.Assert(manager.Context.Current == inheritance, "Somebody messed up our context stack.");
                     manager.Context.Pop();
                 }
             }
         }
-        private PropertyDescriptorCollection GetFilteredProperties(IDesignerSerializationManager manager, object value, Attribute[] filter)
+
+        private static PropertyDescriptorCollection GetFilteredProperties(IDesignerSerializationManager manager, object value, Attribute[] filter)
         {
             PropertyDescriptorCollection props = GetPropertiesHelper(manager, value, filter);
             if (value is IComponent comp)
@@ -2643,7 +2648,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 PropertyDescriptor filterProp = manager.Properties["FilteredProperties"];
-                if (filterProp != null)
+                if (filterProp is not null)
                 {
                     if (filterProp.GetValue(manager) is ITypeDescriptorFilterService filterSvc)
                     {
@@ -2651,6 +2656,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return props;
         }
 
@@ -2668,7 +2674,7 @@ namespace System.ComponentModel.Design.Serialization
                 try
                 {
                     CodeExpression target = SerializeToExpression(manager, value);
-                    if (target != null)
+                    if (target is not null)
                     {
                         CodePropertyReferenceExpression propertyRef = new CodePropertyReferenceExpression(target, string.Empty);
                         foreach (PropertyDescriptor property in props)
@@ -2714,29 +2720,14 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  This serializes the given proeprty for the given object.
+        ///  This serializes the given property for the given object.
         /// </summary>
         protected void SerializeProperty(IDesignerSerializationManager manager, CodeStatementCollection statements, object value, PropertyDescriptor propertyToSerialize)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-
-            if (propertyToSerialize is null)
-            {
-                throw new ArgumentNullException(nameof(propertyToSerialize));
-            }
-
-            if (statements is null)
-            {
-                throw new ArgumentNullException(nameof(statements));
-            }
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(value);
+            ArgumentNullException.ThrowIfNull(propertyToSerialize);
+            ArgumentNullException.ThrowIfNull(statements);
 
             Trace("CodeDomSerializerBase::" + nameof(SerializeProperty) + " {0}", propertyToSerialize.Name);
             // Now look for a MemberCodeDomSerializer for the property.  If we can't find one, then we can't serialize the property
@@ -2746,7 +2737,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 MemberCodeDomSerializer memberSerializer = (MemberCodeDomSerializer)manager.GetSerializer(propertyToSerialize.GetType(), typeof(MemberCodeDomSerializer));
                 TraceErrorIf(memberSerializer is null, "Property {0} cannot be serialized because it has no serializer.", propertyToSerialize.Name);
-                if (memberSerializer != null && memberSerializer.ShouldSerialize(manager, value, propertyToSerialize))
+                if (memberSerializer is not null && memberSerializer.ShouldSerialize(manager, value, propertyToSerialize))
                 {
                     memberSerializer.Serialize(manager, value, propertyToSerialize, statements);
                 }
@@ -2804,17 +2795,17 @@ namespace System.ComponentModel.Design.Serialization
                 // Failing that, we invoke the object's serializer.  If that serializer returned a CodeExpression, we will use it.
                 // If the serializer did not return a code expression, we call GetExpression one last time to see if the serializer added an expression.  If it did, we use it. Otherwise we return null.
                 // If the serializer was invoked and it created one or more statements those statements will be added to a statement collection.  Additionally, if there is a statement context that contains a statement table for this object we will push that statement table onto the context stack in  case someone else needs statements.
-                if (value != null)
+                if (value is not null)
                 {
                     if (IsSerialized(manager, value))
                     {
                         expression = GetExpression(manager, value);
-                        TraceIf(expression != null, "Existing expression found : {0}", expression);
+                        TraceIf(expression is not null, "Existing expression found : {0}", expression);
                     }
                     else
                     {
                         expression = GetLegacyExpression(manager, value);
-                        if (expression != null)
+                        if (expression is not null)
                         {
                             TraceWarning("Using legacy expression guard to prevent recursion.  Serializer for {0} should be rewritten to handle GetExpression / SetExpression.", value);
                             SetExpression(manager, value, expression);
@@ -2825,20 +2816,20 @@ namespace System.ComponentModel.Design.Serialization
                 if (expression is null)
                 {
                     CodeDomSerializer serializer = GetSerializer(manager, value);
-                    if (serializer != null)
+                    if (serializer is not null)
                     {
                         Trace("Invoking serializer {0}", serializer.GetType().Name);
                         CodeStatementCollection saveStatements = null;
-                        if (value != null)
+                        if (value is not null)
                         {
                             // The Whidbey model for serializing a complex object is to call SetExpression with the object's reference expression and then  call on the various Serialize Property / Event methods.  This is incompatible with legacy code, and if not handled legacy code may serialize incorrectly or even stack fault.  To handle this, we keep a private "Legacy Expression Table".  This is a table that we fill in here.  We don't fill in the actual legacy expression here.  Rather,  we fill it with a marker value and obtain the legacy expression  above in GetLegacyExpression.  If we hit this case, we then save the expression in GetExpression so that future calls to IsSerialized will succeed.
                             SetLegacyExpression(manager, value);
-                            if (manager.Context[typeof(StatementContext)] is StatementContext statementCxt)
+                            if (manager.Context[typeof(StatementContext)] is StatementContext statementCtx)
                             {
-                                saveStatements = statementCxt.StatementCollection[value];
+                                saveStatements = statementCtx.StatementCollection[value];
                             }
 
-                            if (saveStatements != null)
+                            if (saveStatements is not null)
                             {
                                 manager.Context.Push(saveStatements);
                             }
@@ -2851,7 +2842,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                         finally
                         {
-                            if (saveStatements != null)
+                            if (saveStatements is not null)
                             {
                                 Debug.Assert(manager.Context.Current == saveStatements, "Context stack corrupted.");
                                 manager.Context.Pop();
@@ -2859,7 +2850,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
 
                         expression = result as CodeExpression;
-                        if (expression is null && value != null)
+                        if (expression is null && value is not null)
                         {
                             expression = GetExpression(manager, value);
                         }
@@ -2877,7 +2868,7 @@ namespace System.ComponentModel.Design.Serialization
                             }
                         }
 
-                        if (statements != null)
+                        if (statements is not null)
                         {
                             Trace("Serialization produced additional statements");
                             // See if we have a place for these statements to be stored.  If not, then check the context.
@@ -2886,7 +2877,7 @@ namespace System.ComponentModel.Design.Serialization
                                 saveStatements = manager.Context[typeof(CodeStatementCollection)] as CodeStatementCollection;
                             }
 
-                            if (saveStatements != null)
+                            if (saveStatements is not null)
                             {
                                 Trace("Saving in context stack statement collection");
                                 Debug.Assert(saveStatements != statements, "The serializer returned the same collection that exists on the context stack.");
@@ -2896,7 +2887,7 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 // If we got here we will be losing data because we have no avenue to save these statements.  Inform the user.
                                 string valueName = "(null)";
-                                if (value != null)
+                                if (value is not null)
                                 {
                                     valueName = manager.GetName(value);
                                     if (valueName is null)
@@ -2904,6 +2895,7 @@ namespace System.ComponentModel.Design.Serialization
                                         valueName = value.GetType().Name;
                                     }
                                 }
+
                                 TraceError("Serialization produced a set of statements but there is no statement collection on the stack to receive them.");
                                 manager.ReportError(string.Format(SR.SerializerLostStatements, valueName));
                             }
@@ -2916,10 +2908,11 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return expression;
         }
 
-        private CodeExpression GetLegacyExpression(IDesignerSerializationManager manager, object value)
+        private static CodeExpression GetLegacyExpression(IDesignerSerializationManager manager, object value)
         {
             CodeExpression expression = null;
             if (manager.Context[typeof(LegacyExpressionTable)] is LegacyExpressionTable table)
@@ -2933,19 +2926,19 @@ namespace System.ComponentModel.Design.Serialization
                     if (name is null)
                     {
                         IReferenceService referenceService = (IReferenceService)manager.GetService(typeof(IReferenceService));
-                        if (referenceService != null)
+                        if (referenceService is not null)
                         {
                             name = referenceService.GetName(value);
-                            referenceName = name != null;
+                            referenceName = name is not null;
                         }
                     }
 
-                    if (name != null)
+                    if (name is not null)
                     {
                         Trace("Object is reference ({0}) Creating reference expression", name);
                         // Check to see if this is a reference to the root component.  If it is, then use "this".
                         RootContext root = (RootContext)manager.Context[typeof(RootContext)];
-                        if (root != null)
+                        if (root is not null)
                         {
                             if (root.Value == value)
                             {
@@ -2978,6 +2971,7 @@ namespace System.ComponentModel.Design.Serialization
                             }
                         }
                     }
+
                     table[value] = expression;
                 }
                 else
@@ -2985,10 +2979,11 @@ namespace System.ComponentModel.Design.Serialization
                     expression = exp as CodeExpression;
                 }
             }
+
             return expression;
         }
 
-        private void SetLegacyExpression(IDesignerSerializationManager manager, object value)
+        private static void SetLegacyExpression(IDesignerSerializationManager manager, object value)
         {
             if (value is IComponent)
             {
@@ -2998,9 +2993,11 @@ namespace System.ComponentModel.Design.Serialization
                     table = new LegacyExpressionTable();
                     manager.Context.Append(table);
                 }
+
                 table[value] = value;
             }
         }
+
         private class LegacyExpressionTable : Hashtable
         {
         }
@@ -3032,14 +3029,14 @@ namespace System.ComponentModel.Design.Serialization
             if (value is null || value.GetType().IsSerializable)
             {
                 CodeStatementCollection saveStatements = null;
-                if (value != null)
+                if (value is not null)
                 {
-                    if (manager.Context[typeof(StatementContext)] is StatementContext statementCxt)
+                    if (manager.Context[typeof(StatementContext)] is StatementContext statementCtx)
                     {
-                        saveStatements = statementCxt.StatementCollection[value];
+                        saveStatements = statementCtx.StatementCollection[value];
                     }
 
-                    if (saveStatements != null)
+                    if (saveStatements is not null)
                     {
                         manager.Context.Push(saveStatements);
                     }
@@ -3051,13 +3048,14 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 finally
                 {
-                    if (saveStatements != null)
+                    if (saveStatements is not null)
                     {
                         Debug.Assert(manager.Context.Current == saveStatements, "Context stack corrupted.");
                         manager.Context.Pop();
                     }
                 }
             }
+
             return result;
         }
 
@@ -3074,20 +3072,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SetExpression(IDesignerSerializationManager manager, object value, CodeExpression expression, bool isPreset)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-
-            if (expression is null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(value);
+            ArgumentNullException.ThrowIfNull(expression);
 
             ExpressionTable table = (ExpressionTable)manager.Context[typeof(ExpressionTable)];
             if (table is null)
@@ -3095,6 +3082,7 @@ namespace System.ComponentModel.Design.Serialization
                 table = new ExpressionTable();
                 manager.Context.Append(table);
             }
+
             Trace("Set expression {0} for object {1}", expression, value);
             // in debug builds, save off who performed this set expression.  It's very valuable to know.
 #if DEBUG
@@ -3109,13 +3097,14 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             CodeExpression existingExpression = table.GetExpression(value);
-            if (existingExpression != null && !isPreset)
+            if (existingExpression is not null && !isPreset)
             {
                 Debug.Fail("There shouldn't be an expression already associated with this object : " + manager.GetName(value));
                 if (!(existingExpression.UserData["StackTrace"] is string stack))
                 {
                     stack = "unknown";
                 }
+
                 TraceWarning("Duplicate expression on context stack for value {0}.  Original expression callstack: {1}", value, stack);
             }
 #endif
@@ -3159,10 +3148,11 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         Trace("Processing CodeVariableDeclarationStatement");
                         AddStatement(table, variableDecl.Name, variableDecl);
-                        if (names != null && variableDecl.Type != null && !string.IsNullOrEmpty(variableDecl.Type.BaseType))
+                        if (names is not null && variableDecl.Type is not null && !string.IsNullOrEmpty(variableDecl.Type.BaseType))
                         {
                             names[variableDecl.Name] = GetTypeNameFromCodeTypeReference(manager, variableDecl.Type);
                         }
+
                         expression = null;
                     }
 
@@ -3178,7 +3168,7 @@ namespace System.ComponentModel.Design.Serialization
                     CodePropertyReferenceExpression propertyReferenceEx;
                     CodeVariableReferenceExpression variableReferenceEx;
 
-                    if (expression != null)
+                    if (expression is not null)
                     {
                         // Simplify the expression as much as we can, looking for our target object in the process.  If we find an expression that refers to our target object, we're done and can move on to the next statement.
                         while (true)
@@ -3188,42 +3178,42 @@ namespace System.ComponentModel.Design.Serialization
                                 Trace("Simplifying CodeCastExpression");
                                 expression = castEx.Expression;
                             }
-                            else if ((delegateCreateEx = expression as CodeDelegateCreateExpression) != null)
+                            else if ((delegateCreateEx = expression as CodeDelegateCreateExpression) is not null)
                             {
                                 Trace("Simplifying CodeDelegateCreateExpression");
                                 expression = delegateCreateEx.TargetObject;
                             }
-                            else if ((delegateInvokeEx = expression as CodeDelegateInvokeExpression) != null)
+                            else if ((delegateInvokeEx = expression as CodeDelegateInvokeExpression) is not null)
                             {
                                 Trace("Simplifying CodeDelegateInvokeExpression");
                                 expression = delegateInvokeEx.TargetObject;
                             }
-                            else if ((directionEx = expression as CodeDirectionExpression) != null)
+                            else if ((directionEx = expression as CodeDirectionExpression) is not null)
                             {
                                 Trace("Simplifying CodeDirectionExpression");
                                 expression = directionEx.Expression;
                             }
-                            else if ((eventReferenceEx = expression as CodeEventReferenceExpression) != null)
+                            else if ((eventReferenceEx = expression as CodeEventReferenceExpression) is not null)
                             {
                                 Trace("Simplifying CodeEventReferenceExpression");
                                 expression = eventReferenceEx.TargetObject;
                             }
-                            else if ((methodInvokeEx = expression as CodeMethodInvokeExpression) != null)
+                            else if ((methodInvokeEx = expression as CodeMethodInvokeExpression) is not null)
                             {
                                 Trace("Simplifying CodeMethodInvokeExpression");
                                 expression = methodInvokeEx.Method;
                             }
-                            else if ((methodReferenceEx = expression as CodeMethodReferenceExpression) != null)
+                            else if ((methodReferenceEx = expression as CodeMethodReferenceExpression) is not null)
                             {
                                 Trace("Simplifying CodeMethodReferenceExpression");
                                 expression = methodReferenceEx.TargetObject;
                             }
-                            else if ((arrayIndexerEx = expression as CodeArrayIndexerExpression) != null)
+                            else if ((arrayIndexerEx = expression as CodeArrayIndexerExpression) is not null)
                             {
                                 Trace("Simplifying CodeArrayIndexerExpression");
                                 expression = arrayIndexerEx.TargetObject;
                             }
-                            else if ((fieldReferenceEx = expression as CodeFieldReferenceExpression) != null)
+                            else if ((fieldReferenceEx = expression as CodeFieldReferenceExpression) is not null)
                             {
                                 // For fields we need to check to see if the field name is equal to the target object. If it is, then we have the expression we want.  We can add the statement here and then break out of our loop.
                                 // Note:  We cannot validate that this is a name in our nametable.  The nametable only contains names we have discovered through code parsing and will not include data from any inherited objects.  We accept the field now, and then fail later if we try to resolve it to an object and we can't find it.
@@ -3231,7 +3221,7 @@ namespace System.ComponentModel.Design.Serialization
                                 if (fieldReferenceEx.TargetObject is CodeThisReferenceExpression)
                                 {
                                     Type type = GetType(manager, fieldReferenceEx.FieldName, names);
-                                    if (type != null)
+                                    if (type is not null)
                                     {
                                         if (manager.GetSerializer(type, typeof(CodeDomSerializer)) is CodeDomSerializer serializer)
                                         {
@@ -3243,11 +3233,13 @@ namespace System.ComponentModel.Design.Serialization
                                             }
                                         }
                                     }
+
                                     if (!addedStatement)
                                     {
                                         // we still want to do this in case of the "Note" above.
                                         AddStatement(table, fieldReferenceEx.FieldName, statement);
                                     }
+
                                     break;
                                 }
                                 else
@@ -3256,7 +3248,7 @@ namespace System.ComponentModel.Design.Serialization
                                     expression = fieldReferenceEx.TargetObject;
                                 }
                             }
-                            else if ((propertyReferenceEx = expression as CodePropertyReferenceExpression) != null)
+                            else if ((propertyReferenceEx = expression as CodePropertyReferenceExpression) is not null)
                             {
                                 // For properties we need to check to see if the property name is equal to the target object. If it is, then we have the expression we want.  We can add the statement here and then break out of our loop.
                                 if (propertyReferenceEx.TargetObject is CodeThisReferenceExpression && (names is null || names.ContainsKey(propertyReferenceEx.PropertyName)))
@@ -3270,14 +3262,14 @@ namespace System.ComponentModel.Design.Serialization
                                     expression = propertyReferenceEx.TargetObject;
                                 }
                             }
-                            else if ((variableReferenceEx = expression as CodeVariableReferenceExpression) != null)
+                            else if ((variableReferenceEx = expression as CodeVariableReferenceExpression) is not null)
                             {
                                 // For variables we need to check to see if the variable name is equal to the target object. If it is, then we have the expression we want.  We can add the statement here and then break out of our loop.
                                 bool statementAdded = false;
-                                if (names != null)
+                                if (names is not null)
                                 {
                                     Type type = GetType(manager, variableReferenceEx.VariableName, names);
-                                    if (type != null)
+                                    if (type is not null)
                                     {
                                         if (manager.GetSerializer(type, typeof(CodeDomSerializer)) is CodeDomSerializer serializer)
                                         {
@@ -3295,21 +3287,24 @@ namespace System.ComponentModel.Design.Serialization
                                     AddStatement(table, variableReferenceEx.VariableName, statement);
                                     statementAdded = true;
                                 }
+
                                 if (!statementAdded)
                                 {
                                     TraceError("Variable {0} used before it was declared.", variableReferenceEx.VariableName);
                                     manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerUndeclaredName, variableReferenceEx.VariableName), manager));
                                 }
+
                                 break;
                             }
                             else if (expression is CodeThisReferenceExpression || expression is CodeBaseReferenceExpression)
                             {
                                 // We cannot go any further than "this".  So, we break out of the loop.  We file this statement under the root object.
-                                Debug.Assert(className != null, "FillStatementTable expected a valid className but received null");
-                                if (className != null)
+                                Debug.Assert(className is not null, "FillStatementTable expected a valid className but received null");
+                                if (className is not null)
                                 {
                                     AddStatement(table, className, statement);
                                 }
+
                                 break;
                             }
                             else
@@ -3322,17 +3317,19 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
         }
+
         internal static Type GetType(IDesignerSerializationManager manager, string name, Dictionary<string, string> names)
         {
             Type type = null;
-            if (names != null && names.ContainsKey(name))
+            if (names is not null && names.ContainsKey(name))
             {
                 string typeName = names[name];
-                if (manager != null && !string.IsNullOrEmpty(typeName))
+                if (manager is not null && !string.IsNullOrEmpty(typeName))
                 {
                     type = manager.GetType(typeName);
                 }
             }
+
             return type;
         }
 
@@ -3353,6 +3350,7 @@ namespace System.ComponentModel.Design.Serialization
                 };
                 table[name] = statements;
             }
+
             statements.Add(statement);
         }
 

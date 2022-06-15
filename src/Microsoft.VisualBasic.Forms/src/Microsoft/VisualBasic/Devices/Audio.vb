@@ -85,7 +85,6 @@ Namespace Microsoft.VisualBasic
                 Play(New Media.SoundPlayer(stream), playMode)
             End Sub
 
-#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
             ''' <summary>
             '''   Plays a system messageBeep sound.
             ''' </summary>
@@ -105,9 +104,8 @@ Namespace Microsoft.VisualBasic
             ''' </summary>
             Public Sub [Stop]()
                 Dim sound As New Media.SoundPlayer()
-                InternalStop(sound)
+                sound.Stop()
             End Sub
-#Enable Warning CA1822 ' Mark members as static
 
             ''' <summary>
             '''  Plays the passed in SoundPlayer in the passed in mode
@@ -121,7 +119,7 @@ Namespace Microsoft.VisualBasic
 
                 ' Stopping the sound ensures it's safe to dispose it. This could happen when we change the value of m_Sound below
                 If _sound IsNot Nothing Then
-                    InternalStop(_sound)
+                    _sound.Stop()
                 End If
 
                 _sound = sound
@@ -140,29 +138,11 @@ Namespace Microsoft.VisualBasic
             End Sub
 
             ''' <summary>
-            ''' SoundPlayer.Stop requires unmanaged code permissions. This method allows us to wrap calls to SoundPlayer.Stop
-            ''' with the appropriate Demand/Assert
-            ''' </summary>
-            ''' <param name="sound"></param>
-            Private Shared Sub InternalStop(sound As Media.SoundPlayer)
-
-                ' Stop requires unmanaged code permission. Stop demands SafeSubWindows permissions, so we don't need to do it here                     
-#Disable Warning BC40000 ' Type or member is obsolete
-                Call New Security.Permissions.SecurityPermission(System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode).Assert()
-                Try
-                    sound.Stop()
-                Finally
-                    System.Security.CodeAccessPermission.RevertAssert()
-#Enable Warning BC40000 ' Type or member is obsolete
-                End Try
-            End Sub
-
-            ''' <summary>
             '''  Gets the full name and path for the file. Throws if unable to get full name and path
             ''' </summary>
             ''' <param name="location">The filename being tested</param>
             ''' <returns>A full name and path of the file</returns>
-            Private Function ValidateFilename(location As String) As String
+            Private Shared Function ValidateFilename(location As String) As String
                 If String.IsNullOrEmpty(location) Then
                     Throw GetArgumentNullException("location")
                 End If
@@ -174,7 +154,7 @@ Namespace Microsoft.VisualBasic
             ''' Validates that the value being passed as an AudioPlayMode enum is a legal value
             ''' </summary>
             ''' <param name="value"></param>
-            Private Sub ValidateAudioPlayModeEnum(value As AudioPlayMode, paramName As String)
+            Private Shared Sub ValidateAudioPlayModeEnum(value As AudioPlayMode, paramName As String)
                 If value < AudioPlayMode.WaitToComplete OrElse value > AudioPlayMode.BackgroundLoop Then
                     Throw New ComponentModel.InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(AudioPlayMode))
                 End If

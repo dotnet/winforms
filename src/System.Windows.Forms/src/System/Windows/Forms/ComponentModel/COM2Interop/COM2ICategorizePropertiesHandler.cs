@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using static Interop;
 
@@ -13,9 +11,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     {
         public override Type Interface => typeof(VSSDK.ICategorizeProperties);
 
-        private unsafe string GetCategoryFromObject(object obj, Ole32.DispatchID dispid)
+        private static unsafe string? GetCategoryFromObject(object obj, Ole32.DispatchID dispid)
         {
-            if (!(obj is VSSDK.ICategorizeProperties catObj))
+            if (obj is not VSSDK.ICategorizeProperties catObj)
             {
                 return null;
             }
@@ -60,12 +58,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return null;
         }
 
-        public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc)
+        public override void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc)
         {
             if (propDesc is null)
             {
                 return;
             }
+
             for (int i = 0; i < propDesc.Length; i++)
             {
                 propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(OnGetAttributes);
@@ -74,9 +73,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private void OnGetAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
-            string cat = GetCategoryFromObject(sender.TargetObject, sender.DISPID);
+            string? cat = GetCategoryFromObject(sender.TargetObject, sender.DISPID);
 
-            if (cat != null && cat.Length > 0)
+            if (cat?.Length > 0)
             {
                 attrEvent.Add(new CategoryAttribute(cat));
             }

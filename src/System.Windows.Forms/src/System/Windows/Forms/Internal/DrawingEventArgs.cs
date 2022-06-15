@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -18,7 +17,7 @@ namespace System.Windows.Forms
     ///  That would make things a little more robust, but would require API review as the class itself would have to
     ///  be public. The internal functionality can obviously still be internal.
     /// </remarks>
-    internal partial struct DrawingEventArgs
+    internal partial class DrawingEventArgs
     {
         private Graphics? _graphics;
 
@@ -34,7 +33,7 @@ namespace System.Windows.Forms
             Rectangle clipRect,
             DrawingEventFlags flags)
         {
-            _graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            _graphics = graphics.OrThrowIfNull();
             _hdc = default;
             _oldPalette = default;
             CheckGraphicsForState(graphics, flags);
@@ -50,8 +49,7 @@ namespace System.Windows.Forms
             Rectangle clipRect,
             DrawingEventFlags flags)
         {
-            if (dc.IsNull)
-                throw new ArgumentNullException(nameof(dc));
+            ArgumentValidation.ThrowIfNull(dc);
 
 #if DEBUG
             Gdi32.OBJ type = Gdi32.GetObjectType(dc);
@@ -80,7 +78,7 @@ namespace System.Windows.Forms
         internal Gdi32.HDC HDC => IsStateClean ? default : _hdc;
 
         /// <summary>
-        ///  Gets the <see cref='Graphics'/> object used to paint.
+        ///  Gets the <see cref="Graphics"/> object used to paint.
         /// </summary>
         internal Graphics Graphics
         {
@@ -102,14 +100,14 @@ namespace System.Windows.Forms
                 Debug.Assert(!_hdc.IsNull);
 
                 // We need to manually unset the palette here so this scope shouldn't be disposed
-                var palleteScope = Gdi32.SelectPaletteScope.HalftonePalette(
+                var paletteScope = Gdi32.SelectPaletteScope.HalftonePalette(
                     _hdc,
                     forceBackground: false,
                     realizePalette: false);
 
-                GC.SuppressFinalize(palleteScope);
+                GC.SuppressFinalize(paletteScope);
 
-                _oldPalette = palleteScope.HPalette;
+                _oldPalette = paletteScope.HPalette;
 
                 _graphics = Graphics.FromHdcInternal((IntPtr)_hdc);
                 _graphics.PageUnit = GraphicsUnit.Pixel;
@@ -134,7 +132,7 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 // Only dispose the graphics object if we created it via the HDC.
-                if (_graphics != null && !_hdc.IsNull)
+                if (_graphics is not null && !_hdc.IsNull)
                 {
                     _graphics.Dispose();
                 }
@@ -157,15 +155,14 @@ namespace System.Windows.Forms
             }
 
             // Check to see if we've actually corrupted the state
-            object[] data = (object[])graphics.GetContextInfo();
+            graphics.GetContextInfo(out PointF offset, out Region? clip);
 
-            using Region clipRegion = (Region)data[0];
-            using Matrix worldTransform = (Matrix)data[1];
-
-            float[] elements = worldTransform?.Elements!;
-            bool isInfinite = clipRegion.IsInfinite(graphics);
-            Debug.Assert((int)elements[4] == 0 && (int)elements[5] == 0, "transform has been modified");
-            Debug.Assert(isInfinite, "clipping as been applied");
+            using (clip)
+            {
+                bool isInfinite = clip?.IsInfinite(graphics) ?? true;
+                Debug.Assert(offset.IsEmpty, "transform has been modified");
+                Debug.Assert(isInfinite, "clipping as been applied");
+            }
         }
     }
 }

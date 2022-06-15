@@ -10,24 +10,28 @@ using System.Reflection;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    // This grid entry is used for immutable objects.  An immutable object is identified
-    // through it's TypeConverter, which returns TRUE to ShouldCreateInstance.  For this case,
-    // we never go through the property descriptor to change the value, but recreate each
-    // time.
-    internal class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorGridEntry
+    /// <summary>
+    ///  This grid entry is used for immutable objects.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   An immutable object is identified through it's <see cref="TypeConverter"/> when it returns true for
+    ///   <see cref="TypeConverter.GetCreateInstanceSupported()"/>. In this case, we never go through the
+    ///   <see cref="PropertyDescriptor"/> to change the value, but recreate the property object each time.
+    ///  </para>
+    /// </remarks>
+    internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorGridEntry
     {
-        internal ImmutablePropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry peParent, PropertyDescriptor propInfo, bool hide)
-        : base(ownerGrid, peParent, propInfo, hide)
+        internal ImmutablePropertyDescriptorGridEntry(
+            PropertyGrid ownerGrid,
+            GridEntry parent,
+            PropertyDescriptor propertyInfo,
+            bool hide)
+            : base(ownerGrid, parent, propertyInfo, hide)
         {
         }
 
-        internal override bool IsPropertyReadOnly
-        {
-            get
-            {
-                return ShouldRenderReadOnly;
-            }
-        }
+        internal override bool IsPropertyReadOnly => ShouldRenderReadOnly;
 
         public override object PropertyValue
         {
@@ -35,24 +39,23 @@ namespace System.Windows.Forms.PropertyGridInternal
             set
             {
                 // Create a new instance of the value and set it into the parent grid entry.
-                //
                 object owner = GetValueOwner();
                 GridEntry parentEntry = InstanceParentGridEntry;
                 TypeConverter parentConverter = parentEntry.TypeConverter;
 
-                PropertyDescriptorCollection props = parentConverter.GetProperties(parentEntry, owner);
-                IDictionary values = new Hashtable(props.Count);
-                object newObject = null;
+                PropertyDescriptorCollection properties = parentConverter.GetProperties(parentEntry, owner);
+                IDictionary values = new Hashtable(properties.Count);
+                object newObject;
 
-                for (int i = 0; i < props.Count; i++)
+                for (int i = 0; i < properties.Count; i++)
                 {
-                    if (_propertyInfo.Name != null && _propertyInfo.Name.Equals(props[i].Name))
+                    if (PropertyDescriptor.Name is not null && PropertyDescriptor.Name.Equals(properties[i].Name))
                     {
-                        values[props[i].Name] = value;
+                        values[properties[i].Name] = value;
                     }
                     else
                     {
-                        values[props[i].Name] = props[i].GetValue(owner);
+                        values[properties[i].Name] = properties[i].GetValue(owner);
                     }
                 }
 
@@ -64,9 +67,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     if (string.IsNullOrEmpty(e.Message))
                     {
-                        throw new TargetInvocationException(string.Format(SR.ExceptionCreatingObject,
-                                                            InstanceParentGridEntry.PropertyType.FullName,
-                                                            e.ToString()), e);
+                        throw new TargetInvocationException(
+                            string.Format(SR.ExceptionCreatingObject, InstanceParentGridEntry.PropertyType.FullName, e.ToString()),
+                            e);
                     }
                     else
                     {
@@ -74,25 +77,17 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                if (newObject != null)
+                if (newObject is not null)
                 {
                     parentEntry.PropertyValue = newObject;
                 }
             }
         }
 
-        internal override bool NotifyValueGivenParent(object obj, int type)
-        {
-            return ParentGridEntry.NotifyValue(type);
-        }
+        protected override bool SendNotification(object owner, Notify notification)
+            => ParentGridEntry.SendNotificationToParent(notification);
 
-        public override bool ShouldRenderReadOnly
-        {
-            get
-            {
-                return InstanceParentGridEntry.ShouldRenderReadOnly;
-            }
-        }
+        public override bool ShouldRenderReadOnly => InstanceParentGridEntry.ShouldRenderReadOnly;
 
         private GridEntry InstanceParentGridEntry
         {

@@ -11,54 +11,56 @@ using static Interop.Mshtml;
 
 namespace System.Windows.Forms
 {
-    public sealed class HtmlWindow
+    public sealed partial class HtmlWindow
     {
-        internal static readonly object EventError = new object();
-        internal static readonly object EventGotFocus = new object();
-        internal static readonly object EventLoad = new object();
-        internal static readonly object EventLostFocus = new object();
-        internal static readonly object EventResize = new object();
-        internal static readonly object EventScroll = new object();
-        internal static readonly object EventUnload = new object();
+        internal static readonly object s_eventError = new();
+        internal static readonly object s_eventGotFocus = new();
+        internal static readonly object s_eventLoad = new();
+        internal static readonly object s_eventLostFocus = new();
+        internal static readonly object s_eventResize = new();
+        internal static readonly object s_eventScroll = new();
+        internal static readonly object s_eventUnload = new();
 
-        private readonly HtmlShimManager shimManager;
-        private readonly IHTMLWindow2 htmlWindow2;
+        private readonly HtmlShimManager _shimManager;
+        private readonly IHTMLWindow2 _htmlWindow2;
 
         internal HtmlWindow(HtmlShimManager shimManager, IHTMLWindow2 win)
         {
-            htmlWindow2 = win;
-            Debug.Assert(NativeHtmlWindow != null, "The window object should implement IHTMLWindow2");
+            _htmlWindow2 = win;
+            Debug.Assert(NativeHtmlWindow is not null, "The window object should implement IHTMLWindow2");
 
-            this.shimManager = shimManager;
+            _shimManager = shimManager;
         }
 
         internal IHTMLWindow2 NativeHtmlWindow
         {
             get
             {
-                return htmlWindow2;
+                return _htmlWindow2;
             }
         }
 
         private HtmlShimManager ShimManager
         {
-            get { return shimManager; }
+            get { return _shimManager; }
         }
 
         private HtmlWindowShim WindowShim
         {
             get
             {
-                if (ShimManager != null)
+                if (ShimManager is not null)
                 {
                     HtmlWindowShim shim = ShimManager.GetWindowShim(this);
                     if (shim is null)
                     {
-                        shimManager.AddWindowShim(this);
+                        _shimManager.AddWindowShim(this);
                         shim = ShimManager.GetWindowShim(this);
                     }
+
                     return shim;
                 }
+
                 return null;
             }
         }
@@ -84,7 +86,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLFramesCollection2 iHTMLFramesCollection2 = NativeHtmlWindow.GetFrames();
-                return (iHTMLFramesCollection2 != null) ? new HtmlWindowCollection(ShimManager, iHTMLFramesCollection2) : null;
+                return (iHTMLFramesCollection2 is not null) ? new HtmlWindowCollection(ShimManager, iHTMLFramesCollection2) : null;
             }
         }
 
@@ -93,7 +95,7 @@ namespace System.Windows.Forms
             get
             {
                 IOmHistory iOmHistory = NativeHtmlWindow.GetHistory();
-                return iOmHistory != null ? new HtmlHistory(iOmHistory) : null;
+                return iOmHistory is not null ? new HtmlHistory(iOmHistory) : null;
             }
         }
 
@@ -133,7 +135,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.GetParent();
-                return (iHTMLWindow2 != null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
+                return (iHTMLWindow2 is not null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
             }
         }
 
@@ -259,7 +261,7 @@ namespace System.Windows.Forms
         public HtmlWindow Open(string urlString, string target, string windowOptions, bool replaceEntry)
         {
             IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.Open(urlString, target, windowOptions, replaceEntry);
-            return (iHTMLWindow2 != null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
+            return (iHTMLWindow2 is not null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
         }
 
         public HtmlWindow Open(Uri url, string target, string windowOptions, bool replaceEntry)
@@ -274,7 +276,7 @@ namespace System.Windows.Forms
         public HtmlWindow OpenNew(string urlString, string windowOptions)
         {
             IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.Open(urlString, "_blank", windowOptions, true);
-            return (iHTMLWindow2 != null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
+            return (iHTMLWindow2 is not null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
         }
 
         public HtmlWindow OpenNew(Uri url, string windowOptions)
@@ -330,233 +332,44 @@ namespace System.Windows.Forms
 
         public event HtmlElementErrorEventHandler Error
         {
-            add => WindowShim.AddHandler(EventError, value);
-            remove => WindowShim.RemoveHandler(EventError, value);
+            add => WindowShim.AddHandler(s_eventError, value);
+            remove => WindowShim.RemoveHandler(s_eventError, value);
         }
 
         public event HtmlElementEventHandler GotFocus
         {
-            add => WindowShim.AddHandler(EventGotFocus, value);
-            remove => WindowShim.RemoveHandler(EventGotFocus, value);
+            add => WindowShim.AddHandler(s_eventGotFocus, value);
+            remove => WindowShim.RemoveHandler(s_eventGotFocus, value);
         }
 
         public event HtmlElementEventHandler Load
         {
-            add => WindowShim.AddHandler(EventLoad, value);
-            remove => WindowShim.RemoveHandler(EventLoad, value);
+            add => WindowShim.AddHandler(s_eventLoad, value);
+            remove => WindowShim.RemoveHandler(s_eventLoad, value);
         }
 
         public event HtmlElementEventHandler LostFocus
         {
-            add => WindowShim.AddHandler(EventLostFocus, value);
-            remove => WindowShim.RemoveHandler(EventLostFocus, value);
+            add => WindowShim.AddHandler(s_eventLostFocus, value);
+            remove => WindowShim.RemoveHandler(s_eventLostFocus, value);
         }
 
         public event HtmlElementEventHandler Resize
         {
-            add => WindowShim.AddHandler(EventResize, value);
-            remove => WindowShim.RemoveHandler(EventResize, value);
+            add => WindowShim.AddHandler(s_eventResize, value);
+            remove => WindowShim.RemoveHandler(s_eventResize, value);
         }
 
         public event HtmlElementEventHandler Scroll
         {
-            add => WindowShim.AddHandler(EventScroll, value);
-            remove => WindowShim.RemoveHandler(EventScroll, value);
+            add => WindowShim.AddHandler(s_eventScroll, value);
+            remove => WindowShim.RemoveHandler(s_eventScroll, value);
         }
 
         public event HtmlElementEventHandler Unload
         {
-            add => WindowShim.AddHandler(EventUnload, value);
-            remove => WindowShim.RemoveHandler(EventUnload, value);
-        }
-
-        //
-        // Private classes:
-        //
-        [ClassInterface(ClassInterfaceType.None)]
-        private class HTMLWindowEvents2 : StandardOleMarshalObject, /*Enforce calling back on the same thread*/
-            DHTMLWindowEvents2
-        {
-            private readonly HtmlWindow parent;
-
-            public HTMLWindowEvents2(HtmlWindow htmlWindow)
-            {
-                parent = htmlWindow;
-            }
-
-            private void FireEvent(object key, EventArgs e)
-            {
-                if (parent != null)
-                {
-                    parent.WindowShim.FireEvent(key, e);
-                }
-            }
-
-            public void onfocus(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                FireEvent(HtmlWindow.EventGotFocus, e);
-            }
-
-            public void onblur(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                FireEvent(HtmlWindow.EventLostFocus, e);
-            }
-
-            public bool onerror(string description, string urlString, int line)
-            {
-                HtmlElementErrorEventArgs e = new HtmlElementErrorEventArgs(description, urlString, line);
-                FireEvent(HtmlWindow.EventError, e);
-                return e.Handled;
-            }
-
-            public void onload(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                FireEvent(HtmlWindow.EventLoad, e);
-            }
-
-            public void onunload(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                FireEvent(HtmlWindow.EventUnload, e);
-                if (parent != null)
-                {
-                    parent.WindowShim.OnWindowUnload();
-                }
-            }
-
-            public void onscroll(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                FireEvent(HtmlWindow.EventScroll, e);
-            }
-
-            public void onresize(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                FireEvent(HtmlWindow.EventResize, e);
-            }
-
-            public bool onhelp(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public void onbeforeunload(IHTMLEventObj evtObj) { }
-
-            public void onbeforeprint(IHTMLEventObj evtObj) { }
-
-            public void onafterprint(IHTMLEventObj evtObj) { }
-        }
-
-        /// <summary>
-        ///  HtmlWindowShim - this is the glue between the DOM eventing mechanisms
-        ///        and our CLR callbacks.
-        ///
-        ///  There are two kinds of events: HTMLWindowEvents2 and IHtmlWindow3.AttachHandler style
-        ///  HTMLWindowEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
-        ///              on an instance of HTMLWindowEvents2.  The HTMLWindowEvents2 class then fires the event.
-        ///
-        ///  IHTMLWindow3.AttachHandler: MSHML calls back on an HtmlToClrEventProxy that we've created, looking
-        ///                       for a method named DISPID=0.  For each event that's subscribed, we create
-        ///                       a new HtmlToClrEventProxy, detect the callback and fire the corresponding
-        ///                       CLR event.
-        /// </summary>
-        internal class HtmlWindowShim : HtmlShim
-        {
-            private AxHost.ConnectionPointCookie cookie;
-            private HtmlWindow htmlWindow;
-
-            public HtmlWindowShim(HtmlWindow window)
-            {
-                htmlWindow = window;
-            }
-
-            public IHTMLWindow2 NativeHtmlWindow
-            {
-                get { return htmlWindow.NativeHtmlWindow; }
-            }
-
-            public override IHTMLWindow2 AssociatedWindow
-            {
-                get { return htmlWindow.NativeHtmlWindow; }
-            }
-
-            ///  Support IHtmlDocument3.AttachHandler
-            public override void AttachEventHandler(string eventName, EventHandler eventHandler)
-            {
-                // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
-                // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on
-                // our EventHandler properly.
-
-                HtmlToClrEventProxy proxy = AddEventProxy(eventName, eventHandler);
-                bool success = ((IHTMLWindow3)NativeHtmlWindow).AttachEvent(eventName, proxy);
-                Debug.Assert(success, "failed to add event");
-            }
-
-            ///  Support HTMLWindowEvents2
-            public override void ConnectToEvents()
-            {
-                if (cookie is null || !cookie.Connected)
-                {
-                    cookie = new AxHost.ConnectionPointCookie(NativeHtmlWindow,
-                                                                              new HTMLWindowEvents2(htmlWindow),
-                                                                              typeof(DHTMLWindowEvents2),
-                                                                              /*throwException*/ false);
-                    if (!cookie.Connected)
-                    {
-                        cookie = null;
-                    }
-                }
-            }
-
-            ///  Support IHTMLWindow3.DetachHandler
-            public override void DetachEventHandler(string eventName, EventHandler eventHandler)
-            {
-                HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);
-                if (proxy != null)
-                {
-                    ((IHTMLWindow3)NativeHtmlWindow).DetachEvent(eventName, proxy);
-                }
-            }
-
-            public override void DisconnectFromEvents()
-            {
-                if (cookie != null)
-                {
-                    cookie.Disconnect();
-                    cookie = null;
-                }
-            }
-
-            protected override void Dispose(bool disposing)
-            {
-                base.Dispose(disposing);
-                if (disposing)
-                {
-                    if (htmlWindow != null && htmlWindow.NativeHtmlWindow != null)
-                    {
-                        Marshal.FinalReleaseComObject(htmlWindow.NativeHtmlWindow);
-                    }
-                    htmlWindow = null;
-                }
-            }
-
-            protected override object GetEventSender()
-            {
-                return htmlWindow;
-            }
-
-            public void OnWindowUnload()
-            {
-                if (htmlWindow != null)
-                {
-                    htmlWindow.ShimManager.OnWindowUnloaded(htmlWindow);
-                }
-            }
+            add => WindowShim.AddHandler(s_eventUnload, value);
+            remove => WindowShim.RemoveHandler(s_eventUnload, value);
         }
 
         #region operators
@@ -590,6 +403,7 @@ namespace System.Windows.Forms
                 {
                     Marshal.Release(leftPtr);
                 }
+
                 if (rightPtr != IntPtr.Zero)
                 {
                     Marshal.Release(rightPtr);
@@ -602,7 +416,7 @@ namespace System.Windows.Forms
             return !(left == right);
         }
 
-        public override int GetHashCode() => htmlWindow2?.GetHashCode() ?? 0;
+        public override int GetHashCode() => _htmlWindow2?.GetHashCode() ?? 0;
 
         public override bool Equals(object obj)
         {

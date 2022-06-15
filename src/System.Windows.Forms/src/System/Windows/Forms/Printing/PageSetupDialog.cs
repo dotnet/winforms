@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Globalization;
@@ -20,15 +18,15 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionPageSetupDialog))]
     public sealed class PageSetupDialog : CommonDialog
     {
-        // If PrintDocument != null, pageSettings == printDocument.PageSettings
-        private PrintDocument _printDocument;
-        private PageSettings _pageSettings;
-        private PrinterSettings _printerSettings;
+        // If PrintDocument is not null, pageSettings == printDocument.PageSettings
+        private PrintDocument? _printDocument;
+        private PageSettings? _pageSettings;
+        private PrinterSettings? _printerSettings;
 
-        private Margins _minMargins;
+        private Margins? _minMargins;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='PageSetupDialog'/> class.
+        ///  Initializes a new instance of the <see cref="PageSetupDialog"/> class.
         /// </summary>
         public PageSetupDialog() => Reset();
 
@@ -67,18 +65,18 @@ namespace System.Windows.Forms
         public bool AllowPrinter { get; set; }
 
         /// <summary>
-        ///  Gets or sets a value indicating the <see cref='PrintDocument'/> to get page settings from.
+        ///  Gets or sets a value indicating the <see cref="PrintDocument"/> to get page settings from.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [DefaultValue(null)]
         [SRDescription(nameof(SR.PDdocumentDescr))]
-        public PrintDocument Document
+        public PrintDocument? Document
         {
             get => _printDocument;
             set
             {
                 _printDocument = value;
-                if (_printDocument != null)
+                if (_printDocument is not null)
                 {
                     _pageSettings = _printDocument.DefaultPageSettings;
                     _printerSettings = _printDocument.PrinterSettings;
@@ -102,7 +100,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [SRDescription(nameof(SR.PSDminMarginsDescr))]
-        public Margins MinMargins
+        public Margins? MinMargins
         {
             get => _minMargins;
             set => _minMargins = value ?? new Margins(0, 0, 0, 0);
@@ -116,7 +114,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.PSDpageSettingsDescr))]
-        public PageSettings PageSettings
+        public PageSettings? PageSettings
         {
             get => _pageSettings;
             set
@@ -136,7 +134,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.PSDprinterSettingsDescr))]
-        public PrinterSettings PrinterSettings
+        public PrinterSettings? PrinterSettings
         {
             get => _printerSettings;
             set
@@ -196,12 +194,12 @@ namespace System.Windows.Forms
                 flags |= Comdlg32.PSD.NONETWORKBUTTON;
             }
 
-            if (_minMargins != null)
+            if (_minMargins is not null)
             {
                 flags |= Comdlg32.PSD.MINMARGINS;
             }
 
-            if (_pageSettings.Margins != null)
+            if (_pageSettings?.Margins is not null)
             {
                 flags |= Comdlg32.PSD.MARGINS;
             }
@@ -232,23 +230,26 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='MinMargins'/>
+        ///  Indicates whether the <see cref="MinMargins"/>
         ///  property should be
         ///  persisted.
         /// </summary>
         private bool ShouldSerializeMinMargins()
         {
-            return _minMargins.Left != 0
+            return _minMargins is not null
+                && (_minMargins.Left != 0
                 || _minMargins.Right != 0
                 || _minMargins.Top != 0
-                || _minMargins.Bottom != 0;
+                || _minMargins.Bottom != 0);
         }
 
-        private static void UpdateSettings(Comdlg32.PAGESETUPDLGW data, PageSettings pageSettings,
-                                           PrinterSettings printerSettings)
+        private static void UpdateSettings(
+            Comdlg32.PAGESETUPDLGW data,
+            PageSettings pageSettings,
+            PrinterSettings? printerSettings)
         {
             pageSettings.SetHdevmode(data.hDevMode);
-            if (printerSettings != null)
+            if (printerSettings is not null)
             {
                 printerSettings.SetHdevmode(data.hDevMode);
                 printerSettings.SetHdevnames(data.hDevNames);
@@ -302,7 +303,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (MinMargins != null)
+            if (MinMargins is not null)
             {
                 Margins margins = PrinterUnitConvert.Convert(MinMargins, PrinterUnit.Display, toUnit);
                 data.rtMinMargin.left = margins.Left;
@@ -311,7 +312,7 @@ namespace System.Windows.Forms
                 data.rtMinMargin.bottom = margins.Bottom;
             }
 
-            if (_pageSettings.Margins != null)
+            if (_pageSettings.Margins is not null)
             {
                 Margins margins = PrinterUnitConvert.Convert(_pageSettings.Margins, PrinterUnit.Display, toUnit);
                 data.rtMargin.left = margins.Left;

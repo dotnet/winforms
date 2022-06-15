@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.Design.Behavior;
 
@@ -63,6 +62,7 @@ namespace System.Windows.Forms.Design
                         _currentItem = null;
                     }
                 }
+
                 if (item != null)
                 {
                     // Add new editor from the item...
@@ -71,7 +71,8 @@ namespace System.Windows.Forms.Design
                     {
                         _itemDesigner = (ToolStripItemDesigner)_designerHost.GetDesigner(_currentItem);
                     }
-                    _editorUI = (ToolStripTemplateNode)_itemDesigner.Editor;
+
+                    _editorUI = _itemDesigner.Editor;
                     // If we got an editor, position and focus it.
                     if (_editorUI != null)
                     {
@@ -93,7 +94,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  This will remove the Command for F2.
         /// </summary>
-        internal void CloseManager()
+        internal static void CloseManager()
         {
         }
 

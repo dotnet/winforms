@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Diagnostics;
-using System.IO;
 using System.Windows.Forms.IntegrationTests.Common;
 using Xunit;
 
@@ -24,6 +22,7 @@ namespace Microsoft.VisualBasic.IntegrationTests
             {
                 // Modal dialog may be closed automatically on build machine.
             }
+
             EndProcess(process);
         }
 
@@ -69,6 +68,7 @@ namespace Microsoft.VisualBasic.IntegrationTests
             {
                 // Modal dialog may be closed automatically on build machine.
             }
+
             EndProcess(process);
         }
 
@@ -84,6 +84,7 @@ namespace Microsoft.VisualBasic.IntegrationTests
             {
                 // Modal dialog may be closed automatically on build machine.
             }
+
             EndProcess(process);
         }
 

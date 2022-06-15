@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Data;
 using System.Windows.Forms;
+using System.Windows.Forms.Automation;
 
 namespace AccessibilityTests
 {
@@ -29,19 +29,25 @@ namespace AccessibilityTests
                 dr[2] = "I like" + i.ToString();
                 dt.Rows.Add(dr);
             }
+
             //this.dataGridView2.DataSource = dt;
 
             bindingSource1.DataSource = dt;
             dataGridView2.DataSource = bindingSource1;
             bindingNavigator1.BindingSource = bindingSource1;
 
-            dataGridView1.Rows.Add("abc");
-            dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[4];
-            dataGridView1.Rows[0].Cells[4].Value = "Item2";
+            dataGridView1.Rows[0].Cells[0].Value = "Rose";
+            dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
             dataGridView1.BeginEdit(false);
             DataGridViewComboBoxEditingControl cbox = dataGridView1.EditingControl as DataGridViewComboBoxEditingControl;
             if (cbox != null)
                 cbox.DroppedDown = true;
+        }
+
+        private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
+        {
+            dataGridView2.Focus();
+            bindingNavigator1.AccessibilityObject.RaiseAutomationNotification(AutomationNotificationKind.Other, AutomationNotificationProcessing.CurrentThenMostRecent, "Please enter first name now");
         }
     }
 }

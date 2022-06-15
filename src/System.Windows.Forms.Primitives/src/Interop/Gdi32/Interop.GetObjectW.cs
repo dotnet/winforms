@@ -2,15 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        private unsafe static extern int GetObjectW(HGDIOBJ h, int c, void* pv);
+        [LibraryImport(Libraries.Gdi32)]
+        private unsafe static partial int GetObjectW(HGDIOBJ h, int c, void* pv);
 
         public unsafe static bool GetObjectW<T>(HGDIOBJ h, out T @object) where T : unmanaged
         {

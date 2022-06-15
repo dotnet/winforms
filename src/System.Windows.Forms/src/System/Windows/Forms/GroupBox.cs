@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Text;
@@ -23,11 +21,11 @@ namespace System.Windows.Forms
     public partial class GroupBox : Control
     {
         private int _fontHeight = -1;
-        private Font _cachedFont;
+        private Font? _cachedFont;
         private FlatStyle _flatStyle = FlatStyle.Standard;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='GroupBox'/> class.
+        ///  Initializes a new instance of the <see cref="GroupBox"/> class.
         /// </summary>
         public GroupBox() : base()
         {
@@ -70,7 +68,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler AutoSizeChanged
+        new public event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -89,15 +87,12 @@ namespace System.Windows.Forms
             get => GetAutoSizeMode();
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (GetAutoSizeMode() != value)
                 {
                     SetAutoSizeMode(value);
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         // DefaultLayout does not keep anchor information until it needs to.  When
                         // AutoSize became a common property, we could no longer blindly call into
@@ -106,6 +101,7 @@ namespace System.Windows.Forms
                         {
                             ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
                         }
+
                         LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.AutoSize);
                     }
                 }
@@ -148,7 +144,7 @@ namespace System.Windows.Forms
         protected override Size DefaultSize => new Size(200, 100);
 
         /// <summary>
-        ///  Gets a rectangle that represents the dimensions of the <see cref='GroupBox'/>
+        ///  Gets a rectangle that represents the dimensions of the <see cref="GroupBox"/>
         /// </summary>
         public override Rectangle DisplayRectangle
         {
@@ -191,10 +187,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_flatStyle != value)
                 {
@@ -228,7 +221,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets a value indicating whether the user may press the TAB key to give the focus to the
-        ///  <see cref='GroupBox'/>.
+        ///  <see cref="GroupBox"/>.
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -240,7 +233,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public event EventHandler TabStopChanged
+        new public event EventHandler? TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
@@ -252,7 +245,7 @@ namespace System.Windows.Forms
             get => base.Text;
             set
             {
-                // the GroupBox controls immediately draws when teh WM_SETTEXT comes through, but
+                // the GroupBox controls immediately draws when the WM_SETTEXT comes through, but
                 // does so in the wrong font, so we suspend that behavior, and then
                 // invalidate.
                 bool suspendRedraw = Visible;
@@ -260,17 +253,19 @@ namespace System.Windows.Forms
                 {
                     if (suspendRedraw && IsHandleCreated)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(false));
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
                     }
+
                     base.Text = value;
                 }
                 finally
                 {
                     if (suspendRedraw && IsHandleCreated)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(true));
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
                     }
                 }
+
                 Invalidate(true);
             }
         }
@@ -297,7 +292,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public new event EventHandler Click
+        public new event EventHandler? Click
         {
             add => base.Click += value;
             remove => base.Click -= value;
@@ -306,7 +301,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public new event MouseEventHandler MouseClick
+        public new event MouseEventHandler? MouseClick
         {
             add => base.MouseClick += value;
             remove => base.MouseClick -= value;
@@ -315,7 +310,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public new event EventHandler DoubleClick
+        public new event EventHandler? DoubleClick
         {
             add => base.DoubleClick += value;
             remove => base.DoubleClick -= value;
@@ -324,7 +319,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public new event MouseEventHandler MouseDoubleClick
+        public new event MouseEventHandler? MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
             remove => base.MouseDoubleClick -= value;
@@ -333,7 +328,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public new event KeyEventHandler KeyUp
+        public new event KeyEventHandler? KeyUp
         {
             add => base.KeyUp += value;
             remove => base.KeyUp -= value;
@@ -342,7 +337,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public new event KeyEventHandler KeyDown
+        public new event KeyEventHandler? KeyDown
         {
             add => base.KeyDown += value;
             remove => base.KeyDown -= value;
@@ -351,7 +346,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public new event KeyPressEventHandler KeyPress
+        public new event KeyPressEventHandler? KeyPress
         {
             add => base.KeyPress += value;
             remove => base.KeyPress -= value;
@@ -360,7 +355,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public new event MouseEventHandler MouseDown
+        public new event MouseEventHandler? MouseDown
         {
             add => base.MouseDown += value;
             remove => base.MouseDown -= value;
@@ -369,7 +364,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public new event MouseEventHandler MouseUp
+        public new event MouseEventHandler? MouseUp
         {
             add => base.MouseUp += value;
             remove => base.MouseUp -= value;
@@ -378,7 +373,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public new event MouseEventHandler MouseMove
+        public new event MouseEventHandler? MouseMove
         {
             add => base.MouseMove += value;
             remove => base.MouseMove -= value;
@@ -387,7 +382,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public new event EventHandler MouseEnter
+        public new event EventHandler? MouseEnter
         {
             add => base.MouseEnter += value;
             remove => base.MouseEnter -= value;
@@ -396,7 +391,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public new event EventHandler MouseLeave
+        public new event EventHandler? MouseLeave
         {
             add => base.MouseLeave += value;
             remove => base.MouseLeave -= value;
@@ -518,11 +513,11 @@ namespace System.Windows.Forms
                 }
 
                 using var hfont = GdiCache.GetHFONT(Font);
-                textSize = hdc.MeasureText(Text, hfont, new Size(textRectangle.Width, int.MaxValue), flags);
+                textSize = hdc.HDC.MeasureText(Text, hfont, new Size(textRectangle.Width, int.MaxValue), (TextFormatFlags)flags);
 
                 if (Enabled)
                 {
-                    hdc.DrawText(Text, hfont, textRectangle, ForeColor, flags);
+                    hdc.HDC.DrawText(Text, hfont, textRectangle, ForeColor, (TextFormatFlags)flags);
                 }
                 else
                 {
@@ -631,18 +626,21 @@ namespace System.Windows.Forms
                 SelectNextControl(null, true, true, true, false);
                 return true;
             }
+
             return false;
         }
+
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
             if (factor.Width != 1F && factor.Height != 1F)
             {
                 // Make sure when we're scaling by non-unity to clear the font cache
-                // as the font has likely changed, but we dont know it yet as OnFontChanged has yet to
+                // as the font has likely changed, but we don't know it yet as OnFontChanged has yet to
                 // be called on us by our parent.
                 _fontHeight = -1;
                 _cachedFont = null;
             }
+
             base.ScaleControl(factor, specified);
         }
 
@@ -658,7 +656,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmEraseBkgnd(ref Message m)
         {
-            if (m.WParam == IntPtr.Zero)
+            if (m.WParamInternal == 0)
             {
                 return;
             }
@@ -670,18 +668,18 @@ namespace System.Windows.Forms
 
             if (backColor.HasTransparency())
             {
-                using Graphics graphics = Graphics.FromHdcInternal(m.WParam);
+                using Graphics graphics = Graphics.FromHdcInternal(m.WParamInternal);
                 using var brush = backColor.GetCachedSolidBrushScope();
                 graphics.FillRectangle(brush, rect);
             }
             else
             {
-                var hdc = (Gdi32.HDC)m.WParam;
+                var hdc = (Gdi32.HDC)m.WParamInternal;
                 using var hbrush = new Gdi32.CreateBrushScope(backColor);
                 User32.FillRect(hdc, ref rect, hbrush);
             }
 
-            m.Result = (IntPtr)1;
+            m.ResultInternal = 1;
         }
 
         protected override void WndProc(ref Message m)
@@ -692,7 +690,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            switch ((User32.WM)m.Msg)
+            switch (m.MsgInternal)
             {
                 case User32.WM.ERASEBKGND:
                 case User32.WM.PRINTCLIENT:
@@ -704,11 +702,12 @@ namespace System.Windows.Forms
                     // Force MSAA to always treat a group box as a custom window. This ensures its child controls
                     // will always be exposed through MSAA. Reason: When FlatStyle=System, we map down to the Win32
                     // "Button" window class to get OS group box rendering; but the OS does not expose the children
-                    // of buttons to MSAA (beacuse it assumes buttons won't have children).
-                    if (unchecked((int)(long)m.LParam) == User32.OBJID.QUERYCLASSNAMEIDX)
+                    // of buttons to MSAA (because it assumes buttons won't have children).
+                    if (m.LParamInternal == User32.OBJID.QUERYCLASSNAMEIDX)
                     {
-                        m.Result = IntPtr.Zero;
+                        m.ResultInternal = 0;
                     }
+
                     break;
                 default:
                     base.WndProc(ref m);

@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FlowDirection))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FlowDirection))]
         public void FlowLayoutSettings_FlowDirection_SetInvalidValue_ThrowsInvalidEnumArgumentException(FlowDirection value)
         {
             using var control = new ToolStrip
@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void FlowLayoutSettings_SetFlowBreak_Invoke_GetFlowBreakReturnsExpected(bool value)
         {
             using var control = new ToolStrip
@@ -191,6 +191,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("FlowBreak", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -228,7 +229,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void FlowLayoutSettings_SetFlowBreak_NullChild_ThrowsArgumentNullException(bool value)
         {
             using var control = new ToolStrip
@@ -240,7 +241,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void FlowLayoutSettings_SetFlowBreak_InvalidChild_ThrowsNotSupportedException(bool value)
         {
             using var control = new ToolStrip

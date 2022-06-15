@@ -1,0 +1,10 @@
+<!--
+    This props file comes from dotnet/winforms. It gets ingested by dotnet/wpf and processed by
+    packaging/Microsoft.NET.Sdk.WindowsDesktop project.
+    
+    It is referenced via Microsoft.NET.Sdk.WindowsDesktop/targets/Microsoft.NET.Sdk.WindowsDesktop.targets.
+   -->
+
+<Project>
+
+</Project>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
-  <file datatype="xml" source-language="en" target-language="zh-HANT" original="../PrintPreviewDialog.resx">
+  <file datatype="xml" source-language="en" target-language="zh-Hant" original="../PrintPreviewDialog.resx">
     <body>
       <trans-unit id="$this.Text">
         <source>Print preview</source>
@@ -43,13 +43,13 @@
         <note />
       </trans-unit>
       <trans-unit id="fourpagesToolStripButton.AccessibleName">
-        <source>Four pages</source>
-        <target state="translated">四頁</target>
+        <source>Four pages (Ctrl+4)</source>
+        <target state="translated">四頁 (Ctrl+4)</target>
         <note />
       </trans-unit>
       <trans-unit id="fourpagesToolStripButton.Text">
-        <source>Four pages</source>
-        <target state="translated">四頁</target>
+        <source>Four pages (Ctrl+4)</source>
+        <target state="translated">四頁 (Ctrl+4)</target>
         <note />
       </trans-unit>
       <trans-unit id="onepageToolStripButton.AccessibleDescription">
@@ -58,13 +58,13 @@
         <note />
       </trans-unit>
       <trans-unit id="onepageToolStripButton.AccessibleName">
-        <source>One page</source>
-        <target state="translated">一頁</target>
+        <source>One page (Ctrl+1)</source>
+        <target state="translated">一頁 (Ctrl+1)</target>
         <note />
       </trans-unit>
       <trans-unit id="onepageToolStripButton.Text">
-        <source>One page</source>
-        <target state="translated">一頁</target>
+        <source>One page (Ctrl+1)</source>
+        <target state="translated">一頁 (Ctrl+1)</target>
         <note />
       </trans-unit>
       <trans-unit id="pageCounter.AccessibleDescription">
@@ -108,13 +108,13 @@
         <note />
       </trans-unit>
       <trans-unit id="sixpagesToolStripButton.AccessibleName">
-        <source>Six pages</source>
-        <target state="translated">六頁</target>
+        <source>Six pages (Ctrl+5)</source>
+        <target state="translated">六頁 (Ctrl+5)</target>
         <note />
       </trans-unit>
       <trans-unit id="sixpagesToolStripButton.Text">
-        <source>Six pages</source>
-        <target state="translated">六頁</target>
+        <source>Six pages (Ctrl+5)</source>
+        <target state="translated">六頁 (Ctrl+5)</target>
         <note />
       </trans-unit>
       <trans-unit id="threepagesToolStripButton.AccessibleDescription">
@@ -123,13 +123,13 @@
         <note />
       </trans-unit>
       <trans-unit id="threepagesToolStripButton.AccessibleName">
-        <source>Three pages</source>
-        <target state="translated">三頁</target>
+        <source>Three pages (Ctrl+3)</source>
+        <target state="translated">三頁 (Ctrl+3)</target>
         <note />
       </trans-unit>
       <trans-unit id="threepagesToolStripButton.Text">
-        <source>Three pages</source>
-        <target state="translated">三頁</target>
+        <source>Three pages (Ctrl+3)</source>
+        <target state="translated">三頁 (Ctrl+3)</target>
         <note />
       </trans-unit>
       <trans-unit id="toolStrip1.AccessibleName">
@@ -268,13 +268,13 @@
         <note />
       </trans-unit>
       <trans-unit id="twopagesToolStripButton.AccessibleName">
-        <source>Two pages</source>
-        <target state="translated">兩頁</target>
+        <source>Two pages (Ctrl+2)</source>
+        <target state="translated">兩頁 (Ctrl+2)</target>
         <note />
       </trans-unit>
       <trans-unit id="twopagesToolStripButton.Text">
-        <source>Two pages</source>
-        <target state="translated">兩頁</target>
+        <source>Two pages (Ctrl+2)</source>
+        <target state="translated">兩頁 (Ctrl+2)</target>
         <note />
       </trans-unit>
       <trans-unit id="zoomToolStripSplitButton.AccessibleDescription">

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -144,10 +143,12 @@ namespace System.Windows.Forms.Design
             // listViewCannedMasks
             //
             resources.ApplyResources(_listViewCannedMasks, "listViewCannedMasks");
-            _listViewCannedMasks.Columns.AddRange(new ColumnHeader[] {
+            _listViewCannedMasks.Columns.AddRange(new ColumnHeader[]
+            {
             _maskDescriptionHeader,
             _dataFormatHeader,
-            _validatingTypeHeader});
+            _validatingTypeHeader
+            });
             _listViewCannedMasks.FullRowSelect = true;
             _listViewCannedMasks.HideSelection = false;
             _listViewCannedMasks.Margin = new Padding(0, 3, 0, 3);
@@ -301,7 +302,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// Adds the default mask descriptors to the mask description list.
-        /// We need to add the deafult descriptors explicitly because the DiscoverMaskDescriptors method only adds
+        /// We need to add the default descriptors explicitly because the DiscoverMaskDescriptors method only adds
         /// public descriptors and these are internal.
         /// </summary>
         private void AddDefaultMaskDescriptors(CultureInfo culture)
@@ -442,6 +443,7 @@ namespace System.Windows.Forms.Design
             int maskDexIndex = GetMaskDescriptorIndex(maskDex);
             SetSelectedMaskDescriptor(maskDexIndex);
         }
+
         private void SetSelectedMaskDescriptor(int maskDexIndex)
         {
             if (maskDexIndex < 0 || _listViewCannedMasks.Items.Count <= maskDexIndex)
@@ -482,7 +484,7 @@ namespace System.Windows.Forms.Design
             // Since we need to pre-process each item before inserting it in the ListView, it is better to remove all items
             // from it first and then add the sorted ones back (no replace).  Stop redrawing while we change the list.
 
-            User32.SendMessageW(_listViewCannedMasks, User32.WM.SETREDRAW, PARAM.FromBool(false));
+            User32.SendMessageW(_listViewCannedMasks, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
 
             try
             {
@@ -516,7 +518,7 @@ namespace System.Windows.Forms.Design
             finally
             {
                 // Resume redraw.
-                User32.SendMessageW(_listViewCannedMasks, User32.WM.SETREDRAW, PARAM.FromBool(true));
+                User32.SendMessageW(_listViewCannedMasks, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
                 _listViewCannedMasks.Invalidate();
             }
         }
@@ -528,6 +530,7 @@ namespace System.Windows.Forms.Design
         {
             InsertMaskDescriptor(index, maskDescriptor, true);
         }
+
         private void InsertMaskDescriptor(int index, MaskDescriptor maskDescriptor, bool validateDescriptor)
         {
             string errorMessage;
@@ -603,7 +606,7 @@ namespace System.Windows.Forms.Design
             }
 
             int selectedIndex = _listViewCannedMasks.SelectedIndices[0];
-            MaskDescriptor maskDescriptor = (MaskDescriptor)_maskDescriptors[selectedIndex];
+            MaskDescriptor maskDescriptor = _maskDescriptors[selectedIndex];
 
             // If one of the canned mask descriptors chosen, update test control.
             if (maskDescriptor != _customMaskDescriptor)
@@ -630,7 +633,7 @@ namespace System.Windows.Forms.Design
             _errorProvider.SetError(_maskedTextBox, MaskedTextBoxDesigner.GetMaskInputRejectedErrorMessage(e));
         }
 
-        private string HelpTopic
+        private static string HelpTopic
         {
             get
             {
@@ -639,9 +642,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///    <para>
-        ///   Called when the help button is clicked.
-        ///    </para>
+        ///  <para>
+        ///  Called when the help button is clicked.
+        ///  </para>
         /// </summary>
         private void ShowHelp()
         {

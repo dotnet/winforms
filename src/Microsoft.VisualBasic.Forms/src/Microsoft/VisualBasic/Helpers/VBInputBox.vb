@@ -2,10 +2,9 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System.Globalization
-
 Imports System.ComponentModel
 Imports System.Drawing
+Imports System.Globalization
 Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.CompilerServices

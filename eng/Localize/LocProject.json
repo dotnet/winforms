@@ -1,0 +1,174 @@
+{
+    "Projects":  [
+                     {
+                         "LocItems":  [
+                                          {
+                                              "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsApplication-CSharp\\.template.config\\localize\\templatestrings.json",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsApplication-CSharp\\.template.config\\localize\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsApplication-VisualBasic\\.template.config\\localize\\templatestrings.json",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsApplication-VisualBasic\\.template.config\\localize\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsControlLibrary-CSharp\\.template.config\\localize\\templatestrings.json",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsControlLibrary-CSharp\\.template.config\\localize\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsControlLibrary-VisualBasic\\.template.config\\localize\\templatestrings.json",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsControlLibrary-VisualBasic\\.template.config\\localize\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsLibrary-CSharp\\.template.config\\localize\\templatestrings.json",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsLibrary-CSharp\\.template.config\\localize\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsLibrary-VisualBasic\\.template.config\\localize\\templatestrings.json",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsLibrary-VisualBasic\\.template.config\\localize\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsApplication-CSharp\\.template.config\\en\\strings.json",
+                                              "CopyOption":  "LangIDOnPath",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsApplication-CSharp\\.template.config\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsApplication-VisualBasic\\.template.config\\en\\strings.json",
+                                              "CopyOption":  "LangIDOnPath",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsApplication-VisualBasic\\.template.config\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsControlLibrary-CSharp\\.template.config\\en\\strings.json",
+                                              "CopyOption":  "LangIDOnPath",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsControlLibrary-CSharp\\.template.config\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsControlLibrary-VisualBasic\\.template.config\\en\\strings.json",
+                                              "CopyOption":  "LangIDOnPath",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsControlLibrary-VisualBasic\\.template.config\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsLibrary-CSharp\\.template.config\\en\\strings.json",
+                                              "CopyOption":  "LangIDOnPath",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsLibrary-CSharp\\.template.config\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsLibrary-VisualBasic\\.template.config\\en\\strings.json",
+                                              "CopyOption":  "LangIDOnPath",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsLibrary-VisualBasic\\.template.config\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\Microsoft.VisualBasic.Forms\\src\\Resources\\Microsoft\\VisualBasic\\CompilerServices\\xlf\\VBInputBox.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\Microsoft.VisualBasic.Forms\\src\\Resources\\Microsoft\\VisualBasic\\CompilerServices\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\Microsoft.VisualBasic.Forms\\src\\Resources\\Microsoft\\VisualBasic\\MyServices\\Internal\\xlf\\ProgressDialog.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\Microsoft.VisualBasic.Forms\\src\\Resources\\Microsoft\\VisualBasic\\MyServices\\Internal\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\Microsoft.VisualBasic.Forms\\src\\Resources\\xlf\\SR.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\Microsoft.VisualBasic.Forms\\src\\Resources\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms\\src\\Resources\\System\\Windows\\Forms\\xlf\\mdiwindowdialog.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms\\src\\Resources\\System\\Windows\\Forms\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms\\src\\Resources\\System\\Windows\\Forms\\xlf\\PrintPreviewDialog.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms\\src\\Resources\\System\\Windows\\Forms\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms\\src\\Resources\\xlf\\SR.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms\\src\\Resources\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms\\tests\\IntegrationTests\\WinformsControlsTest\\xlf\\ListViewTest.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms\\tests\\IntegrationTests\\WinformsControlsTest\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms\\tests\\IntegrationTests\\WinformsControlsTest\\xlf\\Panels.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms\\tests\\IntegrationTests\\WinformsControlsTest\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms\\tests\\IntegrationTests\\WinformsControlsTest\\xlf\\TreeViewTest.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms\\tests\\IntegrationTests\\WinformsControlsTest\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Analyzers\\src\\Resources\\xlf\\SR.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Analyzers\\src\\Resources\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Analyzers.CSharp\\src\\Resources\\xlf\\SR.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Analyzers.CSharp\\src\\Resources\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\System\\ComponentModel\\Design\\xlf\\BinaryEditor.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\System\\ComponentModel\\Design\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\BorderSidesEditor.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\CollectionEditor.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\FormatControl.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\LinkAreaEditor.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\MaskDesignerDialog.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\ShortcutKeysEditor.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\SR.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\StringCollectionEditor.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Primitives\\src\\Resources\\xlf\\SR.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Primitives\\src\\Resources\\xlf\\"
+                                          }
+                                      ],
+                         "LanguageSet":  "VS_Main_Languages"
+                     }
+                 ]
+}

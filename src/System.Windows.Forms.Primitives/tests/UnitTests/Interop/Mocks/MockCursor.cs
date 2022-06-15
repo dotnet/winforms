@@ -29,6 +29,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
                 {
                     DestroyCursor(_handle);
                 }
+
                 _handle = IntPtr.Zero;
             }
         }
@@ -41,6 +42,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
                 {
                     throw new ObjectDisposedException(nameof(MockCursor));
                 }
+
                 return _handle;
             }
         }

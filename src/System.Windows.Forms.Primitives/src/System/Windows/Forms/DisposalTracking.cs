@@ -39,7 +39,8 @@ namespace System
 
             ~Tracker()
             {
-                Debug.Fail($"Did not dispose {GetType().Name}. Originating stack:\n{_originatingStack}");
+                // Not asserting here as assertions take down test runs.
+                throw new InvalidOperationException($"Did not dispose {GetType().Name}. Originating stack:\n{_originatingStack}");
             }
         }
     }

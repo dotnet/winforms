@@ -2,15 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
     public class DataGridViewCellCancelEventArgs : CancelEventArgs
     {
-        internal DataGridViewCellCancelEventArgs(DataGridViewCell dataGridViewCell) : this(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex)
+        internal DataGridViewCellCancelEventArgs(DataGridViewCell dataGridViewCell)
+            : this(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex)
         {
         }
 
@@ -20,6 +19,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
+
             if (rowIndex < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));

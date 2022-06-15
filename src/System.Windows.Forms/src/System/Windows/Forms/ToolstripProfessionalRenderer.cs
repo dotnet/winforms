@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.Layout;
@@ -35,14 +33,15 @@ namespace System.Windows.Forms
 
         private const int DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE = 1;
         private Padding scaledDropDownMenuItemPaintPadding = new Padding(DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE + 1, 0, DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE, 0);
-        private readonly ProfessionalColorTable professionalColorTable;
+        private readonly ProfessionalColorTable? professionalColorTable;
         private bool roundedEdges = true;
-        private ToolStripRenderer toolStripHighContrastRenderer;
-        private ToolStripRenderer toolStripLowResolutionRenderer;
+        private ToolStripRenderer? toolStripHighContrastRenderer;
+        private ToolStripRenderer? toolStripLowResolutionRenderer;
 
         public ToolStripProfessionalRenderer()
         {
         }
+
         internal ToolStripProfessionalRenderer(bool isDefault) : base(isDefault)
         {
         }
@@ -60,11 +59,12 @@ namespace System.Windows.Forms
                 {
                     return ProfessionalColors.ColorTable;
                 }
+
                 return professionalColorTable;
             }
         }
 
-        internal override ToolStripRenderer RendererOverride
+        internal override ToolStripRenderer? RendererOverride
         {
             get
             {
@@ -72,10 +72,12 @@ namespace System.Windows.Forms
                 {
                     return HighContrastRenderer;
                 }
+
                 if (DisplayInformation.LowResolution)
                 {
                     return LowResolutionRenderer;
                 }
+
                 return null;
             }
         }
@@ -88,6 +90,7 @@ namespace System.Windows.Forms
                 {
                     toolStripHighContrastRenderer = new ToolStripHighContrastRenderer(/*renderLikeSystem*/false);
                 }
+
                 return toolStripHighContrastRenderer;
             }
         }
@@ -100,6 +103,7 @@ namespace System.Windows.Forms
                 {
                     toolStripLowResolutionRenderer = new ToolStripProfessionalLowResolutionRenderer();
                 }
+
                 return toolStripLowResolutionRenderer;
             }
         }
@@ -123,7 +127,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderToolStripBackground(e);
                 return;
@@ -154,10 +158,15 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e) {
-            ScaleObjectSizesIfNeeded(e.ToolStrip.DeviceDpi);
+        protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e)
+        {
+            if (e.ToolStrip is not null)
+            {
+                ScaleObjectSizesIfNeeded(e.ToolStrip.DeviceDpi);
+            }
 
-            if (RendererOverride != null) {
+            if (RendererOverride is not null)
+            {
                 base.OnRenderOverflowButtonBackground(e);
                 return;
             }
@@ -166,12 +175,12 @@ namespace System.Windows.Forms
             Graphics g = e.Graphics;
 
             // fill in the background colors
-            bool rightToLeft = (item.RightToLeft == RightToLeft.Yes);
+            bool rightToLeft = item.RightToLeft == RightToLeft.Yes;
             RenderOverflowBackground(e, rightToLeft);
 
-            bool horizontal = (e.ToolStrip.Orientation == Orientation.Horizontal);
+            bool horizontal = e.ToolStrip is not null && e.ToolStrip.Orientation == Orientation.Horizontal;
 
-            Rectangle overflowArrowRect = Rectangle.Empty;
+            Rectangle overflowArrowRect;
             if (rightToLeft)
             {
                 overflowArrowRect = new Rectangle(0, item.Height - overflowArrowOffsetY, overflowArrowWidth, overflowArrowHeight);
@@ -181,7 +190,7 @@ namespace System.Windows.Forms
                 overflowArrowRect = new Rectangle(item.Width - overflowButtonWidth, item.Height - overflowArrowOffsetY, overflowArrowWidth, overflowArrowHeight);
             }
 
-            ArrowDirection direction = (horizontal) ? ArrowDirection.Down : ArrowDirection.Right;
+            ArrowDirection direction = horizontal ? ArrowDirection.Down : ArrowDirection.Right;
 
             // in RTL the white highlight goes BEFORE the black triangle.
             int rightToLeftShift = (rightToLeft && horizontal) ? -1 : 1;
@@ -197,7 +206,7 @@ namespace System.Windows.Forms
             // draw lines
             if (horizontal)
             {
-                rightToLeftShift = (rightToLeft) ? -2 : 0;
+                rightToLeftShift = rightToLeft ? -2 : 0;
                 // width of the both lines is 1 pixel and lines are drawn next to each other, this the highlight line is 1 pixel below the black line
                 g.DrawLine(SystemPens.ControlText,
                     middle.X - Offset2X,
@@ -227,7 +236,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderDropDownButtonBackground(e);
                 return;
@@ -247,7 +256,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderSeparator(e);
                 return;
@@ -258,7 +267,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderSplitButtonBackground(e);
                 return;
@@ -272,9 +281,9 @@ namespace System.Windows.Forms
             }
 
             Rectangle bounds = new Rectangle(Point.Empty, item.Size);
-            if (item.BackgroundImage != null)
+            if (item.BackgroundImage is not null)
             {
-                Rectangle fillRect = (item.Selected) ? item.ContentRectangle : bounds;
+                Rectangle fillRect = item.Selected ? item.ContentRectangle : bounds;
                 ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, bounds, fillRect);
             }
 
@@ -300,6 +309,7 @@ namespace System.Windows.Forms
             {
                 RenderPressedGradient(e.Graphics, bounds);
             }
+
             Rectangle dropDownRect = item.DropDownButtonBounds;
 
             if (buttonPressedOrSelected && !item.Pressed)
@@ -313,20 +323,23 @@ namespace System.Windows.Forms
 
         protected override void OnRenderToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderToolStripStatusLabelBackground(e);
                 return;
             }
 
             RenderLabelInternal(e);
-            ToolStripStatusLabel item = e.Item as ToolStripStatusLabel;
-            ControlPaint.DrawBorder3D(e.Graphics, new Rectangle(0, 0, item.Width, item.Height), item.BorderStyle, (Border3DSide)item.BorderSides);
+            ToolStripStatusLabel? item = e.Item as ToolStripStatusLabel;
+            if (item is not null)
+            {
+                ControlPaint.DrawBorder3D(e.Graphics, new Rectangle(0, 0, item.Width, item.Height), item.BorderStyle, (Border3DSide)item.BorderSides);
+            }
         }
 
         protected override void OnRenderLabelBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderLabelBackground(e);
                 return;
@@ -337,32 +350,32 @@ namespace System.Windows.Forms
 
         protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderButtonBackground(e);
                 return;
             }
 
-            ToolStripButton item = e.Item as ToolStripButton;
+            ToolStripButton? item = e.Item as ToolStripButton;
             Graphics g = e.Graphics;
-            Rectangle bounds = new Rectangle(Point.Empty, item.Size);
+            Rectangle bounds = new Rectangle(Point.Empty, item?.Size ?? Size.Empty);
 
-            if (item.CheckState == CheckState.Unchecked)
+            if (item is not null && item.CheckState == CheckState.Unchecked)
             {
                 RenderItemInternal(e, useHotBorder: true);
             }
             else
             {
-                Rectangle fillRect = (item.Selected) ? item.ContentRectangle : bounds;
+                Rectangle fillRect = item is not null && item.Selected ? item.ContentRectangle : bounds;
 
-                if (item.BackgroundImage != null)
+                if (item?.BackgroundImage is not null)
                 {
                     ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, bounds, fillRect);
                 }
 
                 if (UseSystemColors)
                 {
-                    if (item.Selected)
+                    if (item is not null && item.Selected)
                     {
                         RenderPressedButtonFill(g, bounds);
                     }
@@ -376,7 +389,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (item.Selected)
+                    if (item is not null && item.Selected)
                     {
                         RenderPressedButtonFill(g, bounds);
                     }
@@ -393,7 +406,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderToolStripBorder(e);
                 return;
@@ -452,7 +465,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // Draw 1PX edging to round off the toolStrip
-                        Rectangle edging = Rectangle.Empty;
+                        Rectangle edging;
                         if (toolStrip.Orientation == Orientation.Horizontal)
                         {
                             edging = new Rectangle(bounds.Width - 1, 3, 1, bounds.Height - 3);
@@ -461,6 +474,7 @@ namespace System.Windows.Forms
                         {
                             edging = new Rectangle(3, bounds.Height - 1, bounds.Width - 3, bounds.Height - 1);
                         }
+
                         ScaleObjectSizesIfNeeded(toolStrip.DeviceDpi);
                         FillWithDoubleGradient(ColorTable.OverflowButtonGradientBegin, ColorTable.OverflowButtonGradientMiddle, ColorTable.OverflowButtonGradientEnd, e.Graphics, edging, iconWellGradientWidth, iconWellGradientWidth, LinearGradientMode.Vertical, /*flipHorizontal=*/false);
                         RenderToolStripCurve(e);
@@ -471,7 +485,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderGrip(ToolStripGripRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderGrip(e);
                 return;
@@ -497,7 +511,7 @@ namespace System.Windows.Forms
 
                 Rectangle[] shadowRects = new Rectangle[numRectangles];
                 int startY = gripPadding + 1 + yOffset;
-                int startX = (width / 2);
+                int startX = width / 2;
 
                 for (int i = 0; i < numRectangles; i++)
                 {
@@ -509,7 +523,7 @@ namespace System.Windows.Forms
                 }
 
                 // in RTL the GripLight rects should paint to the left of the GripDark rects.
-                int xOffset = (rightToLeft) ? 1 : -1;
+                int xOffset = rightToLeft ? 1 : -1;
 
                 if (rightToLeft)
                 {
@@ -535,7 +549,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderMenuItemBackground(e);
                 return;
@@ -555,7 +569,8 @@ namespace System.Windows.Forms
                 return; // no highlights are painted behind a system menu item
             }
 
-            if (item.IsOnDropDown) {
+            if (item.IsOnDropDown)
+            {
                 ScaleObjectSizesIfNeeded(item.DeviceDpi);
 
                 bounds = LayoutUtils.DeflateRect(bounds, scaledDropDownMenuItemPaintPadding);
@@ -590,7 +605,7 @@ namespace System.Windows.Forms
                 {
                     Rectangle fillRect = bounds;
 
-                    if (item.BackgroundImage != null)
+                    if (item.BackgroundImage is not null)
                     {
                         ControlPaint.DrawBackgroundImage(
                             g,
@@ -600,7 +615,7 @@ namespace System.Windows.Forms
                             bounds,
                             fillRect);
                     }
-                    else if (item.Owner != null && item.BackColor != item.Owner.BackColor)
+                    else if (item.Owner is not null && item.BackColor != item.Owner.BackColor)
                     {
                         using var brush = item.BackColor.GetCachedSolidBrushScope();
                         g.FillRectangle(brush, fillRect);
@@ -647,11 +662,11 @@ namespace System.Windows.Forms
                 {
                     Rectangle fillRect = bounds;
 
-                    if (item.BackgroundImage != null)
+                    if (item.BackgroundImage is not null)
                     {
                         ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, bounds, fillRect);
                     }
-                    else if (item.Owner != null && item.BackColor != item.Owner.BackColor)
+                    else if (item.Owner is not null && item.BackColor != item.Owner.BackColor)
                     {
                         using var brush = item.BackColor.GetCachedSolidBrushScope();
                         g.FillRectangle(brush, fillRect);
@@ -662,17 +677,17 @@ namespace System.Windows.Forms
 
         protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderArrow(e);
                 return;
             }
 
-            ToolStripItem item = e.Item;
+            ToolStripItem? item = e.Item;
 
             if (item is ToolStripDropDownItem)
             {
-                e.DefaultArrowColor = (item.Enabled) ? SystemColors.ControlText : SystemColors.ControlDark;
+                e.DefaultArrowColor = item.Enabled ? SystemColors.ControlText : SystemColors.ControlDark;
             }
 
             base.OnRenderArrow(e);
@@ -680,7 +695,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderImageMargin(ToolStripRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderImageMargin(e);
                 return;
@@ -701,7 +716,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderItemText(e);
                 return;
@@ -717,7 +732,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderItemCheck(e);
                 return;
@@ -726,21 +741,22 @@ namespace System.Windows.Forms
             RenderCheckBackground(e);
             base.OnRenderItemCheck(e);
         }
+
         protected override void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderItemImage(e);
                 return;
             }
 
             Rectangle imageRect = e.ImageRectangle;
-            Image image = e.Image;
+            Image? image = e.Image;
 
             if (e.Item is ToolStripMenuItem)
             {
-                ToolStripMenuItem item = e.Item as ToolStripMenuItem;
-                if (item.CheckState != CheckState.Unchecked)
+                ToolStripMenuItem? item = e.Item as ToolStripMenuItem;
+                if (item is not null && item.CheckState != CheckState.Unchecked)
                 {
                     if (item.ParentInternal is ToolStripDropDownMenu dropDownMenu && !dropDownMenu.ShowCheckMargin && dropDownMenu.ShowImageMargin)
                     {
@@ -749,7 +765,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (imageRect != Rectangle.Empty && image != null)
+            if (imageRect != Rectangle.Empty && image is not null)
             {
                 if (!e.Item.Enabled)
                 {
@@ -757,7 +773,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                // Since office images dont scoot one px we have to override all painting but enabled = false;
+                // Since office images don't scoot one px we have to override all painting but enabled = false;
                 if (e.Item.ImageScaling == ToolStripItemImageScaling.None)
                 {
                     e.Graphics.DrawImage(image, imageRect, new Rectangle(Point.Empty, imageRect.Size), GraphicsUnit.Pixel);
@@ -771,7 +787,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderToolStripPanelBackground(ToolStripPanelRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderToolStripPanelBackground(e);
                 return;
@@ -783,7 +799,8 @@ namespace System.Windows.Forms
             {
                 return;
             }
-            // dont paint background effects
+
+            // don't paint background effects
             e.Handled = true;
 
             RenderBackgroundGradient(e.Graphics, toolStripPanel, ColorTable.ToolStripPanelGradientBegin, ColorTable.ToolStripPanelGradientEnd);
@@ -791,7 +808,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderToolStripContentPanelBackground(ToolStripContentPanelRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 base.OnRenderToolStripContentPanelBackground(e);
                 return;
@@ -809,7 +826,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // dont paint background effects
+            // don't paint background effects
             e.Handled = true;
 
             e.Graphics.Clear(ColorTable.ToolStripContentPanelGradientEnd);
@@ -820,26 +837,25 @@ namespace System.Windows.Forms
         #region PrivatePaintHelpers
 
         // consider make public
-        internal override Region GetTransparentRegion(ToolStrip toolStrip)
+        internal override Region? GetTransparentRegion(ToolStrip toolStrip)
         {
             if (toolStrip is ToolStripDropDown || toolStrip is MenuStrip || toolStrip is StatusStrip)
             {
                 return null;
             }
+
             if (!RoundedEdges)
             {
                 return null;
             }
+
             Rectangle bounds = new Rectangle(Point.Empty, toolStrip.Size);
 
             // Render curve
             // eat away at the corners by drawing the parent background
-            //
-            if (toolStrip.ParentInternal != null)
+            if (toolStrip.ParentInternal is not null)
             {
-                //
                 // Paint pieces of the parent here to give toolStrip rounded effect
-                //
                 Point topLeft = Point.Empty;
                 Point topRight = new Point(bounds.Width - 1, 0);
                 Point bottomLeft = new Point(0, bounds.Height - 1);
@@ -880,6 +896,7 @@ namespace System.Windows.Forms
 
                 return parentRegionToPaint;
             }
+
             return null;
         }
 
@@ -937,9 +954,9 @@ namespace System.Windows.Forms
         ///  (2)gradient from beginning to middle of width firstGradientWidth
         ///  (3)gradient from middle to end of width secondGradientWidth
         ///
-        ///  if there isnt enough room to do (2) and (3) it merges into a single gradient from beginning to end.
+        ///  if there isn't enough room to do (2) and (3) it merges into a single gradient from beginning to end.
         /// </summary>
-        private void FillWithDoubleGradient(Color beginColor, Color middleColor, Color endColor, Graphics g, Rectangle bounds, int firstGradientWidth, int secondGradientWidth, LinearGradientMode mode, bool flipHorizontal)
+        private static void FillWithDoubleGradient(Color beginColor, Color middleColor, Color endColor, Graphics g, Rectangle bounds, int firstGradientWidth, int secondGradientWidth, LinearGradientMode mode, bool flipHorizontal)
         {
             if ((bounds.Width == 0) || (bounds.Height == 0))
             {
@@ -1013,18 +1030,22 @@ namespace System.Windows.Forms
 
         private void RenderStatusStripBorder(ToolStripRenderEventArgs e)
         {
-            e.Graphics.DrawLine(SystemPens.ButtonHighlight, 0, 0, e.ToolStrip.Width, 0);
+            using Pen p = new Pen(ColorTable.StatusStripBorder);
+            e.Graphics.DrawLine(p, 0, 0, e.ToolStrip.Width, 0);
         }
 
         private void RenderStatusStripBackground(ToolStripRenderEventArgs e)
         {
-            StatusStrip statusStrip = e.ToolStrip as StatusStrip;
-            RenderBackgroundGradient(
-                e.Graphics,
-                statusStrip,
-                ColorTable.StatusStripGradientBegin,
-                ColorTable.StatusStripGradientEnd,
-                statusStrip.Orientation);
+            StatusStrip? statusStrip = e.ToolStrip as StatusStrip;
+            if (statusStrip is not null)
+            {
+                RenderBackgroundGradient(
+                    e.Graphics,
+                    statusStrip,
+                    ColorTable.StatusStripGradientBegin,
+                    ColorTable.StatusStripGradientEnd,
+                    statusStrip.Orientation);
+            }
         }
 
         private void RenderCheckBackground(ToolStripItemImageRenderEventArgs e)
@@ -1058,6 +1079,7 @@ namespace System.Windows.Forms
                 {
                     RenderSelectedButtonFill(g, bounds);
                 }
+
                 g.DrawRectangle(SystemPens.Highlight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
             }
         }
@@ -1093,21 +1115,21 @@ namespace System.Windows.Forms
             ToolStripItem item = e.Item;
             Rectangle bounds = new Rectangle(Point.Empty, item.Size);
 
-            Rectangle fillRect = (item.Selected) ? item.ContentRectangle : bounds;
+            Rectangle fillRect = item.Selected ? item.ContentRectangle : bounds;
 
-            if (item.BackgroundImage != null)
+            if (item.BackgroundImage is not null)
             {
                 ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, bounds, fillRect);
             }
         }
 
-        private void RenderBackgroundGradient(Graphics g, Control control, Color beginColor, Color endColor)
+        private static void RenderBackgroundGradient(Graphics g, Control control, Color beginColor, Color endColor)
         {
             RenderBackgroundGradient(g, control, beginColor, endColor, Orientation.Horizontal);
         }
 
         // renders the overall gradient
-        private void RenderBackgroundGradient(Graphics g, Control control, Color beginColor, Color endColor, Orientation orientation)
+        private static void RenderBackgroundGradient(Graphics g, Control control, Color beginColor, Color endColor, Orientation orientation)
         {
             if (control.RightToLeft == RightToLeft.Yes)
             {
@@ -1124,7 +1146,7 @@ namespace System.Windows.Forms
             }
 
             Control parent = control.ParentInternal;
-            if (parent != null)
+            if (parent is not null)
             {
                 Rectangle gradientBounds = new Rectangle(Point.Empty, parent.Size);
                 if (!LayoutUtils.IsZeroWidthOrHeight(gradientBounds))
@@ -1201,12 +1223,12 @@ namespace System.Windows.Forms
             ScaleObjectSizesIfNeeded(e.Item.DeviceDpi);
 
             Graphics g = e.Graphics;
-            ToolStripOverflowButton item = e.Item as ToolStripOverflowButton;
+            ToolStripOverflowButton? item = e.Item as ToolStripOverflowButton;
             Rectangle overflowBoundsFill = new Rectangle(Point.Empty, e.Item.Size);
             Rectangle bounds = overflowBoundsFill;
 
-            bool drawCurve = (RoundedEdges && (!(item.GetCurrentParent() is MenuStrip)));
-            bool horizontal = (e.ToolStrip.Orientation == Orientation.Horizontal);
+            bool drawCurve = RoundedEdges && (item?.GetCurrentParent() is not MenuStrip);
+            bool horizontal = e.ToolStrip is not null && e.ToolStrip.Orientation == Orientation.Horizontal;
             // undone RTL
 
             if (horizontal)
@@ -1226,7 +1248,7 @@ namespace System.Windows.Forms
 
             Color overflowButtonGradientBegin, overflowButtonGradientMiddle, overflowButtonGradientEnd, overflowBottomLeftShadow, overflowTopShadow;
 
-            if (item.Pressed)
+            if (item is not null && item.Pressed)
             {
                 overflowButtonGradientBegin = ColorTable.ButtonPressedGradientBegin;
                 overflowButtonGradientMiddle = ColorTable.ButtonPressedGradientMiddle;
@@ -1234,7 +1256,7 @@ namespace System.Windows.Forms
                 overflowBottomLeftShadow = ColorTable.ButtonPressedGradientBegin;
                 overflowTopShadow = overflowBottomLeftShadow;
             }
-            else if (item.Selected)
+            else if (item is not null && item.Selected)
             {
                 overflowButtonGradientBegin = ColorTable.ButtonSelectedGradientBegin;
                 overflowButtonGradientMiddle = ColorTable.ButtonSelectedGradientMiddle;
@@ -1248,7 +1270,7 @@ namespace System.Windows.Forms
                 overflowButtonGradientMiddle = ColorTable.OverflowButtonGradientMiddle;
                 overflowButtonGradientEnd = ColorTable.OverflowButtonGradientEnd;
                 overflowBottomLeftShadow = ColorTable.ToolStripBorder;
-                overflowTopShadow = (horizontal) ? ColorTable.ToolStripGradientMiddle : ColorTable.ToolStripGradientEnd;
+                overflowTopShadow = horizontal ? ColorTable.ToolStripGradientMiddle : ColorTable.ToolStripGradientEnd;
             }
 
             if (drawCurve)
@@ -1262,10 +1284,11 @@ namespace System.Windows.Forms
                     start.X = overflowBoundsFill.Right + 1;
                     end.X = overflowBoundsFill.Right;
                 }
+
                 g.DrawLine(pen, start, end);
             }
 
-            LinearGradientMode mode = (horizontal) ? LinearGradientMode.Vertical : LinearGradientMode.Horizontal;
+            LinearGradientMode mode = horizontal ? LinearGradientMode.Vertical : LinearGradientMode.Horizontal;
 
             // fill main body
             FillWithDoubleGradient(overflowButtonGradientBegin, overflowButtonGradientMiddle, overflowButtonGradientEnd, g, overflowBoundsFill, iconWellGradientWidth, iconWellGradientWidth, mode, false);
@@ -1290,6 +1313,7 @@ namespace System.Windows.Forms
                         top1.X = overflowBoundsFill.Right + 1;
                         top2.X = overflowBoundsFill.Right;
                     }
+
                     g.FillRectangle(brush, top1.X, top1.Y, 1, 1);
                     g.FillRectangle(brush, top2.X, top2.Y, 1, 1);
                 }
@@ -1309,6 +1333,7 @@ namespace System.Windows.Forms
                     {
                         fillRect.X = overflowBoundsFill.Right;
                     }
+
                     g.FillRectangle(brush, fillRect);
                 }
                 else
@@ -1409,6 +1434,7 @@ namespace System.Windows.Forms
                 g.FillRectangle(brush, bounds);
             }
         }
+
         private void RenderCheckedButtonFill(Graphics g, Rectangle bounds)
         {
             if ((bounds.Width == 0) || (bounds.Height == 0))
@@ -1553,7 +1579,7 @@ namespace System.Windows.Forms
 
             Rectangle fillRect = (item.Selected) ? item.ContentRectangle : bounds;
 
-            if (item.BackgroundImage != null)
+            if (item.BackgroundImage is not null)
             {
                 ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, bounds, fillRect);
             }
@@ -1568,7 +1594,7 @@ namespace System.Windows.Forms
                 RenderSelectedButtonFill(g, bounds);
                 drawHotBorder = useHotBorder;
             }
-            else if (item.Owner != null && item.BackColor != item.Owner.BackColor)
+            else if (item.Owner is not null && item.BackColor != item.Owner.BackColor)
             {
                 using var brush = item.BackColor.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, bounds);
@@ -1627,19 +1653,20 @@ namespace System.Windows.Forms
 
         // This draws differently sized arrows than the base one...
         // used only for drawing the overflow button madness.
-        private Point RenderArrowInternal(Graphics g, Rectangle dropDownRect, ArrowDirection direction, Brush brush)
+        private static Point RenderArrowInternal(Graphics g, Rectangle dropDownRect, ArrowDirection direction, Brush brush)
         {
             Point middle = new Point(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
 
             // if the width is odd - favor pushing it over one pixel right.
             middle.X += (dropDownRect.Width % 2);
 
-            Point[] arrow = null;
+            Point[] arrow;
 
             switch (direction)
             {
                 case ArrowDirection.Up:
-                    arrow = new Point[] {
+                    arrow = new Point[]
+                    {
                         new Point(middle.X - Offset2X, middle.Y + 1),
                         new Point(middle.X + Offset2X + 1, middle.Y + 1),
                         new Point(middle.X, middle.Y - Offset2Y)
@@ -1647,7 +1674,8 @@ namespace System.Windows.Forms
                     break;
 
                 case ArrowDirection.Left:
-                    arrow = new Point[] {
+                    arrow = new Point[]
+                    {
                         new Point(middle.X + Offset2X, middle.Y - Offset2Y - 1),
                         new Point(middle.X + Offset2X, middle.Y + Offset2Y + 1),
                         new Point(middle.X - 1, middle.Y)
@@ -1655,7 +1683,8 @@ namespace System.Windows.Forms
                     break;
 
                 case ArrowDirection.Right:
-                    arrow = new Point[] {
+                    arrow = new Point[]
+                    {
                         new Point(middle.X - Offset2X, middle.Y - Offset2Y - 1),
                         new Point(middle.X - Offset2X, middle.Y + Offset2Y + 1),
                         new Point(middle.X + 1, middle.Y)
@@ -1664,13 +1693,15 @@ namespace System.Windows.Forms
 
                 case ArrowDirection.Down:
                 default:
-                    arrow = new Point[] {
+                    arrow = new Point[]
+                    {
                         new Point(middle.X - Offset2X, middle.Y - 1),
                         new Point(middle.X + Offset2X + 1, middle.Y - 1),
                         new Point(middle.X, middle.Y + Offset2Y)
                     };
                     break;
             }
+
             g.FillPolygon(brush, arrow);
 
             return middle;

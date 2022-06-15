@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -37,10 +36,10 @@ internal static partial class Interop
             object? GetPatternProvider(UIA patternId);
 
             /// <summary>
-            ///  Request value of specified property from an element.
+            ///  Returns the value of the specified <paramref name="propertyId"/> from the element.
             /// </summary>
             /// <param name="propertyId">Identifier indicating the property to return</param>
-            /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
+            /// <returns>Returns the requested value if supported or null if it is not.</returns>
             object? GetPropertyValue(UIA propertyId);
 
             // Only native impl roots need to return something for this,

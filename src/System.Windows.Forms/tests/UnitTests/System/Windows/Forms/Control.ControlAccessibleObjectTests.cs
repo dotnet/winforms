@@ -2,41 +2,72 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
-using System.Drawing;
 using System.Runtime.Serialization;
 using System.Windows.Forms.Automation;
 using Accessibility;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ControlControlAccessibleObject : IClassFixture<ThreadExceptionFixture>
+    public class Control_ControlAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
+        // These controls return an empty "AccessKey" property because they have a ControlStyles.UseTextForAccessibility flag
+        // with "false" value, which prohibits the use of text to create the AccessKey.
+        // This behavior is consistent with .NET Framework 4.7.2
+        private static Type[] s_controlsNotUseTextForAccessibility = new Type[]
+        {
+            typeof(CheckedListBox),
+            typeof(ComboBox),
+            typeof(DataGridViewComboBoxEditingControl),
+            typeof(DataGridViewTextBoxEditingControl),
+            typeof(DateTimePicker),
+            typeof(DomainUpDown),
+            typeof(HScrollBar),
+            typeof(ListBox),
+            typeof(ListView),
+            typeof(MaskedTextBox),
+            typeof(NumericUpDown),
+            typeof(ProgressBar),
+            typeof(RichTextBox),
+            typeof(TextBox),
+            typeof(TrackBar),
+            typeof(TreeView),
+            typeof(VScrollBar),
+            typeof(WebBrowser),
+        };
+
+        // These controls have special conditions for setting the Text property.
+        // Please check if the control type isn't contained here in cases where text change is needed
+        // otherwise an error can be thrown.
+        private static Type[] s_controlsIgnoringTextChangesForTests = new Type[]
+        {
+            typeof(DateTimePicker),
+        };
+
         [WinFormsFact]
         public void ControlAccessibleObject_Ctor_ControlWithoutHandle()
         {
             using var ownerControl = new Control();
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
-            Assert.True(ownerControl.IsHandleCreated);
+            Assert.False(ownerControl.IsHandleCreated);
 
             Assert.True(accessibleObject.Bounds.X >= 0);
             Assert.True(accessibleObject.Bounds.Y >= 0);
             Assert.Equal(0, accessibleObject.Bounds.Width);
             Assert.Equal(0, accessibleObject.Bounds.Height);
+            Assert.Equal(IntPtr.Zero, accessibleObject.HandleInternal);
             Assert.Null(accessibleObject.DefaultAction);
             Assert.Null(accessibleObject.Description);
-            Assert.Equal(ownerControl.Handle, accessibleObject.Handle);
             Assert.Null(accessibleObject.Help);
             Assert.Null(accessibleObject.KeyboardShortcut);
             Assert.Null(accessibleObject.Name);
             Assert.Same(ownerControl, accessibleObject.Owner);
-            Assert.NotNull(accessibleObject.Parent);
-            Assert.Equal(AccessibleRole.Client, accessibleObject.Role);
-            Assert.Equal(AccessibleStates.Focusable, accessibleObject.State);
-            Assert.Null(accessibleObject.Value);
+            Assert.Null(accessibleObject.Parent);
+            Assert.Equal(AccessibleRole.None, accessibleObject.Role);
+            Assert.Equal(AccessibleStates.None, accessibleObject.State);
+            Assert.Equal(string.Empty, accessibleObject.Value);
         }
 
         [WinFormsFact]
@@ -80,8 +111,79 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("ownerControl", () => new Control.ControlAccessibleObject(null));
         }
 
+        [WinFormsFact]
+        public void ControlAccessibleObject_created_via_owner_ensure_handle_set_when_owner_created()
+        {
+            using var ownerControl = new Control();
+
+            AccessibleObject accessibleObject = ownerControl.AccessibilityObject;
+            Assert.IsType<Control.ControlAccessibleObject>(accessibleObject);
+
+            Control.ControlAccessibleObject controlAccessibleObject = (Control.ControlAccessibleObject)accessibleObject;
+            Assert.False(ownerControl.IsHandleCreated);
+            Assert.Equal(IntPtr.Zero, controlAccessibleObject.HandleInternal);
+
+            // force the owner control to create its handle
+            ownerControl.CreateControl();
+
+            Assert.True(ownerControl.IsHandleCreated);
+            Assert.Equal(ownerControl.Handle, controlAccessibleObject.Handle);
+        }
+
+        [WinFormsFact]
+        public void ControlAccessibleObject_created_via_owner_ensure_handle_reset_when_owner_destroyed()
+        {
+            using var ownerControl = new Control();
+            ownerControl.CreateControl();
+
+            AccessibleObject accessibleObject = ownerControl.AccessibilityObject;
+            Assert.IsType<Control.ControlAccessibleObject>(accessibleObject);
+
+            Control.ControlAccessibleObject controlAccessibleObject = (Control.ControlAccessibleObject)accessibleObject;
+            Assert.True(ownerControl.IsHandleCreated);
+            Assert.Equal(ownerControl.Handle, controlAccessibleObject.Handle);
+
+            ownerControl.Dispose();
+
+            Assert.False(ownerControl.IsHandleCreated);
+            Assert.Equal(IntPtr.Zero, controlAccessibleObject.Handle);
+        }
+
+        [WinFormsFact]
+        public void ControlAccessibleObject_created_detached_owner_ensure_handle_set_when_owner_created()
+        {
+            using var ownerControl = new Control();
+            var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+            Assert.False(ownerControl.IsHandleCreated);
+            Assert.Equal(IntPtr.Zero, accessibleObject.HandleInternal);
+
+            // force the owner control to create its handle
+            ownerControl.CreateControl();
+
+            Assert.True(ownerControl.IsHandleCreated);
+            Assert.Equal(ownerControl.Handle, accessibleObject.Handle);
+        }
+
+        [WinFormsFact]
+        public void ControlAccessibleObject_created_detached_owner_ensure_handle_reset_when_owner_destroyed()
+        {
+            using var ownerControl = new Control();
+            var controlAccessibleObject = new Control.ControlAccessibleObject(ownerControl);
+            ownerControl.CreateControl();
+
+            Assert.True(ownerControl.IsHandleCreated);
+            Assert.Equal(ownerControl.Handle, controlAccessibleObject.Handle);
+
+            ownerControl.Dispose();
+
+            Assert.False(ownerControl.IsHandleCreated);
+
+            // NB: Detached object, so we don't get notifications
+            Assert.NotEqual(IntPtr.Zero, controlAccessibleObject.Handle);
+        }
+
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ControlAccessibleObject_DefaultAction_GetWithAccessibleDefaultActionDescription_ReturnsExpected(string accessibleDefaultActionDescription)
         {
             using var ownerControl = new Control
@@ -93,7 +195,20 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void ControlAccessibleObject_GetPropertyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected(string accessibleDefaultActionDescription)
+        {
+            using var ownerControl = new Control
+            {
+                AccessibleDefaultActionDescription = accessibleDefaultActionDescription
+            };
+            var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+            Assert.Equal(!string.IsNullOrEmpty(accessibleDefaultActionDescription) ? accessibleDefaultActionDescription :
+                null, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ControlAccessibleObject_Description_GetWithAccessibleDescription_ReturnsExpected(string accessibleDescription)
         {
             using var ownerControl = new Control
@@ -118,6 +233,8 @@ namespace System.Windows.Forms.Tests
         public void ControlAccessibleObject_Handle_Set_Success(IntPtr value)
         {
             using var ownerControl = new Control();
+            ownerControl.CreateControl();
+            Assert.True(ownerControl.IsHandleCreated);
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
             Assert.True(ownerControl.IsHandleCreated);
 
@@ -131,7 +248,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ControlAccessibleObject_Help_GetWithQueryAccessibilityHelpEvent_Success(string result)
         {
             using var ownerControl = new Control();
@@ -147,7 +264,8 @@ namespace System.Windows.Forms.Tests
 
                 e.HelpString = result;
                 callCount++;
-            };
+            }
+
             ownerControl.QueryAccessibilityHelp += handler;
 
             // Get with handler.
@@ -592,7 +710,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ControlAccessibleObject_Name_Set_GetReturnsExpected(string value)
         {
             using var ownerControl = new Control();
@@ -692,10 +810,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ControlAccessibleObject_Value_Set_GetReturnsNull(string value)
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void ControlAccessibleObject_Value_Set_GetReturnsNull_IfHandleIsCreated(string value)
         {
             using var ownerControl = new Control();
+            ownerControl.CreateControl();
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
 
             accessibleObject.Value = value;
@@ -704,6 +823,23 @@ namespace System.Windows.Forms.Tests
             // Set same.
             accessibleObject.Value = value;
             Assert.Null(accessibleObject.Value);
+            Assert.True(ownerControl.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void ControlAccessibleObject_Value_Set_GetReturnsNull_IfHandleIsNotCreated(string value)
+        {
+            using var ownerControl = new Control();
+            var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+
+            accessibleObject.Value = value;
+            Assert.Equal(string.Empty, accessibleObject.Value);
+
+            // Set same.
+            accessibleObject.Value = value;
+            Assert.Equal(string.Empty, accessibleObject.Value);
+            Assert.False(ownerControl.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -760,14 +896,30 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(null, null, 0)]
-        [InlineData("", "", 0)]
-        [InlineData("HelpNamespace", "invalid", 0)]
-        [InlineData("HelpNamespace", "1", 1)]
-        public void ControlAccessibleObject_GetHelpTopic_InvokeWithQueryAccessibilityHelpEvent_ReturnsExpected(string helpNamespace, string helpKeyword, int expectedResult)
+        [InlineData(null, null, 0, true, 0)]
+        [InlineData("", "", 0, true, 0)]
+        [InlineData("HelpNamespace", "invalid", 0, true, 0)]
+        [InlineData("HelpNamespace", "1", 1, true, 0)]
+        [InlineData(null, null, 0, false, -1)]
+        [InlineData("", "", 0, false, -1)]
+        [InlineData("HelpNamespace", "invalid", 0, false, -1)]
+        [InlineData("HelpNamespace", "1", 1, false, -1)]
+        public void ControlAccessibleObject_GetHelpTopic_InvokeWithQueryAccessibilityHelpEvent_ReturnsExpected(
+            string helpNamespace,
+            string helpKeyword,
+            int expectedResult,
+            bool createControl,
+            int expectedResultWithoutHandler)
         {
             using var ownerControl = new Control();
+            if (createControl)
+            {
+                ownerControl.CreateControl();
+            }
+
+            Assert.Equal(createControl, ownerControl.IsHandleCreated);
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+            Assert.Equal(createControl, ownerControl.IsHandleCreated);
 
             int callCount = 0;
             void handler(object sender, QueryAccessibilityHelpEventArgs e)
@@ -780,7 +932,8 @@ namespace System.Windows.Forms.Tests
                 e.HelpNamespace = helpNamespace;
                 e.HelpKeyword = helpKeyword;
                 callCount++;
-            };
+            }
+
             ownerControl.QueryAccessibilityHelp += handler;
 
             // Get with handler.
@@ -795,7 +948,7 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             ownerControl.QueryAccessibilityHelp -= handler;
-            Assert.Equal(0, accessibleObject.GetHelpTopic(out fileName));
+            Assert.Equal(expectedResultWithoutHandler, accessibleObject.GetHelpTopic(out fileName));
             Assert.Null(fileName);
             Assert.Equal(2, callCount);
         }
@@ -820,7 +973,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleNavigation))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleNavigation))]
         public void AccessibleObject_Navigate_InvokeDefault_ReturnsNull(AccessibleNavigation navdir)
         {
             using var ownerControl = new Control();
@@ -883,17 +1036,15 @@ namespace System.Windows.Forms.Tests
             using var ownerControl = new Control();
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(ownerControl.IsHandleCreated);
+            Assert.False(ownerControl.IsHandleCreated);
 
             if (isHandleCreated)
             {
                 Assert.NotEqual(IntPtr.Zero, ownerControl.Handle);
             }
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            // Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId));
-            // Assert.Equal(isHandleCreated, ownerControl.IsHandleCreated);
+            Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId));
+            Assert.Equal(isHandleCreated, ownerControl.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -904,17 +1055,15 @@ namespace System.Windows.Forms.Tests
             using var ownerControl = new Control();
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(ownerControl.IsHandleCreated);
+            Assert.False(ownerControl.IsHandleCreated);
 
             if (isHandleCreated)
             {
                 Assert.NotEqual(IntPtr.Zero, ownerControl.Handle);
             }
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            // Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.NamePropertyId, ownerControl.Name, ownerControl.Name));
-            // Assert.Equal(isHandleCreated, ownerControl.IsHandleCreated);
+            Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.NamePropertyId, ownerControl.Name, ownerControl.Name));
+            Assert.Equal(isHandleCreated, ownerControl.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -942,24 +1091,45 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-1, -2)]
-        [InlineData(0, 0)]
-        [InlineData(1, 2)]
-        public void AccessibleObject_IAccessibleaccHitTest_InvokeDefault_ReturnsNull(int x, int y)
+        [InlineData(true, -1, -2, 0)]
+        [InlineData(true, 0, 0, 0)]
+        [InlineData(true, 1, 2, 0)]
+        [InlineData(false, -1, -2, null)]
+        [InlineData(false, 0, 0, null)]
+        [InlineData(false, 1, 2, null)]
+        public void AccessibleObject_IAccessibleaccHitTest_InvokeDefault_ReturnsExpectedValue(bool createControl, int x, int y, int? expectedValue)
         {
             using var ownerControl = new Control();
+            if (createControl)
+            {
+                ownerControl.CreateControl();
+            }
+
+            Assert.Equal(createControl, ownerControl.IsHandleCreated);
+
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+            Assert.Equal(createControl, ownerControl.IsHandleCreated);
             IAccessible iAccessible = accessibleObject;
-            Assert.Equal(0, iAccessible.accHitTest(x, y));
+            Assert.Equal(expectedValue, iAccessible.accHitTest(x, y));
         }
 
-        [WinFormsFact]
-        public void ControlAccessibleObject_IAccessibleaccParent_InvokeDefault_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ControlAccessibleObject_IAccessibleaccParent_InvokeDefault_ReturnsExpectedValue(bool createControl)
         {
             using var ownerControl = new Control();
+            if (createControl)
+            {
+                ownerControl.CreateControl();
+            }
+
+            Assert.Equal(createControl, ownerControl.IsHandleCreated);
+
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+            Assert.Equal(createControl, ownerControl.IsHandleCreated);
             IAccessible iAccessible = accessibleObject;
-            Assert.NotNull(iAccessible.accParent);
+            Assert.Equal(createControl, iAccessible.accParent != null);
         }
 
         [WinFormsFact]
@@ -991,15 +1161,24 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, iAccessible.accChildCount);
         }
 
-        [WinFormsFact]
-        public void ControlAccessibleObject_IAccessibleget_accChildCount_InvokeWithChildren_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public void ControlAccessibleObject_IAccessibleget_accChildCount_InvokeWithChildren_ReturnsExpected(bool createControl, int expectedCount)
         {
             using var child = new Control();
             using var ownerControl = new Control();
+            if (createControl)
+            {
+                ownerControl.CreateControl();
+            }
+
+            Assert.Equal(createControl, ownerControl.IsHandleCreated);
             ownerControl.Controls.Add(child);
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+            Assert.Equal(createControl, ownerControl.IsHandleCreated);
             IAccessible iAccessible = accessibleObject;
-            Assert.Equal(1, iAccessible.accChildCount);
+            Assert.Equal(expectedCount, iAccessible.accChildCount);
         }
 
         [WinFormsTheory]
@@ -1036,6 +1215,368 @@ namespace System.Windows.Forms.Tests
             bool actual = accessibleObject.IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId);
             Assert.True(actual);
         }
+
+        public static IEnumerable<object[]> ControlAccessibleObject_TestData()
+        {
+            return ReflectionHelper.GetPublicNotAbstractClasses<Control>().Select(type => new object[] { type });
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_Custom_Role_ReturnsExpected(Type type)
+        {
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            if (!control.SupportsUiaProviders)
+            {
+                return;
+            }
+
+            control.AccessibleRole = AccessibleRole.Link;
+            AccessibleObject controlAccessibleObject = control.AccessibilityObject;
+
+            var accessibleObjectRole = controlAccessibleObject.Role;
+
+            Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_GetPropertyValue_AccessKey_ReturnExpected(Type type)
+        {
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            if (!control.SupportsUiaProviders)
+            {
+                return;
+            }
+
+            if (!s_controlsIgnoringTextChangesForTests.Contains(type))
+            {
+                control.Text = "&Name";
+            }
+
+            AccessibleObject controlAccessibleObject = control.AccessibilityObject;
+            string expectedValue = s_controlsNotUseTextForAccessibility.Contains(type) ? string.Empty : "Alt+n";
+
+            Assert.Equal(expectedValue, controlAccessibleObject.GetPropertyValue(UiaCore.UIA.AccessKeyPropertyId));
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue(Type type)
+        {
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            if (!control.SupportsUiaProviders)
+            {
+                return;
+            }
+
+            AccessibleObject controlAccessibleObject = control.AccessibilityObject;
+
+            bool supportsLegacyIAccessiblePatternId = controlAccessibleObject.IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId);
+
+            Assert.True(supportsLegacyIAccessiblePatternId);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_Custom_Description_ReturnsExpected(Type type)
+        {
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            if (!control.SupportsUiaProviders)
+            {
+                return;
+            }
+
+            control.AccessibleDescription = "Test Accessible Description";
+            AccessibleObject controlAccessibleObject = control.AccessibilityObject;
+
+            var accessibleObjectDescription = controlAccessibleObject.Description;
+
+            Assert.Equal("Test Accessible Description", accessibleObjectDescription);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected(Type type)
+        {
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            if (!control.SupportsUiaProviders)
+            {
+                return;
+            }
+
+            AccessibleObject controlAccessibleObject = control.AccessibilityObject;
+            control.Name = "Name1";
+            control.AccessibleName = "Test Name";
+
+            Assert.Equal("Test Name", controlAccessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
+            Assert.Equal("Test Name", controlAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
+        }
+
+        public static IEnumerable<object[]> ControlAccessibleObject_DefaultName_TestData()
+        {
+            // These controls have AccessibleName defined.
+            // MonthCalendar has "Month" view by default and returns current date as AccessibleName
+            var typeDefaultValues = new Dictionary<Type, string>
+            {
+                { typeof(DataGridViewTextBoxEditingControl), SR.DataGridView_AccEditingControlAccName },
+                { typeof(PrintPreviewDialog), SR.PrintPreviewDialog_PrintPreview },
+                { typeof(DateTimePicker), string.Empty },
+            };
+
+            foreach (Type type in ReflectionHelper.GetPublicNotAbstractClasses<Control>())
+            {
+                yield return new object[]
+                {
+                    type,
+                    typeDefaultValues.ContainsKey(type) ? typeDefaultValues[type] : null
+                };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_DefaultName_TestData))]
+        public void ControlAccessibleObject_GetPropertyValue_Default_Name_ReturnsExpected(Type type, string expectedName)
+        {
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            if (!control.SupportsUiaProviders)
+            {
+                return;
+            }
+
+            AccessibleObject controlAccessibleObject = control.AccessibilityObject;
+            Assert.Equal(expectedName, controlAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
+        }
+
+        public static IEnumerable<object[]> ControlAccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsCorrectValue_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsCorrectValue_TestData))]
+        public void ControlAccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsCorrectValue(AccessibleRole role)
+        {
+            using Control control = new Control();
+            control.AccessibleRole = role;
+
+            UiaCore.UIA actual = (UiaCore.UIA)control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
+            // Check if the method returns an exist UIA_ControlTypeId
+            Assert.True(actual >= UiaCore.UIA.ButtonControlTypeId && actual <= UiaCore.UIA.AppBarControlTypeId);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_FragmentRoot_IsNullOrOwnObject(Type type)
+        {
+            using NoAssertContext context = new();
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            Assert.False(control.IsHandleCreated);
+            Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
+
+            UiaCore.IRawElementProviderFragment actual = control.AccessibilityObject.FragmentRoot;
+
+            Assert.True(actual is null || actual == control.AccessibilityObject);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_FragmentRoot_IsToolStrip_IfControlIsUsedAsToolStripItem(Type type)
+        {
+            using NoAssertContext context = new();
+            using ToolStrip toolStrip = new();
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+            using ToolStripControlHost host = new(control);
+
+            toolStrip.CreateControl();
+            control.CreateControl();
+
+            if (!CanBeAddedToToolStrip(control))
+            {
+                // A number of controls can't be added to ToolStrip. Double verify it is still the case, and exit.
+                Assert.Throws<ArgumentException>(() => toolStrip.Items.Add(host));
+
+                return;
+            }
+
+            toolStrip.Items.Add(host);
+
+            Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
+
+            UiaCore.IRawElementProviderFragment actual = ((UiaCore.IRawElementProviderFragment)control.AccessibilityObject).FragmentRoot;
+
+            Assert.Equal(toolStrip.AccessibilityObject, actual);
+            Assert.True(control.IsHandleCreated);
+            Assert.True(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_FragmentNavigate_Parent_IsNull(Type type)
+        {
+            using NoAssertContext context = new();
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
+
+            UiaCore.IRawElementProviderFragment parent
+                = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+
+            Assert.True(parent is null);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_FragmentNavigate_Siblings_AreNull(Type type)
+        {
+            using NoAssertContext context = new();
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
+
+            UiaCore.IRawElementProviderFragment nextSibling
+                = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+            UiaCore.IRawElementProviderFragment previousSibling
+                = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+
+            Assert.True(nextSibling is null);
+            Assert.True(previousSibling is null);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_FragmentNavigate_ParentIsToolStrip_IfControlIsUsedAsToolStripItem(Type type)
+        {
+            using NoAssertContext noAssertContext = new();
+            using ToolStrip toolStrip = new() { Size = new Drawing.Size(1000, 25) };
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+            using ToolStripControlHost host = new(control);
+
+            toolStrip.CreateControl();
+            control.CreateControl();
+
+            if (!CanBeAddedToToolStrip(control))
+            {
+                // A number of controls can't be added to ToolStrip. Double verify it is still the case, and exit.
+                Assert.Throws<ArgumentException>(() => toolStrip.Items.Add(host));
+
+                return;
+            }
+
+            toolStrip.Items.Add(host);
+            ((ToolStripItem)host).TestAccessor().Dynamic._parent = toolStrip;
+            host.SetPlacement(ToolStripItemPlacement.Main);
+
+            Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
+
+            UiaCore.IRawElementProviderFragment actual = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+            AccessibleObject expected = toolStrip.AccessibilityObject;
+
+            Assert.Equal(expected, actual);
+            Assert.True(control.IsHandleCreated);
+            Assert.True(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_FragmentNavigate_NextSibling_IsNextItem_IfControlIsUsedAsToolStripItem(Type type)
+        {
+            using NoAssertContext noAssertContext = new();
+            using ToolStrip toolStrip = new() { Size = new Drawing.Size(1000, 25) };
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+            using ToolStripControlHost host = new(control);
+            using ToolStripLabel label = new();
+            using ToolStripButton button = new();
+
+            toolStrip.CreateControl();
+            control.CreateControl();
+            toolStrip.Items.Add(label);
+
+            if (!CanBeAddedToToolStrip(control))
+            {
+                // A number of controls can't be added to ToolStrip. Double verify it is still the case, and exit.
+                Assert.Throws<ArgumentException>(() => toolStrip.Items.Add(host));
+
+                return;
+            }
+
+            toolStrip.Items.Add(host);
+            toolStrip.Items.Add(button);
+            ((ToolStripItem)host).TestAccessor().Dynamic._parent = toolStrip;
+            host.SetPlacement(ToolStripItemPlacement.Main);
+
+            Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
+
+            UiaCore.IRawElementProviderFragment actual = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+            AccessibleObject expected = button.AccessibilityObject;
+
+            Assert.Equal(expected, actual);
+            Assert.True(control.IsHandleCreated);
+            Assert.True(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_FragmentNavigate_PreviousSibling_IsPreviousItem_IfControlIsUsedAsToolStripItem(Type type)
+        {
+            using NoAssertContext noAssertContext = new();
+            using ToolStrip toolStrip = new() { Size = new Drawing.Size(1000, 25) };
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+            using ToolStripControlHost host = new(control);
+            using ToolStripLabel label = new();
+
+            toolStrip.CreateControl();
+            control.CreateControl();
+            toolStrip.Items.Add(label);
+
+            if (!CanBeAddedToToolStrip(control))
+            {
+                // A number of controls can't be added to ToolStrip. Double verify it is still the case, and exit.
+                Assert.Throws<ArgumentException>(() => toolStrip.Items.Add(host));
+
+                return;
+            }
+
+            toolStrip.Items.Add(host);
+            ((ToolStripItem)host).TestAccessor().Dynamic._parent = toolStrip;
+            host.SetPlacement(ToolStripItemPlacement.Main);
+
+            Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
+
+            UiaCore.IRawElementProviderFragment actual = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+            AccessibleObject expected = label.AccessibilityObject;
+
+            Assert.Equal(expected, actual);
+            Assert.True(control.IsHandleCreated);
+            Assert.True(toolStrip.IsHandleCreated);
+        }
+
+        // ContextMenuStrip, From, ToolStripDropDown, ToolStripDropDownMenu
+        // are Top level controls that can't be added to a ToolStrip.
+        // A TabPage can be added to a TabControl only (see TabPage.AssignParent method).
+        private bool CanBeAddedToToolStrip(Control control)
+            => !(control is ContextMenuStrip
+                || control is Form
+                || control is ToolStripDropDown
+                || control is ToolStripDropDownMenu
+                || control is TabPage);
 
         private class AutomationLiveRegionControl : Control, IAutomationLiveRegion
         {

@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Design
         void OnMouseDown(IComponent component, MouseButtons button, int x, int y);
 
         /// <summary>
-        ///  This is called when the mouse momentarially hovers over the view for the given component.
+        ///  This is called when the mouse momentarily hovers over the view for the given component.
         /// </summary>
         void OnMouseHover(IComponent component);
 

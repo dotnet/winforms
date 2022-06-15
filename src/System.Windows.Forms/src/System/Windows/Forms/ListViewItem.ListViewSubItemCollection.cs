@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
@@ -23,7 +21,7 @@ namespace System.Windows.Forms
 
             public ListViewSubItemCollection(ListViewItem owner)
             {
-                _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                _owner = owner.OrThrowIfNull();
             }
 
             /// <summary>
@@ -61,17 +59,23 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    _owner.subItems[index] = value ?? throw new ArgumentNullException(nameof(value));
+                    ListViewSubItem oldSubItem = _owner.subItems[index];
+
+                    _owner.subItems[index] = value.OrThrowIfNull();
+                    value._owner = _owner;
+
+                    oldSubItem._owner = null;
+
                     _owner.UpdateSubItems(index);
                 }
             }
 
-            object IList.this[int index]
+            object? IList.this[int index]
             {
                 get => this[index];
                 set
                 {
-                    if (!(value is ListViewSubItem item))
+                    if (value is not ListViewSubItem item)
                     {
                         throw new ArgumentException(SR.ListViewBadListViewSubItem, nameof(value));
                     }
@@ -79,10 +83,11 @@ namespace System.Windows.Forms
                     this[index] = item;
                 }
             }
+
             /// <summary>
             ///  Retrieves the child control with the specified key.
             /// </summary>
-            public virtual ListViewSubItem this[string key]
+            public virtual ListViewSubItem? this[string key]
             {
                 get
                 {
@@ -105,26 +110,23 @@ namespace System.Windows.Forms
 
             public ListViewSubItem Add(ListViewSubItem item)
             {
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item);
 
                 EnsureSubItemSpace(1, -1);
-                item.owner = _owner;
+                item._owner = _owner;
                 _owner.subItems[_owner.SubItemCount] = item;
                 _owner.UpdateSubItems(_owner.SubItemCount++);
                 return item;
             }
 
-            public ListViewSubItem Add(string text)
+            public ListViewSubItem Add(string? text)
             {
                 ListViewSubItem item = new ListViewSubItem(_owner, text);
                 Add(item);
                 return item;
             }
 
-            public ListViewSubItem Add(string text, Color foreColor, Color backColor, Font font)
+            public ListViewSubItem Add(string? text, Color foreColor, Color backColor, Font font)
             {
                 ListViewSubItem item = new ListViewSubItem(_owner, text, foreColor, backColor, font);
                 Add(item);
@@ -133,16 +135,14 @@ namespace System.Windows.Forms
 
             public void AddRange(ListViewSubItem[] items)
             {
-                if (items is null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                ArgumentNullException.ThrowIfNull(items);
 
                 EnsureSubItemSpace(items.Length, -1);
                 foreach (ListViewSubItem item in items)
                 {
-                    if (item != null)
+                    if (item is not null)
                     {
+                        item._owner = _owner;
                         _owner.subItems[_owner.SubItemCount++] = item;
                     }
                 }
@@ -152,15 +152,12 @@ namespace System.Windows.Forms
 
             public void AddRange(string[] items)
             {
-                if (items is null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                ArgumentNullException.ThrowIfNull(items);
 
                 EnsureSubItemSpace(items.Length, -1);
                 foreach (string item in items)
                 {
-                    if (item != null)
+                    if (item is not null)
                     {
                         _owner.subItems[_owner.SubItemCount++] = new ListViewSubItem(_owner, item);
                     }
@@ -171,15 +168,12 @@ namespace System.Windows.Forms
 
             public void AddRange(string[] items, Color foreColor, Color backColor, Font font)
             {
-                if (items is null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                ArgumentNullException.ThrowIfNull(items);
 
                 EnsureSubItemSpace(items.Length, -1);
                 foreach (string item in items)
                 {
-                    if (item != null)
+                    if (item is not null)
                     {
                         _owner.subItems[_owner.SubItemCount++] = new ListViewSubItem(_owner, item, foreColor, backColor, font);
                     }
@@ -188,9 +182,9 @@ namespace System.Windows.Forms
                 _owner.UpdateSubItems(-1);
             }
 
-            int IList.Add(object item)
+            int IList.Add(object? item)
             {
-                if (!(item is ListViewSubItem itemValue))
+                if (item is not ListViewSubItem itemValue)
                 {
                     throw new ArgumentException(SR.ListViewSubItemCollectionInvalidArgument, nameof(item));
                 }
@@ -203,16 +197,21 @@ namespace System.Windows.Forms
                 int oldCount = _owner.SubItemCount;
                 if (oldCount > 0)
                 {
+                    for (int i = 0; i < oldCount; i++)
+                    {
+                        _owner.SubItems[i]._owner = null;
+                    }
+
                     _owner.SubItemCount = 0;
                     _owner.UpdateSubItems(-1, oldCount);
                 }
             }
 
-            public bool Contains(ListViewSubItem subItem) => IndexOf(subItem) != -1;
+            public bool Contains(ListViewSubItem? subItem) => IndexOf(subItem) != -1;
 
-            bool IList.Contains(object item)
+            bool IList.Contains(object? item)
             {
-                if (!(item is ListViewSubItem itemValue))
+                if (item is not ListViewSubItem itemValue)
                 {
                     return false;
                 }
@@ -223,15 +222,12 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns true if the collection contains an item with the specified key, false otherwise.
             /// </summary>
-            public virtual bool ContainsKey(string key) => IsValidIndex(IndexOfKey(key));
+            public virtual bool ContainsKey(string? key) => IsValidIndex(IndexOfKey(key));
 
             /// <summary>
-            ///  Ensures that the sub item array has the given
-            ///  capacity. If it doesn't, it enlarges the
-            ///  array until it does. If index is -1, additional
-            ///  space is tacked onto the end. If it is a valid
-            ///  insertion index into the array, this will move
-            ///  the array data to accomodate the space.
+            ///  Ensures that the sub item array has the given capacity. If it doesn't, it enlarges the
+            ///  array until it does. If index is -1, additional space is tacked onto the end. If it is a valid
+            ///  insertion index into the array, this will move the array data to accomodate the space.
             /// </summary>
             private void EnsureSubItemSpace(int size, int index)
             {
@@ -259,8 +255,7 @@ namespace System.Windows.Forms
 
                         ListViewSubItem[] newItems = new ListViewSubItem[newSize];
 
-                        // Now, when copying to the member variable, use index
-                        // if it was provided.
+                        // When copying to the member variable use index if it was provided.
                         if (index != -1)
                         {
                             Array.Copy(_owner.subItems, 0, newItems, 0, index);
@@ -270,6 +265,7 @@ namespace System.Windows.Forms
                         {
                             Array.Copy(_owner.subItems, newItems, _owner.SubItemCount);
                         }
+
                         _owner.subItems = newItems;
                     }
                 }
@@ -286,7 +282,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public int IndexOf(ListViewSubItem subItem)
+            public int IndexOf(ListViewSubItem? subItem)
             {
                 for (int index = 0; index < Count; ++index)
                 {
@@ -299,9 +295,9 @@ namespace System.Windows.Forms
                 return -1;
             }
 
-            int IList.IndexOf(object subItem)
+            int IList.IndexOf(object? subItem)
             {
-                if (!(subItem is ListViewSubItem subItemValue))
+                if (subItem is not ListViewSubItem subItemValue)
                 {
                     return -1;
                 }
@@ -312,7 +308,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
             /// </summary>
-            public virtual int IndexOfKey(string key)
+            public virtual int IndexOfKey(string? key)
             {
                 if (string.IsNullOrEmpty(key))
                 {
@@ -351,12 +347,10 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
 
-                item.owner = _owner;
+                ArgumentNullException.ThrowIfNull(item);
+
+                item._owner = _owner;
 
                 EnsureSubItemSpace(1, index);
 
@@ -366,17 +360,17 @@ namespace System.Windows.Forms
                 _owner.UpdateSubItems(-1);
             }
 
-            void IList.Insert(int index, object item)
+            void IList.Insert(int index, object? item)
             {
-                if (!(item is ListViewSubItem itemValue))
+                if (item is not ListViewSubItem subItem)
                 {
                     throw new ArgumentException(SR.ListViewBadListViewSubItem, nameof(item));
                 }
 
-                Insert(index, (ListViewSubItem)item);
+                Insert(index, subItem);
             }
 
-            public void Remove(ListViewSubItem item)
+            public void Remove(ListViewSubItem? item)
             {
                 int index = IndexOf(item);
                 if (index != -1)
@@ -385,7 +379,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            void IList.Remove(object item)
+            void IList.Remove(object? item)
             {
                 if (item is ListViewSubItem itemValue)
                 {
@@ -401,7 +395,7 @@ namespace System.Windows.Forms
                 }
 
                 // Remove ourselves as the owner.
-                _owner.subItems[index].owner = null;
+                _owner.subItems[index]._owner = null;
 
                 // Collapse the items
                 for (int i = index + 1; i < _owner.SubItemCount; i++)
@@ -418,7 +412,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Removes the child control with the specified key.
             /// </summary>
-            public virtual void RemoveByKey(string key)
+            public virtual void RemoveByKey(string? key)
             {
                 int index = IndexOfKey(key);
                 if (IsValidIndex(index))
@@ -437,7 +431,7 @@ namespace System.Windows.Forms
 
             public IEnumerator GetEnumerator()
             {
-                if (_owner.subItems != null)
+                if (_owner.subItems is not null)
                 {
                     return new ArraySubsetEnumerator(_owner.subItems, _owner.SubItemCount);
                 }

@@ -6,11 +6,10 @@
 
 using System.Drawing;
 using System.Globalization;
-using static Interop;
 
 namespace System.Windows.Forms
 {
-    public class DataGridViewComboBoxEditingControl : ComboBox, IDataGridViewEditingControl
+    public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridViewEditingControl
     {
         private DataGridView _dataGridView;
         private bool _valueChanged;
@@ -113,19 +112,21 @@ namespace System.Windows.Forms
             {
                 BackColor = dataGridViewCellStyle.BackColor;
             }
+
             ForeColor = dataGridViewCellStyle.ForeColor;
         }
 
         public virtual bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
         {
-            if ((keyData & Keys.KeyCode) == Keys.Down ||
-                (keyData & Keys.KeyCode) == Keys.Up ||
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-                (DroppedDown && ((keyData & Keys.KeyCode) == Keys.Escape) || (keyData & Keys.KeyCode) == Keys.Enter))
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
+            var maskedKeyData = keyData & Keys.KeyCode;
+            if (maskedKeyData == Keys.Down ||
+                maskedKeyData == Keys.Up ||
+                (DroppedDown && (maskedKeyData == Keys.Escape)) ||
+                maskedKeyData == Keys.Enter)
             {
                 return true;
             }
+
             return !dataGridViewWantsInputKey;
         }
 
@@ -161,94 +162,8 @@ namespace System.Windows.Forms
         {
             base.OnHandleCreated(e);
 
-            _dataGridView?.SetAccessibleObjectParent(this.AccessibilityObject);
-        }
-    }
-
-    /// <summary>
-    ///  Defines the DataGridView ComboBox EditingControl accessible object.
-    /// </summary>
-    internal class DataGridViewComboBoxEditingControlAccessibleObject : ComboBox.ComboBoxAccessibleObject
-    {
-        private readonly DataGridViewComboBoxEditingControl ownerControl;
-
-        /// <summary>
-        ///  The parent is changed when the editing control is attached to another editing cell.
-        /// </summary>
-        private AccessibleObject _parentAccessibleObject;
-
-        public DataGridViewComboBoxEditingControlAccessibleObject(DataGridViewComboBoxEditingControl ownerControl) : base(ownerControl)
-        {
-            this.ownerControl = ownerControl;
-        }
-
-        public override AccessibleObject Parent
-        {
-            get
-            {
-                return _parentAccessibleObject;
-            }
-        }
-
-        internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
-        {
-            switch (direction)
-            {
-                case UiaCore.NavigateDirection.Parent:
-                    if (Owner is IDataGridViewEditingControl owner && owner.EditingControlDataGridView.EditingControl == owner)
-                    {
-                        return _parentAccessibleObject;
-                    }
-
-                    return null;
-            }
-
-            return base.FragmentNavigate(direction);
-        }
-
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-        {
-            get
-            {
-                return (Owner as IDataGridViewEditingControl)?.EditingControlDataGridView?.AccessibilityObject;
-            }
-        }
-
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
-        {
-            if (patternId == UiaCore.UIA.ExpandCollapsePatternId)
-            {
-                return ownerControl.DropDownStyle != ComboBoxStyle.Simple;
-            }
-
-            return base.IsPatternSupported(patternId);
-        }
-
-        internal override object GetPropertyValue(UiaCore.UIA propertyID)
-        {
-            if (propertyID == UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId)
-            {
-                return IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
-            }
-
-            return base.GetPropertyValue(propertyID);
-        }
-
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
-        {
-            get
-            {
-                return ownerControl.DroppedDown ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
-            }
-        }
-
-        /// <summary>
-        ///  Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
-        /// </summary>
-        /// <param name="parent">The parent accessible object.</param>
-        internal override void SetParent(AccessibleObject parent)
-        {
-            _parentAccessibleObject = parent;
+            // The null-check was added as a fix for a https://github.com/dotnet/winforms/issues/2138
+            _dataGridView?.SetAccessibleObjectParent(AccessibilityObject);
         }
     }
 }

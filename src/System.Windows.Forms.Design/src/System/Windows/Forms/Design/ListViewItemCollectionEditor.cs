@@ -13,14 +13,12 @@ namespace System.Windows.Forms.Design
     internal class ListViewItemCollectionEditor : CollectionEditor
     {
         /// <summary>
-        ///  Initializes a new instance of the <see cref='System.Windows.Forms.Design.ListViewItemCollectionEditor'/> class.
+        ///  Initializes a new instance of the <see cref="ListViewItemCollectionEditor"/> class.
         /// </summary>
         public ListViewItemCollectionEditor(Type type) : base(type)
         { }
 
-        /// <summary>
-        ///  Retrieves the display text for the given list item.
-        /// </summary>
+        /// <inheritdoc />
         protected override string GetDisplayText(object value)
         {
             if (value is null)
@@ -30,12 +28,12 @@ namespace System.Windows.Forms.Design
 
             string text;
 
-            PropertyDescriptor prop = TypeDescriptor.GetDefaultProperty(CollectionType);
-            if (prop != null && prop.PropertyType == typeof(string))
+            PropertyDescriptor property = TypeDescriptor.GetDefaultProperty(CollectionType);
+            if (property?.PropertyType == typeof(string))
             {
-                text = (string)prop.GetValue(value);
+                text = (string)property.GetValue(value);
 
-                if (text != null && text.Length > 0)
+                if (!string.IsNullOrEmpty(text))
                 {
                     return text;
                 }
@@ -43,7 +41,7 @@ namespace System.Windows.Forms.Design
 
             text = TypeDescriptor.GetConverter(value).ConvertToString(value);
 
-            if (text is null || text.Length == 0)
+            if (string.IsNullOrEmpty(text))
             {
                 text = value.GetType().Name;
             }

@@ -13,7 +13,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
     ''' <summary>
     '''  Internal utilities from Microsoft.VisualBasic.FileIO.FileSystem.
     ''' </summary>
-    Friend Class FileSystemUtils
+    Friend NotInheritable Class FileSystemUtils
 
         ''' <summary>
         ''' Normalize the path, but throw exception if the path ends with separator.
@@ -124,8 +124,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
             End If
 
             Path = Path.TrimEnd(IO.Path.DirectorySeparatorChar, IO.Path.AltDirectorySeparatorChar)
-            Return String.Compare(Path, IO.Path.GetPathRoot(Path),
-                    StringComparison.OrdinalIgnoreCase) = 0
+            Return String.Equals(Path, IO.Path.GetPathRoot(Path),
+                    StringComparison.OrdinalIgnoreCase)
         End Function
 
         ''' <summary>

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -15,35 +13,34 @@ namespace System.Windows.Forms
     {
         protected class DataGridViewTopRowAccessibleObject : AccessibleObject
         {
-            private int[] runtimeId;
-            private DataGridView owner;
+            private int[]? runtimeId;
+            private DataGridView? _ownerDataGridView;
 
-            public DataGridViewTopRowAccessibleObject() : base()
+            public DataGridViewTopRowAccessibleObject()
             {
             }
 
             public DataGridViewTopRowAccessibleObject(DataGridView owner) : base()
             {
-                this.owner = owner;
+                _ownerDataGridView = owner;
             }
 
             public override Rectangle Bounds
             {
                 get
                 {
-                    if (owner is null)
+                    if (_ownerDataGridView is null)
                     {
                         throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
                     }
-                    if (owner.ColumnHeadersVisible)
+
+                    if (_ownerDataGridView.IsHandleCreated && _ownerDataGridView.ColumnHeadersVisible)
                     {
-                        Rectangle rect = Rectangle.Union(owner._layout.ColumnHeaders, owner._layout.TopLeftHeader);
-                        return owner.RectangleToScreen(rect);
+                        Rectangle rect = Rectangle.Union(_ownerDataGridView._layout.ColumnHeaders, _ownerDataGridView._layout.TopLeftHeader);
+                        return _ownerDataGridView.RectangleToScreen(rect);
                     }
-                    else
-                    {
-                        return Rectangle.Empty;
-                    }
+
+                    return Rectangle.Empty;
                 }
             }
 
@@ -55,19 +52,20 @@ namespace System.Windows.Forms
                 }
             }
 
-            public DataGridView Owner
+            public DataGridView? Owner
             {
                 get
                 {
-                    return owner;
+                    return _ownerDataGridView;
                 }
                 set
                 {
-                    if (owner != null)
+                    if (_ownerDataGridView is not null)
                     {
                         throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerAlreadySet);
                     }
-                    owner = value;
+
+                    _ownerDataGridView = value;
                 }
             }
 
@@ -75,11 +73,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (owner is null)
+                    if (_ownerDataGridView is null)
                     {
                         throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
                     }
-                    return owner.AccessibilityObject;
+
+                    return _ownerDataGridView.AccessibilityObject;
                 }
             }
 
@@ -92,20 +91,12 @@ namespace System.Windows.Forms
             }
 
             internal override int[] RuntimeId
-            {
-                get
+                => runtimeId ??= new int[]
                 {
-                    if (runtimeId is null)
-                    {
-                        runtimeId = new int[3];
-                        runtimeId[0] = RuntimeIDFirstItem; // first item is static - 0x2a
-                        runtimeId[1] = Parent.GetHashCode();
-                        runtimeId[2] = GetHashCode();
-                    }
-
-                    return runtimeId;
-                }
-            }
+                    RuntimeIDFirstItem, // first item is static - 0x2a
+                    Parent.GetHashCode(),
+                    GetHashCode()
+                };
 
             public override string Value
             {
@@ -115,9 +106,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject GetChild(int index)
+            public override AccessibleObject? GetChild(int index)
             {
-                if (owner is null)
+                if (_ownerDataGridView is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
                 }
@@ -127,12 +118,17 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
 
-                if (index == 0 && owner.RowHeadersVisible)
+                if (index > GetChildCount() - 1)
                 {
-                    return owner.TopLeftHeaderCell.AccessibilityObject;
+                    return null;
                 }
 
-                if (owner.RowHeadersVisible)
+                if (index == 0 && _ownerDataGridView.RowHeadersVisible)
+                {
+                    return _ownerDataGridView.TopLeftHeaderCell.AccessibilityObject;
+                }
+
+                if (_ownerDataGridView.RowHeadersVisible)
                 {
                     // decrement the index because the first child is the top left header cell
                     index--;
@@ -140,10 +136,10 @@ namespace System.Windows.Forms
 
                 Debug.Assert(index >= 0);
 
-                if (index < owner.Columns.GetColumnCount(DataGridViewElementStates.Visible))
+                if (index < _ownerDataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible))
                 {
-                    int actualColumnIndex = owner.Columns.ActualDisplayIndexToColumnIndex(index, DataGridViewElementStates.Visible);
-                    return owner.Columns[actualColumnIndex].HeaderCell.AccessibilityObject;
+                    int actualColumnIndex = _ownerDataGridView.Columns.ActualDisplayIndexToColumnIndex(index, DataGridViewElementStates.Visible);
+                    return _ownerDataGridView.Columns[actualColumnIndex].HeaderCell.AccessibilityObject;
                 }
                 else
                 {
@@ -153,12 +149,13 @@ namespace System.Windows.Forms
 
             public override int GetChildCount()
             {
-                if (owner is null)
+                if (_ownerDataGridView is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
                 }
-                int result = owner.Columns.GetColumnCount(DataGridViewElementStates.Visible);
-                if (owner.RowHeadersVisible)
+
+                int result = _ownerDataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible);
+                if (_ownerDataGridView.RowHeadersVisible)
                 {
                     // + 1 is the top left header cell accessibility object
                     result++;
@@ -167,28 +164,35 @@ namespace System.Windows.Forms
                 return result;
             }
 
-            public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
+            public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
             {
-                if (owner is null)
+                if (_ownerDataGridView is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
                 }
+
                 switch (navigationDirection)
                 {
                     case AccessibleNavigation.Down:
                     case AccessibleNavigation.Next:
-                        if (owner.AccessibilityObject.GetChildCount() > 1)
+                        if (_ownerDataGridView.AccessibilityObject.GetChildCount() > 1)
                         {
-                            return owner.AccessibilityObject.GetChild(1);
+                            return _ownerDataGridView.AccessibilityObject.GetChild(1);
                         }
                         else
                         {
                             return null;
                         }
+
                     case AccessibleNavigation.FirstChild:
-                        return GetChild(0);
+                        return GetChildCount() > 0
+                            ? GetChild(0)
+                            : null;
                     case AccessibleNavigation.LastChild:
-                        return GetChild(GetChildCount() - 1);
+                        int childCount = GetChildCount();
+                        return childCount > 0
+                            ? GetChild(childCount - 1)
+                            : null;
                     default:
                         return null;
                 }
@@ -208,12 +212,17 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return owner.AccessibilityObject;
+                    if (_ownerDataGridView is null)
+                    {
+                        throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
+                    }
+
+                    return _ownerDataGridView.AccessibilityObject;
                 }
             }
 
             [return: MarshalAs(UnmanagedType.IUnknown)]
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
@@ -222,20 +231,28 @@ namespace System.Windows.Forms
                     case UiaCore.NavigateDirection.NextSibling:
                         if (Parent.GetChildCount() > 1)
                         {
-                            return Parent.GetChild(1);
+                            if (_ownerDataGridView is null)
+                            {
+                                throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
+                            }
+
+                            return _ownerDataGridView.Rows.Count == 0 ? null : Parent.GetChild(1);
                         }
+
                         break;
                     case UiaCore.NavigateDirection.FirstChild:
                         if (GetChildCount() > 0)
                         {
                             return GetChild(0);
                         }
+
                         break;
                     case UiaCore.NavigateDirection.LastChild:
                         if (GetChildCount() > 0)
                         {
                             return GetChild(GetChildCount() - 1);
                         }
+
                         break;
                 }
 
@@ -256,27 +273,18 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyId)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyId)
             {
                 switch (propertyId)
                 {
-                    case UiaCore.UIA.NamePropertyId:
-                        return SR.DataGridView_AccTopRow;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return false;
                     case UiaCore.UIA.IsEnabledPropertyId:
-                        return owner.Enabled;
+                        return _ownerDataGridView is null ? throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet) : _ownerDataGridView.Enabled;
                     case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
                     case UiaCore.UIA.IsContentElementPropertyId:
-                        return true;
-                    case UiaCore.UIA.IsPasswordPropertyId:
-                        return false;
-                    case UiaCore.UIA.AccessKeyPropertyId:
-                    case UiaCore.UIA.HelpTextPropertyId:
-                        return string.Empty;
-                    case UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId:
                         return true;
                 }
 

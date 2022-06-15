@@ -1,0 +1,7 @@
+﻿{
+  "version": "1.0.0.0",
+  "strings": {
+    "name": "Windows Forms Sınıf Kitaplığı",
+    "description": ".NET Windows Forms'u (WinForms) hedefleyen bir sınıf kitaplığı oluşturmaya yönelik proje."
+  }
+}

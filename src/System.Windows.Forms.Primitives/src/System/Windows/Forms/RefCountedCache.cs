@@ -69,9 +69,7 @@ namespace System.Windows.Forms
         public virtual Scope GetEntry(TKey key)
         {
             // NOTE: Measure carefully when changing logic in this method. Code has been optimized for performance.
-
-            if (key is null)
-                throw new ArgumentNullException(nameof(key));
+            ArgumentNullException.ThrowIfNull(key);
 
             Scope scope;
 
@@ -108,6 +106,7 @@ namespace System.Windows.Forms
                             // the node to the front of the list.
                             enumerator.MoveCurrentToFront();
                         }
+
                         success = true;
                         break;
                     }

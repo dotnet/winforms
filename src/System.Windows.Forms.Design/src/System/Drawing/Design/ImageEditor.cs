@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.ComponentModel;
-using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
@@ -55,79 +54,73 @@ namespace System.Drawing.Design
 
         protected static string CreateFilterEntry(ImageEditor e)
         {
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
+            ArgumentNullException.ThrowIfNull(e);
 
             string[] extenders = e.GetExtensions();
-            string desc = e.GetFileDialogDescription();
-            string exts = CreateExtensionsString(extenders, ",");
-            string extsSemis = CreateExtensionsString(extenders, ";");
-            return desc + "(" + exts + ")|" + extsSemis;
+            string description = e.GetFileDialogDescription();
+            string extensions = CreateExtensionsString(extenders, ",");
+            string extensionsWithSemicolons = CreateExtensionsString(extenders, ";");
+            return $"{description}({extensions})|{extensionsWithSemicolons}";
         }
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
             {
-                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
+                return value;
+            }
+
+            if (_fileDialog is null)
+            {
+                _fileDialog = new OpenFileDialog();
+                string filter = CreateFilterEntry(this);
+                foreach (Type extender in GetImageExtenders())
                 {
-                    if (_fileDialog is null)
+                    // Skip invalid extenders.
+                    if (extender is null || !typeof(ImageEditor).IsAssignableFrom(extender))
                     {
-                        _fileDialog = new OpenFileDialog();
-                        string filter = CreateFilterEntry(this);
-                        foreach (Type extender in GetImageExtenders())
-                        {
-                            // Skip invalid extenders.
-                            if (extender is null || !typeof(ImageEditor).IsAssignableFrom(extender))
-                            {
-                                continue;
-                            }
-
-                            ImageEditor e = (ImageEditor)Activator.CreateInstance(extender, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
-                            Type myClass = GetType();
-                            if (!myClass.Equals(e.GetType()) && e != null && myClass.IsInstanceOfType(e))
-                            {
-                                filter += "|" + CreateFilterEntry(e);
-                            }
-                        }
-
-                        _fileDialog.Filter = filter;
+                        continue;
                     }
 
-                    IntPtr hwndFocus = User32.GetFocus();
-                    try
+                    ImageEditor e = (ImageEditor)Activator.CreateInstance(
+                        extender,
+                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance,
+                        null,
+                        null,
+                        null);
+
+                    Type myClass = GetType();
+                    if (!myClass.Equals(e.GetType()) && e != null && myClass.IsInstanceOfType(e))
                     {
-                        if (_fileDialog.ShowDialog() == DialogResult.OK)
-                        {
-                            using (var file = new FileStream(_fileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read))
-                            {
-                                value = LoadFromStream(file);
-                            }
-                        }
+                        filter += $"|{CreateFilterEntry(e)}";
                     }
-                    finally
-                    {
-                        if (hwndFocus != IntPtr.Zero)
-                        {
-                            User32.SetFocus(hwndFocus);
-                        }
-                    }
+                }
+
+                _fileDialog.Filter = filter;
+            }
+
+            IntPtr hwndFocus = User32.GetFocus();
+            try
+            {
+                if (_fileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    using FileStream stream = new(_fileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    value = LoadFromStream(stream);
+                }
+            }
+            finally
+            {
+                if (hwndFocus != IntPtr.Zero)
+                {
+                    User32.SetFocus(hwndFocus);
                 }
             }
 
             return value;
         }
 
-        /// <summary>
-        ///  Retrieves the editing style of the Edit method. If the method is not supported,
-        ///  this will return None.
-        /// </summary>
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
-        {
-            return UITypeEditorEditStyle.Modal;
-        }
+        /// <inheritdoc />
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.Modal;
 
         protected virtual string GetFileDialogDescription() => SR.imageFileDescription;
 
@@ -142,11 +135,17 @@ namespace System.Drawing.Design
                     continue;
                 }
 
-                ImageEditor e = (ImageEditor)Activator.CreateInstance(extender, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
+                ImageEditor e = (ImageEditor)Activator.CreateInstance(
+                    extender,
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance,
+                    null,
+                    null,
+                    null);
+
                 if (e.GetType() != typeof(ImageEditor))
                 {
                     string[] extensions = e.GetExtensions();
-                    if (extensions != null)
+                    if (extensions is not null)
                     {
                         list.AddRange(extensions);
                     }
@@ -156,18 +155,12 @@ namespace System.Drawing.Design
             return (string[])list.ToArray(typeof(string));
         }
 
-        /// <summary>
-        ///  Determines if this editor supports the painting of a representation
-        ///  of an object's value.
-        /// </summary>
+        /// <inheritdoc />
         public override bool GetPaintValueSupported(ITypeDescriptorContext context) => true;
 
         protected virtual Image LoadFromStream(Stream stream)
         {
-            if (stream is null)
-            {
-                throw new ArgumentNullException(nameof(stream));
-            }
+            ArgumentNullException.ThrowIfNull(stream);
 
             // Copy the original stream to a new memory stream to avoid locking the file.
             // The created image will take over ownership of the stream.
@@ -176,11 +169,7 @@ namespace System.Drawing.Design
             return Image.FromStream(memoryStream);
         }
 
-        /// <summary>
-        ///  Paints a representative value of the given object to the provided
-        ///  canvas. Painting should be done within the boundaries of the
-        ///  provided rectangle.
-        /// </summary>
+        /// <inheritdoc />
         public override void PaintValue(PaintValueEventArgs e)
         {
             if (e?.Value is Image image)

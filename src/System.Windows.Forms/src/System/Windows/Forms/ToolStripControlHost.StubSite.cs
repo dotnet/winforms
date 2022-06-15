@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         ///  Since the Control which is wrapped by ToolStripControlHost is a runtime instance, there is no way of knowing
         ///  whether the control is in runtime or designtime.
         ///  This implementation of ISite would be set to Control.Site when ToolStripControlHost.Site is set at DesignTime. (Refer to Site property on ToolStripControlHost)
-        ///  This implementation just returns the DesigMode property to be ToolStripControlHost's DesignMode property.
+        ///  This implementation just returns the DesignMode property to be ToolStripControlHost's DesignMode property.
         ///  Everything else is pretty much default implementation.
         /// </remarks>
         private class StubSite : ISite, IDictionaryService
@@ -33,12 +33,12 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  When implemented by a class, gets the component associated with the <see cref='ISite'/>.
+            ///  When implemented by a class, gets the component associated with the <see cref="ISite"/>.
             /// </summary>
             IComponent ISite.Component => _comp;
 
             /// <summary>
-            ///  When implemented by a class, gets the container associated with the <see cref='ISite'/>.
+            ///  When implemented by a class, gets the container associated with the <see cref="ISite"/>.
             /// </summary>
             IContainer ISite.Container => _owner.Site.Container;
 
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///  When implemented by a class, gets or sets the name of
-            ///  the component associated with the <see cref='ISite'/>.
+            ///  the component associated with the <see cref="ISite"/>.
             /// </summary>
             string ISite.Name
             {
@@ -62,10 +62,7 @@ namespace System.Windows.Forms
             /// </summary>
             object IServiceProvider.GetService(Type service)
             {
-                if (service is null)
-                {
-                    throw new ArgumentNullException(nameof(service));
-                }
+                ArgumentNullException.ThrowIfNull(service);
 
                 // We have to implement our own dictionary service. If we don't,
                 // the properties of the underlying component will end up being
@@ -83,12 +80,12 @@ namespace System.Windows.Forms
             /// </summary>
             object IDictionaryService.GetKey(object value)
             {
-                if (_dictionary != null)
+                if (_dictionary is not null)
                 {
                     foreach (DictionaryEntry de in _dictionary)
                     {
                         object o = de.Value;
-                        if (value != null && value.Equals(o))
+                        if (value is not null && value.Equals(o))
                         {
                             return de.Key;
                         }
@@ -103,7 +100,7 @@ namespace System.Windows.Forms
             /// </summary>
             object IDictionaryService.GetValue(object key)
             {
-                if (_dictionary != null)
+                if (_dictionary is not null)
                 {
                     return _dictionary[key];
                 }

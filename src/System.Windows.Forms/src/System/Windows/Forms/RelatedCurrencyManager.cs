@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -29,7 +28,7 @@ namespace System.Windows.Forms
 
         internal void Bind(BindingManagerBase parentManager, string dataField)
         {
-            Debug.Assert(parentManager != null, "How could this be a null parentManager.");
+            Debug.Assert(parentManager is not null, "How could this be a null parentManager.");
 
             // Unwire previous BindingManagerBase
             UnwireParentManager(this.parentManager);
@@ -41,6 +40,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
             }
+
             finalType = fieldInfo.PropertyType;
 
             // Wire new BindingManagerBase
@@ -51,7 +51,7 @@ namespace System.Windows.Forms
 
         private void UnwireParentManager(BindingManagerBase bmb)
         {
-            if (bmb != null)
+            if (bmb is not null)
             {
                 bmb.CurrentItemChanged -= new EventHandler(ParentManager_CurrentItemChanged);
 
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
 
         private void WireParentManager(BindingManagerBase bmb)
         {
-            if (bmb != null)
+            if (bmb is not null)
             {
                 bmb.CurrentItemChanged += new EventHandler(ParentManager_CurrentItemChanged);
 
@@ -79,7 +79,7 @@ namespace System.Windows.Forms
         {
             PropertyDescriptor[] accessors;
 
-            if (listAccessors != null && listAccessors.Length > 0)
+            if (listAccessors is not null && listAccessors.Length > 0)
             {
                 accessors = new PropertyDescriptor[listAccessors.Length + 1];
                 listAccessors.CopyTo(accessors, 1);
@@ -114,6 +114,7 @@ namespace System.Windows.Forms
             {
                 return name;
             }
+
             return base.GetListName();
         }
 
@@ -195,6 +196,7 @@ namespace System.Windows.Forms
                 SetDataSource(fieldInfo.GetValue(parentManager.Current));
                 listposition = (Count > 0 ? 0 : -1);
             }
+
             if (oldlistposition != listposition)
             {
                 OnPositionChanged(EventArgs.Empty);

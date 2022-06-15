@@ -1,8 +1,6 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using System.Collections;
 using System.ComponentModel;
@@ -18,7 +16,7 @@ namespace System.Windows.Forms
     {
         private readonly ListView _listView;
 
-        private ArrayList _list;
+        private List<ListViewGroup>? _list;
 
         internal ListViewGroupCollection(ListView listView)
         {
@@ -35,17 +33,14 @@ namespace System.Windows.Forms
 
         bool IList.IsReadOnly => false;
 
-        private ArrayList List => _list ?? (_list = new ArrayList());
+        private List<ListViewGroup> List => _list ??= new List<ListViewGroup>();
 
         public ListViewGroup this[int index]
         {
-            get => (ListViewGroup)List[index];
+            get => List[index];
             set
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 if (List.Contains(value))
                 {
@@ -58,7 +53,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public ListViewGroup this[string key]
+        public ListViewGroup? this[string key]
         {
             get
             {
@@ -79,10 +74,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 if (_list is null)
                 {
@@ -107,7 +99,7 @@ namespace System.Windows.Forms
             }
         }
 
-        object IList.this[int index]
+        object? IList.this[int index]
         {
             get => this[index];
             set
@@ -121,10 +113,8 @@ namespace System.Windows.Forms
 
         public int Add(ListViewGroup group)
         {
-            if (group is null)
-            {
-                throw new ArgumentNullException(nameof(group));
-            }
+            ArgumentNullException.ThrowIfNull(group);
+            ThrowInvalidOperationExceptionIfVirtualMode();
 
             if (Contains(group))
             {
@@ -133,7 +123,8 @@ namespace System.Windows.Forms
 
             CheckListViewItems(group);
             group.ListView = _listView;
-            int index = List.Add(group);
+            List.Add(group);
+            int index = List.Count - 1;
             if (_listView.IsHandleCreated)
             {
                 _listView.InsertGroupInListView(List.Count, group);
@@ -143,16 +134,16 @@ namespace System.Windows.Forms
             return index;
         }
 
-        public ListViewGroup Add(string key, string headerText)
+        public ListViewGroup Add(string? key, string? headerText)
         {
             ListViewGroup group = new ListViewGroup(key, headerText);
             Add(group);
             return group;
         }
 
-        int IList.Add(object value)
+        int IList.Add(object? value)
         {
-            if (!(value is ListViewGroup group))
+            if (value is not ListViewGroup group)
             {
                 throw new ArgumentException(SR.ListViewGroupCollectionBadListViewGroup, nameof(value));
             }
@@ -162,10 +153,8 @@ namespace System.Windows.Forms
 
         public void AddRange(ListViewGroup[] groups)
         {
-            if (groups is null)
-            {
-                throw new ArgumentNullException(nameof(groups));
-            }
+            ArgumentNullException.ThrowIfNull(groups);
+            ThrowInvalidOperationExceptionIfVirtualMode();
 
             for (int i = 0; i < groups.Length; i++)
             {
@@ -175,10 +164,8 @@ namespace System.Windows.Forms
 
         public void AddRange(ListViewGroupCollection groups)
         {
-            if (groups is null)
-            {
-                throw new ArgumentNullException(nameof(groups));
-            }
+            ArgumentNullException.ThrowIfNull(groups);
+            ThrowInvalidOperationExceptionIfVirtualMode();
 
             for (int i = 0; i < groups.Count; i++)
             {
@@ -191,7 +178,7 @@ namespace System.Windows.Forms
             for (int i = 0; i < group.Items.Count; i++)
             {
                 ListViewItem item = group.Items[i];
-                if (item.ListView != null && item.ListView != _listView)
+                if (item.ListView is not null && item.ListView != _listView)
                 {
                     throw new ArgumentException(string.Format(SR.OnlyOneControl, item.Text));
                 }
@@ -223,9 +210,9 @@ namespace System.Windows.Forms
 
         public bool Contains(ListViewGroup value) => List.Contains(value);
 
-        bool IList.Contains(object value)
+        bool IList.Contains(object? value)
         {
-            if (!(value is ListViewGroup group))
+            if (value is not ListViewGroup group)
             {
                 return false;
             }
@@ -233,28 +220,26 @@ namespace System.Windows.Forms
             return Contains(group);
         }
 
-        public void CopyTo(Array array, int index) => List.CopyTo(array, index);
+        public void CopyTo(Array array, int index) => ((ICollection)List).CopyTo(array, index);
 
         public IEnumerator GetEnumerator() => List.GetEnumerator();
 
         public int IndexOf(ListViewGroup value) => List.IndexOf(value);
 
-        int IList.IndexOf(object value)
+        int IList.IndexOf(object? value)
         {
-            if (!(value is ListViewGroup group))
+            if (value is not ListViewGroup group)
             {
                 return -1;
             }
 
-            return IndexOf((ListViewGroup)value);
+            return IndexOf(group);
         }
 
         public void Insert(int index, ListViewGroup group)
         {
-            if (group is null)
-            {
-                throw new ArgumentNullException(nameof(group));
-            }
+            ArgumentNullException.ThrowIfNull(group);
+            ThrowInvalidOperationExceptionIfVirtualMode();
 
             if (Contains(group))
             {
@@ -271,7 +256,7 @@ namespace System.Windows.Forms
             }
         }
 
-        void IList.Insert(int index, object value)
+        void IList.Insert(int index, object? value)
         {
             if (value is ListViewGroup group)
             {
@@ -303,7 +288,7 @@ namespace System.Windows.Forms
             }
         }
 
-        void IList.Remove(object value)
+        void IList.Remove(object? value)
         {
             if (value is ListViewGroup group)
             {
@@ -312,5 +297,13 @@ namespace System.Windows.Forms
         }
 
         public void RemoveAt(int index) => Remove(this[index]);
+
+        private void ThrowInvalidOperationExceptionIfVirtualMode()
+        {
+            if (_listView.VirtualMode)
+            {
+                throw new InvalidOperationException(SR.ListViewCannotAddGroupsToVirtualListView);
+            }
+        }
     }
 }

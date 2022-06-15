@@ -2,15 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.IO;
-using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Layout.Tests
@@ -115,12 +112,12 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TableLayoutPanelGrowStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TableLayoutPanelGrowStyle))]
         public void TableLayoutSettings_GrowStyle_SetInvalid_ThrowsArgumentOutOfRangeException(TableLayoutPanelGrowStyle value)
         {
             using var control = new TableLayoutPanel();
             TableLayoutSettings settings = control.LayoutSettings;
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => settings.GrowStyle = value);
+            Assert.Throws<InvalidEnumArgumentException>("value", () => settings.GrowStyle = value);
         }
 
         [WinFormsTheory]
@@ -519,6 +516,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("TableIndex", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -591,6 +589,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("TableIndex", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -736,6 +735,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("TableIndex", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -970,6 +970,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("ColumnSpan", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -1210,6 +1211,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("TableIndex", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -1444,6 +1446,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("RowSpan", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -1783,13 +1786,13 @@ namespace System.Windows.Forms.Layout.Tests
 
             using (var stream = new MemoryStream())
             {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 var formatter = new BinaryFormatter();
-#pragma warning disable CS0618 // Type or member is obsolete
                 formatter.Serialize(stream, settings);
                 stream.Seek(0, SeekOrigin.Begin);
 
                 TableLayoutSettings result = Assert.IsType<TableLayoutSettings>(formatter.Deserialize(stream));
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
                 Assert.Equal(columnStyle.SizeType, ((ColumnStyle)Assert.Single(result.ColumnStyles)).SizeType);
                 Assert.Equal(columnStyle.Width, ((ColumnStyle)Assert.Single(result.ColumnStyles)).Width);
                 Assert.Equal(rowStyle.SizeType, ((RowStyle)Assert.Single(result.RowStyles)).SizeType);
@@ -1812,13 +1815,13 @@ namespace System.Windows.Forms.Layout.Tests
             TypeDescriptor.AddAttributes(settings, new Attribute[] { new TypeConverterAttribute(type) });
             using (var stream = new MemoryStream())
             {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 var formatter = new BinaryFormatter();
-#pragma warning disable CS0618 // Type or member is obsolete
                 formatter.Serialize(stream, settings);
                 stream.Seek(0, SeekOrigin.Begin);
 
                 Assert.Throws<SerializationException>(() => formatter.Deserialize(stream));
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
         }
 
@@ -1832,14 +1835,14 @@ namespace System.Windows.Forms.Layout.Tests
             TypeDescriptor.AddAttributes(settings, new Attribute[] { new TypeConverterAttribute(type) });
             using (var stream = new MemoryStream())
             {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 var formatter = new BinaryFormatter();
-#pragma warning disable CS0618 // Type or member is obsolete
                 formatter.Serialize(stream, settings);
 
                 stream.Seek(0, SeekOrigin.Begin);
 
                 TableLayoutSettings result = Assert.IsType<TableLayoutSettings>(formatter.Deserialize(stream));
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
                 Assert.NotNull(result.LayoutEngine);
                 Assert.Same(result.LayoutEngine, result.LayoutEngine);
                 Assert.Throws<NullReferenceException>(() => result.ColumnCount);

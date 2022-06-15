@@ -2,17 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.User32;
-using Hashtable = System.Collections.Hashtable;
 
 namespace System.Windows.Forms
 {
@@ -24,7 +19,7 @@ namespace System.Windows.Forms
     /// </summary>
     [LookupBindingProperties]
     [SRDescription(nameof(SR.DescriptionCheckedListBox))]
-    public class CheckedListBox : ListBox
+    public partial class CheckedListBox : ListBox
     {
         private int _idealCheckSize = 13;
 
@@ -41,7 +36,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Current listener of the onItemCheck event.
         /// </summary>
-        private ItemCheckEventHandler _onItemCheck;
+        private ItemCheckEventHandler? _onItemCheck;
 
         /// <summary>
         ///  Should we use 3d checkboxes or flat ones?
@@ -57,8 +52,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The collection of checked items in the CheckedListBox.
         /// </summary>
-        private CheckedItemCollection _checkedItemCollection;
-        private CheckedIndexCollection _checkedIndexCollection;
+        private CheckedItemCollection? _checkedItemCollection;
+        private CheckedIndexCollection? _checkedIndexCollection;
 
         private static readonly WM LBC_GETCHECKSTATE = RegisterWindowMessageW("LBC_GETCHECKSTATE");
         private static readonly WM LBC_SETCHECKSTATE = RegisterWindowMessageW("LBC_SETCHECKSTATE");
@@ -101,6 +96,7 @@ namespace System.Windows.Forms
                 {
                     _checkedIndexCollection = new CheckedIndexCollection(this);
                 }
+
                 return _checkedIndexCollection;
             }
         }
@@ -118,12 +114,13 @@ namespace System.Windows.Forms
                 {
                     _checkedItemCollection = new CheckedItemCollection(this);
                 }
+
                 return _checkedItemCollection;
             }
         }
 
         /// <summary>
-        ///  This is called when creating a window.  Inheriting classes can ovveride
+        ///  This is called when creating a window.  Inheriting classes can override
         ///  this to add extra functionality, but should not forget to first call
         ///  base.CreateParams() to make sure the control continues to work
         ///  correctly.
@@ -144,7 +141,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new object DataSource
+        public new object? DataSource
         {
             get => base.DataSource;
             set => base.DataSource = value;
@@ -230,10 +227,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)SelectionMode.None, (int)SelectionMode.MultiExtended))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SelectionMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value != SelectionMode.One
                     && value != SelectionMode.None)
                 {
@@ -270,7 +264,7 @@ namespace System.Windows.Forms
 
                     // see if we have some items, and only invalidate if we do.
                     ObjectCollection items = (ObjectCollection)Items;
-                    if ((items != null) && (items.Count > 0))
+                    if ((items is not null) && (items.Count > 0))
                     {
                         Invalidate();
                     }
@@ -317,7 +311,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler DataSourceChanged
+        new public event EventHandler? DataSourceChanged
         {
             add => base.DataSourceChanged += value;
             remove => base.DataSourceChanged -= value;
@@ -325,7 +319,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler DisplayMemberChanged
+        new public event EventHandler? DisplayMemberChanged
         {
             add => base.DisplayMemberChanged += value;
             remove => base.DisplayMemberChanged -= value;
@@ -333,7 +327,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.CheckedListBoxItemCheckDescr))]
-        public event ItemCheckEventHandler ItemCheck
+        public event ItemCheckEventHandler? ItemCheck
         {
             add => _onItemCheck += value;
             remove => _onItemCheck -= value;
@@ -342,7 +336,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public new event EventHandler Click
+        public new event EventHandler? Click
         {
             add => base.Click += value;
             remove => base.Click -= value;
@@ -351,7 +345,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public new event MouseEventHandler MouseClick
+        public new event MouseEventHandler? MouseClick
         {
             add => base.MouseClick += value;
             remove => base.MouseClick -= value;
@@ -360,7 +354,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event DrawItemEventHandler DrawItem
+        public new event DrawItemEventHandler? DrawItem
         {
             add => base.DrawItem += value;
             remove => base.DrawItem -= value;
@@ -369,7 +363,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MeasureItemEventHandler MeasureItem
+        public new event MeasureItemEventHandler? MeasureItem
         {
             add => base.MeasureItem += value;
             remove => base.MeasureItem -= value;
@@ -386,7 +380,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ValueMemberChanged
+        new public event EventHandler? ValueMemberChanged
         {
             add => base.ValueMemberChanged += value;
             remove => base.ValueMemberChanged -= value;
@@ -424,10 +418,7 @@ namespace System.Windows.Forms
         ///  Indicates if the given item is, in any way, shape, or form, checked.
         ///  This will return true if the item is fully or indeterminately checked.
         /// </summary>
-        public bool GetItemChecked(int index)
-        {
-            return (GetItemCheckState(index) != CheckState.Unchecked);
-        }
+        public bool GetItemChecked(int index) => GetItemCheckState(index) != CheckState.Unchecked;
 
         /// <summary>
         ///  Invalidates the given item in the listbox
@@ -437,7 +428,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 var rect = new RECT();
-                SendMessageW(this, (WM)LB.GETITEMRECT, (IntPtr)index, ref rect);
+                SendMessageW(this, (WM)LB.GETITEMRECT, index, ref rect);
                 InvalidateRect(new HandleRef(this, Handle), &rect, BOOL.FALSE);
             }
         }
@@ -451,7 +442,7 @@ namespace System.Windows.Forms
             // this.  Note that we'll only change the selection when the
             // user clicks again on a currently selected item, or when the
             // user has CheckOnClick set to true.  Otherwise
-            // just using the up and down arrows selects or unselects
+            // just using the up and down arrows selects or deselects
             // every item around town ...
             //
 
@@ -509,7 +500,7 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SendMessageW(this, (WM)LB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)ItemHeight);
+            SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
         }
 
         /// <summary>
@@ -551,6 +542,7 @@ namespace System.Windows.Forms
                 {
                     state |= ButtonState.Flat;
                 }
+
                 if (e.Index < Items.Count)
                 {
                     switch (CheckedItems.GetCheckedState(e.Index))
@@ -635,11 +627,12 @@ namespace System.Windows.Forms
                 {
                     foreColor = SystemColors.GrayText;
                 }
+
                 Font font = Font;
 
                 // Setup text font, color, and text
 
-                string text = GetItemText(item);
+                string? text = GetItemText(item);
 
                 if (SelectionMode != SelectionMode.None && (e.State & DrawItemState.Selected) == DrawItemState.Selected)
                 {
@@ -693,7 +686,6 @@ namespace System.Windows.Forms
                             tabStops[i] = tabDistance;
                         }
 
-                        //(
                         if (Math.Abs(tabOffset) < tabDistance)
                         {
                             tabStops[0] = tabDistance + tabOffset;
@@ -702,6 +694,7 @@ namespace System.Windows.Forms
                         {
                             tabStops[0] = tabDistance;
                         }
+
                         format.SetTabStops(0, tabStops);
                     }
                     else if (UseCustomTabOffsets)
@@ -757,7 +750,7 @@ namespace System.Windows.Forms
                 if ((e.State & DrawItemState.Focus) == DrawItemState.Focus &&
                     (e.State & DrawItemState.NoFocusRect) != DrawItemState.NoFocusRect)
                 {
-                    ControlPaint.DrawFocusRectangle(e.Graphics, textBounds, foreColor, backColor);
+                    ControlPaint.DrawBlackWhiteFocusRectangle(e.Graphics, textBounds, backColor);
                 }
             }
 
@@ -806,14 +799,12 @@ namespace System.Windows.Forms
         protected override void OnFontChanged(EventArgs e)
         {
             // Update the item height
-            //
             if (IsHandleCreated)
             {
-                SendMessageW(this, (WM)LB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)ItemHeight);
+                SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
             }
 
             // The base OnFontChanged will adjust the height of the CheckedListBox accordingly
-            //
             base.OnFontChanged(e);
         }
 
@@ -830,6 +821,7 @@ namespace System.Windows.Forms
             {
                 LbnSelChange();
             }
+
             if (FormattingEnabled) //We want to fire KeyPress only when FormattingEnabled (this is a whidbey property)
             {
                 base.OnKeyPress(e);
@@ -844,6 +836,16 @@ namespace System.Windows.Forms
         protected virtual void OnItemCheck(ItemCheckEventArgs ice)
         {
             _onItemCheck?.Invoke(this, ice);
+
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibleObject? checkedItem = AccessibilityObject.GetChild(ice.Index);
+
+                if (checkedItem is not null)
+                {
+                    checkedItem.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId, ice.CurrentValue, ice.NewValue);
+                }
+            }
         }
 
         protected override void OnMeasureItem(MeasureItemEventArgs e)
@@ -852,7 +854,6 @@ namespace System.Windows.Forms
 
             // we'll use the ideal checkbox size plus enough for padding on the top
             // and bottom
-            //
             if (e.ItemHeight < _idealCheckSize + 2)
             {
                 e.ItemHeight = _idealCheckSize + 2;
@@ -877,19 +878,19 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void RefreshItems()
         {
-            Hashtable savedcheckedItems = new Hashtable();
+            CheckState[] savedCheckedItems = new CheckState[Items.Count];
             for (int i = 0; i < Items.Count; i++)
             {
-                savedcheckedItems[i] = CheckedItems.GetCheckedState(i);
+                savedCheckedItems[i] = CheckedItems.GetCheckedState(i);
             }
 
             //call the base
             base.RefreshItems();
-            // restore the checkedItems...
 
+            // restore the checkedItems...
             for (int j = 0; j < Items.Count; j++)
             {
-                CheckedItems.SetCheckedState(j, (CheckState)savedcheckedItems[j]);
+                CheckedItems.SetCheckedState(j, savedCheckedItems[j]);
             }
         }
 
@@ -903,11 +904,9 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
+
             // valid values are 0-2 inclusive.
-            if (!ClientUtils.IsEnumValid(value, (int)value, (int)CheckState.Unchecked, (int)CheckState.Indeterminate))
-            {
-                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CheckState));
-            }
+            SourceGenerated.EnumValidator.Validate(value);
             CheckState currentValue = CheckedItems.GetCheckedState(index);
 
             if (value != currentValue)
@@ -933,21 +932,19 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  We need to get LBN_SELCHANGE notifications
+        ///  We need to get LBN_SELCHANGE notifications.
         /// </summary>
         protected override void WmReflectCommand(ref Message m)
         {
-            switch (PARAM.HIWORD(m.WParam))
+            switch ((User32.LBN)PARAM.HIWORD(m.WParamInternal))
             {
-                case (int)LBN.SELCHANGE:
+                case User32.LBN.SELCHANGE:
                     LbnSelChange();
-                    // finally, fire the OnSelectionChange event.
                     base.WmReflectCommand(ref m);
                     break;
 
-                case (int)LBN.DBLCLK:
+                case User32.LBN.DBLCLK:
                     // We want double-clicks to change the checkstate on each click - just like the CheckBox control
-                    //
                     LbnSelChange();
                     base.WmReflectCommand(ref m);
                     break;
@@ -964,8 +961,8 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmReflectVKeyToItem(ref Message m)
         {
-            int keycode = PARAM.LOWORD(m.WParam);
-            switch ((Keys)keycode)
+            Keys keycode = (Keys)PARAM.LOWORD(m.WParamInternal);
+            switch (keycode)
             {
                 case Keys.Up:
                 case Keys.Down:
@@ -981,7 +978,8 @@ namespace System.Windows.Forms
                     _killnextselect = false;
                     break;
             }
-            m.Result = NativeMethods.InvalidIntPtr;
+
+            m.ResultInternal = -1;
         }
 
         /// <summary>
@@ -991,738 +989,47 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch ((WM)m.Msg)
+            switch (m.MsgInternal)
             {
                 case WM.REFLECT_CHARTOITEM:
-                    m.Result = NativeMethods.InvalidIntPtr;
+                    m.ResultInternal = -1;
                     break;
                 case WM.REFLECT_VKEYTOITEM:
                     WmReflectVKeyToItem(ref m);
                     break;
                 default:
-                    if (m.Msg == (int)LBC_GETCHECKSTATE)
+                    if (m.MsgInternal == LBC_GETCHECKSTATE)
                     {
-                        int item = unchecked((int)(long)m.WParam);
+                        int item = (int)m.WParamInternal;
                         if (item < 0 || item >= Items.Count)
                         {
-                            m.Result = (IntPtr)LB_ERR;
+                            m.ResultInternal = LB_ERR;
                         }
                         else
                         {
-                            m.Result = (IntPtr)(GetItemChecked(item) ? LB_CHECKED : LB_UNCHECKED);
+                            m.ResultInternal = GetItemChecked(item) ? LB_CHECKED : LB_UNCHECKED;
                         }
                     }
-                    else if (m.Msg == (int)LBC_SETCHECKSTATE)
+                    else if (m.MsgInternal == LBC_SETCHECKSTATE)
                     {
-                        int item = unchecked((int)(long)m.WParam);
-                        int state = unchecked((int)(long)m.LParam);
+                        int item = (int)m.WParamInternal;
+                        int state = (int)m.LParamInternal;
                         if (item < 0 || item >= Items.Count || (state != LB_CHECKED && state != LB_UNCHECKED))
                         {
-                            m.Result = IntPtr.Zero;
+                            m.ResultInternal = 0;
                         }
                         else
                         {
                             SetItemChecked(item, (state == LB_CHECKED));
-                            m.Result = (IntPtr)1;
+                            m.ResultInternal = 1;
                         }
                     }
                     else
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
-            }
-        }
-
-        new public class ObjectCollection : ListBox.ObjectCollection
-        {
-            private readonly CheckedListBox _owner;
-
-            public ObjectCollection(CheckedListBox owner) : base(owner)
-            {
-                _owner = owner;
-            }
-
-            /// <summary>
-            ///  Lets the user add an item to the listbox with the given initial value
-            ///  for the Checked portion of the item.
-            /// </summary>
-            public int Add(object item, bool isChecked)
-            {
-                return Add(item, isChecked ? CheckState.Checked : CheckState.Unchecked);
-            }
-
-            /// <summary>
-            ///  Lets the user add an item to the listbox with the given initial value
-            ///  for the Checked portion of the item.
-            /// </summary>
-            public int Add(object item, CheckState check)
-            {
-                //validate the enum that's passed in here
-                //
-                // Valid values are 0-2 inclusive.
-                if (!ClientUtils.IsEnumValid(check, (int)check, (int)CheckState.Unchecked, (int)CheckState.Indeterminate))
-                {
-                    throw new InvalidEnumArgumentException(nameof(check), (int)check, typeof(CheckState));
-                }
-
-                int index = base.Add(item);
-                _owner.SetItemCheckState(index, check);
-
-                return index;
-            }
-        }
-
-        public class CheckedIndexCollection : IList
-        {
-            private readonly CheckedListBox _owner;
-
-            internal CheckedIndexCollection(CheckedListBox owner)
-            {
-                _owner = owner;
-            }
-
-            /// <summary>
-            ///  Number of current checked items.
-            /// </summary>
-            public int Count
-            {
-                get
-                {
-                    return _owner.CheckedItems.Count;
-                }
-            }
-
-            object ICollection.SyncRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
-
-            bool ICollection.IsSynchronized
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            bool IList.IsFixedSize
-            {
-                get
-                {
-                    return true;
-                }
-            }
-
-            public bool IsReadOnly
-            {
-                get
-                {
-                    return true;
-                }
-            }
-
-            /// <summary>
-            ///  Retrieves the specified checked item.
-            /// </summary>
-            [Browsable(false)]
-            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public int this[int index]
-            {
-                get
-                {
-                    object identifier = InnerArray.GetEntryObject(index, CheckedItemCollection.s_anyMask);
-                    return InnerArray.IndexOfIdentifier(identifier, 0);
-                }
-            }
-
-            object IList.this[int index]
-            {
-                get
-                {
-                    return this[index];
-                }
-                set
-                {
-                    throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
-                }
-            }
-
-            int IList.Add(object value)
-            {
-                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
-            }
-
-            void IList.Clear()
-            {
-                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
-            }
-
-            void IList.Insert(int index, object value)
-            {
-                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
-            }
-
-            void IList.Remove(object value)
-            {
-                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
-            }
-
-            void IList.RemoveAt(int index)
-            {
-                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
-            }
-
-            public bool Contains(int index)
-            {
-                return (IndexOf(index) != -1);
-            }
-
-            bool IList.Contains(object index)
-            {
-                if (index is int)
-                {
-                    return Contains((int)index);
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            public void CopyTo(Array dest, int index)
-            {
-                int cnt = _owner.CheckedItems.Count;
-                for (int i = 0; i < cnt; i++)
-                {
-                    dest.SetValue(this[i], i + index);
-                }
-            }
-
-            /// <summary>
-            ///  This is the item array that stores our data.  We share this backing store
-            ///  with the main object collection.
-            /// </summary>
-            private ItemArray InnerArray
-            {
-                get
-                {
-                    return ((ObjectCollection)_owner.Items).InnerArray;
-                }
-            }
-
-            public IEnumerator GetEnumerator()
-            {
-                int[] indices = new int[Count];
-                CopyTo(indices, 0);
-                return indices.GetEnumerator();
-            }
-
-            public int IndexOf(int index)
-            {
-                if (index >= 0 && index < _owner.Items.Count)
-                {
-                    object value = InnerArray.GetEntryObject(index, 0);
-                    return _owner.CheckedItems.IndexOfIdentifier(value);
-                }
-                return -1;
-            }
-
-            int IList.IndexOf(object index)
-            {
-                if (index is int)
-                {
-                    return IndexOf((int)index);
-                }
-                else
-                {
-                    return -1;
-                }
-            }
-        }
-
-        public class CheckedItemCollection : IList
-        {
-            internal static int s_checkedItemMask = ItemArray.CreateMask();
-            internal static int s_indeterminateItemMask = ItemArray.CreateMask();
-            internal static int s_anyMask = s_checkedItemMask | s_indeterminateItemMask;
-
-            private readonly CheckedListBox _owner;
-
-            internal CheckedItemCollection(CheckedListBox owner)
-            {
-                _owner = owner;
-            }
-
-            /// <summary>
-            ///  Number of current checked items.
-            /// </summary>
-            public int Count
-            {
-                get
-                {
-                    return InnerArray.GetCount(s_anyMask);
-                }
-            }
-
-            /// <summary>
-            ///  This is the item array that stores our data.  We share this backing store
-            ///  with the main object collection.
-            /// </summary>
-            private ItemArray InnerArray
-            {
-                get
-                {
-                    return ((ListBox.ObjectCollection)_owner.Items).InnerArray;
-                }
-            }
-
-            /// <summary>
-            ///  Retrieves the specified checked item.
-            /// </summary>
-            [Browsable(false)]
-            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public object this[int index]
-            {
-                get
-                {
-                    return InnerArray.GetItem(index, s_anyMask);
-                }
-                set
-                {
-                    throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
-                }
-            }
-
-            object ICollection.SyncRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
-
-            bool ICollection.IsSynchronized
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            bool IList.IsFixedSize
-            {
-                get
-                {
-                    return true;
-                }
-            }
-
-            public bool IsReadOnly
-            {
-                get
-                {
-                    return true;
-                }
-            }
-
-            public bool Contains(object item)
-            {
-                return IndexOf(item) != -1;
-            }
-
-            public int IndexOf(object item)
-            {
-                return InnerArray.IndexOf(item, s_anyMask);
-            }
-
-            internal int IndexOfIdentifier(object item)
-            {
-                return InnerArray.IndexOfIdentifier(item, s_anyMask);
-            }
-
-            int IList.Add(object value)
-            {
-                throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
-            }
-
-            void IList.Clear()
-            {
-                throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
-            }
-
-            void IList.Insert(int index, object value)
-            {
-                throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
-            }
-
-            void IList.Remove(object value)
-            {
-                throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
-            }
-
-            void IList.RemoveAt(int index)
-            {
-                throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
-            }
-
-            public void CopyTo(Array dest, int index)
-            {
-                int cnt = InnerArray.GetCount(s_anyMask);
-                for (int i = 0; i < cnt; i++)
-                {
-                    dest.SetValue(InnerArray.GetItem(i, s_anyMask), i + index);
-                }
-            }
-
-            /// <summary>
-            ///  This method returns if the actual item index is checked.  The index is the index to the MAIN
-            ///  collection, not this one.
-            /// </summary>
-            internal CheckState GetCheckedState(int index)
-            {
-                bool isChecked = InnerArray.GetState(index, s_checkedItemMask);
-                bool isIndeterminate = InnerArray.GetState(index, s_indeterminateItemMask);
-                Debug.Assert(!isChecked || !isIndeterminate, "Can't be both checked and indeterminate.  Somebody broke our state.");
-                if (isIndeterminate)
-                {
-                    return CheckState.Indeterminate;
-                }
-                else if (isChecked)
-                {
-                    return CheckState.Checked;
-                }
-
-                return CheckState.Unchecked;
-            }
-
-            public IEnumerator GetEnumerator()
-            {
-                return InnerArray.GetEnumerator(s_anyMask, true);
-            }
-
-            /// <summary>
-            ///  Same thing for GetChecked.
-            /// </summary>
-            internal void SetCheckedState(int index, CheckState value)
-            {
-                bool isChecked;
-                bool isIndeterminate;
-
-                switch (value)
-                {
-                    case CheckState.Checked:
-                        isChecked = true;
-                        isIndeterminate = false;
-                        break;
-
-                    case CheckState.Indeterminate:
-                        isChecked = false;
-                        isIndeterminate = true;
-                        break;
-
-                    default:
-                        isChecked = false;
-                        isIndeterminate = false;
-                        break;
-                }
-
-                bool wasChecked = InnerArray.GetState(index, s_checkedItemMask);
-                bool wasIndeterminate = InnerArray.GetState(index, s_indeterminateItemMask);
-
-                InnerArray.SetState(index, s_checkedItemMask, isChecked);
-                InnerArray.SetState(index, s_indeterminateItemMask, isIndeterminate);
-
-                if (wasChecked != isChecked || wasIndeterminate != isIndeterminate)
-                {
-                    // Raise a notify event that this item has changed.
-                    _owner.AccessibilityNotifyClients(AccessibleEvents.StateChange, index);
-                }
-            }
-        }
-
-        internal override bool SupportsUiaProviders => false;
-
-        internal class CheckedListBoxAccessibleObject : ControlAccessibleObject
-        {
-            public CheckedListBoxAccessibleObject(CheckedListBox owner) : base(owner)
-            {
-            }
-
-            private CheckedListBox CheckedListBox
-            {
-                get
-                {
-                    return (CheckedListBox)Owner;
-                }
-            }
-
-            public override AccessibleObject GetChild(int index)
-            {
-                if (index >= 0 && index < CheckedListBox.Items.Count)
-                {
-                    return new CheckedListBoxItemAccessibleObject(CheckedListBox.GetItemText(CheckedListBox.Items[index]), index, this);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-
-            public override int GetChildCount()
-            {
-                return CheckedListBox.Items.Count;
-            }
-
-            public override AccessibleObject GetFocused()
-            {
-                int index = CheckedListBox.FocusedIndex;
-                if (index >= 0)
-                {
-                    return GetChild(index);
-                }
-
-                return null;
-            }
-
-            public override AccessibleObject GetSelected()
-            {
-                int index = CheckedListBox.SelectedIndex;
-                if (index >= 0)
-                {
-                    return GetChild(index);
-                }
-
-                return null;
-            }
-
-            public override AccessibleObject HitTest(int x, int y)
-            {
-                // Within a child element?
-                //
-                int count = GetChildCount();
-                for (int index = 0; index < count; ++index)
-                {
-                    AccessibleObject child = GetChild(index);
-                    if (child.Bounds.Contains(x, y))
-                    {
-                        return child;
-                    }
-                }
-
-                // Within the CheckedListBox bounds?
-                //
-                if (Bounds.Contains(x, y))
-                {
-                    return this;
-                }
-
-                return null;
-            }
-
-            public override AccessibleObject Navigate(AccessibleNavigation direction)
-            {
-                if (GetChildCount() > 0)
-                {
-                    if (direction == AccessibleNavigation.FirstChild)
-                    {
-                        return GetChild(0);
-                    }
-                    if (direction == AccessibleNavigation.LastChild)
-                    {
-                        return GetChild(GetChildCount() - 1);
-                    }
-                }
-                return base.Navigate(direction);
-            }
-        }
-
-        internal class CheckedListBoxItemAccessibleObject : AccessibleObject
-        {
-            private string _name;
-            private readonly int _index;
-            private readonly CheckedListBoxAccessibleObject _parent;
-
-            public CheckedListBoxItemAccessibleObject(string name, int index, CheckedListBoxAccessibleObject parent) : base()
-            {
-                _name = name;
-                _parent = parent;
-                _index = index;
-            }
-
-            public override Rectangle Bounds
-            {
-                get
-                {
-                    Rectangle rect = ParentCheckedListBox.GetItemRectangle(_index);
-
-                    if (rect.IsEmpty)
-                    {
-                        return rect;
-                    }
-
-                    // Translate rect to screen coordinates
-                    //
-                    rect = ParentCheckedListBox.RectangleToScreen(rect);
-                    Rectangle visibleArea = ParentCheckedListBox.RectangleToScreen(ParentCheckedListBox.ClientRectangle);
-
-                    if (visibleArea.Bottom < rect.Bottom)
-                    {
-                        rect.Height = visibleArea.Bottom - rect.Top;
-                    }
-
-                    rect.Width = visibleArea.Width;
-
-                    return rect;
-                }
-            }
-
-            public override string DefaultAction
-            {
-                get
-                {
-                    if (ParentCheckedListBox.GetItemChecked(_index))
-                    {
-                        return SR.AccessibleActionUncheck;
-                    }
-                    else
-                    {
-                        return SR.AccessibleActionCheck;
-                    }
-                }
-            }
-
-            private CheckedListBox ParentCheckedListBox
-            {
-                get
-                {
-                    return (CheckedListBox)_parent.Owner;
-                }
-            }
-
-            public override string Name
-            {
-                get
-                {
-                    return _name;
-                }
-                set
-                {
-                    _name = value;
-                }
-            }
-
-            public override AccessibleObject Parent
-            {
-                get
-                {
-                    return _parent;
-                }
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    return AccessibleRole.CheckButton;
-                }
-            }
-
-            public override AccessibleStates State
-            {
-                get
-                {
-                    AccessibleStates state = AccessibleStates.Selectable | AccessibleStates.Focusable;
-
-                    // Checked state
-                    //
-                    switch (ParentCheckedListBox.GetItemCheckState(_index))
-                    {
-                        case CheckState.Checked:
-                            state |= AccessibleStates.Checked;
-                            break;
-                        case CheckState.Indeterminate:
-                            state |= AccessibleStates.Indeterminate;
-                            break;
-                        case CheckState.Unchecked:
-                            // No accessible state corresponding to unchecked
-                            break;
-                    }
-
-                    // Selected state
-                    //
-                    if (ParentCheckedListBox.SelectedIndex == _index)
-                    {
-                        state |= AccessibleStates.Selected | AccessibleStates.Focused;
-                    }
-
-                    if (ParentCheckedListBox.Focused && ParentCheckedListBox.SelectedIndex == -1)
-                    {
-                        state |= AccessibleStates.Focused;
-                    }
-
-                    return state;
-                }
-            }
-
-            public override string Value
-            {
-                get
-                {
-                    return ParentCheckedListBox.GetItemChecked(_index).ToString();
-                }
-            }
-
-            public override void DoDefaultAction()
-            {
-                ParentCheckedListBox.SetItemChecked(_index, !ParentCheckedListBox.GetItemChecked(_index));
-            }
-
-            public override AccessibleObject Navigate(AccessibleNavigation direction)
-            {
-                // Down/Next
-                //
-                if (direction == AccessibleNavigation.Down ||
-                    direction == AccessibleNavigation.Next)
-                {
-                    if (_index < _parent.GetChildCount() - 1)
-                    {
-                        return _parent.GetChild(_index + 1);
-                    }
-                }
-
-                // Up/Previous
-                //
-                if (direction == AccessibleNavigation.Up ||
-                    direction == AccessibleNavigation.Previous)
-                {
-                    if (_index > 0)
-                    {
-                        return _parent.GetChild(_index - 1);
-                    }
-                }
-
-                return base.Navigate(direction);
-            }
-
-            public override void Select(AccessibleSelection flags)
-            {
-                try
-                {
-                    ParentCheckedListBox.AccessibilityObject.GetSystemIAccessibleInternal().accSelect((int)flags, _index + 1);
-                }
-                catch (ArgumentException)
-                {
-                    // In Everett, the CheckedListBox accessible children did not have any selection capability.
-                    // In Whidbey, they delegate the selection capability to OLEACC.
-                    // However, OLEACC does not deal w/ several Selection flags: ExtendSelection, AddSelection, RemoveSelection.
-                    // OLEACC instead throws an ArgumentException.
-                    // Since Whidbey API's should not throw an exception in places where Everett API's did not, we catch
-                    // the ArgumentException and fail silently.
-                }
             }
         }
     }

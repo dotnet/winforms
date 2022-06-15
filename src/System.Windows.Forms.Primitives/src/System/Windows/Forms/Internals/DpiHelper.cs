@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using Microsoft.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -15,24 +16,43 @@ namespace System.Windows.Forms
     /// </summary>
     internal static partial class DpiHelper
     {
+        // The default(100) and max(225) text scale factor is value what Settings display text scale
+        // applies and also clamps the text scale factor value between 100 and 225 value.
+        // See https://docs.microsoft.com/windows/uwp/design/input/text-scaling.
+        internal const short MinTextScaleValue = 100;
+        internal const short MaxTextScaleValue = 225;
+        internal const float MinTextScaleFactorValue = 1.00f;
+        internal const float MaxTextScaleFactorValue = 2.25f;
+
         internal const double LogicalDpi = 96.0;
-        private static InterpolationMode s_interpolationMode = InterpolationMode.Invalid;
+        private static InterpolationMode s_interpolationMode;
 
         // Backing field, indicating that we will need to send a PerMonitorV2 query in due course.
-        private static readonly bool s_perMonitorAware = GetPerMonitorAware();
+        private static bool s_perMonitorAware;
 
-        internal static int DeviceDpi { get; } = GetDeviceDPI();
+        internal static int DeviceDpi { get; private set; }
+
+        static DpiHelper() => Initialize();
+
+        private static void Initialize()
+        {
+            s_interpolationMode = InterpolationMode.Invalid;
+            s_perMonitorAware = GetPerMonitorAware();
+            DeviceDpi = GetDeviceDPI();
+        }
 
         private static int GetDeviceDPI()
         {
-            // This never changes for the process. Depending on what the DPI awareness settings are we'll get
-            // either the actual DPI of the primary display at process startup or the default LogicalDpi;
+            // This will only change when the first call to set the process DPI awareness is made. Multiple calls to
+            // set the DPI have no effect after making the first call. Depending on what the DPI awareness settings are
+            // we'll get either the actual DPI of the primary display at process startup or the default LogicalDpi;
 
             if (!OsVersion.IsWindows10_1607OrGreater)
             {
                 using var dc = User32.GetDcScope.ScreenDC;
                 return Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
             }
+
             // This avoids needing to create a DC
             return (int)User32.GetDpiForSystem();
         }
@@ -100,8 +120,8 @@ namespace System.Windows.Forms
                     int dpiScalePercent = (int)Math.Round(LogicalToDeviceUnitsScalingFactor * 100);
 
                     // We will prefer NearestNeighbor algorithm for 200, 300, 400, etc zoom factors, in which each pixel become a 2x2, 3x3, 4x4, etc rectangle.
-                    // This produces sharp edges in the scaled image and doesn't cause distorsions of the original image.
-                    // For any other scale factors we will prefer a high quality resizing algorith. While that introduces fuzziness in the resulting image,
+                    // This produces sharp edges in the scaled image and doesn't cause distortions of the original image.
+                    // For any other scale factors we will prefer a high quality resizing algorithm. While that introduces fuzziness in the resulting image,
                     // it will not distort the original (which is extremely important for small zoom factors like 125%, 150%).
                     // We'll use Bicubic in those cases, except on reducing (zoom < 100, which we shouldn't have anyway), in which case Linear produces better
                     // results because it uses less neighboring pixels.
@@ -118,6 +138,7 @@ namespace System.Windows.Forms
                         s_interpolationMode = InterpolationMode.HighQualityBicubic;
                     }
                 }
+
                 return s_interpolationMode;
             }
         }
@@ -158,6 +179,40 @@ namespace System.Windows.Forms
         ///  if the application opted in the automatic scaling in the .config file.
         /// </summary>
         public static bool IsScalingRequired => DeviceDpi != LogicalDpi;
+
+        /// <summary>
+        /// Retrieve the text scale factor, which is set via Settings > Display > Make Text Bigger.
+        /// The settings are stored in the registry under HKCU\Software\Microsoft\Accessibility in (DWORD)TextScaleFactor.
+        /// </summary>
+        /// <returns>The scaling factor in the range [1.0, 2.25].</returns>
+        /// <seealso href="https://docs.microsoft.com/windows/uwp/design/input/text-scaling">Windows Text scaling</seealso>
+        public static float GetTextScaleFactor()
+        {
+            short textScaleValue = MinTextScaleValue;
+            try
+            {
+                RegistryKey? key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Accessibility");
+                if (key is not null && key.GetValue("TextScaleFactor") is int _textScaleValue)
+                {
+                    textScaleValue = (short)_textScaleValue;
+                }
+            }
+            catch
+            {
+                // Failed to read the registry for whatever reason.
+#if DEBUG
+                throw;
+#endif
+            }
+
+            // Restore the text scale if it isn't the default value in the valid text scale factor value
+            if (textScaleValue > MinTextScaleValue && textScaleValue <= MaxTextScaleValue)
+            {
+                return (float)textScaleValue / MinTextScaleValue;
+            }
+
+            return MinTextScaleFactorValue;
+        }
 
         /// <summary>
         /// scale logical pixel to the factor
@@ -262,6 +317,27 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Creates a new bitmap scaled to the closest size from the icon set according to the current DPI mode.
+        /// </summary>
+        /// <param name="type">Resource type</param>
+        /// <param name="name">Resource name</param>
+        /// <param name="defaultSize">Default size for 100% DPI</param>
+        /// <returns>New scaled bitmap</returns>
+        internal static Bitmap GetScaledBitmapFromIcon(Type type, string name, Size defaultSize)
+        {
+            using Icon icon = new(type, name);
+            Size scaledSize = LogicalToDeviceUnits(defaultSize);
+            Size deltaSize = icon.Size - scaledSize;
+            if (Math.Abs(deltaSize.Height) <= 2 && Math.Abs(deltaSize.Width) <= 2)
+            {
+                return icon.ToBitmap();
+            }
+
+            using Icon scaledIcon = new(icon, scaledSize);
+            return scaledIcon.ToBitmap();
+        }
+
+        /// <summary>
         ///  Create a new bitmap scaled for the device units.
         ///  When displayed on the device, the scaled image will have same size as the original image would have when displayed at 96dpi.
         /// </summary>
@@ -272,8 +348,9 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             Bitmap deviceBitmap = CreateScaledBitmap(logicalBitmap, deviceDpi);
-            if (deviceBitmap != null)
+            if (deviceBitmap is not null)
             {
                 logicalBitmap.Dispose();
                 logicalBitmap = deviceBitmap;
@@ -351,6 +428,8 @@ namespace System.Windows.Forms
         /// <returns>true/false - If the process DPI awareness is successfully set, returns true. Otherwise false.</returns>
         internal static bool SetWinformsApplicationDpiAwareness(HighDpiMode highDpiMode)
         {
+            bool success = false;
+
             if (OsVersion.IsWindows10_1703OrGreater)
             {
                 // SetProcessIntPtr needs Windows 10 RS2 and above
@@ -379,7 +458,8 @@ namespace System.Windows.Forms
                         rs2AndAboveDpiFlag = User32.DPI_AWARENESS_CONTEXT.UNAWARE;
                         break;
                 }
-                return User32.SetProcessDpiAwarenessContext(rs2AndAboveDpiFlag).IsTrue();
+
+                success = User32.SetProcessDpiAwarenessContext(rs2AndAboveDpiFlag).IsTrue();
             }
             else if (OsVersion.IsWindows8_1OrGreater)
             {
@@ -403,7 +483,7 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                return SHCore.SetProcessDpiAwareness(dpiFlag) == HRESULT.S_OK;
+                success = SHCore.SetProcessDpiAwareness(dpiFlag) == HRESULT.S_OK;
             }
             else
             {
@@ -424,11 +504,14 @@ namespace System.Windows.Forms
 
                 if (dpiFlag == SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE)
                 {
-                    return User32.SetProcessDPIAware().IsTrue();
+                    success = User32.SetProcessDPIAware().IsTrue();
                 }
             }
 
-            return false;
+            // Need to reset as our DPI will change if this was the first call to set the DPI context for the process.
+            Initialize();
+
+            return success;
         }
     }
 }

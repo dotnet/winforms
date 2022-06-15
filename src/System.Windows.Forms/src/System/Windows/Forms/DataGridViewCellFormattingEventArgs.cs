@@ -2,22 +2,23 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public class DataGridViewCellFormattingEventArgs : ConvertEventArgs
     {
-        public DataGridViewCellFormattingEventArgs(int columnIndex,
-                                                   int rowIndex,
-                                                   object value,
-                                                   Type desiredType,
-                                                   DataGridViewCellStyle cellStyle) : base(value, desiredType)
+        public DataGridViewCellFormattingEventArgs(
+            int columnIndex,
+            int rowIndex,
+            object? value,
+            Type? desiredType,
+            DataGridViewCellStyle? cellStyle)
+            : base(value, desiredType)
         {
             if (columnIndex < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
+
             if (rowIndex < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
@@ -28,7 +29,7 @@ namespace System.Windows.Forms
             CellStyle = cellStyle;
         }
 
-        public DataGridViewCellStyle CellStyle { get; set; }
+        public DataGridViewCellStyle? CellStyle { get; set; }
 
         public int ColumnIndex { get; }
 

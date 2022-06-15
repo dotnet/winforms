@@ -20,5 +20,5 @@ namespace System.Windows.Forms.Design
         ///  The window will have themed scrollbars but all of its children will be un-themed
         /// </summary>
         OnlyTopLevel = 3
-    };
+    }
 }

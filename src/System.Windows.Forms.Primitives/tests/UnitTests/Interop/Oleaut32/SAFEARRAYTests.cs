@@ -1,10 +1,9 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 #nullable disable
 
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Xunit;
 using static Interop;
@@ -18,6 +17,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
         public void SAFEARRAY_Sizeof_InvokeX86_ReturnsExpected()
         {
+            if (Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             Assert.Equal(24, Marshal.SizeOf<SAFEARRAY>());
             Assert.Equal(24, sizeof(SAFEARRAY));
         }
@@ -25,6 +29,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
         public void SAFEARRAY_Sizeof_InvokeX64_ReturnsExpected()
         {
+            if (!Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             Assert.Equal(32, Marshal.SizeOf<SAFEARRAY>());
             Assert.Equal(32, sizeof(SAFEARRAY));
         }
@@ -47,7 +56,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 10,
                 lLbound = 1
             };
-            SAFEARRAY *psa = SafeArrayCreate((VARENUM)vt, 1, &saBound);
+            SAFEARRAY* psa = SafeArrayCreate((VARENUM)vt, 1, &saBound);
             Assert.True(psa != null);
 
             try
@@ -84,7 +93,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr pRecord = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(record);
             try
             {
-                SAFEARRAY *psa = SafeArrayCreateEx(VARENUM.RECORD, 1, &saBound, pRecord);
+                SAFEARRAY* psa = SafeArrayCreateEx(VARENUM.RECORD, 1, &saBound, pRecord);
                 Assert.True(psa != null);
 
                 try
@@ -175,7 +184,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 20,
                 lLbound = 0
             };
-            SAFEARRAY *psa = SafeArrayCreate((VARENUM)vt, 2, saBounds);
+            SAFEARRAY* psa = SafeArrayCreate((VARENUM)vt, 2, saBounds);
             Assert.True(psa != null);
 
             try
@@ -210,7 +219,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 10,
                 lLbound = 0
             };
-            SAFEARRAY *psa = SafeArrayCreate(VARENUM.I4, 1, &saBound);
+            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, 1, &saBound);
             Assert.True(psa != null);
 
             try
@@ -256,7 +265,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 10,
                 lLbound = -5
             };
-            SAFEARRAY *psa = SafeArrayCreate(VARENUM.I4, 1, &saBound);
+            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, 1, &saBound);
             Assert.True(psa != null);
 
             try
@@ -308,7 +317,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 20,
                 lLbound = 0
             };
-            SAFEARRAY *psa = SafeArrayCreate(VARENUM.I4, 2, saBounds);
+            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, 2, saBounds);
             Assert.True(psa != null);
 
             try
@@ -360,7 +369,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 20,
                 lLbound = -4
             };
-            SAFEARRAY *psa = SafeArrayCreate(VARENUM.I4, 2, saBounds);
+            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, 2, saBounds);
             Assert.True(psa != null);
 
             try

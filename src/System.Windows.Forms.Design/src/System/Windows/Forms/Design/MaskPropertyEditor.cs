@@ -9,42 +9,45 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Design time editing class for the Mask property of the MaskedTextBox control.
+    ///  Design time editing class for the Mask property of the <see cref="MaskedTextBox"/> control.
     /// </summary>
     internal class MaskPropertyEditor : UITypeEditor
     {
         /// <summary>
-        /// Gets the mask property value fromt the MaskDesignerDialog.
-        /// The IUIService is used to show the mask designer dialog within VS so it doesn't get blocked if focus
-        /// is moved to anoter app.
+        ///  Gets the mask property value from the MaskDesignerDialog.
         /// </summary>
-        internal static string EditMask(ITypeDiscoveryService discoverySvc, IUIService uiSvc, MaskedTextBox instance, IHelpService helpService)
+        /// <remarks>
+        ///  <para>
+        ///   The <see cref="IUIService"/> is used to show the mask designer dialog within VS so it doesn't get
+        ///   blocked if focus is moved to another app.
+        ///  </para>
+        /// </remarks>
+        internal static string EditMask(
+            ITypeDiscoveryService discoveryService,
+            IUIService uiService,
+            MaskedTextBox instance,
+            IHelpService helpService)
         {
-            Debug.Assert(instance != null, "Null masked text box.");
+            Debug.Assert(instance is not null, "Null masked text box.");
             string mask = null;
 
             // Launching modal dialog in System aware mode.
-            MaskDesignerDialog dlg = DpiHelper.CreateInstanceInSystemAwareContext(() => new MaskDesignerDialog(instance, helpService));
-            try
-            {
-                dlg.DiscoverMaskDescriptors(discoverySvc);  // fine if service is null.
+            using MaskDesignerDialog dialog = DpiHelper.CreateInstanceInSystemAwareContext(
+                () => new MaskDesignerDialog(instance, helpService));
 
-                // Show dialog from VS.
-                DialogResult dlgResult = uiSvc != null ? uiSvc.ShowDialog(dlg) : dlg.ShowDialog();
-                if (dlgResult == DialogResult.OK)
+            dialog.DiscoverMaskDescriptors(discoveryService);  // fine if service is null.
+
+            // Show dialog from VS.
+            DialogResult result = uiService is not null ? uiService.ShowDialog(dialog) : dialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                mask = dialog.Mask;
+
+                // ValidatingType is not browsable so we don't need to set the property through the designer.
+                if (dialog.ValidatingType != instance.ValidatingType)
                 {
-                    mask = dlg.Mask;
-
-                    // ValidatingType is not browsable so we don't need to set the property through the designer.
-                    if (dlg.ValidatingType != instance.ValidatingType)
-                    {
-                        instance.ValidatingType = dlg.ValidatingType;
-                    }
+                    instance.ValidatingType = dialog.ValidatingType;
                 }
-            }
-            finally
-            {
-                dlg.Dispose();
             }
 
             // Will return null if dlgResult != OK.
@@ -52,7 +55,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Edits the Mask property of the MaskedTextBox control from the PropertyGrid.
+        ///  Edits the Mask property of the MaskedTextBox control from the PropertyGrid.
         /// </summary>
         public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -61,28 +64,22 @@ namespace System.Windows.Forms.Design
                 return value;
             }
 
-            ITypeDiscoveryService discoverySvc = (ITypeDiscoveryService)provider.GetService(typeof(ITypeDiscoveryService));  // fine if service is not found.
-            IUIService uiSvc = (IUIService)provider.GetService(typeof(IUIService));
-            IHelpService helpService = (IHelpService)provider.GetService(typeof(IHelpService));
-            string mask = MaskPropertyEditor.EditMask(discoverySvc, uiSvc, context.Instance as MaskedTextBox, helpService);
+            string mask = EditMask(
+                provider.GetService<ITypeDiscoveryService>(),
+                provider.GetService<IUIService>(),
+                context.Instance as MaskedTextBox,
+                provider.GetService<IHelpService>());
 
-            if (mask != null)
-            {
-                return mask;
-            }
-
-            return value;
+            return mask ?? value;
         }
 
         /// <summary>
-        /// Painting a representation of the Mask value is not supported.
+        ///  Painting a representation of the Mask value is not supported.
         /// </summary>
         public override bool GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context)
             => false;
 
-        /// <summary>
-        /// Gets the edit style of the type editor.
-        /// </summary>
+        /// <inheritdoc />
         public override UITypeEditorEditStyle GetEditStyle(System.ComponentModel.ITypeDescriptorContext context)
             => UITypeEditorEditStyle.Modal;
     }

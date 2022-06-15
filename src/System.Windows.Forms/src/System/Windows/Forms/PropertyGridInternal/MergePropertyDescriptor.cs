@@ -9,167 +9,103 @@ using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    internal class MergePropertyDescriptor : PropertyDescriptor
+    internal partial class MergePropertyDescriptor : PropertyDescriptor
     {
-        private readonly PropertyDescriptor[] descriptors;
+        private readonly PropertyDescriptor[] _descriptors;
 
-        private enum TriState
-        {
-            Unknown,
-            Yes,
-            No
-        }
+        private bool? _localizable;
+        private bool? _readOnly;
+        private bool? _canReset;
 
-        private TriState localizable = TriState.Unknown;
-        private TriState readOnly = TriState.Unknown;
-        private TriState canReset = TriState.Unknown;
-
-        private MultiMergeCollection collection;
+        private MultiMergeCollection _collection;
 
         public MergePropertyDescriptor(PropertyDescriptor[] descriptors) : base(descriptors[0].Name, null)
         {
-            this.descriptors = descriptors;
+            _descriptors = descriptors;
         }
 
-        /// <summary>
-        ///  When overridden in a derived class, gets the type of the
-        ///  component this property
-        ///  is bound to.
-        /// </summary>
-        public override Type ComponentType
-        {
-            get
-            {
-                return descriptors[0].ComponentType;
-            }
-        }
+        public override Type ComponentType => _descriptors[0].ComponentType;
 
-        /// <summary>
-        ///  Gets the type converter for this property.
-        /// </summary>
-        public override TypeConverter Converter
-        {
-            get
-            {
-                return descriptors[0].Converter;
-            }
-        }
+        public override TypeConverter Converter => _descriptors[0].Converter;
 
-        public override string DisplayName
-        {
-            get
-            {
-                return descriptors[0].DisplayName;
-            }
-        }
+        public override string DisplayName => _descriptors[0].DisplayName;
 
-        /// <summary>
-        ///  Gets a value
-        ///  indicating whether this property should be localized, as
-        ///  specified in the <see cref='LocalizableAttribute'/>.
-        /// </summary>
         public override bool IsLocalizable
         {
             get
             {
-                if (localizable == TriState.Unknown)
+                if (!_localizable.HasValue)
                 {
-                    localizable = TriState.Yes;
-                    foreach (PropertyDescriptor pd in descriptors)
+                    _localizable = true;
+                    foreach (PropertyDescriptor pd in _descriptors)
                     {
                         if (!pd.IsLocalizable)
                         {
-                            localizable = TriState.No;
+                            _localizable = false;
                             break;
                         }
                     }
                 }
-                return (localizable == TriState.Yes);
+
+                return _localizable.Value;
             }
         }
 
-        /// <summary>
-        ///  When overridden in
-        ///  a derived class, gets a value
-        ///  indicating whether this property is read-only.
-        /// </summary>
         public override bool IsReadOnly
         {
             get
             {
-                if (readOnly == TriState.Unknown)
+                if (!_readOnly.HasValue)
                 {
-                    readOnly = TriState.No;
-                    foreach (PropertyDescriptor pd in descriptors)
+                    _readOnly = false;
+                    foreach (PropertyDescriptor pd in _descriptors)
                     {
                         if (pd.IsReadOnly)
                         {
-                            readOnly = TriState.Yes;
+                            _readOnly = true;
                             break;
                         }
                     }
                 }
-                return (readOnly == TriState.Yes);
+
+                return _readOnly.Value;
             }
         }
 
-        /// <summary>
-        ///  When overridden in a derived class,
-        ///  gets the type of the property.
-        /// </summary>
-        public override Type PropertyType
-        {
-            get
-            {
-                return descriptors[0].PropertyType;
-            }
-        }
+        public override Type PropertyType => _descriptors[0].PropertyType;
 
-        public PropertyDescriptor this[int index]
-        {
-            get
-            {
-                return descriptors[index];
-            }
-        }
+        public PropertyDescriptor this[int index] => _descriptors[index];
 
-        /// <summary>
-        ///  When overridden in a derived class, indicates whether
-        ///  resetting the <paramref name="component"/> will change the value of the
-        ///  <paramref name="component"/>.
-        /// </summary>
         public override bool CanResetValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::CanResetValue called with non-array value");
-            if (canReset == TriState.Unknown)
+            if (!_canReset.HasValue)
             {
-                canReset = TriState.Yes;
-                Array a = (Array)component;
-                for (int i = 0; i < descriptors.Length; i++)
+                _canReset = true;
+                var a = (Array)component;
+                for (int i = 0; i < _descriptors.Length; i++)
                 {
-                    if (!descriptors[i].CanResetValue(GetPropertyOwnerForComponent(a, i)))
+                    if (!_descriptors[i].CanResetValue(GetPropertyOwnerForComponent(a, i)))
                     {
-                        canReset = TriState.No;
+                        _canReset = false;
                         break;
                     }
                 }
             }
-            return (canReset == TriState.Yes);
+
+            return _canReset.Value;
         }
 
         /// <summary>
-        ///  This method attempts to copy the given value so unique values are
-        ///  always passed to each object.  If the object cannot be copied it
-        ///  will be returned.
+        ///  This method attempts to copy the given value so unique values are always passed to each object.
+        ///  If the value cannot be copied the original value will be returned.
         /// </summary>
-        private object CopyValue(object value)
+        private static object CopyValue(object value)
         {
-            // null is always OK
+            // Null is always OK.
             if (value is null)
             {
                 return value;
@@ -177,7 +113,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             Type type = value.GetType();
 
-            // value types are always copies
+            // Value types are always copies.
             if (type.IsValueType)
             {
                 return value;
@@ -185,130 +121,113 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             object clonedValue = null;
 
-            // ICloneable is the next easiest thing
+            // ICloneable is the next easiest thing.
             if (value is ICloneable clone)
             {
                 clonedValue = clone.Clone();
+
+                if (clonedValue is not null)
+                {
+                    return clonedValue;
+                }
             }
 
-            // Next, access the type converter
-            if (clonedValue is null)
+            // Next, access the type converter.
+            TypeConverter converter = TypeDescriptor.GetConverter(value);
+            if (converter.CanConvertTo(typeof(InstanceDescriptor)))
             {
-                TypeConverter converter = TypeDescriptor.GetConverter(value);
-                if (converter.CanConvertTo(typeof(InstanceDescriptor)))
+                // Instance descriptors provide full fidelity unless they are marked as incomplete.
+                var instanceDescriptor = (InstanceDescriptor)converter.ConvertTo(
+                    null,
+                    CultureInfo.InvariantCulture,
+                    value,
+                    typeof(InstanceDescriptor));
+
+                if (instanceDescriptor is not null && instanceDescriptor.IsComplete)
                 {
-                    // Instance descriptors provide full fidelity unless
-                    // they are marked as incomplete.
-                    InstanceDescriptor desc = (InstanceDescriptor)converter.ConvertTo(null, CultureInfo.InvariantCulture, value, typeof(InstanceDescriptor));
-                    if (desc != null && desc.IsComplete)
+                    clonedValue = instanceDescriptor.Invoke();
+                    if (clonedValue is not null)
                     {
-                        clonedValue = desc.Invoke();
+                        return clonedValue;
                     }
                 }
+            }
 
-                // If that didn't work, try conversion to/from string
-                if (clonedValue is null && converter.CanConvertTo(typeof(string)) && converter.CanConvertFrom(typeof(string)))
+            // If that didn't work, try conversion to/from string.
+            if (converter.CanConvertTo(typeof(string)) && converter.CanConvertFrom(typeof(string)))
+            {
+                object stringRepresentation = converter.ConvertToInvariantString(value);
+                clonedValue = converter.ConvertFromInvariantString((string)stringRepresentation);
+                if (clonedValue is not null)
                 {
-                    object stringRep = converter.ConvertToInvariantString(value);
-                    clonedValue = converter.ConvertFromInvariantString((string)stringRep);
+                    return clonedValue;
                 }
             }
 
-            // How about serialization?
-            if (clonedValue is null && type.IsSerializable)
-            {
-                BinaryFormatter f = new BinaryFormatter();
-                MemoryStream ms = new MemoryStream();
-#pragma warning disable CS0618 // Type or member is obsolete
-                f.Serialize(ms, value);
-                ms.Position = 0;
-                clonedValue = f.Deserialize(ms);
-#pragma warning restore CS0618 // Type or member is obsolete
-            }
-
-            if (clonedValue != null)
+            if (clonedValue is not null)
             {
                 return clonedValue;
             }
 
-            // we failed.  This object's reference will be set on each property.
+            // We failed.  This object's reference will be set on each property.
             return value;
         }
 
-        /// <summary>
-        ///  Creates a collection of attributes using the
-        ///  array of attributes that you passed to the constructor.
-        /// </summary>
-        protected override AttributeCollection CreateAttributeCollection()
-        {
-            return new MergedAttributeCollection(this);
-        }
+        protected override AttributeCollection CreateAttributeCollection() => new MergedAttributeCollection(this);
 
         private object GetPropertyOwnerForComponent(Array a, int i)
         {
             object propertyOwner = a.GetValue(i);
-            if (propertyOwner is ICustomTypeDescriptor)
+            if (propertyOwner is ICustomTypeDescriptor descriptor)
             {
-                propertyOwner = ((ICustomTypeDescriptor)propertyOwner).GetPropertyOwner(descriptors[i]);
+                propertyOwner = descriptor.GetPropertyOwner(_descriptors[i]);
             }
+
             return propertyOwner;
         }
 
-        /// <summary>
-        ///  Gets an editor of the specified type.
-        /// </summary>
-        public override object GetEditor(Type editorBaseType)
-        {
-            return descriptors[0].GetEditor(editorBaseType);
-        }
+        public override object GetEditor(Type editorBaseType) => _descriptors[0].GetEditor(editorBaseType);
 
-        /// <summary>
-        ///  When overridden in a derived class, gets the current
-        ///  value
-        ///  of the
-        ///  property on a component.
-        /// </summary>
         public override object GetValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::GetValue called with non-array value");
-            return GetValue((Array)component, out bool temp);
+            return GetValue((Array)component, out bool _);
         }
 
         public object GetValue(Array components, out bool allEqual)
         {
             allEqual = true;
-            object obj = descriptors[0].GetValue(GetPropertyOwnerForComponent(components, 0));
+            object @object = _descriptors[0].GetValue(GetPropertyOwnerForComponent(components, 0));
 
-            if (obj is ICollection)
+            if (@object is ICollection collection)
             {
-                if (collection is null)
+                if (_collection is null)
                 {
-                    collection = new MultiMergeCollection((ICollection)obj);
+                    _collection = new MultiMergeCollection(collection);
                 }
-                else if (collection.Locked)
+                else if (_collection.Locked)
                 {
-                    return collection;
+                    return _collection;
                 }
                 else
                 {
-                    collection.SetItems((ICollection)obj);
+                    _collection.SetItems(collection);
                 }
             }
 
-            for (int i = 1; i < descriptors.Length; i++)
+            for (int i = 1; i < _descriptors.Length; i++)
             {
-                object objCur = descriptors[i].GetValue(GetPropertyOwnerForComponent(components, i));
+                object currentObject = _descriptors[i].GetValue(GetPropertyOwnerForComponent(components, i));
 
-                if (collection != null)
+                if (_collection is not null)
                 {
-                    if (!collection.MergeCollection((ICollection)objCur))
+                    if (!_collection.ReinitializeIfNotEqual((ICollection)currentObject))
                     {
                         allEqual = false;
                         return null;
                     }
                 }
-                else if ((obj is null && objCur is null) ||
-                         (obj != null && obj.Equals(objCur)))
+                else if ((@object is null && currentObject is null) || (@object is not null && @object.Equals(currentObject)))
                 {
                     continue;
                 }
@@ -319,12 +238,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            if (allEqual && collection != null && collection.Count == 0)
+            if (allEqual && _collection is not null && _collection.Count == 0)
             {
                 return null;
             }
 
-            return (collection ?? obj);
+            return _collection ?? @object;
         }
 
         internal object[] GetValues(Array components)
@@ -333,24 +252,19 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             for (int i = 0; i < components.Length; i++)
             {
-                values[i] = descriptors[i].GetValue(GetPropertyOwnerForComponent(components, i));
+                values[i] = _descriptors[i].GetValue(GetPropertyOwnerForComponent(components, i));
             }
+
             return values;
         }
 
-        /// <summary>
-        ///  When overridden in a derived class, resets the
-        ///  value
-        ///  for this property
-        ///  of the component.
-        /// </summary>
         public override void ResetValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::ResetValue called with non-array value");
-            Array a = (Array)component;
-            for (int i = 0; i < descriptors.Length; i++)
+            var array = (Array)component;
+            for (int i = 0; i < _descriptors.Length; i++)
             {
-                descriptors[i].ResetValue(GetPropertyOwnerForComponent(a, i));
+                _descriptors[i].ResetValue(GetPropertyOwnerForComponent(array, i));
             }
         }
 
@@ -358,273 +272,70 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             try
             {
-                if (collection != null)
+                if (_collection is not null)
                 {
-                    collection.Locked = true;
+                    _collection.Locked = true;
                 }
 
-                // now we have to copy the value into each property.
+                // Now we have to copy the value into each property.
                 object[] values = new object[listValue.Count];
 
                 listValue.CopyTo(values, 0);
 
-                for (int i = 0; i < descriptors.Length; i++)
+                for (int i = 0; i < _descriptors.Length; i++)
                 {
-                    if (!(descriptors[i].GetValue(GetPropertyOwnerForComponent(a, i)) is IList propList))
+                    if (_descriptors[i].GetValue(GetPropertyOwnerForComponent(a, i)) is not IList properties)
                     {
                         continue;
                     }
 
-                    propList.Clear();
-                    foreach (object val in values)
+                    properties.Clear();
+                    foreach (object value in values)
                     {
-                        propList.Add(val);
+                        properties.Add(value);
                     }
                 }
             }
             finally
             {
-                if (collection != null)
+                if (_collection is not null)
                 {
-                    collection.Locked = false;
+                    _collection.Locked = false;
                 }
             }
         }
 
-        /// <summary>
-        ///  When overridden in a derived class, sets the value of
-        ///  the component to a different value.
-        /// </summary>
         public override void SetValue(object component, object value)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::SetValue called with non-array value");
-            Array a = (Array)component;
-            if (value is IList && typeof(IList).IsAssignableFrom(PropertyType))
+            var array = (Array)component;
+            if (value is IList list && typeof(IList).IsAssignableFrom(PropertyType))
             {
-                SetCollectionValues(a, (IList)value);
+                SetCollectionValues(array, list);
             }
             else
             {
-                for (int i = 0; i < descriptors.Length; i++)
+                for (int i = 0; i < _descriptors.Length; i++)
                 {
                     object clonedValue = CopyValue(value);
-                    descriptors[i].SetValue(GetPropertyOwnerForComponent(a, i), clonedValue);
+                    _descriptors[i].SetValue(GetPropertyOwnerForComponent(array, i), clonedValue);
                 }
             }
         }
 
-        /// <summary>
-        ///  When overridden in a derived class, indicates whether the
-        ///  value of
-        ///  this property needs to be persisted.
-        /// </summary>
         public override bool ShouldSerializeValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::ShouldSerializeValue called with non-array value");
-            Array a = (Array)component;
-            for (int i = 0; i < descriptors.Length; i++)
+            var array = (Array)component;
+            for (int i = 0; i < _descriptors.Length; i++)
             {
-                if (!descriptors[i].ShouldSerializeValue(GetPropertyOwnerForComponent(a, i)))
+                if (!_descriptors[i].ShouldSerializeValue(GetPropertyOwnerForComponent(array, i)))
                 {
                     return false;
                 }
             }
+
             return true;
-        }
-
-        private class MultiMergeCollection : ICollection
-        {
-            private object[] items;
-            private bool locked;
-
-            public MultiMergeCollection(ICollection original)
-            {
-                SetItems(original);
-            }
-
-            /// <summary>
-            ///  Retrieves the number of items.
-            /// </summary>
-            public int Count
-            {
-                get
-                {
-                    if (items != null)
-                    {
-                        return items.Length;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                }
-            }
-
-            /// <summary>
-            ///  Prevents the contents of the collection from being re-initialized;
-            /// </summary>
-            public bool Locked
-            {
-                get
-                {
-                    return locked;
-                }
-                set
-                {
-                    locked = value;
-                }
-            }
-
-            object ICollection.SyncRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
-
-            bool ICollection.IsSynchronized
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            public void CopyTo(Array array, int index)
-            {
-                if (items is null)
-                {
-                    return;
-                }
-
-                Array.Copy(items, 0, array, index, items.Length);
-            }
-
-            public IEnumerator GetEnumerator()
-            {
-                if (items != null)
-                {
-                    return items.GetEnumerator();
-                }
-                else
-                {
-                    return Array.Empty<object>().GetEnumerator();
-                }
-            }
-
-            /// <summary>
-            ///  Ensures that the new collection equals the exisitng one.
-            ///  Otherwise, it wipes out the contents of the new collection.
-            /// </summary>
-            public bool MergeCollection(ICollection newCollection)
-            {
-                if (locked)
-                {
-                    return true;
-                }
-
-                if (items.Length != newCollection.Count)
-                {
-                    items = Array.Empty<object>();
-                    return false;
-                }
-
-                object[] newItems = new object[newCollection.Count];
-                newCollection.CopyTo(newItems, 0);
-                for (int i = 0; i < newItems.Length; i++)
-                {
-                    if (((newItems[i] is null) != (items[i] is null)) ||
-                        (items[i] != null && !items[i].Equals(newItems[i])))
-                    {
-                        items = Array.Empty<object>();
-                        return false;
-                    }
-                }
-                return true;
-            }
-
-            public void SetItems(ICollection collection)
-            {
-                if (locked)
-                {
-                    return;
-                }
-                items = new object[collection.Count];
-                collection.CopyTo(items, 0);
-            }
-        }
-
-        private class MergedAttributeCollection : AttributeCollection
-        {
-            private readonly MergePropertyDescriptor owner;
-
-            private AttributeCollection[] attributeCollections;
-            private IDictionary foundAttributes;
-
-            public MergedAttributeCollection(MergePropertyDescriptor owner) : base((Attribute[])null)
-            {
-                this.owner = owner;
-            }
-
-            public override Attribute this[Type attributeType]
-            {
-                get
-                {
-                    return GetCommonAttribute(attributeType);
-                }
-            }
-
-            private Attribute GetCommonAttribute(Type attributeType)
-            {
-                if (attributeCollections is null)
-                {
-                    attributeCollections = new AttributeCollection[owner.descriptors.Length];
-                    for (int i = 0; i < owner.descriptors.Length; i++)
-                    {
-                        attributeCollections[i] = owner.descriptors[i].Attributes;
-                    }
-                }
-
-                if (attributeCollections.Length == 0)
-                {
-                    return GetDefaultAttribute(attributeType);
-                }
-
-                Attribute value;
-                if (foundAttributes != null)
-                {
-                    value = foundAttributes[attributeType] as Attribute;
-                    if (value != null)
-                    {
-                        return value;
-                    }
-                }
-
-                value = attributeCollections[0][attributeType];
-
-                if (value is null)
-                {
-                    return null;
-                }
-
-                for (int i = 1; i < attributeCollections.Length; i++)
-                {
-                    Attribute newValue = attributeCollections[i][attributeType];
-                    if (!value.Equals(newValue))
-                    {
-                        value = GetDefaultAttribute(attributeType);
-                        break;
-                    }
-                }
-
-                if (foundAttributes is null)
-                {
-                    foundAttributes = new Hashtable();
-                }
-                foundAttributes[attributeType] = value;
-                return value;
-            }
         }
     }
 }

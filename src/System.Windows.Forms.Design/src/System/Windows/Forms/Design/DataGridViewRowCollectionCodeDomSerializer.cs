@@ -5,7 +5,9 @@
 using System.CodeDom;
 using System.Collections;
 using System.ComponentModel.Design.Serialization;
+#if DEBUG
 using System.Diagnostics;
+#endif
 
 namespace System.Windows.Forms.Design
 {

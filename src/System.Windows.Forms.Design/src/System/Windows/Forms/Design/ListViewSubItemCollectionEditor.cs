@@ -13,34 +13,30 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class ListViewSubItemCollectionEditor : CollectionEditor
     {
-        private static int _count;
+        private static int s_count;
         private ListViewItem.ListViewSubItem _firstSubItem;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='System.Windows.Forms.Design.ListViewSubItemCollectionEditor'/> class.
+        ///  Initializes a new instance of the <see cref="ListViewSubItemCollectionEditor"/> class.
         /// </summary>
         public ListViewSubItemCollectionEditor(Type type) : base(type)
         { }
 
-        /// <summary>
-        ///  Creates an instance of the specified type in the collection.
-        /// </summary>
+        /// <inheritdoc />
         protected override object CreateInstance(Type type)
         {
             object instance = base.CreateInstance(type);
 
-            // slap in a default site-like name
-            if (instance is ListViewItem.ListViewSubItem)
+            // Create a default site-like name.
+            if (instance is ListViewItem.ListViewSubItem item)
             {
-                ((ListViewItem.ListViewSubItem)instance).Name = SR.ListViewSubItemBaseName + _count++;
+                item.Name = SR.ListViewSubItemBaseName + s_count++;
             }
 
             return instance;
         }
 
-        /// <summary>
-        ///  Retrieves the display text for the given list sub item.
-        /// </summary>
+        /// <inheritdoc />
         protected override string GetDisplayText(object value)
         {
             if (value is null)
@@ -50,13 +46,13 @@ namespace System.Windows.Forms.Design
 
             string text;
 
-            PropertyDescriptor prop = TypeDescriptor.GetDefaultProperty(CollectionType);
+            PropertyDescriptor property = TypeDescriptor.GetDefaultProperty(CollectionType);
 
-            if (prop != null && prop.PropertyType == typeof(string))
+            if (property?.PropertyType == typeof(string))
             {
-                text = (string)prop.GetValue(value);
+                text = (string)property.GetValue(value);
 
-                if (text != null && text.Length > 0)
+                if (!string.IsNullOrEmpty(text))
                 {
                     return text;
                 }
@@ -64,7 +60,7 @@ namespace System.Windows.Forms.Design
 
             text = TypeDescriptor.GetConverter(value).ConvertToString(value);
 
-            if (text is null || text.Length == 0)
+            if (string.IsNullOrEmpty(text))
             {
                 text = value.GetType().Name;
             }
@@ -74,22 +70,29 @@ namespace System.Windows.Forms.Design
 
         protected override object[] GetItems(object editValue)
         {
-            // take the fist sub item out of the collection
-            ListViewItem.ListViewSubItemCollection subItemsColl = (ListViewItem.ListViewSubItemCollection)editValue;
+            var subItems = (ListViewItem.ListViewSubItemCollection)editValue;
 
-            // add all the other sub items
-            object[] values = new object[subItemsColl.Count];
-            ((ICollection)subItemsColl).CopyTo(values, 0);
-
-            if (values.Length > 0)
+            if (subItems.Count == 0)
             {
-                // save the first sub item
-                _firstSubItem = subItemsColl[0];
+                return Array.Empty<object>();
+            }
 
-                // now return the rest.
-                object[] subValues = new object[values.Length - 1];
-                Array.Copy(values, 1, subValues, 0, subValues.Length);
-                values = subValues;
+            // Save the first sub item.
+            _firstSubItem = subItems[0];
+
+            if (subItems.Count == 1)
+            {
+                return Array.Empty<object>();
+            }
+
+            object[] values = new object[subItems.Count - 1];
+            int index = 0;
+            IEnumerator enumerator = subItems.GetEnumerator();
+            enumerator.MoveNext();
+
+            while (enumerator.MoveNext())
+            {
+                values[index++] = enumerator.Current;
             }
 
             return values;

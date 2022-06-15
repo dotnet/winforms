@@ -1,0 +1,177 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.Drawing;
+using System.Windows.Forms.Metafiles;
+using Xunit;
+using static Interop;
+
+namespace System.Windows.Forms.Tests
+{
+    public partial class ToolStripButtonTests : IClassFixture<ThreadExceptionFixture>
+    {
+        [WinFormsFact]
+        public void ToolStripButton_RendersTextCorrectly()
+        {
+            using Form form = new();
+            using ToolStrip toolStrip = new();
+            using ToolStripButton toolStripButton = new()
+            {
+                Text = "Hello"
+            };
+            toolStrip.Items.Add(toolStripButton);
+            form.Controls.Add(toolStrip);
+
+            using EmfScope emf = new();
+
+            DeviceContextState state = new(emf);
+
+            Rectangle bounds = toolStripButton.Bounds;
+
+            using PaintEventArgs e = new(emf, bounds);
+            toolStripButton.TestAccessor().Dynamic.OnPaint(e);
+
+            emf.Validate(
+                state,
+                 Validate.TextOut("Hello"));
+        }
+
+        [WinFormsFact]
+        public void ToolStripButton_RendersBackgroundCorrectly()
+        {
+            using Form form = new();
+            using ToolStrip toolStrip = new();
+            using ToolStripButton toolStripButton = new()
+            {
+                BackColor = Color.Blue,
+            };
+            toolStrip.Items.Add(toolStripButton);
+            form.Controls.Add(toolStrip);
+
+            using EmfScope emf = new();
+            DeviceContextState state = new(emf);
+            Rectangle bounds = toolStripButton.Bounds;
+            using PaintEventArgs e = new(emf, bounds);
+            toolStripButton.TestAccessor().Dynamic.OnPaint(e);
+
+            emf.Validate(
+               state,
+               Validate.Polygon16(
+                    bounds: null,
+                    points: null,
+                    State.Brush(Color.Blue, Gdi32.BS.SOLID)));
+        }
+
+        [WinFormsFact]
+        public void ToolStripButton_Selected_RendersBackgroundCorrectly_HighContrast()
+        {
+            using Form form = new();
+            using ToolStrip toolStrip = new();
+            toolStrip.Renderer = new ToolStripSystemHighContrastRenderer();
+            using ToolStripButton toolStripButton = new();
+            toolStrip.Items.Add(toolStripButton);
+            form.Controls.Add(toolStrip);
+            toolStripButton.Select();
+
+            using EmfScope emf = new();
+            DeviceContextState state = new(emf);
+            Rectangle bounds = toolStripButton.Bounds;
+            using PaintEventArgs e = new(emf, bounds);
+            toolStripButton.TestAccessor().Dynamic.OnPaint(e);
+
+            emf.Validate(
+               state,
+               Validate.Polygon16(
+                    bounds: null,
+                    points: null,
+                    State.Brush(SystemColors.Highlight, Gdi32.BS.SOLID)),
+               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYPOLYGON16), 2));
+        }
+
+        [WinFormsFact]
+        public void ToolStripButton_Indeterminate_RendersBackgroundCorrectly_HighContrast()
+        {
+            using Form form = new();
+            using ToolStrip toolStrip = new();
+            toolStrip.Renderer = new ToolStripSystemHighContrastRenderer();
+            using ToolStripButton toolStripButton = new();
+            toolStrip.Items.Add(toolStripButton);
+            form.Controls.Add(toolStrip);
+            toolStripButton.CheckState = CheckState.Indeterminate;
+
+            using EmfScope emf = new();
+            DeviceContextState state = new(emf);
+            Rectangle bounds = toolStripButton.Bounds;
+            using PaintEventArgs e = new(emf, bounds);
+            toolStripButton.TestAccessor().Dynamic.OnPaint(e);
+
+            emf.Validate(
+               state,
+               Validate.Polygon16(
+                    bounds: null,
+                    points: null,
+                    State.Brush(SystemColors.Highlight, Gdi32.BS.SOLID)),
+               Validate.SkipType(Gdi32.EMR.POLYGON16));
+        }
+
+        [WinFormsFact]
+        public void ToolStripButton_DropDownButton_Selected_RendersBackgroundCorrectly_HighContrast()
+        {
+            using Form form = new();
+            using ToolStrip toolStrip = new();
+            toolStrip.Renderer = new ToolStripSystemHighContrastRenderer();
+            using ToolStripDropDownButton toolStripDropDownButton = new();
+            toolStrip.Items.Add(toolStripDropDownButton);
+            form.Controls.Add(toolStrip);
+            toolStripDropDownButton.Select();
+
+            using EmfScope emf = new();
+            DeviceContextState state = new(emf);
+            Rectangle bounds = toolStripDropDownButton.Bounds;
+            using PaintEventArgs e = new(emf, bounds);
+            toolStripDropDownButton.TestAccessor().Dynamic.OnPaint(e);
+
+            emf.Validate(
+               state,
+               Validate.Polygon16(
+                    bounds: null,
+                    points: null,
+                    State.Brush(SystemColors.Highlight, Gdi32.BS.SOLID)),
+               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYPOLYGON16), 2),
+               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYGON16), 1));
+        }
+
+        [WinFormsFact]
+        public void ToolStripButton_SplitButton_Selected_RendersBackgroundCorrectly_HighContrast()
+        {
+            using Form form = new();
+            using ToolStrip toolStrip = new();
+            toolStrip.Renderer = new ToolStripSystemHighContrastRenderer();
+            using ToolStripSplitButton toolStripDropDownButton = new();
+            toolStrip.Items.Add(toolStripDropDownButton);
+            form.Controls.Add(toolStrip);
+            toolStripDropDownButton.Select();
+
+            using EmfScope emf = new();
+            DeviceContextState state = new(emf);
+            Rectangle bounds = toolStripDropDownButton.Bounds;
+            using PaintEventArgs e = new(emf, bounds);
+            toolStripDropDownButton.TestAccessor().Dynamic.OnPaint(e);
+
+            emf.Validate(
+               state,
+               Validate.Polygon16(
+                    bounds: null,
+                    points: null,
+                    State.Brush(SystemColors.Highlight, Gdi32.BS.SOLID)),
+               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYPOLYGON16), 2),
+               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYGON16), 2));
+        }
+
+        private class ToolStripSystemHighContrastRenderer : ToolStripSystemRenderer
+        {
+            internal override ToolStripRenderer RendererOverride => HighContrastRenderer;
+        }
+    }
+}

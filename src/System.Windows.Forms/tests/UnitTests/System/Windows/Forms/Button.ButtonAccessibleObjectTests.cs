@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using static Interop;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
@@ -23,24 +24,28 @@ namespace System.Windows.Forms.Tests
             var buttonAccessibleObject = new Button.ButtonAccessibleObject(button);
 
             Assert.Same(button, buttonAccessibleObject.Owner);
-            // TODO: ControlAccessibleObject should not force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(button.IsHandleCreated);
+            Assert.False(button.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void ButtonAccessibleObject_AccessibleRole_Default_ReturnsPushButton()
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.PushButton)]
+        [InlineData(false, AccessibleRole.None)]
+        public void ButtonAccessibleObject_AccessibleRole_Default_ReturnsExpected(bool createControl, AccessibleRole accessibleRole)
         {
             using var button = new Button
             {
                 AccessibleRole = AccessibleRole.Default
             };
 
-            Assert.False(button.IsHandleCreated);
+            if (createControl)
+            {
+                button.CreateControl();
+            }
+
             var buttonAccessibleObject = new Button.ButtonAccessibleObject(button);
 
-            Assert.Equal(AccessibleRole.PushButton, buttonAccessibleObject.Role);
-            // TODO: ControlAccessibleObject should not force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(button.IsHandleCreated);
+            Assert.Equal(accessibleRole, buttonAccessibleObject.Role);
+            Assert.Equal(createControl, button.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -55,13 +60,13 @@ namespace System.Windows.Forms.Tests
             var buttonAccessibleObject = new Button.ButtonAccessibleObject(button);
 
             Assert.Equal(AccessibleRole.Link, buttonAccessibleObject.Role);
-            // TODO: ControlAccessibleObject should not force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(button.IsHandleCreated);
+            Assert.False(button.IsHandleCreated);
         }
 
         [WinFormsTheory]
         [InlineData((int)UIA.NamePropertyId, "TestName")]
-        [InlineData((int)UIA.ControlTypePropertyId, UIA.ButtonControlTypeId)]
+        [InlineData((int)UIA.LegacyIAccessibleNamePropertyId, "TestName")]
+        [InlineData((int)UIA.ControlTypePropertyId, UIA.ButtonControlTypeId)] // If AccessibleRole is Default
         [InlineData((int)UIA.IsKeyboardFocusablePropertyId, true)]
         [InlineData((int)UIA.AutomationIdPropertyId, "Button1")]
         public void ButtonAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
@@ -77,8 +82,7 @@ namespace System.Windows.Forms.Tests
             object value = buttonAccessibleObject.GetPropertyValue((UIA)propertyID);
 
             Assert.Equal(expected, value);
-            // TODO: ControlAccessibleObject should not force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(button.IsHandleCreated);
+            Assert.False(button.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -90,8 +94,36 @@ namespace System.Windows.Forms.Tests
             var buttonAccessibleObject = new Button.ButtonAccessibleObject(button);
 
             Assert.True(buttonAccessibleObject.IsPatternSupported(UIA.LegacyIAccessiblePatternId));
-            // TODO: ControlAccessibleObject should not force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(button.IsHandleCreated);
+            Assert.False(button.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> ButtonAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ButtonAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void ButtonAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using Button button = new Button();
+            button.AccessibleRole = role;
+
+            object actual = button.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
+            Assert.False(button.IsHandleCreated);
         }
     }
 }

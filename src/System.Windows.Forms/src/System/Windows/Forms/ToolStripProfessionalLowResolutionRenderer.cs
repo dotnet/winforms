@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -15,7 +13,7 @@ namespace System.Windows.Forms
         {
         }
 
-        internal override ToolStripRenderer RendererOverride
+        internal override ToolStripRenderer? RendererOverride
         {
             get
             {
@@ -51,7 +49,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void RenderToolStripBorderInternal(ToolStripRenderEventArgs e)
+        private static void RenderToolStripBorderInternal(ToolStripRenderEventArgs e)
         {
             Rectangle bounds = new Rectangle(Point.Empty, e.ToolStrip.Size);
             Graphics g = e.Graphics;
@@ -78,7 +76,7 @@ namespace System.Windows.Forms
 
             // connecting pixels
 
-            // top left conntecting pixel - always drawn
+            // top left connecting pixel - always drawn
             g.FillRectangle(SystemBrushes.ButtonShadow, new Rectangle(1, 1, 1, 1));
 
             if (oddWidth)
@@ -86,14 +84,15 @@ namespace System.Windows.Forms
                 // top right pixel
                 g.FillRectangle(SystemBrushes.ButtonShadow, new Rectangle(bounds.Width - 2, 1, 1, 1));
             }
-            // bottom conntecting pixels - drawn only if height is odd
+
+            // bottom connecting pixels - drawn only if height is odd
             if (oddHeight)
             {
                 // bottom left
                 g.FillRectangle(SystemBrushes.ButtonShadow, new Rectangle(1, bounds.Height - 2, 1, 1));
             }
 
-            // top and bottom right conntecting pixel - drawn only if height and width are odd
+            // top and bottom right connecting pixel - drawn only if height and width are odd
             if (oddHeight && oddWidth)
             {
                 // bottom right

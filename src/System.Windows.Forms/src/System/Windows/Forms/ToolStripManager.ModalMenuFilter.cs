@@ -1,10 +1,9 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 #nullable disable
 
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -95,7 +94,7 @@ namespace System.Windows.Forms
                         if (_activeHwnd.Handle != IntPtr.Zero)
                         {
                             control = Control.FromHandle(_activeHwnd.Handle);
-                            if (control != null)
+                            if (control is not null)
                             {
                                 control.HandleCreated -= new EventHandler(OnActiveHwndHandleCreated);
                             }
@@ -105,7 +104,7 @@ namespace System.Windows.Forms
 
                         // make sure we watch out for handle recreates.
                         control = Control.FromHandle(_activeHwnd.Handle);
-                        if (control != null)
+                        if (control is not null)
                         {
                             control.HandleCreated += new EventHandler(OnActiveHwndHandleCreated);
                         }
@@ -163,6 +162,7 @@ namespace System.Windows.Forms
                         // switch over to a MessageHook
                         MessageHook.HookMessages = true;
                     }
+
                     _inMenuMode = true;
 
                     NotifyLastLastFocusedToolAboutFocusLoss();
@@ -175,7 +175,7 @@ namespace System.Windows.Forms
             internal void NotifyLastLastFocusedToolAboutFocusLoss()
             {
                 IKeyboardToolTip lastFocusedTool = KeyboardToolTipStateMachine.Instance.LastFocusedTool;
-                if (lastFocusedTool != null)
+                if (lastFocusedTool is not null)
                 {
                     _lastFocusedTool.SetTarget(lastFocusedTool);
                     KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(lastFocusedTool);
@@ -195,9 +195,9 @@ namespace System.Windows.Forms
                     {
                         Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "___________Exiting MenuMode....");
 
-                        if (_messageHook != null)
+                        if (_messageHook is not null)
                         {
-                            // message filter isn't going to help as we dont own the message pump
+                            // message filter isn't going to help as we don't own the message pump
                             // switch over to a MessageHook
                             _messageHook.HookMessages = false;
                         }
@@ -212,10 +212,11 @@ namespace System.Windows.Forms
                         {
                             // Unsubscribe from handle creates
                             Control control = Control.FromHandle(ActiveHwnd.Handle);
-                            if (control != null)
+                            if (control is not null)
                             {
                                 control.HandleCreated -= new EventHandler(OnActiveHwndHandleCreated);
                             }
+
                             ActiveHwndInternal = NativeMethods.NullHandleRef;
                         }
 
@@ -226,7 +227,7 @@ namespace System.Windows.Forms
                             User32.ShowCaret(IntPtr.Zero);
                         }
 
-                        if (_lastFocusedTool.TryGetTarget(out IKeyboardToolTip tool) && tool != null)
+                        if (_lastFocusedTool.TryGetTarget(out IKeyboardToolTip tool) && tool is not null)
                         {
                             KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(tool);
                         }
@@ -247,7 +248,7 @@ namespace System.Windows.Forms
 
             internal ToolStrip GetActiveToolStripInternal()
             {
-                if (_inputFilterQueue != null && _inputFilterQueue.Count > 0)
+                if (_inputFilterQueue is not null && _inputFilterQueue.Count > 0)
                 {
                     return _inputFilterQueue[_inputFilterQueue.Count - 1];
                 }
@@ -263,7 +264,7 @@ namespace System.Windows.Forms
                 if (_toplevelToolStrip is null)
                 {
                     ToolStrip activeToolStrip = GetActiveToolStripInternal();
-                    if (activeToolStrip != null)
+                    if (activeToolStrip is not null)
                     {
                         _toplevelToolStrip = activeToolStrip.GetToplevelOwnerToolStrip();
                     }
@@ -280,17 +281,16 @@ namespace System.Windows.Forms
 
             internal static void ProcessMenuKeyDown(ref Message m)
             {
-                Keys keyData = (Keys)(int)m.WParam;
+                Keys keyData = (Keys)m.WParamInternal;
 
                 if (Control.FromHandle(m.HWnd) is ToolStrip toolStrip && !toolStrip.IsDropDown)
                 {
                     return;
                 }
 
-                // Handle the case where the ALT key has been pressed down while a dropdown
-                // was open. We need to clear off the MenuKeyToggle so the next ALT will activate
-                // the menu.
-                if (ToolStripManager.IsMenuKey(keyData))
+                // Handle the case where the ALT key has been pressed down while a dropdown was open. We need to clear
+                // off the MenuKeyToggle so the next ALT will activate the menu.
+                if (IsMenuKey(keyData))
                 {
                     if (!InMenuMode && MenuKeyToggle)
                     {
@@ -315,7 +315,7 @@ namespace System.Windows.Forms
                     ExitMenuMode();
 
                     // Make sure we roll selection off  the toplevel toolstrip.
-                    if (activeToolStripDropDown.OwnerItem != null)
+                    if (activeToolStripDropDown.OwnerItem is not null)
                     {
                         activeToolStripDropDown.OwnerItem.Unselect();
                     }
@@ -333,7 +333,7 @@ namespace System.Windows.Forms
                     _ensureMessageProcessingTimer.Interval = MessageProcessingInterval;
                     _ensureMessageProcessingTimer.Enabled = true;
                 }
-                else if (_ensureMessageProcessingTimer != null)
+                else if (_ensureMessageProcessingTimer is not null)
                 {
                     _ensureMessageProcessingTimer.Enabled = false;
                     _ensureMessageProcessingTimer.Dispose();
@@ -341,7 +341,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            private void ProcessMouseButtonPressed(IntPtr hwndMouseMessageIsFrom, int x, int y)
+            private void ProcessMouseButtonPressed(IntPtr hwndMouseMessageIsFrom, Point location)
             {
                 Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ModalMenuFilter.ProcessMouseButtonPressed] Found a mouse down.");
 
@@ -350,18 +350,18 @@ namespace System.Windows.Forms
                 {
                     ToolStrip activeToolStrip = GetActiveToolStripInternal();
 
-                    if (activeToolStrip != null)
+                    if (activeToolStrip is not null)
                     {
-                        var pt = new Point(x, y);
-                        User32.MapWindowPoints(new HandleRef(activeToolStrip, hwndMouseMessageIsFrom), new HandleRef(activeToolStrip, activeToolStrip.Handle), ref pt, 1);
-                        if (!activeToolStrip.ClientRectangle.Contains(pt.X, pt.Y))
+                        Point translatedLocation = location;
+                        User32.MapWindowPoint(hwndMouseMessageIsFrom, activeToolStrip, ref translatedLocation);
+                        if (!activeToolStrip.ClientRectangle.Contains(translatedLocation))
                         {
                             if (activeToolStrip is ToolStripDropDown activeToolStripDropDown)
                             {
-                                if (!(activeToolStripDropDown.OwnerToolStrip != null
+                                if (!(activeToolStripDropDown.OwnerToolStrip is not null
                                     && activeToolStripDropDown.OwnerToolStrip.Handle == hwndMouseMessageIsFrom
-                                    && activeToolStripDropDown.OwnerDropDownItem != null
-                                     && activeToolStripDropDown.OwnerDropDownItem.DropDownButtonArea.Contains(x, y)))
+                                    && activeToolStripDropDown.OwnerDropDownItem is not null
+                                    && activeToolStripDropDown.OwnerDropDownItem.DropDownButtonArea.Contains(location)))
                                 {
                                     // The owner item should handle closing the dropdown
                                     // this allows code such as if (DropDown.Visible) { Hide, Show } etc.
@@ -372,15 +372,19 @@ namespace System.Windows.Forms
                             {
                                 // Make sure we clear the selection.
                                 activeToolStrip.NotifySelectionChange(item: null);
+
                                 // We're a toplevel toolstrip and we've clicked somewhere else.
                                 // Exit menu mode
-                                Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ModalMenuFilter.ProcessMouseButtonPressed] Calling exit because we're a toplevel toolstrip and we've clicked somewhere else.");
+                                Debug.WriteLineIf(
+                                    ToolStrip.s_snapFocusDebug.TraceVerbose,
+                                    "[ModalMenuFilter.ProcessMouseButtonPressed] Calling exit because we're a toplevel toolstrip and we've clicked somewhere else.");
+
                                 ExitMenuModeCore();
                             }
                         }
                         else
                         {
-                            // we've found a dropdown that intersects with the mouse message
+                            // We've found a dropdown that intersects with the mouse message
                             break;
                         }
                     }
@@ -429,7 +433,7 @@ namespace System.Windows.Forms
 
                 if (toolStrip.IsDropDown)
                 {
-                    // For something that never closes, dont use menu mode.
+                    // For something that never closes, don't use menu mode.
                     ToolStripDropDown dropDown = toolStrip as ToolStripDropDown;
 
                     if (dropDown.AutoClose == false)
@@ -441,10 +445,11 @@ namespace System.Windows.Forms
                             ActiveHwndInternal = new HandleRef(this, hwndActive);
                         }
 
-                        // Dont actually enter menu mode..
+                        // Don't actually enter menu mode..
                         return;
                     }
                 }
+
                 toolStrip.KeyboardActive = true;
 
                 if (_inputFilterQueue is null)
@@ -458,7 +463,7 @@ namespace System.Windows.Forms
 
                     // ToolStrip dropdowns push/pull their activation based on visibility.
                     // we have to account for the toolstrips that aren't dropdowns
-                    if (currentActiveToolStrip != null)
+                    if (currentActiveToolStrip is not null)
                     {
                         if (!currentActiveToolStrip.IsDropDown)
                         {
@@ -556,16 +561,19 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
+
                 ToolStrip activeToolStrip = GetActiveToolStrip();
                 if (activeToolStrip is null)
                 {
                     return false;
                 }
+
                 if (activeToolStrip.IsDisposed)
                 {
                     RemoveActiveToolStripCore(activeToolStrip);
                     return false;
                 }
+
                 HandleRef hwndActiveToolStrip = new HandleRef(activeToolStrip, activeToolStrip.Handle);
                 HandleRef hwndCurrentActiveWindow = new HandleRef(null, User32.GetActiveWindow());
 
@@ -575,7 +583,7 @@ namespace System.Windows.Forms
                     // if another window has gotten activation - we should dismiss.
                     if (hwndCurrentActiveWindow.Handle == IntPtr.Zero)
                     {
-                        // we dont know what it was cause it's on another thread or doesnt exist
+                        // we don't know what it was cause it's on another thread or doesnt exist
                         Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ModalMenuFilter.PreFilterMessage] Dismissing because: " + WindowsFormsUtils.GetControlInformation(hwndCurrentActiveWindow.Handle) + " has gotten activation. ");
                         ProcessActivationChange();
                     }
@@ -588,7 +596,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                // Store this off so we dont have to do activation processing next time
+                // Store this off so we don't have to do activation processing next time
                 _lastActiveWindow = hwndCurrentActiveWindow;
 
                 // Performance: skip over things like WM_PAINT.
@@ -617,7 +625,7 @@ namespace System.Windows.Forms
                                     // It is NOT a child of the current active toolstrip.
 
                                     ToolStrip toplevelToolStrip = GetCurrentTopLevelToolStrip();
-                                    if (toplevelToolStrip != null
+                                    if (toplevelToolStrip is not null
                                         && (IsChildOrSameWindow(new HandleRef(toplevelToolStrip, toplevelToolStrip.Handle),
                                                                new HandleRef(null, m.HWnd))))
                                     {
@@ -643,25 +651,21 @@ namespace System.Windows.Forms
                                     return true;
                                 }
                             }
+
                             break;
                         case User32.WM.LBUTTONDOWN:
                         case User32.WM.RBUTTONDOWN:
                         case User32.WM.MBUTTONDOWN:
                             // When a mouse button is pressed, we should determine if it is within the client coordinates
                             // of the active dropdown. If not, we should dismiss it.
-                            ProcessMouseButtonPressed(m.HWnd,
-                                x: PARAM.SignedLOWORD(m.LParam),
-                                y: PARAM.SignedHIWORD(m.LParam));
-
+                            ProcessMouseButtonPressed(m.HWnd, PARAM.ToPoint(m.LParamInternal));
                             break;
                         case User32.WM.NCLBUTTONDOWN:
                         case User32.WM.NCRBUTTONDOWN:
                         case User32.WM.NCMBUTTONDOWN:
                             // When a mouse button is pressed, we should determine if it is within the client coordinates
                             // of the active dropdown. If not, we should dismiss it.
-                            ProcessMouseButtonPressed(/*nc messages are in screen coords*/IntPtr.Zero,
-                                x: PARAM.SignedLOWORD(m.LParam),
-                                y: PARAM.SignedHIWORD(m.LParam));
+                            ProcessMouseButtonPressed(/*nc messages are in screen coords*/IntPtr.Zero, PARAM.ToPoint(m.LParamInternal));
                             break;
 
                         case User32.WM.KEYDOWN:
@@ -684,6 +688,7 @@ namespace System.Windows.Forms
                             {
                                 Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ModalMenuFilter.PreFilterMessage] got Keyboard message " + m.ToString());
                             }
+
                             break;
                     }
                 }

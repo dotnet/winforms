@@ -1,6 +1,8 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+#nullable enable
 
 using System.ComponentModel;
 using System.Drawing;
@@ -15,38 +17,38 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     public class ComponentGlyph : Glyph
     {
+        private readonly IComponent? _relatedComponent;
+
         /// <summary>
         ///  Standard constructor.
         /// </summary>
-        public ComponentGlyph(IComponent relatedComponent, Behavior behavior) : base(behavior)
+        public ComponentGlyph(IComponent? relatedComponent, Behavior? behavior)
+            : base(behavior)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            _relatedComponent = relatedComponent;
         }
 
-        public ComponentGlyph(IComponent relatedComponent) : base(null)
+        public ComponentGlyph(IComponent? relatedComponent)
+            : base(null)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            _relatedComponent = relatedComponent;
         }
 
         /// <summary>
         ///  Returns the Component this Glyph is related to.
         /// </summary>
-        public IComponent RelatedComponent => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public IComponent? RelatedComponent => _relatedComponent;
 
         /// <summary>
         ///  Overrides GetHitTest - this implementation does nothing.
         /// </summary>
-        public override Cursor GetHitTest(Point p)
-        {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
-        }
+        public override Cursor? GetHitTest(Point p) => null;
 
         /// <summary>
         ///  Overrides Glyph::Paint - this implementation does nothing.
         /// </summary>
         public override void Paint(PaintEventArgs pe)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
         }
     }
 }

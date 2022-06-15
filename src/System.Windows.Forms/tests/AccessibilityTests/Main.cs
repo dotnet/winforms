@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Windows.Forms;
 
 namespace AccessibilityTests
@@ -16,43 +15,43 @@ namespace AccessibilityTests
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            Commontrol1 commontrol1 = new Commontrol1();
+            Commontrol1 commontrol1 = new();
             commontrol1.Show();
         }
 
         private void Button2_Click(object sender, EventArgs e)
         {
-            CommonControl2 commonControl2 = new CommonControl2();
+            CommonControl2 commonControl2 = new();
             commonControl2.Show();
         }
 
         private void Button3_Click(object sender, EventArgs e)
         {
-            DataControls dataControls = new DataControls();
+            DataControls dataControls = new();
             dataControls.Show();
         }
 
         private void Button4_Click(object sender, EventArgs e)
         {
-            DialogsTesting dialogsTesting = new DialogsTesting();
-            dialogsTesting.Show();
+            TaskDialogTesting TaskDialogTesting = new();
+            TaskDialogTesting.ShowEventsDemoTaskDialog();
         }
 
         private void Button5_Click(object sender, EventArgs e)
         {
-            MenuForm menuForm = new MenuForm();
+            MenuForm menuForm = new();
             menuForm.Show();
         }
 
         private void Button6_Click(object sender, EventArgs e)
         {
-            PrintingTesting printingTesting = new PrintingTesting();
+            PrintingTesting printingTesting = new();
             printingTesting.Show();
         }
 
         private void Button7_Click(object sender, EventArgs e)
         {
-            RemainingControls remainingControls = new RemainingControls();
+            RemainingControls remainingControls = new();
             remainingControls.Show();
         }
 
@@ -60,6 +59,19 @@ namespace AccessibilityTests
         {
             ContainersTesting containerControl = new ContainersTesting();
             containerControl.Show();
+        }
+
+        private void btnDataBindingExample_Click(object sender, EventArgs e)
+        {
+            DataBindingExample dataBindingExample = new();
+            dataBindingExample.Show();
+        }
+
+        private void customAccessiblePropertiesButton_Click(object sender, EventArgs e)
+        {
+            CustomAccessiblePropertiesForm cusAcccName = new();
+            cusAcccName.StartPosition = FormStartPosition.CenterParent;
+            cusAcccName.Show();
         }
     }
 }

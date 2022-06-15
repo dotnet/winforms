@@ -52,7 +52,7 @@ namespace System.Windows.Forms
         ///  Sent when a menu popup comes up.
         /// </summary>
         /// <remarks>
-        ///  Note that for a call to TrackPopupMenu(), a client will see <c>EVENT_SYSTEM_MENUSTART</c>
+        ///  For a call to TrackPopupMenu(), a client will see <c>EVENT_SYSTEM_MENUSTART</c>
         ///  followed almost immediately by <c>EVENT_SYSTEM_MENUPOPUPSTART</c> for the popup being shown.
         /// </remarks>
         /// <seealso cref="SystemMenuPopupEnd"/>.
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
         ///  Sent when a menu popup just before it is taken down.
         /// </summary>
         /// <remarks>
-        ///  Note that for a call to TrackPopupMenu(), a client will see <c>EVENT_SYSTEM_MENUSTART</c>
+        ///  For a call to TrackPopupMenu(), a client will see <c>EVENT_SYSTEM_MENUSTART</c>
         ///  followed almost immediately by <c>EVENT_SYSTEM_MENUPOPUPSTART</c> for the popup being shown.
         /// </remarks>
         /// <seealso cref="SystemMenuPopupStart"/>.
@@ -116,7 +116,7 @@ namespace System.Windows.Forms
         ///  Sent when a window enters drag drop mode.
         /// </summary>
         /// <seealso cref="SystemDragDropEnd"/>.
-        //  Note that it is up to apps and OLE to generate this, since the system doesn't know.
+        //  It is up to apps and OLE to generate this, since the system doesn't know.
         //  Like <c>EVENT_SYSTEM_SOUND</c>, it will be a while before this is prevalent.
         SystemDragDropStart = 0x000E,
 
@@ -125,7 +125,7 @@ namespace System.Windows.Forms
         ///  Sent when a window leaves drag drop mode.
         /// </summary>
         /// <seealso cref="SystemDragDropStart"/>.
-        //  Note that it is up to apps and OLE to generate this, since the system doesn't know.
+        //  It is up to apps and OLE to generate this, since the system doesn't know.
         //  Like <c>EVENT_SYSTEM_SOUND</c>, it will be a while before this is prevalent.
         SystemDragDropEnd = 0x000F,
 
@@ -179,7 +179,7 @@ namespace System.Windows.Forms
         SystemMinimizeStart = 0x0016,
 
         /// <summary>
-        ///  <c>EVENT_SYSTEM_MINIMIZEEND</c>
+        ///  <c>EVENT_SYSTEM_MINIMIZED</c>
         ///  Sent when a window minimizes and just before it restores.
         /// </summary>
         /// <seealso cref="SystemMinimizeStart"/>.

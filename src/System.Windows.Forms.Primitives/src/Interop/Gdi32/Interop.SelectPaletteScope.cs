@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Drawing;
 
 internal static partial class Interop
@@ -14,7 +13,7 @@ internal static partial class Interop
         /// </summary>
         /// <remarks>
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
-        ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double pallete reset.
+        ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double palette reset.
         /// </remarks>
 #if DEBUG
         internal class SelectPaletteScope : DisposalTracking.Tracker, IDisposable

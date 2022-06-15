@@ -7,7 +7,7 @@ using static Interop.ComCtl32;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Specifies how list items are displayed in a <see cref='ListView'/> control.
+    ///  Specifies how list items are displayed in a <see cref="ListView"/> control.
     /// </summary>
     public enum View
     {
@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         LargeIcon = (int)LV_VIEW.ICON,
 
         /// <summary>
-        ///  Each item appears on a seperate line with further
+        ///  Each item appears on a separate line with further
         ///  information about each item arranged in columns. The left
         ///  most column
         ///  contains a small icon and

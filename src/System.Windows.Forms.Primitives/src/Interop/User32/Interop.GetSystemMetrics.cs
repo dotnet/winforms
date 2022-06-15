@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -92,11 +90,11 @@ internal static partial class Interop
             SM_CYSIZEFRAME = SM_CYFRAME
         }
 
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern int GetSystemMetrics(SystemMetric nIndex);
+        [LibraryImport(Libraries.User32)]
+        public static partial int GetSystemMetrics(SystemMetric nIndex);
 
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        private static extern int GetSystemMetricsForDpi(SystemMetric nIndex, uint dpi);
+        [LibraryImport(Libraries.User32)]
+        private static partial int GetSystemMetricsForDpi(SystemMetric nIndex, uint dpi);
 
         /// <summary>
         ///  Tries to get system metrics for the dpi. dpi is ignored if "GetSystemMetricsForDpi" is not available on the OS that this application is running.

@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
@@ -44,7 +43,7 @@ namespace System.Windows.Forms
         //
         internal WebBrowserSiteBase(WebBrowserBase h)
         {
-            host = h ?? throw new ArgumentNullException(nameof(h));
+            host = h.OrThrowIfNull();
         }
 
         /// <summary>
@@ -99,7 +98,7 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT IOleControlSite.TransformCoords(Point *pPtlHimetric, PointF *pPtfContainer, XFORMCOORDS dwFlags)
+        unsafe HRESULT IOleControlSite.TransformCoords(Point* pPtlHimetric, PointF* pPtfContainer, XFORMCOORDS dwFlags)
         {
             if (pPtlHimetric is null || pPtfContainer is null)
             {
@@ -271,7 +270,7 @@ namespace System.Windows.Forms
 
             *lprcPosRect = Host.Bounds;
             *lprcClipRect = WebBrowserHelper.GetClipRect();
-            if (lpFrameInfo != null)
+            if (lpFrameInfo is not null)
             {
                 lpFrameInfo->cb = (uint)Marshal.SizeOf<OLEINPLACEFRAMEINFO>();
                 lpFrameInfo->fMDIApp = BOOL.FALSE;
@@ -360,50 +359,29 @@ namespace System.Windows.Forms
 
         internal virtual void OnPropertyChanged(DispatchID dispid)
         {
-            try
+            if (Host.Site.TryGetService(out IComponentChangeService changeService))
             {
-                ISite site = Host.Site;
-                if (site != null)
+                try
                 {
-                    IComponentChangeService changeService = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-
-                    if (changeService != null)
-                    {
-                        try
-                        {
-                            changeService.OnComponentChanging(Host, null);
-                        }
-                        catch (CheckoutException coEx)
-                        {
-                            if (coEx == CheckoutException.Canceled)
-                            {
-                                return;
-                            }
-                            throw;
-                        }
-
-                        // Now notify the change service that the change was successful.
-                        //
-                        changeService.OnComponentChanged(Host, null, null, null);
-                    }
+                    changeService.OnComponentChanging(Host);
+                    changeService.OnComponentChanged(Host);
                 }
-            }
-            catch (Exception t)
-            {
-                Debug.Fail(t.ToString());
-                throw;
+                catch (CheckoutException e) when (e == CheckoutException.Canceled)
+                {
+                    return;
+                }
             }
         }
 
         internal void StartEvents()
         {
-            if (connectionPoint != null)
+            if (connectionPoint is not null)
             {
                 return;
             }
 
             object nativeObject = Host.activeXInstance;
-            if (nativeObject != null)
+            if (nativeObject is not null)
             {
                 try
                 {
@@ -421,7 +399,7 @@ namespace System.Windows.Forms
 
         internal void StopEvents()
         {
-            if (connectionPoint != null)
+            if (connectionPoint is not null)
             {
                 connectionPoint.Disconnect();
                 connectionPoint = null;

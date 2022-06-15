@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -46,7 +45,7 @@ namespace System.Windows.Forms
         {
             //
             // The purpose of this method is to find a list, given a 'data source' object and a
-            // decription of some 'data member' property of that object which returns the list.
+            // description of some 'data member' property of that object which returns the list.
             //
             // - If the data source is not a list, we get the list by just querying for the
             //   current value of that property on the data source itself.
@@ -74,7 +73,7 @@ namespace System.Windows.Forms
             {
                 // Data source is another BindingSource so ask for its current item
                 CurrencyManager cm = (dataSource as ICurrencyManagerProvider).CurrencyManager;
-                bool currentKnown = (cm != null && cm.Position >= 0 && cm.Position <= cm.Count - 1);
+                bool currentKnown = (cm is not null && cm.Position >= 0 && cm.Position <= cm.Count - 1);
                 currentItem = currentKnown ? cm.Current : null;
             }
             else if (dataSource is IEnumerable)
@@ -100,6 +99,7 @@ namespace System.Windows.Forms
             {
                 return string.Empty;
             }
+
             if (list is ITypedList typedList)
             {
                 // Use typed list
@@ -244,7 +244,7 @@ namespace System.Windows.Forms
             }
 
             PropertyInfo indexer = GetTypedIndexer(listType);
-            if (indexer != null)
+            if (indexer is not null)
             {
                 return indexer.PropertyType;
             }
@@ -280,7 +280,7 @@ namespace System.Windows.Forms
                 instanceException = ex; // No default ctor defined
             }
 
-            if (instanceException != null)
+            if (instanceException is not null)
             {
                 throw new NotSupportedException(SR.BindingSourceInstanceError, instanceException);
             }
@@ -328,7 +328,7 @@ namespace System.Windows.Forms
             {
                 // If the type is Customers[], this will return "Customers"
                 Type elementType = type.GetElementType();
-                if (elementType != null)
+                if (elementType is not null)
                 {
                     name = elementType.Name;
                 }
@@ -342,7 +342,7 @@ namespace System.Windows.Forms
             {
                 // If the type is BindingList<T>, TCollection, TList (or equiv), this will return "T"
                 PropertyInfo indexer = GetTypedIndexer(type);
-                if (indexer != null)
+                if (indexer is not null)
                 {
                     name = indexer.PropertyType.Name;
                 }
@@ -390,6 +390,7 @@ namespace System.Windows.Forms
                 // Walk down the tree
                 pdc = GetListItemPropertiesByType(subType, listAccessors, startIndex);
             }
+
             // Return descriptors
             return pdc;
         }
@@ -412,14 +413,14 @@ namespace System.Windows.Forms
             //
             object instance = GetFirstItemByEnumerable(iEnumerable);
 
-            if (instance != null)
+            if (instance is not null)
             {
                 // This calls GetValue(Customers[0], "Orders") - or Customers[0].Orders
                 // If this list is non-null, it is an instance of Orders (Order[]) for the first customer
                 subList = GetList(listAccessors[startIndex].GetValue(instance));
             }
 
-            if (null == subList)
+            if (subList is null)
             {
                 // Can't get shape by Instance, try by Type
                 pdc = GetListItemPropertiesByType(listAccessors[startIndex].PropertyType, listAccessors, startIndex);
@@ -455,12 +456,12 @@ namespace System.Windows.Forms
         private static Type GetListItemTypeByEnumerable(IEnumerable iEnumerable)
         {
             object instance = GetFirstItemByEnumerable(iEnumerable);
-            return (instance != null) ? instance.GetType() : typeof(object);
+            return (instance is not null) ? instance.GetType() : typeof(object);
         }
 
         private static PropertyDescriptorCollection GetListItemPropertiesByInstance(object target, PropertyDescriptor[] listAccessors, int startIndex)
         {
-            Debug.Assert(listAccessors != null);
+            Debug.Assert(listAccessors is not null);
 
             // At this point, things can be simplified because:
             //   We know target is _not_ a list
@@ -602,7 +603,7 @@ namespace System.Windows.Forms
                 {
                     PropertyInfo indexer = GetTypedIndexer(targetType);
 
-                    if (indexer != null && !typeof(ICustomTypeDescriptor).IsAssignableFrom(indexer.PropertyType))
+                    if (indexer is not null && !typeof(ICustomTypeDescriptor).IsAssignableFrom(indexer.PropertyType))
                     {
                         Type type = indexer.PropertyType;
                         pdc = TypeDescriptor.GetProperties(type, BrowsableAttributeList);
@@ -619,7 +620,7 @@ namespace System.Windows.Forms
                         //     List<PropertyDescriptor> merged = new List<PropertyDescriptor>(pdc.Count * 2 + 1);
                         //     foreach (Type baseInterface in interfaces) {
                         //         PropertyDescriptorCollection props = TypeDescriptor.GetProperties(baseInterface, BrowsableAttributeList);
-                        //         if (props != null) {
+                        //         if (props is not null) {
                         //             foreach (PropertyDescriptor p in props) {
                         //                 merged.Add(p);
                         //             }
@@ -638,7 +639,7 @@ namespace System.Windows.Forms
 
             // See if we were successful - if not, return the shape of the first
             // item in the list
-            if (null == pdc)
+            if (pdc is null)
             {
                 object instance = GetFirstItemByEnumerable(enumerable);
                 if (enumerable is string)

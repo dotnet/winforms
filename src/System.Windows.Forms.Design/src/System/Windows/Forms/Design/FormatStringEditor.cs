@@ -15,76 +15,69 @@ namespace System.Windows.Forms.Design
         /// Edits the specified value using the specified provider within the specified context.
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider is null)
+            if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
             {
                 return value;
             }
 
-            IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-            if (edSvc is null)
-            {
-                return value;
-            }
+            var cellStyle = context.Instance as DataGridViewCellStyle;
+            var listControl = context.Instance as ListControl;
 
-            DataGridViewCellStyle dgvCellStyle = context.Instance as DataGridViewCellStyle;
-            ListControl listControl = context.Instance as ListControl;
-            Debug.Assert(listControl != null || dgvCellStyle != null, "this editor is used for the DataGridViewCellStyle::Format and the ListControl::FormatString properties");
+            Debug.Assert(
+                listControl is not null || cellStyle is not null,
+                "this editor is used for the DataGridViewCellStyle::Format and the ListControl::FormatString properties");
+
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
 
-            if (_formatStringDialog is null)
-            {
-                _formatStringDialog = new FormatStringDialog(context);
-            }
+            _formatStringDialog ??= new FormatStringDialog(context);
 
-            if (listControl != null)
+            if (listControl is not null)
             {
                 _formatStringDialog.ListControl = listControl;
             }
             else
             {
-                _formatStringDialog.DataGridViewCellStyle = dgvCellStyle;
+                _formatStringDialog.DataGridViewCellStyle = cellStyle;
             }
 
-            IComponentChangeService changeSvc = (IComponentChangeService)provider.GetService(typeof(IComponentChangeService));
-
-            if (changeSvc != null)
+            if (provider.TryGetService(out IComponentChangeService changeService))
             {
-                if (dgvCellStyle != null)
+                if (cellStyle is not null)
                 {
-                    changeSvc.OnComponentChanging(dgvCellStyle, TypeDescriptor.GetProperties(dgvCellStyle)["Format"]);
-                    changeSvc.OnComponentChanging(dgvCellStyle, TypeDescriptor.GetProperties(dgvCellStyle)["NullValue"]);
-                    changeSvc.OnComponentChanging(dgvCellStyle, TypeDescriptor.GetProperties(dgvCellStyle)["FormatProvider"]);
+                    changeService.OnComponentChanging(cellStyle, TypeDescriptor.GetProperties(cellStyle)["Format"]);
+                    changeService.OnComponentChanging(cellStyle, TypeDescriptor.GetProperties(cellStyle)["NullValue"]);
+                    changeService.OnComponentChanging(cellStyle, TypeDescriptor.GetProperties(cellStyle)["FormatProvider"]);
                 }
                 else
                 {
-                    changeSvc.OnComponentChanging(listControl, TypeDescriptor.GetProperties(listControl)["FormatString"]);
-                    changeSvc.OnComponentChanging(listControl, TypeDescriptor.GetProperties(listControl)["FormatInfo"]);
+                    changeService.OnComponentChanging(listControl, TypeDescriptor.GetProperties(listControl)["FormatString"]);
+                    changeService.OnComponentChanging(listControl, TypeDescriptor.GetProperties(listControl)["FormatInfo"]);
                 }
             }
 
-            edSvc.ShowDialog(_formatStringDialog);
-            _formatStringDialog.End();
+            editorService.ShowDialog(_formatStringDialog);
+            FormatStringDialog.End();
 
             if (!_formatStringDialog.Dirty)
             {
                 return value;
             }
 
-            // since the bindings may have changed, the properties listed in the properties window need to be refreshed
+            // Since the bindings may have changed, the properties listed in the properties window need to be refreshed.
             TypeDescriptor.Refresh(context.Instance);
 
-            if (changeSvc != null)
+            if (changeService is not null)
             {
-                if (dgvCellStyle != null)
+                if (cellStyle is not null)
                 {
-                    changeSvc.OnComponentChanged(dgvCellStyle, TypeDescriptor.GetProperties(dgvCellStyle)["Format"], null, null);
-                    changeSvc.OnComponentChanged(dgvCellStyle, TypeDescriptor.GetProperties(dgvCellStyle)["NullValue"], null, null);
-                    changeSvc.OnComponentChanged(dgvCellStyle, TypeDescriptor.GetProperties(dgvCellStyle)["FormatProvider"], null, null);
+                    changeService.OnComponentChanged(cellStyle, TypeDescriptor.GetProperties(cellStyle)["Format"]);
+                    changeService.OnComponentChanged(cellStyle, TypeDescriptor.GetProperties(cellStyle)["NullValue"]);
+                    changeService.OnComponentChanged(cellStyle, TypeDescriptor.GetProperties(cellStyle)["FormatProvider"]);
                 }
                 else
                 {
-                    changeSvc.OnComponentChanged(listControl, TypeDescriptor.GetProperties(listControl)["FormatString"], null, null);
-                    changeSvc.OnComponentChanged(listControl, TypeDescriptor.GetProperties(listControl)["FormatInfo"], null, null);
+                    changeService.OnComponentChanged(listControl, TypeDescriptor.GetProperties(listControl)["FormatString"]);
+                    changeService.OnComponentChanged(listControl, TypeDescriptor.GetProperties(listControl)["FormatInfo"]);
                 }
             }
 

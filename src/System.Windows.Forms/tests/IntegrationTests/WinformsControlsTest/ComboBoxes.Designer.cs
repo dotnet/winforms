@@ -73,11 +73,15 @@ namespace WinformsControlsTest
             "aa",
             "bb",
             "cc",
-            "d"});
+            "d",
+            "ee",
+            "ff",
+            "gg",});
             this.comboBox2.Location = new System.Drawing.Point(148, 22);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(121, 21);
             this.comboBox2.TabIndex = 4;
+            this.comboBox2.DropDownHeight = 80;
             //
             // comboBox3
             //
@@ -87,11 +91,16 @@ namespace WinformsControlsTest
             "standard",
             "aa",
             "bb",
-            "cc"});
+            "cc",
+            "d",
+            "ee",
+            "ff",
+            "gg",});
             this.comboBox3.Location = new System.Drawing.Point(21, 59);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(121, 21);
             this.comboBox3.TabIndex = 5;
+            this.comboBox3.DropDownHeight = 80;
             //
             // comboBox4
             //
@@ -207,7 +216,10 @@ namespace WinformsControlsTest
             "aa",
             "bb",
             "cc",
-            "d"});
+            "d",
+            "ee",
+            "ff",
+            "gg",});
             this.comboBox12.Location = new System.Drawing.Point(275, 22);
             this.comboBox12.Name = "comboBox12";
             this.comboBox12.Size = new System.Drawing.Size(121, 150);

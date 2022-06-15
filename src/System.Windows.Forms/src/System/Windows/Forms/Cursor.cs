@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using static Interop;
@@ -42,7 +41,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Cursor'/> class with the specified handle.
+        ///  Initializes a new instance of the <see cref="Cursor"/> class with the specified handle.
         /// </summary>
         public Cursor(IntPtr handle)
         {
@@ -56,7 +55,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Cursor'/>
+        ///  Initializes a new instance of the <see cref="Cursor"/>
         ///  class with the specified filename.
         /// </summary>
         public Cursor(string fileName)
@@ -68,23 +67,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Cursor'/> class from the specified resource.
+        ///  Initializes a new instance of the <see cref="Cursor"/> class from the specified resource.
         /// </summary>
         public Cursor(Type type, string resource)
-            : this((type ?? throw new ArgumentNullException(nameof(type))).Module.Assembly.GetManifestResourceStream(type, resource)!)
+            : this((type.OrThrowIfNull()).Module.Assembly.GetManifestResourceStream(type, resource)!)
         {
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Cursor'/> class from the
+        ///  Initializes a new instance of the <see cref="Cursor"/> class from the
         ///  specified data stream.
         /// </summary>
         public Cursor(Stream stream)
         {
-            if (stream is null)
-            {
-                throw new ArgumentNullException(nameof(stream));
-            }
+            ArgumentNullException.ThrowIfNull(stream);
 
             int length = checked((int)stream.Length);
             _cursorData = new byte[length];
@@ -95,8 +91,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets a <see cref='Rectangle'/> that represents the current clipping
-        ///  rectangle for this <see cref='Cursor'/> in screen coordinates.
+        ///  Gets or sets a <see cref="Rectangle"/> that represents the current clipping
+        ///  rectangle for this <see cref="Cursor"/> in screen coordinates.
         /// </summary>
         public unsafe static Rectangle Clip
         {
@@ -120,7 +116,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets a <see cref='Cursor'/> that represents the current mouse cursor.
+        ///  Gets or sets a <see cref="Cursor"/> that represents the current mouse cursor.
         ///  The value is <see langword="null"/> if the current mouse cursor is not visible.
         /// </summary>
         public static Cursor? Current
@@ -139,7 +135,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the Win32 handle for this <see cref='Cursor'/>.
+        ///  Gets the Win32 handle for this <see cref="Cursor"/>.
         /// </summary>
         public IntPtr Handle
         {
@@ -149,6 +145,7 @@ namespace System.Windows.Forms
                 {
                     throw new ObjectDisposedException(string.Format(SR.ObjectDisposed, GetType().Name));
                 }
+
                 return _handle;
             }
         }
@@ -166,7 +163,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets a <see cref='Point'/> that specifies the current cursor
+        ///  Gets or sets a <see cref="Point"/> that specifies the current cursor
         ///  position in screen coordinates.
         /// </summary>
         public static Point Position
@@ -180,7 +177,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the size of this <see cref='Cursor'/> object.
+        ///  Gets the size of this <see cref="Cursor"/> object.
         /// </summary>
         public Size Size
         {
@@ -206,7 +203,7 @@ namespace System.Windows.Forms
         public object? Tag { get; set; }
 
         /// <summary>
-        ///  Duplicates this the Win32 handle of this <see cref='Cursor'/>.
+        ///  Duplicates this the Win32 handle of this <see cref="Cursor"/>.
         /// </summary>
         public IntPtr CopyHandle()
         {
@@ -232,6 +229,7 @@ namespace System.Windows.Forms
                 {
                     User32.DestroyCursor(_handle);
                 }
+
                 _handle = IntPtr.Zero;
             }
         }
@@ -245,10 +243,7 @@ namespace System.Windows.Forms
         // This method is way more powerful than what we expose, but I'll leave it in place.
         private void DrawImageCore(Graphics graphics, Rectangle imageRect, Rectangle targetRect, bool stretch)
         {
-            if (graphics is null)
-            {
-                throw new ArgumentNullException(nameof(graphics));
-            }
+            ArgumentNullException.ThrowIfNull(graphics);
 
             // Support GDI+ Translate method
             targetRect.X += (int)graphics.Transform.OffsetX;
@@ -355,7 +350,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Draws this <see cref='Cursor'/> to a <see cref='Graphics'/>.
+        ///  Draws this <see cref="Cursor"/> to a <see cref="Graphics"/>.
         /// </summary>
         public void Draw(Graphics g, Rectangle targetRect)
         {
@@ -363,7 +358,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Draws this <see cref='Cursor'/> to a <see cref='Graphics'/>.
+        ///  Draws this <see cref="Cursor"/> to a <see cref="Graphics"/>.
         /// </summary>
         public void DrawStretched(Graphics g, Rectangle targetRect)
         {
@@ -415,38 +410,45 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Loads a picture from the requested stream.
         /// </summary>
-        private void LoadPicture(Ole32.IStream stream, string paramName)
+        private unsafe void LoadPicture(Ole32.IStream stream, string paramName)
         {
-            Debug.Assert(stream != null, "Stream should be validated before this method is called.");
+            Debug.Assert(stream is not null, "Stream should be validated before this method is called.");
 
             try
             {
-                Guid iid = typeof(Ole32.IPicture).GUID;
-                Ole32.IPicture picture = (Ole32.IPicture)Ole32.OleCreatePictureIndirect(ref iid);
-                Ole32.IPersistStream ipictureAsIPersist = (Ole32.IPersistStream)picture;
-                ipictureAsIPersist.Load(stream);
-
-                if (picture != null && picture.Type == (short)Ole32.PICTYPE.ICON)
+                Guid iid = IID.IPicture;
+                Ole32.IPicture picture = (Ole32.IPicture)Ole32.OleCreatePictureIndirect(&iid);
+                try
                 {
-                    IntPtr cursorHandle = (IntPtr)picture.Handle;
-                    Size picSize = GetIconSize(cursorHandle);
-                    if (DpiHelper.IsScalingRequired)
+                    Ole32.IPersistStream ipictureAsIPersist = (Ole32.IPersistStream)picture;
+                    ipictureAsIPersist.Load(stream);
+
+                    if (picture.Type == (short)Ole32.PICTYPE.ICON)
                     {
-                        picSize = DpiHelper.LogicalToDeviceUnits(picSize);
+                        IntPtr cursorHandle = (IntPtr)picture.Handle;
+                        Size picSize = GetIconSize(cursorHandle);
+                        if (DpiHelper.IsScalingRequired)
+                        {
+                            picSize = DpiHelper.LogicalToDeviceUnits(picSize);
+                        }
+
+                        _handle = User32.CopyImage(
+                            cursorHandle,
+                            User32.IMAGE.CURSOR,
+                            picSize.Width,
+                            picSize.Height,
+                            User32.LR.DEFAULTCOLOR);
+
+                        _ownHandle = true;
                     }
-
-                    _handle = User32.CopyImage(
-                        cursorHandle,
-                        User32.IMAGE.CURSOR,
-                        picSize.Width,
-                        picSize.Height,
-                        User32.LR.DEFAULTCOLOR);
-
-                    _ownHandle = true;
+                    else
+                    {
+                        throw new ArgumentException(string.Format(SR.InvalidPictureType, nameof(picture), nameof(Cursor)), paramName);
+                    }
                 }
-                else
+                finally
                 {
-                    throw new ArgumentException(string.Format(SR.InvalidPictureType, nameof(picture), nameof(Cursor)), paramName);
+                    ((IDisposable)picture).Dispose();
                 }
             }
             catch (COMException e)
@@ -464,6 +466,7 @@ namespace System.Windows.Forms
             {
                 throw new FormatException(SR.CursorCannotCovertToBytes);
             }
+
             if (_cursorData is null)
             {
                 throw new InvalidOperationException(SR.InvalidPictureFormat);
@@ -479,7 +482,7 @@ namespace System.Windows.Forms
         public static void Show() => User32.ShowCursor(BOOL.TRUE);
 
         /// <summary>
-        ///  Retrieves a human readable string representing this <see cref='Cursor'/>.
+        ///  Retrieves a human readable string representing this <see cref="Cursor"/>.
         /// </summary>
         public override string ToString()
         {
@@ -497,7 +500,7 @@ namespace System.Windows.Forms
             return $"[Cursor: {s}]";
         }
 
-        public static bool operator ==(Cursor left, Cursor right)
+        public static bool operator ==(Cursor? left, Cursor? right)
         {
             if (right is null)
             {
@@ -512,7 +515,7 @@ namespace System.Windows.Forms
             return left._handle == right._handle;
         }
 
-        public static bool operator !=(Cursor left, Cursor right)
+        public static bool operator !=(Cursor? left, Cursor? right)
         {
             return !(left == right);
         }
@@ -520,16 +523,17 @@ namespace System.Windows.Forms
         public override int GetHashCode()
         {
             // Handle is a 64-bit value in 64-bit machines, uncheck here to avoid overflow exceptions.
-            return unchecked((int)_handle);
+            return unchecked(PARAM.ToInt(_handle));
         }
 
         public override bool Equals(object? obj)
         {
-            if (!(obj is Cursor))
+            if (obj is not Cursor)
             {
                 return false;
             }
-            return (this == (Cursor)obj);
+
+            return this == (Cursor)obj;
         }
     }
 }

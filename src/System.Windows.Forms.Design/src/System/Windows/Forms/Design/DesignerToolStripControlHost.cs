@@ -29,12 +29,13 @@ namespace System.Windows.Forms.Design
             get => new Size(92, 22);
         }
 
-        internal GlyphCollection GetGlyphs(ToolStrip parent, GlyphCollection glyphs, System.Windows.Forms.Design.Behavior.Behavior standardBehavior)
+        internal GlyphCollection GetGlyphs(ToolStrip parent, GlyphCollection glyphs, Behavior.Behavior standardBehavior)
         {
             if (_behaviorService is null)
             {
                 _behaviorService = (BehaviorService)parent.Site.GetService(typeof(BehaviorService));
             }
+
             Point loc = _behaviorService.ControlToAdornerWindow(Parent);
             Rectangle r = Bounds;
             r.Offset(loc);

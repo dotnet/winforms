@@ -5,17 +5,21 @@
 namespace System.Windows.Forms.VisualStyles
 {
     /// <summary>
-    ///  Encapsulates the class, part and state of the "element" you wish to draw using
-    ///  the VisualStyleRenderer.
-    ///  Usage pattern is something like this: new VisualStyleRenderer(VisualStyleElement.Window.Caption.Active);
+    ///  Encapsulates the class, part and state of the "element" you wish to draw using the <see cref="VisualStyleRenderer"/>.
     /// </summary>
-    public class VisualStyleElement
+    /// <remarks>
+    ///  <para>
+    ///   Usage pattern is something like this:
+    ///  </para>
+    ///  <code>new VisualStyleRenderer(VisualStyleElement.Window.Caption.Active);</code>
+    /// </remarks>
+    public partial class VisualStyleElement
     {
-        internal const int Count = 25; //UPDATE THIS WHEN CLASSES ARE ADDED/REMOVED!
+        internal const int Count = 25; // UPDATE THIS WHEN CLASSES ARE ADDED/REMOVED!
 
         private VisualStyleElement(string className, int part, int state)
         {
-            ClassName = className ?? throw new ArgumentNullException(nameof(className));
+            ClassName = className.OrThrowIfNull();
             Part = part;
             State = state;
         }
@@ -39,25 +43,25 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? _default;
+                private static VisualStyleElement? s_default;
 
-                public static VisualStyleElement Default => _default ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement Default => s_default ??= new VisualStyleElement(ClassName, Part, 5);
             }
 
             public static class RadioButton
@@ -66,37 +70,37 @@ namespace System.Windows.Forms.VisualStyles
                 // in Win10 RS3 a new part was added to BUTTONPARTS enum in vsstyle.h  - BP_RADIOBUTTON_HCDISABLED = 8
                 internal const int HighContrastDisabledPart = 8;
 
-                private static VisualStyleElement? uncheckednormal;
+                private static VisualStyleElement? s_uncheckednormal;
 
-                public static VisualStyleElement UncheckedNormal => uncheckednormal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement UncheckedNormal => s_uncheckednormal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? uncheckedhot;
+                private static VisualStyleElement? s_uncheckedhot;
 
-                public static VisualStyleElement UncheckedHot => uncheckedhot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement UncheckedHot => s_uncheckedhot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? uncheckedpressed;
+                private static VisualStyleElement? s_uncheckedpressed;
 
-                public static VisualStyleElement UncheckedPressed => uncheckedpressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement UncheckedPressed => s_uncheckedpressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? uncheckeddisabled;
+                private static VisualStyleElement? s_uncheckeddisabled;
 
-                public static VisualStyleElement UncheckedDisabled => uncheckeddisabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement UncheckedDisabled => s_uncheckeddisabled ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? checkednormal;
+                private static VisualStyleElement? s_checkednormal;
 
-                public static VisualStyleElement CheckedNormal => checkednormal ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement CheckedNormal => s_checkednormal ??= new VisualStyleElement(ClassName, Part, 5);
 
-                private static VisualStyleElement? checkedhot;
+                private static VisualStyleElement? s_checkedhot;
 
-                public static VisualStyleElement CheckedHot => checkedhot ??= new VisualStyleElement(ClassName, Part, 6);
+                public static VisualStyleElement CheckedHot => s_checkedhot ??= new VisualStyleElement(ClassName, Part, 6);
 
-                private static VisualStyleElement? checkedpressed;
+                private static VisualStyleElement? s_checkedpressed;
 
-                public static VisualStyleElement CheckedPressed => checkedpressed ??= new VisualStyleElement(ClassName, Part, 7);
+                public static VisualStyleElement CheckedPressed => s_checkedpressed ??= new VisualStyleElement(ClassName, Part, 7);
 
-                private static VisualStyleElement? checkeddisabled;
+                private static VisualStyleElement? s_checkeddisabled;
 
-                public static VisualStyleElement CheckedDisabled => checkeddisabled ??= new VisualStyleElement(ClassName, Part, 8);
+                public static VisualStyleElement CheckedDisabled => s_checkeddisabled ??= new VisualStyleElement(ClassName, Part, 8);
             }
 
             public static class CheckBox
@@ -105,53 +109,53 @@ namespace System.Windows.Forms.VisualStyles
                 // in Win10 RS3 a new part was added to BUTTONPARTS enum in vsstyle.h  - BP_CHECKBOX_HCDISABLED = 9
                 internal const int HighContrastDisabledPart = 9;
 
-                private static VisualStyleElement? uncheckednormal;
+                private static VisualStyleElement? s_uncheckednormal;
 
-                public static VisualStyleElement UncheckedNormal => uncheckednormal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement UncheckedNormal => s_uncheckednormal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? uncheckedhot;
+                private static VisualStyleElement? s_uncheckedhot;
 
-                public static VisualStyleElement UncheckedHot => uncheckedhot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement UncheckedHot => s_uncheckedhot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? uncheckedpressed;
+                private static VisualStyleElement? s_uncheckedpressed;
 
-                public static VisualStyleElement UncheckedPressed => uncheckedpressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement UncheckedPressed => s_uncheckedpressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? uncheckeddisabled;
+                private static VisualStyleElement? s_uncheckeddisabled;
 
-                public static VisualStyleElement UncheckedDisabled => uncheckeddisabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement UncheckedDisabled => s_uncheckeddisabled ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? checkednormal;
+                private static VisualStyleElement? s_checkednormal;
 
-                public static VisualStyleElement CheckedNormal => checkednormal ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement CheckedNormal => s_checkednormal ??= new VisualStyleElement(ClassName, Part, 5);
 
-                private static VisualStyleElement? checkedhot;
+                private static VisualStyleElement? s_checkedhot;
 
-                public static VisualStyleElement CheckedHot => checkedhot ??= new VisualStyleElement(ClassName, Part, 6);
+                public static VisualStyleElement CheckedHot => s_checkedhot ??= new VisualStyleElement(ClassName, Part, 6);
 
-                private static VisualStyleElement? checkedpressed;
+                private static VisualStyleElement? s_checkedpressed;
 
-                public static VisualStyleElement CheckedPressed => checkedpressed ??= new VisualStyleElement(ClassName, Part, 7);
+                public static VisualStyleElement CheckedPressed => s_checkedpressed ??= new VisualStyleElement(ClassName, Part, 7);
 
-                private static VisualStyleElement? checkeddisabled;
+                private static VisualStyleElement? s_checkeddisabled;
 
-                public static VisualStyleElement CheckedDisabled => checkeddisabled ??= new VisualStyleElement(ClassName, Part, 8);
+                public static VisualStyleElement CheckedDisabled => s_checkeddisabled ??= new VisualStyleElement(ClassName, Part, 8);
 
-                private static VisualStyleElement? mixednormal;
+                private static VisualStyleElement? s_mixednormal;
 
-                public static VisualStyleElement MixedNormal => mixednormal ??= new VisualStyleElement(ClassName, Part, 9);
+                public static VisualStyleElement MixedNormal => s_mixednormal ??= new VisualStyleElement(ClassName, Part, 9);
 
-                private static VisualStyleElement? mixedhot;
+                private static VisualStyleElement? s_mixedhot;
 
-                public static VisualStyleElement MixedHot => mixedhot ??= new VisualStyleElement(ClassName, Part, 10);
+                public static VisualStyleElement MixedHot => s_mixedhot ??= new VisualStyleElement(ClassName, Part, 10);
 
-                private static VisualStyleElement? mixedpressed;
+                private static VisualStyleElement? s_mixedpressed;
 
-                public static VisualStyleElement MixedPressed => mixedpressed ??= new VisualStyleElement(ClassName, Part, 11);
+                public static VisualStyleElement MixedPressed => s_mixedpressed ??= new VisualStyleElement(ClassName, Part, 11);
 
-                private static VisualStyleElement? mixeddisabled;
+                private static VisualStyleElement? s_mixeddisabled;
 
-                public static VisualStyleElement MixedDisabled => mixeddisabled ??= new VisualStyleElement(ClassName, Part, 12);
+                public static VisualStyleElement MixedDisabled => s_mixeddisabled ??= new VisualStyleElement(ClassName, Part, 12);
             }
 
             public static class GroupBox
@@ -160,24 +164,24 @@ namespace System.Windows.Forms.VisualStyles
                 // in Win10 RS3 a new part was added to BUTTONPARTS enum in vsstyle.h  - BP_GROUPBOX_HCDISABLED = 10
                 internal const int HighContrastDisabledPart = 10;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 2);
             }
 
             public static class UserButton
             {
                 private const int Part = 5;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
-        } //END BUTTON
+        }
 
         public static class ComboBox
         {
@@ -187,21 +191,21 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             internal static class Border
@@ -215,9 +219,9 @@ namespace System.Windows.Forms.VisualStyles
                 //  3 - Window Color (white by default)
                 //  4 - disabled (light gray by default)
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             internal static class ReadOnlyButton
@@ -231,9 +235,9 @@ namespace System.Windows.Forms.VisualStyles
                 //  3 - pressed (dark blue by default)
                 //  4 - flat (light gray by default)
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 2);
             }
 
             internal static class DropDownButtonRight
@@ -248,9 +252,9 @@ namespace System.Windows.Forms.VisualStyles
                 //  3 - pressed (arrow with dark blue background by default)
                 //  4 - disabled (transparent background with just light arrow)
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
             }
 
             internal static class DropDownButtonLeft
@@ -265,11 +269,11 @@ namespace System.Windows.Forms.VisualStyles
                 //  3 - pressed (dark blue by default)
                 //  4 - transparent disabled (just light arrow)
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 2);
             }
-        } //END COMBOBOX
+        }
 
         public static class Page
         {
@@ -279,86 +283,86 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class Down
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class UpHorizontal
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class DownHorizontal
             {
                 private const int Part = 4;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
-        } //END PAGE
+        }
 
         public static class Spin
         {
@@ -368,86 +372,86 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class Down
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class UpHorizontal
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class DownHorizontal
             {
                 private const int Part = 4;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
-        } //END SPIN
+        }
 
         public static class ScrollBar
         {
@@ -457,228 +461,228 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? upnormal;
+                private static VisualStyleElement? s_upnormal;
 
-                public static VisualStyleElement UpNormal => upnormal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement UpNormal => s_upnormal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? uphot;
+                private static VisualStyleElement? s_uphot;
 
-                public static VisualStyleElement UpHot => uphot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement UpHot => s_uphot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? uppressed;
+                private static VisualStyleElement? s_uppressed;
 
-                public static VisualStyleElement UpPressed => uppressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement UpPressed => s_uppressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? updisabled;
+                private static VisualStyleElement? s_updisabled;
 
-                public static VisualStyleElement UpDisabled => updisabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement UpDisabled => s_updisabled ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? downnormal;
+                private static VisualStyleElement? s_downnormal;
 
-                public static VisualStyleElement DownNormal => downnormal ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement DownNormal => s_downnormal ??= new VisualStyleElement(ClassName, Part, 5);
 
-                private static VisualStyleElement? downhot;
+                private static VisualStyleElement? s_downhot;
 
-                public static VisualStyleElement DownHot => downhot ??= new VisualStyleElement(ClassName, Part, 6);
+                public static VisualStyleElement DownHot => s_downhot ??= new VisualStyleElement(ClassName, Part, 6);
 
-                private static VisualStyleElement? downpressed;
+                private static VisualStyleElement? s_downpressed;
 
-                public static VisualStyleElement DownPressed => downpressed ??= new VisualStyleElement(ClassName, Part, 7);
+                public static VisualStyleElement DownPressed => s_downpressed ??= new VisualStyleElement(ClassName, Part, 7);
 
-                private static VisualStyleElement? downdisabled;
+                private static VisualStyleElement? s_downdisabled;
 
-                public static VisualStyleElement DownDisabled => downdisabled ??= new VisualStyleElement(ClassName, Part, 8);
+                public static VisualStyleElement DownDisabled => s_downdisabled ??= new VisualStyleElement(ClassName, Part, 8);
 
-                private static VisualStyleElement? leftnormal;
+                private static VisualStyleElement? s_leftnormal;
 
-                public static VisualStyleElement LeftNormal => leftnormal ??= new VisualStyleElement(ClassName, Part, 9);
+                public static VisualStyleElement LeftNormal => s_leftnormal ??= new VisualStyleElement(ClassName, Part, 9);
 
-                private static VisualStyleElement? lefthot;
+                private static VisualStyleElement? s_lefthot;
 
-                public static VisualStyleElement LeftHot => lefthot ??= new VisualStyleElement(ClassName, Part, 10);
+                public static VisualStyleElement LeftHot => s_lefthot ??= new VisualStyleElement(ClassName, Part, 10);
 
-                private static VisualStyleElement? leftpressed;
+                private static VisualStyleElement? s_leftpressed;
 
-                public static VisualStyleElement LeftPressed => leftpressed ??= new VisualStyleElement(ClassName, Part, 11);
+                public static VisualStyleElement LeftPressed => s_leftpressed ??= new VisualStyleElement(ClassName, Part, 11);
 
-                private static VisualStyleElement? leftdisabled;
+                private static VisualStyleElement? s_leftdisabled;
 
-                public static VisualStyleElement LeftDisabled => leftdisabled ??= new VisualStyleElement(ClassName, Part, 12);
+                public static VisualStyleElement LeftDisabled => s_leftdisabled ??= new VisualStyleElement(ClassName, Part, 12);
 
-                private static VisualStyleElement? rightnormal;
+                private static VisualStyleElement? s_rightnormal;
 
-                public static VisualStyleElement RightNormal => rightnormal ??= new VisualStyleElement(ClassName, Part, 13);
+                public static VisualStyleElement RightNormal => s_rightnormal ??= new VisualStyleElement(ClassName, Part, 13);
 
-                private static VisualStyleElement? righthot;
+                private static VisualStyleElement? s_righthot;
 
-                public static VisualStyleElement RightHot => righthot ??= new VisualStyleElement(ClassName, Part, 14);
+                public static VisualStyleElement RightHot => s_righthot ??= new VisualStyleElement(ClassName, Part, 14);
 
-                private static VisualStyleElement? rightpressed;
+                private static VisualStyleElement? s_rightpressed;
 
-                public static VisualStyleElement RightPressed => rightpressed ??= new VisualStyleElement(ClassName, Part, 15);
+                public static VisualStyleElement RightPressed => s_rightpressed ??= new VisualStyleElement(ClassName, Part, 15);
 
-                private static VisualStyleElement? rightdisabled;
+                private static VisualStyleElement? s_rightdisabled;
 
-                public static VisualStyleElement RightDisabled => rightdisabled ??= new VisualStyleElement(ClassName, Part, 16);
+                public static VisualStyleElement RightDisabled => s_rightdisabled ??= new VisualStyleElement(ClassName, Part, 16);
             }
 
             public static class ThumbButtonHorizontal
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class ThumbButtonVertical
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class RightTrackHorizontal
             {
                 private const int Part = 4;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class LeftTrackHorizontal
             {
                 private const int Part = 5;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class LowerTrackVertical
             {
                 private const int Part = 6;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class UpperTrackVertical
             {
                 private const int Part = 7;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class GripperHorizontal
             {
                 private const int Part = 8;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class GripperVertical
             {
                 private const int Part = 9;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class SizeBox
             {
                 private const int Part = 10;
 
-                private static VisualStyleElement? rightalign;
+                private static VisualStyleElement? s_rightalign;
 
-                public static VisualStyleElement RightAlign => rightalign ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement RightAlign => s_rightalign ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? leftalign;
+                private static VisualStyleElement? s_leftalign;
 
-                public static VisualStyleElement LeftAlign => leftalign ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement LeftAlign => s_leftalign ??= new VisualStyleElement(ClassName, Part, 2);
             }
-        } // END SCROLLBAR
+        }
 
         public static class Tab
         {
@@ -688,164 +692,164 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class TabItemLeftEdge
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class TabItemRightEdge
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class TabItemBothEdges
             {
                 private const int Part = 4;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class TopTabItem
             {
                 private const int Part = 5;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class TopTabItemLeftEdge
             {
                 private const int Part = 6;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class TopTabItemRightEdge
             {
                 private const int Part = 7;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class TopTabItemBothEdges
             {
                 private const int Part = 8;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class Pane
             {
                 private const int Part = 9;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class Body
             {
                 private const int Part = 10;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
-        } // END TAB
+        }
 
         public static class ExplorerBar
         {
@@ -855,178 +859,178 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class HeaderClose
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class HeaderPin
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? selectednormal;
+                private static VisualStyleElement? s_selectednormal;
 
-                public static VisualStyleElement SelectedNormal => selectednormal ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement SelectedNormal => s_selectednormal ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? selectedhot;
+                private static VisualStyleElement? s_selectedhot;
 
-                public static VisualStyleElement SelectedHot => selectedhot ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement SelectedHot => s_selectedhot ??= new VisualStyleElement(ClassName, Part, 5);
 
-                private static VisualStyleElement? selectedpressed;
+                private static VisualStyleElement? s_selectedpressed;
 
-                public static VisualStyleElement SelectedPressed => selectedpressed ??= new VisualStyleElement(ClassName, Part, 6);
+                public static VisualStyleElement SelectedPressed => s_selectedpressed ??= new VisualStyleElement(ClassName, Part, 6);
             }
 
             public static class IEBarMenu
             {
                 private const int Part = 4;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class NormalGroupBackground
             {
                 private const int Part = 5;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class NormalGroupCollapse
             {
                 private const int Part = 6;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class NormalGroupExpand
             {
                 private const int Part = 7;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class NormalGroupHead
             {
                 private const int Part = 8;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class SpecialGroupBackground
             {
                 private const int Part = 9;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class SpecialGroupCollapse
             {
                 private const int Part = 10;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class SpecialGroupExpand
             {
                 private const int Part = 11;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class SpecialGroupHead
             {
                 private const int Part = 12;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
-        } // END EXPLORERBAR
+        }
 
         public static class Header
         {
@@ -1036,66 +1040,66 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class ItemLeft
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class ItemRight
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class SortArrow
             {
                 private const int Part = 4;
 
-                private static VisualStyleElement? sortedup;
+                private static VisualStyleElement? s_sortedup;
 
-                public static VisualStyleElement SortedUp => sortedup ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement SortedUp => s_sortedup ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? sorteddown;
+                private static VisualStyleElement? s_sorteddown;
 
-                public static VisualStyleElement SortedDown => sorteddown ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement SortedDown => s_sorteddown ??= new VisualStyleElement(ClassName, Part, 2);
             }
-        } // END HEADER
+        }
 
         public static class ListView
         {
@@ -1105,63 +1109,63 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? selected;
+                private static VisualStyleElement? s_selected;
 
-                public static VisualStyleElement Selected => selected ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Selected => s_selected ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? selectednotfocus;
+                private static VisualStyleElement? s_selectednotfocus;
 
-                public static VisualStyleElement SelectedNotFocus => selectednotfocus ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement SelectedNotFocus => s_selectednotfocus ??= new VisualStyleElement(ClassName, Part, 5);
             }
 
             public static class Group
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class Detail
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class SortedDetail
             {
                 private const int Part = 4;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class EmptyText
             {
                 private const int Part = 5;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
-        } // END LISTVIEW
+        }
 
         public static class MenuBand
         {
@@ -1171,40 +1175,40 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? _checked;
+                private static VisualStyleElement? s_checked;
 
-                public static VisualStyleElement Checked => _checked ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement Checked => s_checked ??= new VisualStyleElement(ClassName, Part, 5);
 
-                private static VisualStyleElement? hotchecked;
+                private static VisualStyleElement? s_hotchecked;
 
-                public static VisualStyleElement HotChecked => hotchecked ??= new VisualStyleElement(ClassName, Part, 6);
+                public static VisualStyleElement HotChecked => s_hotchecked ??= new VisualStyleElement(ClassName, Part, 6);
             }
 
             public static class Separator
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
-        } // END MENUBAND
+        }
 
         public static class Menu
         {
@@ -1214,64 +1218,64 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? selected;
+                private static VisualStyleElement? s_selected;
 
-                public static VisualStyleElement Selected => selected ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Selected => s_selected ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? demoted;
+                private static VisualStyleElement? s_demoted;
 
-                public static VisualStyleElement Demoted => demoted ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Demoted => s_demoted ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class DropDown
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class BarItem
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class BarDropDown
             {
                 private const int Part = 4;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class Chevron
             {
                 private const int Part = 5;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class Separator
             {
                 private const int Part = 6;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
-        } // END MENU
+        }
 
         public static class ProgressBar
         {
@@ -1281,38 +1285,38 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class BarVertical
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class Chunk
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class ChunkVertical
             {
                 private const int Part = 4;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
-        } // END PROGRESSBAR
+        }
 
         public static class Rebar
         {
@@ -1322,63 +1326,63 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class GripperVertical
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class Band
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class Chevron
             {
                 private const int Part = 4;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class ChevronVertical
             {
                 private const int Part = 5;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
             }
-        } // END REBAR
+        }
 
         public static class StartPanel
         {
@@ -1388,119 +1392,119 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class MorePrograms
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class MoreProgramsArrow
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class ProgList
             {
                 private const int Part = 4;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class ProgListSeparator
             {
                 private const int Part = 5;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class PlaceList
             {
                 private const int Part = 6;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class PlaceListSeparator
             {
                 private const int Part = 7;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
-            //The verb, not the noun.  Matches "Log Off" button.
+            // The verb, not the noun.  Matches "Log Off" button.
             public static class LogOff
             {
                 private const int Part = 8;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
-            //The verb, not the noun.  Matches "Log Off" button.
+            // The verb, not the noun.  Matches "Log Off" button.
             public static class LogOffButtons
             {
                 private const int Part = 9;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class UserPicture
             {
                 private const int Part = 10;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class Preview
             {
                 private const int Part = 11;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
-        } // END STARTPANEL
+        }
 
         public static class Status
         {
@@ -1508,38 +1512,38 @@ namespace System.Windows.Forms.VisualStyles
 
             public static class Bar
             {
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, 0, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, 0, 0);
             }
 
             public static class Pane
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class GripperPane
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class Gripper
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
-        } // END STATUS
+        }
 
         public static class TaskBand
         {
@@ -1549,29 +1553,29 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class FlashButton
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class FlashButtonGroupMenu
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
-        } // END TASKBAND
+        }
 
         public static class TaskbarClock
         {
@@ -1581,11 +1585,11 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
             }
-        } // END TASKBARCLOCK
+        }
 
         public static class Taskbar
         {
@@ -1595,221 +1599,220 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class BackgroundRight
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class BackgroundTop
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class BackgroundLeft
             {
                 private const int Part = 4;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class SizingBarBottom
             {
                 private const int Part = 5;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class SizingBarRight
             {
                 private const int Part = 6;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class SizingBarTop
             {
                 private const int Part = 7;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class SizingBarLeft
             {
                 private const int Part = 8;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
-        } // END TASKBAR
+        }
 
         public static class ToolBar
         {
             private const string ClassName = "TOOLBAR";
 
-            //
             internal static class Bar
             {
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, 0, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, 0, 0);
             }
 
             public static class Button
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? _checked;
+                private static VisualStyleElement? s_checked;
 
-                public static VisualStyleElement Checked => _checked ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement Checked => s_checked ??= new VisualStyleElement(ClassName, Part, 5);
 
-                private static VisualStyleElement? hotchecked;
+                private static VisualStyleElement? s_hotchecked;
 
-                public static VisualStyleElement HotChecked => hotchecked ??= new VisualStyleElement(ClassName, Part, 6);
+                public static VisualStyleElement HotChecked => s_hotchecked ??= new VisualStyleElement(ClassName, Part, 6);
             }
 
             public static class DropDownButton
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? _checked;
+                private static VisualStyleElement? s_checked;
 
-                public static VisualStyleElement Checked => _checked ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement Checked => s_checked ??= new VisualStyleElement(ClassName, Part, 5);
 
-                private static VisualStyleElement? hotchecked;
+                private static VisualStyleElement? s_hotchecked;
 
-                public static VisualStyleElement HotChecked => hotchecked ??= new VisualStyleElement(ClassName, Part, 6);
+                public static VisualStyleElement HotChecked => s_hotchecked ??= new VisualStyleElement(ClassName, Part, 6);
             }
 
             public static class SplitButton
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? _checked;
+                private static VisualStyleElement? s_checked;
 
-                public static VisualStyleElement Checked => _checked ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement Checked => s_checked ??= new VisualStyleElement(ClassName, Part, 5);
 
-                private static VisualStyleElement? hotchecked;
+                private static VisualStyleElement? s_hotchecked;
 
-                public static VisualStyleElement HotChecked => hotchecked ??= new VisualStyleElement(ClassName, Part, 6);
+                public static VisualStyleElement HotChecked => s_hotchecked ??= new VisualStyleElement(ClassName, Part, 6);
             }
 
             public static class SplitButtonDropDown
             {
                 private const int Part = 4;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? _checked;
+                private static VisualStyleElement? s_checked;
 
-                public static VisualStyleElement Checked => _checked ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement Checked => s_checked ??= new VisualStyleElement(ClassName, Part, 5);
 
-                private static VisualStyleElement? hotchecked;
+                private static VisualStyleElement? s_hotchecked;
 
-                public static VisualStyleElement HotChecked => hotchecked ??= new VisualStyleElement(ClassName, Part, 6);
+                public static VisualStyleElement HotChecked => s_hotchecked ??= new VisualStyleElement(ClassName, Part, 6);
             }
 
             public static class SeparatorHorizontal
             {
                 private const int Part = 5;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class SeparatorVertical
             {
                 private const int Part = 6;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
-        } // END TOOLBAR
+        }
 
         public static class ToolTip
         {
@@ -1819,63 +1822,63 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? link;
+                private static VisualStyleElement? s_link;
 
-                public static VisualStyleElement Link => link ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Link => s_link ??= new VisualStyleElement(ClassName, Part, 2);
             }
 
             public static class StandardTitle
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class Balloon
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? link;
+                private static VisualStyleElement? s_link;
 
-                public static VisualStyleElement Link => link ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Link => s_link ??= new VisualStyleElement(ClassName, Part, 2);
             }
 
             public static class BalloonTitle
             {
                 private const int Part = 4;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class Close
             {
                 private const int Part = 5;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
             }
-        } // END TOOLTIP
+        }
 
         public static class TrackBar
         {
@@ -1885,188 +1888,188 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
             }
 
             public static class TrackVertical
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
             }
 
             public static class Thumb
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? focused;
+                private static VisualStyleElement? s_focused;
 
-                public static VisualStyleElement Focused => focused ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Focused => s_focused ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 5);
             }
 
             public static class ThumbBottom
             {
                 private const int Part = 4;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? focused;
+                private static VisualStyleElement? s_focused;
 
-                public static VisualStyleElement Focused => focused ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Focused => s_focused ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 5);
             }
 
             public static class ThumbTop
             {
                 private const int Part = 5;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? focused;
+                private static VisualStyleElement? s_focused;
 
-                public static VisualStyleElement Focused => focused ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Focused => s_focused ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 5);
             }
 
             public static class ThumbVertical
             {
                 private const int Part = 6;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? focused;
+                private static VisualStyleElement? s_focused;
 
-                public static VisualStyleElement Focused => focused ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Focused => s_focused ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 5);
             }
 
             public static class ThumbLeft
             {
                 private const int Part = 7;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? focused;
+                private static VisualStyleElement? s_focused;
 
-                public static VisualStyleElement Focused => focused ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Focused => s_focused ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 5);
             }
 
             public static class ThumbRight
             {
                 private const int Part = 8;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? focused;
+                private static VisualStyleElement? s_focused;
 
-                public static VisualStyleElement Focused => focused ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Focused => s_focused ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 5);
             }
 
             public static class Ticks
             {
                 private const int Part = 9;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
             }
 
             public static class TicksVertical
             {
                 private const int Part = 10;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
             }
-        } // END TRACKBAR
+        }
 
         public static class TreeView
         {
@@ -2076,49 +2079,49 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? selected;
+                private static VisualStyleElement? s_selected;
 
-                public static VisualStyleElement Selected => selected ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Selected => s_selected ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? selectednotfocus;
+                private static VisualStyleElement? s_selectednotfocus;
 
-                public static VisualStyleElement SelectedNotFocus => selectednotfocus ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement SelectedNotFocus => s_selectednotfocus ??= new VisualStyleElement(ClassName, Part, 5);
             }
 
             public static class Glyph
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? closed;
+                private static VisualStyleElement? s_closed;
 
-                public static VisualStyleElement Closed => closed ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Closed => s_closed ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? opened;
+                private static VisualStyleElement? s_opened;
 
-                public static VisualStyleElement Opened => opened ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Opened => s_opened ??= new VisualStyleElement(ClassName, Part, 2);
             }
 
             public static class Branch
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
-        } // END TREEVIEW
+        }
 
         internal static class ExplorerTreeView
         {
@@ -2128,15 +2131,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? closed;
+                private static VisualStyleElement? s_closed;
 
-                public static VisualStyleElement Closed => closed ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Closed => s_closed ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? opened;
+                private static VisualStyleElement? s_opened;
 
-                public static VisualStyleElement Opened => opened ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Opened => s_opened ??= new VisualStyleElement(ClassName, Part, 2);
             }
-        } // END Explorer::Tree
+        }
 
         public static class TextBox
         {
@@ -2146,44 +2149,44 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? selected;
+                private static VisualStyleElement? s_selected;
 
-                public static VisualStyleElement Selected => selected ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Selected => s_selected ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
 
-                private static VisualStyleElement? focused;
+                private static VisualStyleElement? s_focused;
 
-                public static VisualStyleElement Focused => focused ??= new VisualStyleElement(ClassName, Part, 5);
+                public static VisualStyleElement Focused => s_focused ??= new VisualStyleElement(ClassName, Part, 5);
 
-                private static VisualStyleElement? _readonly;
+                private static VisualStyleElement? s_readonly;
 
-                public static VisualStyleElement ReadOnly => _readonly ??= new VisualStyleElement(ClassName, Part, 6);
+                public static VisualStyleElement ReadOnly => s_readonly ??= new VisualStyleElement(ClassName, Part, 6);
 
-                private static VisualStyleElement? assist;
+                private static VisualStyleElement? s_assist;
 
-                public static VisualStyleElement Assist => assist ??= new VisualStyleElement(ClassName, Part, 7);
+                public static VisualStyleElement Assist => s_assist ??= new VisualStyleElement(ClassName, Part, 7);
             }
 
             public static class Caret
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
-        } // END TEXTBOX
+        }
 
         public static class TrayNotify
         {
@@ -2193,20 +2196,20 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class AnimateBackground
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
-        } // END TRAYNOTIFY
+        }
 
         public static class Window
         {
@@ -2216,600 +2219,600 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private const int Part = 1;
 
-                private static VisualStyleElement? active;
+                private static VisualStyleElement? s_active;
 
-                public static VisualStyleElement Active => active ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Active => s_active ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? inactive;
+                private static VisualStyleElement? s_inactive;
 
-                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Inactive => s_inactive ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class SmallCaption
             {
                 private const int Part = 2;
 
-                private static VisualStyleElement? active;
+                private static VisualStyleElement? s_active;
 
-                public static VisualStyleElement Active => active ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Active => s_active ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? inactive;
+                private static VisualStyleElement? s_inactive;
 
-                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Inactive => s_inactive ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class MinCaption
             {
                 private const int Part = 3;
 
-                private static VisualStyleElement? active;
+                private static VisualStyleElement? s_active;
 
-                public static VisualStyleElement Active => active ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Active => s_active ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? inactive;
+                private static VisualStyleElement? s_inactive;
 
-                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Inactive => s_inactive ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class SmallMinCaption
             {
                 private const int Part = 4;
 
-                private static VisualStyleElement? active;
+                private static VisualStyleElement? s_active;
 
-                public static VisualStyleElement Active => active ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Active => s_active ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? inactive;
+                private static VisualStyleElement? s_inactive;
 
-                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Inactive => s_inactive ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class MaxCaption
             {
                 private const int Part = 5;
 
-                private static VisualStyleElement? active;
+                private static VisualStyleElement? s_active;
 
-                public static VisualStyleElement Active => active ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Active => s_active ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? inactive;
+                private static VisualStyleElement? s_inactive;
 
-                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Inactive => s_inactive ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class SmallMaxCaption
             {
                 private const int Part = 6;
 
-                private static VisualStyleElement? active;
+                private static VisualStyleElement? s_active;
 
-                public static VisualStyleElement Active => active ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Active => s_active ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? inactive;
+                private static VisualStyleElement? s_inactive;
 
-                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Inactive => s_inactive ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 3);
             }
 
             public static class FrameLeft
             {
                 private const int Part = 7;
 
-                private static VisualStyleElement? active;
+                private static VisualStyleElement? s_active;
 
-                public static VisualStyleElement Active => active ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Active => s_active ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? inactive;
+                private static VisualStyleElement? s_inactive;
 
-                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Inactive => s_inactive ??= new VisualStyleElement(ClassName, Part, 2);
             }
 
             public static class FrameRight
             {
                 private const int Part = 8;
 
-                private static VisualStyleElement? active;
+                private static VisualStyleElement? s_active;
 
-                public static VisualStyleElement Active => active ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Active => s_active ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? inactive;
+                private static VisualStyleElement? s_inactive;
 
-                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Inactive => s_inactive ??= new VisualStyleElement(ClassName, Part, 2);
             }
 
             public static class FrameBottom
             {
                 private const int Part = 9;
 
-                private static VisualStyleElement? active;
+                private static VisualStyleElement? s_active;
 
-                public static VisualStyleElement Active => active ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Active => s_active ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? inactive;
+                private static VisualStyleElement? s_inactive;
 
-                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Inactive => s_inactive ??= new VisualStyleElement(ClassName, Part, 2);
             }
 
             public static class SmallFrameLeft
             {
                 private const int Part = 10;
 
-                private static VisualStyleElement? active;
+                private static VisualStyleElement? s_active;
 
-                public static VisualStyleElement Active => active ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Active => s_active ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? inactive;
+                private static VisualStyleElement? s_inactive;
 
-                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Inactive => s_inactive ??= new VisualStyleElement(ClassName, Part, 2);
             }
 
             public static class SmallFrameRight
             {
                 private const int Part = 11;
 
-                private static VisualStyleElement? active;
+                private static VisualStyleElement? s_active;
 
-                public static VisualStyleElement Active => active ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Active => s_active ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? inactive;
+                private static VisualStyleElement? s_inactive;
 
-                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Inactive => s_inactive ??= new VisualStyleElement(ClassName, Part, 2);
             }
 
             public static class SmallFrameBottom
             {
                 private const int Part = 12;
 
-                private static VisualStyleElement? active;
+                private static VisualStyleElement? s_active;
 
-                public static VisualStyleElement Active => active ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Active => s_active ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? inactive;
+                private static VisualStyleElement? s_inactive;
 
-                public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Inactive => s_inactive ??= new VisualStyleElement(ClassName, Part, 2);
             }
 
             public static class SysButton
             {
                 private const int Part = 13;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class MdiSysButton
             {
                 private const int Part = 14;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class MinButton
             {
                 private const int Part = 15;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class MdiMinButton
             {
                 private const int Part = 16;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class MaxButton
             {
                 private const int Part = 17;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class CloseButton
             {
                 private const int Part = 18;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class SmallCloseButton
             {
                 private const int Part = 19;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class MdiCloseButton
             {
                 private const int Part = 20;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class RestoreButton
             {
                 private const int Part = 21;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class MdiRestoreButton
             {
                 private const int Part = 22;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class HelpButton
             {
                 private const int Part = 23;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class MdiHelpButton
             {
                 private const int Part = 24;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class HorizontalScroll
             {
                 private const int Part = 25;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class HorizontalThumb
             {
                 private const int Part = 26;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class VerticalScroll
             {
                 private const int Part = 27;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class VerticalThumb
             {
                 private const int Part = 28;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 1);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 1);
 
-                private static VisualStyleElement? hot;
+                private static VisualStyleElement? s_hot;
 
-                public static VisualStyleElement Hot => hot ??= new VisualStyleElement(ClassName, Part, 2);
+                public static VisualStyleElement Hot => s_hot ??= new VisualStyleElement(ClassName, Part, 2);
 
-                private static VisualStyleElement? pressed;
+                private static VisualStyleElement? s_pressed;
 
-                public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(ClassName, Part, 3);
+                public static VisualStyleElement Pressed => s_pressed ??= new VisualStyleElement(ClassName, Part, 3);
 
-                private static VisualStyleElement? disabled;
+                private static VisualStyleElement? s_disabled;
 
-                public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(ClassName, Part, 4);
+                public static VisualStyleElement Disabled => s_disabled ??= new VisualStyleElement(ClassName, Part, 4);
             }
 
             public static class Dialog
             {
                 private const int Part = 29;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class CaptionSizingTemplate
             {
                 private const int Part = 30;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class SmallCaptionSizingTemplate
             {
                 private const int Part = 31;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class FrameLeftSizingTemplate
             {
                 private const int Part = 32;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class SmallFrameLeftSizingTemplate
             {
                 private const int Part = 33;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
-            //Not used as compound word here
+            // Not used as compound word here.
             public static class FrameRightSizingTemplate
             {
                 private const int Part = 34;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
-            //Not used as compound word here
+            // Not used as compound word here.
             public static class SmallFrameRightSizingTemplate
             {
                 private const int Part = 35;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class FrameBottomSizingTemplate
             {
                 private const int Part = 36;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
 
             public static class SmallFrameBottomSizingTemplate
             {
                 private const int Part = 37;
 
-                private static VisualStyleElement? normal;
+                private static VisualStyleElement? s_normal;
 
-                public static VisualStyleElement Normal => normal ??= new VisualStyleElement(ClassName, Part, 0);
+                public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
             }
-        } // END WINDOW
+        }
     }
 }

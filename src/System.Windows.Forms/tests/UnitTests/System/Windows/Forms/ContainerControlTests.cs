@@ -2,10 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Reflection;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -148,7 +148,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ContainerControl_ActiveContanerControl_Set_GetReturnsExpected()
+        public void ContainerControl_ActiveContainerControl_Set_GetReturnsExpected()
         {
             using var control = new ContainerControl();
             using var child = new Control();
@@ -173,7 +173,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ContainerControl_ActiveContanerControl_SetInvalid_ThrowsArgumentException()
+        public void ContainerControl_ActiveContainerControl_SetInvalid_ThrowsArgumentException()
         {
             using var control = new ContainerControl();
             Assert.Throws<ArgumentException>("value", () => control.ActiveControl = control);
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
         public void ContainerControl_AutoScaleDimensions_Set_GetReturnsExpected(Size value)
         {
             using var control = new ContainerControl
@@ -198,7 +198,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
         public void ContainerControl_AutoScaleDimensions_SetWithChildren_GetReturnsExpected(Size value)
         {
             using var child = new Control();
@@ -214,7 +214,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoPositives)]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoPositives)]
         public void ContainerControl_AutoScaleDimensions_SetInvalid_ThrowsArgumentOutOfRangeException(Size value)
         {
             using var control = new ContainerControl();
@@ -222,7 +222,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
         public void ContainerControl_AutoScaleMode_Set_GetReturnsExpected(AutoScaleMode value)
         {
             using var control = new ContainerControl
@@ -270,7 +270,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoScaleMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoScaleMode))]
         public void ContainerControl_AutoScaleMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoScaleMode value)
         {
             using var control = new ContainerControl();
@@ -338,7 +338,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoValidate))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoValidate))]
         public void ContainerControl_AutoValidate_SetInvalidValue_ThrowsInvalidEnumArgumentException(AutoValidate value)
         {
             using var control = new ContainerControl();
@@ -406,7 +406,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ContainerControl_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubContainerControl
@@ -425,7 +425,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ContainerControl_Font_SetWithAutoScaleModeFont_GetReturnsExpected(Font value)
         {
             using var control = new SubContainerControl
@@ -448,7 +448,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ContanerControl_Font_SetWithHandler_CallsFontChanged()
+        public void ContainerControl_Font_SetWithHandler_CallsFontChanged()
         {
             using var control = new ContainerControl();
             int callCount = 0;
@@ -549,7 +549,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
         public void PerformAutoScale_InvokeWithoutChildren_Success(AutoScaleMode autoScaleMode)
         {
             using var control = new SubContainerControl
@@ -560,7 +560,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
         public void PerformAutoScale_InvokeWithChildren_Success(AutoScaleMode autoScaleMode)
         {
             using var child = new Control();
@@ -573,7 +573,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ContainerControl_CreateContanerControl_Invoke_CallsBindingContextChanged()
+        public void ContainerControl_CreateContainerControl_Invoke_CallsBindingContextChanged()
         {
             using var control = new ContainerControl();
             int callCount = 0;
@@ -623,7 +623,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ContainerControl_OnAutoValidateChanged_Invoke_CallsAutoValidateChanged(EventArgs eventArgs)
         {
             using var control = new SubContainerControl();
@@ -669,7 +669,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ContainerControl_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
         {
             using var control = new SubContainerControl();
@@ -693,7 +693,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ContainerControl_OnFontChanged_InvokeWithAutoScaleModeFont_CallsFontChanged(EventArgs eventArgs)
         {
             using var control = new SubContainerControl
@@ -722,7 +722,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ContainerControl_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var control = new SubContainerControl();
@@ -746,7 +746,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ContainerControl_OnParentChanged_Invoke_CallsParentChanged(EventArgs eventArgs)
         {
             using var control = new SubContainerControl();
@@ -985,7 +985,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ValidationConstraints))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ValidationConstraints))]
         public void ContainerControl_ValidateChildren_InvokeValidationConstraintsWithoutChildren_ReturnsTrue(ValidationConstraints validationConstraints)
         {
             using var control = new ContainerControl();
@@ -1313,6 +1313,88 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        [WinFormsFact]
+        public void ContainerControl_OnMove_HidesToolTip_IfToolTipIsShown()
+        {
+            using Control control = new();
+            using SubContainerControl container = new();
+            container.Controls.Add(control);
+            container.SetTopLevel();
+            container.CreateControl();
+
+            // Simulate that a keyboard toolTip is shown
+            KeyboardToolTipStateMachine instance = KeyboardToolTipStateMachine.Instance;
+            instance.TestAccessor().Dynamic._currentTool = control;
+            instance.TestAccessor().Dynamic._currentState = (byte)2;
+
+            container.MoveContainer();
+            IKeyboardToolTip currentTool = instance.TestAccessor().Dynamic._currentTool;
+            string currentState = instance.TestAccessor().Dynamic._currentState.ToString();
+
+            Assert.Null(currentTool);
+            Assert.Equal("Hidden", currentState);
+
+            Assert.True(control.IsHandleCreated);
+            Assert.True(container.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ContainerControl_OnResize_HidesToolTip_IfToolTipIsShown()
+        {
+            using Control control = new();
+            using SubContainerControl container = new();
+            container.Controls.Add(control);
+            container.SetTopLevel();
+            container.CreateControl();
+
+            // Simulate that a keyboard toolTip is shown
+            KeyboardToolTipStateMachine instance = KeyboardToolTipStateMachine.Instance;
+            instance.TestAccessor().Dynamic._currentTool = control;
+            instance.TestAccessor().Dynamic._currentState = (byte)2;
+
+            container.ResizeContainer();
+            IKeyboardToolTip currentTool = instance.TestAccessor().Dynamic._currentTool;
+            string currentState = instance.TestAccessor().Dynamic._currentState.ToString();
+
+            Assert.Null(currentTool);
+            Assert.Equal("Hidden", currentState);
+
+            Assert.True(control.IsHandleCreated);
+            Assert.True(container.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ContainerControl_OnResize_DoNothing_IfInstanceIsNotCreated()
+        {
+            using Control control = new();
+            using SubContainerControl container = new();
+            container.Controls.Add(control);
+            container.CreateControl();
+
+            container.ResizeContainer();
+            object instance = typeof(KeyboardToolTipStateMachine).GetField("s_instance", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+
+            Assert.Null(instance);
+            Assert.True(control.IsHandleCreated);
+            Assert.True(container.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ContainerControl_OnMove_DoNothing_IfInstanceIsNotCreated()
+        {
+            using Control control = new();
+            using SubContainerControl container = new();
+            container.Controls.Add(control);
+            container.CreateControl();
+
+            container.MoveContainer();
+            object instance = typeof(KeyboardToolTipStateMachine).GetField("s_instance", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+
+            Assert.Null(instance);
+            Assert.True(control.IsHandleCreated);
+            Assert.True(container.IsHandleCreated);
+        }
+
         private class SubControl : Control
         {
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
@@ -1374,6 +1456,10 @@ namespace System.Windows.Forms.Tests
                 set => base.ImeModeBase = value;
             }
 
+            public void MoveContainer() => base.OnMove(EventArgs.Empty);
+
+            public void ResizeContainer() => base.OnResize(EventArgs.Empty);
+
             public new bool ResizeRedraw
             {
                 get => base.ResizeRedraw;
@@ -1413,6 +1499,8 @@ namespace System.Windows.Forms.Tests
             public new void OnLayout(LayoutEventArgs e) => base.OnLayout(e);
 
             public new void OnParentChanged(EventArgs e) => base.OnParentChanged(e);
+
+            public void SetTopLevel() => SetTopLevel(true);
 
             public new void UpdateDefaultButton() => base.UpdateDefaultButton();
 

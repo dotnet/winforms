@@ -7,6 +7,11 @@
         <target state="translated">VT non géré : {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="General_MissingService">
+        <source>The service '{0}' must be installed for this feature to work.  Ensure that this service is available.</source>
+        <target state="translated">Le service '{0}' doit être installé afin que cette fonctionnalité soit activée. Assurez-vous que ce service est disponible.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
         <target state="translated">Le paramètre IDictionary contient au moins une entrée non valide. Vérifiez que toutes les valeurs correspondent aux propriétés de l'objet.</target>

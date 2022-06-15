@@ -16,16 +16,14 @@ namespace System.Windows.Forms.Design
     internal class ImageCollectionEditor : CollectionEditor
     {
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ImageCollectionEditor'/> class.
+        ///  Initializes a new instance of the <see cref="ImageCollectionEditor"/> class.
         /// </summary>
         public ImageCollectionEditor(Type type)
             : base(type)
         {
         }
 
-        /// <summary>
-        ///  Retrieves the display text for the given list item.
-        /// </summary>
+        /// <inheritdoc />
         protected override string GetDisplayText(object value)
         {
             if (value is null)
@@ -35,20 +33,20 @@ namespace System.Windows.Forms.Design
 
             string text;
 
-            PropertyDescriptor prop = TypeDescriptor.GetProperties(value)["Name"];
-            if (prop != null)
+            PropertyDescriptor property = TypeDescriptor.GetProperties(value)["Name"];
+            if (property is not null)
             {
-                text = (string)prop.GetValue(value);
-                if (text != null && text.Length > 0)
+                text = (string)property.GetValue(value);
+                if (!string.IsNullOrEmpty(text))
                 {
                     return text;
                 }
             }
 
             // If we want to show any type information - pretend we're an image.
-            if (value is ImageListImage)
+            if (value is ImageListImage image)
             {
-                value = ((ImageListImage)value).Image;
+                value = image.Image;
             }
 
             text = TypeDescriptor.GetConverter(value).ConvertToString(value);
@@ -60,24 +58,21 @@ namespace System.Windows.Forms.Design
             return text;
         }
 
-        /// <summary>
-        ///  Creates an instance of the specified type in the collection.
-        /// </summary>
+        /// <inheritdoc />
         protected override object CreateInstance(Type type)
         {
             UITypeEditor editor = (UITypeEditor)TypeDescriptor.GetEditor(typeof(ImageListImage), typeof(UITypeEditor));
             return editor.EditValue(Context, null);
         }
 
-        /// <summary>
-        ///  Creates a new form to show the current collection.
-        /// </summary>
+        /// <inheritdoc />
         protected override CollectionForm CreateCollectionForm()
         {
             CollectionForm form = base.CreateCollectionForm();
 
-            // We want to switch the title to ImageCollection Editor instead of ImageListImage Editor.
-            // The collection editor is actually using ImageListImages, while the collection we're actually editing is the Image collection.
+            // We want to switch the title to ImageCollection Editor instead of ImageListImage Editor. The collection
+            // editor is actually using ImageListImages, while the collection we're actually editing is the Image
+            // collection.
             form.Text = SR.ImageCollectionEditorFormText;
             return form;
         }
@@ -91,8 +86,7 @@ namespace System.Windows.Forms.Design
 
         protected override object[] GetItems(object editValue)
         {
-            var source = editValue as ImageList.ImageCollection;
-            if (source is null)
+            if (editValue is not ImageList.ImageCollection source)
             {
                 return base.GetItems(editValue);
             }
@@ -108,8 +102,7 @@ namespace System.Windows.Forms.Design
 
         protected override object SetItems(object editValue, object[] value)
         {
-            var source = editValue as ImageList.ImageCollection;
-            if (source is null)
+            if (editValue is not ImageList.ImageCollection source)
             {
                 return base.SetItems(editValue, value);
             }

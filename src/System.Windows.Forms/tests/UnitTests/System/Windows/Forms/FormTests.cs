@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
-using WinForms.Common.Tests;
 using static Interop;
 
 namespace System.Windows.Forms.Tests
@@ -198,14 +197,14 @@ namespace System.Windows.Forms.Tests
             using var form = new Form();
             Assert.True(form.Handle != IntPtr.Zero);
 
-            IntPtr hSmallIcon = User32.SendMessageW(form, User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+            IntPtr hSmallIcon = User32.SendMessageW(form, User32.WM.GETICON, (nint)User32.ICON.SMALL, 0);
             Assert.True(hSmallIcon != IntPtr.Zero);
 
-            IntPtr hLargeIcon = User32.SendMessageW(form, User32.WM.GETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
+            IntPtr hLargeIcon = User32.SendMessageW(form, User32.WM.GETICON, (nint)User32.ICON.BIG, 0);
             Assert.True(hLargeIcon != IntPtr.Zero);
 
             // normal form doesn't have WS_EX.DLGMODALFRAME set, and show icon
-            User32.WS_EX extendedStyle = unchecked((User32.WS_EX)(long)User32.GetWindowLong(form, User32.GWL.EXSTYLE));
+            User32.WS_EX extendedStyle = (User32.WS_EX)User32.GetWindowLong(form, User32.GWL.EXSTYLE);
             Assert.False(extendedStyle.HasFlag(User32.WS_EX.DLGMODALFRAME));
         }
 
@@ -222,7 +221,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Form_Active_Set_GetReturnsExpected(bool value)
         {
             using var form = new Form
@@ -309,7 +308,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Form_AllowTransparency_Set_GetReturnsExpected(bool value)
         {
             using var control = new Form
@@ -373,7 +372,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Form_AllowTransparency_SetNotTopLevel_GetReturnsExpected(bool value)
         {
             using var control = new Form
@@ -548,7 +547,7 @@ namespace System.Windows.Forms.Tests
 #pragma warning disable 0618
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Form_AutoScale_Set_GetReturnsExpected(bool value)
         {
             using var form = new Form
@@ -565,7 +564,7 @@ namespace System.Windows.Forms.Tests
 #pragma warning restore 0618
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
         public void Form_AutoScaleMode_Set_GetReturnsExpected(AutoScaleMode value)
         {
             using var form = new Form
@@ -580,7 +579,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Form_AutoScroll_Set_GetReturnsExpected(bool value)
         {
             using var form = new Form
@@ -595,7 +594,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Form_AutoSizeSet_GetReturnsExpected(bool value)
         {
             using var form = new Form
@@ -976,6 +975,64 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void Form_Restore_RestoresPosition_User()
+        {
+            if (!OsVersion.IsWindows11_OrGreater)
+            {
+                return;
+            }
+
+            using var form = new Form();
+            form.Show();
+
+            form.Location = new Point(10, 11);
+            form.Size = new Size(200, 210);
+
+            User32.SendMessageW(form, User32.WM.SYSCOMMAND, (nint)User32.SC.MAXIMIZE, 0);
+
+            form.Location = new Point(20, 21);
+            form.Size = new Size(300, 310);
+
+            Assert.Equal(FormWindowState.Maximized, form.WindowState);
+            Assert.NotEqual(new Point(20, 21), form.Location);
+            Assert.NotEqual(new Size(300, 310), form.Size);
+
+            User32.SendMessageW(form, User32.WM.SYSCOMMAND, (nint)User32.SC.RESTORE, 0);
+
+            Assert.Equal(new Point(20, 21), form.Location);
+            Assert.Equal(new Size(300, 310), form.Size);
+        }
+
+        [WinFormsFact]
+        public void Form_Restore_RestoresPosition_WindowState()
+        {
+            if (!OsVersion.IsWindows11_OrGreater)
+            {
+                return;
+            }
+
+            using var form = new Form();
+            form.Show();
+
+            form.Location = new Point(10, 11);
+            form.Size = new Size(200, 210);
+
+            form.WindowState = FormWindowState.Maximized;
+
+            form.Location = new Point(20, 21);
+            form.Size = new Size(300, 310);
+
+            Assert.Equal(FormWindowState.Maximized, form.WindowState);
+            Assert.NotEqual(new Point(20, 21), form.Location);
+            Assert.NotEqual(new Size(300, 310), form.Size);
+
+            form.WindowState = FormWindowState.Normal;
+
+            Assert.Equal(new Point(20, 21), form.Location);
+            Assert.Equal(new Size(300, 310), form.Size);
+        }
+
         [WinFormsTheory]
         [InlineData(false, true)]
         [InlineData(true, false)]
@@ -986,8 +1043,8 @@ namespace System.Windows.Forms.Tests
 
             form.ShowIcon = showIcon;
 
-            IntPtr hSmallIcon = User32.SendMessageW(form, User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
-            IntPtr hLargeIcon = User32.SendMessageW(form, User32.WM.GETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
+            IntPtr hSmallIcon = User32.SendMessageW(form, User32.WM.GETICON, (nint)User32.ICON.SMALL, 0);
+            IntPtr hLargeIcon = User32.SendMessageW(form, User32.WM.GETICON, (nint)User32.ICON.BIG, 0);
             Assert.Equal(expectedIconNull, hSmallIcon == IntPtr.Zero);
             Assert.Equal(expectedIconNull, hLargeIcon == IntPtr.Zero);
         }
@@ -1168,6 +1225,44 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>("value", () => control.Parent = parent);
             Assert.NotNull(control.Parent);
             Assert.Same(oldParent, control.MdiParent);
+        }
+
+        [WinFormsFact]
+        public void Form_Parent_ShowIconInMaximized()
+        {
+            using var parent = new Form();
+            using var menuStrip = new MenuStrip();
+            parent.Controls.Add(menuStrip);
+            parent.IsMdiContainer = true;
+            parent.MainMenuStrip = menuStrip;
+            parent.Show();
+            Assert.True(parent.Handle != IntPtr.Zero);
+            using var control = new Form();
+            control.MdiParent = parent;
+            control.Icon = Form.DefaultIcon;
+            Assert.True(control.Handle != IntPtr.Zero);
+            control.Show();
+
+            control.ShowIcon = false;
+            IntPtr hSmallIcon = User32.SendMessageW(control, User32.WM.GETICON, (nint)User32.ICON.SMALL, 0);
+            Assert.True(hSmallIcon == IntPtr.Zero);
+            IntPtr hLargeIcon = User32.SendMessageW(control, User32.WM.GETICON, (nint)User32.ICON.BIG, 0);
+            Assert.True(hLargeIcon == IntPtr.Zero);
+
+            control.WindowState = FormWindowState.Maximized;
+            control.ShowIcon = false;
+            hSmallIcon = User32.SendMessageW(control, User32.WM.GETICON, (nint)User32.ICON.SMALL, 0);
+            Assert.True(hSmallIcon == IntPtr.Zero);
+            hLargeIcon = User32.SendMessageW(control, User32.WM.GETICON, (nint)User32.ICON.BIG, 0);
+            Assert.True(hLargeIcon == IntPtr.Zero);
+            Assert.True(!menuStrip.Items[0].Visible);
+
+            control.ShowIcon = true;
+            hSmallIcon = User32.SendMessageW(control, User32.WM.GETICON, (nint)User32.ICON.SMALL, 0);
+            Assert.True(hSmallIcon != IntPtr.Zero);
+            hLargeIcon = User32.SendMessageW(control, User32.WM.GETICON, (nint)User32.ICON.BIG, 0);
+            Assert.True(hLargeIcon != IntPtr.Zero);
+            Assert.True(menuStrip.Items[0].Visible);
         }
 
         public static IEnumerable<object[]> TransparencyKey_Set_TestData()
@@ -1725,6 +1820,36 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        [WinFormsFact]
+        public void Form_ShowInTaskbar_SetFalse_GetReturnsExpected()
+        {
+            // Regression test for https://github.com/dotnet/winforms/issues/6421
+
+            using var form = new Form
+            {
+                ShowInTaskbar = true,
+            };
+
+            DialogResult expectedDialogResult = DialogResult.OK;
+
+            form.Load += (object sender, EventArgs e) =>
+            {
+                IntPtr formHandle = form.Handle;
+                form.ShowInTaskbar = false;
+
+                Assert.True(form.IsHandleCreated);
+                Assert.NotEqual(formHandle, form.Handle);
+            };
+
+            form.Shown += (object sender, EventArgs e) =>
+            {
+                form.DialogResult = expectedDialogResult;
+            };
+
+            Assert.Equal(expectedDialogResult, form.ShowDialog());
+            Assert.Equal(expectedDialogResult, form.DialogResult);
+        }
+
         public static IEnumerable<object[]> Visible_Set_TestData()
         {
             foreach (DialogResult dialogResult in Enum.GetValues(typeof(DialogResult)))
@@ -1856,7 +1981,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DialogResult))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DialogResult))]
         public void Form_Visible_SetTrueMdiChildVisibleWithHandle_GetReturnsExpected(DialogResult dialogResult)
         {
             using var parent = new Form
@@ -1908,7 +2033,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DialogResult))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DialogResult))]
         public void Form_Visible_SetFalseMdiChildVisibleWithHandle_GetReturnsExpected(DialogResult dialogResult)
         {
             using var parent = new Form
@@ -2221,7 +2346,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Form_Visible_SetWithHandlerWithHandle_CallsVisibleChanged(bool initialVisible)
         {
             using var control = new Form
@@ -2342,7 +2467,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Form_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubForm();
@@ -2368,7 +2493,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Form_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubForm();
@@ -2393,8 +2518,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
         }
+
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Form_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubForm();
@@ -2420,7 +2546,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Form_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubForm();

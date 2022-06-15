@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Globalization;
-using System.Threading;
 
 namespace System.Windows.Forms.Design
 {
@@ -152,6 +151,7 @@ namespace System.Windows.Forms.Design
             {
                 hash += ValidatingType.ToString();
             }
+
             return hash.GetHashCode();
         }
 
@@ -161,8 +161,7 @@ namespace System.Windows.Forms.Design
                 GetType(),
                 Name != null ? Name : "null",
                 Mask != null ? Mask : "null",
-                ValidatingType != null ? ValidatingType.ToString() : "null"
-                );
+                ValidatingType != null ? ValidatingType.ToString() : "null");
         }
     }
 }

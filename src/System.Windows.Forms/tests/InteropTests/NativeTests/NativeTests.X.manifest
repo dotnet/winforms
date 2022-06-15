@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
+<assemblyIdentity
+    type="win32"
+    name="NativeTests.X"
+    version="1.0.0.0" />
+
+<file name="NativeTests.dll">
+    <!-- RawErrorInfoUsageTest -->
+    <comClass
+        clsid="{0ED8EE0D-22E3-49EA-850C-E69B20D1F296}"
+        threadingModel="Both" />
+    <!-- StandardErrorInfoUsageTest Test -->
+    <comClass
+        clsid="{EA1FCB3A-277C-4C79-AB85-E2ED3E858201}"
+        threadingModel="Both" />
+</file>
+
+</assembly>

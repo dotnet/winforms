@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.CodeDom;
-using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace System.ComponentModel.Design.Serialization
 {
@@ -18,9 +18,9 @@ namespace System.ComponentModel.Design.Serialization
     {
         public ExpressionContext(CodeExpression expression, Type expressionType, object owner, object presetValue)
         {
-            Expression = expression ?? throw new ArgumentNullException(nameof(expression));
-            ExpressionType = expressionType ?? throw new ArgumentNullException(nameof(expressionType));
-            Owner = owner ?? throw new ArgumentNullException(nameof(owner));
+            Expression = expression.OrThrowIfNull();
+            ExpressionType = expressionType.OrThrowIfNull();
+            Owner = owner.OrThrowIfNull();
             PresetValue = presetValue;
         }
 
@@ -55,7 +55,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  hand, a property such as Text or Visible does not have a preset
         ///  value and therefore the PresetValue property will return null.
         ///  Serializers can use this information to guide serialization.
-        ///  For example, take the following two snippts of code:
+        ///  For example, take the following two snippets of code:
         ///  Padding p = new Padding();
         ///  p.Left = 5;
         ///  button1.Padding = p;

@@ -1,8 +1,6 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
@@ -11,23 +9,20 @@ namespace System.Windows.Forms
 {
     public partial class DataGridViewButtonCell
     {
-        private class DataGridViewButtonCellRenderer
+        private static class DataGridViewButtonCellRenderer
         {
-            private static VisualStyleRenderer visualStyleRenderer;
-
-            private DataGridViewButtonCellRenderer()
-            {
-            }
+            private static VisualStyleRenderer? s_visualStyleRenderer;
 
             public static VisualStyleRenderer DataGridViewButtonRenderer
             {
                 get
                 {
-                    if (visualStyleRenderer is null)
+                    if (s_visualStyleRenderer is null)
                     {
-                        visualStyleRenderer = new VisualStyleRenderer(ButtonElement);
+                        s_visualStyleRenderer = new VisualStyleRenderer(ButtonElement);
                     }
-                    return visualStyleRenderer;
+
+                    return s_visualStyleRenderer;
                 }
             }
 

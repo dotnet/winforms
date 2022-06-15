@@ -2,14 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    internal class DataGridViewUtilities
+    internal static class DataGridViewUtilities
     {
         private const byte IconMarginWidth = 3;      // 3 pixels of margin on the left and right of icons
         private const byte IconMarginHeight = 2;     // 2 pixels of margin on the top and bottom of icons
@@ -66,6 +64,7 @@ namespace System.Windows.Forms
                     {
                         tff |= TextFormatFlags.Left;
                     }
+
                     break;
                 case DataGridViewContentAlignment.TopCenter:
                     tff = TextFormatFlags.Top | TextFormatFlags.HorizontalCenter;
@@ -80,6 +79,7 @@ namespace System.Windows.Forms
                     {
                         tff |= TextFormatFlags.Right;
                     }
+
                     break;
                 case DataGridViewContentAlignment.MiddleLeft:
                     tff = TextFormatFlags.VerticalCenter;
@@ -91,6 +91,7 @@ namespace System.Windows.Forms
                     {
                         tff |= TextFormatFlags.Left;
                     }
+
                     break;
                 case DataGridViewContentAlignment.MiddleCenter:
                     tff = TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter;
@@ -105,6 +106,7 @@ namespace System.Windows.Forms
                     {
                         tff |= TextFormatFlags.Right;
                     }
+
                     break;
                 case DataGridViewContentAlignment.BottomLeft:
                     tff = TextFormatFlags.Bottom;
@@ -116,6 +118,7 @@ namespace System.Windows.Forms
                     {
                         tff |= TextFormatFlags.Left;
                     }
+
                     break;
                 case DataGridViewContentAlignment.BottomCenter:
                     tff = TextFormatFlags.Bottom | TextFormatFlags.HorizontalCenter;
@@ -130,11 +133,13 @@ namespace System.Windows.Forms
                     {
                         tff |= TextFormatFlags.Right;
                     }
+
                     break;
                 default:
                     tff = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter;
                     break;
             }
+
             if (wrapMode == DataGridViewTriState.False)
             {
                 tff |= TextFormatFlags.SingleLine;
@@ -144,12 +149,14 @@ namespace System.Windows.Forms
                 //tff |= TextFormatFlags.NoFullWidthCharacterBreak;
                 tff |= TextFormatFlags.WordBreak;
             }
+
             tff |= TextFormatFlags.NoPrefix;
             tff |= TextFormatFlags.PreserveGraphicsClipping;
             if (rightToLeft)
             {
                 tff |= TextFormatFlags.RightToLeft;
             }
+
             return tff;
         }
 
@@ -184,24 +191,29 @@ namespace System.Windows.Forms
                                 {
                                     preferredWidth = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font, flags).Width;
                                 }
+
                                 preferredWidth += 2 * ContentMarginWidth + HorizontalTextMarginLeft + HorizontalTextMarginRight;
                             }
                         }
+
                         if (allowedHeight >= IconsHeight + 2 * IconMarginHeight)
                         {
                             if (showGlyph)
                             {
                                 preferredWidth += IconsWidth + 2 * IconMarginWidth;
                             }
+
                             if (showRowErrors)
                             {
                                 preferredWidth += IconsWidth + 2 * IconMarginWidth;
                             }
                         }
+
                         preferredWidth = Math.Max(preferredWidth, 1);
                         preferredWidth += borderAndPaddingWidths;
                         return new Size(preferredWidth, 0);
                     }
+
                 case DataGridViewFreeDimension.Height:
                     {
                         int minHeightIcon = 1, minHeightContent = 1;
@@ -215,6 +227,7 @@ namespace System.Windows.Forms
                                 // Status icon takes priority
                                 allowedWidth -= 2 * IconMarginWidth + IconsWidth;
                             }
+
                             if (showRowErrors && allowedWidth >= 2 * IconMarginWidth + IconsWidth)
                             {
                                 // There is enough room for the error icon
@@ -222,6 +235,7 @@ namespace System.Windows.Forms
                                 // There is enough room for both the status and error icons
                                 allowedWidth -= 2 * IconMarginWidth + IconsWidth;
                             }
+
                             if (allowedWidth > 2 * ContentMarginWidth +
                                                HorizontalTextMarginLeft +
                                                HorizontalTextMarginRight)
@@ -238,6 +252,7 @@ namespace System.Windows.Forms
                                 {
                                     minHeightContent = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font, flags).Height;
                                 }
+
                                 minHeightContent += 2 * VerticalTextMargin;
                             }
                         }
@@ -248,8 +263,10 @@ namespace System.Windows.Forms
                                 minHeightIcon = IconsHeight + 2 * IconMarginHeight;
                             }
                         }
+
                         return new Size(0, Math.Max(minHeightIcon, minHeightContent) + borderAndPaddingHeights);
                     }
+
                 default:
                     {
                         if (!string.IsNullOrEmpty(val))
@@ -262,6 +279,7 @@ namespace System.Windows.Forms
                             {
                                 preferredSize = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font, flags);
                             }
+
                             preferredSize.Width += 2 * ContentMarginWidth +
                                                    HorizontalTextMarginLeft +
                                                    HorizontalTextMarginRight;
@@ -271,19 +289,23 @@ namespace System.Windows.Forms
                         {
                             preferredSize = new Size(0, 1);
                         }
+
                         if (showGlyph)
                         {
                             preferredSize.Width += IconsWidth + 2 * IconMarginWidth;
                         }
+
                         if (showRowErrors)
                         {
                             preferredSize.Width += IconsWidth + 2 * IconMarginWidth;
                         }
+
                         if (showGlyph || showRowErrors)
                         {
                             preferredSize.Height = Math.Max(preferredSize.Height,
                                                             IconsHeight + 2 * IconMarginHeight);
                         }
+
                         preferredSize.Width += borderAndPaddingWidths;
                         preferredSize.Height += borderAndPaddingHeights;
                         return preferredSize;
@@ -320,14 +342,17 @@ namespace System.Windows.Forms
             {
                 sizeConstraint.Width = sizeCell.Width;
             }
+
             if (sizeConstraint.Height > sizeCell.Height)
             {
                 sizeConstraint.Height = sizeCell.Height;
             }
+
             if (sizeConstraint == sizeCell)
             {
                 return cellBounds;
             }
+
             return new Rectangle(GetTextLocation(cellBounds, sizeConstraint, flags, cellStyle), sizeConstraint);
         }
 
@@ -421,6 +446,7 @@ namespace System.Windows.Forms
                     Debug.Assert(cellStyle.Alignment == DataGridViewContentAlignment.NotSet, "this is the only alignment left");
                     break;
             }
+
             return ptTextLocation;
         }
 

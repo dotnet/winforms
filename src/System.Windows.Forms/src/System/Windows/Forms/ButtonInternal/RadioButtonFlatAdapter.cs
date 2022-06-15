@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms.ButtonInternal
@@ -26,11 +24,11 @@ namespace System.Windows.Forms.ButtonInternal
             ColorData colors = PaintFlatRender(e).Calculate();
             if (Control.Enabled)
             {
-                PaintFlatWorker(e, colors.windowText, colors.highlight, colors.windowFrame, colors);
+                PaintFlatWorker(e, colors.WindowText, colors.Highlight, colors.WindowFrame, colors);
             }
             else
             {
-                PaintFlatWorker(e, colors.buttonShadow, colors.buttonFace, colors.buttonShadow, colors);
+                PaintFlatWorker(e, colors.ButtonShadow, colors.ButtonFace, colors.ButtonShadow, colors);
             }
         }
 
@@ -46,11 +44,11 @@ namespace System.Windows.Forms.ButtonInternal
             ColorData colors = PaintFlatRender(e).Calculate();
             if (Control.Enabled)
             {
-                PaintFlatWorker(e, colors.windowText, colors.lowHighlight, colors.windowFrame, colors);
+                PaintFlatWorker(e, colors.WindowText, colors.LowHighlight, colors.WindowFrame, colors);
             }
             else
             {
-                PaintFlatWorker(e, colors.buttonShadow, colors.buttonFace, colors.buttonShadow, colors);
+                PaintFlatWorker(e, colors.ButtonShadow, colors.ButtonFace, colors.ButtonShadow, colors);
             }
         }
 
@@ -66,11 +64,11 @@ namespace System.Windows.Forms.ButtonInternal
             ColorData colors = PaintFlatRender(e).Calculate();
             if (Control.Enabled)
             {
-                PaintFlatWorker(e, colors.windowText, colors.highlight, colors.windowFrame, colors);
+                PaintFlatWorker(e, colors.WindowText, colors.Highlight, colors.WindowFrame, colors);
             }
             else
             {
-                PaintFlatWorker(e, colors.buttonShadow, colors.buttonFace, colors.buttonShadow, colors);
+                PaintFlatWorker(e, colors.ButtonShadow, colors.ButtonFace, colors.ButtonShadow, colors);
             }
         }
 
@@ -80,7 +78,7 @@ namespace System.Windows.Forms.ButtonInternal
             PaintButtonBackground(e, Control.ClientRectangle, null);
 
             PaintImage(e, layout);
-            DrawCheckFlat(e, layout, checkColor, colors.options.HighContrast ? colors.buttonFace : checkBackground, checkBorder);
+            DrawCheckFlat(e, layout, checkColor, colors.Options.HighContrast ? colors.ButtonFace : checkBackground, checkBorder);
             AdjustFocusRectangle(layout);
             PaintField(e, layout, colors, checkColor, true);
         }
@@ -94,8 +92,8 @@ namespace System.Windows.Forms.ButtonInternal
         protected override LayoutOptions Layout(PaintEventArgs e)
         {
             LayoutOptions layout = CommonLayout();
-            layout.checkSize = (int)(FlatCheckSize * GetDpiScaleRatio());
-            layout.shadowedText = false;
+            layout.CheckSize = (int)(FlatCheckSize * GetDpiScaleRatio());
+            layout.ShadowedText = false;
 
             return layout;
         }

@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,67 +11,81 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///  The SelectionBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The SelectionBehavior performs  two main tasks: 1) forward messages to the related ControlDesigner, and 2) calls upon the SelectionManager to push a potention DragBehavior.
+    ///  The SelectionBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The SelectionBehavior performs  two main tasks: 1) forward messages to the related ControlDesigner, and 2) calls upon the SelectionManager to push a potential DragBehavior.
     /// </summary>
     internal sealed class SelectionManager : IDisposable
     {
-        private Adorner selectionAdorner;//used to provide all selection glyphs
-        private Adorner bodyAdorner;//used to track all body glyphs for each control
-        private BehaviorService behaviorService;//ptr back to our BehaviorService
-        private IServiceProvider serviceProvider;//standard service provider
-        private readonly Hashtable componentToDesigner;//used for quick look up of designers related to comps
-        private readonly Control rootComponent;//root component being designed
-        private ISelectionService selSvc;//we cache the selection service for perf.
-        private IDesignerHost designerHost;//we cache the designerhost for perf.
-        private bool needRefresh;    // do we need to refresh?
-        private Rectangle[] prevSelectionBounds;//used to only repaint the changing part of the selection
-        private object prevPrimarySelection; //used to check if the primary selection changed
-        private Rectangle[] curSelectionBounds;
-        private int curCompIndex;
-        private DesignerActionUI designerActionUI; // the "container" for all things related to the designer action (smartags) UI
-        private bool selectionChanging; //we dont want the OnSelectionChanged to be recursively called.
+        private Adorner _selectionAdorner;                  //used to provide all selection glyphs
+        private Adorner _bodyAdorner;                       //used to track all body glyphs for each control
+        private BehaviorService _behaviorService;           //ptr back to our BehaviorService
+        private IServiceProvider _serviceProvider;          //standard service provider
+        private readonly Hashtable _componentToDesigner;    //used for quick look up of designers related to comps
+        private readonly Control _rootComponent;            //root component being designed
+        private ISelectionService _selSvc;                  //we cache the selection service for perf.
+        private IDesignerHost _designerHost;                //we cache the designerhost for perf.
+        private bool _needRefresh;                          // do we need to refresh?
+        private Rectangle[] _prevSelectionBounds;           //used to only repaint the changing part of the selection
+        private object _prevPrimarySelection;               //used to check if the primary selection changed
+        private Rectangle[] _curSelectionBounds;
+        private int _curCompIndex;
+        private DesignerActionUI _designerActionUI;         // the "container" for all things related to the designer action (smarttags) UI
+        private bool _selectionChanging;                    //we don't want the OnSelectionChanged to be recursively called.
 
         /// <summary>
         ///  Constructor.  Here we query for necessary services and cache them for perf. reasons. We also hook to Component Added/Removed/Changed notifications so we can keep in sync when the designers' components change.  Also, we create our custom Adorner and add it to the BehaviorService.
         /// </summary>
         public SelectionManager(IServiceProvider serviceProvider, BehaviorService behaviorService)
         {
-            prevSelectionBounds = null;
-            prevPrimarySelection = null;
-            this.behaviorService = behaviorService;
-            this.serviceProvider = serviceProvider;
+            _prevSelectionBounds = null;
+            _prevPrimarySelection = null;
+            _behaviorService = behaviorService;
+            _serviceProvider = serviceProvider;
 
-            selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
-            designerHost = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
+            _selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
+            _designerHost = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
 
-            if (designerHost is null || selSvc is null)
+            if (_designerHost is null || _selSvc is null)
             {
                 Debug.Fail("SelectionManager - Host or SelSvc is null, can't continue");
             }
 
             //sync the BehaviorService's begindrag event
             behaviorService.BeginDrag += new BehaviorDragDropEventHandler(OnBeginDrag);
+
             //sync the BehaviorService's Synchronize event
             behaviorService.Synchronize += new EventHandler(OnSynchronize);
-            selSvc.SelectionChanged += new EventHandler(OnSelectionChanged);
-            rootComponent = (Control)designerHost.RootComponent;
 
-            // create and add both of our adorners, one for selection, one for bodies
-            selectionAdorner = new Adorner();
-            bodyAdorner = new Adorner();
-            behaviorService.Adorners.Add(bodyAdorner);
-            behaviorService.Adorners.Add(selectionAdorner); //adding this will cause the adorner to get setup with a ptr to the beh.svc.
+            _selSvc.SelectionChanged += new EventHandler(OnSelectionChanged);
+            _rootComponent = (Control)_designerHost.RootComponent;
 
-            componentToDesigner = new Hashtable();
-            designerHost.TransactionClosed += new DesignerTransactionCloseEventHandler(OnTransactionClosed);
+            //create and add both of our adorners,
+            //one for selection, one for bodies
+            _selectionAdorner = new Adorner();
+            _bodyAdorner = new Adorner();
+            behaviorService.Adorners.Add(_bodyAdorner);
+            behaviorService.Adorners.Add(_selectionAdorner); //adding this will cause the adorner to get setup with a ptr
+                                                            //to the beh.svc.
+
+            _componentToDesigner = new Hashtable();
+
+            IComponentChangeService cs = (IComponentChangeService)serviceProvider.GetService(typeof(IComponentChangeService));
+            if (cs != null)
+            {
+                cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
+                cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+                cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+            }
+
+            _designerHost.TransactionClosed += new DesignerTransactionCloseEventHandler(OnTransactionClosed);
+
             // designeraction UI
-            if (designerHost.GetService(typeof(DesignerOptionService)) is DesignerOptionService options)
+            if (_designerHost.GetService(typeof(DesignerOptionService)) is DesignerOptionService options)
             {
                 PropertyDescriptor p = options.Options.Properties["UseSmartTags"];
                 if (p != null && p.PropertyType == typeof(bool) && (bool)p.GetValue(null))
                 {
-                    designerActionUI = new DesignerActionUI(serviceProvider, selectionAdorner);
-                    behaviorService.DesignerActionUI = designerActionUI;
+                    _designerActionUI = new DesignerActionUI(serviceProvider, _selectionAdorner);
+                    behaviorService.DesignerActionUI = _designerActionUI;
                 }
             }
         }
@@ -81,16 +95,21 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         internal Adorner BodyGlyphAdorner
         {
-            get => bodyAdorner;
+            get => _bodyAdorner;
         }
 
         /// <summary>
-        ///  There are certain cases like Adding Item to ToolStrips through InSitu Editor, where there is ParentTransaction that has to be cancelled depending upon the user action When this parent transaction is cancelled, there may be no reason to REFRESH the selectionManager which actually clears all the glyphs and readds them This REFRESH causes a lot of flicker and can be avoided by setting this property to false. Since this property is checked in the TransactionClosed, the SelectionManager won't REFRESH and hence just eat up the refresh thus avoiding unnecessary flicker.
+        ///  There are certain cases like Adding Item to ToolStrips through InSitu Editor, where there is
+        ///  ParentTransaction that has to be cancelled depending upon the user action When this parent transaction is
+        ///  cancelled, there may be no reason to REFRESH the selectionManager which actually clears all the glyphs and
+        ///  readds them This REFRESH causes a lot of flicker and can be avoided by setting this property to false.
+        ///  Since this property is checked in the TransactionClosed, the SelectionManager won't REFRESH and hence
+        ///  just eat up the refresh thus avoiding unnecessary flicker.
         /// </summary>
         internal bool NeedRefresh
         {
-            get => needRefresh;
-            set => needRefresh = value;
+            get => _needRefresh;
+            set => _needRefresh = value;
         }
 
         /// <summary>
@@ -98,11 +117,12 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         internal Adorner SelectionGlyphAdorner
         {
-            get => selectionAdorner;
+            get => _selectionAdorner;
         }
 
         /// <summary>
-        ///  This method fist calls the recursive AddControlGlyphs() method. When finished, we add the final glyph(s) to the root comp.
+        ///  This method fist calls the recursive AddControlGlyphs() method. When finished, we add the final glyph(s)
+        ///  to the root comp.
         /// </summary>
         private void AddAllControlGlyphs(Control parent, ArrayList selComps, object primarySelection)
         {
@@ -123,6 +143,7 @@ namespace System.Windows.Forms.Design.Behavior
                     selType = GlyphSelectionType.Selected;
                 }
             }
+
             AddControlGlyphs(parent, selType);
         }
 
@@ -131,36 +152,37 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void AddControlGlyphs(Control c, GlyphSelectionType selType)
         {
-            ControlDesigner cd = (ControlDesigner)componentToDesigner[c];
+            ControlDesigner cd = (ControlDesigner)_componentToDesigner[c];
             if (cd != null)
             {
                 ControlBodyGlyph bodyGlyph = cd.GetControlGlyphInternal(selType);
                 if (bodyGlyph != null)
                 {
-                    bodyAdorner.Glyphs.Add(bodyGlyph);
+                    _bodyAdorner.Glyphs.Add(bodyGlyph);
                     if (selType == GlyphSelectionType.SelectedPrimary ||
                         selType == GlyphSelectionType.Selected)
                     {
-                        if (curSelectionBounds[curCompIndex] == Rectangle.Empty)
+                        if (_curSelectionBounds[_curCompIndex] == Rectangle.Empty)
                         {
-                            curSelectionBounds[curCompIndex] = bodyGlyph.Bounds;
+                            _curSelectionBounds[_curCompIndex] = bodyGlyph.Bounds;
                         }
                         else
                         {
-                            curSelectionBounds[curCompIndex] = Rectangle.Union(curSelectionBounds[curCompIndex], bodyGlyph.Bounds);
+                            _curSelectionBounds[_curCompIndex] = Rectangle.Union(_curSelectionBounds[_curCompIndex], bodyGlyph.Bounds);
                         }
                     }
                 }
+
                 GlyphCollection glyphs = cd.GetGlyphs(selType);
                 if (glyphs != null)
                 {
-                    selectionAdorner.Glyphs.AddRange(glyphs);
+                    _selectionAdorner.Glyphs.AddRange(glyphs);
                     if (selType == GlyphSelectionType.SelectedPrimary ||
                         selType == GlyphSelectionType.Selected)
                     {
                         foreach (Glyph glyph in glyphs)
                         {
-                            curSelectionBounds[curCompIndex] = Rectangle.Union(curSelectionBounds[curCompIndex], glyph.Bounds);
+                            _curSelectionBounds[_curCompIndex] = Rectangle.Union(_curSelectionBounds[_curCompIndex], glyph.Bounds);
                         }
                     }
                 }
@@ -168,7 +190,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             if (selType == GlyphSelectionType.SelectedPrimary || selType == GlyphSelectionType.Selected)
             {
-                curCompIndex++;
+                _curCompIndex++;
             }
         }
 
@@ -178,47 +200,56 @@ namespace System.Windows.Forms.Design.Behavior
         // We don't need to Dispose rootComponent.
         public void Dispose()
         {
-            if (designerHost != null)
+            if (_designerHost != null)
             {
-                designerHost.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
-                designerHost = null;
+                _designerHost.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
+                _designerHost = null;
             }
 
-            if (serviceProvider != null)
+            if (_serviceProvider != null)
             {
-                if (selSvc != null)
+                IComponentChangeService cs = (IComponentChangeService)_serviceProvider.GetService(typeof(IComponentChangeService));
+                if (cs != null)
                 {
-                    selSvc.SelectionChanged -= new EventHandler(OnSelectionChanged);
-                    selSvc = null;
+                    cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
+                    cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                    cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
                 }
-                serviceProvider = null;
+
+                if (_selSvc != null)
+                {
+                    _selSvc.SelectionChanged -= new EventHandler(OnSelectionChanged);
+                    _selSvc = null;
+                }
+
+                _serviceProvider = null;
             }
 
-            if (behaviorService != null)
+            if (_behaviorService != null)
             {
-                behaviorService.Adorners.Remove(bodyAdorner);
-                behaviorService.Adorners.Remove(selectionAdorner);
-                behaviorService.BeginDrag -= new BehaviorDragDropEventHandler(OnBeginDrag);
-                behaviorService.Synchronize -= new EventHandler(OnSynchronize);
-                behaviorService = null;
+                _behaviorService.Adorners.Remove(_bodyAdorner);
+                _behaviorService.Adorners.Remove(_selectionAdorner);
+                _behaviorService.BeginDrag -= new BehaviorDragDropEventHandler(OnBeginDrag);
+                _behaviorService.Synchronize -= new EventHandler(OnSynchronize);
+                _behaviorService = null;
             }
 
-            if (selectionAdorner != null)
+            if (_selectionAdorner != null)
             {
-                selectionAdorner.Glyphs.Clear();
-                selectionAdorner = null;
+                _selectionAdorner.Glyphs.Clear();
+                _selectionAdorner = null;
             }
 
-            if (bodyAdorner != null)
+            if (_bodyAdorner != null)
             {
-                bodyAdorner.Glyphs.Clear();
-                bodyAdorner = null;
+                _bodyAdorner.Glyphs.Clear();
+                _bodyAdorner = null;
             }
 
-            if (designerActionUI != null)
+            if (_designerActionUI != null)
             {
-                designerActionUI.Dispose();
-                designerActionUI = null;
+                _designerActionUI.Dispose();
+                _designerActionUI = null;
             }
         }
 
@@ -237,10 +268,10 @@ namespace System.Windows.Forms.Design.Behavior
         private void OnComponentAdded(object source, ComponentEventArgs ce)
         {
             IComponent component = ce.Component;
-            IDesigner designer = designerHost.GetDesigner(component);
+            IDesigner designer = _designerHost.GetDesigner(component);
             if (designer is ControlDesigner)
             {
-                componentToDesigner.Add(component, designer);
+                _componentToDesigner.Add(component, designer);
             }
         }
 
@@ -251,7 +282,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             ArrayList dragComps = new ArrayList(e.DragComponents);
             ArrayList glyphsToRemove = new ArrayList();
-            foreach (ControlBodyGlyph g in bodyAdorner.Glyphs)
+            foreach (ControlBodyGlyph g in _bodyAdorner.Glyphs)
             {
                 if (g.RelatedComponent is Control)
                 {
@@ -262,9 +293,10 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
             }
+
             foreach (Glyph g in glyphsToRemove)
             {
-                bodyAdorner.Glyphs.Remove(g);
+                _bodyAdorner.Glyphs.Remove(g);
             }
         }
 
@@ -279,9 +311,9 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void OnComponentChanged(object source, ComponentChangedEventArgs ce)
         {
-            if (selSvc.GetComponentSelected(ce.Component))
+            if (_selSvc.GetComponentSelected(ce.Component))
             {
-                if (!designerHost.InTransaction)
+                if (!_designerHost.InTransaction)
                 {
                     Refresh();
                 }
@@ -297,16 +329,18 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void OnComponentRemoved(object source, ComponentEventArgs ce)
         {
-            if (componentToDesigner.Contains(ce.Component))
+            if (_componentToDesigner.Contains(ce.Component))
             {
-                componentToDesigner.Remove(ce.Component);
+                _componentToDesigner.Remove(ce.Component);
             }
+
             //remove the associated designeractionpanel
-            if (designerActionUI != null)
+            if (_designerActionUI != null)
             {
-                designerActionUI.RemoveActionGlyph(ce.Component);
+                _designerActionUI.RemoveActionGlyph(ce.Component);
             }
         }
+
         /// <summary>
         ///  Computes the region representing the difference between the old selection and the new selection.
         /// </summary>
@@ -315,25 +349,29 @@ namespace System.Windows.Forms.Design.Behavior
             Region toRefresh = new Region(Rectangle.Empty);
             Rectangle[] larger;
             Rectangle[] smaller;
-            if (curSelectionBounds.Length >= prevSelectionBounds.Length)
+            if (_curSelectionBounds.Length >= _prevSelectionBounds.Length)
             {
-                larger = curSelectionBounds;
-                smaller = prevSelectionBounds;
+                larger = _curSelectionBounds;
+                smaller = _prevSelectionBounds;
             }
             else
             {
-                larger = prevSelectionBounds;
-                smaller = curSelectionBounds;
+                larger = _prevSelectionBounds;
+                smaller = _curSelectionBounds;
             }
 
-            // we need to make sure all of the rects in the smaller array are  accounted for.  Any that don't intersect a rect in the larger array need to be included in the region to repaint.
+            // we need to make sure all of the rects in the smaller array are
+            // accounted for.  Any that don't intersect a rect in the larger
+            // array need to be included in the region to repaint.
             bool[] intersected = new bool[smaller.Length];
             for (int i = 0; i < smaller.Length; i++)
             {
                 intersected[i] = false;
             }
 
-            // determine which rects in the larger array need to be included in the region to invalidate by intersecting with rects in the smaller array.
+            // determine which rects in the larger array need to be
+            // included in the region to invalidate by intersecting
+            // with rects in the smaller array.
             for (int l = 0; l < larger.Length; l++)
             {
                 bool largeIntersected = false;
@@ -349,15 +387,18 @@ namespace System.Windows.Forms.Design.Behavior
                             toRefresh.Union(large);
                             toRefresh.Union(small);
                         }
+
                         intersected[s] = true;
                         break;
                     }
                 }
+
                 if (!largeIntersected)
                 {
                     toRefresh.Union(large);
                 }
             }
+
             // now add any rects from the smaller array that weren't accounted for
             for (int k = 0; k < intersected.Length; k++)
             {
@@ -367,17 +408,18 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
 
-            using (Graphics g = behaviorService.AdornerWindowGraphics)
+            using (Graphics g = _behaviorService.AdornerWindowGraphics)
             {
-                //If all that changed was the primary selection, then the refresh region was empty, but we do need to update the 2 controls.
-                if (toRefresh.IsEmpty(g) && primarySelection != null && !primarySelection.Equals(prevPrimarySelection))
+                // If all that changed was the primary selection, then the refresh region was empty, but we do need to update the 2 controls.
+                if (toRefresh.IsEmpty(g) && primarySelection != null && !primarySelection.Equals(_prevPrimarySelection))
                 {
-                    for (int i = 0; i < curSelectionBounds.Length; i++)
+                    for (int i = 0; i < _curSelectionBounds.Length; i++)
                     {
-                        toRefresh.Union(curSelectionBounds[i]);
+                        toRefresh.Union(_curSelectionBounds[i]);
                     }
                 }
             }
+
             return toRefresh;
         }
 
@@ -394,61 +436,69 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void OnSelectionChanged(object sender, EventArgs e)
         {
-            // Note: selectionChanging would guard against a re-entrant code... Since we dont want to be in messed up state when adding new Glyphs.
-            if (!selectionChanging)
+            // Note: selectionChanging would guard against a re-entrant code...
+            // Since we don't want to be in messed up state when adding new Glyphs.
+            if (!_selectionChanging)
             {
-                selectionChanging = true;
-                selectionAdorner.Glyphs.Clear();
-                bodyAdorner.Glyphs.Clear();
-                ArrayList selComps = new ArrayList(selSvc.GetSelectedComponents());
-                object primarySelection = selSvc.PrimarySelection;
+                _selectionChanging = true;
+
+                _selectionAdorner.Glyphs.Clear();
+                _bodyAdorner.Glyphs.Clear();
+
+                ArrayList selComps = new ArrayList(_selSvc.GetSelectedComponents());
+                object primarySelection = _selSvc.PrimarySelection;
+
                 //add all control glyphs to all controls on rootComp
-                curCompIndex = 0;
-                curSelectionBounds = new Rectangle[selComps.Count];
-                AddAllControlGlyphs(rootComponent, selComps, primarySelection);
-                if (prevSelectionBounds != null)
+                _curCompIndex = 0;
+                _curSelectionBounds = new Rectangle[selComps.Count];
+                AddAllControlGlyphs(_rootComponent, selComps, primarySelection);
+
+                if (_prevSelectionBounds != null)
                 {
                     Region toUpdate = DetermineRegionToRefresh(primarySelection);
-                    using (Graphics g = behaviorService.AdornerWindowGraphics)
+                    using (Graphics g = _behaviorService.AdornerWindowGraphics)
                     {
                         if (!toUpdate.IsEmpty(g))
                         {
-                            selectionAdorner.Invalidate(toUpdate);
+                            _selectionAdorner.Invalidate(toUpdate);
                         }
                     }
                 }
                 else
                 {
-                    // There was no previous selection, so just invalidate the current selection
-                    if (curSelectionBounds.Length > 0)
+                    // There was no previous selection, so just invalidate
+                    // the current selection
+                    if (_curSelectionBounds.Length > 0)
                     {
-                        Rectangle toUpdate = curSelectionBounds[0];
-                        for (int i = 1; i < curSelectionBounds.Length; i++)
+                        Rectangle toUpdate = _curSelectionBounds[0];
+                        for (int i = 1; i < _curSelectionBounds.Length; i++)
                         {
-                            toUpdate = Rectangle.Union(toUpdate, curSelectionBounds[i]);
+                            toUpdate = Rectangle.Union(toUpdate, _curSelectionBounds[i]);
                         }
+
                         if (toUpdate != Rectangle.Empty)
                         {
-                            selectionAdorner.Invalidate(toUpdate);
+                            _selectionAdorner.Invalidate(toUpdate);
                         }
                     }
                     else
                     {
-                        selectionAdorner.Invalidate();
+                        _selectionAdorner.Invalidate();
                     }
                 }
 
-                prevPrimarySelection = primarySelection;
-                if (curSelectionBounds.Length > 0)
+                _prevPrimarySelection = primarySelection;
+                if (_curSelectionBounds.Length > 0)
                 {
-                    prevSelectionBounds = new Rectangle[curSelectionBounds.Length];
-                    Array.Copy(curSelectionBounds, prevSelectionBounds, curSelectionBounds.Length);
+                    _prevSelectionBounds = new Rectangle[_curSelectionBounds.Length];
+                    Array.Copy(_curSelectionBounds, _prevSelectionBounds, _curSelectionBounds.Length);
                 }
                 else
                 {
-                    prevSelectionBounds = null;
+                    _prevSelectionBounds = null;
                 }
-                selectionChanging = false;
+
+                _selectionChanging = false;
             }
         }
 

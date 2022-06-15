@@ -8,8 +8,8 @@ internal static partial class Interop
     {
         public enum GDT : uint
         {
-            VALID =  0,
-            NONE =  1,
+            VALID = 0,
+            NONE = 1,
         }
     }
 }

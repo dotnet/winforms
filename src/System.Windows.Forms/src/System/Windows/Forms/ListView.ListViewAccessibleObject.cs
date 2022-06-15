@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
 using static Interop;
 
@@ -20,17 +19,21 @@ namespace System.Windows.Forms
                 _owningListView = owningListView;
             }
 
+            internal override Rectangle BoundingRectangle => _owningListView.IsHandleCreated
+                ? User32.GetWindowRect(_owningListView)
+                : Rectangle.Empty;
+
             internal override bool CanSelectMultiple
                 => _owningListView.IsHandleCreated;
 
             internal override int ColumnCount
                 => _owningListView.Columns.Count;
 
-            private bool OwnerHasDefaultGroup
+            internal bool OwnerHasDefaultGroup
             {
                 get
                 {
-                    if (!_owningListView.IsHandleCreated || !_owningListView.ShowGroups)
+                    if (!_owningListView.GroupsDisplayed)
                     {
                         return false;
                     }
@@ -41,7 +44,7 @@ namespace System.Windows.Forms
                         // to any of the group and have null as the item.Group value, so these items
                         // are put into the default group and thereby the ListView itself starts
                         // containing Default group.
-                        if (item != null && item.Group is null)
+                        if (item is not null && item.Group is null)
                         {
                             return true;
                         }
@@ -51,32 +54,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            private bool OwnerHasGroups
-                => _owningListView.IsHandleCreated && _owningListView.Groups.Count > 0;
-
             internal override int RowCount
                 => _owningListView.Items.Count;
 
             internal override UiaCore.RowOrColumnMajor RowOrColumnMajor
                 => UiaCore.RowOrColumnMajor.RowMajor;
 
-            internal override int[]? RuntimeId
-            {
-                get
-                {
-                    if (!_owningListView.IsHandleCreated)
-                    {
-                        return base.RuntimeId;
-                    }
-
-                    var runtimeId = new int[2];
-                    runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = PARAM.ToInt(_owningListView.Handle);
-                    return runtimeId;
-                }
-            }
-
-            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
             {
                 AccessibleObject? element = HitTest((int)x, (int)y);
 
@@ -90,80 +74,76 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                int childCount = GetChildCount();
-                if (childCount == 0)
-                {
-                    return null;
-                }
-
                 return direction switch
                 {
                     UiaCore.NavigateDirection.FirstChild => GetChild(0),
-                    UiaCore.NavigateDirection.LastChild => GetChild(childCount - 1),
+                    UiaCore.NavigateDirection.LastChild => GetLastChild(),
                     _ => base.FragmentNavigate(direction)
                 };
             }
 
             public override AccessibleObject? GetChild(int index)
             {
-                if (!_owningListView.IsHandleCreated || index < 0 || index >= GetChildCount())
+                if (!_owningListView.IsHandleCreated || index < 0)
                 {
                     return null;
                 }
 
-                if (!OwnerHasGroups)
+                if (_owningListView.GroupsDisplayed)
                 {
-                    return _owningListView.Items[index].AccessibilityObject;
+                    IReadOnlyList<ListViewGroup> visibleGroups = GetVisibleGroups();
+                    return index < visibleGroups.Count ? visibleGroups[index].AccessibilityObject : null;
                 }
 
-                if (!OwnerHasDefaultGroup)
-                {
-                    return _owningListView.Groups[index].AccessibilityObject;
-                }
-
-                // Default group has the last index out of the Groups.Count
-                // upper bound: so the DefaultGroup.Index == Groups.Count.
-                // But IMPORTANT: in the accessible tree the position of
-                // default group is the first before other groups.
-                return index == 0
-                    ? _owningListView.DefaultGroup.AccessibilityObject
-                    : _owningListView.Groups[index - 1].AccessibilityObject;
+                return index < _owningListView.Items.Count ? _owningListView.Items[index].AccessibilityObject : null;
             }
 
             public override int GetChildCount()
             {
                 if (!_owningListView.IsHandleCreated)
                 {
-                    return 0;
+                    return InvalidIndex;
                 }
 
-                if (_owningListView.Groups.Count > 0)
-                {
-                    return OwnerHasDefaultGroup ? _owningListView.Groups.Count + 1 : _owningListView.Groups.Count;
-                }
-
-                return _owningListView.Items.Count;
+                return _owningListView.GroupsDisplayed ? GetVisibleGroups().Count : _owningListView.Items.Count;
             }
 
-            internal int GetChildIndex(AccessibleObject child)
+            private int GetItemIndex(AccessibleObject? child)
             {
                 if (child is null)
                 {
-                    return -1;
+                    return InvalidIndex;
                 }
 
-                int childCount = GetChildCount();
-                for (int i = 0; i < childCount; i++)
+                if (child is ListViewItem.ListViewItemBaseAccessibleObject itemAccessibleObject)
                 {
-                    AccessibleObject? currentChild = GetChild(i);
-                    if (child == currentChild)
+                    int index = itemAccessibleObject.CurrentIndex;
+                    return index < _owningListView.Items.Count ? index : InvalidIndex;
+                }
+
+                return InvalidIndex;
+            }
+
+            private int GetGroupIndex(AccessibleObject? child)
+            {
+                if (child is null)
+                {
+                    return InvalidIndex;
+                }
+
+                IReadOnlyList<ListViewGroup> visibleGroups = GetVisibleGroups();
+                for (int i = 0; i < visibleGroups.Count; i++)
+                {
+                    if (visibleGroups[i].AccessibilityObject == child)
                     {
                         return i;
                     }
                 }
 
-                return -1;
+                return InvalidIndex;
             }
+
+            internal override int GetChildIndex(AccessibleObject? child) => _owningListView.GroupsDisplayed ? GetGroupIndex(child) : GetItemIndex(child);
 
             private string GetItemStatus()
                 => _owningListView.Sorting switch
@@ -178,8 +158,7 @@ namespace System.Windows.Forms
                 UiaCore.IRawElementProviderSimple[] columnHeaders = new UiaCore.IRawElementProviderSimple[_owningListView.Columns.Count];
                 for (int i = 0; i < columnHeaders.Length; i++)
                 {
-                    ColumnHeader columnHeader = _owningListView.Columns[i];
-                    columnHeaders[i] = new ColumnHeader.ListViewColumnHeaderAccessibleObject(columnHeader);
+                    columnHeaders[i] = new ColumnHeader.ListViewColumnHeaderAccessibleObject(_owningListView.Columns[i]);
                 }
 
                 return columnHeaders;
@@ -214,44 +193,29 @@ namespace System.Windows.Forms
                 return string.Empty;
             }
 
-            internal AccessibleObject? GetNextChild(AccessibleObject currentChild)
+            private AccessibleObject? GetLastChild()
             {
-                int currentChildIndex = GetChildIndex(currentChild);
-                if (currentChildIndex == -1)
+                if (_owningListView.GroupsDisplayed)
                 {
-                    return null;
+                    IReadOnlyList<ListViewGroup> visibleGroups = GetVisibleGroups();
+                    return visibleGroups.Count == 0 ? null : visibleGroups[visibleGroups.Count - 1].AccessibilityObject;
                 }
 
-                int childCount = GetChildCount();
-                if (currentChildIndex > childCount - 2) // is not the second to the last element.
-                {
-                    return null;
-                }
-
-                return GetChild(currentChildIndex + 1);
-            }
-
-            internal AccessibleObject? GetPreviousChild(AccessibleObject currentChild)
-            {
-                int currentChildIndex = GetChildIndex(currentChild);
-                if (currentChildIndex <= 0)
-                {
-                    return null;
-                }
-
-                return GetChild(currentChildIndex - 1);
+                return _owningListView.Items.Count == 0 ? null : _owningListView.Items[_owningListView.Items.Count - 1].AccessibilityObject;
             }
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.NamePropertyId => Name,
                     UiaCore.UIA.AutomationIdPropertyId => _owningListView.Name,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => false,
-                    UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ListControlTypeId,
-                    UiaCore.UIA.IsMultipleViewPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.MultipleViewPatternId),
+                    // If we don't set a default role for the accessible object
+                    // it will be retrieved from Windows.
+                    // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                    UiaCore.UIA.ControlTypePropertyId => _owningListView.AccessibleRole == AccessibleRole.Default
+                                                         ? UiaCore.UIA.ListControlTypeId
+                                                         : base.GetPropertyValue(propertyID),
                     UiaCore.UIA.ItemStatusPropertyId => GetItemStatus(),
                     _ => base.GetPropertyValue(propertyID)
                 };
@@ -266,13 +230,33 @@ namespace System.Windows.Forms
                     return Array.Empty<UiaCore.IRawElementProviderSimple>();
                 }
 
-                UiaCore.IRawElementProviderSimple[] selectedItemProviders = new UiaCore.IRawElementProviderSimple[_owningListView.SelectedItems.Count];
+                UiaCore.IRawElementProviderSimple[] selectedItemProviders = new UiaCore.IRawElementProviderSimple[_owningListView.SelectedIndices.Count];
                 for (int i = 0; i < selectedItemProviders.Length; i++)
                 {
-                    selectedItemProviders[i] = _owningListView.SelectedItems[i].AccessibilityObject;
+                    selectedItemProviders[i] = _owningListView.Items[_owningListView.SelectedIndices[i]].AccessibilityObject;
                 }
 
                 return selectedItemProviders;
+            }
+
+            internal IReadOnlyList<ListViewGroup> GetVisibleGroups()
+            {
+                List<ListViewGroup> list = new();
+                if (OwnerHasDefaultGroup)
+                {
+                    list.Add(_owningListView.DefaultGroup);
+                }
+
+                foreach (ListViewGroup listViewGroup in _owningListView.Groups)
+                {
+                    if (listViewGroup.AccessibilityObject is ListViewGroup.ListViewGroupAccessibleObject listViewGroupAccessibleObject
+                        && listViewGroupAccessibleObject.GetVisibleItems().Count > 0)
+                    {
+                        list.Add(listViewGroup);
+                    }
+                }
+
+                return list;
             }
 
             public override AccessibleObject? HitTest(int x, int y)
@@ -282,28 +266,47 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                Point point = _owningListView.PointToClient(new Point(x, y));
+                Point hitTestPoint = new(x, y);
+                Point point = _owningListView.PointToClient(hitTestPoint);
                 ListViewHitTestInfo hitTestInfo = _owningListView.HitTest(point.X, point.Y);
-                if (hitTestInfo.Item is null && OwnerHasGroups)
+                if (hitTestInfo.Item is null && _owningListView.GroupsDisplayed)
                 {
-                    for (int i = 0; i < GetChildCount(); i++)
+                    IReadOnlyList<ListViewGroup> visibleGroups = GetVisibleGroups();
+                    for (int i = 0; i < visibleGroups.Count; i++)
                     {
-                        AccessibleObject? accessibilityObject = GetChild(i);
-                        if (accessibilityObject != null &&
-                            accessibilityObject.Bounds.Contains(new Point(x, y)))
+                        if (visibleGroups[i].AccessibilityObject.Bounds.Contains(hitTestPoint))
                         {
-                            return accessibilityObject;
+                            return visibleGroups[i].AccessibilityObject;
                         }
                     }
 
                     return null;
                 }
 
-                if (hitTestInfo.Item != null)
+                if (hitTestInfo.Item is not null)
                 {
-                    if (hitTestInfo.SubItem != null)
+                    if (hitTestInfo.SubItem is not null)
                     {
-                        return hitTestInfo.SubItem.AccessibilityObject;
+                        return _owningListView.View switch
+                        {
+                            View.Details => hitTestInfo.SubItem.AccessibilityObject,
+
+                            // Only additional ListViewSubItem are displayed in the accessibility tree if the ListView
+                            // in the "Tile" view (the first ListViewSubItem is responsible for the ListViewItem)
+                            View.Tile => hitTestInfo.SubItem.Index > 0 ? hitTestInfo.SubItem.AccessibilityObject : hitTestInfo.Item.AccessibilityObject,
+                            _ => hitTestInfo.Item.AccessibilityObject
+                        };
+                    }
+
+                    if (hitTestInfo.Item.AccessibilityObject is ListViewItem.ListViewItemDetailsAccessibleObject itemAccessibleObject)
+                    {
+                        for (int i = 1; i < _owningListView.Columns.Count; i++)
+                        {
+                            if (itemAccessibleObject.GetSubItemBounds(i).Contains(point))
+                            {
+                                return itemAccessibleObject.GetDetailsSubItemOrFake(i);
+                            }
+                        }
                     }
 
                     return hitTestInfo.Item.AccessibilityObject;

@@ -2,12 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///  The LockedHandleGlyph represents the handle for a non-resizeable control in our new seleciton model.  Note that the pen and brush are created once per instance of this class and re-used in our painting logic for perf. reasonse.
+    ///  The LockedHandleGlyph represents the handle for a non-resizeable control in our new selection model.  Note that the pen and brush are created once per instance of this class and re-used in our painting logic for perf. reasons.
     /// </summary>
     internal class LockedHandleGlyph : SelectionGlyphBase
     {

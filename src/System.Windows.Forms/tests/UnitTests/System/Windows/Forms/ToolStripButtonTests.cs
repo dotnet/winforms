@@ -1,18 +1,17 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
     using Size = System.Drawing.Size;
 
-    public class ToolStripButtonTests : IClassFixture<ThreadExceptionFixture>
+    public partial class ToolStripButtonTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void ToolStripButton_Ctor_Default()
@@ -81,7 +80,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
             Assert.False(item.RightToLeftAutoMirrorImage);
             Assert.False(item.Selected);
-            Assert.False(item.ShowKeyboardCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, item.ShowKeyboardCues);
             Assert.Null(item.Site);
             Assert.Equal(new Size(23, 23), item.Size);
             Assert.Null(item.Tag);
@@ -95,7 +94,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ToolStripButton_Ctor_String(string text)
         {
             using var item = new SubToolStripButton(text);
@@ -162,7 +161,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
             Assert.False(item.RightToLeftAutoMirrorImage);
             Assert.False(item.Selected);
-            Assert.False(item.ShowKeyboardCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, item.ShowKeyboardCues);
             Assert.Null(item.Site);
             Assert.Equal(new Size(23, 23), item.Size);
             Assert.Null(item.Tag);
@@ -249,7 +248,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
             Assert.False(item.RightToLeftAutoMirrorImage);
             Assert.False(item.Selected);
-            Assert.False(item.ShowKeyboardCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, item.ShowKeyboardCues);
             Assert.Null(item.Site);
             Assert.Equal(new Size(23, 23), item.Size);
             Assert.Null(item.Tag);
@@ -339,7 +338,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
             Assert.False(item.RightToLeftAutoMirrorImage);
             Assert.False(item.Selected);
-            Assert.False(item.ShowKeyboardCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, item.ShowKeyboardCues);
             Assert.Null(item.Site);
             Assert.Equal(new Size(23, 23), item.Size);
             Assert.Null(item.Tag);
@@ -427,7 +426,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
             Assert.False(item.RightToLeftAutoMirrorImage);
             Assert.False(item.Selected);
-            Assert.False(item.ShowKeyboardCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, item.ShowKeyboardCues);
             Assert.Null(item.Site);
             Assert.Equal(new Size(23, 23), item.Size);
             Assert.Null(item.Tag);
@@ -525,7 +524,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
             Assert.False(item.RightToLeftAutoMirrorImage);
             Assert.False(item.Selected);
-            Assert.False(item.ShowKeyboardCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, item.ShowKeyboardCues);
             Assert.Null(item.Site);
             Assert.Equal(new Size(23, 23), item.Size);
             Assert.Null(item.Tag);
@@ -549,7 +548,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripButton_AutoToolTip_Set_GetReturnsExpected(bool value)
         {
             using var item = new ToolStripButton
@@ -568,7 +567,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripButton_CheckOnClick_Set_GetReturnsExpected(bool value)
         {
             using var item = new ToolStripButton
@@ -813,7 +812,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(CheckState))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(CheckState))]
         public void ToolStripButton_CheckState_Set_GetReturnsExpected(CheckState value)
         {
             using var item = new ToolStripButton
@@ -830,7 +829,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(CheckState))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(CheckState))]
         public void ToolStripButton_CheckState_SetWithOwner_GetReturnsExpected(CheckState value)
         {
             using var owner = new ToolStrip();
@@ -851,7 +850,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(CheckState))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(CheckState))]
         public void ToolStripButton_CheckState_SetWithOwnerWithHandle_GetReturnsExpected(CheckState value)
         {
             using var owner = new ToolStrip();
@@ -943,7 +942,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(CheckState))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(CheckState))]
         public void ToolStripButton_CheckState_SetInvalidValue_ThrowsInvalidEnumArgumentException(CheckState value)
         {
             using var item = new ToolStripButton();
@@ -1065,7 +1064,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStripButton_OnCheckedChanged_Invoke_CallsCheckedChanged(EventArgs eventArgs)
         {
             using var item = new SubToolStripButton();
@@ -1089,7 +1088,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStripButton_OnCheckStateChanged_Invoke_CallsCheckStateChanged(EventArgs eventArgs)
         {
             using var item = new SubToolStripButton();
@@ -1113,7 +1112,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStripButton_OnClick_Invoke_CallsClick(EventArgs eventArgs)
         {
             using var item = new SubToolStripButton();
@@ -1139,7 +1138,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStripButton_OnClick_InvokeCheckOnClick_CallsClick(EventArgs eventArgs)
         {
             using var item = new SubToolStripButton
@@ -1168,7 +1167,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void ToolStripButton_OnPaint_Invoke_DoesNotCallPaint(PaintEventArgs eventArgs)
         {
             using var item = new SubToolStripButton();

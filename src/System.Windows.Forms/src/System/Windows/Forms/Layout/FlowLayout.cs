@@ -4,13 +4,15 @@
 
 #nullable disable
 
+#if DEBUG
 using System.ComponentModel;
+#endif
 using System.Diagnostics;
 using System.Drawing;
 
 namespace System.Windows.Forms.Layout
 {
-    internal class FlowLayout : LayoutEngine
+    internal partial class FlowLayout : LayoutEngine
     {
         internal static readonly FlowLayout Instance = new FlowLayout();
 
@@ -27,6 +29,7 @@ namespace System.Windows.Forms.Layout
                     + "displayRect=" + container.DisplayRectangle.ToString() + ", "
                     + "args=" + args.ToString() + ")");
             }
+
             Debug.Indent();
 #endif
 
@@ -57,7 +60,7 @@ namespace System.Windows.Forms.Layout
             {
                 // Controls measured earlier than a control which couldn't be fit to constraints may
                 // shift around with the new bounds. We need to make a 2nd pass through the
-                // controls using these bounds which are gauranteed to fit.
+                // controls using these bounds which are guaranteed to fit.
                 measureBounds.Size = prefSize;
                 prefSize = TryCalculatePreferredSize(container, measureBounds, /* measureOnly = */ true);
             }
@@ -92,7 +95,7 @@ namespace System.Windows.Forms.Layout
         ///  Both LayoutCore and GetPreferredSize forward to this method.
         ///  The measureOnly flag determines which behavior we get.
         /// </summary>
-        private Size TryCalculatePreferredSize(IArrangedElement container, Rectangle displayRect, bool measureOnly)
+        private static Size TryCalculatePreferredSize(IArrangedElement container, Rectangle displayRect, bool measureOnly)
         {
             FlowDirection flowDirection = GetFlowDirection(container);
             bool wrapContents = GetWrapContents(container);
@@ -151,9 +154,9 @@ namespace System.Windows.Forms.Layout
         /// <summary>
         ///  Just forwards to TryCalculatePreferredSizeRow. This will layout elements from the start index to the end
         ///  index. RowBounds was computed by a call to measure row and is used for alignment/boxstretch.
-        ///  See the ElementProxy class for an explaination of the elementProxy parameter.
+        ///  See the ElementProxy class for an explanation of the elementProxy parameter.
         /// </summary>
-        private void LayoutRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, int endIndex, Rectangle rowBounds)
+        private static void LayoutRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, int endIndex, Rectangle rowBounds)
         {
             Size outSize = TryCalculatePreferredSizeRow(containerProxy, elementProxy, startIndex, endIndex, rowBounds, /* breakIndex = */ out int dummy, /* measureOnly = */ false);
             Debug.Assert(dummy == endIndex, "EndIndex / BreakIndex mismatch.");
@@ -163,9 +166,9 @@ namespace System.Windows.Forms.Layout
         ///  Just forwards to TryCalculatePreferredSizeRow. breakIndex is the index of the first control not to
         ///  fit in the displayRectangle. The returned Size is the size required to layout the
         ///  controls from startIndex up to but not including breakIndex. See the ElementProxy
-        ///  class for an explaination of the elementProxy parameter.
+        ///  class for an explanation of the elementProxy parameter.
         /// </summary>
-        private Size MeasureRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, Rectangle displayRectangle, out int breakIndex)
+        private static Size MeasureRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, Rectangle displayRectangle, out int breakIndex)
         {
             return TryCalculatePreferredSizeRow(containerProxy, elementProxy, startIndex, endIndex: containerProxy.Container.Children.Count, rowBounds: displayRectangle, breakIndex: out breakIndex, measureOnly: true);
         }
@@ -174,7 +177,7 @@ namespace System.Windows.Forms.Layout
         ///  LayoutRow and MeasureRow both forward to this method. The measureOnly flag
         ///  determines which behavior we get.
         /// </summary>
-        private Size TryCalculatePreferredSizeRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, int endIndex, Rectangle rowBounds, out int breakIndex, bool measureOnly)
+        private static Size TryCalculatePreferredSizeRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, int endIndex, Rectangle rowBounds, out int breakIndex, bool measureOnly)
         {
             Debug.Assert(startIndex < endIndex, "Loop should be in forward Z-order.");
             Point location = rowBounds.Location;
@@ -234,7 +237,7 @@ namespace System.Windows.Forms.Layout
                 // Position the element (if applicable).
                 if (!measureOnly)
                 {
-                    // If measureOnly = false, rowBounds.Height = measured row hieght
+                    // If measureOnly = false, rowBounds.Height = measured row height
                     // (otherwise its the remaining displayRect of the container)
 
                     Rectangle cellBounds = new Rectangle(location, new Size(requiredSize.Width, rowBounds.Height));
@@ -312,377 +315,21 @@ namespace System.Windows.Forms.Layout
 
         public static void SetFlowDirection(IArrangedElement container, FlowDirection value)
         {
-            if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlowDirection.LeftToRight, (int)FlowDirection.BottomUp))
-            {
-                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlowDirection));
-            }
+            SourceGenerated.EnumValidator.Validate(value);
 
             container.Properties.SetInteger(s_flowDirectionProperty, (int)value);
             LayoutTransaction.DoLayout(container, container, PropertyNames.FlowDirection);
             Debug.Assert(GetFlowDirection(container) == value, "GetFlowDirection should return the same value as we set");
         }
 
-        /// <summary>
-        ///  The goal of the FlowLayout Engine is to always layout from left to right. In order to achieve different
-        ///  flow directions we have "Proxies" for the Container (the thing laying out) and for setting the bounds of the
-        ///  child elements.
-        ///
-        ///  We have a base ContainerProxy, and derived proxies for all of the flow directions. In order to achieve flow direction of RightToLeft,
-        ///  the RightToLeft container proxy detects when we're going to set the bounds and translates it to the right.
-        ///
-        ///  In order to do a vertical flow, such as TopDown, we pretend we're laying out horizontally. The main way this is
-        ///  achieved is through the use of the VerticalElementProxy, which flips all rectangles and sizes.
-        ///
-        ///  In order to do BottomUp, we combine the same techniques of TopDown with the RightToLeft flow. That is,
-        ///  we override the bounds, and translate from left to right, AND use the VerticalElementProxy.
-        ///
-        ///  A final note: This layout engine does all its RightToLeft translation itself. It does not support
-        ///  WS_EX_LAYOUTRTL (OS mirroring).
-        /// </summary>
-        private class ContainerProxy
-        {
-            private readonly IArrangedElement _container;
-            private ElementProxy _elementProxy;
-            private Rectangle _displayRect;
-            private readonly bool _isContainerRTL;
-
-            public ContainerProxy(IArrangedElement container)
-            {
-                _container = container;
-                _isContainerRTL = false;
-                if (_container is Control)
-                {
-                    _isContainerRTL = ((Control)(_container)).RightToLeft == RightToLeft.Yes;
-                }
-            }
-
-            public virtual Rectangle Bounds
-            {
-                set
-                {
-                    if (IsContainerRTL)
-                    {
-                        // Offset the X coordinate.
-                        if (IsVertical)
-                        {
-                            // Offset the Y value here, since it is really the X value.
-                            value.Y = DisplayRect.Bottom - value.Bottom;
-                        }
-                        else
-                        {
-                            value.X = DisplayRect.Right - value.Right;
-                        }
-
-                        if (Container is FlowLayoutPanel flp)
-                        {
-                            Point ptScroll = flp.AutoScrollPosition;
-                            if (ptScroll != Point.Empty)
-                            {
-                                Point pt = new Point(value.X, value.Y);
-                                if (IsVertical)
-                                {
-                                    // Offset the Y value here, since it is really the X value.
-                                    pt.Offset(0, ptScroll.X);
-                                }
-                                else
-                                {
-                                    pt.Offset(ptScroll.X, 0);
-                                }
-                                value.Location = pt;
-                            }
-                        }
-                    }
-
-                    ElementProxy.Bounds = value;
-                }
-            }
-
-            public IArrangedElement Container => _container;
-
-            /// <summary>
-            ///  Specifies if we're TopDown or BottomUp and should use the VerticalElementProxy to
-            ///  translate
-            /// </summary>
-            protected virtual bool IsVertical => false;
-
-            protected bool IsContainerRTL =>  _isContainerRTL;
-
-            /// <summary>
-            ///  Returns the display rectangle of the container - this will be flipped if the layout
-            ///  is a vertical layout.
-            /// </summary>
-            public Rectangle DisplayRect
-            {
-                get => _displayRect;
-                set
-                {
-                    if (_displayRect != value)
-                    {
-                        // flip the displayRect since when we do layout direction TopDown/BottomUp, we layout the controls
-                        // on the flipped rectangle as if our layout direction were LeftToRight/RightToLeft. In this case
-                        // we can save some code bloat
-                        _displayRect = LayoutUtils.FlipRectangleIf(IsVertical, value);
-                    }
-                }
-            }
-
-            /// <summary>
-            ///  Returns the element proxy to use. A vertical element proxy will typically flip
-            ///  all the sizes and rectangles so that it can fake being laid out in a
-            ///  horizontal manner.
-            /// </summary>
-            public ElementProxy ElementProxy
-            {
-                get
-                {
-                    if (_elementProxy is null)
-                    {
-                        _elementProxy = IsVertical ? new VerticalElementProxy() : new ElementProxy();
-                    }
-
-                    return _elementProxy;
-                }
-            }
-
-            /// <summary>
-            ///  Used when you want to translate from right to left, but preserve Margin.Righ
-            ///  and Margin.Left.
-            /// </summary>
-            protected Rectangle RTLTranslateNoMarginSwap(Rectangle bounds)
-            {
-                Rectangle newBounds = bounds;
-                newBounds.X = DisplayRect.Right - bounds.X - bounds.Width + ElementProxy.Margin.Left - ElementProxy.Margin.Right;
-
-                // Since DisplayRect.Right and bounds.X are both adjusted for the AutoScrollPosition, we need add it back here.
-                if (Container is FlowLayoutPanel flp)
-                {
-                    Point ptScroll = flp.AutoScrollPosition;
-                    if (ptScroll != Point.Empty)
-                    {
-                        Point pt = new Point(newBounds.X, newBounds.Y);
-                        if (IsVertical)
-                        {
-                            // We need to treat Vertical a litte differently. It really helps if you draw this out.
-                            // Remember that when we layout BottomUp, we first layout TopDown, then call this method.
-                            // When we layout TopDown we layout in flipped rectangles. I.e. x becomes y, y becomes x,
-                            // height becomes width, width becomes height. We do our layout, then when we eventually
-                            // set the bounds of the child elements, we flip back. Thus, x will eventually
-                            // become y. We need to adjust for scrolling - but only in the y direction -
-                            // and since x becomes y, we adjust x. But since AutoScrollPoisition has not been swapped,
-                            // we need to use its Y coordinate when offsetting.
-
-                            pt.Offset(ptScroll.Y, 0);
-                        }
-                        else
-                        {
-                            pt.Offset(ptScroll.X, 0);
-                        }
-
-                        newBounds.Location = pt;
-                    }
-                }
-
-                return newBounds;
-            }
-        }
-
-        private class RightToLeftProxy : ContainerProxy
-        {
-            public RightToLeftProxy(IArrangedElement container) : base(container)
-            {
-            }
-
-            public override Rectangle Bounds
-            {
-                set
-                {
-                    // if the container is RTL, align to the left, otherwise, align to the right.
-                    // Do NOT use LayoutUtils.RTLTranslate as we want to preserve the padding.Right on the right...
-                    base.Bounds = RTLTranslateNoMarginSwap(value);
-                }
-            }
-        }
-
-        /// <summary>
-        ///  For TopDown we're really still laying out horizontally. The element proxy is the one
-        ///  which flips all the rectangles and rotates itself into the vertical orientation.
-        ///  to achieve right to left, we actually have to do something non-intuitive - instead of
-        ///  sending the control to the right, we have to send the control to the bottom. When the rotation
-        ///  is complete - that's equivilant to pushing it to the right.
-        /// </summary>
-        private class TopDownProxy : ContainerProxy
-        {
-            public TopDownProxy(IArrangedElement container) : base(container)
-            {
-            }
-
-            protected override bool IsVertical => true;
-        }
-
-        private class BottomUpProxy : ContainerProxy
-        {
-            public BottomUpProxy(IArrangedElement container) : base(container)
-            {
-            }
-
-            protected override bool IsVertical => true;
-
-            /// <summary>
-            ///  For BottomUp we're really still laying out horizontally. The element proxy is the one
-            ///  which flips all the rectangles and rotates itself into the vertical orientation.
-            ///  BottomUp is the analog of RightToLeft - meaning, in order to place a control at the bottom,
-            ///  the control has to be placed to the right. When the rotation is complete, that's the equivilant of
-            ///  pushing it to the right. This must be done all the time.
-            ///
-            ///  To achieve right to left, we actually have to do something non-intuitive - instead of
-            ///  sending the control to the right, we have to send the control to the bottom. When the rotation
-            ///  is complete - that's equivilant to pushing it to the right.
-            /// </summary>
-            public override Rectangle Bounds
-            {
-                set
-                {
-                    // push the control to the bottom.
-                    // Do NOT use LayoutUtils.RTLTranslate as we want to preserve the padding.Right on the right...
-                    base.Bounds = RTLTranslateNoMarginSwap(value);
-                }
-            }
-        }
-
-        /// <summary>
-        ///  ElementProxy inserts a level of indirection between the LayoutEngine
-        ///  and the IArrangedElement that allows us to use the same code path
-        ///  for Vertical and Horizontal flow layout. (see VerticalElementProxy)
-        /// </summary>
-        private class ElementProxy
-        {
-            private IArrangedElement _element;
-
-            public virtual AnchorStyles AnchorStyles
-            {
-                get
-                {
-                    AnchorStyles anchorStyles = LayoutUtils.GetUnifiedAnchor(Element);
-                    bool isStretch = (anchorStyles & LayoutUtils.VerticalAnchorStyles) == LayoutUtils.VerticalAnchorStyles; //whether the control stretches to fill in the whole space
-                    bool isTop = (anchorStyles & AnchorStyles.Top) != 0;   //whether the control anchors to top and does not stretch;
-                    bool isBottom = (anchorStyles & AnchorStyles.Bottom) != 0;  //whether the control anchors to bottom and does not stretch;
-
-                    if (isStretch)
-                    {
-                        //the element stretches to fill in the whole row. Equivalent to AnchorStyles.Top|AnchorStyles.Bottom
-                        return LayoutUtils.VerticalAnchorStyles;
-                    }
-                    if (isTop)
-                    {
-                        //the element anchors to top and doesn't stretch
-                        return AnchorStyles.Top;
-                    }
-                    if (isBottom)
-                    {
-                        //the element anchors to bottom and doesn't stretch
-                        return AnchorStyles.Bottom;
-                    }
-                    return AnchorStyles.None;
-                }
-            }
-
-            public bool AutoSize => CommonProperties.GetAutoSize(_element);
-
-            public virtual Rectangle Bounds
-            {
-                set => _element.SetBounds(value, BoundsSpecified.None);
-            }
-
-            public IArrangedElement Element
-            {
-                get => _element;
-                set
-                {
-                    _element = value;
-                    Debug.Assert(Element == value, "Element should be the same as we set it to");
-                }
-            }
-
-            public bool Stretches
-            {
-                get
-                {
-                    AnchorStyles styles = AnchorStyles;
-                    return (LayoutUtils.VerticalAnchorStyles & styles) == LayoutUtils.VerticalAnchorStyles;
-                }
-            }
-
-            public virtual Padding Margin => CommonProperties.GetMargin(Element);
-
-            public virtual Size MinimumSize => CommonProperties.GetMinimumSize(Element, Size.Empty);
-
-            public bool ParticipatesInLayout => _element.ParticipatesInLayout;
-
-            public virtual Size SpecifiedSize => CommonProperties.GetSpecifiedBounds(_element).Size;
-
-            public virtual Size GetPreferredSize(Size proposedSize)
-            {
-                return _element.GetPreferredSize(proposedSize);
-            }
-        }
-
-        /// <summary>
-        ///  VerticalElementProxy swaps Top/Left, Bottom/Right, and other properties
-        ///  so that the same code path used for horizantal flow can be applied to
-        ///  vertical flow.
-        /// </summary>
-        private class VerticalElementProxy : ElementProxy
-        {
-            public override AnchorStyles AnchorStyles
-            {
-                get
-                {
-                    AnchorStyles anchorStyles = LayoutUtils.GetUnifiedAnchor(Element);
-                    bool isStretch = (anchorStyles & LayoutUtils.HorizontalAnchorStyles) == LayoutUtils.HorizontalAnchorStyles; //whether the control stretches to fill in the whole space
-                    bool isLeft = (anchorStyles & AnchorStyles.Left) != 0;  //whether the control anchors to left and does not stretch;
-                    bool isRight = (anchorStyles & AnchorStyles.Right) != 0; //whether the control anchors to right and does not stretch;
-                    if (isStretch)
-                    {
-                        return LayoutUtils.VerticalAnchorStyles;
-                    }
-                    if (isLeft)
-                    {
-                        return AnchorStyles.Top;
-                    }
-                    if (isRight)
-                    {
-                        return AnchorStyles.Bottom;
-                    }
-
-                    return AnchorStyles.None;
-                }
-            }
-
-            public override Rectangle Bounds
-            {
-                set => base.Bounds = LayoutUtils.FlipRectangle(value);
-            }
-
-            public override Padding Margin => LayoutUtils.FlipPadding(base.Margin);
-
-            public override Size MinimumSize => LayoutUtils.FlipSize(base.MinimumSize);
-
-            public override Size SpecifiedSize => LayoutUtils.FlipSize(base.SpecifiedSize);
-
-            public override Size GetPreferredSize(Size proposedSize)
-            {
-                return LayoutUtils.FlipSize(base.GetPreferredSize(LayoutUtils.FlipSize(proposedSize)));
-            }
-        }
-
         [Conditional("DEBUG_VERIFY_ALIGNMENT")]
-        private void Debug_VerifyAlignment(IArrangedElement container, FlowDirection flowDirection)
+        private static void Debug_VerifyAlignment(IArrangedElement container, FlowDirection flowDirection)
         {
 #if DEBUG
             // We cannot apply any of these checks @ design-time since dragging new children into a FlowLayoutPanel
-            // will attempt to set the children at the mouse position when the child was dropped - we rely on the controil
+            // will attempt to set the children at the mouse position when the child was dropped - we rely on the control
             // to reposition the children once added.
-            if (container is Control flp && flp.Site != null && flp.Site.DesignMode)
+            if (container is Control flp && flp.Site is not null && flp.Site.DesignMode)
             {
                 return;
             }

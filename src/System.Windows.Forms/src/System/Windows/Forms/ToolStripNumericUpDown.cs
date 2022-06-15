@@ -4,11 +4,9 @@
 
 #nullable disable
 
-using static Interop;
-
 namespace System.Windows.Forms
 {
-    internal class ToolStripNumericUpDown : ToolStripControlHost
+    internal partial class ToolStripNumericUpDown : ToolStripControlHost
     {
         private ToolStripNumericUpDownControl _numericUpDownControl;
 
@@ -24,48 +22,5 @@ namespace System.Windows.Forms
         }
 
         private static Control CreateControlInstance() => new ToolStripNumericUpDownControl();
-
-        internal class ToolStripNumericUpDownControl : NumericUpDown
-        {
-            public ToolStrip ParentToolStrip { get; private set; }
-
-            public ToolStripNumericUpDown Owner { get; set; }
-
-            internal override bool SupportsUiaProviders => true;
-
-            protected override AccessibleObject CreateAccessibilityInstance() => new ToolStripNumericUpDownAccessibleObject(this, Owner);
-
-            private class ToolStripNumericUpDownAccessibleObject : ToolStripHostedControlAccessibleObject
-            {
-                public ToolStripNumericUpDownAccessibleObject(Control toolStripHostedControl, ToolStripControlHost toolStripControlHost) : base(toolStripHostedControl, toolStripControlHost)
-                {
-                }
-
-                internal override object GetPropertyValue(UiaCore.UIA propertyID)
-                {
-                    if (propertyID == UiaCore.UIA.NamePropertyId)
-                    {
-                        return Name;
-                    }
-
-                    if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                    {
-                        return UiaCore.UIA.SpinnerControlTypeId;
-                    }
-
-                    return base.GetPropertyValue(propertyID);
-                }
-
-                internal override bool IsPatternSupported(UiaCore.UIA patternId)
-                {
-                    if (patternId == UiaCore.UIA.ValuePatternId)
-                    {
-                        return true;
-                    }
-
-                    return base.IsPatternSupported(patternId);
-                }
-            }
-        }
     }
 }

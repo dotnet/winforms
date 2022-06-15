@@ -9,6 +9,11 @@ internal partial class Interop
     internal static partial class Ole32
     {
         [DllImport(Libraries.Ole32, PreserveSig = false, ExactSpelling = true)]
-        public static extern IStorage StgCreateDocfileOnILockBytes(ILockBytes iLockBytes, STGM grfMode, uint reserved);
+        private static extern IStorage StgCreateDocfileOnILockBytes(IntPtr iLockBytes, STGM grfMode, uint reserved);
+
+        public static IStorage StgCreateDocfileOnILockBytes(WinFormsComWrappers.LockBytesWrapper iLockBytes, STGM grfMode)
+        {
+            return StgCreateDocfileOnILockBytes(iLockBytes.Instance, grfMode, 0);
+        }
     }
 }

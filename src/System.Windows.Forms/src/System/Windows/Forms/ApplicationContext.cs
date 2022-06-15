@@ -9,8 +9,8 @@ namespace System.Windows.Forms
 {
     /// <summary>
     ///  ApplicationContext provides contextual information about an application
-    ///  thread. Specifically this allows an application author to redifine what
-    ///  circurmstances cause a message loop to exit. By default the application
+    ///  thread. Specifically this allows an application author to redefine what
+    ///  circumstances cause a message loop to exit. By default the application
     ///  context listens to the close event on the mainForm, then exits the
     ///  thread's message loop.
     /// </summary>
@@ -49,14 +49,14 @@ namespace System.Windows.Forms
             set
             {
                 EventHandler onClose = OnMainFormDestroy;
-                if (_mainForm != null)
+                if (_mainForm is not null)
                 {
                     _mainForm.HandleDestroyed -= onClose;
                 }
 
                 _mainForm = value;
 
-                if (_mainForm != null)
+                if (_mainForm is not null)
                 {
                     _mainForm.HandleDestroyed += onClose;
                 }
@@ -92,7 +92,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (_mainForm != null)
+                if (_mainForm is not null)
                 {
                     if (!_mainForm.IsDisposed)
                     {

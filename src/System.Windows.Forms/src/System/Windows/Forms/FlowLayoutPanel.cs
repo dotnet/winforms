@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms.Layout;
@@ -60,10 +58,7 @@ namespace System.Windows.Forms
         [DisplayName("FlowBreak")]
         public bool GetFlowBreak(Control control)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             return _flowLayoutSettings.GetFlowBreak(control);
         }
@@ -71,10 +66,7 @@ namespace System.Windows.Forms
         [DisplayName("FlowBreak")]
         public void SetFlowBreak(Control control, bool value)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             _flowLayoutSettings.SetFlowBreak(control, value);
         }

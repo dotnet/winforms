@@ -17,38 +17,32 @@ namespace System.Windows.Forms.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            if (!provider.TryGetService(out IWindowsFormsEditorService _))
             {
-                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
-                {
-                    if (_openFileDialog is null)
-                    {
-                        _openFileDialog = new OpenFileDialog();
-                        InitializeDialog(_openFileDialog);
-                    }
+                return value;
+            }
 
-                    if (value is string stringValue)
-                    {
-                        _openFileDialog.FileName = stringValue;
-                    }
+            if (_openFileDialog is null)
+            {
+                _openFileDialog = new OpenFileDialog();
+                InitializeDialog(_openFileDialog);
+            }
 
-                    if (_openFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        return _openFileDialog.FileName;
-                    }
-                }
+            if (value is string stringValue)
+            {
+                _openFileDialog.FileName = stringValue;
+            }
+
+            if (_openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                return _openFileDialog.FileName;
             }
 
             return value;
         }
 
-        /// <summary>
-        ///  Gets the editing style of the Edit method.
-        /// </summary>
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
-        {
-            return UITypeEditorEditStyle.Modal;
-        }
+        /// <inheritdoc />
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.Modal;
 
         /// <summary>
         ///  Initializes the open file dialog when it is created. This gives you an opportunity to
@@ -57,10 +51,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected virtual void InitializeDialog(OpenFileDialog openFileDialog)
         {
-            if (openFileDialog is null)
-            {
-                throw new ArgumentNullException(nameof(openFileDialog));
-            }
+            ArgumentNullException.ThrowIfNull(openFileDialog);
 
             openFileDialog.Filter = SR.GenericFileFilter;
             openFileDialog.Title = SR.GenericOpenFile;

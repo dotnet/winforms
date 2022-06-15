@@ -2,11 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using System.Windows.Forms.Layout;
 
@@ -19,7 +17,8 @@ namespace System.Windows.Forms
     [Serializable]  // This class participates in resx serialization.
     public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     {
-        private static readonly int[] borderStyleToOffset = {
+        private static readonly int[] borderStyleToOffset =
+        {
             /*None = */ 0,
             /*Single = */ 1,
             /*Inset = */ 2,
@@ -29,7 +28,7 @@ namespace System.Windows.Forms
             /*OutsetPartial = */ 3
         };
         private TableLayoutPanelCellBorderStyle _borderStyle;
-        private TableLayoutSettingsStub _stub;
+        private TableLayoutSettingsStub? _stub;
 
         // used by TableLayoutSettingsTypeConverter
         internal TableLayoutSettings() : base(null)
@@ -42,7 +41,7 @@ namespace System.Windows.Forms
         private TableLayoutSettings(SerializationInfo serializationInfo, StreamingContext context) : this()
         {
             TypeConverter converter = TypeDescriptor.GetConverter(this);
-            string stringVal = serializationInfo.GetString("SerializedString");
+            string? stringVal = serializationInfo.GetString("SerializedString");
 
             if (!string.IsNullOrEmpty(stringVal))
             {
@@ -73,10 +72,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x6
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelCellBorderStyle.None, (int)TableLayoutPanelCellBorderStyle.OutsetPartial))
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(CellBorderStyle), value));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 _borderStyle = value;
                 //set the CellBorderWidth according to the current CellBorderStyle.
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
@@ -206,10 +202,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelGrowStyle.FixedSize, (int)TableLayoutPanelGrowStyle.AddColumns))
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(GrowStyle), value));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                 if (containerInfo.GrowStyle != value)
@@ -220,14 +213,16 @@ namespace System.Windows.Forms
             }
         }
 
+        [MemberNotNullWhen(true, nameof(_stub))]
         internal bool IsStub
         {
             get
             {
-                if (_stub != null)
+                if (_stub is not null)
                 {
                     return true;
                 }
+
                 return false;
             }
         }
@@ -253,10 +248,7 @@ namespace System.Windows.Forms
 
         public int GetColumnSpan(object control)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             if (IsStub)
             {
@@ -271,10 +263,8 @@ namespace System.Windows.Forms
 
         public void SetColumnSpan(object control, int value)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
+
             if (value < 1)
             {
                 throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(value), value));
@@ -287,10 +277,11 @@ namespace System.Windows.Forms
             else
             {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                if (element.Container != null)
+                if (element.Container is not null)
                 {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
                 }
+
                 TableLayout.GetLayoutInfo(element).ColumnSpan = value;
                 LayoutTransaction.DoLayout(element.Container, element, PropertyNames.ColumnSpan);
                 Debug.Assert(GetColumnSpan(element) == value, "column span should equal to the value we set");
@@ -299,10 +290,7 @@ namespace System.Windows.Forms
 
         public int GetRowSpan(object control)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             if (IsStub)
             {
@@ -317,10 +305,8 @@ namespace System.Windows.Forms
 
         public void SetRowSpan(object control, int value)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
+
             if (value < 1)
             {
                 throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(value), value));
@@ -333,10 +319,11 @@ namespace System.Windows.Forms
             else
             {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                if (element.Container != null)
+                if (element.Container is not null)
                 {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
                 }
+
                 TableLayout.GetLayoutInfo(element).RowSpan = value;
                 LayoutTransaction.DoLayout(element.Container, element, PropertyNames.RowSpan);
                 Debug.Assert(GetRowSpan(element) == value, "row span should equal to the value we set");
@@ -351,10 +338,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public int GetRow(object control)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             if (IsStub)
             {
@@ -375,10 +359,8 @@ namespace System.Windows.Forms
         /// </summary>
         public void SetRow(object control, int row)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
+
             if (row < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(row), row, string.Format(SR.InvalidArgument, nameof(row), row));
@@ -395,10 +377,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public TableLayoutPanelCellPosition GetCellPosition(object control)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             return new TableLayoutPanelCellPosition(GetColumn(control), GetRow(control));
         }
@@ -411,10 +390,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public void SetCellPosition(object control, TableLayoutPanelCellPosition cellPosition)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             SetCellPosition(control, cellPosition.Row, cellPosition.Column, rowSpecified: true, colSpecified: true);
         }
@@ -427,10 +403,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public int GetColumn(object control)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             if (IsStub)
             {
@@ -451,10 +424,8 @@ namespace System.Windows.Forms
         /// </summary>
         public void SetColumn(object control, int column)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
+
             if (column < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(column), column, string.Format(SR.InvalidArgument, nameof(column), column));
@@ -478,6 +449,7 @@ namespace System.Windows.Forms
                 {
                     _stub.SetColumn(control, column);
                 }
+
                 if (rowSpecified)
                 {
                     _stub.SetRow(control, row);
@@ -486,19 +458,22 @@ namespace System.Windows.Forms
             else
             {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                if (element.Container != null)
+                if (element.Container is not null)
                 {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
                 }
+
                 TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
                 if (colSpecified)
                 {
                     layoutInfo.ColumnPosition = column;
                 }
+
                 if (rowSpecified)
                 {
                     layoutInfo.RowPosition = row;
                 }
+
                 LayoutTransaction.DoLayout(element.Container, element, PropertyNames.TableIndex);
                 Debug.Assert(!colSpecified || GetColumn(element) == column, "column position shoule equal to what we set");
                 Debug.Assert(!rowSpecified || GetRow(element) == row, "row position shoule equal to what we set");
@@ -508,12 +483,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Get the element which covers the specified row and column. return null if we can't find one
         /// </summary>
-        internal IArrangedElement GetControlFromPosition(int column, int row)
+        internal IArrangedElement? GetControlFromPosition(int column, int row)
         {
             return TableLayout.GetControlFromPosition(Owner, column, row);
         }
 
-        internal TableLayoutPanelCellPosition GetPositionFromControl(IArrangedElement element)
+        internal TableLayoutPanelCellPosition GetPositionFromControl(IArrangedElement? element)
         {
             return TableLayout.GetPositionFromControl(Owner, element);
         }
@@ -523,7 +498,7 @@ namespace System.Windows.Forms
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
         {
             TypeConverter converter = TypeDescriptor.GetConverter(this);
-            string stringVal = converter.ConvertToInvariantString(this);
+            string? stringVal = converter.ConvertToInvariantString(this);
 
             if (!string.IsNullOrEmpty(stringVal))
             {
@@ -539,7 +514,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                List<ControlInformation> controlsInfo = new List<ControlInformation>(Owner.Children.Count);
+                List<ControlInformation> controlsInfo = new List<ControlInformation>(Owner!.Children.Count);
 
                 foreach (IArrangedElement element in Owner.Children)
                 {
@@ -549,8 +524,8 @@ namespace System.Windows.Forms
 
                         // We need to go through the PropertyDescriptor for the Name property
                         // since it is shadowed.
-                        PropertyDescriptor prop = TypeDescriptor.GetProperties(c)["Name"];
-                        if (prop != null && prop.PropertyType == typeof(string))
+                        PropertyDescriptor? prop = TypeDescriptor.GetProperties(c)["Name"];
+                        if (prop is not null && prop.PropertyType == typeof(string))
                         {
                             controlInfo.Name = prop.GetValue(c);
                         }
@@ -562,6 +537,7 @@ namespace System.Windows.Forms
                         controlsInfo.Add(controlInfo);
                     }
                 }
+
                 return controlsInfo;
             }
         }

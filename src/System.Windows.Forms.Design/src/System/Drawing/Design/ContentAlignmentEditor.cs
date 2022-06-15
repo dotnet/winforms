@@ -8,44 +8,33 @@ using System.Windows.Forms.Design;
 namespace System.Drawing.Design
 {
     /// <summary>
-    /// Provides a <see cref='System.Drawing.Design.UITypeEditor'/> for visually editing content alignment.
+    ///  Provides a <see cref="UITypeEditor"/> for visually editing content alignment.
     /// </summary>
     public partial class ContentAlignmentEditor : UITypeEditor
     {
         private ContentUI _contentUI;
 
         /// <summary>
-        /// Edits the given object value using the editor style provided by GetEditStyle.
+        ///  Edits the given object value using the editor style provided by GetEditStyle.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider is null)
+            if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
             {
                 return value;
             }
 
-            IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-            if (edSvc is null)
-            {
-                return value;
-            }
+            _contentUI ??= new ContentUI();
 
-            if (_contentUI is null)
-            {
-                _contentUI = new ContentUI();
-            }
-
-            _contentUI.Start(edSvc, value);
-            edSvc.DropDownControl(_contentUI);
+            _contentUI.Start(editorService, value);
+            editorService.DropDownControl(_contentUI);
             value = _contentUI.Value;
             _contentUI.End();
 
             return value;
         }
 
-        /// <summary>
-        /// Gets the editing style of the Edit method.
-        /// </summary>
+        /// <inheritdoc />
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
             => UITypeEditorEditStyle.DropDown;
     }

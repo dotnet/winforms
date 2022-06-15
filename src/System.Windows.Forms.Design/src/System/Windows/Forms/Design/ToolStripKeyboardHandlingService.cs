@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Design
         private object _ownerItemAfterCut; // This value is set only of the ToolStripMenuItem is cut and now we need to reopen the dropDown which was closed in the previous CUT operation.
 
         /// <summary>
-        ///  This creates a service for handling the keyboard navigation at desgin time.
+        ///  This creates a service for handling the keyboard navigation at design time.
         /// </summary>
         public ToolStripKeyboardHandlingService(IServiceProvider serviceProvider)
         {
@@ -63,6 +63,7 @@ namespace System.Windows.Forms.Design
             {
                 _designerHost.AddService(typeof(ToolStripKeyboardHandlingService), this);
             }
+
             _componentChangeSvc = (IComponentChangeService)_designerHost.GetService(typeof(IComponentChangeService));
             Debug.Assert(_componentChangeSvc != null, "ToolStripKeyboardHandlingService relies on the componentChange service, which is unavailable.");
             if (_componentChangeSvc != null)
@@ -89,7 +90,7 @@ namespace System.Windows.Forms.Design
             set => _contextMenuShownByKeyBoard = value;
         }
 
-        // When Copy (Through Control + Drag) this boolean is set to true.  Problem is that during copy the DesignerUtils creates new components and as a result the ToolStripMenuItemDesigner and ToolStripDesigners get the "ComponentAdding/ComponentAdded" events where they try to parent the components.  We dont need to "parent" in case of control + drag.
+        // When Copy (Through Control + Drag) this boolean is set to true.  Problem is that during copy the DesignerUtils creates new components and as a result the ToolStripMenuItemDesigner and ToolStripDesigners get the "ComponentAdding/ComponentAdded" events where they try to parent the components.  We don't need to "parent" in case of control + drag.
         internal bool CopyInProgress
         {
             get => _copyInProgress;
@@ -116,7 +117,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Retrieves the selection service, which tthis service uses while selecting the toolStrip Item.
+        ///  Retrieves the selection service, which this service uses while selecting the toolStrip Item.
         /// </summary>
         private IDesignerHost Host
         {
@@ -137,11 +138,12 @@ namespace System.Windows.Forms.Design
                         _menuCommandService = (IMenuCommandService)_provider.GetService(typeof(IMenuCommandService));
                     }
                 }
+
                 return _menuCommandService;
             }
         }
 
-        // When the TemplateNode gets selected ... we dont set in the SelectionService.SelectedComponents since we want to blank out the propertygrid ... so we keep the selected cache here.
+        // When the TemplateNode gets selected ... we don't set in the SelectionService.SelectedComponents since we want to blank out the propertygrid ... so we keep the selected cache here.
         internal object SelectedDesignerControl
         {
             get => _currentSelection;
@@ -153,6 +155,7 @@ namespace System.Windows.Forms.Design
                     {
                         prevDesignerNode.RefreshSelectionGlyph();
                     }
+
                     _currentSelection = value;
                     if (_currentSelection != null)
                     {
@@ -162,12 +165,13 @@ namespace System.Windows.Forms.Design
                             if (curDesignerNode.AccessibilityObject is ToolStripItem.ToolStripItemAccessibleObject acc)
                             {
                                 acc.AddState(AccessibleStates.Selected | AccessibleStates.Focused);
-                                ToolStrip owner = curDesignerNode.GetCurrentParent() as ToolStrip;
+                                ToolStrip owner = curDesignerNode.GetCurrentParent();
                                 int focusIndex = 0;
                                 if (owner != null)
                                 {
                                     focusIndex = owner.Items.IndexOf(curDesignerNode);
                                 }
+
                                 User32.NotifyWinEvent((uint)AccessibleEvents.SelectionAdd, new HandleRef(owner, owner.Handle), User32.OBJID.CLIENT, focusIndex + 1);
                                 User32.NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(owner, owner.Handle), User32.OBJID.CLIENT, focusIndex + 1);
                             }
@@ -191,14 +195,14 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Retrieves the selection service, which tthis service uses while selecting the toolStrip Item.
+        ///  Retrieves the selection service, which this service uses while selecting the toolStrip Item.
         /// </summary>
         private ISelectionService SelectionService
         {
             get => _selectionService;
         }
 
-        // When the ToolStripTemplateNode becomes active, the ToolStripKeyBoardHandlingService shouldnt process any MenuCommands...
+        // When the ToolStripTemplateNode becomes active, the ToolStripKeyBoardHandlingService shouldn't process any MenuCommands...
         internal bool TemplateNodeActive
         {
             get => _templateNodeActive;
@@ -246,6 +250,7 @@ namespace System.Windows.Forms.Design
                 {
                     PopulateOldCommands();
                 }
+
                 //Remove the Old Commands
                 foreach (MenuCommand oldCommand in _oldCommands)
                 {
@@ -254,11 +259,13 @@ namespace System.Windows.Forms.Design
                         mcs.RemoveCommand(oldCommand);
                     }
                 }
+
                 // DemandCreate the new Commands.
                 if (_newCommands is null)
                 {
                     PopulateNewCommands();
                 }
+
                 // Add our Commands
                 foreach (MenuCommand newCommand in _newCommands)
                 {
@@ -267,12 +274,13 @@ namespace System.Windows.Forms.Design
                         mcs.AddCommand(newCommand);
                     }
                 }
+
                 _commandsAdded = true;
             }
         }
 
         // private function to get Next toolStripItem based on direction.
-        private ToolStripItem GetNextItem(ToolStrip parent, ToolStripItem startItem, ArrowDirection direction)
+        private static ToolStripItem GetNextItem(ToolStrip parent, ToolStripItem startItem, ArrowDirection direction)
         {
             if (parent.RightToLeft == RightToLeft.Yes && (direction == ArrowDirection.Left || direction == ArrowDirection.Right))
             {
@@ -285,13 +293,14 @@ namespace System.Windows.Forms.Design
                     direction = ArrowDirection.Right;
                 }
             }
+
             return parent.GetNextItem(startItem, direction);
         }
 
         /// <summary>
         ///  This is the private helper function which gets the next control in the TabOrder..
         /// </summary>
-        private Control GetNextControlInTab(Control basectl, Control ctl, bool forward)
+        private static Control GetNextControlInTab(Control basectl, Control ctl, bool forward)
         {
             if (forward)
             {
@@ -303,7 +312,7 @@ namespace System.Windows.Forms.Design
                     Control p = ctl.Parent;
                     // Cycle through the controls in z-order looking for the one with the next highest tab index.  Because there can be dups, we have to start with the existing tab index and remember to exclude the current control.
                     int parentControlCount = 0;
-                    Control.ControlCollection parentControls = (Control.ControlCollection)p.Controls;
+                    Control.ControlCollection parentControls = p.Controls;
                     if (parentControls != null)
                     {
                         parentControlCount = parentControls.Count;
@@ -311,7 +320,7 @@ namespace System.Windows.Forms.Design
 
                     for (int c = 0; c < parentControlCount; c++)
                     {
-                        // The logic for this is a bit lengthy, so I have broken it into separate caluses: We are not interested in ourself.
+                        // The logic for this is a bit lengthy, so I have broken it into separate clauses: We are not interested in ourself.
                         if (parentControls[c] != ctl)
                         {
                             // We are interested in controls with >= tab indexes to ctl.  We must include those controls with equal indexes to account for duplicate indexes.
@@ -353,7 +362,7 @@ namespace System.Windows.Forms.Design
                     Control p = ctl.Parent;
                     // Cycle through the controls in reverse z-order looking for the next lowest tab index.  We must start with the same tab index as ctl, because there can be dups.
                     int parentControlCount = 0;
-                    Control.ControlCollection parentControls = (Control.ControlCollection)p.Controls;
+                    Control.ControlCollection parentControls = p.Controls;
                     if (parentControls != null)
                     {
                         parentControlCount = parentControls.Count;
@@ -361,7 +370,7 @@ namespace System.Windows.Forms.Design
 
                     for (int c = parentControlCount - 1; c >= 0; c--)
                     {
-                        // The logic for this is a bit lengthy, so I have broken it into separate caluses: We are not interested in ourself.
+                        // The logic for this is a bit lengthy, so I have broken it into separate clauses: We are not interested in ourself.
                         if (parentControls[c] != ctl)
                         {
                             // We are interested in controls with <= tab indexes to ctl.  We must include those controls with equal indexes to account for duplicate indexes.
@@ -403,6 +412,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return ctl == basectl ? null : ctl;
         }
 
@@ -432,6 +442,7 @@ namespace System.Windows.Forms.Design
                     break;
                 }
             }
+
             if (!toolStripPresent)
             {
                 ToolStripKeyboardHandlingService keyboardHandlingService = (ToolStripKeyboardHandlingService)_provider.GetService(typeof(ToolStripKeyboardHandlingService));
@@ -452,7 +463,8 @@ namespace System.Windows.Forms.Design
             {
                 return true;
             }
-            // commandsAdded means that either toolstrip, toolSripItem or templatenode is selected.
+
+            // commandsAdded means that either toolstrip, toolStripItem or templatenode is selected.
             if (_commandsAdded && x == -1 && y == -1)
             {
                 ContextMenuShownByKeyBoard = true;
@@ -477,6 +489,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return false;
         }
 
@@ -531,6 +544,7 @@ namespace System.Windows.Forms.Design
                         {
                             mcs.RemoveCommand(_oldCommandPaste);
                         }
+
                         _newCommandPaste = new MenuCommand(new EventHandler(OnCommandPaste), StandardCommands.Paste);
                         if (_newCommandPaste != null && mcs.FindCommand(_newCommandPaste.CommandID) is null)
                         {
@@ -565,11 +579,12 @@ namespace System.Windows.Forms.Design
         private void OnCommandPaste(object sender, EventArgs e)
         {
             //IF TemplateNode is Active DO NOT Support Paste. This is what MainMenu did
-            // We used to incorrectly paste the item to the parent's collection; so inorder to make a simple fix I am being consistent with MainMenu
+            // We used to incorrectly paste the item to the parent's collection; so in order to make a simple fix I am being consistent with MainMenu
             if (TemplateNodeActive)
             {
                 return;
             }
+
             ISelectionService selSvc = SelectionService;
             IDesignerHost host = Host;
             if (selSvc != null && host != null)
@@ -578,13 +593,15 @@ namespace System.Windows.Forms.Design
                 {
                     comp = (IComponent)SelectedDesignerControl;
                 }
+
                 ToolStripItem item = comp as ToolStripItem;
                 ToolStrip parent = null;
                 //Case 1: If SelectedObj is ToolStripItem select all items in its immediate parent.
                 if (item != null)
                 {
-                    parent = item.GetCurrentParent() as ToolStrip;
+                    parent = item.GetCurrentParent();
                 }
+
                 if (parent != null)
                 {
                     parent.SuspendLayout();
@@ -599,17 +616,17 @@ namespace System.Windows.Forms.Design
                 if (parent != null)
                 {
                     parent.ResumeLayout();
-                    // Since the Glyphs dont get correct bounds as the ToolStrip Layout is suspended .. force Glyph Updates.
+                    // Since the Glyphs don't get correct bounds as the ToolStrip Layout is suspended .. force Glyph Updates.
                     BehaviorService behaviorService = (BehaviorService)_provider.GetService(typeof(BehaviorService));
                     if (behaviorService != null)
                     {
                         behaviorService.SyncSelection();
                     }
 
-                    // For ContextMenuStrip; since its not a control .. we dont get called on GetGlyphs directly through the BehaviorService So we need this internal call to push the glyphs on the SelectionManager
+                    // For ContextMenuStrip; since its not a control .. we don't get called on GetGlyphs directly through the BehaviorService So we need this internal call to push the glyphs on the SelectionManager
                     if (host.GetDesigner(item) is ToolStripItemDesigner designer)
                     {
-                        ToolStripDropDown dropDown = designer.GetFirstDropDown(item);
+                        ToolStripDropDown dropDown = ToolStripItemDesigner.GetFirstDropDown(item);
                         if (dropDown != null && !dropDown.IsAutoGenerated)
                         {
                             if (host.GetDesigner(dropDown) is ToolStripDropDownDesigner dropDownDesigner)
@@ -657,6 +674,7 @@ namespace System.Windows.Forms.Design
                 {
                     item = SelectedDesignerControl as ToolStripItem;
                 }
+
                 // Process Keys only if we are a ToolStripItem and the TemplateNode is not in Insitu Mode.
                 if (item != null)
                 {
@@ -679,6 +697,7 @@ namespace System.Windows.Forms.Design
                             {
                                 totalObjects[j++] = parent.Items[i];
                             }
+
                             selSvc.SetSelectedComponents(totalObjects, SelectionTypes.Replace);
                         }
                         else
@@ -700,6 +719,7 @@ namespace System.Windows.Forms.Design
                 {
                     item = SelectedDesignerControl as ToolStripItem;
                 }
+
                 // Process Keys only if we are a ToolStripItem and the TemplateNode is not in Insitu Mode.
                 if (item != null)
                 {
@@ -722,6 +742,7 @@ namespace System.Windows.Forms.Design
                             {
                                 totalObjects[j++] = parent.Items[i];
                             }
+
                             selSvc.SetSelectedComponents(totalObjects, SelectionTypes.Replace);
                         }
                         else
@@ -744,19 +765,22 @@ namespace System.Windows.Forms.Design
                 if (selectedObj is ToolStripItem)
                 {
                     ToolStripItem selectedItem = selectedObj as ToolStripItem;
-                    ToolStrip parent = selectedItem.GetCurrentParent() as ToolStrip;
+                    ToolStrip parent = selectedItem.GetCurrentParent();
                     if (parent is ToolStripOverflow)
                     {
                         parent = selectedItem.Owner;
                     }
+
                     SelectItems(parent);
                     BehaviorService behaviorService = (BehaviorService)_provider.GetService(typeof(BehaviorService));
                     if (behaviorService != null)
                     {
                         behaviorService.Invalidate();
                     }
+
                     return;
                 }
+
                 // Case 2: if SelectedObj is ToolStrip ... then select all the item contained in it.
                 if (selectedObj is ToolStrip)
                 {
@@ -764,11 +788,12 @@ namespace System.Windows.Forms.Design
                     SelectItems(parent);
                     return;
                 }
+
                 //Case 3: if selectedOj is ToolStripPanel ... select the ToolStrips within the ToolStripPanel...
                 if (selectedObj is ToolStripPanel)
                 {
                     ToolStripPanel parentToolStripPanel = selectedObj as ToolStripPanel;
-                    selSvc.SetSelectedComponents((ICollection)parentToolStripPanel.Controls, SelectionTypes.Replace);
+                    selSvc.SetSelectedComponents(parentToolStripPanel.Controls, SelectionTypes.Replace);
                     return;
                 }
             }
@@ -796,6 +821,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             // INVOKE THE OldCommand
             InvokeOldCommand(sender);
             // END
@@ -913,6 +939,7 @@ namespace System.Windows.Forms.Design
                                     }
                                 }
                             }
+
                             if (comp is DesignerToolStripControlHost)
                             {
                                 DesignerToolStripControlHost typeHereNode = comp as DesignerToolStripControlHost;
@@ -968,6 +995,7 @@ namespace System.Windows.Forms.Design
                     {
                         ProcessUpDown(true);
                     }
+
                     return;
                 }
 
@@ -987,6 +1015,7 @@ namespace System.Windows.Forms.Design
                             return;
                         }
                     }
+
                     if (cmd.CommandID.Equals(MenuCommands.KeyMoveLeft) || cmd.CommandID.Equals(MenuCommands.KeyNudgeLeft) || cmd.CommandID.Equals(MenuCommands.KeySizeWidthDecrease))
                     {
                         if (!ProcessRightLeft(false))
@@ -995,11 +1024,13 @@ namespace System.Windows.Forms.Design
                             return;
                         }
                     }
+
                     if (cmd.CommandID.Equals(MenuCommands.KeyMoveDown) || cmd.CommandID.Equals(MenuCommands.KeyNudgeDown) || cmd.CommandID.Equals(MenuCommands.KeySizeHeightIncrease))
                     {
                         ProcessUpDown(true);
                         return;
                     }
+
                     if (cmd.CommandID.Equals(MenuCommands.KeyMoveUp) || cmd.CommandID.Equals(MenuCommands.KeyNudgeUp) || cmd.CommandID.Equals(MenuCommands.KeySizeHeightDecrease))
                     {
                         ProcessUpDown(false);
@@ -1026,6 +1057,7 @@ namespace System.Windows.Forms.Design
                 {
                     item = SelectedDesignerControl as ToolStripItem;
                 }
+
                 // Process Keys only if we are a ToolStripItem and the TemplateNode is not in Insitu Mode.
                 if (item != null)
                 {
@@ -1097,6 +1129,7 @@ namespace System.Windows.Forms.Design
             {
                 primarySelection = SelectedDesignerControl as ToolStripItem;
             }
+
             ToolStrip tool = primarySelection as ToolStrip;
             if (tool != null)
             {
@@ -1119,6 +1152,7 @@ namespace System.Windows.Forms.Design
                         designerUI.HideDesignerActionPanel();
                     }
                 }
+
                 AddCommands();
             }
         }
@@ -1133,6 +1167,7 @@ namespace System.Windows.Forms.Design
                 {
                     item = SelectedDesignerControl as ToolStripItem;
                 }
+
                 // Process Keys only if we are a ToolStripItem and the TemplateNode is not in Insitu Mode.
                 if (item != null)
                 {
@@ -1141,6 +1176,7 @@ namespace System.Windows.Forms.Design
                         RotateTab(reverse);
                         return;
                     }
+
                     return;
                 }
                 else if (item is null && selSvc.PrimarySelection is ToolStrip)
@@ -1170,6 +1206,7 @@ namespace System.Windows.Forms.Design
             {
                 currentSelection = ShiftPrimaryItem;
             }
+
             if (currentSelection is null)
             {
                 currentSelection = SelectedDesignerControl;
@@ -1183,10 +1220,12 @@ namespace System.Windows.Forms.Design
                 {
                     toolStripItem = ShiftPrimaryItem as ToolStripItem;
                 }
+
                 if (toolStripItem is null)
                 {
                     toolStripItem = SelectedDesignerControl as ToolStripItem;
                 }
+
                 if (toolStripItem is DesignerToolStripControlHost && toolStripItem.GetCurrentParent() is ToolStripDropDown parent)
                 {
                     if (parent != null)
@@ -1207,6 +1246,7 @@ namespace System.Windows.Forms.Design
                             }
                         }
                     }
+
                     if (targetSelection != null)
                     {
                         SetSelection(targetSelection);
@@ -1220,10 +1260,12 @@ namespace System.Windows.Forms.Design
                     {
                         item = ShiftPrimaryItem as ToolStripDropDownItem;
                     }
+
                     if (item is null)
                     {
                         item = SelectedDesignerControl as ToolStripDropDownItem;
                     }
+
                     if (item != null && item.IsOnDropDown)
                     {
                         bool menusCascadeRight = SystemInformation.RightAlignedMenus;
@@ -1243,10 +1285,12 @@ namespace System.Windows.Forms.Design
                                             designer.InitializeDropDown();
                                         }
                                     }
+
                                     return true;
                                 }
                             }
                         }
+
                         if (!right && !menusCascadeRight)
                         {
                             ToolStripItem owner = ((ToolStripDropDown)item.Owner).OwnerItem;
@@ -1259,6 +1303,7 @@ namespace System.Windows.Forms.Design
                             {
                                 targetSelection = owner;
                             }
+
                             if (targetSelection != null)
                             {
                                 SetSelection(targetSelection);
@@ -1268,6 +1313,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return false;
         }
 
@@ -1300,6 +1346,7 @@ namespace System.Windows.Forms.Design
                     targetSelection = GetNextItem(contextMenu, null, ArrowDirection.Down);
                     SetSelection(targetSelection);
                 }
+
                 return;
             }
 
@@ -1307,6 +1354,7 @@ namespace System.Windows.Forms.Design
             {
                 currentSelection = SelectedDesignerControl;
             }
+
             ctl = currentSelection as Control;
 
             if (targetSelection is null && ctl is null)
@@ -1316,10 +1364,12 @@ namespace System.Windows.Forms.Design
                 {
                     item = ShiftPrimaryItem as ToolStripItem;
                 }
+
                 if (item is null)
                 {
                     item = SelectedDesignerControl as ToolStripItem;
                 }
+
                 ToolStripDropDown parentToMoveOn = null;
                 if (item != null)
                 {
@@ -1359,6 +1409,7 @@ namespace System.Windows.Forms.Design
                             parentToMoveOn = ((dropDownItem.Placement == ToolStripItemPlacement.Overflow) ? dropDownItem.Owner.OverflowButton.DropDown : dropDownItem.Owner) as ToolStripDropDown;
                             item = dropDownItem;
                         }
+
                         if (dropDownItem is null)
                         {
                             parentToMoveOn = item.GetCurrentParent() as ToolStripDropDown;
@@ -1393,7 +1444,7 @@ namespace System.Windows.Forms.Design
                         }
                         else
                         {
-                            // We dont want to WRAP around for items on toolStrip Overflow, if the currentSelection is the  topMost item on the Overflow, but select the one on the PARENT toolStrip.
+                            // We don't want to WRAP around for items on toolStrip Overflow, if the currentSelection is the  topMost item on the Overflow, but select the one on the PARENT toolStrip.
                             if (parentToMoveOn is ToolStripOverflow)
                             {
                                 ToolStripItem firstItem = GetNextItem(parentToMoveOn, null, ArrowDirection.Down);
@@ -1401,7 +1452,7 @@ namespace System.Windows.Forms.Design
                                 {
                                     if (item.Owner is ToolStrip owner)
                                     {
-                                        targetSelection = GetNextItem(owner, ((ToolStripDropDown)parentToMoveOn).OwnerItem, ArrowDirection.Left);
+                                        targetSelection = GetNextItem(owner, parentToMoveOn.OwnerItem, ArrowDirection.Left);
                                     }
                                 }
                                 else
@@ -1435,6 +1486,7 @@ namespace System.Windows.Forms.Design
                                 SelectionService.SetSelectedComponents(new object[] { ShiftPrimaryItem, targetSelection }, SelectionTypes.Remove);
                             }
                         }
+
                         if (targetSelection != null && targetSelection != item)
                         {
                             SetSelection(targetSelection);
@@ -1451,6 +1503,7 @@ namespace System.Windows.Forms.Design
             {
                 _oldCommands = new ArrayList();
             }
+
             IMenuCommandService mcs = MenuService;
             if (mcs != null)
             {
@@ -1480,11 +1533,11 @@ namespace System.Windows.Forms.Design
                 _oldCommands.Add(mcs.FindCommand(MenuCommands.KeyInvokeSmartTag));
 
                 _oldCommands.Add(mcs.FindCommand(StandardCommands.Cut));
-                _oldCommands.Add(mcs.FindCommand(MenuCommands.Delete));
+                _oldCommands.Add(mcs.FindCommand(StandardCommands.Delete));
             }
         }
 
-        // pupulates a list of our custom commands to be added to menu command service.
+        // populates a list of our custom commands to be added to menu command service.
         private void PopulateNewCommands()
         {
             if (_newCommands is null)
@@ -1526,7 +1579,7 @@ namespace System.Windows.Forms.Design
             _newCommands.Add(new MenuCommand(new EventHandler(OnKeyShowDesignerActions), MenuCommands.KeyInvokeSmartTag));
 
             _newCommands.Add(new MenuCommand(new EventHandler(OnCommandCopy), StandardCommands.Cut));
-            _newCommands.Add(new MenuCommand(new EventHandler(OnCommandDelete), MenuCommands.Delete));
+            _newCommands.Add(new MenuCommand(new EventHandler(OnCommandDelete), StandardCommands.Delete));
         }
 
         // restores the old commands back into the menu command service.
@@ -1543,6 +1596,7 @@ namespace System.Windows.Forms.Design
                         mcs.RemoveCommand(newCommand);
                     }
                 }
+
                 // Add old Commands
                 if (_oldCommands != null)
                 {
@@ -1566,6 +1620,7 @@ namespace System.Windows.Forms.Design
                     mcs.AddCommand(_oldCommandPaste);
                     _oldCommandPaste = null;
                 }
+
                 _commandsAdded = false;
             }
         }
@@ -1598,11 +1653,13 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             if (_newCommandPaste != null)
             {
                 mcs.RemoveCommand(_newCommandPaste);
                 _newCommandPaste = null;
             }
+
             if (_oldCommandPaste != null)
             {
                 _oldCommandPaste = null;
@@ -1613,6 +1670,7 @@ namespace System.Windows.Forms.Design
                 _newCommands.Clear();
                 _newCommands = null;
             }
+
             if (_oldCommands != null)
             {
                 _oldCommands.Clear();
@@ -1659,6 +1717,7 @@ namespace System.Windows.Forms.Design
             {
                 component = SelectedDesignerControl as Control;
             }
+
             if (component != null)
             {
                 current = component;
@@ -1670,6 +1729,7 @@ namespace System.Windows.Forms.Design
                 {
                     toolStripItem = SelectedDesignerControl as ToolStripItem;
                 }
+
                 if (toolStripItem is null)
                 {
                     current = (Control)host.RootComponent;
@@ -1717,6 +1777,7 @@ namespace System.Windows.Forms.Design
                         {
                             owner.OverflowButton.HideDropDown();
                         }
+
                         next = toolStripItem.Owner;
                     }
                     else
@@ -1763,6 +1824,7 @@ namespace System.Windows.Forms.Design
             {
                 currentSelection = ShiftPrimaryItem;
             }
+
             if (currentSelection is null)
             {
                 currentSelection = SelectedDesignerControl;
@@ -1784,7 +1846,7 @@ namespace System.Windows.Forms.Design
                                     if (targetSelection != null)
                                     {
                                         ControlDesigner controlDesigner = host.GetDesigner((IComponent)targetSelection) as ControlDesigner;
-                                        // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again through compoenent tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
+                                        // In Whidbey controls like ToolStrips have componentTray presence, So don't select them again through component tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
                                         while (controlDesigner != null)
                                         {
                                             // if the targetSelection from the Tray is a control .. try the next one.
@@ -1800,6 +1862,7 @@ namespace System.Windows.Forms.Design
                                         }
                                     }
                                 }
+
                                 if (targetSelection is null)
                                 {
                                     targetSelection = baseCtl;
@@ -1809,6 +1872,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             ctl = currentSelection as Control;
             //Added New Code for ToolStrip Tabbing..
             if (targetSelection is null && ctl is ToolStrip wb)
@@ -1826,6 +1890,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             // ctl is NOT A CONTROL ... so its Component. Try this for ToolStripItem.
             if (targetSelection is null && ctl is null)
             {
@@ -1834,10 +1899,12 @@ namespace System.Windows.Forms.Design
                 {
                     item = ShiftPrimaryItem as ToolStripItem;
                 }
+
                 if (item is null)
                 {
                     item = SelectedDesignerControl as ToolStripItem;
                 }
+
                 if (item != null && item.IsOnDropDown && item.Placement != ToolStripItemPlacement.Overflow)
                 {
                     // You come here only for DesignerToolStripControlHost on the DropDown ...
@@ -1846,7 +1913,7 @@ namespace System.Windows.Forms.Design
                     {
                         ToolStripItem parentItem = ((ToolStripDropDown)designerItem.Owner).OwnerItem;
                         ToolStripMenuItemDesigner designer = host.GetDesigner(parentItem) as ToolStripMenuItemDesigner;
-                        ToolStripDropDown dropDown = designer.GetFirstDropDown((ToolStripDropDownItem)parentItem);
+                        ToolStripDropDown dropDown = ToolStripItemDesigner.GetFirstDropDown((ToolStripDropDownItem)parentItem);
                         if (dropDown != null)  //the DesignerItem is on DropDown....
                         {
                             item = dropDown.OwnerItem;
@@ -1857,6 +1924,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
+
                 if (item != null && !(item is DesignerToolStripControlHost))
                 {
                     ToolStrip parent = item.GetCurrentParent();
@@ -1880,6 +1948,7 @@ namespace System.Windows.Forms.Design
                                     targetSelection = GetNextItem(parent, item, ArrowDirection.Left);
                                 }
                             }
+
                             // check if this is the first item .. if so move out of ToolStrip...
                             else if (item == parent.Items[0] && parent.RightToLeft != RightToLeft.Yes)
                             {
@@ -1888,6 +1957,7 @@ namespace System.Windows.Forms.Design
                                 {
                                     return;
                                 }
+
                                 targetSelection = GetNextControlInTab(baseCtl, parent, !backwards);
                                 if (targetSelection is null)
                                 {
@@ -1898,7 +1968,7 @@ namespace System.Windows.Forms.Design
                                         if (targetSelection != null)
                                         {
                                             ControlDesigner controlDesigner = host.GetDesigner((IComponent)targetSelection) as ControlDesigner;
-                                            // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again through compoenent tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
+                                            // In Whidbey controls like ToolStrips have componentTray presence, So don't select them again through component tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
                                             while (controlDesigner != null)
                                             {
                                                 // if the targetSelection from the Tray is a control .. try the next one.
@@ -1914,6 +1984,7 @@ namespace System.Windows.Forms.Design
                                             }
                                         }
                                     }
+
                                     if (targetSelection is null)
                                     {
                                         targetSelection = baseCtl;
@@ -1943,6 +2014,7 @@ namespace System.Windows.Forms.Design
                                 {
                                     return;
                                 }
+
                                 targetSelection = GetNextControlInTab(baseCtl, parent, !backwards);
                                 // this is the First control in TabOrder... Select the Form..
                                 if (targetSelection is null)
@@ -1961,17 +2033,19 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
+
                 // This is a DesignerToolStripControlHost on the Main ToolStrip.
                 else if (item != null)
                 {
                     ToolStrip parent = item.GetCurrentParent();
                     if (parent != null)
                     {
-                        // flip the semantics of bakcwards...
+                        // flip the semantics of backwards...
                         if (parent.RightToLeft == RightToLeft.Yes)
                         {
                             backwards = !backwards;
                         }
+
                         if (backwards)
                         {
                             ToolStripItemCollection collection = parent.Items;
@@ -2003,6 +2077,7 @@ namespace System.Windows.Forms.Design
                         break;
                     }
                 }
+
                 targetSelection = ctl;
             }
 
@@ -2043,8 +2118,10 @@ namespace System.Windows.Forms.Design
                 {
                     continue;
                 }
+
                 totalObjects[i] = parent.Items[i];
             }
+
             SelectionService.SetSelectedComponents(totalObjects, SelectionTypes.Replace);
         }
 
@@ -2056,7 +2133,7 @@ namespace System.Windows.Forms.Design
             {
                 //Cache original selection
                 ICollection originalSelComps = selSvc.GetSelectedComponents();
-                // Add the TemplateNode to the Selection if it is currently Selected as the GetSelectedComponents wont do it for us.
+                // Add the TemplateNode to the Selection if it is currently Selected as the GetSelectedComponents won't do it for us.
                 ArrayList origSel = new ArrayList(originalSelComps);
                 if (origSel.Count == 0)
                 {
@@ -2084,6 +2161,7 @@ namespace System.Windows.Forms.Design
                         {
                             overFlowButton.ShowDropDown();
                         }
+
                         object newSelection = GetNextItem(overFlowButton.DropDown, null, ArrowDirection.Down);
 
                         if (!_shiftPressed)
@@ -2116,6 +2194,7 @@ namespace System.Windows.Forms.Design
                 // Invalidate old & new selection.
                 ToolStripDesignerUtils.InvalidateSelection(origSel, targetSelection as ToolStripItem, _provider, _shiftPressed);
             }
+
             //reset the shiftPressed since we end selection
             _shiftPressed = false;
         }

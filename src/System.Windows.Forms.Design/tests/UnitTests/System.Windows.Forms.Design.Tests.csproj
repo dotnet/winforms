@@ -22,6 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- workaround for https://github.com/dotnet/sdk/issues/3254 -->
+    <Reference Include="$(BaseOutputPath)..\System.Design.Facade\$(Configuration)\$(TargetFramework)\System.Design.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Resources\telescope_01.wmf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
@@ -16,170 +13,161 @@ namespace System.Windows.Forms.Design
     /// </summary>
     public class EventsTab : PropertyTab
     {
-        private readonly IServiceProvider _sp;
-        private IDesignerHost _currentHost;
-        private bool _sunkEvent;
+        private readonly IServiceProvider? _serviceProvider;
+        private IDesignerHost? _currentHost;
+        private bool _hookedDesignerChanged;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='EventsTab'/> class.
+        ///  Initializes a new instance of the <see cref="EventsTab"/> class.
         /// </summary>
-        public EventsTab(IServiceProvider sp)
-        {
-            _sp = sp;
-        }
+        public EventsTab(IServiceProvider? sp) => _serviceProvider = sp;
 
-        /// <summary>
-        ///  Gets or sets the name of the tab.
-        /// </summary>
         public override string TabName => SR.PBRSToolTipEvents;
 
-        /// <summary>
-        ///  Gets or sets the help keyword for the tab.
-        /// </summary>
         public override string HelpKeyword => "Events";
 
-        /// <summary>
-        ///  Gets a value indicating whether the specified object can be extended.
-        /// </summary>
         public override bool CanExtend(object extendee) => extendee is null || !Marshal.IsComObject(extendee);
 
-        private void OnActiveDesignerChanged(object sender, ActiveDesignerEventArgs adevent)
+        private void OnActiveDesignerChanged(object? sender, ActiveDesignerEventArgs e)
+            => _currentHost = e.NewDesigner;
+
+        public override PropertyDescriptor? GetDefaultProperty(object obj)
         {
-            _currentHost = adevent?.NewDesigner;
+            if (GetEventBindingService(obj, context: null) is not IEventBindingService eventPropertyService)
+            {
+                return null;
+            }
+
+            // Find the default event. Note that we rely on GetEventProperties caching the property to event match,
+            // so we can == on the default event. We assert that this always works.
+            return TypeDescriptor.GetDefaultEvent(obj) is EventDescriptor defaultEvent
+                ? eventPropertyService.GetEventProperty(defaultEvent)
+                : null;
         }
 
         /// <summary>
-        ///  Gets the default property from the specified object.
+        ///  Returns the most relevant <see cref="IEventBindingService"/>.
         /// </summary>
-        public override PropertyDescriptor GetDefaultProperty(object obj)
+        /// <remarks>
+        ///  <para>
+        ///   This looks first at the current <see cref="IDesignerHost"/>, then the <paramref name="object"/>'s
+        ///   <see cref="ISite"/>, then finally the passed in <paramref name="context"/>.
+        ///  </para>
+        /// </remarks>
+        private IEventBindingService? GetEventBindingService(object @object, ITypeDescriptorContext? context)
         {
-            IEventBindingService eventPropertySvc = GetEventPropertyService(obj, null);
-            if (eventPropertySvc is null)
+            if (!_hookedDesignerChanged)
             {
-                return null;
-            }
-
-            // Find the default event.  Note that we rely on GetEventProperties caching
-            // the property to event match, so we can == on the default event.
-            // We assert that this always works.
-            EventDescriptor defEvent = TypeDescriptor.GetDefaultEvent(obj);
-            if (defEvent is null)
-            {
-                return null;
-            }
-
-            return eventPropertySvc.GetEventProperty(defEvent);
-        }
-
-        private IEventBindingService GetEventPropertyService(object obj, ITypeDescriptorContext context)
-        {
-            if (!_sunkEvent)
-            {
-                if (_sp?.GetService(typeof(IDesignerEventService)) is IDesignerEventService des)
+                if (_serviceProvider.TryGetService(out IDesignerEventService? designerEventService))
                 {
-                    des.ActiveDesignerChanged += new ActiveDesignerEventHandler(OnActiveDesignerChanged);
+                    designerEventService.ActiveDesignerChanged += OnActiveDesignerChanged;
                 }
 
-                _sunkEvent = true;
+                _hookedDesignerChanged = true;
             }
 
-            if (_currentHost != null)
+            if (_currentHost.TryGetService(out IEventBindingService? hostEventBindingService))
             {
-                if (_currentHost.GetService(typeof(IEventBindingService)) is IEventBindingService service)
+                return hostEventBindingService;
+            }
+
+            if (@object is IComponent component)
+            {
+                if (component.Site.TryGetService(out IEventBindingService? siteEventBindingService))
                 {
-                    return service;
+                    return siteEventBindingService;
                 }
             }
 
-            if (obj is IComponent component)
+            if (context.TryGetService(out IEventBindingService? contextEventBindingService))
             {
-                if (component.Site?.GetService(typeof(IEventBindingService)) is IEventBindingService service)
-                {
-                    return service;
-                }
-            }
-
-            if (context != null)
-            {
-                if (context.GetService(typeof(IEventBindingService)) is IEventBindingService service)
-                {
-                    return service;
-                }
+                return contextEventBindingService;
             }
 
             return null;
         }
 
-        /// <summary>
-        ///  Gets all the properties of the tab.
-        /// </summary>
-        public override PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes)
-        {
-            return GetProperties(null, component, attributes);
-        }
+        public override PropertyDescriptorCollection GetProperties(object component, Attribute[]? attributes)
+            => GetProperties(context: null, component, attributes);
 
-        /// <summary>
-        ///  Gets the properties of the specified component.
-        /// </summary>
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object component, Attribute[] attributes)
+        /// <inheritdoc/>
+        /// <devdoc>
+        ///  The <see cref="EventsTab"/> uses <see cref="IEventBindingService.GetEventProperties(EventDescriptorCollection)"/>
+        ///  to get <paramref name="component"/> property descriptors from <see cref="TypeDescriptor.GetEvents(object)"/>.
+        /// </devdoc>
+        public override PropertyDescriptorCollection GetProperties(
+            ITypeDescriptorContext? context,
+            object component,
+            Attribute[]? attributes)
         {
-            IEventBindingService eventPropertySvc = GetEventPropertyService(component, context);
-            if (eventPropertySvc is null)
+            if (GetEventBindingService(component, context) is not IEventBindingService eventBindingService)
             {
-                return new PropertyDescriptorCollection(null);
+                return new(null);
             }
 
-            EventDescriptorCollection events = TypeDescriptor.GetEvents(component, attributes);
-            PropertyDescriptorCollection realEvents = eventPropertySvc.GetEventProperties(events);
+            // By passing `noCustomTypeDesc: false` we allow the component itself to participate in getting events
+            // (if `component` implements `ICustomTypeDescriptor`).
+            var componentEventProperties = eventBindingService.GetEventProperties(
+               TypeDescriptor.GetEvents(component, attributes, noCustomTypeDesc: false));
 
-            // Add DesignerSerializationVisibilityAttribute.Content to attributes to see if we have any.
-            var attributesPlusNamespace = new Attribute[attributes.Length + 1];
-            Array.Copy(attributes, 0, attributesPlusNamespace, 0, attributes.Length);
-            attributesPlusNamespace[attributes.Length] = DesignerSerializationVisibilityAttribute.Content;
-
-            // If we do, then we traverse them to see if they have any events under the current attributes,
-            // and if so, we'll show them as top-level properties so they can be drilled down into to get events.
-            PropertyDescriptorCollection namespaceProperties = TypeDescriptor.GetProperties(component, attributesPlusNamespace);
-            if (namespaceProperties.Count > 0)
+            if (component is null)
             {
-                ArrayList list = null;
-                for (int i = 0; i < namespaceProperties.Count; i++)
+                return componentEventProperties;
+            }
+
+            // Add DesignerSerializationVisibilityAttribute.Content to the specified attributes.
+            Attribute[] specifiedAttributesPlusContent;
+
+            if (attributes is null)
+            {
+                specifiedAttributesPlusContent = new Attribute[] { DesignerSerializationVisibilityAttribute.Content };
+            }
+            else
+            {
+                specifiedAttributesPlusContent = new Attribute[attributes.Length + 1];
+                Array.Copy(attributes, 0, specifiedAttributesPlusContent, 0, attributes.Length);
+                specifiedAttributesPlusContent[attributes.Length] = DesignerSerializationVisibilityAttribute.Content;
+            }
+
+            var matchingComponentProperties = TypeDescriptor.GetProperties(component, specifiedAttributesPlusContent);
+            if (matchingComponentProperties.Count == 0)
+            {
+                return componentEventProperties;
+            }
+
+            // Check the matching component properties to see if they themselves have any matching events.
+
+            List<PropertyDescriptor>? matchingPropertyEvents = null;
+            foreach (PropertyDescriptor property in matchingComponentProperties)
+            {
+                if (!property.Converter.GetPropertiesSupported())
                 {
-                    PropertyDescriptor nsProp = namespaceProperties[i];
-                    TypeConverter tc = nsProp.Converter;
-                    if (!tc.GetPropertiesSupported())
-                    {
-                        continue;
-                    }
-
-                    object namespaceValue = nsProp.GetValue(component);
-                    EventDescriptorCollection namespaceEvents = TypeDescriptor.GetEvents(namespaceValue, attributes);
-                    if (namespaceEvents.Count > 0)
-                    {
-                        if (list is null)
-                        {
-                            list = new ArrayList();
-                        }
-
-                        // Make this non-mergable
-                        nsProp = TypeDescriptor.CreateProperty(nsProp.ComponentType, nsProp, MergablePropertyAttribute.No);
-                        list.Add(nsProp);
-                    }
+                    continue;
                 }
 
-                // We've found some, so add them to the event list.
-                if (list != null)
+                object? value = property.GetValue(component);
+
+                // Annotations on TypeDescriptor.GetEvents aren't correct, it doesn't care about null.
+                EventDescriptorCollection propertyEvents = TypeDescriptor.GetEvents(value!, attributes!);
+                if (propertyEvents.Count > 0)
                 {
-                    var realNamespaceProperties = new PropertyDescriptor[list.Count];
-                    list.CopyTo(realNamespaceProperties, 0);
-                    var finalEvents = new PropertyDescriptor[realEvents.Count + realNamespaceProperties.Length];
-                    realEvents.CopyTo(finalEvents, 0);
-                    Array.Copy(realNamespaceProperties, 0, finalEvents, realEvents.Count, realNamespaceProperties.Length);
-                    realEvents = new PropertyDescriptorCollection(finalEvents);
+                    matchingPropertyEvents ??= new();
+
+                    // Make the matching property non-mergable.
+                    matchingPropertyEvents.Add(TypeDescriptor.CreateProperty(property.ComponentType, property, MergablePropertyAttribute.No));
                 }
             }
 
-            return realEvents;
+            if (matchingPropertyEvents is not null)
+            {
+                // Found matching events on the component properties, merge them with the events directly on the component.
+                var mergedEvents = new PropertyDescriptor[componentEventProperties.Count + matchingPropertyEvents.Count];
+                componentEventProperties.CopyTo(mergedEvents, 0);
+                matchingPropertyEvents.CopyTo(mergedEvents, componentEventProperties.Count);
+                componentEventProperties = new(mergedEvents);
+            }
+
+            return componentEventProperties;
         }
     }
 }

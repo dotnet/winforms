@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -35,7 +34,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  We increment this every time we look at an Object, at specified
-        ///  intervals, we run through the properies list to see if we should
+        ///  intervals, we run through the properties list to see if we should
         ///  delete any.
         /// </summary>
         private int clearCount;
@@ -49,6 +48,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     handler = new ComNativeDescriptor();
                 }
+
                 return handler;
             }
         }
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         // Called via reflection for AutomationExtender stuff. Don't delete!
         public static object GetNativePropertyValue(object component, string propertyName, ref bool succeeded)
         {
-            return Instance.GetPropertyValue(component, propertyName, ref succeeded);
+            return GetPropertyValue(component, propertyName, ref succeeded);
         }
 
         /// <summary>
@@ -77,18 +77,19 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return new ComTypeDescriptor(this, instance);
         }
 
-        internal unsafe string GetClassName(object component)
+        internal static unsafe string GetClassName(object component)
         {
             string name = null;
 
-            // does IVsPerPropretyBrowsing supply us a name?
+            // does IVsPerPropertyBrowsing supply us a name?
             if (component is VSSDK.IVsPerPropertyBrowsing)
             {
                 HRESULT hr = ((VSSDK.IVsPerPropertyBrowsing)component).GetClassName(ref name);
-                if (hr.Succeeded() && name != null)
+                if (hr.Succeeded() && name is not null)
                 {
                     return name;
                 }
+
                 // otherwise fall through...
             }
 
@@ -104,17 +105,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return nameBstr.String.TrimStart('_').ToString();
         }
 
-        internal TypeConverter GetConverter(object component)
+        internal static TypeConverter GetConverter()
         {
             return TypeDescriptor.GetConverter(typeof(IComponent));
         }
 
-        internal object GetEditor(object component, Type baseEditorType)
+        internal static object GetEditor(object component, Type baseEditorType)
         {
             return TypeDescriptor.GetEditor(component.GetType(), baseEditorType);
         }
 
-        internal string GetName(object component)
+        internal static string GetName(object component)
         {
             if (!(component is Oleaut32.IDispatch))
             {
@@ -127,7 +128,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 bool success = false;
                 object value = GetPropertyValue(component, dispid, ref success);
 
-                if (success && value != null)
+                if (success && value is not null)
                 {
                     return value.ToString();
                 }
@@ -136,7 +137,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return string.Empty;
         }
 
-        internal unsafe object GetPropertyValue(object component, string propertyName, ref bool succeeded)
+        internal static unsafe object GetPropertyValue(object component, string propertyName, ref bool succeeded)
         {
             if (!(component is Oleaut32.IDispatch iDispatch))
             {
@@ -162,12 +163,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        internal object GetPropertyValue(object component, DispatchID dispid, ref bool succeeded)
+        internal static object GetPropertyValue(object component, DispatchID dispid, ref bool succeeded)
         {
             if (!(component is Oleaut32.IDispatch))
             {
                 return null;
             }
+
             object[] pVarResult = new object[1];
             if (GetPropertyValue(component, dispid, pVarResult) == HRESULT.S_OK)
             {
@@ -181,7 +183,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        internal unsafe HRESULT GetPropertyValue(object component, DispatchID dispid, object[] retval)
+        internal static unsafe HRESULT GetPropertyValue(object component, DispatchID dispid, object[] retval)
         {
             if (!(component is Oleaut32.IDispatch iDispatch))
             {
@@ -225,9 +227,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  Checks if the given dispid matches the dispid that the Object would like to specify
-        ///  as its identification proeprty (Name, ID, etc).
+        ///  as its identification property (Name, ID, etc).
         /// </summary>
-        internal bool IsNameDispId(object obj, DispatchID dispid)
+        internal static bool IsNameDispId(object obj, DispatchID dispid)
         {
             if (obj is null || !obj.GetType().IsCOMObject)
             {
@@ -240,7 +242,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Checks all our property manages to see if any have become invalid.
         /// </summary>
-        private void CheckClear(object component)
+        private void CheckClear()
         {
             // walk the list every so many calls
             if ((++clearCount % CLEAR_INTERVAL) == 0)
@@ -259,12 +261,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         entry = de.Value as Com2Properties;
 
-                        if (entry != null && entry.TooOld)
+                        if (entry is not null && entry.TooOld)
                         {
                             if (disposeList is null)
                             {
                                 disposeList = new List<object>(3);
                             }
+
                             disposeList.Add(de.Key);
                         }
                     }
@@ -272,7 +275,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     // now run through the ones that are dead and dispose them.
                     // there's going to be a very small number of these.
                     //
-                    if (disposeList != null)
+                    if (disposeList is not null)
                     {
                         object oldKey;
                         for (int i = disposeList.Count - 1; i >= 0; i--)
@@ -280,7 +283,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             oldKey = disposeList[i];
                             entry = nativeProps[oldKey] as Com2Properties;
 
-                            if (entry != null)
+                            if (entry is not null)
                             {
                                 entry.Disposed -= new EventHandler(OnPropsInfoDisposed);
                                 entry.Dispose();
@@ -299,24 +302,25 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             // check caches if necessary
             //
-            CheckClear(component);
+            CheckClear();
 
             // Get the property info Object
             //
             Com2Properties propsInfo = (Com2Properties)nativeProps[component];
 
-            // if we dont' have one, create one and set it up
+            // if we don't have one, create one and set it up
             //
             if (propsInfo is null || !propsInfo.CheckValid())
             {
                 propsInfo = Com2TypeInfoProcessor.GetProperties(component);
-                if (propsInfo != null)
+                if (propsInfo is not null)
                 {
                     propsInfo.Disposed += new EventHandler(OnPropsInfoDisposed);
                     nativeProps.SetWeak(component, propsInfo);
                     propsInfo.AddExtendedBrowsingHandlers(extendedBrowsingHandlers);
                 }
             }
+
             return propsInfo;
         }
 
@@ -359,27 +363,23 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         internal PropertyDescriptor GetDefaultProperty(object component)
         {
-            CheckClear(component);
+            CheckClear();
 
             Com2Properties propsInfo = GetPropsInfo(component);
-            if (propsInfo != null)
+            if (propsInfo is not null)
             {
                 return propsInfo.DefaultProperty;
             }
+
             return null;
         }
 
-        internal EventDescriptorCollection GetEvents(object component)
+        internal static EventDescriptorCollection GetEvents()
         {
             return new EventDescriptorCollection(null);
         }
 
-        internal EventDescriptorCollection GetEvents(object component, Attribute[] attributes)
-        {
-            return new EventDescriptorCollection(null);
-        }
-
-        internal EventDescriptor GetDefaultEvent(object component)
+        internal static EventDescriptor GetDefaultEvent()
         {
             return null;
         }
@@ -455,16 +455,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         internal static void ResolveVariantTypeConverterAndTypeEditor(object propertyValue, ref TypeConverter currentConverter, Type editorType, ref object currentEditor)
         {
             object curValue = propertyValue;
-            if (curValue != null && curValue != null && !Convert.IsDBNull(curValue))
+            if (curValue is not null && curValue is not null && !Convert.IsDBNull(curValue))
             {
                 Type t = curValue.GetType();
                 TypeConverter subConverter = TypeDescriptor.GetConverter(t);
-                if (subConverter != null && subConverter.GetType() != typeof(TypeConverter))
+                if (subConverter is not null && subConverter.GetType() != typeof(TypeConverter))
                 {
                     currentConverter = subConverter;
                 }
+
                 object subEditor = TypeDescriptor.GetEditor(t, editorType);
-                if (subEditor != null)
+                if (subEditor is not null)
                 {
                     currentEditor = subEditor;
                 }
@@ -501,7 +502,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// </summary>
             string ICustomTypeDescriptor.GetClassName()
             {
-                return _handler.GetClassName(_instance);
+                return GetClassName(_instance);
             }
 
             /// <summary>
@@ -509,7 +510,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// </summary>
             string ICustomTypeDescriptor.GetComponentName()
             {
-                return _handler.GetName(_instance);
+                return GetName(_instance);
             }
 
             /// <summary>
@@ -517,7 +518,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// </summary>
             TypeConverter ICustomTypeDescriptor.GetConverter()
             {
-                return _handler.GetConverter(_instance);
+                return GetConverter();
             }
 
             /// <summary>
@@ -525,7 +526,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// </summary>
             EventDescriptor ICustomTypeDescriptor.GetDefaultEvent()
             {
-                return _handler.GetDefaultEvent(_instance);
+                return GetDefaultEvent();
             }
 
             /// <summary>
@@ -541,7 +542,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// </summary>
             object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
             {
-                return _handler.GetEditor(_instance, editorBaseType);
+                return GetEditor(_instance, editorBaseType);
             }
 
             /// <summary>
@@ -549,7 +550,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// </summary>
             EventDescriptorCollection ICustomTypeDescriptor.GetEvents()
             {
-                return _handler.GetEvents(_instance);
+                return GetEvents();
             }
 
             /// <summary>
@@ -557,7 +558,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// </summary>
             EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
             {
-                return _handler.GetEvents(_instance, attributes);
+                return GetEvents();
             }
 
             /// <summary>

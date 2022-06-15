@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -34,20 +34,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected override CodeMemberMethod GetInitializeMethod(IDesignerSerializationManager manager, CodeTypeDeclaration typeDecl, object value)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (typeDecl is null)
-            {
-                throw new ArgumentNullException(nameof(typeDecl));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(typeDecl);
+            ArgumentNullException.ThrowIfNull(value);
 
             if (!(typeDecl.UserData[_initMethodKey] is CodeMemberMethod method))
             {
@@ -74,15 +63,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected override CodeMemberMethod[] GetInitializeMethods(IDesignerSerializationManager manager, CodeTypeDeclaration typeDecl)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (typeDecl is null)
-            {
-                throw new ArgumentNullException(nameof(typeDecl));
-            }
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(typeDecl);
 
             foreach (CodeTypeMember member in typeDecl.Members)
             {

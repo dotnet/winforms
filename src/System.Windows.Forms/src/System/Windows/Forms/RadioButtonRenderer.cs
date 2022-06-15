@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
@@ -18,7 +17,7 @@ namespace System.Windows.Forms
     {
         // Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer t_visualStyleRenderer = null;
+        private static VisualStyleRenderer? t_visualStyleRenderer = null;
 
         private static readonly VisualStyleElement s_radioElement = VisualStyleElement.Button.RadioButton.UncheckedNormal;
 
@@ -33,7 +32,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (!RenderMatchingApplicationState || Application.RenderWithVisualStyles);
+                return !RenderMatchingApplicationState || Application.RenderWithVisualStyles;
             }
         }
 
@@ -105,6 +104,7 @@ namespace System.Windows.Forms
                 {
                     glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
                 }
+
                 ControlPaint.DrawRadioButton(graphics, glyphBounds, ConvertToButtonState(state));
             }
         }
@@ -112,7 +112,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a RadioButton control.
         /// </summary>
-        public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string radioButtonText, Font font, bool focused, RadioButtonState state)
+        public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string? radioButtonText, Font? font, bool focused, RadioButtonState state)
         {
             DrawRadioButton(g, glyphLocation, textBounds, radioButtonText, font,
                        TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
@@ -122,18 +122,19 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a RadioButton control.
         /// </summary>
-        public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string radioButtonText, Font font, TextFormatFlags flags, bool focused, RadioButtonState state)
+        public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string? radioButtonText, Font? font, TextFormatFlags flags, bool focused, RadioButtonState state)
         {
             DrawRadioButton(g, glyphLocation, textBounds, radioButtonText, font, flags, focused, state, IntPtr.Zero);
         }
 
-        internal static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string radioButtonText, Font font, TextFormatFlags flags, bool focused, RadioButtonState state, IntPtr hWnd)
+        internal static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string? radioButtonText, Font? font, TextFormatFlags flags, bool focused, RadioButtonState state, IntPtr hWnd)
         {
             Rectangle glyphBounds;
             using (var hdc = new DeviceContextHdcScope(g))
             {
                 glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
             }
+
             Color textColor;
 
             if (RenderWithVisualStyles)
@@ -160,7 +161,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a RadioButton control.
         /// </summary>
-        public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string radioButtonText, Font font, Image image, Rectangle imageBounds, bool focused, RadioButtonState state)
+        public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string? radioButtonText, Font? font, Image image, Rectangle imageBounds, bool focused, RadioButtonState state)
         {
             DrawRadioButton(g, glyphLocation, textBounds, radioButtonText, font,
                        TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
@@ -170,18 +171,19 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a RadioButton control.
         /// </summary>
-        public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string radioButtonText, Font font, TextFormatFlags flags, Image image, Rectangle imageBounds, bool focused, RadioButtonState state)
+        public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string? radioButtonText, Font? font, TextFormatFlags flags, Image image, Rectangle imageBounds, bool focused, RadioButtonState state)
         {
             DrawRadioButton(g, glyphLocation, textBounds, radioButtonText, font, flags, image, imageBounds, focused, state, IntPtr.Zero);
         }
 
-        internal static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string radioButtonText, Font font, TextFormatFlags flags, Image image, Rectangle imageBounds, bool focused, RadioButtonState state, IntPtr hWnd)
+        internal static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string? radioButtonText, Font? font, TextFormatFlags flags, Image image, Rectangle imageBounds, bool focused, RadioButtonState state, IntPtr hWnd)
         {
             Rectangle glyphBounds;
             using (var hdc = new DeviceContextHdcScope(g))
             {
                 glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
             }
+
             Color textColor;
 
             if (RenderWithVisualStyles)
@@ -289,6 +291,7 @@ namespace System.Windows.Forms
             }
         }
 
+        [MemberNotNull(nameof(t_visualStyleRenderer))]
         private static void InitializeRenderer(int state)
         {
             RadioButtonState radioButtonState = (RadioButtonState)state;

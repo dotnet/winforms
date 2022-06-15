@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -25,9 +23,9 @@ namespace System.Windows.Forms
         private ContentAlignment _textAlign = ContentAlignment.MiddleCenter;
         private TextImageRelation _textImageRelation = TextImageRelation.Overlay;
         private readonly ImageList.Indexer _imageIndex = new ImageList.Indexer();
-        private FlatButtonAppearance _flatAppearance;
-        private ImageList _imageList;
-        private Image _image;
+        private FlatButtonAppearance? _flatAppearance;
+        private ImageList? _imageList;
+        private Image? _image;
 
         private const int FlagMouseOver = 0x0001;
         private const int FlagMouseDown = 0x0002;
@@ -40,15 +38,18 @@ namespace System.Windows.Forms
         private const int FlagShowToolTip = 0x0100;
         private int _state;
 
-        private ToolTip _textToolTip;
+        private ToolTip? _textToolTip;
 
         // This allows the user to disable visual styles for the button so that it inherits its background color
         private bool _enableVisualStyleBackground = true;
 
         private bool _isEnableVisualStyleBackgroundSet;
 
+        private ButtonBaseAdapter? _adapter;
+        private FlatStyle _cachedAdapterType;
+
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ButtonBase'/> class.
+        ///  Initializes a new instance of the <see cref="ButtonBase"/> class.
         /// </summary>
         protected ButtonBase()
         {
@@ -102,6 +103,7 @@ namespace System.Windows.Forms
                         _textToolTip = new ToolTip();
                     }
                 }
+
                 Invalidate();
             }
         }
@@ -130,7 +132,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler AutoSizeChanged
+        public new event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -151,7 +153,7 @@ namespace System.Windows.Forms
                 {
                     if (value != Color.Empty)
                     {
-                        PropertyDescriptor pd = TypeDescriptor.GetProperties(this)["UseVisualStyleBackColor"];
+                        PropertyDescriptor? pd = TypeDescriptor.GetProperties(this)["UseVisualStyleBackColor"];
                         pd?.SetValue(this, false);
                     }
                 }
@@ -206,6 +208,7 @@ namespace System.Windows.Forms
                     {
                         cp.Style |= (int)User32.BS.CENTER;
                     }
+
                     if ((int)(align & WindowsFormsUtils.AnyTopAlign) != 0)
                     {
                         cp.Style |= (int)User32.BS.TOP;
@@ -219,6 +222,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)User32.BS.VCENTER;
                     }
                 }
+
                 return cp;
             }
         }
@@ -281,10 +285,8 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
+
                 _flatStyle = value;
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.FlatStyle);
                 Invalidate();
@@ -316,11 +318,11 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ButtonImageDescr))]
         [Localizable(true)]
         [SRCategory(nameof(SR.CatAppearance))]
-        public Image Image
+        public Image? Image
         {
             get
             {
-                if (_image is null && _imageList != null)
+                if (_image is null && _imageList is not null)
                 {
                     int actualIndex = _imageIndex.ActualIndex;
 
@@ -338,8 +340,10 @@ namespace System.Windows.Forms
                     {
                         return _imageList.Images[actualIndex];
                     }
+
                     Debug.Assert(_image is null, "We expect to be returning null.");
                 }
+
                 return _image;
             }
             set
@@ -352,7 +356,7 @@ namespace System.Windows.Forms
                 StopAnimate();
 
                 _image = value;
-                if (_image != null)
+                if (_image is not null)
                 {
                     ImageIndex = ImageList.Indexer.DefaultIndex;
                     ImageList = null;
@@ -379,10 +383,8 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
+
                 if (value != _imageAlign)
                 {
                     _imageAlign = value;
@@ -407,10 +409,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_imageIndex.Index != ImageList.Indexer.DefaultIndex && _imageList != null && _imageIndex.Index >= _imageList.Images.Count)
+                if (_imageIndex.Index != ImageList.Indexer.DefaultIndex && _imageList is not null && _imageIndex.Index >= _imageList.Images.Count)
                 {
                     return _imageList.Images.Count - 1;
                 }
+
                 return _imageIndex.Index;
             }
             set
@@ -461,7 +464,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (value != null)
+                if (value is not null)
                 {
                     // Image.set calls ImageIndex = -1
                     _image = null;
@@ -474,13 +477,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the <see cref='Forms.ImageList'/> that contains the <see cref='Drawing.Image'/> displayed on a button control.
+        ///  Gets or sets the <see cref="Forms.ImageList"/> that contains the <see cref="Drawing.Image"/> displayed on a button control.
         /// </summary>
         [DefaultValue(null)]
         [SRDescription(nameof(SR.ButtonImageListDescr))]
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRCategory(nameof(SR.CatAppearance))]
-        public ImageList ImageList
+        public ImageList? ImageList
         {
             get
             {
@@ -497,16 +500,14 @@ namespace System.Windows.Forms
                 EventHandler disposedHandler = new EventHandler(DetachImageList);
 
                 // Detach old event handlers
-                //
-                if (_imageList != null)
+                if (_imageList is not null)
                 {
                     _imageList.RecreateHandle -= recreateHandler;
                     _imageList.Disposed -= disposedHandler;
                 }
 
                 // Make sure we don't have an Image as well as an ImageList
-                //
-                if (value != null)
+                if (value is not null)
                 {
                     _image = null; // Image.set calls ImageList = null
                 }
@@ -515,8 +516,7 @@ namespace System.Windows.Forms
                 _imageIndex.ImageList = value;
 
                 // Wire up new event handlers
-                //
-                if (value != null)
+                if (value is not null)
                 {
                     value.RecreateHandle += recreateHandler;
                     value.Disposed += disposedHandler;
@@ -528,7 +528,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public ImeMode ImeMode
+        public new ImeMode ImeMode
         {
             get => base.ImeMode;
             set => base.ImeMode = value;
@@ -536,7 +536,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged
+        public new event EventHandler? ImeModeChanged
         {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
@@ -666,10 +666,8 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
+
                 if (value == TextAlign)
                 {
                     return;
@@ -697,10 +695,7 @@ namespace System.Windows.Forms
             get => _textImageRelation;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TextImageRelation.Overlay, (int)TextImageRelation.TextBeforeImage, 1))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TextImageRelation));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (value == TextImageRelation)
                 {
@@ -742,7 +737,7 @@ namespace System.Windows.Forms
 
         private void Animate()
         {
-            Animate(!DesignMode && Visible && Enabled && ParentInternal != null);
+            Animate(!DesignMode && Visible && Enabled && ParentInternal is not null);
         }
 
         private void StopAnimate()
@@ -756,7 +751,7 @@ namespace System.Windows.Forms
             {
                 if (animate)
                 {
-                    if (_image != null)
+                    if (_image is not null)
                     {
                         ImageAnimator.Animate(_image, new EventHandler(OnFrameChanged));
                         SetFlag(FlagCurrentlyAnimating, animate);
@@ -764,7 +759,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (_image != null)
+                    if (_image is not null)
                     {
                         ImageAnimator.StopAnimate(_image, new EventHandler(OnFrameChanged));
                         SetFlag(FlagCurrentlyAnimating, animate);
@@ -778,7 +773,7 @@ namespace System.Windows.Forms
             return new ButtonBaseAccessibleObject(this);
         }
 
-        private void DetachImageList(object sender, EventArgs e)
+        private void DetachImageList(object? sender, EventArgs e)
         {
             ImageList = null;
         }
@@ -788,17 +783,19 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 StopAnimate();
-                if (_imageList != null)
+                if (_imageList is not null)
                 {
                     _imageList.Disposed -= new EventHandler(DetachImageList);
                 }
-                //Dipose the tooltip if one present..
-                if (_textToolTip != null)
+
+                //Dispose the tooltip if one present..
+                if (_textToolTip is not null)
                 {
                     _textToolTip.Dispose();
                     _textToolTip = null;
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -807,7 +804,7 @@ namespace System.Windows.Forms
             return ((_state & flag) == flag);
         }
 
-        private void ImageListRecreateHandle(object sender, EventArgs e)
+        private void ImageListRecreateHandle(object? sender, EventArgs e)
         {
             if (IsHandleCreated)
             {
@@ -816,7 +813,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnGotFocus'/> event.
+        ///  Raises the <see cref="OnGotFocus"/> event.
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
@@ -825,7 +822,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnLostFocus'/> event.
+        ///  Raises the <see cref="OnLostFocus"/> event.
         /// </summary>
         protected override void OnLostFocus(EventArgs e)
         {
@@ -839,31 +836,33 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseEnter'/> event.
+        ///  Raises the <see cref="Control.OnMouseEnter"/> event.
         /// </summary>
         protected override void OnMouseEnter(EventArgs eventargs)
         {
             SetFlag(FlagMouseOver, true);
             Invalidate();
-            if (!DesignMode && AutoEllipsis && ShowToolTip && _textToolTip != null)
+            if (!DesignMode && AutoEllipsis && ShowToolTip && _textToolTip is not null)
             {
                 _textToolTip.Show(WindowsFormsUtils.TextWithoutMnemonics(Text), this);
             }
+
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
             base.OnMouseEnter(eventargs);
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseLeave'/> event.
+        ///  Raises the <see cref="Control.OnMouseLeave"/> event.
         /// </summary>
         protected override void OnMouseLeave(EventArgs eventargs)
         {
             SetFlag(FlagMouseOver, false);
-            if (_textToolTip != null)
+            if (_textToolTip is not null)
             {
                 _textToolTip.Hide(this);
             }
+
             Invalidate();
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
@@ -871,7 +870,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseMove'/> event.
+        ///  Raises the <see cref="Control.OnMouseMove"/> event.
         /// </summary>
         protected override void OnMouseMove(MouseEventArgs mevent)
         {
@@ -895,13 +894,14 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
             base.OnMouseMove(mevent);
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseDown'/> event.
+        ///  Raises the <see cref="Control.OnMouseDown"/> event.
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs mevent)
         {
@@ -911,13 +911,14 @@ namespace System.Windows.Forms
                 SetFlag(FlagMousePressed, true);
                 Invalidate(DownChangeRectangle);
             }
+
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
             base.OnMouseDown(mevent);
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnMouseUp'/> event.
+        ///  Raises the <see cref="OnMouseUp"/> event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
@@ -954,10 +955,12 @@ namespace System.Windows.Forms
             {
                 proposedSize.Width = 0;
             }
+
             if (proposedSize.Height == 1)
             {
                 proposedSize.Height = 0;
             }
+
             return base.GetPreferredSize(proposedSize);
         }
 
@@ -966,9 +969,6 @@ namespace System.Windows.Forms
             Size prefSize = Adapter.GetPreferredSizeCore(proposedConstraints);
             return LayoutUtils.UnionSizes(prefSize + Padding.Size, MinimumSize);
         }
-
-        private ButtonBaseAdapter _adapter;
-        private FlatStyle _cachedAdapterType;
 
         internal ButtonBaseAdapter Adapter
         {
@@ -992,8 +992,10 @@ namespace System.Windows.Forms
                             Debug.Fail("Unsupported FlatStyle: '" + FlatStyle + '"');
                             break;
                     }
+
                     _cachedAdapterType = FlatStyle;
                 }
+
                 return _adapter;
             }
         }
@@ -1023,6 +1025,7 @@ namespace System.Windows.Forms
                 Debug.Fail("Adapter not expected to be null at this point");
                 return new StringFormat();
             }
+
             return Adapter.CreateStringFormat();
         }
 
@@ -1033,18 +1036,20 @@ namespace System.Windows.Forms
                 Debug.Fail("Adapter not expected to be null at this point");
                 return TextFormatFlags.Default;
             }
+
             return Adapter.CreateTextFormatFlags();
         }
 
-        private void OnFrameChanged(object o, EventArgs e)
+        private void OnFrameChanged(object? o, EventArgs e)
         {
             if (Disposing || IsDisposed)
             {
                 return;
             }
+
             if (IsHandleCreated && InvokeRequired)
             {
-                BeginInvoke(new EventHandler(OnFrameChanged), new object[] { o, e });
+                BeginInvoke(new EventHandler(OnFrameChanged), new object?[] { o, e });
                 return;
             }
 
@@ -1074,7 +1079,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnKeyDown'/> event.
+        ///  Raises the <see cref="OnKeyDown"/> event.
         /// </summary>
         protected override void OnKeyDown(KeyEventArgs kevent)
         {
@@ -1086,22 +1091,24 @@ namespace System.Windows.Forms
                     // It looks like none of the "SPACE" key downs generate the BM_SETSTATE.
                     // This causes to not draw the focus rectangle inside the button and also
                     // not paint the button as "un-depressed".
-                    //
                     if (!OwnerDraw)
                     {
-                        User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, PARAM.FromBool(true));
+                        User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, (nint)BOOL.TRUE);
                     }
+
                     Invalidate(DownChangeRectangle);
                 }
+
                 kevent.Handled = true;
             }
+
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
             base.OnKeyDown(kevent);
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnKeyUp'/> event.
+        ///  Raises the <see cref="OnKeyUp"/> event.
         /// </summary>
         protected override void OnKeyUp(KeyEventArgs kevent)
         {
@@ -1115,23 +1122,26 @@ namespace System.Windows.Forms
                 {
                     SetFlag(FlagMousePressed, false);
                     SetFlag(FlagMouseDown, false);
-                    User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, PARAM.FromBool(false));
+                    User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, (nint)BOOL.FALSE);
                 }
+
                 // Breaking change: specifically filter out Keys.Enter and Keys.Space as the only
                 // two keystrokes to execute OnClick.
                 if (kevent.KeyCode == Keys.Enter || kevent.KeyCode == Keys.Space)
                 {
                     OnClick(EventArgs.Empty);
                 }
+
                 kevent.Handled = true;
             }
+
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
             base.OnKeyUp(kevent);
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnPaint'/> event.
+        ///  Raises the <see cref="OnPaint"/> event.
         /// </summary>
         protected override void OnPaint(PaintEventArgs pevent)
         {
@@ -1152,6 +1162,7 @@ namespace System.Windows.Forms
 
                 PaintControl(pevent);
             }
+
             base.OnPaint(pevent);
         }
 
@@ -1193,7 +1204,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeImage()
         {
-            return _image != null;
+            return _image is not null;
         }
 
         private void UpdateOwnerDraw()
@@ -1272,34 +1283,35 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch (m.MsgInternal)
             {
                 // We don't respect this because the code below eats BM_SETSTATE.
                 // So we just invoke the click.
-                case (int)User32.BM.CLICK:
-                    if (this is IButtonControl)
+                case (User32.WM)User32.BM.CLICK:
+                    if (this is IButtonControl control)
                     {
-                        ((IButtonControl)this).PerformClick();
+                        control.PerformClick();
                     }
                     else
                     {
                         OnClick(EventArgs.Empty);
                     }
+
                     return;
             }
 
             if (OwnerDraw)
             {
-                switch (m.Msg)
+                switch (m.MsgInternal)
                 {
-                    case (int)User32.BM.SETSTATE:
+                    case (User32.WM)User32.BM.SETSTATE:
                         // Ignore BM_SETSTATE - Windows gets confused and paints things,
                         // even though we are ownerdraw.
                         break;
 
-                    case (int)User32.WM.KILLFOCUS:
-                    case (int)User32.WM.CANCELMODE:
-                    case (int)User32.WM.CAPTURECHANGED:
+                    case User32.WM.KILLFOCUS:
+                    case User32.WM.CANCELMODE:
+                    case User32.WM.CAPTURECHANGED:
                         if (!GetFlag(FlagInButtonUp) && GetFlag(FlagMousePressed))
                         {
                             SetFlag(FlagMousePressed, false);
@@ -1310,12 +1322,13 @@ namespace System.Windows.Forms
                                 Invalidate(DownChangeRectangle);
                             }
                         }
+
                         base.WndProc(ref m);
                         break;
 
-                    case (int)User32.WM.LBUTTONUP:
-                    case (int)User32.WM.MBUTTONUP:
-                    case (int)User32.WM.RBUTTONUP:
+                    case User32.WM.LBUTTONUP:
+                    case User32.WM.MBUTTONUP:
+                    case User32.WM.RBUTTONUP:
                         try
                         {
                             SetFlag(FlagInButtonUp, true);
@@ -1325,6 +1338,7 @@ namespace System.Windows.Forms
                         {
                             SetFlag(FlagInButtonUp, false);
                         }
+
                         break;
 
                     default:
@@ -1334,13 +1348,14 @@ namespace System.Windows.Forms
             }
             else
             {
-                switch ((User32.WM)m.Msg)
+                switch (m.MsgInternal)
                 {
                     case User32.WM.REFLECT_COMMAND:
-                        if (PARAM.HIWORD(m.WParam) == (int)User32.BN.CLICKED && !ValidationCancelled)
+                        if ((User32.BN)PARAM.HIWORD(m.WParamInternal) == User32.BN.CLICKED && !ValidationCancelled)
                         {
                             OnClick(EventArgs.Empty);
                         }
+
                         break;
                     default:
                         base.WndProc(ref m);

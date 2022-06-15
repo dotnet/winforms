@@ -2,22 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
     using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
 
     [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads (instantiated via GUID)
     public class AxHostTests : IClassFixture<ThreadExceptionFixture>
@@ -289,7 +287,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void AxHost_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new SubAxHost(EmptyClsidString)
@@ -304,7 +302,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void AxHost_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new SubAxHost(EmptyClsidString)
@@ -321,7 +319,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void AxHost_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new SubAxHost(EmptyClsidString)
@@ -338,7 +336,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
         public void AxHost_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
         {
             using var control = new SubAxHost(EmptyClsidString);
@@ -433,7 +431,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void AxHost_Cursor_Set_GetReturnsExpected(Cursor value)
         {
             using var control = new SubAxHost(EmptyClsidString)
@@ -448,7 +446,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void AxHost_Cursor_SetWithHandle_GetReturnsExpected(Cursor value)
         {
             using var control = new SubAxHost(WebBrowserClsidString);
@@ -463,7 +461,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void AxHost_Cursor_SetWithChildren_GetReturnsExpected(Cursor value)
         {
             var child1 = new Control();
@@ -485,7 +483,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void AxHost_Cursor_SetWithChildrenWithCursor_GetReturnsExpected(Cursor value)
         {
             var cursor1 = new Cursor((IntPtr)1);
@@ -515,7 +513,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void AxHost_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubAxHost(EmptyClsidString)
@@ -534,7 +532,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void AxHost_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new SubAxHost(EmptyClsidString)
@@ -549,7 +547,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void AxHost_ImeMode_Set_GetReturnsExpected(ImeMode value)
         {
             using var control = new SubAxHost(EmptyClsidString)
@@ -564,7 +562,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
         public void AxHost_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
             using var control = new SubAxHost(EmptyClsidString);
@@ -572,7 +570,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void AxHost_Enabled_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubAxHost(EmptyClsidString)
@@ -591,7 +589,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void AxHost_Site_SetDesignMode_CreatesOcx(bool otherDesignMode)
         {
             var mockSite1 = new Mock<ISite>(MockBehavior.Strict);
@@ -874,7 +872,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void AxHost_Text_Set_GetReturnsExpected(string value)
         {
             using var control = new SubAxHost(EmptyClsidString)
@@ -891,7 +889,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void AxHost_Text_SetWithHandle_GetReturnsExpected(string value)
         {
             using var control = new SubAxHost(WebBrowserClsidString);
@@ -1444,7 +1442,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(iFont.Italic.IsTrue());
             Assert.False(iFont.Underline.IsTrue());
             Assert.False(iFont.Strikethrough.IsTrue());
-            Assert.Equal(0, iFont.Charset);
+            // Charset is locale specific
+            // Assert.Equal(0, iFont.Charset);
             Assert.NotEqual(IntPtr.Zero, iFont.hFont);
 
             Ole32.IFontDisp iFontDisp = (Ole32.IFontDisp)disp;
@@ -1454,7 +1453,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(iFontDisp.Italic);
             Assert.False(iFontDisp.Underline);
             Assert.False(iFontDisp.Strikethrough);
-            Assert.Equal(0, iFontDisp.Charset);
+            // Charset is locale specific
+            // Assert.Equal(0, iFontDisp.Charset);
 
             Font result = SubAxHost.GetFontFromIFont(iFont);
             Assert.Equal(font.Name, result.Name);
@@ -1536,7 +1536,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(iFont.Italic.IsTrue());
             Assert.False(iFont.Underline.IsTrue());
             Assert.False(iFont.Strikethrough.IsTrue());
-            Assert.Equal(0, iFont.Charset);
+            // Charset is locale specific
+            // Assert.Equal(0, iFont.Charset);
             Assert.NotEqual(IntPtr.Zero, iFont.hFont);
 
             Font result = SubAxHost.GetFontFromIFont(iFont);
@@ -1746,7 +1747,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void AxHost_InvokeEditMode_Invoke_Sucess()
+        public void AxHost_InvokeEditMode_Invoke_Success()
         {
             using var control = new SubAxHost(EmptyClsidString);
             control.InvokeEditMode();
@@ -1769,7 +1770,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(InvokeEditMode_Site_TestData))]
-        public void AxHost_InvokeEditMode_InvokeWithSite_Sucess(bool designMode, object selectionService, int expectedCallCount)
+        public void AxHost_InvokeEditMode_InvokeWithSite_Success(bool designMode, object selectionService, int expectedCallCount)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
@@ -1820,7 +1821,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(InvokeEditMode_SiteWithParent_TestData))]
-        public void AxHost_InvokeEditMode_InvokeWithSiteWithParent_Sucess(bool designMode, object selectionService, int expectedCallCount)
+        public void AxHost_InvokeEditMode_InvokeWithSiteWithParent_Success(bool designMode, object selectionService, int expectedCallCount)
         {
             using var parent = new Control();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -1873,8 +1874,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedNoSelectionStyleProperty_Sucess(bool componentSelected)
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedNoSelectionStyleProperty_Success(bool componentSelected)
         {
             using var control = new SubAxHost(WebBrowserClsidString);
             var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
@@ -1928,8 +1929,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedInvalidSelectionStyleProperty_Sucess(bool componentSelected)
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedInvalidSelectionStyleProperty_Success(bool componentSelected)
         {
             using var control = new InvalidSelectionStyleAxHost(WebBrowserClsidString);
             var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
@@ -1985,8 +1986,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedValidSelectionStyleProperty_Sucess(bool componentSelected)
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedValidSelectionStyleProperty_Success(bool componentSelected)
         {
             using var control = new ValidSelectionStyleAxHost(WebBrowserClsidString);
             var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
@@ -2044,7 +2045,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(InvokeEditMode_Site_TestData))]
-        public void AxHost_InvokeEditMode_InvokeWithSiteWithHandle_Sucess(bool designMode, object selectionService, int expectedCallCount)
+        public void AxHost_InvokeEditMode_InvokeWithSiteWithHandle_Success(bool designMode, object selectionService, int expectedCallCount)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
@@ -2108,7 +2109,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(InvokeEditMode_SiteWithParent_TestData))]
-        public void AxHost_InvokeEditMode_InvokeWithSiteWithParentWithHandle_Sucess(bool designMode, object selectionService, int expectedCallCount)
+        public void AxHost_InvokeEditMode_InvokeWithSiteWithParentWithHandle_Success(bool designMode, object selectionService, int expectedCallCount)
         {
             using var parent = new Control();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -2177,7 +2178,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true, 2)]
         [InlineData(false, 0)]
-        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedValidSelectionStylePropertyWithHandle_Sucess(bool componentSelected, int expectedSelectionStyle)
+        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedValidSelectionStylePropertyWithHandle_Success(bool componentSelected, int expectedSelectionStyle)
         {
             using var control = new ValidSelectionStyleAxHost(WebBrowserClsidString);
             var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
@@ -2247,7 +2248,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void AxHost_OnEnter_Invoke_CallsEnter(EventArgs eventArgs)
         {
             using var control = new SubAxHost(EmptyClsidString);
@@ -2271,7 +2272,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void AxHost_OnLeave_Invoke_CallsLeave(KeyEventArgs eventArgs)
         {
             using var control = new SubAxHost(EmptyClsidString);
@@ -2295,7 +2296,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void AxHost_OnMouseCaptureChanged_Invoke_CallsMouseCaptureChanged(EventArgs eventArgs)
         {
             using var control = new SubAxHost(EmptyClsidString);
@@ -2312,10 +2313,10 @@ namespace System.Windows.Forms.Tests
             control.OnMouseCaptureChanged(eventArgs);
             Assert.Equal(1, callCount);
 
-           // Remove handler.
-           control.MouseCaptureChanged -= handler;
-           control.OnMouseCaptureChanged(eventArgs);
-           Assert.Equal(1, callCount);
+            // Remove handler.
+            control.MouseCaptureChanged -= handler;
+            control.OnMouseCaptureChanged(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [WinFormsFact]

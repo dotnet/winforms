@@ -2,110 +2,226 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Drawing;
+using System.Globalization;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
     public partial class MonthCalendar
     {
         /// <summary>
-        /// Represents the calendar cell accessible object.
+        ///  Represents an accessible object for a calendar date cell in <see cref="MonthCalendar"/> control.
         /// </summary>
-        internal class CalendarCellAccessibleObject : CalendarGridChildAccessibleObject
+        internal class CalendarCellAccessibleObject : CalendarButtonAccessibleObject
         {
-            private int _rowIndex;
-            private int _columnIndex;
-            private string _name;
+            // This const is used to get ChildId.
+            // It should take into account previous cells in a row.
+            // Indices start at 1.
+            private const int ChildIdIncrement = 1;
 
-            public CalendarCellAccessibleObject(MonthCalendarAccessibleObject calendarAccessibleObject, int calendarIndex, AccessibleObject parentAccessibleObject, int rowIndex, int columnIndex, string name)
-                : base(calendarAccessibleObject, calendarIndex, CalendarChildType.CalendarCell, parentAccessibleObject, rowIndex * columnIndex)
+            private readonly CalendarRowAccessibleObject _calendarRowAccessibleObject;
+            private readonly CalendarBodyAccessibleObject _calendarBodyAccessibleObject;
+            private readonly MonthCalendarAccessibleObject _monthCalendarAccessibleObject;
+            private readonly int _calendarIndex;
+            private readonly int _rowIndex;
+            private readonly int _columnIndex;
+            private readonly int[] _initRuntimeId;
+            private SelectionRange? _dateRange;
+
+            public CalendarCellAccessibleObject(CalendarRowAccessibleObject calendarRowAccessibleObject,
+                CalendarBodyAccessibleObject calendarBodyAccessibleObject,
+                MonthCalendarAccessibleObject monthCalendarAccessibleObject,
+                int calendarIndex, int rowIndex, int columnIndex)
+                : base(monthCalendarAccessibleObject)
             {
+                _calendarRowAccessibleObject = calendarRowAccessibleObject;
+                _calendarBodyAccessibleObject = calendarBodyAccessibleObject;
+                _monthCalendarAccessibleObject = monthCalendarAccessibleObject;
+                _calendarIndex = calendarIndex;
                 _rowIndex = rowIndex;
                 _columnIndex = columnIndex;
-                _name = name;
+                // RuntimeId don't change if the calendar date range is not changed,
+                // otherwise the calendar accessibility tree will be rebuilt.
+                // So save this value one time to avoid recreating new structures and making extra calculations.
+                _initRuntimeId = new int[]
+                {
+                    _calendarRowAccessibleObject.RuntimeId[0],
+                    _calendarRowAccessibleObject.RuntimeId[1],
+                    _calendarRowAccessibleObject.RuntimeId[2],
+                    _calendarRowAccessibleObject.RuntimeId[3],
+                    _calendarRowAccessibleObject.RuntimeId[4],
+                    GetChildId()
+                };
             }
 
-            public override string Name => _name;
+            public override Rectangle Bounds
+                => _monthCalendarAccessibleObject
+                .GetCalendarPartRectangle(MCGIP.CALENDARCELL, _calendarIndex, _rowIndex, _columnIndex);
 
-            internal override int Row => _rowIndex;
+            internal int CalendarIndex => _calendarIndex;
 
             internal override int Column => _columnIndex;
 
-            internal override UiaCore.IRawElementProviderSimple ContainingGrid => _calendarAccessibleObject;
+            internal override UiaCore.IRawElementProviderSimple ContainingGrid => _calendarBodyAccessibleObject;
 
-            internal override int[] RuntimeId =>
-                new int[5]
-                {
-                    RuntimeIDFirstItem,
-                    _calendarAccessibleObject.Owner.Handle.ToInt32(),
-                    Parent.Parent.GetChildId(),
-                    Parent.GetChildId(),
-                    GetChildId()
-                };
+            internal virtual SelectionRange? DateRange
+                => _dateRange ??= _monthCalendarAccessibleObject
+                .GetCalendarPartDateRange(MCGIP.CALENDARCELL, _calendarIndex, _rowIndex, _columnIndex);
 
-            protected override RECT CalculateBoundingRectangle()
+            public override string? Description
             {
-                _calendarAccessibleObject.GetCalendarPartRectangle(_calendarIndex, ComCtl32.MCGIP.CALENDARCELL, _rowIndex, _columnIndex, out RECT rectangle);
-                return rectangle;
+                get
+                {
+                    // Only date cells in the Month view have Descriptions that based on cells date ranges
+                    if (!_monthCalendarAccessibleObject.IsHandleCreated
+                        || _monthCalendarAccessibleObject.CalendarView != MCMV.MONTH
+                        || DateRange is null)
+                    {
+                        return null;
+                    }
+
+                    DateTime cellDate = DateRange.Start;
+                    CultureInfo culture = CultureInfo.CurrentCulture;
+                    int weekNumber = culture.Calendar.GetWeekOfYear(cellDate,
+                        culture.DateTimeFormat.CalendarWeekRule, _monthCalendarAccessibleObject.FirstDayOfWeek);
+
+                    // Used string.Format here to get the correct value from resources
+                    // that should be consistent with the rest resources values
+                    return string.Format(SR.MonthCalendarWeekNumberDescription, weekNumber)
+                        + $", {cellDate.ToString("dddd", culture)}";
+                }
             }
 
-            internal override int GetChildId() => _columnIndex + 1;
-
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction) =>
-                direction switch
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+                => direction switch
                 {
-                    UiaCore.NavigateDirection.Parent => _parentAccessibleObject,
-                    UiaCore.NavigateDirection.NextSibling =>
-                        _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarCell, _parentAccessibleObject, _columnIndex + 1),
-                    UiaCore.NavigateDirection.PreviousSibling =>
-                        _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarCell, _parentAccessibleObject, _columnIndex - 1),
+                    UiaCore.NavigateDirection.NextSibling
+                        => _calendarRowAccessibleObject.CellsAccessibleObjects?.Find(this)?.Next?.Value,
+                    UiaCore.NavigateDirection.PreviousSibling
+                        => _columnIndex == 0
+                            ? _calendarRowAccessibleObject.WeekNumberCellAccessibleObject
+                            : _calendarRowAccessibleObject.CellsAccessibleObjects?.Find(this)?.Previous?.Value,
                     _ => base.FragmentNavigate(direction)
                 };
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID) =>
-                propertyID switch
-                {
-                    UiaCore.UIA.ControlTypePropertyId => (_rowIndex == -1) ? UiaCore.UIA.HeaderControlTypeId : UiaCore.UIA.DataItemControlTypeId,
-                    UiaCore.UIA.NamePropertyId => Name,
-                    var p when
-                        p == UiaCore.UIA.HasKeyboardFocusPropertyId ||
-                        p == UiaCore.UIA.IsGridItemPatternAvailablePropertyId ||
-                        p == UiaCore.UIA.IsTableItemPatternAvailablePropertyId => true,
-                    _ => base.GetPropertyValue(propertyID)
-                };
+            internal override int GetChildId() => ChildIdIncrement + _columnIndex;
 
-            internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
-                patternId switch
-                {
-                    var p when
-                        p == UiaCore.UIA.GridItemPatternId ||
-                        p == UiaCore.UIA.InvokePatternId ||
-                        p == UiaCore.UIA.TableItemPatternId => true,
-                    _ => base.IsPatternSupported(patternId)
-                };
-
-            internal override void Invoke()
+            internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems()
             {
-                RaiseMouseClick();
-            }
+                if (!_monthCalendarAccessibleObject.IsHandleCreated
+                    || _monthCalendarAccessibleObject.CalendarView != MCMV.MONTH)
+                {
+                    // Column headers are available only in the "Month" view
+                    return null;
+                }
 
-            internal override UiaCore.IRawElementProviderSimple[] GetRowHeaderItems() => null;
+                CalendarRowAccessibleObject? topRow = _calendarBodyAccessibleObject.RowsAccessibleObjects?.First?.Value;
 
-            internal override UiaCore.IRawElementProviderSimple[] GetColumnHeaderItems()
-            {
-                if (!_calendarAccessibleObject.HasHeaderRow)
+                if (topRow is null || topRow.CellsAccessibleObjects is null)
                 {
                     return null;
                 }
 
-                AccessibleObject headerRowAccessibleObject =
-                    _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, _parentAccessibleObject.Parent, -1);
-                AccessibleObject headerCellAccessibleObject =
-                    _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarCell, headerRowAccessibleObject, _columnIndex);
+                foreach (CalendarCellAccessibleObject cell in topRow.CellsAccessibleObjects)
+                {
+                    if (cell.Column == _columnIndex)
+                    {
+                        return new UiaCore.IRawElementProviderSimple[1] { cell };
+                    }
+                }
 
-                return new UiaCore.IRawElementProviderSimple[1] { headerCellAccessibleObject };
+                return null;
+            }
+
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+                => propertyID switch
+                {
+                    UiaCore.UIA.ControlTypePropertyId
+                        => UiaCore.UIA.DataItemControlTypeId,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId
+                        => IsEnabled,
+                    _ => base.GetPropertyValue(propertyID)
+                };
+
+            internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaderItems()
+                => _calendarRowAccessibleObject.WeekNumberCellAccessibleObject is AccessibleObject weekNumber
+                    ? new UiaCore.IRawElementProviderSimple[1] { weekNumber }
+                    : null;
+
+            private protected override bool HasKeyboardFocus
+                => _monthCalendarAccessibleObject.Focused
+                    && _monthCalendarAccessibleObject.FocusedCell == this;
+
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+                => patternId switch
+                {
+                    UiaCore.UIA.GridItemPatternId => true,
+                    UiaCore.UIA.TableItemPatternId => true,
+                    _ => base.IsPatternSupported(patternId)
+                };
+
+            public override string Name
+            {
+                get
+                {
+                    if (DateRange is null)
+                    {
+                        return string.Empty;
+                    }
+
+                    return _monthCalendarAccessibleObject.CalendarView switch
+                    {
+                        MCMV.MONTH => $"{DateRange.Start:D}",
+                        MCMV.YEAR => $"{DateRange.Start:Y}",
+                        MCMV.DECADE => $"{DateRange.Start:yyy}",
+                        MCMV.CENTURY => $"{DateRange.Start:yyy} - {DateRange.End:yyy}",
+                        _ => string.Empty,
+                    };
+                }
+            }
+
+            public override AccessibleObject Parent => _calendarRowAccessibleObject;
+
+            public override AccessibleRole Role => AccessibleRole.Cell;
+
+            internal override int Row => _rowIndex;
+
+            internal override int[] RuntimeId => _initRuntimeId;
+
+            public override void Select(AccessibleSelection flags)
+            {
+                if (DateRange is not null)
+                {
+                    _monthCalendarAccessibleObject.SetSelectionRange(DateRange.Start, DateRange.End);
+                }
+            }
+
+            public override AccessibleStates State
+            {
+                get
+                {
+                    AccessibleStates state = AccessibleStates.Focusable | AccessibleStates.Selectable;
+
+                    if (_monthCalendarAccessibleObject.Focused && _monthCalendarAccessibleObject.FocusedCell == this)
+                    {
+                        return state | AccessibleStates.Focused | AccessibleStates.Selected;
+                    }
+
+                    // This condition works correctly in Month view only because the cell range is bigger
+                    // then the calendar selection range in the rest views.
+                    // But in the rest views a user can select only one cell. It means that a focused cell equals one selected cell,
+                    // so the correct state will be returned in the condition above for the rest views.
+                    if (DateRange is not null && _monthCalendarAccessibleObject.CalendarView == MCMV.MONTH
+                        && DateRange.Start >= _monthCalendarAccessibleObject.SelectionRange.Start
+                        && DateRange.End <= _monthCalendarAccessibleObject.SelectionRange.End)
+                    {
+                        state |= AccessibleStates.Selected;
+                    }
+
+                    return state;
+                }
             }
         }
     }

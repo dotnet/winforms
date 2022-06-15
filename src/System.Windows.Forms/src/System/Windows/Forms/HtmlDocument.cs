@@ -14,35 +14,35 @@ using static Interop.Mshtml;
 
 namespace System.Windows.Forms
 {
-    public sealed class HtmlDocument
+    public sealed partial class HtmlDocument
     {
-        internal static object EventClick = new object();
-        internal static object EventContextMenuShowing = new object();
-        internal static object EventFocusing = new object();
-        internal static object EventLosingFocus = new object();
-        internal static object EventMouseDown = new object();
-        internal static object EventMouseLeave = new object();
-        internal static object EventMouseMove = new object();
-        internal static object EventMouseOver = new object();
-        internal static object EventMouseUp = new object();
-        internal static object EventStop = new object();
+        internal static object s_eventClick = new();
+        internal static object s_eventContextMenuShowing = new();
+        internal static object s_eventFocusing = new();
+        internal static object s_eventLosingFocus = new();
+        internal static object s_eventMouseDown = new();
+        internal static object s_eventMouseLeave = new();
+        internal static object s_eventMouseMove = new();
+        internal static object s_eventMouseOver = new();
+        internal static object s_eventMouseUp = new();
+        internal static object s_eventStop = new();
 
-        private readonly IHTMLDocument2 htmlDocument2;
-        private readonly HtmlShimManager shimManager;
+        private readonly IHTMLDocument2 _htmlDocument2;
+        private readonly HtmlShimManager _shimManager;
 
         internal HtmlDocument(HtmlShimManager shimManager, IHTMLDocument doc)
         {
-            htmlDocument2 = (IHTMLDocument2)doc;
-            Debug.Assert(NativeHtmlDocument2 != null, "The document should implement IHtmlDocument2");
+            _htmlDocument2 = (IHTMLDocument2)doc;
+            Debug.Assert(NativeHtmlDocument2 is not null, "The document should implement IHtmlDocument2");
 
-            this.shimManager = shimManager;
+            _shimManager = shimManager;
         }
 
         internal IHTMLDocument2 NativeHtmlDocument2
         {
             get
             {
-                return htmlDocument2;
+                return _htmlDocument2;
             }
         }
 
@@ -50,16 +50,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ShimManager != null)
+                if (ShimManager is not null)
                 {
                     HtmlDocumentShim shim = ShimManager.GetDocumentShim(this);
                     if (shim is null)
                     {
-                        shimManager.AddDocumentShim(this);
+                        _shimManager.AddDocumentShim(this);
                         shim = ShimManager.GetDocumentShim(this);
                     }
+
                     return shim;
                 }
+
                 return null;
             }
         }
@@ -68,7 +70,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return shimManager;
+                return _shimManager;
             }
         }
 
@@ -77,7 +79,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElement iHtmlElement = NativeHtmlDocument2.GetActiveElement();
-                return iHtmlElement != null ? new HtmlElement(ShimManager, iHtmlElement) : null;
+                return iHtmlElement is not null ? new HtmlElement(ShimManager, iHtmlElement) : null;
             }
         }
 
@@ -86,7 +88,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElement iHtmlElement = NativeHtmlDocument2.GetBody();
-                return iHtmlElement != null ? new HtmlElement(ShimManager, iHtmlElement) : null;
+                return iHtmlElement is not null ? new HtmlElement(ShimManager, iHtmlElement) : null;
             }
         }
 
@@ -137,7 +139,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLWindow2 iHTMLWindow2 = NativeHtmlDocument2.GetParentWindow();
-                return iHTMLWindow2 != null ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
+                return iHTMLWindow2 is not null ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
             }
         }
 
@@ -157,6 +159,7 @@ namespace System.Windows.Forms
                         throw;
                     }
                 }
+
                 return c;
             }
             set
@@ -182,6 +185,7 @@ namespace System.Windows.Forms
                         throw;
                     }
                 }
+
                 return c;
             }
             set
@@ -207,6 +211,7 @@ namespace System.Windows.Forms
                         throw;
                     }
                 }
+
                 return c;
             }
             set
@@ -232,6 +237,7 @@ namespace System.Windows.Forms
                         throw;
                     }
                 }
+
                 return c;
             }
             set
@@ -257,6 +263,7 @@ namespace System.Windows.Forms
                         throw;
                     }
                 }
+
                 return c;
             }
             set
@@ -331,7 +338,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElementCollection iHTMLElementCollection = NativeHtmlDocument2.GetAll();
-                return iHTMLElementCollection != null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
+                return iHTMLElementCollection is not null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
             }
         }
 
@@ -340,7 +347,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElementCollection iHTMLElementCollection = NativeHtmlDocument2.GetLinks();
-                return iHTMLElementCollection != null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
+                return iHTMLElementCollection is not null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
             }
         }
 
@@ -349,7 +356,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElementCollection iHTMLElementCollection = NativeHtmlDocument2.GetImages();
-                return iHTMLElementCollection != null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
+                return iHTMLElementCollection is not null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
             }
         }
 
@@ -358,7 +365,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElementCollection iHTMLElementCollection = NativeHtmlDocument2.GetForms();
-                return iHTMLElementCollection != null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
+                return iHTMLElementCollection is not null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
             }
         }
 
@@ -387,19 +394,19 @@ namespace System.Windows.Forms
         public HtmlElement GetElementById(string id)
         {
             IHTMLElement iHTMLElement = ((IHTMLDocument3)NativeHtmlDocument2).GetElementById(id);
-            return iHTMLElement != null ? new HtmlElement(ShimManager, iHTMLElement) : null;
+            return iHTMLElement is not null ? new HtmlElement(ShimManager, iHTMLElement) : null;
         }
 
         public HtmlElement GetElementFromPoint(Point point)
         {
             IHTMLElement iHTMLElement = NativeHtmlDocument2.ElementFromPoint(point.X, point.Y);
-            return iHTMLElement != null ? new HtmlElement(ShimManager, iHTMLElement) : null;
+            return iHTMLElement is not null ? new HtmlElement(ShimManager, iHTMLElement) : null;
         }
 
         public HtmlElementCollection GetElementsByTagName(string tagName)
         {
             IHTMLElementCollection iHTMLElementCollection = ((IHTMLDocument3)NativeHtmlDocument2).GetElementsByTagName(tagName);
-            return iHTMLElementCollection != null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
+            return iHTMLElementCollection is not null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
         }
 
         public HtmlDocument OpenNew(bool replaceInHistory)
@@ -413,7 +420,7 @@ namespace System.Windows.Forms
         public HtmlElement CreateElement(string elementTag)
         {
             IHTMLElement iHTMLElement = NativeHtmlDocument2.CreateElement(elementTag);
-            return iHTMLElement != null ? new HtmlElement(ShimManager, iHTMLElement) : null;
+            return iHTMLElement is not null ? new HtmlElement(ShimManager, iHTMLElement) : null;
         }
 
         public unsafe object InvokeScript(string scriptName, object[] args)
@@ -431,7 +438,7 @@ namespace System.Windows.Forms
                         return null;
                     }
 
-                    if (args != null)
+                    if (args is not null)
                     {
                         // Reverse the arg order so that they read naturally after IDispatch.
                         Array.Reverse(args);
@@ -479,7 +486,7 @@ namespace System.Windows.Forms
         public void AttachEventHandler(string eventName, EventHandler eventHandler)
         {
             HtmlDocumentShim shim = DocumentShim;
-            if (shim != null)
+            if (shim is not null)
             {
                 shim.AttachEventHandler(eventName, eventHandler);
             }
@@ -488,7 +495,7 @@ namespace System.Windows.Forms
         public void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
             HtmlDocumentShim shim = DocumentShim;
-            if (shim != null)
+            if (shim is not null)
             {
                 shim.DetachEventHandler(eventName, eventHandler);
             }
@@ -496,32 +503,32 @@ namespace System.Windows.Forms
 
         public event HtmlElementEventHandler Click
         {
-            add => DocumentShim.AddHandler(EventClick, value);
-            remove => DocumentShim.RemoveHandler(EventClick, value);
+            add => DocumentShim.AddHandler(s_eventClick, value);
+            remove => DocumentShim.RemoveHandler(s_eventClick, value);
         }
 
         public event HtmlElementEventHandler ContextMenuShowing
         {
-            add => DocumentShim.AddHandler(EventContextMenuShowing, value);
-            remove => DocumentShim.RemoveHandler(EventContextMenuShowing, value);
+            add => DocumentShim.AddHandler(s_eventContextMenuShowing, value);
+            remove => DocumentShim.RemoveHandler(s_eventContextMenuShowing, value);
         }
 
         public event HtmlElementEventHandler Focusing
         {
-            add => DocumentShim.AddHandler(EventFocusing, value);
-            remove => DocumentShim.RemoveHandler(EventFocusing, value);
+            add => DocumentShim.AddHandler(s_eventFocusing, value);
+            remove => DocumentShim.RemoveHandler(s_eventFocusing, value);
         }
 
         public event HtmlElementEventHandler LosingFocus
         {
-            add => DocumentShim.AddHandler(EventLosingFocus, value);
-            remove => DocumentShim.RemoveHandler(EventLosingFocus, value);
+            add => DocumentShim.AddHandler(s_eventLosingFocus, value);
+            remove => DocumentShim.RemoveHandler(s_eventLosingFocus, value);
         }
 
         public event HtmlElementEventHandler MouseDown
         {
-            add => DocumentShim.AddHandler(EventMouseDown, value);
-            remove => DocumentShim.RemoveHandler(EventMouseDown, value);
+            add => DocumentShim.AddHandler(s_eventMouseDown, value);
+            remove => DocumentShim.RemoveHandler(s_eventMouseDown, value);
         }
 
         /// <summary>
@@ -529,35 +536,35 @@ namespace System.Windows.Forms
         /// </summary>
         public event HtmlElementEventHandler MouseLeave
         {
-            add => DocumentShim.AddHandler(EventMouseLeave, value);
-            remove => DocumentShim.RemoveHandler(EventMouseLeave, value);
+            add => DocumentShim.AddHandler(s_eventMouseLeave, value);
+            remove => DocumentShim.RemoveHandler(s_eventMouseLeave, value);
         }
 
         public event HtmlElementEventHandler MouseMove
         {
-            add => DocumentShim.AddHandler(EventMouseMove, value);
-            remove => DocumentShim.RemoveHandler(EventMouseMove, value);
+            add => DocumentShim.AddHandler(s_eventMouseMove, value);
+            remove => DocumentShim.RemoveHandler(s_eventMouseMove, value);
         }
 
         public event HtmlElementEventHandler MouseOver
         {
-            add => DocumentShim.AddHandler(EventMouseOver, value);
-            remove => DocumentShim.RemoveHandler(EventMouseOver, value);
+            add => DocumentShim.AddHandler(s_eventMouseOver, value);
+            remove => DocumentShim.RemoveHandler(s_eventMouseOver, value);
         }
 
         public event HtmlElementEventHandler MouseUp
         {
-            add => DocumentShim.AddHandler(EventMouseUp, value);
-            remove => DocumentShim.RemoveHandler(EventMouseUp, value);
+            add => DocumentShim.AddHandler(s_eventMouseUp, value);
+            remove => DocumentShim.RemoveHandler(s_eventMouseUp, value);
         }
 
         public event HtmlElementEventHandler Stop
         {
-            add => DocumentShim.AddHandler(EventStop, value);
-            remove => DocumentShim.RemoveHandler(EventStop, value);
+            add => DocumentShim.AddHandler(s_eventStop, value);
+            remove => DocumentShim.RemoveHandler(s_eventStop, value);
         }
 
-        private Color ColorFromObject(object oColor)
+        private static Color ColorFromObject(object oColor)
         {
             try
             {
@@ -594,315 +601,6 @@ namespace System.Windows.Forms
             return Color.Empty;
         }
 
-        /// <summary>
-        ///  HtmlDocumentShim - this is the glue between the DOM eventing mechanisms
-        ///          and our CLR callbacks.
-        ///
-        ///  There are two kinds of events: HTMLWindowEvents2 and IHtmlWindow3.AttachHandler style
-        ///  HTMLDocumentEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
-        ///              on our an instance of HTMLDocumentEvents2.  The HTMLDocumentEvents2 class then fires the event.
-        ///
-        ///  IHTMLDocument3.AttachHandler: MSHML calls back on an HtmlToClrEventProxy that we've created, looking
-        ///                       for a method named DISPID=0.  For each event that's subscribed, we create
-        ///                       a new HtmlToClrEventProxy, detect the callback and fire the corresponding
-        ///                       CLR event.
-        /// </summary>
-        internal class HtmlDocumentShim : HtmlShim
-        {
-            private AxHost.ConnectionPointCookie cookie;
-            private HtmlDocument htmlDocument;
-            private readonly IHTMLWindow2 associatedWindow;
-
-            internal HtmlDocumentShim(HtmlDocument htmlDocument)
-            {
-                this.htmlDocument = htmlDocument;
-                // snap our associated window so we know when to disconnect.
-                if (this.htmlDocument != null)
-                {
-                    HtmlWindow window = htmlDocument.Window;
-                    if (window != null)
-                    {
-                        associatedWindow = window.NativeHtmlWindow;
-                    }
-                }
-            }
-
-            public override IHTMLWindow2 AssociatedWindow
-            {
-                get { return associatedWindow; }
-            }
-
-            public IHTMLDocument2 NativeHtmlDocument2
-            {
-                get { return htmlDocument.NativeHtmlDocument2; }
-            }
-
-            internal HtmlDocument Document
-            {
-                get { return htmlDocument; }
-            }
-
-            ///  Support IHtmlDocument3.AttachHandler
-            public override void AttachEventHandler(string eventName, EventHandler eventHandler)
-            {
-                // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
-                // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on
-                // our EventHandler properly.
-
-                HtmlToClrEventProxy proxy = AddEventProxy(eventName, eventHandler);
-                ((IHTMLDocument3)NativeHtmlDocument2).AttachEvent(eventName, proxy);
-            }
-
-            ///  Support IHtmlDocument3.DetachHandler
-            public override void DetachEventHandler(string eventName, EventHandler eventHandler)
-            {
-                HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);
-                if (proxy != null)
-                {
-                    ((IHTMLDocument3)NativeHtmlDocument2).DetachEvent(eventName, proxy);
-                }
-            }
-
-            //
-            // Connect to standard events
-            //
-            public override void ConnectToEvents()
-            {
-                if (cookie is null || !cookie.Connected)
-                {
-                    cookie = new AxHost.ConnectionPointCookie(NativeHtmlDocument2,
-                                                                          new HTMLDocumentEvents2(htmlDocument),
-                                                                          typeof(DHTMLDocumentEvents2),
-                                                                          /*throwException*/ false);
-                    if (!cookie.Connected)
-                    {
-                        cookie = null;
-                    }
-                }
-            }
-
-            //
-            // Disconnect from standard events
-            //
-            public override void DisconnectFromEvents()
-            {
-                if (cookie != null)
-                {
-                    cookie.Disconnect();
-                    cookie = null;
-                }
-            }
-
-            protected override void Dispose(bool disposing)
-            {
-                base.Dispose(disposing);
-                if (disposing)
-                {
-                    if (htmlDocument != null)
-                    {
-                        Marshal.FinalReleaseComObject(htmlDocument.NativeHtmlDocument2);
-                    }
-                    htmlDocument = null;
-                }
-            }
-
-            protected override object GetEventSender()
-            {
-                return htmlDocument;
-            }
-        }
-
-        //
-        // Private classes:
-        //
-        [ClassInterface(ClassInterfaceType.None)]
-        private class HTMLDocumentEvents2 : StandardOleMarshalObject, /*Enforce calling back on the same thread*/
-                                            DHTMLDocumentEvents2
-        {
-            private readonly HtmlDocument parent;
-
-            public HTMLDocumentEvents2(HtmlDocument htmlDocument)
-            {
-                parent = htmlDocument;
-            }
-
-            private void FireEvent(object key, EventArgs e)
-            {
-                if (parent != null)
-                {
-                    parent.DocumentShim.FireEvent(key, e);
-                }
-            }
-
-            public bool onclick(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                FireEvent(HtmlDocument.EventClick, e);
-
-                return e.ReturnValue;
-            }
-
-            public bool oncontextmenu(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                FireEvent(HtmlDocument.EventContextMenuShowing, e);
-                return e.ReturnValue;
-            }
-
-            public void onfocusin(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                FireEvent(HtmlDocument.EventFocusing, e);
-            }
-
-            public void onfocusout(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                FireEvent(HtmlDocument.EventLosingFocus, e);
-            }
-
-            public void onmousemove(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                FireEvent(HtmlDocument.EventMouseMove, e);
-            }
-
-            public void onmousedown(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                FireEvent(HtmlDocument.EventMouseDown, e);
-            }
-
-            public void onmouseout(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                FireEvent(HtmlDocument.EventMouseLeave, e);
-            }
-
-            public void onmouseover(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                FireEvent(HtmlDocument.EventMouseOver, e);
-            }
-
-            public void onmouseup(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                FireEvent(HtmlDocument.EventMouseUp, e);
-            }
-
-            public bool onstop(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                FireEvent(HtmlDocument.EventStop, e);
-                return e.ReturnValue;
-            }
-
-            public bool onhelp(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public bool ondblclick(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public void onkeydown(IHTMLEventObj evtObj) { }
-
-            public void onkeyup(IHTMLEventObj evtObj) { }
-
-            public bool onkeypress(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public void onreadystatechange(IHTMLEventObj evtObj) { }
-
-            public bool onbeforeupdate(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public void onafterupdate(IHTMLEventObj evtObj) { }
-
-            public bool onrowexit(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public void onrowenter(IHTMLEventObj evtObj) { }
-
-            public bool ondragstart(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public bool onselectstart(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public bool onerrorupdate(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public void onrowsdelete(IHTMLEventObj evtObj) { }
-
-            public void onrowsinserted(IHTMLEventObj evtObj) { }
-
-            public void oncellchange(IHTMLEventObj evtObj) { }
-
-            public void onpropertychange(IHTMLEventObj evtObj) { }
-
-            public void ondatasetchanged(IHTMLEventObj evtObj) { }
-
-            public void ondataavailable(IHTMLEventObj evtObj) { }
-
-            public void ondatasetcomplete(IHTMLEventObj evtObj) { }
-
-            public void onbeforeeditfocus(IHTMLEventObj evtObj) { }
-
-            public void onselectionchange(IHTMLEventObj evtObj) { }
-
-            public bool oncontrolselect(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public bool onmousewheel(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public void onactivate(IHTMLEventObj evtObj) { }
-
-            public void ondeactivate(IHTMLEventObj evtObj) { }
-
-            public bool onbeforeactivate(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public bool onbeforedeactivate(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-        }
-
         #region operators
 
         public static bool operator ==(HtmlDocument left, HtmlDocument right)
@@ -934,6 +632,7 @@ namespace System.Windows.Forms
                 {
                     Marshal.Release(leftPtr);
                 }
+
                 if (rightPtr != IntPtr.Zero)
                 {
                     Marshal.Release(rightPtr);
@@ -946,7 +645,7 @@ namespace System.Windows.Forms
             return !(left == right);
         }
 
-        public override int GetHashCode() => htmlDocument2?.GetHashCode() ?? 0;
+        public override int GetHashCode() => _htmlDocument2?.GetHashCode() ?? 0;
 
         public override bool Equals(object obj)
         {

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using static Interop;
@@ -11,7 +9,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  DCMapping is used to change the mapping and clip region of the the specified device context to the given
+    ///  DCMapping is used to change the mapping and clip region of the specified device context to the given
     ///  bounds. When the DCMapping is disposed, the original mapping and clip rectangle are restored.
     ///
     ///  Example:
@@ -33,18 +31,13 @@ namespace System.Windows.Forms
 
         public unsafe DCMapping(Gdi32.HDC hdc, Rectangle bounds)
         {
-            if (hdc.IsNull)
-            {
-                throw new ArgumentNullException(nameof(hdc));
-            }
-
-            bool success;
+            ArgumentNullException.ThrowIfNull(hdc);
 
             _hdc = hdc;
             _savedState = Gdi32.SaveDC(hdc);
 
             // Retrieve the x-coordinates and y-coordinates of the viewport origin for the specified device context.
-            success = Gdi32.GetViewportOrgEx(hdc, out Point viewportOrg).IsTrue();
+            bool success = Gdi32.GetViewportOrgEx(hdc, out Point viewportOrg).IsTrue();
             Debug.Assert(success, "GetViewportOrgEx() failed.");
 
             // Create a new rectangular clipping region based off of the bounds specified, shifted over by the x & y specified in the viewport origin.
@@ -59,7 +52,7 @@ namespace System.Windows.Forms
             {
                 var hOriginalClippingRegion = new Gdi32.RegionScope(hdc);
 
-                // Shift the viewpoint origint by coordinates specified in "bounds".
+                // Shift the viewpoint origin by coordinates specified in "bounds".
                 var lastViewPort = new Point();
                 success = Gdi32.SetViewportOrgEx(
                     hdc,
@@ -71,7 +64,7 @@ namespace System.Windows.Forms
                 RegionType originalRegionType;
                 if (!hOriginalClippingRegion.IsNull)
                 {
-                    // Get the origninal clipping region so we can determine its type (we'll check later if we've restored the region back properly.)
+                    // Get the original clipping region so we can determine its type (we'll check later if we've restored the region back properly.)
                     RECT originalClipRect = new RECT();
                     originalRegionType = Gdi32.GetRgnBox(hOriginalClippingRegion, ref originalClipRect);
                     Debug.Assert(

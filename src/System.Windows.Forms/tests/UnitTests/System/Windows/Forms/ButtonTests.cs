@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using static Interop.UiaCore;
@@ -273,7 +272,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
         public void Button_AutoSizeMode_Set_GetReturnsExpected(AutoSizeMode value)
         {
             using var control = new SubButton();
@@ -313,7 +312,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -361,7 +361,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             try
             {
@@ -410,7 +411,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
         public void Button_AutoSizeMode_SetWithHandle_GetReturnsExpected(AutoSizeMode value)
         {
             using var control = new SubButton();
@@ -459,7 +460,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -531,7 +533,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -603,7 +606,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]
         public void Button_AutoSizeMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoSizeMode value)
         {
             using var control = new Button();
@@ -611,7 +614,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DialogResult))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DialogResult))]
         public void Button_DialogResult_Set_GetReturnsExpected(DialogResult value)
         {
             using var control = new Button
@@ -628,7 +631,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DialogResult))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DialogResult))]
         public void Button_DialogResult_SetWithHandle_GetReturnsExpected(DialogResult value)
         {
             using var control = new Button();
@@ -657,7 +660,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DialogResult))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DialogResult))]
         public void Button_DialogResult_SetInvalidValue_ThrowsInvalidEnumArgumentException(DialogResult value)
         {
             using var control = new Button();
@@ -665,7 +668,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void Button_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubButton
@@ -804,7 +807,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Text", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -906,7 +910,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Text", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -992,13 +997,36 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
-        public void Button_CreateAccessibilityInstance_Invoke_ReturnsExpected(FlatStyle flatStyle)
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        public void Button_CreateAccessibilityInstance_Invoke_ReturnsExpected_IfHandleIsNotCreated(FlatStyle flatStyle)
         {
             using var control = new SubButton
             {
                 FlatStyle = flatStyle
             };
+
+            Assert.False(control.IsHandleCreated);
+            Button.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<Button.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
+            Assert.NotNull(instance);
+            Assert.Same(control, instance.Owner);
+            Assert.Equal(AccessibleStates.None, instance.State);
+            Assert.Equal(AccessibleRole.None, instance.Role);
+            Assert.NotSame(control.CreateAccessibilityInstance(), instance);
+            Assert.NotSame(control.AccessibilityObject, instance);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        public void Button_CreateAccessibilityInstance_Invoke_ReturnsExpected_IfHandleIsCreated(FlatStyle flatStyle)
+        {
+            using var control = new SubButton
+            {
+                FlatStyle = flatStyle
+            };
+
+            control.CreateControl();
+            Assert.True(control.IsHandleCreated);
             Button.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<Button.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
             Assert.NotNull(instance);
             Assert.Same(control, instance.Owner);
@@ -1006,38 +1034,55 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AccessibleRole.PushButton, instance.Role);
             Assert.NotSame(control.CreateAccessibilityInstance(), instance);
             Assert.NotSame(control.AccessibilityObject, instance);
+            Assert.True(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [InlineData(FlatStyle.Flat, AccessibleStates.Pressed | AccessibleStates.Focusable)]
-        [InlineData(FlatStyle.Popup, AccessibleStates.Pressed | AccessibleStates.Focusable)]
-        [InlineData(FlatStyle.Standard, AccessibleStates.Pressed | AccessibleStates.Focusable)]
-        [InlineData(FlatStyle.System, AccessibleStates.Focusable)]
-        public void Button_CreateAccessibilityInstance_InvokeMouseDown_ReturnsExpected(FlatStyle flatStyle, AccessibleStates expectedState)
+        [InlineData(true, FlatStyle.Flat, AccessibleStates.Pressed | AccessibleStates.Focusable, AccessibleRole.PushButton)]
+        [InlineData(true, FlatStyle.Popup, AccessibleStates.Pressed | AccessibleStates.Focusable, AccessibleRole.PushButton)]
+        [InlineData(true, FlatStyle.Standard, AccessibleStates.Pressed | AccessibleStates.Focusable, AccessibleRole.PushButton)]
+        [InlineData(true, FlatStyle.System, AccessibleStates.Focusable, AccessibleRole.PushButton)]
+        [InlineData(false, FlatStyle.Flat, AccessibleStates.None, AccessibleRole.None)]
+        [InlineData(false, FlatStyle.Popup, AccessibleStates.None, AccessibleRole.None)]
+        [InlineData(false, FlatStyle.Standard, AccessibleStates.None, AccessibleRole.None)]
+        [InlineData(false, FlatStyle.System, AccessibleStates.None, AccessibleRole.None)]
+        public void Button_CreateAccessibilityInstance_InvokeMouseDown_ReturnsExpected(bool createControl, FlatStyle flatStyle, AccessibleStates expectedState, AccessibleRole expectedRole)
         {
             using var control = new SubButton
             {
                 FlatStyle = flatStyle
             };
+
+            if (createControl)
+            {
+                control.CreateControl();
+            }
+
+            Assert.Equal(createControl, control.IsHandleCreated);
+
             control.OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0));
             Button.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<Button.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
             Assert.NotNull(instance);
             Assert.Same(control, instance.Owner);
             Assert.Equal(expectedState, instance.State);
-            Assert.Equal(AccessibleRole.PushButton, instance.Role);
+            Assert.Equal(expectedRole, instance.Role);
             Assert.NotSame(control.CreateAccessibilityInstance(), instance);
             Assert.NotSame(control.AccessibilityObject, instance);
+            Assert.Equal(createControl, control.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
-        public void Button_CreateAccessibilityInstance_InvokeWithCustomRole_ReturnsExpected(FlatStyle flatStyle)
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        public void Button_CreateAccessibilityInstance_InvokeWithCustomRole_ReturnsExpected_IfHandleIsCreated(FlatStyle flatStyle)
         {
             using var control = new SubButton
             {
                 FlatStyle = flatStyle,
                 AccessibleRole = AccessibleRole.HelpBalloon
             };
+
+            control.CreateControl();
+            Assert.True(control.IsHandleCreated);
             Button.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<Button.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
             Assert.NotNull(instance);
             Assert.Same(control, instance.Owner);
@@ -1045,16 +1090,40 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AccessibleRole.HelpBalloon, instance.Role);
             Assert.NotSame(control.CreateAccessibilityInstance(), instance);
             Assert.NotSame(control.AccessibilityObject, instance);
+            Assert.True(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
-        public void Button_CreateAccessibilityInstance_InvokeDoDefaultAction_CallsOnClick(FlatStyle flatStyle)
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        public void Button_CreateAccessibilityInstance_InvokeWithCustomRole_ReturnsExpected_IfHandleIsNotCreated(FlatStyle flatStyle)
+        {
+            using var control = new SubButton
+            {
+                FlatStyle = flatStyle,
+                AccessibleRole = AccessibleRole.HelpBalloon
+            };
+
+            Assert.False(control.IsHandleCreated);
+            Button.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<Button.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
+            Assert.NotNull(instance);
+            Assert.Same(control, instance.Owner);
+            Assert.Equal(AccessibleStates.None, instance.State);
+            Assert.Equal(AccessibleRole.HelpBalloon, instance.Role);
+            Assert.NotSame(control.CreateAccessibilityInstance(), instance);
+            Assert.NotSame(control.AccessibilityObject, instance);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        public void Button_CreateAccessibilityInstance_InvokeDoDefaultAction_CallsOnClick_IfHandleIsCreated(FlatStyle flatStyle)
         {
             using var control = new SubButton
             {
                 FlatStyle = flatStyle
             };
+
+            control.CreateControl();
             int callCount = 0;
             control.Click += (sender, e) =>
             {
@@ -1065,6 +1134,29 @@ namespace System.Windows.Forms.Tests
             Button.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<Button.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
             instance.DoDefaultAction();
             Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        public void Button_CreateAccessibilityInstance_InvokeDoDefaultAction_CallsOnClick_IfHandleIsNotCreated(FlatStyle flatStyle)
+        {
+            using var control = new SubButton
+            {
+                FlatStyle = flatStyle
+            };
+
+            int callCount = 0;
+            control.Click += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            Button.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<Button.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
+            instance.DoDefaultAction();
+            Assert.Equal(0, callCount);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -1814,7 +1906,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Button_OnClick_Invoke_CallsClick(EventArgs eventArgs)
         {
             using var control = new SubButton();
@@ -1830,21 +1922,17 @@ namespace System.Windows.Forms.Tests
             control.Click += handler;
             control.OnClick(eventArgs);
             Assert.Equal(1, callCount);
-
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.Click -= handler;
             control.OnClick(eventArgs);
             Assert.Equal(1, callCount);
-
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Button_OnClick_InvokeWithForm_CallsClick(EventArgs eventArgs)
         {
             using var form = new Form();
@@ -1871,8 +1959,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.Equal(DialogResult.Yes, form.DialogResult);
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
             Assert.False(form.IsHandleCreated);
 
@@ -1882,14 +1969,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.Equal(DialogResult.Yes, form.DialogResult);
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
             Assert.False(form.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Button_OnClick_InvokeWithHandle_CallsClick(EventArgs eventArgs)
         {
             using var control = new SubButton();
@@ -1928,7 +2014,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Button_OnClick_InvokeWithFormWithHandle_CallsClick(EventArgs eventArgs)
         {
             using var form = new Form();
@@ -1982,7 +2068,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Button_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
         {
             using var control = new SubButton();
@@ -2006,7 +2092,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Button_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
         {
             using var control = new SubButton();
@@ -2032,7 +2118,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Button_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubButton();
@@ -2058,7 +2144,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Button_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubButton();
@@ -2085,7 +2171,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Button_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubButton();
@@ -2111,7 +2197,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Button_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubButton();
@@ -2138,7 +2224,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void Button_OnMouseDoubleClick_Invoke_CallsMouseDoubleClick(MouseEventArgs eventArgs)
         {
             using var control = new SubButton();
@@ -2852,7 +2938,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Text", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -2961,7 +3048,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Text", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -3019,17 +3107,13 @@ namespace System.Windows.Forms.Tests
             control.Click += handler;
             control.PerformClick();
             Assert.Equal(1, callCount);
-
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.Click -= handler;
             control.PerformClick();
             Assert.Equal(1, callCount);
-
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -3195,8 +3279,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedClickCallCount != 0, control.ProcessMnemonic(charCode));
             Assert.Equal(expectedClickCallCount, clickCallCount);
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.Equal(expectedClickCallCount != 0, control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -3237,11 +3320,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Button_RaiseAutomationEvent_Invoke_Success()
+        public void Button_RaiseAutomationEvent_Invoke_Success_IfControlIsCreated()
         {
             using var button = new TestButton();
             Assert.False(button.IsHandleCreated);
-
+            button.CreateControl();
             var accessibleObject = (SubButtonAccessibleObject)button.AccessibilityObject;
             Assert.Equal(0, accessibleObject.RaiseAutomationEventCallsCount);
             Assert.Equal(0, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
@@ -3250,8 +3333,22 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(1, accessibleObject.RaiseAutomationEventCallsCount);
             Assert.Equal(1, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
             Assert.True(button.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void Button_RaiseAutomationEvent_IsNotInvoked_IfControlIsNotCreated()
+        {
+            using var button = new TestButton();
+            var accessibleObject = (SubButtonAccessibleObject)button.AccessibilityObject;
+            Assert.Equal(0, accessibleObject.RaiseAutomationEventCallsCount);
+            Assert.Equal(0, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
+
+            button.PerformClick();
+
+            Assert.Equal(0, accessibleObject.RaiseAutomationEventCallsCount);
+            Assert.Equal(0, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
+            Assert.False(button.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -3426,7 +3523,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void Button_WndProc_InvokeMouseHoverWithHandle_Success(FlatStyle flatStyle)
         {
             using var control = new SubButton
@@ -3512,9 +3609,7 @@ namespace System.Windows.Forms.Tests
                 control.WndProc(ref m);
                 Assert.Equal(expectedResult, m.Result);
                 Assert.Equal(expectedCallCount, callCount);
-
-                // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-                Assert.Equal(expectedCallCount > 0, control.IsHandleCreated);
+                Assert.False(control.IsHandleCreated);
             }
         }
 
@@ -3677,13 +3772,21 @@ namespace System.Windows.Forms.Tests
 
             internal override bool RaiseAutomationEvent(UIA eventId)
             {
-                RaiseAutomationEventCallsCount++;
+                if (Owner.IsHandleCreated)
+                {
+                    RaiseAutomationEventCallsCount++;
+                }
+
                 return base.RaiseAutomationEvent(eventId);
             }
 
             internal override bool RaiseAutomationPropertyChangedEvent(UIA propertyId, object oldValue, object newValue)
             {
-                RaiseAutomationPropertyChangedEventCallsCount++;
+                if (Owner.IsHandleCreated)
+                {
+                    RaiseAutomationPropertyChangedEventCallsCount++;
+                }
+
                 return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
             }
         }

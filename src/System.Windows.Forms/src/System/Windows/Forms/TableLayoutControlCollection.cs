@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     [DesignerSerializer("System.Windows.Forms.Design.TableLayoutControlCollectionCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
     public class TableLayoutControlCollection : Control.ControlCollection
     {
-        public TableLayoutControlCollection(TableLayoutPanel container) : base(container ?? throw new ArgumentNullException(nameof(container)))
+        public TableLayoutControlCollection(TableLayoutPanel container) : base(container.OrThrowIfNull())
         {
             Container = container;
         }

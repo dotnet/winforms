@@ -2,13 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public class DataGridViewCellEventArgs : EventArgs
     {
-        internal DataGridViewCellEventArgs(DataGridViewCell dataGridViewCell) : this(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex)
+        internal DataGridViewCellEventArgs(DataGridViewCell dataGridViewCell)
+            : this(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex)
         {
         }
 
@@ -18,6 +17,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
+
             if (rowIndex < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));

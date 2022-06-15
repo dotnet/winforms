@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -17,7 +16,6 @@ namespace System.Windows.Forms
     /// </summary>
     [DefaultProperty(nameof(Color))]
     [SRDescription(nameof(SR.DescriptionColorDialog))]
-    // The only event this dialog has is HelpRequest, which isn't very useful
     public class ColorDialog : CommonDialog
     {
         private int _options;
@@ -26,8 +24,7 @@ namespace System.Windows.Forms
         private Color _color;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ColorDialog'/>
-        ///  class.
+        ///  Initializes a new instance of the <see cref="ColorDialog"/> class.
         /// </summary>
         public ColorDialog()
         {
@@ -44,15 +41,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.CDallowFullOpenDescr))]
         public virtual bool AllowFullOpen
         {
-            get
-            {
-                return !GetOption((int)Comdlg32.CC.PREVENTFULLOPEN);
-            }
-
-            set
-            {
-                SetOption((int)Comdlg32.CC.PREVENTFULLOPEN, !value);
-            }
+            get => !GetOption((int)Comdlg32.CC.PREVENTFULLOPEN);
+            set => SetOption((int)Comdlg32.CC.PREVENTFULLOPEN, !value);
         }
 
         /// <summary>
@@ -64,15 +54,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.CDanyColorDescr))]
         public virtual bool AnyColor
         {
-            get
-            {
-                return GetOption((int)Comdlg32.CC.ANYCOLOR);
-            }
-
-            set
-            {
-                SetOption((int)Comdlg32.CC.ANYCOLOR, value);
-            }
+            get => GetOption((int)Comdlg32.CC.ANYCOLOR);
+            set => SetOption((int)Comdlg32.CC.ANYCOLOR, value);
         }
 
         /// <summary>
@@ -82,39 +65,26 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.CDcolorDescr))]
         public Color Color
         {
-            get
-            {
-                return _color;
-            }
-            set
-            {
-                if (!value.IsEmpty)
-                {
-                    _color = value;
-                }
-                else
-                {
-                    _color = Color.Black;
-                }
-            }
+            get => _color;
+            set => _color = !value.IsEmpty ? value : Color.Black;
         }
 
         /// <summary>
-        ///  Gets or sets the set of
-        ///  custom colors shown in the dialog box.
+        ///  Gets or sets the set of custom colors shown in the dialog box.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.CDcustomColorsDescr))]
+        [AllowNull]
         public int[] CustomColors
         {
-            get { return (int[])_customColors.Clone(); }
+            get => (int[])_customColors.Clone();
             set
             {
                 int length = value is null ? 0 : Math.Min(value.Length, 16);
                 if (length > 0)
                 {
-                    Array.Copy(value, 0, _customColors, 0, length);
+                    Array.Copy(value!, 0, _customColors, 0, length);
                 }
 
                 for (int i = length; i < 16; i++)
@@ -126,22 +96,15 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets a value indicating whether the controls used to create custom
-        ///  colors are visible when the dialog box is opened
+        ///  colors are visible when the dialog box is opened.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(false)]
         [SRDescription(nameof(SR.CDfullOpenDescr))]
         public virtual bool FullOpen
         {
-            get
-            {
-                return GetOption((int)Comdlg32.CC.FULLOPEN);
-            }
-
-            set
-            {
-                SetOption((int)Comdlg32.CC.FULLOPEN, value);
-            }
+            get => GetOption((int)Comdlg32.CC.FULLOPEN);
+            set => SetOption((int)Comdlg32.CC.FULLOPEN, value);
         }
 
         /// <summary>
@@ -152,66 +115,39 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns our CHOOSECOLOR options.
         /// </summary>
-        protected virtual int Options
-        {
-            get
-            {
-                return _options;
-            }
-        }
+        protected virtual int Options => _options;
 
         /// <summary>
-        ///  Gets or sets a value indicating whether a Help button appears
-        ///  in the color dialog box.
+        ///  Gets or sets a value indicating whether a Help button appears in the color dialog box.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
         [SRDescription(nameof(SR.CDshowHelpDescr))]
         public virtual bool ShowHelp
         {
-            get
-            {
-                return GetOption((int)Comdlg32.CC.SHOWHELP);
-            }
-            set
-            {
-                SetOption((int)Comdlg32.CC.SHOWHELP, value);
-            }
+            get => GetOption((int)Comdlg32.CC.SHOWHELP);
+            set => SetOption((int)Comdlg32.CC.SHOWHELP, value);
         }
 
         /// <summary>
-        ///  Gets
-        ///  or sets a value indicating
-        ///  whether the dialog
-        ///  box will restrict users to selecting solid colors only.
+        ///  Gets or sets a value indicating whether the dialog box will restrict users to selecting solid colors only.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
         [SRDescription(nameof(SR.CDsolidColorOnlyDescr))]
         public virtual bool SolidColorOnly
         {
-            get
-            {
-                return GetOption((int)Comdlg32.CC.SOLIDCOLOR);
-            }
-            set
-            {
-                SetOption((int)Comdlg32.CC.SOLIDCOLOR, value);
-            }
+            get => GetOption((int)Comdlg32.CC.SOLIDCOLOR);
+            set => SetOption((int)Comdlg32.CC.SOLIDCOLOR, value);
         }
 
         /// <summary>
         ///  Lets us control the CHOOSECOLOR options.
         /// </summary>
-        private bool GetOption(int option)
-        {
-            return (_options & option) != 0;
-        }
+        private bool GetOption(int option) => (_options & option) != 0;
 
         /// <summary>
-        ///  Resets
-        ///  all options to their
-        ///  default values, the last selected color to black, and the custom
+        ///  Resets all options to their default values, the last selected color to black, and the custom
         ///  colors to their default values.
         /// </summary>
         public override void Reset()
@@ -221,10 +157,7 @@ namespace System.Windows.Forms
             CustomColors = null;
         }
 
-        private void ResetColor()
-        {
-            Color = Color.Black;
-        }
+        private void ResetColor() => Color = Color.Black;
 
         protected unsafe override bool RunDialog(IntPtr hwndOwner)
         {
@@ -233,16 +166,16 @@ namespace System.Windows.Forms
             {
                 lStructSize = (uint)Marshal.SizeOf<Comdlg32.CHOOSECOLORW>()
             };
-            IntPtr custColorPtr = Marshal.AllocCoTaskMem(64);
-            try
+
+            fixed (int* customColors = _customColors)
             {
-                Marshal.Copy(_customColors, 0, custColorPtr, 16);
                 cc.hwndOwner = hwndOwner;
                 cc.hInstance = Instance;
                 cc.rgbResult = ColorTranslator.ToWin32(_color);
-                cc.lpCustColors = custColorPtr;
+                cc.lpCustColors = (IntPtr)customColors;
 
                 Comdlg32.CC flags = (Comdlg32.CC)Options | Comdlg32.CC.RGBINIT | Comdlg32.CC.ENABLEHOOK;
+
                 // Our docs say AllowFullOpen takes precedence over FullOpen; ChooseColor implements the opposite
                 if (!AllowFullOpen)
                 {
@@ -262,12 +195,7 @@ namespace System.Windows.Forms
                     _color = ColorTranslator.FromOle(cc.rgbResult);
                 }
 
-                Marshal.Copy(custColorPtr, _customColors, 0, 16);
                 return true;
-            }
-            finally
-            {
-                Marshal.FreeCoTaskMem(custColorPtr);
             }
         }
 
@@ -287,21 +215,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='Color'/> property should be
-        ///  persisted.
+        ///  Indicates whether the <see cref="Color"/> property should be persisted.
         /// </summary>
-        private bool ShouldSerializeColor()
-        {
-            return !Color.Equals(Color.Black);
-        }
+        private bool ShouldSerializeColor() => !Color.Equals(Color.Black);
 
         /// <summary>
         ///  Provides a string version of this object.
         /// </summary>
-        public override string ToString()
-        {
-            string s = base.ToString();
-            return s + ",  Color: " + Color.ToString();
-        }
+        public override string ToString() => $"{base.ToString()},  Color: {Color}";
     }
 }

@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 
-  <!-- Rulesets -->
-  <PropertyGroup Condition="'$(CodeAnalysisRuleSet)' == '' OR '$(CodeAnalysisRuleSet)' == 'MinimumRecommendedRules.ruleset'">
-    <CodeAnalysisRuleSet Condition="'$(IsShipping)' == 'true'">$(MSBuildThisFileDirectory)Shipping.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSet Condition="'$(IsShipping)' != 'true'">$(MSBuildThisFileDirectory)NonShipping.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
+  <ItemGroup>
+    <EditorConfigFiles Include="$(MSBuildThisFileDirectory)CodeAnalysis.src.globalconfig" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(IsShipping)' == 'false'">
+    <EditorConfigFiles Remove="$(MSBuildThisFileDirectory)CodeAnalysis.src.globalconfig" />
+    <EditorConfigFiles Include="$(MSBuildThisFileDirectory)CodeAnalysis.test.globalconfig" />
+  </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164" PrivateAssets="all" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.354" PrivateAssets="all" />
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" Visible="false" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0-beta1.final" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>

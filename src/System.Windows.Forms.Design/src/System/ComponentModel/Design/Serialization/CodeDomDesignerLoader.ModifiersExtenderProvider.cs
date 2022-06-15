@@ -60,13 +60,13 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     ISite site = c.Site;
 
-                    if (site != null)
+                    if (site is not null)
                     {
                         _host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
                     }
                 }
 
-                if (_host != null)
+                if (_host is not null)
                 {
                     baseComponent = _host.RootComponent;
                 }
@@ -85,7 +85,7 @@ namespace System.ComponentModel.Design.Serialization
             [SRDescription(nameof(SR.CodeDomDesignerLoaderPropGenerateMember))]
             [Category("Design")]
             [HelpKeyword("Designer_GenerateMember")]
-            public bool GetGenerateMember(IComponent comp)
+            public static bool GetGenerateMember(IComponent comp)
             {
                 ISite site = comp.Site;
 
@@ -96,7 +96,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 IDictionaryService dictionary = (IDictionaryService)site.GetService(typeof(IDictionaryService));
 
-                if (dictionary != null)
+                if (dictionary is not null)
                 {
                     object value = dictionary.GetValue("GenerateMember");
 
@@ -112,7 +112,7 @@ namespace System.ComponentModel.Design.Serialization
             /// <summary>
             ///  This is an extender property that we offer to all components
             ///  on the form.  It implements the "Modifiers" property, which
-            ///  is an enum represneing the "public/protected/private" scope
+            ///  is an enum representing the "public/protected/private" scope
             ///  of a component.
             /// </summary>
             [DesignOnly(true)]
@@ -122,15 +122,15 @@ namespace System.ComponentModel.Design.Serialization
             [Category("Design")]
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             [HelpKeyword("Designer_Modifiers")]
-            public MemberAttributes GetModifiers(IComponent comp)
+            public static MemberAttributes GetModifiers(IComponent comp)
             {
                 ISite site = comp.Site;
 
-                if (site != null)
+                if (site is not null)
                 {
                     IDictionaryService dictionary = (IDictionaryService)site.GetService(typeof(IDictionaryService));
 
-                    if (dictionary != null)
+                    if (dictionary is not null)
                     {
                         object value = dictionary.GetValue("Modifiers");
 
@@ -146,7 +146,7 @@ namespace System.ComponentModel.Design.Serialization
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(comp);
                 PropertyDescriptor prop = props["DefaultModifiers"];
 
-                if (prop != null && prop.PropertyType == typeof(MemberAttributes))
+                if (prop is not null && prop.PropertyType == typeof(MemberAttributes))
                 {
                     return (MemberAttributes)prop.GetValue(comp);
                 }
@@ -160,7 +160,7 @@ namespace System.ComponentModel.Design.Serialization
             ///  is a boolean that, if true, causes a field member to be generated for
             ///  the object.
             /// </summary>
-            public void SetGenerateMember(IComponent comp, bool generate)
+            public static void SetGenerateMember(IComponent comp, bool generate)
             {
                 ISite site = comp.Site;
 
@@ -172,7 +172,7 @@ namespace System.ComponentModel.Design.Serialization
                 IDictionaryService dictionary = (IDictionaryService)site.GetService(typeof(IDictionaryService));
                 bool oldValue = GetGenerateMember(comp);
 
-                if (dictionary != null)
+                if (dictionary is not null)
                 {
                     dictionary.SetValue("GenerateMember", generate);
                 }
@@ -205,10 +205,10 @@ namespace System.ComponentModel.Design.Serialization
             /// <summary>
             ///  This is an extender property that we offer to all components
             ///  on the form.  It implements the "Modifiers" property, which
-            ///  is an enum represneing the "public/protected/private" scope
+            ///  is an enum representing the "public/protected/private" scope
             ///  of a component.
             /// </summary>
-            public void SetModifiers(IComponent comp, MemberAttributes modifiers)
+            public static void SetModifiers(IComponent comp, MemberAttributes modifiers)
             {
                 ISite site = comp.Site;
 
@@ -219,7 +219,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 IDictionaryService dictionary = (IDictionaryService)site.GetService(typeof(IDictionaryService));
 
-                if (dictionary != null)
+                if (dictionary is not null)
                 {
                     dictionary.SetValue("Modifiers", modifiers);
                 }

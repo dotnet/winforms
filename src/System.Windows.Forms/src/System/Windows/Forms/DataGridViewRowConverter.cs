@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
@@ -13,7 +11,7 @@ namespace System.Windows.Forms
 {
     internal class DataGridViewRowConverter : ExpandableObjectConverter
     {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
         {
             if (destinationType == typeof(InstanceDescriptor))
             {
@@ -23,17 +21,14 @@ namespace System.Windows.Forms
             return base.CanConvertTo(context, destinationType);
         }
 
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
-            if (destinationType is null)
-            {
-                throw new ArgumentNullException(nameof(destinationType));
-            }
+            ArgumentNullException.ThrowIfNull(destinationType);
 
-            if (value is DataGridView row && destinationType == typeof(InstanceDescriptor))
+            if (value is DataGridViewRow row && destinationType == typeof(InstanceDescriptor))
             {
-                ConstructorInfo ctor = row.GetType().GetConstructor(Array.Empty<Type>());
-                if (ctor != null)
+                ConstructorInfo? ctor = row.GetType().GetConstructor(Array.Empty<Type>());
+                if (ctor is not null)
                 {
                     return new InstanceDescriptor(ctor, Array.Empty<object>(), isComplete: false);
                 }

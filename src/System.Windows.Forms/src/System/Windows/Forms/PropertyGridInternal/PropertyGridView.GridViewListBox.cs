@@ -10,17 +10,14 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         internal class GridViewListBox : ListBox
         {
-            internal bool fInSetSelectedIndex;
+            private bool _inSetSelectedIndex;
             private readonly PropertyGridView _owningPropertyGridView;
 
             public GridViewListBox(PropertyGridView gridView)
             {
-                if (gridView is null)
-                {
-                    throw new ArgumentNullException(nameof(gridView));
-                }
+                ArgumentNullException.ThrowIfNull(gridView);
 
-                base.IntegralHeight = false;
+                IntegralHeight = false;
                 _owningPropertyGridView = gridView;
                 base.BackColor = gridView.BackColor;
             }
@@ -53,20 +50,15 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <returns>The accessibility object instance.</returns>
             protected override AccessibleObject CreateAccessibilityInstance()
-            {
-                return new GridViewListBoxAccessibleObject(this);
-            }
+                => new GridViewListBoxAccessibleObject(this);
 
-            public virtual bool InSetSelectedIndex()
-            {
-                return fInSetSelectedIndex;
-            }
+            public virtual bool InSetSelectedIndex() => _inSetSelectedIndex;
 
             protected override void OnSelectedIndexChanged(EventArgs e)
             {
-                fInSetSelectedIndex = true;
+                _inSetSelectedIndex = true;
                 base.OnSelectedIndexChanged(e);
-                fInSetSelectedIndex = false;
+                _inSetSelectedIndex = false;
             }
         }
     }

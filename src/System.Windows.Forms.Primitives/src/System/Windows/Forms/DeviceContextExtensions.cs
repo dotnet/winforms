@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         {
             using var penScope = new Gdi32.SelectObjectScope(hdc, hpen);
             using var ropScope = new Gdi32.SetRop2Scope(hdc, Gdi32.R2.COPYPEN);
-            using var brushScope = new Gdi32.SelectObjectScope(hdc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
+            using var brushScope = new Gdi32.SelectObjectScope(hdc, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
 
             Gdi32.Rectangle(hdc, left, top, right, bottom);
         }
@@ -72,7 +72,7 @@ namespace System.Windows.Forms
         ///  Draws lines with the <paramref name="hpen"/> using points defined in <paramref name="lines"/>.
         /// </summary>
         /// <param name="lines">
-        ///  MUST be a mulitple of 4. Each group of 4 represents x1, y1, x2, y2.
+        ///  MUST be a multiple of 4. Each group of 4 represents x1, y1, x2, y2.
         /// </param>
         internal unsafe static void DrawLines(this DeviceContextHdcScope hdc, Gdi32.HPEN hpen, ReadOnlySpan<int> lines)
             => DrawLines(hdc.HDC, hpen, lines);
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
         ///  Draws lines with the <paramref name="hpen"/> using points defined in <paramref name="lines"/>.
         /// </summary>
         /// <param name="lines">
-        ///  MUST be a mulitple of 4. Each group of 4 represents x1, y1, x2, y2.
+        ///  MUST be a multiple of 4. Each group of 4 represents x1, y1, x2, y2.
         /// </param>
         internal unsafe static void DrawLines(this Gdi32.HDC hdc, Gdi32.HPEN hpen, ReadOnlySpan<int> lines)
         {

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms.Layout;
 
@@ -11,7 +9,10 @@ namespace System.Windows.Forms.ButtonInternal
 {
     internal sealed class CheckBoxStandardAdapter : CheckBoxBaseAdapter
     {
-        internal CheckBoxStandardAdapter(ButtonBase control) : base(control) { }
+        internal CheckBoxStandardAdapter(ButtonBase control)
+            : base(control)
+        {
+        }
 
         internal override void PaintUp(PaintEventArgs e, CheckState state)
         {
@@ -25,36 +26,38 @@ namespace System.Windows.Forms.ButtonInternal
                 LayoutData layout = Layout(e).Layout();
                 PaintButtonBackground(e, Control.ClientRectangle, null);
 
-                if (!layout.options.everettButtonCompat)
+                if (!layout.Options.DotNetOneButtonCompat)
                 {
-                    layout.textBounds.Offset(-1, -1);
+                    layout.TextBounds.Offset(-1, -1);
                 }
-                layout.imageBounds.Offset(-1, -1);
+
+                layout.ImageBounds.Offset(-1, -1);
 
                 AdjustFocusRectangle(layout);
 
                 if (!string.IsNullOrEmpty(Control.Text))
                 {
                     //minor adjustment to make sure the appearance is exactly the same as Win32 app.
-                    int focusRectFixup = layout.focus.X & 0x1; // if it's odd, subtract one pixel for fixup.
+                    int focusRectFixup = layout.Focus.X & 0x1; // if it's odd, subtract one pixel for fixup.
                     if (!Application.RenderWithVisualStyles)
                     {
                         focusRectFixup = 1 - focusRectFixup;
                     }
-                    layout.focus.Offset(-(focusRectFixup + 1), -2);
-                    layout.focus.Width = layout.textBounds.Width + layout.imageBounds.Width - 1;
-                    layout.focus.Intersect(layout.textBounds);
 
-                    if (layout.options.textAlign != LayoutUtils.AnyLeft && layout.options.useCompatibleTextRendering && layout.options.font.Italic)
+                    layout.Focus.Offset(-(focusRectFixup + 1), -2);
+                    layout.Focus.Width = layout.TextBounds.Width + layout.ImageBounds.Width - 1;
+                    layout.Focus.Intersect(layout.TextBounds);
+
+                    if (layout.Options.TextAlign != LayoutUtils.AnyLeft && layout.Options.UseCompatibleTextRendering && layout.Options.Font.Italic)
                     {
                         // fixup for GDI+ text rendering.
-                        layout.focus.Width += 2;
+                        layout.Focus.Width += 2;
                     }
                 }
 
                 PaintImage(e, layout);
                 DrawCheckBox(e, layout);
-                PaintField(e, layout, colors, colors.windowText, true);
+                PaintField(e, layout, colors, colors.WindowText, true);
             }
         }
 
@@ -91,7 +94,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                LayoutOptions options = default;
+                LayoutOptions? options = default;
                 using (var screen = GdiCache.GetScreenHdc())
                 using (PaintEventArgs pe = new PaintEventArgs(screen, new Rectangle()))
                 {
@@ -120,13 +123,13 @@ namespace System.Windows.Forms.ButtonInternal
         protected override LayoutOptions Layout(PaintEventArgs e)
         {
             LayoutOptions layout = CommonLayout();
-            layout.checkPaddingSize = 1;
-            layout.everettButtonCompat = !Application.RenderWithVisualStyles;
+            layout.CheckPaddingSize = 1;
+            layout.DotNetOneButtonCompat = !Application.RenderWithVisualStyles;
 
             if (Application.RenderWithVisualStyles)
             {
                 using var screen = GdiCache.GetScreenHdc();
-                layout.checkSize = CheckBoxRenderer.GetGlyphSize(
+                layout.CheckSize = CheckBoxRenderer.GetGlyphSize(
                     screen,
                     CheckBoxRenderer.ConvertFromButtonState(
                         GetState(),
@@ -138,11 +141,11 @@ namespace System.Windows.Forms.ButtonInternal
             {
                 if (DpiHelper.IsPerMonitorV2Awareness)
                 {
-                    layout.checkSize = Control.LogicalToDeviceUnits(layout.checkSize);
+                    layout.CheckSize = Control.LogicalToDeviceUnits(layout.CheckSize);
                 }
                 else
                 {
-                    layout.checkSize = (int)(layout.checkSize * GetDpiScaleRatio());
+                    layout.CheckSize = (int)(layout.CheckSize * GetDpiScaleRatio());
                 }
             }
 

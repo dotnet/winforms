@@ -17,12 +17,15 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UIA propertyID)
                 => propertyID switch
                 {
-                    UIA.NamePropertyId
-                        => Name,
                     UIA.AutomationIdPropertyId
                         => Owner.Name,
                     UIA.ControlTypePropertyId
-                        => UIA.ButtonControlTypeId,
+                        // If we don't set a default role for Button and ButtonBase accessible objects
+                        // it will be retrieved from Windows.
+                        // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                        => Owner.AccessibleRole == AccessibleRole.Default
+                           ? UIA.ButtonControlTypeId
+                           : base.GetPropertyValue(propertyID),
                     UIA.IsKeyboardFocusablePropertyId
                         =>
                         // This is necessary for compatibility with MSAA proxy:

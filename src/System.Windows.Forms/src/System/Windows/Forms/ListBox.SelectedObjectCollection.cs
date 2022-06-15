@@ -1,8 +1,6 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using System.Collections;
 using System.ComponentModel;
@@ -19,15 +17,15 @@ namespace System.Windows.Forms
             internal static int SelectedObjectMask = ItemArray.CreateMask();
 
             private readonly ListBox _owner;
-            private bool stateDirty;
-            private int lastVersion;
-            private int count;
+            private bool _stateDirty;
+            private int _lastVersion;
+            private int _count;
 
             public SelectedObjectCollection(ListBox owner)
             {
-                _owner = owner ?? throw new ArgumentNullException(nameof(owner));
-                stateDirty = true;
-                lastVersion = -1;
+                _owner = owner.OrThrowIfNull();
+                _stateDirty = true;
+                _lastVersion = -1;
             }
 
             /// <summary>
@@ -39,7 +37,7 @@ namespace System.Windows.Forms
                 {
                     if (_owner.IsHandleCreated)
                     {
-                        SelectionMode current = (_owner.selectionModeChanging) ? _owner.cachedSelectionMode : _owner.selectionMode;
+                        SelectionMode current = _owner._selectionModeChanging ? _owner._cachedSelectionMode : _owner._selectionMode;
                         switch (current)
                         {
                             case SelectionMode.None:
@@ -51,11 +49,12 @@ namespace System.Windows.Forms
                                 {
                                     return 1;
                                 }
+
                                 return 0;
 
                             case SelectionMode.MultiSimple:
                             case SelectionMode.MultiExtended:
-                                return unchecked((int)(long)SendMessageW(_owner, (WM)LB.GETSELCOUNT));
+                                return (int)SendMessageW(_owner, (WM)LB.GETSELCOUNT);
                         }
 
                         return 0;
@@ -63,14 +62,13 @@ namespace System.Windows.Forms
 
                     // If the handle hasn't been created, we must do this the hard way.
                     // Getting the count when using a mask is expensive, so cache it.
-                    //
-                    if (lastVersion != InnerArray.Version)
+                    if (_lastVersion != InnerArray.Version)
                     {
-                        lastVersion = InnerArray.Version;
-                        count = InnerArray.GetCount(SelectedObjectMask);
+                        _lastVersion = InnerArray.Version;
+                        _count = InnerArray.GetCount(SelectedObjectMask);
                     }
 
-                    return count;
+                    return _count;
                 }
             }
 
@@ -103,7 +101,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal void Dirty()
             {
-                stateDirty = true;
+                _stateDirty = true;
             }
 
             /// <summary>
@@ -115,7 +113,7 @@ namespace System.Windows.Forms
                 get
                 {
                     EnsureUpToDate();
-                    return ((ObjectCollection)_owner.Items).InnerArray;
+                    return _owner.Items.InnerArray;
                 }
             }
 
@@ -125,9 +123,9 @@ namespace System.Windows.Forms
             /// </summary>
             internal void EnsureUpToDate()
             {
-                if (stateDirty)
+                if (_stateDirty)
                 {
-                    stateDirty = false;
+                    _stateDirty = false;
                     if (_owner.IsHandleCreated)
                     {
                         _owner.NativeUpdateSelection();
@@ -143,17 +141,17 @@ namespace System.Windows.Forms
                 }
             }
 
-            public bool Contains(object selectedObject)
+            public bool Contains(object? selectedObject)
             {
                 return IndexOf(selectedObject) != -1;
             }
 
-            public int IndexOf(object selectedObject)
+            public int IndexOf(object? selectedObject)
             {
-                return InnerArray.IndexOf(selectedObject, SelectedObjectMask);
+                return selectedObject is null ? -1 : InnerArray.IndexOf(selectedObject, SelectedObjectMask);
             }
 
-            int IList.Add(object value)
+            int IList.Add(object? value)
             {
                 throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
@@ -163,12 +161,12 @@ namespace System.Windows.Forms
                 throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
-            void IList.Insert(int index, object value)
+            void IList.Insert(int index, object? value)
             {
                 throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
-            void IList.Remove(object value)
+            void IList.Remove(object? value)
             {
                 throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
@@ -183,10 +181,9 @@ namespace System.Windows.Forms
             // and hence a object comparison is required...
             // This method returns the "object" at the passed index rather than the "item" ...
             // this "object" is then compared in the IndexOf( ) method of the itemsCollection.
-            //
             internal object GetObjectAt(int index)
             {
-                return InnerArray.GetEntryObject(index, SelectedObjectCollection.SelectedObjectMask);
+                return InnerArray.GetEntryObject(index, SelectedObjectMask);
             }
 
             /// <summary>
@@ -194,7 +191,7 @@ namespace System.Windows.Forms
             /// </summary>
             [Browsable(false)]
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public object this[int index]
+            public object? this[int index]
             {
                 get
                 {
@@ -234,7 +231,7 @@ namespace System.Windows.Forms
             internal void PushSelectionIntoNativeListBox(int index)
             {
                 // we can't use ItemArray accessor because this will wipe out our Selection collection
-                bool selected = ((ObjectCollection)_owner.Items).InnerArray.GetState(index, SelectedObjectMask);
+                bool selected = _owner.Items.InnerArray.GetState(index, SelectedObjectMask);
                 // push selection only if the item is actually selected
                 // this also takes care of the case where owner.SelectionMode == SelectionMode.One
                 if (selected)
@@ -253,7 +250,7 @@ namespace System.Windows.Forms
 
             public void Clear()
             {
-                if (_owner != null)
+                if (_owner is not null)
                 {
                     _owner.ClearSelected();
                 }
@@ -261,10 +258,10 @@ namespace System.Windows.Forms
 
             public void Add(object value)
             {
-                if (_owner != null)
+                if (_owner is not null)
                 {
                     ObjectCollection items = _owner.Items;
-                    if (items != null && value != null)
+                    if (items is not null && value is not null)
                     {
                         int index = items.IndexOf(value);
                         if (index != -1 && !GetSelected(index))
@@ -277,10 +274,10 @@ namespace System.Windows.Forms
 
             public void Remove(object value)
             {
-                if (_owner != null)
+                if (_owner is not null)
                 {
                     ObjectCollection items = _owner.Items;
-                    if (items != null & value != null)
+                    if (items is not null && value is not null)
                     {
                         int index = items.IndexOf(value);
                         if (index != -1 && GetSelected(index))

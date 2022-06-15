@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
@@ -14,13 +12,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2PropertyPageDisplayService
     {
-        private readonly Com2PropertyDescriptor propDesc;
-        private Guid guid;
+        private readonly Com2PropertyDescriptor _propDesc;
+        private readonly Guid _guid;
 
         public Com2PropertyPageUITypeEditor(Com2PropertyDescriptor pd, Guid guid, UITypeEditor baseEditor) : base(baseEditor)
         {
-            propDesc = pd;
-            this.guid = guid;
+            _propDesc = pd;
+            _guid = guid;
         }
 
         /// <summary>
@@ -30,43 +28,44 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  the user to modify the value.  Host assistance in presenting UI to the user
         ///  can be found through the valueAccess.getService function.
         /// </summary>
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
             IntPtr hWndParent = User32.GetFocus(); // Windows.GetForegroundWindow
 
             try
             {
-                ICom2PropertyPageDisplayService propPageSvc = (ICom2PropertyPageDisplayService)provider.GetService(typeof(ICom2PropertyPageDisplayService));
+                ICom2PropertyPageDisplayService? propPageSvc = (ICom2PropertyPageDisplayService?)provider.GetService(typeof(ICom2PropertyPageDisplayService));
 
                 if (propPageSvc is null)
                 {
                     propPageSvc = this;
                 }
 
-                object instance = context.Instance;
+                object? instance = context?.Instance;
 
-                if (!instance.GetType().IsArray)
+                if (instance is not null && !instance.GetType().IsArray)
                 {
-                    instance = propDesc.TargetObject;
-                    if (instance is ICustomTypeDescriptor)
+                    instance = _propDesc.TargetObject;
+                    if (instance is ICustomTypeDescriptor customTypeDescriptor)
                     {
-                        instance = ((ICustomTypeDescriptor)instance).GetPropertyOwner(propDesc);
+                        instance = customTypeDescriptor.GetPropertyOwner(_propDesc);
                     }
                 }
 
-                propPageSvc.ShowPropertyPage(propDesc.Name, instance, (int)propDesc.DISPID, guid, hWndParent);
+                propPageSvc.ShowPropertyPage(_propDesc.Name, instance, (int)_propDesc.DISPID, _guid, hWndParent);
             }
-            catch (Exception ex1)
+            catch (Exception ex)
             {
-                if (provider != null)
+                if (provider is not null)
                 {
-                    IUIService uiSvc = (IUIService)provider.GetService(typeof(IUIService));
-                    if (uiSvc != null)
+                    IUIService? uiSvc = (IUIService?)provider.GetService(typeof(IUIService));
+                    if (uiSvc is not null)
                     {
-                        uiSvc.ShowError(ex1, SR.ErrorTypeConverterFailed);
+                        uiSvc.ShowError(ex, SR.ErrorTypeConverterFailed);
                     }
                 }
             }
+
             return value;
         }
 
@@ -74,7 +73,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Retrieves the editing style of the Edit method.  If the method
         ///  is not supported, this will return None.
         /// </summary>
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
         {
             return UITypeEditorEditStyle.Modal;
         }

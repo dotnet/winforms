@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
@@ -16,7 +15,7 @@ namespace System.Windows.Forms
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer visualStyleRenderer = null;
+        private static VisualStyleRenderer? t_visualStyleRenderer = null;
         const int lineWidth = 2;
 
         /// <summary>
@@ -32,7 +31,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.TrackBar.Track.Normal, 1);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -42,7 +41,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.TrackBar.TrackVertical.Normal, 1);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -52,7 +51,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.TrackBar.Thumb.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -62,7 +61,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.TrackBar.ThumbVertical.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -72,7 +71,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.TrackBar.ThumbLeft.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -82,7 +81,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.TrackBar.ThumbRight.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -92,7 +91,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.TrackBar.ThumbTop.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -102,7 +101,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.TrackBar.ThumbBottom.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -120,7 +119,7 @@ namespace System.Windows.Forms
             //trivial case -- avoid calcs
             if (numTicks == 1)
             {
-                visualStyleRenderer.DrawEdge(g, new Rectangle(bounds.X, bounds.Y, lineWidth, bounds.Height), Edges.Left, edgeStyle, EdgeEffects.None);
+                t_visualStyleRenderer.DrawEdge(g, new Rectangle(bounds.X, bounds.Y, lineWidth, bounds.Height), Edges.Left, edgeStyle, EdgeEffects.None);
                 return;
             }
 
@@ -130,7 +129,7 @@ namespace System.Windows.Forms
             {
                 //draw the nth tick
                 float x = bounds.X + ((float)(numTicks - 1)) * inc;
-                visualStyleRenderer.DrawEdge(g, new Rectangle((int)Math.Round(x), bounds.Y, lineWidth, bounds.Height), Edges.Left, edgeStyle, EdgeEffects.None);
+                t_visualStyleRenderer.DrawEdge(g, new Rectangle((int)Math.Round(x), bounds.Y, lineWidth, bounds.Height), Edges.Left, edgeStyle, EdgeEffects.None);
                 numTicks--;
             }
         }
@@ -150,7 +149,7 @@ namespace System.Windows.Forms
             //trivial case
             if (numTicks == 1)
             {
-                visualStyleRenderer.DrawEdge(g, new Rectangle(bounds.X, bounds.Y, bounds.Width, lineWidth), Edges.Top, edgeStyle, EdgeEffects.None);
+                t_visualStyleRenderer.DrawEdge(g, new Rectangle(bounds.X, bounds.Y, bounds.Width, lineWidth), Edges.Top, edgeStyle, EdgeEffects.None);
                 return;
             }
 
@@ -160,7 +159,7 @@ namespace System.Windows.Forms
             {
                 //draw the nth tick
                 float y = bounds.Y + ((float)(numTicks - 1)) * inc;
-                visualStyleRenderer.DrawEdge(g, new Rectangle(bounds.X, (int)Math.Round(y), bounds.Width, lineWidth), Edges.Top, edgeStyle, EdgeEffects.None);
+                t_visualStyleRenderer.DrawEdge(g, new Rectangle(bounds.X, (int)Math.Round(y), bounds.Width, lineWidth), Edges.Top, edgeStyle, EdgeEffects.None);
                 numTicks--;
             }
         }
@@ -172,7 +171,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.TrackBar.ThumbLeft.Normal, (int)state);
 
-            return (visualStyleRenderer.GetPartSize(g, ThemeSizeType.True));
+            return t_visualStyleRenderer.GetPartSize(g, ThemeSizeType.True);
         }
 
         /// <summary>
@@ -182,7 +181,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.TrackBar.ThumbRight.Normal, (int)state);
 
-            return (visualStyleRenderer.GetPartSize(g, ThemeSizeType.True));
+            return t_visualStyleRenderer.GetPartSize(g, ThemeSizeType.True);
         }
 
         /// <summary>
@@ -192,7 +191,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.TrackBar.ThumbTop.Normal, (int)state);
 
-            return (visualStyleRenderer.GetPartSize(g, ThemeSizeType.True));
+            return t_visualStyleRenderer.GetPartSize(g, ThemeSizeType.True);
         }
 
         /// <summary>
@@ -202,18 +201,19 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.TrackBar.ThumbBottom.Normal, (int)state);
 
-            return (visualStyleRenderer.GetPartSize(g, ThemeSizeType.True));
+            return t_visualStyleRenderer.GetPartSize(g, ThemeSizeType.True);
         }
 
+        [MemberNotNull(nameof(t_visualStyleRenderer))]
         private static void InitializeRenderer(VisualStyleElement element, int state)
         {
-            if (visualStyleRenderer is null)
+            if (t_visualStyleRenderer is null)
             {
-                visualStyleRenderer = new VisualStyleRenderer(element.ClassName, element.Part, state);
+                t_visualStyleRenderer = new VisualStyleRenderer(element.ClassName, element.Part, state);
             }
             else
             {
-                visualStyleRenderer.SetParameters(element.ClassName, element.Part, state);
+                t_visualStyleRenderer.SetParameters(element.ClassName, element.Part, state);
             }
         }
     }

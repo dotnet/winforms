@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
+using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
@@ -25,6 +25,12 @@ internal static partial class Interop
             BOOL result = GetWindowRect(hWnd.Handle, ref rect);
             GC.KeepAlive(hWnd);
             return result;
+        }
+
+        public static Rectangle GetWindowRect(IHandle hWnd)
+        {
+            Unsafe.SkipInit(out RECT rectangle);
+            return User32.GetWindowRect(hWnd, ref rectangle).IsTrue() ? rectangle : default;
         }
     }
 }

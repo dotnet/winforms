@@ -17,10 +17,13 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.NamePropertyId
-                        => Name,
                     UiaCore.UIA.ControlTypePropertyId
-                        => UiaCore.UIA.PaneControlTypeId,
+                        // If we don't set a default role for the accessible object
+                        // it will be retrieved from Windows.
+                        // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                        => Owner.AccessibleRole == AccessibleRole.Default
+                           ? UiaCore.UIA.PaneControlTypeId
+                           : base.GetPropertyValue(propertyID),
                     UiaCore.UIA.AutomationIdPropertyId
                         => Owner.Name,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
 using Xunit;
 
@@ -10,12 +9,18 @@ namespace System.Windows.Forms.Tests
 {
     public class ToolStripArrowRenderEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
+        [WinFormsFact]
+        public void ToolStripArrowRenderEventArgs_NullGraphics_ThrowsArgumentNullException()
+        {
+            using var toolStripButton = new ToolStripButton();
+            Assert.Throws<ArgumentNullException>(() => new ToolStripArrowRenderEventArgs(null, toolStripButton, Rectangle.Empty, Color.Empty, ArrowDirection.Up));
+        }
+
         public static IEnumerable<object[]> Ctor_Graphics_ToolStripItem_Rectangle_Color_ArrowDirection_TestData()
         {
             var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
-
-            yield return new object[] { null, null, Rectangle.Empty, Color.Empty, (ArrowDirection)(ArrowDirection.Down + 1) };
+            yield return new object[] { graphics, null, Rectangle.Empty, Color.Empty, (ArrowDirection)(ArrowDirection.Down + 1) };
             yield return new object[] { graphics, new ToolStripButton(), new Rectangle(1, 2, 3, 4), Color.Blue, ArrowDirection.Down };
             yield return new object[] { graphics, new ToolStripButton(), new Rectangle(-1, -2, -3, -4), Color.Blue, ArrowDirection.Down };
         }

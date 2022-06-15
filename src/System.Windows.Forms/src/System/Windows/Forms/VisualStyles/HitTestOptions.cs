@@ -20,7 +20,7 @@ namespace System.Windows.Forms.VisualStyles
 
         //  Theme background segment hit test flag (default). possible return values are:
         //  HTCLIENT: hit test succeeded in the middle background segment
-        //  HTTOP, HTLEFT, HTTOPLEFT, etc:  // hit test succeeded in the the respective theme background segment.
+        //  HTTOP, HTLEFT, HTTOPLEFT, etc:  // hit test succeeded in the respective theme background segment.
         //#define HTTB_BACKGROUNDSEG          0x0000
 
         //  Fixed border hit test option.  possible return values are:

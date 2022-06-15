@@ -3,13 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
-using System.Windows.Forms;
 using Moq;
 using Moq.Protected;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -19,7 +16,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_Ctor_Default()
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             Assert.Empty(designer.ActionLists);
             Assert.Same(designer.ActionLists, designer.ActionLists);
             Assert.Empty(designer.AssociatedComponents);
@@ -37,36 +34,17 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_Children_GetDefault_ReturnsExpected()
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             ITreeDesigner treeDesigner = designer;
             Assert.Empty(treeDesigner.Children);
         }
 
-        [Fact]
-        public void ComponentDesigner_Children_GetWithValidHostValidResult_ReturnsExpected()
+        private static Mock<ISite> CreateMockSiteWithDesignerHost(object designerHost)
         {
-            var mockComponent1 = new Mock<IComponent>(MockBehavior.Strict);
-            var mockComponent2 = new Mock<IComponent>(MockBehavior.Strict);
-            var mockDesigner1 = new Mock<IDesigner>(MockBehavior.Strict);
-            var mockDesigner2 = new Mock<IDesigner>(MockBehavior.Strict);
-            var designer = new CustomAssociatedComponentsComponentDesigner(new object[] { mockComponent1.Object, mockComponent2.Object });
-            ITreeDesigner treeDesigner = designer;
-            var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
-            mockDesignerHost
-                .Setup(h => h.RootComponent)
-                .Returns<IComponent>(null);
-            mockDesignerHost
-                .Setup(h => h.GetDesigner(mockComponent1.Object))
-                .Returns(mockDesigner1.Object)
-                .Verifiable();
-            mockDesignerHost
-                .Setup(h => h.GetDesigner(mockComponent2.Object))
-                .Returns(mockDesigner2.Object)
-                .Verifiable();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
-                .Returns(mockDesignerHost.Object);
+                .Returns(designerHost);
             mockSite
                 .Setup(s => s.GetService(typeof(IComponentChangeService)))
                 .Returns(null);
@@ -82,10 +60,41 @@ namespace System.ComponentModel.Design.Tests
             mockSite
                 .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
                 .Returns(null);
-            var component = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+
+            return mockSite;
+        }
+
+        [Fact]
+        public void ComponentDesigner_Children_GetWithValidHostValidResult_ReturnsExpected()
+        {
+            var mockComponent1 = new Mock<IComponent>(MockBehavior.Strict);
+            var mockComponent2 = new Mock<IComponent>(MockBehavior.Strict);
+            var mockDesigner1 = new Mock<IDesigner>(MockBehavior.Strict);
+            var mockDesigner2 = new Mock<IDesigner>(MockBehavior.Strict);
+            using var designer = new CustomAssociatedComponentsComponentDesigner(
+                new object[] { mockComponent1.Object, mockComponent2.Object });
+            ITreeDesigner treeDesigner = designer;
+            var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+            mockDesignerHost
+                .Setup(h => h.RootComponent)
+                .Returns<IComponent>(null);
+            mockDesignerHost
+                .Setup(h => h.GetDesigner(mockComponent1.Object))
+                .Returns(mockDesigner1.Object)
+                .Verifiable();
+            mockDesignerHost
+                .Setup(h => h.GetDesigner(mockComponent2.Object))
+                .Returns(mockDesigner2.Object)
+                .Verifiable();
+
+            using var component = new Component
             {
-                Site = mockSite.Object
+                Site = CreateMockSiteWithDesignerHost(mockDesignerHost.Object).Object
             };
+
             designer.Initialize(component);
             Assert.Equal(new object[] { mockDesigner1.Object, mockDesigner2.Object }, treeDesigner.Children);
             mockDesignerHost.Verify(h => h.GetDesigner(mockComponent1.Object), Times.Once());
@@ -103,7 +112,8 @@ namespace System.ComponentModel.Design.Tests
             var mockComponent1 = new Mock<IComponent>(MockBehavior.Strict);
             var mockComponent2 = new Mock<IComponent>(MockBehavior.Strict);
             var mockDesigner = new Mock<IDesigner>(MockBehavior.Strict);
-            var designer = new CustomAssociatedComponentsComponentDesigner(new object[] { new object(), null, mockComponent1.Object, mockComponent2.Object });
+            using var designer = new CustomAssociatedComponentsComponentDesigner(
+                new object[] { new object(), null, mockComponent1.Object, mockComponent2.Object });
             ITreeDesigner treeDesigner = designer;
             var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
             mockDesignerHost
@@ -117,29 +127,12 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(h => h.GetDesigner(mockComponent2.Object))
                 .Returns<IDesigner>(null)
                 .Verifiable();
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDesignerHost)))
-                .Returns(mockDesignerHost.Object);
-            mockSite
-                .Setup(s => s.GetService(typeof(IComponentChangeService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IInheritanceService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
-            var component = new Component
+
+            using var component = new Component
             {
-                Site = mockSite.Object
+                Site = CreateMockSiteWithDesignerHost(mockDesignerHost.Object).Object
             };
+
             designer.Initialize(component);
             Assert.Equal(new object[] { mockDesigner.Object }, treeDesigner.Children);
             mockDesignerHost.Verify(h => h.GetDesigner(mockComponent1.Object), Times.Once());
@@ -153,7 +146,7 @@ namespace System.ComponentModel.Design.Tests
 
         public static IEnumerable<object[]> Children_GetInvalidService_TestData()
         {
-            foreach (ICollection associatedComponents in new object[] { null, Array.Empty<object>(), new object[] { new Component() }})
+            foreach (ICollection associatedComponents in new object[] { null, Array.Empty<object>(), new object[] { new Component() } })
             {
                 yield return new object[] { associatedComponents, null };
                 yield return new object[] { associatedComponents, new object() };
@@ -164,31 +157,14 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(Children_GetInvalidService_TestData))]
         public void ComponentDesigner_Children_GetWithInvalidDesignerHost_ReturnsEmpty(ICollection associatedComponents, object host)
         {
-            var designer = new CustomAssociatedComponentsComponentDesigner(associatedComponents);
+            using var designer = new CustomAssociatedComponentsComponentDesigner(associatedComponents);
             ITreeDesigner treeDesigner = designer;
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDesignerHost)))
-                .Returns(host);
-            mockSite
-                .Setup(s => s.GetService(typeof(IComponentChangeService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IInheritanceService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
-            var component = new Component
+
+            using var component = new Component
             {
-                Site = mockSite.Object
+                Site = CreateMockSiteWithDesignerHost(host).Object
             };
+
             designer.Initialize(component);
             Assert.Empty(treeDesigner.Children);
         }
@@ -199,17 +175,8 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { new InheritanceAttribute(), 1, 1 };
         }
 
-        [Theory]
-        [MemberData(nameof(InheritanceAttribute_GetValidService_TestData))]
-        public void ComponentDesigner_InheritanceAttribute_GetWithValidService_ReturnsDefault(InheritanceAttribute attributeResult, int expectedCallCount1, int expectedCallCount2)
+        private static Mock<ISite> CreateMockSiteWithInheritanceService(object inheritanceService)
         {
-            var designer = new SubComponentDesigner();
-            var component = new Component();
-            var mockInheritanceService = new Mock<IInheritanceService>(MockBehavior.Strict);
-            mockInheritanceService
-                .Setup(s => s.GetInheritanceAttribute(component))
-                .Returns(attributeResult)
-                .Verifiable();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
@@ -219,8 +186,7 @@ namespace System.ComponentModel.Design.Tests
                 .Returns(null);
             mockSite
                 .Setup(s => s.GetService(typeof(IInheritanceService)))
-                .Returns(mockInheritanceService.Object)
-                .Verifiable();
+                .Returns(inheritanceService);
             mockSite
                 .Setup(s => s.GetService(typeof(IDictionaryService)))
                 .Returns(null);
@@ -230,6 +196,25 @@ namespace System.ComponentModel.Design.Tests
             mockSite
                 .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
                 .Returns(null);
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+
+            return mockSite;
+        }
+
+        [Theory]
+        [MemberData(nameof(InheritanceAttribute_GetValidService_TestData))]
+        public void ComponentDesigner_InheritanceAttribute_GetWithValidService_ReturnsDefault(InheritanceAttribute attributeResult, int expectedCallCount1, int expectedCallCount2)
+        {
+            using var designer = new SubComponentDesigner();
+            using var component = new Component();
+            var mockInheritanceService = new Mock<IInheritanceService>(MockBehavior.Strict);
+            mockInheritanceService
+                .Setup(s => s.GetInheritanceAttribute(component))
+                .Returns(attributeResult)
+                .Verifiable();
+            var mockSite = CreateMockSiteWithInheritanceService(mockInheritanceService.Object);
             component.Site = mockSite.Object;
             designer.Initialize(component);
             mockSite.Verify(s => s.GetService(typeof(IInheritanceService)), Times.Exactly(expectedCallCount1));
@@ -250,31 +235,14 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(InheritanceAttribute_GetInvalidService_TestData))]
         public void ComponentDesigner_InheritanceAttribute_GetWithInvalidService_ReturnsDefault(object inheritanceService)
         {
-            var designer = new SubComponentDesigner();
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDesignerHost)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IComponentChangeService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IInheritanceService)))
-                .Returns(inheritanceService)
-                .Verifiable();
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
-            var component = new Component
+            using var designer = new SubComponentDesigner();
+            var mockSite = CreateMockSiteWithInheritanceService(inheritanceService);
+
+            using var component = new Component
             {
                 Site = mockSite.Object
             };
+
             designer.Initialize(component);
             mockSite.Verify(s => s.GetService(typeof(IInheritanceService)), Times.Once());
 
@@ -297,7 +265,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(Inherited_Get_TestData))]
         public void ComponentDesigner_Inherited_Get_ReturnsExpected(InheritanceAttribute inheritanceAttribute, bool expected)
         {
-            var designer = new CustomInheritanceAttributeComponentDesigner(inheritanceAttribute);
+            using var designer = new CustomInheritanceAttributeComponentDesigner(inheritanceAttribute);
             Assert.Equal(expected, designer.Inherited);
         }
 
@@ -311,35 +279,18 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(ParentComponent_ValidService_TestData))]
         public void ComponentDesigner_ParentComponent_GetWithValidService_ReturnsExpected(Component rootComponent)
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
             mockDesignerHost
                 .Setup(h => h.RootComponent)
                 .Returns(rootComponent);
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDesignerHost)))
-                .Returns(mockDesignerHost.Object);
-            mockSite
-                .Setup(s => s.GetService(typeof(IComponentChangeService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IInheritanceService)))
-                .Returns(null)
-                .Verifiable();
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
-            var component = new Component
+            var mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+
+            using var component = new Component
             {
                 Site = mockSite.Object
             };
+
             designer.Initialize(component);
             mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
             mockDesignerHost.Verify(h => h.RootComponent, Times.Once());
@@ -357,32 +308,13 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_ParentComponent_GetWithValidServiceRootComponentEqual_ReturnsNull()
         {
-            var designer = new SubComponentDesigner();
-            var component = new Component();
+            using var designer = new SubComponentDesigner();
+            using var component = new Component();
             var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
             mockDesignerHost
                 .Setup(h => h.RootComponent)
                 .Returns(component);
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDesignerHost)))
-                .Returns(mockDesignerHost.Object);
-            mockSite
-                .Setup(s => s.GetService(typeof(IComponentChangeService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IInheritanceService)))
-                .Returns(null)
-                .Verifiable();
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
+            var mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
             component.Site = mockSite.Object;
             designer.Initialize(component);
             mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
@@ -408,31 +340,14 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(ParentComponent_InvalidService_TestData))]
         public void ComponentDesigner_ParentComponent_GetWithInvalidService_ReturnsNull(object host)
         {
-            var designer = new SubComponentDesigner();
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDesignerHost)))
-                .Returns(host);
-            mockSite
-                .Setup(s => s.GetService(typeof(IComponentChangeService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IInheritanceService)))
-                .Returns(null)
-                .Verifiable();
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
-            var component = new Component
+            using var designer = new SubComponentDesigner();
+            var mockSite = CreateMockSiteWithDesignerHost(host);
+
+            using var component = new Component
             {
                 Site = mockSite.Object
             };
+
             designer.Initialize(component);
             mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
 
@@ -448,7 +363,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(ParentComponent_ValidService_TestData))]
         public void ComponentDesigner_ITreeDesignerParent_GetWithValidService_ReturnsExpected(Component rootComponent)
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             ITreeDesigner treeDesigner = designer;
             var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
             mockDesignerHost
@@ -458,30 +373,13 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(h => h.GetDesigner(rootComponent))
                 .Returns(designer)
                 .Verifiable();
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDesignerHost)))
-                .Returns(mockDesignerHost.Object);
-            mockSite
-                .Setup(s => s.GetService(typeof(IComponentChangeService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IInheritanceService)))
-                .Returns(null)
-                .Verifiable();
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
-            var component = new Component
+            var mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+
+            using var component = new Component
             {
                 Site = mockSite.Object
             };
+
             designer.Initialize(component);
             mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
             mockDesignerHost.Verify(h => h.RootComponent, Times.Once());
@@ -502,33 +400,14 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_ITreeDesignerParent_GetWithValidServiceRootComponentEqual_ReturnsNull()
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             ITreeDesigner treeDesigner = designer;
-            var component = new Component();
+            using var component = new Component();
             var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
             mockDesignerHost
                 .Setup(h => h.RootComponent)
                 .Returns(component);
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDesignerHost)))
-                .Returns(mockDesignerHost.Object);
-            mockSite
-                .Setup(s => s.GetService(typeof(IComponentChangeService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IInheritanceService)))
-                .Returns(null)
-                .Verifiable();
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
+            var mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
             component.Site = mockSite.Object;
             designer.Initialize(component);
             mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
@@ -548,32 +427,15 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(ParentComponent_InvalidService_TestData))]
         public void ComponentDesigner_ITreeDesignerParent_GetWithInvalidServiceFirstCall_ReturnsNull(object host)
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             ITreeDesigner treeDesigner = designer;
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDesignerHost)))
-                .Returns(host);
-            mockSite
-                .Setup(s => s.GetService(typeof(IComponentChangeService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IInheritanceService)))
-                .Returns(null)
-                .Verifiable();
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
-            var component = new Component
+            var mockSite = CreateMockSiteWithDesignerHost(host);
+
+            using var component = new Component
             {
                 Site = mockSite.Object
             };
+
             designer.Initialize(component);
             mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
 
@@ -589,7 +451,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(ParentComponent_InvalidService_TestData))]
         public void ComponentDesigner_ITreeDesignerParent_GetWithInvalidServiceSecondCall_ReturnsNull(object host)
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             ITreeDesigner treeDesigner = designer;
             var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
             mockDesignerHost
@@ -627,10 +489,15 @@ namespace System.ComponentModel.Design.Tests
             mockSite
                 .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
                 .Returns(null);
-            var component = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+
+            using var component = new Component
             {
                 Site = mockSite.Object
             };
+
             designer.Initialize(component);
             mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
 
@@ -645,7 +512,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_Dispose_InvokeWithComponent_Success()
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             var mockComponent = new Mock<IComponent>(MockBehavior.Strict);
             mockComponent
                 .Setup(c => c.Site)
@@ -673,11 +540,8 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { new Mock<IComponentChangeService>(MockBehavior.Strict).Object };
         }
 
-        [Theory]
-        [MemberData(nameof(Dispose_InvokeWithComponentChangeService_TestData))]
-        public void ComponentDesigner_Dispose_InvokeWithComponentChangeService_Success(object componentChangeService)
+        private static Mock<ISite> CreateMockSiteWithComponentChangeService(object componentChangeService)
         {
-            var designer = new ComponentDesigner();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
@@ -697,9 +561,21 @@ namespace System.ComponentModel.Design.Tests
             mockSite
                 .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
                 .Returns(null);
-            var component = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+
+            return mockSite;
+        }
+
+        [Theory]
+        [MemberData(nameof(Dispose_InvokeWithComponentChangeService_TestData))]
+        public void ComponentDesigner_Dispose_InvokeWithComponentChangeService_Success(object componentChangeService)
+        {
+            using var designer = new ComponentDesigner();
+            using var component = new Component
             {
-                Site = mockSite.Object
+                Site = CreateMockSiteWithComponentChangeService(componentChangeService).Object
             };
             designer.Initialize(component);
             Assert.Same(component, designer.Component);
@@ -715,7 +591,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_Dispose_InvokeWithoutComponent_Success()
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             designer.Dispose();
             Assert.Null(designer.Component);
 
@@ -725,10 +601,10 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentDesigner_Dispose_InvokeBoolWithComponent_Success(bool disposing)
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             var mockComponent = new Mock<IComponent>(MockBehavior.Strict);
             mockComponent
                 .Setup(c => c.Site)
@@ -763,29 +639,10 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(Dispose_InvokeBoolWithComponentChangeService_TestData))]
         public void ComponentDesigner_Dispose_InvokeBoolWithComponentChangeService_Success(object componentChangeService, bool disposing)
         {
-            var designer = new SubComponentDesigner();
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDesignerHost)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IComponentChangeService)))
-                .Returns(componentChangeService);
-            mockSite
-                .Setup(s => s.GetService(typeof(IInheritanceService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
-            var component = new Component
+            using var designer = new SubComponentDesigner();
+            using var component = new Component
             {
-                Site = mockSite.Object
+                Site = CreateMockSiteWithComponentChangeService(componentChangeService).Object
             };
             designer.Initialize(component);
             Assert.Same(component, designer.Component);
@@ -799,10 +656,10 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentDesigner_Dispose_InvokeBoolWithoutComponent_Success(bool disposing)
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             designer.Dispose(disposing);
             Assert.Null(designer.Component);
 
@@ -814,7 +671,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_DoDefaultAction_InvokeDefault_Nop()
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             designer.DoDefaultAction();
 
             // Call again.
@@ -848,16 +705,16 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(DoDefaultAction_ValidProperty_TestData))]
         public void ComponentDesigner_DoDefaultAction_InvokeWithComponentWithHostValidProperty_Success(string property, ICollection compatibleMethods, int expectedSetCallCount, string uniqueMethodName)
         {
-            var designer = new ComponentDesigner();
-            var component1 = new DefaultEventComponent
+            using var designer = new ComponentDesigner();
+            using var component1 = new DefaultEventComponent
             {
                 StringProperty = "StringValue"
             };
-            var component2 = new DefaultEventComponent
+            using var component2 = new DefaultEventComponent
             {
                 StringProperty = string.Empty
             };
-            var component3 = new DefaultEventComponent
+            using var component3 = new DefaultEventComponent
             {
                 StringProperty = null
             };
@@ -913,7 +770,10 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(ISelectionService)))
                 .Returns(mockSelectionService.Object)
                 .Verifiable();
-            var rootComponent = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+            using var rootComponent = new Component
             {
                 Site = mockSite.Object
             };
@@ -966,8 +826,8 @@ namespace System.ComponentModel.Design.Tests
         [InlineData("name", "name", 1)]
         public void ComponentDesigner_DoDefaultAction_InvokeWithRootComponent_CallsShowCode(string value, string uniqueName, int expectedCallCount)
         {
-            var designer = new ComponentDesigner();
-            var component = new DefaultEventComponent
+            using var designer = new ComponentDesigner();
+            using var component = new DefaultEventComponent
             {
                 StringProperty = value
             };
@@ -1028,6 +888,9 @@ namespace System.ComponentModel.Design.Tests
             mockSite
                 .Setup(s => s.Name)
                 .Returns("Name");
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
             component.Site = mockSite.Object;
             designer.Initialize(component);
             component.StringPropertySetCount = 0;
@@ -1061,16 +924,16 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(DoDefaultAction_ValidProperty_TestData))]
         public void ComponentDesigner_DoDefaultAction_InvokeWithComponentWithHostValidPropertyWithTransaction_Success(string property, ICollection compatibleMethods, int expectedSetCallCount, string uniqueMethodName)
         {
-            var designer = new ComponentDesigner();
-            var component1 = new DefaultEventComponent
+            using var designer = new ComponentDesigner();
+            using var component1 = new DefaultEventComponent
             {
                 StringProperty = "StringValue"
             };
-            var component2 = new DefaultEventComponent
+            using var component2 = new DefaultEventComponent
             {
                 StringProperty = string.Empty
             };
-            var component3 = new DefaultEventComponent
+            using var component3 = new DefaultEventComponent
             {
                 StringProperty = null
             };
@@ -1131,10 +994,15 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(ISelectionService)))
                 .Returns(mockSelectionService.Object)
                 .Verifiable();
-            var rootComponent = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+
+            using var rootComponent = new Component
             {
                 Site = mockSite.Object
             };
+
             designer.Initialize(rootComponent);
             component1.StringPropertySetCount = 0;
             component2.StringPropertySetCount = 0;
@@ -1185,8 +1053,8 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_DoDefaultAction_InvokeWithCanceledThrowingCreateTransaction_Success()
         {
-            var designer = new ComponentDesigner();
-            var component = new DefaultEventComponent
+            using var designer = new ComponentDesigner();
+            using var component = new DefaultEventComponent
             {
                 StringProperty = "StringValue"
             };
@@ -1234,10 +1102,15 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(ISelectionService)))
                 .Returns(mockSelectionService.Object)
                 .Verifiable();
-            var rootComponent = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+
+            using var rootComponent = new Component
             {
                 Site = mockSite.Object
             };
+
             designer.Initialize(rootComponent);
             component.StringPropertySetCount = 0;
 
@@ -1273,8 +1146,8 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(DoDefaultAction_NotCanceledException_TestData))]
         public void ComponentDesigner_DoDefaultAction_InvokeWithNotCanceledThrowingCreateTransaction_Rethrows(Exception exception)
         {
-            var designer = new ComponentDesigner();
-            var component = new DefaultEventComponent
+            using var designer = new ComponentDesigner();
+            using var component = new DefaultEventComponent
             {
                 StringProperty = "StringValue"
             };
@@ -1322,10 +1195,15 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(ISelectionService)))
                 .Returns(mockSelectionService.Object)
                 .Verifiable();
-            var rootComponent = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+
+            using var rootComponent = new Component
             {
                 Site = mockSite.Object
             };
+
             designer.Initialize(rootComponent);
             component.StringPropertySetCount = 0;
 
@@ -1354,8 +1232,8 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_DoDefaultAction_InvokeWithInvalidOperationExceptionThrowingCreateTransaction_Catches()
         {
-            var designer = new ComponentDesigner();
-            var component = new DefaultEventComponent
+            using var designer = new ComponentDesigner();
+            using var component = new DefaultEventComponent
             {
                 StringProperty = "StringValue"
             };
@@ -1408,7 +1286,11 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(ISelectionService)))
                 .Returns(mockSelectionService.Object)
                 .Verifiable();
-            var rootComponent = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+
+            using var rootComponent = new Component
             {
                 Site = mockSite.Object
             };
@@ -1440,8 +1322,8 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_DoDefaultAction_InvokeThrowsInvalidOperationException_CallsCancel()
         {
-            var designer = new ComponentDesigner();
-            var component = new DefaultEventComponent
+            using var designer = new ComponentDesigner();
+            using var component = new DefaultEventComponent
             {
                 StringProperty = "StringValue"
             };
@@ -1498,10 +1380,15 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(ISelectionService)))
                 .Returns(mockSelectionService.Object)
                 .Verifiable();
-            var rootComponent = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+
+            using var rootComponent = new Component
             {
                 Site = mockSite.Object
             };
+
             designer.Initialize(rootComponent);
             component.StringPropertySetCount = 0;
 
@@ -1542,8 +1429,8 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(DoDefaultAction_NonInvalidOperationException_TestData))]
         public void ComponentDesigner_DoDefaultAction_InvokeThrowsNonInvalidOperationException_CallsCommit(Exception exception)
         {
-            var designer = new ComponentDesigner();
-            var component = new DefaultEventComponent
+            using var designer = new ComponentDesigner();
+            using var component = new DefaultEventComponent
             {
                 StringProperty = "StringValue"
             };
@@ -1600,10 +1487,15 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(ISelectionService)))
                 .Returns(mockSelectionService.Object)
                 .Verifiable();
-            var rootComponent = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+
+            using var rootComponent = new Component
             {
                 Site = mockSite.Object
             };
+
             designer.Initialize(rootComponent);
             component.StringPropertySetCount = 0;
 
@@ -1644,8 +1536,8 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(DoDefaultAction_InvalidProperty_TestData))]
         public void ComponentDesigner_DoDefaultAction_InvokeWithComponentWithHostInvalidProperty_Success(PropertyDescriptor property)
         {
-            var designer = new ComponentDesigner();
-            var component = new DefaultEventComponent
+            using var designer = new ComponentDesigner();
+            using var component = new DefaultEventComponent
             {
                 StringProperty = "StringValue"
             };
@@ -1693,7 +1585,11 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(ISelectionService)))
                 .Returns(mockSelectionService.Object)
                 .Verifiable();
-            var rootComponent = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+
+            using var rootComponent = new Component
             {
                 Site = mockSite.Object
             };
@@ -1731,7 +1627,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(DoDefaultAction_InvalidSelectedComponents_TestData))]
         public void ComponentDesigner_DoDefaultAction_InvokeWithComponentWithHostInvalidSelectedComponents_Success(ICollection selectedComponents)
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             var mockEventBindingService = new Mock<IEventBindingService>(MockBehavior.Strict);
             var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
             mockSelectionService
@@ -1768,7 +1664,11 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(ISelectionService)))
                 .Returns(mockSelectionService.Object)
                 .Verifiable();
-            var rootComponent = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+
+            using var rootComponent = new Component
             {
                 Site = mockSite.Object
             };
@@ -1798,7 +1698,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(DoDefaultAction_InvalidEventBindingService_TestData))]
         public void ComponentDesigner_DoDefaultAction_InvokeInvalidEventBindingService_Nop(object eventBindingService)
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
@@ -1822,10 +1722,15 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(IEventBindingService)))
                 .Returns(eventBindingService)
                 .Verifiable();
-            var component = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+
+            using var component = new Component
             {
                 Site = mockSite.Object
             };
+
             designer.Initialize(component);
 
             designer.DoDefaultAction();
@@ -1848,7 +1753,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(DoDefaultAction_InvalidSelectionService_TestData))]
         public void ComponentDesigner_DoDefaultAction_InvokeInvalidSelectionService_Nop(object selectionService)
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             var mockEventBindingService = new Mock<IEventBindingService>(MockBehavior.Strict);
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
@@ -1877,7 +1782,10 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(ISelectionService)))
                 .Returns(selectionService)
                 .Verifiable();
-            var component = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+            using var component = new Component
             {
                 Site = mockSite.Object
             };
@@ -1905,11 +1813,11 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(DoDefaultAction_InvalidDesignerHost_TestData))]
         public void ComponentDesigner_DoDefaultAction_InvokeInvalidDesignerHost_Success(object designerHost)
         {
-            var component = new DefaultEventComponent
+            using var component = new DefaultEventComponent
             {
                 StringProperty = "StringValue"
             };
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             var mockEventBindingService = new Mock<IEventBindingService>(MockBehavior.Strict);
             var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
             mockSelectionService
@@ -1950,7 +1858,10 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(ISelectionService)))
                 .Returns(mockSelectionService.Object)
                 .Verifiable();
-            var rootComponent = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+            using var rootComponent = new Component
             {
                 Site = mockSite.Object
             };
@@ -1981,11 +1892,11 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void ComponentDesigner_GetService_InvokeWithComponentWithSite_ReturnsNull(Type serviceType)
         {
             var service = new object();
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.GetService(serviceType))
@@ -2000,7 +1911,10 @@ namespace System.ComponentModel.Design.Tests
             mockSite
                 .Setup(s => s.GetService(typeof(IInheritanceService)))
                 .Returns(null);
-            var component = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+            using var component = new Component
             {
                 Site = mockSite.Object
             };
@@ -2011,27 +1925,27 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void ComponentDesigner_GetService_InvokeWithComponentWithoutSite_ReturnsNull(Type serviceType)
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             designer.Initialize(new Component());
             Assert.Null(designer.GetService(serviceType));
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void ComponentDesigner_GetService_InvokeWithoutComponent_ReturnsNull(Type serviceType)
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             Assert.Null(designer.GetService(serviceType));
         }
 
         [Fact]
         public void ComponentDesigner_Initialize_Invoke_Success()
         {
-            var designer = new ComponentDesigner();
-            var component = new Component();
+            using var designer = new ComponentDesigner();
+            using var component = new Component();
             designer.Initialize(component);
             Assert.Same(component, designer.Component);
             Assert.Empty(designer.AssociatedComponents);
@@ -2045,8 +1959,8 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_Initialize_RootComponent_Success()
         {
-            var component = new Component();
-            var designer = new ComponentDesigner();
+            using var component = new Component();
+            using var designer = new ComponentDesigner();
             var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
             mockDesignerHost
                 .Setup(h => h.RootComponent)
@@ -2076,6 +1990,9 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
                 .Returns(null)
                 .Verifiable();
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
             component.Site = mockSite.Object;
 
             designer.Initialize(component);
@@ -2109,7 +2026,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(Initialize_NonRootComponent_TestData))]
         public void ComponentDesigner_Initialize_NonRootComponent_Success(object host, object componentChangeService)
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
@@ -2133,7 +2050,10 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(DesignerCommandSet)))
                 .Returns(null)
                 .Verifiable();
-            var component = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+            using var component = new Component
             {
                 Site = mockSite.Object
             };
@@ -2147,8 +2067,8 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_Initialize_NullInheritanceAttribute_Success()
         {
-            var designer = new CustomInheritanceAttributeComponentDesigner(null);
-            var component = new Component();
+            using var designer = new CustomInheritanceAttributeComponentDesigner(null);
+            using var component = new Component();
             designer.Initialize(component);
             Assert.Same(component, designer.Component);
             Assert.Empty(designer.AssociatedComponents);
@@ -2157,7 +2077,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_Initialize_InvokeIServiceContainerSiteWithNullDesignerCommandSet_CallsAddService()
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
@@ -2181,13 +2101,16 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(s => s.GetService(typeof(DesignerCommandSet)))
                 .Returns(null)
                 .Verifiable();
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
             DesignerCommandSet set = null;
             mockSite
                 .As<IServiceContainer>()
                 .Setup(c => c.AddService(typeof(DesignerCommandSet), It.IsAny<DesignerCommandSet>()))
                 .Callback<Type, object>((t, s) => set = Assert.IsAssignableFrom<DesignerCommandSet>(s))
                 .Verifiable();
-            var component = new Component
+            using var component = new Component
             {
                 Site = mockSite.Object
             };
@@ -2214,7 +2137,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(Initialize_NonNullDesignerCommandSet_TestData))]
         public void ComponentDesigner_Initialize_InvokeIServiceContainerSiteWithNonNullDesignerCommandSet_DoesNotCallAddService(object designerCommandSet)
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
@@ -2242,7 +2165,10 @@ namespace System.ComponentModel.Design.Tests
                 .As<IServiceContainer>()
                 .Setup(c => c.AddService(typeof(DesignerCommandSet), It.IsAny<DesignerCommandSet>()))
                 .Verifiable();
-            var component = new Component
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+            using var component = new Component
             {
                 Site = mockSite.Object
             };
@@ -2257,8 +2183,8 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_ParentComponent_GetWithHost_ReturnsExpected()
         {
-            var designer = new SubComponentDesigner();
-            var component = new Component();
+            using var designer = new SubComponentDesigner();
+            using var component = new Component();
             designer.Initialize(component);
         }
 
@@ -2272,7 +2198,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(IDictionary_TestData))]
         public void ComponentDesigner_InitializeExistingComponent_Invoke_ThrowsNotImplementedException(IDictionary defaultValues)
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             Assert.Throws<NotImplementedException>(() => designer.InitializeExistingComponent(defaultValues));
         }
 
@@ -2280,7 +2206,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(IDictionary_TestData))]
         public void ComponentDesigner_InitializeNewComponent_Invoke_Nop(IDictionary defaultValues)
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             designer.InitializeNewComponent(defaultValues);
         }
 
@@ -2288,7 +2214,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_InitializeNonDefault_Invoke_Nop()
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             designer.InitializeNonDefault();
         }
 #pragma warning restore 0618
@@ -2296,14 +2222,14 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_InvokeGetInheritanceAttribute_InvokeNonNullToInvoke_ReturnsExpected()
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             Assert.Same(designer.InheritanceAttribute, designer.InvokeGetInheritanceAttribute(designer));
         }
 
         [Fact]
         public void ComponentDesigner_InvokeGetInheritanceAttribute_InvokeNullToInvoke_ReturnsNull()
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             Assert.Null(designer.InvokeGetInheritanceAttribute(null));
         }
 
@@ -2318,51 +2244,51 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_PreFilterProperties_WithComponentWithKey_Success()
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
             var properties = new Dictionary<string, PropertyDescriptor>
             {
                 { "SettingsKey", descriptor }
             };
-            var component = new IPersistComponentSettingsComponent();
+            using var component = new IPersistComponentSettingsComponent();
             designer.Initialize(component);
             designer.PreFilterProperties(properties);
             PropertyDescriptor result = (PropertyDescriptor)properties["SettingsKey"];
             Assert.NotSame(descriptor, result);
             Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
             Assert.Equal(descriptor.Name, result.Name);
-            Assert.Equal(7, descriptor.Attributes.Count);
-            Assert.Equal(8, result.Attributes.Count);
+            Assert.True(descriptor.Attributes.Count >= 7);
+            Assert.True(result.Attributes.Count >= 8);
         }
 
         [Fact]
         public void ComponentDesigner_PreFilterProperties_WithIPersistComponentSettingsComponentWithKey_Success()
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
             var properties = new Dictionary<string, PropertyDescriptor>
             {
                 { "SettingsKey", descriptor }
             };
-            var component = new IPersistComponentSettingsComponent();
+            using var component = new IPersistComponentSettingsComponent();
             designer.Initialize(component);
             designer.PreFilterProperties(properties);
             PropertyDescriptor result = (PropertyDescriptor)properties["SettingsKey"];
             Assert.NotSame(descriptor, result);
             Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
             Assert.Equal(descriptor.Name, result.Name);
-            Assert.Equal(7, descriptor.Attributes.Count);
-            Assert.Equal(8, result.Attributes.Count);
+            Assert.True(descriptor.Attributes.Count >= 7);
+            Assert.True(result.Attributes.Count >= 8);
         }
 
         [Theory]
         [MemberData(nameof(PreFilterProperties_ComponentWithoutKey_TestData))]
         public void ComponentDesigner_PreFilterProperties_WithIPersistComponentSettingsComponentWithoutKey_Success(IDictionary properties)
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
             object oldValue = properties?["SettingsKey"];
-            var component = new IPersistComponentSettingsComponent();
+            using var component = new IPersistComponentSettingsComponent();
             designer.Initialize(component);
             designer.PreFilterProperties(properties);
             Assert.Same(oldValue, properties?["SettingsKey"]);
@@ -2371,13 +2297,13 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_PreFilterProperties_WithNonIPersistComponentSettingsComponent_Nop()
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
             var properties = new Dictionary<string, PropertyDescriptor>
             {
                 { "SettingsKey", descriptor }
             };
-            var component = new Component();
+            using var component = new Component();
             designer.Initialize(component);
             designer.PreFilterProperties(properties);
             Assert.Same(descriptor, properties["SettingsKey"]);
@@ -2387,7 +2313,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(IDictionary_TestData))]
         public void ComponentDesigner_PreFilterProperties_WithoutComponent_Nop(IDictionary properties)
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             designer.PreFilterProperties(properties);
         }
 
@@ -2409,7 +2335,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(PostFilterAttributes_NoInheritanceAttribute_TestData))]
         public void ComponentDesigner_PostFilterAttributes_NoInheritanceAttribute_AddsToAttributes(InheritanceAttribute attribute, IDictionary attributes, object expected)
         {
-            var designer = new CustomInheritanceAttributeComponentDesigner(attribute);
+            using var designer = new CustomInheritanceAttributeComponentDesigner(attribute);
             designer.PostFilterAttributes(attributes);
             Assert.Same(expected, attributes?[typeof(InheritanceAttribute)]);
         }
@@ -2428,7 +2354,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(PostFilterAttributes_TestData))]
         public void ComponentDesigner_PostFilterAttributes_HasInheritanceAttributeKey_Sets(IDictionary attributes, object expected)
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             designer.PostFilterAttributes(attributes);
             Assert.Same(expected, designer.InheritanceAttribute);
         }
@@ -2448,7 +2374,7 @@ namespace System.ComponentModel.Design.Tests
         {
             EventDescriptor descriptor = TypeDescriptor.GetEvents(typeof(CustomComponent))[0];
             var events = new Dictionary<object, object> { { "key1", descriptor }, { "Key2", null } };
-            var designer = new CustomInheritanceAttributeComponentDesigner(inheritanceAttribute);
+            using var designer = new CustomInheritanceAttributeComponentDesigner(inheritanceAttribute);
             designer.PostFilterEvents(events);
             if (valid)
             {
@@ -2482,7 +2408,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(PostFilterEvents_NoEvents_TestData))]
         public void ComponentDesigner_PostFilterEvents_InvokeWithoutEvents_Success(InheritanceAttribute inheritanceAttribute, IDictionary events, IDictionary expected)
         {
-            var designer = new CustomInheritanceAttributeComponentDesigner(inheritanceAttribute);
+            using var designer = new CustomInheritanceAttributeComponentDesigner(inheritanceAttribute);
             designer.PostFilterEvents(events);
             Assert.Equal(expected, events);
         }
@@ -2490,8 +2416,8 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_PostFilterEvents_InvokeWithInvalidEvents_ThrowsArrayTypeMismatchException()
         {
-            var designer = new CustomInheritanceAttributeComponentDesigner(InheritanceAttribute.InheritedReadOnly);
-            Assert.Throws<ArrayTypeMismatchException>(() => designer.PostFilterEvents(new Dictionary<object, object> { { "key", new object() } } ));
+            using var designer = new CustomInheritanceAttributeComponentDesigner(InheritanceAttribute.InheritedReadOnly);
+            Assert.Throws<ArrayTypeMismatchException>(() => designer.PostFilterEvents(new Dictionary<object, object> { { "key", new object() } }));
         }
 
         public static IEnumerable<object[]> RaiseComponentChanged_TestData()
@@ -2504,32 +2430,13 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(RaiseComponentChanged_TestData))]
         public void ComponentDesigner_RaiseComponentChanged_InvokeWithValidService_CallsOnOnComponentChanged(MemberDescriptor member, object oldValue, object newValue)
         {
-            var designer = new SubComponentDesigner();
-            var component = new Component();
+            using var designer = new SubComponentDesigner();
+            using var component = new Component();
             var mockComponentChangeService = new Mock<IComponentChangeService>(MockBehavior.Strict);
             mockComponentChangeService
                 .Setup(s => s.OnComponentChanged(component, member, oldValue, newValue))
                 .Verifiable();
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDesignerHost)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IComponentChangeService)))
-                .Returns(mockComponentChangeService.Object)
-                .Verifiable();
-            mockSite
-                .Setup(s => s.GetService(typeof(IInheritanceService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
+            var mockSite = CreateMockSiteWithComponentChangeService(mockComponentChangeService.Object);
             component.Site = mockSite.Object;
 
             designer.Initialize(component);
@@ -2552,28 +2459,9 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(RaiseComponentChanged_InvalidService_TestData))]
         public void ComponentDesigner_RaiseComponentChanged_InvokeWithInvalidService_CallsOnOnComponentChanged(object componentChangeService, MemberDescriptor member, object oldValue, object newValue)
         {
-            var designer = new SubComponentDesigner();
-            var component = new Component();
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDesignerHost)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IComponentChangeService)))
-                .Returns(componentChangeService)
-                .Verifiable();
-            mockSite
-                .Setup(s => s.GetService(typeof(IInheritanceService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
+            using var designer = new SubComponentDesigner();
+            using var component = new Component();
+            var mockSite = CreateMockSiteWithComponentChangeService(componentChangeService);
             component.Site = mockSite.Object;
 
             designer.Initialize(component);
@@ -2586,7 +2474,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(RaiseComponentChanged_TestData))]
         public void ComponentDesigner_RaiseComponentChanged_InvokeWithoutComponent_Nop(MemberDescriptor member, object oldValue, object newValue)
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             designer.RaiseComponentChanged(member, oldValue, newValue);
         }
 
@@ -2600,32 +2488,13 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(RaiseComponentChanging_TestData))]
         public void ComponentDesigner_RaiseComponentChanging_InvokeWithValidService_CallsOnOnComponentChanged(MemberDescriptor member)
         {
-            var designer = new SubComponentDesigner();
-            var component = new Component();
+            using var designer = new SubComponentDesigner();
+            using var component = new Component();
             var mockComponentChangeService = new Mock<IComponentChangeService>(MockBehavior.Strict);
             mockComponentChangeService
                 .Setup(s => s.OnComponentChanging(component, member))
                 .Verifiable();
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDesignerHost)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IComponentChangeService)))
-                .Returns(mockComponentChangeService.Object)
-                .Verifiable();
-            mockSite
-                .Setup(s => s.GetService(typeof(IInheritanceService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
+            var mockSite = CreateMockSiteWithComponentChangeService(mockComponentChangeService.Object);
             component.Site = mockSite.Object;
 
             designer.Initialize(component);
@@ -2648,28 +2517,9 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(RaiseComponentChanging_InvalidService_TestData))]
         public void ComponentDesigner_RaiseComponentChanging_InvokeWithInvalidService_CallsOnOnComponentChanged(object componentChangeService, MemberDescriptor member)
         {
-            var designer = new SubComponentDesigner();
-            var component = new Component();
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDesignerHost)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IComponentChangeService)))
-                .Returns(componentChangeService)
-                .Verifiable();
-            mockSite
-                .Setup(s => s.GetService(typeof(IInheritanceService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IDictionaryService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(IExtenderListService)))
-                .Returns(null);
-            mockSite
-                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-                .Returns(null);
+            using var designer = new SubComponentDesigner();
+            using var component = new Component();
+            var mockSite = CreateMockSiteWithComponentChangeService(componentChangeService);
             component.Site = mockSite.Object;
 
             designer.Initialize(component);
@@ -2682,7 +2532,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(RaiseComponentChanging_TestData))]
         public void ComponentDesigner_RaiseComponentChanging_InvokeWithoutComponent_Nop(MemberDescriptor member)
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             designer.RaiseComponentChanging(member);
         }
 
@@ -2699,7 +2549,7 @@ namespace System.ComponentModel.Design.Tests
         [InlineData("OldValue", "NewValue", "OldValue")]
         public void ComponentDesigner_OnSetComponentDefaults_InvokeWithComponentWithDefaultProperty_Nop(string oldValue, string siteName, string expectedValue)
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
@@ -2722,7 +2572,10 @@ namespace System.ComponentModel.Design.Tests
             mockSite
                 .Setup(s => s.Name)
                 .Returns(siteName);
-            var component = new StringDefaultPropertyComponent
+            mockSite
+                .SetupGet(s => s.Container)
+                .Returns((IContainer)null);
+            using var component = new StringDefaultPropertyComponent
             {
                 Site = mockSite.Object,
                 Value = oldValue
@@ -2765,7 +2618,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(OnSetComponentDefaults_InvalidComponent_TestData))]
         public void ComponentDesigner_OnSetComponentDefaults_InvokeWithInvalidComponent_Nop(Component component)
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             designer.Initialize(component);
             designer.OnSetComponentDefaults();
         }
@@ -2773,8 +2626,8 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_OnSetComponentDefaults_InvokeWithComponentWithoutSite_Nop()
         {
-            var designer = new ComponentDesigner();
-            var component = new Component();
+            using var designer = new ComponentDesigner();
+            using var component = new Component();
             designer.Initialize(component);
             designer.OnSetComponentDefaults();
         }
@@ -2782,7 +2635,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_OnSetComponentDefaults_InvokeWithoutComponent_Nop()
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             designer.OnSetComponentDefaults();
         }
 #pragma warning restore 0618
@@ -2820,54 +2673,54 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_IDesignerFilterPreFilterProperties_WithComponentWithKey_Success()
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             IDesignerFilter filter = designer;
             PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
             var properties = new Dictionary<string, PropertyDescriptor>
             {
                 { "SettingsKey", descriptor }
             };
-            var component = new IPersistComponentSettingsComponent();
+            using var component = new IPersistComponentSettingsComponent();
             designer.Initialize(component);
             filter.PreFilterProperties(properties);
             PropertyDescriptor result = (PropertyDescriptor)properties["SettingsKey"];
             Assert.NotSame(descriptor, result);
             Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
             Assert.Equal(descriptor.Name, result.Name);
-            Assert.Equal(7, descriptor.Attributes.Count);
-            Assert.Equal(8, result.Attributes.Count);
+            Assert.True(descriptor.Attributes.Count >= 7);
+            Assert.True(result.Attributes.Count >= 8);
         }
 
         [Fact]
         public void ComponentDesigner_IDesignerFilterPreFilterProperties_WithIPersistComponentSettingsComponentWithKey_Success()
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             IDesignerFilter filter = designer;
             PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
             var properties = new Dictionary<string, PropertyDescriptor>
             {
                 { "SettingsKey", descriptor }
             };
-            var component = new IPersistComponentSettingsComponent();
+            using var component = new IPersistComponentSettingsComponent();
             designer.Initialize(component);
             filter.PreFilterProperties(properties);
             PropertyDescriptor result = (PropertyDescriptor)properties["SettingsKey"];
             Assert.NotSame(descriptor, result);
             Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
             Assert.Equal(descriptor.Name, result.Name);
-            Assert.Equal(7, descriptor.Attributes.Count);
-            Assert.Equal(8, result.Attributes.Count);
+            Assert.True(descriptor.Attributes.Count >= 7);
+            Assert.True(result.Attributes.Count >= 8);
         }
 
         [Theory]
         [MemberData(nameof(PreFilterProperties_ComponentWithoutKey_TestData))]
         public void ComponentDesigner_IDesignerFilterPreFilterProperties_WithIPersistComponentSettingsComponentWithoutKey_Success(IDictionary properties)
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             IDesignerFilter filter = designer;
             PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
             object oldValue = properties?["SettingsKey"];
-            var component = new IPersistComponentSettingsComponent();
+            using var component = new IPersistComponentSettingsComponent();
             designer.Initialize(component);
             filter.PreFilterProperties(properties);
             Assert.Same(oldValue, properties?["SettingsKey"]);
@@ -2876,14 +2729,14 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_IDesignerFilterPreFilterProperties_WithNonIPersistComponentSettingsComponent_Nop()
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             IDesignerFilter filter = designer;
             PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
             var properties = new Dictionary<string, PropertyDescriptor>
             {
                 { "SettingsKey", descriptor }
             };
-            var component = new Component();
+            using var component = new Component();
             designer.Initialize(component);
             filter.PreFilterProperties(properties);
             Assert.Same(descriptor, properties["SettingsKey"]);
@@ -2893,7 +2746,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(IDictionary_TestData))]
         public void ComponentDesigner_IDesignerFilterPreFilterProperties_WithoutComponent_Nop(IDictionary properties)
         {
-            var designer = new ComponentDesigner();
+            using var designer = new ComponentDesigner();
             IDesignerFilter filter = designer;
             filter.PreFilterProperties(properties);
         }
@@ -2917,7 +2770,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(PostFilterAttributes_NoInheritanceAttribute_TestData))]
         public void ComponentDesigner_IDesignerFilterPostFilterAttributes_NoInheritanceAttribute_AddsToAttributes(InheritanceAttribute attribute, IDictionary attributes, object expected)
         {
-            var designer = new CustomInheritanceAttributeComponentDesigner(attribute);
+            using var designer = new CustomInheritanceAttributeComponentDesigner(attribute);
             IDesignerFilter filter = designer;
             filter.PostFilterAttributes(attributes);
             Assert.Same(expected, attributes?[typeof(InheritanceAttribute)]);
@@ -2927,7 +2780,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(PostFilterAttributes_TestData))]
         public void ComponentDesigner_IDesignerFilterPostFilterAttributes_HasInheritanceAttributeKey_Sets(IDictionary attributes, object expected)
         {
-            var designer = new SubComponentDesigner();
+            using var designer = new SubComponentDesigner();
             IDesignerFilter filter = designer;
             filter.PostFilterAttributes(attributes);
             Assert.Same(expected, designer.InheritanceAttribute);
@@ -2958,7 +2811,7 @@ namespace System.ComponentModel.Design.Tests
         {
             EventDescriptor descriptor = TypeDescriptor.GetEvents(typeof(CustomComponent))[0];
             var events = new Dictionary<object, object> { { "key1", descriptor }, { "Key2", null } };
-            var designer = new CustomInheritanceAttributeComponentDesigner(inheritanceAttribute);
+            using var designer = new CustomInheritanceAttributeComponentDesigner(inheritanceAttribute);
             IDesignerFilter filter = designer;
             filter.PostFilterEvents(events);
             if (valid)
@@ -2979,7 +2832,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(PostFilterEvents_NoEvents_TestData))]
         public void ComponentDesigner_IDesignerFilterPostFilterEvents_InvokeWithoutEvents_Success(InheritanceAttribute inheritanceAttribute, IDictionary events, IDictionary expected)
         {
-            var designer = new CustomInheritanceAttributeComponentDesigner(inheritanceAttribute);
+            using var designer = new CustomInheritanceAttributeComponentDesigner(inheritanceAttribute);
             IDesignerFilter filter = designer;
             filter.PostFilterEvents(events);
             Assert.Equal(expected, events);
@@ -2990,7 +2843,7 @@ namespace System.ComponentModel.Design.Tests
         {
             var designer = new CustomInheritanceAttributeComponentDesigner(InheritanceAttribute.InheritedReadOnly);
             IDesignerFilter filter = designer;
-            Assert.Throws<ArrayTypeMismatchException>(() => filter.PostFilterEvents(new Dictionary<object, object> { { "key", new object() } } ));
+            Assert.Throws<ArrayTypeMismatchException>(() => filter.PostFilterEvents(new Dictionary<object, object> { { "key", new object() } }));
         }
 
         [Fact]

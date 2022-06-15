@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -25,31 +23,28 @@ namespace System.Windows.Forms
 
         private bool _enabled;
 
-        private protected EventHandler _onTimer;
+        private protected EventHandler? _onTimer;
 
         private GCHandle _timerRoot;
 
         // Holder for the HWND that handles our Timer messages.
-        private TimerNativeWindow _timerWindow;
+        private TimerNativeWindow? _timerWindow;
 
         private readonly object _syncObj = new object();
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Timer'/> class.
+        ///  Initializes a new instance of the <see cref="Timer"/> class.
         /// </summary>
         public Timer() : base()
         {
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Timer'/> class with the specified container.
+        ///  Initializes a new instance of the <see cref="Timer"/> class with the specified container.
         /// </summary>
         public Timer(IContainer container) : this()
         {
-            if (container is null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
+            ArgumentNullException.ThrowIfNull(container);
 
             container.Add(this);
         }
@@ -60,7 +55,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         /// <summary>
         ///  Occurs when the specified timer interval has elapsed and the timer is enabled.
@@ -157,7 +152,7 @@ namespace System.Windows.Forms
                         if (Enabled)
                         {
                             // Change the timer value, don't tear down the timer itself.
-                            if (!DesignMode && _timerWindow != null)
+                            if (!DesignMode && _timerWindow is not null)
                             {
                                 _timerWindow.RestartTimer(value);
                             }
@@ -168,7 +163,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Tick'/> event.
+        ///  Raises the <see cref="Tick"/> event.
         /// </summary>
         protected virtual void OnTick(EventArgs e) => _onTimer?.Invoke(this, e);
 
@@ -189,7 +184,7 @@ namespace System.Windows.Forms
             // The timer that owns the window
             private readonly Timer _owner;
 
-            // The current id -- this is usally the same as TimerID but we also
+            // The current id -- this is usually the same as TimerID but we also
             // use it as a flag of when our timer is running.
             private IntPtr _timerID;
 
@@ -239,7 +234,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns true if we need to marshal across threads to access this timer's HWND.
             /// </summary>
-            private bool GetInvokeRequired(IntPtr hWnd)
+            private static bool GetInvokeRequired(IntPtr hWnd)
             {
                 if (hWnd != IntPtr.Zero)
                 {
@@ -347,15 +342,15 @@ namespace System.Windows.Forms
                 Debug.Assert(m.HWnd == Handle && Handle != IntPtr.Zero, "Timer getting messages for other windows?");
 
                 // For timer messages call the timer event.
-                if (m.Msg == (int)User32.WM.TIMER)
+                if (m.MsgInternal == User32.WM.TIMER)
                 {
-                    if (m.WParam == _timerID)
+                    if (m.WParamInternal == _timerID)
                     {
                         _owner.OnTick(EventArgs.Empty);
                         return;
                     }
                 }
-                else if (m.Msg == (int)User32.WM.CLOSE)
+                else if (m.MsgInternal == User32.WM.CLOSE)
                 {
                     // This is a posted method from another thread that tells us we need
                     // to kill the timer. The handle may already be gone, so we specify it here.

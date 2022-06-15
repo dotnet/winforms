@@ -7,6 +7,14 @@ Microsoft.VisualBasic.ApplicationServices.ApplicationBase.Info() -> Microsoft.Vi
 Microsoft.VisualBasic.ApplicationServices.ApplicationBase.Log() -> Microsoft.VisualBasic.Logging.Log
 Microsoft.VisualBasic.ApplicationServices.ApplicationBase.New() -> Void
 Microsoft.VisualBasic.ApplicationServices.ApplicationBase.UICulture() -> System.Globalization.CultureInfo
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.Font() -> System.Drawing.Font
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.Font(AutoPropertyValue As System.Drawing.Font) -> Void
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.HighDpiMode() -> System.Windows.Forms.HighDpiMode
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.HighDpiMode(AutoPropertyValue As System.Windows.Forms.HighDpiMode) -> Void
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.MinimumSplashScreenDisplayTime() -> Integer
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.MinimumSplashScreenDisplayTime(AutoPropertyValue As Integer) -> Void
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventHandler
 Microsoft.VisualBasic.ApplicationServices.AssemblyInfo
 Microsoft.VisualBasic.ApplicationServices.AssemblyInfo.AssemblyName() -> String
 Microsoft.VisualBasic.ApplicationServices.AssemblyInfo.CompanyName() -> String
@@ -66,10 +74,13 @@ Microsoft.VisualBasic.ApplicationServices.User.Name() -> String
 Microsoft.VisualBasic.ApplicationServices.User.New() -> Void
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.ApplicationContext() -> System.Windows.Forms.ApplicationContext
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.ApplyApplicationDefaults -> Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventHandler
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.DoEvents() -> Void
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.EnableVisualStyles() -> Boolean
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.EnableVisualStyles(value As Boolean) -> Void
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.HideSplashScreen() -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.HighDpiMode() -> System.Windows.Forms.HighDpiMode
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.HighDpiMode(value As System.Windows.Forms.HighDpiMode) -> Void
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.IsSingleInstance() -> Boolean
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.IsSingleInstance(value As Boolean) -> Void
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.MainForm() -> System.Windows.Forms.Form
@@ -358,8 +369,8 @@ Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.Close() -> Void
 Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.Dispose(disposing As Boolean) -> Void
 Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.Flush() -> Void
 Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.GetSupportedAttributes() -> String()
-Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.TraceData(eventCache As System.Diagnostics.TraceEventCache, source As String, eventType As System.Diagnostics.TraceEventType, id As Integer, ParamArray data As Object()) -> Void
 Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.TraceData(eventCache As System.Diagnostics.TraceEventCache, source As String, eventType As System.Diagnostics.TraceEventType, id As Integer, data As Object) -> Void
+Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.TraceData(eventCache As System.Diagnostics.TraceEventCache, source As String, eventType As System.Diagnostics.TraceEventType, id As Integer, ParamArray data As Object()) -> Void
 Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.TraceEvent(eventCache As System.Diagnostics.TraceEventCache, source As String, eventType As System.Diagnostics.TraceEventType, id As Integer, format As String, ParamArray args As Object()) -> Void
 Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.TraceEvent(eventCache As System.Diagnostics.TraceEventCache, source As String, eventType As System.Diagnostics.TraceEventType, id As Integer, message As String) -> Void
 Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.Write(message As String) -> Void

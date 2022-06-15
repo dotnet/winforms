@@ -14,14 +14,17 @@ namespace System.Windows.Forms
 
             public ListViewColumnHeaderAccessibleObject(ColumnHeader columnHeader)
             {
-                _owningColumnHeader = columnHeader ?? throw new ArgumentNullException(nameof(columnHeader));
+                _owningColumnHeader = columnHeader.OrThrowIfNull();
             }
+
+            public override string? Name => _owningColumnHeader.Text;
+
+            internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, _owningColumnHeader.GetHashCode() };
 
             internal override object? GetPropertyValue(UIA propertyID)
                 => propertyID switch
                 {
                     UIA.ControlTypePropertyId => UIA.HeaderItemControlTypeId,
-                    UIA.NamePropertyId => _owningColumnHeader.Text,
                     _ => base.GetPropertyValue(propertyID)
                 };
         }

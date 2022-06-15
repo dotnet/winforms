@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design
         private InheritanceAttribute _addingAttribute;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='System.ComponentModel.Design.InheritanceService'/> class.
+        ///  Initializes a new instance of the <see cref="InheritanceService"/> class.
         /// </summary>
         public InheritanceService()
         {
@@ -32,7 +32,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Disposes of the resources (other than memory) used by the <see cref='System.ComponentModel.Design.InheritanceService'/>.
+        ///  Disposes of the resources (other than memory) used by the <see cref="InheritanceService"/>.
         /// </summary>
         public void Dispose()
         {
@@ -41,7 +41,7 @@ namespace System.ComponentModel.Design
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing && _inheritedComponents != null)
+            if (disposing && _inheritedComponents is not null)
             {
                 _inheritedComponents.Clear();
                 _inheritedComponents = null;
@@ -49,7 +49,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds inherited components to the <see cref='System.ComponentModel.Design.InheritanceService'/>.
+        ///  Adds inherited components to the <see cref="InheritanceService"/>.
         /// </summary>
         public void AddInheritedComponents(IComponent component, IContainer container)
         {
@@ -57,7 +57,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds inherited components to the <see cref='System.ComponentModel.Design.InheritanceService'/>.
+        ///  Adds inherited components to the <see cref="InheritanceService"/>.
         /// </summary>
         protected virtual void AddInheritedComponents(Type type, IComponent component, IContainer container)
         {
@@ -73,11 +73,11 @@ namespace System.ComponentModel.Design
             IComponentChangeService cs = null;
             INameCreationService ncs = null;
 
-            if (site != null)
+            if (site is not null)
             {
                 ncs = (INameCreationService)site.GetService(typeof(INameCreationService));
                 cs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-                if (cs != null)
+                if (cs is not null)
                 {
                     cs.ComponentAdding += new ComponentEventHandler(OnComponentAdding);
                 }
@@ -118,7 +118,7 @@ namespace System.ComponentModel.Design
                         MemberInfo member = field;
 
                         object[] fieldAttrs = field.GetCustomAttributes(typeof(AccessedThroughPropertyAttribute), false);
-                        if (fieldAttrs != null && fieldAttrs.Length > 0)
+                        if (fieldAttrs is not null && fieldAttrs.Length > 0)
                         {
                             Debug.Assert(fieldAttrs.Length == 1, "Non-inheritable attribute has more than one copy");
                             Debug.Assert(fieldAttrs[0] is AccessedThroughPropertyAttribute, "Reflection bug:  GetCustomAttributes(type) didn't discriminate by type");
@@ -126,9 +126,9 @@ namespace System.ComponentModel.Design
 
                             PropertyInfo fieldProp = reflect.GetProperty(propAttr.PropertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-                            Debug.Assert(fieldProp != null, "Field declared with AccessedThroughPropertyAttribute has no associated property");
+                            Debug.Assert(fieldProp is not null, "Field declared with AccessedThroughPropertyAttribute has no associated property");
                             Debug.Assert(fieldProp.PropertyType == field.FieldType, "Field declared with AccessedThroughPropertyAttribute is associated with a property with a different return type.");
-                            if (fieldProp != null && fieldProp.PropertyType == field.FieldType)
+                            if (fieldProp is not null && fieldProp.PropertyType == field.FieldType)
                             {
                                 // If the property cannot be read, it is useless to us.
                                 if (!fieldProp.CanRead)
@@ -138,7 +138,7 @@ namespace System.ComponentModel.Design
 
                                 // We never access the set for the property, so we can concentrate on just the get method.
                                 member = fieldProp.GetGetMethod(true);
-                                Debug.Assert(member != null, "GetGetMethod for property didn't return a method, but CanRead is true");
+                                Debug.Assert(member is not null, "GetGetMethod for property didn't return a method, but CanRead is true");
                                 name = propAttr.PropertyName;
                             }
                         }
@@ -146,7 +146,7 @@ namespace System.ComponentModel.Design
                         // Add a user hook to add or remove members.  The default hook here ignores all inherited private members.
                         bool ignoreMember = IgnoreInheritedMember(member, component);
 
-                        // We now have an inherited member.  Gather some information about it and then add it to our list.  We must always add to our list, but we may not want to  add it to the container.  That is up to the IngoreInheritedMember method. We add here because there are components in the world that, when sited, add their children to the container too. That's fine, but we want to make sure we account for them in the inheritance service too.
+                        // We now have an inherited member.  Gather some information about it and then add it to our list.  We must always add to our list, but we may not want to  add it to the container.  That is up to the IgnoreInheritedMember method. We add here because there are components in the world that, when sited, add their children to the container too. That's fine, but we want to make sure we account for them in the inheritance service too.
                         Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "...found inherited member '" + name + "'");
                         Debug.Indent();
                         Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "Type: " + field.FieldType.FullName);
@@ -214,14 +214,16 @@ namespace System.ComponentModel.Design
                                 _addingAttribute = null;
                             }
                         }
+
                         Debug.Unindent();
                     }
+
                     type = type.BaseType;
                 }
             }
             finally
             {
-                if (cs != null)
+                if (cs is not null)
                 {
                     cs.ComponentAdding -= new ComponentEventHandler(OnComponentAdding);
                 }
@@ -244,6 +246,7 @@ namespace System.ComponentModel.Design
             {
                 return method.IsPrivate || method.IsAssembly;
             }
+
             Debug.Fail("Unknown member type passed to IgnoreInheritedMember");
             return true;
         }
@@ -258,12 +261,13 @@ namespace System.ComponentModel.Design
             {
                 attr = InheritanceAttribute.Default;
             }
+
             return attr;
         }
 
         private void OnComponentAdding(object sender, ComponentEventArgs ce)
         {
-            if (_addingComponent != null && _addingComponent != ce.Component)
+            if (_addingComponent is not null && _addingComponent != ce.Component)
             {
                 Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "Adding component... " + ce.Component.ToString());
                 _inheritedComponents[ce.Component] = InheritanceAttribute.InheritedReadOnly;
@@ -277,10 +281,10 @@ namespace System.ComponentModel.Design
 
         private static Type GetReflectionTypeFromTypeHelper(Type type)
         {
-            if (type != null)
+            if (type is not null)
             {
                 TypeDescriptionProvider targetProvider = GetTargetFrameworkProviderForType(type);
-                if (targetProvider != null)
+                if (targetProvider is not null)
                 {
                     if (targetProvider.IsSupportedType(type))
                     {
@@ -288,19 +292,21 @@ namespace System.ComponentModel.Design
                     }
                 }
             }
+
             return type;
         }
 
         private static TypeDescriptionProvider GetTargetFrameworkProviderForType(Type type)
         {
             IDesignerSerializationManager manager = DocumentDesigner.manager;
-            if (manager != null)
+            if (manager is not null)
             {
                 if (manager.GetService(typeof(TypeDescriptionProviderService)) is TypeDescriptionProviderService service)
                 {
                     return service.GetProvider(type);
                 }
             }
+
             return null;
         }
     }

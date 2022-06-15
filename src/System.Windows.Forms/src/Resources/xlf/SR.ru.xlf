@@ -194,7 +194,7 @@
       </trans-unit>
       <trans-unit id="AccessibleActionDoubleClick">
         <source>Double Click</source>
-        <target state="new">Double Click</target>
+        <target state="translated">Двойной щелчок</target>
         <note />
       </trans-unit>
       <trans-unit id="AccessibleActionExpand">
@@ -215,6 +215,11 @@
       <trans-unit id="AccessibleObjectLiveRegionNotSupported">
         <source>The corresponding UI element is not a live region.</source>
         <target state="translated">Соответствующий элемент пользовательского интерфейса не является динамической областью.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
+        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
+        <target state="translated">{0} не поддерживает свойство {1}. Его необходимо переопределить в производном классе.</target>
         <note />
       </trans-unit>
       <trans-unit id="AddDifferentThreads">
@@ -677,6 +682,21 @@
         <target state="translated">Необработанный VT: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
+        <source>Go to next time frame</source>
+        <target state="translated">Перейти к следующему интервалу времени</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
+        <source>Go to previous time frame</source>
+        <target state="translated">Перейти к предыдущему интервалу времени</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
+        <source>Go to and select today's date</source>
+        <target state="translated">Перейти и выбрать сегодняшний день</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CancelCaption">
         <source>Cancel</source>
         <target state="translated">Отмена</target>
@@ -800,6 +820,11 @@
       <trans-unit id="CatWindowStyle">
         <source>Window Style</source>
         <target state="translated">Стиль окна</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CategoryPropertyGridLocalizedControlType">
+        <source>PropertyGrid category</source>
+        <target state="translated">Категория PropertyGrid</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckBoxAppearanceDescr">
@@ -949,7 +974,7 @@
       </trans-unit>
       <trans-unit id="CombinationOfAccessibilitySwitchesNotSupported">
         <source>Desktop applications are required to opt in to all earlier accessibility improvements to get the later improvements. To do this, ensure that if the AppContext switch 'Switch.UseLegacyAccessibilityFeatures.N' is set to 'false', then 'Switch.UseLegacyAccessibilityFeatures' and all 'Switch.UseLegacyAccessibilityFeatures.M' switches, when M &lt; N, evaluate to false as well. Note that, if a switch for a particular set of accessibility improvements is not present, its value is determined by the target framework version. You can remedy this by adding these switches and setting their value to false.</source>
-        <target state="translated">Классические приложения должны активировать все предыдущие специальные возможности, чтобы получить  последующие улучшения. Для этого в случае, когда параметр AppContext "Switch.UseLegacyAccessibilityFeatures.N" имеет значение False, "Switch.UseLegacyAccessibilityFeatures" и все параметры "Switch.UseLegacyAccessibilityFeatures.M" также должны иметь значение False, если M &lt; N. Обратите внимание, что если параметр для конкретного набора улучшений специальных возможностей отсутствует, его значение определяется версией целевой платформы. Исправить это можно, добавив параметры и задав значение False.</target>
+        <target state="translated">Классические приложения должны активировать все предыдущие специальные возможности, чтобы получить последующие улучшения. Для этого в случае, когда параметр AppContext "Switch.UseLegacyAccessibilityFeatures.N" имеет значение False, "Switch.UseLegacyAccessibilityFeatures" и все параметры "Switch.UseLegacyAccessibilityFeatures.M" также должны иметь значение False, если M &lt; N. Обратите внимание, что если параметр для конкретного набора улучшений специальных возможностей отсутствует, его значение определяется версией целевой платформы. Исправить это можно, добавив параметры и задав значение False.</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboBoxAutoCompleteCustomSourceDescr">
@@ -1112,6 +1137,16 @@
         <target state="translated">Выбрано: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonCloseName">
+        <source>Close</source>
+        <target state="translated">Закрыть</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonOpenName">
+        <source>Open</source>
+        <target state="translated">Открыть</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">Выделение нового идентификатора команды невозможно.</target>
@@ -1217,7 +1252,7 @@
         <target state="translated">Последний элемент управления, вызвавший отображение полосы данного контекстного меню.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">Доступный объект элемента управления в недействительном состоянии.</target>
         <note />
@@ -2037,6 +2072,16 @@
         <target state="translated">Размеры данного элемента управления при бесконечном размере экрана.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlsCollectionShouldNotBeEmptyInGetNextControl">
+        <source>{0} collection shouldn't be empty for {1}.</source>
+        <target state="translated">Коллекция {0} не может быть пустой для элемента {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlsPropertyNotSetInGetNextControl">
+        <source>{0} property should be set for {1}.</source>
+        <target state="translated">Необходимо задать свойство {0} для элемента {1}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CurrencyManagerCantAddNew">
         <source>The list must be an IBindingList to AddNew.</source>
         <target state="translated">Данный список должен быть IBindingList для AddNew.</target>
@@ -2210,6 +2255,16 @@
       <trans-unit id="DataGridViewCell_ValueTypeNull">
         <source>ValueType property of a cell in a grid cannot be null.</source>
         <target state="translated">Свойство ValueType ячейки в сетке не может принимать пустое значение.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellCheckedStateDescription">
+        <source>{0} check box checked</source>
+        <target state="translated">Флажок {0} установлен.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
+        <source>{0} check box unchecked</source>
+        <target state="translated">Флажок {0} снят.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardChecked">
@@ -3699,6 +3754,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">Указывает, может ли пользователь редактировать ячейки элемента управления DataGridView.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridView_RowAddedNotification">
+        <source>Row {0} is added</source>
+        <target state="translated">Добавлена строка {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
         <source>Row provided already belongs to a DataGridView control.</source>
         <target state="translated">Указанная строка уже принадлежит к элементу управления DataGridView.</target>
@@ -4219,11 +4279,6 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">Изменить</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -4539,6 +4594,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">Регистрация DragDrop невозможна.</target>
         <note />
       </trans-unit>
+      <trans-unit id="EditDefaultAccessibleName">
+        <source>Spinner</source>
+        <target state="translated">Вертушка</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorBadInputLanguage">
         <source>inputLanguage is not recognized by the system.</source>
         <target state="translated">inputLanguage не распознан системой.</target>
@@ -4721,7 +4781,7 @@ just-in-time (JIT) debugging instead of this dialog box.
         <target state="translated">{0}
     Версия сборки: {1}
     Версия Win32: {2}
-    CodeBase: {3}
+    CodeBase (база кода): {3}
 </target>
         <note />
       </trans-unit>
@@ -4730,7 +4790,7 @@ just-in-time (JIT) debugging instead of this dialog box.
         <target state="translated">Загруженные сборки</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4739,7 +4799,7 @@ just-in-time (JIT) debugging instead of this dialog box.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -4887,6 +4947,11 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">Определяет, проверяет ли диалоговое окно имена файлов на наличие недопустимых символов или последовательностей.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogAddToRecentDescr">
+        <source>Controls whether to add the file being opened or saved to the recent list.</source>
+        <target state="translated">Определяет, следует ли добавлять открываемый или сохраненный файл в список "Последние".</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogBufferTooSmall">
         <source>Too many files selected. Select fewer files and try again.</source>
         <target state="translated">Выбрано слишком много файлов. Выберите меньшее число файлов и повторите попытку.</target>
@@ -4921,11 +4986,26 @@ Verify that the correct file name was given.</source>
         <target state="translated">Недопустимый индекс фильтра.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogOkRequiresInteractionDescr">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="translated">Определяет, отключена ли кнопка "ОК" в диалоговом окне, пока пользователь не перейдет в представление или не изменит имя файла (если применимо). Примечание. Отключение кнопки "ОК" не блокирует отправку сообщения из диалогового окна при нажатии клавиши ВВОД.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
         <target state="translated">Файл {0} уже существует.
 Заменить его?</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowHiddenFilesDescr">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="translated">Определяет, отображаются ли скрытые и системные файлы в диалоговом окне.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowPinnedPlacesDescr">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="translated">Определяет, можно ли просмотреть элементы, отображаемые по умолчанию в области навигации представления.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5033,6 +5113,11 @@ Do you want to replace it?</source>
         <target state="translated">Определяет, отображать ли кнопку 'Справка'.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogAddToRecent">
+        <source>Controls whether the dialog box adds the folder being selected to the recent list.</source>
+        <target state="translated">Определяет, добавляет ли диалоговое окно выбранную папку в список "Последние".</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogDescription">
         <source>The string that is displayed above the tree view control in the dialog box. This string can be used to specify instructions to the user.</source>
         <target state="translated">Строка, отображаемая над иерархическим представлением структуры дерева в данном диалоговом окне. Эта строка служит для задания инструкций для пользователя.</target>
@@ -5041,6 +5126,11 @@ Do you want to replace it?</source>
       <trans-unit id="FolderBrowserDialogNoRootFolder">
         <source>Unable to retrieve the root folder.</source>
         <target state="translated">Не удалось извлечь корневую папку.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="translated">Определяет, отключена ли кнопка "ОК" в диалоговом окне, пока пользователь не перейдет в представление или не изменит имя файла (если применимо). Примечание. Отключение кнопки "ОК" не блокирует отправку сообщения из диалогового окна при нажатии клавиши ВВОД.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogRootFolder">
@@ -5053,9 +5143,19 @@ Do you want to replace it?</source>
         <target state="translated">Путь к папке, которая первой выбрана в данном диалоговом окне, или к последней папке, выбранной пользователем.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogShowHiddenFiles">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="translated">Определяет, отображаются ли скрытые и системные файлы в диалоговом окне.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogShowNewFolderButton">
         <source>Include the New Folder button in the dialog box.</source>
         <target state="translated">Отображать кнопку 'Создать папку' в диалоговом окне.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogShowPinnedPlaces">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="translated">Определяет, можно ли просмотреть элементы, отображаемые по умолчанию в области навигации представления.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogUseDescriptionForTitle">
@@ -5186,6 +5286,11 @@ Do you want to replace it?</source>
       <trans-unit id="FormMaximumSizeDescr">
         <source>The maximum size the form can be resized to.</source>
         <target state="translated">Максимальный размер, который может иметь форма.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
+        <source>Gets or sets the anchoring for minimized MDI children.</source>
+        <target state="translated">Получает или задает привязку для свернутых дочерних форм MDI.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormMenuStripDescr">
@@ -5687,6 +5792,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Дескриптор Win32, переданный в {0}, является недопустимым либо имеет неверный тип.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="translated">Недопустимый тип HDC: {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
         <target state="translated">Значение '{1}' недопустимо для '{0}'. '{0}' должно быть меньше {2}.</target>
@@ -5800,11 +5910,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">Недопустимая комбинация ключа.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">Недопустимое имя ключа.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
@@ -6247,6 +6352,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Оповещает пользователей виртуальных элементов управления ListView о том, что они должны подготовить кэш.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
+        <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
+        <target state="translated">Если ListView находится в виртуальном режиме, добавление групп в коллекцию групп ListView невозможно.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
         <source>Cannot access the checked items collection when the ListView is in virtual mode.</source>
         <target state="translated">Если ListView находится в виртуальном режиме, доступ к коллекции элементов с установленным флажком невозможен.</target>
@@ -6372,6 +6482,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Событие, возникающее при изменении свойства CollapsedState для ListViewGroup.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateName">
+        <source>{0}, group, collapsed</source>
+        <target state="translated">{0}, группа, свернуто</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">Параметр должен иметь тип ListViewGroup.</target>
@@ -6385,6 +6500,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ListViewGroupDefaultHeader">
         <source>ListViewGroup</source>
         <target state="translated">ListViewGroup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupExpandedStateName">
+        <source>{0}, group, expanded</source>
+        <target state="translated">{0}, группа, развернуто</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
@@ -6440,6 +6560,21 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ListViewInsertionMarkDescr">
         <source>Allows insertion mark attributes to be changed.</source>
         <target state="translated">Позволяет изменение атрибутов метки вставки.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
+        <source>The current accessibility object is only for the ListView in {0} view</source>
+        <target state="translated">Текущий объект специальных возможностей предназначен только для ListView в представлении {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
+        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
+        <target state="translated">Текущий объект специальных возможностей предназначен только для ListView в представлениях {0}, {1} или {2}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="translated">Невозможно получить объект доступа, если ListViewItem не присоединен к ListView.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -7052,6 +7187,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Цвет для отображения предыдущих и следующих месяцев, отображаемых в элементе управления 'календарь на месяц'.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarWeekNumberDescription">
+        <source>Week {0}</source>
+        <target state="translated">Неделя {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
         <source>Year {0} to {1} selected.</source>
         <target state="translated">Выбраны года с {0} по {1}.</target>
@@ -7262,6 +7402,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Невозможно добавить или вставить элемент '{0}' в несколько позиций. Сначала удалите его из текущей позиции или создайте его клон.</target>
         <note />
       </trans-unit>
+      <trans-unit id="OpenFileDialogSelectReadOnlyDescr">
+        <source>Controls whether the dialog box allows to select read-only files.</source>
+        <target state="translated">Определяет, разрешено ли в диалоговом окне выбирать файлы, доступные только для чтения.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OpenFileDialogShowPreviewDescr">
+        <source>Controls whether the dialog box shows a preview for selected files.</source>
+        <target state="translated">Определяет, доступен ли в диалоговом окне предварительный просмотр выбранных файлов.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">
         <source>This operation requires an IBindingList.</source>
         <target state="translated">Для данной операции нужен IBindingList.</target>
@@ -7285,11 +7435,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="OwnsSelfOrOwner">
         <source>Form {0} tried to set an ineligible form as its owner. Forms cannot own themselves or their owners.</source>
         <target state="translated">Форма {0} пыталась установить в качестве своего владельца недействительную форму. Формы не могут быть владельцами самих себя или своих владельцев.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description</source>
-        <target state="translated">Описание</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -7477,6 +7622,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Показывает, должны ли у панели быть границы.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ParentPropertyNotSetInGetNextControl">
+        <source>{0} property should be set for {1}.</source>
+        <target state="translated">Необходимо задать свойство {0} для элемента {1}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PictureBoxBorderStyleDescr">
         <source>Controls what type of border the PictureBox should have.</source>
         <target state="translated">Определяет тип границы для PictureBox.</target>
@@ -7550,6 +7700,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PictureBoxOnSizeModeChangedDescr">
         <source>Event raised when the value of the SizeMode property is changed on the PictureBox.</source>
         <target state="translated">Событие, возникающее при изменении свойства SizeMode в элементе PictureBox.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PictureBoxRemoteLocationNotSupported">
+        <source>Loading from remote location not supported.</source>
+        <target state="translated">Загрузка из удаленного расположения не поддерживается.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
@@ -7882,6 +8037,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Цвет для эффекта подсветки на разделителе.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
+        <source>Border color to use on the top edge of the StatusStrip.</source>
+        <target state="translated">Цвет границы, используемый на верхнем крае StatusStrip.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
         <source>Starting color of the gradient used in the StatusStrip.</source>
         <target state="translated">Начальный цвет градиента, используемый в StatusStrip.</target>
@@ -8112,11 +8272,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Цвет переднего плана отключенного текста в области таблицы.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
-        <source>{0} Description</source>
-        <target state="translated">{0}: описание</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
         <source>Browse...</source>
         <target state="translated">Обзор…</target>
@@ -8155,6 +8310,16 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PropertyGridHelpForeColorDesc">
         <source>The foreground color of the description pane.</source>
         <target state="translated">Цвет переднего плана панели описания.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="translated">{0}: описание</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridHelpPaneTitle">
+        <source>Description</source>
+        <target state="translated">Описание</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">
@@ -8219,7 +8384,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyGridRemoveStaticTabs">
         <source>Static tabs cannot be removed from the PropertyGrid.</source>
-        <target state="translated">&lt;невозможно найти строку ресурса "PropertyGridRemoveStaticTabs"&gt;</target>
+        <target state="translated">невозможно найти строку ресурса "PropertyGridRemoveStaticTabs"</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridResetValue">
@@ -8300,6 +8465,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PropertyGridViewBorderColorDesc">
         <source>The color of the border surrounding the grid area.</source>
         <target state="translated">Цвет границы вокруг области таблицы.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="translated">Контейнер раскрывающегося элемента управления</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
@@ -8602,9 +8772,19 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">{1} - {0} - {2}</target>
         <note />
       </trans-unit>
+      <trans-unit id="SaveFileDialogCheckWriteAccess">
+        <source>Controls whether the dialog box verifies if the creation of the specified file will be successful.</source>
+        <target state="translated">Определяет, выполняется ли в диалоговом окне проверка успешности создания указанного файла.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SaveFileDialogCreatePrompt">
         <source>Controls whether to prompt the user when a new file is about to be created. It is only applicable if 'ValidateNames' is set to true.</source>
         <target state="translated">Определяет, получает ли пользователь запрос перед созданием нового файла. Действует только в том случае, если ValidateNames имеет значение true (истина).</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SaveFileDialogExpandedMode">
+        <source>Controls whether the dialog box is always opened in the expanded mode.</source>
+        <target state="translated">Определяет, всегда ли диалоговое окно открыто в развернутом режиме.</target>
         <note />
       </trans-unit>
       <trans-unit id="SaveFileDialogOverWritePrompt">
@@ -8734,7 +8914,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="SortRequiresIBindingList">
         <source>Sorting requires an IBindingList that supports sorting or an IBindingListView that supports advanced sorting.</source>
-        <target state="translated">Для сортировки нужен элемент IBindingList, поддерживающий сортировку, или IBindingListView,  поддерживающий расширенную сортировку.</target>
+        <target state="translated">Для сортировки нужен элемент IBindingList, поддерживающий сортировку, или IBindingListView, поддерживающий расширенную сортировку.</target>
         <note />
       </trans-unit>
       <trans-unit id="SortedAscendingAccessibleStatus">
@@ -8745,11 +8925,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="SortedDescendingAccessibleStatus">
         <source>Sorted descending.</source>
         <target state="translated">Отсортировано по убыванию.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Вертушка</target>
         <note />
       </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">
@@ -9409,7 +9584,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
         <source>TextFormatFlags.ModifyString is not allowed.</source>
-        <target state="new">TextFormatFlags.ModifyString is not allowed.</target>
+        <target state="translated">TextFormatFlags.ModifyString не допускается.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
@@ -10142,6 +10317,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Определяет, должен ли элемент ToolStrip сохранять пользовательские настройки при помощи IPersistComponentSettings.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="translated">На одну строку вниз</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="translated">На одну строку вверх</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">
         <source>Specifies the settings key to use to save settings.</source>
         <target state="translated">Определяет клавишу настройки для сохранения параметров.</target>
@@ -10347,6 +10532,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">LargeChange: значение '{0}' должно быть больше или равно 0.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrackBarLargeDecreaseButtonName">
+        <source>Large decrease</source>
+        <target state="translated">Большое уменьшение</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarLargeIncreaseButtonName">
+        <source>Large increase</source>
+        <target state="translated">Большое увеличение</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
         <source>The maximum value for the position of the slider on the TrackBar.</source>
         <target state="translated">Максимальное значение для положения движка на TrackBar.</target>
@@ -10365,6 +10560,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TrackBarOrientationDescr">
         <source>The orientation of the control.</source>
         <target state="translated">Ориентация элемента управления.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarPositionButtonName">
+        <source>Position</source>
+        <target state="translated">Положение</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">
@@ -10398,8 +10598,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
-        <source>Text length must be less than 64 characters long.</source>
-        <target state="translated">Длина текста должна быть меньше 64 символов.</target>
+        <source>Text length must be less than 128 characters long.</source>
+        <target state="translated">Длина текста должна быть меньше 128 символов.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
@@ -10410,6 +10610,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TreeNodeBeginEditFailed">
         <source>BeginEdit did not succeed because LabelEdit property is false.</source>
         <target state="translated">Операция BeginEdit не удалась, поскольку значение свойства LabelEdit равно false.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="translated">TreeNode уже связан с другим TreeView. Сначала необходимо удалить его из текущего расположения или клонировать его.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
@@ -10792,6 +10997,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Вверх</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="translated">Изменить</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">Определяет, должен ли отображаемый текст быть совместимым с предыдущими версиями Windows Forms.</target>
@@ -10998,8 +11208,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">До создания первого объекта IWin32Window в приложении необходимо вызвать SetCompatibleTextRenderingDefault.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="translated">Перед созданием в приложении первого объекта IWin32Window необходимо вызвать {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

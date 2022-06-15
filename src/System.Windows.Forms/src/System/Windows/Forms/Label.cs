@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
@@ -22,13 +21,13 @@ namespace System.Windows.Forms
     /// </summary>
     [DefaultProperty(nameof(Text))]
     [DefaultBindingProperty(nameof(Text))]
-    [Designer("System.Windows.Forms.Design.LabelDesigner, " + AssemblyRef.SystemDesign)]
-    [ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.LabelDesigner, {AssemblyRef.SystemDesign}")]
+    [ToolboxItem($"System.Windows.Forms.Design.AutoSizeToolboxItem,{AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionLabel))]
     // If not for FormatControl, we could inherit from ButtonBase and get foreground images for free.
     public partial class Label : Control, IAutomationLiveRegion
     {
-        private static readonly object s_eventTextAlignChanged = new object();
+        private static readonly object s_eventTextAlignChanged = new();
 
         private static readonly BitVector32.Section s_stateUseMnemonic = BitVector32.CreateSection(1);
         private static readonly BitVector32.Section s_stateAutoSize = BitVector32.CreateSection(1, s_stateUseMnemonic);
@@ -47,11 +46,11 @@ namespace System.Windows.Forms
         private BitVector32 _labelState;
         private int _requestedHeight;
         private int _requestedWidth;
-        private LayoutUtils.MeasureTextCache _textMeasurementCache;
+        private LayoutUtils.MeasureTextCache? _textMeasurementCache;
 
         // Tooltip is shown only if the Text in the Label is cut.
         internal bool _showToolTip;
-        private ToolTip _textToolTip;
+        private ToolTip? _textToolTip;
 
         // This bool suggests that the User has added a toolTip to this label. In such a case we should not show the
         // AutoEllipsis tooltip.
@@ -60,7 +59,7 @@ namespace System.Windows.Forms
         private AutomationLiveSetting _liveSetting;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Label'/> class.
+        ///  Initializes a new instance of the <see cref="Label"/> class.
         /// </summary>
         public Label() : base()
         {
@@ -115,7 +114,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler AutoSizeChanged
+        public new event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -150,7 +149,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.AutoEllipsis);
                     }
@@ -168,7 +167,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.LabelBackgroundImageDescr))]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -176,7 +175,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        public new event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -195,7 +194,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -213,22 +212,21 @@ namespace System.Windows.Forms
             get => (BorderStyle)_labelState[s_stateBorderStyle];
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (BorderStyle != value)
                 {
                     _labelState[s_stateBorderStyle] = (int)value;
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.BorderStyle);
                     }
+
                     if (AutoSize)
                     {
                         AdjustSize();
                     }
+
                     RecreateHandle();
                 }
             }
@@ -326,10 +324,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_labelState[s_stateFlatStyle] != (int)value)
                 {
@@ -349,6 +344,7 @@ namespace System.Windows.Forms
                         {
                             AdjustSize();
                         }
+
                         RecreateHandle();
                     }
                     else
@@ -360,18 +356,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the image that is displayed on a <see cref='Label'/>.
+        ///  Gets or sets the image that is displayed on a <see cref="Label"/>.
         /// </summary>
         [Localizable(true)]
         [SRDescription(nameof(SR.ButtonImageDescr))]
         [SRCategory(nameof(SR.CatAppearance))]
-        public Image Image
+        public Image? Image
         {
             get
             {
-                Image image = (Image)Properties.GetObject(s_propImage);
+                Image? image = (Image?)Properties.GetObject(s_propImage);
 
-                if (image is null && ImageList != null && ImageIndexer.ActualIndex >= 0)
+                if (image is null && ImageList is not null && ImageIndexer.ActualIndex >= 0)
                 {
                     return ImageList.Images[ImageIndexer.ActualIndex];
                 }
@@ -387,7 +383,7 @@ namespace System.Windows.Forms
                     StopAnimate();
 
                     Properties.SetObject(s_propImage, value);
-                    if (value != null)
+                    if (value is not null)
                     {
                         ImageIndex = -1;
                         ImageList = null;
@@ -403,7 +399,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets the index value of the images displayed on the
-        ///  <see cref='Label'/>.
+        ///  <see cref="Label"/>.
         /// </summary>
         [TypeConverter(typeof(ImageIndexConverter))]
         [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
@@ -416,14 +412,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ImageIndexer != null)
+                if (ImageIndexer is not null)
                 {
                     int index = ImageIndexer.Index;
 
-                    if (ImageList != null && (index >= ImageList.Images.Count))
+                    if (ImageList is not null && (index >= ImageList.Images.Count))
                     {
                         return ImageList.Images.Count - 1;
                     }
+
                     return index;
                 }
 
@@ -455,7 +452,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the key accessor for the image list.  This specifies the image
         ///   from the image list to display on
-        ///  <see cref='Label'/>.
+        ///  <see cref="Label"/>.
         /// </summary>
         [TypeConverter(typeof(ImageKeyConverter))]
         [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
@@ -464,7 +461,7 @@ namespace System.Windows.Forms
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRDescription(nameof(SR.ButtonImageIndexDescr))]
         [SRCategory(nameof(SR.CatAppearance))]
-        public string ImageKey
+        public string? ImageKey
         {
             get => ImageIndexer?.Key;
             set
@@ -502,15 +499,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the images displayed in a <see cref='Label'/>.
+        ///  Gets or sets the images displayed in a <see cref="Label"/>.
         /// </summary>
         [DefaultValue(null)]
         [SRDescription(nameof(SR.ButtonImageListDescr))]
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRCategory(nameof(SR.CatAppearance))]
-        public ImageList ImageList
+        public ImageList? ImageList
         {
-            get => (ImageList)Properties.GetObject(s_propImageList);
+            get => (ImageList?)Properties.GetObject(s_propImageList);
             set
             {
                 if (ImageList != value)
@@ -519,15 +516,15 @@ namespace System.Windows.Forms
                     EventHandler disposedHandler = new EventHandler(DetachImageList);
 
                     // Remove the previous imagelist handle recreate handler
-                    ImageList imageList = ImageList;
-                    if (imageList != null)
+                    ImageList? imageList = ImageList;
+                    if (imageList is not null)
                     {
                         imageList.RecreateHandle -= recreateHandler;
                         imageList.Disposed -= disposedHandler;
                     }
 
                     // Make sure we don't have an Image as well as an ImageList
-                    if (value != null)
+                    if (value is not null)
                     {
                         Properties.SetObject(s_propImage, null); // Image.set calls ImageList = null
                     }
@@ -535,7 +532,7 @@ namespace System.Windows.Forms
                     Properties.SetObject(s_propImageList, value);
 
                     // Add the new imagelist handle recreate handler
-                    if (value != null)
+                    if (value is not null)
                     {
                         value.RecreateHandle += recreateHandler;
                         value.Disposed += disposedHandler;
@@ -547,7 +544,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the alignment of the image on the <see cref='Label'/>.
+        ///  Gets or sets the alignment of the image on the <see cref="Label"/>.
         /// </summary>
         [DefaultValue(ContentAlignment.MiddleCenter)]
         [Localizable(true)]
@@ -562,14 +559,13 @@ namespace System.Windows.Forms
                 {
                     return (ContentAlignment)imageAlign;
                 }
+
                 return ContentAlignment.MiddleCenter;
             }
             set
             {
-                if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
+
                 if (value != ImageAlign)
                 {
                     Properties.SetInteger(s_propImageAlign, (int)value);
@@ -593,17 +589,14 @@ namespace System.Windows.Forms
             get => _liveSetting;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutomationLiveSetting.Off, (int)AutomationLiveSetting.Assertive))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutomationLiveSetting));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 _liveSetting = value;
             }
         }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public ImeMode ImeMode
+        public new ImeMode ImeMode
         {
             get => base.ImeMode;
             set => base.ImeMode = value;
@@ -611,7 +604,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged
+        public new event EventHandler? ImeModeChanged
         {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
@@ -620,7 +613,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler KeyUp
+        public new event KeyEventHandler? KeyUp
         {
             add => base.KeyUp += value;
             remove => base.KeyUp -= value;
@@ -629,7 +622,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler KeyDown
+        public new event KeyEventHandler? KeyDown
         {
             add => base.KeyDown += value;
             remove => base.KeyDown -= value;
@@ -638,7 +631,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyPressEventHandler KeyPress
+        public new event KeyPressEventHandler? KeyPress
         {
             add => base.KeyPress += value;
             remove => base.KeyPress -= value;
@@ -673,9 +666,9 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Indicates whether
-        ///  the container control background is rendered on the <see cref='Label'/>.
+        ///  the container control background is rendered on the <see cref="Label"/>.
         /// </summary>
-        [Obsolete("This property has been deprecated. Use BackColor instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Obsolete("This property has been deprecated. Use BackColor instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
         virtual new protected bool RenderTransparent
         {
             get => ((Control)this).RenderTransparent;
@@ -686,12 +679,12 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets a value indicating whether the user can tab to the
-        ///  <see cref='Label'/>.
+        ///  <see cref="Label"/>.
         /// </summary>
         [DefaultValue(false)]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public bool TabStop
+        public new bool TabStop
         {
             get => base.TabStop;
             set => base.TabStop = value;
@@ -699,7 +692,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TabStopChanged
+        public new event EventHandler? TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
@@ -727,10 +720,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (TextAlign != value)
                 {
@@ -742,6 +732,7 @@ namespace System.Windows.Forms
                     {
                         RecreateHandle();
                     }
+
                     OnTextAlignChanged(EventArgs.Empty);
                 }
             }
@@ -749,10 +740,11 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets the text in the Label. Since we can have multiline support
-        ///  this property just overides the base to pluck in the Multiline editor.
+        ///  this property just overrides the base to pluck in the Multiline editor.
         /// </summary>
         [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         SettingsBindable(true)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;
@@ -761,7 +753,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.LabelOnTextAlignChangedDescr))]
-        public event EventHandler TextAlignChanged
+        public event EventHandler? TextAlignChanged
         {
             add => Events.AddHandler(s_eventTextAlignChanged, value);
 
@@ -814,33 +806,35 @@ namespace System.Windows.Forms
             get => _labelState[s_stateUseMnemonic] != 0;
             set
             {
-                if (UseMnemonic != value)
+                if (UseMnemonic == value)
                 {
-                    _labelState[s_stateUseMnemonic] = value ? 1 : 0;
-                    MeasureTextCache.InvalidateCache();
+                    return;
+                }
 
-                    // The size of the label need to be adjusted when the Mnemonic
-                    // is set irrespective of auto-sizing
-                    using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Text))
+                _labelState[s_stateUseMnemonic] = value ? 1 : 0;
+                MeasureTextCache.InvalidateCache();
+
+                // The size of the label need to be adjusted when the Mnemonic is set irrespective of auto-sizing.
+                using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Text))
+                {
+                    AdjustSize();
+                    Invalidate();
+                }
+
+                // Set windowStyle directly instead of recreating handle to increase efficiency.
+                if (IsHandleCreated)
+                {
+                    User32.WS style = WindowStyle;
+                    if (!UseMnemonic)
                     {
-                        AdjustSize();
-                        Invalidate();
+                        style |= (User32.WS)User32.SS.NOPREFIX;
+                    }
+                    else
+                    {
+                        style &= ~(User32.WS)User32.SS.NOPREFIX;
                     }
 
-                    //set windowStyle directly instead of recreating handle to increase efficiency
-                    if (IsHandleCreated)
-                    {
-                        int style = WindowStyle;
-                        if (!UseMnemonic)
-                        {
-                            style |= (int)User32.SS.NOPREFIX;
-                        }
-                        else
-                        {
-                            style &= ~(int)User32.SS.NOPREFIX;
-                        }
-                        WindowStyle = style;
-                    }
+                    WindowStyle = style;
                 }
             }
         }
@@ -883,7 +877,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void Animate() => Animate(!DesignMode && Visible && Enabled && ParentInternal != null);
+        internal void Animate() => Animate(!DesignMode && Visible && Enabled && ParentInternal is not null);
 
         internal void StopAnimate() => Animate(false);
 
@@ -892,10 +886,10 @@ namespace System.Windows.Forms
             bool currentlyAnimating = _labelState[s_stateAnimating] != 0;
             if (animate != currentlyAnimating)
             {
-                Image image = (Image)Properties.GetObject(s_propImage);
+                Image? image = (Image?)Properties.GetObject(s_propImage);
                 if (animate)
                 {
-                    if (image != null)
+                    if (image is not null)
                     {
                         ImageAnimator.Animate(image, new EventHandler(OnFrameChanged));
                         _labelState[s_stateAnimating] = animate ? 1 : 0;
@@ -903,7 +897,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (image != null)
+                    if (image is not null)
                     {
                         ImageAnimator.StopAnimate(image, new EventHandler(OnFrameChanged));
                         _labelState[s_stateAnimating] = animate ? 1 : 0;
@@ -964,7 +958,7 @@ namespace System.Windows.Forms
             //
             // Please read if you're adding a new TextFormatFlag.
             // whenever something can change the TextFormatFlags used
-            // MeasureTextCache.InvalidateCache() should be called so we can approprately clear.
+            // MeasureTextCache.InvalidateCache() should be called so we can appropriately clear.
 
             TextFormatFlags flags = ControlPaint.CreateTextFormatFlags(this, TextAlign, AutoEllipsis, UseMnemonic);
 
@@ -980,7 +974,7 @@ namespace System.Windows.Forms
             return flags;
         }
 
-        private void DetachImageList(object sender, EventArgs e) => ImageList = null;
+        private void DetachImageList(object? sender, EventArgs e) => ImageList = null;
 
         protected override void Dispose(bool disposing)
         {
@@ -988,25 +982,28 @@ namespace System.Windows.Forms
             {
                 StopAnimate();
                 // Holding on to images and image list is a memory leak.
-                if (ImageList != null)
+                if (ImageList is not null)
                 {
                     ImageList.Disposed -= new EventHandler(DetachImageList);
                     ImageList.RecreateHandle -= new EventHandler(ImageListRecreateHandle);
                     Properties.SetObject(s_propImageList, null);
                 }
-                if (Image != null)
+
+                if (Image is not null)
                 {
                     Properties.SetObject(s_propImage, null);
                 }
 
-                //Dipose the tooltip if one present..
-                if (_textToolTip != null)
+                //Dispose the tooltip if one present..
+                if (_textToolTip is not null)
                 {
                     _textToolTip.Dispose();
                     _textToolTip = null;
                 }
+
                 _controlToolTip = false;
             }
+
             base.Dispose(disposing);
         }
 
@@ -1024,7 +1021,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Draws an <see cref='Drawing.Image'/> within the specified bounds.
+        ///  Draws an <see cref="Drawing.Image"/> within the specified bounds.
         /// </summary>
         protected void DrawImage(Graphics g, Image image, Rectangle r, ContentAlignment align)
             => DrawImageInternal(g, image, r, align);
@@ -1071,6 +1068,7 @@ namespace System.Windows.Forms
                     bordersAndPadding += new Size(2, 2);
                 }
             }
+
             return bordersAndPadding;
         }
 
@@ -1081,10 +1079,12 @@ namespace System.Windows.Forms
             {
                 proposedSize.Width = 0;
             }
+
             if (proposedSize.Height == 1)
             {
                 proposedSize.Height = 0;
             }
+
             return base.GetPreferredSize(proposedSize);
         }
 
@@ -1171,7 +1171,7 @@ namespace System.Windows.Forms
             return dtParams.iLeftMargin;
         }
 
-        private void ImageListRecreateHandle(object sender, EventArgs e)
+        private void ImageListRecreateHandle(object? sender, EventArgs e)
         {
             if (IsHandleCreated)
             {
@@ -1193,11 +1193,11 @@ namespace System.Windows.Forms
         private bool IsOwnerDraw() => FlatStyle != FlatStyle.System;
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseEnter'/> event.
+        ///  Raises the <see cref="Control.OnMouseEnter"/> event.
         /// </summary>
         protected override void OnMouseEnter(EventArgs e)
         {
-            if (!_controlToolTip && !DesignMode && AutoEllipsis && _showToolTip && _textToolTip != null)
+            if (!_controlToolTip && !DesignMode && AutoEllipsis && _showToolTip && _textToolTip is not null)
             {
                 try
                 {
@@ -1209,15 +1209,16 @@ namespace System.Windows.Forms
                     _controlToolTip = false;
                 }
             }
+
             base.OnMouseEnter(e);
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseLeave'/> event.
+        ///  Raises the <see cref="Control.OnMouseLeave"/> event.
         /// </summary>
         protected override void OnMouseLeave(EventArgs e)
         {
-            if (!_controlToolTip && _textToolTip != null && _textToolTip.GetHandleCreated())
+            if (!_controlToolTip && _textToolTip is not null && _textToolTip.GetHandleCreated())
             {
                 _textToolTip.RemoveAll();
 
@@ -1227,7 +1228,7 @@ namespace System.Windows.Forms
             base.OnMouseLeave(e);
         }
 
-        private void OnFrameChanged(object o, EventArgs e)
+        private void OnFrameChanged(object? o, EventArgs e)
         {
             if (Disposing || IsDisposed)
             {
@@ -1254,7 +1255,7 @@ namespace System.Windows.Forms
         protected override void OnHandleDestroyed(EventArgs e)
         {
             base.OnHandleDestroyed(e);
-            if (_textToolTip != null && _textToolTip.GetHandleCreated())
+            if (_textToolTip is not null && _textToolTip.GetHandleCreated())
             {
                 _textToolTip.DestroyHandle();
             }
@@ -1270,7 +1271,7 @@ namespace System.Windows.Forms
                 Invalidate();
             }
 
-            if (LiveSetting != AutomationLiveSetting.Off)
+            if (IsAccessibilityObjectCreated && LiveSetting != AutomationLiveSetting.Off)
             {
                 AccessibilityObject.RaiseLiveRegionChanged();
             }
@@ -1296,20 +1297,15 @@ namespace System.Windows.Forms
             ImageAnimator.UpdateFrames(Image);
 
             Rectangle face = LayoutUtils.DeflateRect(ClientRectangle, Padding);
-            Image i = Image;
-            if (i != null)
+            Image? i = Image;
+            if (i is not null)
             {
                 DrawImage(e, i, face, RtlTranslateAlignment(ImageAlign));
             }
 
             Color color;
-            if (Enabled && SystemInformation.HighContrast)
+            using (var hdc = new DeviceContextHdcScope(e))
             {
-                color = SystemColors.WindowText;
-            }
-            else
-            {
-                using var hdc = new DeviceContextHdcScope(e);
                 color = hdc.FindNearestColor(Enabled ? ForeColor : DisabledColor);
             }
 
@@ -1379,9 +1375,10 @@ namespace System.Windows.Forms
             if (SelfSizing)
             {
                 // In the case of SelfSizing
-                // we dont know what size to be until we're parented
+                // we don't know what size to be until we're parented
                 AdjustSize();
             }
+
             Animate();
         }
 
@@ -1415,15 +1412,17 @@ namespace System.Windows.Forms
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanProcessMnemonic())
             {
                 Control parent = ParentInternal;
-                if (parent != null)
+                if (parent is not null)
                 {
                     if (parent.SelectNextControl(this, true, false, true, false) && !parent.ContainsFocus)
                     {
                         parent.Focus();
                     }
                 }
+
                 return true;
             }
+
             return false;
         }
 
@@ -1457,17 +1456,23 @@ namespace System.Windows.Forms
 
         private void ResetImage() => Image = null;
 
-        private bool ShouldSerializeImage() => Properties.GetObject(s_propImage) != null;
+        private bool ShouldSerializeImage() => Properties.GetObject(s_propImage) is not null;
 
         /// <summary>
         ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </summary>
-        internal void SetToolTip(ToolTip toolTip)
+        internal override void SetToolTip(ToolTip toolTip)
         {
-            if (toolTip != null && !_controlToolTip)
+            if (toolTip is null || _controlToolTip)
             {
-                _controlToolTip = true;
+                return;
             }
+
+            // Label now has its own Tooltip for AutoEllipsis.
+            // So this control too falls in special casing.
+            // We need to disable the LABEL AutoEllipsis tooltip and show
+            // this tooltip always.
+            _controlToolTip = true;
         }
 
         internal override bool SupportsUiaProviders => true;
@@ -1493,69 +1498,13 @@ namespace System.Windows.Forms
                     // this so we can tell what's going on.
 
                     Rectangle rectInScreen = RectangleToScreen(new Rectangle(0, 0, Width, Height));
-                    Point pt = new Point(unchecked((int)(long)m.LParam));
-                    m.Result = (IntPtr)(rectInScreen.Contains(pt) ? User32.HT.CLIENT : User32.HT.NOWHERE);
+                    Point pt = new Point((int)m.LParamInternal);
+                    m.ResultInternal = (nint)(rectInScreen.Contains(pt) ? User32.HT.CLIENT : User32.HT.NOWHERE);
                     break;
 
                 default:
                     base.WndProc(ref m);
                     break;
-            }
-        }
-
-        /// <summary>
-        ///  Override ImageList.Indexer to support Label's ImageList semantics.
-        /// </summary>
-        internal class LabelImageIndexer : ImageList.Indexer
-        {
-            private readonly Label _owner;
-            private bool _useIntegerIndex = true;
-
-            public LabelImageIndexer(Label owner) => _owner = owner;
-
-            public override ImageList ImageList
-            {
-                get { return _owner?.ImageList; }
-                set { Debug.Assert(false, "Setting the image list in this class is not supported"); }
-            }
-
-            public override string Key
-            {
-                get => base.Key;
-                set
-                {
-                    base.Key = value;
-                    _useIntegerIndex = false;
-                }
-            }
-
-            public override int Index
-            {
-                get => base.Index;
-                set
-                {
-                    base.Index = value;
-                    _useIntegerIndex = true;
-                }
-            }
-
-            public override int ActualIndex
-            {
-                get
-                {
-                    if (_useIntegerIndex)
-                    {
-                        // The behavior of label is to return the last item in the Images collection
-                        // if the index is currently set higher than the count.
-                        return (Index < ImageList.Images.Count) ? Index : ImageList.Images.Count - 1;
-                    }
-                    else if (ImageList != null)
-                    {
-                        return ImageList.Images.IndexOfKey(Key);
-                    }
-
-                    return -1;
-                }
             }
         }
     }

@@ -3,12 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel.Design;
-using System.Diagnostics;
 
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  Main class for collection editor for <see cref="TabControl.TabPageCollection"/>.
+    ///  Collection editor for <see cref="TabControl.TabPageCollection"/>.
     ///  Allows a single level of <see cref="ToolStripItem"/> children to be designed.
     /// </summary>
     internal class TabPageCollectionEditor : CollectionEditor
@@ -36,7 +35,6 @@ namespace System.Windows.Forms.Design
             object instance = base.CreateInstance(itemType);
 
             TabPage tabPage = instance as TabPage;
-            Debug.Assert(tabPage != null);
             tabPage.UseVisualStyleBackColor = true;
 
             return tabPage;

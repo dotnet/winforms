@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace System.Windows.Forms
@@ -44,7 +43,8 @@ namespace System.Windows.Forms
                 shim = new HtmlDocument.HtmlDocumentShim(doc);
                 htmlDocumentShims[doc] = shim;
             }
-            if (shim != null)
+
+            if (shim is not null)
             {
                 OnShimAdded(shim);
             }
@@ -67,7 +67,8 @@ namespace System.Windows.Forms
                 shim = new HtmlWindow.HtmlWindowShim(window);
                 htmlWindowShims[window] = shim;
             }
-            if (shim != null)
+
+            if (shim is not null)
             {
                 // strictly not necessary, but here for future use.
                 OnShimAdded(shim);
@@ -92,7 +93,8 @@ namespace System.Windows.Forms
                 shim = new HtmlElement.HtmlElementShim(element);
                 htmlElementShims[element] = shim;
             }
-            if (shim != null)
+
+            if (shim is not null)
             {
                 OnShimAdded(shim);
             }
@@ -104,10 +106,12 @@ namespace System.Windows.Forms
             {
                 return null;
             }
+
             if (htmlDocumentShims.ContainsKey(document))
             {
                 return htmlDocumentShims[document];
             }
+
             return null;
         }
 
@@ -117,10 +121,12 @@ namespace System.Windows.Forms
             {
                 return null;
             }
+
             if (htmlElementShims.ContainsKey(element))
             {
                 return htmlElementShims[element];
             }
+
             return null;
         }
 
@@ -130,17 +136,19 @@ namespace System.Windows.Forms
             {
                 return null;
             }
+
             if (htmlWindowShims.ContainsKey(window))
             {
                 return htmlWindowShims[window];
             }
+
             return null;
         }
 
         private void OnShimAdded(HtmlShim addedShim)
         {
-            Debug.Assert(addedShim != null, "Why are we calling this with a null shim?");
-            if (addedShim != null)
+            Debug.Assert(addedShim is not null, "Why are we calling this with a null shim?");
+            if (addedShim is not null)
             {
                 if (!(addedShim is HtmlWindow.HtmlWindowShim))
                 {
@@ -152,19 +160,20 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         /// <summary>
         ///  HtmlWindowShim calls back on us when it has unloaded the page.  At this point we need to
         ///  walk through our lists and make sure we've cleaned up
         /// </summary>
         internal void OnWindowUnloaded(HtmlWindow unloadedWindow)
         {
-            Debug.Assert(unloadedWindow != null, "Why are we calling this with a null window?");
-            if (unloadedWindow != null)
+            Debug.Assert(unloadedWindow is not null, "Why are we calling this with a null window?");
+            if (unloadedWindow is not null)
             {
                 //
                 // prune documents
                 //
-                if (htmlDocumentShims != null)
+                if (htmlDocumentShims is not null)
                 {
                     HtmlDocument.HtmlDocumentShim[] shims = new HtmlDocument.HtmlDocumentShim[htmlDocumentShims.Count];
                     htmlDocumentShims.Values.CopyTo(shims, 0);
@@ -178,10 +187,11 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 //
                 // prune elements
                 //
-                if (htmlElementShims != null)
+                if (htmlElementShims is not null)
                 {
                     HtmlElement.HtmlElementShim[] shims = new HtmlElement.HtmlElementShim[htmlElementShims.Count];
                     htmlElementShims.Values.CopyTo(shims, 0);
@@ -199,7 +209,7 @@ namespace System.Windows.Forms
                 //
                 // prune the particular window from the list.
                 //
-                if (htmlWindowShims != null)
+                if (htmlWindowShims is not null)
                 {
                     if (htmlWindowShims.ContainsKey(unloadedWindow))
                     {
@@ -220,14 +230,15 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (htmlElementShims != null)
+                if (htmlElementShims is not null)
                 {
                     foreach (HtmlElement.HtmlElementShim shim in htmlElementShims.Values)
                     {
                         shim.Dispose();
                     }
                 }
-                if (htmlDocumentShims != null)
+
+                if (htmlDocumentShims is not null)
                 {
                     foreach (HtmlDocument.HtmlDocumentShim shim in htmlDocumentShims.Values)
                     {
@@ -235,21 +246,18 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (htmlWindowShims != null)
+                if (htmlWindowShims is not null)
                 {
                     foreach (HtmlWindow.HtmlWindowShim shim in htmlWindowShims.Values)
                     {
                         shim.Dispose();
                     }
                 }
+
                 htmlWindowShims = null;
                 htmlDocumentShims = null;
                 htmlWindowShims = null;
             }
-        }
-        ~HtmlShimManager()
-        {
-            Dispose(false);
         }
     }
 }

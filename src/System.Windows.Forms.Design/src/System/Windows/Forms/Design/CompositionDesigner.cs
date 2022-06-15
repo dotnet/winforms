@@ -5,7 +5,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design
@@ -67,8 +66,8 @@ namespace System.Windows.Forms.Design
         ViewTechnology[] IRootDesigner.SupportedTechnologies => throw new NotImplementedException();
 
         /// <summary>
-            ///  Initializes the designer with the specified component.
-            /// </summary>
+        ///  Initializes the designer with the specified component.
+        /// </summary>
         public override void Initialize(IComponent component)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
@@ -113,18 +112,18 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-            ///  Disposes of the resources (other than memory) used by
-        ///  the <see cref='System.Windows.Forms.Design.ComponentDocumentDesigner' />.
-            /// </summary>
+        ///  Disposes of the resources (other than memory) used by
+        ///  the <see cref="ComponentDocumentDesigner"/>.
+        /// </summary>
         protected override void Dispose(bool disposing)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
         /// <summary>
-            ///  Gets a value indicating whether the specified tool is supported by this
+        ///  Gets a value indicating whether the specified tool is supported by this
         ///  designer.
-            /// </summary>
+        /// </summary>
         [CLSCompliant(false)]
         protected virtual bool GetToolSupported(ToolboxItem tool)
         {
@@ -132,11 +131,11 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-            ///  Allows a
+        ///  Allows a
         ///  designer to filter the set of properties the component
         ///  it is designing will expose through the TypeDescriptor
         ///  object.
-            /// </summary>
+        /// </summary>
         protected override void PreFilterProperties(IDictionary properties)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);

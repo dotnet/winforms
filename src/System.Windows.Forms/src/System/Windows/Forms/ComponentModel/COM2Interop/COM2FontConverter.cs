@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using static Interop.Ole32;
 
@@ -15,7 +13,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     internal class Com2FontConverter : Com2DataTypeToManagedDataTypeConverter
     {
         private IntPtr _lastHandle = IntPtr.Zero;
-        private Font _lastFont;
+        private Font? _lastFont;
 
         public override bool AllowExpand => true;
 
@@ -27,10 +25,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Converts the native value into a managed value
         /// </summary>
-        public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd)
+        public override object ConvertNativeToManaged(object? nativeValue, Com2PropertyDescriptor pd)
         {
             // we're getting an IFont here
-            if (!(nativeValue is IFont nativeFont))
+            if (nativeValue is not IFont nativeFont)
             {
                 _lastHandle = IntPtr.Zero;
                 _lastFont = Control.DefaultFont;
@@ -40,7 +38,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             IntPtr fontHandle = nativeFont.hFont;
 
             // see if we have this guy cached
-            if (fontHandle == _lastHandle && _lastFont != null)
+            if (fontHandle == _lastHandle && _lastFont is not null)
             {
                 return _lastFont;
             }
@@ -69,7 +67,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Converts the managed value into a native value
         /// </summary>
-        public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet)
+        public override object? ConvertManagedToNative(object? managedValue, Com2PropertyDescriptor pd, ref bool cancelSet)
         {
             // we default to black.
             if (managedValue is null)
@@ -79,7 +77,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             cancelSet = true;
 
-            if (_lastFont != null && _lastFont.Equals(managedValue))
+            if (_lastFont is not null && _lastFont.Equals(managedValue))
             {
                 // don't do anything here.
                 return null;
@@ -89,7 +87,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             IFont nativeFont = (IFont)pd.GetNativeValue(pd.TargetObject);
 
             // now, push all the values into the native side
-            if (nativeFont != null)
+            if (nativeFont is not null)
             {
                 bool changed = ControlPaint.FontToIFont(_lastFont, nativeFont);
 

@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
+#if DEBUG
+#endif
 using System.Drawing;
-using System.Diagnostics;
 
 internal static partial class Interop
 {

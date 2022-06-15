@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
@@ -16,7 +15,7 @@ namespace System.Windows.Forms
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer visualStyleRenderer = null;
+        private static VisualStyleRenderer? t_visualStyleRenderer = null;
 
         /// <summary>
         ///  Returns true if this class is supported for the current OS and user/application settings,
@@ -31,7 +30,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.ProgressBar.Bar.Normal);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -41,7 +40,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.ProgressBar.BarVertical.Normal);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -51,7 +50,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.ProgressBar.Chunk.Normal);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -61,7 +60,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.ProgressBar.ChunkVertical.Normal);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -73,7 +72,7 @@ namespace System.Windows.Forms
             {
                 InitializeRenderer(VisualStyleElement.ProgressBar.Chunk.Normal);
 
-                return (visualStyleRenderer.GetInteger(IntegerProperty.ProgressChunkSize));
+                return t_visualStyleRenderer.GetInteger(IntegerProperty.ProgressChunkSize);
             }
         }
 
@@ -86,19 +85,20 @@ namespace System.Windows.Forms
             {
                 InitializeRenderer(VisualStyleElement.ProgressBar.Chunk.Normal);
 
-                return (visualStyleRenderer.GetInteger(IntegerProperty.ProgressSpaceSize));
+                return t_visualStyleRenderer.GetInteger(IntegerProperty.ProgressSpaceSize);
             }
         }
 
+        [MemberNotNull(nameof(t_visualStyleRenderer))]
         private static void InitializeRenderer(VisualStyleElement element)
         {
-            if (visualStyleRenderer is null)
+            if (t_visualStyleRenderer is null)
             {
-                visualStyleRenderer = new VisualStyleRenderer(element);
+                t_visualStyleRenderer = new VisualStyleRenderer(element);
             }
             else
             {
-                visualStyleRenderer.SetParameters(element);
+                t_visualStyleRenderer.SetParameters(element);
             }
         }
     }

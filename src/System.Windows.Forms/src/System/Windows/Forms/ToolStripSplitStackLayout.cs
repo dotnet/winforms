@@ -6,7 +6,9 @@
 
 using System.Diagnostics;
 using System.Drawing;
+#if DEBUG
 using System.Globalization;
+#endif
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -46,7 +48,7 @@ namespace System.Windows.Forms
                     return Size.Empty;
                 }
 
-                // since we havent parented the item yet - the auto size wont have reset the size yet.
+                // since we haven't parented the item yet - the auto size won't have reset the size yet.
                 Size overflowButtonSize = toolStrip.OverflowButton.AutoSize ? toolStrip.OverflowButton.GetPreferredSize(displayRectangle.Size) : toolStrip.OverflowButton.Size;
                 return overflowButtonSize + toolStrip.OverflowButton.Margin.Size;
             }
@@ -90,7 +92,7 @@ namespace System.Windows.Forms
 #if DEBUG
                         if (DebugLayoutTraceSwitch.TraceVerbose)
                         {
-                            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OverflowRequired - item set to alaways overflow: {0} ", item));
+                            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OverflowRequired - item set to always overflow: {0} ", item));
                         }
 #endif
                         OverflowRequired = true;
@@ -98,7 +100,7 @@ namespace System.Windows.Forms
 
                     if (item.Overflow != ToolStripItemOverflow.Always && item.Placement == ToolStripItemPlacement.None)
                     {
-                        // since we havent parented the item yet - the auto size wont have reset the size yet.
+                        // since we haven't parented the item yet - the auto size won't have reset the size yet.
                         Size itemSize = item.AutoSize ? item.GetPreferredSize(displayRectangle.Size) : item.Size;
 
                         currentWidth += itemSize.Width + item.Margin.Horizontal;
@@ -110,7 +112,7 @@ namespace System.Windows.Forms
 #if DEBUG
                             if (DebugLayoutTraceSwitch.TraceVerbose)
                             {
-                                Debug.WriteLine("SendNextItemToOverflow to fres space for " + item.ToString());
+                                Debug.WriteLine("SendNextItemToOverflow to free space for " + item.ToString());
                             }
 #endif
                             int spaceRecovered = SendNextItemToOverflow((currentWidth + overflowWidth) - displayRectangle.Width, true);
@@ -161,7 +163,7 @@ namespace System.Windows.Forms
 
                     if (item.Overflow != ToolStripItemOverflow.Always && item.Placement == ToolStripItemPlacement.None)
                     {
-                        // since we havent parented the item yet - the auto size wont have reset the size yet.
+                        // since we haven't parented the item yet - the auto size won't have reset the size yet.
                         Size itemSize = item.AutoSize ? item.GetPreferredSize(displayRectangle.Size) : item.Size;
                         int overflowWidth = (OverflowRequired) ? OverflowButtonSize.Height : 0;
 
@@ -201,7 +203,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                return ToolStrip.GetPreferredSizeVertical(container, proposedConstraints);
+                return ToolStrip.GetPreferredSizeVertical(container);
             }
         }
 
@@ -309,18 +311,18 @@ namespace System.Windows.Forms
                         continue;
                     }
 
-                    // since we havent parented the item yet - the auto size wont have reset the size yet.
+                    // since we haven't parented the item yet - the auto size won't have reset the size yet.
                     itemSize = item.AutoSize ? item.GetPreferredSize(Size.Empty) : item.Size;
                 }
 
-                // if it turns out we dont need the overflow (because there are no Overflow.Always items and the width of everything
+                // if it turns out we don't need the overflow (because there are no Overflow.Always items and the width of everything
                 // in the overflow is less than the width of the overflow button then reset the placement of the as needed items to
                 // main.
                 if (!needOverflow && (item.Overflow == ToolStripItemOverflow.AsNeeded && item.Placement == ToolStripItemPlacement.Overflow))
                 {
 #if DEBUG
                     if (DebugLayoutTraceSwitch.TraceVerbose)
-                    { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we dont need it to overflow", item)); }
+                    { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we don't need it to overflow", item)); }
 #endif
                     item.SetPlacement(ToolStripItemPlacement.Main);
                 }
@@ -329,7 +331,7 @@ namespace System.Windows.Forms
                 // We need to honor left to right and head and tail.
                 //      In RTL.Yes, Head is to the Right, Tail is to the Left
                 //      In RTL.No,  Head is to the Left,  Tail is to the Right
-                if ((item != null) && (item.Placement == ToolStripItemPlacement.Main))
+                if ((item is not null) && (item.Placement == ToolStripItemPlacement.Main))
                 {
                     int x = displayRectangle.Left;
                     int y = displayRectangle.Top;
@@ -424,13 +426,12 @@ namespace System.Windows.Forms
 
             Size toolStripPreferredSize = displayRectangle.Size;
             DockStyle dock = toolStrip.Dock;
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-            if (toolStrip.AutoSize && (!toolStrip.IsInToolStripPanel && (dock == DockStyle.Left) || (dock == DockStyle.Right)))
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
+            var IsNotInToolStripPanelWithLeftDockstyle = !toolStrip.IsInToolStripPanel && dock == DockStyle.Left;
+            if (toolStrip.AutoSize && (IsNotInToolStripPanelWithLeftDockstyle || dock == DockStyle.Right))
             {
                 // if we're autosizing, make sure we pad out items to the preferred width, not the
                 // width of the display rectangle.
-                toolStripPreferredSize = ToolStrip.GetPreferredSizeVertical(toolStrip, Size.Empty) - toolStrip.Padding.Size;
+                toolStripPreferredSize = ToolStrip.GetPreferredSizeVertical(toolStrip) - toolStrip.Padding.Size;
             }
 
             CalculatePlacementsVertical();
@@ -469,11 +470,11 @@ namespace System.Windows.Forms
                         continue;
                     }
 
-                    // since we havent parented the item yet - the auto size wont have reset the size yet.
+                    // since we haven't parented the item yet - the auto size won't have reset the size yet.
                     itemSize = item.AutoSize ? item.GetPreferredSize(Size.Empty) : item.Size;
                 }
 
-                // if it turns out we dont need the overflow (because there are no Overflow.Always items and the height of everything
+                // if it turns out we don't need the overflow (because there are no Overflow.Always items and the height of everything
                 // in the overflow is less than the width of the overflow button then reset the placement of the as needed items to
                 // main.
                 if (!needOverflow && (item.Overflow == ToolStripItemOverflow.AsNeeded && item.Placement == ToolStripItemPlacement.Overflow))
@@ -481,7 +482,7 @@ namespace System.Windows.Forms
 #if DEBUG
                     if (DebugLayoutTraceSwitch.TraceVerbose)
                     {
-                        Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we dont need it to overflow", item));
+                        Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we don't need it to overflow", item));
                     }
 #endif
                     item.SetPlacement(ToolStripItemPlacement.Main);
@@ -491,7 +492,7 @@ namespace System.Windows.Forms
                 // Vertical split stack management ignores left to right.
                 //      Items aligned to the Head are placed from Top to Bottom
                 //      Items aligned to the Tail are placed from Bottom to Top
-                if ((item != null) && (item.Placement == ToolStripItemPlacement.Main))
+                if ((item is not null) && (item.Placement == ToolStripItemPlacement.Main))
                 {
                     Padding itemMargin = item.Margin;
                     int x = displayRectangle.Left + itemMargin.Left;
@@ -514,6 +515,7 @@ namespace System.Windows.Forms
                                                     : Rectangle.Union(alignedLeftItems, new Rectangle(x, y, itemSize.Width, itemSize.Height));
                             break;
                     }
+
                     item.ParentInternal = ToolStrip;
                     Point itemLocation = new Point(x, y);
 
@@ -558,7 +560,7 @@ namespace System.Windows.Forms
 
         private void SetItemLocation(ToolStripItem item, Point itemLocation, Size itemSize)
         {
-            // make sure that things that dont fit within the display rectangle arent laid out.
+            // make sure that things that don't fit within the display rectangle aren't laid out.
             if ((item.Placement == ToolStripItemPlacement.Main) && !(item is ToolStripOverflowButton))
             {
                 // overflow buttons can be placed outside the display rect.
@@ -589,7 +591,7 @@ namespace System.Windows.Forms
 #if DEBUG
                         if (DebugLayoutTraceSwitch.TraceVerbose)
                         {
-                            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[SplitStack.SetItemLocation] Sending Item {0} to NoMansLand as it doesnt fit verticallu within the DRect", item));
+                            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[SplitStack.SetItemLocation] Sending Item {0} to NoMansLand as it doesnt fit vertically within the DRect", item));
                         }
 #endif
 
@@ -608,7 +610,7 @@ namespace System.Windows.Forms
             for (int i = 0; i < toolStrip.Items.Count; i++)
             {
                 ToolStripItem item = toolStrip.Items[i];
-                // if we havent placed the items, place them now.
+                // if we haven't placed the items, place them now.
                 if (item.Placement == ToolStripItemPlacement.None)
                 {
                     if (item.Overflow != ToolStripItemOverflow.Always)
@@ -680,7 +682,7 @@ namespace System.Windows.Forms
                     }
 #endif
 
-                    // since we havent parented the item yet - the auto size wont have reset the size yet.
+                    // since we haven't parented the item yet - the auto size won't have reset the size yet.
                     Size itemSize = item.AutoSize ? item.GetPreferredSize(displayRectangle.Size) : item.Size;
 
                     if (BackwardsWalkingIndex <= ForwardsWalkingIndex)

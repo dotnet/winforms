@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -53,7 +52,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolTipIcon))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolTipIcon))]
         public void NotifyIcon_BalloonTipIcon_Set_GetReturnsExpected(ToolTipIcon value)
         {
             var notifyIcon = new NotifyIcon
@@ -68,7 +67,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolTipIcon))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolTipIcon))]
         public void NotifyIcon_BalloonTipIcon_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolTipIcon value)
         {
             var notifyIcon = new NotifyIcon();
@@ -76,7 +75,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void CollectionForm_BalloonTipText_Set_GetReturnsExpected(string value)
         {
             using var notifyIcon = new NotifyIcon
@@ -91,7 +90,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void CollectionForm_BalloonTipText_SetWithCustomOldValue_GetReturnsExpected(string value)
         {
             using var notifyIcon = new NotifyIcon
@@ -108,7 +107,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void CollectionForm_BalloonTipTitle_Set_GetReturnsExpected(string value)
         {
             using var notifyIcon = new NotifyIcon
@@ -123,7 +122,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void CollectionForm_BalloonTipTitle_SetWithCustomOldValue_GetReturnsExpected(string value)
         {
             using var notifyIcon = new NotifyIcon
@@ -138,6 +137,7 @@ namespace System.Windows.Forms.Tests
             notifyIcon.BalloonTipTitle = value;
             Assert.Equal(value, notifyIcon.BalloonTipTitle);
         }
+
         public static IEnumerable<object[]> ContextMenuStrip_Set_TestData()
         {
             yield return new object[] { null };
@@ -315,7 +315,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
         public void CollectionForm_Tag_Set_GetReturnsExpected(object value)
         {
             using var notifyIcon = new NotifyIcon
@@ -338,18 +338,18 @@ namespace System.Windows.Forms.Tests
                     yield return new object[] { visible, icon, null, string.Empty };
                     yield return new object[] { visible, icon, string.Empty, string.Empty };
                     yield return new object[] { visible, icon, "text", "text" };
-                    yield return new object[] { visible, icon, new string('a', 63), new string('a', 63) };
+                    yield return new object[] { visible, icon, new string('a', NotifyIcon.MaxTextSize), new string('a', NotifyIcon.MaxTextSize) };
                 }
             }
         }
 
         [WinFormsTheory]
         [MemberData(nameof(Text_Set_TestData))]
-        public void CollectionForm_Text_Set_GetReturnsExpected(bool viisble, Icon icon, string value, string expected)
+        public void CollectionForm_Text_Set_GetReturnsExpected(bool visible, Icon icon, string value, string expected)
         {
             using var notifyIcon = new NotifyIcon
             {
-                Visible = viisble,
+                Visible = visible,
                 Icon = icon,
                 Text = value
             };
@@ -362,11 +362,11 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Text_Set_TestData))]
-        public void CollectionForm_Text_SetWithCustomOldValue_GetReturnsExpected(bool viisble, Icon icon, string value, string expected)
+        public void CollectionForm_Text_SetWithCustomOldValue_GetReturnsExpected(bool visible, Icon icon, string value, string expected)
         {
             using var notifyIcon = new NotifyIcon
             {
-                Visible = viisble,
+                Visible = visible,
                 Icon = icon,
                 Text = "OldValue"
             };
@@ -390,18 +390,18 @@ namespace System.Windows.Forms.Tests
                 }
 
                 yield return new object[] { visible, null, "text", "text", 0 };
-                yield return new object[] { visible, null, new string('a', 63), new string('a', 63), 0 };
+                yield return new object[] { visible, null, new string('a', NotifyIcon.MaxTextSize), new string('a', NotifyIcon.MaxTextSize), 0 };
             }
 
             yield return new object[] { false, new Icon("bitmaps/10x16_one_entry_32bit.ico"), "text", "text", 0 };
-            yield return new object[] { false, new Icon("bitmaps/10x16_one_entry_32bit.ico"), new string('a', 63), new string('a', 63), 0 };
+            yield return new object[] { false, new Icon("bitmaps/10x16_one_entry_32bit.ico"), new string('a', NotifyIcon.MaxTextSize), new string('a', NotifyIcon.MaxTextSize), 0 };
             yield return new object[] { true, new Icon("bitmaps/10x16_one_entry_32bit.ico"), "text", "text", 1 };
-            yield return new object[] { true, new Icon("bitmaps/10x16_one_entry_32bit.ico"), new string('a', 63), new string('a', 63), 1 };
+            yield return new object[] { true, new Icon("bitmaps/10x16_one_entry_32bit.ico"), new string('a', NotifyIcon.MaxTextSize), new string('a', NotifyIcon.MaxTextSize), 1 };
         }
 
         [WinFormsTheory]
         [MemberData(nameof(Text_SetDesignMode_TestData))]
-        public void CollectionForm_Text_SetDesignMode_GetReturnsExpected(bool viisble, Icon icon, string value, string expected, int expectedDesignModeCallCount)
+        public void CollectionForm_Text_SetDesignMode_GetReturnsExpected(bool visible, Icon icon, string value, string expected, int expectedDesignModeCallCount)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
@@ -412,7 +412,7 @@ namespace System.Windows.Forms.Tests
                 .Returns(true);
             using var notifyIcon = new NotifyIcon
             {
-                Visible = viisble,
+                Visible = visible,
                 Icon = icon,
                 Site = mockSite.Object,
                 Text = value
@@ -430,16 +430,16 @@ namespace System.Windows.Forms.Tests
         public void NotifyIcon_Text_SetLongValue_ThrowsArgumentOutOfRangeException()
         {
             using var notifyIcon = new NotifyIcon();
-            Assert.Throws<ArgumentOutOfRangeException>("Text", () => notifyIcon.Text = new string('a', 64));
+            Assert.Throws<ArgumentOutOfRangeException>("Text", () => notifyIcon.Text = new string('a', NotifyIcon.MaxTextSize + 1));
         }
 
         [WinFormsTheory]
         [MemberData(nameof(Text_Set_TestData))]
-        public void CollectionForm_Text_SetDisposed_GetReturnsExpected(bool viisble, Icon icon, string value, string expected)
+        public void CollectionForm_Text_SetDisposed_GetReturnsExpected(bool visible, Icon icon, string value, string expected)
         {
             using var notifyIcon = new NotifyIcon
             {
-                Visible = viisble,
+                Visible = visible,
                 Icon = icon
             };
             notifyIcon.Dispose();
@@ -453,7 +453,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void NotifyIcon_Visible_Set_GetReturnsExpected(bool value)
         {
             using var notifyIcon = new NotifyIcon
@@ -472,7 +472,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void NotifyIcon_Visible_SetWithIcon_GetReturnsExpected(bool value)
         {
             using var icon = new Icon("bitmaps/10x16_one_entry_32bit.ico");
@@ -557,7 +557,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void NotifyIcon_Visible_SetDisposed_ThrowsNullReferenceException(bool value)
         {
             using var notifyIcon = new NotifyIcon
@@ -578,6 +578,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.BalloonTipClicked += handler;
             notifyIcon.BalloonTipClicked -= handler;
             Assert.Equal(0, callCount);
@@ -592,6 +593,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.BalloonTipClosed += handler;
             notifyIcon.BalloonTipClosed -= handler;
             Assert.Equal(0, callCount);
@@ -606,6 +608,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.BalloonTipShown += handler;
             notifyIcon.BalloonTipShown -= handler;
             Assert.Equal(0, callCount);
@@ -620,6 +623,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.Click += handler;
             notifyIcon.Click -= handler;
             Assert.Equal(0, callCount);
@@ -634,6 +638,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.DoubleClick += handler;
             notifyIcon.DoubleClick -= handler;
             Assert.Equal(0, callCount);
@@ -648,6 +653,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.MouseClick += handler;
             notifyIcon.MouseClick -= handler;
             Assert.Equal(0, callCount);
@@ -662,6 +668,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.MouseDoubleClick += handler;
             notifyIcon.MouseDoubleClick -= handler;
             Assert.Equal(0, callCount);
@@ -676,6 +683,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.MouseDown += handler;
             notifyIcon.MouseDown -= handler;
             Assert.Equal(0, callCount);
@@ -690,6 +698,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.MouseMove += handler;
             notifyIcon.MouseMove -= handler;
             Assert.Equal(0, callCount);
@@ -704,6 +713,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.MouseUp += handler;
             notifyIcon.MouseUp -= handler;
             Assert.Equal(0, callCount);
@@ -948,7 +958,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void NotifyIcon_ShowBalloonTip_InvokeInvalidText_ThrowsArgumentException(string tipText)
         {
             using var notifyIcon = new NotifyIcon
@@ -960,7 +970,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolTipIcon))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolTipIcon))]
         public void NotifyIcon_ShowBalloonTip_InvokeInvalidTipIcon_ThrowsInvalidEnumArgumentException(ToolTipIcon tipIcon)
         {
             using var notifyIcon = new NotifyIcon();

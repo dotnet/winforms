@@ -13,7 +13,7 @@ using static Interop;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  This internal class wraps the InSitu Editor. The editor is a runtime ToolStrip  control which contains a leftButton (for image), centerLabel (for text) which  gets swaped by a centerTextBox (when InSitu is ON). The ToolStripTemplateNode is also responsible for intercepting the Escape and Enter keys and implements the IMenuStatusHandler so that it can commit and rollback as required. Finally this ToolStripTemplateNode has a private class ItemTypeToolStripMenuItem for adding  ToolStripItem types to the Dropdown for addItemButton.
+    ///  This internal class wraps the InSitu Editor. The editor is a runtime ToolStrip  control which contains a leftButton (for image), centerLabel (for text) which  gets swapped by a centerTextBox (when InSitu is ON). The ToolStripTemplateNode is also responsible for intercepting the Escape and Enter keys and implements the IMenuStatusHandler so that it can commit and rollback as required. Finally this ToolStripTemplateNode has a private class ItemTypeToolStripMenuItem for adding  ToolStripItem types to the Dropdown for addItemButton.
     /// </summary>
     internal class ToolStripTemplateNode : IMenuStatusHandler
     {
@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Design
 
         // Component for this InSitu Editor... (this is a ToolStripItem) that wants to go into InSitu
         private readonly IComponent _component;
-        // Current Designer for the comopenent that in InSitu mode
+        // Current Designer for the component that in InSitu mode
         private IDesigner _designer;
         //Get DesignerHost.
         private readonly IDesignerHost _designerHost;
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Design
         private ToolStripLabel _centerLabel;
         // SplitButton reAdded for ToolStrip specific TemplateNode
         private ToolStripSplitButton _addItemButton;
-        //swaped in text...
+        //swapped in text...
         private ToolStripControlHost _centerTextBox;
 
         //reqd as rtb does accept Enter..
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Design
         private MiniToolStripRenderer _renderer;
         // This is the Type that the user has selected for the new Item
         private Type _itemType;
-        //Get the ToolStripKeyBoardService to notify that the TemplateNode is Active and so it shouldnt process the KeyMessages.
+        //Get the ToolStripKeyBoardService to notify that the TemplateNode is Active and so it shouldn't process the KeyMessages.
         private ToolStripKeyboardHandlingService _toolStripKeyBoardService;
 
         //Cached ISelectionService
@@ -133,6 +133,7 @@ namespace System.Windows.Forms.Design
                     MINITOOLSTRIP_DROPDOWN_BUTTON_WIDTH = DpiHelper.LogicalToDeviceUnitsX(MINITOOLSTRIP_DROPDOWN_BUTTON_WIDTH_ORIGINAL);
                     MINITOOLSTRIP_TEXTBOX_WIDTH = DpiHelper.LogicalToDeviceUnitsX(MINITOOLSTRIP_TEXTBOX_WIDTH_ORIGINAL);
                 }
+
                 s_isScalingInitialized = true;
             }
 
@@ -170,13 +171,13 @@ namespace System.Windows.Forms.Design
                         IMenuCommandService menuService = (IMenuCommandService)_component.Site.GetService(typeof(IMenuCommandService));
                         if (menuService != null)
                         {
-                            _oldUndoCommand = menuService.FindCommand(MenuCommands.Undo);
+                            _oldUndoCommand = menuService.FindCommand(StandardCommands.Undo);
                             if (_oldUndoCommand != null)
                             {
                                 menuService.RemoveCommand(_oldUndoCommand);
                             }
 
-                            _oldRedoCommand = menuService.FindCommand(MenuCommands.Redo);
+                            _oldRedoCommand = menuService.FindCommand(StandardCommands.Redo);
                             if (_oldRedoCommand != null)
                             {
                                 menuService.RemoveCommand(_oldRedoCommand);
@@ -283,6 +284,7 @@ namespace System.Windows.Forms.Design
                 {
                     templateNodeContextMenu.Groups[StandardGroups.Custom].Items.Add(item);
                 }
+
                 return templateNodeContextMenu;
             }
         }
@@ -344,6 +346,7 @@ namespace System.Windows.Forms.Design
                 {
                     _toolStripKeyBoardService = (ToolStripKeyboardHandlingService)_component.Site.GetService(typeof(ToolStripKeyboardHandlingService));
                 }
+
                 return _toolStripKeyBoardService;
             }
         }
@@ -359,6 +362,7 @@ namespace System.Windows.Forms.Design
                 {
                     _selectionService = (ISelectionService)_component.Site.GetService(typeof(ISelectionService));
                 }
+
                 return _selectionService;
             }
         }
@@ -371,6 +375,7 @@ namespace System.Windows.Forms.Design
                 {
                     _behaviorService = (BehaviorService)_component.Site.GetService(typeof(BehaviorService));
                 }
+
                 return _behaviorService;
             }
         }
@@ -414,6 +419,7 @@ namespace System.Windows.Forms.Design
                     {
                         designer.DontCloseOverflow = true;
                     }
+
                     SelectionService.SetSelectedComponents(new object[] { _component });
                 }
                 finally
@@ -437,7 +443,7 @@ namespace System.Windows.Forms.Design
             // Set the property used in the CommitEditor (.. ) to add the correct Type.
             ToolStripItemType = senderItem.ItemType;
             //Select the parent before adding
-            ToolStrip parent = _controlHost.GetCurrentParent() as ToolStrip;
+            ToolStrip parent = _controlHost.GetCurrentParent();
             // this will add the item to the ToolStrip..
             if (parent is MenuStrip)
             {
@@ -463,15 +469,17 @@ namespace System.Windows.Forms.Design
             //For Right Button we show the DesignerContextMenu...
             if (e.Button == MouseButtons.Right)
             {
-                //Dont show the DesignerContextMenu if there is any active templateNode.
+                // Don't show the DesignerContextMenu if there is any active templateNode.
                 if (KeyboardService != null && KeyboardService.TemplateNodeActive)
                 {
                     return;
                 }
+
                 if (KeyboardService != null)
                 {
                     KeyboardService.SelectedDesignerControl = _controlHost;
                 }
+
                 SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
                 if (BehaviorService != null)
                 {
@@ -489,6 +497,7 @@ namespace System.Windows.Forms.Design
                     {
                         KeyboardService.SelectedDesignerControl = _controlHost;
                     }
+
                     SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
                     ToolStripDropDown oldContextMenu = _contextMenu;
                     // PERF: Consider refresh mechanism for the derived items.
@@ -499,6 +508,7 @@ namespace System.Windows.Forms.Design
                         oldContextMenu.Opened -= new EventHandler(OnContextMenuOpened);
                         oldContextMenu.Dispose();
                     }
+
                     _contextMenu = null;
                     ShowDropDownMenu();
                 }
@@ -513,6 +523,7 @@ namespace System.Windows.Forms.Design
                         {
                             KeyboardService.ActiveTemplateNode.Commit(false, false);
                         }
+
                         // cause a selectionChange...
                         if (SelectionService.PrimarySelection is null)
                         {
@@ -523,10 +534,11 @@ namespace System.Windows.Forms.Design
                         SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
                         ((ToolStripDesigner)_designer).ShowEditNode(true);
                     }
+
                     if (_designer is ToolStripMenuItemDesigner)
                     {
                         // cache the serviceProvider (Site) since the component can potential get disposed after the call to CommitAndSelect();
-                        IServiceProvider svcProvider = _component.Site as IServiceProvider;
+                        IServiceProvider svcProvider = _component.Site;
                         // Commit any InsituEdit Node.
                         if (KeyboardService.TemplateNodeActive)
                         {
@@ -549,6 +561,7 @@ namespace System.Windows.Forms.Design
                                 KeyboardService.ActiveTemplateNode.Commit(false, false);
                             }
                         }
+
                         if (_designer != null)
                         {
                             ((ToolStripMenuItemDesigner)_designer).EditTemplateNode(true);
@@ -570,6 +583,7 @@ namespace System.Windows.Forms.Design
                                             bSvc.Invalidate(bounds);
                                         }
                                     }
+
                                     itemDesigner.EditTemplateNode(true);
                                 }
                             }
@@ -611,6 +625,7 @@ namespace System.Windows.Forms.Design
                     {
                         _renderer.State = (int)TemplateNodeSelectionState.MouseOverLabel;
                     }
+
                     _miniToolStrip.Invalidate();
                 }
             }
@@ -627,10 +642,12 @@ namespace System.Windows.Forms.Design
                 {
                     _renderer.State = (int)TemplateNodeSelectionState.None;
                 }
+
                 if (KeyboardService != null && KeyboardService.SelectedDesignerControl == _controlHost)
                 {
                     _renderer.State = (int)TemplateNodeSelectionState.TemplateNodeSelected;
                 }
+
                 _miniToolStrip.Invalidate();
             }
         }
@@ -660,7 +677,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  This Internal function is called from the ToolStripItemDesigner to relinquish the resources used by the EditorToolStrip. This Fucntion disposes the ToolStrip and its components and also clears the event handlers associated.
+        ///  This Internal function is called from the ToolStripItemDesigner to relinquish the resources used by the EditorToolStrip. This Function disposes the ToolStrip and its components and also clears the event handlers associated.
         /// </summary>
         internal void CloseEditor()
         {
@@ -675,13 +692,13 @@ namespace System.Windows.Forms.Design
 
                 if (_component is ToolStrip strip)
                 {
-                    strip.RightToLeftChanged -= new System.EventHandler(OnRightToLeftChanged);
+                    strip.RightToLeftChanged -= new EventHandler(OnRightToLeftChanged);
                 }
                 else
                 {
                     if (_component is ToolStripDropDownItem stripItem)
                     {
-                        stripItem.RightToLeftChanged -= new System.EventHandler(OnRightToLeftChanged);
+                        stripItem.RightToLeftChanged -= new EventHandler(OnRightToLeftChanged);
                     }
                 }
 
@@ -705,6 +722,7 @@ namespace System.Windows.Forms.Design
                     _addItemButton.Dispose();
                     _addItemButton = null;
                 }
+
                 if (_contextMenu != null)
                 {
                     _contextMenu.Closed -= new ToolStripDropDownClosedEventHandler(OnContextMenuClosed);
@@ -722,6 +740,7 @@ namespace System.Windows.Forms.Design
                     _designSurface.Flushed -= new EventHandler(OnLoaderFlushed);
                     _designSurface = null;
                 }
+
                 _designer = null;
                 OnClosed(new EventArgs());
             }
@@ -765,6 +784,7 @@ namespace System.Windows.Forms.Design
                 {
                     ToolStripItemType = typeof(ToolStripSeparator);
                 }
+
                 if (ToolStripItemType != null)
                 {
                     selectedType = ToolStripItemType;
@@ -775,6 +795,7 @@ namespace System.Windows.Forms.Design
                     Type[] supportedTypes = ToolStripDesignerUtils.GetStandardItemTypes(_component);
                     selectedType = supportedTypes[0];
                 }
+
                 if (_designer is ToolStripDesigner)
                 {
                     ((ToolStripDesigner)_designer).AddNewItem(selectedType, text, enterKeyPressed, tabKeyPressed);
@@ -791,7 +812,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  This private function performs the job of commiting the current InSitu Editor. This will call the CommitEdit(...) function for the appropriate designers so that they can actually do their own Specific things for commiting (or ROLLBACKING) the Insitu Edit mode.  The commit flag is used for commit or rollback. BE SURE TO ALWAYS call ExitInSituEdit from this function to put the EditorToolStrip in a sane "NON EDIT" mode.
+        ///  This private function performs the job of committing the current InSitu Editor. This will call the CommitEdit(...) function for the appropriate designers so that they can actually do their own Specific things for committing (or ROLLING BACK) the Insitu Edit mode.  The commit flag is used for commit or rollback. BE SURE TO ALWAYS call ExitInSituEdit from this function to put the EditorToolStrip in a sane "NON EDIT" mode.
         /// </summary>
         private void CommitEditor(bool commit, bool enterKeyPressed, bool tabKeyPressed)
         {
@@ -819,6 +840,7 @@ namespace System.Windows.Forms.Design
                         {
                             BehaviorService.Invalidate(rgn);
                         }
+
                         rgn.Dispose();
                     }
                 }
@@ -832,11 +854,12 @@ namespace System.Windows.Forms.Design
         {
             if (!_inSituMode)
             {
-                // Listen For Commandss....
+                // Listen For Commands....
                 if (_miniToolStrip.Parent != null)
                 {
                     _miniToolStrip.Parent.SuspendLayout();
                 }
+
                 try
                 {
                     Active = true;
@@ -863,12 +886,13 @@ namespace System.Windows.Forms.Design
 
                     if (_activeItem is ToolStripDropDownItem item && !item.IsOnDropDown)
                     {
-                        _centerTextBox.Margin = new System.Windows.Forms.Padding(1, 2, 1, 3);
+                        _centerTextBox.Margin = new Padding(1, 2, 1, 3);
                     }
                     else
                     {
-                        _centerTextBox.Margin = new System.Windows.Forms.Padding(1);
+                        _centerTextBox.Margin = new Padding(1);
                     }
+
                     _centerTextBox.Size = _miniToolStrip.DisplayRectangle.Size - _centerTextBox.Margin.Size;
                     _centerTextBox.Name = "centerTextBox";
                     _centerTextBox.MouseEnter += new EventHandler(CenterTextBoxMouseEnter);
@@ -885,12 +909,12 @@ namespace System.Windows.Forms.Design
                     tb.KeyDown += new KeyEventHandler(OnKeyDown);
                     tb.SelectAll();
                     Control baseComponent = null;
-                    if (_designerHost != null)
+                    if (_designerHost is not null)
                     {
                         baseComponent = (Control)_designerHost.RootComponent;
-                        User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, IntPtr.Zero, IntPtr.Zero);
+                        User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
                         tb.Focus();
-                        User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (IntPtr)1, IntPtr.Zero);
+                        User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
                     }
                 }
                 finally
@@ -915,6 +939,7 @@ namespace System.Windows.Forms.Design
                 {
                     _miniToolStrip.Parent.SuspendLayout();
                 }
+
                 try
                 {
                     //if going insitu with a real item, set & select all the text
@@ -944,6 +969,7 @@ namespace System.Windows.Forms.Design
                     {
                         _miniToolStrip.Parent.ResumeLayout();
                     }
+
                     // POP of the Handler !!!
                     Active = false;
                 }
@@ -959,6 +985,7 @@ namespace System.Windows.Forms.Design
             {
                 _centerLabel.Text = currentItem.Text;
             }
+
             EnterInSituEdit();
         }
 
@@ -967,15 +994,13 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void FocusForm()
         {
-            if (_component.Site.GetService(typeof(ISplitWindowService)) is DesignerFrame designerFrame)
+            if (_component.Site.GetService(typeof(ISplitWindowService)) is DesignerFrame designerFrame
+                && _designerHost is not null)
             {
-                if (_designerHost != null)
-                {
-                    Control baseComponent = (Control)_designerHost.RootComponent;
-                    User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, IntPtr.Zero, IntPtr.Zero);
-                    designerFrame.Focus();
-                    User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (IntPtr)1, IntPtr.Zero);
-                }
+                Control baseComponent = (Control)_designerHost.RootComponent;
+                User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
+                designerFrame.Focus();
+                User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
             }
         }
 
@@ -1048,6 +1073,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             switch (e.KeyCode)
             {
                 case Keys.Up:
@@ -1056,6 +1082,7 @@ namespace System.Windows.Forms.Design
                     {
                         KeyboardService.ProcessUpDown(false);
                     }
+
                     break;
                 case Keys.Down:
                     Commit(true, false);
@@ -1069,6 +1096,7 @@ namespace System.Windows.Forms.Design
                         ignoreFirstKeyUp = false;
                         return;
                     }
+
                     OnKeyDefaultAction(sender, e);
                     break;
             }
@@ -1083,6 +1111,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             if (e.KeyCode == Keys.A && (e.KeyData & Keys.Control) != 0)
             {
                 if (sender is TextBox t)
@@ -1097,7 +1126,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnKeyDefaultAction(object sender, EventArgs e)
         {
-            //exit Insitu with commiting....
+            //exit Insitu with committing....
             Active = false;
             Debug.Assert(_centerTextBox.Control != null, "The TextBox is null");
             if (_centerTextBox.Control != null)
@@ -1147,6 +1176,7 @@ namespace System.Windows.Forms.Design
             {
                 KeyboardService.SelectedDesignerControl = _controlHost;
             }
+
             SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
         }
 
@@ -1169,6 +1199,7 @@ namespace System.Windows.Forms.Design
                         _renderer.State = (int)TemplateNodeSelectionState.DropDownSelected;
                     }
                 }
+
                 _miniToolStrip.Invalidate();
             }
         }
@@ -1184,10 +1215,12 @@ namespace System.Windows.Forms.Design
                 {
                     _renderer.State = (int)TemplateNodeSelectionState.None;
                 }
+
                 if (KeyboardService != null && KeyboardService.SelectedDesignerControl == _controlHost)
                 {
                     _renderer.State = (int)TemplateNodeSelectionState.TemplateNodeSelected;
                 }
+
                 _miniToolStrip.Invalidate();
             }
         }
@@ -1206,7 +1239,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Intercept invokation of specific commands and keys
+        ///  Intercept invocation of specific commands and keys
         /// </summary>
         public bool OverrideInvoke(MenuCommand cmd)
         {
@@ -1214,18 +1247,19 @@ namespace System.Windows.Forms.Design
             {
                 if (_commands[i].CommandID.Equals(cmd.CommandID))
                 {
-                    if (cmd.CommandID == MenuCommands.Delete || cmd.CommandID == MenuCommands.Cut || cmd.CommandID == MenuCommands.Copy)
+                    if (cmd.CommandID == StandardCommands.Delete || cmd.CommandID == StandardCommands.Cut || cmd.CommandID == StandardCommands.Copy)
                     {
                         _commands[i].Invoke();
                         return true;
                     }
                 }
             }
+
             return false;
         }
 
         /// <summary>
-        ///  Intercept invokation of specific commands and keys
+        ///  Intercept invocation of specific commands and keys
         /// </summary>
         public bool OverrideStatus(MenuCommand cmd)
         {
@@ -1267,6 +1301,7 @@ namespace System.Windows.Forms.Design
                     _isPopulated = true;
                     ToolStripDesignerUtils.GetCustomNewItemDropDown(_contextMenu, _component, null, new EventHandler(AddNewItemClick), false, _component.Site);
                 }
+
                 _addItemButton.ShowDropDown();
             }
             else
@@ -1304,6 +1339,7 @@ namespace System.Windows.Forms.Design
                             _contextMenu.RightToLeft = stripItem.RightToLeft;
                         }
                     }
+
                     _contextMenu.Show(translatedBounds.X, translatedBounds.Y + translatedBounds.Height);
                     _contextMenu.Focus();
                     if (_renderer != null)
@@ -1334,6 +1370,7 @@ namespace System.Windows.Forms.Design
             {
                 _centerLabel.Margin = new Padding(1, 2, 1, 3);
             }
+
             _centerLabel.Padding = new Padding(0, 1, 0, 0);
             _centerLabel.Name = CenterLabelName;
             _centerLabel.Size = _miniToolStrip.DisplayRectangle.Size - _centerLabel.Margin.Size;
@@ -1368,9 +1405,9 @@ namespace System.Windows.Forms.Design
                 _addItemButton.ToolTipText = SR.ToolStripDesignerTemplateNodeSplitButtonToolTip;
             }
 
-            _addItemButton.MouseDown += new System.Windows.Forms.MouseEventHandler(OnMouseDown);
-            _addItemButton.MouseMove += new System.Windows.Forms.MouseEventHandler(OnMouseMove);
-            _addItemButton.MouseUp += new System.Windows.Forms.MouseEventHandler(OnMouseUp);
+            _addItemButton.MouseDown += new MouseEventHandler(OnMouseDown);
+            _addItemButton.MouseMove += new MouseEventHandler(OnMouseMove);
+            _addItemButton.MouseUp += new MouseEventHandler(OnMouseUp);
             _addItemButton.DropDownOpened += OnAddItemButtonDropDownOpened;
             _contextMenu = ToolStripDesignerUtils.GetNewItemDropDown(component, null, new EventHandler(AddNewItemClick), false, component.Site, false);
             _contextMenu.Text = "ItemSelectionMenu";
@@ -1392,9 +1429,11 @@ namespace System.Windows.Forms.Design
                     {
                         DpiHelper.ScaleBitmapLogicalToDevice(ref bmp);
                     }
+
                     _addItemButton.Image = bmp;
                     _addItemButton.DefaultItem = firstItem;
                 }
+
                 Debug.Assert(_addItemButton.DropDownItems.Count > 0);
             }
             catch (Exception ex)
@@ -1404,7 +1443,9 @@ namespace System.Windows.Forms.Design
                     throw;
                 }
             }
-            _miniToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+
+            _miniToolStrip.Items.AddRange(new ToolStripItem[]
+            {
                 _addItemButton
             });
         }
@@ -1420,20 +1461,22 @@ namespace System.Windows.Forms.Design
             if (currentItem is ToolStrip strip)
             {
                 _miniToolStrip.RightToLeft = strip.RightToLeft;
-                strip.RightToLeftChanged += new System.EventHandler(OnRightToLeftChanged);
+                strip.RightToLeftChanged += new EventHandler(OnRightToLeftChanged);
                 // Make TransparentToolStrip has the same "Site" as ToolStrip. This could make sure TransparentToolStrip has the same design time behavior as ToolStrip.
                 _miniToolStrip.Site = strip.Site;
             }
+
             if (currentItem is ToolStripDropDownItem stripItem)
             {
                 _miniToolStrip.RightToLeft = stripItem.RightToLeft;
-                stripItem.RightToLeftChanged += new System.EventHandler(OnRightToLeftChanged);
+                stripItem.RightToLeftChanged += new EventHandler(OnRightToLeftChanged);
             }
+
             _miniToolStrip.SuspendLayout();
             _miniToolStrip.CanOverflow = false;
-            _miniToolStrip.Cursor = System.Windows.Forms.Cursors.Default;
-            _miniToolStrip.Dock = System.Windows.Forms.DockStyle.None;
-            _miniToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            _miniToolStrip.Cursor = Cursors.Default;
+            _miniToolStrip.Dock = DockStyle.None;
+            _miniToolStrip.GripStyle = ToolStripGripStyle.Hidden;
             _miniToolStrip.Name = "miniToolStrip";
             _miniToolStrip.TabIndex = 0;
             _miniToolStrip.Visible = true;
@@ -1451,7 +1494,8 @@ namespace System.Windows.Forms.Design
                 SetUpToolTemplateNode(owner, text, image, currentItem);
                 _miniToolStrip.AccessibleRole = AccessibleRole.ButtonDropDown;
             }
-            _miniToolStrip.MouseLeave += new System.EventHandler(OnMouseLeave);
+
+            _miniToolStrip.MouseLeave += new EventHandler(OnMouseLeave);
             _miniToolStrip.ResumeLayout();
         }
 
@@ -1497,6 +1541,7 @@ namespace System.Windows.Forms.Design
                 {
                     return true;
                 }
+
                 return false;
             }
 
@@ -1508,6 +1553,7 @@ namespace System.Windows.Forms.Design
                         owner.Commit(true, false);
                         return true;
                 }
+
                 return base.IsInputKey(keyData);
             }
 
@@ -1525,6 +1571,7 @@ namespace System.Windows.Forms.Design
                     owner.IMEModeSet = false;
                     owner.ignoreFirstKeyUp = false;
                 }
+
                 return base.ProcessDialogKey(keyData);
             }
 
@@ -1533,15 +1580,16 @@ namespace System.Windows.Forms.Design
             /// </summary>
             protected override void WndProc(ref Message m)
             {
-                switch ((User32.WM)m.Msg)
+                switch (m.MsgInternal)
                 {
                     case User32.WM.KILLFOCUS:
                         base.WndProc(ref m);
-                        IntPtr focussedWindow = (IntPtr)m.WParam;
-                        if (!IsParentWindow(focussedWindow))
+                        IntPtr focusedWindow = m.WParamInternal;
+                        if (!IsParentWindow(focusedWindow))
                         {
-                            owner.Commit(false, false);
+                            owner.Commit(enterKeyPressed: false, tabKeyPressed: false);
                         }
+
                         break;
 
                     // 1.Slowly click on a menu strip item twice to make it editable, while the item's dropdown menu is visible
@@ -1560,7 +1608,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Private class to Change the ToolStrip to a TransparentToolStrip. Our EditorToolStrip is a TranparentToolStrip so that it picks up the itemColor.
+        ///  Private class to Change the ToolStrip to a TransparentToolStrip. Our EditorToolStrip is a TransparentToolStrip so that it picks up the itemColor.
         /// </summary>
         public class TransparentToolStrip : ToolStrip
         {
@@ -1611,6 +1659,7 @@ namespace System.Windows.Forms.Design
                         selectedItem = Items[i];
                     }
                 }
+
                 return selectedItem;
             }
 
@@ -1639,6 +1688,7 @@ namespace System.Windows.Forms.Design
                     CommitAndSelectNext(forward);
                     return true;
                 }
+
                 return false;
             }
 
@@ -1652,7 +1702,7 @@ namespace System.Windows.Forms.Design
                 {
                     if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None)
                     {
-                        Keys keyCode = (Keys)keyData & Keys.KeyCode;
+                        Keys keyCode = keyData & Keys.KeyCode;
                         switch (keyCode)
                         {
                             case Keys.Tab:
@@ -1666,6 +1716,7 @@ namespace System.Windows.Forms.Design
                         return retVal;
                     }
                 }
+
                 return base.ProcessDialogKey(keyData);
             }
 
@@ -1702,8 +1753,10 @@ namespace System.Windows.Forms.Design
                             // m.Result = AutomationInteropProvider.ReturnRawElementProvider(Handle, m.WParam, m.LParam, (IRawElementProviderSimple)(new TransparentToolStripUiaProvider(this)));
                             return;
                         }
+
                         break;
                 }
+
                 base.WndProc(ref m);
             }
         }
@@ -1764,20 +1817,24 @@ namespace System.Windows.Forms.Design
                         {
                             g.FillRectangle(brush, bounds);
                         }
+
                         break;
-                    case 5: //MouseOnthe HotRegion
+                    case 5: //MouseOverHotRegion
                         using (SolidBrush b = new SolidBrush(dropDownMouseOverColor))
                         {
                             g.FillRectangle(b, hotRegion);
                         }
+
                         break;
                     case 6: //HotRegionSelected
                         using (SolidBrush b = new SolidBrush(dropDownMouseDownColor))
                         {
                             g.FillRectangle(b, hotRegion);
                         }
+
                         break;
                 }
+
                 DrawArrow(g, bounds);
             }
 
@@ -1824,6 +1881,7 @@ namespace System.Windows.Forms.Design
                     {
                         g.FillRectangle(brush, drawRect);
                     }
+
                     if (owner.EditorToolStrip.RightToLeft == RightToLeft.Yes)
                     {
                         hotRegion = new Rectangle(bounds.Left + 2, bounds.Top + 2, TEMPLATE_HOTREGION_WIDTH, bounds.Bottom - 4);
@@ -1832,6 +1890,7 @@ namespace System.Windows.Forms.Design
                     {
                         hotRegion = new Rectangle(bounds.Right - TEMPLATE_HOTREGION_WIDTH - 2, bounds.Top + 2, TEMPLATE_HOTREGION_WIDTH, bounds.Bottom - 4);
                     }
+
                     owner.HotRegion = hotRegion;
 
                     // do the Actual Drawing
@@ -1852,6 +1911,7 @@ namespace System.Windows.Forms.Design
                     {
                         hotRegion = new Rectangle(bounds.Right - TEMPLATE_HOTREGION_WIDTH - 2, bounds.Top + 2, TEMPLATE_HOTREGION_WIDTH, bounds.Bottom - 4);
                     }
+
                     owner.HotRegion = hotRegion;
 
                     g.Clear(toolStripBorderColor);
@@ -1886,6 +1946,7 @@ namespace System.Windows.Forms.Design
                     g.DrawRectangle(borderPen, drawRect);
                     item.ForeColor = defaultBorderColor;
                 }
+
                 borderPen.Dispose();
             }
 
@@ -1894,7 +1955,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             protected override void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e)
             {
-                // DONT CALL THE BASE AS IT DOESNT ALLOW US TO RENDER THE DROPDOWN BUTTON ....
+                // DON'T CALL THE BASE AS IT DOESNT ALLOW US TO RENDER THE DROPDOWN BUTTON ....
                 //base.OnRenderSplitButtonBackground(e);
                 Graphics g = e.Graphics;
                 if (e.Item is ToolStripSplitButton splitButton)
@@ -1908,7 +1969,6 @@ namespace System.Windows.Forms.Design
                     }
 
                     Rectangle bounds = new Rectangle(Point.Empty, splitButton.Size);
-                    Pen selectborderPen = null;
                     bool splitButtonSelected = false;
                     if (splitButton.DropDownButtonPressed)
                     {
@@ -1919,6 +1979,7 @@ namespace System.Windows.Forms.Design
                         {
                             g.FillRectangle(brush, fillRect);
                         }
+
                         splitButtonSelected = true;
                     }
                     else if (state == (int)TemplateNodeSelectionState.SplitButtonSelected)
@@ -1927,6 +1988,7 @@ namespace System.Windows.Forms.Design
                         {
                             g.FillRectangle(brush, splitButton.ButtonBounds);
                         }
+
                         splitButtonSelected = true;
                     }
                     else if (state == (int)TemplateNodeSelectionState.DropDownSelected)
@@ -1936,6 +1998,7 @@ namespace System.Windows.Forms.Design
                         {
                             g.FillRectangle(brush, fillRect);
                         }
+
                         splitButtonSelected = true;
                     }
                     else if (state == (int)TemplateNodeSelectionState.TemplateNodeSelected)
@@ -1943,9 +2006,10 @@ namespace System.Windows.Forms.Design
                         splitButtonSelected = true;
                     }
 
+                    Pen selectborderPen;
                     if (splitButtonSelected)
                     {
-                        //DrawSeleted Boder
+                        //DrawSelected Boder
                         selectborderPen = new Pen(selectedBorderColor);
                     }
                     else
@@ -1966,11 +2030,12 @@ namespace System.Windows.Forms.Design
             protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
             {
                 ToolStripItem item = e.Item as ToolStripLabel;
-                if (item != null && String.Equals(item.Name, CenterLabelName, StringComparison.InvariantCulture) && SystemInformation.HighContrast)
+                if (item != null && string.Equals(item.Name, CenterLabelName, StringComparison.InvariantCulture) && SystemInformation.HighContrast)
                 {
                     // "Type Here" node always has white background, text should be painted in black
                     e.TextColor = Color.Black;
                 }
+
                 base.OnRenderItemText(e);
             }
         }

@@ -20,17 +20,17 @@ namespace System.Windows.Forms
         Tile,
 
         /// <summary>
-        ///  The image is centred within the controls client rectangle.
+        ///  The image is centered within the controls client rectangle.
         /// </summary>
         Center,
 
         /// <summary>
-        ///  The image is streched across the controls client rectangle.
+        ///  The image is stretched across the controls client rectangle.
         /// </summary>
         Stretch,
 
         /// <summary>
-        ///  The image is streched across the controls client rectangle.
+        ///  The image is stretched across the controls client rectangle.
         /// </summary>
         Zoom,
     }

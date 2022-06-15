@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using static Interop;
 
@@ -15,7 +13,7 @@ namespace System.Windows.Forms
         private const DataGridViewContentAlignment AnyRight = DataGridViewContentAlignment.TopRight | DataGridViewContentAlignment.MiddleRight | DataGridViewContentAlignment.BottomRight;
         private const DataGridViewContentAlignment AnyCenter = DataGridViewContentAlignment.TopCenter | DataGridViewContentAlignment.MiddleCenter | DataGridViewContentAlignment.BottomCenter;
 
-        private DataGridView _dataGridView;
+        private DataGridView? _dataGridView;
         private bool _valueChanged;
         private bool _repositionOnValueChange;
         private int _rowIndex;
@@ -30,7 +28,7 @@ namespace System.Windows.Forms
             return new DataGridViewTextBoxEditingControlAccessibleObject(this);
         }
 
-        public virtual DataGridView EditingControlDataGridView
+        public virtual DataGridView? EditingControlDataGridView
         {
             get
             {
@@ -98,10 +96,7 @@ namespace System.Windows.Forms
 
         public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
         {
-            if (dataGridViewCellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewCellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(dataGridViewCellStyle);
 
             Font = dataGridViewCellStyle.Font;
             if (dataGridViewCellStyle.BackColor.A < 255)
@@ -110,7 +105,7 @@ namespace System.Windows.Forms
                 Color opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
                 BackColor = opaqueBackColor;
 
-                if (_dataGridView != null)
+                if (_dataGridView is not null)
                 {
                     _dataGridView.EditingPanel.BackColor = opaqueBackColor;
                 }
@@ -119,11 +114,13 @@ namespace System.Windows.Forms
             {
                 BackColor = dataGridViewCellStyle.BackColor;
             }
+
             ForeColor = dataGridViewCellStyle.ForeColor;
             if (dataGridViewCellStyle.WrapMode == DataGridViewTriState.True)
             {
                 WordWrap = true;
             }
+
             TextAlign = TranslateAlignment(dataGridViewCellStyle.Alignment);
             _repositionOnValueChange = (dataGridViewCellStyle.WrapMode == DataGridViewTriState.True && (dataGridViewCellStyle.Alignment & AnyTop) == 0);
         }
@@ -140,6 +137,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     break;
 
                 case Keys.Left:
@@ -151,6 +149,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     break;
 
                 case Keys.Down:
@@ -161,6 +160,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     break;
 
                 case Keys.Up:
@@ -170,6 +170,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     break;
 
                 case Keys.Home:
@@ -178,6 +179,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     break;
 
                 case Keys.Prior:
@@ -186,6 +188,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     break;
 
                 case Keys.Delete:
@@ -194,6 +197,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     break;
 
                 case Keys.Enter:
@@ -201,8 +205,10 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     break;
             }
+
             return !dataGridViewWantsInputKey;
         }
 
@@ -234,7 +240,10 @@ namespace System.Windows.Forms
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
-            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
@@ -246,42 +255,46 @@ namespace System.Windows.Forms
         protected override void OnTextChanged(EventArgs e)
         {
             base.OnTextChanged(e);
+
             // Let the DataGridView know about the value change
             NotifyDataGridViewOfValueChange();
         }
 
         protected override bool ProcessKeyEventArgs(ref Message m)
         {
-            switch ((Keys)(int)m.WParam)
+            switch ((Keys)m.WParamInternal)
             {
                 case Keys.Enter:
-                    if (m.Msg == (int)User32.WM.CHAR &&
-                        !(ModifierKeys == Keys.Shift && Multiline && AcceptsReturn))
+                    if (m.MsgInternal == User32.WM.CHAR
+                        && !(ModifierKeys == Keys.Shift && Multiline && AcceptsReturn))
                     {
-                        // Ignore the Enter key and don't add it to the textbox content. This happens when failing validation brings
-                        // up a dialog box for example.
-                        // Shift-Enter for multiline textboxes need to be accepted however.
+                        // Ignore the Enter key and don't add it to the textbox content. This happens when failing
+                        // validation brings up a dialog box for example. Shift-Enter for multiline textboxes need to
+                        // be accepted however.
                         return true;
                     }
+
                     break;
 
                 case Keys.LineFeed:
-                    if (m.Msg == (int)User32.WM.CHAR &&
-                        ModifierKeys == Keys.Control && Multiline && AcceptsReturn)
+                    if (m.MsgInternal == User32.WM.CHAR && ModifierKeys == Keys.Control && Multiline && AcceptsReturn)
                     {
                         // Ignore linefeed character when user hits Ctrl-Enter to commit the cell.
                         return true;
                     }
+
                     break;
 
                 case Keys.A:
-                    if (m.Msg == (int)User32.WM.KEYDOWN && ModifierKeys == Keys.Control)
+                    if (m.MsgInternal == User32.WM.KEYDOWN && ModifierKeys == Keys.Control)
                     {
                         SelectAll();
                         return true;
                     }
+
                     break;
             }
+
             return base.ProcessKeyEventArgs(ref m);
         }
 
@@ -306,7 +319,8 @@ namespace System.Windows.Forms
             base.OnHandleCreated(e);
             if (IsHandleCreated)
             {
-                _dataGridView?.SetAccessibleObjectParent(this.AccessibilityObject);
+                // The null-check was added as a fix for a https://github.com/dotnet/winforms/issues/2138
+                _dataGridView?.SetAccessibleObjectParent(AccessibilityObject);
             }
         }
     }

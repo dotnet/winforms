@@ -2,13 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -20,7 +17,7 @@ namespace System.Windows.Forms
     /// </summary>
     [DefaultProperty(nameof(Document))]
     [SRDescription(nameof(SR.DescriptionPrintPreviewControl))]
-    public class PrintPreviewControl : Control
+    public partial class PrintPreviewControl : Control
     {
         Size virtualSize = new Size(1, 1);
         Point position = new Point(0, 0);
@@ -33,8 +30,8 @@ namespace System.Windows.Forms
 
         private const int border = 10; // spacing per page, in mm
 
-        private PrintDocument document;
-        private PreviewPageInfo[] pageInfo; // null if needs refreshing
+        private PrintDocument? document;
+        private PreviewPageInfo[]? pageInfo; // null if needs refreshing
         private int startPage;  // 0-based
         private int rows = 1;
         private int columns = 1;
@@ -49,7 +46,7 @@ namespace System.Windows.Forms
         bool exceptionPrinting;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='PrintPreviewControl'/> class.
+        ///  Initializes a new instance of the <see cref="PrintPreviewControl"/> class.
         /// </summary>
         public PrintPreviewControl()
         {
@@ -101,7 +98,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(null)]
         [SRDescription(nameof(SR.PrintPreviewDocumentDescr))]
-        public PrintDocument Document
+        public PrintDocument? Document
         {
             get { return document; }
             set
@@ -205,6 +202,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Bindable(false)]
@@ -217,7 +216,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        new public event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -234,10 +233,11 @@ namespace System.Windows.Forms
             get
             {
                 int value = startPage;
-                if (pageInfo != null)
+                if (pageInfo is not null)
                 {
                     value = Math.Min(value, pageInfo.Length - (rows * columns));
                 }
+
                 value = Math.Max(value, 0);
 
                 return value;
@@ -248,6 +248,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(StartPage), value, 0));
                 }
+
                 int oldValue = StartPage;
                 startPage = value;
                 if (oldValue != startPage)
@@ -262,7 +263,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.RadioButtonOnStartPageChangedDescr))]
-        public event EventHandler StartPageChanged
+        public event EventHandler? StartPageChanged
         {
             add => Events.AddHandler(EVENT_STARTPAGECHANGED, value);
             remove => Events.RemoveHandler(EVENT_STARTPAGECHANGED, value);
@@ -308,17 +309,18 @@ namespace System.Windows.Forms
             }
         }
 
-        private int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
+        private static unsafe int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
         {
-            switch ((User32.SBH)PARAM.LOWORD(m.WParam))
+            switch ((User32.SBH)PARAM.LOWORD(m.WParamInternal))
             {
                 case User32.SBH.THUMBPOSITION:
                 case User32.SBH.THUMBTRACK:
-                    var si = new User32.SCROLLINFO
+                    User32.SCROLLINFO si = new()
                     {
-                        cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                        cbSize = (uint)sizeof(User32.SCROLLINFO),
                         fMask = User32.SIF.TRACKPOS
                     };
+
                     User32.SB direction = horizontal ? User32.SB.HORZ : User32.SB.VERT;
                     if (User32.GetScrollInfo(m.HWnd, direction, ref si).IsTrue())
                     {
@@ -326,8 +328,9 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        pos = PARAM.HIWORD(m.WParam);
+                        pos = PARAM.HIWORD(m.WParamInternal);
                     }
+
                     break;
                 case User32.SBH.LINELEFT:
                     if (pos > SCROLL_LINE)
@@ -338,6 +341,7 @@ namespace System.Windows.Forms
                     {
                         pos = 0;
                     }
+
                     break;
                 case User32.SBH.LINERIGHT:
                     if (pos < maxPos - SCROLL_LINE)
@@ -348,6 +352,7 @@ namespace System.Windows.Forms
                     {
                         pos = maxPos;
                     }
+
                     break;
                 case User32.SBH.PAGELEFT:
                     if (pos > SCROLL_PAGE)
@@ -358,6 +363,7 @@ namespace System.Windows.Forms
                     {
                         pos = 0;
                     }
+
                     break;
                 case User32.SBH.PAGERIGHT:
                     if (pos < maxPos - SCROLL_PAGE)
@@ -368,15 +374,17 @@ namespace System.Windows.Forms
                     {
                         pos = maxPos;
                     }
+
                     break;
             }
+
             return pos;
         }
 
         // This function computes everything in terms of physical size (millimeters), not pixels
         private void ComputeLayout()
         {
-            Debug.Assert(pageInfo != null, "Must call ComputePreview first");
+            Debug.Assert(pageInfo is not null, "Must call ComputePreview first");
             layoutOk = true;
             if (pageInfo.Length == 0)
             {
@@ -425,7 +433,7 @@ namespace System.Windows.Forms
 
                 document.Print();
                 pageInfo = previewController.GetPreviewPageInfo();
-                Debug.Assert(pageInfo != null, "ReviewPrintController did not give us preview info");
+                Debug.Assert(pageInfo is not null, "ReviewPrintController did not give us preview info");
 
                 document.PrintController = oldController;
             }
@@ -435,6 +443,9 @@ namespace System.Windows.Forms
                 OnStartPageChanged(EventArgs.Empty);
             }
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new PrintPreviewControlAccessibleObject(this);
 
         // Recomputes the sizes and positions of pages without forcing a new "preview print"
         private void InvalidateLayout()
@@ -506,7 +517,7 @@ namespace System.Windows.Forms
             {
                 pevent.Graphics.FillRectangle(backBrush, ClientRectangle);
 
-                if (pageInfo != null || exceptionPrinting)
+                if (pageInfo is not null || exceptionPrinting)
                 {
                     // Calculate formats
                     using StringFormat format = new StringFormat
@@ -609,11 +620,13 @@ namespace System.Windows.Forms
                         {
                             pevent.Graphics.FillRectangle(brush, box);
                         }
+
                         box.Inflate(-1, -1);
-                        if (pageInfo[i + StartPage].Image != null)
+                        if (pageInfo[i + StartPage].Image is not null)
                         {
                             pevent.Graphics.DrawImage(pageInfo[i + StartPage].Image, box);
                         }
+
                         box.Width--;
                         box.Height--;
                         pevent.Graphics.DrawRectangle(Pens.Black, box);
@@ -685,14 +698,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  WM_HSCROLL handler
+        ///  WM_HSCROLL handler.
         /// </summary>
         private void WmHScroll(ref Message m)
         {
-            // The lparam is handle of the sending scrollbar, or NULL when
-            // the scrollbar sending the message is the "form" scrollbar...
-            //
-            if (m.LParam != IntPtr.Zero)
+            // The lparam is the handle of the sending scrollbar, or NULL when the scrollbar sending
+            // the message is the built-in Window scrollbar.
+            if (m.LParamInternal != 0)
             {
                 base.WndProc(ref m);
                 return;
@@ -735,19 +747,20 @@ namespace System.Windows.Forms
             User32.SetScrollPos(this, User32.SB.VERT, position.Y, BOOL.TRUE);
         }
 
-        internal void SetVirtualSizeNoInvalidate(Size value)
+        internal unsafe void SetVirtualSizeNoInvalidate(Size value)
         {
             virtualSize = value;
             SetPositionNoInvalidate(position); // Make sure it's within range
 
-            var info = new User32.SCROLLINFO
+            User32.SCROLLINFO info = new()
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.RANGE | User32.SIF.PAGE,
                 nMin = 0,
                 nMax = Math.Max(Height, virtualSize.Height) - 1,
                 nPage = (uint)Height
             };
+
             User32.SetScrollInfo(this, User32.SB.VERT, ref info, BOOL.TRUE);
 
             info.fMask = User32.SIF.RANGE | User32.SIF.PAGE;
@@ -758,14 +771,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  WM_VSCROLL handler
+        ///  WM_VSCROLL handler.
         /// </summary>
         private void WmVScroll(ref Message m)
         {
-            // The lparam is handle of the sending scrollbar, or NULL when
-            // the scrollbar sending the message is the "form" scrollbar...
-            //
-            if (m.LParam != IntPtr.Zero)
+            // The lparam is the handle of the sending scrollbar, or NULL when the scrollbar sending
+            // the message is the built-in Window scrollbar.
+            if (m.LParamInternal != 0)
             {
                 base.WndProc(ref m);
                 return;
@@ -784,10 +796,10 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmKeyDown(ref Message msg)
         {
-            Keys keyData = (Keys)((int)msg.WParam | (int)ModifierKeys);
+            Keys keyData = (Keys)msg.WParamInternal | ModifierKeys;
             Point locPos = Position;
-            int pos = 0;
-            int maxPos = 0;
+            int pos;
+            int maxPos;
 
             switch (keyData & Keys.KeyCode)
             {
@@ -803,6 +815,7 @@ namespace System.Windows.Forms
                         {
                             pos = 0;
                         }
+
                         locPos.X = pos;
                         Position = locPos;
                     }
@@ -810,12 +823,13 @@ namespace System.Windows.Forms
                     {
                         StartPage--;
                     }
+
                     break;
                 case Keys.PageDown:
                     if ((keyData & Keys.Modifiers) == Keys.Control)
                     {
                         pos = locPos.X;
-                        maxPos = Math.Max(Width, virtualSize.Width /*- Width*/);
+                        maxPos = Math.Max(Width, virtualSize.Width);
                         if (pos < maxPos - SCROLL_PAGE)
                         {
                             pos += SCROLL_PAGE;
@@ -824,13 +838,15 @@ namespace System.Windows.Forms
                         {
                             pos = maxPos;
                         }
+
                         locPos.X = pos;
                         Position = locPos;
                     }
-                    else if (StartPage < pageInfo.Length)
+                    else if (pageInfo is not null && StartPage < pageInfo.Length)
                     {
                         StartPage++;
                     }
+
                     break;
                 case Keys.Home:
                     if ((keyData & Keys.Modifiers) == Keys.Control)
@@ -840,7 +856,7 @@ namespace System.Windows.Forms
 
                     break;
                 case Keys.End:
-                    if ((keyData & Keys.Modifiers) == Keys.Control)
+                    if (pageInfo is not null && (keyData & Keys.Modifiers) == Keys.Control)
                     {
                         StartPage = pageInfo.Length;
                     }
@@ -857,13 +873,14 @@ namespace System.Windows.Forms
                     {
                         pos = 0;
                     }
+
                     locPos.Y = pos;
                     Position = locPos;
                     break;
                 case Keys.Down:
 
                     pos = locPos.Y;
-                    maxPos = Math.Max(Height, virtualSize.Height/* - Height*/);
+                    maxPos = Math.Max(Height, virtualSize.Height);
 
                     if (pos < maxPos - SCROLL_LINE)
                     {
@@ -873,6 +890,7 @@ namespace System.Windows.Forms
                     {
                         pos = maxPos;
                     }
+
                     locPos.Y = pos;
                     Position = locPos;
                     break;
@@ -887,12 +905,13 @@ namespace System.Windows.Forms
                     {
                         pos = 0;
                     }
+
                     locPos.X = pos;
                     Position = locPos;
                     break;
                 case Keys.Right:
                     pos = locPos.X;
-                    maxPos = Math.Max(Width, virtualSize.Width /*- Width*/);
+                    maxPos = Math.Max(Width, virtualSize.Width);
                     if (pos < maxPos - SCROLL_LINE)
                     {
                         pos += SCROLL_LINE;
@@ -901,6 +920,7 @@ namespace System.Windows.Forms
                     {
                         pos = maxPos;
                     }
+
                     locPos.X = pos;
                     Position = locPos;
                     break;
@@ -909,7 +929,7 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            switch (m.MsgInternal)
             {
                 case User32.WM.VSCROLL:
                     WmVScroll(ref m);
@@ -927,8 +947,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='Control.BackColor'/> property should be
-        ///  persisted.
+        ///  Indicates whether the <see cref="Control.BackColor"/> property should be persisted.
         /// </summary>
         internal override bool ShouldSerializeBackColor()
         {
@@ -936,8 +955,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='Control.ForeColor'/> property should be
-        ///  persisted.
+        ///  Indicates whether the <see cref="Control.ForeColor"/> property should be persisted.
         /// </summary>
         internal override bool ShouldSerializeForeColor()
         {

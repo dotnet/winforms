@@ -2,14 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 
 namespace System.Windows.Forms
@@ -21,18 +18,19 @@ namespace System.Windows.Forms
     /// </summary>
     public class CursorConverter : TypeConverter
     {
-        private StandardValuesCollection values;
+        private StandardValuesCollection? _values;
 
         /// <summary>
         ///  Determines if this converter can convert an object in the given source
         ///  type to the native type of the converter.
         /// </summary>
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
             if (sourceType == typeof(string) || sourceType == typeof(byte[]))
             {
                 return true;
             }
+
             return base.CanConvertFrom(context, sourceType);
         }
 
@@ -40,7 +38,7 @@ namespace System.Windows.Forms
         ///  Gets a value indicating whether this converter can
         ///  convert an object to the given destination type using the context.
         /// </summary>
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
         {
             if (destinationType == typeof(InstanceDescriptor) || destinationType == typeof(byte[]))
             {
@@ -53,7 +51,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Converts the given object to the converter's native type.
         /// </summary>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
             if (value is string s)
             {
@@ -82,10 +80,10 @@ namespace System.Windows.Forms
         ///  Converts the given object to another type.  The most common types to convert
         ///  are to and from a string object.  The default implementation will make a call
         ///  to ToString on the object if the object is valid and if the destination
-        ///  type is string.  If this cannot convert to the desitnation type, this will
+        ///  type is string.  If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
             if (value is Cursor cursor)
             {
@@ -97,8 +95,8 @@ namespace System.Windows.Forms
                     for (int i = 0; i < props.Length; i++)
                     {
                         PropertyInfo prop = props[i];
-                        object[] tempIndex = null;
-                        Cursor c = (Cursor)prop.GetValue(null, tempIndex);
+                        object[]? tempIndex = null;
+                        Cursor? c = (Cursor?)prop.GetValue(null, tempIndex);
                         if (c == cursor)
                         {
                             if (ReferenceEquals(c, value))
@@ -120,7 +118,7 @@ namespace System.Windows.Forms
                     // We throw here because we cannot meaningfully convert a custom
                     // cursor into a string. In fact, the ResXResourceWriter will use
                     // this exception to indicate to itself that this object should
-                    // be serialized through ISeriazable instead of a string.
+                    // be serialized through ISerializable instead of a string.
 
                     throw new FormatException(SR.CursorCannotCovertToString);
                 }
@@ -151,7 +149,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the properties for the available cursors.
         /// </summary>
-        private PropertyInfo[] GetProperties()
+        private static PropertyInfo[] GetProperties()
         {
             return typeof(Cursors).GetProperties(BindingFlags.Static | BindingFlags.Public);
         }
@@ -162,31 +160,31 @@ namespace System.Windows.Forms
         ///  will return null if the data type does not support a
         ///  standard set of values.
         /// </summary>
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
-            if (values is null)
+            if (_values is null)
             {
                 ArrayList list = new ArrayList();
                 PropertyInfo[] props = GetProperties();
                 for (int i = 0; i < props.Length; i++)
                 {
                     PropertyInfo prop = props[i];
-                    object[] tempIndex = null;
-                    Debug.Assert(prop.GetValue(null, tempIndex) != null, "Property " + prop.Name + " returned NULL");
+                    object[]? tempIndex = null;
+                    Debug.Assert(prop.GetValue(null, tempIndex) is not null, "Property " + prop.Name + " returned NULL");
                     list.Add(prop.GetValue(null, tempIndex));
                 }
 
-                values = new StandardValuesCollection(list.ToArray());
+                _values = new StandardValuesCollection(list.ToArray());
             }
 
-            return values;
+            return _values;
         }
 
         /// <summary>
         ///  Determines if this object supports a standard set of values
         ///  that can be picked from a list.
         /// </summary>
-        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext? context)
         {
             return true;
         }

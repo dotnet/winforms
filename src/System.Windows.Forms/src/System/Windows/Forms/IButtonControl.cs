@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -24,7 +22,7 @@ namespace System.Windows.Forms
         void NotifyDefault(bool value);
 
         /// <summary>
-        ///  Generates a <see cref='Control.Click'/> event for the control.
+        ///  Generates a <see cref="Control.Click"/> event for the control.
         /// </summary>
         void PerformClick();
     }

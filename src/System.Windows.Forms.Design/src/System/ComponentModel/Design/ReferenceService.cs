@@ -72,8 +72,8 @@ namespace System.ComponentModel.Design
                 }
 
                 IComponentChangeService cs = _provider.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                Debug.Assert(cs != null, "Reference service relies on IComponentChangeService");
-                if (cs != null)
+                Debug.Assert(cs is not null, "Reference service relies on IComponentChangeService");
+                if (cs is not null)
                 {
                     cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
                     cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
@@ -97,7 +97,7 @@ namespace System.ComponentModel.Design
                 _populating = true;
                 try
                 {
-                    if (_addedComponents != null && _addedComponents.Count > 0)
+                    if (_addedComponents is not null && _addedComponents.Count > 0)
                     {
                         // There is a possibility that this component already exists. If it does, just remove it first and then re-add it.
                         foreach (IComponent ic in _addedComponents)
@@ -105,15 +105,17 @@ namespace System.ComponentModel.Design
                             RemoveReferences(ic);
                             CreateReferences(ic);
                         }
+
                         _addedComponents.Clear();
                     }
 
-                    if (_removedComponents != null && _removedComponents.Count > 0)
+                    if (_removedComponents is not null && _removedComponents.Count > 0)
                     {
                         foreach (IComponent ic in _removedComponents)
                         {
                             RemoveReferences(ic);
                         }
+
                         _removedComponents.Clear();
                     }
                 }
@@ -138,7 +140,7 @@ namespace System.ComponentModel.Design
             if (!(compAdded.Site is INestedSite))
             {
                 _addedComponents.Add(compAdded);
-                if (_removedComponents != null)
+                if (_removedComponents is not null)
                 {
                     _removedComponents.Remove(compAdded);
                 }
@@ -159,7 +161,7 @@ namespace System.ComponentModel.Design
             if (!(compRemoved.Site is INestedSite))
             {
                 _removedComponents.Add(compRemoved);
-                if (_addedComponents != null)
+                if (_addedComponents is not null)
                 {
                     _addedComponents.Remove(compRemoved);
                 }
@@ -173,7 +175,7 @@ namespace System.ComponentModel.Design
         {
             foreach (ReferenceHolder reference in _references)
             {
-                if (object.ReferenceEquals(reference.SitedComponent, cevent.Component))
+                if (ReferenceEquals(reference.SitedComponent, cevent.Component))
                 {
                     reference.ResetName();
                     return;
@@ -186,12 +188,12 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void RemoveReferences(IComponent component)
         {
-            if (_references != null)
+            if (_references is not null)
             {
                 int size = _references.Count;
                 for (int i = size - 1; i >= 0; i--)
                 {
-                    if (object.ReferenceEquals(((ReferenceHolder)_references[i]).SitedComponent, component))
+                    if (ReferenceEquals(((ReferenceHolder)_references[i]).SitedComponent, component))
                     {
                         _references.RemoveAt(i);
                     }
@@ -204,7 +206,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         void IDisposable.Dispose()
         {
-            if (_references != null && _provider != null)
+            if (_references is not null && _provider is not null)
             {
                 if (_provider.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
                 {
@@ -212,6 +214,7 @@ namespace System.ComponentModel.Design
                     cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
                     cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
                 }
+
                 _references = null;
                 _provider = null;
             }
@@ -222,19 +225,17 @@ namespace System.ComponentModel.Design
         /// </summary>
         IComponent IReferenceService.GetComponent(object reference)
         {
-            if (reference is null)
-            {
-                throw new ArgumentNullException(nameof(reference));
-            }
+            ArgumentNullException.ThrowIfNull(reference);
 
             EnsureReferences();
             foreach (ReferenceHolder holder in _references)
             {
-                if (object.ReferenceEquals(holder.Reference, reference))
+                if (ReferenceEquals(holder.Reference, reference))
                 {
                     return holder.SitedComponent;
                 }
             }
+
             return null;
         }
 
@@ -243,15 +244,12 @@ namespace System.ComponentModel.Design
         /// </summary>
         string IReferenceService.GetName(object reference)
         {
-            if (reference is null)
-            {
-                throw new ArgumentNullException(nameof(reference));
-            }
+            ArgumentNullException.ThrowIfNull(reference);
 
             EnsureReferences();
             foreach (ReferenceHolder holder in _references)
             {
-                if (object.ReferenceEquals(holder.Reference, reference))
+                if (ReferenceEquals(holder.Reference, reference))
                 {
                     return holder.Name;
                 }
@@ -265,10 +263,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         object IReferenceService.GetReference(string name)
         {
-            if (name is null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentNullException.ThrowIfNull(name);
 
             EnsureReferences();
             foreach (ReferenceHolder holder in _references)
@@ -278,6 +273,7 @@ namespace System.ComponentModel.Design
                     return holder.Reference;
                 }
             }
+
             return null;
         }
 
@@ -293,6 +289,7 @@ namespace System.ComponentModel.Design
             {
                 references[i] = ((ReferenceHolder)_references[i]).Reference;
             }
+
             return references;
         }
 
@@ -301,10 +298,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         object[] IReferenceService.GetReferences(Type baseType)
         {
-            if (baseType is null)
-            {
-                throw new ArgumentNullException(nameof(baseType));
-            }
+            ArgumentNullException.ThrowIfNull(baseType);
 
             EnsureReferences();
             ArrayList results = new ArrayList(_references.Count);
@@ -342,18 +336,18 @@ namespace System.ComponentModel.Design
                 _reference = reference;
                 _sitedComponent = sitedComponent;
 
-                Debug.Assert(trailingName != null, "Expected a trailing name");
-                Debug.Assert(reference != null, "Expected a reference");
+                Debug.Assert(trailingName is not null, "Expected a trailing name");
+                Debug.Assert(reference is not null, "Expected a reference");
 #if DEBUG
-                Debug.Assert(sitedComponent != null, "Expected a sited component");
-                if (sitedComponent != null)
+                Debug.Assert(sitedComponent is not null, "Expected a sited component");
+                if (sitedComponent is not null)
                 {
-                    Debug.Assert(sitedComponent.Site != null, "Sited component is not really sited: " + sitedComponent.ToString());
+                    Debug.Assert(sitedComponent.Site is not null, "Sited component is not really sited: " + sitedComponent.ToString());
                 }
 
-                if (sitedComponent != null)
+                if (sitedComponent is not null)
                 {
-                    Debug.Assert(TypeDescriptor.GetComponentName(sitedComponent) != null, "Sited component has no name: " + sitedComponent.ToString());
+                    Debug.Assert(TypeDescriptor.GetComponentName(sitedComponent) is not null, "Sited component has no name: " + sitedComponent.ToString());
                 }
 #endif // DEBUG
             }
@@ -375,10 +369,10 @@ namespace System.ComponentModel.Design
                 {
                     if (_fullName is null)
                     {
-                        if (_sitedComponent != null)
+                        if (_sitedComponent is not null)
                         {
                             string siteName = TypeDescriptor.GetComponentName(_sitedComponent);
-                            if (siteName != null)
+                            if (siteName is not null)
                             {
                                 _fullName = string.Format(CultureInfo.CurrentCulture, "{0}{1}", siteName, _trailingName);
                             }
@@ -388,18 +382,19 @@ namespace System.ComponentModel.Design
                         {
                             _fullName = string.Empty;
 #if DEBUG
-                            if (_sitedComponent != null)
+                            if (_sitedComponent is not null)
                             {
-                                Debug.Assert(_sitedComponent.Site != null, "Sited component is not really sited: " + _sitedComponent.ToString());
+                                Debug.Assert(_sitedComponent.Site is not null, "Sited component is not really sited: " + _sitedComponent.ToString());
                             }
 
-                            if (_sitedComponent != null)
+                            if (_sitedComponent is not null)
                             {
-                                Debug.Assert(TypeDescriptor.GetComponentName(_sitedComponent) != null, "Sited component has no name: " + _sitedComponent.ToString());
+                                Debug.Assert(TypeDescriptor.GetComponentName(_sitedComponent) is not null, "Sited component has no name: " + _sitedComponent.ToString());
                             }
 #endif // DEBUG
                         }
                     }
+
                     return _fullName;
                 }
             }

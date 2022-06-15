@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using Microsoft.CSharp.RuntimeBinder;
 using Xunit;
 
@@ -232,7 +231,6 @@ namespace System.Windows.Forms.Tests
         }
 #pragma warning restore IDE0044
 #pragma warning restore IDE0051
-#pragma warning disable IDE0052
 #pragma warning restore CS0169
 #pragma warning restore CA1823
     }

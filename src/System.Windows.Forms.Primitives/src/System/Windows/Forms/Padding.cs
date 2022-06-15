@@ -10,7 +10,8 @@ namespace System.Windows.Forms
 {
     [TypeConverter(typeof(PaddingConverter))]
     [Serializable] // This type is participating in resx serialization scenarios.
-    public struct Padding
+    [Runtime.CompilerServices.TypeForwardedFrom("System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
+    public struct Padding : IEquatable<Padding>
     {
         private bool _all; // Do NOT rename (binary serialization).
         private int _top; // Do NOT rename (binary serialization).
@@ -132,16 +133,22 @@ namespace System.Windows.Forms
 
         public override bool Equals(object? other)
         {
-            if (!(other is Padding otherPadding))
+            if (other is not Padding otherPadding)
             {
                 return false;
             }
 
-            return this == otherPadding;
+            return Equals(otherPadding);
         }
 
+        public bool Equals(Padding other)
+            => Left == other.Left
+                && Top == other.Top
+                && Right == other.Right
+                && Bottom == other.Bottom;
+
         /// <summary>
-        ///  Performs vector addition of two <see cref='Padding'/> objects.
+        ///  Performs vector addition of two <see cref="Padding"/> objects.
         /// </summary>
         public static Padding operator +(Padding p1, Padding p2)
         {
@@ -149,7 +156,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Contracts a <see cref='Drawing.Size'/> by another <see cref='Drawing.Size'/>.
+        ///  Contracts a <see cref="Drawing.Size"/> by another <see cref="Drawing.Size"/>.
         /// </summary>
         public static Padding operator -(Padding p1, Padding p2)
         {
@@ -157,7 +164,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Tests whether two <see cref='Padding'/> objects are identical.
+        ///  Tests whether two <see cref="Padding"/> objects are identical.
         /// </summary>
         public static bool operator ==(Padding p1, Padding p2)
         {
@@ -165,7 +172,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Tests whether two <see cref='Padding'/> objects are different.
+        ///  Tests whether two <see cref="Padding"/> objects are different.
         /// </summary>
         public static bool operator !=(Padding p1, Padding p2) => !(p1 == p2);
 

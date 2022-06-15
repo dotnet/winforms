@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.Shell32;
@@ -17,12 +14,23 @@ namespace System.Windows.Forms
     ///  a common dialog box that allows the user to specify options for saving a
     ///  file. This class cannot be inherited.
     /// </summary>
-    [
-    Designer("System.Windows.Forms.Design.SaveFileDialogDesigner, " + AssemblyRef.SystemDesign)]
-    [SRDescription(nameof(SR.DescriptionSaveFileDialog))
-    ]
-    public sealed class SaveFileDialog : FileDialog
+    [Designer("System.Windows.Forms.Design.SaveFileDialogDesigner, " + AssemblyRef.SystemDesign)]
+    [SRDescription(nameof(SR.DescriptionSaveFileDialog))]
+    public sealed partial class SaveFileDialog : FileDialog
     {
+        /// <summary>
+        ///  Gets or sets a value indicating whether the dialog box verifies if the creation of the specified file will be successful.
+        ///  If this flag is not set, the calling application must handle errors, such as denial of access, discovered when the item is created.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.SaveFileDialogCheckWriteAccess))]
+        public bool CheckWriteAccess
+        {
+            get => !GetOption((int)Comdlg32.OFN.NOTESTFILECREATE);
+            set => SetOption((int)Comdlg32.OFN.NOTESTFILECREATE, !value);
+        }
+
         /// <summary>
         ///  Gets or sets a value indicating whether the dialog box prompts the user for
         ///  permission to create a file if the user specifies a file that does not exist.
@@ -34,6 +42,18 @@ namespace System.Windows.Forms
         {
             get => GetOption((int)Comdlg32.OFN.CREATEPROMPT);
             set => SetOption((int)Comdlg32.OFN.CREATEPROMPT, value);
+        }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether the dialog box is always opened in the expanded mode.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.SaveFileDialogExpandedMode))]
+        public bool ExpandedMode
+        {
+            get => GetOption((int)FOS.DEFAULTNOMINIMODE);
+            set => SetOption((int)FOS.DEFAULTNOMINIMODE, value);
         }
 
         /// <summary>
@@ -55,16 +75,12 @@ namespace System.Windows.Forms
         public Stream OpenFile()
         {
             string filename = FileNames[0];
-            if (string.IsNullOrEmpty(filename))
-            {
-                throw new ArgumentNullException(nameof(FileName));
-            }
-
+            filename.ThrowIfNullOrEmpty();
             return new FileStream(filename, FileMode.Create, FileAccess.ReadWrite);
         }
 
         /// <summary>
-        ///  Prompts the user with a <see cref='MessageBox'/>
+        ///  Prompts the user with a <see cref="MessageBox"/>
         ///  when a file is about to be created. This method is
         ///  invoked when the CreatePrompt property is true and the specified file
         ///  does not exist. A return value of false prevents the dialog from
@@ -125,6 +141,7 @@ namespace System.Windows.Forms
         public override void Reset()
         {
             base.Reset();
+            SetOption((int)FOS.DEFAULTNOMINIMODE, true);
             SetOption((int)Comdlg32.OFN.OVERWRITEPROMPT, true);
         }
 
@@ -145,28 +162,33 @@ namespace System.Windows.Forms
             return result;
         }
 
-        private protected override string[] ProcessVistaFiles(IFileDialog dialog)
+        private protected override string[] ProcessVistaFiles(WinFormsComWrappers.FileDialogWrapper dialog)
         {
-            IFileSaveDialog saveDialog = (IFileSaveDialog)dialog;
-            dialog.GetResult(out IShellItem item);
+            dialog.GetResult(out IShellItem? item);
+            if (item is null)
+            {
+                return Array.Empty<string>();
+            }
+
             return new string[] { GetFilePathFromShellItem(item) };
         }
 
-        private protected override IFileDialog CreateVistaDialog() => new NativeFileSaveDialog();
-
-        [ComImport]
-        [Guid("84bccd23-5fde-4cdb-aea4-af64b83d78ab")]
-        [CoClass(typeof(FileSaveDialogRCW))]
-        private interface NativeFileSaveDialog : IFileSaveDialog
+        private protected override Interop.WinFormsComWrappers.FileDialogWrapper CreateVistaDialog()
         {
-        }
+            HRESULT hr = Ole32.CoCreateInstance(
+                in CLSID.FileSaveDialog,
+                IntPtr.Zero,
+                Ole32.CLSCTX.INPROC_SERVER | Ole32.CLSCTX.LOCAL_SERVER | Ole32.CLSCTX.REMOTE_SERVER,
+                in NativeMethods.ActiveX.IID_IUnknown,
+                out IntPtr lpDialogUnknownPtr);
+            if (!hr.Succeeded())
+            {
+                Marshal.ThrowExceptionForHR((int)hr);
+            }
 
-        [ComImport]
-        [ClassInterface(ClassInterfaceType.None)]
-        [TypeLibType(TypeLibTypeFlags.FCanCreate)]
-        [Guid("C0B4E2F3-BA21-4773-8DBA-335EC946EB8B")]
-        private class FileSaveDialogRCW
-        {
+            var obj = WinFormsComWrappers.Instance
+                .GetOrCreateObjectForComInstance(lpDialogUnknownPtr, CreateObjectFlags.None);
+            return (WinFormsComWrappers.FileDialogWrapper)obj;
         }
     }
 }

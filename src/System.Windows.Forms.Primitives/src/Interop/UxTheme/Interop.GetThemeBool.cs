@@ -2,15 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [DllImport(Libraries.UxTheme, ExactSpelling = true)]
-        public static extern HRESULT GetThemeBool(IntPtr hTheme, int iPartId, int iStateId, int iPropId, ref BOOL pfVal);
+        [LibraryImport(Libraries.UxTheme)]
+        public static partial HRESULT GetThemeBool(IntPtr hTheme, int iPartId, int iStateId, int iPropId, ref BOOL pfVal);
 
         public static HRESULT GetThemeBool(IHandle hTheme, int iPartId, int iStateId, int iPropId, ref BOOL pfVal)
         {

@@ -4,8 +4,6 @@
 
 #nullable disable
 
-using System.IO;
-
 namespace System.Resources
 {
     /// <summary>

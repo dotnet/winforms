@@ -7,6 +7,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 
+using static System.Windows.Forms.ItemArray;
+
 namespace System.Windows.Forms
 {
     public partial class ListBox
@@ -22,7 +24,7 @@ namespace System.Windows.Forms
 
             public ObjectCollection(ListBox owner)
             {
-                _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                _owner = owner.OrThrowIfNull();
             }
 
             /// <summary>
@@ -31,10 +33,7 @@ namespace System.Windows.Forms
             public ObjectCollection(ListBox owner, ObjectCollection value)
                 : this(owner)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 AddRange(value);
             }
@@ -45,10 +44,7 @@ namespace System.Windows.Forms
             public ObjectCollection(ListBox owner, object[] value)
                 : this(owner)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 AddRange(value);
             }
@@ -56,7 +52,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the number of items.
             /// </summary>
-            public int Count => InnerArray.GetCount(0);
+            public int Count => InnerArray.Count;
 
             /// <summary>
             ///  Internal access to the actual data store.
@@ -69,6 +65,7 @@ namespace System.Windows.Forms
                     {
                         _items = new ItemArray(_owner);
                     }
+
                     return _items;
                 }
             }
@@ -100,21 +97,19 @@ namespace System.Windows.Forms
 
             private int AddInternal(object item)
             {
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item);
 
                 int index = -1;
-                if (!_owner.sorted)
+                if (!_owner._sorted)
                 {
                     InnerArray.Add(item);
                 }
                 else
                 {
+                    Entry entry = GetEntry(item);
                     if (Count > 0)
                     {
-                        index = InnerArray.BinarySearch(item);
+                        index = InnerArray.BinarySearch(entry);
                         if (index < 0)
                         {
                             // getting the index of the first element that is larger than the search value
@@ -128,22 +123,23 @@ namespace System.Windows.Forms
                     }
 
                     Debug.Assert(index >= 0 && index <= Count, "Wrong index for insert");
-                    InnerArray.Insert(index, item);
+                    InnerArray.InsertEntry(index, entry);
                 }
+
                 bool successful = false;
 
                 try
                 {
-                    if (_owner.sorted)
+                    if (_owner._sorted)
                     {
                         if (_owner.IsHandleCreated)
                         {
                             _owner.NativeInsert(index, item);
                             _owner.UpdateMaxItemWidth(item, false);
-                            if (_owner.selectedItems != null)
+                            if (_owner._selectedItems is not null)
                             {
                                 // Sorting may throw the LB contents and the selectedItem array out of synch.
-                                _owner.selectedItems.Dirty();
+                                _owner._selectedItems.Dirty();
                             }
                         }
                     }
@@ -156,6 +152,7 @@ namespace System.Windows.Forms
                             _owner.UpdateMaxItemWidth(item, false);
                         }
                     }
+
                     successful = true;
                 }
                 finally
@@ -173,10 +170,7 @@ namespace System.Windows.Forms
 
             public void AddRange(ObjectCollection value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 _owner.CheckNoDataSource();
                 AddRangeInternal(value);
@@ -184,10 +178,7 @@ namespace System.Windows.Forms
 
             public void AddRange(object[] items)
             {
-                if (items is null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                ArgumentNullException.ThrowIfNull(items);
 
                 _owner.CheckNoDataSource();
                 AddRangeInternal(items);
@@ -195,7 +186,7 @@ namespace System.Windows.Forms
 
             internal void AddRangeInternal(ICollection items)
             {
-                Debug.Assert(items != null);
+                Debug.Assert(items is not null);
 
                 _owner.BeginUpdate();
                 try
@@ -224,12 +215,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (index < 0 || index >= InnerArray.GetCount(0))
+                    if (index < 0 || index >= InnerArray.Count)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    return InnerArray.GetItem(index, 0);
+                    return InnerArray.GetItem(index);
                 }
                 set
                 {
@@ -264,15 +255,16 @@ namespace System.Windows.Forms
                 int cnt = _owner.Items.Count;
                 for (int i = 0; i < cnt; i++)
                 {
-                    _owner.UpdateMaxItemWidth(InnerArray.GetItem(i, 0), true);
+                    _owner.UpdateMaxItemWidth(InnerArray.GetItem(i), true);
                 }
 
                 if (_owner.IsHandleCreated)
                 {
                     _owner.NativeClear();
                 }
+
                 InnerArray.Clear();
-                _owner.maxWidth = -1;
+                _owner._maxWidth = -1;
                 _owner.UpdateHorizontalExtent();
             }
 
@@ -288,29 +280,23 @@ namespace System.Windows.Forms
             /// </summary>
             public void CopyTo(object[] destination, int arrayIndex)
             {
-                if (destination is null)
-                {
-                    throw new ArgumentNullException(nameof(destination));
-                }
+                ArgumentNullException.ThrowIfNull(destination);
 
-                int count = InnerArray.GetCount(0);
+                int count = InnerArray.Count;
                 for (int i = 0; i < count; i++)
                 {
-                    destination[i + arrayIndex] = InnerArray.GetItem(i, 0);
+                    destination[i + arrayIndex] = InnerArray.GetItem(i);
                 }
             }
 
             void ICollection.CopyTo(Array destination, int index)
             {
-                if (destination is null)
-                {
-                    throw new ArgumentNullException(nameof(destination));
-                }
+                ArgumentNullException.ThrowIfNull(destination);
 
-                int count = InnerArray.GetCount(0);
+                int count = InnerArray.Count;
                 for (int i = 0; i < count; i++)
                 {
-                    destination.SetValue(InnerArray.GetItem(i, 0), i + index);
+                    destination.SetValue(InnerArray.GetItem(i), i + index);
                 }
             }
 
@@ -321,24 +307,18 @@ namespace System.Windows.Forms
 
             public int IndexOf(object value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
-                return InnerArray.IndexOf(value, 0);
+                return InnerArray.IndexOf(value);
             }
 
             int IList.IndexOf(object? value) => IndexOf(value!);
 
             internal int IndexOfIdentifier(object value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
-                return InnerArray.IndexOfIdentifier(value, 0);
+                return InnerArray.IndexOf(value);
             }
 
             /// <summary>
@@ -354,20 +334,17 @@ namespace System.Windows.Forms
             {
                 _owner.CheckNoDataSource();
 
-                if (index < 0 || index > InnerArray.GetCount(0))
+                if (index < 0 || index > InnerArray.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item);
 
                 // If the List box is sorted, then nust treat this like an add
                 // because we are going to twiddle the index anyway.
                 //
-                if (_owner.sorted)
+                if (_owner._sorted)
                 {
                     Add(item);
                 }
@@ -407,7 +384,7 @@ namespace System.Windows.Forms
             {
                 _owner.CheckNoDataSource();
 
-                int index = InnerArray.IndexOf(value, 0);
+                int index = InnerArray.IndexOf(value);
                 if (index != -1)
                 {
                     RemoveAt(index);
@@ -423,12 +400,12 @@ namespace System.Windows.Forms
             {
                 _owner.CheckNoDataSource();
 
-                if (index < 0 || index >= InnerArray.GetCount(0))
+                if (index < 0 || index >= InnerArray.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                _owner.UpdateMaxItemWidth(InnerArray.GetItem(index, 0), true);
+                _owner.UpdateMaxItemWidth(InnerArray.GetItem(index), true);
 
                 // Update InnerArray before calling NativeRemoveAt to ensure that when
                 // SelectedIndexChanged is raised (by NativeRemoveAt), InnerArray's state matches wrapped LB state.
@@ -444,17 +421,14 @@ namespace System.Windows.Forms
 
             internal void SetItemInternal(int index, object value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
-                if (index < 0 || index >= InnerArray.GetCount(0))
+                if (index < 0 || index >= InnerArray.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                _owner.UpdateMaxItemWidth(InnerArray.GetItem(index, 0), true);
+                _owner.UpdateMaxItemWidth(InnerArray.GetItem(index), true);
                 InnerArray.SetItem(index, value);
 
                 // If the native control has been created, and the display text of the new list item object
@@ -482,6 +456,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 _owner.UpdateHorizontalExtent();
             }
         }

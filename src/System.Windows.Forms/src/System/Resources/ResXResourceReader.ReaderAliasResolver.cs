@@ -23,7 +23,7 @@ namespace System.Resources
             public AssemblyName ResolveAlias(string alias)
             {
                 AssemblyName result = null;
-                if (_cachedAliases != null)
+                if (_cachedAliases is not null)
                 {
                     result = (AssemblyName)_cachedAliases[alias];
                 }
@@ -33,7 +33,7 @@ namespace System.Resources
 
             public void PushAlias(string alias, AssemblyName name)
             {
-                if (_cachedAliases != null && !string.IsNullOrEmpty(alias))
+                if (_cachedAliases is not null && !string.IsNullOrEmpty(alias))
                 {
                     _cachedAliases[alias] = name;
                 }

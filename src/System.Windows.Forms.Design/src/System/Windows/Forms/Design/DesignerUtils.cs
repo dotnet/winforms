@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Design
         public static int DEFAULTROWCOUNT = 2;
         public static int DEFAULTCOLUMNCOUNT = 2;
 
-        //size of the col/row grab handle glyphs for teh table layout panel
+        //size of the col/row grab handle glyphs for the table layout panel
         public static int RESIZEGLYPHSIZE = ScaleLogicalToDeviceUnitsX(4);
 
         //default value for Form padding if it has not been set in the designer (usability study request)
@@ -112,13 +112,14 @@ namespace System.Windows.Forms.Design
             {
                 if (s_boxImage is null)
                 {
-                    s_boxImage = new Bitmap(BOXIMAGESIZE, BOXIMAGESIZE, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                    s_boxImage = new Bitmap(BOXIMAGESIZE, BOXIMAGESIZE, PixelFormat.Format32bppPArgb);
                     using (Graphics g = Graphics.FromImage(s_boxImage))
                     {
                         g.FillRectangle(new SolidBrush(SystemColors.InactiveBorder), 0, 0, BOXIMAGESIZE, BOXIMAGESIZE);
                         g.DrawRectangle(new Pen(SystemColors.ControlDarkDark), 0, 0, BOXIMAGESIZE - 1, BOXIMAGESIZE - 1);
                     }
                 }
+
                 return s_boxImage;
             }
         }
@@ -145,6 +146,7 @@ namespace System.Windows.Forms.Design
                     s_minDragSize.Width = Math.Max(minDrag.Width, minDblClick.Width);
                     s_minDragSize.Height = Math.Max(minDrag.Height, minDblClick.Height);
                 }
+
                 return s_minDragSize;
             }
         }
@@ -229,6 +231,7 @@ namespace System.Windows.Forms.Design
             {
                 color = SystemColors.ControlLight;
             }
+
             switch (style)
             {
                 case FrameStyle.Dashed:
@@ -239,6 +242,7 @@ namespace System.Windows.Forms.Design
                     brush = new SolidBrush(color);
                     break;
             }
+
             g.FillRegion(brush, resizeBorder);
             brush.Dispose();
         }
@@ -311,6 +315,7 @@ namespace System.Windows.Forms.Design
                 GenerateSnapShotWithBitBlt(control, ref image);
                 //if we still failed - we'll just fall though, put up a border around an empty area and call it good enough
             }
+
             //set the opacity
             if (opacity < 1.0 && opacity > 0.0)
             {
@@ -341,6 +346,7 @@ namespace System.Windows.Forms.Design
                 case AdornmentType.Maximum:
                     return new Size(CONTAINERGRABHANDLESIZE, CONTAINERGRABHANDLESIZE);
             }
+
             return new Size(0, 0);
         }
 
@@ -361,6 +367,7 @@ namespace System.Windows.Forms.Design
             {
                 useSnapLines = (bool)optionValue;
             }
+
             return useSnapLines;
         }
 
@@ -385,6 +392,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return optionValue;
         }
 
@@ -428,34 +436,38 @@ namespace System.Windows.Forms.Design
         public static bool GenerateSnapShotWithWM_PRINT(Control control, ref Image image)
         {
             IntPtr hWnd = control.Handle;
-            image = new Bitmap(Math.Max(control.Width, MINCONTROLBITMAPSIZE), Math.Max(control.Height, MINCONTROLBITMAPSIZE), System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+            image = new Bitmap(Math.Max(control.Width, MINCONTROLBITMAPSIZE), Math.Max(control.Height, MINCONTROLBITMAPSIZE), PixelFormat.Format32bppPArgb);
 
-            //Have to do this BEFORE we set the testcolor.
+            // Have to do this BEFORE we set the testcolor.
             if (control.BackColor == Color.Transparent)
             {
-                using (Graphics g = Graphics.FromImage(image))
-                {
-                    g.Clear(SystemColors.Control);
-                }
+                using Graphics g = Graphics.FromImage(image);
+                g.Clear(SystemColors.Control);
             }
 
-            // To validate that the control responded to the wm_print message, we pre-populate the bitmap with a colored center pixel.  We assume that the control _did not_ respond to wm_print if these center pixel is still this value
+            //  To validate that the control responded to the wm_print message, we pre-populate the bitmap with a
+            //  colored center pixel.  We assume that the control _did not_ respond to wm_print if these center pixel
+            //  is still this value.
+
             Color testColor = Color.FromArgb(255, 252, 186, 238);
             ((Bitmap)image).SetPixel(image.Width / 2, image.Height / 2, testColor);
             using (Graphics g = Graphics.FromImage(image))
             {
                 IntPtr hDc = g.GetHdc();
-                //send the actual wm_print message
-                User32.SendMessageW(hWnd, User32.WM.PRINT, hDc, (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
+                User32.SendMessageW(
+                    hWnd,
+                    User32.WM.PRINT,
+                    hDc,
+                    (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
                 g.ReleaseHdc(hDc);
             }
 
-            //now check to see if our center pixel was cleared, if not then our wm_print failed
+            // Now check to see if our center pixel was cleared, if not then our WM_PRINT failed
             if (((Bitmap)image).GetPixel(image.Width / 2, image.Height / 2).Equals(testColor))
             {
-                //wm_print failed
                 return false;
             }
+
             return true;
         }
 
@@ -483,6 +495,7 @@ namespace System.Windows.Forms.Design
                     bounds = originalBounds;
                     break;
             }
+
             return bounds;
         }
 
@@ -518,6 +531,7 @@ namespace System.Windows.Forms.Design
                         break;
                 }
             }
+
             return bounds;
         }
 
@@ -526,25 +540,21 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static Rectangle GetBoundsForSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type)
         {
-            return GetBoundsForSelectionType(originalBounds, type, DesignerUtils.SELECTIONBORDERSIZE, SELECTIONBORDEROFFSET);
+            return GetBoundsForSelectionType(originalBounds, type, SELECTIONBORDERSIZE, SELECTIONBORDEROFFSET);
         }
 
         public static Rectangle GetBoundsForNoResizeSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type)
         {
-            return GetBoundsForSelectionType(originalBounds, type, DesignerUtils.SELECTIONBORDERSIZE, NORESIZEBORDEROFFSET);
+            return GetBoundsForSelectionType(originalBounds, type, SELECTIONBORDERSIZE, NORESIZEBORDEROFFSET);
         }
 
         /// <summary>
-        ///  Identifes where the text baseline for our control which should be based on bounds, padding, font, and textalignment.
+        ///  Identifies where the text baseline for our control which should be based on bounds, padding, font, and textalignment.
         /// </summary>
         public static int GetTextBaseline(Control ctrl, ContentAlignment alignment)
         {
             //determine the actual client area we are working in (w/padding)
             Rectangle face = ctrl.ClientRectangle;
-
-            //get the font metrics via gdi
-            int fontAscent = 0;
-            int fontHeight = 0;
 
             using Graphics g = ctrl.CreateGraphics();
             using var dc = new DeviceContextHdcScope(g, applyGraphicsState: false);
@@ -554,9 +564,10 @@ namespace System.Windows.Forms.Design
             var metrics = new Gdi32.TEXTMETRICW();
             Gdi32.GetTextMetricsW(dc, ref metrics);
 
+            //get the font metrics via gdi
             // Add the font ascent to the baseline
-            fontAscent = metrics.tmAscent + 1;
-            fontHeight = metrics.tmHeight;
+            int fontAscent = metrics.tmAscent + 1;
+            int fontHeight = metrics.tmHeight;
 
             // Now add it all up
             if ((alignment & AnyTopAlignment) != 0)
@@ -590,7 +601,7 @@ namespace System.Windows.Forms.Design
                 //snap either up or down depending on offset
                 if ((e.SnapDirections & ToolboxSnapDragDropEventArgs.SnapDirection.Top) != 0)
                 {
-                    newBounds.Y += e.Offset.Y;//snap to top - so move up our bounds
+                    newBounds.Y += e.Offset.Y; //snap to top - so move up our bounds
                 }
                 else if ((e.SnapDirections & ToolboxSnapDragDropEventArgs.SnapDirection.Bottom) != 0)
                 {
@@ -602,7 +613,7 @@ namespace System.Windows.Forms.Design
                 {
                     if ((e.SnapDirections & ToolboxSnapDragDropEventArgs.SnapDirection.Left) != 0)
                     {
-                        newBounds.X += e.Offset.X;//snap to left-
+                        newBounds.X += e.Offset.X; //snap to left-
                     }
                     else if ((e.SnapDirections & ToolboxSnapDragDropEventArgs.SnapDirection.Right) != 0)
                     {
@@ -619,7 +630,7 @@ namespace System.Windows.Forms.Design
                     }
                     else if ((e.SnapDirections & ToolboxSnapDragDropEventArgs.SnapDirection.Right) != 0)
                     {
-                        // e.Offset.X is positive when we snao to right
+                        // e.Offset.X is positive when we snap to right
                         newBounds.X -= e.Offset.X;
                     }
                 }
@@ -661,6 +672,7 @@ namespace System.Windows.Forms.Design
                 {
                     nameN = name + i.ToString(CultureInfo.InvariantCulture);
                 }
+
                 return nameN;
             }
         }
@@ -695,7 +707,7 @@ namespace System.Windows.Forms.Design
                 // by doing the pointer math
                 byte* maxAddr = (byte*)(pPixels + pixels);
 
-                // now run through the pixels only modifyng the A byte
+                // now run through the pixels only modifying the A byte
                 for (byte* addr = (byte*)(pPixels) + 3; addr < maxAddr; addr += 4)
                 {
                     // the new value is just an index into our precomputed value array from above.
@@ -728,6 +740,7 @@ namespace System.Windows.Forms.Design
                     final.Add(t);
                 }
             }
+
             return final;
         }
 
@@ -767,8 +780,7 @@ namespace System.Windows.Forms.Design
                 Debug.Assert(host != null, "No host -- we cannot copy the objects");
                 if (css != null && host != null)
                 {
-                    SerializationStore store = null;
-                    store = css.CreateStore();
+                    SerializationStore store = css.CreateStore();
                     // Get all the objects, meaning we want the children too
                     ICollection copyObjects = GetCopySelection(objects, host);
 
@@ -777,6 +789,7 @@ namespace System.Windows.Forms.Design
                     {
                         css.Serialize(store, comp);
                     }
+
                     store.Close();
                     copyObjects = css.Deserialize(store);
 
@@ -797,6 +810,7 @@ namespace System.Windows.Forms.Design
                             }
                         }
                     }
+
                     Debug.Assert(newObjects.Count == objects.Count, "Why is the count of the copied objects not the same?");
                     return newObjects;
                 }
@@ -805,6 +819,7 @@ namespace System.Windows.Forms.Design
             {
                 Cursor.Current = oldCursor;
             }
+
             return null;
         }
 
@@ -821,6 +836,7 @@ namespace System.Windows.Forms.Design
                 copySelection.Add(comp);
                 GetAssociatedComponents(comp, host, copySelection);
             }
+
             return copySelection;
         }
 
@@ -850,9 +866,7 @@ namespace System.Windows.Forms.Design
             => DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(unit) : unit;
 
         private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(IntPtr handle)
-        {
-            return (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
-        }
+            => (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
 
         /// <summary>
         ///  Modify a WinForms TreeView control to use the new Explorer style theme
@@ -860,17 +874,15 @@ namespace System.Windows.Forms.Design
         /// <param name="treeView">The tree view control to modify</param>
         public static void ApplyTreeViewThemeStyles(TreeView treeView)
         {
-            if (treeView is null)
-            {
-                throw new ArgumentNullException(nameof(treeView));
-            }
+            ArgumentNullException.ThrowIfNull(treeView);
+
             treeView.HotTracking = true;
             treeView.ShowLines = false;
             IntPtr hwnd = treeView.Handle;
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
             ComCtl32.TVS_EX exstyle = TreeView_GetExtendedStyle(hwnd);
             exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
-            User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, IntPtr.Zero, (IntPtr)exstyle);
+            User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, 0, (nint)exstyle);
         }
 
         /// <summary>
@@ -879,13 +891,15 @@ namespace System.Windows.Forms.Design
         /// <param name="listView">The list view control to modify</param>
         public static void ApplyListViewThemeStyles(ListView listView)
         {
-            if (listView is null)
-            {
-                throw new ArgumentNullException(nameof(listView));
-            }
+            ArgumentNullException.ThrowIfNull(listView);
+
             IntPtr hwnd = listView.Handle;
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
-            User32.SendMessageW(hwnd, (User32.WM)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE, (IntPtr)ComCtl32.LVS_EX.DOUBLEBUFFER, (IntPtr)ComCtl32.LVS_EX.DOUBLEBUFFER);
+            User32.SendMessageW(
+                hwnd,
+                (User32.WM)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE,
+                (nint)ComCtl32.LVS_EX.DOUBLEBUFFER,
+                (nint)ComCtl32.LVS_EX.DOUBLEBUFFER);
         }
     }
 }

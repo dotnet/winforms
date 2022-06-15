@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
@@ -16,7 +15,7 @@ namespace System.Windows.Forms
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer t_visualStyleRenderer = null;
+        private static VisualStyleRenderer? t_visualStyleRenderer = null;
         private static readonly VisualStyleElement s_textBoxElement = VisualStyleElement.TextBox.TextEdit.Normal;
 
         /// <summary>
@@ -27,7 +26,7 @@ namespace System.Windows.Forms
 
         private static void DrawBackground(Graphics g, Rectangle bounds, TextBoxState state)
         {
-            t_visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer!.DrawBackground(g, bounds);
             if (state != TextBoxState.Disabled)
             {
                 Color windowColor = t_visualStyleRenderer.GetColor(ColorProperty.FillColor);
@@ -51,7 +50,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a TextBox control.
         /// </summary>
-        public static void DrawTextBox(Graphics g, Rectangle bounds, string textBoxText, Font font, TextBoxState state)
+        public static void DrawTextBox(Graphics g, Rectangle bounds, string? textBoxText, Font? font, TextBoxState state)
         {
             DrawTextBox(g, bounds, textBoxText, font, TextFormatFlags.TextBoxControl, state);
         }
@@ -59,7 +58,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a TextBox control.
         /// </summary>
-        public static void DrawTextBox(Graphics g, Rectangle bounds, string textBoxText, Font font, Rectangle textBounds, TextBoxState state)
+        public static void DrawTextBox(Graphics g, Rectangle bounds, string? textBoxText, Font? font, Rectangle textBounds, TextBoxState state)
         {
             DrawTextBox(g, bounds, textBoxText, font, textBounds, TextFormatFlags.TextBoxControl, state);
         }
@@ -67,7 +66,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a TextBox control.
         /// </summary>
-        public static void DrawTextBox(Graphics g, Rectangle bounds, string textBoxText, Font font, TextFormatFlags flags, TextBoxState state)
+        public static void DrawTextBox(Graphics g, Rectangle bounds, string? textBoxText, Font? font, TextFormatFlags flags, TextBoxState state)
         {
             InitializeRenderer((int)state);
             Rectangle textBounds = t_visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
@@ -78,7 +77,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a TextBox control.
         /// </summary>
-        public static void DrawTextBox(Graphics g, Rectangle bounds, string textBoxText, Font font, Rectangle textBounds, TextFormatFlags flags, TextBoxState state)
+        public static void DrawTextBox(Graphics g, Rectangle bounds, string? textBoxText, Font? font, Rectangle textBounds, TextFormatFlags flags, TextBoxState state)
         {
             InitializeRenderer((int)state);
 
@@ -87,6 +86,7 @@ namespace System.Windows.Forms
             TextRenderer.DrawText(g, textBoxText, font, textBounds, textColor, flags);
         }
 
+        [MemberNotNull(nameof(t_visualStyleRenderer))]
         private static void InitializeRenderer(int state)
         {
             if (t_visualStyleRenderer is null)

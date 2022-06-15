@@ -34,7 +34,7 @@
       </trans-unit>
       <trans-unit id="propertiesLabel.Text">
         <source>&amp;Properties:</source>
-        <target state="translated">Сво&amp;йства:</target>
+        <target state="translated">&amp;Свойства:</target>
         <note />
       </trans-unit>
       <trans-unit id="removeButton.Text">

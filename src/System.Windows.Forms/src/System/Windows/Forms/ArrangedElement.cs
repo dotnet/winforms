@@ -2,37 +2,35 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Drawing;
-using System.Windows.Forms.Layout;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
     internal abstract class ArrangedElement : Component, IArrangedElement
     {
-        private Rectangle bounds = Rectangle.Empty;
-        private IArrangedElement parent;
-        private BitVector32 state;
-        private readonly PropertyStore propertyStore = new PropertyStore();  // Contains all properties that are not always set.
+        private Rectangle _bounds = Rectangle.Empty;
+        private IArrangedElement? _parent;
+        private BitVector32 _state;
+        private readonly PropertyStore _propertyStore = new PropertyStore();  // Contains all properties that are not always set.
 
-        private static readonly int stateVisible = BitVector32.CreateMask();
+        private static readonly int s_stateVisible = BitVector32.CreateMask();
 
         internal ArrangedElement()
         {
             Padding = DefaultPadding;
             Margin = DefaultMargin;
-            state[stateVisible] = true;
+            _state[s_stateVisible] = true;
         }
 
         public Rectangle Bounds
         {
             get
             {
-                return bounds;
+                return _bounds;
             }
         }
 
@@ -94,15 +92,15 @@ namespace System.Windows.Forms
             }
         }
 
-        public virtual IArrangedElement Parent
+        public virtual IArrangedElement? Parent
         {
             get
             {
-                return parent;
+                return _parent;
             }
             set
             {
-                parent = value as IArrangedElement;
+                _parent = value;
             }
         }
 
@@ -126,7 +124,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return propertyStore;
+                return _propertyStore;
             }
         }
 
@@ -134,14 +132,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return state[stateVisible];
+                return _state[s_stateVisible];
             }
             set
             {
-                if (state[stateVisible] != value)
+                if (_state[s_stateVisible] != value)
                 {
-                    state[stateVisible] = value;
-                    if (Parent != null)
+                    _state[s_stateVisible] = value;
+                    if (Parent is not null)
                     {
                         LayoutTransaction.DoLayout(Parent, this, PropertyNames.Visible);
                     }
@@ -160,7 +158,7 @@ namespace System.Windows.Forms
             return preferredSize;
         }
 
-        public virtual void PerformLayout(IArrangedElement container, string propertyName)
+        public virtual void PerformLayout(IArrangedElement container, string? propertyName)
         {
             OnLayout(new LayoutEventArgs(container, propertyName));
         }
@@ -177,18 +175,18 @@ namespace System.Windows.Forms
 
         public void SetBounds(Rectangle bounds, BoundsSpecified specified)
         {
-            // in this case the parent is telling us to refresh our bounds - dont
+            // in this case the parent is telling us to refresh our bounds - don't
             // call PerformLayout
             SetBoundsCore(bounds, specified);
         }
 
         protected virtual void SetBoundsCore(Rectangle bounds, BoundsSpecified specified)
         {
-            if (bounds != this.bounds)
+            if (bounds != _bounds)
             {
-                Rectangle oldBounds = this.bounds;
+                Rectangle oldBounds = _bounds;
 
-                this.bounds = bounds;
+                _bounds = bounds;
                 OnBoundsChanged(oldBounds, bounds);
             }
         }

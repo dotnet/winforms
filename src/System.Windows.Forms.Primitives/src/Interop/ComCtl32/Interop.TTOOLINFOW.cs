@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
@@ -57,17 +56,18 @@ internal static partial class Interop
                 _handle = handle;
             }
 
-            public unsafe IntPtr SendMessage(IHandle sender, User32.WM message, BOOL state = BOOL.FALSE)
+            public unsafe nint SendMessage(IHandle sender, User32.WM message, BOOL state = BOOL.FALSE)
             {
                 Info.cbSize = (uint)sizeof(TTOOLINFOW);
                 fixed (char* c = Text)
                 fixed (void* i = &Info)
                 {
-                    if (Text != null)
+                    if (Text is not null)
                     {
                         Info.lpszText = c;
                     }
-                    IntPtr result = User32.SendMessageW(sender, message, (IntPtr)state, (IntPtr)i);
+
+                    nint result = User32.SendMessageW(sender, message, (nint)state, (nint)i);
                     GC.KeepAlive(_handle);
                     return result;
                 }

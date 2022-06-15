@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -19,9 +17,9 @@ namespace System.Windows.Forms
         /// </summary>
         private class BitmapBinder : SerializationBinder
         {
-            // Bitmap type lives in defferent assemblies in the .NET Framework and in .NET Core.
-            // However we allow desktop content to be deserializated in Core and Core content
-            // deserialized on desktop. To support this roundtrip,
+            // Bitmap type lives in different assemblies in the .NET Framework and in .NET Core.
+            // However we allow desktop content to be deserialization in Core and Core content
+            // deserialized on desktop. To support this round trip,
             // Bitmap type identity is unified to the desktop type during serialization
             // and we use the desktop type name when filtering as well.
             private const string AllowedTypeName = "System.Drawing.Bitmap";
@@ -37,11 +35,11 @@ namespace System.Windows.Forms
             /// <param name="assemblyName"></param>
             /// <param name="typeName"></param>
             /// <returns>null - continue with the default binder.</returns>
-            public override Type BindToType(string assemblyName, string typeName)
+            public override Type? BindToType(string assemblyName, string typeName)
             {
                 if (string.CompareOrdinal(typeName, AllowedTypeName) == 0)
                 {
-                    AssemblyName nameToBind = null;
+                    AssemblyName? nameToBind = null;
                     try
                     {
                         nameToBind = new AssemblyName(assemblyName);
@@ -49,13 +47,14 @@ namespace System.Windows.Forms
                     catch
                     {
                     }
-                    if (nameToBind != null)
+
+                    if (nameToBind is not null)
                     {
                         if (string.CompareOrdinal(nameToBind.Name, AllowedAssemblyName) == 0)
                         {
-                            byte[] tokenToBind = nameToBind.GetPublicKeyToken();
-                            if ((tokenToBind != null) &&
-                                (s_allowedToken != null) &&
+                            byte[]? tokenToBind = nameToBind.GetPublicKeyToken();
+                            if ((tokenToBind is not null) &&
+                                (s_allowedToken is not null) &&
                                 (tokenToBind.Length == s_allowedToken.Length))
                             {
                                 bool block = false;
@@ -67,6 +66,7 @@ namespace System.Windows.Forms
                                         break;
                                     }
                                 }
+
                                 if (!block)
                                 {
                                     return null;
@@ -75,6 +75,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 throw new RestrictedTypeDeserializationException(SR.UnexpectedClipboardType);
             }
 
@@ -84,12 +85,12 @@ namespace System.Windows.Forms
             /// <param name="serializedType"></param>
             /// <param name="assemblyName"></param>
             /// <param name="typeName"></param>
-            public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
+            public override void BindToName(Type serializedType, out string? assemblyName, out string? typeName)
             {
                 // null strings will follow the default codepath in BinaryFormatter
                 assemblyName = null;
                 typeName = null;
-                if (serializedType != null && !serializedType.Equals(typeof(string)) && !serializedType.Equals(typeof(Bitmap)))
+                if (serializedType is not null && !serializedType.Equals(typeof(string)) && !serializedType.Equals(typeof(Bitmap)))
                 {
                     throw new SerializationException(string.Format(SR.UnexpectedTypeForClipboardFormat, serializedType.FullName));
                 }

@@ -63,10 +63,7 @@ namespace System.Windows.Forms
         /// <param name="handle">The window handle of the window to subclass.</param>
         public WindowSubclassHandler(IntPtr handle)
         {
-            if (handle == IntPtr.Zero)
-                throw new ArgumentNullException(nameof(handle));
-
-            _handle = handle;
+            _handle = handle.OrThrowIfZero();
 
             // Create a delegate for our window procedure and get a function
             // pointer for it.
@@ -92,6 +89,7 @@ namespace System.Windows.Forms
             {
                 throw new ObjectDisposedException(nameof(WindowSubclassHandler));
             }
+
             if (_opened)
             {
                 throw new InvalidOperationException();
@@ -180,7 +178,7 @@ namespace System.Windows.Forms
             }
 
             // We cannot do anything from the finalizer thread since we have
-            // resoures that must only be accessed from the GUI thread.
+            // resources that must only be accessed from the GUI thread.
             if (disposing && _opened)
             {
                 // Check if the current window procedure is the correct one.
@@ -229,12 +227,12 @@ namespace System.Windows.Forms
             // Call the original window procedure to process the message.
             if (_originalWindowProc != IntPtr.Zero)
             {
-                m.Result = User32.CallWindowProcW(
+                m.ResultInternal = User32.CallWindowProcW(
                     _originalWindowProc,
                     m.HWnd,
-                    (User32.WM)m.Msg,
-                    m.WParam,
-                    m.LParam);
+                    m.MsgInternal,
+                    m.WParamInternal,
+                    m.LParamInternal);
             }
         }
 
@@ -280,7 +278,7 @@ namespace System.Windows.Forms
                 HandleWndProcException(ex);
             }
 
-            return m.Result;
+            return m.ResultInternal;
         }
     }
 }

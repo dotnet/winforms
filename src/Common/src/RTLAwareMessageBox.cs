@@ -23,6 +23,7 @@ namespace System.Windows.Forms
             {
                 options |= (MessageBoxOptions.RightAlign | MessageBoxOptions.RtlReading);
             }
+
             return MessageBox.Show(owner, text, caption, buttons, icon, defaultButton, options);
         }
 

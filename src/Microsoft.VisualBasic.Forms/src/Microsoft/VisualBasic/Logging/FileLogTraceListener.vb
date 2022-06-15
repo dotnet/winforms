@@ -8,7 +8,6 @@ Option Strict On
 Imports System.ComponentModel
 Imports System.Globalization
 Imports System.IO
-Imports System.Security.Permissions
 Imports System.Text
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
@@ -211,7 +210,7 @@ Namespace Microsoft.VisualBasic.Logging
                 ' Test the file name. This will throw if the name is invalid.
                 Path.GetFullPath(value)
 
-                If String.Compare(value, _baseFileName, StringComparison.OrdinalIgnoreCase) <> 0 Then
+                If Not String.Equals(value, _baseFileName, StringComparison.OrdinalIgnoreCase) Then
                     CloseCurrentStream()
                     _baseFileName = value
                 End If
@@ -233,10 +232,6 @@ Namespace Microsoft.VisualBasic.Logging
 
                 ' We shouldn't use fields for demands so we use a local variable
                 Dim returnPath As String = _fullFileName
-#Disable Warning BC40000 ' Type or member is obsolete
-                Dim filePermission As New FileIOPermission(FileIOPermissionAccess.PathDiscovery, returnPath)
-#Enable Warning BC40000 ' Type or member is obsolete
-                filePermission.Demand()
 
                 Return returnPath
             End Get
@@ -373,10 +368,6 @@ Namespace Microsoft.VisualBasic.Logging
                 End If
 
                 Dim fileName As String = Path.GetFullPath(_customLocation)
-#Disable Warning BC40000 ' Type or member is obsolete
-                Dim filePermission As New FileIOPermission(FileIOPermissionAccess.PathDiscovery, fileName)
-#Enable Warning BC40000 ' Type or member is obsolete
-                filePermission.Demand()
                 Return fileName
             End Get
             Set(value As String)
@@ -390,7 +381,7 @@ Namespace Microsoft.VisualBasic.Logging
 
                 ' If we're using custom location and the value is changing we need to
                 ' close the stream
-                If Me.Location = LogFileLocation.Custom And String.Compare(tempPath, _customLocation, StringComparison.OrdinalIgnoreCase) <> 0 Then
+                If Me.Location = LogFileLocation.Custom And Not String.Equals(tempPath, _customLocation, StringComparison.OrdinalIgnoreCase) Then
                     CloseCurrentStream()
                 End If
 
@@ -725,12 +716,6 @@ Namespace Microsoft.VisualBasic.Logging
                             refStream = Nothing
                         Else
                             If Append Then
-                                ' We are handing off an already existing stream, so we need to make sure the caller has permissions to write to this stream
-#Disable Warning BC40000 ' Type or member is obsolete
-                                Dim filePermission As New FileIOPermission(FileIOPermissionAccess.Write, fileName)
-#Enable Warning BC40000 ' Type or member is obsolete
-                                filePermission.Demand()
-
                                 refStream.AddReference()
                                 _fullFileName = fileName
                                 Return refStream
@@ -879,11 +864,6 @@ Namespace Microsoft.VisualBasic.Logging
             Dim TotalUserSpace As Long
             Dim TotalFreeSpace As Long
 
-#Disable Warning BC40000 ' Type or member is obsolete
-            Dim discoveryPermission As New FileIOPermission(FileIOPermissionAccess.PathDiscovery, PathName)
-#Enable Warning BC40000 ' Type or member is obsolete
-            discoveryPermission.Demand()
-
             If UnsafeNativeMethods.GetDiskFreeSpaceEx(PathName, FreeUserSpace, TotalUserSpace, TotalFreeSpace) Then
                 If FreeUserSpace > -1 Then
                     Return FreeUserSpace
@@ -947,17 +927,13 @@ Namespace Microsoft.VisualBasic.Logging
         Private Sub DemandWritePermission()
             Debug.Assert(Not String.IsNullOrWhiteSpace(Path.GetDirectoryName(LogFileName)), "The log directory shouldn't be empty.")
             Dim fileName As String = Path.GetDirectoryName(LogFileName)
-#Disable Warning BC40000 ' Type or member is obsolete
-            Dim filePermission As New FileIOPermission(FileIOPermissionAccess.Write, fileName)
-#Enable Warning BC40000 ' Type or member is obsolete
-            filePermission.Demand()
         End Sub
 
         ''' <summary>
         ''' Validates that the value being passed as an LogFileLocation enum is a legal value
         ''' </summary>
         ''' <param name="value"></param>
-        Private Sub ValidateLogFileLocationEnumValue(value As LogFileLocation, paramName As String)
+        Private Shared Sub ValidateLogFileLocationEnumValue(value As LogFileLocation, paramName As String)
             If value < LogFileLocation.TempDirectory OrElse value > LogFileLocation.Custom Then
                 Throw New InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(LogFileLocation))
             End If
@@ -967,7 +943,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Validates that the value being passed as an DiskSpaceExhaustedOption enum is a legal value
         ''' </summary>
         ''' <param name="value"></param>
-        Private Sub ValidateDiskSpaceExhaustedOptionEnumValue(value As DiskSpaceExhaustedOption, paramName As String)
+        Private Shared Sub ValidateDiskSpaceExhaustedOptionEnumValue(value As DiskSpaceExhaustedOption, paramName As String)
             If value < DiskSpaceExhaustedOption.ThrowException OrElse value > DiskSpaceExhaustedOption.DiscardMessages Then
                 Throw New InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(DiskSpaceExhaustedOption))
             End If
@@ -977,7 +953,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Validates that the value being passed as an LogFileCreationScheduleOption enum is a legal value
         ''' </summary>
         ''' <param name="value"></param>
-        Private Sub ValidateLogFileCreationScheduleOptionEnumValue(value As LogFileCreationScheduleOption, paramName As String)
+        Private Shared Sub ValidateLogFileCreationScheduleOptionEnumValue(value As LogFileCreationScheduleOption, paramName As String)
             If value < LogFileCreationScheduleOption.None OrElse value > LogFileCreationScheduleOption.Weekly Then
                 Throw New InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(LogFileCreationScheduleOption))
             End If

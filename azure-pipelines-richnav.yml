@@ -1,0 +1,30 @@
+trigger:
+- master
+- main
+
+stages:
+- stage: build
+  displayName: Build
+  jobs:
+  - template: /eng/common/templates/jobs/jobs.yml
+    parameters:
+      enableMicrobuild: true
+      enableTelemetry: true
+
+      jobs:
+      - job: Windows
+        enableRichCodeNavigation: true
+        richCodeNavigationEnvironment: 'production'
+        pool:
+          name: NetCore1ESPool-Public
+          demands: ImageOverride -equals Build.Windows.10.Amd64.VS2019.Open
+
+        steps:
+        - checkout: self
+          clean: true
+
+        - script: eng\cibuild.cmd
+            -restore
+            -build
+            -configuration Debug
+          displayName: Build

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -24,16 +22,16 @@ namespace System.Windows.Forms
         private static readonly object s_formattingEnabledChangedEvent = new object();
         private static readonly object s_formatEvent = new object();
 
-        private object _dataSource;
-        private CurrencyManager _dataManager;
+        private object? _dataSource;
+        private CurrencyManager? _dataManager;
         private BindingMemberInfo _displayMember;
         private BindingMemberInfo _valueMember;
 
         private string _formatString = string.Empty;
-        private IFormatProvider _formatInfo;
+        private IFormatProvider? _formatInfo;
         private bool _formattingEnabled;
-        private TypeConverter _displayMemberConverter;
-        private static TypeConverter _stringTypeConverter;
+        private TypeConverter? _displayMemberConverter;
+        private static TypeConverter? _stringTypeConverter;
 
         private bool _isDataSourceInitialized;
         private bool _isDataSourceInitEventHooked;
@@ -48,12 +46,12 @@ namespace System.Windows.Forms
         [RefreshProperties(RefreshProperties.Repaint)]
         [AttributeProvider(typeof(IListSource))]
         [SRDescription(nameof(SR.ListControlDataSourceDescr))]
-        public object DataSource
+        public object? DataSource
         {
             get => _dataSource;
             set
             {
-                if (value != null && !(value is IList || value is IListSource))
+                if (value is not null && !(value is IList || value is IListSource))
                 {
                     throw new ArgumentException(SR.BadDataSourceForComplexBinding, nameof(value));
                 }
@@ -79,6 +77,7 @@ namespace System.Windows.Forms
                     // the ListControl should also eat the exception - this is the RTM behavior and doing anything else is a breaking change
                     DisplayMember = string.Empty;
                 }
+
                 if (value is null)
                 {
                     DisplayMember = string.Empty;
@@ -88,13 +87,13 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ListControlOnDataSourceChangedDescr))]
-        public event EventHandler DataSourceChanged
+        public event EventHandler? DataSourceChanged
         {
             add => Events.AddHandler(s_dataSourceChangedEvent, value);
             remove => Events.RemoveHandler(s_dataSourceChangedEvent, value);
         }
 
-        protected CurrencyManager DataManager => _dataManager;
+        protected CurrencyManager? DataManager => _dataManager;
 
         /// <summary>
         ///  If the ListBox contains objects that support properties, this indicates
@@ -124,7 +123,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ListControlOnDisplayMemberChangedDescr))]
-        public event EventHandler DisplayMemberChanged
+        public event EventHandler? DisplayMemberChanged
         {
             add => Events.AddHandler(s_displayMemberChangedEvent, value);
             remove => Events.RemoveHandler(s_displayMemberChangedEvent, value);
@@ -133,17 +132,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Cached type converter of the property associated with the display member
         /// </summary>
-        private TypeConverter DisplayMemberConverter
+        private TypeConverter? DisplayMemberConverter
         {
             get
             {
                 if (_displayMemberConverter is null)
                 {
-                    PropertyDescriptorCollection props = DataManager?.GetItemProperties();
-                    if (props != null)
+                    PropertyDescriptorCollection? props = DataManager?.GetItemProperties();
+                    if (props is not null)
                     {
-                        PropertyDescriptor displayMemberProperty = props.Find(_displayMember.BindingField, true);
-                        if (displayMemberProperty != null)
+                        PropertyDescriptor? displayMemberProperty = props.Find(_displayMember.BindingField, true);
+                        if (displayMemberProperty is not null)
                         {
                             _displayMemberConverter = displayMemberProperty.Converter;
                         }
@@ -156,7 +155,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ListControlFormatDescr))]
-        public event ListControlConvertEventHandler Format
+        public event ListControlConvertEventHandler? Format
         {
             add
             {
@@ -173,7 +172,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DefaultValue(null)]
-        public IFormatProvider FormatInfo
+        public IFormatProvider? FormatInfo
         {
             get => _formatInfo;
             set
@@ -191,7 +190,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ListControlFormatInfoChangedDescr))]
-        public event EventHandler FormatInfoChanged
+        public event EventHandler? FormatInfoChanged
         {
             add => Events.AddHandler(s_formatInfoChangedEvent, value);
             remove => Events.RemoveHandler(s_formatInfoChangedEvent, value);
@@ -222,7 +221,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ListControlFormatStringChangedDescr))]
-        public event EventHandler FormatStringChanged
+        public event EventHandler? FormatStringChanged
         {
             add => Events.AddHandler(s_formatStringChangedEvent, value);
             remove => Events.RemoveHandler(s_formatStringChangedEvent, value);
@@ -246,7 +245,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ListControlFormattingEnabledChangedDescr))]
-        public event EventHandler FormattingEnabledChanged
+        public event EventHandler? FormattingEnabledChanged
         {
             add => Events.AddHandler(s_formattingEnabledChangedEvent, value);
             remove => Events.RemoveHandler(s_formattingEnabledChangedEvent, value);
@@ -254,7 +253,7 @@ namespace System.Windows.Forms
 
         private static bool BindingMemberInfoInDataManager(CurrencyManager dataManager, BindingMemberInfo bindingMemberInfo)
         {
-            Debug.Assert(dataManager != null);
+            Debug.Assert(dataManager is not null);
 
             PropertyDescriptorCollection props = dataManager.GetItemProperties();
 
@@ -264,6 +263,7 @@ namespace System.Windows.Forms
                 {
                     continue;
                 }
+
                 if (props[i].Name.Equals(bindingMemberInfo.BindingField))
                 {
                     return true;
@@ -276,6 +276,7 @@ namespace System.Windows.Forms
                 {
                     continue;
                 }
+
                 if (string.Equals(props[i].Name, bindingMemberInfo.BindingField, StringComparison.CurrentCultureIgnoreCase))
                 {
                     return true;
@@ -311,7 +312,7 @@ namespace System.Windows.Forms
 
                     // See if the valueMember is a member of
                     // the properties in the dataManager
-                    if (DataManager != null && !string.IsNullOrEmpty(value))
+                    if (DataManager is not null && !string.IsNullOrEmpty(value))
                     {
                         if (!BindingMemberInfoInDataManager(DataManager, newValueMember))
                         {
@@ -328,7 +329,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ListControlOnValueMemberChangedDescr))]
-        public event EventHandler ValueMemberChanged
+        public event EventHandler? ValueMemberChanged
         {
             add => Events.AddHandler(s_valueMemberChangedEvent, value);
             remove => Events.RemoveHandler(s_valueMemberChangedEvent, value);
@@ -347,11 +348,11 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ListControlSelectedValueDescr))]
         [Bindable(true)]
-        public object SelectedValue
+        public object? SelectedValue
         {
             get
             {
-                if (SelectedIndex != -1 && _dataManager != null)
+                if (SelectedIndex != -1 && _dataManager is not null)
                 {
                     object currentItem = _dataManager[SelectedIndex];
                     return FilterItemOnProperty(currentItem, _valueMember.BindingField);
@@ -361,7 +362,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (_dataManager != null)
+                if (_dataManager is not null)
                 {
                     string propertyName = _valueMember.BindingField;
                     // We can't set the SelectedValue property when the listManager does not
@@ -372,7 +373,7 @@ namespace System.Windows.Forms
                     }
 
                     PropertyDescriptorCollection props = _dataManager.GetItemProperties();
-                    PropertyDescriptor property = props.Find(propertyName, true);
+                    PropertyDescriptor? property = props.Find(propertyName, true);
                     int index = _dataManager.Find(property, value, true);
                     SelectedIndex = index;
                 }
@@ -381,15 +382,15 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ListControlOnSelectedValueChangedDescr))]
-        public event EventHandler SelectedValueChanged
+        public event EventHandler? SelectedValueChanged
         {
             add => Events.AddHandler(s_selectedValueChangedEvent, value);
             remove => Events.RemoveHandler(s_selectedValueChangedEvent, value);
         }
 
-        private void DataManager_PositionChanged(object sender, EventArgs e)
+        private void DataManager_PositionChanged(object? sender, EventArgs e)
         {
-            if (DataManager != null)
+            if (_dataManager is not null)
             {
                 if (AllowSelection)
                 {
@@ -398,17 +399,17 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DataManager_ItemChanged(object sender, ItemChangedEventArgs e)
+        private void DataManager_ItemChanged(object? sender, ItemChangedEventArgs e)
         {
             // Note this is being called internally with a null event.
-            if (_dataManager != null)
+            if (_dataManager is not null)
             {
                 if (e.Index == -1)
                 {
                     SetItemsCore(_dataManager.List);
                     if (AllowSelection)
                     {
-                        SelectedIndex = DataManager.Position;
+                        SelectedIndex = _dataManager.Position;
                     }
                 }
                 else
@@ -418,20 +419,20 @@ namespace System.Windows.Forms
             }
         }
 
-        protected object FilterItemOnProperty(object item)
+        protected object? FilterItemOnProperty(object? item)
         {
             return FilterItemOnProperty(item, _displayMember.BindingField);
         }
 
-        protected object FilterItemOnProperty(object item, string field)
+        protected object? FilterItemOnProperty(object? item, string? field)
         {
-            if (item != null && !string.IsNullOrEmpty(field))
+            if (item is not null && !string.IsNullOrEmpty(field))
             {
                 try
                 {
                     // if we have a dataSource, then use that to display the string
-                    PropertyDescriptor descriptor;
-                    if (DataManager != null)
+                    PropertyDescriptor? descriptor;
+                    if (DataManager is not null)
                     {
                         descriptor = DataManager.GetItemProperties().Find(field, true);
                     }
@@ -439,7 +440,8 @@ namespace System.Windows.Forms
                     {
                         descriptor = TypeDescriptor.GetProperties(item).Find(field, true);
                     }
-                    if (descriptor != null)
+
+                    if (descriptor is not null)
                     {
                         item = descriptor.GetValue(item);
                     }
@@ -458,23 +460,25 @@ namespace System.Windows.Forms
         /// </remarks>
         private protected bool BindingFieldEmpty => _displayMember.BindingField.Length == 0;
 
-        private protected int FindStringInternal(string str, IList items, int startIndex, bool exact, bool ignoreCase)
+        private protected int FindStringInternal(string? str, IList? items, int startIndex, bool exact, bool ignoreCase)
         {
             if (str is null)
             {
                 return -1;
             }
+
             if (items is null || items.Count == 0)
             {
                 return -1;
             }
+
             if (startIndex < -1 || startIndex >= items.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(startIndex));
             }
 
             // Start from the start index and wrap around until we find the string
-            // in question. Use a separate counter to ensure that we arent cycling through the list infinitely.
+            // in question. Use a separate counter to ensure that we aren't cycling through the list infinitely.
             int numberOfTimesThroughLoop = 0;
 
             // this API is really Find NEXT String...
@@ -501,7 +505,7 @@ namespace System.Windows.Forms
             return -1;
         }
 
-        public string GetItemText(object item)
+        public string? GetItemText(object? item)
         {
             if (!_formattingEnabled)
             {
@@ -519,7 +523,7 @@ namespace System.Windows.Forms
                 return Convert.ToString(item, CultureInfo.CurrentCulture);
             }
 
-            object filteredItem = FilterItemOnProperty(item, _displayMember.BindingField);
+            object? filteredItem = FilterItemOnProperty(item, _displayMember.BindingField);
 
             // First try the OnFormat event
             var e = new ListControlConvertEventArgs(filteredItem, typeof(string), item);
@@ -534,6 +538,7 @@ namespace System.Windows.Forms
             {
                 _stringTypeConverter = TypeDescriptor.GetConverter(typeof(string));
             }
+
             try
             {
                 return (string)Formatter.FormatObject(filteredItem, typeof(string), DisplayMemberConverter, _stringTypeConverter, _formatString, _formatInfo, null, DBNull.Value);
@@ -575,37 +580,37 @@ namespace System.Windows.Forms
 
         protected virtual void OnDataSourceChanged(EventArgs e)
         {
-            EventHandler eh = Events[s_dataSourceChangedEvent] as EventHandler;
+            EventHandler? eh = Events[s_dataSourceChangedEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
 
         protected virtual void OnDisplayMemberChanged(EventArgs e)
         {
-            EventHandler eh = Events[s_displayMemberChangedEvent] as EventHandler;
+            EventHandler? eh = Events[s_displayMemberChangedEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
 
         protected virtual void OnFormat(ListControlConvertEventArgs e)
         {
-            ListControlConvertEventHandler eh = Events[s_formatEvent] as ListControlConvertEventHandler;
+            ListControlConvertEventHandler? eh = Events[s_formatEvent] as ListControlConvertEventHandler;
             eh?.Invoke(this, e);
         }
 
         protected virtual void OnFormatInfoChanged(EventArgs e)
         {
-            EventHandler eh = Events[s_formatInfoChangedEvent] as EventHandler;
+            EventHandler? eh = Events[s_formatInfoChangedEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
 
         protected virtual void OnFormatStringChanged(EventArgs e)
         {
-            EventHandler eh = Events[s_formatStringChangedEvent] as EventHandler;
+            EventHandler? eh = Events[s_formatStringChangedEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
 
         protected virtual void OnFormattingEnabledChanged(EventArgs e)
         {
-            EventHandler eh = Events[s_formattingEnabledChangedEvent] as EventHandler;
+            EventHandler? eh = Events[s_formattingEnabledChangedEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
 
@@ -623,13 +628,13 @@ namespace System.Windows.Forms
 
         protected virtual void OnValueMemberChanged(EventArgs e)
         {
-            EventHandler eh = Events[s_valueMemberChangedEvent] as EventHandler;
+            EventHandler? eh = Events[s_valueMemberChangedEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
 
         protected virtual void OnSelectedValueChanged(EventArgs e)
         {
-            EventHandler eh = Events[s_selectedValueChangedEvent] as EventHandler;
+            EventHandler? eh = Events[s_selectedValueChangedEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
 
@@ -639,17 +644,17 @@ namespace System.Windows.Forms
         {
         }
 
-        private void DataSourceDisposed(object sender, EventArgs e)
+        private void DataSourceDisposed(object? sender, EventArgs e)
         {
             SetDataConnection(null, new BindingMemberInfo(string.Empty), true);
         }
 
-        private void DataSourceInitialized(object sender, EventArgs e)
+        private void DataSourceInitialized(object? sender, EventArgs e)
         {
             SetDataConnection(_dataSource, _displayMember, true);
         }
 
-        private void SetDataConnection(object newDataSource, BindingMemberInfo newDisplayMember, bool force)
+        private void SetDataConnection(object? newDataSource, BindingMemberInfo newDisplayMember, bool force)
         {
             bool dataSourceChanged = _dataSource != newDataSource;
             bool displayMemberChanged = !_displayMember.Equals(newDisplayMember);
@@ -658,12 +663,13 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             try
             {
                 if (force || dataSourceChanged || displayMemberChanged)
                 {
                     _inSetDataConnection = true;
-                    IList currentList = DataManager?.List;
+                    IList? currentList = DataManager?.List;
                     bool currentManagerIsNull = DataManager is null;
 
                     UnwireDataSource();
@@ -678,15 +684,15 @@ namespace System.Windows.Forms
                     // skip this step for now, and try again later (once the data source has fired its Initialized event).
                     if (_isDataSourceInitialized)
                     {
-                        CurrencyManager newDataManager = null;
-                        if (newDataSource != null && BindingContext != null && newDataSource != Convert.DBNull)
+                        CurrencyManager? newDataManager = null;
+                        if (newDataSource is not null && BindingContext is not null && newDataSource != Convert.DBNull)
                         {
                             newDataManager = (CurrencyManager)BindingContext[newDataSource, newDisplayMember.BindingPath];
                         }
 
                         if (_dataManager != newDataManager)
                         {
-                            if (_dataManager != null)
+                            if (_dataManager is not null)
                             {
                                 _dataManager.ItemChanged -= new ItemChangedEventHandler(DataManager_ItemChanged);
                                 _dataManager.PositionChanged -= new EventHandler(DataManager_PositionChanged);
@@ -694,7 +700,7 @@ namespace System.Windows.Forms
 
                             _dataManager = newDataManager;
 
-                            if (_dataManager != null)
+                            if (_dataManager is not null)
                             {
                                 _dataManager.ItemChanged += new ItemChangedEventHandler(DataManager_ItemChanged);
                                 _dataManager.PositionChanged += new EventHandler(DataManager_PositionChanged);
@@ -704,7 +710,7 @@ namespace System.Windows.Forms
                         // See if the BindingField in the newDisplayMember is valid
                         // The same thing if dataSource Changed
                         // "" is a good value for displayMember
-                        if (_dataManager != null && (displayMemberChanged || dataSourceChanged) && !string.IsNullOrEmpty(_displayMember.BindingMember))
+                        if (_dataManager is not null && (displayMemberChanged || dataSourceChanged) && !string.IsNullOrEmpty(_displayMember.BindingMember))
                         {
                             if (!BindingMemberInfoInDataManager(_dataManager, _displayMember))
                             {
@@ -712,12 +718,12 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        if (_dataManager != null && (dataSourceChanged || displayMemberChanged || force))
+                        if (_dataManager is not null && (dataSourceChanged || displayMemberChanged || force))
                         {
                             // If we force a new data manager, then change the items in the list control
                             // only if the list changed or if we go from a null dataManager to a full fledged one
                             // or if the DisplayMember changed
-                            if (displayMemberChanged || (force && (currentList != DataManager.List || currentManagerIsNull)))
+                            if (displayMemberChanged || (force && (currentList != _dataManager.List || currentManagerIsNull)))
                             {
                                 DataManager_ItemChanged(_dataManager, new ItemChangedEventArgs(-1));
                             }

@@ -194,7 +194,7 @@
       </trans-unit>
       <trans-unit id="AccessibleActionDoubleClick">
         <source>Double Click</source>
-        <target state="new">Double Click</target>
+        <target state="translated">Doppelklick</target>
         <note />
       </trans-unit>
       <trans-unit id="AccessibleActionExpand">
@@ -215,6 +215,11 @@
       <trans-unit id="AccessibleObjectLiveRegionNotSupported">
         <source>The corresponding UI element is not a live region.</source>
         <target state="translated">Das entsprechende Element der Benutzeroberfläche ist kein dynamischer Bereich.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
+        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
+        <target state="translated">{0} unterstützt {1} Eigenschaft nicht. Sie muss in der abgeleiteten Klasse überschrieben werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="AddDifferentThreads">
@@ -677,6 +682,21 @@
         <target state="translated">Unbehandelter VT: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
+        <source>Go to next time frame</source>
+        <target state="translated">Zum nächsten Zeitrahmen wechseln</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
+        <source>Go to previous time frame</source>
+        <target state="translated">Zum vorherigen Zeitrahmen wechseln</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
+        <source>Go to and select today's date</source>
+        <target state="translated">Zum aktuellen Datum wechseln und auswählen</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CancelCaption">
         <source>Cancel</source>
         <target state="translated">Abbrechen</target>
@@ -754,7 +774,7 @@
       </trans-unit>
       <trans-unit id="CatDragDrop">
         <source>Drag Drop</source>
-        <target state="translated">Drag &amp; Drop</target>
+        <target state="translated">Drag &amp;amp; Drop</target>
         <note />
       </trans-unit>
       <trans-unit id="CatFocus">
@@ -800,6 +820,11 @@
       <trans-unit id="CatWindowStyle">
         <source>Window Style</source>
         <target state="translated">Fensterstil</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CategoryPropertyGridLocalizedControlType">
+        <source>PropertyGrid category</source>
+        <target state="translated">Kategorie „PropertyGrid“</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckBoxAppearanceDescr">
@@ -1112,6 +1137,16 @@
         <target state="translated">{0} ausgewählt</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonCloseName">
+        <source>Close</source>
+        <target state="translated">Schließen</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonOpenName">
+        <source>Open</source>
+        <target state="translated">Öffnen</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">Die neue Befehls-ID kann nicht zugeordnet werden.</target>
@@ -1217,7 +1252,7 @@
         <target state="translated">Das letzte Steuerelement, das die Anzeige dieser Kontextmenüleiste verursacht hat.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">Das zugreifbare Objekt des Steuerelements befindet sich in einem ungültigen Zustand.</target>
         <note />
@@ -1649,7 +1684,7 @@
       </trans-unit>
       <trans-unit id="ControlOnDragDropDescr">
         <source>Occurs when a drag-and-drop operation is completed.</source>
-        <target state="translated">Tritt auf, wenn ein Drag &amp; Drop-Vorgang abgeschlossen wurde.</target>
+        <target state="translated">Tritt auf, wenn ein Drag &amp;amp; Drop-Vorgang abgeschlossen wurde.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnDragEnterDescr">
@@ -1829,7 +1864,7 @@
       </trans-unit>
       <trans-unit id="ControlOnQueryContinueDragDescr">
         <source>Occurs when the mouse drags an item. The system requests whether the drag-and-drop operation should be allowed to continue.</source>
-        <target state="translated">Tritt ein, wenn die Maus ein Element zieht. Das System bestimmt, ob der Drag &amp; Drop-Vorgang fortgeführt werden darf.</target>
+        <target state="translated">Tritt ein, wenn die Maus ein Element zieht. Das System bestimmt, ob der Drag &amp;amp; Drop-Vorgang fortgeführt werden darf.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnResizeBeginDescr">
@@ -2037,6 +2072,16 @@
         <target state="translated">Die Größe des Steuerelements, wenn die Bildschirmgröße unendlich wäre.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlsCollectionShouldNotBeEmptyInGetNextControl">
+        <source>{0} collection shouldn't be empty for {1}.</source>
+        <target state="translated">{0} Sammlung sollte für {1} nicht leer sein.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlsPropertyNotSetInGetNextControl">
+        <source>{0} property should be set for {1}.</source>
+        <target state="translated">{0} Eigenschaft sollte für {1} festgelegt werden.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CurrencyManagerCantAddNew">
         <source>The list must be an IBindingList to AddNew.</source>
         <target state="translated">Die Liste muss eine IBindingList für AddNew sein.</target>
@@ -2210,6 +2255,16 @@
       <trans-unit id="DataGridViewCell_ValueTypeNull">
         <source>ValueType property of a cell in a grid cannot be null.</source>
         <target state="translated">Die ValueType-Eigenschaft einer Zelle in einem Raster kann nicht NULL sein.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellCheckedStateDescription">
+        <source>{0} check box checked</source>
+        <target state="translated">Das Kontrollkästchen "{0}" ist aktiviert.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
+        <source>{0} check box unchecked</source>
+        <target state="translated">Das Kontrollkästchen "{0}" ist deaktiviert.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardChecked">
@@ -3699,6 +3754,11 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
         <target state="translated">Gibt an, ob der Benutzer die Zellen des DataGridView-Steuerelements bearbeiten kann.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridView_RowAddedNotification">
+        <source>Row {0} is added</source>
+        <target state="translated">Zeile "{0}" hinzugefügt</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
         <source>Row provided already belongs to a DataGridView control.</source>
         <target state="translated">Die angegebene Zeile gehört bereits zu einem DataGridView-Steuerelement.</target>
@@ -4219,11 +4279,6 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
         <target state="translated">Bearbeiten</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -4539,6 +4594,11 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
         <target state="translated">Fehler bei der DragDrop-Registrierung</target>
         <note />
       </trans-unit>
+      <trans-unit id="EditDefaultAccessibleName">
+        <source>Spinner</source>
+        <target state="translated">Spinner</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorBadInputLanguage">
         <source>inputLanguage is not recognized by the system.</source>
         <target state="translated">Die inputLanguage wird vom System nicht erkannt.</target>
@@ -4729,7 +4789,7 @@ anstelle dieses Dialogfelds finden Sie am Ende dieser Meldung.
         <target state="translated">Geladene Assemblys</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4738,7 +4798,7 @@ anstelle dieses Dialogfelds finden Sie am Ende dieser Meldung.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -4886,6 +4946,11 @@ Wenn Sie auf "Weiter" klicken, ignoriert die Anwendung den Fehler und setzt den 
         <target state="translated">Steuert, ob das Dialogfeld sicherstellt, dass Dateinamen keine ungültigen Zeichen oder Sequenzen enthalten.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogAddToRecentDescr">
+        <source>Controls whether to add the file being opened or saved to the recent list.</source>
+        <target state="translated">Steuert, ob die Datei, die geöffnet oder gespeichert wird, zur Liste zuletzt verwendeten Elemente hinzugefügt wird.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogBufferTooSmall">
         <source>Too many files selected. Select fewer files and try again.</source>
         <target state="translated">Zu viele Dateien ausgewählt. Wählen Sie weniger Dateien aus, und wiederholen Sie den Vorgang.</target>
@@ -4920,11 +4985,26 @@ Verify that the correct file name was given.</source>
         <target state="translated">Ungültiger Filterindex.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogOkRequiresInteractionDescr">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="translated">Steuert, ob die Schaltfläche „OK“ des Dialogfelds deaktiviert ist, bis der Benutzer in der Ansicht navigiert oder den Dateinamen bearbeitet (falls zutreffend). Hinweis: Das Deaktivieren der Schaltfläche „OK“ verhindert nicht, dass das Dialogfeld mit der EINGABETASTE übermittelt wird.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
         <target state="translated">Die Datei {0} ist bereits vorhanden.
 Möchten Sie sie ersetzen?</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowHiddenFilesDescr">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="translated">Steuert, ob ausgeblendete und Systemdateien im Dialogfeld angezeigt werden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowPinnedPlacesDescr">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="translated">Steuert, ob die standardmäßig im Navigationsbereich der Ansicht angezeigten Elemente angezeigt werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5032,6 +5112,11 @@ Möchten Sie sie ersetzen?</target>
         <target state="translated">Steuert, ob die Schaltfläche "Hilfe" angezeigt wird.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogAddToRecent">
+        <source>Controls whether the dialog box adds the folder being selected to the recent list.</source>
+        <target state="translated">Steuert, ob das Dialogfeld den ausgewählten Ordner zur Liste der zuletzt verwendeten Elemente hinzufügt.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogDescription">
         <source>The string that is displayed above the tree view control in the dialog box. This string can be used to specify instructions to the user.</source>
         <target state="translated">Die Zeichenfolge, die im Dialogfeld über dem Strukturansicht-Steuerelement angezeigt wird. Sie kann zum Angeben von Benutzeranweisungen verwendet werden.</target>
@@ -5040,6 +5125,11 @@ Möchten Sie sie ersetzen?</target>
       <trans-unit id="FolderBrowserDialogNoRootFolder">
         <source>Unable to retrieve the root folder.</source>
         <target state="translated">Der Stammordner kann nicht abgerufen werden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="translated">Steuert, ob die Schaltfläche „OK“ des Dialogfelds deaktiviert ist, bis der Benutzer in der Ansicht navigiert oder den Dateinamen bearbeitet (falls zutreffend). Hinweis: Das Deaktivieren der Schaltfläche „OK“ verhindert nicht, dass das Dialogfeld mit der EINGABETASTE übermittelt wird.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogRootFolder">
@@ -5052,9 +5142,19 @@ Möchten Sie sie ersetzen?</target>
         <target state="translated">Der Pfad für den Ordner, der im Dialogfeld zuerst ausgewählt war oder vom Benutzer zuletzt gewählt wurde.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogShowHiddenFiles">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="translated">Steuert, ob ausgeblendete und Systemdateien im Dialogfeld angezeigt werden.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogShowNewFolderButton">
         <source>Include the New Folder button in the dialog box.</source>
         <target state="translated">Fügen Sie die Schaltfläche "Neuer Ordner" zum Dialogfeld hinzu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogShowPinnedPlaces">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="translated">Steuert, ob die standardmäßig im Navigationsbereich der Ansicht angezeigten Elemente angezeigt werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogUseDescriptionForTitle">
@@ -5185,6 +5285,11 @@ Möchten Sie sie ersetzen?</target>
       <trans-unit id="FormMaximumSizeDescr">
         <source>The maximum size the form can be resized to.</source>
         <target state="translated">Die Maximalgröße, die das Formular annehmen kann.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
+        <source>Gets or sets the anchoring for minimized MDI children.</source>
+        <target state="translated">Ruft die Verankerung für minimierte untergeordnete MDI-Elemente ab oder legt sie fest.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormMenuStripDescr">
@@ -5686,6 +5791,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Der an {0} übergebene Win32-Handle ist ungültig oder hat den falschen Typ.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="translated">Ungültiger HDC-Typ: {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
         <target state="translated">Der Wert {1} ist für {0} ungültig. {0} muss kleiner als {2} sein.</target>
@@ -5799,11 +5909,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">Ungültige Schlüsselkombination.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="KeysConverterInvalidKeyName">
-        <source>Key name is not valid.</source>
-        <target state="translated">Ungültiger Schlüsselname.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
@@ -6246,6 +6351,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Benachrichtigt die Benutzer virtueller ListView-Steuerelemente, dass sie den Cache vorbereiten müssen.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
+        <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
+        <target state="translated">Sie können der ListView-Gruppensammlung keine Gruppen hinzufügen, wenn sich die ListView im virtuellen Modus befindet.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
         <source>Cannot access the checked items collection when the ListView is in virtual mode.</source>
         <target state="translated">Auf die Sammlung aktivierter Steuerelemente kann nicht zugegriffen werden, wenn sich die ListView im virtuellen Modus befindet.</target>
@@ -6371,6 +6481,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Das ausgelöste Ereignis, wenn sich die CollapsedState-Eigenschaft für ein ListViewGroup-Element ändert.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateName">
+        <source>{0}, group, collapsed</source>
+        <target state="translated">{0}, gruppe, reduziert</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">Der Parametertyp muss ListViewGroup sein.</target>
@@ -6384,6 +6499,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="ListViewGroupDefaultHeader">
         <source>ListViewGroup</source>
         <target state="translated">ListViewGroup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupExpandedStateName">
+        <source>{0}, group, expanded</source>
+        <target state="translated">{0}, gruppe, erweitert</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
@@ -6439,6 +6559,21 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="ListViewInsertionMarkDescr">
         <source>Allows insertion mark attributes to be changed.</source>
         <target state="translated">Ermöglicht das Ändern von Einfügemarkenattributen.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
+        <source>The current accessibility object is only for the ListView in {0} view</source>
+        <target state="translated">Das aktuelle Objekt für Barrierefreiheit gilt nur für ListView in der Ansicht "{0}".</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
+        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
+        <target state="translated">Das aktuelle Objekt für Barrierefreiheit gilt nur für ListView in der Ansicht "{0}", "{1}" oder "{2}".</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="translated">Das Accessiblity-Objekt kann nicht abgerufen werden, wenn ListViewItem nicht an eine ListView angefügt ist.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -7051,6 +7186,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Die Farbe, in der die vorhergehenden und folgenden Monate im Monatskalender angezeigt werden.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarWeekNumberDescription">
+        <source>Week {0}</source>
+        <target state="translated">Woche {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
         <source>Year {0} to {1} selected.</source>
         <target state="translated">Jahr {0} bis {1} ausgewählt.</target>
@@ -7261,6 +7401,16 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Das Element {0} kann nur an einer Stelle hinzugefügt oder eingefügt werden. Entfernen Sie es von der aktuellen Position, oder klonen Sie es.</target>
         <note />
       </trans-unit>
+      <trans-unit id="OpenFileDialogSelectReadOnlyDescr">
+        <source>Controls whether the dialog box allows to select read-only files.</source>
+        <target state="translated">Steuert, ob das Dialogfeld die Auswahl schreibgeschützter Dateien erlaubt.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OpenFileDialogShowPreviewDescr">
+        <source>Controls whether the dialog box shows a preview for selected files.</source>
+        <target state="translated">Steuert, ob im Dialogfeld eine Vorschau ausgewählter Dateien angezeigt wird.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">
         <source>This operation requires an IBindingList.</source>
         <target state="translated">Dieser Vorgang erfordert eine IBindingList.</target>
@@ -7284,11 +7434,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="OwnsSelfOrOwner">
         <source>Form {0} tried to set an ineligible form as its owner. Forms cannot own themselves or their owners.</source>
         <target state="translated">Das Formular {0} hat versucht, ein ungültiges Formular als Besitzer festzulegen. Formulare können nicht sich selbst oder ihre Besitzer besitzen.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description</source>
-        <target state="translated">Beschreibung</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -7476,6 +7621,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Zeigt an, ob der Bereich einen Rahmen haben soll.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ParentPropertyNotSetInGetNextControl">
+        <source>{0} property should be set for {1}.</source>
+        <target state="translated">{0} Eigenschaft sollte für {1} festgelegt werden.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PictureBoxBorderStyleDescr">
         <source>Controls what type of border the PictureBox should have.</source>
         <target state="translated">Steuert, welchen Rahmentyp die PictureBox haben soll.</target>
@@ -7549,6 +7699,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="PictureBoxOnSizeModeChangedDescr">
         <source>Event raised when the value of the SizeMode property is changed on the PictureBox.</source>
         <target state="translated">Das ausgelöste Ereignis, wenn der Wert der SizeMode-Eigenschaft für PictureBox geändert wird.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PictureBoxRemoteLocationNotSupported">
+        <source>Loading from remote location not supported.</source>
+        <target state="translated">Das Laden vom Remotespeicherort wird nicht unterstützt.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
@@ -7881,6 +8036,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Die für Hervorhebungseffekte im Trennzeichen zu verwendende Farbe.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
+        <source>Border color to use on the top edge of the StatusStrip.</source>
+        <target state="translated">Rahmenfarbe, die am oberen Rand des StatusStrip verwendet werden kann.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
         <source>Starting color of the gradient used in the StatusStrip.</source>
         <target state="translated">Die im StatusStrip verwendete Anfangsfarbe des Farbverlaufs.</target>
@@ -8111,11 +8271,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Die Vordergrundfarbe für gesperrten Text im Rasterbereich.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
-        <source>{0} Description</source>
-        <target state="translated">{0}-Beschreibung</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
         <source>Browse...</source>
         <target state="translated">Durchsuchen...</target>
@@ -8154,6 +8309,16 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="PropertyGridHelpForeColorDesc">
         <source>The foreground color of the description pane.</source>
         <target state="translated">Die Vordergrundfarbe des Beschreibungsbereichs.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="translated">{0}-Beschreibung</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridHelpPaneTitle">
+        <source>Description</source>
+        <target state="translated">Beschreibung</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">
@@ -8301,6 +8466,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Die Farbe des Rahmens, der den Rasterbereich umgibt.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="translated">Container des Dropdown-Steuerelements</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
         <source>Editor created an object that is not valid.  The created object must be of type '{0}'.</source>
         <target state="translated">Der Editor hat ein ungültiges Objekt erstellt. Der erstellte Objekt muss den Typ {0} haben.</target>
@@ -8423,7 +8593,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="RichTextBoxEnableAutoDragDrop">
         <source>Enable drag/drop of text, pictures, and other data</source>
-        <target state="translated">Aktiviert Drag&amp;Drop für Text, Bilder und andere Daten.</target>
+        <target state="translated">Aktiviert Drag/Drop für Text, Bilder und andere Daten.</target>
         <note />
       </trans-unit>
       <trans-unit id="RichTextBoxHScroll">
@@ -8573,7 +8743,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="RichTextBox_IDDragDrop">
         <source>Drag and Drop</source>
-        <target state="translated">Drag &amp; Drop</target>
+        <target state="translated">Drag &amp;amp; Drop</target>
         <note />
       </trans-unit>
       <trans-unit id="RichTextBox_IDPaste">
@@ -8601,9 +8771,19 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">{1} - {0} - {2}</target>
         <note />
       </trans-unit>
+      <trans-unit id="SaveFileDialogCheckWriteAccess">
+        <source>Controls whether the dialog box verifies if the creation of the specified file will be successful.</source>
+        <target state="translated">Steuert, ob das Dialogfeld überprüft, ob die angegebene Datei erfolgreich erstellt werden wird.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SaveFileDialogCreatePrompt">
         <source>Controls whether to prompt the user when a new file is about to be created. It is only applicable if 'ValidateNames' is set to true.</source>
         <target state="translated">Steuert, ob der Benutzer zum Bestätigen aufgefordert wird, bevor eine neue Datei erstellt wird. Nur zutreffend, wenn ValidateNames auf "true" festgelegt ist.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SaveFileDialogExpandedMode">
+        <source>Controls whether the dialog box is always opened in the expanded mode.</source>
+        <target state="translated">Steuert, ob das Dialogfeld immer im erweiterten Modus geöffnet wird.</target>
         <note />
       </trans-unit>
       <trans-unit id="SaveFileDialogOverWritePrompt">
@@ -8744,11 +8924,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="SortedDescendingAccessibleStatus">
         <source>Sorted descending.</source>
         <target state="translated">Absteigend sortiert.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Wartekreisel</target>
         <note />
       </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">
@@ -9408,7 +9583,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
         <source>TextFormatFlags.ModifyString is not allowed.</source>
-        <target state="new">TextFormatFlags.ModifyString is not allowed.</target>
+        <target state="translated">"TextFormatFlags.ModifyString" ist unzulässig.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
@@ -9918,7 +10093,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ToolStripItemOnQueryContinueDragDescr">
         <source>Occurs when the mouse drags an item. The system requests whether the drag-and-drop operation should be allowed to continue.</source>
-        <target state="translated">Tritt ein, wenn die Maus ein Element zieht. Das System bestimmt, ob der Drag &amp; Drop-Vorgang fortgeführt werden darf.</target>
+        <target state="translated">Tritt ein, wenn die Maus ein Element zieht. Das System bestimmt, ob der Drag &amp;amp; Drop-Vorgang fortgeführt werden darf.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnRightToLeftChangedDescr">
@@ -10141,6 +10316,16 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Gibt an, ob der ToolStrip Benutzereinstellungen über IPersistComponentSettings beibehalten soll.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="translated">Zeile nach unten</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="translated">Zeile nach oben</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">
         <source>Specifies the settings key to use to save settings.</source>
         <target state="translated">Gibt den Einstellungsschlüssel an, der zum Speichern von Einstellungen verwendet werden soll.</target>
@@ -10346,6 +10531,16 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">LargeChange: Der Wert {0} muss größer als oder gleich 0 sein.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrackBarLargeDecreaseButtonName">
+        <source>Large decrease</source>
+        <target state="translated">Großer Rückgang</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarLargeIncreaseButtonName">
+        <source>Large increase</source>
+        <target state="translated">Große Zunahme</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
         <source>The maximum value for the position of the slider on the TrackBar.</source>
         <target state="translated">Der maximale Wert für die Schiebereglerposition auf der TrackBar.</target>
@@ -10364,6 +10559,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="TrackBarOrientationDescr">
         <source>The orientation of the control.</source>
         <target state="translated">Die Ausrichtung des Steuerelements.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarPositionButtonName">
+        <source>Position</source>
+        <target state="translated">Position</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">
@@ -10397,8 +10597,8 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <note />
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
-        <source>Text length must be less than 64 characters long.</source>
-        <target state="translated">Der Text muss kürzer als 64 Zeichen sein.</target>
+        <source>Text length must be less than 128 characters long.</source>
+        <target state="translated">Der Text muss kürzer als 128 Zeichen sein.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
@@ -10409,6 +10609,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="TreeNodeBeginEditFailed">
         <source>BeginEdit did not succeed because LabelEdit property is false.</source>
         <target state="translated">Fehler bei BeginEdit, da die LabelEdit-Eigenschaft auf "false" festgelegt ist.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="translated">Der TreeNode ist bereits an eine andere TreeView gebunden. Sie müssen den Knoten zuerst aus dem aktuellen Speicherort entfernen oder klonen.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
@@ -10791,6 +10996,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Nach oben</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="translated">Bearbeiten</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">Gibt an, ob die Textdarstellung kompatibel mit Windows Forms-Vorgängerversionen sein soll.</target>
@@ -10997,8 +11207,8 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">SetCompatibleTextRenderingDefault muss aufgerufen werden, bevor das erste IWin32Window-Objekt in der Anwendung erstellt wird.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="translated">"{0}" muss aufgerufen werden, bevor das erste IWin32Window-Objekt in der Anwendung erstellt wird.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

@@ -2,21 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [DllImport(Libraries.UxTheme, CharSet = CharSet.Unicode, EntryPoint = "GetThemeDocumentationProperty")]
-        private static unsafe extern int GetThemeDocumentationPropertyInternal(string pszThemeName, string pszPropertyName, char *pszValueBuff, int cchMaxValChars);
+        [LibraryImport(Libraries.UxTheme, EntryPoint = "GetThemeDocumentationProperty", StringMarshalling = StringMarshalling.Utf16)]
+        private static unsafe partial int GetThemeDocumentationPropertyInternal(string pszThemeName, string pszPropertyName, char* pszValueBuff, int cchMaxValChars);
 
         public static unsafe string GetThemeDocumentationProperty(string pszThemeName, string pszPropertyName)
         {
             Span<char> buffer = stackalloc char[512];
-            fixed (char *pBuffer = buffer)
+            fixed (char* pBuffer = buffer)
             {
                 GetThemeDocumentationPropertyInternal(pszThemeName, pszPropertyName, pBuffer, buffer.Length);
             }

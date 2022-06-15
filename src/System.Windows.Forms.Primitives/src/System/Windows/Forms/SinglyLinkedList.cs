@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace System.Windows.Forms
@@ -48,7 +47,7 @@ namespace System.Windows.Forms
             else
             {
                 // Add at the end
-                Debug.Assert(First != null && Last != null);
+                Debug.Assert(First is not null && Last is not null);
                 Last!.Next = node;
                 Last = node;
             }
@@ -119,7 +118,7 @@ namespace System.Windows.Forms
                     // At the start
                     _current = _list.First;
                 }
-                else if (_current.Next != null)
+                else if (_current.Next is not null)
                 {
                     // Not to the end yet
                     _previous = _current;
@@ -163,7 +162,7 @@ namespace System.Windows.Forms
                 else if (_current == _list.Last)
                 {
                     // End of list, set last to previous
-                    Debug.Assert(_previous != null);
+                    Debug.Assert(_previous is not null);
                     _list.Last = _previous;
                     _previous!.Next = null;
                     _current = _previous;
@@ -171,7 +170,7 @@ namespace System.Windows.Forms
                 else
                 {
                     // In the middle
-                    Debug.Assert(_previous != null);
+                    Debug.Assert(_previous is not null);
                     Node? next = _current.Next;
                     _current = _previous;
                     _previous!.Next = next;
@@ -203,7 +202,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                Debug.Assert(_previous != null);
+                Debug.Assert(_previous is not null);
 
                 if (_current.Next is null)
                 {

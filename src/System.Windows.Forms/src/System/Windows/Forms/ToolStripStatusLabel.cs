@@ -6,11 +6,9 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -18,7 +16,7 @@ namespace System.Windows.Forms
     ///  A non selectable ToolStrip item
     /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.StatusStrip)]
-    public class ToolStripStatusLabel : ToolStripLabel, IAutomationLiveRegion
+    public partial class ToolStripStatusLabel : ToolStripLabel, IAutomationLiveRegion
     {
         private static readonly Padding defaultMargin = new Padding(0, 3, 0, 2);
         private Padding scaledDefaultMargin = defaultMargin;
@@ -35,23 +33,28 @@ namespace System.Windows.Forms
         {
             Initialize();
         }
+
         public ToolStripStatusLabel(string text) : base(text, null, false, null)
         {
             Initialize();
         }
+
         public ToolStripStatusLabel(Image image) : base(null, image, false, null)
         {
             Initialize();
         }
+
         public ToolStripStatusLabel(string text, Image image) : base(text, image, false, null)
         {
             Initialize();
         }
-        public ToolStripStatusLabel(string text, Image image, EventHandler onClick) : base(text, image,/*isLink=*/false, onClick, null)
+
+        public ToolStripStatusLabel(string text, Image image, EventHandler onClick) : base(text, image, /*isLink=*/false, onClick, null)
         {
             Initialize();
         }
-        public ToolStripStatusLabel(string text, Image image, EventHandler onClick, string name) : base(text, image,/*isLink=*/false, onClick, name)
+
+        public ToolStripStatusLabel(string text, Image image, EventHandler onClick, string name) : base(text, image, /*isLink=*/false, onClick, name)
         {
             Initialize();
         }
@@ -96,22 +99,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid_NotSequential(value,
-                                             (int)value,
-                                             (int)Border3DStyle.Adjust,
-                                             (int)Border3DStyle.Bump,
-                                             (int)Border3DStyle.Etched,
-                                             (int)Border3DStyle.Flat,
-                                             (int)Border3DStyle.Raised,
-                                             (int)Border3DStyle.RaisedInner,
-                                             (int)Border3DStyle.RaisedOuter,
-                                             (int)Border3DStyle.Sunken,
-                                             (int)Border3DStyle.SunkenInner,
-                                             (int)Border3DStyle.SunkenOuter
-                                                ))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Border3DStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (borderStyle != value)
                 {
@@ -172,7 +160,7 @@ namespace System.Windows.Forms
                 if (spring != value)
                 {
                     spring = value;
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Spring);
                     }
@@ -197,10 +185,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutomationLiveSetting.Off, (int)AutomationLiveSetting.Assertive))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutomationLiveSetting));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 liveSetting = value;
             }
         }
@@ -208,7 +193,7 @@ namespace System.Windows.Forms
         protected override void OnTextChanged(EventArgs e)
         {
             base.OnTextChanged(e);
-            if (LiveSetting != AutomationLiveSetting.Off)
+            if (IsParentAccessibilityObjectCreated && LiveSetting != AutomationLiveSetting.Off)
             {
                 AccessibilityObject.RaiseLiveRegionChanged();
             }
@@ -231,7 +216,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Owner != null)
+            if (Owner is not null)
             {
                 ToolStripRenderer renderer = Renderer;
 
@@ -243,60 +228,6 @@ namespace System.Windows.Forms
                 }
 
                 PaintText(e.Graphics);
-            }
-        }
-
-        internal class ToolStripStatusLabelAccessibleObject : ToolStripLabelAccessibleObject
-        {
-            private readonly ToolStripStatusLabel ownerItem;
-
-            public ToolStripStatusLabelAccessibleObject(ToolStripStatusLabel ownerItem) : base(ownerItem)
-            {
-                this.ownerItem = ownerItem;
-            }
-
-            /// <summary>
-            ///  Raises the LiveRegionChanged UIA event.
-            /// </summary>
-            /// <returns>True if operation succeeds, False otherwise.</returns>
-            public override bool RaiseLiveRegionChanged()
-            {
-                return RaiseAutomationEvent(UiaCore.UIA.LiveRegionChangedEventId);
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.LiveSettingPropertyId:
-                        return ownerItem.LiveSetting;
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.TextControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
-        }
-
-        /// <summary>
-        ///  This class performs internal layout for the "split button button" portion of a split button.
-        ///  Its main job is to make sure the inner button has the same parent as the split button, so
-        ///  that layout can be performed using the correct graphics context.
-        /// </summary>
-        private class ToolStripStatusLabelLayout : ToolStripItemInternalLayout
-        {
-            readonly ToolStripStatusLabel owner;
-
-            public ToolStripStatusLabelLayout(ToolStripStatusLabel owner) : base(owner)
-            {
-                this.owner = owner;
-            }
-
-            protected override ToolStripItemLayoutOptions CommonLayoutOptions()
-            {
-                ToolStripItemLayoutOptions layoutOptions = base.CommonLayoutOptions();
-                layoutOptions.borderSize = 0;
-                return layoutOptions;
             }
         }
     }

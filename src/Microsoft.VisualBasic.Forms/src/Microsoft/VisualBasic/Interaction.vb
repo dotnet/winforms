@@ -2,12 +2,10 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System.Text
-Imports System.Threading
-Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Security
-
+Imports System.Text
+Imports System.Threading
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Imports Microsoft.VisualBasic.CompilerServices.Utils
@@ -45,22 +43,16 @@ Namespace Microsoft.VisualBasic
                 'free the string fields since the API manages it instead.  But its OK here because we are just passing along the memory
                 'that GetStartupInfo() allocated along to CreateProcess() which just reads the string fields.
 
-#Disable Warning BC40000 ' Type or member is obsolete
-                RuntimeHelpers.PrepareConstrainedRegions()
-#Enable Warning BC40000 ' Type or member is obsolete
-                Try
-                Finally
-                    ok = NativeMethods.CreateProcess(Nothing, PathName, Nothing, Nothing, False, NativeTypes.NORMAL_PRIORITY_CLASS, Nothing, Nothing, StartupInfo, ProcessInfo)
-                    If ok = 0 Then
-                        ErrorCode = Marshal.GetLastWin32Error()
-                    End If
-                    If ProcessInfo.hProcess <> IntPtr.Zero AndAlso ProcessInfo.hProcess <> NativeTypes.INVALID_HANDLE Then
-                        safeProcessHandle.InitialSetHandle(ProcessInfo.hProcess)
-                    End If
-                    If ProcessInfo.hThread <> IntPtr.Zero AndAlso ProcessInfo.hThread <> NativeTypes.INVALID_HANDLE Then
-                        safeThreadHandle.InitialSetHandle(ProcessInfo.hThread)
-                    End If
-                End Try
+                ok = NativeMethods.CreateProcess(Nothing, PathName, Nothing, Nothing, False, NativeTypes.NORMAL_PRIORITY_CLASS, Nothing, Nothing, StartupInfo, ProcessInfo)
+                If ok = 0 Then
+                    ErrorCode = Marshal.GetLastWin32Error()
+                End If
+                If ProcessInfo.hProcess <> IntPtr.Zero AndAlso ProcessInfo.hProcess <> NativeTypes.s_invalidHandle Then
+                    safeProcessHandle.InitialSetHandle(ProcessInfo.hProcess)
+                End If
+                If ProcessInfo.hThread <> IntPtr.Zero AndAlso ProcessInfo.hThread <> NativeTypes.s_invalidHandle Then
+                    safeThreadHandle.InitialSetHandle(ProcessInfo.hThread)
+                End If
 
                 Try
                     If (ok <> 0) Then
@@ -267,10 +259,8 @@ Namespace Microsoft.VisualBasic
             Public Sub StartHere()
                 Try
                     _result = InternalInputBox(_prompt, _title, _defaultResponse, _xPos, _yPos, _parentWindow)
-#Disable Warning CA1031 ' Do not catch general exception types
                 Catch ex As Exception
                     _exception = ex
-#Enable Warning CA1031 ' Do not catch general exception types
                 End Try
             End Sub
 
@@ -366,7 +356,7 @@ Namespace Microsoft.VisualBasic
             Dim ParentWindow As Windows.Forms.IWin32Window = Nothing
 
             vbhost = CompilerServices.HostServices.VBHost
-            If Not vbhost Is Nothing Then
+            If vbhost IsNot Nothing Then
                 ParentWindow = vbhost.GetParentWindow()
             End If
 
@@ -381,7 +371,7 @@ Namespace Microsoft.VisualBasic
             End If
 
             Try
-                If Not Prompt Is Nothing Then
+                If Prompt IsNot Nothing Then
                     sPrompt = DirectCast(Conversions.ChangeType(Prompt, GetType(String)), String)
                 End If
             Catch ex As StackOverflowException

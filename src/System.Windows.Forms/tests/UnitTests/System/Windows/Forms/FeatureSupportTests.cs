@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Reflection;
 using Moq;
 using Xunit;
@@ -62,6 +61,7 @@ namespace System.Windows.Forms.Tests
                 .Returns(versionPresent);
             Assert.Equal(expected, featureSupport.Object.IsPresent(feature, minimumVersion));
         }
+
         public static IEnumerable<object[]> GetVersionPresent_TestData()
         {
             foreach (string invalidType in new string[] { null, string.Empty, "NoSuchType" })

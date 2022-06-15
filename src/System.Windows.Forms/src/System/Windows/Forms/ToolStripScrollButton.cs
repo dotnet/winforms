@@ -5,16 +5,17 @@
 #nullable disable
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
     ///  A non selectable ToolStrip item
     /// </summary>
-    internal class ToolStripScrollButton : ToolStripControlHost
+    internal partial class ToolStripScrollButton : ToolStripControlHost
     {
         private readonly bool up = true;
+
+        private static readonly Size defaultBitmapSize = new(16, 16);
 
         [ThreadStatic]
         private static Bitmap upScrollImage;
@@ -29,18 +30,23 @@ namespace System.Windows.Forms
 
         public ToolStripScrollButton(bool up) : base(CreateControlInstance(up))
         {
+            if (Control is StickyLabel stickyLabel)
+            {
+                stickyLabel.OwnerScrollButton = this;
+            }
+
             this.up = up;
         }
 
+        protected override AccessibleObject CreateAccessibilityInstance()
+           => this.Control.AccessibilityObject;
+
         private static Control CreateControlInstance(bool up)
-        {
-            StickyLabel label = new StickyLabel
+            => new StickyLabel(up)
             {
                 ImageAlign = ContentAlignment.MiddleCenter,
                 Image = (up) ? UpImage : DownImage
             };
-            return label;
-        }
 
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
@@ -53,6 +59,7 @@ namespace System.Windows.Forms
                 return Padding.Empty;
             }
         }
+
         protected override Padding DefaultPadding
         {
             get
@@ -67,19 +74,15 @@ namespace System.Windows.Forms
             {
                 if (downScrollImage is null)
                 {
-                    downScrollImage = DpiHelper.GetBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown");
+                    downScrollImage = DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown", defaultBitmapSize);
                 }
+
                 return downScrollImage;
             }
         }
 
         internal StickyLabel Label
-        {
-            get
-            {
-                return Control as StickyLabel;
-            }
-        }
+            => Control as StickyLabel;
 
         private static Image UpImage
         {
@@ -87,8 +90,9 @@ namespace System.Windows.Forms
             {
                 if (upScrollImage is null)
                 {
-                    upScrollImage = DpiHelper.GetBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp");
+                    upScrollImage = DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp", defaultBitmapSize);
                 }
+
                 return upScrollImage;
             }
         }
@@ -101,6 +105,7 @@ namespace System.Windows.Forms
                 {
                     mouseDownTimer = new Timer();
                 }
+
                 return mouseDownTimer;
             }
         }
@@ -109,15 +114,17 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (mouseDownTimer != null)
+                if (mouseDownTimer is not null)
                 {
                     mouseDownTimer.Enabled = false;
                     mouseDownTimer.Dispose();
                     mouseDownTimer = null;
                 }
             }
+
             base.Dispose(disposing);
         }
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
             UnsubscribeAll();
@@ -140,14 +147,15 @@ namespace System.Windows.Forms
         {
             UnsubscribeAll();
         }
+
         private void UnsubscribeAll()
         {
             MouseDownTimer.Enabled = false;
             MouseDownTimer.Tick -= new EventHandler(OnInitialAutoScrollMouseDown);
-            MouseDownTimer.Tick -= new EventHandler(OnAutoScrollAccellerate);
+            MouseDownTimer.Tick -= new EventHandler(OnAutoScrollAccelerate);
         }
 
-        private void OnAutoScrollAccellerate(object sender, EventArgs e)
+        private void OnAutoScrollAccelerate(object sender, EventArgs e)
         {
             Scroll();
         }
@@ -158,14 +166,14 @@ namespace System.Windows.Forms
 
             Scroll();
             MouseDownTimer.Interval = AUTOSCROLL_UPDATE;
-            MouseDownTimer.Tick += new EventHandler(OnAutoScrollAccellerate);
+            MouseDownTimer.Tick += new EventHandler(OnAutoScrollAccelerate);
         }
 
         public override Size GetPreferredSize(Size constrainingSize)
         {
             Size preferredSize = Size.Empty;
-            preferredSize.Height = (Label.Image != null) ? Label.Image.Height + 4 : 0;
-            preferredSize.Width = (ParentInternal != null) ? ParentInternal.Width - 2 : preferredSize.Width; // Two for border
+            preferredSize.Height = (Label.Image is not null) ? Label.Image.Height + 4 : 0;
+            preferredSize.Width = (ParentInternal is not null) ? ParentInternal.Width - 2 : preferredSize.Width; // Two for border
             return preferredSize;
         }
 
@@ -174,38 +182,6 @@ namespace System.Windows.Forms
             if (ParentInternal is ToolStripDropDownMenu parent && Label.Enabled)
             {
                 parent.ScrollInternal(up);
-            }
-        }
-
-        internal class StickyLabel : Label
-        {
-            public StickyLabel()
-            {
-            }
-
-            public bool FreezeLocationChange
-            {
-                get => false;
-            }
-
-            protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
-            {
-                if (((specified & BoundsSpecified.Location) != 0) && FreezeLocationChange)
-                {
-                    return;
-                }
-                base.SetBoundsCore(x, y, width, height, specified);
-            }
-
-            protected override void WndProc(ref Message m)
-            {
-                if (m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <= (int)User32.WM.KEYLAST)
-                {
-                    DefWndProc(ref m);
-                    return;
-                }
-
-                base.WndProc(ref m);
             }
         }
     }

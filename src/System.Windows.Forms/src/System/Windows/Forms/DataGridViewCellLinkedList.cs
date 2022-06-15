@@ -10,7 +10,7 @@ using System.Diagnostics;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents a linked list of <see cref='DataGridViewCell'/> objects
+    ///  Represents a linked list of <see cref="DataGridViewCell"/> objects
     /// </summary>
     internal class DataGridViewCellLinkedList : IEnumerable
     {
@@ -43,6 +43,7 @@ namespace System.Windows.Forms
                         tmp = tmp.Next;
                         tmpIndex--;
                     }
+
                     lastAccessedElement = tmp;
                     lastAccessedIndex = index;
                     return tmp.DataGridViewCell;
@@ -54,6 +55,7 @@ namespace System.Windows.Forms
                         lastAccessedElement = lastAccessedElement.Next;
                         lastAccessedIndex++;
                     }
+
                     return lastAccessedElement.DataGridViewCell;
                 }
             }
@@ -71,22 +73,23 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(headElement != null);
+                Debug.Assert(headElement is not null);
                 return headElement.DataGridViewCell;
             }
         }
 
         public void Add(DataGridViewCell dataGridViewCell)
         {
-            Debug.Assert(dataGridViewCell != null);
+            Debug.Assert(dataGridViewCell is not null);
             Debug.Assert(dataGridViewCell.DataGridView.SelectionMode == DataGridViewSelectionMode.CellSelect ||
                          dataGridViewCell.DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect ||
                          dataGridViewCell.DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect);
             DataGridViewCellLinkedListElement newHead = new DataGridViewCellLinkedListElement(dataGridViewCell);
-            if (headElement != null)
+            if (headElement is not null)
             {
                 newHead.Next = headElement;
             }
+
             headElement = newHead;
             count++;
             lastAccessedElement = null;
@@ -103,10 +106,10 @@ namespace System.Windows.Forms
 
         public bool Contains(DataGridViewCell dataGridViewCell)
         {
-            Debug.Assert(dataGridViewCell != null);
+            Debug.Assert(dataGridViewCell is not null);
             int index = 0;
             DataGridViewCellLinkedListElement tmp = headElement;
-            while (tmp != null)
+            while (tmp is not null)
             {
                 if (tmp.DataGridViewCell == dataGridViewCell)
                 {
@@ -114,25 +117,29 @@ namespace System.Windows.Forms
                     lastAccessedIndex = index;
                     return true;
                 }
+
                 tmp = tmp.Next;
                 index++;
             }
+
             return false;
         }
 
         public bool Remove(DataGridViewCell dataGridViewCell)
         {
-            Debug.Assert(dataGridViewCell != null);
+            Debug.Assert(dataGridViewCell is not null);
             DataGridViewCellLinkedListElement tmp1 = null, tmp2 = headElement;
-            while (tmp2 != null)
+            while (tmp2 is not null)
             {
                 if (tmp2.DataGridViewCell == dataGridViewCell)
                 {
                     break;
                 }
+
                 tmp1 = tmp2;
                 tmp2 = tmp2.Next;
             }
+
             if (tmp2.DataGridViewCell == dataGridViewCell)
             {
                 DataGridViewCellLinkedListElement tmp3 = tmp2.Next;
@@ -144,11 +151,13 @@ namespace System.Windows.Forms
                 {
                     tmp1.Next = tmp3;
                 }
+
                 count--;
                 lastAccessedElement = null;
                 lastAccessedIndex = -1;
                 return true;
             }
+
             return false;
         }
 
@@ -156,7 +165,7 @@ namespace System.Windows.Forms
         {
             int removedCount = 0;
             DataGridViewCellLinkedListElement tmp1 = null, tmp2 = headElement;
-            while (tmp2 != null)
+            while (tmp2 is not null)
             {
                 if ((column && tmp2.DataGridViewCell.ColumnIndex == bandIndex) ||
                     (!column && tmp2.DataGridViewCell.RowIndex == bandIndex))
@@ -170,6 +179,7 @@ namespace System.Windows.Forms
                     {
                         tmp1.Next = tmp3;
                     }
+
                     tmp2 = tmp3;
                     count--;
                     lastAccessedElement = null;
@@ -182,89 +192,8 @@ namespace System.Windows.Forms
                     tmp2 = tmp2.Next;
                 }
             }
+
             return removedCount;
-        }
-    }
-
-    /// <summary>
-    ///  Represents an emunerator of elements in a <see cref='DataGridViewCellLinkedList'/>  linked list.
-    /// </summary>
-    internal class DataGridViewCellLinkedListEnumerator : IEnumerator
-    {
-        private readonly DataGridViewCellLinkedListElement headElement;
-        private DataGridViewCellLinkedListElement current;
-        private bool reset;
-
-        public DataGridViewCellLinkedListEnumerator(DataGridViewCellLinkedListElement headElement)
-        {
-            this.headElement = headElement;
-            reset = true;
-        }
-
-        object IEnumerator.Current
-        {
-            get
-            {
-                Debug.Assert(current != null); // Since this is for internal use only.
-                return current.DataGridViewCell;
-            }
-        }
-
-        bool IEnumerator.MoveNext()
-        {
-            if (reset)
-            {
-                Debug.Assert(current is null);
-                current = headElement;
-                reset = false;
-            }
-            else
-            {
-                Debug.Assert(current != null); // Since this is for internal use only.
-                current = current.Next;
-            }
-            return (current != null);
-        }
-
-        void IEnumerator.Reset()
-        {
-            reset = true;
-            current = null;
-        }
-    }
-
-    /// <summary>
-    ///  Represents an element in a <see cref='DataGridViewCellLinkedList'/> linked list.
-    /// </summary>
-    internal class DataGridViewCellLinkedListElement
-    {
-        private readonly DataGridViewCell dataGridViewCell;
-        private DataGridViewCellLinkedListElement next;
-
-        public DataGridViewCellLinkedListElement(DataGridViewCell dataGridViewCell)
-        {
-            Debug.Assert(dataGridViewCell != null);
-            this.dataGridViewCell = dataGridViewCell;
-        }
-
-        public DataGridViewCell DataGridViewCell
-        {
-            get
-            {
-                return dataGridViewCell;
-            }
-        }
-
-        public DataGridViewCellLinkedListElement Next
-        {
-            get
-            {
-                return next;
-            }
-            set
-            {
-                next = value;
-            }
         }
     }
 }

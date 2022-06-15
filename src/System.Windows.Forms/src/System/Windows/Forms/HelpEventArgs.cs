@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
@@ -13,7 +12,7 @@ namespace System.Windows.Forms
     public class HelpEventArgs : EventArgs
     {
         /// <summary>
-        ///  Initializes a new instance of the <see cref='HelpEventArgs'/> class.
+        ///  Initializes a new instance of the <see cref="HelpEventArgs"/> class.
         /// </summary>
         public HelpEventArgs(Point mousePos)
         {

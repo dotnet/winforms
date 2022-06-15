@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Threading;
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -33,7 +31,7 @@ namespace System.Windows.Forms
             for (int i = 0; i < _itemsCache.Length; i++)
             {
                 item = Interlocked.Exchange(ref _itemsCache[i], null);
-                if (item != null && Accept(item))
+                if (item is not null && Accept(item))
                 {
                     return item;
                 }

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 
@@ -55,15 +53,15 @@ namespace System.Windows.Forms.Layout
         ///  method to update the layout on the element. In Orcas, we
         ///  will sync the DPs changed event.
         /// </summary>
-        void PerformLayout(IArrangedElement affectedElement, string propertyName);
+        void PerformLayout(IArrangedElement affectedElement, string? propertyName);
 
         /// <summary>
-        ///  Returns the element's parent container (on a control, this forwands to Parent)
+        ///  Returns the element's parent container (on a control, this forwards to Parent)
         /// </summary>
-        IArrangedElement Container { get; }
+        IArrangedElement? Container { get; }
 
         /// <summary>
-        ///  Returns the element's childern (on a control, this forwands to Controls)
+        ///  Returns the element's children (on a control, this forwards to Controls)
         /// </summary>
         ArrangedElementCollection Children { get; }
     }

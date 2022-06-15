@@ -36,6 +36,8 @@
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
+            this.btnDataBindingExample = new System.Windows.Forms.Button();
+            this.customAccessiblePropertiesButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -74,7 +76,7 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(455, 23);
             this.button4.TabIndex = 3;
-            this.button4.Text = "Dialogs_Controls: Testing the controls under the Dialogs Tab";
+            this.button4.Text = "TaskDialog: Testing the task dialog";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
@@ -118,11 +120,33 @@
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.Button8_Click);
             // 
+            // BtnDataBindingExample
+            // 
+            this.btnDataBindingExample.Location = new System.Drawing.Point(12, 370);
+            this.btnDataBindingExample.Name = "dataBindingExample";
+            this.btnDataBindingExample.Size = new System.Drawing.Size(455, 23);
+            this.btnDataBindingExample.TabIndex = 8;
+            this.btnDataBindingExample.Text = "DataBinding Example";
+            this.btnDataBindingExample.UseVisualStyleBackColor = true;
+            this.btnDataBindingExample.Click += new System.EventHandler(this.btnDataBindingExample_Click);
+            // 
+            // customAccessiblePropertiesButton
+            // 
+            this.customAccessiblePropertiesButton.Location = new System.Drawing.Point(12, 410);
+            this.customAccessiblePropertiesButton.Name = "cusAccName";
+            this.customAccessiblePropertiesButton.Size = new System.Drawing.Size(455, 23);
+            this.customAccessiblePropertiesButton.TabIndex = 9;
+            this.customAccessiblePropertiesButton.Text = "Accessible properties: Testing controls with custom accessible name, role, and description";
+            this.customAccessiblePropertiesButton.UseVisualStyleBackColor = true;
+            this.customAccessiblePropertiesButton.Click += new System.EventHandler(this.customAccessiblePropertiesButton_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(486, 388);
+            this.ClientSize = new System.Drawing.Size(486, 450);
+            this.Controls.Add(this.customAccessiblePropertiesButton);
+            this.Controls.Add(this.btnDataBindingExample);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
@@ -134,7 +158,6 @@
             this.Name = "Main";
             this.Text = "MainForm";
             this.ResumeLayout(false);
-
         }
 
         #endregion
@@ -147,6 +170,8 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button btnDataBindingExample;
+        private System.Windows.Forms.Button customAccessiblePropertiesButton;
     }
 }
 

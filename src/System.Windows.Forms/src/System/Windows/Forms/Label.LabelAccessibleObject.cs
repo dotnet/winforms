@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -36,9 +35,7 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.NamePropertyId => Name,
                     UiaCore.UIA.AutomationIdPropertyId => _owningLabel.Name,
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TextControlTypeId,
                     _ => base.GetPropertyValue(propertyID)
                 };
         }

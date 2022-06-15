@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -29,7 +27,7 @@ namespace System.Windows.Forms
         private const int defaultMaxSize = 0;
 
         private Comdlg32.CF options;
-        private Font font;
+        private Font? font;
         private Color color;
         private int minSize = defaultMinSize;
         private int maxSize = defaultMaxSize;
@@ -37,7 +35,7 @@ namespace System.Windows.Forms
         private bool usingDefaultIndirectColor;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='FontDialog'/>
+        ///  Initializes a new instance of the <see cref="FontDialog"/>
         ///  class.
         /// </summary>
         public FontDialog()
@@ -115,6 +113,7 @@ namespace System.Windows.Forms
                 {
                     return ColorTranslator.FromWin32(ColorTranslator.ToWin32(color));
                 }
+
                 return color;
             }
             set
@@ -154,11 +153,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Font result = font;
-                if (result is null)
-                {
-                    result = Control.DefaultFont;
-                }
+                Font? result = font ?? Control.DefaultFont;
 
                 float actualSize = result.SizeInPoints;
                 if (minSize != defaultMinSize && actualSize < MinSize)
@@ -214,6 +209,7 @@ namespace System.Windows.Forms
                 {
                     value = 0;
                 }
+
                 maxSize = value;
 
                 if (maxSize > 0 && maxSize < minSize)
@@ -241,6 +237,7 @@ namespace System.Windows.Forms
                 {
                     value = 0;
                 }
+
                 minSize = value;
 
                 if (maxSize > 0 && maxSize < minSize)
@@ -329,7 +326,7 @@ namespace System.Windows.Forms
         ///  dialog box.
         /// </summary>
         [SRDescription(nameof(SR.FnDapplyDescr))]
-        public event EventHandler Apply
+        public event EventHandler? Apply
         {
             add => Events.AddHandler(EventApply, value);
             remove => Events.RemoveHandler(EventApply, value);
@@ -352,16 +349,17 @@ namespace System.Windows.Forms
             switch ((User32.WM)msg)
             {
                 case User32.WM.COMMAND:
-                    if ((int)wparam == 0x402)
+                    if (PARAM.ToInt(wparam) == 0x402)
                     {
                         var logFont = new User32.LOGFONTW();
-                        User32.SendMessageW(hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, IntPtr.Zero, ref logFont);
+                        User32.SendMessageW(hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, 0, ref logFont);
                         UpdateFont(ref logFont);
-                        int index = (int)User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETCURSEL);
+                        int index = PARAM.ToInt(User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETCURSEL));
                         if (index != User32.CB_ERR)
                         {
-                            UpdateColor((int)User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETITEMDATA, (IntPtr)index));
+                            UpdateColor(PARAM.ToInt(User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETITEMDATA, (IntPtr)index)));
                         }
+
                         if (NativeWindow.WndProcShouldBeDebuggable)
                         {
                             OnApply(EventArgs.Empty);
@@ -378,6 +376,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     break;
                 case User32.WM.INITDIALOG:
                     if (!showColor)
@@ -387,6 +386,7 @@ namespace System.Windows.Forms
                         hWndCtl = User32.GetDlgItem(hWnd, User32.DialogItemID.stc4);
                         User32.ShowWindow(hWndCtl, User32.SW.HIDE);
                     }
+
                     break;
             }
 
@@ -394,11 +394,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Apply'/> event.
+        ///  Raises the <see cref="Apply"/> event.
         /// </summary>
         protected virtual void OnApply(EventArgs e)
         {
-            ((EventHandler)Events[EventApply])?.Invoke(this, e);
+            ((EventHandler?)Events[EventApply])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -464,7 +464,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            if (logFont.FaceName.Length > 0)
+            if (!logFont.FaceName.IsEmpty)
             {
                 UpdateFont(ref logFont);
                 UpdateColor(cf.rgbColors);
@@ -489,7 +489,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='Font'/> property should be
+        ///  Indicates whether the <see cref="Font"/> property should be
         ///  persisted.
         /// </summary>
         private bool ShouldSerializeFont()

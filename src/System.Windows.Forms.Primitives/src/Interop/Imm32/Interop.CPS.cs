@@ -4,7 +4,7 @@
 
 internal partial class Interop
 {
-    internal partial class Imm32
+    internal static partial class Imm32
     {
         public enum CPS : uint
         {

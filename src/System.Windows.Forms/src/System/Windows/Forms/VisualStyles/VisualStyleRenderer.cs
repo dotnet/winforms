@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.ComponentModel;
 using System.Drawing;
 using Microsoft.Win32;
 using static Interop;
@@ -62,7 +61,7 @@ namespace System.Windows.Forms.VisualStyles
                     // could fail for some other reason. Try creating a theme handle here - if successful, return true,
                     // else return false.
                     IntPtr hTheme = GetHandle("BUTTON", false); // Button is an arbitrary choice.
-                    supported = (hTheme != IntPtr.Zero);
+                    supported = hTheme != IntPtr.Zero;
                 }
 
                 return supported;
@@ -79,15 +78,14 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public static bool IsElementDefined(VisualStyleElement element)
         {
-            if (element is null)
-                throw new ArgumentNullException(nameof(element));
+            ArgumentNullException.ThrowIfNull(element);
 
             return IsCombinationDefined(element.ClassName, element.Part);
         }
 
         internal static bool IsCombinationDefined(string className, int part)
         {
-            bool returnVal = false;
+            bool result = false;
 
             if (!IsSupported)
             {
@@ -104,33 +102,32 @@ namespace System.Windows.Forms.VisualStyles
                 // allow these explicitly here.
                 if (part == 0)
                 {
-                    returnVal = true;
+                    result = true;
                 }
                 else
                 {
-                    returnVal = IsThemePartDefined(hTheme, part, 0).IsTrue();
+                    result = IsThemePartDefined(hTheme, part, 0).IsTrue();
                 }
             }
 
-            // If the combo isn't defined, check the validity of our theme handle cache
-            if (!returnVal)
+            // If the combo isn't defined, check the validity of our theme handle cache.
+            if (!result)
             {
-                using (ThemeHandle? tHandle = ThemeHandle.Create(className, false))
-                {
-                    if (tHandle != null)
-                    {
-                        returnVal = IsThemePartDefined(tHandle, part, 0).IsTrue();
-                    }
+                using ThemeHandle? handle = ThemeHandle.Create(className, false);
 
-                    // If we did, in fact get a new correct theme handle, our cache is out of date -- update it now.
-                    if (returnVal)
-                    {
-                        RefreshCache();
-                    }
+                if (handle is not null)
+                {
+                    result = IsThemePartDefined(handle, part, 0).IsTrue();
+                }
+
+                // If we did, in fact get a new correct theme handle, our cache is out of date -- update it now.
+                if (result)
+                {
+                    RefreshCache();
                 }
             }
 
-            return returnVal;
+            return result;
         }
 
         /// <summary>
@@ -146,8 +143,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public VisualStyleRenderer(string className, int part, int state)
         {
-            if (className is null)
-                throw new ArgumentNullException(nameof(className));
+            ArgumentNullException.ThrowIfNull(className);
 
             if (!IsCombinationDefined(className, part))
                 throw new ArgumentException(SR.VisualStylesInvalidCombination);
@@ -199,8 +195,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void SetParameters(VisualStyleElement element)
         {
-            if (element is null)
-                throw new ArgumentNullException(nameof(element));
+            ArgumentNullException.ThrowIfNull(element);
 
             SetParameters(element.ClassName, element.Part, element.State);
         }
@@ -225,8 +220,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawBackground(IDeviceContext dc, Rectangle bounds)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             DrawBackground(hdc, bounds, IntPtr.Zero);
@@ -237,19 +231,20 @@ namespace System.Windows.Forms.VisualStyles
             if (bounds.Width < 0 || bounds.Height < 0)
                 return;
 
-            if (IntPtr.Zero != hwnd)
+            if (hwnd != IntPtr.Zero)
             {
                 using var htheme = new UxTheme.OpenThemeDataScope(hwnd, Class);
                 if (htheme.IsNull)
                 {
                     throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
                 }
+
                 RECT rect = bounds;
                 _lastHResult = DrawThemeBackground(htheme, dc, Part, State, ref rect, null);
             }
             else
             {
-                RECT rect  = bounds;
+                RECT rect = bounds;
                 _lastHResult = DrawThemeBackground(this, dc, Part, State, ref rect, null);
             }
         }
@@ -259,8 +254,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawBackground(IDeviceContext dc, Rectangle bounds, Rectangle clipRectangle)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             DrawBackground(hdc, bounds, clipRectangle, IntPtr.Zero);
@@ -278,6 +272,7 @@ namespace System.Windows.Forms.VisualStyles
                 {
                     throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
                 }
+
                 RECT rect = bounds;
                 RECT clipRect = clipRectangle;
                 _lastHResult = DrawThemeBackground(htheme, dc, Part, State, ref rect, &clipRect);
@@ -295,8 +290,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Rectangle DrawEdge(IDeviceContext dc, Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             return DrawEdge(hdc, bounds, edges, style, effects);
@@ -304,14 +298,9 @@ namespace System.Windows.Forms.VisualStyles
 
         internal Rectangle DrawEdge(Gdi32.HDC dc, Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects)
         {
-            if (!ClientUtils.IsEnumValid_Masked(edges, (int)edges, (uint)(Edges.Left | Edges.Top | Edges.Right | Edges.Bottom | Edges.Diagonal)))
-                throw new InvalidEnumArgumentException(nameof(edges), (int)edges, typeof(Edges));
-
-            if (!ClientUtils.IsEnumValid_NotSequential(style, (int)style, (int)EdgeStyle.Raised, (int)EdgeStyle.Sunken, (int)EdgeStyle.Etched, (int)EdgeStyle.Bump))
-                throw new InvalidEnumArgumentException(nameof(style), (int)style, typeof(EdgeStyle));
-
-            if (!ClientUtils.IsEnumValid_Masked(effects, (int)effects, (uint)(EdgeEffects.FillInterior | EdgeEffects.Flat | EdgeEffects.Soft | EdgeEffects.Mono)))
-                throw new InvalidEnumArgumentException(nameof(effects), (int)effects, typeof(EdgeEffects));
+            SourceGenerated.EnumValidator.Validate(edges, nameof(edges));
+            SourceGenerated.EnumValidator.Validate(style, nameof(style));
+            SourceGenerated.EnumValidator.Validate(effects, nameof(effects));
 
             RECT destRect = bounds;
             var contentRect = new RECT();
@@ -334,11 +323,8 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawImage(Graphics g, Rectangle bounds, Image image)
         {
-            if (g is null)
-                throw new ArgumentNullException(nameof(g));
-
-            if (image is null)
-                throw new ArgumentNullException(nameof(image));
+            ArgumentNullException.ThrowIfNull(g);
+            ArgumentNullException.ThrowIfNull(image);
 
             if (bounds.Width < 0 || bounds.Height < 0)
                 return;
@@ -352,11 +338,8 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawImage(Graphics g, Rectangle bounds, ImageList imageList, int imageIndex)
         {
-            if (g is null)
-                throw new ArgumentNullException(nameof(g));
-
-            if (imageList is null)
-                throw new ArgumentNullException(nameof(imageList));
+            ArgumentNullException.ThrowIfNull(g);
+            ArgumentNullException.ThrowIfNull(imageList);
 
             if (imageIndex < 0 || imageIndex >= imageList.Images.Count)
                 throw new ArgumentOutOfRangeException(nameof(imageIndex), imageIndex, string.Format(SR.InvalidArgument, nameof(imageIndex), imageIndex));
@@ -376,11 +359,8 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawParentBackground(IDeviceContext dc, Rectangle bounds, Control childControl)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
-
-            if (childControl is null)
-                throw new ArgumentNullException(nameof(childControl));
+            ArgumentNullException.ThrowIfNull(dc);
+            ArgumentNullException.ThrowIfNull(childControl);
 
             if (bounds.Width < 0 || bounds.Height < 0)
                 return;
@@ -414,8 +394,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawText(IDeviceContext dc, Rectangle bounds, string? textToDraw, bool drawDisabled, TextFormatFlags flags)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             DrawText(hdc, bounds, textToDraw, drawDisabled, flags);
@@ -439,8 +418,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Rectangle GetBackgroundContentRectangle(IDeviceContext dc, Rectangle bounds)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             return GetBackgroundContentRectangle(hdc, bounds);
@@ -461,8 +439,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Rectangle GetBackgroundExtent(IDeviceContext dc, Rectangle contentBounds)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             if (contentBounds.Width < 0 || contentBounds.Height < 0)
                 return Rectangle.Empty;
@@ -480,8 +457,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Region? GetBackgroundRegion(IDeviceContext dc, Rectangle bounds)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             if (bounds.Width < 0 || bounds.Height < 0)
                 return null;
@@ -510,8 +486,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public bool GetBoolean(BooleanProperty prop)
         {
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)BooleanProperty.Transparent, (int)BooleanProperty.SourceShrink))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(BooleanProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             BOOL val = BOOL.FALSE;
             _lastHResult = GetThemeBool(this, Part, State, (int)prop, ref val);
@@ -524,8 +499,7 @@ namespace System.Windows.Forms.VisualStyles
         public Color GetColor(ColorProperty prop)
         {
             // Valid values are 0xed9 to 0xeef
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)ColorProperty.BorderColor, (int)ColorProperty.AccentColorHint))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(ColorProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             int color = 0;
             _lastHResult = GetThemeColor(this, Part, State, (int)prop, ref color);
@@ -538,8 +512,7 @@ namespace System.Windows.Forms.VisualStyles
         public int GetEnumValue(EnumProperty prop)
         {
             // Valid values are 0xfa1 to 0xfaf
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)EnumProperty.BackgroundType, (int)EnumProperty.TrueSizeScalingType))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(EnumProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             int val = 0;
             _lastHResult = GetThemeEnumValue(this, Part, State, (int)prop, ref val);
@@ -552,14 +525,14 @@ namespace System.Windows.Forms.VisualStyles
         public unsafe string GetFilename(FilenameProperty prop)
         {
             // Valid values are 0xbb9 to 0xbc0
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)FilenameProperty.ImageFile, (int)FilenameProperty.GlyphImageFile))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(FilenameProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             Span<char> filename = stackalloc char[512];
             fixed (char* pFilename = filename)
             {
                 _lastHResult = GetThemeFilename(this, Part, State, (int)prop, pFilename, filename.Length);
             }
+
             return filename.SliceAtFirstNull().ToString();
         }
 
@@ -569,11 +542,9 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Font? GetFont(IDeviceContext dc, FontProperty prop)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
-            if (!ClientUtils.IsEnumValid_NotSequential(prop, (int)prop, (int)FontProperty.TextFont, (int)FontProperty.GlyphFont))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(FontProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeFont(this, hdc, Part, State, (int)prop, out User32.LOGFONTW logfont);
@@ -606,8 +577,7 @@ namespace System.Windows.Forms.VisualStyles
         public int GetInteger(IntegerProperty prop)
         {
             // Valid values are 0x961 to 0x978
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)IntegerProperty.ImageCount, (int)IntegerProperty.MinDpi5))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(IntegerProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             int val = 0;
             _lastHResult = GetThemeInt(this, Part, State, (int)prop, ref val);
@@ -619,8 +589,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Size GetPartSize(IDeviceContext dc, ThemeSizeType type)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             return GetPartSize(hdc, type, IntPtr.Zero);
@@ -629,8 +598,7 @@ namespace System.Windows.Forms.VisualStyles
         internal unsafe Size GetPartSize(Gdi32.HDC dc, ThemeSizeType type, IntPtr hwnd = default)
         {
             // Valid values are 0x0 to 0x2
-            if (!ClientUtils.IsEnumValid(type, (int)type, (int)ThemeSizeType.Minimum, (int)ThemeSizeType.Draw))
-                throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(ThemeSizeType));
+            SourceGenerated.EnumValidator.Validate(type, nameof(type));
 
             if (DpiHelper.IsPerMonitorV2Awareness && hwnd != IntPtr.Zero)
             {
@@ -639,6 +607,7 @@ namespace System.Windows.Forms.VisualStyles
                 {
                     throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
                 }
+
                 _lastHResult = GetThemePartSize(htheme, dc, Part, State, null, type, out Size dpiSize);
                 return dpiSize;
             }
@@ -652,12 +621,10 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public unsafe Size GetPartSize(IDeviceContext dc, Rectangle bounds, ThemeSizeType type)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             // Valid values are 0x0 to 0x2
-            if (!ClientUtils.IsEnumValid(type, (int)type, (int)ThemeSizeType.Minimum, (int)ThemeSizeType.Draw))
-                throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(ThemeSizeType));
+            SourceGenerated.EnumValidator.Validate(type, nameof(type));
 
             using var hdc = new DeviceContextHdcScope(dc);
             RECT boundsRect = bounds;
@@ -671,8 +638,7 @@ namespace System.Windows.Forms.VisualStyles
         public Point GetPoint(PointProperty prop)
         {
             //valid values are 0xd49 to 0xd50
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)PointProperty.Offset, (int)PointProperty.MinSize5))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(PointProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             _lastHResult = GetThemePosition(this, Part, State, (int)prop, out Point point);
             return point;
@@ -683,12 +649,10 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public unsafe Padding GetMargins(IDeviceContext dc, MarginProperty prop)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             // Valid values are 0xe11 to 0xe13
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)MarginProperty.SizingMargins, (int)MarginProperty.CaptionMargins))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(MarginProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeMargins(this, hdc, Part, State, (int)prop, null, out MARGINS margins);
@@ -702,14 +666,14 @@ namespace System.Windows.Forms.VisualStyles
         public unsafe string GetString(StringProperty prop)
         {
             // Valid values are 0xc81 to 0xc81
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)StringProperty.Text, (int)StringProperty.Text))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(StringProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             Span<char> aString = stackalloc char[512];
             fixed (char* pString = aString)
             {
                 _lastHResult = GetThemeString(this, Part, State, (int)prop, pString, aString.Length);
             }
+
             return aString.SliceAtFirstNull().ToString();
         }
 
@@ -718,11 +682,8 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public unsafe Rectangle GetTextExtent(IDeviceContext dc, string textToDraw, TextFormatFlags flags)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
-
-            if (string.IsNullOrEmpty(textToDraw))
-                throw new ArgumentNullException(nameof(textToDraw));
+            ArgumentNullException.ThrowIfNull(dc);
+            textToDraw.ThrowIfNullOrEmpty();
 
             using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeTextExtent(this, hdc, Part, State, textToDraw, textToDraw.Length, (uint)flags, null, out RECT rect);
@@ -734,11 +695,8 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public unsafe Rectangle GetTextExtent(IDeviceContext dc, Rectangle bounds, string textToDraw, TextFormatFlags flags)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
-
-            if (string.IsNullOrEmpty(textToDraw))
-                throw new ArgumentNullException(nameof(textToDraw));
+            ArgumentNullException.ThrowIfNull(dc);
+            textToDraw.ThrowIfNullOrEmpty();
 
             using var hdc = new DeviceContextHdcScope(dc);
             RECT boundsRect = bounds;
@@ -751,8 +709,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public TextMetrics GetTextMetrics(IDeviceContext dc)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeTextMetrics(this, hdc, Part, State, out TextMetrics tm);
@@ -764,8 +721,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public HitTestCode HitTestBackground(IDeviceContext dc, Rectangle backgroundRectangle, Point pt, HitTestOptions options)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             RECT backgroundRect = backgroundRectangle;
@@ -778,11 +734,8 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public HitTestCode HitTestBackground(Graphics g, Rectangle backgroundRectangle, Region region, Point pt, HitTestOptions options)
         {
-            if (g is null)
-                throw new ArgumentNullException(nameof(g));
-
-            if (region is null)
-                throw new ArgumentNullException(nameof(region));
+            ArgumentNullException.ThrowIfNull(g);
+            ArgumentNullException.ThrowIfNull(region);
 
             IntPtr hRgn = region.GetHrgn(g);
             return HitTestBackground(g, backgroundRectangle, hRgn, pt, options);
@@ -793,8 +746,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public HitTestCode HitTestBackground(IDeviceContext dc, Rectangle backgroundRectangle, IntPtr hRgn, Point pt, HitTestOptions options)
         {
-            if (dc is null)
-                throw new ArgumentNullException(nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             RECT backgroundRect = backgroundRectangle;
@@ -849,7 +801,7 @@ namespace System.Windows.Forms.VisualStyles
         {
             ThemeHandle? tHandle = null;
 
-            if (t_themeHandles != null)
+            if (t_themeHandles is not null)
             {
                 string[] classNames = new string[t_themeHandles.Keys.Count];
                 t_themeHandles.Keys.CopyTo(classNames, 0);
@@ -857,7 +809,7 @@ namespace System.Windows.Forms.VisualStyles
                 foreach (string className in classNames)
                 {
                     tHandle = (ThemeHandle?)t_themeHandles[className];
-                    if (tHandle != null)
+                    if (tHandle is not null)
                     {
                         tHandle.Dispose();
                     }
@@ -867,7 +819,7 @@ namespace System.Windows.Forms.VisualStyles
                     if (AreClientAreaVisualStylesSupported)
                     {
                         tHandle = ThemeHandle.Create(className, false);
-                        if (tHandle != null)
+                        if (tHandle is not null)
                         {
                             t_themeHandles[className] = tHandle;
                         }

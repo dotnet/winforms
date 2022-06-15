@@ -24,18 +24,12 @@ namespace System.ComponentModel.Design.Serialization
 
         public CodeDomSerializerException(string message, IDesignerSerializationManager manager) : base(message)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
+            ArgumentNullException.ThrowIfNull(manager);
         }
 
         public CodeDomSerializerException(Exception ex, IDesignerSerializationManager manager) : base(ex?.Message, ex)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
+            ArgumentNullException.ThrowIfNull(manager);
         }
 
         /// <summary>

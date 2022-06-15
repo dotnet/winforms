@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.Win32;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
+using Microsoft.Win32;
 using Xunit;
 using static Interop;
 
@@ -65,6 +64,7 @@ namespace System
                 {
                     return true;
                 }
+
                 return false;
             }
         }
@@ -269,8 +269,7 @@ namespace System
             int dwOSMinorVersion,
             int dwSpMajorVersion,
             int dwSpMinorVersion,
-            out int pdwReturnedProductType
-        );
+            out int pdwReturnedProductType);
 
         [DllImport("ntdll.dll", ExactSpelling = true)]
         private static extern int RtlGetVersion(ref RTL_OSVERSIONINFOEX lpVersionInformation);

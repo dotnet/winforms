@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -14,14 +12,14 @@ namespace System.Windows.Forms
 {
     internal class DropTarget : Ole32.IDropTarget
     {
-        private IDataObject lastDataObject;
-        private DragDropEffects lastEffect = DragDropEffects.None;
-        private readonly IDropTarget owner;
+        private IDataObject? _lastDataObject;
+        private DragDropEffects _lastEffect = DragDropEffects.None;
+        private readonly IDropTarget _owner;
 
         public DropTarget(IDropTarget owner)
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DropTarget created");
-            this.owner = owner;
+            _owner = owner.OrThrowIfNull();
         }
 
 #if DEBUG
@@ -31,19 +29,19 @@ namespace System.Windows.Forms
         }
 #endif
 
-        private DragEventArgs CreateDragEventArgs(object pDataObj, uint grfKeyState, Point pt, uint pdwEffect)
+        private DragEventArgs? CreateDragEventArgs(object? pDataObj, uint grfKeyState, Point pt, uint pdwEffect)
         {
-            IDataObject data = null;
+            IDataObject? data;
 
             if (pDataObj is null)
             {
-                data = lastDataObject;
+                data = _lastDataObject;
             }
             else
             {
-                if (pDataObj is IDataObject)
+                if (pDataObj is IDataObject dataObject)
                 {
-                    data = (IDataObject)pDataObj;
+                    data = dataObject;
                 }
                 else if (pDataObj is IComDataObject)
                 {
@@ -55,8 +53,8 @@ namespace System.Windows.Forms
                 }
             }
 
-            DragEventArgs drgevent = new DragEventArgs(data, (int)grfKeyState, pt.X, pt.Y, (DragDropEffects)pdwEffect, lastEffect);
-            lastDataObject = data;
+            DragEventArgs drgevent = new DragEventArgs(data, (int)grfKeyState, pt.X, pt.Y, (DragDropEffects)pdwEffect, _lastEffect);
+            _lastDataObject = data;
             return drgevent;
         }
 
@@ -64,14 +62,14 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragEnter received");
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (pt.X) + "," + (pt.Y));
-            Debug.Assert(pDataObj != null, "OleDragEnter didn't give us a valid data object.");
-            DragEventArgs drgevent = CreateDragEventArgs(pDataObj, grfKeyState, pt, pdwEffect);
+            Debug.Assert(pDataObj is not null, "OleDragEnter didn't give us a valid data object.");
+            DragEventArgs? drgevent = CreateDragEventArgs(pDataObj, grfKeyState, pt, pdwEffect);
 
-            if (drgevent != null)
+            if (drgevent is not null)
             {
-                owner.OnDragEnter(drgevent);
+                _owner.OnDragEnter(drgevent);
                 pdwEffect = (uint)drgevent.Effect;
-                lastEffect = drgevent.Effect;
+                _lastEffect = drgevent.Effect;
             }
             else
             {
@@ -85,17 +83,25 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragOver received");
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (pt.X) + "," + (pt.Y));
-            DragEventArgs drgevent = CreateDragEventArgs(null, grfKeyState, pt, pdwEffect);
-            owner.OnDragOver(drgevent);
-            pdwEffect = (uint)drgevent.Effect;
-            lastEffect = drgevent.Effect;
+            DragEventArgs? drgevent = CreateDragEventArgs(null, grfKeyState, pt, pdwEffect);
+            if (drgevent is not null)
+            {
+                _owner.OnDragOver(drgevent);
+                pdwEffect = (uint)drgevent.Effect;
+                _lastEffect = drgevent.Effect;
+            }
+            else
+            {
+                pdwEffect = (uint)DragDropEffects.None;
+            }
+
             return HRESULT.S_OK;
         }
 
         HRESULT Ole32.IDropTarget.DragLeave()
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragLeave received");
-            owner.OnDragLeave(EventArgs.Empty);
+            _owner.OnDragLeave(EventArgs.Empty);
             return HRESULT.S_OK;
         }
 
@@ -103,11 +109,11 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDrop received");
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (pt.X) + "," + (pt.Y));
-            DragEventArgs drgevent = CreateDragEventArgs(pDataObj, grfKeyState, pt, pdwEffect);
+            DragEventArgs? drgevent = CreateDragEventArgs(pDataObj, grfKeyState, pt, pdwEffect);
 
-            if (drgevent != null)
+            if (drgevent is not null)
             {
-                owner.OnDragDrop(drgevent);
+                _owner.OnDragDrop(drgevent);
                 pdwEffect = (uint)drgevent.Effect;
             }
             else
@@ -115,8 +121,8 @@ namespace System.Windows.Forms
                 pdwEffect = (uint)DragDropEffects.None;
             }
 
-            lastEffect = DragDropEffects.None;
-            lastDataObject = null;
+            _lastEffect = DragDropEffects.None;
+            _lastDataObject = null;
             return HRESULT.S_OK;
         }
     }

@@ -7,14 +7,13 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static Interop;
 
 namespace System.Windows.Forms
 {
     [SRDescription(nameof(SR.DescriptionStatusStrip))]
-    public class StatusStrip : ToolStrip
+    public partial class StatusStrip : ToolStrip
     {
         private const AnchorStyles AllAnchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top;
         private const AnchorStyles HorizontalAnchor = AnchorStyles.Left | AnchorStyles.Right;
@@ -147,6 +146,7 @@ namespace System.Windows.Forms
                 {
                     rtlLayoutGrip = new RightToLeftLayoutGrip();
                 }
+
                 return rtlLayoutGrip;
             }
         }
@@ -169,7 +169,7 @@ namespace System.Windows.Forms
                 {
                     if (DesignMode)
                     {
-                        return true;  // we dont care about the state of VS.
+                        return true;  // we don't care about the state of VS.
                     }
 
                     IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
@@ -211,7 +211,7 @@ namespace System.Windows.Forms
                 if (SizingGrip)
                 {
                     Size statusStripSize = Size;
-                    // we cant necessarily make this the height of the status strip, as
+                    // we can't necessarily make this the height of the status strip, as
                     // the orientation could change.
                     int gripHeight = Math.Min(DefaultSize.Height, statusStripSize.Height);
 
@@ -224,6 +224,7 @@ namespace System.Windows.Forms
                         return new Rectangle(statusStripSize.Width - gripWidth, statusStripSize.Height - gripHeight, gripWidth, gripHeight);
                     }
                 }
+
                 return Rectangle.Empty;
             }
         }
@@ -256,12 +257,13 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (rtlLayoutGrip != null)
+                if (rtlLayoutGrip is not null)
                 {
                     rtlLayoutGrip.Dispose();
                     rtlLayoutGrip = null;
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -279,7 +281,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
-            else if (rtlLayoutGrip != null)
+            else if (rtlLayoutGrip is not null)
             {
                 if (Controls.Contains(rtlLayoutGrip))
                 {
@@ -287,6 +289,7 @@ namespace System.Windows.Forms
                     {
                         controlCollection.RemoveInternal(rtlLayoutGrip);
                     }
+
                     rtlLayoutGrip.Dispose();
                     rtlLayoutGrip = null;
                 }
@@ -301,19 +304,22 @@ namespace System.Windows.Forms
                 {
                     proposedSize.Width = int.MaxValue;
                 }
+
                 if (proposedSize.Height == 1)
                 {
                     proposedSize.Height = int.MaxValue;
                 }
+
                 if (Orientation == Orientation.Horizontal)
                 {
                     return GetPreferredSizeHorizontal(this, proposedSize) + Padding.Size;
                 }
                 else
                 {
-                    return GetPreferredSizeVertical(this, proposedSize) + Padding.Size;
+                    return GetPreferredSizeVertical(this) + Padding.Size;
                 }
             }
+
             return base.GetPreferredSizeCore(proposedSize);
         }
 
@@ -330,21 +336,22 @@ namespace System.Windows.Forms
         protected override void OnLayout(LayoutEventArgs levent)
         {
             state[stateCalledSpringTableLayout] = false;
-            bool inDisplayedItemCollecton = false;
+            bool inDisplayedItemCollection = false;
             ToolStripItem item = levent.AffectedComponent as ToolStripItem;
             int itemCount = DisplayedItems.Count;
-            if (item != null)
+            if (item is not null)
             {
-                inDisplayedItemCollecton = DisplayedItems.Contains(item);
+                inDisplayedItemCollection = DisplayedItems.Contains(item);
             }
 
             if (LayoutStyle == ToolStripLayoutStyle.Table)
             {
                 OnSpringTableLayoutCore();
             }
+
             base.OnLayout(levent);
 
-            if (itemCount != DisplayedItems.Count || (item != null && (inDisplayedItemCollecton != DisplayedItems.Contains(item))))
+            if (itemCount != DisplayedItems.Count || (item is not null && (inDisplayedItemCollection != DisplayedItems.Contains(item))))
             {
                 // calling OnLayout has changed the displayed items collection
                 // the SpringTableLayoutCore requires the count of displayed items to
@@ -368,7 +375,7 @@ namespace System.Windows.Forms
             {
                 bool rightToLeft = ((Orientation == Orientation.Horizontal) && (RightToLeft == RightToLeft.Yes));
 
-                // shove all items that dont fit one pixel outside the displayed region
+                // shove all items that don't fit one pixel outside the displayed region
                 Rectangle displayRect = DisplayRectangle;
                 Point noMansLand = displayRect.Location;
                 noMansLand.X += ClientSize.Width + 1;
@@ -392,7 +399,7 @@ namespace System.Windows.Forms
                             item.SetPlacement(ToolStripItemPlacement.None);
                         }
                     }
-                    else if (lastItem != null && (lastItemBounds.IntersectsWith(item.Bounds)))
+                    else if (lastItem is not null && (lastItemBounds.IntersectsWith(item.Bounds)))
                     {
                         // if it overlaps the previous element, set the location to nomansland.
                         SetItemLocation(item, noMansLand);
@@ -418,7 +425,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        // we cant fit an item, everything else after it should not be displayed
+                        // we can't fit an item, everything else after it should not be displayed
                         if (((IArrangedElement)item).ParticipatesInLayout)
                         {
                             overflow = true;
@@ -426,6 +433,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             base.SetDisplayedItems();
         }
 
@@ -433,6 +441,7 @@ namespace System.Windows.Forms
         {
             RenderMode = ToolStripRenderMode.System;
         }
+
         internal override bool ShouldSerializeRenderMode()
         {
             // We should NEVER serialize custom.
@@ -460,6 +469,7 @@ namespace System.Windows.Forms
                     settings.ColumnStyles.Clear();
                     settings.RowStyles.Clear();
                 }
+
                 lastOrientation = Orientation;
 
                 if (Orientation == Orientation.Horizontal)
@@ -495,13 +505,14 @@ namespace System.Windows.Forms
                         TableLayoutSettings.RowStyles.Clear();
                         TableLayoutSettings.RowStyles.Add(new RowStyle());
                     }
+
                     TableLayoutSettings.RowCount = 1;
 
                     TableLayoutSettings.RowStyles[0].SizeType = SizeType.Absolute;
                     TableLayoutSettings.RowStyles[0].Height = Math.Max(0, DisplayRectangle.Height);
                     TableLayoutSettings.ColumnCount = DisplayedItems.Count + 1; // add an extra cell so it fills the remaining space
 
-                    // dont remove the extra column styles, just set them back to autosize.
+                    // don't remove the extra column styles, just set them back to autosize.
                     for (int i = DisplayedItems.Count; i < TableLayoutSettings.ColumnStyles.Count; i++)
                     {
                         TableLayoutSettings.ColumnStyles[i].SizeType = SizeType.AutoSize;
@@ -535,6 +546,7 @@ namespace System.Windows.Forms
                         rowStyle.Height = 100; // this width is ignored in AutoSize.
                         rowStyle.SizeType = (spring) ? SizeType.Percent : SizeType.AutoSize;
                     }
+
                     TableLayoutSettings.ColumnCount = 1;
 
                     if (TableLayoutSettings.ColumnStyles.Count > 1 || TableLayoutSettings.ColumnStyles.Count == 0)
@@ -549,7 +561,7 @@ namespace System.Windows.Forms
 
                     TableLayoutSettings.RowCount = DisplayedItems.Count + 1; // add an extra cell so it fills the remaining space
 
-                    // dont remove the extra column styles, just set them back to autosize.
+                    // don't remove the extra column styles, just set them back to autosize.
                     for (int i = DisplayedItems.Count; i < TableLayoutSettings.RowStyles.Count; i++)
                     {
                         TableLayoutSettings.RowStyles[i].SizeType = SizeType.AutoSize;
@@ -567,14 +579,12 @@ namespace System.Windows.Forms
                 // if we're within the grip bounds tell windows
                 // that we're the bottom right of the window.
                 Rectangle sizeGripBounds = SizeGripBounds;
-                int x = PARAM.LOWORD(m.LParam);
-                int y = PARAM.HIWORD(m.LParam);
 
-                if (sizeGripBounds.Contains(PointToClient(new Point(x, y))))
+                if (sizeGripBounds.Contains(PointToClient(PARAM.ToPoint(m.LParamInternal))))
                 {
                     IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
 
-                    // if the main window isnt maximized - we should paint a resize grip.
+                    // if the main window isn't maximized - we should paint a resize grip.
                     // double check that we're at the bottom right hand corner of the window.
                     if (rootHwnd != IntPtr.Zero && !User32.IsZoomed(rootHwnd).IsTrue())
                     {
@@ -593,7 +603,8 @@ namespace System.Windows.Forms
                         {
                             gripLocation = new Point(SizeGripBounds.Right, SizeGripBounds.Bottom);
                         }
-                        User32.MapWindowPoints(new HandleRef(this, Handle), rootHwnd, ref gripLocation, 1);
+
+                        User32.MapWindowPoint(this, rootHwnd, ref gripLocation);
 
                         int deltaBottomEdge = Math.Abs(rootHwndClientArea.bottom - gripLocation.Y);
                         int deltaRightEdge = Math.Abs(rootHwndClientArea.right - gripLocation.X);
@@ -602,13 +613,14 @@ namespace System.Windows.Forms
                         {
                             if ((deltaRightEdge + deltaBottomEdge) < 2)
                             {
-                                m.Result = (IntPtr)User32.HT.BOTTOMRIGHT;
+                                m.ResultInternal = (nint)User32.HT.BOTTOMRIGHT;
                                 return;
                             }
                         }
                     }
                 }
             }
+
             base.WndProc(ref m);
         }
 
@@ -620,6 +632,7 @@ namespace System.Windows.Forms
                 SetStyle(ControlStyles.SupportsTransparentBackColor, true);
                 BackColor = Color.Transparent;
             }
+
             protected override CreateParams CreateParams
             {
                 get
@@ -629,97 +642,19 @@ namespace System.Windows.Forms
                     return cp;
                 }
             }
+
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == (int)User32.WM.NCHITTEST)
+                if (m.MsgInternal == User32.WM.NCHITTEST)
                 {
-                    int x = PARAM.LOWORD(m.LParam);
-                    int y = PARAM.HIWORD(m.LParam);
-
-                    if (ClientRectangle.Contains(PointToClient(new Point(x, y))))
+                    if (ClientRectangle.Contains(PointToClient(PARAM.ToPoint(m.LParamInternal))))
                     {
-                        m.Result = (IntPtr)User32.HT.BOTTOMLEFT;
+                        m.ResultInternal = (nint)User32.HT.BOTTOMLEFT;
                         return;
                     }
                 }
+
                 base.WndProc(ref m);
-            }
-        }
-
-        internal class StatusStripAccessibleObject : ToolStripAccessibleObject
-        {
-            public StatusStripAccessibleObject(StatusStrip owner) : base(owner)
-            {
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-                    return AccessibleRole.StatusBar;
-                }
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.StatusBarControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
-
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
-            {
-                if (!(Owner is StatusStrip statusStrip) || statusStrip.Items.Count == 0)
-                {
-                    return null;
-                }
-
-                switch (direction)
-                {
-                    case UiaCore.NavigateDirection.FirstChild:
-                        AccessibleObject firstChild = null;
-                        for (int i = 0; i < GetChildCount(); i++)
-                        {
-                            firstChild = GetChild(i);
-                            if (firstChild != null && !(firstChild is ControlAccessibleObject))
-                            {
-                                return firstChild;
-                            }
-                        }
-                        return null;
-
-                    case UiaCore.NavigateDirection.LastChild:
-                        AccessibleObject lastChild = null;
-                        for (int i = GetChildCount() - 1; i >= 0; i--)
-                        {
-                            lastChild = GetChild(i);
-                            if (lastChild != null && !(lastChild is ControlAccessibleObject))
-                            {
-                                return lastChild;
-                            }
-                        }
-                        return null;
-                }
-
-                return base.FragmentNavigate(direction);
-            }
-
-            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
-            {
-                return HitTest((int)x, (int)y);
-            }
-
-            internal override UiaCore.IRawElementProviderFragment GetFocus()
-            {
-                return GetFocused();
             }
         }
     }

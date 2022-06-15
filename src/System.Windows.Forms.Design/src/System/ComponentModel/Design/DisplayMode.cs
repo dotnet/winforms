@@ -5,7 +5,7 @@
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    ///  Specifies identifiers to indicate the display modes used by <see cref='ByteViewer'/>.
+    ///  Specifies identifiers to indicate the display modes used by <see cref="ByteViewer"/>.
     /// </summary>
     public enum DisplayMode
     {

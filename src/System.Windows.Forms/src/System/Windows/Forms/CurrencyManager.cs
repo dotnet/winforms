@@ -74,6 +74,7 @@ namespace System.Windows.Forms
                 {
                     return ((IBindingList)list).AllowNew;
                 }
+
                 if (list is null)
                 {
                     return false;
@@ -95,6 +96,7 @@ namespace System.Windows.Forms
                 {
                     return ((IBindingList)list).AllowEdit;
                 }
+
                 if (list is null)
                 {
                     return false;
@@ -115,6 +117,7 @@ namespace System.Windows.Forms
                 {
                     return ((IBindingList)list).AllowRemove;
                 }
+
                 if (list is null)
                 {
                     return false;
@@ -199,6 +202,7 @@ namespace System.Windows.Forms
                     {
                         finalType = tempList.GetType();
                     }
+
                     list = (IList)tempList;
                     WireEvents(list);
                     if (list.Count > 0)
@@ -216,10 +220,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (tempList is null)
-                    {
-                        throw new ArgumentNullException(nameof(dataSource));
-                    }
+                    ArgumentNullException.ThrowIfNull(tempList, nameof(dataSource));
+
                     throw new ArgumentException(string.Format(SR.ListManagerSetDataSource, tempList.GetType().FullName), nameof(dataSource));
                 }
             }
@@ -306,6 +308,7 @@ namespace System.Windows.Forms
                 {
                     throw new IndexOutOfRangeException(string.Format(SR.ListManagerNoValue, index.ToString(CultureInfo.CurrentCulture)));
                 }
+
                 return list[index];
             }
             set
@@ -314,6 +317,7 @@ namespace System.Windows.Forms
                 {
                     throw new IndexOutOfRangeException(string.Format(SR.ListManagerNoValue, index.ToString(CultureInfo.CurrentCulture)));
                 }
+
                 list[index] = value;
             }
         }
@@ -370,6 +374,7 @@ namespace System.Windows.Forms
                     listposition = -1;
                     OnPositionChanged(EventArgs.Empty);
                 }
+
                 return;
             }
 
@@ -455,6 +460,7 @@ namespace System.Windows.Forms
                     // that is good for all the bindings.
                     FindGoodRow();
                 }
+
                 lastGoodKnownRow = listposition;
             }
             else
@@ -470,6 +476,7 @@ namespace System.Windows.Forms
                     listposition = lastGoodKnownRow;
                     PushData();
                 }
+
                 lastGoodKnownRow = listposition;
             }
 
@@ -539,9 +546,11 @@ namespace System.Windows.Forms
                     OnDataError(ex);
                     continue;
                 }
+
                 listposition = i;
                 return;
             }
+
             // if we got here, the list did not contain any rows suitable for the bindings
             // suspend binding and throw an exception
             SuspendBinding();
@@ -560,7 +569,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets a <see cref='PropertyDescriptor'/> for a CurrencyManager.
+        ///  Gets a <see cref="PropertyDescriptor"/> for a CurrencyManager.
         /// </summary>
         internal PropertyDescriptor GetSortProperty()
         {
@@ -568,6 +577,7 @@ namespace System.Windows.Forms
             {
                 return ((IBindingList)list).SortProperty;
             }
+
             return null;
         }
 
@@ -580,6 +590,7 @@ namespace System.Windows.Forms
             {
                 return ((IBindingList)list).SortDirection;
             }
+
             return ListSortDirection.Ascending;
         }
 
@@ -588,17 +599,14 @@ namespace System.Windows.Forms
         /// </summary>
         internal int Find(PropertyDescriptor property, object key, bool keepIndex)
         {
-            if (key is null)
-            {
-                throw new ArgumentNullException(nameof(key));
-            }
+            ArgumentNullException.ThrowIfNull(key);
 
-            if (property != null && (list is IBindingList) && ((IBindingList)list).SupportsSearching)
+            if (property is not null && (list is IBindingList) && ((IBindingList)list).SupportsSearching)
             {
                 return ((IBindingList)list).Find(property, key);
             }
 
-            if (property != null)
+            if (property is not null)
             {
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -639,6 +647,7 @@ namespace System.Windows.Forms
                 listAccessors.CopyTo(properties, 0);
                 return ((ITypedList)list).GetListName(properties);
             }
+
             return "";
         }
 
@@ -648,7 +657,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the <see cref='PropertyDescriptorCollection'/> for the list.
+        ///  Gets the <see cref="PropertyDescriptorCollection"/> for the list.
         /// </summary>
         public override PropertyDescriptorCollection GetItemProperties()
         {
@@ -656,7 +665,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the <see cref='PropertyDescriptorCollection'/> for the specified list.
+        ///  Gets the <see cref="PropertyDescriptorCollection"/> for the specified list.
         /// </summary>
         private void List_ListChanged(object sender, ListChangedEventArgs e)
         {
@@ -775,6 +784,7 @@ namespace System.Windows.Forms
                             // do not call EndEdit on a row that was not there ( position == -1)
                             ChangeRecordState(0, false, false, true, false);
                         }
+
                         UpdateIsBinding();
                         // put the call to OnItemChanged after setting the position, so the
                         // controls would use the actual position.
@@ -795,6 +805,7 @@ namespace System.Windows.Forms
                             OnItemChanged(resetEvent);
                             break;
                         }
+
                         if (dbe.NewIndex < listposition)
                         {
                             // this means the current row just moved up by one.
@@ -805,6 +816,7 @@ namespace System.Windows.Forms
                             OnItemChanged(resetEvent);
                             break;
                         }
+
                         OnItemChanged(resetEvent);
                         break;
                     case System.ComponentModel.ListChangedType.ItemChanged:
@@ -829,6 +841,7 @@ namespace System.Windows.Forms
                             // the position changes, so end the current edit. Make sure there is something that we can end edit
                             ChangeRecordState(dbe.OldIndex, true, Position > -1 && Position < list.Count, true, false);
                         }
+
                         OnItemChanged(resetEvent);
                         break;
                     case System.ComponentModel.ListChangedType.PropertyDescriptorAdded:
@@ -852,6 +865,7 @@ namespace System.Windows.Forms
                         OnMetaDataChanged(EventArgs.Empty);
                         break;
                 }
+
                 // send the ListChanged notification after the position changed in the list
                 //
 
@@ -861,6 +875,7 @@ namespace System.Windows.Forms
             {
                 suspendPushDataInCurrentChanged = false;
             }
+
             Debug.Assert(lastGoodKnownRow == -1 || listposition == lastGoodKnownRow, "how did they get out of sync?");
         }
 
@@ -894,6 +909,7 @@ namespace System.Windows.Forms
                         ((IEditableObject)item).BeginEdit();
                     }
                 }
+
                 try
                 {
                     // if currencyManager changed position then we have two cases:
@@ -957,7 +973,7 @@ namespace System.Windows.Forms
             onListChanged?.Invoke(this, e);
         }
 
-//Exists in Everett
+        //Exists in Everett
         internal protected void OnMetaDataChanged(EventArgs e)
         {
             onMetaDataChangedHandler?.Invoke(this, e);
@@ -993,6 +1009,7 @@ namespace System.Windows.Forms
             {
                 listposition = -1;
             }
+
             List_ListChanged(list, new ListChangedEventArgs(System.ComponentModel.ListChangedType.Reset, -1));
         }
 
@@ -1013,7 +1030,7 @@ namespace System.Windows.Forms
                 {
                     shouldBind = true;
                     // we need to put the listPosition at the beginning of the list if the list is not empty
-                    listposition = (list != null && list.Count != 0) ? 0 : -1;
+                    listposition = (list is not null && list.Count != 0) ? 0 : -1;
                     UpdateIsBinding();
                 }
             }
@@ -1053,8 +1070,8 @@ namespace System.Windows.Forms
 
         private void UpdateIsBinding(bool raiseItemChangedEvent)
         {
-            bool newBound = list != null && list.Count > 0 && shouldBind && listposition != -1;
-            if (list != null)
+            bool newBound = list is not null && list.Count > 0 && shouldBind && listposition != -1;
+            if (list is not null)
             {
                 if (bound != newBound)
                 {

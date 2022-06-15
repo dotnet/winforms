@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  The ToolStripItems are the associated components. We want those to come with in any cut, copy opreations.
         /// </summary>
-        public override System.Collections.ICollection AssociatedComponents
+        public override Collections.ICollection AssociatedComponents
         {
             get
             {
@@ -30,6 +30,7 @@ namespace System.Windows.Forms.Design
                 {
                     return item.DropDownItems;
                 }
+
                 return base.AssociatedComponents;
             }
         }

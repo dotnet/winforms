@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices.ComTypes;
@@ -35,13 +32,13 @@ namespace System.Windows.Forms
                 _formats.AddRange(source._formats);
             }
 
-            public FormatEnumerator(IDataObject parent, string[] formats)
+            public FormatEnumerator(IDataObject parent, string[]? formats)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"FormatEnumerator: Constructed: {parent}, string[{(formats?.Length ?? 0)}]");
 
                 _parent = parent;
 
-                if (formats != null)
+                if (formats is not null)
                 {
                     for (int i = 0; i < formats.Length; i++)
                     {
@@ -79,32 +76,35 @@ namespace System.Windows.Forms
                 }
             }
 
-            public int Next(int celt, FORMATETC[] rgelt, int[] pceltFetched)
+            public int Next(int celt, FORMATETC[] rgelt, int[]? pceltFetched)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Next");
                 if (_current < _formats.Count && celt > 0)
                 {
-                    FORMATETC current = (FORMATETC)_formats[_current];
+                    FORMATETC current = _formats[_current];
                     rgelt[0].cfFormat = current.cfFormat;
                     rgelt[0].tymed = current.tymed;
                     rgelt[0].dwAspect = DVASPECT.DVASPECT_CONTENT;
                     rgelt[0].ptd = IntPtr.Zero;
                     rgelt[0].lindex = -1;
 
-                    if (pceltFetched != null)
+                    if (pceltFetched is not null)
                     {
                         pceltFetched[0] = 1;
                     }
+
                     _current++;
                 }
                 else
                 {
-                    if (pceltFetched != null)
+                    if (pceltFetched is not null)
                     {
                         pceltFetched[0] = 0;
                     }
+
                     return (int)HRESULT.S_FALSE;
                 }
+
                 return (int)HRESULT.S_OK;
             }
 
@@ -115,6 +115,7 @@ namespace System.Windows.Forms
                 {
                     return (int)HRESULT.S_FALSE;
                 }
+
                 _current += celt;
                 return (int)HRESULT.S_OK;
             }

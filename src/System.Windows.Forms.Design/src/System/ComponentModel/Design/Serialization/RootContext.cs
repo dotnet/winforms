@@ -3,11 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System.CodeDom;
+using System.Windows.Forms;
 
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    ///  The root context is added by a type code dom serailizier to provide a
+    ///  The root context is added by a type code dom serializer to provide a
     ///  definiton of the "root" object.
     /// </summary>
     public sealed class RootContext
@@ -20,8 +21,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public RootContext(CodeExpression expression, object value)
         {
-            Expression = expression ?? throw new ArgumentNullException(nameof(expression));
-            Value = value ?? throw new ArgumentNullException(nameof(value));
+            Expression = expression.OrThrowIfNull();
+            Value = value.OrThrowIfNull();
         }
 
         /// <summary>

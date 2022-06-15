@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -15,8 +13,8 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolStripItemRenderEventArgs(Graphics g, ToolStripItem item)
         {
-            Graphics = g;
-            Item = item;
+            Graphics = g.OrThrowIfNull();
+            Item = item.OrThrowIfNull();
         }
 
         /// <summary>
@@ -32,6 +30,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The toolstrip the item is currently parented to
         /// </summary>
-        public ToolStrip ToolStrip => Item?.ParentInternal;
+        public ToolStrip? ToolStrip => Item.ParentInternal;
     }
 }

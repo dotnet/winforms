@@ -12,7 +12,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -33,14 +32,13 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Name))]
     [DefaultEvent(nameof(Enter))]
     [Designer("System.Windows.Forms.Design.AxDesigner, " + AssemblyRef.SystemDesign)]
-    public class WebBrowserBase : Control
+    public partial class WebBrowserBase : Control
     {
         private WebBrowserHelper.AXState axState = WebBrowserHelper.AXState.Passive;
         private WebBrowserHelper.AXState axReloadingState = WebBrowserHelper.AXState.Passive;
         private WebBrowserHelper.AXEditMode axEditMode = WebBrowserHelper.AXEditMode.None;
         private BitVector32 axHostState;
         private WebBrowserHelper.SelectionStyle selectionStyle = WebBrowserHelper.SelectionStyle.NotSelected;
-        private int noComponentChange;
         private WebBrowserSiteBase axSite;
         private ContainerControl containingControl;
         private IntPtr hwndFocus = IntPtr.Zero;
@@ -70,9 +68,9 @@ namespace System.Windows.Forms
         internal object activeXInstance;
 
         /// <summary>
-            ///  Creates a new instance of a WinForms control which wraps an ActiveX control
+        ///  Creates a new instance of a WinForms control which wraps an ActiveX control
         ///  given by the clsid parameter.
-            /// </summary>
+        /// </summary>
         internal WebBrowserBase(string clsidString) : base()
         {
             if (Application.OleRequired() != ApartmentState.STA)
@@ -124,7 +122,7 @@ namespace System.Windows.Forms
         //
         /// <summary>
         ///  Returns an object that will be set as the site for the native ActiveX control.
-        ///  Implementors of the site can derive from <see cref='WebBrowserSiteBase'/> class.
+        ///  Implementors of the site can derive from <see cref="WebBrowserSiteBase"/> class.
         /// </summary>
         protected virtual WebBrowserSiteBase CreateWebBrowserSiteBase()
         {
@@ -132,35 +130,35 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  This will be called when the native ActiveX control has just been created.
+        ///  This will be called when the native ActiveX control has just been created.
         ///  Inheritors of this class can override this method to cast the nativeActiveXObject
         ///  parameter to the appropriate interface. They can then cache this interface
         ///  value in a member variable. However, they must release this value when
         ///  DetachInterfaces is called (by setting the cached interface variable to null).
-            /// </summary>
+        /// </summary>
         protected virtual void AttachInterfaces(object nativeActiveXObject)
         {
         }
 
         /// <summary>
-            ///  See AttachInterfaces for a description of when to override DetachInterfaces.
-            /// </summary>
+        ///  See AttachInterfaces for a description of when to override DetachInterfaces.
+        /// </summary>
         protected virtual void DetachInterfaces()
         {
         }
 
         /// <summary>
-            ///  This will be called when we are ready to start listening to events.
+        ///  This will be called when we are ready to start listening to events.
         ///  Inheritors can override this method to hook their own connection points.
-            /// </summary>
+        /// </summary>
         protected virtual void CreateSink()
         {
         }
 
         /// <summary>
-            ///  This will be called when it is time to stop listening to events.
+        ///  This will be called when it is time to stop listening to events.
         ///  This is where inheritors have to disconnect their connection points.
-            /// </summary>
+        /// </summary>
         protected virtual void DetachSink()
         {
         }
@@ -227,6 +225,7 @@ namespace System.Windows.Forms
         {
             return ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
         }
+
         public unsafe override bool PreProcessMessage(ref Message msg)
         {
             // Let us assume that TAB key was pressed. In this case, we should first
@@ -240,75 +239,82 @@ namespace System.Windows.Forms
             // WebBrowserSiteBase's IOleControlSite.TranslateAccelerator implementation. There, we
             // set a flag and call back into this method. In this method, we first check
             // if this flag is set. If so, we call base.PreProcessMessage.
-            if (IsUserMode)
+            if (!IsUserMode)
             {
-                if (GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
-                {
-                    // In this case, the control called us back through IOleControlSite
-                    // and is now giving us a chance to see if we want to process it.
-                    return base.PreProcessMessage(ref msg);
-                }
-
-                // Convert Message to MSG
-                User32.MSG win32Message = msg;
-                SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
-                try
-                {
-                    if (axOleInPlaceObject != null)
-                    {
-                        // Give the ActiveX control a chance to process this key by calling
-                        // IOleInPlaceActiveObject::TranslateAccelerator.
-                        HRESULT hr = axOleInPlaceActiveObject.TranslateAccelerator(&win32Message);
-                        if (hr == HRESULT.S_OK)
-                        {
-                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message translated to " + win32Message);
-                            return true;
-                        }
-                        else
-                        {
-                            // win32Message may have been modified. Lets copy it back.
-                            msg.Msg = (int)win32Message.message;
-                            msg.WParam = win32Message.wParam;
-                            msg.LParam = win32Message.lParam;
-                            msg.HWnd = win32Message.hwnd;
-
-                            if (hr == HRESULT.S_FALSE)
-                            {
-                                // Same code as in AxHost (ignore dialog keys here).
-                                // We have the same problem here
-                                bool ret = false;
-
-                                ignoreDialogKeys = true;
-                                try
-                                {
-                                    ret = base.PreProcessMessage(ref msg);
-                                }
-                                finally
-                                {
-                                    ignoreDialogKeys = false;
-                                }
-                                return ret;
-                            }
-                            else if (GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
-                            {
-                                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message processed by site. Calling base.PreProcessMessage() " + msg);
-                                return base.PreProcessMessage(ref msg);
-                            }
-                            else
-                            {
-                                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message not processed by site. Returning false. " + msg);
-                                return false;
-                            }
-                        }
-                    }
-                }
-                finally
-                {
-                    SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
-                }
+                return false;
             }
 
-            return false;
+            if (GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
+            {
+                // In this case, the control called us back through IOleControlSite
+                // and is now giving us a chance to see if we want to process it.
+                return base.PreProcessMessage(ref msg);
+            }
+
+            // Convert Message to MSG
+            User32.MSG win32Message = msg;
+            SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
+            try
+            {
+                if (axOleInPlaceObject is null)
+                {
+                    return false;
+                }
+
+                // Give the ActiveX control a chance to process this key by calling
+                // IOleInPlaceActiveObject::TranslateAccelerator.
+                HRESULT hr = axOleInPlaceActiveObject.TranslateAccelerator(&win32Message);
+                if (hr == HRESULT.S_OK)
+                {
+                    Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"\t Message translated to {win32Message}");
+                    return true;
+                }
+                else
+                {
+                    // win32Message may have been modified. Lets copy it back.
+                    msg.MsgInternal = win32Message.message;
+                    msg.WParamInternal = win32Message.wParam;
+                    msg.LParamInternal = win32Message.lParam;
+                    msg.HWnd = win32Message.hwnd;
+
+                    if (hr == HRESULT.S_FALSE)
+                    {
+                        // Same code as in AxHost (ignore dialog keys here).
+                        // We have the same problem here.
+                        bool ret = false;
+
+                        ignoreDialogKeys = true;
+                        try
+                        {
+                            ret = base.PreProcessMessage(ref msg);
+                        }
+                        finally
+                        {
+                            ignoreDialogKeys = false;
+                        }
+
+                        return ret;
+                    }
+                    else if (GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
+                    {
+                        Debug.WriteLineIf(
+                            s_controlKeyboardRouting.TraceVerbose,
+                            $"\t Message processed by site. Calling base.PreProcessMessage() {msg}");
+                        return base.PreProcessMessage(ref msg);
+                    }
+                    else
+                    {
+                        Debug.WriteLineIf(
+                            s_controlKeyboardRouting.TraceVerbose,
+                            $"\t Message not processed by site. Returning false. {msg}");
+                        return false;
+                    }
+                }
+            }
+            finally
+            {
+                SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
+            }
         }
 
         //
@@ -362,9 +368,11 @@ namespace System.Windows.Forms
                     {
                         throw;
                     }
+
                     Debug.Fail("error in processMnemonic");
                 }
             }
+
             return processed;
         }
 
@@ -396,7 +404,7 @@ namespace System.Windows.Forms
                     break;
 
                 case User32.WM.COMMAND:
-                    if (!ReflectMessage(m.LParam, ref m))
+                    if (!ReflectMessage(m.LParamInternal, ref m))
                     {
                         DefWndProc(ref m);
                     }
@@ -415,16 +423,17 @@ namespace System.Windows.Forms
                 case User32.WM.MOUSEACTIVATE:
                     if (!DesignMode)
                     {
-                        if (containingControl != null && containingControl.ActiveControl != this)
+                        if (containingControl is not null && containingControl.ActiveControl != this)
                         {
                             Focus();
                         }
                     }
+
                     DefWndProc(ref m);
                     break;
 
                 case User32.WM.KILLFOCUS:
-                    hwndFocus = (IntPtr)m.WParam;
+                    hwndFocus = m.WParamInternal;
                     try
                     {
                         base.WndProc(ref m);
@@ -433,6 +442,7 @@ namespace System.Windows.Forms
                     {
                         hwndFocus = IntPtr.Zero;
                     }
+
                     break;
 
                 case User32.WM.DESTROY:
@@ -448,7 +458,7 @@ namespace System.Windows.Forms
                         IntPtr hwndInPlaceObject = IntPtr.Zero;
                         if (AXInPlaceObject.GetWindow(&hwndInPlaceObject).Succeeded())
                         {
-                            Application.ParkHandle(new HandleRef(AXInPlaceObject, hwndInPlaceObject));
+                            Application.ParkHandle(new HandleRef(AXInPlaceObject, hwndInPlaceObject), DpiAwarenessContext);
                         }
                     }
 
@@ -464,7 +474,7 @@ namespace System.Windows.Forms
                     // up to InPlaceActivate that the ActiveX control grabs our handle).
                     TransitionDownTo(WebBrowserHelper.AXState.Running);
 
-                    if (axWindow != null)
+                    if (axWindow is not null)
                     {
                         axWindow.ReleaseHandle();
                     }
@@ -473,14 +483,15 @@ namespace System.Windows.Forms
                     break;
 
                 default:
-                    if (m.Msg == (int)WebBrowserHelper.REGMSG_MSG)
+                    if (m.MsgInternal == WebBrowserHelper.REGMSG_MSG)
                     {
-                        m.Result = (IntPtr)WebBrowserHelper.REGMSG_RETVAL;
+                        m.ResultInternal = WebBrowserHelper.REGMSG_RETVAL;
                     }
                     else
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
             }
         }
@@ -488,10 +499,11 @@ namespace System.Windows.Forms
         protected override void OnParentChanged(EventArgs e)
         {
             Control parent = ParentInternal;
-            if ((Visible && parent != null && parent.Visible) || IsHandleCreated)
+            if ((Visible && parent is not null && parent.Visible) || IsHandleCreated)
             {
                 TransitionUpTo(WebBrowserHelper.AXState.InPlaceActive);
             }
+
             base.OnParentChanged(e);
         }
 
@@ -501,6 +513,7 @@ namespace System.Windows.Forms
             {
                 TransitionUpTo(WebBrowserHelper.AXState.InPlaceActive);
             }
+
             base.OnVisibleChanged(e);
         }
 
@@ -510,6 +523,7 @@ namespace System.Windows.Forms
             {
                 TransitionUpTo(WebBrowserHelper.AXState.UIActive);
             }
+
             base.OnGotFocus(e);
         }
 
@@ -583,6 +597,7 @@ namespace System.Windows.Forms
             {
                 TransitionDownTo(WebBrowserHelper.AXState.Passive);
             }
+
             base.Dispose(disposing);
         }
 
@@ -741,6 +756,7 @@ namespace System.Windows.Forms
             {
                 wbContainer = new WebBrowserContainer(this);
             }
+
             return wbContainer;
         }
 
@@ -750,11 +766,13 @@ namespace System.Windows.Forms
             {
                 container = WebBrowserContainer.FindContainerForControl(this);
             }
+
             if (container is null)
             {
                 container = CreateWebBrowserContainer();
                 container.AddControl(this);
             }
+
             return container;
         }
 
@@ -769,12 +787,12 @@ namespace System.Windows.Forms
             {
                 ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
                 this.selectionStyle = selectionStyle;
-                if (iss != null && iss.GetComponentSelected(this))
+                if (iss is not null && iss.GetComponentSelected(this))
                 {
                     // The ActiveX Host designer will offer an extender property
                     // called "SelectionStyle"
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(this)["SelectionStyle"];
-                    if (prop != null && prop.PropertyType == typeof(int))
+                    if (prop is not null && prop.PropertyType == typeof(int))
                     {
                         prop.SetValue(this, (int)selectionStyle);
                     }
@@ -789,7 +807,7 @@ namespace System.Windows.Forms
                 SetAXHostState(WebBrowserHelper.addedSelectionHandler, true);
 
                 ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
-                if (iss != null)
+                if (iss is not null)
                 {
                     iss.SelectionChanging += SelectionChangeHandler;
                 }
@@ -804,11 +822,12 @@ namespace System.Windows.Forms
                 SetAXHostState(WebBrowserHelper.addedSelectionHandler, false);
 
                 ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
-                if (iss != null)
+                if (iss is not null)
                 {
                     iss.SelectionChanging -= SelectionChangeHandler;
                 }
             }
+
             return retVal;
         }
 
@@ -816,10 +835,11 @@ namespace System.Windows.Forms
         {
             User32.SetParent(hwnd, new HandleRef(this, Handle));
 
-            if (axWindow != null)
+            if (axWindow is not null)
             {
                 axWindow.ReleaseHandle();
             }
+
             axWindow = new WebBrowserBaseNativeWindow(this);
             axWindow.AssignHandle(hwnd, false);
 
@@ -833,40 +853,18 @@ namespace System.Windows.Forms
             Bounds = new Rectangle(location.X, location.Y, extent.Width, extent.Height);
         }
 
-        internal bool IsUserMode
-        {
-            get
-            {
-                return Site is null || !DesignMode;
-            }
-        }
+        internal bool IsUserMode => Site is null || !DesignMode;
 
         internal void MakeDirty()
         {
-            ISite iSite = Site;
-            if (iSite != null)
+            if (Site.TryGetService(out IComponentChangeService changeService))
             {
-                IComponentChangeService ccs = (IComponentChangeService)iSite.GetService(typeof(IComponentChangeService));
-                if (ccs != null)
-                {
-                    ccs.OnComponentChanging(this, null);
-                    ccs.OnComponentChanged(this, null, null, null);
-                }
+                changeService.OnComponentChanging(this);
+                changeService.OnComponentChanged(this);
             }
         }
 
-        internal int NoComponentChangeEvents
-        {
-            get
-            {
-                return noComponentChange;
-            }
-
-            set
-            {
-                noComponentChange = value;
-            }
-        }
+        internal int NoComponentChangeEvents { get; set; }
 
         //
         // Private helper methods:
@@ -879,6 +877,7 @@ namespace System.Windows.Forms
                 SetAXHostState(WebBrowserHelper.sinkAttached, true);
                 CreateSink();
             }
+
             ActiveXSite.StartEvents();
         }
 
@@ -889,6 +888,7 @@ namespace System.Windows.Forms
                 SetAXHostState(WebBrowserHelper.sinkAttached, false);
                 DetachSink();
             }
+
             ActiveXSite.StopEvents();
         }
 
@@ -905,12 +905,9 @@ namespace System.Windows.Forms
                     Ole32.CLSCTX.INPROC_SERVER,
                     ref NativeMethods.ActiveX.IID_IUnknown,
                     out activeXInstance);
-                if (!hr.Succeeded())
-                {
-                    throw Marshal.GetExceptionForHR((int)hr);
-                }
+                hr.ThrowIfFailed();
 
-                Debug.Assert(activeXInstance != null, "w/o an exception being thrown we must have an object...");
+                Debug.Assert(activeXInstance is not null, "w/o an exception being thrown we must have an object...");
 
                 // We are now loaded.
                 ActiveXState = WebBrowserHelper.AXState.Loaded;
@@ -933,7 +930,7 @@ namespace System.Windows.Forms
                 {
                     //
                     // Release the activeXInstance
-                    if (activeXInstance != null)
+                    if (activeXInstance is not null)
                     {
                         //
                         // Lets first get the cached interface pointers of activeXInstance released.
@@ -994,7 +991,7 @@ namespace System.Windows.Forms
                 //
                 // Remove ourselves from our parent container...
                 WebBrowserContainer parentContainer = GetParentContainer();
-                if (parentContainer != null)
+                if (parentContainer is not null)
                 {
                     parentContainer.RemoveControl(this);
                 }
@@ -1040,7 +1037,7 @@ namespace System.Windows.Forms
                 // First, lets make sure we transfer the ContainingControl's ActiveControl
                 // before we InPlaceDeactivate.
                 ContainerControl f = ContainingControl;
-                if (f != null && f.ActiveControl == this)
+                if (f is not null && f.ActiveControl == this)
                 {
                     f.SetActiveControl(null);
                 }
@@ -1096,13 +1093,14 @@ namespace System.Windows.Forms
                 {
                     axSite = CreateWebBrowserSiteBase();
                 }
+
                 return axSite;
             }
         }
 
         private void AttachInterfacesInternal()
         {
-            Debug.Assert(activeXInstance != null, "The native control is null");
+            Debug.Assert(activeXInstance is not null, "The native control is null");
             axOleObject = (Ole32.IOleObject)activeXInstance;
             axOleInPlaceObject = (Ole32.IOleInPlaceObject)activeXInstance;
             axOleInPlaceActiveObject = (Ole32.IOleInPlaceActiveObject)activeXInstance;
@@ -1135,6 +1133,7 @@ namespace System.Windows.Forms
                 {
                     selectionChangeHandler = new EventHandler(OnNewSelection);
                 }
+
                 return selectionChangeHandler;
             }
         }
@@ -1147,7 +1146,7 @@ namespace System.Windows.Forms
             if (DesignMode)
             {
                 ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
-                if (iss != null)
+                if (iss is not null)
                 {
                     // We are no longer selected.
                     if (!iss.GetComponentSelected(this))
@@ -1159,6 +1158,7 @@ namespace System.Windows.Forms
                             GetParentContainer().OnExitEditMode(this);
                             SetEditMode(WebBrowserHelper.AXEditMode.None);
                         }
+
                         SetSelectionStyle(WebBrowserHelper.SelectionStyle.Selected);
                         RemoveSelectionHandler();
                     }
@@ -1167,7 +1167,7 @@ namespace System.Windows.Forms
                         //
                         // The AX Host designer will offer an extender property called "SelectionStyle"
                         PropertyDescriptor prop = TypeDescriptor.GetProperties(this)["SelectionStyle"];
-                        if (prop != null && prop.PropertyType == typeof(int))
+                        if (prop is not null && prop.PropertyType == typeof(int))
                         {
                             int curSelectionStyle = (int)prop.GetValue(this);
                             if (curSelectionStyle != (int)selectionStyle)
@@ -1190,6 +1190,7 @@ namespace System.Windows.Forms
             {
                 resetExtents = true;
             }
+
             if (resetExtents)
             {
                 axOleObject.GetExtent(Ole32.DVASPECT.CONTENT, &sz);
@@ -1236,13 +1237,13 @@ namespace System.Windows.Forms
         //Find the uppermost ContainerControl that this control lives in
         internal ContainerControl FindContainerControlInternal()
         {
-            if (Site != null)
+            if (Site is not null)
             {
                 IDesignerHost host = (IDesignerHost)Site.GetService(typeof(IDesignerHost));
-                if (host != null)
+                if (host is not null)
                 {
                     IComponent comp = host.RootComponent;
-                    if (comp != null && comp is ContainerControl)
+                    if (comp is not null && comp is ContainerControl)
                     {
                         return (ContainerControl)comp;
                     }
@@ -1250,7 +1251,7 @@ namespace System.Windows.Forms
             }
 
             ContainerControl cc = null;
-            for (Control control = this; control != null; control = control.ParentInternal)
+            for (Control control = this; control is not null; control = control.ParentInternal)
             {
                 if (control is ContainerControl tempCC)
                 {
@@ -1276,7 +1277,7 @@ namespace System.Windows.Forms
 
         private void AmbientChanged(Ole32.DispatchID dispid)
         {
-            if (activeXInstance != null)
+            if (activeXInstance is not null)
             {
                 try
                 {
@@ -1338,7 +1339,7 @@ namespace System.Windows.Forms
 
             base.OnHandleCreated(e);
 
-            // make sure we restore whatever running state whad prior to the handle recreate.
+            // make sure we restore whatever running state we had prior to the handle recreate.
             //
             if (axReloadingState != WebBrowserHelper.AXState.Passive && axReloadingState != axState)
             {
@@ -1350,6 +1351,7 @@ namespace System.Windows.Forms
                 {
                     TransitionDownTo(axReloadingState);
                 }
+
                 axReloadingState = WebBrowserHelper.AXState.Passive;
             }
         }
@@ -1674,7 +1676,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-//Everett
+        //Everett
         new public event HelpEventHandler HelpRequested
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));
@@ -1823,54 +1825,6 @@ namespace System.Windows.Forms
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "StyleChanged"));
             remove { }
-        }
-
-        /// <summary>
-        ///  Defines a window that the ActiveX window is attached to so that we can override it's wndproc.
-        /// </summary>
-        private class WebBrowserBaseNativeWindow : NativeWindow
-        {
-            private readonly WebBrowserBase WebBrowserBase;
-
-            public WebBrowserBaseNativeWindow(WebBrowserBase ax)
-            {
-                WebBrowserBase = ax;
-            }
-
-            /// <summary>
-            ///  Pass messages on to the NotifyIcon object's wndproc handler.
-            /// </summary>
-            protected override void WndProc(ref Message m)
-            {
-                switch ((User32.WM)m.Msg)
-                {
-                    case User32.WM.WINDOWPOSCHANGING:
-                        WmWindowPosChanging(ref m);
-                        break;
-                    default:
-                        base.WndProc(ref m);
-                        break;
-                }
-            }
-
-            private unsafe void WmWindowPosChanging(ref Message m)
-            {
-                User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParam;
-                wp->x = 0;
-                wp->y = 0;
-                Size s = WebBrowserBase.webBrowserBaseChangingSize;
-                if (s.Width == -1)
-                {   // Invalid value. Use WebBrowserBase.Bounds instead, when this is the case.
-                    wp->cx = WebBrowserBase.Width;
-                    wp->cy = WebBrowserBase.Height;
-                }
-                else
-                {
-                    wp->cx = s.Width;
-                    wp->cy = s.Height;
-                }
-                m.Result = (IntPtr)0;
-            }
         }
     }
 }

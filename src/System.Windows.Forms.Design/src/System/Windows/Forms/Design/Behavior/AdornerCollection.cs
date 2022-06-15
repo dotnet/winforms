@@ -7,236 +7,229 @@ using System.Collections;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///  A collection that stores <see cref='Adorner' /> objects.
+    ///  A collection that stores <see cref="Adorner"/> objects.
     /// </summary>
-    /// <seealso cref='BehaviorServiceAdornerCollection' />
+    /// <seealso cref="BehaviorServiceAdornerCollection"/>
     public sealed class BehaviorServiceAdornerCollection : CollectionBase
     {
+        private readonly BehaviorService behaviorService;
+
         /// <summary>
-        ///  Initializes a new instance of <see cref='BehaviorServiceAdornerCollection' />.
+        ///  Initializes a new instance of <see cref="BehaviorServiceAdornerCollection"/>.
         /// </summary>
         public BehaviorServiceAdornerCollection(BehaviorService behaviorService)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            this.behaviorService = behaviorService;
         }
 
         /// <summary>
-        ///  Initializes a new instance of <see cref='BehaviorServiceAdornerCollection'/> based on another
-        ///  <see cref='BehaviorServiceAdornerCollection'/>.
+        ///  Initializes a new instance of <see cref="BehaviorServiceAdornerCollection"/> based on another
+        ///  <see cref="BehaviorServiceAdornerCollection"/>.
         /// </summary>
         public BehaviorServiceAdornerCollection(BehaviorServiceAdornerCollection value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            AddRange(value);
         }
 
         /// <summary>
-        ///  Initializes a new instance of <see cref='BehaviorServiceAdornerCollection' />
-        ///  containing any array of <see cref='Adorner' /> objects.
+        ///  Initializes a new instance of <see cref="BehaviorServiceAdornerCollection"/>
+        ///  containing any array of <see cref="Adorner"/> objects.
         /// </summary>
-        /// <param name='value'>
-        ///  A array of <see cref='Adorner' /> objects with which to intialize the collection.
+        /// <param name="value">
+        ///  A array of <see cref="Adorner"/> objects with which to initialize the collection.
         /// </param>
         public BehaviorServiceAdornerCollection(Adorner[] value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            AddRange(value);
         }
 
         /// <summary>
-        ///  Represents the entry at the specified index of the <see cref='Adorner' />.
+        ///  Represents the entry at the specified index of the <see cref="Adorner"/>.
         /// </summary>
-        /// <param name='index'>
+        /// <param name="index">
         ///  The zero-based index of the entry to locate in the collection.
         /// </param>
         /// <value>
         ///  The entry at the specified index of the collection.
         /// </value>
-        /// <exception cref='ArgumentOutOfRangeException'>
-        ///  <paramref name='index' /> is outside the valid range of indexes for the collection.
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///  <paramref name="index"/> is outside the valid range of indexes for the collection.
         /// </exception>
         public Adorner this[int index]
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
-            set => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get
+            {
+                return ((Adorner)(List[index]));
+            }
+            set
+            {
+                List[index] = value;
+            }
         }
 
         /// <summary>
-        ///  Adds a <see cref='Adorner' /> with the specified value to the
-        ///  <see cref='BehaviorServiceAdornerCollection' /> .
+        ///  Adds a <see cref="Adorner"/> with the specified value to the
+        ///  <see cref="BehaviorServiceAdornerCollection"/> .
         /// </summary>
-        /// <param name='value'>The <see cref='Adorner' /> to add.</param>
+        /// <param name="value">The <see cref="Adorner"/> to add.</param>
         /// <returns>
         ///  The index at which the new element was inserted.
         /// </returns>
-        /// <seealso cref='BehaviorServiceAdornerCollection.AddRange(Adorner[])' />
+        /// <seealso cref="AddRange(Adorner[])"/>
         public int Add(Adorner value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            value.BehaviorService = behaviorService;
+            return List.Add(value);
         }
 
         /// <summary>
         ///  Copies the elements of an array to the end of the
-        ///  <see cref='BehaviorServiceAdornerCollection' />.
+        ///  <see cref="BehaviorServiceAdornerCollection"/>.
         /// </summary>
-        /// <param name='value'>
-        ///  An array of type <see cref='Adorner' /> containing the objects to add to the
+        /// <param name="value">
+        ///  An array of type <see cref="Adorner"/> containing the objects to add to the
         ///  collection.
         /// </param>
         /// <returns>
         ///  None.
         /// </returns>
-        /// <seealso cref='Add' />
+        /// <seealso cref="Add"/>
         public void AddRange(Adorner[] value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            for (int i = 0; (i < value.Length); i = (i + 1))
+            {
+                Add(value[i]);
+            }
         }
 
         /// <summary>
         ///  Adds the contents of another
-        ///  <see cref='BehaviorServiceAdornerCollection' /> to the end of the
+        ///  <see cref="BehaviorServiceAdornerCollection"/> to the end of the
         ///  collection.
         /// </summary>
-        /// <param name='value'>
-        ///  A <see cref='BehaviorServiceAdornerCollection' /> containing the objects to
+        /// <param name="value">
+        ///  A <see cref="BehaviorServiceAdornerCollection"/> containing the objects to
         ///  add to the collection.
         /// </param>
         /// <returns>
         ///  None.
         /// </returns>
-        /// <seealso cref='Add' />
+        /// <seealso cref="Add"/>
         public void AddRange(BehaviorServiceAdornerCollection value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            for (int i = 0; (i < value.Count); i = (i + 1))
+            {
+                Add(value[i]);
+            }
         }
 
         /// <summary>
         ///  Gets a value indicating whether the
-        ///  <see cref='BehaviorServiceAdornerCollection' /> contains the specified
-        ///  <see cref='Adorner' />.
+        ///  <see cref="BehaviorServiceAdornerCollection"/> contains the specified
+        ///  <see cref="Adorner"/>.
         /// </summary>
-        /// <param name='value'>The <see cref='Adorner' /> to locate.</param>
+        /// <param name="value">The <see cref="Adorner"/> to locate.</param>
         /// <returns>
-        ///  <see langword='true' /> if the <see cref='Adorner' /> is contained in the
+        ///  <see langword="true"/> if the <see cref="Adorner"/> is contained in the
         ///  collection;
-        ///  otherwise, <see langword='false' />.
+        ///  otherwise, <see langword="false"/>.
         /// </returns>
-        /// <seealso cref='IndexOf' />
+        /// <seealso cref="IndexOf"/>
         public bool Contains(Adorner value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            return List.Contains(value);
         }
 
         /// <summary>
-        ///  Copies the <see cref='BehaviorServiceAdornerCollection' /> values to a
-        ///  one-dimensional <see cref='Array' /> instance at the
+        ///  Copies the <see cref="BehaviorServiceAdornerCollection"/> values to a
+        ///  one-dimensional <see cref="Array"/> instance at the
         ///  specified index.
         /// </summary>
-        /// <param name='array'>
-        ///  The one-dimensional <see cref='Array' /> that is the destination of the values copied from
-        ///  <see cref='BehaviorServiceAdornerCollection' /> .
+        /// <param name="array">
+        ///  The one-dimensional <see cref="Array"/> that is the destination of the values copied from
+        ///  <see cref="BehaviorServiceAdornerCollection"/> .
         /// </param>
-        /// <param name='index'>The index in <paramref name='array' /> where copying begins.</param>
+        /// <param name="index">The index in <paramref name="array"/> where copying begins.</param>
         /// <returns>
         ///  None.
         /// </returns>
-        /// <exception cref='ArgumentException'>
-        ///  <paramref name='array' /> is multidimensional.
+        /// <exception cref="ArgumentException">
+        ///  <paramref name="array"/> is multidimensional.
         ///  -or-
         ///  The number of elements in the
-        ///  <see cref='BehaviorServiceAdornerCollection' /> is greater than the
-        ///  available space between <paramref name='index' /> and the end of <paramref name='array' />.
+        ///  <see cref="BehaviorServiceAdornerCollection"/> is greater than the
+        ///  available space between <paramref name="index"/> and the end of <paramref name="array"/>.
         /// </exception>
-        /// <exception cref='ArgumentNullException'><paramref name='array' /> is <see langword='null' />. </exception>
-        /// <exception cref='ArgumentOutOfRangeException'>
-        ///  <paramref name='index' /> is less than
-        ///  <paramref name='array' />'s lowbound.
+        /// <exception cref="ArgumentNullException"><paramref name="array"/> is <see langword="null"/>. </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///  <paramref name="index"/> is less than
+        ///  <paramref name="array"/>'s lowbound.
         /// </exception>
-        /// <seealso cref='Array' />
+        /// <seealso cref="Array"/>
         public void CopyTo(Adorner[] array, int index)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            List.CopyTo(array, index);
         }
 
         /// <summary>
-        ///  Returns the index of a <see cref='Adorner' /> in
-        ///  the <see cref='BehaviorServiceAdornerCollection' /> .
+        ///  Returns the index of a <see cref="Adorner"/> in
+        ///  the <see cref="BehaviorServiceAdornerCollection"/> .
         /// </summary>
-        /// <param name='value'>The <see cref='Adorner' /> to locate.</param>
+        /// <param name="value">The <see cref="Adorner"/> to locate.</param>
         /// <returns>
-        ///  The index of the <see cref='Adorner' /> of <paramref name='value' /> in
+        ///  The index of the <see cref="Adorner"/> of <paramref name="value"/> in
         ///  the
-        ///  <see cref='BehaviorServiceAdornerCollection' />, if found; otherwise, -1.
+        ///  <see cref="BehaviorServiceAdornerCollection"/>, if found; otherwise, -1.
         /// </returns>
-        /// <seealso cref='Contains' />
+        /// <seealso cref="Contains"/>
         public int IndexOf(Adorner value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            return List.IndexOf(value);
         }
 
         /// <summary>
-        ///  Inserts a <see cref='Adorner' /> into the
-        ///  <see cref='BehaviorServiceAdornerCollection' /> at the specified index.
+        ///  Inserts a <see cref="Adorner"/> into the
+        ///  <see cref="BehaviorServiceAdornerCollection"/> at the specified index.
         /// </summary>
-        /// <param name='index'>The zero-based index where <paramref name='value' /> should be inserted.</param>
-        /// <param name=' value'>The <see cref='Adorner' /> to insert.</param>
+        /// <param name="index">The zero-based index where <paramref name="value"/> should be inserted.</param>
+        /// <param name=" value">The <see cref="Adorner"/> to insert.</param>
         /// <returns>
         ///  None.
         /// </returns>
-        /// <seealso cref='Add' />
+        /// <seealso cref="Add"/>
         public void Insert(int index, Adorner value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            List.Insert(index, value);
         }
 
         /// <summary>
         ///  Returns an enumerator that can iterate through
-        ///  the <see cref='BehaviorServiceAdornerCollection' /> .
+        ///  the <see cref="BehaviorServiceAdornerCollection"/> .
         /// </summary>
         /// <returns>
         ///  None.
         /// </returns>
-        /// <seealso cref='IEnumerator' />
+        /// <seealso cref="IEnumerator"/>
         public new BehaviorServiceAdornerCollectionEnumerator GetEnumerator()
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            return new BehaviorServiceAdornerCollectionEnumerator(this);
         }
 
         /// <summary>
-        ///  Removes a specific <see cref='Adorner' /> from the
-        ///  <see cref='BehaviorServiceAdornerCollection' /> .
+        ///  Removes a specific <see cref="Adorner"/> from the
+        ///  <see cref="BehaviorServiceAdornerCollection"/> .
         /// </summary>
-        /// <param name='value'>
-        ///  The <see cref='Adorner' /> to remove from the
-        ///  <see cref='BehaviorServiceAdornerCollection' /> .
+        /// <param name="value">
+        ///  The <see cref="Adorner"/> to remove from the
+        ///  <see cref="BehaviorServiceAdornerCollection"/> .
         /// </param>
         /// <returns>
         ///  None.
         /// </returns>
-        /// <exception cref='ArgumentException'><paramref name='value' /> is not found in the Collection. </exception>
+        /// <exception cref="ArgumentException"><paramref name="value"/> is not found in the Collection. </exception>
         public void Remove(Adorner value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
-        }
-    }
-
-    public class BehaviorServiceAdornerCollectionEnumerator : object, IEnumerator
-    {
-        public BehaviorServiceAdornerCollectionEnumerator(BehaviorServiceAdornerCollection mappings)
-        {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
-        }
-
-        public Adorner Current => throw new NotImplementedException(SR.NotImplementedByDesign);
-
-        object IEnumerator.Current => throw new NotImplementedException();
-
-        public bool MoveNext()
-        {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
-        }
-
-        public void Reset()
-        {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            List.Remove(value);
         }
     }
 }

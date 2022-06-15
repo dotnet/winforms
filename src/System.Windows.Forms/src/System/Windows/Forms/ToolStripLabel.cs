@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Design;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -15,7 +14,7 @@ namespace System.Windows.Forms
     ///  A non selectable ToolStrip item
     /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip)]
-    public class ToolStripLabel : ToolStripItem
+    public partial class ToolStripLabel : ToolStripItem
     {
         private LinkBehavior _linkBehavior = LinkBehavior.SystemDefault;
         private bool _isLink;
@@ -41,15 +40,19 @@ namespace System.Windows.Forms
         public ToolStripLabel(Image image) : base(null, image, null)
         {
         }
+
         public ToolStripLabel(string text, Image image) : base(text, image, null)
         {
         }
+
         public ToolStripLabel(string text, Image image, bool isLink) : this(text, image, isLink, null)
         {
         }
+
         public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick) : this(text, image, isLink, onClick, null)
         {
         }
+
         public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick, string name) : base(text, image, onClick, name)
         {
             IsLink = isLink;
@@ -103,7 +106,8 @@ namespace System.Windows.Forms
                 }
             }
         }
-        private Color IELinkColor
+
+        private static Color IELinkColor
         {
             get
             {
@@ -111,14 +115,15 @@ namespace System.Windows.Forms
             }
         }
 
-        private Color IEActiveLinkColor
+        private static Color IEActiveLinkColor
         {
             get
             {
                 return LinkUtilities.IEActiveLinkColor;
             }
         }
-        private Color IEVisitedLinkColor
+
+        private static Color IEVisitedLinkColor
         {
             get
             {
@@ -138,10 +143,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)LinkBehavior.SystemDefault, (int)LinkBehavior.NeverUnderline))
-                {
-                    throw new InvalidEnumArgumentException(nameof(LinkBehavior), (int)value, typeof(LinkBehavior));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 if (_linkBehavior != value)
                 {
                     _linkBehavior = value;
@@ -226,12 +228,12 @@ namespace System.Windows.Forms
         /// </summary>
         private void InvalidateLinkFonts()
         {
-            if (_linkFont != null)
+            if (_linkFont is not null)
             {
                 _linkFont.Dispose();
             }
 
-            if (_hoverLinkFont != null && _hoverLinkFont != _linkFont)
+            if (_hoverLinkFont is not null && _hoverLinkFont != _linkFont)
             {
                 _hoverLinkFont.Dispose();
             }
@@ -251,12 +253,13 @@ namespace System.Windows.Forms
             if (IsLink)
             {
                 ToolStrip parent = Parent;
-                if (parent != null)
+                if (parent is not null)
                 {
                     _lastCursor = parent.Cursor;
                     parent.Cursor = Cursors.Hand;
                 }
             }
+
             base.OnMouseEnter(e);
         }
 
@@ -265,11 +268,12 @@ namespace System.Windows.Forms
             if (IsLink)
             {
                 ToolStrip parent = Parent;
-                if (parent != null)
+                if (parent is not null)
                 {
                     parent.Cursor = _lastCursor;
                 }
             }
+
             base.OnMouseLeave(e);
         }
 
@@ -326,7 +330,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Owner != null)
+            if (Owner is not null)
             {
                 ToolStripRenderer renderer = Renderer;
 
@@ -336,6 +340,7 @@ namespace System.Windows.Forms
                 {
                     renderer.DrawItemImage(new ToolStripItemImageRenderEventArgs(e.Graphics, this, InternalLayout.ImageRectangle));
                 }
+
                 PaintText(e.Graphics);
             }
         }
@@ -368,6 +373,7 @@ namespace System.Windows.Forms
                         textColor = (LinkVisited) ? VisitedLinkColor : LinkColor;
                     }
                 }
+
                 Rectangle textRect = InternalLayout.TextRectangle;
                 renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, textRect, textColor, font, InternalLayout.TextFormat));
             }
@@ -376,7 +382,7 @@ namespace System.Windows.Forms
         protected internal override bool ProcessMnemonic(char charCode)
         {
             // checking IsMnemonic is not necessary - toolstrip does this for us.
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 if (!CanSelect)
                 {
@@ -387,92 +393,11 @@ namespace System.Windows.Forms
                 {
                     FireEvent(ToolStripItemEventType.Click);
                 }
+
                 return true;
             }
+
             return false;
-        }
-
-        internal class ToolStripLabelAccessibleObject : ToolStripItemAccessibleObject
-        {
-            private readonly ToolStripLabel ownerItem;
-
-            public ToolStripLabelAccessibleObject(ToolStripLabel ownerItem) : base(ownerItem)
-            {
-                this.ownerItem = ownerItem;
-            }
-
-            public override string DefaultAction
-            {
-                get
-                {
-                    if (ownerItem.IsLink)
-                    {
-                        return SR.AccessibleActionClick;
-                    }
-                    else
-                    {
-                        return string.Empty;
-                    }
-                }
-            }
-
-            public override void DoDefaultAction()
-            {
-                if (ownerItem.IsLink)
-                {
-                    base.DoDefaultAction();
-                }
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.TextControlTypeId;
-                }
-                else if (propertyID == UiaCore.UIA.LegacyIAccessibleStatePropertyId)
-                {
-                    return State;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-                    return (ownerItem.IsLink) ? AccessibleRole.Link : AccessibleRole.StaticText;
-                }
-            }
-
-            public override AccessibleStates State
-            {
-                get => base.State | AccessibleStates.ReadOnly;
-            }
-        }
-        /// <summary>
-        ///  This class performs internal layout for the "split button button" portion of a split button.
-        ///  Its main job is to make sure the inner button has the same parent as the split button, so
-        ///  that layout can be performed using the correct graphics context.
-        /// </summary>
-        private class ToolStripLabelLayout : ToolStripItemInternalLayout
-        {
-            public ToolStripLabelLayout(ToolStripLabel owner) : base(owner)
-            {
-            }
-
-            protected override ToolStripItemLayoutOptions CommonLayoutOptions()
-            {
-                ToolStripItemLayoutOptions layoutOptions = base.CommonLayoutOptions();
-                layoutOptions.borderSize = 0;
-                return layoutOptions;
-            }
         }
     }
 }

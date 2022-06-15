@@ -1,8 +1,6 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using System.Collections;
 using System.ComponentModel;
@@ -23,7 +21,7 @@ namespace System.Windows.Forms
 
             public TabPageCollection(TabControl owner)
             {
-                _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                _owner = owner.OrThrowIfNull();
             }
 
             public virtual TabPage this[int index]
@@ -32,7 +30,7 @@ namespace System.Windows.Forms
                 set => _owner.SetTabPage(index, value);
             }
 
-            object IList.this[int index]
+            object? IList.this[int index]
             {
                 get => this[index];
                 set
@@ -49,7 +47,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the child control with the specified key.
             /// </summary>
-            public virtual TabPage this[string key]
+            public virtual TabPage? this[string? key]
             {
                 get
                 {
@@ -83,26 +81,23 @@ namespace System.Windows.Forms
 
             public void Add(TabPage value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 _owner.Controls.Add(value);
             }
 
-            int IList.Add(object value)
+            int IList.Add(object? value)
             {
-                if (!(value is TabPage))
+                if (value is not TabPage tabPage)
                 {
                     throw new ArgumentException(nameof(value));
                 }
 
-                Add((TabPage)value);
-                return IndexOf((TabPage)value);
+                Add(tabPage);
+                return IndexOf(tabPage);
             }
 
-            public void Add(string text)
+            public void Add(string? text)
             {
                 var page = new TabPage
                 {
@@ -111,7 +106,7 @@ namespace System.Windows.Forms
                 Add(page);
             }
 
-            public void Add(string key, string text)
+            public void Add(string? key, string? text)
             {
                 var page = new TabPage
                 {
@@ -121,7 +116,7 @@ namespace System.Windows.Forms
                 Add(page);
             }
 
-            public void Add(string key, string text, int imageIndex)
+            public void Add(string? key, string? text, int imageIndex)
             {
                 var page = new TabPage
                 {
@@ -132,7 +127,7 @@ namespace System.Windows.Forms
                 Add(page);
             }
 
-            public void Add(string key, string text, string imageKey)
+            public void Add(string? key, string? text, string imageKey)
             {
                 var page = new TabPage
                 {
@@ -145,10 +140,7 @@ namespace System.Windows.Forms
 
             public void AddRange(TabPage[] pages)
             {
-                if (pages is null)
-                {
-                    throw new ArgumentNullException(nameof(pages));
-                }
+                ArgumentNullException.ThrowIfNull(pages);
 
                 foreach (TabPage page in pages)
                 {
@@ -158,17 +150,14 @@ namespace System.Windows.Forms
 
             public bool Contains(TabPage page)
             {
-                if (page is null)
-                {
-                    throw new ArgumentNullException(nameof(page));
-                }
+                ArgumentNullException.ThrowIfNull(page);
 
                 return IndexOf(page) != -1;
             }
 
-            bool IList.Contains(object page)
+            bool IList.Contains(object? page)
             {
-                if (!(page is TabPage tabPage))
+                if (page is not TabPage tabPage)
                 {
                     return false;
                 }
@@ -179,17 +168,14 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns true if the collection contains an item with the specified key, false otherwise.
             /// </summary>
-            public virtual bool ContainsKey(string key)
+            public virtual bool ContainsKey(string? key)
             {
                 return IsValidIndex(IndexOfKey(key));
             }
 
             public int IndexOf(TabPage page)
             {
-                if (page is null)
-                {
-                    throw new ArgumentNullException(nameof(page));
-                }
+                ArgumentNullException.ThrowIfNull(page);
 
                 for (int index = 0; index < Count; ++index)
                 {
@@ -202,20 +188,20 @@ namespace System.Windows.Forms
                 return -1;
             }
 
-            int IList.IndexOf(object page)
+            int IList.IndexOf(object? page)
             {
-                if (!(page is TabPage))
+                if (page is not TabPage tabPage)
                 {
                     return -1;
                 }
 
-                return IndexOf((TabPage)page);
+                return IndexOf(tabPage);
             }
 
             /// <summary>
             ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
             /// </summary>
-            public virtual int IndexOfKey(string key)
+            public virtual int IndexOfKey(string? key)
             {
                 if (string.IsNullOrEmpty(key))
                 {
@@ -266,9 +252,9 @@ namespace System.Windows.Forms
                 _owner.Controls.SetChildIndex(tabPage, index);
             }
 
-            void IList.Insert(int index, object tabPage)
+            void IList.Insert(int index, object? tabPage)
             {
-                if (!(tabPage is TabPage actualTabPage))
+                if (tabPage is not TabPage actualTabPage)
                 {
                     throw new ArgumentException(nameof(tabPage));
                 }
@@ -276,7 +262,7 @@ namespace System.Windows.Forms
                 Insert(index, actualTabPage);
             }
 
-            public void Insert(int index, string text)
+            public void Insert(int index, string? text)
             {
                 var page = new TabPage
                 {
@@ -285,7 +271,7 @@ namespace System.Windows.Forms
                 Insert(index, page);
             }
 
-            public void Insert(int index, string key, string text)
+            public void Insert(int index, string? key, string? text)
             {
                 var page = new TabPage
                 {
@@ -295,7 +281,7 @@ namespace System.Windows.Forms
                 Insert(index, page);
             }
 
-            public void Insert(int index, string key, string text, int imageIndex)
+            public void Insert(int index, string? key, string? text, int imageIndex)
             {
                 var page = new TabPage
                 {
@@ -308,7 +294,7 @@ namespace System.Windows.Forms
                 page.ImageIndex = imageIndex;
             }
 
-            public void Insert(int index, string key, string text, string imageKey)
+            public void Insert(int index, string? key, string? text, string imageKey)
             {
                 var page = new TabPage
                 {
@@ -351,15 +337,12 @@ namespace System.Windows.Forms
 
             public void Remove(TabPage value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 _owner.Controls.Remove(value);
             }
 
-            void IList.Remove(object value)
+            void IList.Remove(object? value)
             {
                 if (value is TabPage tabPage)
                 {
@@ -372,7 +355,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Removes the child control with the specified key.
             /// </summary>
-            public virtual void RemoveByKey(string key)
+            public virtual void RemoveByKey(string? key)
             {
                 int index = IndexOfKey(key);
                 if (IsValidIndex(index))

@@ -228,7 +228,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' </summary>
         ''' <param name="traceEventValue"></param>
         ''' <returns>The Id</returns>
-        Private Function TraceEventTypeToId(traceEventValue As TraceEventType) As Integer
+        Private Shared Function TraceEventTypeToId(traceEventValue As TraceEventType) As Integer
             If s_idHash.ContainsKey(traceEventValue) Then
                 Return s_idHash(traceEventValue)
             End If

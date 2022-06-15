@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 
@@ -19,10 +17,8 @@ namespace System.Windows.Forms
         public ContextMenuStrip(IContainer container) : base()
         {
             // this constructor ensures ContextMenuStrip is disposed properly since its not parented to the form.
-            if (container is null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
+            ArgumentNullException.ThrowIfNull(container);
+
             container.Add(this);
         }
 
@@ -38,7 +34,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ContextMenuStripSourceControlDescr))]
-        public Control SourceControl
+        public Control? SourceControl
         {
             get
             {
@@ -73,12 +69,12 @@ namespace System.Windows.Forms
                 {
                     contextMenuStrip.Items.Add(new ToolStripSeparator());
                 }
-                else if (item is ToolStripMenuItem)
+                else if (item is ToolStripMenuItem toolStripMenuItem)
                 {
-                    ToolStripMenuItem menuItem = item as ToolStripMenuItem;
-                    contextMenuStrip.Items.Add(menuItem.Clone());
+                    contextMenuStrip.Items.Add(toolStripMenuItem.Clone());
                 }
             }
+
             return contextMenuStrip;
         }
 
@@ -108,6 +104,7 @@ namespace System.Windows.Forms
             {
                 bounds = CalculateDropDownLocation(new Point(x, y), ToolStripDropDownDirection.AboveRight);
             }
+
             bounds = WindowsFormsUtils.ConstrainToBounds(screenBounds, bounds);
 
             Show(bounds.X, bounds.Y);
@@ -119,6 +116,7 @@ namespace System.Windows.Forms
             {
                 WorkingAreaConstrained = true;
             }
+
             base.SetVisibleCore(visible);
         }
     }

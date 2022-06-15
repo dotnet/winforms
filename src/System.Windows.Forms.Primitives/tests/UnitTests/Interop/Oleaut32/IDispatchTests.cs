@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using Xunit;
 using System.Windows.Forms.Primitives.Tests.Interop.Mocks;
+using Xunit;
 using static Interop;
 using static Interop.Ole32;
 using static Interop.Oleaut32;
@@ -80,8 +80,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
                 &dispParams,
                 varResult,
                 &excepInfo,
-                &argErr
-            );
+                &argErr);
             Assert.Equal(HRESULT.S_OK, hr);
             Assert.Equal(16, GdiHelper.HimetricToPixelY((int)varResult[0]));
             Assert.Equal(0u, argErr);

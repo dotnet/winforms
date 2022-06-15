@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -15,6 +15,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewRowAccessibleObject_Ctor_Default()
         {
             var accessibleObject = new DataGridViewRowAccessibleObject();
+
             Assert.Null(accessibleObject.Owner);
             Assert.Equal(AccessibleRole.Row, accessibleObject.Role);
             Assert.Null(accessibleObject.DefaultAction);
@@ -32,6 +33,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewRowAccessibleObject_Ctor_DataGridViewRow(DataGridViewRow owner)
         {
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
+
             Assert.Equal(owner, accessibleObject.Owner);
             Assert.Equal(AccessibleRole.Row, accessibleObject.Role);
             Assert.Null(accessibleObject.DefaultAction);
@@ -63,16 +65,91 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Bounds);
         }
 
-        public static IEnumerable<object[]> Name_TestData()
+        [Fact]
+        public void DataGridViewRowAccessibleObject_Name_Get_ReturnsExpected_IfDataGridViewNotExist()
         {
-            yield return new object[] { new DataGridViewRowAccessibleObject(new DataGridViewRow()), "Row -1" };
+            AccessibleObject accessibilityObject = new DataGridViewRowAccessibleObject(new DataGridViewRow());
+
+            Assert.Equal(string.Format(SR.DataGridView_AccRowName, -1), accessibilityObject.Name);
         }
 
-        [Theory]
-        [MemberData(nameof(Name_TestData))]
-        public void DataGridViewRowAccessibleObject_Name_Get_ReturnsExpected(AccessibleObject accessibleObject, string expected)
+        [Fact]
+        public void DataGridViewRowAccessibleObject_Name_Get_ReturnsExpected()
         {
-            Assert.Equal(expected, accessibleObject.Name);
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+
+            Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), accessibleObject1.Name);
+            Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), accessibleObject2.Name);
+            Assert.Equal(string.Format(SR.DataGridView_AccRowName, 2), accessibleObject3.Name);
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [Fact]
+        public void DataGridViewRowAccessibleObject_Name_Get_ReturnsExpected_IfFirstRowHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[0].Visible = false;
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+
+            Assert.Equal(string.Format(SR.DataGridView_AccRowName, -1), accessibleObject1.Name);
+            Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), accessibleObject2.Name);
+            Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), accessibleObject3.Name);
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [Fact]
+        public void DataGridViewRowAccessibleObject_Name_Get_ReturnsExpected_IfSecondRowHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[1].Visible = false;
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+
+            Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), accessibleObject1.Name);
+            Assert.Equal(string.Format(SR.DataGridView_AccRowName, -1), accessibleObject2.Name);
+            Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), accessibleObject3.Name);
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [Fact]
+        public void DataGridViewRowAccessibleObject_Name_Get_ReturnsExpected_IfLastRowHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[2].Visible = false;
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+
+            Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), accessibleObject1.Name);
+            Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), accessibleObject2.Name);
+            Assert.Equal(string.Format(SR.DataGridView_AccRowName, -1), accessibleObject3.Name);
+            Assert.False(dataGridView.IsHandleCreated);
         }
 
         [Theory]
@@ -103,7 +180,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Parent_TestData()
         {
-            yield return new object[] { new DataGridViewRowAccessibleObject(new DataGridViewRow()), null  };
+            yield return new object[] { new DataGridViewRowAccessibleObject(new DataGridViewRow()), null };
         }
 
         [Theory]
@@ -179,6 +256,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
+
             Assert.Null(accessibleObject.GetChild(index));
         }
 
@@ -203,6 +281,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
+
             Assert.Equal(0, accessibleObject.GetChildCount());
         }
 
@@ -229,6 +308,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(accessibleObject.GetSelected(), accessibleObject.GetSelected());
 
             AccessibleObject selectedAccessibleObject = accessibleObject.GetSelected();
+
             Assert.Equal("Selected Row Cells", selectedAccessibleObject.Name);
             Assert.Equal(owner.AccessibilityObject, selectedAccessibleObject.Parent);
             Assert.Equal(AccessibleRole.Grouping, selectedAccessibleObject.Role);
@@ -276,6 +356,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
+
             Assert.Null(accessibleObject.Navigate(navigationDirection));
         }
 
@@ -291,6 +372,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
+
             accessibleObject.Select(flags);
         }
 
@@ -299,6 +381,2004 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewRowAccessibleObject_Select_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Select(AccessibleSelection.None));
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentRoot_ReturnsNull_WithoutDataGridView()
+        {
+            using DataGridViewRow dataGridViewRow = new();
+
+            Assert.Null(dataGridViewRow.AccessibilityObject.FragmentRoot);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_IsEnabled_ReturnsFalse_WithoutDataGridView()
+        {
+            using DataGridViewRow dataGridViewRow = new();
+            bool actualValue = (bool)dataGridViewRow.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsEnabledPropertyId);
+
+            Assert.False(actualValue);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Sibling_ReturnExpected()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+            AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfFirstRowHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[0].Visible = false;
+
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+            AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
+
+            Assert.Equal(accessibleObject2, topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(topRowAccessibleObject, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfSecondRowHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[1].Visible = false;
+
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+            AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject3, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(accessibleObject1, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfLastRowHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[2].Visible = false;
+
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject4, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(accessibleObject2, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfSpecialRowHidden()
+        {
+            using DataGridView dataGridView = new() { ColumnHeadersVisible = false, AllowUserToAddRows = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfFirstRowAndSpecialRowHidden()
+        {
+            using DataGridView dataGridView = new() { ColumnHeadersVisible = false, AllowUserToAddRows = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[0].Visible = false;
+
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfSecondRowAndSpecialRowHidden()
+        {
+            using DataGridView dataGridView = new() { ColumnHeadersVisible = false, AllowUserToAddRows = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[1].Visible = false;
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject3, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(accessibleObject1, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfLastRowAndSpecialRowHidden()
+        {
+            using DataGridView dataGridView = new() { ColumnHeadersVisible = false, AllowUserToAddRows = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[2].Visible = false;
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+
+            Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfColumnHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { ColumnHeadersVisible = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+            AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
+
+            Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfFirstRowAndColumnHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { ColumnHeadersVisible = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+
+            dataGridView.Rows[0].Visible = false;
+
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+            AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
+
+            Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfSecondRowAndColumnHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { ColumnHeadersVisible = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+
+            dataGridView.Rows[1].Visible = false;
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+            AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
+
+            Assert.Equal(accessibleObject3, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(accessibleObject1, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfLastRowAndColumnHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { ColumnHeadersVisible = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+
+            dataGridView.Rows[2].Visible = false;
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
+
+            Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject4, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(accessibleObject2, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfUserRowHidden()
+        {
+            using DataGridView dataGridView = new() { AllowUserToAddRows = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfFirstRowAndUserRowHidden()
+        {
+            using DataGridView dataGridView = new() { AllowUserToAddRows = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[0].Visible = false;
+
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject2, topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(topRowAccessibleObject, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfSecondRowAndUserRowHidden()
+        {
+            using DataGridView dataGridView = new() { AllowUserToAddRows = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[1].Visible = false;
+
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject3, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(accessibleObject1, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfLastRowAndUserRowHidden()
+        {
+            using DataGridView dataGridView = new() { AllowUserToAddRows = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[2].Visible = false;
+
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Sibling_ReturnExpected()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+            AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, topRowAccessibleObject.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject2, accessibleObject1.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject3, accessibleObject2.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject4, accessibleObject3.Navigate(AccessibleNavigation.Next));
+            Assert.Null(accessibleObject4.Navigate(AccessibleNavigation.Next));
+
+            Assert.Equal(accessibleObject3, accessibleObject4.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(accessibleObject2, accessibleObject3.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(accessibleObject1, accessibleObject2.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(topRowAccessibleObject, accessibleObject1.Navigate(AccessibleNavigation.Previous));
+            Assert.Null(topRowAccessibleObject.Navigate(AccessibleNavigation.Previous));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Sibling_ReturnExpected_IfFirstRowHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[0].Visible = false;
+
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+            AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
+
+            Assert.Equal(accessibleObject2, topRowAccessibleObject.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject3, accessibleObject2.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject4, accessibleObject3.Navigate(AccessibleNavigation.Next));
+            Assert.Null(accessibleObject4.Navigate(AccessibleNavigation.Next));
+
+            Assert.Equal(accessibleObject3, accessibleObject4.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(accessibleObject2, accessibleObject3.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(topRowAccessibleObject, accessibleObject2.Navigate(AccessibleNavigation.Previous));
+            Assert.Null(topRowAccessibleObject.Navigate(AccessibleNavigation.Previous));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Sibling_ReturnExpected_IfSecondRowHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[1].Visible = false;
+
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+            AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, topRowAccessibleObject.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject3, accessibleObject1.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject4, accessibleObject3.Navigate(AccessibleNavigation.Next));
+            Assert.Null(accessibleObject4.Navigate(AccessibleNavigation.Next));
+
+            Assert.Equal(accessibleObject3, accessibleObject4.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(accessibleObject1, accessibleObject3.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(topRowAccessibleObject, accessibleObject1.Navigate(AccessibleNavigation.Previous));
+            Assert.Null(topRowAccessibleObject.Navigate(AccessibleNavigation.Previous));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Sibling_ReturnExpected_IfLastRowHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[2].Visible = false;
+
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, topRowAccessibleObject.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject2, accessibleObject1.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject4, accessibleObject2.Navigate(AccessibleNavigation.Next));
+            Assert.Null(accessibleObject4.Navigate(AccessibleNavigation.Next));
+
+            Assert.Equal(accessibleObject2, accessibleObject4.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(accessibleObject1, accessibleObject2.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(topRowAccessibleObject, accessibleObject1.Navigate(AccessibleNavigation.Previous));
+            Assert.Null(topRowAccessibleObject.Navigate(AccessibleNavigation.Previous));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Sibling_ReturnExpected_IfSpecialRowHidden()
+        {
+            using DataGridView dataGridView = new() { ColumnHeadersVisible = false, AllowUserToAddRows = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject2, accessibleObject1.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject3, accessibleObject2.Navigate(AccessibleNavigation.Next));
+            Assert.Null(accessibleObject3.Navigate(AccessibleNavigation.Next));
+
+            Assert.Equal(accessibleObject2, accessibleObject3.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(accessibleObject1, accessibleObject2.Navigate(AccessibleNavigation.Previous));
+            Assert.Null(accessibleObject1.Navigate(AccessibleNavigation.Previous));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Sibling_ReturnExpected_IfFirstRowAndSpecialRowHidden()
+        {
+            using DataGridView dataGridView = new() { ColumnHeadersVisible = false, AllowUserToAddRows = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[0].Visible = false;
+
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject3, accessibleObject2.Navigate(AccessibleNavigation.Next));
+            Assert.Null(accessibleObject3.Navigate(AccessibleNavigation.Next));
+
+            Assert.Equal(accessibleObject2, accessibleObject3.Navigate(AccessibleNavigation.Previous));
+            Assert.Null(accessibleObject2.Navigate(AccessibleNavigation.Previous));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Sibling_ReturnExpected_IfSecondRowAndSpecialRowHidden()
+        {
+            using DataGridView dataGridView = new() { ColumnHeadersVisible = false, AllowUserToAddRows = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[1].Visible = false;
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject3, accessibleObject1.Navigate(AccessibleNavigation.Next));
+            Assert.Null(accessibleObject3.Navigate(AccessibleNavigation.Next));
+
+            Assert.Equal(accessibleObject1, accessibleObject3.Navigate(AccessibleNavigation.Previous));
+            Assert.Null(accessibleObject1.Navigate(AccessibleNavigation.Previous));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Sibling_ReturnExpected_IfLastRowAndSpecialRowHidden()
+        {
+            using DataGridView dataGridView = new() { ColumnHeadersVisible = false, AllowUserToAddRows = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[2].Visible = false;
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+
+            Assert.Equal(accessibleObject2, accessibleObject1.Navigate(AccessibleNavigation.Next));
+            Assert.Null(accessibleObject2.Navigate(AccessibleNavigation.Next));
+
+            Assert.Equal(accessibleObject1, accessibleObject2.Navigate(AccessibleNavigation.Previous));
+            Assert.Null(accessibleObject1.Navigate(AccessibleNavigation.Previous));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Sibling_ReturnExpected_IfColumnHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { ColumnHeadersVisible = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+            AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
+
+            Assert.Equal(accessibleObject2, accessibleObject1.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject3, accessibleObject2.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject4, accessibleObject3.Navigate(AccessibleNavigation.Next));
+            Assert.Null(accessibleObject4.Navigate(AccessibleNavigation.Next));
+
+            Assert.Equal(accessibleObject3, accessibleObject4.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(accessibleObject2, accessibleObject3.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(accessibleObject1, accessibleObject2.Navigate(AccessibleNavigation.Previous));
+            Assert.Null(accessibleObject1.Navigate(AccessibleNavigation.Previous));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Sibling_ReturnExpected_IfFirstRowAndColumnHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { ColumnHeadersVisible = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+
+            dataGridView.Rows[0].Visible = false;
+
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+            AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
+
+            Assert.Equal(accessibleObject3, accessibleObject2.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject4, accessibleObject3.Navigate(AccessibleNavigation.Next));
+            Assert.Null(accessibleObject4.Navigate(AccessibleNavigation.Next));
+
+            Assert.Equal(accessibleObject3, accessibleObject4.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(accessibleObject2, accessibleObject3.Navigate(AccessibleNavigation.Previous));
+            Assert.Null(accessibleObject2.Navigate(AccessibleNavigation.Previous));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Sibling_ReturnExpected_IfSecondRowAndColumnHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { ColumnHeadersVisible = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+
+            dataGridView.Rows[1].Visible = false;
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+            AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
+
+            Assert.Equal(accessibleObject3, accessibleObject1.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject4, accessibleObject3.Navigate(AccessibleNavigation.Next));
+            Assert.Null(accessibleObject4.Navigate(AccessibleNavigation.Next));
+
+            Assert.Equal(accessibleObject3, accessibleObject4.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(accessibleObject1, accessibleObject3.Navigate(AccessibleNavigation.Previous));
+            Assert.Null(accessibleObject1.Navigate(AccessibleNavigation.Previous));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Sibling_ReturnExpected_IfLastRowAndColumnHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { ColumnHeadersVisible = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+
+            dataGridView.Rows[2].Visible = false;
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
+
+            Assert.Equal(accessibleObject2, accessibleObject1.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject4, accessibleObject2.Navigate(AccessibleNavigation.Next));
+            Assert.Null(accessibleObject4.Navigate(AccessibleNavigation.Next));
+
+            Assert.Equal(accessibleObject2, accessibleObject4.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(accessibleObject1, accessibleObject2.Navigate(AccessibleNavigation.Previous));
+            Assert.Null(accessibleObject1.Navigate(AccessibleNavigation.Previous));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Sibling_ReturnExpected_IfUserRowHidden()
+        {
+            using DataGridView dataGridView = new() { AllowUserToAddRows = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, topRowAccessibleObject.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject2, accessibleObject1.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject3, accessibleObject2.Navigate(AccessibleNavigation.Next));
+            Assert.Null(accessibleObject3.Navigate(AccessibleNavigation.Next));
+
+            Assert.Equal(accessibleObject2, accessibleObject3.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(accessibleObject1, accessibleObject2.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(topRowAccessibleObject, accessibleObject1.Navigate(AccessibleNavigation.Previous));
+            Assert.Null(topRowAccessibleObject.Navigate(AccessibleNavigation.Previous));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Sibling_ReturnExpected_IfFirstRowAndUserRowHidden()
+        {
+            using DataGridView dataGridView = new() { AllowUserToAddRows = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[0].Visible = false;
+
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject2, topRowAccessibleObject.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject3, accessibleObject2.Navigate(AccessibleNavigation.Next));
+            Assert.Null(accessibleObject3.Navigate(AccessibleNavigation.Next));
+
+            Assert.Equal(accessibleObject2, accessibleObject3.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(topRowAccessibleObject, accessibleObject2.Navigate(AccessibleNavigation.Previous));
+            Assert.Null(topRowAccessibleObject.Navigate(AccessibleNavigation.Previous));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Sibling_ReturnExpected_IfSecondRowAndUserRowHidden()
+        {
+            using DataGridView dataGridView = new() { AllowUserToAddRows = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[1].Visible = false;
+
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, topRowAccessibleObject.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject3, accessibleObject1.Navigate(AccessibleNavigation.Next));
+            Assert.Null(accessibleObject3.Navigate(AccessibleNavigation.Next));
+
+            Assert.Equal(accessibleObject1, accessibleObject3.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(topRowAccessibleObject, accessibleObject1.Navigate(AccessibleNavigation.Previous));
+            Assert.Null(topRowAccessibleObject.Navigate(AccessibleNavigation.Previous));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Sibling_ReturnExpected_IfLastRowAndUserRowHidden()
+        {
+            using DataGridView dataGridView = new() { AllowUserToAddRows = false };
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add("1");
+            dataGridView.Rows.Add("2");
+            dataGridView.Rows.Add("3");
+            dataGridView.Rows[2].Visible = false;
+
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, topRowAccessibleObject.Navigate(AccessibleNavigation.Next));
+            Assert.Equal(accessibleObject2, accessibleObject1.Navigate(AccessibleNavigation.Next));
+            Assert.Null(accessibleObject2.Navigate(AccessibleNavigation.Next));
+
+            Assert.Equal(accessibleObject1, accessibleObject2.Navigate(AccessibleNavigation.Previous));
+            Assert.Equal(topRowAccessibleObject, accessibleObject1.Navigate(AccessibleNavigation.Previous));
+            Assert.Null(topRowAccessibleObject.Navigate(AccessibleNavigation.Previous));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_ReturnsExpected_IfColumnsHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsNull_IfRowHeadersAndColumnsHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+
+            Assert.Null(rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Null(rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsExpected_IfRowHeadersAndFirstColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(accessibleObject3, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsExpected_IfRowHeadersAndSecondColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[1].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(accessibleObject3, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsExpected_IfRowHeadersAndLastColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsExpected_IfRowHeadersAndAllColumnsHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+            dataGridView.Columns[1].Visible = false;
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+
+            Assert.Null(rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Null(rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsExpected_IfFirstColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsExpected_IfSecondColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[1].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsExpected_IfLastColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsExpected_IfAllColumnsHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+            dataGridView.Columns[1].Visible = false;
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsExpected_IfCustomOrderAndRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsExpected_IfCustomOrderAndFirstColumnAndRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsExpected_IfCustomOrderAndSecondColumnAndRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[1].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsExpected_IfCustomOrderAndLastColumnAndRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsExpected_IfCustomOrder()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsExpected_IfCustomOrderAndFirstColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsExpected_IfCustomOrderAndSecondColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[1].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentNavigate_Child_ReturnsExpected_IfCustomOrderAndLastColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsNull_IfRowHeadersAndColumnsHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+
+            Assert.Null(rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Null(rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsExpected_IfRowHeadersAndFirstColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject2, rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Equal(accessibleObject3, rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsExpected_IfRowHeadersAndSecondColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[1].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Equal(accessibleObject3, rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsExpected_IfRowHeadersAndLastColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsExpected_IfRowHeadersAndAllColumnsHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+            dataGridView.Columns[1].Visible = false;
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+
+            Assert.Null(rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Null(rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsExpected_IfFirstColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Equal(accessibleObject, rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsExpected_IfSecondColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[1].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Equal(accessibleObject, rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsExpected_IfLastColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Equal(accessibleObject, rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsExpected_IfAllColumnsHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+            dataGridView.Columns[1].Visible = false;
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsExpected_IfCustomOrderAndRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsExpected_IfCustomOrderAndFirstColumnAndRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsExpected_IfCustomOrderAndSecondColumnAndRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[1].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsExpected_IfCustomOrderAndLastColumnAndRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsExpected_IfCustomOrder()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Equal(accessibleObject, rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsExpected_IfCustomOrderAndFirstColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Equal(accessibleObject, rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsExpected_IfCustomOrderAndSecondColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[1].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Equal(accessibleObject, rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_Navigate_Child_ReturnsExpected_IfCustomOrderAndLastColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
+            Assert.Equal(accessibleObject, rowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfRowHeadersAndColumnsHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+            dataGridView.Columns[1].Visible = false;
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+
+            Assert.Null(rowAccessibleObject.GetChild(0));
+            Assert.Null(rowAccessibleObject.GetChild(1));
+            Assert.Null(rowAccessibleObject.GetChild(2));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.GetChild(0));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.GetChild(1));
+            Assert.Equal(accessibleObject3, rowAccessibleObject.GetChild(2));
+            Assert.Null(rowAccessibleObject.GetChild(3));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfRowHeadersAndFirstColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject2, rowAccessibleObject.GetChild(0));
+            Assert.Equal(accessibleObject3, rowAccessibleObject.GetChild(1));
+            Assert.Null(rowAccessibleObject.GetChild(2));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfRowHeadersAndSecondColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[1].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.GetChild(0));
+            Assert.Equal(accessibleObject3, rowAccessibleObject.GetChild(1));
+            Assert.Null(rowAccessibleObject.GetChild(2));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfRowHeadersAndLastColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.GetChild(0));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.GetChild(1));
+            Assert.Null(rowAccessibleObject.GetChild(2));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.GetChild(0));
+            Assert.Equal(accessibleObject1, rowAccessibleObject.GetChild(1));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.GetChild(2));
+            Assert.Equal(accessibleObject3, rowAccessibleObject.GetChild(3));
+            Assert.Null(rowAccessibleObject.GetChild(4));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfAllColumnsHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+            dataGridView.Columns[1].Visible = false;
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.GetChild(0));
+            Assert.Null(rowAccessibleObject.GetChild(1));
+            Assert.Null(rowAccessibleObject.GetChild(2));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfFirstColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.GetChild(0));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.GetChild(1));
+            Assert.Equal(accessibleObject3, rowAccessibleObject.GetChild(2));
+            Assert.Null(rowAccessibleObject.GetChild(3));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfSecondColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[1].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.GetChild(0));
+            Assert.Equal(accessibleObject1, rowAccessibleObject.GetChild(1));
+            Assert.Equal(accessibleObject3, rowAccessibleObject.GetChild(2));
+            Assert.Null(rowAccessibleObject.GetChild(3));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfThirdColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.GetChild(0));
+            Assert.Equal(accessibleObject1, rowAccessibleObject.GetChild(1));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.GetChild(2));
+            Assert.Null(rowAccessibleObject.GetChild(3));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfCustomOrderAndRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.GetChild(0));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.GetChild(1));
+            Assert.Equal(accessibleObject3, rowAccessibleObject.GetChild(2));
+            Assert.Null(rowAccessibleObject.GetChild(3));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfCustomOrderAndRowHeadersAndFirstColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.GetChild(0));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.GetChild(1));
+            Assert.Null(rowAccessibleObject.GetChild(2));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfCustomOrderAndRowHeadersAndSecondColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[1].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(accessibleObject1, rowAccessibleObject.GetChild(0));
+            Assert.Equal(accessibleObject3, rowAccessibleObject.GetChild(1));
+            Assert.Null(rowAccessibleObject.GetChild(2));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfCustomOrderAndRowHeadersAndLastColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(accessibleObject2, rowAccessibleObject.GetChild(0));
+            Assert.Equal(accessibleObject3, rowAccessibleObject.GetChild(1));
+            Assert.Null(rowAccessibleObject.GetChild(2));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfCustomOrder()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.GetChild(0));
+            Assert.Equal(accessibleObject1, rowAccessibleObject.GetChild(1));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.GetChild(2));
+            Assert.Equal(accessibleObject3, rowAccessibleObject.GetChild(3));
+            Assert.Null(rowAccessibleObject.GetChild(4));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfCustomOrderAndFirstColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.GetChild(0));
+            Assert.Equal(accessibleObject1, rowAccessibleObject.GetChild(1));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.GetChild(2));
+            Assert.Null(rowAccessibleObject.GetChild(3));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfCustomOrderAndSecondColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[1].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.GetChild(0));
+            Assert.Equal(accessibleObject1, rowAccessibleObject.GetChild(1));
+            Assert.Equal(accessibleObject3, rowAccessibleObject.GetChild(2));
+            Assert.Null(rowAccessibleObject.GetChild(3));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChild_ReturnsExpected_IfCustomOrderAndLastColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+            AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.GetChild(0));
+            Assert.Equal(accessibleObject2, rowAccessibleObject.GetChild(1));
+            Assert.Equal(accessibleObject3, rowAccessibleObject.GetChild(2));
+            Assert.Null(rowAccessibleObject.GetChild(3));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChildCount_ReturnsFour()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+
+            Assert.Equal(4, rowAccessibleObject.GetChildCount());
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChildCount_ReturnsThree_IfOneColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+
+            Assert.Equal(3, rowAccessibleObject.GetChildCount());
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChildCount_ReturnsTwo_IfTwoColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+            dataGridView.Columns[1].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+
+            Assert.Equal(2, rowAccessibleObject.GetChildCount());
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChildCount_ReturnsOne_IfAllColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+            dataGridView.Columns[1].Visible = false;
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+
+            Assert.Equal(1, rowAccessibleObject.GetChildCount());
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChildCount_ReturnsThreeIfRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+
+            Assert.Equal(3, rowAccessibleObject.GetChildCount());
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChildCount_ReturnsTwo_IfRowHeadersAndOneColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+
+            Assert.Equal(2, rowAccessibleObject.GetChildCount());
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChildCount_ReturnsOne_IfRowHeadersAndTwoColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+            dataGridView.Columns[1].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+
+            Assert.Equal(1, rowAccessibleObject.GetChildCount());
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetChildCount_ReturnsZero_IfRowHeadersAndAllColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Column 1");
+            dataGridView.Columns.Add("Column 2", "Column 2");
+            dataGridView.Columns.Add("Column 3", "Column 3");
+            dataGridView.Columns[0].Visible = false;
+            dataGridView.Columns[1].Visible = false;
+            dataGridView.Columns[2].Visible = false;
+
+            AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+
+            Assert.Equal(0, rowAccessibleObject.GetChildCount());
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_GetPropertyValue_ValueValuePropertyId_ReturnsExpected()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.AutoGenerateColumns = false;
+            DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "col1";
+            dataGridView.Columns.Add(column);
+            dataGridView.Rows.Add(new DataGridViewRow());
+            dataGridView.Rows[0].Cells[0].Value = "test1";
+
+            Assert.Equal("test1", dataGridView.Rows[0].AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+            Assert.False(dataGridView.IsHandleCreated);
         }
 
         private class SubDataGridViewCell : DataGridViewCell

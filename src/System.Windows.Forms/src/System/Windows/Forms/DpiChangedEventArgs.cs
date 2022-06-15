@@ -2,12 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -20,12 +17,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Parameter units are pixels(dots) per inch.
         /// </summary>
-        internal DpiChangedEventArgs(int old, Message m)
+        internal unsafe DpiChangedEventArgs(int old, Message m)
         {
             DeviceDpiOld = old;
-            DeviceDpiNew = PARAM.SignedLOWORD(m.WParam);
-            Debug.Assert(PARAM.SignedHIWORD(m.WParam) == DeviceDpiNew, "Non-square pixels!");
-            RECT suggestedRect = Marshal.PtrToStructure<RECT>(m.LParam);
+            DeviceDpiNew = PARAM.SignedLOWORD(m.WParamInternal);
+            Debug.Assert(PARAM.SignedHIWORD(m.WParamInternal) == DeviceDpiNew, "Non-square pixels!");
+            RECT suggestedRect = *(RECT*)m.LParamInternal;
             SuggestedRectangle = Rectangle.FromLTRB(suggestedRect.left, suggestedRect.top, suggestedRect.right, suggestedRect.bottom);
         }
 

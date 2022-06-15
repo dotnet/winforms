@@ -2,11 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static System.Windows.Forms.ListBox;
 using static Interop;
 
@@ -29,64 +24,32 @@ namespace System.Windows.Forms.PropertyGridInternal
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
                 => _owningGridViewListBox.AccessibilityObject;
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.AccessKeyPropertyId:
-                        return KeyboardShortcut;
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
-
-            /// <summary>
-            ///  Indicates whether specified pattern is supported.
-            /// </summary>
-            /// <param name="patternId">The pattern ID.</param>
-            /// <returns>True if specified </returns>
+            /// <inheritdoc />
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.InvokePatternId)
-                {
-                    return true;
-                }
+                => patternId == UiaCore.UIA.InvokePatternId || base.IsPatternSupported(patternId);
 
-                return base.IsPatternSupported(patternId);
-            }
-
-            /// <summary>
-            ///  Gets or sets the accessible name.
-            /// </summary>
+            /// <inheritdoc />
             public override string? Name
             {
                 get
                 {
-                    if (_owningGridViewListBox != null)
+                    if (_owningGridViewListBox is not null)
                     {
                         return _owningItem.ToString();
                     }
 
                     return base.Name;
                 }
-                set => base.Name = value;
             }
 
-            /// <summary>
-            ///  Gets the runtime ID.
-            /// </summary>
+            /// <inheritdoc />
             internal override int[] RuntimeId
-            {
-                get
+                => new int[]
                 {
-                    var runtimeId = new int[3];
-                    runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = (int)(long)_owningGridViewListBox.Handle;
-                    runtimeId[2] = _owningItem.GetHashCode();
-
-                    return runtimeId;
-                }
-            }
+                    RuntimeIDFirstItem,
+                    PARAM.ToInt(_owningGridViewListBox.InternalHandle),
+                    _owningItem.GetHashCode()
+                };
         }
     }
 }

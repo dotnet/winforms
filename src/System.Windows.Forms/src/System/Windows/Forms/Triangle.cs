@@ -2,24 +2,29 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
-    using System.Diagnostics;
     using System;
+    using System.Diagnostics;
     using System.Drawing;
 
     /// <summary>
     ///  This class fully encapsulates the painting logic for a triangle.  (Used by DataGrid)
     /// </summary>
-    internal static class Triangle
+    internal static partial class Triangle
     {
         private const double TRI_HEIGHT_RATIO = 2.5;
         private const double TRI_WIDTH_RATIO = 0.8;
 
-        public static void Paint(Graphics g, Rectangle bounds, TriangleDirection dir, Brush backBr,
-                                 Pen backPen1, Pen backPen2, Pen backPen3, bool opaque)
+        public static void Paint(
+            Graphics g,
+            Rectangle bounds,
+            TriangleDirection dir,
+            Brush backBr,
+            Pen backPen1,
+            Pen backPen2,
+            Pen backPen3,
+            bool opaque)
         {
             // build an equilateral triangle centered on the midpoint of the rect.
             Point[] points = BuildTrianglePoints(dir, bounds);
@@ -34,18 +39,19 @@ namespace System.Windows.Forms
             g.DrawLine(backPen3, points[2], points[0]);
         }
 
-        private static Point[] BuildTrianglePoints(TriangleDirection dir,
-                                                    Rectangle bounds)
+        private static Point[] BuildTrianglePoints(
+            TriangleDirection dir,
+            Rectangle bounds)
         {
             Point[] points = new Point[3];
 
-            int updnWidth = (int)(bounds.Width * TRI_WIDTH_RATIO);
-            if (updnWidth % 2 == 1)
+            int upDownWidth = (int)(bounds.Width * TRI_WIDTH_RATIO);
+            if (upDownWidth % 2 == 1)
             {
-                updnWidth++;
+                upDownWidth++;
             }
 
-            int updnHeight = (int)Math.Ceiling((updnWidth / 2) * TRI_HEIGHT_RATIO);
+            int upDownHeight = (int)Math.Ceiling((upDownWidth / 2) * TRI_HEIGHT_RATIO);
 
             int lrWidth = (int)(bounds.Height * TRI_WIDTH_RATIO);
             if (lrWidth % 2 == 0)
@@ -59,17 +65,19 @@ namespace System.Windows.Forms
             {
                 case TriangleDirection.Up:
                     {
-                        points[0] = new Point(0, updnHeight);
-                        points[1] = new Point(updnWidth, updnHeight);
-                        points[2] = new Point(updnWidth / 2, 0);
+                        points[0] = new Point(0, upDownHeight);
+                        points[1] = new Point(upDownWidth, upDownHeight);
+                        points[2] = new Point(upDownWidth / 2, 0);
                     }
+
                     break;
                 case TriangleDirection.Down:
                     {
                         points[0] = new Point(0, 0);
-                        points[1] = new Point(updnWidth, 0);
-                        points[2] = new Point(updnWidth / 2, updnHeight);
+                        points[1] = new Point(upDownWidth, 0);
+                        points[2] = new Point(upDownWidth / 2, upDownHeight);
                     }
+
                     break;
                 case TriangleDirection.Left:
                     {
@@ -77,6 +85,7 @@ namespace System.Windows.Forms
                         points[1] = new Point(lrWidth, lrHeight);
                         points[2] = new Point(0, lrHeight / 2);
                     }
+
                     break;
                 case TriangleDirection.Right:
                     {
@@ -84,6 +93,7 @@ namespace System.Windows.Forms
                         points[1] = new Point(0, lrHeight);
                         points[2] = new Point(lrWidth, lrHeight / 2);
                     }
+
                     break;
                 default:
                     Debug.Fail("Wrong triangle enum");
@@ -97,8 +107,8 @@ namespace System.Windows.Forms
                 case TriangleDirection.Up:
                 case TriangleDirection.Down:
                     OffsetPoints(points,
-                                  bounds.X + (bounds.Width - updnHeight) / 2,
-                                  bounds.Y + (bounds.Height - updnWidth) / 2);
+                                  bounds.X + (bounds.Width - upDownHeight) / 2,
+                                  bounds.Y + (bounds.Height - upDownWidth) / 2);
                     break;
                 case TriangleDirection.Left:
                 case TriangleDirection.Right:
@@ -107,6 +117,7 @@ namespace System.Windows.Forms
                                   bounds.Y + (bounds.Height - lrHeight) / 2);
                     break;
             }
+
             return points;
         }
 
@@ -118,13 +129,5 @@ namespace System.Windows.Forms
                 points[i].Y += yOffset;
             }
         }
-    }
-
-    internal enum TriangleDirection
-    {
-        Up,
-        Down,
-        Left,
-        Right
     }
 }

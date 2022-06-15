@@ -33,6 +33,7 @@ namespace System.Windows.Forms.Design
                 {
                     _menuService = (IMenuCommandService)_serviceProvider.GetService(typeof(IMenuCommandService));
                 }
+
                 return _menuService;
             }
         }
@@ -51,6 +52,7 @@ namespace System.Windows.Forms.Design
                         _statusRectCommand = MenuService.FindCommand(MenuCommands.SetStatusRectangle);
                     }
                 }
+
                 return _statusRectCommand;
             }
         }
@@ -64,6 +66,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             Rectangle bounds = Rectangle.Empty;
             if (selectedComponent is Control c)
             {
@@ -77,11 +80,13 @@ namespace System.Windows.Forms.Design
                     bounds = (Rectangle)BoundsProp.GetValue(selectedComponent);
                 }
             }
+
             if (location != Point.Empty)
             {
                 bounds.X = location.X;
                 bounds.Y = location.Y;
             }
+
             if (StatusRectCommand != null)
             {
                 StatusRectCommand.Invoke(bounds);
@@ -97,6 +102,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             Rectangle bounds = Rectangle.Empty;
             if (selectedComponent is Control c)
             {
@@ -110,6 +116,7 @@ namespace System.Windows.Forms.Design
                     bounds = (Rectangle)BoundsProp.GetValue(selectedComponent);
                 }
             }
+
             if (StatusRectCommand != null)
             {
                 StatusRectCommand.Invoke(bounds);

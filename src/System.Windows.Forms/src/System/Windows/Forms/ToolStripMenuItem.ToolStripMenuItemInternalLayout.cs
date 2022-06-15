@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -28,9 +28,11 @@ namespace System.Windows.Forms
                     {
                         return menu.ShowCheckMargin;
                     }
+
                     return false;
                 }
             }
+
             public bool ShowImageMargin
             {
                 get
@@ -39,6 +41,7 @@ namespace System.Windows.Forms
                     {
                         return menu.ShowImageMargin;
                     }
+
                     return false;
                 }
             }
@@ -58,6 +61,7 @@ namespace System.Windows.Forms
                     return ShowImageMargin;
                 }
             }
+
             public Rectangle ArrowRectangle
             {
                 get
@@ -66,16 +70,18 @@ namespace System.Windows.Forms
                     {
                         if (ownerItem.Owner is ToolStripDropDownMenu menu)
                         {
-                            // since menuItem.Padding isnt taken into consideration, we've got to recalc the centering of
+                            // since menuItem.Padding isn't taken into consideration, we've got to recalc the centering of
                             // the arrow rect per item
                             Rectangle arrowRect = menu.ArrowRectangle;
                             arrowRect.Y = LayoutUtils.VAlign(arrowRect.Size, ownerItem.ClientBounds, ContentAlignment.MiddleCenter).Y;
                             return arrowRect;
                         }
                     }
+
                     return Rectangle.Empty;
                 }
             }
+
             public Rectangle CheckRectangle
             {
                 get
@@ -85,7 +91,7 @@ namespace System.Windows.Forms
                         if (ownerItem.Owner is ToolStripDropDownMenu menu)
                         {
                             Rectangle checkRectangle = menu.CheckRectangle;
-                            if (ownerItem.CheckedImage != null)
+                            if (ownerItem.CheckedImage is not null)
                             {
                                 int imageHeight = ownerItem.CheckedImage.Height;
                                 // make sure we're vertically centered
@@ -95,9 +101,11 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     return Rectangle.Empty;
                 }
             }
+
             public override Rectangle ImageRectangle
             {
                 get
@@ -106,7 +114,7 @@ namespace System.Windows.Forms
                     {
                         if (ownerItem.Owner is ToolStripDropDownMenu menu)
                         {
-                            // since menuItem.Padding isnt taken into consideration, we've got to recalc the centering of
+                            // since menuItem.Padding isn't taken into consideration, we've got to recalc the centering of
                             // the image rect per item
                             Rectangle imageRect = menu.ImageRectangle;
                             if (ownerItem.ImageScaling == ToolStripItemImageScaling.SizeToFit)
@@ -119,10 +127,12 @@ namespace System.Windows.Forms
                                 Image image = ownerItem.Image ?? ownerItem.CheckedImage;
                                 imageRect.Size = image.Size;
                             }
+
                             imageRect.Y = LayoutUtils.VAlign(imageRect.Size, ownerItem.ClientBounds, ContentAlignment.MiddleCenter).Y;
                             return imageRect;
                         }
                     }
+
                     return base.ImageRectangle;
                 }
             }
@@ -138,6 +148,7 @@ namespace System.Windows.Forms
                             return menu.TextRectangle;
                         }
                     }
+
                     return base.TextRectangle;
                 }
             }
@@ -159,6 +170,7 @@ namespace System.Windows.Forms
                         return menu.MaxItemSize;
                     }
                 }
+
                 return base.GetPreferredSize(constrainingSize);
             }
         }

@@ -1,9 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using static Interop;
 
@@ -11,7 +10,7 @@ namespace System.Windows.Forms
 {
     public abstract partial class UpDownBase
     {
-        internal class UpDownEdit : TextBox
+        internal partial class UpDownEdit : TextBox
         {
             private readonly UpDownBase _parent;
             private bool _doubleClickFired;
@@ -24,17 +23,20 @@ namespace System.Windows.Forms
                 _parent = parent;
             }
 
+            [AllowNull]
             public override string Text
             {
                 get => base.Text;
                 set
                 {
-                    bool valueChanged = (value != base.Text);
-                    base.Text = value;
-                    if (valueChanged)
+                    if (IsAccessibilityObjectCreated && value != base.Text)
                     {
-                        AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
+                        AccessibilityObject.RaiseAutomationNotification(Automation.AutomationNotificationKind.ActionCompleted,
+                            Automation.AutomationNotificationProcessing.CurrentThenMostRecent, SR.UpDownEditLocalizedControlTypeName);
+                        AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextChangedEventId);
                     }
+
+                    base.Text = value;
                 }
             }
 
@@ -73,6 +75,7 @@ namespace System.Windows.Forms
                             _parent.OnMouseDoubleClick(me);
                         }
                     }
+
                     _doubleClickFired = false;
                 }
 
@@ -82,7 +85,7 @@ namespace System.Windows.Forms
             internal override void WmContextMenu(ref Message m)
             {
                 // Want to make the SourceControl to be the UpDownBase, not the Edit.
-                if (ContextMenuStrip != null)
+                if (ContextMenuStrip is not null)
                 {
                     WmContextMenu(ref m, _parent);
                 }
@@ -93,7 +96,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Raises the <see cref='Control.KeyUp'/> event.
+            ///  Raises the <see cref="Control.KeyUp"/> event.
             /// </summary>
             protected override void OnKeyUp(KeyEventArgs e)
             {
@@ -108,24 +111,6 @@ namespace System.Windows.Forms
 
             protected override void OnLostFocus(EventArgs e)
                 => _parent.InvokeLostFocus(_parent, e);
-
-            internal class UpDownEditAccessibleObject : ControlAccessibleObject
-            {
-                readonly UpDownBase _parent;
-
-                public UpDownEditAccessibleObject(UpDownEdit owner, UpDownBase parent) : base(owner)
-                {
-                    _parent = parent;
-                }
-
-                public override string Name
-                {
-                    get => _parent.AccessibilityObject.Name;
-                    set => _parent.AccessibilityObject.Name = value;
-                }
-
-                public override string KeyboardShortcut => _parent.AccessibilityObject.KeyboardShortcut;
-            }
         }
     }
 }

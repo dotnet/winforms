@@ -1,0 +1,7 @@
+﻿{
+  "version": "1.0.0.0",
+  "strings": {
+    "name": "Biblioteka klas Windows Forms",
+    "description": "Szablon projektu służący do tworzenia biblioteki klas przeznaczonej dla środowiska .NET Windows Forms (WinForms)."
+  }
+}

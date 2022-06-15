@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#if DEBUG
 using System.Diagnostics;
+#endif
 using System.Drawing;
 using static Interop;
 using static Interop.ComCtl32;
@@ -13,6 +15,9 @@ namespace System.Windows.Forms
     {
         internal class NativeImageList : IDisposable, IHandle
         {
+#if DEBUG
+            private readonly string _callStack = new StackTrace().ToString();
+#endif
             private const int GrowBy = 4;
             private const int InitialCapacity = 4;
 
@@ -61,9 +66,12 @@ namespace System.Windows.Forms
 
             public void Dispose()
             {
-#if DEBUG
+                Dispose(true);
                 GC.SuppressFinalize(this);
-#endif
+            }
+
+            private void Dispose(bool disposing)
+            {
                 lock (s_syncLock)
                 {
                     if (Handle == IntPtr.Zero)
@@ -71,31 +79,22 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    var result = ComCtl32.ImageList.Destroy(Handle);
-                    Debug.Assert(result.IsTrue());
+                    ComCtl32.ImageList.Destroy(Handle);
                     Handle = IntPtr.Zero;
                 }
             }
 
-#if DEBUG
-            private readonly string _callStack = new StackTrace().ToString();
-
             ~NativeImageList()
             {
-                Debug.Fail($"{nameof(NativeImageList)} was not disposed properly. Originating stack:\n{_callStack}");
-
-                // We can't do anything with the fields when we're on the finalizer as they're all classes. If any of
-                // them become structs they'll be a part of this instance and possible to clean up. Ideally we fix
-                // the leaks and never come in on the finalizer.
-                return;
-            }
-#endif
-
-            internal IntPtr TransferOwnership()
-            {
-                var handle = Handle;
-                Handle = IntPtr.Zero;
-                return handle;
+                // There are certain code paths where we are unable to track the lifetime of the object,
+                // for example in the following scenarios:
+                //
+                //      this.imageList1.ImageStream = (System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream"));
+                // or
+                //      resources.ApplyResources(this.listView1, "listView1");
+                //
+                // In those cases the loose instances will be collected by the GC.
+                Dispose(false);
             }
 
             internal NativeImageList Duplicate()

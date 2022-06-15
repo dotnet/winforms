@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -13,7 +11,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Logic copied from Windows sources to copy the lightening and darkening of colors.
         /// </summary>
-        private readonly struct HLSColor
+        private readonly struct HLSColor : IEquatable<HLSColor>
         {
             private const int ShadowAdjustment = -333;
             private const int HighlightAdjustment = 500;
@@ -35,18 +33,16 @@ namespace System.Windows.Forms
                 int r = argb.R;
                 int g = argb.G;
                 int b = argb.B;
-                int max, min;
-                int sum, dif;
                 int Rdelta, Gdelta, Bdelta;  // intermediate value: % of spread from max
 
                 // calculate lightness
-                max = Math.Max(Math.Max(r, g), b);
-                min = Math.Min(Math.Min(r, g), b);
-                sum = max + min;
+                int max = Math.Max(Math.Max(r, g), b);
+                int min = Math.Min(Math.Min(r, g), b);
+                int sum = max + min;
 
                 Luminosity = ((sum * HLSMax) + RGBMax) / (2 * RGBMax);
 
-                dif = max - min;
+                int dif = max - min;
                 if (dif == 0)
                 {
                     // r=g=b --> achromatic case
@@ -124,18 +120,22 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override bool Equals(object o)
+            public override bool Equals(object? o)
             {
-                if (!(o is HLSColor))
+                if (o is not HLSColor hlsColor)
                 {
                     return false;
                 }
 
-                HLSColor c = (HLSColor)o;
-                return _hue == c._hue &&
-                       _saturation == c._saturation &&
-                       Luminosity == c.Luminosity &&
-                       _isSystemColors_Control == c._isSystemColors_Control;
+                return Equals(hlsColor);
+            }
+
+            public bool Equals(HLSColor other)
+            {
+                return _hue == other._hue
+                    && _saturation == other._saturation
+                    && Luminosity == other.Luminosity
+                    && _isSystemColors_Control == other._isSystemColors_Control;
             }
 
             public static bool operator ==(HLSColor a, HLSColor b) => a.Equals(b);
@@ -182,7 +182,7 @@ namespace System.Windows.Forms
                 return NewLuma(Luminosity, n, scale);
             }
 
-            private int NewLuma(int luminosity, int n, bool scale)
+            private static int NewLuma(int luminosity, int n, bool scale)
             {
                 if (n == 0)
                 {
@@ -210,7 +210,7 @@ namespace System.Windows.Forms
                 return luminosity;
             }
 
-            private Color ColorFromHLS(int hue, int luminosity, int saturation)
+            private static Color ColorFromHLS(int hue, int luminosity, int saturation)
             {
                 byte r, g, b;
                 int magic1, magic2;
@@ -247,7 +247,7 @@ namespace System.Windows.Forms
                 return Color.FromArgb(r, g, b);
             }
 
-            private int HueToRGB(int n1, int n2, int hue)
+            private static int HueToRGB(int n1, int n2, int hue)
             {
                 // range check: note values passed add/subtract thirds of range
 
@@ -262,7 +262,7 @@ namespace System.Windows.Forms
                     hue -= HLSMax;
                 }
 
-                // return r, g, or b value from this tridrant
+                // return r, g, or b value from this sector
                 if (hue < (HLSMax / 6))
                 {
                     return n1 + (((n2 - n1) * hue + (HLSMax / 12)) / (HLSMax / 6));

@@ -2,50 +2,35 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Runtime.InteropServices;
-
 namespace System.Windows.Forms
 {
-    internal struct ToolTipBuffer : IDisposable
+    internal struct ToolTipBuffer
     {
-        private IntPtr _buffer;
-        private int _bufferSize;
+        private char[]? _buffer;
 
-        public IntPtr Buffer => _buffer;
-
-        public unsafe void SetText(string text)
+        public unsafe IntPtr Buffer
         {
-            if (text is null)
+            get
             {
-                text = string.Empty;
+                fixed (char* c = _buffer)
+                {
+                    return (IntPtr)c;
+                }
             }
+        }
 
-            int oldTextLength = _bufferSize - 1;
-            if (oldTextLength < text.Length)
-            {
-                Marshal.FreeHGlobal(_buffer);
-                _buffer = IntPtr.Zero;
-                _bufferSize = text.Length + 1;
-            }
+        public void SetText(string? text)
+        {
+            text ??= string.Empty;
 
-            if (_buffer == IntPtr.Zero)
+            if (_buffer is null || _buffer.Length < text.Length + 1)
             {
-                _buffer = Marshal.AllocHGlobal(_bufferSize * sizeof(char));
+                _buffer = GC.AllocateUninitializedArray<char>(text.Length + 1, pinned: true);
             }
 
             // Copy the string to the allocated memory.
-            ReadOnlySpan<char> textSpan = text;
-            var destinationSpan = new Span<char>((void*)_buffer, _bufferSize);
-            textSpan.CopyTo(destinationSpan);
-            destinationSpan[text.Length] = '\0';
-        }
-
-        public void Dispose()
-        {
-            Marshal.FreeHGlobal(_buffer);
-            _buffer = IntPtr.Zero;
+            text.AsSpan().CopyTo(_buffer);
+            _buffer[text.Length] = '\0';
         }
     }
 }

@@ -79,12 +79,14 @@ namespace System.Windows.Forms.Design
             {
                 _overlayService.RemoveOverlay(_toolStripAdornerWindow);
             }
+
             _toolStripAdornerWindow.Dispose();
             if (_behaviorService != null)
             {
                 _behaviorService.Adorners.Remove(_dropDownAdorner);
                 _behaviorService = null;
             }
+
             if (_dropDownAdorner != null)
             {
                 _dropDownAdorner.Glyphs.Clear();
@@ -95,20 +97,12 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Translates a point in the AdornerWindow to screen coords.
         /// </summary>
-        public Point AdornerWindowPointToScreen(Point p)
-        {
-            User32.MapWindowPoints(_toolStripAdornerWindow.Handle, IntPtr.Zero, ref p, 1);
-            return p;
-        }
+        public Point AdornerWindowPointToScreen(Point p) => _toolStripAdornerWindow.PointToScreen(p);
 
         /// <summary>
         ///  Gets the location (upper-left corner) of the AdornerWindow in screen coords.
         /// </summary>
-        public Point AdornerWindowToScreen()
-        {
-            Point origin = new Point(0, 0);
-            return AdornerWindowPointToScreen(origin);
-        }
+        public Point AdornerWindowToScreen() => AdornerWindowPointToScreen(new Point(0, 0));
 
         /// <summary>
         ///  Returns the location of a Control translated to AdornerWidnow coords.
@@ -121,12 +115,12 @@ namespace System.Windows.Forms.Design
             }
 
             var pt = new Point(c.Left, c.Top);
-            User32.MapWindowPoints(c.Parent.Handle, _toolStripAdornerWindow.Handle, ref pt, 1);
+            User32.MapWindowPoint(c.Parent, _toolStripAdornerWindow, ref pt);
             return pt;
         }
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners and, in turn, all Glyphs.
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate()
         {
@@ -134,7 +128,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners and, in turn, all Glyphs.
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate(Rectangle rect)
         {
@@ -142,7 +136,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners and, in turn, all Glyphs.
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate(Region r)
         {
@@ -187,7 +181,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  The key here is to set the appropriate TransparetWindow style.
+            ///  The key here is to set the appropriate TransparentWindow style.
             /// </summary>
             protected override CreateParams CreateParams
             {
@@ -228,6 +222,7 @@ namespace System.Windows.Forms.Design
                         _designerFrame = null;
                     }
                 }
+
                 base.Dispose(disposing);
             }
 
@@ -242,6 +237,7 @@ namespace System.Windows.Forms.Design
                     {
                         return false;
                     }
+
                     return true;
                 }
             }
@@ -287,10 +283,10 @@ namespace System.Windows.Forms.Design
             /// </summary>
             protected override void WndProc(ref Message m)
             {
-                switch ((User32.WM)m.Msg)
+                switch (m.MsgInternal)
                 {
                     case User32.WM.NCHITTEST:
-                        m.Result = (IntPtr)User32.HT.TRANSPARENT;
+                        m.ResultInternal = (nint)User32.HT.TRANSPARENT;
                         break;
                     default:
                         base.WndProc(ref m);
