@@ -11,7 +11,7 @@
       IL Trim warnings which should be removed in order to make WinForms trimmable
       See https://github.com/dotnet/winforms/issues/4649
     -->
-    <NoWarn>$(NoWarn);IL2026;IL2046;IL2050;IL2067</NoWarn>
+    <NoWarn>$(NoWarn);IL2026;IL2050</NoWarn>
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>

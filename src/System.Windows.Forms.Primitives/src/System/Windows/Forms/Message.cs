@@ -5,6 +5,7 @@
 #if DEBUG
 using System.Diagnostics;
 #endif
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -83,7 +84,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the <see cref="LParam"/> value, and converts the value to an object.
         /// </summary>
-        public object? GetLParam(Type cls) => Marshal.PtrToStructure(LParamInternal, cls);
+        public object? GetLParam(
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            Type cls) => Marshal.PtrToStructure(LParamInternal, cls);
 
         internal static Message Create(IntPtr hWnd, User32.WM msg, nint wparam, nint lparam)
             => Create(hWnd, (int)msg, wparam, lparam);
