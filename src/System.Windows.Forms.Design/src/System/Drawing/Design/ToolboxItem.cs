@@ -633,6 +633,7 @@ namespace System.Drawing.Design
                         {
                         }
 
+#pragma warning disable SYSLIB0044 // Type or member is obsolete. Ref https://github.com/dotnet/winforms/issues/7308
                         if (a is null && !string.IsNullOrEmpty(assemblyName.CodeBase))
                         {
                             try
@@ -649,6 +650,7 @@ namespace System.Drawing.Design
                             {
                             }
                         }
+#pragma warning restore SYSLIB0044 // Type or member is obsolete
 
                         if (a != null)
                         {
