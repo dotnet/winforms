@@ -9,8 +9,8 @@ internal partial class Interop
 {
     internal static partial class Oleaut32
     {
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true, CharSet = CharSet.Unicode, PreserveSig = false)]
-        public unsafe static extern void OleCreatePropertyFrame(
+        [LibraryImport(Libraries.Oleaut32, StringMarshalling = StringMarshalling.Utf16)]
+        public static unsafe partial int OleCreatePropertyFrame(
             IntPtr hwndOwner,
             int x,
             int y,

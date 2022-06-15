@@ -8,8 +8,8 @@ internal partial class Interop
 {
     internal static partial class Oleaut32
     {
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        public static extern HRESULT VarFormat(
+        [LibraryImport(Libraries.Oleaut32)]
+        public static partial HRESULT VarFormat(
             IntPtr pvarIn,
             IntPtr pstrFormat,
             Ole32.VarFormatFirstDayOfWeek iFirstDay,
