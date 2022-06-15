@@ -170,6 +170,9 @@ namespace System.Windows.Forms
 
                 if (_ownerItem is not null)
                 {
+                    // _currentLayoutOptions will always be initialised if EnsureLayout() is called,
+                    // because it will get called at least once (for _layoutData is null) and, in turn,
+                    // it'll invoke PerformLayout() that'll unconditionally invoke GetLayoutData().
                     _lastPreferredSize = _currentLayoutOptions!.GetPreferredSizeCore(constrainingSize);
                     return _lastPreferredSize;
                 }
