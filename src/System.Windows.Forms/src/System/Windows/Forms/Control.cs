@@ -4587,27 +4587,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Recursively enables required scaling from the given control
-        /// </summary>
-        internal void EnableRequiredScaling(bool enable)
-        {
-            RequiredScalingEnabled = enable;
-            foreach (Control control in Controls)
-            {
-                control.EnableRequiredScaling(enable);
-            }
-        }
-
-        /// <summary>
-        /// Assigns a new parent control. Sends out the appropriate property change
-        /// notifications for properties that are affected by the change of parent.
+        ///  Assigns a new parent control. Sends out the appropriate property change
+        ///  notifications for properties that are affected by the change of parent.
         /// </summary>
         internal virtual void AssignParent(Control value)
         {
             // Adopt the parent's required scaling bits
             if (value is not null)
             {
-                EnableRequiredScaling(value.RequiredScalingEnabled);
+                RequiredScalingEnabled = value.RequiredScalingEnabled;
             }
 
             if (CanAccessProperties)
@@ -6289,15 +6277,6 @@ namespace System.Windows.Forms
         private void InitScaling(BoundsSpecified specified)
         {
             _requiredScaling |= (byte)((int)specified & RequiredScalingMask);
-
-            // Initscaling on children of container control.
-            if (specified == BoundsSpecified.Size)
-            {
-                foreach (Control control in Controls)
-                {
-                    control.InitScaling(specified);
-                }
-            }
         }
 
         /// <summary>

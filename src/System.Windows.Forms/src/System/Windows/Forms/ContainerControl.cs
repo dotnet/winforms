@@ -637,6 +637,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Recursively enables required scaling from the given control
+        /// </summary>
+        private void EnableRequiredScaling(Control start, bool enable)
+        {
+            start.RequiredScalingEnabled = enable;
+            foreach (Control c in start.Controls)
+            {
+                EnableRequiredScaling(c, enable);
+            }
+        }
+
+        /// <summary>
         ///  Assigns focus to the activeControl. If there is no activeControl then focus is given to
         ///  the form. package scope for Form
         /// </summary>
@@ -776,7 +788,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void LayoutScalingNeeded()
         {
-            EnableRequiredScaling(true);
+            EnableRequiredScaling(this, true);
             _state[s_stateScalingNeededOnLayout] = true;
 
             // If layout is not currently suspended, then perform a layout now,
@@ -1011,7 +1023,7 @@ namespace System.Windows.Forms
                 if (includedBounds)
                 {
                     _state[s_stateScalingNeededOnLayout] = false;
-                    EnableRequiredScaling(enable: false);
+                    EnableRequiredScaling(this, enable: false);
                 }
 
                 _state[s_stateParentChanged] = false;
