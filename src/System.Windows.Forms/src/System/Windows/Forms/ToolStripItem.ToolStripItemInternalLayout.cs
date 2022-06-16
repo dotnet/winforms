@@ -135,17 +135,15 @@ namespace System.Windows.Forms
             }
 
             [MemberNotNull(nameof(_layoutData))]
-            private bool EnsureLayout()
+            private void EnsureLayout()
             {
                 if (_layoutData is null || _parentLayoutData is null || !_parentLayoutData.IsCurrent(ParentInternal))
                 {
                     PerformLayout();
-                    return true;
                 }
-
-                return false;
             }
 
+            [MemberNotNull(nameof(_currentLayoutOptions))]
             private ButtonBaseAdapter.LayoutData GetLayoutData()
             {
                 _currentLayoutOptions = CommonLayoutOptions();
@@ -181,6 +179,7 @@ namespace System.Windows.Forms
             }
 
             [MemberNotNull(nameof(_layoutData))]
+            [MemberNotNull(nameof(_currentLayoutOptions))]
             internal void PerformLayout()
             {
                 _layoutData = GetLayoutData();
