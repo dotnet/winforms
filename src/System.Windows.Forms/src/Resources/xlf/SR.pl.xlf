@@ -8836,6 +8836,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Pobiera lub ustawia wartość Boolean, która kontroluje, czy pokazywany jest pasek przewijania.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="new">Parent property of the active control cannot be null.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
         <source>Gets the horizontal scroll bar for this ScrollableControl.</source>
         <target state="translated">Pobiera poziomy pasek przewijania dla tego elementu ScrollableControl.</target>

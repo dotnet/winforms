@@ -1411,7 +1411,7 @@ namespace System.Windows.Forms
         {
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanProcessMnemonic())
             {
-                Control parent = ParentInternal;
+                Control? parent = ParentInternal;
                 if (parent is not null)
                 {
                     if (parent.SelectNextControl(this, true, false, true, false) && !parent.ContainsFocus)

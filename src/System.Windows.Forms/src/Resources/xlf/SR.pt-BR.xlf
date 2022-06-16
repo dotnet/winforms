@@ -8836,6 +8836,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Obtém ou define um valor booleano que controla se a barra de rolagem é mostrada.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="new">Parent property of the active control cannot be null.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
         <source>Gets the horizontal scroll bar for this ScrollableControl.</source>
         <target state="translated">Obtém a barra de rolagem horizontal para ScrollableControl.</target>

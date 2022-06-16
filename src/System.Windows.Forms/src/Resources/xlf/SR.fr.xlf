@@ -8836,6 +8836,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Obtient ou définit une valeur Boolean déterminant si la barre de défilement est affichée.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="new">Parent property of the active control cannot be null.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
         <source>Gets the horizontal scroll bar for this ScrollableControl.</source>
         <target state="translated">Obtient la barre de défilement horizontale pour ce ScrollableControl.</target>

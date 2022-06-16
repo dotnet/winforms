@@ -907,7 +907,7 @@ namespace System.Windows.Forms
                     return c;
                 }
 
-                Control p = ParentInternal;
+                Control? p = ParentInternal;
                 if (p is not null && p.CanAccessProperties)
                 {
                     c = p.BackColor;
@@ -1099,7 +1099,7 @@ namespace System.Windows.Forms
                 }
 
                 // Otherwise, see if the parent has one for us.
-                Control p = ParentInternal;
+                Control? p = ParentInternal;
                 if (p is not null && p.CanAccessProperties)
                 {
                     return p.BindingContext;
@@ -1636,7 +1636,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Control parent = ParentInternal;
+                    Control? parent = ParentInternal;
                     if (parent is not null)
                     {
                         return parent.ValidationCancelled;
@@ -1713,7 +1713,7 @@ namespace System.Windows.Forms
                     return localDefault;
                 }
 
-                Control p = ParentInternal;
+                Control? p = ParentInternal;
                 if (p is not null)
                 {
                     return p.Cursor;
@@ -2380,7 +2380,7 @@ namespace System.Windows.Forms
                 return null;
             }
         }
-#nullable disable
+
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual Size GetPreferredSize(Size proposedSize)
         {
@@ -2482,7 +2482,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlCollection controls = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                ControlCollection? controls = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
                 return controls is not null && controls.Count > 0;
             }
         }
@@ -2578,7 +2578,7 @@ namespace System.Windows.Forms
 
                 RECT temp = new RECT();
                 Region working;
-                Control parent = ParentInternal;
+                Control? parent = ParentInternal;
                 if (parent is not null)
                 {
                     while (parent.ParentInternal is not null)
@@ -2715,7 +2715,7 @@ namespace System.Windows.Forms
         public bool IsAncestorSiteInDesignMode =>
             GetSitedParentSite(this) is ISite parentSite ? parentSite.DesignMode : false;
 
-        private ISite GetSitedParentSite(Control control)
+        private ISite? GetSitedParentSite(Control control)
         {
             ArgumentNullException.ThrowIfNull(control);
             return (control.Site is not null && control.Site.DesignMode) || control.Parent is null ?
@@ -2804,7 +2804,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnLocationChangedDescr))]
-        public event EventHandler LocationChanged
+        public event EventHandler? LocationChanged
         {
             add => Events.AddHandler(s_locationEvent, value);
             remove => Events.RemoveHandler(s_locationEvent, value);
@@ -2835,7 +2835,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnMarginChangedDescr))]
-        public event EventHandler MarginChanged
+        public event EventHandler? MarginChanged
         {
             add => Events.AddHandler(s_marginChangedEvent, value);
             remove => Events.RemoveHandler(s_marginChangedEvent, value);
@@ -2968,11 +2968,12 @@ namespace System.Windows.Forms
         ///  used as a key into the ControlCollection.
         /// </summary>
         [Browsable(false)]
+        [AllowNull]
         public string Name
         {
             get
             {
-                string name = (string)Properties.GetObject(s_namePropertyProperty);
+                string? name = (string?)Properties.GetObject(s_namePropertyProperty);
                 if (string.IsNullOrEmpty(name))
                 {
                     if (Site is not null)
@@ -3008,27 +3009,29 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlParentDescr))]
-        public Control Parent
+        public Control? Parent
         {
             get => ParentInternal;
             set => ParentInternal = value;
         }
 
-        internal virtual Control ParentInternal
+        internal virtual Control? ParentInternal
         {
             get => _parent;
             set
             {
-                if (_parent != value)
+                if (_parent == value)
                 {
-                    if (value is not null)
-                    {
-                        value.Controls.Add(this);
-                    }
-                    else
-                    {
-                        _parent.Controls.Remove(this);
-                    }
+                    return;
+                }
+
+                if (value is not null)
+                {
+                    value.Controls.Add(this);
+                }
+                else if (_parent is not null)
+                {
+                    _parent.Controls.Remove(this);
                 }
             }
         }
@@ -3085,7 +3088,7 @@ namespace System.Windows.Forms
             // Control doesn't have a specific logic after a toolTip is removed
         }
 
-        private Control ReflectParent
+        private Control? ReflectParent
         {
             get => _reflectParent;
             set
@@ -3095,7 +3098,7 @@ namespace System.Windows.Forms
                     value.AddReflectChild();
                 }
 
-                Control existing = _reflectParent as Control;
+                Control? existing = _reflectParent as Control;
                 _reflectParent = value;
                 existing?.RemoveReflectChild();
             }
@@ -3110,12 +3113,12 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlRegionDescr))]
-        public Region Region
+        public Region? Region
         {
-            get => (Region)Properties.GetObject(s_regionProperty);
+            get => (Region?)Properties.GetObject(s_regionProperty);
             set
             {
-                Region oldRegion = Region;
+                Region? oldRegion = Region;
                 if (oldRegion != value)
                 {
                     oldRegion?.Dispose();
@@ -3125,7 +3128,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void SetRegion(Region region)
+        internal void SetRegion(Region? region)
         {
             Properties.SetObject(s_regionProperty, region);
 
@@ -3142,7 +3145,7 @@ namespace System.Windows.Forms
             }
 
             // If we're an ActiveX control, clone the region so it can potentially be modified
-            using Region regionCopy = IsActiveX ? ActiveXMergeRegion(region.Clone()) : null;
+            using Region? regionCopy = IsActiveX ? ActiveXMergeRegion(region.Clone()) : null;
             using var regionHandle = new Gdi32.RegionScope(regionCopy ?? region, Handle);
 
             if (User32.SetWindowRgn(this, regionHandle, User32.IsWindowVisible(this)) != 0)
@@ -3157,7 +3160,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlRegionChangedDescr))]
-        public event EventHandler RegionChanged
+        public event EventHandler? RegionChanged
         {
             add => Events.AddHandler(s_regionChangedEvent, value);
             remove => Events.RemoveHandler(s_regionChangedEvent, value);
@@ -3264,7 +3267,7 @@ namespace System.Windows.Forms
 
                 if (((RightToLeft)rightToLeft) == RightToLeft.Inherit)
                 {
-                    Control parent = ParentInternal;
+                    Control? parent = ParentInternal;
                     if (parent is not null)
                     {
                         rightToLeft = (int)parent.RightToLeft;
@@ -3303,7 +3306,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
-        public event EventHandler RightToLeftChanged
+        public event EventHandler? RightToLeftChanged
         {
             add => Events.AddHandler(s_rightToLeftEvent, value);
             remove => Events.RemoveHandler(s_rightToLeftEvent, value);
@@ -3317,7 +3320,7 @@ namespace System.Windows.Forms
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual bool ScaleChildren => true;
-
+#nullable disable
         /// <summary>
         /// Stores scaled font from Dpi changed values. This is required to distinguish the Font change from
         /// Dpi changed events and explicit Font change/assignment. Caching Font values for each Dpi is complex.
@@ -13419,7 +13422,7 @@ namespace System.Windows.Forms
             }
         }
 
-        IArrangedElement IArrangedElement.Container
+        IArrangedElement? IArrangedElement.Container
         {
             get
             {
@@ -14327,7 +14330,7 @@ namespace System.Windows.Forms
 
         private IList<Rectangle> GetOwnNeighboringToolsRectangles()
         {
-            Control controlParent = ParentInternal;
+            Control? controlParent = ParentInternal;
             if (controlParent is null)
             {
                 return Array.Empty<Rectangle>();

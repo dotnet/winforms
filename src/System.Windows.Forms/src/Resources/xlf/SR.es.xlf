@@ -8836,6 +8836,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Obtiene o establece un valor Boolean que controla si se muestra la barra de desplazamiento.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="new">Parent property of the active control cannot be null.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
         <source>Gets the horizontal scroll bar for this ScrollableControl.</source>
         <target state="translated">Obtiene la barra de desplazamiento horizontal para este ScrollableControl.</target>

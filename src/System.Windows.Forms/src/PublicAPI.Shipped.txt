@@ -931,19 +931,19 @@ override System.Windows.Forms.TableLayoutPanel.OnPaintBackground(System.Windows.
 ~System.Windows.Forms.Control.InvokeOnClick(System.Windows.Forms.Control toInvoke, System.EventArgs e) -> void
 ~System.Windows.Forms.Control.InvokePaint(System.Windows.Forms.Control c, System.Windows.Forms.PaintEventArgs e) -> void
 ~System.Windows.Forms.Control.InvokePaintBackground(System.Windows.Forms.Control c, System.Windows.Forms.PaintEventArgs e) -> void
-~System.Windows.Forms.Control.Name.get -> string
-~System.Windows.Forms.Control.Name.set -> void
-~System.Windows.Forms.Control.Parent.get -> System.Windows.Forms.Control
-~System.Windows.Forms.Control.Parent.set -> void
+System.Windows.Forms.Control.Name.get -> string!
+System.Windows.Forms.Control.Name.set -> void
+System.Windows.Forms.Control.Parent.get -> System.Windows.Forms.Control?
+System.Windows.Forms.Control.Parent.set -> void
 ~System.Windows.Forms.Control.PerformLayout(System.Windows.Forms.Control affectedControl, string affectedProperty) -> void
-~System.Windows.Forms.Control.ProductName.get -> string
-~System.Windows.Forms.Control.ProductVersion.get -> string
+System.Windows.Forms.Control.ProductName.get -> string!
+System.Windows.Forms.Control.ProductVersion.get -> string!
 ~System.Windows.Forms.Control.RaiseDragEvent(object key, System.Windows.Forms.DragEventArgs e) -> void
 ~System.Windows.Forms.Control.RaiseKeyEvent(object key, System.Windows.Forms.KeyEventArgs e) -> void
 ~System.Windows.Forms.Control.RaiseMouseEvent(object key, System.Windows.Forms.MouseEventArgs e) -> void
 ~System.Windows.Forms.Control.RaisePaintEvent(object key, System.Windows.Forms.PaintEventArgs e) -> void
-~System.Windows.Forms.Control.Region.get -> System.Drawing.Region
-~System.Windows.Forms.Control.Region.set -> void
+System.Windows.Forms.Control.Region.get -> System.Drawing.Region?
+System.Windows.Forms.Control.Region.set -> void
 ~System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitmap logicalBitmap) -> void
 ~System.Windows.Forms.Control.Tag.get -> object
 ~System.Windows.Forms.Control.Tag.set -> void
@@ -5952,13 +5952,13 @@ System.Windows.Forms.Control.Left.get -> int
 System.Windows.Forms.Control.Left.set -> void
 System.Windows.Forms.Control.Location.get -> System.Drawing.Point
 System.Windows.Forms.Control.Location.set -> void
-System.Windows.Forms.Control.LocationChanged -> System.EventHandler
+System.Windows.Forms.Control.LocationChanged -> System.EventHandler?
 System.Windows.Forms.Control.LogicalToDeviceUnits(int value) -> int
 System.Windows.Forms.Control.LogicalToDeviceUnits(System.Drawing.Size value) -> System.Drawing.Size
 System.Windows.Forms.Control.LostFocus -> System.EventHandler
 System.Windows.Forms.Control.Margin.get -> System.Windows.Forms.Padding
 System.Windows.Forms.Control.Margin.set -> void
-System.Windows.Forms.Control.MarginChanged -> System.EventHandler
+System.Windows.Forms.Control.MarginChanged -> System.EventHandler?
 System.Windows.Forms.Control.MouseCaptureChanged -> System.EventHandler
 System.Windows.Forms.Control.MouseClick -> System.Windows.Forms.MouseEventHandler
 System.Windows.Forms.Control.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler
@@ -5987,7 +5987,7 @@ System.Windows.Forms.Control.RecreateHandle() -> void
 System.Windows.Forms.Control.RecreatingHandle.get -> bool
 System.Windows.Forms.Control.RectangleToClient(System.Drawing.Rectangle r) -> System.Drawing.Rectangle
 System.Windows.Forms.Control.RectangleToScreen(System.Drawing.Rectangle r) -> System.Drawing.Rectangle
-System.Windows.Forms.Control.RegionChanged -> System.EventHandler
+System.Windows.Forms.Control.RegionChanged -> System.EventHandler?
 System.Windows.Forms.Control.RenderRightToLeft.get -> bool
 System.Windows.Forms.Control.ResetBindings() -> void
 System.Windows.Forms.Control.ResetImeMode() -> void
@@ -5998,7 +5998,7 @@ System.Windows.Forms.Control.ResizeRedraw.set -> void
 System.Windows.Forms.Control.ResumeLayout() -> void
 System.Windows.Forms.Control.ResumeLayout(bool performLayout) -> void
 System.Windows.Forms.Control.Right.get -> int
-System.Windows.Forms.Control.RightToLeftChanged -> System.EventHandler
+System.Windows.Forms.Control.RightToLeftChanged -> System.EventHandler?
 System.Windows.Forms.Control.RtlTranslateAlignment(System.Drawing.ContentAlignment align) -> System.Drawing.ContentAlignment
 System.Windows.Forms.Control.RtlTranslateAlignment(System.Windows.Forms.HorizontalAlignment align) -> System.Windows.Forms.HorizontalAlignment
 System.Windows.Forms.Control.RtlTranslateAlignment(System.Windows.Forms.LeftRightAlignment align) -> System.Windows.Forms.LeftRightAlignment
@@ -10366,7 +10366,7 @@ System.Windows.Forms.SplitterPanel.MaximumSize.get -> System.Drawing.Size
 System.Windows.Forms.SplitterPanel.MaximumSize.set -> void
 System.Windows.Forms.SplitterPanel.MinimumSize.get -> System.Drawing.Size
 System.Windows.Forms.SplitterPanel.MinimumSize.set -> void
-System.Windows.Forms.SplitterPanel.Name.get -> string?
+System.Windows.Forms.SplitterPanel.Name.get -> string!
 System.Windows.Forms.SplitterPanel.Name.set -> void
 System.Windows.Forms.SplitterPanel.Parent.get -> System.Windows.Forms.Control?
 System.Windows.Forms.SplitterPanel.Parent.set -> void

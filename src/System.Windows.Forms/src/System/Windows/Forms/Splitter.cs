@@ -655,7 +655,12 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                Control parent = ParentInternal;
+                Control? parent = ParentInternal;
+                if (parent is null)
+                {
+                    return spd;
+                }
+
                 ControlCollection children = parent.Controls;
                 int count = children.Count;
                 int dockWidth = 0, dockHeight = 0;
@@ -664,7 +669,7 @@ namespace System.Windows.Forms
                     Control ctl = children[i];
                     if (ctl != target)
                     {
-                        switch (((Control)ctl).Dock)
+                        switch (ctl.Dock)
                         {
                             case DockStyle.Left:
                             case DockStyle.Right:
@@ -701,7 +706,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void DrawSplitHelper(int splitSize)
         {
-            if (_splitTarget is null)
+            if (_splitTarget is null || ParentInternal is null)
             {
                 return;
             }

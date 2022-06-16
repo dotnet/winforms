@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -185,7 +186,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
-        public new string? Name
+        [AllowNull]
+        public new string Name
         {
             get => base.Name;
             set => base.Name = value;
