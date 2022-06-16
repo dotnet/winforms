@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        private static extern BOOL InvalidateRgn(IntPtr hWnd, Gdi32.HRGN hrgn, BOOL erase);
+        [LibraryImport(Libraries.User32)]
+        private static partial BOOL InvalidateRgn(IntPtr hWnd, Gdi32.HRGN hrgn, BOOL erase);
 
         public static BOOL InvalidateRgn(IHandle hWnd, Gdi32.HRGN hrgn, BOOL erase)
         {

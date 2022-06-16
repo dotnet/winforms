@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, SetLastError = true, ExactSpelling = true)]
-        public unsafe static extern uint GetDlgItemInt(IntPtr hDlg, int nIDDlgItem, BOOL* lpTranslated, BOOL bSigned);
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        public static unsafe partial uint GetDlgItemInt(IntPtr hDlg, int nIDDlgItem, BOOL* lpTranslated, BOOL bSigned);
     }
 }
