@@ -8,8 +8,8 @@ internal partial class Interop
 {
     internal partial class ComCtl32
     {
-        [DllImport(Libraries.Comctl32, ExactSpelling = true, EntryPoint = "InitCommonControlsEx")]
-        private static extern BOOL InitCommonControlsExInternal(ref INITCOMMONCONTROLSEX picce);
+        [LibraryImport(Libraries.Comctl32, EntryPoint = "InitCommonControlsEx")]
+        private static partial BOOL InitCommonControlsExInternal(ref INITCOMMONCONTROLSEX picce);
 
         public static BOOL InitCommonControlsEx(ref INITCOMMONCONTROLSEX picce)
         {

@@ -10,8 +10,8 @@ internal partial class Interop
     {
         public static partial class ImageList
         {
-            [DllImport(Libraries.Comctl32, ExactSpelling = true, EntryPoint = "ImageList_Remove")]
-            public static extern BOOL Remove(IntPtr himl, int i);
+            [LibraryImport(Libraries.Comctl32, EntryPoint = "ImageList_Remove")]
+            public static partial BOOL Remove(IntPtr himl, int i);
 
             public static BOOL Remove(IHandle himl, int i)
             {
