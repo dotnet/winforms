@@ -1409,8 +1409,8 @@
 ~System.Windows.Forms.PropertyGrid.SelectedTab.get -> System.Windows.Forms.Design.PropertyTab
 ~System.Windows.Forms.PropertyGrid.ToolStripRenderer.get -> System.Windows.Forms.ToolStripRenderer
 ~System.Windows.Forms.PropertyGrid.ToolStripRenderer.set -> void
-~System.Windows.Forms.RelatedImageListAttribute.RelatedImageList.get -> string
-~System.Windows.Forms.RelatedImageListAttribute.RelatedImageListAttribute(string relatedImageList) -> void
+System.Windows.Forms.RelatedImageListAttribute.RelatedImageList.get -> string!
+System.Windows.Forms.RelatedImageListAttribute.RelatedImageListAttribute(string! relatedImageList) -> void
 ~System.Windows.Forms.RichTextBox.CanPaste(System.Windows.Forms.DataFormats.Format clipFormat) -> bool
 ~System.Windows.Forms.RichTextBox.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
 ~System.Windows.Forms.RichTextBox.Find(char[] characterSet) -> int
