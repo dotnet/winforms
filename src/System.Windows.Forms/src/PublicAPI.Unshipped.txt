@@ -1,0 +1,1 @@
+~override System.Windows.Forms.WebBrowser.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
