@@ -1161,7 +1161,7 @@ namespace System.Windows.Forms
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCommandExecute(CancelEventArgs e)
-            => ((EventHandler)Events[s_commandExecuteEvent]!)?.Invoke(this, e);
+            => ((CancelEventHandler)Events[s_commandExecuteEvent]!)?.Invoke(this, e);
 
         /// <summary>
         ///  Raises the <see cref="ToolStripItem.CommandCanExecuteChanged"/> event.
