@@ -644,8 +644,8 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { new Size(0, 0), 0, 0 };
                 yield return new object[] { new Size(0, 20), 0, 0 };
                 yield return new object[] { new Size(30, 30), 0, 5 };
-                yield return new object[] { new Size(50, 20), 0, 11 };
-                yield return new object[] { new Size(120, 20), 0, 26 };
+                yield return new object[] { new Size(50, 20), 0, 5 };
+                yield return new object[] { new Size(120, 20), 0, 19 };
                 yield return new object[] { new Size(50, 80), 0, 26 };
             }
             else
@@ -661,7 +661,8 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(TextBoxBaseUiaTextProvider_GetVisibleRangePoints_ForMultilineTextBox_TestData))]
-        public void TextBoxBaseUiaTextProvider_GetVisibleRangePoints_ForMultilineTextBox_ReturnsCorrectValue(Size size, int expectedStart, int expectedEnd)
+        public void TextBoxBaseUiaTextProvider_GetVisibleRangePoints_ForMultilineTextBox_ReturnsCorrectValue(
+            Size size, int expectedStart, int expectedEnd)
         {
             using SubTextBoxBase textBoxBase = new SubTextBoxBase()
             {

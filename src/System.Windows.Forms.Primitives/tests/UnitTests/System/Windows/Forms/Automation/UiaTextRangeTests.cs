@@ -524,6 +524,7 @@ this is the third line.";
             enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(10, 33, 96, 19));
             IRawElementProviderSimple enclosingElement = enclosingElementMock.Object;
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+            providerMock.Setup(p => p.Text).Returns("");
             providerMock.Setup(p => p.TextLength).Returns(0);
             UiaTextProvider provider = providerMock.Object;
             UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 0);
@@ -538,7 +539,9 @@ this is the third line.";
             enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(10, 33, 96, 19));
             IRawElementProviderSimple enclosingElement = enclosingElementMock.Object;
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+            providerMock.Setup(p => p.Text).Returns("abcde");
             providerMock.Setup(p => p.TextLength).Returns(5);
+            providerMock.Setup(p => p.IsMultiline).Returns(false);
             UiaTextProvider provider = providerMock.Object;
             UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 0);
             var actual = ((ITextRangeProvider)textRange).GetBoundingRectangles();
@@ -552,6 +555,7 @@ this is the third line.";
             enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(10, 33, 96, 19));
             IRawElementProviderSimple enclosingElement = enclosingElementMock.Object;
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+            providerMock.Setup(p => p.Text).Returns("abc");
             providerMock.Setup(p => p.TextLength).Returns(3);
             providerMock.Setup(p => p.PointToScreen(It.IsAny<Point>())).Returns(Point.Empty);
             using Font font = new Font("Arial", 9f, FontStyle.Regular);
@@ -626,6 +630,10 @@ and numbers 12345";
             using Font font = new Font("Arial", 9f, FontStyle.Regular);
             providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
 
+            // Offset by enclosing element's coordinates
+            providerMock.Setup(m => m.RectangleToScreen(It.IsAny<Rectangle>()))
+                .Returns((Rectangle rect) => new Rectangle(rect.X + 27, rect.Y + 128, rect.Width, rect.Height));
+
             providerMock.Setup(m => m.GetLineFromCharIndex(0)).Returns(0);
             providerMock.Setup(m => m.GetLineFromCharIndex(14)).Returns(0);
             providerMock.Setup(m => m.GetLineFromCharIndex(23)).Returns(1);
@@ -688,6 +696,10 @@ and numbers 12345";
             providerMock.Setup(m => m.LinesPerPage).Returns(9);
             using Font font = new Font("Arial", 9f, FontStyle.Regular);
             providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
+
+            // Offset by enclosing element's coordinates
+            providerMock.Setup(m => m.RectangleToScreen(It.IsAny<Rectangle>()))
+                .Returns((Rectangle rect) => new Rectangle(rect.X + 27, rect.Y + 128, rect.Width, rect.Height));
 
             providerMock.Setup(m => m.GetLineFromCharIndex(0)).Returns(0);
             providerMock.Setup(m => m.GetLineFromCharIndex(14)).Returns(0);
