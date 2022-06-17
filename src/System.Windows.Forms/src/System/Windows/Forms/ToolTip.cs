@@ -1537,12 +1537,10 @@ namespace System.Windows.Forms
                 {
                     if (!_tools.TryGetValue(toolAsControl, out tipInfo))
                     {
-                        if (tool.GetOwnerWindow() is Control ownerWindowAsControl)
+                        if (tool.GetOwnerWindow() is Control ownerWindowAsControl
+                            && _tools.TryGetValue(ownerWindowAsControl, out tipInfo))
                         {
-                            if (_tools.TryGetValue(ownerWindowAsControl, out tipInfo))
-                            {
-                                tipInfo.Position = new Point(pointX, pointY);
-                            }
+                            tipInfo.Position = new Point(pointX, pointY);
                         }
                     }
                     else
