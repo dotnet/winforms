@@ -501,10 +501,10 @@ namespace System.Windows.Forms
                 }
 
                 Control currentTopLevel = null;
-                var regions = _tools.Keys.ToArray();
-                for (int i = 0; i < regions.Length; i++)
+                Control[] controls = _tools.Keys.ToArray();
+                for (int i = 0; i < controls.Length; i++)
                 {
-                    var control = regions[i];
+                    var control = controls[i];
                     currentTopLevel = control.TopLevelControlInternal;
                     if (currentTopLevel is not null)
                     {
@@ -814,7 +814,7 @@ namespace System.Windows.Forms
 
         private void CreateAllRegions()
         {
-            var controls = _tools.Keys.ToArray();
+            Control[] controls = _tools.Keys.ToArray();
             foreach (Control control in controls)
             {
                 CreateRegion(control);
@@ -823,7 +823,7 @@ namespace System.Windows.Forms
 
         private void DestroyAllRegions()
         {
-            var controls = _tools.Keys.ToArray();
+            Control[] controls = _tools.Keys.ToArray();
             foreach (Control control in controls)
             {
                 // DataGridView manages its own tool tip.
@@ -1161,8 +1161,8 @@ namespace System.Windows.Forms
         /// </summary>
         public void RemoveAll()
         {
-            Control[] regions = _tools.Keys.ToArray();
-            foreach (Control control in regions)
+            Control[] controls = _tools.Keys.ToArray();
+            foreach (Control control in controls)
             {
                 if (control.IsHandleCreated)
                 {
@@ -1816,10 +1816,10 @@ namespace System.Windows.Forms
 
         private void HideAllToolTips()
         {
-            Control[] ctls = _owners.Values.ToArray();
-            for (int i = 0; i < ctls.Length; i++)
+            Control[] controls = _owners.Values.ToArray();
+            for (int i = 0; i < controls.Length; i++)
             {
-                Hide(ctls[i]);
+                Hide(controls[i]);
             }
         }
 
