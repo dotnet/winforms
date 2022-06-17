@@ -6,6 +6,6 @@
 
   <ItemGroup>
     <CMakeArguments Include=" --log-level=WARNING" />
-    <CMakeNativeToolArguments Include=" -verbosity:quiet" />
+    <CMakeNativeToolArguments Include=" -verbosity:quiet /p:PlatformToolset=%__PlatformToolset% " />
   </ItemGroup>
 </Project>
