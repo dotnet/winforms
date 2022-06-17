@@ -3,13 +3,16 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
     internal partial class SpecialFolderEnumConverter : EnumConverter
     {
-        public SpecialFolderEnumConverter(Type type) : base(type)
+        public SpecialFolderEnumConverter(
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)]
+            Type type) : base(type)
         {
         }
 

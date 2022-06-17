@@ -6,6 +6,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.ButtonInternal;
@@ -17,6 +18,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Identifies a checkbox cell in the DataGridView.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewEditingCell
     {
         private const DataGridViewContentAlignment AnyLeft = DataGridViewContentAlignment.TopLeft | DataGridViewContentAlignment.MiddleLeft | DataGridViewContentAlignment.BottomLeft;
@@ -216,6 +218,7 @@ namespace System.Windows.Forms
             }
         }
 
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
         public override Type EditType
         {
             get

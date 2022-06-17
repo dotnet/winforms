@@ -5,6 +5,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace System.Windows.Forms
@@ -163,6 +164,7 @@ namespace System.Windows.Forms
             ///  does not return any properties. An easy implementation of this method
             ///  can just call TypeDescriptor.GetProperties for the correct data type.
             /// </summary>
+            [RequiresUnreferencedCode(TrimmingConstants.TypeConverterGetPropertiesMessage)]
             public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(LinkArea), attributes);

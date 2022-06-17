@@ -7,6 +7,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.ComponentModel.Com2Interop;
@@ -80,6 +81,7 @@ namespace System.Windows.Forms
 
             public override TypeConverter Converter
             {
+                [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
                 get
                 {
                     if (_dispid is not null)
@@ -112,6 +114,7 @@ namespace System.Windows.Forms
                 return _baseDescriptor.CanResetValue(o);
             }
 
+            [RequiresUnreferencedCode(TrimmingConstants.EditorRequiresUnreferencedCode)]
             public override object GetEditor(Type editorBaseType)
             {
                 ArgumentNullException.ThrowIfNull(editorBaseType);
