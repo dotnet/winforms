@@ -6,6 +6,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -1649,6 +1650,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Bindable(false)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;
@@ -6131,7 +6133,7 @@ namespace System.Windows.Forms
                 _columnHeaderClicked = null;
                 _columnHeaderClickedWidth = -1;
 
-                ISite site = Site;
+                ISite? site = Site;
 
                 if (site is not null)
                 {
