@@ -21,7 +21,7 @@ internal static partial class Interop
             }
         }
 
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern BOOL TrackMouseEvent(ref TRACKMOUSEEVENT lpEventTrack);
+        [LibraryImport(Libraries.User32)]
+        public static partial BOOL TrackMouseEvent(ref TRACKMOUSEEVENT lpEventTrack);
     }
 }

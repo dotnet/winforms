@@ -10,8 +10,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public unsafe static extern BOOL GetWindowRect(IntPtr hWnd, ref RECT rect);
+        [LibraryImport(Libraries.User32)]
+        public static unsafe partial BOOL GetWindowRect(IntPtr hWnd, ref RECT rect);
 
         public static BOOL GetWindowRect(HandleRef hWnd, ref RECT rect)
         {

@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, CharSet = CharSet.Unicode)]
-        public static extern int SetWindowTextW(IntPtr hWnd, string text);
+        [LibraryImport(Libraries.User32, StringMarshalling = StringMarshalling.Utf16)]
+        public static partial int SetWindowTextW(IntPtr hWnd, string text);
 
         public static int SetWindowTextW(IHandle hWnd, string text)
         {

@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        public static extern ID MessageBoxW(IntPtr hWnd, string lpText, string lpCaption, MB uType);
+        [LibraryImport(Libraries.User32, StringMarshalling = StringMarshalling.Utf16)]
+        public static partial ID MessageBoxW(IntPtr hWnd, string lpText, string lpCaption, MB uType);
 
         public static ID MessageBoxW(HandleRef hWnd, string lpText, string lpCaption, MB uType)
         {

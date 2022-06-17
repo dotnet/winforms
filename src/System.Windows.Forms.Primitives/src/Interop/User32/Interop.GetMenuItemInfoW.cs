@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern BOOL GetMenuItemInfoW(IntPtr hmenu, int item, BOOL fByPosition, ref MENUITEMINFOW lpmii);
+        [LibraryImport(Libraries.User32)]
+        public static partial BOOL GetMenuItemInfoW(IntPtr hmenu, int item, BOOL fByPosition, ref MENUITEMINFOW lpmii);
 
         public static BOOL GetMenuItemInfoW(HandleRef hmenu, int item, BOOL fByPosition, ref MENUITEMINFOW lpmii)
         {
