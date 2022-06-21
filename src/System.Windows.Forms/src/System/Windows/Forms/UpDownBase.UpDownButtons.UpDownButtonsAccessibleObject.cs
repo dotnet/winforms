@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -114,6 +115,25 @@ namespace System.Windows.Forms
                 }
 
                 public override AccessibleObject Parent => _owner.AccessibilityObject;
+
+                internal void ReleaseChildUiaProviders()
+                {
+                    HRESULT result;
+
+                    if (_upButton is not null)
+                    {
+                        result = UiaCore.UiaDisconnectProvider(_upButton);
+                        Debug.Assert(result == HRESULT.S_OK);
+                        _upButton = null;
+                    }
+
+                    if (_downButton is not null)
+                    {
+                        result = UiaCore.UiaDisconnectProvider(_downButton);
+                        Debug.Assert(result == HRESULT.S_OK);
+                        _downButton = null;
+                    }
+                }
 
                 public override AccessibleRole Role
                 {
