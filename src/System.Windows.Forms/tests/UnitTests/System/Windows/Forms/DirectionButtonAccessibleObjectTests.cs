@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Tests
             domainUpDown.SelectedIndex = 1; // Select the second item
 
             // UpButton has 0 childId, DownButton has 1 childId
-            AccessibleObject directionButton = domainUpDown.AccessibilityObject.GetChild(1).GetChild(childId);
+            AccessibleObject directionButton = domainUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(childId);
             directionButton.Invoke();
 
             // The selected index is not changed
@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Tests
             domainUpDown.CreateControl();
 
             // UpButton has 0 childId, DownButton has 1 childId
-            AccessibleObject directionButton = domainUpDown.AccessibilityObject.GetChild(1).GetChild(childId);
+            AccessibleObject directionButton = domainUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(childId);
             directionButton.Invoke();
 
             // The selected index is not changed
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Tests
             numericUpDown.Value = testValue;
 
             // UpButton has 0 childId, DownButton has 1 childId
-            AccessibleObject directionButton = numericUpDown.AccessibilityObject.GetChild(1).GetChild(childId);
+            AccessibleObject directionButton = numericUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(childId);
             directionButton.Invoke();
 
             // The value is not changed
@@ -73,7 +73,7 @@ namespace System.Windows.Forms.Tests
             numericUpDown.CreateControl();
 
             // UpButton has 0 childId, DownButton has 1 childId
-            AccessibleObject directionButton = numericUpDown.AccessibilityObject.GetChild(1).GetChild(childId);
+            AccessibleObject directionButton = numericUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(childId);
             directionButton.Invoke();
 
             Assert.Equal(expected, numericUpDown.Value);

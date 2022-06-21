@@ -6,15 +6,16 @@ namespace System.Windows.Forms
 {
     public partial class DomainUpDown
     {
+        // This class is not used anyhow for building of DomainUpDown accessibility tree, but
+        // we can't remove this class just like that because it's a public API.
+        // See https://github.com/dotnet/winforms/issues/7344 for more details.
         public class DomainItemAccessibleObject : AccessibleObject
         {
             private string? _name;
-            private readonly DomainItemListAccessibleObject _parent;
 
             public DomainItemAccessibleObject(string? name, AccessibleObject parent)
             {
                 _name = name;
-                _parent = (DomainItemListAccessibleObject)parent.OrThrowIfNull();
             }
 
             public override string? Name
@@ -29,13 +30,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject Parent
-            {
-                get
-                {
-                    return _parent;
-                }
-            }
+            public override AccessibleObject? Parent => null;
 
             public override AccessibleRole Role
             {
@@ -61,7 +56,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode() };
+            internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, GetHashCode() };
         }
     }
 }

@@ -214,6 +214,9 @@ namespace System.Windows.Forms
             }
         }
 
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new UpDownBaseAccessibleObject(this);
+
         protected override CreateParams CreateParams
         {
             get
