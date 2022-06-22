@@ -8838,7 +8838,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="ScrollableControlActiveControlParentNull">
         <source>Parent property of the active control cannot be null.</source>
-        <target state="new">Parent property of the active control cannot be null.</target>
+        <target state="translated">Właściwość nadrzędna aktywnej kontrolki nie może mieć wartości null.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">

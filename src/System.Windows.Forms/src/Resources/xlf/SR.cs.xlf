@@ -8838,7 +8838,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="ScrollableControlActiveControlParentNull">
         <source>Parent property of the active control cannot be null.</source>
-        <target state="new">Parent property of the active control cannot be null.</target>
+        <target state="translated">Nadřazená vlastnost aktivního ovládacího prvku nemůže mít hodnotu null.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
