@@ -92,6 +92,7 @@ namespace System.Windows.Forms
         private const int LISTVIEWSTATE1_disposingImageLists = 0x00000004;
         private const int LISTVIEWSTATE1_useCompatibleStateImageBehavior = 0x00000008;
         private const int LISTVIEWSTATE1_selectedIndexChangedSkipped = 0x00000010;
+        private const int LISTVIEWSTATE1_clearingInnerListOnDispose = 0x00000020;
 
         private const int LVLABELEDITTIMER = 0x2A;
         private const int LVTOOLTIPTRACKING = 0x30;
@@ -3143,8 +3144,11 @@ namespace System.Windows.Forms
                     Unhook();
                 }
 
-                // Remove any items we have
-                Items.Clear();
+                using (DisposingContext context = new(this))
+                {
+                    // Remove any items we have
+                    Items.Clear();
+                }
 
                 if (_odCacheFontHandleWrapper is not null)
                 {
@@ -3205,6 +3209,12 @@ namespace System.Windows.Forms
             }
 
             base.Dispose(disposing);
+        }
+
+        private bool ClearingInnerListOnDispose
+        {
+            get => _listViewState1 [LISTVIEWSTATE1_clearingInnerListOnDispose];
+            set => _listViewState1 [LISTVIEWSTATE1_clearingInnerListOnDispose] = value;
         }
 
         /// <summary>
@@ -4744,10 +4754,9 @@ namespace System.Windows.Forms
                 }
 
                 Debug.Assert(_listViewItems is null, "listItemsArray not null, even though handle created");
-                ListViewItem[]? items = null;
                 ListViewItemCollection tempItems = Items;
 
-                items = new ListViewItem[tempItems.Count];
+                var items = new ListViewItem[tempItems.Count];
                 tempItems.CopyTo(items, 0);
 
                 _listViewItems = new List<ListViewItem>(items.Length);
@@ -4761,6 +4770,11 @@ namespace System.Windows.Forms
 
         protected override void OnGotFocus(EventArgs e)
         {
+            if (ClearingInnerListOnDispose)
+            {
+                return;
+            }
+
             base.OnGotFocus(e);
 
             if (ShowItemToolTips && Items.Count > 0 && (FocusedItem ?? Items[0]) is ListViewItem focusedItem)
@@ -4768,7 +4782,9 @@ namespace System.Windows.Forms
                 NotifyAboutGotFocus(focusedItem);
             }
 
-            if (IsHandleCreated && IsAccessibilityObjectCreated && AccessibilityObject.GetFocus() is AccessibleObject focusedAccessibleObject)
+            if (IsHandleCreated &&
+                IsAccessibilityObjectCreated &&
+                AccessibilityObject.GetFocus() is AccessibleObject focusedAccessibleObject)
             {
                 focusedAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
