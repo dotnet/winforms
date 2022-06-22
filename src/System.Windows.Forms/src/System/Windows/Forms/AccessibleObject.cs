@@ -1171,7 +1171,7 @@ namespace System.Windows.Forms
 
                 Debug.WriteLineIf(
                     CompModSwitches.MSAA.TraceInfo,
-                    $"AccessibleObject.accHildCount: this = {ToString()}, returning {childCount}");
+                    $"AccessibleObject.accChildCount: this = {ToString()}, returning {childCount}");
 
                 return childCount;
             }
