@@ -8839,7 +8839,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ScrollableControlActiveControlParentNull">
         <source>Parent property of the active control cannot be null.</source>
-        <target state="new">Parent property of the active control cannot be null.</target>
+        <target state="translated">Родительское свойство активного элемента управления не может иметь значение NULL.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">

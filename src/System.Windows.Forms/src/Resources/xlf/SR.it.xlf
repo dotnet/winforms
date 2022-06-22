@@ -8838,7 +8838,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="ScrollableControlActiveControlParentNull">
         <source>Parent property of the active control cannot be null.</source>
-        <target state="new">Parent property of the active control cannot be null.</target>
+        <target state="translated">La proprietà padre del controllo attivo non può essere Null.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
