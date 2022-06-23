@@ -1201,6 +1201,11 @@ namespace System.Windows.Forms
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
+            OnRequestCommandExecute(e);
+        }
+
+        protected virtual void OnRequestCommandExecute(EventArgs e)
+        {
             ICommandProvider.RequestCommandExecute(this);
         }
 

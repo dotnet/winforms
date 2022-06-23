@@ -795,7 +795,7 @@ namespace System.Windows.Forms
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        private static RightToLeft DefaultRightToLeft 
+        private static RightToLeft DefaultRightToLeft
             => RightToLeft.Inherit;
 
         /// <summary>
@@ -2746,6 +2746,11 @@ namespace System.Windows.Forms
         protected virtual void OnClick(EventArgs e)
         {
             RaiseEvent(s_clickEvent, e);
+            OnRequestCommandExecute(e);
+        }
+
+        protected virtual void OnRequestCommandExecute(EventArgs e)
+        {
             ICommandProvider.RequestCommandExecute(this);
         }
 
@@ -2787,7 +2792,7 @@ namespace System.Windows.Forms
             }
         }
 
-        protected virtual void OnAvailableChanged(EventArgs e) 
+        protected virtual void OnAvailableChanged(EventArgs e)
             => RaiseEvent(s_availableChangedEvent, e);
 
         /// <summary>

@@ -1,11 +1,7 @@
 System.Windows.Forms.ButtonBase.Command.get -> System.Windows.Input.ICommand?
 System.Windows.Forms.ButtonBase.Command.set -> void
-System.Windows.Forms.ButtonBase.CommandCanExecuteChanged -> System.EventHandler!
-System.Windows.Forms.ButtonBase.CommandChanged -> System.EventHandler!
-System.Windows.Forms.ButtonBase.CommandExecute -> System.ComponentModel.CancelEventHandler!
 System.Windows.Forms.ButtonBase.CommandParameter.get -> object?
 System.Windows.Forms.ButtonBase.CommandParameter.set -> void
-System.Windows.Forms.ButtonBase.CommandParameterChanged -> System.EventHandler!
 System.Windows.Forms.Control.DataContextChanged -> System.EventHandler
 System.Windows.Forms.ICommandProvider
 System.Windows.Forms.ICommandProvider.CommandCanExecuteChanged -> System.EventHandler
@@ -16,13 +12,12 @@ System.Windows.Forms.ICommandProvider.Enabled.set -> void
 System.Windows.Forms.ToolStripItem.CommandCanExecuteChanged -> System.EventHandler
 System.Windows.Forms.ToolStripItem.CommandChanged -> System.EventHandler
 System.Windows.Forms.ToolStripItem.BindingContextChanged -> System.EventHandler
-System.Windows.Forms.ToolStripItem.CommandExecute -> System.ComponentModel.CancelEventHandler
 System.Windows.Forms.ToolStripItem.CommandParameterChanged -> System.EventHandler
 override System.Windows.Forms.ButtonBase.OnClick(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ButtonBase.OnCommandCanExecuteChanged(object! sender, System.EventArgs! e) -> void
 virtual System.Windows.Forms.ButtonBase.OnCommandChanged(System.EventArgs! e) -> void
-virtual System.Windows.Forms.ButtonBase.OnCommandExecute(System.ComponentModel.CancelEventArgs! e) -> void
 virtual System.Windows.Forms.ButtonBase.OnCommandParameterChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ButtonBase.OnRequestCommandExecute(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.DataContext.get -> object?
 virtual System.Windows.Forms.Control.DataContext.set -> void
 ~System.Windows.Forms.ICommandProvider.Command.get -> System.Windows.Input.ICommand
@@ -41,5 +36,5 @@ virtual System.Windows.Forms.Control.DataContext.set -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnCommandCanExecuteChanged(object sender, System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnCommandChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnBindingContextChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnCommandExecute(System.ComponentModel.CancelEventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnCommandParameterChanged(System.EventArgs e) -> void
+~virtual System.Windows.Forms.ToolStripItem.OnRequestCommandExecute(System.EventArgs e) -> void
