@@ -243,7 +243,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler CommandParameterChanged
+        public event EventHandler? CommandParameterChanged
         {
             add => Events.AddHandler(s_commandParameterChangedEvent, value);
             remove => Events.RemoveHandler(s_commandParameterChangedEvent, value);
@@ -1153,7 +1153,7 @@ namespace System.Windows.Forms
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCommandChanged(EventArgs e)
-            => ((EventHandler)Events[s_commandChangedEvent]!)?.Invoke(this, e);
+            => ((EventHandler?)Events[s_commandChangedEvent])?.Invoke(this, e);
 
         /// <summary>
         ///  Raises the <see cref="ButtonBase.CommandExecuting"/> event.
@@ -1162,7 +1162,7 @@ namespace System.Windows.Forms
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCommandExecuting(CancelEventArgs e)
-            => ((CancelEventHandler)Events[s_commandExecuteEvent]!)?.Invoke(this, e);
+            => ((CancelEventHandler?)Events[s_commandExecuteEvent])?.Invoke(this, e);
 
         /// <summary>
         ///  Raises the <see cref="ToolStripItem.CommandCanExecuteChanged"/> event.
@@ -1171,7 +1171,7 @@ namespace System.Windows.Forms
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCommandCanExecuteChanged([AllowNull] object sender, EventArgs e)
-            => ((EventHandler)Events[s_commandCanExecuteChangedEvent]!)?.Invoke(sender, e);
+            => ((EventHandler?)Events[s_commandCanExecuteChangedEvent])?.Invoke(sender, e);
 
         /// <summary>
         ///  Raises the <see cref="ButtonBase.CommandParameterChanged"/> event.
@@ -1180,7 +1180,7 @@ namespace System.Windows.Forms
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCommandParameterChanged(EventArgs e)
-            => ((EventHandler)Events[s_commandParameterChangedEvent]!)?.Invoke(this, e);
+            => ((EventHandler?)Events[s_commandParameterChangedEvent])?.Invoke(this, e);
 
         private void OnFrameChanged(object? o, EventArgs e)
         {

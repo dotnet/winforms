@@ -900,7 +900,7 @@ namespace System.Windows.Forms
         ///  the <see cref="Control.DataContextChanged"/> event.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
-        public virtual Object? DataContext
+        public virtual object? DataContext
         {
             get
             {
@@ -7381,9 +7381,6 @@ namespace System.Windows.Forms
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection is not null)
             {
-                // PERFNOTE: This is more efficient than using Foreach.  Foreach
-                // forces the creation of an array subset enum each time we
-                // enumerate
                 for (int i = 0; i < controlsCollection.Count; i++)
                 {
                     controlsCollection[i].OnParentDataContextChanged(e);

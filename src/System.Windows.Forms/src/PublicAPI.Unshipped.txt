@@ -19,7 +19,6 @@ System.Windows.Forms.ToolStripItem.BindingContextChanged -> System.EventHandler
 System.Windows.Forms.ToolStripItem.CommandExecute -> System.ComponentModel.CancelEventHandler
 System.Windows.Forms.ToolStripItem.CommandParameterChanged -> System.EventHandler
 override System.Windows.Forms.ButtonBase.OnClick(System.EventArgs! e) -> void
-override System.Windows.Forms.Form.OnGotFocus(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ButtonBase.OnCommandCanExecuteChanged(object! sender, System.EventArgs! e) -> void
 virtual System.Windows.Forms.ButtonBase.OnCommandChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ButtonBase.OnCommandExecute(System.ComponentModel.CancelEventArgs! e) -> void
@@ -37,7 +36,6 @@ virtual System.Windows.Forms.Control.DataContext.set -> void
 ~System.Windows.Forms.ToolStripItem.CommandParameter.get -> object
 ~System.Windows.Forms.ToolStripItem.CommandParameter.set -> void
 ~System.Windows.Forms.ToolStripItem.DataBindings.get -> System.Windows.Forms.ControlBindingsCollection
-~override System.Windows.Forms.ToolStripDropDownMenu.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~virtual System.Windows.Forms.Control.OnDataContextChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnParentDataContextChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnCommandCanExecuteChanged(object sender, System.EventArgs e) -> void
