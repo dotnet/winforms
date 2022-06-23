@@ -522,7 +522,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event CancelEventHandler CommandExecute
+        public event CancelEventHandler CommandExecuting
         {
             add => Events.AddHandler(s_commandExecuteEvent, value);
             remove => Events.RemoveHandler(s_commandExecuteEvent, value);
@@ -2487,15 +2487,15 @@ namespace System.Windows.Forms
         protected internal virtual bool IsInputChar(char charCode) => false;
 
         // Called by the ICommandProvider's internal DIM-based logic.
-        void ICommandProvider.HandleCommandChanged(EventArgs e)
+        void ICommandProvider.RaiseCommandChanged(EventArgs e)
             => OnCommandChanged(e);
 
         // Called by the ICommandProvider's internal DIM-based logic.
-        void ICommandProvider.HandleCommandCanExecuteChanged(object sender, EventArgs e)
+        void ICommandProvider.RaiseCommandCanExecuteChanged(object sender, EventArgs e)
             => OnCommandCanExecuteChanged(sender, e);
 
         // Called by the ICommandProvider's internal DIM-based logic.
-        void ICommandProvider.HandleCommandExecute(CancelEventArgs e)
+        void ICommandProvider.RaiseCommandExecuting(CancelEventArgs e)
             => OnCommandExecute(e);
 
         private void HandleClick(EventArgs e)
@@ -2800,7 +2800,7 @@ namespace System.Windows.Forms
             => RaiseEvent(s_commandChangedEvent, e);
 
         /// <summary>
-        ///  Raises the <see cref="ToolStripItem.CommandExecute"/> event.
+        ///  Raises the <see cref="ToolStripItem.CommandExecuting"/> event.
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.CommandExecute to send this event to any registered event listeners.
         /// </summary>

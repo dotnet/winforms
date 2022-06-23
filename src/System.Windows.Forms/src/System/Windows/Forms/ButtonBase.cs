@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.ButtonInternal;
@@ -24,7 +25,7 @@ namespace System.Windows.Forms
         private ContentAlignment _imageAlign = ContentAlignment.MiddleCenter;
         private ContentAlignment _textAlign = ContentAlignment.MiddleCenter;
         private TextImageRelation _textImageRelation = TextImageRelation.Overlay;
-        private readonly ImageList.Indexer _imageIndex = new ImageList.Indexer();
+        private readonly ImageList.Indexer _imageIndex = new();
         private FlatButtonAppearance? _flatAppearance;
         private ImageList? _imageList;
         private Image? _image;
@@ -191,7 +192,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler CommandChanged
+        public event EventHandler? CommandChanged
         {
             add => Events.AddHandler(s_commandChangedEvent, value);
             remove => Events.RemoveHandler(s_commandChangedEvent, value);
@@ -202,7 +203,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler CommandCanExecuteChanged
+        public event EventHandler? CommandCanExecuteChanged
         {
             add => Events.AddHandler(s_commandCanExecuteChangedEvent, value);
             remove => Events.RemoveHandler(s_commandCanExecuteChangedEvent, value);
@@ -213,7 +214,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event CancelEventHandler CommandExecute
+        public event CancelEventHandler? CommandExecuting
         {
             add => Events.AddHandler(s_commandExecuteEvent, value);
             remove => Events.RemoveHandler(s_commandExecuteEvent, value);
@@ -915,15 +916,15 @@ namespace System.Windows.Forms
         }
 
         // Called by the ICommandProvider's internal DIM-based logic.
-        void ICommandProvider.HandleCommandChanged(EventArgs e)
+        void ICommandProvider.RaiseCommandChanged(EventArgs e)
             => OnCommandChanged(e);
 
         // Called by the ICommandProvider's internal DIM-based logic.
-        void ICommandProvider.HandleCommandCanExecuteChanged(object sender, EventArgs e)
+        void ICommandProvider.RaiseCommandCanExecuteChanged([AllowNull] object sender, EventArgs e)
             => OnCommandCanExecuteChanged(sender, e);
 
         // Called by the ICommandProvider's internal DIM-based logic.
-        void ICommandProvider.HandleCommandExecute(CancelEventArgs e)
+        void ICommandProvider.RaiseCommandExecuting(CancelEventArgs e)
             => OnCommandExecute(e);
 
         /// <summary>
@@ -1155,7 +1156,7 @@ namespace System.Windows.Forms
             => ((EventHandler)Events[s_commandChangedEvent]!)?.Invoke(this, e);
 
         /// <summary>
-        ///  Raises the <see cref="ButtonBase.CommandExecute"/> event.
+        ///  Raises the <see cref="ButtonBase.CommandExecuting"/> event.
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.CommandExecute to send this event to any registered event listeners.
         /// </summary>
@@ -1169,7 +1170,7 @@ namespace System.Windows.Forms
         ///  Call base.CommandCanExecuteChanged to send this event to any registered event listeners.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnCommandCanExecuteChanged(object sender, EventArgs e)
+        protected virtual void OnCommandCanExecuteChanged([AllowNull] object sender, EventArgs e)
             => ((EventHandler)Events[s_commandCanExecuteChangedEvent]!)?.Invoke(sender, e);
 
         /// <summary>
