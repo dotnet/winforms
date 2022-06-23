@@ -36,7 +36,7 @@ internal partial class Interop
                 try
                 {
                     object? result = instance.ElementProviderFromPoint(x, y);
-                    *pRetVal = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
+                    *pRetVal = result is null ? IntPtr.Zero : Instance.GetComPointer(result, IID.IRawElementProviderFragment);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)

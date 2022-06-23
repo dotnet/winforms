@@ -122,10 +122,11 @@ internal partial class Interop
             IntPtr iRawElementProviderSimpleVtbl = IRawElementProviderSimpleVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
             IntPtr iRawElementProviderFragmentVtbl = IRawElementProviderFragmentVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
             IntPtr iRawElementProviderFragmentRootVtbl = IRawElementProviderFragmentRootVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+            IntPtr iLegacyIAccessibleProviderVtbl = ILegacyIAccessibleProviderVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
 
             ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(
                 typeof(WinFormsComWrappers),
-                sizeof(ComInterfaceEntry) * 3);
+                sizeof(ComInterfaceEntry) * 4);
 
             wrapperEntry[0].IID = IID.IRawElementProviderSimple;
             wrapperEntry[0].Vtable = iRawElementProviderSimpleVtbl;
@@ -135,6 +136,9 @@ internal partial class Interop
 
             wrapperEntry[2].IID = IID.IRawElementProviderFragmentRoot;
             wrapperEntry[2].Vtable = iRawElementProviderFragmentRootVtbl;
+
+            wrapperEntry[4].IID = IID.ILegacyIAccessibleProvider;
+            wrapperEntry[4].Vtable = iLegacyIAccessibleProviderVtbl;
 
             return wrapperEntry;
         }
@@ -185,7 +189,7 @@ internal partial class Interop
 
             if (obj is UiaCore.IRawElementProviderSimple)
             {
-                count = 3;
+                count = 4;
                 return s_accessibleObjectEntry;
             }
 

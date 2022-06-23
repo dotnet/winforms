@@ -59,7 +59,8 @@ internal partial class Interop
                 try
                 {
                     object? result = instance.GetPropertyValue(patternId);
-                    *pRetVal = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
+                    Marshal.GetNativeVariantForObject(result, (IntPtr)pRetVal);
+                    // *pRetVal = result is null ? IntPtr.Zero : WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(result, CreateComInterfaceFlags.None);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
@@ -81,7 +82,7 @@ internal partial class Interop
                 try
                 {
                     object? result = instance.GetPatternProvider(patternId);
-                    *pRetVal = result is null ? IntPtr.Zero : Marshal.GetIUnknownForObject(result);
+                    *pRetVal = result is null ? IntPtr.Zero : Instance.GetOrCreateComInterfaceForObject(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
