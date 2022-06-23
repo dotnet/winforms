@@ -925,7 +925,7 @@ namespace System.Windows.Forms
 
         // Called by the ICommandProvider's internal DIM-based logic.
         void ICommandProvider.RaiseCommandExecuting(CancelEventArgs e)
-            => OnCommandExecute(e);
+            => OnCommandExecuting(e);
 
         /// <summary>
         ///  Raises the <see cref="OnLostFocus"/> event.
@@ -1161,7 +1161,7 @@ namespace System.Windows.Forms
         ///  Call base.CommandExecute to send this event to any registered event listeners.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnCommandExecute(CancelEventArgs e)
+        protected virtual void OnCommandExecuting(CancelEventArgs e)
             => ((CancelEventHandler)Events[s_commandExecuteEvent]!)?.Invoke(this, e);
 
         /// <summary>
