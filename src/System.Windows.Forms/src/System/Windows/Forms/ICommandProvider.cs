@@ -91,7 +91,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// As an example, a <see cref="Button"/> should call this method inside the method which
-        /// also raises the <see cref="Button.Click"/> Event of that Button, which
+        /// also raises the <see cref="Control.Click"/> Event of that Button, which
         /// would be the <see cref="Button.OnClick(EventArgs)"/> OnClick method.
         /// </remarks>
         /// <param name="commandComponent"></param>

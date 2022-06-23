@@ -1,4 +1,3 @@
-System.Windows.Forms.BindingMemberInfo.Equals(System.Windows.Forms.BindingMemberInfo other) -> bool
 System.Windows.Forms.ButtonBase.Command.get -> System.Windows.Input.ICommand?
 System.Windows.Forms.ButtonBase.Command.set -> void
 System.Windows.Forms.ButtonBase.CommandCanExecuteChanged -> System.EventHandler!
@@ -14,8 +13,6 @@ System.Windows.Forms.ICommandProvider.CommandChanged -> System.EventHandler
 System.Windows.Forms.ICommandProvider.CommandExecute -> System.ComponentModel.CancelEventHandler
 System.Windows.Forms.ICommandProvider.Enabled.get -> bool
 System.Windows.Forms.ICommandProvider.Enabled.set -> void
-System.Windows.Forms.LinkArea.Equals(System.Windows.Forms.LinkArea other) -> bool
-System.Windows.Forms.TableLayoutPanelCellPosition.Equals(System.Windows.Forms.TableLayoutPanelCellPosition other) -> bool
 System.Windows.Forms.ToolStripItem.CommandCanExecuteChanged -> System.EventHandler
 System.Windows.Forms.ToolStripItem.CommandChanged -> System.EventHandler
 System.Windows.Forms.ToolStripItem.BindingContextChanged -> System.EventHandler
