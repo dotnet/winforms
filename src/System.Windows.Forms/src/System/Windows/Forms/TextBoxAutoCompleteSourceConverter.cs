@@ -5,13 +5,16 @@
 #nullable disable
 
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
     internal class TextBoxAutoCompleteSourceConverter : EnumConverter
     {
-        public TextBoxAutoCompleteSourceConverter(Type type) : base(type)
+        public TextBoxAutoCompleteSourceConverter(
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)]
+            Type type) : base(type)
         {
         }
 

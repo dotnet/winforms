@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern Gdi32.HDC GetDC(IntPtr hWnd);
+        [LibraryImport(Libraries.User32)]
+        public static partial Gdi32.HDC GetDC(IntPtr hWnd);
 
         public static Gdi32.HDC GetDC(HandleRef hWnd)
         {

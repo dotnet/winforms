@@ -10,8 +10,8 @@ internal partial class Interop
     {
         public static partial class ImageList
         {
-            [DllImport(Libraries.Comctl32, ExactSpelling = true, EntryPoint = "ImageList_Duplicate")]
-            public static extern IntPtr Duplicate(IntPtr himl);
+            [LibraryImport(Libraries.Comctl32, EntryPoint = "ImageList_Duplicate")]
+            public static partial IntPtr Duplicate(IntPtr himl);
         }
     }
 }

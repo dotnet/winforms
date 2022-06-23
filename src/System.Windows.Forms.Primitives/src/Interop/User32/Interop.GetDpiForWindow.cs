@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern uint GetDpiForWindow(IntPtr hwnd);
+        [LibraryImport(Libraries.User32)]
+        public static partial uint GetDpiForWindow(IntPtr hwnd);
 
         public static uint GetDpiForWindow(IHandle hwnd)
         {

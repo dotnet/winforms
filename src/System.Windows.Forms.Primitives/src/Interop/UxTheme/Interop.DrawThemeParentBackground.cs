@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [DllImport(Libraries.UxTheme, ExactSpelling = true)]
-        public static extern HRESULT DrawThemeParentBackground(IntPtr hwnd, Gdi32.HDC hdc, ref RECT prc);
+        [LibraryImport(Libraries.UxTheme)]
+        public static partial HRESULT DrawThemeParentBackground(IntPtr hwnd, Gdi32.HDC hdc, ref RECT prc);
 
         public static HRESULT DrawThemeParentBackground(IHandle hwnd, Gdi32.HDC hdc, ref RECT prc)
         {

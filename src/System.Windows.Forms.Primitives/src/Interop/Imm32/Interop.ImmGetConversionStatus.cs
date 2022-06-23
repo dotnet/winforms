@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal partial class Imm32
     {
-        [DllImport(Libraries.Imm32, ExactSpelling = true)]
-        public static extern BOOL ImmGetConversionStatus(IntPtr hIMC, out IME_CMODE lpfdwConversion, out IME_SMODE lpfdwSentence);
+        [LibraryImport(Libraries.Imm32)]
+        public static partial BOOL ImmGetConversionStatus(IntPtr hIMC, out IME_CMODE lpfdwConversion, out IME_SMODE lpfdwSentence);
     }
 }

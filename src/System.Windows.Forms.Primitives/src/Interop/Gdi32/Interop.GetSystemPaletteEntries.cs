@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern uint GetSystemPaletteEntries(HDC hdc, uint iStart, uint cEntries, byte[] pPalEntries);
+        [LibraryImport(Libraries.Gdi32)]
+        public static partial uint GetSystemPaletteEntries(HDC hdc, uint iStart, uint cEntries, byte[] pPalEntries);
     }
 }

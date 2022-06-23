@@ -12,7 +12,7 @@ internal partial class Interop
         public const string LOCALE_NAME_INVARIANT = "";
         public const string LOCALE_NAME_SYSTEM_DEFAULT = "!x-sys-default-locale";
 
-        [DllImport(Libraries.Kernel32, ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
-        public unsafe static extern int GetLocaleInfoEx(string lpLocaleName, LCTYPE LCType, char* lpLCData, int cchData);
+        [LibraryImport(Libraries.Kernel32, SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+        public static unsafe partial int GetLocaleInfoEx(string lpLocaleName, LCTYPE LCType, char* lpLCData, int cchData);
     }
 }

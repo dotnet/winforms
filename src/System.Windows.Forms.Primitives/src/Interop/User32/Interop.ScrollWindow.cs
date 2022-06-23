@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        private static extern BOOL ScrollWindow(IntPtr hWnd, int nXAmount, int nYAmount, ref RECT rectScrollRegion, ref RECT rectClip);
+        [LibraryImport(Libraries.User32)]
+        private static partial BOOL ScrollWindow(IntPtr hWnd, int nXAmount, int nYAmount, ref RECT rectScrollRegion, ref RECT rectClip);
 
         public static BOOL ScrollWindow(IHandle hWnd, int nXAmount, int nYAmount, ref RECT rectScrollRegion, ref RECT rectClip)
         {

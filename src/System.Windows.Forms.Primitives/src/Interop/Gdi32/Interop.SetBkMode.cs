@@ -9,7 +9,7 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [SuppressGCTransition]
-        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern BKMODE SetBkMode(HDC hdc, BKMODE mode);
+        [LibraryImport(Libraries.Gdi32)]
+        public static partial BKMODE SetBkMode(HDC hdc, BKMODE mode);
     }
 }

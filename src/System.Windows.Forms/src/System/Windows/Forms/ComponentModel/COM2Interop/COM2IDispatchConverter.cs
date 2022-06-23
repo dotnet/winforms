@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -80,6 +81,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
+        [RequiresUnreferencedCode(TrimmingConstants.TypeConverterGetPropertiesMessage)]
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
         {
             return TypeDescriptor.GetProperties(value, attributes);

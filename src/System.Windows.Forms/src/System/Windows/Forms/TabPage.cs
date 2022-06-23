@@ -481,9 +481,9 @@ namespace System.Windows.Forms
         ///  Assigns a new parent control. Sends out the appropriate property change notifications for
         ///  properties that are affected by the change of parent.
         /// </summary>
-        internal override void AssignParent(Control value)
+        internal override void AssignParent(Control? value)
         {
-            if (value is not null && !(value is TabControl))
+            if (value is not null && value is not TabControl)
             {
                 throw new ArgumentException(string.Format(SR.TabControlTabPageNotOnTabControl, value.GetType().FullName));
             }
@@ -497,7 +497,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static TabPage? GetTabPageOfComponent(object? comp)
         {
-            if (comp is not Control c)
+            Control? c = comp as Control;
+            if (c is null)
             {
                 return null;
             }
@@ -623,11 +624,6 @@ namespace System.Windows.Forms
 
         internal override void RemoveToolTip(ToolTip toolTip)
         {
-            if (toolTip is null)
-            {
-                return;
-            }
-
             // If a user used one ToolTIp instance to set a toolTip text before.
             if (_associatedToolTips is null)
             {
@@ -702,7 +698,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            Control parent = ParentInternal;
+            Control? parent = ParentInternal;
 
             if (parent is TabControl && parent.IsHandleCreated)
             {

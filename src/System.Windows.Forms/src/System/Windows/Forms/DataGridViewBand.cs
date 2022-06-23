@@ -12,6 +12,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Identifies a band or column in the dataGridView.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
     {
         private static readonly int s_propContextMenuStrip = PropertyStore.CreateKey();

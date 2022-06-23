@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern BOOL RestoreDC(HDC hdc, int nSavedDC);
+        [LibraryImport(Libraries.Gdi32)]
+        public static partial BOOL RestoreDC(HDC hdc, int nSavedDC);
 
         public static BOOL RestoreDC(IHandle hdc, int nSavedDC)
         {

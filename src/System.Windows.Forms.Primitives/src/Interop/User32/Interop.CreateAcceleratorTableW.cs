@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public unsafe static extern IntPtr CreateAcceleratorTableW(ACCEL* paccel, int cAccel);
+        [LibraryImport(Libraries.User32)]
+        public unsafe static partial IntPtr CreateAcceleratorTableW(ACCEL* paccel, int cAccel);
     }
 }

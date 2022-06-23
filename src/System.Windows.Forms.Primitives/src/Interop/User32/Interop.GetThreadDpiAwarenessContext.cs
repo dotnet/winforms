@@ -9,8 +9,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true, EntryPoint = "GetThreadDpiAwarenessContext", SetLastError = true)]
-        private static extern IntPtr GetThreadDpiAwarenessContextInternal();
+        [LibraryImport(Libraries.User32, EntryPoint = "GetThreadDpiAwarenessContext", SetLastError = true)]
+        private static partial IntPtr GetThreadDpiAwarenessContextInternal();
 
         /// <summary>
         ///  Tries to get thread dpi awareness context

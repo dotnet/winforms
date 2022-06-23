@@ -7,9 +7,11 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.Ole32;
+using static System.TrimmingConstants;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -72,7 +74,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  this method will invoke the parent provider's GetTypeDescriptor
         ///  method.
         /// </summary>
-        public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object instance)
+        public override ICustomTypeDescriptor GetTypeDescriptor([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type objectType, object instance)
         {
             return new ComTypeDescriptor(this, instance);
         }
@@ -516,6 +518,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// <summary>
             ///  ICustomTypeDescriptor implementation.
             /// </summary>
+            [RequiresUnreferencedCode(AttributesRequiresUnreferencedCodeMessage)]
             TypeConverter ICustomTypeDescriptor.GetConverter()
             {
                 return GetConverter();
@@ -524,6 +527,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// <summary>
             ///  ICustomTypeDescriptor implementation.
             /// </summary>
+            [RequiresUnreferencedCode(EventDescriptorRequiresUnreferencedCodeMessage)]
             EventDescriptor ICustomTypeDescriptor.GetDefaultEvent()
             {
                 return GetDefaultEvent();
@@ -532,6 +536,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// <summary>
             ///  ICustomTypeDescriptor implementation.
             /// </summary>
+            [RequiresUnreferencedCode(PropertyDescriptorPropertyTypeMessage)]
             PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty()
             {
                 return _handler.GetDefaultProperty(_instance);
@@ -540,6 +545,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// <summary>
             ///  ICustomTypeDescriptor implementation.
             /// </summary>
+            [RequiresUnreferencedCode(EditorRequiresUnreferencedCode)]
             object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
             {
                 return GetEditor(_instance, editorBaseType);
@@ -556,6 +562,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// <summary>
             ///  ICustomTypeDescriptor implementation.
             /// </summary>
+            [RequiresUnreferencedCode(FilterRequiresUnreferencedCodeMessage)]
             EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
             {
                 return GetEvents();
@@ -564,6 +571,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// <summary>
             ///  ICustomTypeDescriptor implementation.
             /// </summary>
+            [RequiresUnreferencedCode(PropertyDescriptorPropertyTypeMessage)]
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
             {
                 return _handler.GetProperties(_instance);
@@ -572,6 +580,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// <summary>
             ///  ICustomTypeDescriptor implementation.
             /// </summary>
+            [RequiresUnreferencedCode(PropertyDescriptorPropertyTypeMessage + " " + FilterRequiresUnreferencedCodeMessage)]
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
             {
                 return _handler.GetProperties(_instance);

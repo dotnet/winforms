@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern R2 GetROP2(HDC hdc);
+        [LibraryImport(Libraries.Gdi32)]
+        public static partial R2 GetROP2(HDC hdc);
 
         public static R2 GetROP2(IHandle hdc)
         {

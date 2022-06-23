@@ -10,8 +10,8 @@ internal partial class Interop
     {
         public static partial class ImageList
         {
-            [DllImport(Libraries.Comctl32, ExactSpelling = true, EntryPoint = "ImageList_SetBkColor")]
-            public static extern int SetBkColor(IntPtr himl, int clrBk);
+            [LibraryImport(Libraries.Comctl32, EntryPoint = "ImageList_SetBkColor")]
+            public static partial int SetBkColor(IntPtr himl, int clrBk);
 
             public static int SetBkColor(IHandle himl, int clrBk)
             {

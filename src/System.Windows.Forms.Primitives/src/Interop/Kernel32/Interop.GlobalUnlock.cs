@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal partial class Kernel32
     {
-        [DllImport(Libraries.Kernel32, ExactSpelling = true)]
-        public static extern BOOL GlobalUnlock(IntPtr hMem);
+        [LibraryImport(Libraries.Kernel32)]
+        public static partial BOOL GlobalUnlock(IntPtr hMem);
     }
 }

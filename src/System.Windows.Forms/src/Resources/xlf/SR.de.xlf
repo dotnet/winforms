@@ -8836,6 +8836,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Ruft einen booleschen Wert ab oder legt einen booleschen Wert fest, der steuert, ob die Bildlaufleiste angezeigt wird.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="translated">Die übergeordnete Eigenschaft des aktiven Steuerelements darf nicht NULL sein.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
         <source>Gets the horizontal scroll bar for this ScrollableControl.</source>
         <target state="translated">Ruft die horizontale Schiebeleiste für diese ScrollableControl ab.</target>

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace System.Drawing.Design
 {
@@ -18,7 +19,7 @@ namespace System.Drawing.Design
             _innerEditor = baseTypeEditor;
         }
 
-        public Com2ExtendedUITypeEditor(Type baseType)
+        public Com2ExtendedUITypeEditor([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]Type baseType)
         {
             _innerEditor = (UITypeEditor?)TypeDescriptor.GetEditor(baseType, typeof(UITypeEditor));
         }

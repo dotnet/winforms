@@ -8836,6 +8836,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">取得或設定布林值，以控制是否顯示捲軸。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="translated">使用中控制項的父屬性不可以是 Null。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
         <source>Gets the horizontal scroll bar for this ScrollableControl.</source>
         <target state="translated">取得此 ScrollableControl 的水平捲軸。</target>

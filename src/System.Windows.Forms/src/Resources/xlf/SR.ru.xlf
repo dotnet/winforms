@@ -8837,6 +8837,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Получает или задает логическое значение, определяющее, будет ли отображаться данная полоса прокрутки.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="translated">Родительское свойство активного элемента управления не может иметь значение NULL.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
         <source>Gets the horizontal scroll bar for this ScrollableControl.</source>
         <target state="translated">Получает горизонтальную полосу прокрутки для данного ScrollableControl.</target>

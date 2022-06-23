@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern BOOL IsChild(IntPtr hWndParent, IntPtr hWnd);
+        [LibraryImport(Libraries.User32)]
+        public static partial BOOL IsChild(IntPtr hWndParent, IntPtr hWnd);
 
         public static BOOL IsChild(IntPtr hWndParent, HandleRef hWnd)
         {

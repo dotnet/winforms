@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern BOOL RemoveMenu(IntPtr hMenu, uint uPosition, MF uFlags);
+        [LibraryImport(Libraries.User32)]
+        public static partial BOOL RemoveMenu(IntPtr hMenu, uint uPosition, MF uFlags);
 
         public static BOOL RemoveMenu(HandleRef hMenu, uint uPosition, MF uFlags)
         {

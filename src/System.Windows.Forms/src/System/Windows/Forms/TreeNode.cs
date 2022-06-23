@@ -7,6 +7,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -24,6 +25,7 @@ namespace System.Windows.Forms
     [TypeConverterAttribute(typeof(TreeNodeConverter))]
     [Serializable]  // This class participates in resx serialization.
     [DefaultProperty(nameof(Text))]
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         internal const int SHIFTVAL = 12;

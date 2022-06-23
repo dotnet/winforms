@@ -5,12 +5,14 @@
 #nullable disable
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Text;
 
 namespace System.Windows.Forms
 {
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     [ToolboxBitmap(typeof(DataGridViewButtonColumn), "DataGridViewButtonColumn")]
     public class DataGridViewButtonColumn : DataGridViewColumn
     {

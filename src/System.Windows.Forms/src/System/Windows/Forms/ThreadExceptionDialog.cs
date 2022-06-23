@@ -184,6 +184,7 @@ namespace System.Windows.Forms
             detailsTextBuilder.Append(newline);
             detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgLoadedAssembliesSection));
 
+#pragma warning disable SYSLIB0044 // Type or member is obsolete. Ref https://github.com/dotnet/winforms/issues/7308.
             foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
             {
                 AssemblyName name = asm.GetName();
@@ -207,6 +208,7 @@ namespace System.Windows.Forms
                 detailsTextBuilder.Append(string.Format(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, fileVer, name.EscapedCodeBase));
                 detailsTextBuilder.Append(separator);
             }
+#pragma warning restore SYSLIB0044 // Type or member is obsolete
 
             detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgJITDebuggingSection));
             if (Application.CustomThreadExceptionHandlerAttached)

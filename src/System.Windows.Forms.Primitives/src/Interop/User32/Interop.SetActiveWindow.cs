@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true, SetLastError = true)]
-        public static extern IntPtr SetActiveWindow(IntPtr hWnd);
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        public static partial IntPtr SetActiveWindow(IntPtr hWnd);
 
         public static IntPtr SetActiveWindow(HandleRef hWnd)
         {

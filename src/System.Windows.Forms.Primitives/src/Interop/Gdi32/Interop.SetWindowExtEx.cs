@@ -9,7 +9,7 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public unsafe static extern BOOL SetWindowExtEx(HDC hdc, int x, int y, Size* lpsz);
+        [LibraryImport(Libraries.Gdi32)]
+        public unsafe static partial BOOL SetWindowExtEx(HDC hdc, int x, int y, Size* lpsz);
     }
 }

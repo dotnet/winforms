@@ -8836,6 +8836,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">スクロール バーを表示しているかどうかを制御するブール値を取得または設定します。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="translated">アクティブ コントロールの親プロパティを null にすることはできません。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
         <source>Gets the horizontal scroll bar for this ScrollableControl.</source>
         <target state="translated">この ScrollableControl に対して、水平方向のスクロール バーを取得します。</target>

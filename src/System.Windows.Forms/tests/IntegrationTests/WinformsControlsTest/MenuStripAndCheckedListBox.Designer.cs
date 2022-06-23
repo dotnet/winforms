@@ -107,6 +107,7 @@ namespace WinformsControlsTest
             //
             // checkUnCheckToolStripMenuItem
             //
+            this.checkUnCheckToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.checkUnCheckToolStripMenuItem.Checked = true;
             this.checkUnCheckToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkUnCheckToolStripMenuItem.Name = "checkUnCheckToolStripMenuItem";

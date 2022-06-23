@@ -4,6 +4,7 @@
 
 using System.Collections;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -21,7 +22,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             _innerConverter = innerConverter;
         }
 
-        public Com2ExtendedTypeConverter(Type baseType)
+        public Com2ExtendedTypeConverter([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]Type baseType)
         {
             _innerConverter = TypeDescriptor.GetConverter(baseType);
         }
@@ -150,6 +151,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  does not return any properties.  An easy implementation of this method
         ///  can just call TypeDescriptor.GetProperties for the correct data type.
         /// </summary>
+        [RequiresUnreferencedCode(TrimmingConstants.TypeConverterGetPropertiesMessage)]
         public override PropertyDescriptorCollection? GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
         {
             if (_innerConverter is not null)

@@ -462,7 +462,7 @@ namespace System.Windows.Forms
                 TabStop = _isChecked;
                 if (_isChecked)
                 {
-                    Control parent = ParentInternal;
+                    Control? parent = ParentInternal;
                     if (parent is not null)
                     {
                         ControlCollection children = parent.Controls;
@@ -489,7 +489,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WipeTabStops(bool tabbedInto)
         {
-            Control parent = ParentInternal;
+            Control? parent = ParentInternal;
             if (parent is not null)
             {
                 ControlCollection children = parent.Controls;

@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true, SetLastError = true)]
-        public extern static BOOL DestroyIcon(IntPtr handle);
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        public static partial BOOL DestroyIcon(IntPtr handle);
     }
 }

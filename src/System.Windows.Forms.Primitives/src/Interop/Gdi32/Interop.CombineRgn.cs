@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern RegionType CombineRgn(HRGN hrgnDst, HRGN hrgnSrc1, HRGN hrgnSrc2, RGN iMode);
+        [LibraryImport(Libraries.Gdi32, SetLastError = true)]
+        public static partial RegionType CombineRgn(HRGN hrgnDst, HRGN hrgnSrc1, HRGN hrgnSrc2, RGN iMode);
     }
 }

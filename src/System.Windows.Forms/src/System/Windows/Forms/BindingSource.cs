@@ -7,6 +7,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Reflection;
@@ -1813,6 +1814,8 @@ namespace System.Windows.Forms
         public virtual string Filter
         {
             get => _filter;
+
+            [RequiresUnreferencedCode(TrimmingConstants.BindingListViewFilterMessage)]
             set
             {
                 _filter = value;

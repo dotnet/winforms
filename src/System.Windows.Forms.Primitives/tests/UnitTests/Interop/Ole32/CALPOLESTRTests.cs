@@ -11,26 +11,6 @@ namespace System.Windows.Forms.Primitives.Ole32Tests
     public class CALPOLESTRTests
     {
         [Fact]
-        public void CALPOLESTR_ConvertAndFree_FreesMemory()
-        {
-            List<IntPtr> allocations = new();
-            Ole32.CALPOLESTR ca = CreateStringVector(allocations, "Sweet", "Potato");
-
-            MallocSpy.FreeTracker tracker = new();
-            using MallocSpyScope scope = new(tracker);
-
-            string?[] values = ca.ConvertAndFree();
-            Assert.Equal(2, values.Length);
-            Assert.Equal("Sweet", values[0]);
-            Assert.Equal("Potato", values[1]);
-
-            foreach (IntPtr allocation in allocations)
-            {
-                Assert.Contains(allocation, tracker.FreedBlocks);
-            }
-        }
-
-        [Fact]
         public void CALPOLESTR_ConvertAndFree_SingleItem()
         {
             Ole32.CALPOLESTR ca = CreateStringVector("Swizzle");

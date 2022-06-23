@@ -10,8 +10,8 @@ internal partial class Interop
     {
         public static partial class ImageList
         {
-            [DllImport(Libraries.Comctl32, ExactSpelling = true, EntryPoint = "ImageList_DrawEx")]
-            public static extern BOOL DrawEx(IntPtr himl, int i, IntPtr hdcDst, int x, int y, int dx, int dy, int rgbBk, int rgbFg, ILD fStyle);
+            [LibraryImport(Libraries.Comctl32, EntryPoint = "ImageList_DrawEx")]
+            public static partial BOOL DrawEx(IntPtr himl, int i, IntPtr hdcDst, int x, int y, int dx, int dy, int rgbBk, int rgbFg, ILD fStyle);
 
             public static BOOL DrawEx(IntPtr himl, int i, HandleRef hdcDst, int x, int y, int dx, int dy, int rgbBk, int rgbFg, ILD fStyle)
             {

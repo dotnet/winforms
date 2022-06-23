@@ -23,7 +23,7 @@ namespace System.Windows.Forms
                     _size = toolStrip.Size;
                 }
 
-                public bool IsCurrent(ToolStrip toolStrip)
+                public bool IsCurrent(ToolStrip? toolStrip)
                     => toolStrip is not null && toolStrip.Size == _size && toolStrip.LayoutStyle == _layoutStyle && toolStrip.AutoSize == _autoSize;
             }
         }
