@@ -1800,7 +1800,7 @@ namespace System.Windows.Forms
             if (result.Succeeded())
             {
                 var accessible = (WinFormsComWrappers.StandardAccessibleWrapper)WinFormsComWrappers.Instance
-                    .GetOrCreateObjectForComInstance(accessibilePtr, CreateObjectFlags.Unwrap);
+                    .GetOrCreateObjectForComInstance(accessibilePtr, CreateObjectFlags.None);
                 _systemIAccessible = new SystemIAccessibleWrapper((IAccessible?)accessible);
                 _systemIOleWindow = (Ole32.IOleWindow?)accessible;
             }
@@ -1814,7 +1814,7 @@ namespace System.Windows.Forms
             if (result.Succeeded())
             {
                 _systemIEnumVariant = (WinFormsComWrappers.StandardAccessibleWrapper)WinFormsComWrappers.Instance
-                    .GetOrCreateObjectForComInstance(enumVariantPtr, CreateObjectFlags.Unwrap);
+                    .GetOrCreateObjectForComInstance(enumVariantPtr, CreateObjectFlags.None);
             }
         }
 

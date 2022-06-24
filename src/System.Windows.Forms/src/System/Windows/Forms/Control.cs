@@ -12061,7 +12061,7 @@ namespace System.Windows.Forms
             try
             {
                 // Obtain the Lresult.
-                IntPtr pUnknown = Marshal.GetIUnknownForObject(accessibleObject);
+                IntPtr pUnknown = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(accessibleObject, CreateComInterfaceFlags.None);
 
                 try
                 {
