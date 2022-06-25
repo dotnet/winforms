@@ -2547,6 +2547,13 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override void ReleaseUiaProvider()
+        {
+            EditingComboBox?.ReleaseUiaProvider(IntPtr.Zero);
+
+            base.ReleaseUiaProvider();
+        }
+
         /// <summary>
         ///  Gets the row Index and column Index of the cell.
         /// </summary>

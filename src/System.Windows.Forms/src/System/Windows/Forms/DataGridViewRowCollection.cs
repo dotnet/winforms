@@ -2259,6 +2259,17 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.DataGridView_ForbiddenOperationInEventHandler);
             }
 
+            if (DataGridView.IsAccessibilityObjectCreated && OsVersion.IsWindows8OrGreater() && this[index] is DataGridViewRow row)
+            {
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    cell.ReleaseUiaProvider();
+                }
+
+                row.HeaderCell.ReleaseUiaProvider();
+                row.ReleaseUiaProvider();
+            }
+
             if (DataGridView.DataSource is not null)
             {
                 if (DataGridView.DataConnection.List is IBindingList list && list.AllowRemove && list.SupportsChangeNotification)

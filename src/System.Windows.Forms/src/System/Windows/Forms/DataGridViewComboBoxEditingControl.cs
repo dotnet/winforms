@@ -163,7 +163,20 @@ namespace System.Windows.Forms
             base.OnHandleCreated(e);
 
             // The null-check was added as a fix for a https://github.com/dotnet/winforms/issues/2138
-            _dataGridView?.SetAccessibleObjectParent(AccessibilityObject);
+            if (_dataGridView?.IsAccessibilityObjectCreated == true)
+            {
+                _dataGridView.SetAccessibleObjectParent(AccessibilityObject);
+            }
+        }
+
+        internal override void ReleaseUiaProvider(nint handle)
+        {
+            if (TryGetAccessibilityObject(out AccessibleObject accessibleObject))
+            {
+                ((DataGridViewComboBoxEditingControlAccessibleObject)accessibleObject).ClearParent();
+            }
+
+            base.ReleaseUiaProvider(handle);
         }
     }
 }

@@ -26104,6 +26104,44 @@ namespace System.Windows.Forms
             Capture = false;
         }
 
+        internal override void ReleaseUiaProvider(IntPtr handle)
+        {
+            if (!IsAccessibilityObjectCreated)
+            {
+                return;
+            }
+
+            if (OsVersion.IsWindows8OrGreater())
+            {
+                foreach (DataGridViewRow row in Rows)
+                {
+                    foreach (DataGridViewCell cell in row.Cells)
+                    {
+                        cell.ReleaseUiaProvider();
+                    }
+
+                    row.HeaderCell.ReleaseUiaProvider();
+                    row.ReleaseUiaProvider();
+                }
+
+                foreach (DataGridViewColumn column in Columns)
+                {
+                    column.HeaderCell.ReleaseUiaProvider();
+                }
+
+                _editingPanel?.ReleaseUiaProvider(IntPtr.Zero);
+                _editingPanelAccessibleObject = null;
+                _topLeftHeaderCell?.ReleaseUiaProvider();
+
+                if (AccessibilityObject is DataGridViewAccessibleObject accessibleObject)
+                {
+                    accessibleObject.ReleaseChildUiaProviders();
+                }
+            }
+
+            base.ReleaseUiaProvider(handle);
+        }
+
         private void RemoveIndividualReadOnlyCellsInColumn(int columnIndex)
         {
             int cellIndex = 0;

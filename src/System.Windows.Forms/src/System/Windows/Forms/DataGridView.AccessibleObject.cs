@@ -32,6 +32,26 @@ namespace System.Windows.Forms
                 }
             }
 
+            internal void ReleaseChildUiaProviders()
+            {
+                if (!OsVersion.IsWindows8OrGreater())
+                {
+                    return;
+                }
+
+                if (_topRowAccessibilityObject is not null)
+                {
+                    UiaCore.UiaDisconnectProvider(_topRowAccessibilityObject);
+                    _topRowAccessibilityObject = null;
+                }
+
+                if (_selectedCellsAccessibilityObject is not null)
+                {
+                    UiaCore.UiaDisconnectProvider(_selectedCellsAccessibilityObject);
+                    _selectedCellsAccessibilityObject = null;
+                }
+            }
+
             public override AccessibleRole Role
             {
                 get
