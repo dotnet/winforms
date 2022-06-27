@@ -6571,6 +6571,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">L'oggetto accessibilità corrente viene usato solo per il controllo ListView nella visualizzazione {0}, {1} o {2}</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="translated">Impossibile ottenere l'oggetto di accessibilità quando ListViewItem non è collegato a un controllo ListView.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">Evento generato quando la proprietà checked di un elemento di ListView cambia.</target>
@@ -7694,6 +7699,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="PictureBoxOnSizeModeChangedDescr">
         <source>Event raised when the value of the SizeMode property is changed on the PictureBox.</source>
         <target state="translated">Evento generato quando il valore della proprietà SizeMode di PictureBox viene modificato.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PictureBoxRemoteLocationNotSupported">
+        <source>Loading from remote location not supported.</source>
+        <target state="translated">Il caricamento dalla posizione remota non è supportato.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
@@ -8824,6 +8834,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="ScrollBarVisibleDescr">
         <source>Gets or sets a Boolean value controlling whether the scrollbar is showing.</source>
         <target state="translated">Ottiene o imposta un valore Boolean che controlla se la barra di scorrimento è visualizzata.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="translated">La proprietà padre del controllo attivo non può essere Null.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
@@ -10304,6 +10319,16 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="ToolStripSaveSettingsDescr">
         <source>Specifies whether the ToolStrip should persist user settings via IPersistComponentSettings.</source>
         <target state="translated">Specifica se per ToolStrip devono essere mantenute le impostazioni utente tramite IPersistComponentSettings.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="translated">Riga sotto</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="translated">Riga sopra</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">

@@ -509,49 +509,87 @@ namespace System.Windows.Forms.Tests
             Assert.False(dataGridView.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void DataGridViewAccessibleObject_GetPropertyValue_HasKeyboardFocus_IsExpected_ForEmptyDGV()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void DataGridViewAccessibleObject_GetPropertyValue_HasKeyboardFocus_IsExpected_ForEmptyDGV(bool focused)
         {
-            using DataGridView dataGridView = new();
+            using DataGridView dataGridView = new FakeFocusDataGridView(focused);
 
-            Assert.True((bool)dataGridView.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId));
+            bool actual = (bool)dataGridView.AccessibilityObject
+                .GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+
+            Assert.Equal(focused, dataGridView.Focused);
+            Assert.Equal(0, dataGridView.RowCount); // DGV is empty
+            Assert.Equal(focused, actual);
             Assert.False(dataGridView.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void DataGridViewAccessibleObject_GetPropertyValue_HasKeyboardFocus_IsExpected_ForNotEmptyDGV()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void DataGridViewAccessibleObject_GetPropertyValue_HasKeyboardFocus_IsExpected_ForNotEmptyDGV(bool focused)
         {
-            using DataGridView dataGridView = new();
-
+            using DataGridView dataGridView = new FakeFocusDataGridView(focused);
             dataGridView.Columns.Add(new DataGridViewButtonColumn());
 
-            Assert.False((bool)dataGridView.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId));
+            bool actual = (bool)dataGridView.AccessibilityObject
+                .GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+
+            Assert.Equal(focused, dataGridView.Focused);
+            Assert.Equal(1, dataGridView.RowCount); // One new row for editing, it will be in focus instead of whole DGV
+            Assert.Equal(focused, actual);
             Assert.False(dataGridView.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void DataGridViewAccessibleObject_GetPropertyValue_HasKeyboardFocus_IsExpected_ForGridWithHiddenRow()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void DataGridViewAccessibleObject_GetPropertyValue_HasKeyboardFocus_IsExpected_ForGridWithHiddenRow(bool focused)
         {
-            using DataGridView dataGridView = new() { AllowUserToAddRows = false };
+            using DataGridView dataGridView = new FakeFocusDataGridView(focused) { AllowUserToAddRows = false };
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
             dataGridView.Rows.Add("Test");
             dataGridView.Rows[0].Visible = false;
 
-            Assert.True((bool)dataGridView.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId));
+            bool actual = (bool)dataGridView.AccessibilityObject
+                .GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+
+            Assert.Equal(focused, dataGridView.Focused);
+            Assert.Equal(focused, actual);
             Assert.False(dataGridView.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void DataGridViewAccessibleObject_GetPropertyValue_HasKeyboardFocus_IsExpected_ForNonEditableDGV()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void DataGridViewAccessibleObject_GetPropertyValue_HasKeyboardFocus_IsExpected_ForNonEditableDGV(bool focused)
         {
-            using DataGridView dataGridView = new()
+            using DataGridView dataGridView = new FakeFocusDataGridView(focused)
             {
                 ReadOnly = true,
                 AllowUserToAddRows = false
             };
 
-            Assert.True((bool)dataGridView.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId));
+            bool actual = (bool)dataGridView.AccessibilityObject
+                .GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+
+            Assert.Equal(focused, dataGridView.Focused);
+            Assert.Equal(focused, actual);
             Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        private class FakeFocusDataGridView : DataGridView
+        {
+            private readonly bool _focused;
+
+            public FakeFocusDataGridView(bool focused)
+            {
+                _focused = focused;
+            }
+
+            // Emulate the focus state to avoid creation of a form and the control's Handle
+            public override bool Focused => _focused;
         }
 
         [WinFormsFact]
@@ -1589,6 +1627,36 @@ namespace System.Windows.Forms.Tests
             dataGridView.Rows[2].Visible = false;
 
             Assert.Equal(0, dataGridView.AccessibilityObject.RowCount);
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewAccessibleObject_ItemStatusProperty_IsExpected_ForNonSortedDGV()
+        {
+            using DataGridView dataGridView = new();
+            using DataGridViewTextBoxColumn column = new();
+            dataGridView.Columns.Add(column);
+
+            object actual = dataGridView.AccessibilityObject
+                .GetPropertyValue(UiaCore.UIA.ItemStatusPropertyId);
+
+            Assert.Equal(1, dataGridView.RowCount);
+            Assert.Equal(1, dataGridView.ColumnCount);
+            Assert.Equal(SR.NotSortedAccessibleStatus, actual);
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewAccessibleObject_ItemStatusProperty_IsNull_ForEmptyDGV()
+        {
+            using DataGridView dataGridView = new() { AllowUserToAddRows = false };
+
+            object actual = dataGridView.AccessibilityObject
+                .GetPropertyValue(UiaCore.UIA.ItemStatusPropertyId);
+
+            Assert.Equal(0, dataGridView.RowCount);
+            Assert.Equal(0, dataGridView.ColumnCount);
+            Assert.Null(actual);
             Assert.False(dataGridView.IsHandleCreated);
         }
     }

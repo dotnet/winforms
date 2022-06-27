@@ -15,11 +15,11 @@ namespace System.Windows.Forms
         private struct SettingsStub
         {
             public bool Visible;
-            public string ToolStripPanelName;
+            public string? ToolStripPanelName;
             public Point Location;
             public Size Size;
-            public string ItemOrder;
-            public string Name;
+            public string? ItemOrder;
+            public string? Name;
 
             public SettingsStub(ToolStrip toolStrip)
             {

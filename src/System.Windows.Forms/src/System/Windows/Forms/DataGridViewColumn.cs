@@ -6,6 +6,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
@@ -15,9 +16,10 @@ namespace System.Windows.Forms
     ///  Base class for the columns in a data grid view.
     /// </summary>
     [Designer("System.Windows.Forms.Design.DataGridViewColumnDesigner, " + AssemblyRef.SystemDesign)]
-    [TypeConverter(typeof(DataGridViewColumnConverter))]
-    [ToolboxItem(false)]
     [DesignTimeVisible(false)]
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
+    [ToolboxItem(false)]
+    [TypeConverter(typeof(DataGridViewColumnConverter))]
     public class DataGridViewColumn : DataGridViewBand, IComponent
     {
         private const float DefaultFillWeight = 100F;
@@ -66,7 +68,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="value"> initial value</param>
         /// <returns> scaled metric</returns>
-        private int ScaleToCurrentDpi(int value)
+        private static int ScaleToCurrentDpi(int value)
         {
             return DpiHelper.IsScalingRequirementMet ? DpiHelper.LogicalToDeviceUnits(value) : value;
         }
@@ -936,13 +938,15 @@ namespace System.Windows.Forms
             {
                 if (disposing)
                 {
-                    //
                     lock (this)
                     {
                         Site?.Container?.Remove(this);
                         _disposed?.Invoke(this, EventArgs.Empty);
                     }
                 }
+
+                // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this class type (and all of its subclasses) from DataGridViewElement.s_typesWithEmptyFinalizer!
+                // Also consider to modify ~DataGridViewBand() description.
             }
             finally
             {

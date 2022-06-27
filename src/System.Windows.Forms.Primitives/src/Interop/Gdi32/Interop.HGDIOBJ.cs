@@ -6,7 +6,7 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        public struct HGDIOBJ
+        public struct HGDIOBJ : IEquatable<HGDIOBJ>
         {
             public nint Handle { get; }
 
@@ -20,6 +20,7 @@ internal static partial class Interop
             public static bool operator ==(HGDIOBJ value1, HGDIOBJ value2) => value1.Handle == value2.Handle;
             public static bool operator !=(HGDIOBJ value1, HGDIOBJ value2) => value1.Handle != value2.Handle;
             public override bool Equals(object? obj) => obj is HGDIOBJ hgdiobj && hgdiobj.Handle == Handle;
+            public bool Equals(HGDIOBJ other) => other.Handle == Handle;
             public override int GetHashCode() => Handle.GetHashCode();
 
             public OBJ ObjectType => GetObjectType(this);

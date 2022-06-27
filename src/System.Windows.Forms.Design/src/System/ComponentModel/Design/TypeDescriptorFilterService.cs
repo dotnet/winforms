@@ -21,7 +21,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Helper method to return the designer for a given component.
         /// </summary>
-        private IDesigner GetDesigner(IComponent component)
+        private static IDesigner GetDesigner(IComponent component)
         {
             ISite site = component.Site;
             if (site is not null)

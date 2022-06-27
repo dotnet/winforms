@@ -9,8 +9,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public unsafe static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, Point* lpPoints, uint cPoints);
+        [LibraryImport(Libraries.User32)]
+        public unsafe static partial int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, Point* lpPoints, uint cPoints);
 
         public unsafe static int MapWindowPoint(IHandle hWndFrom, IHandle hWndTo, ref Point lpPoints)
         {

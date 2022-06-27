@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
@@ -18,28 +16,28 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private sealed class ComponentEditorPageSite : IComponentEditorPageSite
         {
-            internal IComponent component;
-            internal ComponentEditorPage pageControl;
-            internal Control parent;
-            internal bool isActive;
-            internal bool isDirty;
-            private readonly ComponentEditorForm form;
+            internal IComponent _component;
+            internal ComponentEditorPage _pageControl;
+            internal Control _parent;
+            internal bool _isActive;
+            internal bool _isDirty;
+            private readonly ComponentEditorForm _form;
 
             /// <summary>
             ///  Creates the page site.
             /// </summary>
             internal ComponentEditorPageSite(Control parent, Type pageClass, IComponent component, ComponentEditorForm form)
             {
-                this.component = component;
-                this.parent = parent;
-                isActive = false;
-                isDirty = false;
+                _component = component;
+                _parent = parent;
+                _isActive = false;
+                _isDirty = false;
 
-                this.form = form.OrThrowIfNull();
+                _form = form.OrThrowIfNull();
 
                 try
                 {
-                    pageControl = (ComponentEditorPage)Activator.CreateInstance(pageClass);
+                    _pageControl = (ComponentEditorPage)Activator.CreateInstance(pageClass)!;
                 }
                 catch (TargetInvocationException e)
                 {
@@ -47,8 +45,8 @@ namespace System.Windows.Forms.Design
                     throw new TargetInvocationException(string.Format(SR.ExceptionCreatingCompEditorControl, e.ToString()), e.InnerException);
                 }
 
-                pageControl.SetSite(this);
-                pageControl.SetComponent(component);
+                _pageControl.SetSite(this);
+                _pageControl.SetComponent(component);
             }
 
             /// <summary>
@@ -61,17 +59,17 @@ namespace System.Windows.Forms.Design
                     if (value)
                     {
                         // make sure the page has been created
-                        pageControl.CreateControl();
+                        _pageControl.CreateControl();
 
                         // activate it and give it focus
-                        pageControl.Activate();
+                        _pageControl.Activate();
                     }
                     else
                     {
-                        pageControl.Deactivate();
+                        _pageControl.Deactivate();
                     }
 
-                    isActive = value;
+                    _isActive = value;
                 }
             }
 
@@ -79,7 +77,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    return pageControl.CommitOnDeactivate;
+                    return _pageControl.CommitOnDeactivate;
                 }
             }
 
@@ -87,11 +85,11 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    return isDirty;
+                    return _isDirty;
                 }
                 set
                 {
-                    isDirty = value;
+                    _isDirty = value;
                 }
             }
 
@@ -100,7 +98,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public Control GetControl()
             {
-                return parent;
+                return _parent;
             }
 
             /// <summary>
@@ -108,7 +106,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             internal ComponentEditorPage GetPageControl()
             {
-                return pageControl;
+                return _pageControl;
             }
 
             /// <summary>
@@ -116,12 +114,12 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public void SetDirty()
             {
-                if (isActive)
+                if (_isActive)
                 {
                     Dirty = true;
                 }
 
-                form.SetDirty();
+                _form.SetDirty();
             }
         }
     }

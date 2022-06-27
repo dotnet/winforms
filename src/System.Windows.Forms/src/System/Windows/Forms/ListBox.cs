@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Buffers;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -59,58 +58,59 @@ namespace System.Windows.Forms
         private static readonly object EVENT_DRAWITEM = new object();
         private static readonly object EVENT_MEASUREITEM = new object();
 
-        SelectedObjectCollection selectedItems;
-        SelectedIndexCollection selectedIndices;
-        ObjectCollection itemsCollection;
+        private SelectedObjectCollection? _selectedItems;
+        private SelectedIndexCollection? _selectedIndices;
+        private ObjectCollection? _itemsCollection;
 
-        int itemHeight = DefaultItemHeight;
-        int columnWidth;
-        int requestedHeight;
-        int topIndex;
-        int horizontalExtent;
-        int maxWidth = -1;
-        int updateCount;
+        private int _itemHeight = DefaultItemHeight;
+        private int _columnWidth;
+        private int _requestedHeight;
+        private int _topIndex;
+        private int _horizontalExtent;
+        private int _maxWidth = -1;
+        private int _updateCount;
 
-        bool sorted;
-        bool scrollAlwaysVisible;
-        bool integralHeight = true;
-        bool integralHeightAdjust;
-        bool multiColumn;
-        bool horizontalScrollbar;
-        bool useTabStops = true;
-        bool useCustomTabOffsets;
-        bool fontIsChanged;
-        bool doubleClickFired;
-        bool selectedValueChangedFired;
+        private bool _sorted;
+        private bool _scrollAlwaysVisible;
+        private bool _integralHeight = true;
+        private bool _integralHeightAdjust;
+        private bool _multiColumn;
+        private bool _horizontalScrollbar;
+        private bool _useTabStops = true;
+        private bool _useCustomTabOffsets;
+        private bool _fontIsChanged;
+        private bool _doubleClickFired;
+        private bool _selectedValueChangedFired;
 
-        DrawMode drawMode = System.Windows.Forms.DrawMode.Normal;
-        BorderStyle borderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-        SelectionMode selectionMode = System.Windows.Forms.SelectionMode.One;
+        private DrawMode _drawMode = DrawMode.Normal;
+        private BorderStyle _borderStyle = BorderStyle.Fixed3D;
+        private SelectionMode _selectionMode = SelectionMode.One;
 
-        SelectionMode cachedSelectionMode = System.Windows.Forms.SelectionMode.One;
+        private SelectionMode _cachedSelectionMode = SelectionMode.One;
+
         //We need to know that we are in middle of handleRecreate through Setter of SelectionMode.
         //In this case we set a bool denoting that we are changing SelectionMode and
         //in this case we should always use the cachedValue instead of the currently set value.
         //We need to change this in the count as well as SelectedIndex code where we access the SelectionMode.
-        private bool selectionModeChanging;
+        private bool _selectionModeChanging;
 
         /// <summary>
         ///  This field stores focused ListBox item Accessible object before focus changing.
         ///  Used in FocusedItemIsChanged method.
         /// </summary>
-        private AccessibleObject focusedItem;
+        private AccessibleObject? _focusedItem;
 
         /// <summary>
         ///  This field stores current items count.
         ///  Used in ItemsCountIsChanged method.
         /// </summary>
-        private int itemsCount;
+        private int _itemsCount;
 
         /// <summary>
         ///  This value stores the array of custom tabstops in the listbox. the array should be populated by
         ///  integers in a ascending order.
         /// </summary>
-        private IntegerCollection customTabOffsets;
+        private IntegerCollection? _customTabOffsets;
 
         /// <summary>
         ///  Default start position of items in the checked list box
@@ -145,7 +145,7 @@ namespace System.Windows.Forms
 
             SetBounds(0, 0, 120, 96);
 
-            requestedHeight = Height;
+            _requestedHeight = Height;
 
             PrepareForDrawing();
         }
@@ -188,7 +188,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -196,7 +196,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        new public event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -212,7 +212,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        new public event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -228,25 +228,25 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListBoxBorderDescr))]
         public BorderStyle BorderStyle
         {
-            get => borderStyle;
+            get => _borderStyle;
             set
             {
                 SourceGenerated.EnumValidator.Validate(value);
 
-                if (value != borderStyle)
+                if (value != _borderStyle)
                 {
-                    borderStyle = value;
+                    _borderStyle = value;
                     RecreateHandle();
                     // Avoid the listbox and textbox behavior in Collection editors
                     //
-                    integralHeightAdjust = true;
+                    _integralHeightAdjust = true;
                     try
                     {
-                        Height = requestedHeight;
+                        Height = _requestedHeight;
                     }
                     finally
                     {
-                        integralHeightAdjust = false;
+                        _integralHeightAdjust = false;
                     }
                 }
             }
@@ -260,7 +260,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return columnWidth;
+                return _columnWidth;
             }
 
             set
@@ -270,18 +270,18 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(value), value, 0));
                 }
 
-                if (columnWidth != value)
+                if (_columnWidth != value)
                 {
-                    columnWidth = value;
+                    _columnWidth = value;
                     // if it's zero, we need to reset, and only way to do
                     // that is to recreate the handle.
-                    if (columnWidth == 0)
+                    if (_columnWidth == 0)
                     {
                         RecreateHandle();
                     }
                     else if (IsHandleCreated)
                     {
-                        SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, columnWidth);
+                        SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, _columnWidth);
                     }
                 }
             }
@@ -301,22 +301,22 @@ namespace System.Windows.Forms
                 cp.ClassName = ComCtl32.WindowClasses.WC_LISTBOX;
 
                 cp.Style |= (int)WS.VSCROLL | (int)LBS.NOTIFY | (int)LBS.HASSTRINGS;
-                if (scrollAlwaysVisible)
+                if (_scrollAlwaysVisible)
                 {
                     cp.Style |= (int)LBS.DISABLENOSCROLL;
                 }
 
-                if (!integralHeight)
+                if (!_integralHeight)
                 {
                     cp.Style |= (int)LBS.NOINTEGRALHEIGHT;
                 }
 
-                if (useTabStops)
+                if (_useTabStops)
                 {
                     cp.Style |= (int)LBS.USETABSTOPS;
                 }
 
-                switch (borderStyle)
+                switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
                         cp.ExStyle |= (int)WS_EX.CLIENTEDGE;
@@ -326,16 +326,16 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                if (multiColumn)
+                if (_multiColumn)
                 {
                     cp.Style |= (int)LBS.MULTICOLUMN | (int)WS.HSCROLL;
                 }
-                else if (horizontalScrollbar)
+                else if (_horizontalScrollbar)
                 {
                     cp.Style |= (int)WS.HSCROLL;
                 }
 
-                switch (selectionMode)
+                switch (_selectionMode)
                 {
                     case SelectionMode.None:
                         cp.Style |= (int)LBS.NOSEL;
@@ -350,7 +350,7 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                switch (drawMode)
+                switch (_drawMode)
                 {
                     case DrawMode.Normal:
                         break;
@@ -377,13 +377,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return useCustomTabOffsets;
+                return _useCustomTabOffsets;
             }
             set
             {
-                if (useCustomTabOffsets != value)
+                if (_useCustomTabOffsets != value)
                 {
-                    useCustomTabOffsets = value;
+                    _useCustomTabOffsets = value;
                     RecreateHandle();
                 }
             }
@@ -410,23 +410,23 @@ namespace System.Windows.Forms
         {
             get
             {
-                return drawMode;
+                return _drawMode;
             }
 
             set
             {
                 //valid values are 0x0 to 0x2
                 SourceGenerated.EnumValidator.Validate(value);
-                if (drawMode != value)
+                if (_drawMode != value)
                 {
                     if (MultiColumn && value == DrawMode.OwnerDrawVariable)
                     {
                         throw new ArgumentException(SR.ListBoxVarHeightMultiCol, nameof(value));
                     }
 
-                    drawMode = value;
+                    _drawMode = value;
                     RecreateHandle();
-                    if (drawMode == DrawMode.OwnerDrawVariable)
+                    if (_drawMode == DrawMode.OwnerDrawVariable)
                     {
                         // Force a layout after RecreateHandle() completes because now
                         // the LB is definitely fully populated and can report a preferred size accurately.
@@ -442,7 +442,7 @@ namespace System.Windows.Forms
         // and the control is resized before the font size is change and the new font size causes
         // the height of all the items to exceed the new height of the control. This is a bug in
         // the control, but can be easily worked around by removing and re-adding all the items.
-
+        [AllowNull]
         public override Font Font
         {
             get => base.Font;
@@ -450,7 +450,7 @@ namespace System.Windows.Forms
             {
                 base.Font = value;
 
-                if (false == integralHeight)
+                if (false == _integralHeight)
                 {
                     // Refresh the list to force the scroll bars to display
                     // when the integral height is false.
@@ -487,14 +487,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return horizontalExtent;
+                return _horizontalExtent;
             }
 
             set
             {
-                if (value != horizontalExtent)
+                if (value != _horizontalExtent)
                 {
-                    horizontalExtent = value;
+                    _horizontalExtent = value;
                     UpdateHorizontalExtent();
                 }
             }
@@ -515,14 +515,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return horizontalScrollbar;
+                return _horizontalScrollbar;
             }
 
             set
             {
-                if (value != horizontalScrollbar)
+                if (value != _horizontalScrollbar)
                 {
-                    horizontalScrollbar = value;
+                    _horizontalScrollbar = value;
 
                     // There seems to be a bug in the native ListBox in that the addition
                     // of the horizontal scroll bar does not get reflected in the control
@@ -556,26 +556,26 @@ namespace System.Windows.Forms
         {
             get
             {
-                return integralHeight;
+                return _integralHeight;
             }
 
             set
             {
-                if (integralHeight != value)
+                if (_integralHeight != value)
                 {
-                    integralHeight = value;
+                    _integralHeight = value;
                     RecreateHandle();
                     // Avoid the listbox and textbox behaviour in Collection editors
                     //
 
-                    integralHeightAdjust = true;
+                    _integralHeightAdjust = true;
                     try
                     {
-                        Height = requestedHeight;
+                        Height = _requestedHeight;
                     }
                     finally
                     {
-                        integralHeightAdjust = false;
+                        _integralHeightAdjust = false;
                     }
                 }
             }
@@ -594,10 +594,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (drawMode == DrawMode.OwnerDrawFixed ||
-                    drawMode == DrawMode.OwnerDrawVariable)
+                if (_drawMode == DrawMode.OwnerDrawFixed ||
+                    _drawMode == DrawMode.OwnerDrawVariable)
                 {
-                    return itemHeight;
+                    return _itemHeight;
                 }
 
                 return GetItemHeight(0);
@@ -610,10 +610,10 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidExBoundArgument, nameof(ItemHeight), value, 0, 256));
                 }
 
-                if (itemHeight != value)
+                if (_itemHeight != value)
                 {
-                    itemHeight = value;
-                    if (drawMode == DrawMode.OwnerDrawFixed && IsHandleCreated)
+                    _itemHeight = value;
+                    if (_drawMode == DrawMode.OwnerDrawFixed && IsHandleCreated)
                     {
                         BeginUpdate();
                         SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, value);
@@ -645,23 +645,23 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (itemsCollection is null)
+                if (_itemsCollection is null)
                 {
-                    itemsCollection = CreateItemCollection();
+                    _itemsCollection = CreateItemCollection();
                 }
 
-                return itemsCollection;
+                return _itemsCollection;
             }
         }
 
         private bool ItemsCountIsChanged()
         {
-            if (Items.Count == itemsCount)
+            if (Items.Count == _itemsCount)
             {
                 return false;
             }
 
-            itemsCount = Items.Count;
+            _itemsCount = Items.Count;
             return true;
         }
 
@@ -671,9 +671,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (horizontalExtent > 0)
+                if (_horizontalExtent > 0)
                 {
-                    return horizontalExtent;
+                    return _horizontalExtent;
                 }
 
                 if (DrawMode != DrawMode.Normal)
@@ -682,17 +682,15 @@ namespace System.Windows.Forms
                 }
 
                 // Return cached maxWidth if available
-                //
-                if (maxWidth > -1)
+                if (_maxWidth > -1)
                 {
-                    return maxWidth;
+                    return _maxWidth;
                 }
 
                 // Compute maximum width
-                //
-                maxWidth = ComputeMaxItemWidth(maxWidth);
+                _maxWidth = ComputeMaxItemWidth(_maxWidth);
 
-                return maxWidth;
+                return _maxWidth;
             }
         }
 
@@ -707,18 +705,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                return multiColumn;
+                return _multiColumn;
             }
             set
             {
-                if (multiColumn != value)
+                if (_multiColumn != value)
                 {
-                    if (value && drawMode == DrawMode.OwnerDrawVariable)
+                    if (value && _drawMode == DrawMode.OwnerDrawVariable)
                     {
                         throw new ArgumentException(SR.ListBoxVarHeightMultiCol, nameof(value));
                     }
 
-                    multiColumn = value;
+                    _multiColumn = value;
                     RecreateHandle();
                 }
             }
@@ -737,7 +735,7 @@ namespace System.Windows.Forms
             {
                 int height = 0;
 
-                if (drawMode == DrawMode.OwnerDrawVariable)
+                if (_drawMode == DrawMode.OwnerDrawVariable)
                 {
                     // don't try to get item heights from the LB when items haven't been
                     // added to the LB yet. Just return current height.
@@ -747,9 +745,9 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        if (itemsCollection is not null)
+                        if (_itemsCollection is not null)
                         {
-                            int count = itemsCollection.Count;
+                            int count = _itemsCollection.Count;
                             for (int i = 0; i < count; i++)
                             {
                                 height += GetItemHeight(i);
@@ -761,9 +759,9 @@ namespace System.Windows.Forms
                 {
                     height = GetItemHeight(0);
 
-                    if (itemsCollection is not null)
+                    if (_itemsCollection is not null)
                     {
-                        int count = itemsCollection.Count;
+                        int count = _itemsCollection.Count;
                         if (count != 0)
                         {
                             height *= count;
@@ -771,7 +769,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (borderStyle != BorderStyle.None)
+                if (_borderStyle != BorderStyle.None)
                 {
                     height += SystemInformation.BorderSize.Height * 4 + 3;
                 }
@@ -813,13 +811,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return scrollAlwaysVisible;
+                return _scrollAlwaysVisible;
             }
             set
             {
-                if (scrollAlwaysVisible != value)
+                if (_scrollAlwaysVisible != value)
                 {
-                    scrollAlwaysVisible = value;
+                    _scrollAlwaysVisible = value;
                     RecreateHandle();
                 }
             }
@@ -833,7 +831,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return selectionMode != SelectionMode.None;
+                return _selectionMode != SelectionMode.None;
             }
         }
 
@@ -853,7 +851,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                SelectionMode current = (selectionModeChanging) ? cachedSelectionMode : selectionMode;
+                SelectionMode current = (_selectionModeChanging) ? _cachedSelectionMode : _selectionMode;
 
                 if (current == SelectionMode.None)
                 {
@@ -865,7 +863,7 @@ namespace System.Windows.Forms
                     return (int)SendMessageW(this, (WM)LB.GETCURSEL);
                 }
 
-                if (itemsCollection is not null && SelectedItems.Count > 0)
+                if (_itemsCollection is not null && SelectedItems.Count > 0)
                 {
                     return Items.IndexOfIdentifier(SelectedItems.GetObjectAt(0));
                 }
@@ -874,19 +872,19 @@ namespace System.Windows.Forms
             }
             set
             {
-                int itemCount = (itemsCollection is null) ? 0 : itemsCollection.Count;
+                int itemCount = (_itemsCollection is null) ? 0 : _itemsCollection.Count;
 
                 if (value < -1 || value >= itemCount)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectedIndex), value));
                 }
 
-                if (selectionMode == SelectionMode.None)
+                if (_selectionMode == SelectionMode.None)
                 {
                     throw new ArgumentException(SR.ListBoxInvalidSelectionMode, nameof(value));
                 }
 
-                if (selectionMode == SelectionMode.One && value != -1)
+                if (_selectionMode == SelectionMode.One && value != -1)
                 {
                     // Single select an individual value.
                     int currentIndex = SelectedIndex;
@@ -946,12 +944,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (selectedIndices is null)
+                if (_selectedIndices is null)
                 {
-                    selectedIndices = new SelectedIndexCollection(this);
+                    _selectedIndices = new SelectedIndexCollection(this);
                 }
 
-                return selectedIndices;
+                return _selectedIndices;
             }
         }
 
@@ -967,7 +965,7 @@ namespace System.Windows.Forms
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ListBoxSelectedItemDescr))]
-        public object SelectedItem
+        public object? SelectedItem
         {
             get
             {
@@ -980,11 +978,11 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (itemsCollection is not null)
+                if (_itemsCollection is not null)
                 {
                     if (value is not null)
                     {
-                        int index = itemsCollection.IndexOf(value);
+                        int index = _itemsCollection.IndexOf(value);
                         if (index != -1)
                         {
                             SelectedIndex = index;
@@ -1008,12 +1006,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (selectedItems is null)
+                if (_selectedItems is null)
                 {
-                    selectedItems = new SelectedObjectCollection(this);
+                    _selectedItems = new SelectedObjectCollection(this);
                 }
 
-                return selectedItems;
+                return _selectedItems;
             }
         }
 
@@ -1028,25 +1026,25 @@ namespace System.Windows.Forms
         {
             get
             {
-                return selectionMode;
+                return _selectionMode;
             }
             set
             {
                 SourceGenerated.EnumValidator.Validate(value);
 
-                if (selectionMode != value)
+                if (_selectionMode != value)
                 {
                     SelectedItems.EnsureUpToDate();
-                    selectionMode = value;
+                    _selectionMode = value;
                     try
                     {
-                        selectionModeChanging = true;
+                        _selectionModeChanging = true;
                         RecreateHandle();
                     }
                     finally
                     {
-                        selectionModeChanging = false;
-                        cachedSelectionMode = selectionMode;
+                        _selectionModeChanging = false;
+                        _cachedSelectionMode = _selectionMode;
                         // update the selectedItems list and SelectedItems index collection
                         if (IsHandleCreated)
                         {
@@ -1068,15 +1066,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                return sorted;
+                return _sorted;
             }
             set
             {
-                if (sorted != value)
+                if (_sorted != value)
                 {
-                    sorted = value;
+                    _sorted = value;
 
-                    if (sorted && itemsCollection is not null && itemsCollection.Count >= 1)
+                    if (_sorted && _itemsCollection is not null && _itemsCollection.Count >= 1)
                     {
                         Sort();
                     }
@@ -1090,6 +1088,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Bindable(false)]
+        [AllowNull]
         public override string Text
         {
             get
@@ -1098,11 +1097,11 @@ namespace System.Windows.Forms
                 {
                     if (FormattingEnabled)
                     {
-                        return GetItemText(SelectedItem);
+                        return GetItemText(SelectedItem) ?? string.Empty;
                     }
                     else
                     {
-                        return FilterItemOnProperty(SelectedItem).ToString();
+                        return FilterItemOnProperty(SelectedItem)?.ToString() ?? string.Empty;
                     }
                 }
                 else
@@ -1116,7 +1115,6 @@ namespace System.Windows.Forms
 
                 // Scan through the list items looking for the supplied text string.  If we find it,
                 // select it.
-                //
                 if (SelectionMode != SelectionMode.None && value is not null && (SelectedItem is null || !value.Equals(GetItemText(SelectedItem))))
                 {
                     int cnt = Items.Count;
@@ -1134,7 +1132,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public event EventHandler TextChanged
+        new public event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -1150,7 +1148,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListBoxTopIndexDescr))]
         public int TopIndex
         {
-            get => IsHandleCreated ? (int)SendMessageW(this, (WM)LB.GETTOPINDEX) : topIndex;
+            get => IsHandleCreated ? (int)SendMessageW(this, (WM)LB.GETTOPINDEX) : _topIndex;
             set
             {
                 if (IsHandleCreated)
@@ -1159,7 +1157,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    topIndex = value;
+                    _topIndex = value;
                 }
             }
         }
@@ -1175,13 +1173,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return useTabStops;
+                return _useTabStops;
             }
             set
             {
-                if (useTabStops != value)
+                if (_useTabStops != value)
                 {
-                    useTabStops = value;
+                    _useTabStops = value;
                     RecreateHandle();
                 }
             }
@@ -1199,12 +1197,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (customTabOffsets is null)
+                if (_customTabOffsets is null)
                 {
-                    customTabOffsets = new IntegerCollection(this);
+                    _customTabOffsets = new IntegerCollection(this);
                 }
 
-                return customTabOffsets;
+                return _customTabOffsets;
             }
         }
 
@@ -1214,8 +1212,7 @@ namespace System.Windows.Forms
         [Obsolete("This method has been deprecated.  There is no replacement.  https://go.microsoft.com/fwlink/?linkid=14202")]
         protected virtual void AddItemsCore(object[] value)
         {
-            int count = value is null ? 0 : value.Length;
-            if (count == 0)
+            if (value is null || value.Length == 0)
             {
                 return;
             }
@@ -1225,7 +1222,7 @@ namespace System.Windows.Forms
 
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public new event EventHandler Click
+        public new event EventHandler? Click
         {
             add => base.Click += value;
             remove => base.Click -= value;
@@ -1233,7 +1230,7 @@ namespace System.Windows.Forms
 
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public new event MouseEventHandler MouseClick
+        public new event MouseEventHandler? MouseClick
         {
             add => base.MouseClick += value;
             remove => base.MouseClick -= value;
@@ -1250,7 +1247,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler PaddingChanged
+        public new event EventHandler? PaddingChanged
         {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
@@ -1261,7 +1258,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event PaintEventHandler Paint
+        public new event PaintEventHandler? Paint
         {
             add => base.Paint += value;
             remove => base.Paint -= value;
@@ -1269,7 +1266,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.drawItemEventDescr))]
-        public event DrawItemEventHandler DrawItem
+        public event DrawItemEventHandler? DrawItem
         {
             add => Events.AddHandler(EVENT_DRAWITEM, value);
             remove => Events.RemoveHandler(EVENT_DRAWITEM, value);
@@ -1277,7 +1274,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.measureItemEventDescr))]
-        public event MeasureItemEventHandler MeasureItem
+        public event MeasureItemEventHandler? MeasureItem
         {
             add => Events.AddHandler(EVENT_MEASUREITEM, value);
             remove => Events.RemoveHandler(EVENT_MEASUREITEM, value);
@@ -1285,7 +1282,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
-        public event EventHandler SelectedIndexChanged
+        public event EventHandler? SelectedIndexChanged
         {
             add => Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
             remove => Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
@@ -1303,7 +1300,7 @@ namespace System.Windows.Forms
         public void BeginUpdate()
         {
             BeginUpdateInternal();
-            updateCount++;
+            _updateCount++;
         }
 
         private void CheckIndex(int index)
@@ -1339,7 +1336,7 @@ namespace System.Windows.Forms
         internal virtual int ComputeMaxItemWidth(int oldMax)
         {
             // pass LayoutUtils the collection of strings
-            string[] strings = new string[Items.Count];
+            string?[] strings = new string[Items.Count];
 
             for (int i = 0; i < Items.Count; i++)
             {
@@ -1357,7 +1354,7 @@ namespace System.Windows.Forms
         {
             bool hadSelection = false;
 
-            int itemCount = (itemsCollection is null) ? 0 : itemsCollection.Count;
+            int itemCount = (_itemsCollection is null) ? 0 : _itemsCollection.Count;
             for (int x = 0; x < itemCount; x++)
             {
                 if (SelectedItems.GetSelected(x))
@@ -1389,7 +1386,7 @@ namespace System.Windows.Forms
         public void EndUpdate()
         {
             EndUpdateInternal();
-            --updateCount;
+            --_updateCount;
         }
 
         /// <summary>
@@ -1404,7 +1401,7 @@ namespace System.Windows.Forms
         /// </summary>
         public int FindString(string s, int startIndex)
         {
-            return FindStringInternal(s, itemsCollection, startIndex, exact: false, ignoreCase: true);
+            return FindStringInternal(s, _itemsCollection, startIndex, exact: false, ignoreCase: true);
         }
 
         /// <summary>
@@ -1419,7 +1416,7 @@ namespace System.Windows.Forms
         /// </summary>
         public int FindStringExact(string s, int startIndex)
         {
-            return FindStringInternal(s, itemsCollection, startIndex, exact: true, ignoreCase: true);
+            return FindStringInternal(s, _itemsCollection, startIndex, exact: true, ignoreCase: true);
         }
 
         /// <summary>
@@ -1427,12 +1424,12 @@ namespace System.Windows.Forms
         /// </summary>
         private bool FocusedItemIsChanged()
         {
-            if (focusedItem == AccessibilityObject.GetFocused())
+            if (_focusedItem == AccessibilityObject.GetFocused())
             {
                 return false;
             }
 
-            focusedItem = AccessibilityObject.GetFocused();
+            _focusedItem = AccessibilityObject.GetFocused();
             return true;
         }
 
@@ -1442,7 +1439,7 @@ namespace System.Windows.Forms
         /// </summary>
         public int GetItemHeight(int index)
         {
-            int itemCount = (itemsCollection is null) ? 0 : itemsCollection.Count;
+            int itemCount = (_itemsCollection is null) ? 0 : _itemsCollection.Count;
 
             // Note: index == 0 is OK even if the ListBox currently has no items.
             if (index < 0 || (index > 0 && index >= itemCount))
@@ -1450,7 +1447,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            if (drawMode != DrawMode.OwnerDrawVariable)
+            if (_drawMode != DrawMode.OwnerDrawVariable)
             {
                 index = 0;
             }
@@ -1466,7 +1463,7 @@ namespace System.Windows.Forms
                 return height;
             }
 
-            return itemHeight;
+            return _itemHeight;
         }
 
         /// <summary>
@@ -1495,7 +1492,7 @@ namespace System.Windows.Forms
         {
             // update bounds' height to use the requested height, not the current height.  These
             // can be different if integral height is turned on.
-            bounds.Height = requestedHeight;
+            bounds.Height = _requestedHeight;
             return base.GetScaledBounds(bounds, factor, specified);
         }
 
@@ -1522,7 +1519,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                if (itemsCollection is not null && SelectedItems.GetSelected(index))
+                if (_itemsCollection is not null && SelectedItems.GetSelected(index))
                 {
                     return true;
                 }
@@ -1676,9 +1673,9 @@ namespace System.Windows.Forms
         private void NativeSetSelected(int index, bool value)
         {
             Debug.Assert(IsHandleCreated, "Should only call Native methods after the handle has been created");
-            Debug.Assert(selectionMode != SelectionMode.None, "Guard against setting selection for None selection mode outside this code.");
+            Debug.Assert(_selectionMode != SelectionMode.None, "Guard against setting selection for None selection mode outside this code.");
 
-            if (selectionMode == SelectionMode.One)
+            if (_selectionMode == SelectionMode.One)
             {
                 SendMessageW(this, (WM)LB.SETCURSEL, value ? index : -1);
             }
@@ -1704,7 +1701,7 @@ namespace System.Windows.Forms
                 SelectedItems.SetSelected(i, false);
             }
 
-            switch (selectionMode)
+            switch (_selectionMode)
             {
                 case SelectionMode.One:
                     int index = (int)SendMessageW(this, (WM)LB.GETCURSEL);
@@ -1742,7 +1739,6 @@ namespace System.Windows.Forms
             // time - it draws the focus rect when it shouldn't and vice-versa. So when
             // the UI cues change, we just do an extra invalidate to get it into the
             // right state.
-            //
             Invalidate();
 
             base.OnChangeUICues(e);
@@ -1754,7 +1750,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated && IsAccessibilityObjectCreated)
             {
-                AccessibleObject item = AccessibilityObject.GetFocused();
+                AccessibleObject? item = AccessibilityObject.GetFocused();
 
                 if (item is not null)
                 {
@@ -1780,7 +1776,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDrawItem(DrawItemEventArgs e)
         {
-            ((DrawItemEventHandler)Events[EVENT_DRAWITEM])?.Invoke(this, e);
+            ((DrawItemEventHandler?)Events[EVENT_DRAWITEM])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1796,19 +1792,19 @@ namespace System.Windows.Forms
             //
             SendMessageW(this, (WM)LB.SETLOCALE, (nint)Kernel32.GetThreadLocale().RawValue);
 
-            if (columnWidth != 0)
+            if (_columnWidth != 0)
             {
-                SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, columnWidth);
+                SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, _columnWidth);
             }
 
-            if (drawMode == DrawMode.OwnerDrawFixed)
+            if (_drawMode == DrawMode.OwnerDrawFixed)
             {
                 SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
             }
 
-            if (topIndex != 0)
+            if (_topIndex != 0)
             {
-                SendMessageW(this, (WM)LB.SETTOPINDEX, topIndex);
+                SendMessageW(this, (WM)LB.SETTOPINDEX, _topIndex);
             }
 
             if (UseCustomTabOffsets && CustomTabOffsets is not null)
@@ -1823,27 +1819,27 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (itemsCollection is not null)
+            if (_itemsCollection is not null)
             {
-                int count = itemsCollection.Count;
+                int count = _itemsCollection.Count;
 
                 for (int i = 0; i < count; i++)
                 {
-                    NativeAdd(itemsCollection[i]);
+                    NativeAdd(_itemsCollection[i]);
 
-                    if (selectionMode != SelectionMode.None)
+                    if (_selectionMode != SelectionMode.None)
                     {
-                        if (selectedItems is not null)
+                        if (_selectedItems is not null)
                         {
-                            selectedItems.PushSelectionIntoNativeListBox(i);
+                            _selectedItems.PushSelectionIntoNativeListBox(i);
                         }
                     }
                 }
             }
 
-            if (selectedItems is not null)
+            if (_selectedItems is not null)
             {
-                if (selectedItems.Count > 0 && selectionMode == SelectionMode.One)
+                if (_selectedItems.Count > 0 && _selectionMode == SelectionMode.One)
                 {
                     SelectedItems.Dirty();
                     SelectedItems.EnsureUpToDate();
@@ -1863,7 +1859,7 @@ namespace System.Windows.Forms
             SelectedItems.EnsureUpToDate();
             if (Disposing)
             {
-                itemsCollection = null;
+                _itemsCollection = null;
             }
 
             base.OnHandleDestroyed(e);
@@ -1871,7 +1867,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnMeasureItem(MeasureItemEventArgs e)
         {
-            ((MeasureItemEventHandler)Events[EVENT_MEASUREITEM])?.Invoke(this, e);
+            ((MeasureItemEventHandler?)Events[EVENT_MEASUREITEM])?.Invoke(this, e);
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -1882,7 +1878,6 @@ namespace System.Windows.Forms
             // Make sure we do this after base.OnPropertyChanged, which sends the WM_SETFONT message
 
             // Avoid the listbox and textbox behaviour in Collection editors
-            //
             UpdateFontCache();
         }
 
@@ -1905,7 +1900,6 @@ namespace System.Windows.Forms
             base.OnResize(e);
 
             // There are some repainting issues for RightToLeft - so invalidate when we resize.
-            //
             if (RightToLeft == RightToLeft.Yes || HorizontalScrollbar)
             {
                 Invalidate();
@@ -1946,7 +1940,6 @@ namespace System.Windows.Forms
             // from the SelectedIndex. Setting CurrencyManager::Position (even w/o changing it)
             // calls CurrencyManager::EndCurrentEdit, and that will pull the dataFrom the controls
             // into the backEnd. We do not need to do that.
-            //
             if (DataManager is not null && DataManager.Position != SelectedIndex)
             {
                 //read this as "if everett or   (whidbey and selindex is valid)"
@@ -1960,13 +1953,13 @@ namespace System.Windows.Forms
 
             // Call the handler after updating the DataManager's position so that
             // the DataManager's selected index will be correct in an event handler.
-            ((EventHandler)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
+            ((EventHandler?)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
         }
 
         protected override void OnSelectedValueChanged(EventArgs e)
         {
             base.OnSelectedValueChanged(e);
-            selectedValueChangedFired = true;
+            _selectedValueChangedFired = true;
         }
 
         protected override void OnDataSourceChanged(EventArgs e)
@@ -2002,7 +1995,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override void Refresh()
         {
-            if (drawMode == DrawMode.OwnerDrawVariable)
+            if (_drawMode == DrawMode.OwnerDrawVariable)
             {
                 //Fire MeasureItem for Each Item in the Listbox...
                 int cnt = Items.Count;
@@ -2031,24 +2024,21 @@ namespace System.Windows.Forms
         protected override void RefreshItems()
         {
             // Store the currently selected object collection.
-            //
-            ObjectCollection savedItems = itemsCollection;
+            ObjectCollection? savedItems = _itemsCollection;
 
             // Clear the items.
-            //
-            itemsCollection = null;
-            selectedIndices = null;
+            _itemsCollection = null;
+            _selectedIndices = null;
 
             if (IsHandleCreated)
             {
                 NativeClear();
             }
 
-            object[] newItems = null;
+            object[]? newItems = null;
 
             // If we have a DataSource and a DisplayMember, then use it
             // to populate the Items collection
-            //
             if (DataManager is not null && DataManager.Count != -1)
             {
                 newItems = new object[DataManager.Count];
@@ -2064,14 +2054,12 @@ namespace System.Windows.Forms
             }
 
             // Store the current list of items
-            //
             if (newItems is not null)
             {
                 Items.AddRangeInternal(newItems);
             }
 
             // Restore the selected indices if SelectionMode allows it.
-            //
             if (SelectionMode != SelectionMode.None)
             {
                 if (DataManager is not null)
@@ -2116,7 +2104,7 @@ namespace System.Windows.Forms
 
         private void ResetItemHeight()
         {
-            itemHeight = DefaultItemHeight;
+            _itemHeight = DefaultItemHeight;
         }
 
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
@@ -2135,11 +2123,9 @@ namespace System.Windows.Forms
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             // Avoid the listbox and textbox behaviour in Collection editors
-            //
-
-            if (!integralHeightAdjust && height != Height)
+            if (!_integralHeightAdjust && height != Height)
             {
-                requestedHeight = height;
+                _requestedHeight = height;
             }
 
             base.SetBoundsCore(x, y, width, height, specified);
@@ -2165,7 +2151,7 @@ namespace System.Windows.Forms
             {
                 if (DataSource is ICurrencyManagerProvider)
                 {
-                    selectedValueChangedFired = false;
+                    _selectedValueChangedFired = false;
                 }
 
                 if (IsHandleCreated)
@@ -2175,10 +2161,10 @@ namespace System.Windows.Forms
 
                 // if the list changed and we still did not fire the
                 // onselectedChanged event, then fire it now;
-                if (!selectedValueChangedFired)
+                if (!_selectedValueChangedFired)
                 {
                     OnSelectedValueChanged(EventArgs.Empty);
-                    selectedValueChangedFired = false;
+                    _selectedValueChangedFired = false;
                 }
             }
 
@@ -2196,13 +2182,13 @@ namespace System.Windows.Forms
         /// </summary>
         public void SetSelected(int index, bool value)
         {
-            int itemCount = (itemsCollection is null) ? 0 : itemsCollection.Count;
+            int itemCount = (_itemsCollection is null) ? 0 : _itemsCollection.Count;
             if (index < 0 || index >= itemCount)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            if (selectionMode == SelectionMode.None)
+            if (_selectionMode == SelectionMode.None)
             {
                 throw new InvalidOperationException(SR.ListBoxInvalidSelectionMode);
             }
@@ -2225,25 +2211,24 @@ namespace System.Windows.Forms
             // This will force the collection to add each item back to itself
             // if sorted is now true, then the add method will insert the item
             // into the correct position
-            //
             CheckNoDataSource();
 
             SelectedObjectCollection currentSelections = SelectedItems;
             currentSelections.EnsureUpToDate();
 
-            if (sorted && itemsCollection is not null)
+            if (_sorted && _itemsCollection is not null)
             {
-                itemsCollection.InnerArray.Sort();
+                _itemsCollection.InnerArray.Sort();
 
                 // Now that we've sorted, update our handle
                 // if it has been created.
                 if (IsHandleCreated)
                 {
                     NativeClear();
-                    int count = itemsCollection.Count;
+                    int count = _itemsCollection.Count;
                     for (int i = 0; i < count; i++)
                     {
-                        NativeAdd(itemsCollection[i]);
+                        NativeAdd(_itemsCollection[i]);
                         if (currentSelections.GetSelected(i))
                         {
                             NativeSetSelected(i, true);
@@ -2259,14 +2244,17 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            if (itemsCollection is not null)
+            if (_itemsCollection is not null)
             {
                 s += ", Items.Count: " + Items.Count.ToString(CultureInfo.CurrentCulture);
                 if (Items.Count > 0)
                 {
-                    string z = GetItemText(Items[0]);
-                    string txt = (z.Length > 40) ? z.Substring(0, 40) : z;
-                    s += ", Items[0]: " + txt;
+                    string? z = GetItemText(Items[0]);
+                    if (z is not null)
+                    {
+                        string txt = (z.Length > 40) ? z.Substring(0, 40) : z;
+                        s += ", Items[0]: " + txt;
+                    }
                 }
             }
 
@@ -2275,18 +2263,18 @@ namespace System.Windows.Forms
 
         private void UpdateFontCache()
         {
-            fontIsChanged = true;
-            integralHeightAdjust = true;
+            _fontIsChanged = true;
+            _integralHeightAdjust = true;
             try
             {
-                Height = requestedHeight;
+                Height = _requestedHeight;
             }
             finally
             {
-                integralHeightAdjust = false;
+                _integralHeightAdjust = false;
             }
 
-            maxWidth = -1;
+            _maxWidth = -1;
             UpdateHorizontalExtent();
             // clear the preferred size cache.
             CommonProperties.xClearPreferredSizeCache(this);
@@ -2294,9 +2282,9 @@ namespace System.Windows.Forms
 
         private void UpdateHorizontalExtent()
         {
-            if (!multiColumn && horizontalScrollbar && IsHandleCreated)
+            if (!_multiColumn && _horizontalScrollbar && IsHandleCreated)
             {
-                int width = horizontalExtent;
+                int width = _horizontalExtent;
                 if (width == 0)
                 {
                     width = MaxItemWidth;
@@ -2312,16 +2300,15 @@ namespace System.Windows.Forms
         {
             // We shouldn't be caching maxWidth if we don't have horizontal scrollbars,
             // or horizontal extent has been set
-            //
-            if (!horizontalScrollbar || horizontalExtent > 0)
+            if (!_horizontalScrollbar || _horizontalExtent > 0)
             {
-                maxWidth = -1;
+                _maxWidth = -1;
                 return;
             }
 
             // Only update if we are currently caching maxWidth
             //
-            if (maxWidth > -1)
+            if (_maxWidth > -1)
             {
                 // Compute item width
                 //
@@ -2335,19 +2322,17 @@ namespace System.Windows.Forms
                 {
                     // We're removing this item, so if it's the longest
                     // in the list, reset the cache
-                    //
-                    if (width >= maxWidth)
+                    if (width >= _maxWidth)
                     {
-                        maxWidth = -1;
+                        _maxWidth = -1;
                     }
                 }
                 else
                 {
                     // We're adding or inserting this item - update the cache
-                    //
-                    if (width > maxWidth)
+                    if (width > _maxWidth)
                     {
-                        maxWidth = width;
+                        _maxWidth = width;
                     }
                 }
             }
@@ -2388,9 +2373,9 @@ namespace System.Windows.Forms
             switch ((User32.LBN)PARAM.HIWORD(m.WParamInternal))
             {
                 case User32.LBN.SELCHANGE:
-                    if (selectedItems is not null)
+                    if (_selectedItems is not null)
                     {
-                        selectedItems.Dirty();
+                        _selectedItems.Dirty();
                     }
 
                     OnSelectedIndexChanged(EventArgs.Empty);
@@ -2431,7 +2416,7 @@ namespace System.Windows.Forms
         {
             MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m.LParamInternal;
 
-            if (drawMode == DrawMode.OwnerDrawVariable && mis->itemID >= 0)
+            if (_drawMode == DrawMode.OwnerDrawVariable && mis->itemID >= 0)
             {
                 using Graphics graphics = CreateGraphicsInternal();
                 var mie = new MeasureItemEventArgs(graphics, (int)mis->itemID, ItemHeight);
@@ -2468,7 +2453,7 @@ namespace System.Windows.Forms
                     WmPrint(ref m);
                     break;
                 case WM.LBUTTONDOWN:
-                    selectedItems?.Dirty();
+                    _selectedItems?.Dirty();
                     base.WndProc(ref m);
                     break;
                 case WM.LBUTTONUP:
@@ -2476,14 +2461,14 @@ namespace System.Windows.Forms
                     bool captured = Capture;
                     if (captured && WindowFromPoint(PointToScreen(point)) == Handle)
                     {
-                        if (!doubleClickFired && !ValidationCancelled)
+                        if (!_doubleClickFired && !ValidationCancelled)
                         {
                             OnClick(new MouseEventArgs(MouseButtons.Left, 1, point));
                             OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, point));
                         }
                         else
                         {
-                            doubleClickFired = false;
+                            _doubleClickFired = false;
 
                             // WM_COMMAND is only fired if the user double clicks an item,
                             // so we can't use that as a double-click substitute.
@@ -2510,13 +2495,13 @@ namespace System.Windows.Forms
                         base.WndProc(ref m);
                     }
 
-                    doubleClickFired = false;
+                    _doubleClickFired = false;
                     break;
 
                 case WM.RBUTTONUP:
                     if (Capture && WindowFromPoint(PointToScreen(PARAM.ToPoint(m.LParamInternal))) == Handle)
                     {
-                        selectedItems?.Dirty();
+                        _selectedItems?.Dirty();
                     }
 
                     base.WndProc(ref m);
@@ -2526,16 +2511,16 @@ namespace System.Windows.Forms
                     // The Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP sequence for
                     // doubleclick. The first WM_LBUTTONUP, resets the flag for double click so its necessary for us
                     // to set it again.
-                    doubleClickFired = true;
+                    _doubleClickFired = true;
                     base.WndProc(ref m);
                     break;
 
                 case WM.WINDOWPOSCHANGED:
                     base.WndProc(ref m);
-                    if (integralHeight && fontIsChanged)
+                    if (_integralHeight && _fontIsChanged)
                     {
                         Height = Math.Max(Height, ItemHeight);
-                        fontIsChanged = false;
+                        _fontIsChanged = false;
                     }
 
                     break;

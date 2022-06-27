@@ -74,5 +74,84 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AccessibleRole.Client, actual);
             Assert.False(form.IsHandleCreated);
         }
+
+        [WinFormsTheory]
+        [InlineData("null")] // The form is empty
+        [InlineData("invisible")]  // The form has invisible control (looks empty)
+        [InlineData("disabled")] // The form has disabled control
+        public void FormAccessibleObject_RaiseFocusEvent_WhenFormGetsFocus_WithoutActiveControl(string controlCase)
+        {
+            using Form form = new FocusEventsCounterForm();
+            using Control control = controlCase switch
+            {
+                "null" => null,
+                "invisible" => new Button() { Visible = false },
+                "disabled" => new Button() { Enabled = false },
+                _ => null
+            };
+            form.Controls.Add(control);
+            form.CreateControl(true);
+            var accessibleObject = (FocusEventsCounterFormAccessibleObject)form.AccessibilityObject;
+
+            Assert.NotNull(accessibleObject);
+            Assert.Equal(0, accessibleObject.RaiseAutomationFocusEventCallsCount);
+            Assert.True(form.IsHandleCreated);
+
+            form.Visible = true;
+            form.Focus();
+
+            Assert.Null(form.ActiveControl);
+            Assert.Equal(1, accessibleObject.RaiseAutomationFocusEventCallsCount);
+        }
+
+        [WinFormsFact]
+        public void FormAccessibleObject_RaiseFocusEvent_WhenFormGetsFocus_WithActiveControl()
+        {
+            using Form form = new FocusEventsCounterForm();
+            using Button control = new();
+            form.Controls.Add(control);
+            form.CreateControl(true);
+            var accessibleObject = (FocusEventsCounterFormAccessibleObject)form.AccessibilityObject;
+
+            Assert.NotNull(accessibleObject);
+            Assert.Equal(0, accessibleObject.RaiseAutomationFocusEventCallsCount);
+            Assert.True(form.IsHandleCreated);
+
+            form.Visible = true;
+            control.Visible = true;
+            form.Focus();
+
+            Assert.NotNull(form.ActiveControl);
+
+            // The child control gets the focus changed event instead of the form.
+            // Native control does it itself, so a screen reader should focus on the inner control.
+            Assert.Equal(0, accessibleObject.RaiseAutomationFocusEventCallsCount);
+        }
+
+        private class FocusEventsCounterForm : Form
+        {
+            protected override AccessibleObject CreateAccessibilityInstance()
+                => new FocusEventsCounterFormAccessibleObject(this);
+        }
+
+        private class FocusEventsCounterFormAccessibleObject : FormAccessibleObject
+        {
+            public FocusEventsCounterFormAccessibleObject(Form owner) : base(owner)
+            {
+                RaiseAutomationFocusEventCallsCount = 0;
+            }
+
+            public int RaiseAutomationFocusEventCallsCount { get; private set; }
+
+            internal override bool RaiseAutomationEvent(UiaCore.UIA eventId)
+            {
+                if (eventId == UiaCore.UIA.AutomationFocusChangedEventId)
+                {
+                    RaiseAutomationFocusEventCallsCount++;
+                }
+
+                return base.RaiseAutomationEvent(eventId);
+            }
+        }
     }
 }

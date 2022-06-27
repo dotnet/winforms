@@ -4531,6 +4531,9 @@ Stack trace where the illegal operation occurred was:
   <data name="PictureBoxWaitOnLoadDescr" xml:space="preserve">
     <value>Controls whether processing will stop until the image is loaded.</value>
   </data>
+  <data name="PictureBoxRemoteLocationNotSupported" xml:space="preserve">
+    <value>Loading from remote location not supported.</value>
+  </data>
   <data name="PopupControlBadParentArgument" xml:space="preserve">
     <value>Cannot set the ParentPopup to be yourself.</value>
   </data>
@@ -5190,6 +5193,9 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="ScrollableControlHorizontalScrollDescr" xml:space="preserve">
     <value>Gets the horizontal scroll bar for this ScrollableControl.</value>
+  </data>
+  <data name="ScrollableControlActiveControlParentNull" xml:space="preserve">
+    <value>Parent property of the active control cannot be null.</value>
   </data>
   <data name="ScrollableControlRaiseMouseEnterLeaveEventsForScrollBarsDescr" xml:space="preserve">
     <value>Property being set to false will not raise MouseEnter and MouseLeave events until the mouse leaves the client area and the scrollbars.</value>
@@ -6000,6 +6006,12 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="ToolStripSaveSettingsDescr" xml:space="preserve">
     <value>Specifies whether the ToolStrip should persist user settings via IPersistComponentSettings.</value>
+  </data>
+  <data name="ToolStripScrollButtonDownAccessibleName" xml:space="preserve">
+    <value>Line down</value>
+  </data>
+  <data name="ToolStripScrollButtonUpAccessibleName" xml:space="preserve">
+    <value>Line up</value>
   </data>
   <data name="ToolStripSettingsKeyDescr" xml:space="preserve">
     <value>Specifies the settings key to use to save settings.</value>
@@ -6897,5 +6909,8 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="EditDefaultAccessibleName" xml:space="preserve">
     <value>Spinner</value>
+  </data>
+  <data name="ListViewItemAccessibilityObjectRequiresListView" xml:space="preserve">
+    <value>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</value>
   </data>
 </root>

@@ -1534,7 +1534,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool CanCatchCallbackException()
+        private static bool CanCatchCallbackException()
         {
             // Catch all exceptions, except when the NativeWindow indicates
             // that a debuggable WndProc callback should be used, in which
@@ -1548,7 +1548,7 @@ namespace System.Windows.Forms
         ///   Called when an exception occurs in dispatching messages through
         ///   the task dialog callback or its window procedure.
         /// </summary>
-        private void HandleCallbackException(Exception e) => Application.OnThreadException(e);
+        private static void HandleCallbackException(Exception e) => Application.OnThreadException(e);
 
         private void SendTaskDialogMessage(
             ComCtl32.TDM message,

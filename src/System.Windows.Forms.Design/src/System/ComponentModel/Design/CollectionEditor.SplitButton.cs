@@ -252,7 +252,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            private void PaintArrow(IDeviceContext deviceContext, Rectangle dropDownRect)
+            private static void PaintArrow(IDeviceContext deviceContext, Rectangle dropDownRect)
             {
                 Point middle = new Point(
                     Convert.ToInt32(dropDownRect.Left + dropDownRect.Width / 2),

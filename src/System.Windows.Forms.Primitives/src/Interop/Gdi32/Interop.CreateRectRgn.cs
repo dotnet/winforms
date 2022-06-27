@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern HRGN CreateRectRgn(int x1, int y1, int x2, int y2);
+        [LibraryImport(Libraries.Gdi32, SetLastError = true)]
+        public static partial HRGN CreateRectRgn(int x1, int y1, int x2, int y2);
     }
 }

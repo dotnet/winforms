@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
@@ -101,6 +102,7 @@ namespace System.Windows.Forms
                 }
             }
 
+            [AllowNull]
             public override Font Font
             {
                 get => base.Font;
@@ -218,9 +220,7 @@ namespace System.Windows.Forms
             }
 
             protected override AccessibleObject CreateAccessibilityInstance()
-            {
-                return new ToolStripTextBoxControlAccessibleObject(this, Owner);
-            }
+                => new ToolStripTextBoxControlAccessibleObject(this);
 
             protected override void Dispose(bool disposing)
             {

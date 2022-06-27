@@ -6,6 +6,7 @@ parameters:
   enablePublishTestResults: true
   enablePublishBuildAssets: true
   enablePublishUsingPipelines: true
+  testResultsFormat: 'xunit'
 
 steps:
   - ${{ if eq(parameters.enableRichCodeNavigation, true) }}:

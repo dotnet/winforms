@@ -349,7 +349,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private void TryCancelTransaction(ref DesignerTransaction transaction)
+        private static void TryCancelTransaction(ref DesignerTransaction transaction)
         {
             if (transaction != null)
             {

@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
                 style: WS.OVERLAPPED | WS.VISIBLE);
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-            ES actual = providerMock.Object.GetEditStyle(textBox);
+            ES actual = UiaTextProvider.GetEditStyle(textBox);
             Assert.True(actual.HasFlag(ES.MULTILINE));
         }
 
@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
                 style: WS.OVERLAPPED | WS.VISIBLE);
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-            ES actual = providerMock.Object.GetEditStyle(textBox);
+            ES actual = UiaTextProvider.GetEditStyle(textBox);
             Assert.False(actual.HasFlag(ES.MULTILINE));
         }
 
@@ -46,7 +46,7 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
                 style: WS.OVERLAPPED | WS.VISIBLE);
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-            WS actual = providerMock.Object.GetWindowStyle(textBox);
+            WS actual = UiaTextProvider.GetWindowStyle(textBox);
             Assert.True(actual.HasFlag(WS.VISIBLE));
         }
 
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
                 style: WS.OVERLAPPED | WS.VISIBLE);
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-            WS_EX actual = providerMock.Object.GetWindowExStyle(textBox);
+            WS_EX actual = UiaTextProvider.GetWindowExStyle(textBox);
             Assert.True(actual.HasFlag(WS_EX.CLIENTEDGE));
         }
 
@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
             double[] expected = { 0, 0, 10, 5, 10, 10, 20, 30 };
-            double[] actual = providerMock.Object.RectListToDoubleArray(new List<Rectangle>
+            double[] actual = UiaTextProvider.RectListToDoubleArray(new List<Rectangle>
             {
                 new Rectangle(0, 0, 10, 5),
                 new Rectangle(10, 10, 20, 30)
@@ -87,7 +87,7 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
         {
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-            double[] actual = providerMock.Object.RectListToDoubleArray(null);
+            double[] actual = UiaTextProvider.RectListToDoubleArray(null);
             Assert.Empty(actual);
         }
 #pragma warning restore CS8625
@@ -97,7 +97,7 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
         {
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-            double[] actual = providerMock.Object.RectListToDoubleArray(new List<Rectangle>());
+            double[] actual = UiaTextProvider.RectListToDoubleArray(new List<Rectangle>());
             Assert.Empty(actual);
         }
 

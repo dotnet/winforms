@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Design
 
                 if (inheritanceUI != null)
                 {
-                    pe.Graphics.DrawImage(inheritanceUI.InheritanceGlyph, 0, 0);
+                    pe.Graphics.DrawImage(InheritanceUI.InheritanceGlyph, 0, 0);
                 }
             }
         }

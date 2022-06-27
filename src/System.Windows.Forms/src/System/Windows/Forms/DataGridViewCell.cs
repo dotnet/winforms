@@ -6,6 +6,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Text;
@@ -17,6 +18,7 @@ namespace System.Windows.Forms
     ///  Identifies a cell in the dataGridView.
     /// </summary>
     [TypeConverter(typeof(DataGridViewCellConverter))]
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
     public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable, IDisposable, IKeyboardToolTip
     {
         private const TextFormatFlags TextFormatSupportedFlags = TextFormatFlags.SingleLine
@@ -84,6 +86,8 @@ namespace System.Windows.Forms
             _useDefaultToolTipText = true;
         }
 
+        // NOTE: currently this finalizer is unneeded (empty). See https://github.com/dotnet/winforms/issues/6858.
+        // All classes that are not need to be finalized contains in DataGridViewElement.s_typesWithEmptyFinalizer collection. Consider to modify it if needed.
         ~DataGridViewCell()
         {
             Dispose(false);
@@ -225,6 +229,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
         public virtual Type EditType
         {
             get
@@ -1320,6 +1325,9 @@ namespace System.Windows.Forms
                     contextMenuStrip.Disposed -= new EventHandler(DetachContextMenuStrip);
                 }
             }
+
+            // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this class type (and all of its subclasses) from DataGridViewElement.s_typesWithEmptyFinalizer!
+            // Also consider to modify ~DataGridViewCell() description.
         }
 
         protected virtual bool DoubleClickUnsharesRow(DataGridViewCellEventArgs e)
@@ -2573,7 +2581,7 @@ namespace System.Windows.Forms
             return toolTipText;
         }
 
-        private protected string GetToolTipTextWithoutMnemonic(string toolTipText)
+        private protected static string GetToolTipTextWithoutMnemonic(string toolTipText)
         {
             if (WindowsFormsUtils.ContainsMnemonic(toolTipText))
             {

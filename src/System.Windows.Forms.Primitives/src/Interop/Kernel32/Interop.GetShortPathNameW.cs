@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class Kernel32
     {
-        [DllImport(Libraries.Kernel32, ExactSpelling = true, SetLastError = true, CharSet = CharSet.Unicode)]
-        public unsafe static extern uint GetShortPathNameW(string lpszLongPath, char* lpszShortPath, uint cchBuffer);
+        [LibraryImport(Libraries.Kernel32, SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+        public static unsafe partial uint GetShortPathNameW(string lpszLongPath, char* lpszShortPath, uint cchBuffer);
     }
 }

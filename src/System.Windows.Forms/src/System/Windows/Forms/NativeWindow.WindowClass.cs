@@ -99,7 +99,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Fabricates a full class name from a partial.
             /// </summary>
-            private string GetFullClassName(string className)
+            private static string GetFullClassName(string className)
             {
                 StringBuilder b = new StringBuilder(50);
                 b.Append(Application.WindowsFormsVersion);

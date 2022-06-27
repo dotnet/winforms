@@ -6,7 +6,7 @@
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    internal class Com2PropertyDescriptorRefresh
+    internal static class Com2PropertyDescriptorRefresh
     {
         public const int Attributes = 0x0001;
         public const int DisplayName = 0x0002;

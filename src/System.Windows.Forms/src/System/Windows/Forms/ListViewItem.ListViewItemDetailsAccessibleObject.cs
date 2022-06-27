@@ -63,7 +63,7 @@ namespace System.Windows.Forms
                     || !_owningListView.SupportsListViewSubItems
                     || child is not ListViewSubItem.ListViewSubItemAccessibleObject subItemAccessibleObject)
                 {
-                    return -1;
+                    return InvalidIndex;
                 }
 
                 if (subItemAccessibleObject.OwningSubItem is null)
@@ -72,7 +72,7 @@ namespace System.Windows.Forms
                 }
 
                 int index = _owningItem.SubItems.IndexOf(subItemAccessibleObject.OwningSubItem);
-                return index > _owningListView.Columns.Count - 1 ? -1 : index;
+                return index > _owningListView.Columns.Count - 1 ? InvalidIndex : index;
             }
 
             // This method returns an accessibility object for an existing ListViewSubItem, or creates a fake one

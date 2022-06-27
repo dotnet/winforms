@@ -10,8 +10,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern Gdi32.HBRUSH GetSysColorBrush(COLOR nIndex);
+        [LibraryImport(Libraries.User32)]
+        public static partial Gdi32.HBRUSH GetSysColorBrush(COLOR nIndex);
 
         public static Gdi32.HBRUSH GetSysColorBrush(Color systemColor)
         {

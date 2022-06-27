@@ -316,7 +316,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return GetPreferredSizeVertical(this, proposedSize) + Padding.Size;
+                    return GetPreferredSizeVertical(this) + Padding.Size;
                 }
             }
 

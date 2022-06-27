@@ -10,8 +10,8 @@ internal partial class Interop
     {
         public static partial class ImageList
         {
-            [DllImport(Libraries.Comctl32, ExactSpelling = true, EntryPoint = "ImageList_Create")]
-            public static extern IntPtr Create(int cx, int cy, ILC flags, int cInitial, int cGrow);
+            [LibraryImport(Libraries.Comctl32, EntryPoint = "ImageList_Create")]
+            public static partial IntPtr Create(int cx, int cy, ILC flags, int cInitial, int cGrow);
         }
     }
 }

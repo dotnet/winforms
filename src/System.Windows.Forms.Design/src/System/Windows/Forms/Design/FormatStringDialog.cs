@@ -152,7 +152,7 @@ namespace System.Windows.Forms.Design
             _formatControl1.NullValue = nullValue != null ? nullValue.ToString() : "";
         }
 
-        public void End()
+        public static void End()
         {
             // clear the tree nodes collection
         }

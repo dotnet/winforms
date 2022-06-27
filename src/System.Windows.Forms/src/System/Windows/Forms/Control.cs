@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -95,7 +94,7 @@ namespace System.Windows.Forms
                     while (frameIndex < maxFrameCount)
                     {
                         StackFrame sf = new StackFrame(frameIndex);
-                        if (frameIndex == 2 && sf.GetMethod().Name.Equals("CanProcessMnemonic"))
+                        if (frameIndex == 2 && sf.GetMethod()!.Name.Equals("CanProcessMnemonic"))
                         {
                             // log immediate call if in a virtual/recursive call.
                             break;
@@ -120,9 +119,9 @@ namespace System.Windows.Forms
             }
         }
 #else
-        internal static readonly TraceSwitch s_paletteTracing;
-        internal static readonly TraceSwitch s_controlKeyboardRouting;
-        private protected readonly TraceSwitch s_focusTracing;
+        internal static readonly TraceSwitch? s_paletteTracing;
+        internal static readonly TraceSwitch? s_controlKeyboardRouting;
+        private protected readonly TraceSwitch? s_focusTracing;
 #endif
 
 #if DEBUG
@@ -208,18 +207,18 @@ namespace System.Windows.Forms
         private static readonly object s_previewKeyDownEvent = new object();
 
         private static User32.WM s_threadCallbackMessage;
-        private static ContextCallback s_invokeMarshaledCallbackHelperDelegate;
+        private static ContextCallback? s_invokeMarshaledCallbackHelperDelegate;
 
 #pragma warning disable IDE1006 // Naming Styles
         [ThreadStatic]
         private static bool t_inCrossThreadSafeCall = false;
 
         [ThreadStatic]
-        internal static HelpInfo t_currentHelpInfo = null;
+        internal static HelpInfo? t_currentHelpInfo = null;
 
 #pragma warning restore IDE1006
 
-        private static FontHandleWrapper s_defaultFontHandleWrapper;
+        private static FontHandleWrapper? s_defaultFontHandleWrapper;
 
         private const short PaintLayerBackground = 1;
         private const short PaintLayerForeground = 2;
@@ -229,7 +228,7 @@ namespace System.Windows.Forms
 
         private const byte HighOrderBitMask = 0x80;
 
-        private static Font s_defaultFont;
+        private static Font? s_defaultFont;
 
         // Property store keys for properties.  The property store allocates most efficiently
         // in groups of four, so we try to lump properties in groups of four based on how
@@ -297,9 +296,9 @@ namespace System.Windows.Forms
         // file.  Making it 'internal' makes controlling it quite difficult.
         private readonly ControlNativeWindow _window;
 
-        private Control _parent;
-        private Control _reflectParent;
-        private CreateParams _createParams;
+        private Control? _parent;
+        private Control? _reflectParent;
+        private CreateParams? _createParams;
         private int _x;
         private int _y;
         private int _width;
@@ -314,13 +313,13 @@ namespace System.Windows.Forms
         /// </summary>
         private ControlStyles _controlStyle;
         private int _tabIndex;
-        private string _text;                       // See ControlStyles.CacheText for usage notes
+        private string? _text;                       // See ControlStyles.CacheText for usage notes
         private byte _layoutSuspendCount;
         private byte _requiredScaling;              // bits 0-4: BoundsSpecified stored in RequiredScaling property.  Bit 5: RequiredScalingEnabled property.
         private User32.TRACKMOUSEEVENT _trackMouseEvent;
         private short _updateCount;
-        private LayoutEventArgs _cachedLayoutEventArgs;
-        private Queue<ThreadMethodEntry> _threadCallbackList;
+        private LayoutEventArgs? _cachedLayoutEventArgs;
+        private Queue<ThreadMethodEntry>? _threadCallbackList;
         internal int _deviceDpi;
         internal int _oldDeviceDpi;
 
@@ -330,15 +329,15 @@ namespace System.Windows.Forms
 
         // Stores scaled font from Dpi changed values. This is required to distinguish the Font change from
         // Dpi changed events and explicit Font change/assignment.
-        private Font _scaledControlFont;
-        private FontHandleWrapper _scaledFontWrapper;
+        private Font? _scaledControlFont;
+        private FontHandleWrapper? _scaledFontWrapper;
 
         // ContainerControls like 'PropertyGrid' scale their children when they resize.
         // no explicit scaling of children required in such cases. They have specific logic.
         internal bool _doNotScaleChildren;
 
         // Contains a collection of calculated fonts for various Dpi values of the control in the PerMonV2 mode.
-        private Dictionary<int, Font> _dpiFonts;
+        private Dictionary<int, Font>? _dpiFonts;
 
 #if DEBUG
         internal int LayoutSuspendCount
@@ -448,21 +447,21 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Initializes a new instance of the <see cref="Control"/> class.
         /// </summary>
-        public Control(string text) : this(null, text)
+        public Control(string? text) : this(null, text)
         {
         }
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="Control"/> class.
         /// </summary>
-        public Control(string text, int left, int top, int width, int height) : this(null, text, left, top, width, height)
+        public Control(string? text, int left, int top, int width, int height) : this(null, text, left, top, width, height)
         {
         }
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="Control"/> class.
         /// </summary>
-        public Control(Control parent, string text) : this()
+        public Control(Control? parent, string? text) : this()
         {
             Parent = parent;
             Text = text;
@@ -471,7 +470,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Initializes a new instance of the <see cref="Control"/> class.
         /// </summary>
-        public Control(Control parent, string text, int left, int top, int width, int height) : this(parent, text)
+        public Control(Control? parent, string? text, int left, int top, int width, int height) : this(parent, text)
         {
             Location = new Point(left, top);
             Size = new Size(width, height);
@@ -493,7 +492,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(s_accessibilityProperty);
+                AccessibleObject? accessibleObject = (AccessibleObject?)Properties.GetObject(s_accessibilityProperty);
                 if (accessibleObject is null)
                 {
                     accessibleObject = CreateAccessibilityInstance();
@@ -514,7 +513,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                AccessibleObject ncAccessibleObject = (AccessibleObject)Properties.GetObject(s_ncAccessibilityProperty);
+                AccessibleObject? ncAccessibleObject = (AccessibleObject?)Properties.GetObject(s_ncAccessibilityProperty);
                 if (ncAccessibleObject is null)
                 {
                     ncAccessibleObject = new ControlAccessibleObject(this, User32.OBJID.WINDOW);
@@ -530,9 +529,9 @@ namespace System.Windows.Forms
         ///  Returns a specific AccessibleObject associated with this
         ///  control, based on standard "accessible object id".
         /// </summary>
-        private AccessibleObject GetAccessibilityObject(int accObjId)
+        private AccessibleObject? GetAccessibilityObject(int accObjId)
         {
-            AccessibleObject accessibleObject;
+            AccessibleObject? accessibleObject;
 
             switch (accObjId)
             {
@@ -561,7 +560,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a specific AccessibleObject associated w/ the objectID
         /// </summary>
-        protected virtual AccessibleObject GetAccessibilityObjectById(int objectId)
+        protected virtual AccessibleObject? GetAccessibilityObjectById(int objectId)
         {
             if (this is IAutomationLiveRegion)
             {
@@ -579,9 +578,9 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlAccessibleDefaultActionDescr))]
-        public string AccessibleDefaultActionDescription
+        public string? AccessibleDefaultActionDescription
         {
-            get => (string)Properties.GetObject(s_accessibleDefaultActionProperty);
+            get => (string?)Properties.GetObject(s_accessibleDefaultActionProperty);
             set => Properties.SetObject(s_accessibleDefaultActionProperty, value);
         }
 
@@ -592,9 +591,9 @@ namespace System.Windows.Forms
         [DefaultValue(null)]
         [Localizable(true)]
         [SRDescription(nameof(SR.ControlAccessibleDescriptionDescr))]
-        public string AccessibleDescription
+        public string? AccessibleDescription
         {
-            get => (string)Properties.GetObject(s_accessibleDescriptionProperty);
+            get => (string?)Properties.GetObject(s_accessibleDescriptionProperty);
             set => Properties.SetObject(s_accessibleDescriptionProperty, value);
         }
 
@@ -605,9 +604,9 @@ namespace System.Windows.Forms
         [DefaultValue(null)]
         [Localizable(true)]
         [SRDescription(nameof(SR.ControlAccessibleNameDescr))]
-        public string AccessibleName
+        public string? AccessibleName
         {
-            get => (string)Properties.GetObject(s_accessibleNameProperty);
+            get => (string?)Properties.GetObject(s_accessibleNameProperty);
             set => Properties.SetObject(s_accessibleNameProperty, value);
         }
 
@@ -644,7 +643,7 @@ namespace System.Windows.Forms
 
         private Color ActiveXAmbientBackColor => ActiveXInstance.AmbientBackColor;
         private Color ActiveXAmbientForeColor => ActiveXInstance.AmbientForeColor;
-        private Font ActiveXAmbientFont => ActiveXInstance.AmbientFont;
+        private Font? ActiveXAmbientFont => ActiveXInstance.AmbientFont;
         private bool ActiveXEventsFrozen => ActiveXInstance.EventsFrozen;
         private IntPtr ActiveXHWNDParent => ActiveXInstance.HWNDParent;
 
@@ -657,7 +656,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ActiveXImpl activeXImpl = (ActiveXImpl)Properties.GetObject(s_activeXImplProperty);
+                ActiveXImpl? activeXImpl = (ActiveXImpl?)Properties.GetObject(s_activeXImplProperty);
                 if (activeXImpl is null)
                 {
                     // Don't allow top level objects to be hosted
@@ -719,11 +718,11 @@ namespace System.Windows.Forms
         // Queries the Site for AmbientProperties.  May return null.
         // Do not confuse with inheritedProperties -- the service is turned to
         // after we've exhausted inheritedProperties.
-        private AmbientProperties AmbientPropertiesService
+        private AmbientProperties? AmbientPropertiesService
         {
             get
             {
-                AmbientProperties props = (AmbientProperties)Properties.GetObject(s_ambientPropertiesServiceProperty, out bool contains);
+                AmbientProperties? props = (AmbientProperties?)Properties.GetObject(s_ambientPropertiesServiceProperty, out bool contains);
                 if (!contains)
                 {
                     if (Site is not null)
@@ -732,7 +731,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        props = (AmbientProperties)GetService(typeof(AmbientProperties));
+                        props = (AmbientProperties?)GetService(typeof(AmbientProperties));
                     }
 
                     if (props is not null)
@@ -758,7 +757,7 @@ namespace System.Windows.Forms
         public virtual AnchorStyles Anchor
         {
             get => DefaultLayout.GetAnchor(this);
-            set => DefaultLayout.SetAnchor(ParentInternal, this, value);
+            set => DefaultLayout.SetAnchor(this, value);
         }
 
         [SRCategory(nameof(SR.CatLayout))]
@@ -799,7 +798,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public event EventHandler AutoSizeChanged
+        public event EventHandler? AutoSizeChanged
         {
             add => Events.AddHandler(s_autoSizeChangedEvent, value);
             remove => Events.RemoveHandler(s_autoSizeChangedEvent, value);
@@ -818,7 +817,7 @@ namespace System.Windows.Forms
             {
                 if (Properties.ContainsObject(s_autoScrollOffsetProperty))
                 {
-                    return (Point)Properties.GetObject(s_autoScrollOffsetProperty);
+                    return (Point)Properties.GetObject(s_autoScrollOffsetProperty)!;
                 }
 
                 return Point.Empty;
@@ -850,7 +849,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                object customBackBrush = Properties.GetObject(s_backBrushProperty);
+                object? customBackBrush = Properties.GetObject(s_backBrushProperty);
                 if (customBackBrush is not null)
                 {
                     // We already have a valid brush.  Unbox, and return.
@@ -908,7 +907,7 @@ namespace System.Windows.Forms
                     return c;
                 }
 
-                Control p = ParentInternal;
+                Control? p = ParentInternal;
                 if (p is not null && p.CanAccessProperties)
                 {
                     c = p.BackColor;
@@ -925,7 +924,7 @@ namespace System.Windows.Forms
 
                 if (c.IsEmpty)
                 {
-                    AmbientProperties ambient = AmbientPropertiesService;
+                    AmbientProperties? ambient = AmbientPropertiesService;
                     if (ambient is not null)
                     {
                         c = ambient.BackColor;
@@ -963,7 +962,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnBackColorChangedDescr))]
-        public event EventHandler BackColorChanged
+        public event EventHandler? BackColorChanged
         {
             add => Events.AddHandler(s_backColorEvent, value);
             remove => Events.RemoveHandler(s_backColorEvent, value);
@@ -976,11 +975,11 @@ namespace System.Windows.Forms
         [DefaultValue(null)]
         [Localizable(true)]
         [SRDescription(nameof(SR.ControlBackgroundImageDescr))]
-        public virtual Image BackgroundImage
+        public virtual Image? BackgroundImage
         {
             get
             {
-                return (Image)Properties.GetObject(s_backgroundImageProperty);
+                return (Image?)Properties.GetObject(s_backgroundImageProperty);
             }
             set
             {
@@ -994,7 +993,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnBackgroundImageChangedDescr))]
-        public event EventHandler BackgroundImageChanged
+        public event EventHandler? BackgroundImageChanged
         {
             add => Events.AddHandler(s_backgroundImageEvent, value);
             remove => Events.RemoveHandler(s_backgroundImageEvent, value);
@@ -1018,7 +1017,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return ((ImageLayout)Properties.GetObject(s_backgroundImageLayoutProperty));
+                    return (ImageLayout)Properties.GetObject(s_backgroundImageLayoutProperty)!;
                 }
             }
             set
@@ -1048,7 +1047,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnBackgroundImageLayoutChangedDescr))]
-        public event EventHandler BackgroundImageLayoutChanged
+        public event EventHandler? BackgroundImageLayoutChanged
         {
             add => Events.AddHandler(s_backgroundImageLayoutEvent, value);
             remove => Events.RemoveHandler(s_backgroundImageLayoutEvent, value);
@@ -1076,7 +1075,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void ResetBindings()
         {
-            ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(s_bindingsProperty);
+            ControlBindingsCollection? bindings = (ControlBindingsCollection?)Properties.GetObject(s_bindingsProperty);
             if (bindings is not null)
             {
                 bindings.Clear();
@@ -1088,19 +1087,19 @@ namespace System.Windows.Forms
         ///  ContainerControl can bypass the "containerControls" bindingContext property and do what the other simple controls
         ///  do.
         /// </summary>
-        internal BindingContext BindingContextInternal
+        internal BindingContext? BindingContextInternal
         {
             get
             {
                 // See if we have locally overridden the binding manager.
-                BindingContext context = (BindingContext)Properties.GetObject(s_bindingManagerProperty);
+                BindingContext? context = (BindingContext?)Properties.GetObject(s_bindingManagerProperty);
                 if (context is not null)
                 {
                     return context;
                 }
 
                 // Otherwise, see if the parent has one for us.
-                Control p = ParentInternal;
+                Control? p = ParentInternal;
                 if (p is not null && p.CanAccessProperties)
                 {
                     return p.BindingContext;
@@ -1111,15 +1110,14 @@ namespace System.Windows.Forms
             }
             set
             {
-                BindingContext oldContext = (BindingContext)Properties.GetObject(s_bindingManagerProperty);
-                BindingContext newContext = value;
+                BindingContext? oldContext = (BindingContext?)Properties.GetObject(s_bindingManagerProperty);
+                BindingContext? newContext = value;
 
                 if (oldContext != newContext)
                 {
                     Properties.SetObject(s_bindingManagerProperty, newContext);
 
                     // the property change will wire up the bindings.
-                    //
                     OnBindingContextChanged(EventArgs.Empty);
                 }
             }
@@ -1129,7 +1127,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlBindingContextDescr))]
-        public virtual BindingContext BindingContext
+        public virtual BindingContext? BindingContext
         {
             get => BindingContextInternal;
             set => BindingContextInternal = value;
@@ -1137,7 +1135,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnBindingContextChangedDescr))]
-        public event EventHandler BindingContextChanged
+        public event EventHandler? BindingContextChanged
         {
             add => Events.AddHandler(s_bindingContextEvent, value);
             remove => Events.RemoveHandler(s_bindingContextEvent, value);
@@ -1259,7 +1257,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnCausesValidationChangedDescr))]
-        public event EventHandler CausesValidationChanged
+        public event EventHandler? CausesValidationChanged
         {
             add => Events.AddHandler(s_causesValidationEvent, value);
             remove => Events.RemoveHandler(s_causesValidationEvent, value);
@@ -1309,7 +1307,7 @@ namespace System.Windows.Forms
                     cacheTextCounter--;
                     if (cacheTextCounter == 0)
                     {
-                        _text = (string)Properties.GetObject(s_acheTextFieldProperty, out found);
+                        _text = (string?)Properties.GetObject(s_acheTextFieldProperty, out found);
                     }
                 }
 
@@ -1358,7 +1356,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnClientSizeChangedDescr))]
-        public event EventHandler ClientSizeChanged
+        public event EventHandler? ClientSizeChanged
         {
             add => Events.AddHandler(s_clientSizeEvent, value);
             remove => Events.RemoveHandler(s_clientSizeEvent, value);
@@ -1408,12 +1406,12 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(null)]
         [SRDescription(nameof(SR.ControlContextMenuDescr))]
-        public virtual ContextMenuStrip ContextMenuStrip
+        public virtual ContextMenuStrip? ContextMenuStrip
         {
-            get => (ContextMenuStrip)Properties.GetObject(s_contextMenuStripProperty);
+            get => (ContextMenuStrip?)Properties.GetObject(s_contextMenuStripProperty);
             set
             {
-                ContextMenuStrip oldValue = Properties.GetObject(s_contextMenuStripProperty) as ContextMenuStrip;
+                ContextMenuStrip? oldValue = Properties.GetObject(s_contextMenuStripProperty) as ContextMenuStrip;
 
                 if (oldValue != value)
                 {
@@ -1438,7 +1436,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlContextMenuStripChangedDescr))]
-        public event EventHandler ContextMenuStripChanged
+        public event EventHandler? ContextMenuStripChanged
         {
             add => Events.AddHandler(s_contextMenuStripEvent, value);
             remove => Events.RemoveHandler(s_contextMenuStripEvent, value);
@@ -1454,7 +1452,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
                 if (controlsCollection is null)
                 {
@@ -1529,7 +1527,6 @@ namespace System.Windows.Forms
                 {
                     // When the window is actually created, we will parent WS_CHILD windows to the
                     // parking form if cp.parent == 0.
-                    //
                     cp.Parent = _parent is null ? IntPtr.Zero : _parent.InternalHandle;
                     cp.Style |= (int)(User32.WS.CHILD | User32.WS.CLIPSIBLINGS);
                 }
@@ -1601,8 +1598,8 @@ namespace System.Windows.Forms
                 {
                     while (container.ActiveControl is null)
                     {
-                        ContainerControl cc;
-                        Control parent = container.ParentInternal;
+                        ContainerControl? cc;
+                        Control? parent = container.ParentInternal;
                         if (parent is not null)
                         {
                             cc = parent.GetContainerControl() as ContainerControl;
@@ -1639,7 +1636,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Control parent = ParentInternal;
+                    Control? parent = ParentInternal;
                     if (parent is not null)
                     {
                         return parent.ValidationCancelled;
@@ -1692,6 +1689,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ControlCursorDescr))]
         [AmbientValue(null)]
+        [AllowNull]
         public virtual Cursor Cursor
         {
             get
@@ -1701,7 +1699,7 @@ namespace System.Windows.Forms
                     return Cursors.WaitCursor;
                 }
 
-                Cursor cursor = (Cursor)Properties.GetObject(s_cursorProperty);
+                Cursor? cursor = (Cursor?)Properties.GetObject(s_cursorProperty);
                 if (cursor is not null)
                 {
                     return cursor;
@@ -1715,13 +1713,13 @@ namespace System.Windows.Forms
                     return localDefault;
                 }
 
-                Control p = ParentInternal;
+                Control? p = ParentInternal;
                 if (p is not null)
                 {
                     return p.Cursor;
                 }
 
-                AmbientProperties ambient = AmbientPropertiesService;
+                AmbientProperties? ambient = AmbientPropertiesService;
                 if (ambient is not null && ambient.Cursor is not null)
                 {
                     return ambient.Cursor;
@@ -1731,7 +1729,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                Cursor localCursor = (Cursor)Properties.GetObject(s_cursorProperty);
+                Cursor? localCursor = (Cursor?)Properties.GetObject(s_cursorProperty);
                 Cursor resolvedCursor = Cursor;
                 if (localCursor != value)
                 {
@@ -1762,7 +1760,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnCursorChangedDescr))]
-        public event EventHandler CursorChanged
+        public event EventHandler? CursorChanged
         {
             add => Events.AddHandler(s_cursorEvent, value);
             remove => Events.RemoveHandler(s_cursorEvent, value);
@@ -1780,7 +1778,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(s_bindingsProperty);
+                ControlBindingsCollection? bindings = (ControlBindingsCollection?)Properties.GetObject(s_bindingsProperty);
                 if (bindings is null)
                 {
                     bindings = new ControlBindingsCollection(this);
@@ -1836,7 +1834,7 @@ namespace System.Windows.Forms
 
         protected virtual Padding DefaultPadding => Padding.Empty;
 
-        private RightToLeft DefaultRightToLeft => RightToLeft.No;
+        private static RightToLeft DefaultRightToLeft => RightToLeft.No;
 
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
@@ -1844,7 +1842,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual Size DefaultSize => Size.Empty;
 
-        private void DetachContextMenuStrip(object sender, EventArgs e) => ContextMenuStrip = null;
+        private void DetachContextMenuStrip(object? sender, EventArgs e) => ContextMenuStrip = null;
 
         /// <summary>
         ///  Dpi value either for the primary screen or for the monitor where the top-level parent is displayed when
@@ -1866,7 +1864,7 @@ namespace System.Windows.Forms
                 Color color = BackColor;
                 if (color.A == 0)
                 {
-                    Control control = ParentInternal;
+                    Control? control = ParentInternal;
                     while (color.A == 0)
                     {
                         if (control is null)
@@ -1974,7 +1972,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnDockChangedDescr))]
-        public event EventHandler DockChanged
+        public event EventHandler? DockChanged
         {
             add => Events.AddHandler(s_dockEvent, value);
             remove => Events.RemoveHandler(s_dockEvent, value);
@@ -2053,7 +2051,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnEnabledChangedDescr))]
-        public event EventHandler EnabledChanged
+        public event EventHandler? EnabledChanged
         {
             add => Events.AddHandler(s_enabledEvent, value);
             remove => Events.RemoveHandler(s_enabledEvent, value);
@@ -2078,6 +2076,7 @@ namespace System.Windows.Forms
         [DispId((int)Ole32.DispatchID.FONT)]
         [AmbientValue(null)]
         [SRDescription(nameof(SR.ControlFontDescr))]
+        [AllowNull]
         public virtual Font Font
         {
             [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
@@ -2089,7 +2088,7 @@ namespace System.Windows.Forms
             [param: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
             set
             {
-                var local = (Font)Properties.GetObject(s_fontProperty);
+                var local = (Font?)Properties.GetObject(s_fontProperty);
                 bool localChanged;
                 if (value is null)
                 {
@@ -2156,7 +2155,7 @@ namespace System.Windows.Forms
             _dpiFonts.Add(dpi, font);
         }
 
-        private protected bool TryGetDpiFont(int dpi, out Font font)
+        private protected bool TryGetDpiFont(int dpi, [NotNullWhen(true)] out Font? font)
         {
             font = null;
             if (!User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
@@ -2185,7 +2184,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnFontChangedDescr))]
-        public event EventHandler FontChanged
+        public event EventHandler? FontChanged
         {
             add => Events.AddHandler(s_fontEvent, value);
             remove => Events.RemoveHandler(s_fontEvent, value);
@@ -2206,9 +2205,9 @@ namespace System.Windows.Forms
                     return _scaledFontWrapper.Handle;
                 }
 
-                if (TryGetExplicitlySetFont(out Font font))
+                if (TryGetExplicitlySetFont(out Font? font))
                 {
-                    FontHandleWrapper fontHandle = (FontHandleWrapper)Properties.GetObject(s_fontHandleWrapperProperty);
+                    FontHandleWrapper? fontHandle = (FontHandleWrapper?)Properties.GetObject(s_fontHandleWrapperProperty);
                     if (fontHandle is null)
                     {
                         fontHandle = new FontHandleWrapper(font);
@@ -2224,17 +2223,17 @@ namespace System.Windows.Forms
                     return _parent.FontHandle;
                 }
 
-                AmbientProperties ambient = AmbientPropertiesService;
+                AmbientProperties? ambient = AmbientPropertiesService;
 
                 if (ambient is not null && ambient.Font is not null)
                 {
-                    FontHandleWrapper fontHandle = null;
+                    FontHandleWrapper? fontHandle = null;
 
-                    Font currentAmbient = (Font)Properties.GetObject(s_currentAmbientFontProperty);
+                    Font? currentAmbient = (Font?)Properties.GetObject(s_currentAmbientFontProperty);
 
                     if (currentAmbient is not null && currentAmbient == ambient.Font)
                     {
-                        fontHandle = (FontHandleWrapper)Properties.GetObject(s_fontHandleWrapperProperty);
+                        fontHandle = (FontHandleWrapper?)Properties.GetObject(s_fontHandleWrapperProperty);
                     }
                     else
                     {
@@ -2267,7 +2266,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (TryGetExplicitlySetFont(out Font font))
+                    if (TryGetExplicitlySetFont(out Font? font))
                     {
                         fontHeight = font.Height;
                         Properties.SetInteger(s_fontHeightProperty, fontHeight);
@@ -2314,7 +2313,7 @@ namespace System.Windows.Forms
                     return color;
                 }
 
-                Control p = ParentInternal;
+                Control? p = ParentInternal;
                 if (p is not null && p.CanAccessProperties)
                 {
                     return p.ForeColor;
@@ -2329,7 +2328,7 @@ namespace System.Windows.Forms
 
                 if (c.IsEmpty)
                 {
-                    AmbientProperties ambient = AmbientPropertiesService;
+                    AmbientProperties? ambient = AmbientPropertiesService;
                     if (ambient is not null)
                     {
                         c = ambient.ForeColor;
@@ -2363,13 +2362,13 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnForeColorChangedDescr))]
-        public event EventHandler ForeColorChanged
+        public event EventHandler? ForeColorChanged
         {
             add => Events.AddHandler(s_foreColorEvent, value);
             remove => Events.RemoveHandler(s_foreColorEvent, value);
         }
 
-        private Font GetParentFont(out int fontDpi)
+        private Font? GetParentFont(out int fontDpi)
         {
             fontDpi = _deviceDpi;
             if (ParentInternal is not null && ParentInternal.CanAccessProperties)
@@ -2483,7 +2482,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlCollection controls = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                ControlCollection? controls = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
                 return controls is not null && controls.Count > 0;
             }
         }
@@ -2579,7 +2578,7 @@ namespace System.Windows.Forms
 
                 RECT temp = new RECT();
                 Region working;
-                Control parent = ParentInternal;
+                Control? parent = ParentInternal;
                 if (parent is not null)
                 {
                     while (parent.ParentInternal is not null)
@@ -2716,7 +2715,7 @@ namespace System.Windows.Forms
         public bool IsAncestorSiteInDesignMode =>
             GetSitedParentSite(this) is ISite parentSite ? parentSite.DesignMode : false;
 
-        private ISite GetSitedParentSite(Control control)
+        private ISite? GetSitedParentSite(Control control)
         {
             ArgumentNullException.ThrowIfNull(control);
             return (control.Site is not null && control.Site.DesignMode) || control.Parent is null ?
@@ -2805,7 +2804,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnLocationChangedDescr))]
-        public event EventHandler LocationChanged
+        public event EventHandler? LocationChanged
         {
             add => Events.AddHandler(s_locationEvent, value);
             remove => Events.RemoveHandler(s_locationEvent, value);
@@ -2836,7 +2835,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnMarginChangedDescr))]
-        public event EventHandler MarginChanged
+        public event EventHandler? MarginChanged
         {
             add => Events.AddHandler(s_marginChangedEvent, value);
             remove => Events.RemoveHandler(s_marginChangedEvent, value);
@@ -2969,11 +2968,12 @@ namespace System.Windows.Forms
         ///  used as a key into the ControlCollection.
         /// </summary>
         [Browsable(false)]
+        [AllowNull]
         public string Name
         {
             get
             {
-                string name = (string)Properties.GetObject(s_namePropertyProperty);
+                string? name = (string?)Properties.GetObject(s_namePropertyProperty);
                 if (string.IsNullOrEmpty(name))
                 {
                     if (Site is not null)
@@ -3009,27 +3009,29 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlParentDescr))]
-        public Control Parent
+        public Control? Parent
         {
             get => ParentInternal;
             set => ParentInternal = value;
         }
 
-        internal virtual Control ParentInternal
+        internal virtual Control? ParentInternal
         {
             get => _parent;
             set
             {
-                if (_parent != value)
+                if (_parent == value)
                 {
-                    if (value is not null)
-                    {
-                        value.Controls.Add(this);
-                    }
-                    else
-                    {
-                        _parent.Controls.Remove(this);
-                    }
+                    return;
+                }
+
+                if (value is not null)
+                {
+                    value.Controls.Add(this);
+                }
+                else if (_parent is not null)
+                {
+                    _parent.Controls.Remove(this);
                 }
             }
         }
@@ -3086,7 +3088,7 @@ namespace System.Windows.Forms
             // Control doesn't have a specific logic after a toolTip is removed
         }
 
-        private Control ReflectParent
+        private Control? ReflectParent
         {
             get => _reflectParent;
             set
@@ -3096,7 +3098,7 @@ namespace System.Windows.Forms
                     value.AddReflectChild();
                 }
 
-                Control existing = _reflectParent as Control;
+                Control? existing = _reflectParent as Control;
                 _reflectParent = value;
                 existing?.RemoveReflectChild();
             }
@@ -3111,12 +3113,12 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlRegionDescr))]
-        public Region Region
+        public Region? Region
         {
-            get => (Region)Properties.GetObject(s_regionProperty);
+            get => (Region?)Properties.GetObject(s_regionProperty);
             set
             {
-                Region oldRegion = Region;
+                Region? oldRegion = Region;
                 if (oldRegion != value)
                 {
                     oldRegion?.Dispose();
@@ -3126,7 +3128,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void SetRegion(Region region)
+        internal void SetRegion(Region? region)
         {
             Properties.SetObject(s_regionProperty, region);
 
@@ -3143,7 +3145,7 @@ namespace System.Windows.Forms
             }
 
             // If we're an ActiveX control, clone the region so it can potentially be modified
-            using Region regionCopy = IsActiveX ? ActiveXMergeRegion(region.Clone()) : null;
+            using Region? regionCopy = IsActiveX ? ActiveXMergeRegion(region.Clone()) : null;
             using var regionHandle = new Gdi32.RegionScope(regionCopy ?? region, Handle);
 
             if (User32.SetWindowRgn(this, regionHandle, User32.IsWindowVisible(this)) != 0)
@@ -3158,7 +3160,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlRegionChangedDescr))]
-        public event EventHandler RegionChanged
+        public event EventHandler? RegionChanged
         {
             add => Events.AddHandler(s_regionChangedEvent, value);
             remove => Events.RemoveHandler(s_regionChangedEvent, value);
@@ -3265,7 +3267,7 @@ namespace System.Windows.Forms
 
                 if (((RightToLeft)rightToLeft) == RightToLeft.Inherit)
                 {
-                    Control parent = ParentInternal;
+                    Control? parent = ParentInternal;
                     if (parent is not null)
                     {
                         rightToLeft = (int)parent.RightToLeft;
@@ -3304,7 +3306,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
-        public event EventHandler RightToLeftChanged
+        public event EventHandler? RightToLeftChanged
         {
             add => Events.AddHandler(s_rightToLeftEvent, value);
             remove => Events.RemoveHandler(s_rightToLeftEvent, value);
@@ -3325,7 +3327,7 @@ namespace System.Windows.Forms
         /// ToDo: Look into caching Dpi and control bounds for each Dpi to improve perf.
         /// https://github.com/dotnet/winforms/issues/5047
         /// </summary>
-        internal Font ScaledControlFont
+        internal Font? ScaledControlFont
         {
             get => _scaledControlFont;
             set
@@ -3342,13 +3344,13 @@ namespace System.Windows.Forms
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public override ISite Site
+        public override ISite? Site
         {
             get => base.Site;
             set
             {
-                AmbientProperties oldAmbients = AmbientPropertiesService;
-                AmbientProperties newAmbients = null;
+                AmbientProperties? oldAmbients = AmbientPropertiesService;
+                AmbientProperties? newAmbients = null;
 
                 if (value is not null)
                 {
@@ -3363,10 +3365,10 @@ namespace System.Windows.Forms
                     bool checkForeColor = !Properties.ContainsObject(s_foreColorProperty);
                     bool checkCursor = !Properties.ContainsObject(s_cursorProperty);
 
-                    Font oldFont = null;
+                    Font? oldFont = null;
                     Color oldBackColor = Color.Empty;
                     Color oldForeColor = Color.Empty;
-                    Cursor oldCursor = null;
+                    Cursor? oldCursor = null;
 
                     if (checkFont)
                     {
@@ -3391,7 +3393,7 @@ namespace System.Windows.Forms
                     Properties.SetObject(s_ambientPropertiesServiceProperty, newAmbients);
                     base.Site = value;
 
-                    if (checkFont && !oldFont.Equals(Font))
+                    if (checkFont && !oldFont!.Equals(Font))
                     {
                         OnFontChanged(EventArgs.Empty);
                     }
@@ -3406,7 +3408,7 @@ namespace System.Windows.Forms
                         OnBackColorChanged(EventArgs.Empty);
                     }
 
-                    if (checkCursor && oldCursor.Equals(Cursor))
+                    if (checkCursor && oldCursor!.Equals(Cursor))
                     {
                         OnCursorChanged(EventArgs.Empty);
                     }
@@ -3433,7 +3435,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnSizeChangedDescr))]
-        public event EventHandler SizeChanged
+        public event EventHandler? SizeChanged
         {
             add => Events.AddHandler(s_sizeEvent, value);
             remove => Events.RemoveHandler(s_sizeEvent, value);
@@ -3466,7 +3468,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnTabIndexChangedDescr))]
-        public event EventHandler TabIndexChanged
+        public event EventHandler? TabIndexChanged
         {
             add => Events.AddHandler(s_tabIndexEvent, value);
             remove => Events.RemoveHandler(s_tabIndexEvent, value);
@@ -3513,7 +3515,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnTabStopChangedDescr))]
-        public event EventHandler TabStopChanged
+        public event EventHandler? TabStopChanged
         {
             add => Events.AddHandler(s_tabStopEvent, value);
             remove => Events.RemoveHandler(s_tabStopEvent, value);
@@ -3525,7 +3527,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag
+        public object? Tag
         {
             get => Properties.GetObject(s_userDataProperty);
             set => Properties.SetObject(s_userDataProperty, value);
@@ -3539,9 +3541,10 @@ namespace System.Windows.Forms
         [Bindable(true)]
         [DispId((int)Ole32.DispatchID.TEXT)]
         [SRDescription(nameof(SR.ControlTextDescr))]
+        [AllowNull]
         public virtual string Text
         {
-            get => CacheTextInternal ? _text ?? "" : WindowText;
+            get => CacheTextInternal ? _text ?? string.Empty : WindowText;
             set
             {
                 if (value is null)
@@ -3564,9 +3567,9 @@ namespace System.Windows.Forms
 
                 if (IsMnemonicsListenerAxSourced)
                 {
-                    for (Control ctl = this; ctl is not null; ctl = ctl.ParentInternal)
+                    for (Control? ctl = this; ctl is not null; ctl = ctl.ParentInternal)
                     {
-                        ActiveXImpl activeXImpl = (ActiveXImpl)ctl.Properties.GetObject(s_activeXImplProperty);
+                        ActiveXImpl? activeXImpl = (ActiveXImpl?)ctl.Properties.GetObject(s_activeXImplProperty);
                         if (activeXImpl is not null)
                         {
                             activeXImpl.UpdateAccelTable();
@@ -3579,7 +3582,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnTextChangedDescr))]
-        public event EventHandler TextChanged
+        public event EventHandler? TextChanged
         {
             add => Events.AddHandler(s_textEvent, value);
             remove => Events.RemoveHandler(s_textEvent, value);
@@ -3609,13 +3612,13 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlTopLevelControlDescr))]
-        public Control TopLevelControl => TopLevelControlInternal;
+        public Control? TopLevelControl => TopLevelControlInternal;
 
-        internal Control TopLevelControlInternal
+        internal Control? TopLevelControlInternal
         {
             get
             {
-                Control control = this;
+                Control? control = this;
                 while (control is not null && !control.GetTopLevel())
                 {
                     control = control.ParentInternal;
@@ -3640,7 +3643,7 @@ namespace System.Windows.Forms
         }
 
         // This auto upgraded v1 client to per-process doublebuffering logic
-        private BufferedGraphicsContext BufferContext => BufferedGraphicsManager.Current;
+        private static BufferedGraphicsContext BufferContext => BufferedGraphicsManager.Current;
 
         /// <summary>
         ///  Indicates whether the user interface is in a state to show or hide keyboard
@@ -3778,7 +3781,7 @@ namespace System.Windows.Forms
                 if (GetState(States.UseWaitCursor) != value)
                 {
                     SetState(States.UseWaitCursor, value);
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                    ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
                     if (controlsCollection is not null)
                     {
@@ -3839,7 +3842,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlVersionInfo info = (ControlVersionInfo)Properties.GetObject(s_controlVersionInfoProperty);
+                ControlVersionInfo? info = (ControlVersionInfo?)Properties.GetObject(s_controlVersionInfoProperty);
                 if (info is null)
                 {
                     info = new ControlVersionInfo(this);
@@ -3881,7 +3884,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnVisibleChangedDescr))]
-        public event EventHandler VisibleChanged
+        public event EventHandler? VisibleChanged
         {
             add => Events.AddHandler(s_visibleEvent, value);
             remove => Events.RemoveHandler(s_visibleEvent, value);
@@ -4033,7 +4036,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ControlOnClickDescr))]
-        public event EventHandler Click
+        public event EventHandler? Click
         {
             add => Events.AddHandler(s_clickEvent, value);
             remove => Events.RemoveHandler(s_clickEvent, value);
@@ -4046,7 +4049,7 @@ namespace System.Windows.Forms
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SRDescription(nameof(SR.ControlOnControlAddedDescr))]
-        public event ControlEventHandler ControlAdded
+        public event ControlEventHandler? ControlAdded
         {
             add => Events.AddHandler(s_controlAddedEvent, value);
             remove => Events.RemoveHandler(s_controlAddedEvent, value);
@@ -4059,7 +4062,7 @@ namespace System.Windows.Forms
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SRDescription(nameof(SR.ControlOnControlRemovedDescr))]
-        public event ControlEventHandler ControlRemoved
+        public event ControlEventHandler? ControlRemoved
         {
             add => Events.AddHandler(s_controlRemovedEvent, value);
             remove => Events.RemoveHandler(s_controlRemovedEvent, value);
@@ -4067,7 +4070,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatDragDrop))]
         [SRDescription(nameof(SR.ControlOnDragDropDescr))]
-        public event DragEventHandler DragDrop
+        public event DragEventHandler? DragDrop
         {
             add => Events.AddHandler(s_dragDropEvent, value);
             remove => Events.RemoveHandler(s_dragDropEvent, value);
@@ -4075,7 +4078,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatDragDrop))]
         [SRDescription(nameof(SR.ControlOnDragEnterDescr))]
-        public event DragEventHandler DragEnter
+        public event DragEventHandler? DragEnter
         {
             add => Events.AddHandler(s_dragEnterEvent, value);
             remove => Events.RemoveHandler(s_dragEnterEvent, value);
@@ -4083,7 +4086,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatDragDrop))]
         [SRDescription(nameof(SR.ControlOnDragOverDescr))]
-        public event DragEventHandler DragOver
+        public event DragEventHandler? DragOver
         {
             add => Events.AddHandler(s_dragOverEvent, value);
             remove => Events.RemoveHandler(s_dragOverEvent, value);
@@ -4091,7 +4094,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatDragDrop))]
         [SRDescription(nameof(SR.ControlOnDragLeaveDescr))]
-        public event EventHandler DragLeave
+        public event EventHandler? DragLeave
         {
             add => Events.AddHandler(s_dragLeaveEvent, value);
             remove => Events.RemoveHandler(s_dragLeaveEvent, value);
@@ -4099,7 +4102,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatDragDrop))]
         [SRDescription(nameof(SR.ControlOnGiveFeedbackDescr))]
-        public event GiveFeedbackEventHandler GiveFeedback
+        public event GiveFeedbackEventHandler? GiveFeedback
         {
             add => Events.AddHandler(s_giveFeedbackEvent, value);
             remove => Events.RemoveHandler(s_giveFeedbackEvent, value);
@@ -4112,7 +4115,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SRDescription(nameof(SR.ControlOnCreateHandleDescr))]
-        public event EventHandler HandleCreated
+        public event EventHandler? HandleCreated
         {
             add => Events.AddHandler(s_handleCreatedEvent, value);
             remove => Events.RemoveHandler(s_handleCreatedEvent, value);
@@ -4125,7 +4128,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SRDescription(nameof(SR.ControlOnDestroyHandleDescr))]
-        public event EventHandler HandleDestroyed
+        public event EventHandler? HandleDestroyed
         {
             add => Events.AddHandler(s_handleDestroyedEvent, value);
             remove => Events.RemoveHandler(s_handleDestroyedEvent, value);
@@ -4133,7 +4136,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ControlOnHelpDescr))]
-        public event HelpEventHandler HelpRequested
+        public event HelpEventHandler? HelpRequested
         {
             add => Events.AddHandler(s_helpRequestedEvent, value);
             remove => Events.RemoveHandler(s_helpRequestedEvent, value);
@@ -4143,7 +4146,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SRDescription(nameof(SR.ControlOnInvalidateDescr))]
-        public event InvalidateEventHandler Invalidated
+        public event InvalidateEventHandler? Invalidated
         {
             add => Events.AddHandler(s_invalidatedEvent, value);
             remove => Events.RemoveHandler(s_invalidatedEvent, value);
@@ -4187,7 +4190,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
-        public event EventHandler PaddingChanged
+        public event EventHandler? PaddingChanged
         {
             add => Events.AddHandler(s_paddingChangedEvent, value);
             remove => Events.RemoveHandler(s_paddingChangedEvent, value);
@@ -4195,7 +4198,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ControlOnPaintDescr))]
-        public event PaintEventHandler Paint
+        public event PaintEventHandler? Paint
         {
             add => Events.AddHandler(s_paintEvent, value);
             remove => Events.RemoveHandler(s_paintEvent, value);
@@ -4203,7 +4206,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatDragDrop))]
         [SRDescription(nameof(SR.ControlOnQueryContinueDragDescr))]
-        public event QueryContinueDragEventHandler QueryContinueDrag
+        public event QueryContinueDragEventHandler? QueryContinueDrag
         {
             add => Events.AddHandler(s_queryContinueDragEvent, value);
             remove => Events.RemoveHandler(s_queryContinueDragEvent, value);
@@ -4211,7 +4214,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ControlOnQueryAccessibilityHelpDescr))]
-        public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp
+        public event QueryAccessibilityHelpEventHandler? QueryAccessibilityHelp
         {
             add => Events.AddHandler(s_queryAccessibilityHelpEvent, value);
             remove => Events.RemoveHandler(s_queryAccessibilityHelpEvent, value);
@@ -4222,7 +4225,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
-        public event EventHandler DoubleClick
+        public event EventHandler? DoubleClick
         {
             add => Events.AddHandler(s_doubleClickEvent, value);
             remove => Events.RemoveHandler(s_doubleClickEvent, value);
@@ -4233,7 +4236,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatFocus))]
         [SRDescription(nameof(SR.ControlOnEnterDescr))]
-        public event EventHandler Enter
+        public event EventHandler? Enter
         {
             add => Events.AddHandler(s_enterEvent, value);
             remove => Events.RemoveHandler(s_enterEvent, value);
@@ -4246,7 +4249,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnGotFocusDescr))]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler GotFocus
+        public event EventHandler? GotFocus
         {
             add => Events.AddHandler(s_gotFocusEvent, value);
             remove => Events.RemoveHandler(s_gotFocusEvent, value);
@@ -4257,7 +4260,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatKey))]
         [SRDescription(nameof(SR.ControlOnKeyDownDescr))]
-        public event KeyEventHandler KeyDown
+        public event KeyEventHandler? KeyDown
         {
             add => Events.AddHandler(s_keyDownEvent, value);
             remove => Events.RemoveHandler(s_keyDownEvent, value);
@@ -4268,7 +4271,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatKey))]
         [SRDescription(nameof(SR.ControlOnKeyPressDescr))]
-        public event KeyPressEventHandler KeyPress
+        public event KeyPressEventHandler? KeyPress
         {
             add => Events.AddHandler(s_keyPressEvent, value);
             remove => Events.RemoveHandler(s_keyPressEvent, value);
@@ -4279,7 +4282,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatKey))]
         [SRDescription(nameof(SR.ControlOnKeyUpDescr))]
-        public event KeyEventHandler KeyUp
+        public event KeyEventHandler? KeyUp
         {
             add => Events.AddHandler(s_keyUpEvent, value);
             remove => Events.RemoveHandler(s_keyUpEvent, value);
@@ -4287,7 +4290,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnLayoutDescr))]
-        public event LayoutEventHandler Layout
+        public event LayoutEventHandler? Layout
         {
             add => Events.AddHandler(s_layoutEvent, value);
             remove => Events.RemoveHandler(s_layoutEvent, value);
@@ -4298,7 +4301,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatFocus))]
         [SRDescription(nameof(SR.ControlOnLeaveDescr))]
-        public event EventHandler Leave
+        public event EventHandler? Leave
         {
             add => Events.AddHandler(s_leaveEvent, value);
             remove => Events.RemoveHandler(s_leaveEvent, value);
@@ -4311,7 +4314,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnLostFocusDescr))]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler LostFocus
+        public event EventHandler? LostFocus
         {
             add => Events.AddHandler(s_lostFocusEvent, value);
             remove => Events.RemoveHandler(s_lostFocusEvent, value);
@@ -4322,7 +4325,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ControlOnMouseClickDescr))]
-        public event MouseEventHandler MouseClick
+        public event MouseEventHandler? MouseClick
         {
             add => Events.AddHandler(s_mouseClickEvent, value);
             remove => Events.RemoveHandler(s_mouseClickEvent, value);
@@ -4333,7 +4336,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ControlOnMouseDoubleClickDescr))]
-        public event MouseEventHandler MouseDoubleClick
+        public event MouseEventHandler? MouseDoubleClick
         {
             add => Events.AddHandler(s_mouseDoubleClickEvent, value);
             remove => Events.RemoveHandler(s_mouseDoubleClickEvent, value);
@@ -4344,7 +4347,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ControlOnMouseCaptureChangedDescr))]
-        public event EventHandler MouseCaptureChanged
+        public event EventHandler? MouseCaptureChanged
         {
             add => Events.AddHandler(s_mouseCaptureChangedEvent, value);
             remove => Events.RemoveHandler(s_mouseCaptureChangedEvent, value);
@@ -4356,7 +4359,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ControlOnMouseDownDescr))]
-        public event MouseEventHandler MouseDown
+        public event MouseEventHandler? MouseDown
         {
             add => Events.AddHandler(s_mouseDownEvent, value);
             remove => Events.RemoveHandler(s_mouseDownEvent, value);
@@ -4367,7 +4370,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ControlOnMouseEnterDescr))]
-        public event EventHandler MouseEnter
+        public event EventHandler? MouseEnter
         {
             add => Events.AddHandler(s_mouseEnterEvent, value);
             remove => Events.RemoveHandler(s_mouseEnterEvent, value);
@@ -4378,7 +4381,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ControlOnMouseLeaveDescr))]
-        public event EventHandler MouseLeave
+        public event EventHandler? MouseLeave
         {
             add => Events.AddHandler(s_mouseLeaveEvent, value);
             remove => Events.RemoveHandler(s_mouseLeaveEvent, value);
@@ -4391,7 +4394,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnDpiChangedBeforeParentDescr))]
-        public event EventHandler DpiChangedBeforeParent
+        public event EventHandler? DpiChangedBeforeParent
         {
             add => Events.AddHandler(s_dpiChangedBeforeParentEvent, value);
             remove => Events.RemoveHandler(s_dpiChangedBeforeParentEvent, value);
@@ -4404,7 +4407,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnDpiChangedAfterParentDescr))]
-        public event EventHandler DpiChangedAfterParent
+        public event EventHandler? DpiChangedAfterParent
         {
             add => Events.AddHandler(s_dpiChangedAfterParentEvent, value);
             remove => Events.RemoveHandler(s_dpiChangedAfterParentEvent, value);
@@ -4415,7 +4418,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ControlOnMouseHoverDescr))]
-        public event EventHandler MouseHover
+        public event EventHandler? MouseHover
         {
             add => Events.AddHandler(s_mouseHoverEvent, value);
             remove => Events.RemoveHandler(s_mouseHoverEvent, value);
@@ -4426,7 +4429,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
-        public event MouseEventHandler MouseMove
+        public event MouseEventHandler? MouseMove
         {
             add => Events.AddHandler(s_mouseMoveEvent, value);
             remove => Events.RemoveHandler(s_mouseMoveEvent, value);
@@ -4437,7 +4440,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ControlOnMouseUpDescr))]
-        public event MouseEventHandler MouseUp
+        public event MouseEventHandler? MouseUp
         {
             add => Events.AddHandler(s_mouseUpEvent, value);
             remove => Events.RemoveHandler(s_mouseUpEvent, value);
@@ -4450,7 +4453,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnMouseWheelDescr))]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event MouseEventHandler MouseWheel
+        public event MouseEventHandler? MouseWheel
         {
             add => Events.AddHandler(s_mouseWheelEvent, value);
             remove => Events.RemoveHandler(s_mouseWheelEvent, value);
@@ -4461,7 +4464,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnMoveDescr))]
-        public event EventHandler Move
+        public event EventHandler? Move
         {
             add => Events.AddHandler(s_moveEvent, value);
             remove => Events.RemoveHandler(s_moveEvent, value);
@@ -4472,7 +4475,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatKey))]
         [SRDescription(nameof(SR.PreviewKeyDownDescr))]
-        public event PreviewKeyDownEventHandler PreviewKeyDown
+        public event PreviewKeyDownEventHandler? PreviewKeyDown
         {
             add => Events.AddHandler(s_previewKeyDownEvent, value);
             remove => Events.RemoveHandler(s_previewKeyDownEvent, value);
@@ -4484,7 +4487,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnResizeDescr))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler Resize
+        public event EventHandler? Resize
         {
             add => Events.AddHandler(s_resizeEvent, value);
             remove => Events.RemoveHandler(s_resizeEvent, value);
@@ -4492,7 +4495,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ControlOnChangeUICuesDescr))]
-        public event UICuesEventHandler ChangeUICues
+        public event UICuesEventHandler? ChangeUICues
         {
             add => Events.AddHandler(s_changeUICuesEvent, value);
             remove => Events.RemoveHandler(s_changeUICuesEvent, value);
@@ -4500,7 +4503,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ControlOnStyleChangedDescr))]
-        public event EventHandler StyleChanged
+        public event EventHandler? StyleChanged
         {
             add => Events.AddHandler(s_styleChangedEvent, value);
             remove => Events.RemoveHandler(s_styleChangedEvent, value);
@@ -4508,7 +4511,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ControlOnSystemColorsChangedDescr))]
-        public event EventHandler SystemColorsChanged
+        public event EventHandler? SystemColorsChanged
         {
             add => Events.AddHandler(s_systemColorsChangedEvent, value);
             remove => Events.RemoveHandler(s_systemColorsChangedEvent, value);
@@ -4519,7 +4522,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatFocus))]
         [SRDescription(nameof(SR.ControlOnValidatingDescr))]
-        public event CancelEventHandler Validating
+        public event CancelEventHandler? Validating
         {
             add => Events.AddHandler(s_validatingEvent, value);
             remove => Events.RemoveHandler(s_validatingEvent, value);
@@ -4530,7 +4533,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatFocus))]
         [SRDescription(nameof(SR.ControlOnValidatedDescr))]
-        public event EventHandler Validated
+        public event EventHandler? Validated
         {
             add => Events.AddHandler(s_validatedEvent, value);
             remove => Events.RemoveHandler(s_validatedEvent, value);
@@ -4591,7 +4594,7 @@ namespace System.Windows.Forms
         ///  Assigns a new parent control. Sends out the appropriate property change
         ///  notifications for properties that are affected by the change of parent.
         /// </summary>
-        internal virtual void AssignParent(Control value)
+        internal virtual void AssignParent(Control? value)
         {
             // Adopt the parent's required scaling bits
             if (value is not null)
@@ -4660,7 +4663,6 @@ namespace System.Windows.Forms
                     // and invoking the property would just create the binding manager, which
                     // we don't need.  We just blindly notify that the binding manager has
                     // changed, and if anyone cares, they will do the comparison at that time.
-                    //
                     OnBindingContextChanged(EventArgs.Empty);
                 }
             }
@@ -4679,7 +4681,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnParentChangedDescr))]
-        public event EventHandler ParentChanged
+        public event EventHandler? ParentChanged
         {
             add => Events.AddHandler(s_parentEvent, value);
             remove => Events.RemoveHandler(s_parentEvent, value);
@@ -4704,7 +4706,7 @@ namespace System.Windows.Forms
         /// </returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public IAsyncResult BeginInvoke(Action method) => BeginInvoke(method, null);
-
+#nullable disable
         /// <summary>
         ///  Executes the given delegate on the thread that owns this Control's
         ///  underlying window handle.  The delegate is called asynchronously and this
@@ -5805,7 +5807,7 @@ namespace System.Windows.Forms
             return new Rectangle(sx, sy, sw, sh);
         }
 
-        private MouseButtons GetXButton(int wparam)
+        private static MouseButtons GetXButton(int wparam)
         {
             switch (wparam)
             {
@@ -6501,7 +6503,7 @@ namespace System.Windows.Forms
         ///  When the invoke request comes from this thread, there won't be an ExecutionContext so we just invoke
         ///  the callback as is.
         /// </summary>
-        private void InvokeMarshaledCallback(ThreadMethodEntry tme)
+        private static void InvokeMarshaledCallback(ThreadMethodEntry tme)
         {
             if (tme._executionContext is not null)
             {
@@ -6871,7 +6873,7 @@ namespace System.Windows.Forms
         }
 
         // Checks if this is a container control and will be scaled by parent.
-        private bool IsScaledByParent(Control control)
+        private static bool IsScaledByParent(Control control)
         {
             Control parentControl = control.Parent;
             while (parentControl is not null and not ContainerControl)
@@ -6935,7 +6937,7 @@ namespace System.Windows.Forms
             AdjustWindowRectExForDpi(ref rect, style, bMenu, exStyle, _deviceDpi);
         }
 
-        private void AdjustWindowRectExForDpi(ref RECT rect, int style, bool bMenu, int exStyle, int dpi)
+        private static void AdjustWindowRectExForDpi(ref RECT rect, int style, bool bMenu, int exStyle, int dpi)
         {
             if ((DpiHelper.IsPerMonitorV2Awareness || DpiHelper.IsScalingRequired) && OsVersion.IsWindows10_1703OrGreater)
             {
@@ -7038,7 +7040,7 @@ namespace System.Windows.Forms
         ///  buffer needed.  If a buffer was passed, it fills the buffer.
         ///  If the passed buffer is not long enough it will return -1.
         /// </summary>
-        private void MarshalStringToMessage(string value, ref Message m)
+        private static void MarshalStringToMessage(string value, ref Message m)
         {
             if (m.LParamInternal == 0)
             {
@@ -9712,7 +9714,7 @@ namespace System.Windows.Forms
         {
             ((PaintEventHandler)Events[s_paintEvent])?.Invoke(this, e);
         }
-
+#nullable enable
         private void RemovePendingMessages(User32.WM msgMin, User32.WM msgMax)
         {
             if (!IsDisposed)
@@ -9839,7 +9841,7 @@ namespace System.Windows.Forms
 
                 HandleRef parentHandle = new HandleRef(this, User32.GetParent(this));
 
-                Control[] controlSnapshot = null;
+                Control?[]? controlSnapshot = null;
                 SetState(States.Recreate, true);
 
                 try
@@ -9851,7 +9853,7 @@ namespace System.Windows.Forms
                     // This behavior can be overridden in OnParentHandleRecreat* and is in ListView.
 
                     //fish out control collection w/o demand creating one.
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                    ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
                     if (controlsCollection is not null && controlsCollection.Count > 0)
                     {
                         controlSnapshot = new Control[controlsCollection.Count];
@@ -9916,7 +9918,7 @@ namespace System.Windows.Forms
                     {
                         for (int i = 0; i < controlSnapshot.Length; i++)
                         {
-                            Control childControl = controlSnapshot[i];
+                            Control? childControl = controlSnapshot[i];
                             if (childControl is not null && childControl.IsHandleCreated)
                             {
                                 // Re-parent the control.
@@ -10117,7 +10119,7 @@ namespace System.Windows.Forms
             if (!performLayout)
             {
                 CommonProperties.xClearPreferredSizeCache(this);
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
@@ -10156,7 +10158,7 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.ToString(CultureInfo.CurrentCulture));
                         if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
                         {
-                            throw Marshal.GetExceptionForHR((int)n);
+                            throw Marshal.GetExceptionForHR((int)n)!;
                         }
                     }
                     else
@@ -10168,7 +10170,7 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.ToString(CultureInfo.InvariantCulture));
                         if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_NOTREGISTERED)
                         {
-                            throw Marshal.GetExceptionForHR((int)n);
+                            throw Marshal.GetExceptionForHR((int)n)!;
                         }
                     }
 
@@ -10229,7 +10231,7 @@ namespace System.Windows.Forms
                 ScaleControl(factor, factor, this);
                 if (ScaleChildren)
                 {
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                    ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
                     if (controlsCollection is not null)
                     {
                         // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -10297,7 +10299,7 @@ namespace System.Windows.Forms
         {
             if (ScaleChildren)
             {
-                var controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                var controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
                 if (controlsCollection is not null)
                 {
@@ -10542,7 +10544,7 @@ namespace System.Windows.Forms
 
                 SetBounds(sx, sy, sw, sh, BoundsSpecified.All);
 
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
                 if (controlsCollection is not null)
                 {
@@ -10594,7 +10596,7 @@ namespace System.Windows.Forms
         // used by Form
         protected virtual void Select(bool directed, bool forward)
         {
-            IContainerControl c = GetContainerControl();
+            IContainerControl? c = GetContainerControl();
 
             if (c is not null)
             {
@@ -10605,9 +10607,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Selects the next control following ctl.
         /// </summary>
-        public bool SelectNextControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
+        public bool SelectNextControl(Control? ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
         {
-            Control nextSelectableControl = GetNextSelectableControl(ctl, forward, tabStopOnly, nested, wrap);
+            Control? nextSelectableControl = GetNextSelectableControl(ctl, forward, tabStopOnly, nested, wrap);
             if (nextSelectableControl is not null)
             {
                 nextSelectableControl.Select(true, forward);
@@ -10619,16 +10621,16 @@ namespace System.Windows.Forms
             }
         }
 
-        private Control GetNextSelectableControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
+        private Control? GetNextSelectableControl(Control? ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
         {
             if (!Contains(ctl) ||
-                (!nested && ctl._parent != this))
+                (!nested && ctl?._parent != this))
             {
                 ctl = null;
             }
 
             bool alreadyWrapped = false;
-            Control start = ctl;
+            Control? start = ctl;
             do
             {
                 ctl = GetNextControl(ctl, forward);
@@ -10673,10 +10675,9 @@ namespace System.Windows.Forms
         {
             //           We want to move focus away from hidden controls, so this
             //           function was added.
-            //
             if (ContainsFocus && ParentInternal is not null)
             {
-                IContainerControl c = ParentInternal.GetContainerControl();
+                IContainerControl? c = ParentInternal.GetContainerControl();
 
                 if (c is not null)
                 {
@@ -10830,7 +10831,6 @@ namespace System.Windows.Forms
                                 flags |= User32.SWP.NOSIZE;
                             }
 
-                            //
                             // Give a chance for derived controls to do what they want, just before we resize.
                             OnBoundsUpdate(x, y, width, height);
 
@@ -10846,15 +10846,8 @@ namespace System.Windows.Forms
                             // NOTE: SetWindowPos causes a WM_WINDOWPOSCHANGED which is processed
                             // synchonously so we effectively end up in UpdateBounds immediately following
                             // SetWindowPos.
-                            // In case of MDI child windows, UpdateBounds() is made no-op with respect
-                            // to bounds due to incorrect size returned by GetClientRect() method when
-                            // UpdateBounds() is triggered as a result of DPI_CHNAGED event. As a workaround,
-                            // we would be explicitly calling UpdateBounds(x, y, width, height).
-
-                            if (this is Form form && form.IsMdiChild)
-                            {
-                                UpdateBounds(x, y, width, height);
-                            }
+                            //
+                            //UpdateBounds(x, y, width, height);
                         }
                     }
                 }
@@ -11178,7 +11171,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static AutoValidate GetAutoValidateForControl(Control control)
         {
-            ContainerControl parent = control.ParentContainerControl;
+            ContainerControl? parent = control.ParentContainerControl;
             return (parent is not null) ? parent.AutoValidate : AutoValidate.EnablePreventFocusChange;
         }
 
@@ -11218,7 +11211,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeCursor()
         {
-            object cursor = Properties.GetObject(s_cursorProperty, out bool found);
+            object? cursor = Properties.GetObject(s_cursorProperty, out bool found);
             return (found && cursor is not null);
         }
 
@@ -11247,7 +11240,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeFont()
         {
-            object font = Properties.GetObject(s_fontProperty, out bool found);
+            object? font = Properties.GetObject(s_fontProperty, out bool found);
             return (found && font is not null);
         }
 
@@ -11452,9 +11445,9 @@ namespace System.Windows.Forms
         /// <summary>
         /// Retrieve Font from propertybag. This is the FOnt that was explicitly set on control by the application.
         /// </summary>
-        internal bool TryGetExplicitlySetFont(out Font localFont)
+        internal bool TryGetExplicitlySetFont([NotNullWhen(true)] out Font? localFont)
         {
-            localFont = (Font)Properties.GetObject(s_fontProperty);
+            localFont = (Font?)Properties.GetObject(s_fontProperty);
 
             return localFont is not null;
         }
@@ -11522,36 +11515,16 @@ namespace System.Windows.Forms
             int clientWidth = rect.right;
             int clientHeight = rect.bottom;
             User32.GetWindowRect(new HandleRef(_window, InternalHandle), ref rect);
-
-            int width = rect.right - rect.left;
-            int height = rect.bottom - rect.top;
-
             if (!GetTopLevel())
             {
                 User32.MapWindowPoints(IntPtr.Zero, User32.GetParent(new HandleRef(_window, InternalHandle)), ref rect);
-
-                // When moving the Form to a new monitor with different DPI settings, Windows changing the Dpi
-                // on the handle and sending DPI changed message to the Form are not in sync. Due to this,
-                // methods User32.GetClientRect are returning the incorrect value. User32.GetClientRect method is not
-                // accurate with respect to adornments metrics, their Dpi and current layout transaction. Hence this work around.
-
-                // UpdateBounds() is expected to be called whenever there is WINDOWSPOSITION_CHANGED message is triggered.
-                // We will be calling UpdateBounds(x, y, width, height) explicitly, instead, for MDI child windows if we
-                // had to change the size. For every other control, bounds are changed here.
-                if (this is Form form && form.IsMdiChild)
-                {
-                    clientWidth = form.ClientRectangle.Width;
-                    clientHeight = form.ClientRectangle.Height;
-                    width = form.Bounds.Width;
-                    height = form.Bounds.Height;
-                }
             }
 
             UpdateBounds(
                 rect.left,
                 rect.top,
-                width,
-                height,
+                rect.right - rect.left,
+                rect.bottom - rect.top,
                 clientWidth,
                 clientHeight);
         }
@@ -11927,7 +11900,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void WmContextMenu(ref Message m, Control sourceControl)
         {
-            var contextMenuStrip = (ContextMenuStrip)Properties.GetObject(s_contextMenuStripProperty);
+            var contextMenuStrip = (ContextMenuStrip?)Properties.GetObject(s_contextMenuStripProperty);
             if (contextMenuStrip is not null)
             {
                 int x = PARAM.SignedLOWORD(m.LParamInternal);
@@ -12025,7 +11998,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmGetControlName(ref Message m)
         {
-            string name;
+            string? name;
 
             if (Site is not null)
             {
@@ -12049,7 +12022,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmGetControlType(ref Message m)
         {
-            string type = GetType().AssemblyQualifiedName;
+            string? type = GetType().AssemblyQualifiedName;
             MarshalStringToMessage(type, ref m);
         }
 
@@ -12073,7 +12046,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            AccessibleObject accessibleObject = GetAccessibilityObject((int)m.LParamInternal);
+            AccessibleObject? accessibleObject = GetAccessibilityObject((int)m.LParamInternal);
 
             // See "How to Handle WM_GETOBJECT" in MSDN.
             if (accessibleObject is null)
@@ -12228,7 +12201,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmKillFocus(ref Message m)
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::WmKillFocus - " + Name);
+            Debug.WriteLineIf(s_focusTracing!.TraceVerbose, "Control::WmKillFocus - " + Name);
             WmImeKillFocus();
             DefWndProc(ref m);
             InvokeLostFocus(this, EventArgs.Empty);
@@ -12348,7 +12321,7 @@ namespace System.Windows.Forms
 
             var factor = (float)_deviceDpi / fontDpi;
 
-            if (!TryGetDpiFont(_deviceDpi, out Font fontForDpi))
+            if (!TryGetDpiFont(_deviceDpi, out Font? fontForDpi))
             {
                 fontForDpi = localFont.WithSize(localFont.Size * factor);
                 AddToDpiFonts(_deviceDpi, fontForDpi);
@@ -12569,7 +12542,7 @@ namespace System.Windows.Forms
             if (!ReflectMessage(p, ref m))
             {
                 // Additional Check For Control .... TabControl truncates the Hwnd value...
-                IntPtr handle = _window.GetHandleFromWindowId((short)PARAM.LOWORD(m.WParamInternal));
+                IntPtr handle = NativeWindow.GetHandleFromWindowId((short)PARAM.LOWORD(m.WParamInternal));
                 if (handle != IntPtr.Zero)
                 {
                     Control control = FromHandle(handle);
@@ -12609,9 +12582,9 @@ namespace System.Windows.Forms
             bool usingBeginPaint = dc.IsNull;
             using var paintScope = usingBeginPaint ? new User32.BeginPaintScope(Handle) : default;
 
-            if (dc.IsNull)
+            if (usingBeginPaint)
             {
-                dc = paintScope.HDC;
+                dc = paintScope!.HDC;
                 clip = paintScope.PaintStruct.rcPaint;
             }
             else
@@ -12626,8 +12599,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            BufferedGraphics bufferedGraphics = null;
-            PaintEventArgs pevent = null;
+            BufferedGraphics? bufferedGraphics = null;
+            PaintEventArgs? pevent = null;
 
             using var paletteScope = doubleBuffered || usingBeginPaint
                 ? Gdi32.SelectPaletteScope.HalftonePalette(dc, forceBackground: false, realizePalette: false)
@@ -12732,7 +12705,7 @@ namespace System.Windows.Forms
 
         private void WmQueryNewPalette(ref Message m)
         {
-            Debug.WriteLineIf(s_paletteTracing.TraceVerbose, $"{Handle}: WM_QUERYNEWPALETTE");
+            Debug.WriteLineIf(s_paletteTracing!.TraceVerbose, $"{Handle}: WM_QUERYNEWPALETTE");
 
             using var dc = new User32.GetDcScope(Handle);
 
@@ -12827,12 +12800,12 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmSetFocus(ref Message m)
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, $"Control::WmSetFocus - {Name}");
+            Debug.WriteLineIf(s_focusTracing!.TraceVerbose, $"Control::WmSetFocus - {Name}");
             WmImeSetFocus();
 
             if (!HostedInWin32DialogManager)
             {
-                IContainerControl c = GetContainerControl();
+                IContainerControl? c = GetContainerControl();
                 if (c is not null)
                 {
                     bool activateSucceed;
@@ -12968,7 +12941,6 @@ namespace System.Windows.Forms
             if (((User32.UISF)PARAM.HIWORD(m.WParamInternal) & User32.UISF.HIDEACCEL) != 0)
             {
                 // yes, clear means show.  nice api, guys.
-                //
                 bool showKeyboard = (cmd == User32.UIS.CLEAR);
 
                 if (showKeyboard != keyboard || !keyboardInitialized)
@@ -13123,7 +13095,7 @@ namespace System.Windows.Forms
                 case User32.WM.SYSCOMMAND:
                     if ((User32.SC)(m.WParamInternal & 0xFFF0) == User32.SC.KEYMENU)
                     {
-                        Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.WndProc processing {m}");
+                        Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.WndProc processing {m}");
 
                         if (ToolStripManager.ProcessMenuKey(ref m))
                         {
@@ -13410,7 +13382,7 @@ namespace System.Windows.Forms
         ///  Called when an exception occurs in dispatching messages through
         ///  the main window procedure.
         /// </summary>
-        private void WndProcException(Exception e)
+        private static void WndProcException(Exception e)
         {
             Application.OnThreadException(e);
         }
@@ -13419,7 +13391,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
                 if (controlsCollection is null)
                 {
                     return ArrangedElementCollection.Empty;
@@ -13429,7 +13401,7 @@ namespace System.Windows.Forms
             }
         }
 
-        IArrangedElement IArrangedElement.Container
+        IArrangedElement? IArrangedElement.Container
         {
             get
             {
@@ -13443,7 +13415,7 @@ namespace System.Windows.Forms
             get { return GetState(States.Visible); }
         }
 
-        void IArrangedElement.PerformLayout(IArrangedElement affectedElement, string affectedProperty)
+        void IArrangedElement.PerformLayout(IArrangedElement affectedElement, string? affectedProperty)
         {
             PerformLayout(new LayoutEventArgs(affectedElement, affectedProperty));
         }
@@ -13456,10 +13428,10 @@ namespace System.Windows.Forms
         // CAREFUL: This really calls SetBoundsCore, not SetBounds.
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified)
         {
-            ISite site = Site;
-            IComponentChangeService changeService = null;
-            PropertyDescriptor sizeProperty = null;
-            PropertyDescriptor locationProperty = null;
+            ISite? site = Site;
+            IComponentChangeService? changeService = null;
+            PropertyDescriptor? sizeProperty = null;
+            PropertyDescriptor? locationProperty = null;
             bool sizeChanged = false;
             bool locationChanged = false;
 
@@ -13473,7 +13445,7 @@ namespace System.Windows.Forms
                 {
                     if (sizeProperty is not null && !sizeProperty.IsReadOnly && (bounds.Width != Width || bounds.Height != Height))
                     {
-                        if (!(site is INestedSite))
+                        if (site is not INestedSite)
                         {
                             changeService.OnComponentChanging(this, sizeProperty);
                         }
@@ -13483,7 +13455,7 @@ namespace System.Windows.Forms
 
                     if (locationProperty is not null && !locationProperty.IsReadOnly && (bounds.X != _x || bounds.Y != _y))
                     {
-                        if (!(site is INestedSite))
+                        if (site is not INestedSite)
                         {
                             changeService.OnComponentChanging(this, locationProperty);
                         }
@@ -13726,7 +13698,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleObject.GetClientSite(out Ole32.IOleClientSite ppClientSite)
+        HRESULT Ole32.IOleObject.GetClientSite(out Ole32.IOleClientSite? ppClientSite)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetClientSite");
             ppClientSite = ActiveXInstance.GetClientSite();
@@ -13772,7 +13744,7 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT Ole32.IOleObject.GetClipboardData(uint dwReserved, out IComDataObject ppDataObject)
+        HRESULT Ole32.IOleObject.GetClipboardData(uint dwReserved, out IComDataObject? ppDataObject)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetClipboardData");
             ppDataObject = null;
@@ -13850,7 +13822,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetUserType");
             if (dwFormOfType == Ole32.USERCLASSTYPE.FULL)
             {
-                pszUserType = GetType().FullName;
+                pszUserType = GetType().FullName!;
             }
             else
             {
@@ -13910,7 +13882,7 @@ namespace System.Windows.Forms
             return hr;
         }
 
-        HRESULT Ole32.IOleObject.EnumAdvise(out IEnumSTATDATA e)
+        HRESULT Ole32.IOleObject.EnumAdvise(out IEnumSTATDATA? e)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnumAdvise");
             e = null;
@@ -14287,7 +14259,7 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.CanShowToolTipsNow()
         {
-            IKeyboardToolTip host = ToolStripControlHost;
+            IKeyboardToolTip? host = ToolStripControlHost;
             return IsHandleCreated && Visible && (host is null || host.CanShowToolTipsNow());
         }
 
@@ -14299,13 +14271,13 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.HasRtlModeEnabled()
         {
-            Control topLevelControl = TopLevelControlInternal;
+            Control? topLevelControl = TopLevelControlInternal;
             return topLevelControl is not null && topLevelControl.RightToLeft == RightToLeft.Yes && !IsMirrored;
         }
 
         bool IKeyboardToolTip.AllowsToolTip()
         {
-            IKeyboardToolTip host = ToolStripControlHost;
+            IKeyboardToolTip? host = ToolStripControlHost;
             return (host is null || host.AllowsToolTip()) && AllowsKeyboardToolTip();
         }
 
@@ -14319,7 +14291,7 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.ShowsOwnToolTip()
         {
-            IKeyboardToolTip host = ToolStripControlHost;
+            IKeyboardToolTip? host = ToolStripControlHost;
             return (host is null || host.ShowsOwnToolTip()) && ShowsOwnKeyboardToolTip();
         }
 
@@ -14337,7 +14309,7 @@ namespace System.Windows.Forms
 
         private IList<Rectangle> GetOwnNeighboringToolsRectangles()
         {
-            Control controlParent = ParentInternal;
+            Control? controlParent = ParentInternal;
             if (controlParent is null)
             {
                 return Array.Empty<Rectangle>();
@@ -14354,7 +14326,7 @@ namespace System.Windows.Forms
 
             return neighboringControlsRectangles;
 
-            void AddIfCreated(Control control)
+            void AddIfCreated(Control? control)
             {
                 if (control?.IsHandleCreated ?? false)
                 {
@@ -14417,14 +14389,14 @@ namespace System.Windows.Forms
         internal virtual ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(ComCtl32.TTF flags, string caption, ToolTip tooltip)
             => new ComCtl32.ToolInfoWrapper<Control>(this, flags, caption);
 
-        private readonly WeakReference<ToolStripControlHost> toolStripControlHostReference
-            = new WeakReference<ToolStripControlHost>(null);
+        private readonly WeakReference<ToolStripControlHost?> toolStripControlHostReference
+            = new WeakReference<ToolStripControlHost?>(null);
 
-        internal ToolStripControlHost ToolStripControlHost
+        internal ToolStripControlHost? ToolStripControlHost
         {
             get
             {
-                toolStripControlHostReference.TryGetTarget(out ToolStripControlHost value);
+                toolStripControlHostReference.TryGetTarget(out ToolStripControlHost? value);
                 return value;
             }
             set

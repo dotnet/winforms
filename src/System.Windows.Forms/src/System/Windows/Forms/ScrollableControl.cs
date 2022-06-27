@@ -885,6 +885,12 @@ namespace System.Windows.Forms
             if (activeControl.ParentInternal != this)
             {
                 Debug.WriteLineIf(s_autoScrolling!.TraceVerbose, "not direct child, original bounds: " + bounds);
+
+                if (activeControl.ParentInternal is null)
+                {
+                    throw new InvalidOperationException(SR.ScrollableControlActiveControlParentNull);
+                }
+
                 bounds = RectangleToClient(activeControl.ParentInternal.RectangleToScreen(bounds));
             }
 
@@ -958,7 +964,7 @@ namespace System.Windows.Forms
 
         private void ResetAutoScrollMinSize() => AutoScrollMinSize = Size.Empty;
 
-        private void ResetScrollProperties(ScrollProperties scrollProperties)
+        private static void ResetScrollProperties(ScrollProperties scrollProperties)
         {
             // Set only these two values as when the ScrollBars are not visible ...
             // there is no meaning of the "value" property.

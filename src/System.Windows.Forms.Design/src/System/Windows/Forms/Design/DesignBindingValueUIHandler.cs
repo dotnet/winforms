@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private void OnPropertyValueUIItemInvoke(ITypeDescriptorContext context, PropertyDescriptor descriptor, PropertyValueUIItem invokedItem)
+        private static void OnPropertyValueUIItemInvoke(ITypeDescriptorContext context, PropertyDescriptor descriptor, PropertyValueUIItem invokedItem)
         {
             // TODO: design a way for consumers to register own AdvancedBindingEditor
 #if DESIGNER_DATABINDING

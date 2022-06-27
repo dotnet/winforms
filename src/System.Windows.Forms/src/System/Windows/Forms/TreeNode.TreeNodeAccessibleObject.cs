@@ -102,9 +102,7 @@ namespace System.Windows.Forms
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId
-                        => _owningTreeView.CheckBoxes
-                            ? UiaCore.UIA.CheckBoxControlTypeId
-                            : UiaCore.UIA.TreeItemControlTypeId,
+                        => UiaCore.UIA.TreeItemControlTypeId,
                     UiaCore.UIA.IsEnabledPropertyId
                         => _owningTreeView.Enabled,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
@@ -122,7 +120,7 @@ namespace System.Windows.Forms
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 => patternId switch
                 {
-                    UiaCore.UIA.ExpandCollapsePatternId => true,
+                    UiaCore.UIA.ExpandCollapsePatternId => _owningTreeNode.childCount > 0,
                     UiaCore.UIA.LegacyIAccessiblePatternId => true,
                     UiaCore.UIA.ScrollItemPatternId => true,
                     UiaCore.UIA.SelectionItemPatternId => true,

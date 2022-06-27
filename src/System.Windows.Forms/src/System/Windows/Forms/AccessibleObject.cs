@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Reflection;
@@ -50,6 +51,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies the <see cref="IAccessible"/> interface used by this <see cref="AccessibleObject"/>.
         /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   This is also set by <see cref="UseStdAccessibleObjects(IntPtr, int)"/>.
+        ///  </para>
+        /// </remarks>
         private SystemIAccessibleWrapper _systemIAccessible = new(
             null /* Prevents throwing exception when call to null-value system IAccessible */);
 
@@ -66,15 +72,14 @@ namespace System.Windows.Forms
         // Indicates this object is being used ONLY to wrap a system IAccessible
         private readonly bool _systemWrapper;
 
-        private UiaTextProvider? _textProvider;
-        private UiaTextProvider2? _textProvider2;
-
         // The support for the UIA Notification event begins in RS3.
         // Assume the UIA Notification event is available until we learn otherwise.
         // If we learn that the UIA Notification event is not available,
         // controls should not attempt to raise it.
         private static bool s_notificationEventAvailable = true;
         private static bool? s_canNotifyClients;
+
+        internal const int InvalidIndex = -1;
 
         internal const int RuntimeIDFirstItem = 0x2a;
 
@@ -152,9 +157,24 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  When overridden in a derived class, gets or sets the parent of an
-        ///  accessible object.
+        ///  When overridden in a derived class, gets or sets the parent of an accessible object.
         /// </summary>
+        /// <devdoc>
+        ///  Note that the default behavior for <see cref="Control"/> is that it calls base from its override in
+        ///  <see cref="Control.ControlAccessibleObject"/>. <see cref="Control.ControlAccessibleObject"/> always
+        ///  creates the Win32 standard accessible objects so it will hit the Windows implementation of
+        ///  <see cref="IAccessible.accParent"/>.
+        ///
+        ///  For the non-client area (OBJID_WINDOW), the Windows accParent implementation simply calls
+        ///  GetAncestor(GA_PARENT) to find the window it will call WM_GETOBJECT on with OBJID_CLIENT.
+        ///
+        ///  For the client area (OBJID_CLIENT), the Windows accParent implementation calls WM_GETOBJECT directly
+        ///  with OBJID_WINDOW.
+        ///
+        ///  What this means, effectively, is that the non-client area is the parent of the client area, and the parent
+        ///  window's client area is the parent of the non-client area of the current window (at least from an
+        ///  accessiblity object standpoint).
+        /// </devdoc>
         public virtual AccessibleObject? Parent => WrapIAccessible(_systemIAccessible.accParent);
 
         /// <summary>
@@ -208,7 +228,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual AccessibleObject? GetChild(int index) => null;
 
-        internal virtual int GetChildIndex(AccessibleObject? child) => -1;
+        internal virtual int GetChildIndex(AccessibleObject? child) => InvalidIndex;
 
         /// <summary>
         ///  When overridden in a derived class, gets the number of children
@@ -555,28 +575,60 @@ namespace System.Windows.Forms
 
         internal virtual void Invoke() => DoDefaultAction();
 
-        internal virtual UiaCore.ITextRangeProvider? DocumentRangeInternal => _textProvider?.DocumentRange;
+        internal virtual UiaCore.ITextRangeProvider? DocumentRangeInternal
+        {
+            get
+            {
+                Debug.Fail("Not implemented. DocumentRangeInternal property should be overridden.");
+                return null;
+            }
+        }
 
-        internal virtual UiaCore.ITextRangeProvider[]? GetTextSelection() => _textProvider?.GetSelection();
+        internal virtual UiaCore.ITextRangeProvider[]? GetTextSelection()
+        {
+            Debug.Fail("Not implemented. GetTextSelection method should be overridden.");
+            return null;
+        }
 
-        internal virtual UiaCore.ITextRangeProvider[]? GetTextVisibleRanges() => _textProvider?.GetVisibleRanges();
+        internal virtual UiaCore.ITextRangeProvider[]? GetTextVisibleRanges()
+        {
+            Debug.Fail("Not implemented. GetTextVisibleRanges method should be overridden.");
+            return null;
+        }
 
         internal virtual UiaCore.ITextRangeProvider? GetTextRangeFromChild(UiaCore.IRawElementProviderSimple childElement)
-            => _textProvider?.RangeFromChild(childElement);
+        {
+            Debug.Fail("Not implemented. GetTextRangeFromChild method should be overridden.");
+            return null;
+        }
 
-        internal virtual UiaCore.ITextRangeProvider? GetTextRangeFromPoint(Point screenLocation) => _textProvider?.RangeFromPoint(screenLocation);
+        internal virtual UiaCore.ITextRangeProvider? GetTextRangeFromPoint(Point screenLocation)
+        {
+            Debug.Fail("Not implemented. GetTextRangeFromPoint method should be overridden.");
+            return null;
+        }
 
         internal virtual UiaCore.SupportedTextSelection SupportedTextSelectionInternal
-            => _textProvider?.SupportedTextSelection ?? UiaCore.SupportedTextSelection.None;
+        {
+            get
+            {
+                Debug.Fail("Not implemented. SupportedTextSelectionInternal property should be overridden.");
+                return UiaCore.SupportedTextSelection.None;
+            }
+        }
 
         internal virtual UiaCore.ITextRangeProvider? GetTextCaretRange(out BOOL isActive)
         {
             isActive = BOOL.FALSE;
-            return _textProvider2?.GetCaretRange(out isActive);
+            Debug.Fail("Not implemented. GetTextCaretRange method should be overridden.");
+            return null;
         }
 
-        internal virtual UiaCore.ITextRangeProvider? GetRangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement) =>
-            _textProvider2?.RangeFromAnnotation(annotationElement);
+        internal virtual UiaCore.ITextRangeProvider? GetRangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement)
+        {
+            Debug.Fail("Not implemented. GetRangeFromAnnotation method should be overridden.");
+            return null;
+        }
 
         internal virtual bool IsReadOnly => false;
 
@@ -891,6 +943,22 @@ namespace System.Windows.Forms
         /// </summary>
         object? IAccessible.accHitTest(int xLeft, int yTop)
         {
+            // When the AccessibleObjectFromPoint() is called it calls WindowFromPhysicalPoint() to find the window
+            // under the given point. It then walks up parent windows with GetAncestor(hwnd, GA_PARENT) until it can't
+            // find a parent, or the parent is the desktop. This "root" window is used to get the initial OBJID_WINDOW
+            // (non client) IAccessible object (via WM_GETOBJECT).
+            //
+            // This starting IAccessible object gets the initial accHitTest call. AccessibleObjectFromPoint() will
+            // keep recursively calling accHitTest on any new IAccessible objects that are returned. Once CHILDID_SELF
+            // is returned from accHitTest, that IAccessible object is returned from AccessibleObjectFromPoint().
+            //
+            // The default Windows IAccessible behavior is for the OBJID_WINDOW object to check to see if the given
+            // point is in the client area of the window and return that IAccessible object (OBJID_CLIENT). The default
+            // OBJID_CLIENT behavior is to look for child windows that have bounds that contain the point (via
+            // ChildWindowFromPoint()) and return the OBJID_WINDOW IAccessible object for any such window. In the
+            // process of doing this, transparency is considered and WM_NCHITTEST is sent to the relevant windows to
+            // assist in this check.
+
             if (IsClientObject)
             {
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"AccessibleObject.AccHitTest: this = {ToString()}");
@@ -1103,7 +1171,7 @@ namespace System.Windows.Forms
 
                 Debug.WriteLineIf(
                     CompModSwitches.MSAA.TraceInfo,
-                    $"AccessibleObject.accHildCount: this = {ToString()}, returning {childCount}");
+                    $"AccessibleObject.accChildCount: this = {ToString()}, returning {childCount}");
 
                 return childCount;
             }
@@ -1672,7 +1740,7 @@ namespace System.Windows.Forms
             return AsIAccessible(obj);
         }
 
-        private IAccessible? AsIAccessible(AccessibleObject? obj)
+        private static IAccessible? AsIAccessible(AccessibleObject? obj)
         {
             if (obj is not null && obj._systemWrapper)
             {
@@ -1721,33 +1789,30 @@ namespace System.Windows.Forms
         protected void UseStdAccessibleObjects(IntPtr handle, int objid)
         {
             object? acc = null;
-            int result = UnsafeNativeMethods.CreateStdAccessibleObject(
+            UnsafeNativeMethods.CreateStdAccessibleObject(
                 new HandleRef(this, handle),
                 objid,
                 ref IID.IAccessible,
                 ref acc);
 
-            // Get the IEnumVariant interface
-            Guid IID_IEnumVariant = typeof(Oleaut32.IEnumVariant).GUID;
-            object? en = null;
-            result = UnsafeNativeMethods.CreateStdAccessibleObject(
-                        new HandleRef(this, handle),
-                        objid,
-                        ref IID_IEnumVariant,
-                        ref en);
+            Guid IID_IEnumVariant = IID.IEnumVariant;
+            Oleacc.CreateStdAccessibleObject(
+                new HandleRef(this, handle),
+                objid,
+                ref IID_IEnumVariant,
+                out var enumVariantPtr);
 
-            if (acc is not null || en is not null)
+            if (enumVariantPtr != IntPtr.Zero)
+            {
+                _systemIEnumVariant = (WinFormsComWrappers.EnumVariantWrapper)WinFormsComWrappers.Instance
+                    .GetOrCreateObjectForComInstance(enumVariantPtr, CreateObjectFlags.None);
+            }
+
+            if (acc is not null)
             {
                 _systemIAccessible = new SystemIAccessibleWrapper((IAccessible?)acc);
-                _systemIEnumVariant = (Oleaut32.IEnumVariant?)en;
                 _systemIOleWindow = (Ole32.IOleWindow?)acc;
             }
-        }
-
-        internal void UseTextProviders(UiaTextProvider textProvider, UiaTextProvider2 textProvider2)
-        {
-            _textProvider = textProvider.OrThrowIfNull();
-            _textProvider2 = textProvider2.OrThrowIfNull();
         }
 
         /// <summary>
@@ -1784,7 +1849,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Make sure that the childID is valid.
         /// </summary>
-        internal void ValidateChildID(ref object childID)
+        internal static void ValidateChildID(ref object childID)
         {
             // An empty childID is considered to be the same as CHILDID_SELF.
             // Some accessibility programs pass null into our functions, so we
@@ -1825,6 +1890,7 @@ namespace System.Windows.Forms
         ///  match is based upon the name and DescriptorInfo which describes the signature
         ///  of the method.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder? binder, Type[] types, ParameterModifier[]? modifiers)
             => typeof(IAccessible).GetMethod(name, bindingAttr, binder, types, modifiers);
 
@@ -1833,9 +1899,11 @@ namespace System.Windows.Forms
         ///  match is based upon the name of the method. If the object implemented multiple methods
         ///  with the same name an AmbiguousMatchException is thrown.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr)
             => typeof(IAccessible).GetMethod(name, bindingAttr);
 
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr)
             => typeof(IAccessible).GetMethods(bindingAttr);
 
@@ -1844,9 +1912,11 @@ namespace System.Windows.Forms
         ///  object. The match is based upon a name. There cannot be more than
         ///  a single field with a name.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)]
         FieldInfo? IReflect.GetField(string name, BindingFlags bindingAttr)
             => typeof(IAccessible).GetField(name, bindingAttr);
 
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)]
         FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr)
             => typeof(IAccessible).GetFields(bindingAttr);
 
@@ -1855,6 +1925,7 @@ namespace System.Windows.Forms
         ///  the given name an AmbiguousMatchException will be thrown. Returns
         ///  null if no property is found.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
         PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr)
             => typeof(IAccessible).GetProperty(name, bindingAttr);
 
@@ -1862,6 +1933,7 @@ namespace System.Windows.Forms
         ///  Return the property based upon the name and Descriptor info describing
         ///  the property indexing. Return null if no property is found.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
         PropertyInfo? IReflect.GetProperty(
             string name,
             BindingFlags bindingAttr,
@@ -1875,18 +1947,31 @@ namespace System.Windows.Forms
         ///  Returns an array of PropertyInfos for all the properties defined on
         ///  the Reflection object.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
         PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
             => typeof(IAccessible).GetProperties(bindingAttr);
 
         /// <summary>
         ///  Return an array of members which match the passed in name.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields |
+            DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods |
+            DynamicallyAccessedMemberTypes.PublicEvents | DynamicallyAccessedMemberTypes.NonPublicEvents |
+            DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties |
+            DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors |
+            DynamicallyAccessedMemberTypes.PublicNestedTypes | DynamicallyAccessedMemberTypes.NonPublicNestedTypes)]
         MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
             => typeof(IAccessible).GetMember(name, bindingAttr);
 
         /// <summary>
         ///  Return an array of all of the members defined for this object.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields |
+            DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods |
+            DynamicallyAccessedMemberTypes.PublicEvents | DynamicallyAccessedMemberTypes.NonPublicEvents |
+            DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties |
+            DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors |
+            DynamicallyAccessedMemberTypes.PublicNestedTypes | DynamicallyAccessedMemberTypes.NonPublicNestedTypes)]
         MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
             => typeof(IAccessible).GetMembers(bindingAttr);
 
@@ -1922,6 +2007,7 @@ namespace System.Windows.Forms
         ///  @exception ArgumentException when <var>invokeAttr</var> specifies property set and
         ///  invoke method.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
         object? IReflect.InvokeMember(
             string name,
             BindingFlags invokeAttr,
@@ -2062,7 +2148,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        internal virtual bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object oldValue, object newValue)
+        internal virtual bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object? oldValue, object? newValue)
         {
             if (UiaCore.UiaClientsAreListening().IsTrue() && CanNotifyClients)
             {

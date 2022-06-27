@@ -1,0 +1,38 @@
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+    object,
+    uuid(F4611744-02AF-47D4-A10F-9E692368DEFD)
+]
+interface IBasicTest : IDispatch
+{
+    [propget] HRESULT Int_Property([out, retval] int *ret);
+    [propput] HRESULT Int_Property([in] int val);
+};
+
+[
+    uuid(0971AD7E-3D4A-4C44-B0A3-A518AC88DFE1)
+]
+library NativeTests
+{
+    importlib("stdole2.tlb");
+
+    [
+        uuid(0ED8EE0D-22E3-49EA-850C-E69B20D1F296)
+    ]
+    coclass RawErrorInfoUsageTest
+    {
+        [default] interface IBasicTest;
+        interface ISupportErrorInfo;
+    }
+
+    [
+        uuid(EA1FCB3A-277C-4C79-AB85-E2ED3E858201)
+    ]
+    coclass StandardErrorInfoUsageTest
+    {
+        [default] interface IBasicTest;
+        interface ISupportErrorInfo;
+    }
+}

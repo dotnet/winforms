@@ -382,7 +382,7 @@ namespace System.ComponentModel.Design
             ///  This means in theory that the text can change at any time (ie. its not fixed when the item is added to the list).
             ///  The item returns its display text through ToString() so that the same text will be reported to Accessibility clients.
             /// </summary>
-            private string GetDisplayText(ListItem item)
+            private static string GetDisplayText(ListItem item)
             {
                 return (item is null) ? string.Empty : item.ToString();
             }

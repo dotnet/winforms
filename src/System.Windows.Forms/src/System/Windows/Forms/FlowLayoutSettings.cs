@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(child);
 
-            IArrangedElement element = FlowLayout.Instance.CastToArrangedElement(child);
+            IArrangedElement element = LayoutEngine.CastToArrangedElement(child);
             if (GetFlowBreak(child) != value)
             {
                 CommonProperties.SetFlowBreak(element, value);
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(child);
 
-            IArrangedElement element = FlowLayout.Instance.CastToArrangedElement(child);
+            IArrangedElement element = LayoutEngine.CastToArrangedElement(child);
             return CommonProperties.GetFlowBreak(element);
         }
     }

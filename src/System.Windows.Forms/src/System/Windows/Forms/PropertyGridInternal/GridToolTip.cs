@@ -47,7 +47,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (value is not null && value.Length > MaximumToolTipLength)
                 {
                     // Let the user know the text was truncated by throwing on an ellipsis.
-                    value = value.Substring(0, MaximumToolTipLength) + "...";
+                    value = string.Concat(value.AsSpan(0, MaximumToolTipLength), "...");
                 }
 
                 _toolTipText = value;

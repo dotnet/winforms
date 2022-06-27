@@ -6571,6 +6571,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">当前的可访问性对象仅适用于 {0}、{1} 或 {2} 视图中的 ListView</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="translated">ListViewItem 未附加到 ListView 时，无法获取 accessiblity 对象。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">当 ListView 项的 Checked 属性更改时引发的事件。</target>
@@ -7694,6 +7699,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PictureBoxOnSizeModeChangedDescr">
         <source>Event raised when the value of the SizeMode property is changed on the PictureBox.</source>
         <target state="translated">在 PictureBox 的 SizeMode 属性值更改时引发的事件。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PictureBoxRemoteLocationNotSupported">
+        <source>Loading from remote location not supported.</source>
+        <target state="translated">不支持从远程位置加载。</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
@@ -8824,6 +8834,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ScrollBarVisibleDescr">
         <source>Gets or sets a Boolean value controlling whether the scrollbar is showing.</source>
         <target state="translated">获取或设置一个控制是否显示滚动条的 Boolean 值。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="translated">活动控件的父属性不能为 null。</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
@@ -10304,6 +10319,16 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ToolStripSaveSettingsDescr">
         <source>Specifies whether the ToolStrip should persist user settings via IPersistComponentSettings.</source>
         <target state="translated">指定 ToolStrip 是否应通过 IPersistComponentSettings 保持用户设置。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="translated">下移行</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="translated">上移行</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">

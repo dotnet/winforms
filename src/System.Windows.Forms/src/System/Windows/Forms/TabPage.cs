@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Layout;
@@ -23,15 +22,15 @@ namespace System.Windows.Forms
     [DefaultProperty("Text")]
     public partial class TabPage : Panel
     {
-        private ImageList.Indexer _imageIndexer;
+        private ImageList.Indexer? _imageIndexer;
         private string _toolTipText = string.Empty;
         private bool _enterFired;
         private bool _leaveFired;
         private bool _useVisualStyleBackColor;
-        private List<ToolTip> _associatedToolTips;
-        private ToolTip _externalToolTip;
+        private List<ToolTip>? _associatedToolTips;
+        private ToolTip? _externalToolTip;
         private readonly ToolTip _internalToolTip = new ToolTip();
-        private TabAccessibleObject _tabAccessibilityObject;
+        private TabAccessibleObject? _tabAccessibilityObject;
 
         /// <summary>
         ///  Constructs an empty TabPage.
@@ -45,7 +44,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Constructs a TabPage with text for the tab.
         /// </summary>
-        public TabPage(string text) : this()
+        public TabPage(string? text) : this()
         {
             Text = text;
         }
@@ -84,7 +83,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler AutoSizeChanged
+        public new event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -118,7 +117,7 @@ namespace System.Windows.Forms
                 {
                     if (value != Color.Empty)
                     {
-                        PropertyDescriptor pd = TypeDescriptor.GetProperties(this)[nameof(UseVisualStyleBackColor)];
+                        PropertyDescriptor? pd = TypeDescriptor.GetProperties(this)[nameof(UseVisualStyleBackColor)];
                         pd?.SetValue(this, false);
                     }
                 }
@@ -249,6 +248,7 @@ namespace System.Windows.Forms
         [DefaultValue("")]
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRDescription(nameof(SR.TabItemImageIndexDescr))]
+        [AllowNull]
         public string ImageKey
         {
             get => ImageIndexer.Key;
@@ -283,7 +283,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler DockChanged
+        public new event EventHandler? DockChanged
         {
             add => base.DockChanged += value;
             remove => base.DockChanged -= value;
@@ -299,7 +299,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler EnabledChanged
+        public new event EventHandler? EnabledChanged
         {
             add => base.EnabledChanged += value;
             remove => base.EnabledChanged -= value;
@@ -336,7 +336,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler LocationChanged
+        public new event EventHandler? LocationChanged
         {
             add => base.LocationChanged += value;
             remove => base.LocationChanged -= value;
@@ -384,7 +384,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler TabIndexChanged
+        public new event EventHandler? TabIndexChanged
         {
             add => base.TabIndexChanged += value;
             remove => base.TabIndexChanged -= value;
@@ -400,7 +400,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler TabStopChanged
+        public new event EventHandler? TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
@@ -409,6 +409,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;
@@ -421,7 +422,7 @@ namespace System.Windows.Forms
 
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public new event EventHandler TextChanged
+        public new event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -434,6 +435,7 @@ namespace System.Windows.Forms
         [DefaultValue("")]
         [Localizable(true)]
         [SRDescription(nameof(SR.TabItemToolTipTextDescr))]
+        [AllowNull]
         public string ToolTipText
         {
             get => _toolTipText;
@@ -469,7 +471,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler VisibleChanged
+        public new event EventHandler? VisibleChanged
         {
             add => base.VisibleChanged += value;
             remove => base.VisibleChanged -= value;
@@ -479,9 +481,9 @@ namespace System.Windows.Forms
         ///  Assigns a new parent control. Sends out the appropriate property change notifications for
         ///  properties that are affected by the change of parent.
         /// </summary>
-        internal override void AssignParent(Control value)
+        internal override void AssignParent(Control? value)
         {
-            if (value is not null && !(value is TabControl))
+            if (value is not null && value is not TabControl)
             {
                 throw new ArgumentException(string.Format(SR.TabControlTabPageNotOnTabControl, value.GetType().FullName));
             }
@@ -493,19 +495,20 @@ namespace System.Windows.Forms
         ///  Given a component, this retrieves the tab page that it's parented to, or null if it's not
         ///  parented to any tab page.
         /// </summary>
-        public static TabPage GetTabPageOfComponent(object comp)
+        public static TabPage? GetTabPageOfComponent(object? comp)
         {
-            if (!(comp is Control c))
+            Control? c = comp as Control;
+            if (c is null)
             {
                 return null;
             }
 
-            while (c is not null && !(c is TabPage))
+            while (c is not null && c is not TabPage)
             {
                 c = c.ParentInternal;
             }
 
-            return (TabPage)c;
+            return (TabPage?)c;
         }
 
         internal override Rectangle GetToolNativeScreenRectangle()
@@ -552,7 +555,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnEnter(EventArgs e)
         {
-            if (ParentInternal is TabControl parent)
+            if (ParentInternal is TabControl)
             {
                 if (_enterFired)
                 {
@@ -575,7 +578,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnLeave(EventArgs e)
         {
-            if (ParentInternal is TabControl parent)
+            if (ParentInternal is TabControl)
             {
                 if (_leaveFired)
                 {
@@ -621,11 +624,6 @@ namespace System.Windows.Forms
 
         internal override void RemoveToolTip(ToolTip toolTip)
         {
-            if (toolTip is null)
-            {
-                return;
-            }
-
             // If a user used one ToolTIp instance to set a toolTip text before.
             if (_associatedToolTips is null)
             {
@@ -700,7 +698,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            Control parent = ParentInternal;
+            Control? parent = ParentInternal;
 
             if (parent is TabControl && parent.IsHandleCreated)
             {

@@ -633,6 +633,7 @@ namespace System.Drawing.Design
                         {
                         }
 
+#pragma warning disable SYSLIB0044 // Type or member is obsolete. Ref https://github.com/dotnet/winforms/issues/7308
                         if (a is null && !string.IsNullOrEmpty(assemblyName.CodeBase))
                         {
                             try
@@ -649,6 +650,7 @@ namespace System.Drawing.Design
                             {
                             }
                         }
+#pragma warning restore SYSLIB0044 // Type or member is obsolete
 
                         if (a != null)
                         {
@@ -769,7 +771,7 @@ namespace System.Drawing.Design
             }
         }
 
-        private AssemblyName GetNonRetargetedAssemblyName(Type type, AssemblyName policiedAssemblyName)
+        private static AssemblyName GetNonRetargetedAssemblyName(Type type, AssemblyName policiedAssemblyName)
         {
             Debug.Assert(type != null);
             if (policiedAssemblyName is null)
@@ -1032,7 +1034,7 @@ namespace System.Drawing.Design
                 base.Clear();
             }
 
-            private string GetPropertyName(object key)
+            private static string GetPropertyName(object key)
             {
                 ArgumentNullException.ThrowIfNull(key);
 

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -13,8 +11,8 @@ namespace System.Windows.Forms
     /// </summary>
     public class NumericUpDownAcceleration
     {
-        private int seconds;        // Ideally we would use UInt32 but it is not CLS-compliant.
-        private decimal increment;  // Ideally we would use UInt32 but NumericUpDown uses Decimal values.
+        private int _seconds;        // Ideally we would use UInt32 but it is not CLS-compliant.
+        private decimal _increment;  // Ideally we would use UInt32 but NumericUpDown uses Decimal values.
 
         public NumericUpDownAcceleration(int seconds, decimal increment)
         {
@@ -28,8 +26,8 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(increment), increment, SR.NumericUpDownLessThanZeroError);
             }
 
-            this.seconds = seconds;
-            this.increment = increment;
+            _seconds = seconds;
+            _increment = increment;
         }
 
         /// <summary>
@@ -40,16 +38,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                return seconds;
+                return _seconds;
             }
             set
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(seconds), value, SR.NumericUpDownLessThanZeroError);
+                    throw new ArgumentOutOfRangeException(nameof(_seconds), value, SR.NumericUpDownLessThanZeroError);
                 }
 
-                seconds = value;
+                _seconds = value;
             }
         }
 
@@ -60,17 +58,17 @@ namespace System.Windows.Forms
         {
             get
             {
-                return increment;
+                return _increment;
             }
 
             set
             {
                 if (value < decimal.Zero)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(increment), value, SR.NumericUpDownLessThanZeroError);
+                    throw new ArgumentOutOfRangeException(nameof(_increment), value, SR.NumericUpDownLessThanZeroError);
                 }
 
-                increment = value;
+                _increment = value;
             }
         }
     }

@@ -47,7 +47,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  this method once during serialization, and we track this by appending an object to
         ///  the context stack.
         /// </summary>
-        private bool EmitApplyMethod(IDesignerSerializationManager manager, object owner)
+        private static bool EmitApplyMethod(IDesignerSerializationManager manager, object owner)
         {
             ApplyMethodTable table = (ApplyMethodTable)manager.Context[typeof(ApplyMethodTable)];
 

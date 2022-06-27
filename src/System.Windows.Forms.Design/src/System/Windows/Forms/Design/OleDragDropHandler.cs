@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private IComponent GetDragOwnerComponent(IDataObject data)
+        private static IComponent GetDragOwnerComponent(IDataObject data)
         {
             if (currentDrags == null || !currentDrags.Contains(data))
             {
@@ -374,7 +374,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Determines whether we are currently in localization mode - i.e., language is not (Default).
         /// </summary>
-        private bool CurrentlyLocalizing(IComponent rootComponent)
+        private static bool CurrentlyLocalizing(IComponent rootComponent)
         {
             if (rootComponent != null)
             {
@@ -509,7 +509,7 @@ namespace System.Windows.Forms.Design
             return newOffset;
         }
 
-        private void DrawReversibleFrame(IntPtr handle, Rectangle rectangle, Color backColor)
+        private static void DrawReversibleFrame(IntPtr handle, Rectangle rectangle, Color backColor)
         {
             //Bug # 71547 <subhag> to make drag rect visible if any the dimensions of the control are 0
             if (rectangle.Width == 0)
@@ -1182,7 +1182,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private object[] GetDraggingObjects(IDataObject dataObj, bool topLevelOnly)
+        private static object[] GetDraggingObjects(IDataObject dataObj, bool topLevelOnly)
         {
             object[] components = null;
 
@@ -1202,17 +1202,17 @@ namespace System.Windows.Forms.Design
             return GetTopLevelComponents(components);
         }
 
-        public object[] GetDraggingObjects(IDataObject dataObj)
+        public static object[] GetDraggingObjects(IDataObject dataObj)
         {
             return GetDraggingObjects(dataObj, false);
         }
 
-        public object[] GetDraggingObjects(DragEventArgs de)
+        public static object[] GetDraggingObjects(DragEventArgs de)
         {
             return GetDraggingObjects(de.Data);
         }
 
-        private object[] GetTopLevelComponents(ICollection comps)
+        private static object[] GetTopLevelComponents(ICollection comps)
         {
             // Filter the top-level components.
             //

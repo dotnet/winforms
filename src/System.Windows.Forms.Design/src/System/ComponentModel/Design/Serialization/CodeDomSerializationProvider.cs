@@ -40,7 +40,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Returns a code dom serializer
         /// </summary>
-        private object GetCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
+        private static object GetCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
         {
             // If this isn't a serializer type we recognize, do nothing.  Also, if metadata specified
             // a custom serializer, then use it.
@@ -103,7 +103,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Returns a code dom serializer for members
         /// </summary>
-        private object GetMemberCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
+        private static object GetMemberCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
         {
             // Don't provide our serializer if someone else already had one
             if (currentSerializer is not null)
@@ -127,7 +127,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Returns a code dom serializer for types
         /// </summary>
-        private object GetTypeCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
+        private static object GetTypeCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
         {
             // Don't provide our serializer if someone else already had one
             if (currentSerializer is not null)

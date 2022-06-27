@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public unsafe static extern BOOL EnumEnhMetaFile(
+        [LibraryImport(Libraries.Gdi32)]
+        public unsafe static partial BOOL EnumEnhMetaFile(
             HDC hdc,
             HENHMETAFILE hmf,
             Enhmfenumproc proc,

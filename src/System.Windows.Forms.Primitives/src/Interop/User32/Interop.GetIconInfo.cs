@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        private static extern BOOL GetIconInfo(IntPtr hIcon, out ICONINFO info);
+        [LibraryImport(Libraries.User32)]
+        private static partial BOOL GetIconInfo(IntPtr hIcon, out ICONINFO info);
 
         public static ICONINFO GetIconInfo(IntPtr hIcon)
         {

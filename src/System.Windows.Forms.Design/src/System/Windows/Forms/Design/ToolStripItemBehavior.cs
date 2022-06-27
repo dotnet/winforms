@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Design
         }
 
         // Returns true if oldSelection and newSelection have a commonParent.
-        private bool CommonParent(ToolStripItem oldSelection, ToolStripItem newSelection)
+        private static bool CommonParent(ToolStripItem oldSelection, ToolStripItem newSelection)
         {
             ToolStrip oldSelectionParent = oldSelection.GetCurrentParent();
             ToolStrip newSelectionParent = newSelection.GetCurrentParent();
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Clears the insertion mark when items are being reordered
         /// </summary>
-        private void ClearInsertionMark(ToolStripItem item)
+        private static void ClearInsertionMark(ToolStripItem item)
         {
             // Don't paint if cursor hasnt moved.
             if (ToolStripDesigner.s_lastCursorPosition != Point.Empty && ToolStripDesigner.s_lastCursorPosition == Cursor.Position)
@@ -100,7 +100,7 @@ namespace System.Windows.Forms.Design
         }
 
         // Tries to put the item in the Insitu edit mode after the double click timer has ticked
-        private void EnterInSituMode(ToolStripItemGlyph glyph)
+        private static void EnterInSituMode(ToolStripItemGlyph glyph)
         {
             if (glyph.ItemDesigner != null && !glyph.ItemDesigner.IsEditorActive)
             {
@@ -109,7 +109,7 @@ namespace System.Windows.Forms.Design
         }
 
         // Gets the Selection Service.
-        private ISelectionService GetSelectionService(ToolStripItem item)
+        private static ISelectionService GetSelectionService(ToolStripItem item)
         {
             Debug.Assert(item != null, "Item passed is null, SelectionService cannot be obtained");
             if (item.Site != null)
@@ -123,7 +123,7 @@ namespace System.Windows.Forms.Design
         }
 
         // Gets the Behavior Service.
-        private BehaviorService GetBehaviorService(ToolStripItem item)
+        private static BehaviorService GetBehaviorService(ToolStripItem item)
         {
             Debug.Assert(item != null, "Item passed is null, BehaviorService cannot be obtained");
             if (item.Site != null)
@@ -137,7 +137,7 @@ namespace System.Windows.Forms.Design
         }
 
         // Gets the ToolStripKeyBoardHandling Service.
-        private ToolStripKeyboardHandlingService GetKeyBoardHandlingService(ToolStripItem item)
+        private static ToolStripKeyboardHandlingService GetKeyBoardHandlingService(ToolStripItem item)
         {
             Debug.Assert(item != null, "Item passed is null, ToolStripKeyBoardHandlingService cannot be obtained");
             if (item.Site != null)
@@ -886,7 +886,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Paints the insertion mark when items are being reordered
         /// </summary>
-        private void PaintInsertionMark(ToolStripItem item)
+        private static void PaintInsertionMark(ToolStripItem item)
         {
             // Don't paint if cursor hasnt moved.
             if (ToolStripDesigner.s_lastCursorPosition != Point.Empty && ToolStripDesigner.s_lastCursorPosition == Cursor.Position)

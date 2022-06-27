@@ -6,6 +6,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -91,6 +92,7 @@ namespace System.Windows.Forms
         private const int LISTVIEWSTATE1_disposingImageLists = 0x00000004;
         private const int LISTVIEWSTATE1_useCompatibleStateImageBehavior = 0x00000008;
         private const int LISTVIEWSTATE1_selectedIndexChangedSkipped = 0x00000010;
+        private const int LISTVIEWSTATE1_clearingInnerListOnDispose = 0x00000020;
 
         private const int LVLABELEDITTIMER = 0x2A;
         private const int LVTOOLTIPTRACKING = 0x30;
@@ -1546,9 +1548,9 @@ namespace System.Windows.Forms
                         {
                             _listItemSorter = new IconComparer(_sorting);
                         }
-                        else if (_listItemSorter is IconComparer)
+                        else if (_listItemSorter is IconComparer iconComparer)
                         {
-                            ((IconComparer)_listItemSorter).SortOrder = _sorting;
+                            iconComparer.SortOrder = _sorting;
                         }
                     }
                     else if (value == SortOrder.None)
@@ -1649,6 +1651,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Bindable(false)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;
@@ -2993,7 +2996,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DeleteFileName(string? fileName)
+        private static void DeleteFileName(string? fileName)
         {
             if (!string.IsNullOrEmpty(fileName))
             {
@@ -3141,8 +3144,11 @@ namespace System.Windows.Forms
                     Unhook();
                 }
 
-                // Remove any items we have
-                Items.Clear();
+                using (DisposingContext context = new(this))
+                {
+                    // Remove any items we have
+                    Items.Clear();
+                }
 
                 if (_odCacheFontHandleWrapper is not null)
                 {
@@ -3203,6 +3209,12 @@ namespace System.Windows.Forms
             }
 
             base.Dispose(disposing);
+        }
+
+        private bool ClearingInnerListOnDispose
+        {
+            get => _listViewState1 [LISTVIEWSTATE1_clearingInnerListOnDispose];
+            set => _listViewState1 [LISTVIEWSTATE1_clearingInnerListOnDispose] = value;
         }
 
         /// <summary>
@@ -4108,7 +4120,6 @@ namespace System.Windows.Forms
             }
 
             // loop through the items and give them id's so we can identify them later.
-            //
             for (int i = 0; i < items.Length; i++)
             {
                 ListViewItem item = items[i];
@@ -4119,7 +4130,6 @@ namespace System.Windows.Forms
                 }
 
                 // create an ID..
-                //
                 int itemID = GenerateUniqueID();
                 Debug.Assert(!_listItemsTable.ContainsKey(itemID), "internal hash table inconsistent -- inserting item, but it's already in the hash table");
                 _listItemsTable.Add(itemID, item);
@@ -4128,7 +4138,6 @@ namespace System.Windows.Forms
                 item.Host(this, itemID, -1);
 
                 // if there's no handle created, just ad them to our list items array.
-                //
                 if (!IsHandleCreated)
                 {
                     Debug.Assert(_listViewItems is not null, "listItemsArray is null, but the handle isn't created");
@@ -4745,10 +4754,9 @@ namespace System.Windows.Forms
                 }
 
                 Debug.Assert(_listViewItems is null, "listItemsArray not null, even though handle created");
-                ListViewItem[]? items = null;
                 ListViewItemCollection tempItems = Items;
 
-                items = new ListViewItem[tempItems.Count];
+                var items = new ListViewItem[tempItems.Count];
                 tempItems.CopyTo(items, 0);
 
                 _listViewItems = new List<ListViewItem>(items.Length);
@@ -4762,6 +4770,11 @@ namespace System.Windows.Forms
 
         protected override void OnGotFocus(EventArgs e)
         {
+            if (ClearingInnerListOnDispose)
+            {
+                return;
+            }
+
             base.OnGotFocus(e);
 
             if (ShowItemToolTips && Items.Count > 0 && (FocusedItem ?? Items[0]) is ListViewItem focusedItem)
@@ -4769,7 +4782,9 @@ namespace System.Windows.Forms
                 NotifyAboutGotFocus(focusedItem);
             }
 
-            if (IsHandleCreated && IsAccessibilityObjectCreated && AccessibilityObject.GetFocus() is AccessibleObject focusedAccessibleObject)
+            if (IsHandleCreated &&
+                IsAccessibilityObjectCreated &&
+                AccessibilityObject.GetFocus() is AccessibleObject focusedAccessibleObject)
             {
                 focusedAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
@@ -5850,7 +5865,7 @@ namespace System.Windows.Forms
             Debug.Assert(retval != 0, "LVM_SETTILEVIEWINFO failed");
         }
 
-        private void WmNmClick(ref Message m)
+        private void WmNmClick()
         {
             // If we're checked, hittest to see if we're
             // on the check mark
@@ -5892,7 +5907,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void WmNmDblClick(ref Message m)
+        private void WmNmDblClick()
         {
             // If we're checked, hittest to see if we're
             // on the item
@@ -6134,7 +6149,7 @@ namespace System.Windows.Forms
                 _columnHeaderClicked = null;
                 _columnHeaderClickedWidth = -1;
 
-                ISite site = Site;
+                ISite? site = Site;
 
                 if (site is not null)
                 {
@@ -6630,7 +6645,7 @@ namespace System.Windows.Forms
                     }
 
                 case (int)NM.CLICK:
-                    WmNmClick(ref m);
+                    WmNmClick();
                     // FALL THROUGH //
                     goto case (int)NM.RCLICK;
 
@@ -6656,7 +6671,7 @@ namespace System.Windows.Forms
                     break;
 
                 case (int)NM.DBLCLK:
-                    WmNmDblClick(ref m);
+                    WmNmDblClick();
                     // FALL THROUGH //
                     goto case (int)NM.RDBLCLK;
 
@@ -6702,7 +6717,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (CheckBoxes)
+                    if (CheckBoxes && !VirtualMode)
                     {
                         NMLVKEYDOWN* lvkd = (NMLVKEYDOWN*)m.LParamInternal;
                         if (lvkd->wVKey == (short)Keys.Space)
@@ -6711,14 +6726,11 @@ namespace System.Windows.Forms
                             if (focusedItem is not null)
                             {
                                 bool check = !focusedItem.Checked;
-                                if (!VirtualMode)
+                                foreach (ListViewItem item in SelectedItems)
                                 {
-                                    foreach (ListViewItem item in SelectedItems)
+                                    if (item != focusedItem)
                                     {
-                                        if (item != focusedItem)
-                                        {
-                                            item.Checked = check;
-                                        }
+                                        item.Checked = check;
                                     }
                                 }
                             }
@@ -6914,22 +6926,22 @@ namespace System.Windows.Forms
                 case User32.WM.KEYUP:
                     int key = (int)m.WParamInternal;
 
+                    // User can collapse/expand a group using the keyboard by focusing the group header and using left/right
                     if (GroupsDisplayed && (key is User32.VK.LEFT or User32.VK.RIGHT) && SelectedItems.Count > 0)
                     {
                         ListViewGroup group = SelectedItems[0].Group;
 
-                        if (group is null || group.CollapsedState is ListViewGroupCollapsedState.Default
-                            || (key == User32.VK.LEFT && group.CollapsedState is ListViewGroupCollapsedState.Collapsed)
-                            || (key == User32.VK.RIGHT && group.CollapsedState is ListViewGroupCollapsedState.Expanded))
+                        if (group is null || group.CollapsedState is ListViewGroupCollapsedState.Default)
                         {
                             break;
                         }
 
-                        group.SetCollapsedStateInternal(group.CollapsedState == ListViewGroupCollapsedState.Expanded
-                                                ? ListViewGroupCollapsedState.Collapsed
-                                                : ListViewGroupCollapsedState.Expanded);
-
-                        OnGroupCollapsedStateChanged(new ListViewGroupEventArgs(Groups.IndexOf(group)));
+                        ListViewGroupCollapsedState nativeState = group.GetNativeCollapsedState();
+                        if (nativeState != group.CollapsedState)
+                        {
+                            group.SetCollapsedStateInternal(nativeState);
+                            OnGroupCollapsedStateChanged(new ListViewGroupEventArgs(Groups.IndexOf(group)));
+                        }
                     }
 
                     break;

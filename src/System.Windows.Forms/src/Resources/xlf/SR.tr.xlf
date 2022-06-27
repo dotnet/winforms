@@ -6571,6 +6571,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Geçerli erişilebilirlik nesnesi yalnızca {0}, {1} veya {2} görünümündeki ListView içindir</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="translated">ListViewItem bir ListView'a ekli olmadığında erişilebilirlik nesnesi alınamaz.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">ListView öğesinin Checked özelliği değiştiğinde harekete geçirilen olay.</target>
@@ -7694,6 +7699,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="PictureBoxOnSizeModeChangedDescr">
         <source>Event raised when the value of the SizeMode property is changed on the PictureBox.</source>
         <target state="translated">PictureBox'da SizeMode özelliğinin değeri değiştiğinde harekete geçirilen olay.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PictureBoxRemoteLocationNotSupported">
+        <source>Loading from remote location not supported.</source>
+        <target state="translated">Uzak konumdan yükleme desteklenmiyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
@@ -8824,6 +8834,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="ScrollBarVisibleDescr">
         <source>Gets or sets a Boolean value controlling whether the scrollbar is showing.</source>
         <target state="translated">Kaydırma çubuğunun gösterilip gösterilmediğini denetleyen bir boole değerini alır veya ayarlar.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="translated">Etkin denetimin üst özelliği null olamaz.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
@@ -10304,6 +10319,16 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="ToolStripSaveSettingsDescr">
         <source>Specifies whether the ToolStrip should persist user settings via IPersistComponentSettings.</source>
         <target state="translated">ToolStrip'in kullanıcı ayarlarını IPersistComponentSettings aracılığıyla kalıcı yapıp yapmayacağını belirtir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="translated">Satır aşağı</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="translated">Satır yukarı</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">

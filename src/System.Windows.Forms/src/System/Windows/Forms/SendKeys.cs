@@ -466,7 +466,7 @@ namespace System.Windows.Forms
                                     j++;
                                 }
 
-                                repeat = int.Parse(keys.Substring(digit, j - digit), CultureInfo.InvariantCulture);
+                                repeat = int.Parse(keys.AsSpan(digit, j - digit), CultureInfo.InvariantCulture);
                             }
                         }
 

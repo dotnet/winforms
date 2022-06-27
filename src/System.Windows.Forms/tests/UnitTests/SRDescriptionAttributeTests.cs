@@ -13,10 +13,10 @@ namespace System.Windows.Forms.Tests
         public void VerifyDescriptionAttributeValue()
         {
             SRDescriptionAttribute srDescriptionAttribute = new SRDescriptionAttribute(nameof(SR.AboutBoxDesc));
-            Assert.True(string.Compare(srDescriptionAttribute.Description, SR.AboutBoxDesc, StringComparison.Ordinal) == 0);
+            Assert.True(string.Equals(srDescriptionAttribute.Description, SR.AboutBoxDesc, StringComparison.Ordinal));
 
             // Getting srDescriptionAttribute.Description again should also return description value
-            Assert.True(string.Compare(srDescriptionAttribute.Description, SR.AboutBoxDesc, StringComparison.Ordinal) == 0);
+            Assert.True(string.Equals(srDescriptionAttribute.Description, SR.AboutBoxDesc, StringComparison.Ordinal));
         }
 
         [Fact]

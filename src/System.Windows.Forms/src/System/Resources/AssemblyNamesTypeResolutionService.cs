@@ -81,7 +81,9 @@ namespace System.Resources
         [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Returns null if in a single file")]
         public string GetPathOfAssembly(AssemblyName name)
         {
+#pragma warning disable SYSLIB0044 // Type or member is obsolete. Ref https://github.com/dotnet/winforms/issues/7308
             return name.CodeBase;
+#pragma warning restore SYSLIB0044 // Type or member is obsolete
         }
 
         public Type GetType(string name)
@@ -139,7 +141,7 @@ namespace System.Resources
                         List<AssemblyName> assemblyList = new List<AssemblyName>(_names.Length);
                         foreach (AssemblyName asmName in _names)
                         {
-                            if (string.Compare(assemblyName.Name, asmName.Name, StringComparison.OrdinalIgnoreCase) == 0)
+                            if (string.Equals(assemblyName.Name, asmName.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 assemblyList.Insert(0, asmName);
                             }
@@ -199,7 +201,7 @@ namespace System.Resources
         /// <summary>
         ///  This is matching %windir%\Microsoft.NET\Framework*, so both 32bit and 64bit framework will be covered.
         /// </summary>
-        private bool IsDotNetAssembly(string assemblyPath)
+        private static bool IsDotNetAssembly(string assemblyPath)
         {
             return assemblyPath is not null && (assemblyPath.StartsWith(s_dotNetPath, StringComparison.OrdinalIgnoreCase) || assemblyPath.StartsWith(s_dotNetPathX86, StringComparison.OrdinalIgnoreCase));
         }

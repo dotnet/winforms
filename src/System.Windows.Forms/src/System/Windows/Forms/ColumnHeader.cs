@@ -13,9 +13,10 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Displays a single column header in a <see cref="Forms.ListView"/> control.
     /// </summary>
-    [ToolboxItem(false)]
     [DesignTimeVisible(false)]
     [DefaultProperty(nameof(Text))]
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
+    [ToolboxItem(false)]
     [TypeConverter(typeof(ColumnHeaderConverter))]
     public partial class ColumnHeader : Component, ICloneable
     {

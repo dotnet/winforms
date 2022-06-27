@@ -38,7 +38,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string DefaultAction => _owningTrackBar.AccessibleDefaultActionDescription;
+            public override string? DefaultAction => _owningTrackBar.AccessibleDefaultActionDescription;
 
             public override AccessibleRole Role
                 => Owner.AccessibleRole != AccessibleRole.Default

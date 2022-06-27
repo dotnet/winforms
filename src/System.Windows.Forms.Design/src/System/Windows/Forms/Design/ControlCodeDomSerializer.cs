@@ -86,7 +86,7 @@ namespace System.Windows.Forms.Design
             return objectGraphData;
         }
 
-        private bool HasAutoSizedChildren(Control parent)
+        private static bool HasAutoSizedChildren(Control parent)
         {
             foreach (Control child in parent.Controls)
             {
@@ -99,7 +99,7 @@ namespace System.Windows.Forms.Design
             return false;
         }
 
-        private bool HasMixedInheritedChildren(Control parent)
+        private static bool HasMixedInheritedChildren(Control parent)
         {
             bool inheritedChildren = false;
             bool nonInheritedChildren = false;

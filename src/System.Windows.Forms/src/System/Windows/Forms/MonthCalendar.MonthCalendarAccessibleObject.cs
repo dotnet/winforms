@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Drawing;
 using static Interop;
 using static Interop.ComCtl32;
@@ -79,10 +80,51 @@ namespace System.Windows.Forms
                 }
             }
 
+            // This function should be called from a single place in the root of MonthCalendar object that already tests for availability of this API
+            internal void DisconnectChildren()
+            {
+                Debug.Assert(OsVersion.IsWindows8OrGreater);
+                if (_previousButtonAccessibleObject is not null)
+                {
+                    HRESULT result = UiaCore.UiaDisconnectProvider(_previousButtonAccessibleObject);
+                    Debug.Assert(result == 0);
+                }
+
+                if (_nextButtonAccessibleObject is not null)
+                {
+                    HRESULT result = UiaCore.UiaDisconnectProvider(_nextButtonAccessibleObject);
+                    Debug.Assert(result == 0);
+                }
+
+                if (_todayLinkAccessibleObject is not null)
+                {
+                    HRESULT result = UiaCore.UiaDisconnectProvider(_todayLinkAccessibleObject);
+                    Debug.Assert(result == 0);
+                }
+
+                if (_focusedCellAccessibleObject is not null)
+                {
+                    HRESULT result = UiaCore.UiaDisconnectProvider(_focusedCellAccessibleObject);
+                    Debug.Assert(result == 0);
+                }
+
+                if (_calendarsAccessibleObjects is null)
+                {
+                    return;
+                }
+
+                foreach (CalendarAccessibleObject calendarAccessibleObject in _calendarsAccessibleObjects)
+                {
+                    calendarAccessibleObject.DisconnectChildren();
+                    HRESULT result = UiaCore.UiaDisconnectProvider(calendarAccessibleObject);
+                    Debug.Assert(result == 0);
+                }
+            }
+
             /// <summary>
             ///  Associates Win API day of week values with DateTime values.
             /// </summary>
-            private DayOfWeek CastDayToDayOfWeek(Day day)
+            private static DayOfWeek CastDayToDayOfWeek(Day day)
                 => day switch
                 {
                     Day.Monday => DayOfWeek.Monday,

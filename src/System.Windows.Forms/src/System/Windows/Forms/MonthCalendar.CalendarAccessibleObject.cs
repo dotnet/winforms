@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Drawing;
 using static Interop;
 using static Interop.ComCtl32;
@@ -36,6 +37,23 @@ namespace System.Windows.Forms
                 // otherwise the calendar accessibility tree will be rebuilt.
                 // So save this value one time to avoid sending messages to Windows every time.
                 _initName = initName;
+            }
+
+            internal void DisconnectChildren()
+            {
+                Debug.Assert(OsVersion.IsWindows8OrGreater);
+                if (_calendarHeaderAccessibleObject is not null)
+                {
+                    HRESULT result = UiaCore.UiaDisconnectProvider(_calendarHeaderAccessibleObject);
+                    Debug.Assert(result == 0);
+                }
+
+                if (_calendarBodyAccessibleObject is not null)
+                {
+                    _calendarBodyAccessibleObject.DisconnectChildren();
+                    HRESULT result = UiaCore.UiaDisconnectProvider(_calendarBodyAccessibleObject);
+                    Debug.Assert(result == 0);
+                }
             }
 
             public override Rectangle Bounds

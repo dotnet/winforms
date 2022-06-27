@@ -6571,6 +6571,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">O objeto de acessibilidade atual é apenas para ListView no modo de exibição {0}, {1} ou {2}</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="translated">Não é possível obter o objeto de acessibilidade quando o Item ListView não está anexado a um ListView.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">Evento gerado quando a propriedade de ativação de um item ListView é alterada.</target>
@@ -7694,6 +7699,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="PictureBoxOnSizeModeChangedDescr">
         <source>Event raised when the value of the SizeMode property is changed on the PictureBox.</source>
         <target state="translated">Evento gerado quando o valor da propriedade SizeMode é alterado em PictureBox.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PictureBoxRemoteLocationNotSupported">
+        <source>Loading from remote location not supported.</source>
+        <target state="translated">Não há suporte para carregamento do local remoto.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
@@ -8824,6 +8834,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="ScrollBarVisibleDescr">
         <source>Gets or sets a Boolean value controlling whether the scrollbar is showing.</source>
         <target state="translated">Obtém ou define um valor booleano que controla se a barra de rolagem é mostrada.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="translated">A propriedade pai do controle ativo não pode ser nula.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
@@ -10304,6 +10319,16 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="ToolStripSaveSettingsDescr">
         <source>Specifies whether the ToolStrip should persist user settings via IPersistComponentSettings.</source>
         <target state="translated">Especifica se ToolStrip deve preservar as configurações de usuário via IPersistComponentSettings.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="translated">Linha para baixo</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="translated">Linha acima</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">

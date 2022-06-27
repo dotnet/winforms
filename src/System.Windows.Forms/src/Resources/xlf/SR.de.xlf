@@ -6571,6 +6571,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Das aktuelle Objekt für Barrierefreiheit gilt nur für ListView in der Ansicht "{0}", "{1}" oder "{2}".</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="translated">Das Accessiblity-Objekt kann nicht abgerufen werden, wenn ListViewItem nicht an eine ListView angefügt ist.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">Das ausgelöste Ereignis, wenn sich die aktivierte Eigenschaft für ein ListView-Element ändert.</target>
@@ -7694,6 +7699,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="PictureBoxOnSizeModeChangedDescr">
         <source>Event raised when the value of the SizeMode property is changed on the PictureBox.</source>
         <target state="translated">Das ausgelöste Ereignis, wenn der Wert der SizeMode-Eigenschaft für PictureBox geändert wird.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PictureBoxRemoteLocationNotSupported">
+        <source>Loading from remote location not supported.</source>
+        <target state="translated">Das Laden vom Remotespeicherort wird nicht unterstützt.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
@@ -8824,6 +8834,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="ScrollBarVisibleDescr">
         <source>Gets or sets a Boolean value controlling whether the scrollbar is showing.</source>
         <target state="translated">Ruft einen booleschen Wert ab oder legt einen booleschen Wert fest, der steuert, ob die Bildlaufleiste angezeigt wird.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="translated">Die übergeordnete Eigenschaft des aktiven Steuerelements darf nicht NULL sein.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
@@ -10304,6 +10319,16 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="ToolStripSaveSettingsDescr">
         <source>Specifies whether the ToolStrip should persist user settings via IPersistComponentSettings.</source>
         <target state="translated">Gibt an, ob der ToolStrip Benutzereinstellungen über IPersistComponentSettings beibehalten soll.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="translated">Zeile nach unten</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="translated">Zeile nach oben</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">

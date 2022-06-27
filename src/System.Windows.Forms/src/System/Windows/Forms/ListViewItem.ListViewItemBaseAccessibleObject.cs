@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Accessibility;
-using static System.Windows.Forms.ListViewGroup;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -123,7 +122,7 @@ namespace System.Windows.Forms
                         return _parentInternal;
                     case UiaCore.NavigateDirection.NextSibling:
                         int childIndex = _parentInternal.GetChildIndex(this);
-                        return childIndex == -1 ? null : _parentInternal.GetChild(childIndex + 1);
+                        return childIndex == InvalidIndex ? null : _parentInternal.GetChild(childIndex + 1);
                     case UiaCore.NavigateDirection.PreviousSibling:
                         return _parentInternal.GetChild(_parentInternal.GetChildIndex(this) - 1);
                     case UiaCore.NavigateDirection.FirstChild:
@@ -159,10 +158,10 @@ namespace System.Windows.Forms
                         nameof(View.SmallIcon)));
                 }
 
-                return -1;
+                return InvalidIndex;
             }
 
-            internal override int GetChildIndex(AccessibleObject? child) => -1;
+            internal override int GetChildIndex(AccessibleObject? child) => InvalidIndex;
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
@@ -174,7 +173,7 @@ namespace System.Windows.Forms
                     UiaCore.UIA.IsEnabledPropertyId => _owningListView.Enabled,
                     UiaCore.UIA.IsOffscreenPropertyId => OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed
                                                         || (bool)(base.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId) ?? false),
-                    UiaCore.UIA.NativeWindowHandlePropertyId => _owningListView.IsHandleCreated ? _owningListView.Handle : IntPtr.Zero,
+                    UiaCore.UIA.NativeWindowHandlePropertyId => _owningListView.InternalHandle,
                     _ => base.GetPropertyValue(propertyID)
                 };
 
@@ -188,26 +187,18 @@ namespace System.Windows.Forms
 
                     Debug.Assert(owningListViewRuntimeId.Length >= 2);
 
-                    if (OwningGroup is not null)
-                    {
-                        return new int[]
-                        {
-                            owningListViewRuntimeId[0],
-                            owningListViewRuntimeId[1],
-                            4, // Win32-control specific RuntimeID constant, is used in similar Win32 controls and is used in WinForms controls for consistency.
-                            OwningGroup.AccessibilityObject is ListViewGroupAccessibleObject listViewGroupAccessibleObject
-                                            ? listViewGroupAccessibleObject.CurrentIndex
-                                            : -1,
-                            CurrentIndex
-                        };
-                    }
-
                     return new int[]
                     {
                         owningListViewRuntimeId[0],
                         owningListViewRuntimeId[1],
                         4, // Win32-control specific RuntimeID constant.
-                        CurrentIndex
+                        // RuntimeId uses hash code instead of item's index. When items are removed,
+                        // indexes of below items shift. But when UiaDisconnectProvider is called for item
+                        // with updated index, it in fact disconnects the item which had the index initially,
+                        // apparently because of lack of synchronization with RuntimeId updates.
+                        // Similar applies for items within a group, where adding the group's index
+                        // was preventing from correct disconnection of items on removal.
+                        _owningItem.GetHashCode()
                     };
                 }
             }
@@ -223,18 +214,15 @@ namespace System.Windows.Forms
             /// <param name="patternId">The pattern ID.</param>
             /// <returns>True if specified </returns>
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.ScrollItemPatternId ||
-                    patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
-                    patternId == UiaCore.UIA.SelectionItemPatternId ||
-                    patternId == UiaCore.UIA.InvokePatternId ||
-                    (patternId == UiaCore.UIA.TogglePatternId && _owningListView.CheckBoxes))
+                => patternId switch
                 {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
+                    UiaCore.UIA.ScrollItemPatternId => true,
+                    UiaCore.UIA.LegacyIAccessiblePatternId => true,
+                    UiaCore.UIA.SelectionItemPatternId => true,
+                    UiaCore.UIA.InvokePatternId => true,
+                    UiaCore.UIA.TogglePatternId => _owningListView.CheckBoxes,
+                    _ => base.IsPatternSupported(patternId)
+                };
 
             internal override void RemoveFromSelection()
             {

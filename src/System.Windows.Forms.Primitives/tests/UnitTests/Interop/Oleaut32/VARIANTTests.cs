@@ -185,161 +185,161 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         {
             if (IntPtr.Size == 8)
             {
-                yield return new object[] { VARENUM.I1, (IntPtr)long.MinValue, (sbyte)0 };
+                yield return new object[] { VARENUM.I1, unchecked((nint)long.MinValue), (sbyte)0 };
             }
 
-            yield return new object[] { VARENUM.I1, (IntPtr)int.MinValue, (sbyte)0 };
-            yield return new object[] { VARENUM.I1, (IntPtr)short.MinValue, (sbyte)0 };
-            yield return new object[] { VARENUM.I1, (IntPtr)sbyte.MinValue, sbyte.MinValue };
-            yield return new object[] { VARENUM.I1, (IntPtr)(-10), (sbyte)(-10) };
-            yield return new object[] { VARENUM.I1, (IntPtr)0, (sbyte)0 };
-            yield return new object[] { VARENUM.I1, (IntPtr)10, (sbyte)10 };
-            yield return new object[] { VARENUM.I1, (IntPtr)sbyte.MaxValue, sbyte.MaxValue };
-            yield return new object[] { VARENUM.I1, (IntPtr)short.MaxValue, (sbyte)(-1) };
-            yield return new object[] { VARENUM.I1, (IntPtr)int.MaxValue, (sbyte)(-1) };
+            yield return new object[] { VARENUM.I1, (nint)int.MinValue, (sbyte)0 };
+            yield return new object[] { VARENUM.I1, (nint)short.MinValue, (sbyte)0 };
+            yield return new object[] { VARENUM.I1, (nint)sbyte.MinValue, sbyte.MinValue };
+            yield return new object[] { VARENUM.I1, (nint)(-10), (sbyte)(-10) };
+            yield return new object[] { VARENUM.I1, (nint)0, (sbyte)0 };
+            yield return new object[] { VARENUM.I1, (nint)10, (sbyte)10 };
+            yield return new object[] { VARENUM.I1, (nint)sbyte.MaxValue, sbyte.MaxValue };
+            yield return new object[] { VARENUM.I1, (nint)short.MaxValue, (sbyte)(-1) };
+            yield return new object[] { VARENUM.I1, (nint)int.MaxValue, (sbyte)(-1) };
             if (IntPtr.Size == 8)
             {
-                yield return new object[] { VARENUM.I1, (IntPtr)long.MaxValue, (sbyte)(-1) };
+                yield return new object[] { VARENUM.I1, unchecked((nint)long.MaxValue), (sbyte)(-1) };
             }
 
-            yield return new object[] { VARENUM.UI1, (IntPtr)(-10), (byte)246 };
-            yield return new object[] { VARENUM.UI1, (IntPtr)0, (byte)0 };
-            yield return new object[] { VARENUM.UI1, (IntPtr)10, (byte)10 };
-            yield return new object[] { VARENUM.UI1, (IntPtr)byte.MaxValue, byte.MaxValue };
-            yield return new object[] { VARENUM.UI1, (IntPtr)ushort.MaxValue, byte.MaxValue };
+            yield return new object[] { VARENUM.UI1, (nint)(-10), (byte)246 };
+            yield return new object[] { VARENUM.UI1, (nint)0, (byte)0 };
+            yield return new object[] { VARENUM.UI1, (nint)10, (byte)10 };
+            yield return new object[] { VARENUM.UI1, (nint)byte.MaxValue, byte.MaxValue };
+            yield return new object[] { VARENUM.UI1, (nint)ushort.MaxValue, byte.MaxValue };
             if (IntPtr.Size == 8)
             {
-                yield return new object[] { VARENUM.UI1, (IntPtr)uint.MaxValue, byte.MaxValue };
+                yield return new object[] { VARENUM.UI1, unchecked((nint)uint.MaxValue), byte.MaxValue };
             }
 
-            yield return new object[] { VARENUM.UI1, (IntPtr)(-1), byte.MaxValue };
-
-            if (IntPtr.Size == 8)
-            {
-                yield return new object[] { VARENUM.I2, (IntPtr)long.MinValue, (short)0 };
-            }
-
-            yield return new object[] { VARENUM.I2, (IntPtr)int.MinValue, (short)0 };
-            yield return new object[] { VARENUM.I2, (IntPtr)short.MinValue, short.MinValue };
-            yield return new object[] { VARENUM.I2, (IntPtr)sbyte.MinValue, (short)sbyte.MinValue };
-            yield return new object[] { VARENUM.I2, (IntPtr)(-10), (short)(-10) };
-            yield return new object[] { VARENUM.I2, (IntPtr)0, (short)0 };
-            yield return new object[] { VARENUM.I2, (IntPtr)10, (short)10 };
-            yield return new object[] { VARENUM.I2, (IntPtr)sbyte.MaxValue, (short)sbyte.MaxValue };
-            yield return new object[] { VARENUM.I2, (IntPtr)short.MaxValue, short.MaxValue };
-            if (IntPtr.Size == 8)
-            {
-                yield return new object[] { VARENUM.I2, (IntPtr)long.MaxValue, (short)(-1) };
-            }
-
-            yield return new object[] { VARENUM.UI2, (IntPtr)(-10), (ushort)65526 };
-            yield return new object[] { VARENUM.UI2, (IntPtr)0, (ushort)0 };
-            yield return new object[] { VARENUM.UI2, (IntPtr)10, (ushort)10 };
-            yield return new object[] { VARENUM.UI2, (IntPtr)byte.MaxValue, (ushort)byte.MaxValue };
-            yield return new object[] { VARENUM.UI2, (IntPtr)ushort.MaxValue, ushort.MaxValue };
-            if (IntPtr.Size == 8)
-            {
-                yield return new object[] { VARENUM.UI2, (IntPtr)uint.MaxValue, ushort.MaxValue };
-            }
-
-            yield return new object[] { VARENUM.UI2, (IntPtr)(-1), ushort.MaxValue };
+            yield return new object[] { VARENUM.UI1, (nint)(-1), byte.MaxValue };
 
             if (IntPtr.Size == 8)
             {
-                yield return new object[] { VARENUM.I4, (IntPtr)long.MinValue, 0 };
+                yield return new object[] { VARENUM.I2, unchecked((nint)long.MinValue), (short)0 };
             }
 
-            yield return new object[] { VARENUM.I4, (IntPtr)int.MinValue, int.MinValue };
-            yield return new object[] { VARENUM.I4, (IntPtr)short.MinValue, (int)short.MinValue };
-            yield return new object[] { VARENUM.I4, (IntPtr)sbyte.MinValue, (int)sbyte.MinValue };
-            yield return new object[] { VARENUM.I4, (IntPtr)(-10), -10 };
-            yield return new object[] { VARENUM.I4, (IntPtr)0, 0 };
-            yield return new object[] { VARENUM.I4, (IntPtr)10, 10 };
-            yield return new object[] { VARENUM.I4, (IntPtr)sbyte.MaxValue, (int)sbyte.MaxValue };
-            yield return new object[] { VARENUM.I4, (IntPtr)short.MaxValue, (int)short.MaxValue };
-            yield return new object[] { VARENUM.I4, (IntPtr)int.MaxValue, int.MaxValue };
+            yield return new object[] { VARENUM.I2, (nint)int.MinValue, (short)0 };
+            yield return new object[] { VARENUM.I2, (nint)short.MinValue, short.MinValue };
+            yield return new object[] { VARENUM.I2, (nint)sbyte.MinValue, (short)sbyte.MinValue };
+            yield return new object[] { VARENUM.I2, (nint)(-10), (short)(-10) };
+            yield return new object[] { VARENUM.I2, (nint)0, (short)0 };
+            yield return new object[] { VARENUM.I2, (nint)10, (short)10 };
+            yield return new object[] { VARENUM.I2, (nint)sbyte.MaxValue, (short)sbyte.MaxValue };
+            yield return new object[] { VARENUM.I2, (nint)short.MaxValue, short.MaxValue };
             if (IntPtr.Size == 8)
             {
-                yield return new object[] { VARENUM.I4, (IntPtr)long.MaxValue, -1 };
+                yield return new object[] { VARENUM.I2, unchecked((nint)long.MaxValue), (short)(-1) };
             }
 
-            yield return new object[] { VARENUM.UI4, (IntPtr)(-10), (uint)4294967286 };
-            yield return new object[] { VARENUM.UI4, (IntPtr)0, (uint)0 };
-            yield return new object[] { VARENUM.UI4, (IntPtr)10, (uint)10 };
-            yield return new object[] { VARENUM.UI4, (IntPtr)byte.MaxValue, (uint)byte.MaxValue };
-            yield return new object[] { VARENUM.UI4, (IntPtr)ushort.MaxValue, (uint)ushort.MaxValue };
+            yield return new object[] { VARENUM.UI2, (nint)(-10), (ushort)65526 };
+            yield return new object[] { VARENUM.UI2, (nint)0, (ushort)0 };
+            yield return new object[] { VARENUM.UI2, (nint)10, (ushort)10 };
+            yield return new object[] { VARENUM.UI2, (nint)byte.MaxValue, (ushort)byte.MaxValue };
+            yield return new object[] { VARENUM.UI2, (nint)ushort.MaxValue, ushort.MaxValue };
             if (IntPtr.Size == 8)
             {
-                yield return new object[] { VARENUM.UI4, (IntPtr)uint.MaxValue, uint.MaxValue };
+                yield return new object[] { VARENUM.UI2, unchecked((nint)uint.MaxValue), ushort.MaxValue };
             }
 
-            yield return new object[] { VARENUM.UI4, (IntPtr)(-1), uint.MaxValue };
-
-            if (IntPtr.Size == 8)
-            {
-                yield return new object[] { VARENUM.INT, (IntPtr)long.MinValue, 0 };
-            }
-
-            yield return new object[] { VARENUM.INT, (IntPtr)int.MinValue, int.MinValue };
-            yield return new object[] { VARENUM.INT, (IntPtr)short.MinValue, (int)short.MinValue };
-            yield return new object[] { VARENUM.INT, (IntPtr)sbyte.MinValue, (int)sbyte.MinValue };
-            yield return new object[] { VARENUM.INT, (IntPtr)(-10), -10 };
-            yield return new object[] { VARENUM.INT, (IntPtr)0, 0 };
-            yield return new object[] { VARENUM.INT, (IntPtr)10, 10 };
-            yield return new object[] { VARENUM.INT, (IntPtr)sbyte.MaxValue, (int)sbyte.MaxValue };
-            yield return new object[] { VARENUM.INT, (IntPtr)short.MaxValue, (int)short.MaxValue };
-            yield return new object[] { VARENUM.INT, (IntPtr)int.MaxValue, int.MaxValue };
-            if (IntPtr.Size == 8)
-            {
-                yield return new object[] { VARENUM.INT, (IntPtr)long.MaxValue, -1 };
-            }
-
-            yield return new object[] { VARENUM.UINT, (IntPtr)(-10), (uint)4294967286 };
-            yield return new object[] { VARENUM.UINT, (IntPtr)0, (uint)0 };
-            yield return new object[] { VARENUM.UINT, (IntPtr)10, (uint)10 };
-            yield return new object[] { VARENUM.UINT, (IntPtr)byte.MaxValue, (uint)byte.MaxValue };
-            yield return new object[] { VARENUM.UINT, (IntPtr)ushort.MaxValue, (uint)ushort.MaxValue };
-            if (IntPtr.Size == 8)
-            {
-                yield return new object[] { VARENUM.UINT, (IntPtr)uint.MaxValue, uint.MaxValue };
-            }
-
-            yield return new object[] { VARENUM.UINT, (IntPtr)(-1), uint.MaxValue };
-
-            yield return new object[] { VARENUM.BOOL, (IntPtr)(-1), true };
-            yield return new object[] { VARENUM.BOOL, (IntPtr)0, false };
-            yield return new object[] { VARENUM.BOOL, (IntPtr)1, true };
+            yield return new object[] { VARENUM.UI2, (nint)(-1), ushort.MaxValue };
 
             if (IntPtr.Size == 8)
             {
-                yield return new object[] { VARENUM.ERROR, (IntPtr)long.MinValue, 0 };
+                yield return new object[] { VARENUM.I4, unchecked((nint)long.MinValue), 0 };
             }
 
-            yield return new object[] { VARENUM.ERROR, (IntPtr)int.MinValue, int.MinValue };
-            yield return new object[] { VARENUM.ERROR, (IntPtr)short.MinValue, (int)short.MinValue };
-            yield return new object[] { VARENUM.ERROR, (IntPtr)sbyte.MinValue, (int)sbyte.MinValue };
-            yield return new object[] { VARENUM.ERROR, (IntPtr)(-10), -10 };
-            yield return new object[] { VARENUM.ERROR, (IntPtr)0, 0 };
-            yield return new object[] { VARENUM.ERROR, (IntPtr)10, 10 };
-            yield return new object[] { VARENUM.ERROR, (IntPtr)sbyte.MaxValue, (int)sbyte.MaxValue };
-            yield return new object[] { VARENUM.ERROR, (IntPtr)short.MaxValue, (int)short.MaxValue };
-            yield return new object[] { VARENUM.ERROR, (IntPtr)int.MaxValue, int.MaxValue };
+            yield return new object[] { VARENUM.I4, (nint)int.MinValue, int.MinValue };
+            yield return new object[] { VARENUM.I4, (nint)short.MinValue, (int)short.MinValue };
+            yield return new object[] { VARENUM.I4, (nint)sbyte.MinValue, (int)sbyte.MinValue };
+            yield return new object[] { VARENUM.I4, (nint)(-10), -10 };
+            yield return new object[] { VARENUM.I4, (nint)0, 0 };
+            yield return new object[] { VARENUM.I4, (nint)10, 10 };
+            yield return new object[] { VARENUM.I4, (nint)sbyte.MaxValue, (int)sbyte.MaxValue };
+            yield return new object[] { VARENUM.I4, (nint)short.MaxValue, (int)short.MaxValue };
+            yield return new object[] { VARENUM.I4, (nint)int.MaxValue, int.MaxValue };
             if (IntPtr.Size == 8)
             {
-                yield return new object[] { VARENUM.ERROR, (IntPtr)long.MaxValue, -1 };
+                yield return new object[] { VARENUM.I4, unchecked((nint)long.MaxValue), -1 };
+            }
+
+            yield return new object[] { VARENUM.UI4, (nint)(-10), (uint)4294967286 };
+            yield return new object[] { VARENUM.UI4, (nint)0, (uint)0 };
+            yield return new object[] { VARENUM.UI4, (nint)10, (uint)10 };
+            yield return new object[] { VARENUM.UI4, (nint)byte.MaxValue, (uint)byte.MaxValue };
+            yield return new object[] { VARENUM.UI4, (nint)ushort.MaxValue, (uint)ushort.MaxValue };
+            if (IntPtr.Size == 8)
+            {
+                yield return new object[] { VARENUM.UI4, unchecked((nint)uint.MaxValue), uint.MaxValue };
+            }
+
+            yield return new object[] { VARENUM.UI4, (nint)(-1), uint.MaxValue };
+
+            if (IntPtr.Size == 8)
+            {
+                yield return new object[] { VARENUM.INT, unchecked((nint)long.MinValue), 0 };
+            }
+
+            yield return new object[] { VARENUM.INT, (nint)int.MinValue, int.MinValue };
+            yield return new object[] { VARENUM.INT, (nint)short.MinValue, (int)short.MinValue };
+            yield return new object[] { VARENUM.INT, (nint)sbyte.MinValue, (int)sbyte.MinValue };
+            yield return new object[] { VARENUM.INT, (nint)(-10), -10 };
+            yield return new object[] { VARENUM.INT, (nint)0, 0 };
+            yield return new object[] { VARENUM.INT, (nint)10, 10 };
+            yield return new object[] { VARENUM.INT, (nint)sbyte.MaxValue, (int)sbyte.MaxValue };
+            yield return new object[] { VARENUM.INT, (nint)short.MaxValue, (int)short.MaxValue };
+            yield return new object[] { VARENUM.INT, (nint)int.MaxValue, int.MaxValue };
+            if (IntPtr.Size == 8)
+            {
+                yield return new object[] { VARENUM.INT, unchecked((nint)long.MaxValue), -1 };
+            }
+
+            yield return new object[] { VARENUM.UINT, (nint)(-10), (uint)4294967286 };
+            yield return new object[] { VARENUM.UINT, (nint)0, (uint)0 };
+            yield return new object[] { VARENUM.UINT, (nint)10, (uint)10 };
+            yield return new object[] { VARENUM.UINT, (nint)byte.MaxValue, (uint)byte.MaxValue };
+            yield return new object[] { VARENUM.UINT, (nint)ushort.MaxValue, (uint)ushort.MaxValue };
+            if (IntPtr.Size == 8)
+            {
+                yield return new object[] { VARENUM.UINT, unchecked((nint)uint.MaxValue), uint.MaxValue };
+            }
+
+            yield return new object[] { VARENUM.UINT, (nint)(-1), uint.MaxValue };
+
+            yield return new object[] { VARENUM.BOOL, (nint)(-1), true };
+            yield return new object[] { VARENUM.BOOL, (nint)0, false };
+            yield return new object[] { VARENUM.BOOL, (nint)1, true };
+
+            if (IntPtr.Size == 8)
+            {
+                yield return new object[] { VARENUM.ERROR, unchecked((nint)long.MinValue), 0 };
+            }
+
+            yield return new object[] { VARENUM.ERROR, (nint)int.MinValue, int.MinValue };
+            yield return new object[] { VARENUM.ERROR, (nint)short.MinValue, (int)short.MinValue };
+            yield return new object[] { VARENUM.ERROR, (nint)sbyte.MinValue, (int)sbyte.MinValue };
+            yield return new object[] { VARENUM.ERROR, (nint)(-10), -10 };
+            yield return new object[] { VARENUM.ERROR, (nint)0, 0 };
+            yield return new object[] { VARENUM.ERROR, (nint)10, 10 };
+            yield return new object[] { VARENUM.ERROR, (nint)sbyte.MaxValue, (int)sbyte.MaxValue };
+            yield return new object[] { VARENUM.ERROR, (nint)short.MaxValue, (int)short.MaxValue };
+            yield return new object[] { VARENUM.ERROR, (nint)int.MaxValue, int.MaxValue };
+            if (IntPtr.Size == 8)
+            {
+                yield return new object[] { VARENUM.ERROR, unchecked((nint)long.MaxValue), -1 };
             }
         }
 
         [StaTheory]
         [MemberData(nameof(ToObject_TestData))]
-        public void VARIANT_ToObject_Invoke_ReturnsExpected(ushort vt, IntPtr data, object expected)
+        public void VARIANT_ToObject_Invoke_ReturnsExpected(ushort vt, nint data, object expected)
         {
             using var variant = new VARIANT
             {
                 vt = (VARENUM)vt,
                 data = new VARIANT.VARIANTUnion
                 {
-                    punkVal = (IntPtr)data
+                    punkVal = (nint)data
                 }
             };
             AssertToObjectEqual(expected, variant);
@@ -347,7 +347,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         [StaTheory]
         [MemberData(nameof(ToObject_TestData))]
-        public void VARIANT_ToObject_InvokeBYREF_ReturnsExpected(ushort vt, IntPtr data, object expected)
+        public void VARIANT_ToObject_InvokeBYREF_ReturnsExpected(ushort vt, nint data, object expected)
         {
             using var variant = new VARIANT
             {
@@ -422,34 +422,34 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         {
             if (IntPtr.Size == 8)
             {
-                yield return new object[] { (IntPtr)long.MinValue, long.MinValue };
-                yield return new object[] { (IntPtr)int.MinValue, (long)int.MinValue };
-                yield return new object[] { (IntPtr)short.MinValue, (long)short.MinValue };
-                yield return new object[] { (IntPtr)sbyte.MinValue, (long)sbyte.MinValue };
-                yield return new object[] { (IntPtr)(-10), (long)(-10) };
+                yield return new object[] { unchecked((nint)long.MinValue), long.MinValue };
+                yield return new object[] { (nint)int.MinValue, (long)int.MinValue };
+                yield return new object[] { (nint)short.MinValue, (long)short.MinValue };
+                yield return new object[] { (nint)sbyte.MinValue, (long)sbyte.MinValue };
+                yield return new object[] { (nint)(-10), (long)(-10) };
             }
 
-            yield return new object[] { (IntPtr)0, (long)0 };
-            yield return new object[] { (IntPtr)10, (long)10 };
-            yield return new object[] { (IntPtr)sbyte.MaxValue, (long)sbyte.MaxValue };
-            yield return new object[] { (IntPtr)short.MaxValue, (long)short.MaxValue };
-            yield return new object[] { (IntPtr)int.MaxValue, (long)int.MaxValue };
+            yield return new object[] { (nint)0, (long)0 };
+            yield return new object[] { (nint)10, (long)10 };
+            yield return new object[] { (nint)sbyte.MaxValue, (long)sbyte.MaxValue };
+            yield return new object[] { (nint)short.MaxValue, (long)short.MaxValue };
+            yield return new object[] { (nint)int.MaxValue, (long)int.MaxValue };
             if (IntPtr.Size == 8)
             {
-                yield return new object[] { (IntPtr)long.MaxValue, long.MaxValue };
+                yield return new object[] { unchecked((nint)long.MaxValue), long.MaxValue };
             }
         }
 
         [Theory]
         [MemberData(nameof(ToObject_I8_TestData))]
-        public void VARIANT_ToObject_I8_ReturnsExpected(IntPtr data, long expected)
+        public void VARIANT_ToObject_I8_ReturnsExpected(nint data, long expected)
         {
             using var variant = new VARIANT
             {
                 vt = VARENUM.I8,
                 data = new VARIANT.VARIANTUnion
                 {
-                    punkVal = data
+                    llVal = data
                 }
             };
             AssertToObjectEqual(expected, variant);
@@ -489,23 +489,23 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         {
             if (IntPtr.Size == 8)
             {
-                yield return new object[] { (IntPtr)(-10), (ulong)18446744073709551606 };
+                yield return new object[] { (nint)(-10), (ulong)18446744073709551606 };
             }
 
-            yield return new object[] { (IntPtr)0, (ulong)0 };
-            yield return new object[] { (IntPtr)10, (ulong)10 };
-            yield return new object[] { (IntPtr)byte.MaxValue, (ulong)byte.MaxValue };
-            yield return new object[] { (IntPtr)ushort.MaxValue, (ulong)ushort.MaxValue };
+            yield return new object[] { (nint)0, (ulong)0 };
+            yield return new object[] { (nint)10, (ulong)10 };
+            yield return new object[] { (nint)byte.MaxValue, (ulong)byte.MaxValue };
+            yield return new object[] { (nint)ushort.MaxValue, (ulong)ushort.MaxValue };
             if (IntPtr.Size == 8)
             {
-                yield return new object[] { (IntPtr)uint.MaxValue, (ulong)uint.MaxValue };
-                yield return new object[] { (IntPtr)ulong.MaxValue, ulong.MaxValue };
+                yield return new object[] { unchecked((nint)uint.MaxValue), (ulong)uint.MaxValue };
+                yield return new object[] { (nint)(-1L), ulong.MaxValue };
             }
         }
 
         [Theory]
         [MemberData(nameof(ToObject_UI8_TestData))]
-        public void VARIANT_ToObject_UI8_ReturnsExpected(IntPtr data, ulong expected)
+        public void VARIANT_ToObject_UI8_ReturnsExpected(nint data, ulong expected)
         {
             using var variant = new VARIANT
             {
@@ -545,21 +545,21 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> ToObject_CY_TestData()
         {
-            yield return new object[] { (IntPtr)0, 0.0m };
-            yield return new object[] { (IntPtr)10, 0.001m };
-            yield return new object[] { (IntPtr)10000, 1m };
-            yield return new object[] { (IntPtr)123456, 12.3456m };
+            yield return new object[] { (nint)0, 0.0m };
+            yield return new object[] { (nint)10, 0.001m };
+            yield return new object[] { (nint)10000, 1m };
+            yield return new object[] { (nint)123456, 12.3456m };
             if (IntPtr.Size == 8)
             {
-                yield return new object[] { (IntPtr)(-10), -0.001m };
-                yield return new object[] { (IntPtr)(-10000), -1m };
-                yield return new object[] { (IntPtr)(-123456), -12.3456m };
+                yield return new object[] { (nint)(-10), -0.001m };
+                yield return new object[] { (nint)(-10000), -1m };
+                yield return new object[] { (nint)(-123456), -12.3456m };
             }
         }
 
         [Theory]
         [MemberData(nameof(ToObject_CY_TestData))]
-        public void VARIANT_ToObject_CY_ReturnsExpected(IntPtr data, decimal expected)
+        public void VARIANT_ToObject_CY_ReturnsExpected(nint data, decimal expected)
         {
             using var variant = new VARIANT
             {
@@ -600,18 +600,18 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> ToObject_R4_TestData()
         {
-            yield return new object[] { (IntPtr)0, 0.0f };
-            yield return new object[] { (IntPtr)1067030938, 1.2f };
+            yield return new object[] { (nint)0, 0.0f };
+            yield return new object[] { (nint)1067030938, 1.2f };
             if (IntPtr.Size == 8)
             {
-                yield return new object[] { (IntPtr)3214514586, -1.2f };
-                yield return new object[] { (IntPtr)4290772992, float.NaN };
+                yield return new object[] { unchecked((nint)3214514586), -1.2f };
+                yield return new object[] { unchecked((nint)4290772992), float.NaN };
             }
         }
 
         [Theory]
         [MemberData(nameof(ToObject_R4_TestData))]
-        public void VARIANT_ToObject_R4_ReturnsExpected(IntPtr data, float expected)
+        public void VARIANT_ToObject_R4_ReturnsExpected(nint data, float expected)
         {
             using var variant = new VARIANT
             {
@@ -641,7 +641,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 vt = VARENUM.R4 | VARENUM.BYREF,
                 data = new VARIANT.VARIANTUnion
                 {
-                    punkVal = (IntPtr)(&data)
+                    pfltVal = (float*)(&data)
                 }
             };
             AssertToObjectEqual(data, variant);
@@ -649,18 +649,18 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> ToObject_R8_TestData()
         {
-            yield return new object[] { (IntPtr)0, 0.0 };
+            yield return new object[] { (nint)0, 0.0 };
             if (IntPtr.Size == 8)
             {
-                yield return new object[] { (IntPtr)4608083138725491507, 1.2 };
-                yield return new object[] { (IntPtr)(-4615288898129284301), -1.2 };
-                yield return new object[] { (IntPtr)(-2251799813685248), double.NaN };
+                yield return new object[] { unchecked((nint)4608083138725491507), 1.2 };
+                yield return new object[] { unchecked((nint)(-4615288898129284301)), -1.2 };
+                yield return new object[] { unchecked((nint)(-2251799813685248)), double.NaN };
             }
         }
 
         [Theory]
         [MemberData(nameof(ToObject_R8_TestData))]
-        public void VARIANT_ToObject_R8_ReturnsExpected(IntPtr data, double expected)
+        public void VARIANT_ToObject_R8_ReturnsExpected(nint data, double expected)
         {
             using var variant = new VARIANT
             {
@@ -699,12 +699,12 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> NULL_TestData()
         {
             yield return new object[] { IntPtr.Zero };
-            yield return new object[] { (IntPtr)1 };
+            yield return new object[] { (nint)1 };
         }
 
         [StaTheory]
         [MemberData(nameof(NULL_TestData))]
-        public void VARIANT_ToObject_NULL_Success(IntPtr data)
+        public void VARIANT_ToObject_NULL_Success(nint data)
         {
             using var variant = new VARIANT
             {
@@ -719,7 +719,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         [StaTheory]
         [MemberData(nameof(NULL_TestData))]
-        public void VARIANT_ToObject_NULLBYREFData_Success(IntPtr data)
+        public void VARIANT_ToObject_NULLBYREFData_Success(nint data)
         {
             using var variant = new VARIANT
             {
@@ -745,12 +745,12 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> EMPTY_TestData()
         {
             yield return new object[] { IntPtr.Zero };
-            yield return new object[] { (IntPtr)1 };
+            yield return new object[] { (nint)1 };
         }
 
         [StaTheory]
         [MemberData(nameof(EMPTY_TestData))]
-        public void VARIANT_ToObject_EMPTY_Success(IntPtr data)
+        public void VARIANT_ToObject_EMPTY_Success(nint data)
         {
             using var variant = new VARIANT
             {
@@ -765,7 +765,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         [StaTheory]
         [MemberData(nameof(EMPTY_TestData))]
-        public void VARIANT_ToObject_EMPTYBYREFData_Success(IntPtr data)
+        public void VARIANT_ToObject_EMPTYBYREFData_Success(nint data)
         {
             using var variant = new VARIANT
             {
@@ -810,32 +810,25 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> HRESULT_TestData()
         {
-            yield return new object[] { (IntPtr)int.MinValue, int.MinValue };
-            yield return new object[] { (IntPtr)short.MinValue, (int)short.MinValue };
-            yield return new object[] { (IntPtr)sbyte.MinValue, (int)sbyte.MinValue };
-            yield return new object[] { (IntPtr)(-10), -10 };
-            yield return new object[] { (IntPtr)0, 0 };
-            yield return new object[] { (IntPtr)10, 10 };
-            yield return new object[] { (IntPtr)sbyte.MaxValue, (int)sbyte.MaxValue };
-            yield return new object[] { (IntPtr)short.MaxValue, (int)short.MaxValue };
-            yield return new object[] { (IntPtr)int.MaxValue, int.MaxValue };
+            yield return new object[] { (nint)int.MinValue, int.MinValue };
+            yield return new object[] { (nint)short.MinValue, (int)short.MinValue };
+            yield return new object[] { (nint)sbyte.MinValue, (int)sbyte.MinValue };
+            yield return new object[] { (nint)(-10), -10 };
+            yield return new object[] { (nint)0, 0 };
+            yield return new object[] { (nint)10, 10 };
+            yield return new object[] { (nint)sbyte.MaxValue, (int)sbyte.MaxValue };
+            yield return new object[] { (nint)short.MaxValue, (int)short.MaxValue };
+            yield return new object[] { (nint)int.MaxValue, int.MaxValue };
             if (IntPtr.Size == 8)
             {
-                if (IntPtr.Size == 8)
-                {
-                    yield return new object[] { (IntPtr)long.MinValue, 0 };
-                }
-
-                if (IntPtr.Size == 8)
-                {
-                    yield return new object[] { (IntPtr)long.MaxValue, -1 };
-                }
+                yield return new object[] { unchecked((nint)long.MinValue), 0 };
+                yield return new object[] { unchecked((nint)long.MaxValue), -1 };
             }
         }
 
         [StaTheory]
         [MemberData(nameof(HRESULT_TestData))]
-        public void VARIANT_ToObject_HRESULT_Success(IntPtr data, int expected)
+        public void VARIANT_ToObject_HRESULT_Success(nint data, int expected)
         {
             using var variant = new VARIANT
             {
@@ -850,7 +843,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         [StaTheory]
         [MemberData(nameof(HRESULT_TestData))]
-        public void VARIANT_ToObject_HRESULTBYREF_Success(IntPtr data, int expected)
+        public void VARIANT_ToObject_HRESULTBYREF_Success(nint data, int expected)
         {
             using var variant = new VARIANT
             {
@@ -6049,25 +6042,18 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 GetGuidAction = () => (guid, HRESULT.S_OK)
             };
             IntPtr pRecordInfo = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(record);
-            try
+            using var variant = new VARIANT
             {
-                using var variant = new VARIANT
+                vt = VARENUM.RECORD,
+                data = new VARIANT.VARIANTUnion
                 {
-                    vt = VARENUM.RECORD,
-                    data = new VARIANT.VARIANTUnion
+                    recordVal = new VARIANT.VARIANTRecord
                     {
-                        recordVal = new VARIANT.VARIANTRecord
-                        {
-                            pRecInfo = pRecordInfo,
-                        }
+                        pRecInfo = pRecordInfo,
                     }
-                };
-                AssertToObjectEqual(null, variant);
-            }
-            finally
-            {
-                Marshal.Release(pRecordInfo);
-            }
+                }
+            };
+            AssertToObjectEqual(null, variant);
         }
 
         [StaFact]

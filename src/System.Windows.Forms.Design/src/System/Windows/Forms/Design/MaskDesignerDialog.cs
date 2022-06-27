@@ -633,7 +633,7 @@ namespace System.Windows.Forms.Design
             _errorProvider.SetError(_maskedTextBox, MaskedTextBoxDesigner.GetMaskInputRejectedErrorMessage(e));
         }
 
-        private string HelpTopic
+        private static string HelpTopic
         {
             get
             {

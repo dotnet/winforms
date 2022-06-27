@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern int PostThreadMessageW(uint id, WM msg, IntPtr wparam, IntPtr lparam);
+        [LibraryImport(Libraries.User32)]
+        public static partial int PostThreadMessageW(uint id, WM msg, IntPtr wparam, IntPtr lparam);
     }
 }

@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [DllImport(Libraries.UxTheme, ExactSpelling = true)]
-        public static extern HRESULT GetThemeColor(IntPtr hTheme, int iPartId, int iStateId, int iPropId, ref int pColor);
+        [LibraryImport(Libraries.UxTheme)]
+        public static partial HRESULT GetThemeColor(IntPtr hTheme, int iPartId, int iStateId, int iPropId, ref int pColor);
 
         public static HRESULT GetThemeColor(IHandle hTheme, int iPartId, int iStateId, int iPropId, ref int pColor)
         {

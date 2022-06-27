@@ -65,7 +65,7 @@ namespace System.Windows.Forms
 
                 if (!_owningListView.IsHandleCreated || !_owningListView.SupportsListViewSubItems)
                 {
-                    return -1;
+                    return InvalidIndex;
                 }
 
                 if (_owningItem.SubItems.Count == 1)
@@ -84,11 +84,11 @@ namespace System.Windows.Forms
                     || child is not ListViewSubItem.ListViewSubItemAccessibleObject subItemAccessibleObject
                     || subItemAccessibleObject.OwningSubItem is null)
                 {
-                    return -1;
+                    return InvalidIndex;
                 }
 
                 int index = _owningItem.SubItems.IndexOf(subItemAccessibleObject.OwningSubItem);
-                return index == -1 || index > GetLastChildIndex() ? -1 : index;
+                return index == -1 || index > GetLastChildIndex() ? InvalidIndex : index;
             }
 
             private int GetLastChildIndex()
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
                 // Therefore, it is not displayed in the ListViewSubItems list
                 if (_owningItem.SubItems.Count == 1)
                 {
-                    return -1;
+                    return InvalidIndex;
                 }
 
                 // Only ListViewSubItems with the corresponding columns are displayed in the ListView

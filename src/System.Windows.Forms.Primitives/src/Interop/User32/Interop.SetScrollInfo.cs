@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern int SetScrollInfo(IntPtr hWnd, SB nBar, ref SCROLLINFO lpsi, BOOL redraw);
+        [LibraryImport(Libraries.User32)]
+        public static partial int SetScrollInfo(IntPtr hWnd, SB nBar, ref SCROLLINFO lpsi, BOOL redraw);
 
         public static int SetScrollInfo(IHandle hWnd, SB nBar, ref SCROLLINFO lpsi, BOOL redraw)
         {

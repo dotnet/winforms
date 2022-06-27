@@ -674,7 +674,7 @@ namespace System.Windows.Forms
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        private RightToLeft DefaultRightToLeft => RightToLeft.Inherit;
+        private static RightToLeft DefaultRightToLeft => RightToLeft.Inherit;
 
         /// <summary>
         ///  Occurs when the control is double clicked.
@@ -819,7 +819,7 @@ namespace System.Windows.Forms
         {
             if (ParentInternal is not null)
             {
-                ParentInternal.DropTargetManager.EnsureRegistered(this);
+                ParentInternal.DropTargetManager.EnsureRegistered();
             }
         }
 
@@ -2814,7 +2814,7 @@ namespace System.Windows.Forms
             SetAmbientMargin();
             if ((oldParent is not null) && (oldParent.DropTargetManager is not null))
             {
-                oldParent.DropTargetManager.EnsureUnRegistered(this);
+                oldParent.DropTargetManager.EnsureUnRegistered();
             }
 
             if (AllowDrop && (newParent is not null))

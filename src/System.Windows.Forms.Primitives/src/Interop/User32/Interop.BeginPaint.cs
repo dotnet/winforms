@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern IntPtr BeginPaint(IntPtr hWnd, ref PAINTSTRUCT lpPaint);
+        [LibraryImport(Libraries.User32)]
+        public static partial IntPtr BeginPaint(IntPtr hWnd, ref PAINTSTRUCT lpPaint);
 
         public static IntPtr BeginPaint(HandleRef hWnd, ref PAINTSTRUCT lpPaint)
         {

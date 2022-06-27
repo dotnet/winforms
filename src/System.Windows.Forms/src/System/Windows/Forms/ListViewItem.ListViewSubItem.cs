@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.Serialization;
 
@@ -21,33 +20,33 @@ namespace System.Windows.Forms
         public partial class ListViewSubItem
         {
             [NonSerialized]
-            internal ListViewItem _owner;
+            internal ListViewItem? _owner;
 #pragma warning disable IDE1006
-            private string text;  // Do NOT rename (binary serialization).
+            private string? text;  // Do NOT rename (binary serialization).
 
             [OptionalField(VersionAdded = 2)]
-            private string name = null;  // Do NOT rename (binary serialization).
+            private string? name = null;  // Do NOT rename (binary serialization).
 
-            private SubItemStyle style;  // Do NOT rename (binary serialization).
+            private SubItemStyle? style;  // Do NOT rename (binary serialization).
 
             [OptionalField(VersionAdded = 2)]
-            private object userData;  // Do NOT rename (binary serialization).
+            private object? userData;  // Do NOT rename (binary serialization).
 #pragma warning restore IDE1006
 
             [NonSerialized]
-            private AccessibleObject _accessibilityObject;
+            private AccessibleObject? _accessibilityObject;
 
             public ListViewSubItem()
             {
             }
 
-            public ListViewSubItem(ListViewItem owner, string text)
+            public ListViewSubItem(ListViewItem owner, string? text)
             {
                 _owner = owner;
                 this.text = text;
             }
 
-            public ListViewSubItem(ListViewItem owner, string text, Color foreColor, Color backColor, Font font)
+            public ListViewSubItem(ListViewItem owner, string? text, Color foreColor, Color backColor, Font font)
             {
                 _owner = owner;
                 this.text = text;
@@ -59,8 +58,20 @@ namespace System.Windows.Forms
                 };
             }
 
-            internal AccessibleObject AccessibilityObject
-                => _accessibilityObject ??= new ListViewSubItemAccessibleObject(this, _owner);
+            internal AccessibleObject? AccessibilityObject
+            {
+                get
+                {
+                    if (_accessibilityObject is null && _owner is not null)
+                    {
+                        _accessibilityObject = new ListViewSubItemAccessibleObject(this, _owner);
+                    }
+
+                    return _accessibilityObject;
+                }
+            }
+
+            internal bool IsAccessibilityObjectCreated => _accessibilityObject is not null;
 
             public Color BackColor
             {
@@ -185,13 +196,14 @@ namespace System.Windows.Forms
             [SRDescription(nameof(SR.ControlTagDescr))]
             [DefaultValue(null)]
             [TypeConverter(typeof(StringConverter))]
-            public object Tag
+            public object? Tag
             {
                 get => userData;
                 set => userData = value;
             }
 
             [Localizable(true)]
+            [AllowNull]
             public string Text
             {
                 get => text ?? string.Empty;
@@ -203,6 +215,7 @@ namespace System.Windows.Forms
             }
 
             [Localizable(true)]
+            [AllowNull]
             public string Name
             {
                 get => name ?? string.Empty;
@@ -214,7 +227,7 @@ namespace System.Windows.Forms
             }
 
             [OnDeserializing]
-            private void OnDeserializing(StreamingContext ctx)
+            private static void OnDeserializing(StreamingContext ctx)
             {
             }
 
@@ -226,12 +239,12 @@ namespace System.Windows.Forms
             }
 
             [OnSerializing]
-            private void OnSerializing(StreamingContext ctx)
+            private static void OnSerializing(StreamingContext ctx)
             {
             }
 
             [OnSerialized]
-            private void OnSerialized(StreamingContext ctx)
+            private static void OnSerialized(StreamingContext ctx)
             {
             }
 

@@ -52,7 +52,7 @@ namespace System.ComponentModel.Design.Serialization
             ///  Returns the type converter for the member attributes enum.  We search the context
             ///  for a code dom provider that can provide us more information.
             /// </summary>
-            private TypeConverter GetConverter(ITypeDescriptorContext context)
+            private static TypeConverter GetConverter(ITypeDescriptorContext context)
             {
                 TypeConverter modifierConverter = null;
 

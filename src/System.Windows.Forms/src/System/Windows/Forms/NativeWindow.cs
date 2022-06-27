@@ -571,7 +571,7 @@ namespace System.Windows.Forms
         ///  Returns the handle from the given <paramref name="id"/> if found, otherwise returns
         ///  <see cref="IntPtr.Zero"/>.
         /// </summary>
-        internal IntPtr GetHandleFromWindowId(short id)
+        internal static IntPtr GetHandleFromWindowId(short id)
         {
             if (!s_windowIds.TryGetValue(id, out IntPtr handle))
             {

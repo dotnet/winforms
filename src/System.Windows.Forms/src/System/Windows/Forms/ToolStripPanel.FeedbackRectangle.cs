@@ -69,11 +69,6 @@ namespace System.Windows.Forms
             {
                 Dispose(true);
             }
-
-            ~FeedbackRectangle()
-            {
-                Dispose(false);
-            }
         }
     }
 }

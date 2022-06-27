@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
@@ -296,12 +294,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  get the control which covers the specified row and column. return null if we can't find one
         /// </summary>
-        public Control GetControlFromPosition(int column, int row)
+        public Control? GetControlFromPosition(int column, int row)
         {
-            return (Control)_tableLayoutSettings.GetControlFromPosition(column, row);
+            return (Control?)_tableLayoutSettings.GetControlFromPosition(column, row);
         }
 
-        public TableLayoutPanelCellPosition GetPositionFromControl(Control control)
+        public TableLayoutPanelCellPosition GetPositionFromControl(Control? control)
         {
             return _tableLayoutSettings.GetPositionFromControl(control);
         }
@@ -356,7 +354,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.TableLayoutPanelOnPaintCellDescr))]
-        public event TableLayoutCellPaintEventHandler CellPaint
+        public event TableLayoutCellPaintEventHandler? CellPaint
         {
             add => Events.AddHandler(s_eventCellPaint, value);
             remove => Events.RemoveHandler(s_eventCellPaint, value);
@@ -375,7 +373,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnCellPaint(TableLayoutCellPaintEventArgs e)
         {
-            ((TableLayoutCellPaintEventHandler)Events[s_eventCellPaint])?.Invoke(this, e);
+            ((TableLayoutCellPaintEventHandler?)Events[s_eventCellPaint])?.Invoke(this, e);
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)

@@ -6571,6 +6571,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">現在のアクセシビリティ オブジェクトは {0}、{1} または {2} ビューの ListView にのみ使用できます</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="translated">ListViewItem が ListView にアタッチされていない場合、アクセシビリティ オブジェクトは取得できません。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">ListView アイテムのチェックされたプロパティが変更するときに発生するイベントです。</target>
@@ -7694,6 +7699,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PictureBoxOnSizeModeChangedDescr">
         <source>Event raised when the value of the SizeMode property is changed on the PictureBox.</source>
         <target state="translated">SizeMode プロパティの値が PictureBox で変更されたときに発生するイベントです。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PictureBoxRemoteLocationNotSupported">
+        <source>Loading from remote location not supported.</source>
+        <target state="translated">リモートの場所からの読み込みはサポートされていません。</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
@@ -8824,6 +8834,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ScrollBarVisibleDescr">
         <source>Gets or sets a Boolean value controlling whether the scrollbar is showing.</source>
         <target state="translated">スクロール バーを表示しているかどうかを制御するブール値を取得または設定します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="translated">アクティブ コントロールの親プロパティを null にすることはできません。</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
@@ -10304,6 +10319,16 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ToolStripSaveSettingsDescr">
         <source>Specifies whether the ToolStrip should persist user settings via IPersistComponentSettings.</source>
         <target state="translated">IPersistComponentSettings をとおして、ToolStrip がユーザー設定を保持するかどうかを指定します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="translated">1 行下へ</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="translated">1 行上へ</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">

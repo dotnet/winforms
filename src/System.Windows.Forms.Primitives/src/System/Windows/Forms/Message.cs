@@ -5,6 +5,7 @@
 #if DEBUG
 using System.Diagnostics;
 #endif
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -13,7 +14,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Implements a Windows message.
     /// </summary>
-    public struct Message
+    public struct Message : IEquatable<Message>
     {
 #if DEBUG
         private static readonly TraceSwitch s_allWinMessages = new("AllWinMessages", "Output every received message");
@@ -83,7 +84,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the <see cref="LParam"/> value, and converts the value to an object.
         /// </summary>
-        public object? GetLParam(Type cls) => Marshal.PtrToStructure(LParamInternal, cls);
+        public object? GetLParam(
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            Type cls) => Marshal.PtrToStructure(LParamInternal, cls);
 
         internal static Message Create(IntPtr hWnd, User32.WM msg, nint wparam, nint lparam)
             => Create(hWnd, (int)msg, wparam, lparam);
@@ -115,12 +118,15 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            return HWnd == m.HWnd
-                && MsgInternal == m.MsgInternal
-                && WParamInternal == m.WParamInternal
-                && LParamInternal == m.LParamInternal
-                && ResultInternal == m.ResultInternal;
+            return Equals(m);
         }
+
+        public bool Equals(Message other)
+            => HWnd == other.HWnd
+                && MsgInternal == other.MsgInternal
+                && WParamInternal == other.WParamInternal
+                && LParamInternal == other.LParamInternal
+                && ResultInternal == other.ResultInternal;
 
         public static bool operator ==(Message a, Message b) => a.Equals(b);
 

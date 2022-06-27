@@ -39,13 +39,13 @@ namespace System.Windows.Forms
             ArgumentNullException.ThrowIfNull(owner);
         }
 
-        public void EnsureRegistered(IDropTarget dropTarget)
+        public void EnsureRegistered()
         {
             Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Ensuring drop target registered");
             SetAcceptDrops(true);
         }
 
-        public void EnsureUnRegistered(IDropTarget dropTarget)
+        public void EnsureUnRegistered()
         {
             Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Attempting to unregister droptarget");
             for (int i = 0; i < owner.Items.Count; i++)

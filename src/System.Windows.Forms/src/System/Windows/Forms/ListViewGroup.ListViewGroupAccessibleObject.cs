@@ -166,17 +166,14 @@ namespace System.Windows.Forms
                 return LVGS.FOCUSED == (LVGS)User32.SendMessageW(_owningListView, (User32.WM)LVM.GETGROUPSTATE, nativeGroupId, (nint)LVGS.FOCUSED);
             }
 
-            private unsafe int GetNativeGroupId()
+            private int GetNativeGroupId()
             {
-                LVGROUPW lvgroup = new LVGROUPW
+                if (User32.SendMessageW(_owningListView, (User32.WM)LVM.HASGROUP, _owningGroup.ID) == 0)
                 {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.GROUPID,
-                };
+                    return -1;
+                }
 
-                return User32.SendMessageW(_owningListView, (User32.WM)LVM.GETGROUPINFOBYINDEX, CurrentIndex, ref lvgroup) == 0
-                    ? -1
-                    : lvgroup.iGroupId;
+                return _owningGroup.ID;
             }
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
@@ -231,7 +228,9 @@ namespace System.Windows.Forms
                         return _owningListViewAccessibilityObject;
                     case UiaCore.NavigateDirection.NextSibling:
                         int childIndex = _owningListViewAccessibilityObject.GetChildIndex(this);
-                        return childIndex == -1 ? null : _owningListViewAccessibilityObject.GetChild(childIndex + 1);
+                        return childIndex == InvalidIndex
+                            ? null
+                            : _owningListViewAccessibilityObject.GetChild(childIndex + 1);
                     case UiaCore.NavigateDirection.PreviousSibling:
                         return _owningListViewAccessibilityObject.GetChild(_owningListViewAccessibilityObject.GetChildIndex(this) - 1);
                     case UiaCore.NavigateDirection.FirstChild:
@@ -265,7 +264,7 @@ namespace System.Windows.Forms
             {
                 if (child is null || !_owningListView.IsHandleCreated || !_owningListView.GroupsDisplayed)
                 {
-                    return -1;
+                    return InvalidIndex;
                 }
 
                 IReadOnlyList<ListViewItem> visibleItems = GetVisibleItems();
@@ -277,14 +276,14 @@ namespace System.Windows.Forms
                     }
                 }
 
-                return -1;
+                return InvalidIndex;
             }
 
             public override int GetChildCount()
             {
                 if (!_owningListView.IsHandleCreated || !_owningListView.GroupsDisplayed)
                 {
-                    return -1;
+                    return InvalidIndex;
                 }
 
                 return GetVisibleItems().Count;

@@ -164,7 +164,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
             {
                 get
                 {
@@ -176,7 +176,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    string defaultAction = _owningComboBox.AccessibleDefaultActionDescription;
+                    string? defaultAction = _owningComboBox.AccessibleDefaultActionDescription;
                     if (defaultAction is not null)
                     {
                         return defaultAction;

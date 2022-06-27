@@ -40,7 +40,7 @@ namespace System.Windows.Forms
                 out IntPtr autoComplete2Ptr).ThrowIfFailed();
 
             var obj = WinFormsComWrappers.Instance
-                .GetOrCreateObjectForComInstance(autoComplete2Ptr, CreateObjectFlags.None);
+                .GetOrCreateObjectForComInstance(autoComplete2Ptr, CreateObjectFlags.UniqueInstance);
             _autoCompleteObject2 = (WinFormsComWrappers.AutoCompleteWrapper)obj;
         }
 

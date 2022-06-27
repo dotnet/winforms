@@ -9,13 +9,9 @@ namespace System.Windows.Forms
 {
     public partial class DataGridViewRowHeaderCell
     {
-        private class DataGridViewRowHeaderCellRenderer
+        private static class DataGridViewRowHeaderCellRenderer
         {
             private static VisualStyleRenderer? s_visualStyleRenderer;
-
-            private DataGridViewRowHeaderCellRenderer()
-            {
-            }
 
             public static VisualStyleRenderer VisualStyleRenderer
             {

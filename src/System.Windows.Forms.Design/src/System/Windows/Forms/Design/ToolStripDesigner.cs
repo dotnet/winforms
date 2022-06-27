@@ -813,7 +813,7 @@ namespace System.Windows.Forms.Design
                             {
                                 ToolStripItem ownerItem = dropDown.OwnerItem;
                                 ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)_host.GetDesigner(ownerItem);
-                                ToolStripDropDown topmost = itemDesigner.GetFirstDropDown((ToolStripDropDownItem)(ownerItem));
+                                ToolStripDropDown topmost = ToolStripItemDesigner.GetFirstDropDown((ToolStripDropDownItem)(ownerItem));
                                 ToolStripItem topMostItem = (topmost is null) ? ownerItem : topmost.OwnerItem;
 
                                 if (topMostItem != null && topMostItem.Owner == ToolStrip)
@@ -828,8 +828,7 @@ namespace System.Windows.Forms.Design
                         ToolStripItem parentItem = ((ToolStripDropDown)(item.Owner)).OwnerItem;
                         if (parentItem != null)
                         {
-                            ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)_host.GetDesigner(parentItem);
-                            ToolStripDropDown topmost = itemDesigner?.GetFirstDropDown((ToolStripDropDownItem)parentItem);
+                            ToolStripDropDown topmost = ToolStripMenuItemDesigner.GetFirstDropDown((ToolStripDropDownItem)parentItem);
                             ToolStripItem topMostItem = (topmost is null) ? parentItem : topmost.OwnerItem;
                             if (topMostItem != null && topMostItem.Owner == ToolStrip)
                             {
@@ -1185,7 +1184,7 @@ namespace System.Windows.Forms.Design
                 //Dispose of the EditManager
                 if (_editManager != null)
                 {
-                    _editManager.CloseManager();
+                    ToolStripEditorManager.CloseManager();
                     _editManager = null;
                 }
 
@@ -1631,7 +1630,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Returns true if the item is on the overflow.
         /// </summary>
-        private bool ItemParentIsOverflow(ToolStripItem item)
+        private static bool ItemParentIsOverflow(ToolStripItem item)
         {
             ToolStripDropDown topmost = item.Owner as ToolStripDropDown;
             if (topmost != null)

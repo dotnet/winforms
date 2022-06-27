@@ -22,7 +22,7 @@ namespace System.Windows.Forms.ButtonInternal
             Color checkBorder)
         {
             DrawCheckBackgroundFlat(e, layout.CheckBounds, checkBorder, checkBackground);
-            DrawCheckOnly(e, layout, checkColor, checkBackground, true);
+            DrawCheckOnly(e, layout, checkColor, true);
         }
 
         protected void DrawCheckBackground3DLite(
@@ -133,7 +133,7 @@ namespace System.Windows.Forms.ButtonInternal
             return (int)(n * scale);
         }
 
-        protected void DrawCheckOnly(PaintEventArgs e, LayoutData layout, Color checkColor, Color checkBackground, bool disabledColors)
+        protected void DrawCheckOnly(PaintEventArgs e, LayoutData layout, Color checkColor, bool disabledColors)
         {
             if (!Control.Checked)
             {

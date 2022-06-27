@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using static Interop;
@@ -16,9 +14,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// </summary>
     internal class Com2PictureConverter : Com2DataTypeToManagedDataTypeConverter
     {
-        private object _lastManaged;
+        private object? _lastManaged;
         private IntPtr _lastNativeHandle;
-        private WeakReference _pictureRef;
+        private WeakReference? _pictureRef;
 
         private Type _pictureType = typeof(Bitmap);
 
@@ -44,7 +42,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Converts the native value into a managed value
         /// </summary>
-        public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd)
+        public override object? ConvertNativeToManaged(object? nativeValue, Com2PropertyDescriptor pd)
         {
             if (nativeValue is null)
             {
@@ -93,14 +91,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Converts the managed value into a native value
         /// </summary>
-        public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet)
+        public override object? ConvertManagedToNative(object? managedValue, Com2PropertyDescriptor pd, ref bool cancelSet)
         {
             // Don't cancel the set
             cancelSet = false;
 
             if (_lastManaged?.Equals(managedValue) == true)
             {
-                object target = _pictureRef?.Target;
+                object? target = _pictureRef?.Target;
                 if (target is not null)
                 {
                     return target;

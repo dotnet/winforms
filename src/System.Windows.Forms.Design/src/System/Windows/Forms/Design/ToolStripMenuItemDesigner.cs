@@ -933,7 +933,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Helper function to find whether the passed in DropDownItems have same owner.
         /// </summary>
-        private bool CheckSameOwner(ToolStripDropDownItem lastSelected, ToolStripDropDownItem currentSelected)
+        private static bool CheckSameOwner(ToolStripDropDownItem lastSelected, ToolStripDropDownItem currentSelected)
         {
             if (lastSelected != null && currentSelected != null)
             {
@@ -1389,7 +1389,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Get the Insertion Index to drop the current drag-drop item.
         /// </summary>
-        private int GetItemInsertionIndex(ToolStripDropDown wb, Point ownerClientAreaRelativeDropPoint)
+        private static int GetItemInsertionIndex(ToolStripDropDown wb, Point ownerClientAreaRelativeDropPoint)
         {
             for (int i = 0; i < wb.Items.Count; i++)
             {

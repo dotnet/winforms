@@ -171,7 +171,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_fileNames is null || string.IsNullOrEmpty(_fileNames[0]))
+                if (_fileNames is null)
                 {
                     return string.Empty;
                 }
@@ -433,7 +433,7 @@ namespace System.Windows.Forms
                     _fileNames = GetMultiselectFiles(_charBuffer);
                 }
 
-                if (ProcessFileNames())
+                if (ProcessFileNames(_fileNames))
                 {
                     CancelEventArgs ceevent = new CancelEventArgs();
                     if (NativeWindow.WndProcShouldBeDebuggable)
@@ -470,7 +470,7 @@ namespace System.Windows.Forms
             return ok;
         }
 
-        private protected static bool FileExists(string fileName)
+        private protected static bool FileExists(string? fileName)
         {
             try
             {
@@ -485,7 +485,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Extracts the filename(s) returned by the file dialog.
         /// </summary>
-        private string[] GetMultiselectFiles(UnicodeCharBuffer charBuffer)
+        private static string[] GetMultiselectFiles(UnicodeCharBuffer charBuffer)
         {
             string directory = charBuffer.GetString();
             string fileName = charBuffer.GetString();
@@ -663,21 +663,21 @@ namespace System.Windows.Forms
         ///  of the "addExtension", "checkFileExists", "createPrompt", and
         ///  "overwritePrompt" properties.
         /// </summary>
-        private bool ProcessFileNames()
+        private bool ProcessFileNames(string[] fileNames)
         {
             if ((_options & (int)Comdlg32.OFN.NOVALIDATE) == 0)
             {
                 string[] extensions = FilterExtensions;
-                for (int i = 0; i < _fileNames!.Length; i++)
+                for (int i = 0; i < fileNames.Length; i++)
                 {
-                    string fileName = _fileNames[i];
+                    string fileName = fileNames[i];
                     if ((_options & AddExtensionOption) != 0 && !Path.HasExtension(fileName))
                     {
                         bool fileMustExist = (_options & (int)Comdlg32.OFN.FILEMUSTEXIST) != 0;
 
                         for (int j = 0; j < extensions.Length; j++)
                         {
-                            string currentExtension = Path.GetExtension(fileName);
+                            string currentExtension = Path.GetExtension(fileName)!;
 
                             Debug.Assert(!extensions[j].StartsWith("."),
                                          "FileDialog.FilterExtensions should not return things starting with '.'");
@@ -699,7 +699,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        _fileNames[i] = fileName;
+                        fileNames[i] = fileName;
                     }
 
                     if (!PromptUserIfAppropriate(fileName))
@@ -717,7 +717,7 @@ namespace System.Windows.Forms
         ///  given parameters. It also ensures that the focus is set back on the window that
         ///  had the focus to begin with (before we displayed the MessageBox).
         /// </summary>
-        private protected bool MessageBoxWithFocusRestore(string message, string caption,
+        private protected static bool MessageBoxWithFocusRestore(string message, string caption,
                 MessageBoxButtons buttons, MessageBoxIcon icon)
         {
             IntPtr focusHandle = User32.GetFocus();
@@ -804,10 +804,7 @@ namespace System.Windows.Forms
             try
             {
                 _charBuffer = new UnicodeCharBuffer(FileBufferSize);
-                if (_fileNames is not null)
-                {
-                    _charBuffer.PutString(_fileNames[0]);
-                }
+                _charBuffer.PutString(FileName);
 
                 ofn.lStructSize = Marshal.SizeOf<NativeMethods.OPENFILENAME_I>();
                 ofn.hwndOwner = hWndOwner;

@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -200,6 +201,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [AllowNull]
         public override Font Font
         {
             get => base.Font;
@@ -403,7 +405,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Little private routine that helps with auto-sizing.
         /// </summary>
-        private int PreferredDimension
+        private static int PreferredDimension
         {
             get
             {
@@ -490,6 +492,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Bindable(false)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;

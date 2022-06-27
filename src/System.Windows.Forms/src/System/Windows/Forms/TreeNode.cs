@@ -7,6 +7,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -24,6 +25,7 @@ namespace System.Windows.Forms
     [TypeConverterAttribute(typeof(TreeNodeConverter))]
     [Serializable]  // This class participates in resx serialization.
     [DefaultProperty(nameof(Text))]
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         internal const int SHIFTVAL = 12;
@@ -1969,7 +1971,7 @@ namespace System.Windows.Forms
                 }
 
                 _handle = User32.SendMessageW(tv, (User32.WM)TVM.INSERTITEMW, 0, ref tvis);
-                tv._nodeTable[_handle] = this;
+                tv._nodesByHandle[_handle] = this;
 
                 // Lets update the Lparam to the Handle.
                 UpdateNode(TVIF.PARAM);
@@ -2068,7 +2070,7 @@ namespace System.Windows.Forms
                     User32.SendMessageW(tv, (User32.WM)TVM.DELETEITEM, 0, _handle);
                 }
 
-                treeView._nodeTable.Remove(_handle);
+                treeView._nodesByHandle.Remove(_handle);
                 _handle = IntPtr.Zero;
             }
 

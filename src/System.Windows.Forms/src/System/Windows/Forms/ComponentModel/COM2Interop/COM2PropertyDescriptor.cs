@@ -7,6 +7,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Reflection;
@@ -265,7 +266,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     object target = TargetObject;
                     if (target is not null)
                     {
-                        HRESULT hr = new ComNativeDescriptor().GetPropertyValue(target, dispid, new object[1]);
+                        HRESULT hr = ComNativeDescriptor.GetPropertyValue(target, dispid, new object[1]);
 
                         // if not, go ahead and make this a browsable item
                         if (hr.Succeeded())
@@ -360,6 +361,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override TypeConverter Converter
         {
+            [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
             get
             {
                 if (TypeConverterValid)
@@ -816,6 +818,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Retrieves an editor of the requested type.
         /// </summary>
+        [RequiresUnreferencedCode(TrimmingConstants.EditorRequiresUnreferencedCode + " " + TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
         public override object GetEditor(Type editorBaseType)
         {
             if (TypeEditorValid)
@@ -1306,13 +1309,18 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         g = typeof(Oleaut32.IDispatch).GUID;
                         if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.S_OK)
                         {
-                            Oleaut32.IErrorInfo pErrorInfo;
-                            Oleaut32.GetErrorInfo(0, out pErrorInfo);
+                            WinFormsComWrappers.ErrorInfoWrapper pErrorInfo;
+                            Oleaut32.GetErrorInfo(out pErrorInfo);
 
-                            string info;
-                            if (pErrorInfo is not null && pErrorInfo.GetDescription(out info).Succeeded())
+                            if (pErrorInfo is not null)
                             {
-                                errorInfo = info;
+                                string info;
+                                if (pErrorInfo.GetDescription(out info))
+                                {
+                                    errorInfo = info;
+                                }
+
+                                pErrorInfo.Dispose();
                             }
                         }
                     }
@@ -1421,6 +1429,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return baseConversion;
             }
 
+            [RequiresUnreferencedCode(TrimmingConstants.TypeConverterGetPropertiesMessage)]
             public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(value, attributes);

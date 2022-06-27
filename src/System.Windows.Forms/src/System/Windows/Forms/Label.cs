@@ -5,6 +5,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
@@ -743,6 +744,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         SettingsBindable(true)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;
@@ -1409,7 +1411,7 @@ namespace System.Windows.Forms
         {
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanProcessMnemonic())
             {
-                Control parent = ParentInternal;
+                Control? parent = ParentInternal;
                 if (parent is not null)
                 {
                     if (parent.SelectNextControl(this, true, false, true, false) && !parent.ContainsFocus)

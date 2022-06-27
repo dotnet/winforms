@@ -192,7 +192,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
 
                     // If this a sibling control (e.g. the drop down or buttons), just forward the message and skip the commit
-                    bool needCommit = targetControl is null || !_gridView.IsSiblingControl(_control, targetControl);
+                    bool needCommit = targetControl is null || !IsSiblingControl(_control, targetControl);
 
                     try
                     {

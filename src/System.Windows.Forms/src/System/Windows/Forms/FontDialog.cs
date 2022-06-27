@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -29,7 +27,7 @@ namespace System.Windows.Forms
         private const int defaultMaxSize = 0;
 
         private Comdlg32.CF options;
-        private Font font;
+        private Font? font;
         private Color color;
         private int minSize = defaultMinSize;
         private int maxSize = defaultMaxSize;
@@ -155,11 +153,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Font result = font;
-                if (result is null)
-                {
-                    result = Control.DefaultFont;
-                }
+                Font? result = font ?? Control.DefaultFont;
 
                 float actualSize = result.SizeInPoints;
                 if (minSize != defaultMinSize && actualSize < MinSize)
@@ -332,7 +326,7 @@ namespace System.Windows.Forms
         ///  dialog box.
         /// </summary>
         [SRDescription(nameof(SR.FnDapplyDescr))]
-        public event EventHandler Apply
+        public event EventHandler? Apply
         {
             add => Events.AddHandler(EventApply, value);
             remove => Events.RemoveHandler(EventApply, value);
@@ -404,7 +398,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnApply(EventArgs e)
         {
-            ((EventHandler)Events[EventApply])?.Invoke(this, e);
+            ((EventHandler?)Events[EventApply])?.Invoke(this, e);
         }
 
         /// <summary>

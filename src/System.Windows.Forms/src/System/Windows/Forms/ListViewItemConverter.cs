@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -25,7 +23,7 @@ namespace System.Windows.Forms
         ///  Gets a value indicating whether this converter can convert an object to the given
         ///  destination type using the context.
         /// </summary>
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
         {
             if (destinationType == typeof(InstanceDescriptor))
             {
@@ -42,13 +40,13 @@ namespace System.Windows.Forms
         ///  type is string. If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
             ArgumentNullException.ThrowIfNull(destinationType);
 
             if (destinationType == typeof(InstanceDescriptor) && value is ListViewItem item)
             {
-                ConstructorInfo ctor;
+                ConstructorInfo? ctor;
                 // Should we use the subitem constructor?
                 for (int i = 1; i < item.SubItems.Count; ++i)
                 {
@@ -94,7 +92,7 @@ namespace System.Windows.Forms
                             typeof(Font)
                         });
                         Debug.Assert(ctor is not null, "Expected the constructor to exist.");
-                        return new InstanceDescriptor(ctor, new object[]
+                        return new InstanceDescriptor(ctor, new object?[]
                         {
                             subItems,
                             item.ImageKey,
@@ -114,7 +112,7 @@ namespace System.Windows.Forms
                             typeof(Font)
                         });
                         Debug.Assert(ctor is not null, "Expected the constructor to exist.");
-                        return new InstanceDescriptor(ctor, new object[]
+                        return new InstanceDescriptor(ctor, new object?[]
                         {
                             subItems,
                             item.ImageIndex,

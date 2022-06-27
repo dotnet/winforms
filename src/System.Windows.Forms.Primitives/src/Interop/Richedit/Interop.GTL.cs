@@ -14,7 +14,7 @@ internal partial class Interop
             PRECISE = 2,
             CLOSE = 4,
             NUMCHARS = 8,
-            NUMBYTES = 6,
+            NUMBYTES = 16,
         }
     }
 }

@@ -119,7 +119,7 @@ namespace System.Windows.Forms
         ///  Gets the best matching ctor for a given binding and fills it out, based on the
         ///  state of the Binding and the optimal ctor.
         /// </summary>
-        private InstanceDescriptor GetInstanceDescriptorFromValues(Binding b)
+        private static InstanceDescriptor GetInstanceDescriptorFromValues(Binding b)
         {
             // The BindingFormattingDialog turns on Binding::FormattingEnabled property.
             // however, when the user data binds a property using the PropertyBrowser, Binding::FormattingEnabled is set to false

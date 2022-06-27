@@ -1030,7 +1030,7 @@ namespace System.Windows.Forms
         }
 
         // Only paint background effects if no backcolor has been set or no background image has been set.
-        internal bool ShouldPaintBackground(Control control)
+        internal static bool ShouldPaintBackground(Control control)
         {
             return (control.RawBackColor == Color.Empty && control.BackgroundImage is null);
         }

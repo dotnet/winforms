@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Padding(3), control.Margin);
             Assert.Equal(Size.Empty, control.MaximumSize);
             Assert.Empty(control.MdiChildren);
-            Assert.NotSame(control.MdiChildren, control.MdiChildren);
+            Assert.Same(control.MdiChildren, control.MdiChildren);
             Assert.Equal(Size.Empty, control.MinimumSize);
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);

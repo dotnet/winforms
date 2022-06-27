@@ -149,7 +149,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the properties for the available cursors.
         /// </summary>
-        private PropertyInfo[] GetProperties()
+        private static PropertyInfo[] GetProperties()
         {
             return typeof(Cursors).GetProperties(BindingFlags.Static | BindingFlags.Public);
         }

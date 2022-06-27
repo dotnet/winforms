@@ -688,7 +688,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' </summary>
         ''' <param name="address">The remote file address</param>
         ''' <returns>A Uri if successful, otherwise it throws an exception</returns>
-        Private Function GetUri(address As String) As Uri
+        Private Shared Function GetUri(address As String) As Uri
             Try
                 Return New Uri(address)
             Catch ex As UriFormatException
@@ -703,7 +703,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user</param>
         ''' <param name="password">The password of the user</param>
         ''' <returns>A NetworkCredentials</returns>
-        Private Function GetNetworkCredentials(userName As String, password As String) As ICredentials
+        Private Shared Function GetNetworkCredentials(userName As String, password As String) As ICredentials
 
             ' Make sure all nulls are empty strings
             If userName Is Nothing Then

@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     {
         [DllImport(Libraries.User32)]
 #pragma warning disable CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
-        public static extern int GetClassName(HandleRef hwnd, StringBuilder lpClassName, int nMaxCount);
+        public static extern int GetClassName(HandleRef hwnd, StringBuilder? lpClassName, int nMaxCount);
 #pragma warning restore CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
 
         [DllImport(Libraries.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]

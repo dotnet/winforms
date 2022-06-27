@@ -7,12 +7,13 @@
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace System.Windows.Forms
 {
     [TypeConverter(typeof(TableLayoutPanelCellPositionTypeConverter))]
-    public struct TableLayoutPanelCellPosition
+    public struct TableLayoutPanelCellPosition : IEquatable<TableLayoutPanelCellPosition>
     {
         public TableLayoutPanelCellPosition(int column, int row)
         {
@@ -36,13 +37,16 @@ namespace System.Windows.Forms
 
         public override bool Equals(object other)
         {
-            if (!(other is TableLayoutPanelCellPosition otherCellPosition))
+            if (other is not TableLayoutPanelCellPosition otherCellPosition)
             {
                 return false;
             }
 
-            return this == otherCellPosition;
+            return Equals(otherCellPosition);
         }
+
+        public bool Equals(TableLayoutPanelCellPosition other)
+            => Row == other.Row && Column == other.Column;
 
         public static bool operator ==(TableLayoutPanelCellPosition p1, TableLayoutPanelCellPosition p2)
         {
@@ -99,16 +103,22 @@ namespace System.Windows.Forms
 
                 string[] tokens = stringValue.Split(new char[] { culture.TextInfo.ListSeparator[0] });
                 int[] values = new int[tokens.Length];
+
+                if (values.Length != 2)
+                {
+                    throw new ArgumentException(
+                        string.Format(
+                            SR.TextParseFailedFormat,
+                            stringValue,
+                            "column, row"),
+                        nameof(value));
+                }
+
                 TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));
                 for (int i = 0; i < values.Length; i++)
                 {
                     // Note: ConvertFromString will raise exception if value cannot be converted.
                     values[i] = (int)intConverter.ConvertFromString(context, culture, tokens[i]);
-                }
-
-                if (values.Length != 2)
-                {
-                    throw new ArgumentException(string.Format(SR.TextParseFailedFormat, stringValue, "column, row"), nameof(value));
                 }
 
                 return new TableLayoutPanelCellPosition(values[0], values[1]);
@@ -151,6 +161,8 @@ namespace System.Windows.Forms
 
         public override bool GetCreateInstanceSupported(ITypeDescriptorContext context) => true;
 
+        [RequiresUnreferencedCode(TrimmingConstants.TypeOrValueNotDiscoverableMessage)]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields, typeof(BrowsableAttribute))]
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(TableLayoutPanelCellPosition), attributes);

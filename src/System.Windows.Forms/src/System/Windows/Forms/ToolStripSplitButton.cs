@@ -240,7 +240,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This is here for serialization purposes.
         /// </summary>
-        private int DefaultDropDownButtonWidth
+        private static int DefaultDropDownButtonWidth
         {
             get
             {

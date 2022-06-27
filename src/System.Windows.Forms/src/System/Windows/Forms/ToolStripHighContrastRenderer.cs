@@ -2,16 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-#region Using directives
-
 using System.Collections.Specialized;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-
-#endregion
 
 namespace System.Windows.Forms
 {
@@ -20,33 +14,33 @@ namespace System.Windows.Forms
     {
         private const int GRIP_PADDING = 4;
 
-        BitVector32 options;
-        private static readonly int optionsDottedBorder = BitVector32.CreateMask();
-        private static readonly int optionsDottedGrip = BitVector32.CreateMask(optionsDottedBorder);
-        private static readonly int optionsFillWhenSelected = BitVector32.CreateMask(optionsDottedGrip);
+        private BitVector32 _options;
+        private static readonly int s_optionsDottedBorder = BitVector32.CreateMask();
+        private static readonly int s_optionsDottedGrip = BitVector32.CreateMask(s_optionsDottedBorder);
+        private static readonly int s_optionsFillWhenSelected = BitVector32.CreateMask(s_optionsDottedGrip);
 
         public ToolStripHighContrastRenderer(bool systemRenderMode)
         {
-            options[optionsDottedBorder | optionsDottedGrip | optionsFillWhenSelected] = !systemRenderMode;
+            _options[s_optionsDottedBorder | s_optionsDottedGrip | s_optionsFillWhenSelected] = !systemRenderMode;
         }
 
         public bool DottedBorder
         {
-            get { return options[optionsDottedBorder]; }
+            get { return _options[s_optionsDottedBorder]; }
         }
 
         public bool DottedGrip
         {
-            get { return options[optionsDottedGrip]; }
+            get { return _options[s_optionsDottedGrip]; }
         }
 
         public bool FillWhenSelected
         {
-            get { return options[optionsFillWhenSelected]; }
+            get { return _options[s_optionsFillWhenSelected]; }
         }
 
         // this is a renderer override, so return null so we don't get into an infinite loop.
-        internal override ToolStripRenderer RendererOverride
+        internal override ToolStripRenderer? RendererOverride
         {
             get { return null; }
         }
@@ -163,7 +157,7 @@ namespace System.Windows.Forms
                 else if (item.Selected)
                 {
                     g.FillRectangle(SystemBrushes.Highlight, bounds);
-                    g.DrawRectangle(SystemPens.ButtonHighlight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+                    DrawHightContrastDashedBorder(g, e.Item);
                     g.DrawRectangle(SystemPens.ButtonHighlight, dropDownRect);
                 }
 
@@ -381,7 +375,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
         {
-            Image image = e.Image;
+            Image? image = e.Image;
             if (image is not null)
             {
                 if (Image.GetPixelFormatSize(image.PixelFormat) > 16)
@@ -440,7 +434,7 @@ namespace System.Windows.Forms
 
                     if (button.Selected)
                     {
-                        g.DrawRectangle(SystemPens.Highlight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+                        DrawHightContrastDashedBorder(g, button);
                     }
                     else
                     {
@@ -458,12 +452,12 @@ namespace System.Windows.Forms
             }
         }
 
-        private void RenderItemInternalFilled(ToolStripItemRenderEventArgs e)
+        private static void RenderItemInternalFilled(ToolStripItemRenderEventArgs e)
         {
             RenderItemInternalFilled(e, /*pressFill=*/true);
         }
 
-        private void RenderItemInternalFilled(ToolStripItemRenderEventArgs e, bool pressFill)
+        private static void RenderItemInternalFilled(ToolStripItemRenderEventArgs e, bool pressFill)
         {
             Graphics g = e.Graphics;
             Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
@@ -482,8 +476,29 @@ namespace System.Windows.Forms
             else if (e.Item.Selected)
             {
                 g.FillRectangle(SystemBrushes.Highlight, bounds);
-                g.DrawRectangle(SystemPens.ControlLight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+                DrawHightContrastDashedBorder(g, e.Item);
             }
+        }
+
+        private static void DrawHightContrastDashedBorder(Graphics graphics, ToolStripItem item)
+        {
+            var bounds = item.ClientBounds;
+            float[] dashValues = { 2, 2 };
+            int penWidth = 2;
+
+            var focusPen1 = new Pen(SystemColors.ControlText, penWidth)
+            {
+                DashPattern = dashValues
+            };
+
+            var focusPen2 = new Pen(SystemColors.Control, penWidth)
+            {
+                DashPattern = dashValues,
+                DashOffset = 2
+            };
+
+            graphics.DrawRectangle(focusPen1, bounds);
+            graphics.DrawRectangle(focusPen2, bounds);
         }
     }
 }

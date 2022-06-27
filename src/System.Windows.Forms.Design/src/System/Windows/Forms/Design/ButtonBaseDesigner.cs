@@ -107,7 +107,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private int CheckboxBaselineOffset(ContentAlignment alignment, FlatStyle flatStyle)
+        private static int CheckboxBaselineOffset(ContentAlignment alignment, FlatStyle flatStyle)
         {
             if ((alignment & DesignerUtils.AnyMiddleAlignment) != 0)
             {
@@ -162,7 +162,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private int RadiobuttonBaselineOffset(ContentAlignment alignment, FlatStyle flatStyle)
+        private static int RadiobuttonBaselineOffset(ContentAlignment alignment, FlatStyle flatStyle)
         {
             if ((alignment & DesignerUtils.AnyMiddleAlignment) != 0)
             {
@@ -193,7 +193,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private int DefaultBaselineOffset(ContentAlignment alignment, FlatStyle flatStyle)
+        private static int DefaultBaselineOffset(ContentAlignment alignment, FlatStyle flatStyle)
         {
             if ((alignment & DesignerUtils.AnyMiddleAlignment) != 0)
             {

@@ -6571,6 +6571,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">L’objet d’accessibilité actuel est uniquement destiné à ListView dans l’affichage {0}, {1} ou {2}</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="translated">Impossible d'obtenir un objet d'accessibilité lorsque ListViewItem n'est pas attaché à une ListView</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">Événement déclenché lorsque la propriété Checked d'un élément ListView est modifiée.</target>
@@ -7694,6 +7699,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="PictureBoxOnSizeModeChangedDescr">
         <source>Event raised when the value of the SizeMode property is changed on the PictureBox.</source>
         <target state="translated">Événement déclenché lorsque la valeur de la propriété SizeMode du PictureBox est modifiée.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PictureBoxRemoteLocationNotSupported">
+        <source>Loading from remote location not supported.</source>
+        <target state="translated">Le chargement à partir d’un emplacement distant n’est pas pris en charge.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
@@ -8824,6 +8834,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="ScrollBarVisibleDescr">
         <source>Gets or sets a Boolean value controlling whether the scrollbar is showing.</source>
         <target state="translated">Obtient ou définit une valeur Boolean déterminant si la barre de défilement est affichée.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="translated">La propriété parente du contrôle actif ne peut pas être null.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
@@ -10304,6 +10319,16 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="ToolStripSaveSettingsDescr">
         <source>Specifies whether the ToolStrip should persist user settings via IPersistComponentSettings.</source>
         <target state="translated">Spécifie si le ToolStrip doit rendre persistant les paramètres utilisateur via IPersistComponentSettings.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="translated">Ligne en bas</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="translated">Ligne en haut</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">

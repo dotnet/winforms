@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Tests
             AccessibleObject accessibleObject = toolStripOverflow.AccessibilityObject;
             object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
 
-            Assert.Equal(UiaCore.UIA.ToolBarControlTypeId, actual);
+            Assert.Equal(UiaCore.UIA.MenuControlTypeId, actual);
             Assert.False(toolStripOverflow.IsHandleCreated);
         }
 
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Tests
 
             object actual = toolStripOverflow.AccessibilityObject.Role;
 
-            Assert.Equal(AccessibleRole.ToolBar, actual);
+            Assert.Equal(AccessibleRole.MenuPopup, actual);
             Assert.False(toolStripOverflow.IsHandleCreated);
         }
 

@@ -336,7 +336,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return base.SendNotification(owner, notification);
         }
 
-        private bool OwnersEqual(object owner1, object owner2)
+        private static bool OwnersEqual(object owner1, object owner2)
         {
             if (owner1 is not Array)
             {

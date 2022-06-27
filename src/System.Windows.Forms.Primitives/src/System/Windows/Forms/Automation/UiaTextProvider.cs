@@ -71,13 +71,13 @@ namespace System.Windows.Forms.Automation
 
         public abstract void SetSelection(int start, int end);
 
-        public ES GetEditStyle(IHandle hWnd) => (ES)GetWindowLong(hWnd, GWL.STYLE);
+        public static ES GetEditStyle(IHandle hWnd) => (ES)GetWindowLong(hWnd, GWL.STYLE);
 
-        public WS_EX GetWindowExStyle(IHandle hWnd) => (WS_EX)GetWindowLong(hWnd, GWL.EXSTYLE);
+        public static WS_EX GetWindowExStyle(IHandle hWnd) => (WS_EX)GetWindowLong(hWnd, GWL.EXSTYLE);
 
-        public WS GetWindowStyle(IHandle hWnd) => (WS)GetWindowLong(hWnd, GWL.STYLE);
+        public static WS GetWindowStyle(IHandle hWnd) => (WS)GetWindowLong(hWnd, GWL.STYLE);
 
-        public double[] RectListToDoubleArray(List<Rectangle> rectArray)
+        public static double[] RectListToDoubleArray(List<Rectangle> rectArray)
         {
             if (rectArray == null || rectArray.Count == 0)
             {

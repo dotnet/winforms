@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms.Layout
 {
-    internal partial class CommonProperties
+    internal static partial class CommonProperties
     {
         private enum DockAnchorMode
         {

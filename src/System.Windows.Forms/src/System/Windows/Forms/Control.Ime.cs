@@ -1407,7 +1407,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_InputLanguageTable(), Input Language = " + InputLanguage.CurrentInputLanguage.Culture.DisplayName + ", Thread = " + System.Threading.Thread.CurrentThread.ManagedThreadId);
+                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_InputLanguageTable(), Input Language = " + InputLanguage.CurrentInputLanguage.Culture.DisplayName + ", Thread = " + Environment.CurrentManagedThreadId);
                 InputLanguage inputLanguage = InputLanguage.CurrentInputLanguage;
 
                 int lcid = (int)((long)inputLanguage.Handle & (long)0xFFFF);

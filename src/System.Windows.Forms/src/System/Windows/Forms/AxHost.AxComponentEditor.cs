@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms.Design;
@@ -16,7 +14,7 @@ namespace System.Windows.Forms
         public class AxComponentEditor : WindowsFormsComponentEditor
         {
 #pragma warning disable CA1725 // Parameter names should match base declaration - "obj" and "parent" is how this is documented
-            public override bool EditComponent(ITypeDescriptorContext context, object obj, IWin32Window parent)
+            public override bool EditComponent(ITypeDescriptorContext? context, object obj, IWin32Window? parent)
 #pragma warning restore CA1725
             {
                 if (obj is AxHost host)
@@ -27,9 +25,9 @@ namespace System.Windows.Forms
                         ((Ole32.IOleControlSite)host._oleSite).ShowPropertyFrame();
                         return true;
                     }
-                    catch (Exception t)
+                    catch (Exception ex)
                     {
-                        Debug.Fail(t.ToString());
+                        Debug.Fail(ex.ToString());
                         throw;
                     }
                 }

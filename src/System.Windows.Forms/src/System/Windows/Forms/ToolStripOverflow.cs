@@ -10,7 +10,7 @@ using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
-    public class ToolStripOverflow : ToolStripDropDown, IArrangedElement
+    public partial class ToolStripOverflow : ToolStripDropDown, IArrangedElement
     {
 #if DEBUG
         internal static readonly TraceSwitch PopupLayoutDebug = new TraceSwitch("PopupLayoutDebug", "Debug ToolStripPopup Layout code");
@@ -153,24 +153,6 @@ namespace System.Windows.Forms
             }
 
             SetLargestItemSize(biggestItemSize);
-        }
-
-        internal class ToolStripOverflowAccessibleObject : ToolStripAccessibleObject
-        {
-            public ToolStripOverflowAccessibleObject(ToolStripOverflow owner)
-                : base(owner)
-            {
-            }
-
-            public override AccessibleObject GetChild(int index)
-            {
-                return ((ToolStripOverflow)Owner).DisplayedItems[index].AccessibilityObject;
-            }
-
-            public override int GetChildCount()
-            {
-                return ((ToolStripOverflow)Owner).DisplayedItems.Count;
-            }
         }
     }
 }

@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal partial class Kernel32
     {
-        [DllImport(Libraries.Kernel32, ExactSpelling = true)]
-        public unsafe extern static IntPtr CreateActCtxW(ref ACTCTXW pActCtx);
+        [LibraryImport(Libraries.Kernel32)]
+        public static unsafe partial IntPtr CreateActCtxW(ref ACTCTXW pActCtx);
     }
 }

@@ -7,6 +7,11 @@
     <Nullable>enable</Nullable>
 
     <NoWarn>$(NoWarn);618</NoWarn>
+    <!-- 
+      IL Trim warnings which should be removed in order to make WinForms trimmable
+      See https://github.com/dotnet/winforms/issues/4649
+    -->
+    <NoWarn>$(NoWarn);IL2026;IL2050;IL2067;IL2070;IL2072;IL2075;IL2077;IL2080;IL2092;IL2093;IL2094;IL2111</NoWarn>
     <Win32Manifest>Resources\System\Windows\Forms\XPThemes.manifest</Win32Manifest>
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
@@ -51,6 +56,9 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\System\Windows\Forms\PrintPreviewDialog.resx">
       <LogicalName>System.Windows.Forms.PrintPreviewDialog.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ILLink.Substitutions.xml">
+      <LogicalName>ILLink.Substitutions.xml</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
 

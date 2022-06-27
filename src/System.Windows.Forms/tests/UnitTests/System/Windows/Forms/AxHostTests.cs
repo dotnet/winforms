@@ -2043,8 +2043,18 @@ namespace System.Windows.Forms.Tests
             mockSelectionService.Verify(s => s.GetComponentSelected(control), Times.Once());
         }
 
+        public static IEnumerable<object[]> InvokeEditMode_SiteWithHandle_TestData()
+        {
+            yield return new object[] { true, null, 3 };
+            yield return new object[] { true, new object(), 3 };
+
+            yield return new object[] { false, null, 1 };
+            yield return new object[] { false, new object(), 1 };
+            yield return new object[] { false, new Mock<ISelectionService>(MockBehavior.Strict).Object, 1 };
+        }
+
         [WinFormsTheory]
-        [MemberData(nameof(InvokeEditMode_Site_TestData))]
+        [MemberData(nameof(InvokeEditMode_SiteWithHandle_TestData))]
         public void AxHost_InvokeEditMode_InvokeWithSiteWithHandle_Success(bool designMode, object selectionService, int expectedCallCount)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -2233,8 +2243,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(2));
-            mockSelectionService.Verify(s => s.GetComponentSelected(control), Times.Once());
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(3));
+            mockSelectionService.Verify(s => s.GetComponentSelected(control), Times.Exactly(2));
 
             // Call again.
             control.InvokeEditMode();
@@ -2243,8 +2253,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(2));
-            mockSelectionService.Verify(s => s.GetComponentSelected(control), Times.Once());
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(3));
+            mockSelectionService.Verify(s => s.GetComponentSelected(control), Times.Exactly(2));
         }
 
         [WinFormsTheory]

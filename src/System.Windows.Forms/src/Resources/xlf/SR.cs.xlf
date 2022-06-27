@@ -6571,6 +6571,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Aktuální objekt přístupnosti je určený jenom pro ovládací prvek ListView v zobrazení {0}, {1} nebo {2}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="translated">Nelze načíst objekt přístupnosti, pokud položka ListViewItem není připojena k ListView.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">Událost aktivovaná v případě změny zaškrtnuté vlastnosti položky ListView</target>
@@ -7694,6 +7699,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="PictureBoxOnSizeModeChangedDescr">
         <source>Event raised when the value of the SizeMode property is changed on the PictureBox.</source>
         <target state="translated">Událost aktivovaná při změně hodnoty vlastnosti SizeMode ovládacího prvku PictureBox</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PictureBoxRemoteLocationNotSupported">
+        <source>Loading from remote location not supported.</source>
+        <target state="translated">Načítání ze vzdáleného umístění není podporováno.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
@@ -8824,6 +8834,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="ScrollBarVisibleDescr">
         <source>Gets or sets a Boolean value controlling whether the scrollbar is showing.</source>
         <target state="translated">Získá nebo nastaví logickou hodnotu určující, zda je zobrazen posuvník.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="translated">Nadřazená vlastnost aktivního ovládacího prvku nemůže mít hodnotu null.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
@@ -10304,6 +10319,16 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="ToolStripSaveSettingsDescr">
         <source>Specifies whether the ToolStrip should persist user settings via IPersistComponentSettings.</source>
         <target state="translated">Určuje, zda má ovládací prvek ToolStrip zachovat uživatelská nastavení prostřednictvím rozhraní IPersistComponentSettings.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="translated">Řádek dolů</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="translated">Řádek nahoru</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">

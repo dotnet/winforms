@@ -41,6 +41,75 @@ namespace System.Windows.Forms.UITests
             });
         }
 
+        [WinFormsFact]
+        public async Task ListView_Group_NavigateKeyboard_SucceedsAsync()
+        {
+            await RunTestAsync(async (form, listView) =>
+            {
+                var group = new ListViewGroup($"Group 1", HorizontalAlignment.Left) { CollapsedState = ListViewGroupCollapsedState.Expanded };
+                var item1 = new ListViewItem("g1-1") { Group = group };
+                var item2 = new ListViewItem("g1-2") { Group = group };
+                var item3 = new ListViewItem("g1-3") { Group = group };
+
+                listView.Groups.Add(group);
+                listView.Items.AddRange(new[] { item1, item2, item3 });
+                listView.Focus();
+
+                bool collapsedStateChangedFired = false;
+                listView.GroupCollapsedStateChanged += (sender, e) => collapsedStateChangedFired = true;
+
+                item1.Selected = true;
+
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
+                Assert.False(item1.Selected);
+                Assert.True(item2.Selected);
+                Assert.False(item3.Selected);
+                Assert.False(collapsedStateChangedFired);
+
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
+                Assert.False(item1.Selected);
+                Assert.False(item2.Selected);
+                Assert.True(item3.Selected);
+                Assert.False(collapsedStateChangedFired);
+
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
+                Assert.False(item1.Selected);
+                Assert.False(item2.Selected);
+                Assert.True(item3.Selected);
+                Assert.False(collapsedStateChangedFired);
+
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT).KeyPress(VirtualKeyCode.LEFT));
+                Assert.True(item1.Selected);
+                Assert.False(item2.Selected);
+                Assert.False(item3.Selected);
+                Assert.False(collapsedStateChangedFired);
+
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT));
+                Assert.True(item1.Selected);
+                Assert.False(item2.Selected);
+                Assert.False(item3.Selected);
+                Assert.False(collapsedStateChangedFired);
+
+                // Selects header, which selects all items in group
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.UP));
+                Assert.True(item2.Selected);
+                Assert.True(item2.Selected);
+                Assert.True(item2.Selected);
+                Assert.False(collapsedStateChangedFired);
+
+                // Collapse group
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT).KeyPress(VirtualKeyCode.UP).KeyPress(VirtualKeyCode.LEFT));
+                Assert.Equal(ListViewGroupCollapsedState.Collapsed, group.CollapsedState);
+                Assert.True(collapsedStateChangedFired);
+
+                // Expand group
+                collapsedStateChangedFired = false;
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.UP).KeyPress(VirtualKeyCode.RIGHT));
+                Assert.True(collapsedStateChangedFired);
+                Assert.Equal(ListViewGroupCollapsedState.Expanded, group.CollapsedState);
+            });
+        }
+
         [WinFormsTheory]
         [InlineData(2, 2, 150, 150, 0, 1, (int)NavigateDirection.FirstChild)]
         [InlineData(4, 3, 150, 150, 0, 3, (int)NavigateDirection.LastChild)]
@@ -56,7 +125,7 @@ namespace System.Windows.Forms.UITests
                 Application.DoEvents();
                 AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
                 IRawElementProviderFragment? actualAccessibleObject = accessibleObject.FragmentNavigate((NavigateDirection)direction);
-                AccessibleObject expectedAccessibleObject = listView.Items[itemIndex].SubItems[subItemIndex].AccessibilityObject;
+                AccessibleObject? expectedAccessibleObject = listView.Items[itemIndex].SubItems[subItemIndex].AccessibilityObject;
 
                 Assert.Equal(expectedAccessibleObject, actualAccessibleObject);
 
@@ -94,9 +163,9 @@ namespace System.Windows.Forms.UITests
             {
                 InitializeTileList(listView, columnCount, subItemsCount, tileSize: new Size(100, 100));
 
-                AccessibleObject accessibleObject = listView.Items[0].SubItems[1].AccessibilityObject;
-                IRawElementProviderFragment nextAccessibleObject = accessibleObject.FragmentNavigate(NavigateDirection.NextSibling)!;
-                IRawElementProviderFragment previousAccessibleObject = accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling)!;
+                AccessibleObject? accessibleObject = listView.Items[0].SubItems[1].AccessibilityObject;
+                IRawElementProviderFragment? nextAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NextSibling);
+                IRawElementProviderFragment? previousAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.PreviousSibling);
 
                 Assert.Null(nextAccessibleObject);
                 Assert.Null(previousAccessibleObject);
@@ -194,10 +263,10 @@ namespace System.Windows.Forms.UITests
                 InitializeTileList(listView, columnCount: 4, subItemsCount: 4, tileSize: new Size(100, 100));
 
                 Application.DoEvents();
-                AccessibleObject accessibleObject1 = listView.Items[0].SubItems[1].AccessibilityObject;
-                AccessibleObject accessibleObject2 = (AccessibleObject)accessibleObject1.FragmentNavigate(NavigateDirection.NextSibling)!;
-                AccessibleObject accessibleObject3 = (AccessibleObject)accessibleObject2.FragmentNavigate(NavigateDirection.NextSibling)!;
-                AccessibleObject accessibleObject4 = (AccessibleObject)accessibleObject3.FragmentNavigate(NavigateDirection.NextSibling)!;
+                AccessibleObject? accessibleObject1 = listView.Items[0].SubItems[1].AccessibilityObject;
+                AccessibleObject? accessibleObject2 = (AccessibleObject?)accessibleObject1?.FragmentNavigate(NavigateDirection.NextSibling);
+                AccessibleObject? accessibleObject3 = (AccessibleObject?)accessibleObject2?.FragmentNavigate(NavigateDirection.NextSibling);
+                AccessibleObject? accessibleObject4 = (AccessibleObject?)accessibleObject3?.FragmentNavigate(NavigateDirection.NextSibling);
 
                 Assert.Equal(listView.Items[0].SubItems[2].AccessibilityObject, accessibleObject2);
                 Assert.Equal(listView.Items[0].SubItems[3].AccessibilityObject, accessibleObject3);
@@ -216,8 +285,8 @@ namespace System.Windows.Forms.UITests
 
                 Application.DoEvents();
 
-                AccessibleObject expectedAccessibleItem1 = listView.Items[0].SubItems[1].AccessibilityObject;
-                AccessibleObject expectedAccessibleItem2 = listView.Items[0].SubItems[2].AccessibilityObject;
+                AccessibleObject? expectedAccessibleItem1 = listView.Items[0].SubItems[1].AccessibilityObject;
+                AccessibleObject? expectedAccessibleItem2 = listView.Items[0].SubItems[2].AccessibilityObject;
                 AccessibleObject actualAccessibleItem1 = HitTest(GetSubItemLocation(0, 1));
                 AccessibleObject actualAccessibleItem2 = HitTest(GetSubItemLocation(0, 2));
 
@@ -240,9 +309,9 @@ namespace System.Windows.Forms.UITests
             {
                 InitializeTileList(listView, columnCount: 5, subItemsCount: 5, tileSize: new Size(50, 40));
 
-                AccessibleObject accessibleObject = listView.Items[0].SubItems[1].AccessibilityObject;
-                IRawElementProviderFragment nextAccessibleObject = accessibleObject.FragmentNavigate(NavigateDirection.NextSibling)!;
-                IRawElementProviderFragment previousAccessibleObject = accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling)!;
+                AccessibleObject? accessibleObject = listView.Items[0].SubItems[1].AccessibilityObject;
+                IRawElementProviderFragment? nextAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NextSibling);
+                IRawElementProviderFragment? previousAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.PreviousSibling);
 
                 Assert.Null(nextAccessibleObject);
                 Assert.Null(previousAccessibleObject);
@@ -399,10 +468,10 @@ namespace System.Windows.Forms.UITests
             {
                 InitializeTileList(listView, columnCount: 4, subItemsCount: 3, tileSize: new Size(150, 150));
 
-                Assert.Equal(listView.Items[0].SubItems[0].AccessibilityObject.Column, -1);
-                Assert.Equal(listView.Items[0].SubItems[1].AccessibilityObject.Column, -1);
-                Assert.Equal(listView.Items[0].SubItems[2].AccessibilityObject.Column, -1);
-                Assert.Equal(listView.Items[0].SubItems[2].AccessibilityObject.Column, -1);
+                Assert.Equal(listView.Items[0].SubItems[0].AccessibilityObject?.Column, -1);
+                Assert.Equal(listView.Items[0].SubItems[1].AccessibilityObject?.Column, -1);
+                Assert.Equal(listView.Items[0].SubItems[2].AccessibilityObject?.Column, -1);
+                Assert.Equal(listView.Items[0].SubItems[2].AccessibilityObject?.Column, -1);
 
                 return Task.CompletedTask;
             });

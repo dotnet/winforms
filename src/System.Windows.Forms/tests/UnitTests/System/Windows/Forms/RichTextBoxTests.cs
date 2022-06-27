@@ -6876,8 +6876,9 @@ namespace System.Windows.Forms.Tests
         // NOTE: do not convert this into a theory as it will run hundreds of tests
         // and with that will cycle through hundreds of UI controls.
         [ActiveIssue("https://github.com/dotnet/winforms/issues/6609")]
-        [ConditionalWinFormsFact(UnsupportedArchitecture = Architecture.X86,
-            Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6609")]
+        [WinFormsFact]
+        [SkipOnArchitecture(TestArchitectures.X86,
+            "Flaky tests, see: https://github.com/dotnet/winforms/issues/6609")]
         public void RichTextBox_Text_GetWithHandle_ReturnsExpected()
         {
             using (var control = new RichTextBox())
@@ -7930,6 +7931,20 @@ namespace System.Windows.Forms.Tests
 
                 base.WndProc(ref m);
             }
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_OleObject_IncompleteOleObject_DoNothing()
+        {
+            using var control = new RichTextBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            using var memoryStream = new MemoryStream();
+            using var bitmap = new Bitmap(100, 100);
+            bitmap.Save(memoryStream, Drawing.Imaging.ImageFormat.Png);
+            Clipboard.SetData("Embed Source", memoryStream);
+
+            Assert.Equal(string.Empty, control.Text);
         }
 
         [WinFormsFact]

@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern nint SendMessageW(
+        [LibraryImport(Libraries.User32)]
+        public static partial nint SendMessageW(
             IntPtr hWnd,
             WM Msg,
             nint wParam = default,
@@ -30,7 +30,7 @@ internal static partial class Interop
             IntPtr hWnd,
             WM Msg,
             nint wParam,
-            string lParam)
+            string? lParam)
         {
             fixed (char* c = lParam)
             {
@@ -42,7 +42,7 @@ internal static partial class Interop
             IHandle hWnd,
             WM Msg,
             nint wParam,
-            string lParam)
+            string? lParam)
         {
             fixed (char* c = lParam)
             {

@@ -869,7 +869,7 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(s_alternatingRowsDefaultCellStyleChangedEvent, value);
         }
 
-        internal bool ApplyVisualStylesToInnerCells
+        internal static bool ApplyVisualStylesToInnerCells
         {
             get
             {

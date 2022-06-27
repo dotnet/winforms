@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern BOOL DrawIconEx(
+        [LibraryImport(Libraries.User32)]
+        public static partial BOOL DrawIconEx(
             Gdi32.HDC hDC,
             int xLeft,
             int yTop,

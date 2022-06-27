@@ -9,11 +9,21 @@ internal partial class Interop
     internal static partial class Ole32
     {
         [DllImport(Libraries.Ole32, ExactSpelling = true)]
+        private static extern HRESULT RegisterDragDrop(IntPtr hwnd, IntPtr pDropTarget);
+
+        [DllImport(Libraries.Ole32, ExactSpelling = true)]
         public static extern HRESULT RegisterDragDrop(IntPtr hwnd, IDropTarget pDropTarget);
 
         public static HRESULT RegisterDragDrop(IHandle hwnd, IDropTarget pDropTarget)
         {
-            HRESULT result = RegisterDragDrop(hwnd.Handle, pDropTarget);
+            HRESULT result = WinFormsComWrappers.Instance.TryGetComPointer(pDropTarget, IID.IDropTarget, out var dropTargetPtr);
+            if (result.Failed())
+            {
+                return result;
+            }
+
+            result = RegisterDragDrop(hwnd.Handle, dropTargetPtr);
+            Marshal.Release(dropTargetPtr);
             GC.KeepAlive(hwnd);
             return result;
         }

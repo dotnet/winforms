@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using static Interop;
@@ -25,8 +22,7 @@ namespace System.Windows.Forms
     {
         // kept in add order, not ZOrder. Need to return the correct
         // array of items...
-        //
-        private readonly ArrayList children = new ArrayList();
+        private readonly List<Form> _children = new List<Form>();
 
         /// <summary>
         ///  Creates a new MdiClient.
@@ -43,11 +39,11 @@ namespace System.Windows.Forms
         /// </summary>
         /// <value>The image to display in the background of the control.</value>
         [Localizable(true)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get
             {
-                Image result = base.BackgroundImage;
+                Image? result = base.BackgroundImage;
                 if (result is null && ParentInternal is not null)
                 {
                     result = ParentInternal.BackgroundImage;
@@ -64,7 +60,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Image backgroundImage = BackgroundImage;
+                Image? backgroundImage = BackgroundImage;
                 if (backgroundImage is not null && ParentInternal is not null)
                 {
                     ImageLayout imageLayout = base.BackgroundImageLayout;
@@ -105,7 +101,7 @@ namespace System.Windows.Forms
                 {
                     idFirstChild = 1
                 };
-                ISite site = ParentInternal?.Site;
+                ISite? site = ParentInternal?.Site;
                 if (site is not null && site.DesignMode)
                 {
                     cp.Style |= (int)User32.WS.DISABLED;
@@ -133,9 +129,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Form[] temp = new Form[children.Count];
-                children.CopyTo(temp, 0);
-                return temp;
+                return _children.ToArray();
             }
         }
 
@@ -178,7 +172,7 @@ namespace System.Windows.Forms
         /// <param name="e">The event data.</param>
         protected override void OnResize(EventArgs e)
         {
-            ISite site = ParentInternal?.Site;
+            ISite? site = ParentInternal?.Site;
             if (site is not null && site.DesignMode && Handle != IntPtr.Zero)
             {
                 SetWindowRgn();
@@ -196,7 +190,6 @@ namespace System.Windows.Forms
         protected override void ScaleCore(float dx, float dy)
         {
             // Don't scale child forms...
-            //
 
             SuspendLayout();
             try
@@ -256,9 +249,8 @@ namespace System.Windows.Forms
                 for (int i = 0; i < Controls.Count; i++)
                 {
                     Control ctl = Controls[i];
-                    if (ctl is not null && ctl is Form)
+                    if (ctl is not null && ctl is Form child)
                     {
-                        Form child = (Form)ctl;
                         // Only adjust the window position for visible MDI Child windows to prevent
                         // them from being re-displayed.
                         if (child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized)
@@ -331,7 +323,7 @@ namespace System.Windows.Forms
             return BackColor != SystemColors.AppWorkspace;
         }
 
-        private bool ShouldSerializeLocation()
+        private static bool ShouldSerializeLocation()
         {
             return false;
         }
@@ -359,10 +351,10 @@ namespace System.Windows.Forms
 
                 case User32.WM.SETFOCUS:
                     InvokeGotFocus(ParentInternal, EventArgs.Empty);
-                    Form childForm = null;
-                    if (ParentInternal is Form)
+                    Form? childForm = null;
+                    if (ParentInternal is Form parentInternalAsForm)
                     {
-                        childForm = ((Form)ParentInternal).ActiveMdiChildInternal;
+                        childForm = parentInternalAsForm.ActiveMdiChildInternal;
                     }
 
                     if (childForm is null && MdiChildren.Length > 0 && MdiChildren[0].IsMdiChildFocusable)
@@ -394,7 +386,7 @@ namespace System.Windows.Forms
             Application.Idle += new EventHandler(OnIdle); //do this on idle (it must be mega-delayed).
         }
 
-        private void OnIdle(object sender, EventArgs e)
+        private void OnIdle(object? sender, EventArgs e)
         {
             Application.Idle -= new EventHandler(OnIdle);
             base.OnInvokedSetScrollPosition(sender, e);

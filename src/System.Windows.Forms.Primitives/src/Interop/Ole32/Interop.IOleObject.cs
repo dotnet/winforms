@@ -21,7 +21,7 @@ internal partial class Interop
 
             [PreserveSig]
             HRESULT GetClientSite(
-                out IOleClientSite ppClientSite);
+                out IOleClientSite? ppClientSite);
 
             [PreserveSig]
             HRESULT SetHostNames(
@@ -52,7 +52,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT GetClipboardData(
                 uint dwReserved,
-                out IDataObject ppDataObject);
+                out IDataObject? ppDataObject);
 
             [PreserveSig]
             HRESULT DoVerb(
@@ -103,7 +103,7 @@ internal partial class Interop
 
             [PreserveSig]
             HRESULT EnumAdvise(
-                out IEnumSTATDATA e);
+                out IEnumSTATDATA? e);
 
             [PreserveSig]
             HRESULT GetMiscStatus(

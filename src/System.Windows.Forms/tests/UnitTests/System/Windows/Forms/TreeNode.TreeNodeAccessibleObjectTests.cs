@@ -219,71 +219,62 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void TreeNodeAccessibleObject_GetPropertyValue_ControlType_IsCheckBox_IfNodesAreCheckBoxes()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeNodeAccessibleObject_GetPropertyValue_ControlType_IsTreeItem(bool checkBoxes)
         {
-            using TreeView control = new() { CheckBoxes = true };
-            TreeNode node = new(control);
-
-            UiaCore.UIA expected = UiaCore.UIA.CheckBoxControlTypeId;
-
-            Assert.Equal(expected, node.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
-            Assert.False(control.IsHandleCreated);
-        }
-
-        [WinFormsFact]
-        public void TreeNodeAccessibleObject_GetPropertyValue_ControlType_IsTreeItem_IfNodesAreNotCheckBoxes()
-        {
-            using TreeView control = new() { CheckBoxes = false };
+            using TreeView control = new() { CheckBoxes = checkBoxes };
             TreeNode node = new(control);
 
             UiaCore.UIA expected = UiaCore.UIA.TreeItemControlTypeId;
+            object actual = node.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
 
-            Assert.Equal(expected, node.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+            Assert.Equal(expected, actual);
             Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [InlineData((int)UiaCore.UIA.ExpandCollapsePatternId)]
-        [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
-        [InlineData((int)UiaCore.UIA.ScrollItemPatternId)]
-        [InlineData((int)UiaCore.UIA.SelectionItemPatternId)]
-        public void TreeNodeAccessibleObject_IsPatternSupported_IfCommonNodes(int patternId)
+        [InlineData((int)UiaCore.UIA.ExpandCollapsePatternId, false)]
+        [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId, true)]
+        [InlineData((int)UiaCore.UIA.ScrollItemPatternId, true)]
+        [InlineData((int)UiaCore.UIA.SelectionItemPatternId, true)]
+        public void TreeNodeAccessibleObject_IsPatternSupported_IfCommonNodes(int patternId, bool expected)
         {
             using TreeView control = new();
             TreeNode node = new(control);
 
-            Assert.True(node.AccessibilityObject.IsPatternSupported((UiaCore.UIA)patternId));
+            Assert.Equal(node.AccessibilityObject.IsPatternSupported((UiaCore.UIA)patternId), expected);
             Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [InlineData((int)UiaCore.UIA.ExpandCollapsePatternId)]
-        [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
-        [InlineData((int)UiaCore.UIA.ScrollItemPatternId)]
-        [InlineData((int)UiaCore.UIA.SelectionItemPatternId)]
-        [InlineData((int)UiaCore.UIA.TogglePatternId)]
-        public void TreeNodeAccessibleObject_IsPatternSupported_IfNodesAreCheckBoxes(int patternId)
+        [InlineData((int)UiaCore.UIA.ExpandCollapsePatternId, false)]
+        [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId, true)]
+        [InlineData((int)UiaCore.UIA.ScrollItemPatternId, true)]
+        [InlineData((int)UiaCore.UIA.SelectionItemPatternId, true)]
+        [InlineData((int)UiaCore.UIA.TogglePatternId, true)]
+        public void TreeNodeAccessibleObject_IsPatternSupported_IfNodesAreCheckBoxes(int patternId, bool expected)
         {
             using TreeView control = new() { CheckBoxes = true };
             TreeNode node = new(control);
 
-            Assert.True(node.AccessibilityObject.IsPatternSupported((UiaCore.UIA)patternId));
+            Assert.Equal(node.AccessibilityObject.IsPatternSupported((UiaCore.UIA)patternId), expected);
             Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [InlineData((int)UiaCore.UIA.ExpandCollapsePatternId)]
-        [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
-        [InlineData((int)UiaCore.UIA.ScrollItemPatternId)]
-        [InlineData((int)UiaCore.UIA.SelectionItemPatternId)]
-        [InlineData((int)UiaCore.UIA.ValuePatternId)]
-        public void TreeNodeAccessibleObject_IsPatternSupported_IfNodesAreEditable(int patternId)
+        [InlineData((int)UiaCore.UIA.ExpandCollapsePatternId, false)]
+        [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId, true)]
+        [InlineData((int)UiaCore.UIA.ScrollItemPatternId, true)]
+        [InlineData((int)UiaCore.UIA.SelectionItemPatternId, true)]
+        [InlineData((int)UiaCore.UIA.ValuePatternId, true)]
+        public void TreeNodeAccessibleObject_IsPatternSupported_IfNodesAreEditable(int patternId, bool expected)
         {
             using TreeView control = new() { LabelEdit = true };
             TreeNode node = new(control);
 
-            Assert.True(node.AccessibilityObject.IsPatternSupported((UiaCore.UIA)patternId));
+            Assert.Equal(node.AccessibilityObject.IsPatternSupported((UiaCore.UIA)patternId), expected);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -483,6 +474,18 @@ namespace System.Windows.Forms.Tests
             TreeNode node = new(control) { Text = testText };
 
             Assert.Equal(testText, node.AccessibilityObject.Value);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TreeNodeAccessibleObject_HasChildren_ExpandCollapsePatternAvailable()
+        {
+            using TreeView control = new();
+            TreeNode node = new(control);
+            node.Nodes.Add("ChildNode");
+
+            Assert.True(node.AccessibilityObject.IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId));
+            Assert.True(node.childCount > 0);
             Assert.False(control.IsHandleCreated);
         }
     }

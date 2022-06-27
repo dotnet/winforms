@@ -9,6 +9,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
@@ -39,7 +40,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Flags which may be passed to the AxHost constructor
         /// </summary>
-        internal class AxFlags
+        internal static class AxFlags
         {
             /// <summary>
             ///  Indicates that the context menu for the control should not contain an
@@ -2289,7 +2290,7 @@ namespace System.Windows.Forms
 
                     return null;
                 case Ole32.DispatchID.AMBIENT_DISPLAYNAME:
-                    string rval = GetParentContainer().GetNameForControl(this);
+                    string rval = AxContainer.GetNameForControl(this);
                     if (rval is null)
                     {
                         rval = string.Empty;
@@ -2436,11 +2437,7 @@ namespace System.Windows.Forms
                 Ole32.CLSCTX.INPROC_SERVER,
                 ref NativeMethods.ActiveX.IID_IUnknown,
                 out object ret);
-
-            if (!hr.Succeeded())
-            {
-                throw Marshal.GetExceptionForHR((int)hr);
-            }
+            hr.ThrowIfFailed();
 
             _instance = ret;
             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t{(_instance is not null)}");
@@ -2638,18 +2635,21 @@ namespace System.Windows.Forms
         ///  Retrieves the type converter for this object.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [RequiresUnreferencedCode(TrimmingConstants.AttributesRequiresUnreferencedCodeMessage)]
         TypeConverter ICustomTypeDescriptor.GetConverter()
         {
             return null;
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [RequiresUnreferencedCode(TrimmingConstants.EventDescriptorRequiresUnreferencedCodeMessage)]
         EventDescriptor ICustomTypeDescriptor.GetDefaultEvent()
         {
             return TypeDescriptor.GetDefaultEvent(this, true);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
         PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty()
         {
             return TypeDescriptor.GetDefaultProperty(this, true);
@@ -2659,6 +2659,7 @@ namespace System.Windows.Forms
         ///  Retrieves the an editor for this object.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [RequiresUnreferencedCode(TrimmingConstants.EditorRequiresUnreferencedCode)]
         object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
         {
             if (editorBaseType != typeof(ComponentEditor))
@@ -2684,6 +2685,7 @@ namespace System.Windows.Forms
             => TypeDescriptor.GetEvents(this, noCustomTypeDesc: true);
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [RequiresUnreferencedCode(TrimmingConstants.FilterRequiresUnreferencedCodeMessage)]
         EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
             => TypeDescriptor.GetEvents(this, attributes, noCustomTypeDesc: true);
 
@@ -2884,12 +2886,14 @@ namespace System.Windows.Forms
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
         {
             return FillProperties(null);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage + " " + TrimmingConstants.FilterRequiresUnreferencedCodeMessage)]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
         {
             return FillProperties(attributes);
@@ -3614,12 +3618,12 @@ namespace System.Windows.Forms
         }
 
         private const int HMperInch = 2540;
-        private int Pix2HM(int pix, int logP)
+        private static int Pix2HM(int pix, int logP)
         {
             return (HMperInch * pix + (logP >> 1)) / logP;
         }
 
-        private int HM2Pix(int hm, int logP)
+        private static int HM2Pix(int hm, int logP)
         {
             return (logP * hm + HMperInch / 2) / HMperInch;
         }
@@ -4302,7 +4306,7 @@ namespace System.Windows.Forms
             return DateTime.FromOADate(date);
         }
 
-        private int Convert2int(object o, bool xDirection)
+        private static int Convert2int(object o, bool xDirection)
         {
             o = ((Array)o).GetValue(0);
 
@@ -4316,7 +4320,7 @@ namespace System.Windows.Forms
             return Convert.ToInt32(o, CultureInfo.InvariantCulture);
         }
 
-        private short Convert2short(object o)
+        private static short Convert2short(object o)
         {
             o = ((Array)o).GetValue(0);
             return Convert.ToInt16(o, CultureInfo.InvariantCulture);

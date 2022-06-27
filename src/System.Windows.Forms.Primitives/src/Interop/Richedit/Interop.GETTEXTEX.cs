@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal static partial class Richedit
     {
-        [StructLayout(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential, Pack = RichEditPack)]
         public struct GETTEXTEX
         {
             public uint cb;

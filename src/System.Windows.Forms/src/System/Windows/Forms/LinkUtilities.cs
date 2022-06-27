@@ -8,7 +8,7 @@ using Microsoft.Win32;
 
 namespace System.Windows.Forms
 {
-    internal class LinkUtilities
+    internal static class LinkUtilities
     {
         // IE fonts and colors
         private static Color s_ielinkColor = Color.Empty;

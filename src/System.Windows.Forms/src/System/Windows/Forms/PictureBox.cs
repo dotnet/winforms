@@ -26,6 +26,8 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionPictureBox))]
     public partial class PictureBox : Control, ISupportInitialize
     {
+        private static readonly bool s_useWebRequest = AppContext.TryGetSwitch("System.Windows.Forms.PictureBox.UseWebRequest", out bool useWebRequest) ? useWebRequest : true;
+
         /// <summary>
         ///  The type of border this control will have.
         /// </summary>
@@ -48,6 +50,7 @@ namespace System.Windows.Forms
         // Instance members for asynchronous behavior
         private AsyncOperation _currentAsyncLoadOperation;
 
+        private FileStream _fileStream;
         private string _imageLocation;
         private Image _initialImage;
         private Image errorImage;
@@ -146,7 +149,7 @@ namespace System.Windows.Forms
         ///  Try to build a URI, but if that fails, that means it's a relative path, and we treat it as
         ///  relative to the working directory (which is what GetFullPath uses).
         /// </summary>
-        private Uri CalculateUri(string path)
+        private static Uri CalculateUri(string path)
         {
             try
             {
@@ -466,26 +469,25 @@ namespace System.Windows.Forms
             // false to prevent subsequent attempts.
             _pictureBoxState[NeedToLoadImageLocationState] = false;
 
-            Image img;
-            ImageInstallationType installType = ImageInstallationType.FromUrl;
             try
             {
                 DisposeImageStream();
-
-                Uri uri = CalculateUri(_imageLocation);
-                if (uri.IsFile)
+                if (UseWebRequest())
                 {
-                    _localImageStreamReader = new StreamReader(uri.LocalPath);
-                    img = Image.FromStream(_localImageStreamReader.BaseStream);
+                    LoadImageViaWebClient();
                 }
                 else
                 {
-#pragma warning disable SYSLIB0014 // Type or member is obsolete
-                    using (WebClient wc = new WebClient())
-#pragma warning restore SYSLIB0014 // Type or member is obsolete
+                    Uri uri = CalculateUri(_imageLocation);
+                    if (uri.IsFile)
                     {
-                        _uriImageStream = wc.OpenRead(uri.ToString());
-                        img = Image.FromStream(_uriImageStream);
+                        _localImageStreamReader = new StreamReader(uri.LocalPath);
+                        Image img = Image.FromStream(_localImageStreamReader.BaseStream);
+                        InstallNewImage(img, ImageInstallationType.FromUrl);
+                    }
+                    else
+                    {
+                        throw new NotSupportedException(SR.PictureBoxRemoteLocationNotSupported);
                     }
                 }
             }
@@ -498,12 +500,32 @@ namespace System.Windows.Forms
                 else
                 {
                     // In design mode, just replace with Error bitmap.
-                    img = ErrorImage;
-                    installType = ImageInstallationType.ErrorOrInitial;
+                    InstallNewImage(ErrorImage, ImageInstallationType.ErrorOrInitial);
+                }
+            }
+        }
+
+        private void LoadImageViaWebClient()
+        {
+            Image img;
+            Uri uri = CalculateUri(_imageLocation);
+            if (uri.IsFile)
+            {
+                _localImageStreamReader = new StreamReader(uri.LocalPath);
+                img = Image.FromStream(_localImageStreamReader.BaseStream);
+            }
+            else
+            {
+#pragma warning disable SYSLIB0014 // Type or member is obsolete
+                using (WebClient wc = new WebClient())
+#pragma warning restore SYSLIB0014 // Type or member is obsolete
+                {
+                    _uriImageStream = wc.OpenRead(uri.ToString());
+                    img = Image.FromStream(_uriImageStream);
                 }
             }
 
-            InstallNewImage(img, installType);
+            InstallNewImage(img, ImageInstallationType.FromUrl);
         }
 
         [SRCategory(nameof(SR.CatAsynchronous))]
@@ -549,7 +571,47 @@ namespace System.Windows.Forms
             _pictureBoxState[CancellationPendingState] = false;
             _contentLength = -1;
             _tempDownloadStream = new MemoryStream();
+            if (UseWebRequest())
+            {
+                StartLoadViaWebRequest();
+            }
+            else
+            {
+                var uri = CalculateUri(_imageLocation);
+                if (uri.IsFile)
+                {
+                    LoadFromFileAsync();
+                }
+                else
+                {
+                    throw new NotSupportedException(SR.PictureBoxRemoteLocationNotSupported);
+                }
+            }
+        }
 
+        private void LoadFromFileAsync()
+        {
+            try
+            {
+                _fileStream = File.OpenRead(_imageLocation);
+                _contentLength = (int)_fileStream.Length;
+                _totalBytesRead = 0;
+
+                _fileStream.BeginRead(
+                    _readBuffer,
+                    0,
+                    ReadBlockSize,
+                    new AsyncCallback(ReadCallBack),
+                    _fileStream);
+            }
+            catch (Exception error)
+            {
+                PostCompleted(error, cancelled: false);
+            }
+        }
+
+        private void StartLoadViaWebRequest()
+        {
 #pragma warning disable SYSLIB0014 // Type or member is obsolete
             WebRequest req = WebRequest.Create(CalculateUri(_imageLocation));
 #pragma warning restore SYSLIB0014 // Type or member is obsolete
@@ -597,6 +659,8 @@ namespace System.Windows.Forms
                 InstallNewImage(img, installType);
             }
 
+            _fileStream?.Dispose();
+            _fileStream = null;
             _tempDownloadStream = null;
             _pictureBoxState[CancellationPendingState] = false;
             _pictureBoxState[AsyncOperationInProgressState] = false;
@@ -1193,5 +1257,8 @@ namespace System.Windows.Forms
 
             _pictureBoxState[InInitializationState] = false;
         }
+
+        // The Linker is also capable of replacing the value of this method when the application is being trimmed.
+        private static bool UseWebRequest() => s_useWebRequest;
     }
 }

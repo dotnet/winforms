@@ -102,7 +102,7 @@ namespace System.Windows.Forms
             {
                 if (!_owningListView.IsHandleCreated)
                 {
-                    return -1;
+                    return InvalidIndex;
                 }
 
                 return _owningListView.GroupsDisplayed ? GetVisibleGroups().Count : _owningListView.Items.Count;
@@ -112,23 +112,23 @@ namespace System.Windows.Forms
             {
                 if (child is null)
                 {
-                    return -1;
+                    return InvalidIndex;
                 }
 
                 if (child is ListViewItem.ListViewItemBaseAccessibleObject itemAccessibleObject)
                 {
                     int index = itemAccessibleObject.CurrentIndex;
-                    return index < _owningListView.Items.Count ? index : -1;
+                    return index < _owningListView.Items.Count ? index : InvalidIndex;
                 }
 
-                return -1;
+                return InvalidIndex;
             }
 
             private int GetGroupIndex(AccessibleObject? child)
             {
                 if (child is null)
                 {
-                    return -1;
+                    return InvalidIndex;
                 }
 
                 IReadOnlyList<ListViewGroup> visibleGroups = GetVisibleGroups();
@@ -140,7 +140,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                return -1;
+                return InvalidIndex;
             }
 
             internal override int GetChildIndex(AccessibleObject? child) => _owningListView.GroupsDisplayed ? GetGroupIndex(child) : GetItemIndex(child);

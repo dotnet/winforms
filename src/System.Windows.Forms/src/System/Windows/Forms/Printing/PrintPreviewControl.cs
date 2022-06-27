@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Printing;
 using static Interop;
@@ -208,6 +209,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Bindable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;
@@ -309,7 +311,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private unsafe int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
+        private static unsafe int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
         {
             switch ((User32.SBH)PARAM.LOWORD(m.WParamInternal))
             {

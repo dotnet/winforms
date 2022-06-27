@@ -24,9 +24,9 @@ internal partial class Interop
             HRESULT ExecuteBuilder(
                 Ole32.DispatchID dispid,
                 [MarshalAs(UnmanagedType.BStr)] string bstrGuidBldr,
-                [MarshalAs(UnmanagedType.Interface)] object pdispApp,
+                [MarshalAs(UnmanagedType.Interface)] object? pdispApp,
                 IntPtr hwndBldrOwner,
-                [In, Out, MarshalAs(UnmanagedType.Struct)] ref object pvarValue,
+                [In, Out, MarshalAs(UnmanagedType.Struct)] ref object? pvarValue,
                 BOOL* actionCommitted);
         }
     }

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 
@@ -36,7 +34,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ContextMenuStripSourceControlDescr))]
-        public Control SourceControl
+        public Control? SourceControl
         {
             get
             {
@@ -71,10 +69,9 @@ namespace System.Windows.Forms
                 {
                     contextMenuStrip.Items.Add(new ToolStripSeparator());
                 }
-                else if (item is ToolStripMenuItem)
+                else if (item is ToolStripMenuItem toolStripMenuItem)
                 {
-                    ToolStripMenuItem menuItem = item as ToolStripMenuItem;
-                    contextMenuStrip.Items.Add(menuItem.Clone());
+                    contextMenuStrip.Items.Add(toolStripMenuItem.Clone());
                 }
             }
 

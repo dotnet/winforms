@@ -6571,6 +6571,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Bieżący obiekt ułatwień dostępu jest przeznaczony tylko dla elementu ListView w widoku {0}, {1} lub {2}</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
+        <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
+        <target state="translated">Nie można uzyskać obiektu dostępności, gdy element ListViewItem nie jest dołączony do elementu ListView.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">Zdarzenie wywoływane, gdy zostanie zmieniona zaznaczona właściwość elementu ListView.</target>
@@ -7694,6 +7699,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="PictureBoxOnSizeModeChangedDescr">
         <source>Event raised when the value of the SizeMode property is changed on the PictureBox.</source>
         <target state="translated">Zdarzenie wywoływane, gdy wartość właściwości SizeMode zostanie zmieniona w elemencie PictureBox.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PictureBoxRemoteLocationNotSupported">
+        <source>Loading from remote location not supported.</source>
+        <target state="translated">Ładowanie z lokalizacji zdalnej nie jest obsługiwane.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxSizeModeDescr">
@@ -8824,6 +8834,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="ScrollBarVisibleDescr">
         <source>Gets or sets a Boolean value controlling whether the scrollbar is showing.</source>
         <target state="translated">Pobiera lub ustawia wartość Boolean, która kontroluje, czy pokazywany jest pasek przewijania.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="translated">Właściwość nadrzędna aktywnej kontrolki nie może mieć wartości null.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
@@ -10304,6 +10319,16 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="ToolStripSaveSettingsDescr">
         <source>Specifies whether the ToolStrip should persist user settings via IPersistComponentSettings.</source>
         <target state="translated">Określa, czy element ToolStrip ma utrwalić ustawienia użytkownika przy użyciu elementu IPersistComponentSettings.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonDownAccessibleName">
+        <source>Line down</source>
+        <target state="translated">Wiersz w dół</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripScrollButtonUpAccessibleName">
+        <source>Line up</source>
+        <target state="translated">Wiersz w górę</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSettingsKeyDescr">

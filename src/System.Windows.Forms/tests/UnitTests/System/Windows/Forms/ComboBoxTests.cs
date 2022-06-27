@@ -1838,7 +1838,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ComboBox_CustomAccessibleObject_DoesntCrashControl_WhenAddingItems()
         {
-            using CustomComboBox control = new();
+            using AutomationEventCountingComboBox control = new();
             control.Items.Add("item1");
             control.Items.Add("item2");
 
@@ -1848,9 +1848,9 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ComboBox_OnKeyUp_DoesNotInvoke_RaiseAutomationEvent_AccessibilityObjectIsNotCreated()
         {
-            using CustomComboBox comboBox = new();
+            using AutomationEventCountingComboBox comboBox = new();
             comboBox.CreateControl();
-            CustomComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+            AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
             comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
             comboBox.Items.Add("item1");
@@ -1868,15 +1868,15 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ComboBox_OnKeyUp_Invoke_RaiseAutomationEvent_AccessibilityObjectIsCreated()
         {
-            using CustomComboBox comboBox = new();
+            using AutomationEventCountingComboBox comboBox = new();
             comboBox.CreateControl();
-            CustomComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+            AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
             comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
             comboBox.Items.Add("item1");
             comboBox.Items.Add("item2");
 
-            Assert.IsType<CustomComboBoxAccessibleObject>(comboBox.AccessibilityObject);
+            Assert.IsType<AutomationEventCountingComboBoxAccessibleObject>(comboBox.AccessibilityObject);
 
             comboBox.OnKeyUp();
 
@@ -1890,9 +1890,9 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ComboBox_OnMouseDown_DoesNotInvoke_RaiseAutomationEvent_AccessibilityObjectIsNotCreated()
         {
-            using CustomComboBox comboBox = new();
+            using AutomationEventCountingComboBox comboBox = new();
             comboBox.CreateControl();
-            CustomComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+            AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
             comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
             comboBox.Items.Add("item1");
@@ -1910,15 +1910,15 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ComboBox_OnMouseDown_Invoke_RaiseAutomationEvent_AccessibilityObjectIsCreated()
         {
-            using CustomComboBox comboBox = new();
+            using AutomationEventCountingComboBox comboBox = new();
             comboBox.CreateControl();
-            CustomComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+            AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
             comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
             comboBox.Items.Add("item1");
             comboBox.Items.Add("item2");
 
-            Assert.IsType<CustomComboBoxAccessibleObject>(comboBox.AccessibilityObject);
+            Assert.IsType<AutomationEventCountingComboBoxAccessibleObject>(comboBox.AccessibilityObject);
 
             comboBox.OnMouseDown(comboBox.PointToClient(comboBoxChildEditUiaProvider.Bounds.Location));
 
@@ -1956,9 +1956,9 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ComboBox_SelectedItem_Set_DoesNotInvoke_RaiseAutomationEvent_AccessibilityObjectIsCreated()
         {
-            using CustomComboBox comboBox = new();
+            using AutomationEventCountingComboBox comboBox = new();
             comboBox.CreateControl();
-            CustomComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+            AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
             comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
             comboBox.Items.Add("item1");
@@ -1973,15 +1973,15 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ComboBox_SelectedItem_Set_Invoke_RaiseAutomationEvent_AccessibilityObjectIsCreated()
         {
-            using CustomComboBox comboBox = new();
+            using AutomationEventCountingComboBox comboBox = new();
             comboBox.CreateControl();
-            CustomComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+            AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
             comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
             comboBox.Items.Add("item1");
             comboBox.Items.Add("item2");
 
-            Assert.IsType<CustomComboBoxAccessibleObject>(comboBox.AccessibilityObject);
+            Assert.IsType<AutomationEventCountingComboBoxAccessibleObject>(comboBox.AccessibilityObject);
 
             comboBox.SelectedItem = comboBox.Items[0];
 
@@ -1995,10 +1995,10 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ComboBox_Text_Set_DoesNotInvoke_RaiseAutomationEvent_AccessibilityObjectIsCreated()
         {
-            using CustomComboBox comboBox = new();
+            using AutomationEventCountingComboBox comboBox = new();
             comboBox.CreateControl();
 
-            CustomComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+            AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
             comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
             comboBox.Items.Add("item1");
@@ -2013,15 +2013,15 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ComboBox_Text_Set_Invoke_RaiseAutomationEvent_AccessibilityObjectIsCreated()
         {
-            using CustomComboBox comboBox = new();
+            using AutomationEventCountingComboBox comboBox = new();
             comboBox.CreateControl();
-            CustomComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+            AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
             comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
             comboBox.Items.Add("item1");
             comboBox.Items.Add("item2");
 
-            Assert.IsType<CustomComboBoxAccessibleObject>(comboBox.AccessibilityObject);
+            Assert.IsType<AutomationEventCountingComboBoxAccessibleObject>(comboBox.AccessibilityObject);
 
             comboBox.Text = "Test";
 
@@ -2035,7 +2035,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ComboBox_DroppedDown_Set_True_DoesNotInvoke_RaiseAutomationPropertyChangedEvent_AccessibilityObjectIsNotCreated()
         {
-            using CustomComboBox comboBox = new();
+            using AutomationEventCountingComboBox comboBox = new();
 
             comboBox.Items.Add("item1");
             comboBox.Items.Add("item2");
@@ -2043,13 +2043,13 @@ namespace System.Windows.Forms.Tests
 
             Assert.False(comboBox.IsAccessibilityObjectCreated);
             Assert.True(comboBox.IsHandleCreated);
-            Assert.Equal(0, ((CustomComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
+            Assert.Equal(0, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
         }
 
         [WinFormsFact]
         public void ComboBox_DroppedDown_Set_False_DoesNotInvoke_RaiseAutomationPropertyChangedEvent_AccessibilityObjectIsNotCreated()
         {
-            using CustomComboBox comboBox = new();
+            using AutomationEventCountingComboBox comboBox = new();
 
             comboBox.Items.Add("item1");
             comboBox.Items.Add("item2");
@@ -2058,15 +2058,15 @@ namespace System.Windows.Forms.Tests
 
             Assert.False(comboBox.IsAccessibilityObjectCreated);
             Assert.True(comboBox.IsHandleCreated);
-            Assert.Equal(0, ((CustomComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
+            Assert.Equal(0, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
         }
 
         [WinFormsFact]
         public void ComboBox_DroppedDownProperty_Set_True_Invoke_RaiseAutomationPropertyChangedEvent_AccessibilityObjectIsCreated()
         {
-            using CustomComboBox comboBox = new();
+            using AutomationEventCountingComboBox comboBox = new();
 
-            Assert.IsType<CustomComboBoxAccessibleObject>(comboBox.AccessibilityObject);
+            Assert.IsType<AutomationEventCountingComboBoxAccessibleObject>(comboBox.AccessibilityObject);
 
             comboBox.Items.Add("item1");
             comboBox.Items.Add("item2");
@@ -2076,15 +2076,15 @@ namespace System.Windows.Forms.Tests
             Assert.True(comboBox.IsHandleCreated);
 
             // The "RaiseAutomationPropertyChangedEvent" method is called from "OnDropDown" method
-            Assert.Equal(1, ((CustomComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
+            Assert.Equal(1, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
         }
 
         [WinFormsFact]
         public void ComboBox_DroppedDownProperty_Set_False_Invoke_RaiseAutomationPropertyChangedEvent_AccessibilityObjectIsCreated()
         {
-            using CustomComboBox comboBox = new();
+            using AutomationEventCountingComboBox comboBox = new();
 
-            Assert.IsType<CustomComboBoxAccessibleObject>(comboBox.AccessibilityObject);
+            Assert.IsType<AutomationEventCountingComboBoxAccessibleObject>(comboBox.AccessibilityObject);
 
             comboBox.Items.Add("item1");
             comboBox.Items.Add("item2");
@@ -2095,22 +2095,246 @@ namespace System.Windows.Forms.Tests
             Assert.True(comboBox.IsHandleCreated);
 
             // The "RaiseAutomationPropertyChangedEvent" method is called from "OnDropDown" and "OnDropDownClosed" method
-            Assert.Equal(2, ((CustomComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
+            Assert.Equal(2, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
         }
 
-        private class CustomComboBox : ComboBox
+        [WinFormsFact]
+        public void ComboBox_Add_Items_By_Index()
+        {
+            using ComboBox comboBox = new();
+            Random random = new(DateTime.Now.Millisecond);
+            InitializeItems(comboBox, 10);
+
+            // Add 5 items by index
+            for (int i = 0; i < 5; i++)
+            {
+                int count = comboBox.Items.Count;
+                int index = random.Next(0, count - 1);
+                string item = "new item" + i;
+                comboBox.Items.Insert(index, item);
+
+                Assert.True(item.Equals(comboBox.Items[index]));
+                Assert.Equal(comboBox.Items.Count, ++count);
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(10, 0, 5)]
+        [InlineData(10, 2, 4)]
+        public void ComboBox_Remove_Items_By_Index(int numberOfItems, int index, int numberOfItemsToRemove)
+        {
+            using ComboBox comboBox = new();
+            InitializeItems(comboBox, numberOfItems);
+
+            int count = comboBox.Items.Count;
+            for (int i = 0; i < numberOfItemsToRemove; i++)
+            {
+                comboBox.Items.RemoveAt(index);
+            }
+
+            Assert.Equal(count - numberOfItemsToRemove, comboBox.Items.Count);
+        }
+
+        [WinFormsTheory]
+        [InlineData(10, 0, 5)]
+        [InlineData(10, 2, 4)]
+        public void ComboBox_Remove_Items_By_Object(int numberOfItems, int index, int number)
+        {
+            using ComboBox comboBox = new();
+            InitializeItems(comboBox, numberOfItems);
+
+            int count = comboBox.Items.Count;
+            for (int i = 0; i < number; i++)
+            {
+                comboBox.Items.Remove(comboBox.Items[index]);
+            }
+
+            Assert.Equal(count - number, comboBox.Items.Count);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_Sorted_Sorts_By_Ascending()
+        {
+            using ComboBox comboBox = new();
+            const int numItems = 200;
+            Random random = new();
+
+            string[] items = new string[numItems];
+
+            // All the items are between a - z
+            for (int j = 0; j < numItems; j++)
+            {
+                string item = (random.Next() % 26 + (char)'a').ToString();
+                items[j] = item;
+                comboBox.Items.Add(item);
+            }
+
+            comboBox.Sorted = true;
+            Array.Sort(items);
+
+            for (int i = 0; i < numItems; i++)
+            {
+                Assert.Equal(items[i], comboBox.Items[i]);
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(1)]
+        [InlineData(5)]
+        public void ComboBox_SelectedIndex_DoesNotChange_SelectedItem_AndDoesNotFire_OnSelectedIndexChanged(int index)
+        {
+            using ComboBoxWithSelectCounter comboBox = new();
+            InitializeItems(comboBox, 10);
+
+            comboBox.SelectedIndex = index;
+            comboBox.Sorted = false;
+            int selectedIndex = comboBox.SelectedIndex;
+            comboBox.SelectedIndex = index;
+
+            Assert.Equal(index, comboBox.SelectedIndex);
+            Assert.True(comboBox.Items[comboBox.SelectedIndex].Equals(comboBox.SelectedItem));
+        }
+
+        [WinFormsTheory]
+        [InlineData(1)]
+        [InlineData(5)]
+        [InlineData(9)]
+        public void ComboBox_SelectedIndexChangesSelectedItemAndFiresOnSelectedIndexChanged(int index)
+        {
+            using ComboBoxWithSelectCounter comboBox = new();
+            InitializeItems(comboBox, 10);
+
+            comboBox.Sorted = false;
+            int eventsCountExpected = 0;
+            comboBox.ResetEventsCount();
+            int selectedIndex = comboBox.SelectedIndex;
+            comboBox.SelectedIndex = index;
+            eventsCountExpected++;
+
+            Assert.Equal(index, comboBox.SelectedIndex);
+            Assert.True(comboBox.Items[comboBox.SelectedIndex].Equals(comboBox.SelectedItem));
+            Assert.Equal(eventsCountExpected, comboBox.EventsCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData("item0", 0, 0, false)]
+        [InlineData("item1", 0, 1, false)]
+        [InlineData("item1", 1, 1, false)]
+        [InlineData("item1", 2, 1, false)]
+        [InlineData("item7", 2, 7, false)]
+        [InlineData("item7", 9, 7, false)]
+        [InlineData("item9", 0, 9, false)]
+        [InlineData("item9", 9, 9, false)]
+        [InlineData("Item9", 9, -1, false)]
+        [InlineData("item1984", 9, -1, false)]
+        [InlineData("item0", 0, 0, true)]
+        [InlineData("ITEM1", 0, 1, true)]
+        [InlineData("itEm1", 1, 1, true)]
+        [InlineData("item1", 2, 1, true)]
+        [InlineData("item7", 2, 7, true)]
+        [InlineData("item7", 9, 7, true)]
+        [InlineData("item9", 0, 9, true)]
+        [InlineData("item9", 9, 9, true)]
+        [InlineData("Item9", 9, 9, true)]
+        [InlineData("item1984", 9, -1, true)]
+        public void ComboBox_FindString(string value, int index, int expected, bool isExact)
+        {
+            using ComboBox comboBox = new();
+            InitializeItems(comboBox, 10);
+
+            int actual = comboBox.FindStringExact(value, index, isExact);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [WinFormsFact]
+        public void OwnerDrawComboBox_Verify_OnMeasureItem_Receives_Correct_Arguments()
+        {
+            using OwnerDrawComboBox ownerDrawComboBox = new();
+            ownerDrawComboBox.CreateControl();
+            ownerDrawComboBox.Items.AddRange(new object[]
+            {
+                "One",
+                "Two",
+                "Three"
+            });
+            ownerDrawComboBox.Location = new Point(0, 50);
+            Assert.Equal(3, ownerDrawComboBox.MeasureItemEventArgs.Count);
+
+            for (int i = 0; i < 3; i++)
+            {
+                MeasureItemEventArgs e = ownerDrawComboBox.MeasureItemEventArgs[i];
+                Assert.NotNull(e.Graphics);
+                Assert.Equal(e.Index, i);
+                Assert.Equal(18, e.ItemHeight);
+                Assert.Equal(0, e.ItemWidth);
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(Keys.Up, 9, 9)]
+        [InlineData(Keys.Down, 9, 0)]
+        public void ComboBox_Select_Item_By_Key(Keys key, int expectedKeyPressesCount, int selectedIndex)
+        {
+            using ComboBoxWithSelectCounter comboBox = new();
+            comboBox.AddItems(expectedKeyPressesCount+1);
+            comboBox.CreateControl();
+            comboBox.SelectedIndex = selectedIndex;
+            comboBox.ResetEventsCount();
+
+            // https://docs.microsoft.com/windows/win32/inputdev/wm-keyup
+            // The MSDN page tells us what bits of lParam to use for each of the parameters.
+            // All we need to do is some bit shifting to assemble lParam.
+            nint keyCode = (nint)key;
+            nint lParam = 0x00000001 | keyCode << 16;
+            for (int i = 0; i < expectedKeyPressesCount; i++)
+            {
+                User32.SendMessageW(comboBox, User32.WM.KEYDOWN, keyCode, lParam);
+                User32.SendMessageW(comboBox, User32.WM.KEYUP, keyCode, lParam);
+            }
+
+            Assert.Equal(expectedKeyPressesCount, comboBox.EventsCount);
+        }
+
+        private void InitializeItems(ComboBox comboBox, int numItems)
+        {
+            for (int i = 0; i < numItems; i++)
+            {
+                comboBox.Items.Add("item" + i);
+            }
+
+            Assert.Equal(numItems, comboBox.Items.Count);
+        }
+
+        private class OwnerDrawComboBox : ComboBox
+        {
+            public OwnerDrawComboBox()
+            {
+                DrawMode = DrawMode.OwnerDrawVariable;
+                FormattingEnabled = true;
+            }
+
+            public List<MeasureItemEventArgs> MeasureItemEventArgs { get; } = new List<MeasureItemEventArgs>();
+
+            protected override void OnMeasureItem(MeasureItemEventArgs e)
+            {
+                MeasureItemEventArgs.Add(e);
+            }
+        }
+
+        private class AutomationEventCountingComboBox : ComboBox
         {
             protected override AccessibleObject CreateAccessibilityInstance()
-                => new CustomComboBoxAccessibleObject(this);
+                => new AutomationEventCountingComboBoxAccessibleObject(this);
 
             public void OnKeyUp() => base.OnKeyUp(new KeyEventArgs(Keys.Left));
 
             public void OnMouseDown(Point p) => base.OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, p.X, p.Y, 0));
         }
 
-        private class CustomComboBoxAccessibleObject : Control.ControlAccessibleObject
+        private class AutomationEventCountingComboBoxAccessibleObject : Control.ControlAccessibleObject
         {
-            public CustomComboBoxAccessibleObject(ComboBox owner) : base(owner)
+            public AutomationEventCountingComboBoxAccessibleObject(ComboBox owner) : base(owner)
             { }
 
             internal int RaiseAutomationCallCount;
@@ -2122,9 +2346,9 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        private class CustomComboBoxChildEditUiaProvider : ComboBoxChildEditUiaProvider
+        private class AutomationEventCountingComboBoxChildEditUiaProvider : ComboBoxChildEditUiaProvider
         {
-            public CustomComboBoxChildEditUiaProvider(ComboBox owner, IntPtr childEditControlhandle) : base(owner, childEditControlhandle)
+            public AutomationEventCountingComboBoxChildEditUiaProvider(ComboBox owner, IntPtr childEditControlhandle) : base(owner, childEditControlhandle)
             {
                 RaiseAutomationCallCount = 0;
             }
@@ -2268,6 +2492,30 @@ namespace System.Windows.Forms.Tests
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
             public new void WndProc(ref Message m) => base.WndProc(ref m);
+        }
+
+        private class ComboBoxWithSelectCounter : ComboBox
+        {
+            public int EventsCount { get; private set; }
+
+            public void AddItems(int numToAdd)
+            {
+                for (int i = 0; i < numToAdd; i++)
+                {
+                    Items.Add($"Item {i}");
+                }
+            }
+
+            protected override void OnSelectedIndexChanged(EventArgs e)
+            {
+                base.OnSelectedIndexChanged(e);
+                EventsCount++;
+            }
+
+            public void ResetEventsCount()
+            {
+                EventsCount = 0;
+            }
         }
 
         private class DataClass

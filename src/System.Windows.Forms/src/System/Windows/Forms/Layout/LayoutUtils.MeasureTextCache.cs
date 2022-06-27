@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms.Layout
 {
-    internal partial class LayoutUtils
+    internal static partial class LayoutUtils
     {
         ///  MeasureTextCache
         ///  3000 character strings take 9 seconds to load the form
