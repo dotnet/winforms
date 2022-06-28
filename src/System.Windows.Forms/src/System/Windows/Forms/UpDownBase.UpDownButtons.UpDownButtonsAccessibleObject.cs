@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -118,19 +117,15 @@ namespace System.Windows.Forms
 
                 internal void ReleaseChildUiaProviders()
                 {
-                    HRESULT result;
-
                     if (_upButton is not null)
                     {
-                        result = UiaCore.UiaDisconnectProvider(_upButton);
-                        Debug.Assert(result == HRESULT.S_OK);
+                        UiaCore.UiaDisconnectProvider(_upButton);
                         _upButton = null;
                     }
 
                     if (_downButton is not null)
                     {
-                        result = UiaCore.UiaDisconnectProvider(_downButton);
-                        Debug.Assert(result == HRESULT.S_OK);
+                        UiaCore.UiaDisconnectProvider(_downButton);
                         _downButton = null;
                     }
                 }

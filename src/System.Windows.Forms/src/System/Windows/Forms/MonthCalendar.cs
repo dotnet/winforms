@@ -2331,10 +2331,8 @@ namespace System.Windows.Forms
 
                         if (OsVersion.IsWindows8OrGreater)
                         {
-                            ((MonthCalendarAccessibleObject)AccessibilityObject).DisconnectChildren();
-
-                            HRESULT result = UiaCore.UiaDisconnectProvider(AccessibilityObject);
-                            Debug.Assert(result == 0);
+                            (AccessibilityObject as MonthCalendarAccessibleObject)?.DisconnectChildren();
+                            UiaCore.UiaDisconnectProvider(AccessibilityObject);
                         }
                     }
 

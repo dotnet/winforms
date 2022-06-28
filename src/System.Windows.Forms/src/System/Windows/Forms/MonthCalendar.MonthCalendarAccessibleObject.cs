@@ -86,29 +86,25 @@ namespace System.Windows.Forms
                 Debug.Assert(OsVersion.IsWindows8OrGreater);
                 if (_previousButtonAccessibleObject is not null)
                 {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(_previousButtonAccessibleObject);
-                    Debug.Assert(result == 0);
+                    UiaCore.UiaDisconnectProvider(_previousButtonAccessibleObject);
                     _previousButtonAccessibleObject = null;
                 }
 
                 if (_nextButtonAccessibleObject is not null)
                 {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(_nextButtonAccessibleObject);
-                    Debug.Assert(result == 0);
+                    UiaCore.UiaDisconnectProvider(_nextButtonAccessibleObject);
                     _nextButtonAccessibleObject = null;
                 }
 
                 if (_todayLinkAccessibleObject is not null)
                 {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(_todayLinkAccessibleObject);
-                    Debug.Assert(result == 0);
+                    UiaCore.UiaDisconnectProvider(_todayLinkAccessibleObject);
                     _todayLinkAccessibleObject = null;
                 }
 
                 if (_focusedCellAccessibleObject is not null)
                 {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(_focusedCellAccessibleObject);
-                    Debug.Assert(result == 0);
+                    UiaCore.UiaDisconnectProvider(_focusedCellAccessibleObject);
                     _focusedCellAccessibleObject = null;
                 }
 
@@ -120,8 +116,7 @@ namespace System.Windows.Forms
                 foreach (CalendarAccessibleObject calendarAccessibleObject in _calendarsAccessibleObjects)
                 {
                     calendarAccessibleObject.DisconnectChildren();
-                    HRESULT result = UiaCore.UiaDisconnectProvider(calendarAccessibleObject);
-                    Debug.Assert(result == 0);
+                    UiaCore.UiaDisconnectProvider(calendarAccessibleObject);
                 }
 
                 _calendarsAccessibleObjects.Clear();

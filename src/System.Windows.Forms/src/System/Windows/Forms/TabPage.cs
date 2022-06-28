@@ -627,8 +627,7 @@ namespace System.Windows.Forms
         {
             if (_tabAccessibilityObject is not null && OsVersion.IsWindows8OrGreater)
             {
-                HRESULT result = UiaCore.UiaDisconnectProvider(_tabAccessibilityObject);
-                Debug.Assert(result == HRESULT.S_OK);
+                UiaCore.UiaDisconnectProvider(_tabAccessibilityObject);
                 _tabAccessibilityObject = null;
             }
 

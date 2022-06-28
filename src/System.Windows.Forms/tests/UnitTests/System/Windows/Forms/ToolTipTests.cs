@@ -823,6 +823,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ToolTip_WmShow_Invokes_AnnounceText_WithExpectedText_ForTabControlTabs()
         {
+            using NoAssertContext context = new();
             Mock<TabControl> mockTabControl = new() { CallBase = true, Object = { ShowToolTips = true } };
             Mock<Control.ControlAccessibleObject> mockAccessibleObject = new(MockBehavior.Strict, mockTabControl.Object);
             mockAccessibleObject

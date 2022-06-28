@@ -2083,7 +2083,7 @@ namespace System.Windows.Forms
         {
             if (OsVersion.IsWindows8OrGreater && _accessibleObject is not null)
             {
-                UiaCore.UiaDisconnectProvider(AccessibilityObject);
+                UiaCore.UiaDisconnectProvider(_accessibleObject);
                 _accessibleObject = null;
             }
         }

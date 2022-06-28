@@ -228,8 +228,7 @@ namespace System.Windows.Forms
 
                 if (OsVersion.IsWindows8OrGreater)
                 {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(ItemAccessibleObjects[item]);
-                    Debug.Assert(result == HRESULT.S_OK);
+                    UiaCore.UiaDisconnectProvider(ItemAccessibleObjects[item]);
                 }
 
                 ItemAccessibleObjects.Remove(item);
@@ -239,8 +238,7 @@ namespace System.Windows.Forms
             {
                 if (OsVersion.IsWindows8OrGreater && _dropDownButtonUiaProvider is not null)
                 {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(_dropDownButtonUiaProvider);
-                    Debug.Assert(result == HRESULT.S_OK);
+                    UiaCore.UiaDisconnectProvider(_dropDownButtonUiaProvider);
                     _dropDownButtonUiaProvider = null;
                 }
             }
@@ -251,8 +249,7 @@ namespace System.Windows.Forms
                 {
                     foreach (ComboBoxItemAccessibleObject itemAccessibleObject in ItemAccessibleObjects.Values)
                     {
-                        HRESULT result = UiaCore.UiaDisconnectProvider(itemAccessibleObject);
-                        Debug.Assert(result == HRESULT.S_OK);
+                        UiaCore.UiaDisconnectProvider(itemAccessibleObject);
                     }
                 }
 

@@ -2209,8 +2209,7 @@ namespace System.Windows.Forms
                     {
                         if (OsVersion.IsWindows8OrGreater)
                         {
-                            HRESULT result = UiaCore.UiaDisconnectProvider(AccessibilityObject);
-                            Debug.Assert(result == 0);
+                            UiaCore.UiaDisconnectProvider(AccessibilityObject);
                         }
 
                         if (AccessibilityObject is TextBoxBaseAccessibleObject accessibleObject)

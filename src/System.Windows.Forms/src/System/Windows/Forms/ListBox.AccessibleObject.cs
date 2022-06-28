@@ -181,8 +181,7 @@ namespace System.Windows.Forms
                 { 
                     foreach (ListBoxItemAccessibleObject itemAccessibleObject in _itemAccessibleObjects.Values)
                     {
-                        HRESULT result = UiaCore.UiaDisconnectProvider(itemAccessibleObject);
-                        Debug.Assert(result == HRESULT.S_OK);
+                        UiaCore.UiaDisconnectProvider(itemAccessibleObject);
                     }
                 }
 
@@ -206,8 +205,7 @@ namespace System.Windows.Forms
 
                 if (OsVersion.IsWindows8OrGreater)
                 {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(_itemAccessibleObjects[item]);
-                    Debug.Assert(result == HRESULT.S_OK);
+                    UiaCore.UiaDisconnectProvider(_itemAccessibleObjects[item]);
                 }
 
                 _itemAccessibleObjects.Remove(item);

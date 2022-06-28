@@ -1004,8 +1004,7 @@ namespace System.Windows.Forms
                 itemAccessibleObject.ReleaseChildUiaProviders();
             }
 
-            HRESULT result = UiaCore.UiaDisconnectProvider(AccessibilityObject);
-            Debug.Assert(result == HRESULT.S_OK);
+            UiaCore.UiaDisconnectProvider(AccessibilityObject);
             _accessibilityObject = null;
         }
 

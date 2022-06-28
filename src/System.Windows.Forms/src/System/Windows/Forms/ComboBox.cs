@@ -3249,8 +3249,7 @@ namespace System.Windows.Forms
 
             if (_childTextAccessibleObject is not null && OsVersion.IsWindows8OrGreater)
             {
-                HRESULT result = UiaCore.UiaDisconnectProvider(_childTextAccessibleObject);
-                Debug.Assert(result == HRESULT.S_OK);
+                UiaCore.UiaDisconnectProvider(_childTextAccessibleObject);
                 _childTextAccessibleObject = null;
             }
 

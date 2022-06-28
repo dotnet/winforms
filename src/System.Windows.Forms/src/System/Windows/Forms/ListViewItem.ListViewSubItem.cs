@@ -251,8 +251,7 @@ namespace System.Windows.Forms
             {
                 if (OsVersion.IsWindows8OrGreater && _accessibilityObject is not null)
                 {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(_accessibilityObject);
-                    Debug.Assert(result == HRESULT.S_OK);
+                    UiaCore.UiaDisconnectProvider(_accessibilityObject);
                     _accessibilityObject = null;
                 }
             }

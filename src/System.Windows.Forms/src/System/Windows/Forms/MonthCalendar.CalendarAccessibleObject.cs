@@ -44,16 +44,14 @@ namespace System.Windows.Forms
                 Debug.Assert(OsVersion.IsWindows8OrGreater);
                 if (_calendarHeaderAccessibleObject is not null)
                 {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(_calendarHeaderAccessibleObject);
-                    Debug.Assert(result == 0);
+                    UiaCore.UiaDisconnectProvider(_calendarHeaderAccessibleObject);
                     _calendarHeaderAccessibleObject = null;
                 }
 
                 if (_calendarBodyAccessibleObject is not null)
                 {
                     _calendarBodyAccessibleObject.DisconnectChildren();
-                    HRESULT result = UiaCore.UiaDisconnectProvider(_calendarBodyAccessibleObject);
-                    Debug.Assert(result == 0);
+                    UiaCore.UiaDisconnectProvider(_calendarBodyAccessibleObject);
                     _calendarBodyAccessibleObject = null;
                 }
             }
