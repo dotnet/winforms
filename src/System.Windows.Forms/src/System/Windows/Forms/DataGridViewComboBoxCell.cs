@@ -7,6 +7,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.VisualStyles;
@@ -14,6 +15,7 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     public partial class DataGridViewComboBoxCell : DataGridViewCell
     {
         private static readonly int s_propComboBoxCellDataSource = PropertyStore.CreateKey();
@@ -48,6 +50,7 @@ namespace System.Windows.Forms
         internal const int DefaultMaxDropDownItems = 8;
 
         private static readonly Type s_defaultFormattedValueType = typeof(string);
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
         private static readonly Type s_defaultEditType = typeof(DataGridViewComboBoxEditingControl);
         private static readonly Type s_defaultValueType = typeof(object);
         private static readonly Type s_cellType = typeof(DataGridViewComboBoxCell);
@@ -452,6 +455,7 @@ namespace System.Windows.Forms
             }
         }
 
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
         public override Type EditType
         {
             get

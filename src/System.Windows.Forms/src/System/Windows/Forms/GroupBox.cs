@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms.Layout;
@@ -240,6 +241,7 @@ namespace System.Windows.Forms
         }
 
         [Localizable(true)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;

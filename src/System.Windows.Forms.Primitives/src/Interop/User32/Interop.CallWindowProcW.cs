@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern IntPtr CallWindowProcW(
+        [LibraryImport(Libraries.User32)]
+        public static partial IntPtr CallWindowProcW(
             IntPtr wndProc,
             IntPtr hWnd,
             WM msg,

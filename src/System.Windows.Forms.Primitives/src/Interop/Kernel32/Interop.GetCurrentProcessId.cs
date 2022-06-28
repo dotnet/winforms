@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class Kernel32
     {
-        [DllImport(Libraries.Kernel32, ExactSpelling = true)]
-        public static extern uint GetCurrentProcessId();
+        [LibraryImport(Libraries.Kernel32)]
+        public static partial uint GetCurrentProcessId();
     }
 }

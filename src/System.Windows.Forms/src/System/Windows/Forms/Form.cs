@@ -2960,7 +2960,7 @@ namespace System.Windows.Forms
         ///  Assigns a new parent control. Sends out the appropriate property change
         ///  notifications for properties that are affected by the change of parent.
         /// </summary>
-        internal override void AssignParent(Control value)
+        internal override void AssignParent(Control? value)
         {
             // If we are being unparented from the MDI client control, remove
             // formMDIParent as well.

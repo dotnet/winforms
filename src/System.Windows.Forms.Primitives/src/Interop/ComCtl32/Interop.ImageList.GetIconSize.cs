@@ -10,8 +10,8 @@ internal partial class Interop
     {
         public static partial class ImageList
         {
-            [DllImport(Libraries.Comctl32, ExactSpelling = true, EntryPoint = "ImageList_GetIconSize")]
-            public static extern BOOL GetIconSize(IntPtr himl, out int x, out int y);
+            [LibraryImport(Libraries.Comctl32, EntryPoint = "ImageList_GetIconSize")]
+            public static partial BOOL GetIconSize(IntPtr himl, out int x, out int y);
 
             public static BOOL GetIconSize(HandleRef himl, out int x, out int y)
             {

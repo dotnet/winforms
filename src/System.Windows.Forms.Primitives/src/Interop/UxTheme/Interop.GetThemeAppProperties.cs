@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [DllImport(Libraries.UxTheme, ExactSpelling = true)]
-        public static extern STAP GetThemeAppProperties();
+        [LibraryImport(Libraries.UxTheme)]
+        public static partial STAP GetThemeAppProperties();
     }
 }

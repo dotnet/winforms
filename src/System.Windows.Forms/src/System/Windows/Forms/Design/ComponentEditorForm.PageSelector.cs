@@ -100,13 +100,11 @@ namespace System.Windows.Forms.Design
                 var rc = new RECT(rcIn.left, rcIn.top, rcIn.right, rcIn.bottom);
                 ImageList imagelist = ImageList;
 
-                IntPtr hfontOld = IntPtr.Zero;
-
                 // Select the font of the dialog, so we don't get the underlined font
                 // when the item is being tracked
                 using var fontSelection = new Gdi32.SelectObjectScope(
                     dc,
-                    (state & STATE_HOT) != 0 ? (Gdi32.HGDIOBJ)Parent.FontHandle : default);
+                    (state & STATE_HOT) != 0 ? (Gdi32.HGDIOBJ)Parent!.FontHandle : default);
 
                 GC.KeepAlive(Parent);
 

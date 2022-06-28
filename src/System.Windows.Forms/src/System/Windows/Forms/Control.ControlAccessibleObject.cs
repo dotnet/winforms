@@ -14,24 +14,43 @@ namespace System.Windows.Forms
     public partial class Control
     {
         /// <summary>
-        ///  An implementation of AccessibleChild for use with Controls
+        ///  An implementation of AccessibleChild for use with Controls.
         /// </summary>
         public class ControlAccessibleObject : AccessibleObject
         {
-            private IntPtr _handle = IntPtr.Zero;   // Associated window handle (if any)
+            /// <summary>
+            ///  Associated window handle (if any).
+            /// </summary>
+            private IntPtr _handle = IntPtr.Zero;
+
+            /// <summary>
+            ///  Used to lazily grab the owner control handle, if it hasn't been created yet.
+            /// </summary>
             private bool _getOwnerControlHandle;
 
             public ControlAccessibleObject(Control ownerControl)
+                : this(ownerControl, User32.OBJID.CLIENT)
             {
-                Owner = ownerControl.OrThrowIfNull();
-                InitHandle(ownerControl);
             }
 
             internal ControlAccessibleObject(Control ownerControl, int accObjId)
             {
-                AccessibleObjectId = accObjId; // ...must set this *before* setting the Handle property
+                // Must set AccesibleObjectId *before* setting the Handle property as it calls UseStdAccessibleObjects()
+                // which needs the Id.
+                AccessibleObjectId = accObjId;
                 Owner = ownerControl.OrThrowIfNull();
-                InitHandle(ownerControl);
+
+                if (ownerControl.IsHandleCreated)
+                {
+                    Handle = ownerControl.Handle;
+                }
+                else
+                {
+                    // If the owner control doesn't have a valid handle, wait until there is either
+                    // a request to create it, or the owner control creates a handle, which will
+                    // be set via Handle property.
+                    _getOwnerControlHandle = true;
+                }
             }
 
             // If the control is used as an item of a ToolStrip via ToolStripControlHost,
@@ -52,21 +71,6 @@ namespace System.Windows.Forms
                 }
 
                 return base.FragmentNavigate(direction);
-            }
-
-            private void InitHandle(Control ownerControl)
-            {
-                if (ownerControl.IsHandleCreated)
-                {
-                    Handle = ownerControl.Handle;
-                }
-                else
-                {
-                    // If the owner control doesn't have a valid handle, wait until there is either
-                    // a request to create it, or the owner control creates a handle, which will
-                    // be set via Handle property.
-                    _getOwnerControlHandle = true;
-                }
             }
 
             /// <summary>
@@ -117,7 +121,7 @@ namespace System.Windows.Forms
                 accessibleObject = null;
 
                 // Get the owning control's parent, if it has one
-                Control parentControl = Owner.ParentInternal;
+                Control? parentControl = Owner.ParentInternal;
 
                 // ctrls[index] will indicate the control at the destination of this navigation operation
                 int index = -1;
@@ -194,12 +198,26 @@ namespace System.Windows.Forms
 
             public override string? Description => Owner.AccessibleDescription ?? base.Description;
 
+            /// <summary>
+            ///  Gets or sets the handle of the accessible object's associated <see cref="Owner"/> control.
+            /// </summary>
+            /// <value>
+            ///  An <see cref="IntPtr"/> that represents the handle of the associated <see cref="Owner"/> control.
+            /// </value>
+            /// <remarks>
+            ///  <para>
+            ///   The value of the <see cref="Handle"/> property for the <see cref="ControlAccessibleObject"/> is equal to
+            ///   the <see cref="Control.Handle"/> property of the <see cref="Owner"/> it is associated with.
+            ///  </para>
+            /// </remarks>
             public IntPtr Handle
             {
                 get
                 {
                     if (_getOwnerControlHandle)
                     {
+                        // We haven't gotten the associated Control handle yet, grab it now (this will create the
+                        // Control's handle if it hasn't been created yet).
                         _getOwnerControlHandle = false;
                         _handle = Owner.Handle;
                     }
@@ -221,6 +239,7 @@ namespace System.Windows.Forms
                         return;
                     }
 
+                    // Create the Win32 standard accessible objects. We fall back to these in a number of code paths.
                     UseStdAccessibleObjects(_handle);
                 }
             }
@@ -329,7 +348,7 @@ namespace System.Windows.Forms
                 get
                 {
                     // Try to get to the parent of this control.
-                    Control parent = Owner.ParentInternal;
+                    Control? parent = Owner.ParentInternal;
 
                     if (parent is null)
                     {

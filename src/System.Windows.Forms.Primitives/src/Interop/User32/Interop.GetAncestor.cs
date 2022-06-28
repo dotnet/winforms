@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern IntPtr GetAncestor(IntPtr hwnd, GA flags);
+        [LibraryImport(Libraries.User32)]
+        public static partial IntPtr GetAncestor(IntPtr hwnd, GA flags);
 
         public static IntPtr GetAncestor(IHandle hwnd, GA flags)
         {

@@ -6042,25 +6042,18 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 GetGuidAction = () => (guid, HRESULT.S_OK)
             };
             IntPtr pRecordInfo = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(record);
-            try
+            using var variant = new VARIANT
             {
-                using var variant = new VARIANT
+                vt = VARENUM.RECORD,
+                data = new VARIANT.VARIANTUnion
                 {
-                    vt = VARENUM.RECORD,
-                    data = new VARIANT.VARIANTUnion
+                    recordVal = new VARIANT.VARIANTRecord
                     {
-                        recordVal = new VARIANT.VARIANTRecord
-                        {
-                            pRecInfo = pRecordInfo,
-                        }
+                        pRecInfo = pRecordInfo,
                     }
-                };
-                AssertToObjectEqual(null, variant);
-            }
-            finally
-            {
-                Marshal.Release(pRecordInfo);
-            }
+                }
+            };
+            AssertToObjectEqual(null, variant);
         }
 
         [StaFact]

@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true, SetLastError = true)]
-        public static extern uint GetGuiResources(IntPtr hProcess, GR uiFlags);
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        public static partial uint GetGuiResources(IntPtr hProcess, GR uiFlags);
     }
 }

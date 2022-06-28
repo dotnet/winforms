@@ -1155,7 +1155,7 @@ namespace System.Windows.Forms
                 {
                     // Focus the current splitter OnMouseDown.
                     _splitterFocused = true;
-                    IContainerControl c = ParentInternal.GetContainerControl();
+                    IContainerControl? c = ParentInternal?.GetContainerControl();
                     if (c is not null)
                     {
                         if (!(c is ContainerControl cc))
@@ -1555,13 +1555,13 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ProcessArrowKey(bool forward)
         {
-            Control group = this;
+            Control? group = this;
             if (ActiveControl is not null)
             {
                 group = ActiveControl.ParentInternal;
             }
 
-            return group.SelectNextControl(ActiveControl, forward, false, false, true);
+            return group?.SelectNextControl(ActiveControl, forward, false, false, true) ?? false;
         }
 
         /// <summary>
@@ -1893,7 +1893,7 @@ namespace System.Windows.Forms
             {
                 //we are on Splitter.....Focus it
                 _splitterFocused = true;
-                IContainerControl c = ParentInternal.GetContainerControl();
+                IContainerControl? c = ParentInternal?.GetContainerControl();
                 if (c is not null)
                 {
                     if (c is not ContainerControl cc)
@@ -1916,7 +1916,7 @@ namespace System.Windows.Forms
                 bool selected = SelectNextControlInPanel(ctl, forward, tabStopOnly, nested, wrap);
                 if (!selected)
                 {
-                    Control parent = ParentInternal;
+                    Control? parent = ParentInternal;
                     if (parent is not null)
                     {
                         try
@@ -1990,7 +1990,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (ctl is null || !ctl.ParentInternal.Visible)
+                    if (ctl is null || (ctl.ParentInternal is not null && !ctl.ParentInternal.Visible))
                     {
                         _callBaseVersion = true;
                     }
@@ -2397,7 +2397,7 @@ namespace System.Windows.Forms
                 {
                     //We are om Splitter ......
                     _splitterFocused = true;
-                    IContainerControl c = ParentInternal.GetContainerControl();
+                    IContainerControl? c = ParentInternal?.GetContainerControl();
                     if (c is not null)
                     {
                         if (c is not ContainerControl cc)

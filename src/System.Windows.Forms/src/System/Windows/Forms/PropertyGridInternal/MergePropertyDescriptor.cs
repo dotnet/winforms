@@ -8,7 +8,9 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using static System.TrimmingConstants;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
@@ -29,7 +31,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override Type ComponentType => _descriptors[0].ComponentType;
 
-        public override TypeConverter Converter => _descriptors[0].Converter;
+        public override TypeConverter Converter
+        {
+            [RequiresUnreferencedCode(PropertyDescriptorPropertyTypeMessage)]
+            get => _descriptors[0].Converter;
+        }
 
         public override string DisplayName => _descriptors[0].DisplayName;
 
@@ -186,6 +192,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return propertyOwner;
         }
 
+        [RequiresUnreferencedCode(EditorRequiresUnreferencedCode + " " + PropertyDescriptorPropertyTypeMessage)]
         public override object GetEditor(Type editorBaseType) => _descriptors[0].GetEditor(editorBaseType);
 
         public override object GetValue(object component)

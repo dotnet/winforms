@@ -8836,6 +8836,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Kaydırma çubuğunun gösterilip gösterilmediğini denetleyen bir boole değerini alır veya ayarlar.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="translated">Etkin denetimin üst özelliği null olamaz.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
         <source>Gets the horizontal scroll bar for this ScrollableControl.</source>
         <target state="translated">Bu ScrollableControl için yatay kaydırma çubuğunu alır.</target>

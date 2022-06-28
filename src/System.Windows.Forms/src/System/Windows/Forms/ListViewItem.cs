@@ -7,6 +7,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -24,6 +25,7 @@ namespace System.Windows.Forms
     [DesignTimeVisible(false)]
     [DefaultProperty(nameof(Text))]
     [Serializable] // This type is participating in resx serialization scenarios.
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     public partial class ListViewItem : ICloneable, ISerializable
     {
         private const int MaxSubItems = 4096;
@@ -1123,13 +1125,13 @@ namespace System.Windows.Forms
         {
             UpdateStateFromListView(displayIndex, checkSelection);
 
-            if (listView is not null && (listView.Site is null || !listView.Site.DesignMode) && group is not null)
-            {
-                group.Items.Remove(this);
-            }
-
             if (listView is not null)
             {
+                if ((listView.Site is null || !listView.Site.DesignMode) && group is not null)
+                {
+                    group.Items.Remove(this);
+                }
+
                 KeyboardToolTipStateMachine.Instance.Unhook(this, listView.KeyboardToolTip);
             }
 

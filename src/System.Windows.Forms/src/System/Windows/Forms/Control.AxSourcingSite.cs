@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -61,6 +62,8 @@ namespace System.Windows.Forms
             public string? Name
             {
                 get => _name;
+
+                [RequiresUnreferencedCode(TrimmingConstants.SiteNameMessage)]
                 set
                 {
                     if (value is null || _name is null)

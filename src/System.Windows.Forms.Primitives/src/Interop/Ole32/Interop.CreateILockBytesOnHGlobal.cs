@@ -8,8 +8,8 @@ internal partial class Interop
 {
     internal static partial class Ole32
     {
-        [DllImport(Libraries.Ole32)]
-        private static extern HRESULT CreateILockBytesOnHGlobal(IntPtr hGlobal, BOOL fDeleteOnRelease, out IntPtr pplkbyt);
+        [LibraryImport(Libraries.Ole32)]
+        private static partial HRESULT CreateILockBytesOnHGlobal(IntPtr hGlobal, BOOL fDeleteOnRelease, out IntPtr pplkbyt);
 
         public static WinFormsComWrappers.LockBytesWrapper CreateILockBytesOnHGlobal(IntPtr hGlobal, BOOL fDeleteOnRelease)
         {

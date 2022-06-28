@@ -2271,6 +2271,31 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        [WinFormsTheory]
+        [InlineData(Keys.Up, 9, 9)]
+        [InlineData(Keys.Down, 9, 0)]
+        public void ComboBox_Select_Item_By_Key(Keys key, int expectedKeyPressesCount, int selectedIndex)
+        {
+            using ComboBoxWithSelectCounter comboBox = new();
+            comboBox.AddItems(expectedKeyPressesCount+1);
+            comboBox.CreateControl();
+            comboBox.SelectedIndex = selectedIndex;
+            comboBox.ResetEventsCount();
+
+            // https://docs.microsoft.com/windows/win32/inputdev/wm-keyup
+            // The MSDN page tells us what bits of lParam to use for each of the parameters.
+            // All we need to do is some bit shifting to assemble lParam.
+            nint keyCode = (nint)key;
+            nint lParam = 0x00000001 | keyCode << 16;
+            for (int i = 0; i < expectedKeyPressesCount; i++)
+            {
+                User32.SendMessageW(comboBox, User32.WM.KEYDOWN, keyCode, lParam);
+                User32.SendMessageW(comboBox, User32.WM.KEYUP, keyCode, lParam);
+            }
+
+            Assert.Equal(expectedKeyPressesCount, comboBox.EventsCount);
+        }
+
         private void InitializeItems(ComboBox comboBox, int numItems)
         {
             for (int i = 0; i < numItems; i++)
@@ -2472,6 +2497,15 @@ namespace System.Windows.Forms.Tests
         private class ComboBoxWithSelectCounter : ComboBox
         {
             public int EventsCount { get; private set; }
+
+            public void AddItems(int numToAdd)
+            {
+                for (int i = 0; i < numToAdd; i++)
+                {
+                    Items.Add($"Item {i}");
+                }
+            }
+
             protected override void OnSelectedIndexChanged(EventArgs e)
             {
                 base.OnSelectedIndexChanged(e);

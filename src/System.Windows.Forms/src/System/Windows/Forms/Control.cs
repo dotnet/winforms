@@ -951,7 +951,7 @@ namespace System.Windows.Forms
                     return c;
                 }
 
-                Control p = ParentInternal;
+                Control? p = ParentInternal;
                 if (p is not null && p.CanAccessProperties)
                 {
                     c = p.BackColor;
@@ -1143,7 +1143,7 @@ namespace System.Windows.Forms
                 }
 
                 // Otherwise, see if the parent has one for us.
-                Control p = ParentInternal;
+                Control? p = ParentInternal;
                 if (p is not null && p.CanAccessProperties)
                 {
                     return p.BindingContext;
@@ -1680,7 +1680,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Control parent = ParentInternal;
+                    Control? parent = ParentInternal;
                     if (parent is not null)
                     {
                         return parent.ValidationCancelled;
@@ -1757,7 +1757,7 @@ namespace System.Windows.Forms
                     return localDefault;
                 }
 
-                Control p = ParentInternal;
+                Control? p = ParentInternal;
                 if (p is not null)
                 {
                     return p.Cursor;
@@ -2424,7 +2424,7 @@ namespace System.Windows.Forms
                 return null;
             }
         }
-#nullable disable
+
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual Size GetPreferredSize(Size proposedSize)
         {
@@ -2526,7 +2526,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlCollection controls = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                ControlCollection? controls = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
                 return controls is not null && controls.Count > 0;
             }
         }
@@ -2622,7 +2622,7 @@ namespace System.Windows.Forms
 
                 RECT temp = new RECT();
                 Region working;
-                Control parent = ParentInternal;
+                Control? parent = ParentInternal;
                 if (parent is not null)
                 {
                     while (parent.ParentInternal is not null)
@@ -2759,7 +2759,7 @@ namespace System.Windows.Forms
         public bool IsAncestorSiteInDesignMode =>
             GetSitedParentSite(this) is ISite parentSite ? parentSite.DesignMode : false;
 
-        private ISite GetSitedParentSite(Control control)
+        private ISite? GetSitedParentSite(Control control)
         {
             ArgumentNullException.ThrowIfNull(control);
             return (control.Site is not null && control.Site.DesignMode) || control.Parent is null ?
@@ -2848,7 +2848,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnLocationChangedDescr))]
-        public event EventHandler LocationChanged
+        public event EventHandler? LocationChanged
         {
             add => Events.AddHandler(s_locationEvent, value);
             remove => Events.RemoveHandler(s_locationEvent, value);
@@ -2879,7 +2879,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnMarginChangedDescr))]
-        public event EventHandler MarginChanged
+        public event EventHandler? MarginChanged
         {
             add => Events.AddHandler(s_marginChangedEvent, value);
             remove => Events.RemoveHandler(s_marginChangedEvent, value);
@@ -3012,11 +3012,12 @@ namespace System.Windows.Forms
         ///  used as a key into the ControlCollection.
         /// </summary>
         [Browsable(false)]
+        [AllowNull]
         public string Name
         {
             get
             {
-                string name = (string)Properties.GetObject(s_namePropertyProperty);
+                string? name = (string?)Properties.GetObject(s_namePropertyProperty);
                 if (string.IsNullOrEmpty(name))
                 {
                     if (Site is not null)
@@ -3052,27 +3053,29 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlParentDescr))]
-        public Control Parent
+        public Control? Parent
         {
             get => ParentInternal;
             set => ParentInternal = value;
         }
 
-        internal virtual Control ParentInternal
+        internal virtual Control? ParentInternal
         {
             get => _parent;
             set
             {
-                if (_parent != value)
+                if (_parent == value)
                 {
-                    if (value is not null)
-                    {
-                        value.Controls.Add(this);
-                    }
-                    else
-                    {
-                        _parent.Controls.Remove(this);
-                    }
+                    return;
+                }
+
+                if (value is not null)
+                {
+                    value.Controls.Add(this);
+                }
+                else if (_parent is not null)
+                {
+                    _parent.Controls.Remove(this);
                 }
             }
         }
@@ -3129,7 +3132,7 @@ namespace System.Windows.Forms
             // Control doesn't have a specific logic after a toolTip is removed
         }
 
-        private Control ReflectParent
+        private Control? ReflectParent
         {
             get => _reflectParent;
             set
@@ -3139,7 +3142,7 @@ namespace System.Windows.Forms
                     value.AddReflectChild();
                 }
 
-                Control existing = _reflectParent as Control;
+                Control? existing = _reflectParent as Control;
                 _reflectParent = value;
                 existing?.RemoveReflectChild();
             }
@@ -3154,12 +3157,12 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlRegionDescr))]
-        public Region Region
+        public Region? Region
         {
-            get => (Region)Properties.GetObject(s_regionProperty);
+            get => (Region?)Properties.GetObject(s_regionProperty);
             set
             {
-                Region oldRegion = Region;
+                Region? oldRegion = Region;
                 if (oldRegion != value)
                 {
                     oldRegion?.Dispose();
@@ -3169,7 +3172,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void SetRegion(Region region)
+        internal void SetRegion(Region? region)
         {
             Properties.SetObject(s_regionProperty, region);
 
@@ -3186,7 +3189,7 @@ namespace System.Windows.Forms
             }
 
             // If we're an ActiveX control, clone the region so it can potentially be modified
-            using Region regionCopy = IsActiveX ? ActiveXMergeRegion(region.Clone()) : null;
+            using Region? regionCopy = IsActiveX ? ActiveXMergeRegion(region.Clone()) : null;
             using var regionHandle = new Gdi32.RegionScope(regionCopy ?? region, Handle);
 
             if (User32.SetWindowRgn(this, regionHandle, User32.IsWindowVisible(this)) != 0)
@@ -3201,7 +3204,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlRegionChangedDescr))]
-        public event EventHandler RegionChanged
+        public event EventHandler? RegionChanged
         {
             add => Events.AddHandler(s_regionChangedEvent, value);
             remove => Events.RemoveHandler(s_regionChangedEvent, value);
@@ -3308,7 +3311,7 @@ namespace System.Windows.Forms
 
                 if (((RightToLeft)rightToLeft) == RightToLeft.Inherit)
                 {
-                    Control parent = ParentInternal;
+                    Control? parent = ParentInternal;
                     if (parent is not null)
                     {
                         rightToLeft = (int)parent.RightToLeft;
@@ -3347,7 +3350,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
-        public event EventHandler RightToLeftChanged
+        public event EventHandler? RightToLeftChanged
         {
             add => Events.AddHandler(s_rightToLeftEvent, value);
             remove => Events.RemoveHandler(s_rightToLeftEvent, value);
@@ -3368,7 +3371,7 @@ namespace System.Windows.Forms
         /// ToDo: Look into caching Dpi and control bounds for each Dpi to improve perf.
         /// https://github.com/dotnet/winforms/issues/5047
         /// </summary>
-        internal Font ScaledControlFont
+        internal Font? ScaledControlFont
         {
             get => _scaledControlFont;
             set
@@ -3385,13 +3388,13 @@ namespace System.Windows.Forms
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public override ISite Site
+        public override ISite? Site
         {
             get => base.Site;
             set
             {
-                AmbientProperties oldAmbients = AmbientPropertiesService;
-                AmbientProperties newAmbients = null;
+                AmbientProperties? oldAmbients = AmbientPropertiesService;
+                AmbientProperties? newAmbients = null;
 
                 if (value is not null)
                 {
@@ -3406,10 +3409,10 @@ namespace System.Windows.Forms
                     bool checkForeColor = !Properties.ContainsObject(s_foreColorProperty);
                     bool checkCursor = !Properties.ContainsObject(s_cursorProperty);
 
-                    Font oldFont = null;
+                    Font? oldFont = null;
                     Color oldBackColor = Color.Empty;
                     Color oldForeColor = Color.Empty;
-                    Cursor oldCursor = null;
+                    Cursor? oldCursor = null;
 
                     if (checkFont)
                     {
@@ -3434,7 +3437,7 @@ namespace System.Windows.Forms
                     Properties.SetObject(s_ambientPropertiesServiceProperty, newAmbients);
                     base.Site = value;
 
-                    if (checkFont && !oldFont.Equals(Font))
+                    if (checkFont && !oldFont!.Equals(Font))
                     {
                         OnFontChanged(EventArgs.Empty);
                     }
@@ -3449,7 +3452,7 @@ namespace System.Windows.Forms
                         OnBackColorChanged(EventArgs.Empty);
                     }
 
-                    if (checkCursor && oldCursor.Equals(Cursor))
+                    if (checkCursor && oldCursor!.Equals(Cursor))
                     {
                         OnCursorChanged(EventArgs.Empty);
                     }
@@ -3476,7 +3479,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnSizeChangedDescr))]
-        public event EventHandler SizeChanged
+        public event EventHandler? SizeChanged
         {
             add => Events.AddHandler(s_sizeEvent, value);
             remove => Events.RemoveHandler(s_sizeEvent, value);
@@ -3509,7 +3512,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnTabIndexChangedDescr))]
-        public event EventHandler TabIndexChanged
+        public event EventHandler? TabIndexChanged
         {
             add => Events.AddHandler(s_tabIndexEvent, value);
             remove => Events.RemoveHandler(s_tabIndexEvent, value);
@@ -3556,7 +3559,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnTabStopChangedDescr))]
-        public event EventHandler TabStopChanged
+        public event EventHandler? TabStopChanged
         {
             add => Events.AddHandler(s_tabStopEvent, value);
             remove => Events.RemoveHandler(s_tabStopEvent, value);
@@ -3568,7 +3571,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag
+        public object? Tag
         {
             get => Properties.GetObject(s_userDataProperty);
             set => Properties.SetObject(s_userDataProperty, value);
@@ -3582,9 +3585,10 @@ namespace System.Windows.Forms
         [Bindable(true)]
         [DispId((int)Ole32.DispatchID.TEXT)]
         [SRDescription(nameof(SR.ControlTextDescr))]
+        [AllowNull]
         public virtual string Text
         {
-            get => CacheTextInternal ? _text ?? "" : WindowText;
+            get => CacheTextInternal ? _text ?? string.Empty : WindowText;
             set
             {
                 if (value is null)
@@ -3607,9 +3611,9 @@ namespace System.Windows.Forms
 
                 if (IsMnemonicsListenerAxSourced)
                 {
-                    for (Control ctl = this; ctl is not null; ctl = ctl.ParentInternal)
+                    for (Control? ctl = this; ctl is not null; ctl = ctl.ParentInternal)
                     {
-                        ActiveXImpl activeXImpl = (ActiveXImpl)ctl.Properties.GetObject(s_activeXImplProperty);
+                        ActiveXImpl? activeXImpl = (ActiveXImpl?)ctl.Properties.GetObject(s_activeXImplProperty);
                         if (activeXImpl is not null)
                         {
                             activeXImpl.UpdateAccelTable();
@@ -3622,7 +3626,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnTextChangedDescr))]
-        public event EventHandler TextChanged
+        public event EventHandler? TextChanged
         {
             add => Events.AddHandler(s_textEvent, value);
             remove => Events.RemoveHandler(s_textEvent, value);
@@ -3652,13 +3656,13 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlTopLevelControlDescr))]
-        public Control TopLevelControl => TopLevelControlInternal;
+        public Control? TopLevelControl => TopLevelControlInternal;
 
-        internal Control TopLevelControlInternal
+        internal Control? TopLevelControlInternal
         {
             get
             {
-                Control control = this;
+                Control? control = this;
                 while (control is not null && !control.GetTopLevel())
                 {
                     control = control.ParentInternal;
@@ -3821,7 +3825,7 @@ namespace System.Windows.Forms
                 if (GetState(States.UseWaitCursor) != value)
                 {
                     SetState(States.UseWaitCursor, value);
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                    ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
                     if (controlsCollection is not null)
                     {
@@ -3882,7 +3886,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlVersionInfo info = (ControlVersionInfo)Properties.GetObject(s_controlVersionInfoProperty);
+                ControlVersionInfo? info = (ControlVersionInfo?)Properties.GetObject(s_controlVersionInfoProperty);
                 if (info is null)
                 {
                     info = new ControlVersionInfo(this);
@@ -3924,7 +3928,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnVisibleChangedDescr))]
-        public event EventHandler VisibleChanged
+        public event EventHandler? VisibleChanged
         {
             add => Events.AddHandler(s_visibleEvent, value);
             remove => Events.RemoveHandler(s_visibleEvent, value);
@@ -4076,7 +4080,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ControlOnClickDescr))]
-        public event EventHandler Click
+        public event EventHandler? Click
         {
             add => Events.AddHandler(s_clickEvent, value);
             remove => Events.RemoveHandler(s_clickEvent, value);
@@ -4089,7 +4093,7 @@ namespace System.Windows.Forms
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SRDescription(nameof(SR.ControlOnControlAddedDescr))]
-        public event ControlEventHandler ControlAdded
+        public event ControlEventHandler? ControlAdded
         {
             add => Events.AddHandler(s_controlAddedEvent, value);
             remove => Events.RemoveHandler(s_controlAddedEvent, value);
@@ -4102,7 +4106,7 @@ namespace System.Windows.Forms
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SRDescription(nameof(SR.ControlOnControlRemovedDescr))]
-        public event ControlEventHandler ControlRemoved
+        public event ControlEventHandler? ControlRemoved
         {
             add => Events.AddHandler(s_controlRemovedEvent, value);
             remove => Events.RemoveHandler(s_controlRemovedEvent, value);
@@ -4122,7 +4126,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatDragDrop))]
         [SRDescription(nameof(SR.ControlOnDragDropDescr))]
-        public event DragEventHandler DragDrop
+        public event DragEventHandler? DragDrop
         {
             add => Events.AddHandler(s_dragDropEvent, value);
             remove => Events.RemoveHandler(s_dragDropEvent, value);
@@ -4130,7 +4134,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatDragDrop))]
         [SRDescription(nameof(SR.ControlOnDragEnterDescr))]
-        public event DragEventHandler DragEnter
+        public event DragEventHandler? DragEnter
         {
             add => Events.AddHandler(s_dragEnterEvent, value);
             remove => Events.RemoveHandler(s_dragEnterEvent, value);
@@ -4138,7 +4142,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatDragDrop))]
         [SRDescription(nameof(SR.ControlOnDragOverDescr))]
-        public event DragEventHandler DragOver
+        public event DragEventHandler? DragOver
         {
             add => Events.AddHandler(s_dragOverEvent, value);
             remove => Events.RemoveHandler(s_dragOverEvent, value);
@@ -4146,7 +4150,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatDragDrop))]
         [SRDescription(nameof(SR.ControlOnDragLeaveDescr))]
-        public event EventHandler DragLeave
+        public event EventHandler? DragLeave
         {
             add => Events.AddHandler(s_dragLeaveEvent, value);
             remove => Events.RemoveHandler(s_dragLeaveEvent, value);
@@ -4154,7 +4158,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatDragDrop))]
         [SRDescription(nameof(SR.ControlOnGiveFeedbackDescr))]
-        public event GiveFeedbackEventHandler GiveFeedback
+        public event GiveFeedbackEventHandler? GiveFeedback
         {
             add => Events.AddHandler(s_giveFeedbackEvent, value);
             remove => Events.RemoveHandler(s_giveFeedbackEvent, value);
@@ -4167,7 +4171,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SRDescription(nameof(SR.ControlOnCreateHandleDescr))]
-        public event EventHandler HandleCreated
+        public event EventHandler? HandleCreated
         {
             add => Events.AddHandler(s_handleCreatedEvent, value);
             remove => Events.RemoveHandler(s_handleCreatedEvent, value);
@@ -4180,7 +4184,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SRDescription(nameof(SR.ControlOnDestroyHandleDescr))]
-        public event EventHandler HandleDestroyed
+        public event EventHandler? HandleDestroyed
         {
             add => Events.AddHandler(s_handleDestroyedEvent, value);
             remove => Events.RemoveHandler(s_handleDestroyedEvent, value);
@@ -4188,7 +4192,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ControlOnHelpDescr))]
-        public event HelpEventHandler HelpRequested
+        public event HelpEventHandler? HelpRequested
         {
             add => Events.AddHandler(s_helpRequestedEvent, value);
             remove => Events.RemoveHandler(s_helpRequestedEvent, value);
@@ -4198,7 +4202,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SRDescription(nameof(SR.ControlOnInvalidateDescr))]
-        public event InvalidateEventHandler Invalidated
+        public event InvalidateEventHandler? Invalidated
         {
             add => Events.AddHandler(s_invalidatedEvent, value);
             remove => Events.RemoveHandler(s_invalidatedEvent, value);
@@ -4242,7 +4246,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
-        public event EventHandler PaddingChanged
+        public event EventHandler? PaddingChanged
         {
             add => Events.AddHandler(s_paddingChangedEvent, value);
             remove => Events.RemoveHandler(s_paddingChangedEvent, value);
@@ -4250,7 +4254,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ControlOnPaintDescr))]
-        public event PaintEventHandler Paint
+        public event PaintEventHandler? Paint
         {
             add => Events.AddHandler(s_paintEvent, value);
             remove => Events.RemoveHandler(s_paintEvent, value);
@@ -4258,7 +4262,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatDragDrop))]
         [SRDescription(nameof(SR.ControlOnQueryContinueDragDescr))]
-        public event QueryContinueDragEventHandler QueryContinueDrag
+        public event QueryContinueDragEventHandler? QueryContinueDrag
         {
             add => Events.AddHandler(s_queryContinueDragEvent, value);
             remove => Events.RemoveHandler(s_queryContinueDragEvent, value);
@@ -4266,7 +4270,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ControlOnQueryAccessibilityHelpDescr))]
-        public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp
+        public event QueryAccessibilityHelpEventHandler? QueryAccessibilityHelp
         {
             add => Events.AddHandler(s_queryAccessibilityHelpEvent, value);
             remove => Events.RemoveHandler(s_queryAccessibilityHelpEvent, value);
@@ -4277,7 +4281,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
-        public event EventHandler DoubleClick
+        public event EventHandler? DoubleClick
         {
             add => Events.AddHandler(s_doubleClickEvent, value);
             remove => Events.RemoveHandler(s_doubleClickEvent, value);
@@ -4288,7 +4292,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatFocus))]
         [SRDescription(nameof(SR.ControlOnEnterDescr))]
-        public event EventHandler Enter
+        public event EventHandler? Enter
         {
             add => Events.AddHandler(s_enterEvent, value);
             remove => Events.RemoveHandler(s_enterEvent, value);
@@ -4301,7 +4305,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnGotFocusDescr))]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler GotFocus
+        public event EventHandler? GotFocus
         {
             add => Events.AddHandler(s_gotFocusEvent, value);
             remove => Events.RemoveHandler(s_gotFocusEvent, value);
@@ -4312,7 +4316,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatKey))]
         [SRDescription(nameof(SR.ControlOnKeyDownDescr))]
-        public event KeyEventHandler KeyDown
+        public event KeyEventHandler? KeyDown
         {
             add => Events.AddHandler(s_keyDownEvent, value);
             remove => Events.RemoveHandler(s_keyDownEvent, value);
@@ -4323,7 +4327,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatKey))]
         [SRDescription(nameof(SR.ControlOnKeyPressDescr))]
-        public event KeyPressEventHandler KeyPress
+        public event KeyPressEventHandler? KeyPress
         {
             add => Events.AddHandler(s_keyPressEvent, value);
             remove => Events.RemoveHandler(s_keyPressEvent, value);
@@ -4334,7 +4338,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatKey))]
         [SRDescription(nameof(SR.ControlOnKeyUpDescr))]
-        public event KeyEventHandler KeyUp
+        public event KeyEventHandler? KeyUp
         {
             add => Events.AddHandler(s_keyUpEvent, value);
             remove => Events.RemoveHandler(s_keyUpEvent, value);
@@ -4342,7 +4346,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnLayoutDescr))]
-        public event LayoutEventHandler Layout
+        public event LayoutEventHandler? Layout
         {
             add => Events.AddHandler(s_layoutEvent, value);
             remove => Events.RemoveHandler(s_layoutEvent, value);
@@ -4353,7 +4357,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatFocus))]
         [SRDescription(nameof(SR.ControlOnLeaveDescr))]
-        public event EventHandler Leave
+        public event EventHandler? Leave
         {
             add => Events.AddHandler(s_leaveEvent, value);
             remove => Events.RemoveHandler(s_leaveEvent, value);
@@ -4366,7 +4370,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnLostFocusDescr))]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler LostFocus
+        public event EventHandler? LostFocus
         {
             add => Events.AddHandler(s_lostFocusEvent, value);
             remove => Events.RemoveHandler(s_lostFocusEvent, value);
@@ -4377,7 +4381,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ControlOnMouseClickDescr))]
-        public event MouseEventHandler MouseClick
+        public event MouseEventHandler? MouseClick
         {
             add => Events.AddHandler(s_mouseClickEvent, value);
             remove => Events.RemoveHandler(s_mouseClickEvent, value);
@@ -4388,7 +4392,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ControlOnMouseDoubleClickDescr))]
-        public event MouseEventHandler MouseDoubleClick
+        public event MouseEventHandler? MouseDoubleClick
         {
             add => Events.AddHandler(s_mouseDoubleClickEvent, value);
             remove => Events.RemoveHandler(s_mouseDoubleClickEvent, value);
@@ -4399,7 +4403,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ControlOnMouseCaptureChangedDescr))]
-        public event EventHandler MouseCaptureChanged
+        public event EventHandler? MouseCaptureChanged
         {
             add => Events.AddHandler(s_mouseCaptureChangedEvent, value);
             remove => Events.RemoveHandler(s_mouseCaptureChangedEvent, value);
@@ -4411,7 +4415,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ControlOnMouseDownDescr))]
-        public event MouseEventHandler MouseDown
+        public event MouseEventHandler? MouseDown
         {
             add => Events.AddHandler(s_mouseDownEvent, value);
             remove => Events.RemoveHandler(s_mouseDownEvent, value);
@@ -4422,7 +4426,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ControlOnMouseEnterDescr))]
-        public event EventHandler MouseEnter
+        public event EventHandler? MouseEnter
         {
             add => Events.AddHandler(s_mouseEnterEvent, value);
             remove => Events.RemoveHandler(s_mouseEnterEvent, value);
@@ -4433,7 +4437,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ControlOnMouseLeaveDescr))]
-        public event EventHandler MouseLeave
+        public event EventHandler? MouseLeave
         {
             add => Events.AddHandler(s_mouseLeaveEvent, value);
             remove => Events.RemoveHandler(s_mouseLeaveEvent, value);
@@ -4446,7 +4450,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnDpiChangedBeforeParentDescr))]
-        public event EventHandler DpiChangedBeforeParent
+        public event EventHandler? DpiChangedBeforeParent
         {
             add => Events.AddHandler(s_dpiChangedBeforeParentEvent, value);
             remove => Events.RemoveHandler(s_dpiChangedBeforeParentEvent, value);
@@ -4459,7 +4463,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnDpiChangedAfterParentDescr))]
-        public event EventHandler DpiChangedAfterParent
+        public event EventHandler? DpiChangedAfterParent
         {
             add => Events.AddHandler(s_dpiChangedAfterParentEvent, value);
             remove => Events.RemoveHandler(s_dpiChangedAfterParentEvent, value);
@@ -4470,7 +4474,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ControlOnMouseHoverDescr))]
-        public event EventHandler MouseHover
+        public event EventHandler? MouseHover
         {
             add => Events.AddHandler(s_mouseHoverEvent, value);
             remove => Events.RemoveHandler(s_mouseHoverEvent, value);
@@ -4481,7 +4485,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
-        public event MouseEventHandler MouseMove
+        public event MouseEventHandler? MouseMove
         {
             add => Events.AddHandler(s_mouseMoveEvent, value);
             remove => Events.RemoveHandler(s_mouseMoveEvent, value);
@@ -4492,7 +4496,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ControlOnMouseUpDescr))]
-        public event MouseEventHandler MouseUp
+        public event MouseEventHandler? MouseUp
         {
             add => Events.AddHandler(s_mouseUpEvent, value);
             remove => Events.RemoveHandler(s_mouseUpEvent, value);
@@ -4505,7 +4509,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnMouseWheelDescr))]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event MouseEventHandler MouseWheel
+        public event MouseEventHandler? MouseWheel
         {
             add => Events.AddHandler(s_mouseWheelEvent, value);
             remove => Events.RemoveHandler(s_mouseWheelEvent, value);
@@ -4516,7 +4520,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnMoveDescr))]
-        public event EventHandler Move
+        public event EventHandler? Move
         {
             add => Events.AddHandler(s_moveEvent, value);
             remove => Events.RemoveHandler(s_moveEvent, value);
@@ -4527,7 +4531,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatKey))]
         [SRDescription(nameof(SR.PreviewKeyDownDescr))]
-        public event PreviewKeyDownEventHandler PreviewKeyDown
+        public event PreviewKeyDownEventHandler? PreviewKeyDown
         {
             add => Events.AddHandler(s_previewKeyDownEvent, value);
             remove => Events.RemoveHandler(s_previewKeyDownEvent, value);
@@ -4539,7 +4543,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnResizeDescr))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler Resize
+        public event EventHandler? Resize
         {
             add => Events.AddHandler(s_resizeEvent, value);
             remove => Events.RemoveHandler(s_resizeEvent, value);
@@ -4547,7 +4551,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ControlOnChangeUICuesDescr))]
-        public event UICuesEventHandler ChangeUICues
+        public event UICuesEventHandler? ChangeUICues
         {
             add => Events.AddHandler(s_changeUICuesEvent, value);
             remove => Events.RemoveHandler(s_changeUICuesEvent, value);
@@ -4555,7 +4559,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ControlOnStyleChangedDescr))]
-        public event EventHandler StyleChanged
+        public event EventHandler? StyleChanged
         {
             add => Events.AddHandler(s_styleChangedEvent, value);
             remove => Events.RemoveHandler(s_styleChangedEvent, value);
@@ -4563,7 +4567,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ControlOnSystemColorsChangedDescr))]
-        public event EventHandler SystemColorsChanged
+        public event EventHandler? SystemColorsChanged
         {
             add => Events.AddHandler(s_systemColorsChangedEvent, value);
             remove => Events.RemoveHandler(s_systemColorsChangedEvent, value);
@@ -4574,7 +4578,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatFocus))]
         [SRDescription(nameof(SR.ControlOnValidatingDescr))]
-        public event CancelEventHandler Validating
+        public event CancelEventHandler? Validating
         {
             add => Events.AddHandler(s_validatingEvent, value);
             remove => Events.RemoveHandler(s_validatingEvent, value);
@@ -4585,7 +4589,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatFocus))]
         [SRDescription(nameof(SR.ControlOnValidatedDescr))]
-        public event EventHandler Validated
+        public event EventHandler? Validated
         {
             add => Events.AddHandler(s_validatedEvent, value);
             remove => Events.RemoveHandler(s_validatedEvent, value);
@@ -4643,27 +4647,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Recursively enables required scaling from the given control
+        ///  Assigns a new parent control. Sends out the appropriate property change
+        ///  notifications for properties that are affected by the change of parent.
         /// </summary>
-        internal void EnableRequiredScaling(bool enable)
-        {
-            RequiredScalingEnabled = enable;
-            foreach (Control control in Controls)
-            {
-                control.EnableRequiredScaling(enable);
-            }
-        }
-
-        /// <summary>
-        /// Assigns a new parent control. Sends out the appropriate property change
-        /// notifications for properties that are affected by the change of parent.
-        /// </summary>
-        internal virtual void AssignParent(Control value)
+        internal virtual void AssignParent(Control? value)
         {
             // Adopt the parent's required scaling bits
             if (value is not null)
             {
-                EnableRequiredScaling(value.RequiredScalingEnabled);
+                RequiredScalingEnabled = value.RequiredScalingEnabled;
             }
 
             if (CanAccessProperties)
@@ -4727,7 +4719,6 @@ namespace System.Windows.Forms
                     // and invoking the property would just create the binding manager, which
                     // we don't need.  We just blindly notify that the binding manager has
                     // changed, and if anyone cares, they will do the comparison at that time.
-                    //
                     OnBindingContextChanged(EventArgs.Empty);
                 }
             }
@@ -4746,7 +4737,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnParentChangedDescr))]
-        public event EventHandler ParentChanged
+        public event EventHandler? ParentChanged
         {
             add => Events.AddHandler(s_parentEvent, value);
             remove => Events.RemoveHandler(s_parentEvent, value);
@@ -4771,7 +4762,7 @@ namespace System.Windows.Forms
         /// </returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public IAsyncResult BeginInvoke(Action method) => BeginInvoke(method, null);
-
+#nullable disable
         /// <summary>
         ///  Executes the given delegate on the thread that owns this Control's
         ///  underlying window handle.  The delegate is called asynchronously and this
@@ -6345,15 +6336,6 @@ namespace System.Windows.Forms
         private void InitScaling(BoundsSpecified specified)
         {
             _requiredScaling |= (byte)((int)specified & RequiredScalingMask);
-
-            // Initscaling on children of container control.
-            if (specified == BoundsSpecified.Size)
-            {
-                foreach (Control control in Controls)
-                {
-                    control.InitScaling(specified);
-                }
-            }
         }
 
         /// <summary>
@@ -13511,7 +13493,7 @@ namespace System.Windows.Forms
             }
         }
 
-        IArrangedElement IArrangedElement.Container
+        IArrangedElement? IArrangedElement.Container
         {
             get
             {
@@ -13538,7 +13520,7 @@ namespace System.Windows.Forms
         // CAREFUL: This really calls SetBoundsCore, not SetBounds.
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified)
         {
-            ISite site = Site;
+            ISite? site = Site;
             IComponentChangeService? changeService = null;
             PropertyDescriptor? sizeProperty = null;
             PropertyDescriptor? locationProperty = null;
@@ -14381,7 +14363,7 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.HasRtlModeEnabled()
         {
-            Control topLevelControl = TopLevelControlInternal;
+            Control? topLevelControl = TopLevelControlInternal;
             return topLevelControl is not null && topLevelControl.RightToLeft == RightToLeft.Yes && !IsMirrored;
         }
 
@@ -14419,7 +14401,7 @@ namespace System.Windows.Forms
 
         private IList<Rectangle> GetOwnNeighboringToolsRectangles()
         {
-            Control controlParent = ParentInternal;
+            Control? controlParent = ParentInternal;
             if (controlParent is null)
             {
                 return Array.Empty<Rectangle>();

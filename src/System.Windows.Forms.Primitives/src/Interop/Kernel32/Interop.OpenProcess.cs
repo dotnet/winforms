@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal partial class Kernel32
     {
-        [DllImport(Libraries.Kernel32, ExactSpelling = true, SetLastError = true)]
-        public static extern IntPtr OpenProcess(ProcessAccessOptions dwDesiredAccess, BOOL bInheritHandle, uint dwProcessId);
+        [LibraryImport(Libraries.Kernel32, SetLastError = true)]
+        public static partial IntPtr OpenProcess(ProcessAccessOptions dwDesiredAccess, BOOL bInheritHandle, uint dwProcessId);
     }
 }

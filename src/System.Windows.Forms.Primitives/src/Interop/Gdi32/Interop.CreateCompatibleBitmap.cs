@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern HBITMAP CreateCompatibleBitmap(HDC hdc, int cx, int cy);
+        [LibraryImport(Libraries.Gdi32)]
+        public static partial HBITMAP CreateCompatibleBitmap(HDC hdc, int cx, int cy);
     }
 }

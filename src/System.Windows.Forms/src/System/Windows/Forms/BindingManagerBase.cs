@@ -4,6 +4,7 @@
 
 using System.Collections;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace System.Windows.Forms
@@ -92,7 +93,7 @@ namespace System.Windows.Forms
             return GetItemProperties(BindType, 0, dataSources, listAccessors);
         }
 
-        protected virtual PropertyDescriptorCollection? GetItemProperties(Type listType, int offset, ArrayList dataSources, ArrayList listAccessors)
+        protected virtual PropertyDescriptorCollection? GetItemProperties([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]Type listType, int offset, ArrayList dataSources, ArrayList listAccessors)
         {
             if (listAccessors.Count < offset)
             {

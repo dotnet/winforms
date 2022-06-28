@@ -9,8 +9,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true, EntryPoint = "AreDpiAwarenessContextsEqual", SetLastError = true)]
-        private static extern BOOL AreDpiAwarenessContextsEqualInternal(IntPtr dpiContextA, IntPtr dpiContextB);
+        [LibraryImport(Libraries.User32, EntryPoint = "AreDpiAwarenessContextsEqual", SetLastError = true)]
+        private static partial BOOL AreDpiAwarenessContextsEqualInternal(IntPtr dpiContextA, IntPtr dpiContextB);
 
         /// <summary>
         ///  Tries to compare two DPIawareness context values. Return true if they were equal.

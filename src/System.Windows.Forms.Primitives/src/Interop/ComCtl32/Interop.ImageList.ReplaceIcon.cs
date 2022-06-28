@@ -10,8 +10,8 @@ internal partial class Interop
     {
         public static partial class ImageList
         {
-            [DllImport(Libraries.Comctl32, ExactSpelling = true, EntryPoint = "ImageList_ReplaceIcon")]
-            public static extern int ReplaceIcon(IntPtr himl, int i, IntPtr hicon);
+            [LibraryImport(Libraries.Comctl32, EntryPoint = "ImageList_ReplaceIcon")]
+            public static partial int ReplaceIcon(IntPtr himl, int i, IntPtr hicon);
 
             public static int ReplaceIcon(IHandle himl, int i, HandleRef hicon)
             {

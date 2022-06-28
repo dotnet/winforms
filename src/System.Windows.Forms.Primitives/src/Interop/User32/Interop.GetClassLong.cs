@@ -10,12 +10,12 @@ internal static partial class Interop
     {
         // We only ever call this on 32 bit so IntPtr is correct
         // https://msdn.microsoft.com/library/windows/desktop/ms633580.aspx
-        [DllImport(Libraries.User32, SetLastError = true, ExactSpelling = true)]
-        private static extern IntPtr GetClassLongW(IntPtr hWnd, GCL nIndex);
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        private static partial IntPtr GetClassLongW(IntPtr hWnd, GCL nIndex);
 
         // https://msdn.microsoft.com/library/windows/desktop/ms633581.aspx
-        [DllImport(Libraries.User32, SetLastError = true, ExactSpelling = true)]
-        private static extern IntPtr GetClassLongPtrW(IntPtr hWnd, GCL nIndex);
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        private static partial IntPtr GetClassLongPtrW(IntPtr hWnd, GCL nIndex);
 
         public static IntPtr GetClassLong(IntPtr hWnd, GCL nIndex)
         {

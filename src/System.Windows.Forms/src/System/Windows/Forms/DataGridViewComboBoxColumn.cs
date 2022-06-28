@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -13,6 +14,7 @@ using System.Text;
 namespace System.Windows.Forms
 {
     [Designer("System.Windows.Forms.Design.DataGridViewComboBoxColumnDesigner, " + AssemblyRef.SystemDesign)]
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     [ToolboxBitmap(typeof(DataGridViewComboBoxColumn), "DataGridViewComboBoxColumn")]
     public class DataGridViewComboBoxColumn : DataGridViewColumn
     {

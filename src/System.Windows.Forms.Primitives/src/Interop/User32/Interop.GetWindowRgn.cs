@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        private static extern RegionType GetWindowRgn(IntPtr hwnd, Gdi32.HRGN hrgn);
+        [LibraryImport(Libraries.User32)]
+        private static partial RegionType GetWindowRgn(IntPtr hwnd, Gdi32.HRGN hrgn);
 
         public static RegionType GetWindowRgn(IHandle hwnd, Gdi32.HRGN hrgn)
         {

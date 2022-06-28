@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -1639,7 +1640,7 @@ namespace System.Windows.Forms
                     /// <summary>
                     ///  Helper function to load a COM v-table from a com object pointer.
                     /// </summary>
-                    protected V LoadVtable<V>()
+                    protected V LoadVtable<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]V>()
                         where V : struct
                     {
                         IntPtr vtblptr = Marshal.ReadIntPtr(handle, 0);

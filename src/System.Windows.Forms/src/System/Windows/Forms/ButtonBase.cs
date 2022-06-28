@@ -739,6 +739,7 @@ namespace System.Windows.Forms
 
         [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
             SettingsBindable(true)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;
