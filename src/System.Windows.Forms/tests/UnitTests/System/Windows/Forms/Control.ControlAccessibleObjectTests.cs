@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Tests
         // otherwise an error can be thrown.
         private static Type[] s_controlsIgnoringTextChangesForTests = new Type[]
         {
-            typeof(DateTimePicker),
+            typeof(DateTimePicker), typeof(WebBrowser)
         };
 
         [WinFormsFact]
