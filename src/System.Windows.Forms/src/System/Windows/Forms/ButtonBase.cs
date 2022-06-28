@@ -920,12 +920,8 @@ namespace System.Windows.Forms
             => OnCommandChanged(e);
 
         // Called by the ICommandProvider's internal DIM-based logic.
-        void ICommandProvider.RaiseCommandCanExecuteChanged([AllowNull] object sender, EventArgs e)
-            => OnCommandCanExecuteChanged(sender, e);
-
-        // Called by the ICommandProvider's internal DIM-based logic.
-        void ICommandProvider.RaiseCommandExecuting(CancelEventArgs e)
-            => OnCommandExecuting(e);
+        void ICommandProvider.RaiseCommandCanExecuteChanged(EventArgs e)
+            => OnCommandCanExecuteChanged(this, e);
 
         /// <summary>
         ///  Raises the <see cref="OnLostFocus"/> event.

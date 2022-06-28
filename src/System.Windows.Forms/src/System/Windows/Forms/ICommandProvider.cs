@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Input;
 
@@ -19,11 +18,6 @@ namespace System.Windows.Forms
         /// Occurs, when the execution context of the command was changed.
         /// </summary>
         event EventHandler? CommandCanExecuteChanged;
-
-        /// <summary>
-        /// Occurs, when the command is about to be executed. 
-        /// </summary>
-        event CancelEventHandler? CommandExecuting;
 
         /// <summary>
         /// Gets or sets the Command to invoke, when the implementing 
@@ -59,16 +53,8 @@ namespace System.Windows.Forms
         /// An implementation should raise the <see cref="CommandCanExecuteChanged"/> event 
         /// by calling component's or control's OnCommandCanExecuteChanged method.
         /// </summary>
-        /// <param name="sender">The sender of the event, passed from the data source.</param>
         /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
-        protected void RaiseCommandCanExecuteChanged([AllowNull] object sender, EventArgs e);
-
-        /// <summary>
-        /// An implementation should raise the <see cref="CommandExecuting"/> event 
-        /// by calling component's or control's OnCommandExecuting method.
-        /// </summary>
-        /// <param name="e"></param>
-        protected void RaiseCommandExecuting(CancelEventArgs e);
+        protected void RaiseCommandCanExecuteChanged(EventArgs e);
 
         /// <summary>
         /// Method which should be called by a class implementing this 
@@ -97,13 +83,7 @@ namespace System.Windows.Forms
         /// <param name="commandComponent"></param>
         protected static void RequestCommandExecute(ICommandProvider commandComponent)
         {
-            CancelEventArgs e = new();
-            commandComponent.RaiseCommandExecuting(e);
-
-            if (!e.Cancel && (commandComponent.Command?.CanExecute(commandComponent.CommandParameter) ?? false))
-            {
-                commandComponent.Command?.Execute(commandComponent.CommandParameter);
-            }
+            commandComponent.Command?.Execute(commandComponent.CommandParameter);
         }
 
         private void CommandSetter(
@@ -143,13 +123,8 @@ namespace System.Windows.Forms
 
         private void CommandCanExecuteChangedProc([AllowNull] object sender, EventArgs e)
         {
-            CancelEventArgs cancelEventArgs = new();
-            RaiseCommandCanExecuteChanged(sender, cancelEventArgs);
-
-            if (!cancelEventArgs.Cancel)
-            {
-                Enabled = Command?.CanExecute(CommandParameter) ?? false;
-            }
+            RaiseCommandCanExecuteChanged(e);
+            Enabled = Command?.CanExecute(CommandParameter) ?? false;
         }
     }
 }

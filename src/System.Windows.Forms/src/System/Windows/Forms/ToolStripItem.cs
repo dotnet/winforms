@@ -2491,12 +2491,8 @@ namespace System.Windows.Forms
             => OnCommandChanged(e);
 
         // Called by the ICommandProvider's internal DIM-based logic.
-        void ICommandProvider.RaiseCommandCanExecuteChanged(object sender, EventArgs e)
-            => OnCommandCanExecuteChanged(sender, e);
-
-        // Called by the ICommandProvider's internal DIM-based logic.
-        void ICommandProvider.RaiseCommandExecuting(CancelEventArgs e)
-            => OnCommandExecuting(e);
+        void ICommandProvider.RaiseCommandCanExecuteChanged(EventArgs e)
+            => OnCommandCanExecuteChanged(e);
 
         private void HandleClick(EventArgs e)
         {
@@ -2819,8 +2815,8 @@ namespace System.Windows.Forms
         ///  Call base.CommandCanExecuteChanged to send this event to any registered event listeners.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnCommandCanExecuteChanged(object sender, EventArgs e)
-            => ((EventHandler)Events[s_commandCanExecuteChangedEvent])?.Invoke(sender, e);
+        protected virtual void OnCommandCanExecuteChanged(EventArgs e)
+            => ((EventHandler)Events[s_commandCanExecuteChangedEvent])?.Invoke(this, e);
 
         /// <summary>
         ///  Raises the <see cref="ToolStripItem.CommandParameterChanged"/> event.
