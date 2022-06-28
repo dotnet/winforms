@@ -1,4 +1,4 @@
-﻿namespace AccessibilityTests
+﻿namespace Accessibility_Core_App
 {
     partial class CustomAccessiblePropertiesForm
     {

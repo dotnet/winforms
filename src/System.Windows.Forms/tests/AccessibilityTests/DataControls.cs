@@ -1,12 +1,12 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
+using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
-using System.Windows.Forms.Automation;
 
-namespace AccessibilityTests
+namespace Accessibility_Core_App
 {
     public partial class DataControls : Form
     {
@@ -31,7 +31,6 @@ namespace AccessibilityTests
             }
 
             //this.dataGridView2.DataSource = dt;
-
             bindingSource1.DataSource = dt;
             dataGridView2.DataSource = bindingSource1;
             bindingNavigator1.BindingSource = bindingSource1;
@@ -47,7 +46,10 @@ namespace AccessibilityTests
         private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
         {
             dataGridView2.Focus();
-            bindingNavigator1.AccessibilityObject.RaiseAutomationNotification(AutomationNotificationKind.Other, AutomationNotificationProcessing.CurrentThenMostRecent, "Please enter first name now");
+            this.bindingNavigator1.AccessibilityObject.RaiseAutomationNotification(
+                System.Windows.Forms.Automation.AutomationNotificationKind.Other,
+              System.Windows.Forms.Automation.AutomationNotificationProcessing.CurrentThenMostRecent,
+              "Please enter first name now");
         }
     }
 }
