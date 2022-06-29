@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Accessibility_Core_App
@@ -15,32 +14,30 @@ namespace Accessibility_Core_App
             InitializeComponent();
         }
 
-        int totalnumber = 0;//this is for total number of items of the list or array
-        int itemperpage = 0;//this is for no of item per page 
+        int totalNumber;//this is for total number of items of the list or array
+        int itemPerpage;//this is for no of item per page 
         private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
             float currentY = 50;// declare  one variable for height measurement
             Font font = new Font("Times New Roman", 30);
             Brush bru = Brushes.Blue;
 
-            while (totalnumber <= 500) // check the number of items
+            while (totalNumber <= 500) // check the number of items
             {
-                e.Graphics.DrawString(this.txtPrint.Text.ToString() + " " + totalnumber.ToString(), font, bru, 50, currentY);//print each item
+                e.Graphics.DrawString(this.txtPrint.Text.ToString() + " " + totalNumber.ToString(), font, bru, 50, currentY);//print each item
                 currentY += 50; // set a gap between every item
-                totalnumber += 1; //increment count by 1
-                if (itemperpage < 20) // check whether  the number of item(per page) is more than 20 or not
+                totalNumber += 1; //increment count by 1
+                if (itemPerpage < 20) // check whether  the number of item(per page) is more than 20 or not
                 {
-                    itemperpage += 1; // increment itemperpage by 1
+                    itemPerpage += 1; // increment itemperpage by 1
                     e.HasMorePages = false; // set the HasMorePages property to false , so that no other page will not be added
-
                 }
 
                 else // if the number of item(per page) is more than 20 then add one page
                 {
-                    itemperpage = 0; //initiate itemperpage to 0 .
+                    itemPerpage = 0; //initiate itemperpage to 0 .
                     e.HasMorePages = true; //e.HasMorePages raised the PrintPage event once per page .
                     return;//It will call PrintPage event again
-
                 }
             }
         }
@@ -49,7 +46,6 @@ namespace Accessibility_Core_App
         {
             pageSetupDialog1.Document = printDocument1;
             this.pageSetupDialog1.ShowDialog();
-
         }
 
         private void BtnPreView_Click(object sender, EventArgs e)
@@ -58,7 +54,7 @@ namespace Accessibility_Core_App
             //For each button click event we have to reset below two variables to 0     
             // because every time  PrintPage event fires automatically. 
 
-            itemperpage = totalnumber = 0;
+            itemPerpage = totalNumber = 0;
             printPreviewDialog1.Document = printDocument1;
 
             ((ToolStripButton)((ToolStrip)printPreviewDialog1.Controls[1]).Items[0]).Enabled
@@ -79,6 +75,5 @@ namespace Accessibility_Core_App
         {
             this.printPreviewControl1.Document = this.printDocument1;
         }
-
     }
 }

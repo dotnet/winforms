@@ -126,7 +126,7 @@
             this.Controls.Add(this.hScrollBar1);
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "RemainingControls";
-            this.Text = "RamainingControls";
+            this.Text = "RemainingControls";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
