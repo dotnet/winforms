@@ -2568,12 +2568,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(7, parent.accChildCount);
         }
 
-        [WinFormsFact]
-        public void AccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsNull()
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.UIA.ControlTypePropertyId)]
+        [InlineData((int)UiaCore.UIA.AutomationIdPropertyId)]
+        public void AccessibleObject_GetPropertyValue_ReturnsNull_IfExpected(int propertyId)
         {
             AccessibleObject accessibleObject = new AccessibleObject();
 
-            Assert.Null(accessibleObject.GetPropertyValue(Interop.UiaCore.UIA.ControlTypePropertyId));
+            Assert.Null(accessibleObject.GetPropertyValue((UiaCore.UIA)propertyId));
         }
 
         public static IEnumerable<object[]> AccessibleObject_RuntimeId_IsOverriden_TestData()

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms
 {
     public partial class Label
@@ -31,13 +29,6 @@ namespace System.Windows.Forms
                     return AccessibleRole.StaticText;
                 }
             }
-
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-                => propertyID switch
-                {
-                    UiaCore.UIA.AutomationIdPropertyId => _owningLabel.Name,
-                    _ => base.GetPropertyValue(propertyID)
-                };
         }
     }
 }

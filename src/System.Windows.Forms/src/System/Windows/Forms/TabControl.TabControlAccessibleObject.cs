@@ -135,7 +135,6 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UIA propertyID)
                 => propertyID switch
                 {
-                    UIA.AutomationIdPropertyId => _owningTabControl.Name,
                     UIA.HasKeyboardFocusPropertyId => _owningTabControl.Focused,
                     UIA.IsKeyboardFocusablePropertyId
                         // This is necessary for compatibility with MSAA proxy:

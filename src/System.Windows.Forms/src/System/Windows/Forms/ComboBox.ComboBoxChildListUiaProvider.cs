@@ -27,6 +27,8 @@ namespace System.Windows.Forms
                 _childListControlhandle = childListControlhandle;
             }
 
+            private protected override string AutomationId => COMBO_BOX_LIST_AUTOMATION_ID;
+
             internal override Rectangle BoundingRectangle => User32.GetWindowRect(_owningComboBox.GetListNativeWindow());
 
             /// <summary>
@@ -144,8 +146,6 @@ namespace System.Windows.Forms
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
                     case UiaCore.UIA.IsEnabledPropertyId:
                         return _owningComboBox.Enabled;
-                    case UiaCore.UIA.AutomationIdPropertyId:
-                        return COMBO_BOX_LIST_AUTOMATION_ID;
                     case UiaCore.UIA.NativeWindowHandlePropertyId:
                         return _childListControlhandle;
                     case UiaCore.UIA.IsOffscreenPropertyId:

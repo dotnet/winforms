@@ -413,17 +413,21 @@ namespace System.Windows.Forms.Tests
             Assert.False(trackBar.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void TrackBarAccessibilityObject_GetPropertyValue_Name_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.UIA.NamePropertyId, "TestAccessibleName")]
+        [InlineData((int)UiaCore.UIA.AutomationIdPropertyId, "TestControlName")]
+        public void TrackBarAccessibilityObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
         {
-            const string name = "Test name";
             using TrackBar trackBar = new()
             {
-                AccessibleName = name
+                Name = expected.ToString(),
+                AccessibleName = expected.ToString()
             };
-            object actual = trackBar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
 
-            Assert.Equal(name, actual);
+            TrackBar.TrackBarAccessibleObject accessibilityObject = (TrackBar.TrackBarAccessibleObject)trackBar.AccessibilityObject;
+
+            object value = accessibilityObject.GetPropertyValue((UiaCore.UIA)propertyID);
+            Assert.Equal(expected, value);
             Assert.False(trackBar.IsHandleCreated);
         }
 

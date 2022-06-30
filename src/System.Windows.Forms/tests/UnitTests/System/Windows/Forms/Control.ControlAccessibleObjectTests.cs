@@ -1568,6 +1568,17 @@ namespace System.Windows.Forms.Tests
             Assert.True(toolStrip.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void ControlAccessibleObject_GetPropertyValue_AutomationId_ReturnsExpected()
+        {
+            using Control ownerControl = new() { Name = "test name" };
+            string expected = ownerControl.Name;
+            object actual = ownerControl.AccessibilityObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId);
+
+            Assert.Equal(expected, actual);
+            Assert.False(ownerControl.IsHandleCreated);
+        }
+
         // ContextMenuStrip, From, ToolStripDropDown, ToolStripDropDownMenu
         // are Top level controls that can't be added to a ToolStrip.
         // A TabPage can be added to a TabControl only (see TabPage.AssignParent method).

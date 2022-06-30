@@ -9,20 +9,23 @@ namespace System.Windows.Forms.Tests
 {
     public class LabelAccessibleObjectTests
     {
-        [WinFormsFact]
-        public void LabelAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.UIA.NamePropertyId, "Address")]
+        [InlineData((int)UiaCore.UIA.AutomationIdPropertyId, "Label1")]
+        public void LabelAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
         {
-            string testAccName = "Address";
-            using var label = new Label();
-            label.Text = "Some test label text";
-            label.Name = "Label1";
-            label.AccessibleName = testAccName;
-            AccessibleObject labelAccessibleObject = label.AccessibilityObject;
+            using Label label = new()
+            {
+                Text = "Some test label text",
+                Name = "Label1",
+                AccessibleName = "Address"
+            };
 
+            Label.LabelAccessibleObject accessibilityObject = (Label.LabelAccessibleObject)label.AccessibilityObject;
+
+            object value = accessibilityObject.GetPropertyValue((UiaCore.UIA)propertyID);
+            Assert.Equal(expected, value);
             Assert.False(label.IsHandleCreated);
-
-            var accessibleName = labelAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.NamePropertyId);
-            Assert.Equal(testAccName, accessibleName);
         }
 
         [WinFormsFact]

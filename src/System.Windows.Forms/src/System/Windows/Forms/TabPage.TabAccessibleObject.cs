@@ -12,14 +12,14 @@ namespace System.Windows.Forms
     {
         internal class TabAccessibleObject : AccessibleObject
         {
-            private TabControl? OwningTabControl => _owningTabPage.ParentInternal as TabControl;
-
             private readonly TabPage _owningTabPage;
 
             public TabAccessibleObject(TabPage owningTabPage)
             {
                 _owningTabPage = owningTabPage.OrThrowIfNull();
             }
+
+            private protected override string AutomationId => _owningTabPage.Name;
 
             public override Rectangle Bounds
             {
@@ -47,6 +47,8 @@ namespace System.Windows.Forms
             public override string? DefaultAction => SystemIAccessibleInternal?.get_accDefaultAction(GetChildId());
 
             public override string? Name => _owningTabPage.Text;
+
+            private TabControl? OwningTabControl => _owningTabPage.ParentInternal as TabControl;
 
             public override AccessibleRole Role
                 => SystemIAccessibleInternal?.get_accRole(GetChildId()) is object accRole
@@ -116,7 +118,6 @@ namespace System.Windows.Forms
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TabItemControlTypeId,
-                    UiaCore.UIA.AutomationIdPropertyId => _owningTabPage.Name,
                     UiaCore.UIA.IsEnabledPropertyId => OwningTabControl?.Enabled ?? false,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
