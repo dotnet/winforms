@@ -20,11 +20,12 @@ namespace Accessibility_Core_App
         {
             float currentY = 50;// declare  one variable for height measurement
             Font font = new Font("Times New Roman", 30);
-            Brush bru = Brushes.Blue;
+            Brush brush = Brushes.Blue;
 
             while (totalNumber <= 500) // check the number of items
             {
-                e.Graphics.DrawString(this.txtPrint.Text.ToString() + " " + totalNumber.ToString(), font, bru, 50, currentY);//print each item
+                //print each item
+                e.Graphics.DrawString($"{txtPrint.Text} {totalNumber}", font, brush, 50, currentY);
                 currentY += 50; // set a gap between every item
                 totalNumber += 1; //increment count by 1
                 if (itemPerpage < 20) // check whether  the number of item(per page) is more than 20 or not
@@ -45,7 +46,7 @@ namespace Accessibility_Core_App
         private void BtnSetting_Click(object sender, EventArgs e)
         {
             pageSetupDialog1.Document = printDocument1;
-            this.pageSetupDialog1.ShowDialog();
+            pageSetupDialog1.ShowDialog();
         }
 
         private void BtnPreView_Click(object sender, EventArgs e)
@@ -57,23 +58,22 @@ namespace Accessibility_Core_App
             itemPerpage = totalNumber = 0;
             printPreviewDialog1.Document = printDocument1;
 
-            ((ToolStripButton)((ToolStrip)printPreviewDialog1.Controls[1]).Items[0]).Enabled
-            = false;//disable the direct print from printpreview.as when we click that Print button PrintPage event fires again.
+            ((ToolStripButton)((ToolStrip)printPreviewDialog1.Controls[1]).Items[0]).Enabled = false;//disable the direct print from printpreview.as when we click that Print button PrintPage event fires again.
 
             printPreviewDialog1.ShowDialog();
         }
 
         private void BtnPrint_Click(object sender, EventArgs e)
         {
-            if (this.printDialog1.ShowDialog() == DialogResult.OK)
+            if (printDialog1.ShowDialog() == DialogResult.OK)
             {
-                this.printDocument1.Print();
+                printDocument1.Print();
             }
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            this.printPreviewControl1.Document = this.printDocument1;
+            printPreviewControl1.Document = printDocument1;
         }
     }
 }

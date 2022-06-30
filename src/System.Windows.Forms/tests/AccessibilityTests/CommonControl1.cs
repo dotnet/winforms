@@ -17,15 +17,8 @@ namespace Accessibility_Core_App
         {
             ImageList imageListSmall = new ImageList();
             ImageList imageListLarge = new ImageList();
-            //imageListSmall.Images.Add(Bitmap.FromFile("\\mlangfs1\\public\\Winforms\\v-jiaol\\picture\\mySmallImage1.bmp"));
-            //imageListSmall.Images.Add(Bitmap.FromFile("\\mlangfs1\\public\\Winforms\\v-jiaol\\picture\\mySmallImage2.bmp"));
-            //imageListLarge.Images.Add(Bitmap.FromFile("\\mlangfs1\\public\\Winforms\\v-jiaol\\picture\\myLargeImage1.bmp"));
-            //imageListLarge.Images.Add(Bitmap.FromFile("\\mlangfs1\\public\\Winforms\\v-jiaol\\picture\\myLargeImage2.bmp"));
             listView1.LargeImageList = imageListLarge;
             listView1.SmallImageList = imageListSmall;
-
-            //comboBox8.SelectedText = "row6";
-            //comboBox9.SelectedItem = "selected";
         }
 
         private void button2_Click(object sender, EventArgs e)

@@ -15,8 +15,8 @@ namespace Accessibility_Core_App
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            CommonControl1 commontrol1 = new CommonControl1();
-            commontrol1.Show();
+            CommonControl1 commonControl1 = new CommonControl1();
+            commonControl1.Show();
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -69,8 +69,8 @@ namespace Accessibility_Core_App
 
         private void button10_Click(object sender, EventArgs e)
         {
-            TaskDialogTesting TaskDialogTesting = new();
-            TaskDialogTesting.ShowEventsDemoTaskDialog();
+            TaskDialogTesting taskDialogTesting = new();
+            taskDialogTesting.ShowEventsDemoTaskDialog();
         }
 
         private void button11_Click(object sender, EventArgs e)

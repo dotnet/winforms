@@ -48,16 +48,16 @@ namespace Accessibility_Core_App
 
             // Binding Data For TextBox/Label/DomainUpDown/NumericUpDown/LinkLabel/CheckBox/RadioButton/RichTextBox/MaskedTextBox/Button controls by using DadaBindings property
             Student stu = new Student(1, "StudentNumber", "Female", 12121, "HomeNumber", "Habits\nBasketball\nFootball", true, 10, 11);
-            this.textBox1.DataBindings.Add("Text", stu, "StudentNumber");
-            this.domainUpDown1.DataBindings.Add("Text", stu, "LuckyNumber");
-            this.numericUpDown1.DataBindings.Add("Text", stu, "Count");
-            this.label1.DataBindings.Add("Text", stu, "Name");
-            this.button1.DataBindings.Add("Text", stu, "Sex");
-            this.maskedTextBox1.DataBindings.Add("Text", stu, "PhoneNumber");
-            this.linkLabel1.DataBindings.Add("Text", stu, "HomeNumber");
-            this.richTextBox1.DataBindings.Add("Text", stu, "Hobby");
-            this.checkBox1.DataBindings.Add("Checked", stu, "IsStudent");
-            this.radioButton1.DataBindings.Add("Checked", stu, "IsStudent");
+            textBox1.DataBindings.Add("Text", stu, "StudentNumber");
+            domainUpDown1.DataBindings.Add("Text", stu, "LuckyNumber");
+            numericUpDown1.DataBindings.Add("Text", stu, "Count");
+            label1.DataBindings.Add("Text", stu, "Name");
+            button1.DataBindings.Add("Text", stu, "Sex");
+            maskedTextBox1.DataBindings.Add("Text", stu, "PhoneNumber");
+            linkLabel1.DataBindings.Add("Text", stu, "HomeNumber");
+            richTextBox1.DataBindings.Add("Text", stu, "Hobby");
+            checkBox1.DataBindings.Add("Checked", stu, "IsStudent");
+            radioButton1.DataBindings.Add("Checked", stu, "IsStudent");
 
             // Binding Data For TreeView control by using DataSet
             BindTreeView();
@@ -68,15 +68,15 @@ namespace Accessibility_Core_App
 
         private void BindTreeView()
         {
-            using DataSet ds = CreateDataSet();
+            using DataSet dataSet = CreateDataSet();
 
-            if (ds.Tables[0].Rows.Count > 0)
+            if (dataSet.Tables[0].Rows.Count > 0)
             {
-                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
                 {
                     TreeNode node = new TreeNode();
-                    node.Text = ds.Tables[0].Rows[i]["StuName"].ToString();
-                    this.treeView1.Nodes.Add(node);
+                    node.Text = dataSet.Tables[0].Rows[i]["StuName"].ToString();
+                    treeView1.Nodes.Add(node);
                 }
             }
         }
@@ -84,26 +84,26 @@ namespace Accessibility_Core_App
         private void BindListView()
         {
             listView1.View = View.Details;
-            using DataSet ds = CreateDataSet();
+            using DataSet dataSet = CreateDataSet();
 
-            int row_Count = ds.Tables[0].Rows.Count;
-            int col_Count = ds.Tables[0].Columns.Count;
+            int row_Count = dataSet.Tables[0].Rows.Count;
+            int col_Count = dataSet.Tables[0].Columns.Count;
 
             for (int j = 0; j < col_Count; j++)
             {
-                string colName = ds.Tables[0].Columns[j].ColumnName;
+                string colName = dataSet.Tables[0].Columns[j].ColumnName;
                 listView1.Columns.Add(colName);
             }
 
             for (int i = 0; i < row_Count; i++)
             {
-                string itemName = ds.Tables[0].Rows[i][0].ToString();
+                string itemName = dataSet.Tables[0].Rows[i][0].ToString();
                 ListViewItem item = new ListViewItem(itemName, i);
                 listView1.Items.Add(item);
 
                 for (int j = 1; j < col_Count; j++)
                 {
-                    item.SubItems.Add(ds.Tables[0].Rows[i][j].ToString());
+                    item.SubItems.Add(dataSet.Tables[0].Rows[i][j].ToString());
                 }
             }
         }

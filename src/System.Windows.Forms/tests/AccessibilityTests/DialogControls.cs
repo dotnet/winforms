@@ -15,14 +15,14 @@ namespace Accessibility_Core_App
 
         private void ColorDialog_Click(object sender, EventArgs e)
         {
-            ColorDialog colordialog = new ColorDialog();
-            colordialog.ShowDialog();
+            ColorDialog colorDialog = new ColorDialog();
+            colorDialog.ShowDialog();
         }
 
         private void FontDialog_Click(object sender, EventArgs e)
         {
-            FontDialog fontdialog = new FontDialog();
-            fontdialog.ShowDialog();
+            FontDialog fontDialog = new FontDialog();
+            fontDialog.ShowDialog();
         }
 
         private void FolderBrowserDialog_Click(object sender, EventArgs e)
