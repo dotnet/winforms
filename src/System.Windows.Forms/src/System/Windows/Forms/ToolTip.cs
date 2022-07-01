@@ -41,7 +41,7 @@ namespace System.Windows.Forms
         private const int LocationIndexBottom = 2;
         private const int LocationIndexLeft = 3;
         private const int LocationTotal = 4;
-        private readonly Hashtable _tools = new();
+        private readonly Dictionary<Control, TipInfo> _tools = new();
         private readonly int[] _delayTimes = new int[4];
         private bool _auto = true;
         private bool _showAlways;
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
         private string _toolTipTitle = string.Empty;
         private ToolTipIcon _toolTipIcon = ToolTipIcon.None;
         private ToolTipTimer _timer;
-        private readonly Hashtable _owners = new();
+        private readonly Dictionary<IntPtr, Control> _owners = new();
         private bool _stripAmpersands;
         private bool _useAnimation = true;
         private bool _useFading = true;
@@ -158,7 +158,7 @@ namespace System.Windows.Forms
 
         internal string GetCaptionForTool(Control tool)
         {
-            return ((TipInfo)_tools[tool])?.Caption;
+            return _tools.TryGetValue(tool, out TipInfo tipInfo) ? tipInfo.Caption : null;
         }
 
         /// <summary>
@@ -320,8 +320,7 @@ namespace System.Windows.Forms
                 IntPtr rootHwnd = User32.GetAncestor(control, User32.GA.ROOT);
                 if (hWnd != rootHwnd)
                 {
-                    TipInfo tt = (TipInfo)_tools[control];
-                    if (tt is not null && (tt.TipType & TipInfo.Type.SemiAbsolute) != 0)
+                    if (_tools.TryGetValue(control, out TipInfo tt) && (tt.TipType & TipInfo.Type.SemiAbsolute) != 0)
                     {
                         _tools.Remove(control);
                         DestroyRegion(control);
@@ -502,11 +501,10 @@ namespace System.Windows.Forms
                 }
 
                 Control currentTopLevel = null;
-                var regions = new Control[_tools.Keys.Count];
-                _tools.Keys.CopyTo(regions, 0);
-                for (int i = 0; i < regions.Length; i++)
+                Control[] controls = _tools.Keys.ToArray();
+                for (int i = 0; i < controls.Length; i++)
                 {
-                    var control = regions[i];
+                    var control = controls[i];
                     currentTopLevel = control.TopLevelControlInternal;
                     if (currentTopLevel is not null)
                     {
@@ -816,8 +814,7 @@ namespace System.Windows.Forms
 
         private void CreateAllRegions()
         {
-            var controls = new Control[_tools.Keys.Count];
-            _tools.Keys.CopyTo(controls, 0);
+            Control[] controls = _tools.Keys.ToArray();
             foreach (Control control in controls)
             {
                 CreateRegion(control);
@@ -826,8 +823,7 @@ namespace System.Windows.Forms
 
         private void DestroyAllRegions()
         {
-            var controls = new Control[_tools.Keys.Count];
-            _tools.Keys.CopyTo(controls, 0);
+            Control[] controls = _tools.Keys.ToArray();
             foreach (Control control in controls)
             {
                 // DataGridView manages its own tool tip.
@@ -1039,8 +1035,7 @@ namespace System.Windows.Forms
                 return string.Empty;
             }
 
-            var tipInfo = (TipInfo)_tools[control];
-            return tipInfo?.Caption ?? string.Empty;
+            return _tools.TryGetValue(control, out TipInfo tipInfo) ? tipInfo.Caption : string.Empty;
         }
 
         /// <summary>
@@ -1060,7 +1055,6 @@ namespace System.Windows.Forms
                 {
                     Control currentControl = Control.FromHandle(hwndControl);
                     if (currentControl is not null &&
-                        _tools is not null &&
                         _tools.ContainsKey(currentControl))
                     {
                         return hwndControl;
@@ -1167,9 +1161,8 @@ namespace System.Windows.Forms
         /// </summary>
         public void RemoveAll()
         {
-            Control[] regions = new Control[_tools.Keys.Count];
-            _tools.Keys.CopyTo(regions, 0);
-            foreach (Control control in regions)
+            Control[] controls = _tools.Keys.ToArray();
+            foreach (Control control in controls)
             {
                 if (control.IsHandleCreated)
                 {
@@ -1368,8 +1361,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    var tipInfo = (TipInfo)_tools[associatedControl];
-                    if (tipInfo is null)
+                    if (!_tools.TryGetValue(associatedControl, out TipInfo tipInfo))
                     {
                         tipInfo = new TipInfo(text, TipInfo.Type.SemiAbsolute);
                     }
@@ -1540,10 +1532,21 @@ namespace System.Windows.Forms
                 pointY = optimalPoint.Y;
 
                 // Update TipInfo for the tool with optimal position.
-                var tipInfo = (_tools[tool] ?? _tools[tool.GetOwnerWindow()]) as TipInfo;
-                if (tipInfo is not null)
+                TipInfo tipInfo;
+                if (tool is Control toolAsControl)
                 {
-                    tipInfo.Position = new Point(pointX, pointY);
+                    if (!_tools.TryGetValue(toolAsControl, out tipInfo))
+                    {
+                        if (tool.GetOwnerWindow() is Control ownerWindowAsControl
+                            && _tools.TryGetValue(ownerWindowAsControl, out tipInfo))
+                        {
+                            tipInfo.Position = new Point(pointX, pointY);
+                        }
+                    }
+                    else
+                    {
+                        tipInfo.Position = new Point(pointX, pointY);
+                    }
                 }
 
                 // Ensure that the tooltip bubble is moved to the optimal position even when a mouse tooltip is being replaced with a keyboard tooltip.
@@ -1811,11 +1814,10 @@ namespace System.Windows.Forms
 
         private void HideAllToolTips()
         {
-            Control[] ctls = new Control[_owners.Values.Count];
-            _owners.Values.CopyTo(ctls, 0);
-            for (int i = 0; i < ctls.Length; i++)
+            Control[] controls = _owners.Values.ToArray();
+            for (int i = 0; i < controls.Length; i++)
             {
-                Hide(ctls[i]);
+                Hide(controls[i]);
             }
         }
 
@@ -1837,8 +1839,7 @@ namespace System.Windows.Forms
                     toolInfo.Text = text;
                 }
 
-                var tipInfo = (TipInfo)_tools[tool];
-                if (tipInfo is null)
+                if (!_tools.TryGetValue(tool, out TipInfo tipInfo))
                 {
                     tipInfo = new TipInfo(text, type);
                 }
@@ -1860,22 +1861,24 @@ namespace System.Windows.Forms
 
                 // Need to do this BEFORE we call GetWinTOOLINFO, since it relies on the tools array to be populated
                 // in order to find the top level parent.
-                var tipInfo = (TipInfo)_tools[window];
-                if (tipInfo is null)
+                if (window is Control windowAsControl)
                 {
-                    tipInfo = new TipInfo(text, type);
-                }
-                else
-                {
-                    tipInfo.TipType |= type;
-                    tipInfo.Caption = text;
-                }
+                    if (!_tools.TryGetValue(windowAsControl, out TipInfo tipInfo))
+                    {
+                        tipInfo = new TipInfo(text, type);
+                    }
+                    else
+                    {
+                        tipInfo.TipType |= type;
+                        tipInfo.Caption = text;
+                    }
 
-                tipInfo.Position = position;
-                _tools[window] = tipInfo;
+                    tipInfo.Position = position;
+                    _tools[windowAsControl] = tipInfo;
 
-                IntPtr hWnd = Control.GetSafeHandle(window);
-                _owners[hWnd] = window;
+                    IntPtr hWnd = Control.GetSafeHandle(window);
+                    _owners[hWnd] = windowAsControl;
+                }
 
                 var toolInfo = GetWinTOOLINFO(window);
                 toolInfo.Info.uFlags |= TTF.TRACK;
@@ -1997,7 +2000,7 @@ namespace System.Windows.Forms
         private IWin32Window GetCurrentToolWindow()
         {
             IntPtr hwnd = GetCurrentToolHwnd();
-            return (IWin32Window)_owners[hwnd] ?? Control.FromHandle(hwnd);
+            return _owners.TryGetValue(hwnd, out Control control) ? control : Control.FromHandle(hwnd);
         }
 
         /// <summary>
@@ -2009,8 +2012,7 @@ namespace System.Windows.Forms
             if (window is null)
                 return;
 
-            var tipInfo = (TipInfo)_tools[window];
-            if (tipInfo is null)
+            if (window is not Control windowAsControl || !_tools.TryGetValue(windowAsControl, out TipInfo tipInfo))
             {
                 return;
             }
@@ -2180,8 +2182,7 @@ namespace System.Windows.Forms
                 TipInfo tipInfo = null;
                 if (window is not null)
                 {
-                    tipInfo = (TipInfo)_tools[window];
-                    if (tipInfo is null)
+                    if (window is Control windowAsControl && !_tools.TryGetValue(windowAsControl, out tipInfo))
                     {
                         return;
                     }
@@ -2260,8 +2261,7 @@ namespace System.Windows.Forms
                 return;
 
             var control = window as Control;
-            var tipInfo = (TipInfo)_tools[window];
-            if (tipInfo is null)
+            if (control is null || !_tools.TryGetValue(control, out TipInfo tipInfo))
             {
                 return;
             }
