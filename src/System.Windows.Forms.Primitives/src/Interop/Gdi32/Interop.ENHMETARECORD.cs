@@ -12,7 +12,16 @@ internal static partial class Interop
             public uint nSize;
             public uint _dParm;
 
-            public ReadOnlySpan<uint> dParm => TrailingArray<uint>.GetBuffer(ref _dParm, nSize / 4);
+            public unsafe ReadOnlySpan<uint> dParm
+            {
+                get
+                {
+                    fixed (uint* p = &_dParm)
+                    {
+                        return new(p, checked((int)nSize / 4));
+                    }
+                }
+            }
         }
     }
 }
