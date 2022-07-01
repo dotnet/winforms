@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class Ole32
     {
-        [DllImport(Libraries.Ole32, ExactSpelling = true)]
-        public static extern HRESULT CoRevokeMallocSpy();
+        [LibraryImport(Libraries.Ole32)]
+        public static partial HRESULT CoRevokeMallocSpy();
     }
 }

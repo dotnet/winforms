@@ -89,7 +89,7 @@
     },
     "skipAppModel": {
       "type": "computed",
-      "value": "(hostIsCli && !UseAppFramework)"
+      "value": "(UseWindowsDesktopSdk || (hostIsCli && !UseAppFramework))"
     }
     },
     "primaryOutputs": [

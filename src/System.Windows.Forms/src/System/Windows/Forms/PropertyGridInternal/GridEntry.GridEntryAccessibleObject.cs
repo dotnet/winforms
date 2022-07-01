@@ -25,6 +25,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _owningGridEntry = owner;
             }
 
+            private protected override string AutomationId => GetHashCode().ToString();
+
             public override Rectangle Bounds
             {
                 get => PropertyGridView is not null && PropertyGridView.IsHandleCreated
@@ -337,7 +339,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     UiaCore.UIA.HasKeyboardFocusPropertyId => _owningGridEntry.HasFocus,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     UiaCore.UIA.IsEnabledPropertyId => true,
-                    UiaCore.UIA.AutomationIdPropertyId => GetHashCode().ToString(),
                     _ => base.GetPropertyValue(propertyID),
                 };
             }

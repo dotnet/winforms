@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design
@@ -17,24 +16,22 @@ namespace System.Windows.Forms.Design
     [ToolboxItem(false)]
     public partial class ComponentEditorForm : Form
     {
-        private readonly IComponent component;
-        private readonly Type[] pageTypes;
-        private ComponentEditorPageSite[] pageSites;
-        private Size maxSize = System.Drawing.Size.Empty;
-        private int initialActivePage;
-        private int activePage;
-        private bool dirty;
-        private bool firstActivate;
+        private readonly IComponent _component;
+        private readonly Type[] _pageTypes;
+        private ComponentEditorPageSite[] _pageSites;
+        private Size _maxSize = Size.Empty;
+        private int _initialActivePage;
+        private int _activePage;
+        private bool _dirty;
+        private bool _firstActivate;
 
-        private readonly Panel pageHost = new Panel();
-        private PageSelector selector;
-        private ImageList selectorImageList;
-        private Button okButton;
-        private Button cancelButton;
-        private Button applyButton;
-        private Button helpButton;
-
-        // private DesignerTransaction transaction;
+        private readonly Panel _pageHost = new Panel();
+        private PageSelector _selector;
+        private ImageList _selectorImageList;
+        private Button _okButton;
+        private Button _cancelButton;
+        private Button _applyButton;
+        private Button _helpButton;
 
         private const int BUTTON_WIDTH = 80;
         private const int BUTTON_HEIGHT = 23;
@@ -48,17 +45,17 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public ComponentEditorForm(object component, Type[] pageTypes) : base()
         {
-            if (!(component is IComponent))
+            if (component is not IComponent)
             {
                 throw new ArgumentException(SR.ComponentEditorFormBadComponent, nameof(component));
             }
 
-            this.component = (IComponent)component;
-            this.pageTypes = pageTypes;
-            dirty = false;
-            firstActivate = true;
-            activePage = -1;
-            initialActivePage = 0;
+            _component = (IComponent)component;
+            _pageTypes = pageTypes;
+            _dirty = false;
+            _firstActivate = true;
+            _activePage = -1;
+            _initialActivePage = 0;
 
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MinimizeBox = false;
@@ -76,16 +73,16 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal virtual void ApplyChanges(bool lastApply)
         {
-            if (!dirty)
+            if (!_dirty)
             {
                 return;
             }
 
-            if (component.Site.TryGetService(out IComponentChangeService changeService))
+            if (_component.Site.TryGetService(out IComponentChangeService? changeService))
             {
                 try
                 {
-                    changeService.OnComponentChanging(component, null);
+                    changeService.OnComponentChanging(_component, null);
                 }
                 catch (CheckoutException e) when (e == CheckoutException.Canceled)
                 {
@@ -93,26 +90,26 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            for (int n = 0; n < pageSites.Length; n++)
+            for (int n = 0; n < _pageSites.Length; n++)
             {
-                if (pageSites[n].Dirty)
+                if (_pageSites[n].Dirty)
                 {
-                    pageSites[n].GetPageControl().ApplyChanges();
-                    pageSites[n].Dirty = false;
+                    _pageSites[n].GetPageControl().ApplyChanges();
+                    _pageSites[n].Dirty = false;
                 }
             }
 
-            changeService?.OnComponentChanged(component);
+            changeService?.OnComponentChanged(_component);
 
-            applyButton.Enabled = false;
-            cancelButton.Text = SR.CloseCaption;
-            dirty = false;
+            _applyButton.Enabled = false;
+            _cancelButton.Text = SR.CloseCaption;
+            _dirty = false;
 
             if (lastApply == false)
             {
-                for (int n = 0; n < pageSites.Length; n++)
+                for (int n = 0; n < _pageSites.Length; n++)
                 {
-                    pageSites[n].GetPageControl().OnApplyComplete();
+                    _pageSites[n].GetPageControl().OnApplyComplete();
                 }
             }
         }
@@ -131,7 +128,7 @@ namespace System.Windows.Forms.Design
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler AutoSizeChanged
+        new public event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -140,22 +137,22 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Handles ok/cancel/apply/help button click events
         /// </summary>
-        private void OnButtonClick(object sender, EventArgs e)
+        private void OnButtonClick(object? sender, EventArgs e)
         {
-            if (sender == okButton)
+            if (sender == _okButton)
             {
                 ApplyChanges(true);
                 DialogResult = DialogResult.OK;
             }
-            else if (sender == cancelButton)
+            else if (sender == _cancelButton)
             {
                 DialogResult = DialogResult.Cancel;
             }
-            else if (sender == applyButton)
+            else if (sender == _applyButton)
             {
                 ApplyChanges(false);
             }
-            else if (sender == helpButton)
+            else if (sender == _helpButton)
             {
                 ShowPageHelp();
             }
@@ -164,34 +161,40 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Lays out the UI of the form.
         /// </summary>
+        [MemberNotNull(nameof(_okButton))]
+        [MemberNotNull(nameof(_cancelButton))]
+        [MemberNotNull(nameof(_applyButton))]
+        [MemberNotNull(nameof(_helpButton))]
+        [MemberNotNull(nameof(_selectorImageList))]
+        [MemberNotNull(nameof(_selector))]
         private void OnConfigureUI()
         {
-            Font uiFont = Control.DefaultFont;
-            if (component.Site is not null)
+            Font? uiFont = Control.DefaultFont;
+            if (_component.Site is not null)
             {
-                IUIService uiService = (IUIService)component.Site.GetService(typeof(IUIService));
+                IUIService? uiService = (IUIService?)_component.Site.GetService(typeof(IUIService));
                 if (uiService is not null)
                 {
-                    uiFont = (Font)uiService.Styles["DialogFont"];
+                    uiFont = (Font?)uiService.Styles["DialogFont"];
                 }
             }
 
             Font = uiFont;
 
-            okButton = new Button();
-            cancelButton = new Button();
-            applyButton = new Button();
-            helpButton = new Button();
+            _okButton = new Button();
+            _cancelButton = new Button();
+            _applyButton = new Button();
+            _helpButton = new Button();
 
-            selectorImageList = new ImageList
+            _selectorImageList = new ImageList
             {
                 ImageSize = new Size(16, 16)
             };
-            selector = new PageSelector
+            _selector = new PageSelector
             {
-                ImageList = selectorImageList
+                ImageList = _selectorImageList
             };
-            selector.AfterSelect += new TreeViewEventHandler(OnSelChangeSelector);
+            _selector.AfterSelect += new TreeViewEventHandler(OnSelChangeSelector);
 
             Label grayStrip = new Label
             {
@@ -200,20 +203,20 @@ namespace System.Windows.Forms.Design
 
             int selectorWidth = MIN_SELECTOR_WIDTH;
 
-            if (pageSites is not null)
+            if (_pageSites is not null)
             {
                 // Add the nodes corresponding to the pages
-                for (int n = 0; n < pageSites.Length; n++)
+                for (int n = 0; n < _pageSites.Length; n++)
                 {
-                    ComponentEditorPage page = pageSites[n].GetPageControl();
+                    ComponentEditorPage page = _pageSites[n].GetPageControl();
 
                     string title = page.Title;
                     Graphics graphics = CreateGraphicsInternal();
                     int titleWidth = (int)graphics.MeasureString(title, Font).Width;
                     graphics.Dispose();
-                    selectorImageList.Images.Add(page.Icon.ToBitmap());
+                    _selectorImageList.Images.Add(page.Icon.ToBitmap());
 
-                    selector.Nodes.Add(new TreeNode(title, n, n));
+                    _selector.Nodes.Add(new TreeNode(title, n, n));
                     if (titleWidth > selectorWidth)
                     {
                         selectorWidth = titleWidth;
@@ -224,7 +227,7 @@ namespace System.Windows.Forms.Design
             selectorWidth += SELECTOR_PADDING;
 
             string caption = string.Empty;
-            ISite site = component.Site;
+            ISite? site = _component.Site;
             if (site is not null)
             {
                 caption = string.Format(SR.ComponentEditorFormProperties, site.Name);
@@ -237,17 +240,17 @@ namespace System.Windows.Forms.Design
             Text = caption;
 
             Rectangle pageHostBounds = new Rectangle(2 * BUTTON_PAD + selectorWidth, 2 * BUTTON_PAD + STRIP_HEIGHT,
-                                                     maxSize.Width, maxSize.Height);
-            pageHost.Bounds = pageHostBounds;
+                                                     _maxSize.Width, _maxSize.Height);
+            _pageHost.Bounds = pageHostBounds;
             grayStrip.Bounds = new Rectangle(pageHostBounds.X, BUTTON_PAD,
                                              pageHostBounds.Width, STRIP_HEIGHT);
 
-            if (pageSites is not null)
+            if (_pageSites is not null)
             {
                 Rectangle pageBounds = new Rectangle(0, 0, pageHostBounds.Width, pageHostBounds.Height);
-                for (int n = 0; n < pageSites.Length; n++)
+                for (int n = 0; n < _pageSites.Length; n++)
                 {
-                    ComponentEditorPage page = pageSites[n].GetPageControl();
+                    ComponentEditorPage page = _pageSites[n].GetPageControl();
                     page.GetControl().Bounds = pageBounds;
                 }
             }
@@ -259,7 +262,7 @@ namespace System.Windows.Forms.Design
                                    2 * xFrame + SystemInformation.CaptionHeight);
             Size = size;
 
-            selector.Bounds = new Rectangle(BUTTON_PAD, BUTTON_PAD,
+            _selector.Bounds = new Rectangle(BUTTON_PAD, BUTTON_PAD,
                                             selectorWidth, bounds.Height + STRIP_HEIGHT + 2 * BUTTON_PAD + BUTTON_HEIGHT);
 
             bounds.X = bounds.Width + bounds.X - BUTTON_WIDTH;
@@ -267,43 +270,43 @@ namespace System.Windows.Forms.Design
             bounds.Width = BUTTON_WIDTH;
             bounds.Height = BUTTON_HEIGHT;
 
-            helpButton.Bounds = bounds;
-            helpButton.Text = SR.HelpCaption;
-            helpButton.Click += new EventHandler(OnButtonClick);
-            helpButton.Enabled = false;
-            helpButton.FlatStyle = FlatStyle.System;
+            _helpButton.Bounds = bounds;
+            _helpButton.Text = SR.HelpCaption;
+            _helpButton.Click += new EventHandler(OnButtonClick);
+            _helpButton.Enabled = false;
+            _helpButton.FlatStyle = FlatStyle.System;
 
             bounds.X -= (BUTTON_WIDTH + BUTTON_PAD);
-            applyButton.Bounds = bounds;
-            applyButton.Text = SR.ApplyCaption;
-            applyButton.Click += new EventHandler(OnButtonClick);
-            applyButton.Enabled = false;
-            applyButton.FlatStyle = FlatStyle.System;
+            _applyButton.Bounds = bounds;
+            _applyButton.Text = SR.ApplyCaption;
+            _applyButton.Click += new EventHandler(OnButtonClick);
+            _applyButton.Enabled = false;
+            _applyButton.FlatStyle = FlatStyle.System;
 
             bounds.X -= (BUTTON_WIDTH + BUTTON_PAD);
-            cancelButton.Bounds = bounds;
-            cancelButton.Text = SR.CancelCaption;
-            cancelButton.Click += new EventHandler(OnButtonClick);
-            cancelButton.FlatStyle = FlatStyle.System;
-            CancelButton = cancelButton;
+            _cancelButton.Bounds = bounds;
+            _cancelButton.Text = SR.CancelCaption;
+            _cancelButton.Click += new EventHandler(OnButtonClick);
+            _cancelButton.FlatStyle = FlatStyle.System;
+            CancelButton = _cancelButton;
 
             bounds.X -= (BUTTON_WIDTH + BUTTON_PAD);
-            okButton.Bounds = bounds;
-            okButton.Text = SR.OKCaption;
-            okButton.Click += new EventHandler(OnButtonClick);
-            okButton.FlatStyle = FlatStyle.System;
-            AcceptButton = okButton;
+            _okButton.Bounds = bounds;
+            _okButton.Text = SR.OKCaption;
+            _okButton.Click += new EventHandler(OnButtonClick);
+            _okButton.FlatStyle = FlatStyle.System;
+            AcceptButton = _okButton;
 
             Controls.Clear();
             Controls.AddRange(new Control[]
             {
-                selector,
+                _selector,
                 grayStrip,
-                pageHost,
-                okButton,
-                cancelButton,
-                applyButton,
-                helpButton
+                _pageHost,
+                _okButton,
+                _cancelButton,
+                _applyButton,
+                _helpButton
             });
 
             // continuing with the old autoscale base size stuff, it works,
@@ -316,15 +319,15 @@ namespace System.Windows.Forms.Design
         {
             base.OnActivated(e);
 
-            if (firstActivate)
+            if (_firstActivate)
             {
-                firstActivate = false;
+                _firstActivate = false;
 
-                selector.SelectedNode = selector.Nodes[initialActivePage];
-                pageSites[initialActivePage].Active = true;
-                activePage = initialActivePage;
+                _selector.SelectedNode = _selector.Nodes[_initialActivePage];
+                _pageSites[_initialActivePage].Active = true;
+                _activePage = _initialActivePage;
 
-                helpButton.Enabled = pageSites[activePage].GetPageControl().SupportsHelp();
+                _helpButton.Enabled = _pageSites[_activePage].GetPageControl().SupportsHelp();
             }
         }
 
@@ -338,74 +341,72 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Called to initialize this form with the new component.
         /// </summary>
+        [MemberNotNull(nameof(_pageSites))]
         private void OnNewObjects()
         {
-            pageSites = null;
-            maxSize = new Size(3 * (BUTTON_WIDTH + BUTTON_PAD), 24 * pageTypes.Length);
+            _maxSize = new Size(3 * (BUTTON_WIDTH + BUTTON_PAD), 24 * _pageTypes.Length);
 
-            pageSites = new ComponentEditorPageSite[pageTypes.Length];
+            _pageSites = new ComponentEditorPageSite[_pageTypes.Length];
 
             // create sites for them
-            //
-            for (int n = 0; n < pageTypes.Length; n++)
+            for (int n = 0; n < _pageTypes.Length; n++)
             {
-                pageSites[n] = new ComponentEditorPageSite(pageHost, pageTypes[n], component, this);
-                ComponentEditorPage page = pageSites[n].GetPageControl();
+                _pageSites[n] = new ComponentEditorPageSite(_pageHost, _pageTypes[n], _component, this);
+                ComponentEditorPage page = _pageSites[n].GetPageControl();
 
                 Size pageSize = page.Size;
-                if (pageSize.Width > maxSize.Width)
+                if (pageSize.Width > _maxSize.Width)
                 {
-                    maxSize.Width = pageSize.Width;
+                    _maxSize.Width = pageSize.Width;
                 }
 
-                if (pageSize.Height > maxSize.Height)
+                if (pageSize.Height > _maxSize.Height)
                 {
-                    maxSize.Height = pageSize.Height;
+                    _maxSize.Height = pageSize.Height;
                 }
             }
 
             // and set them all to an ideal size
-            //
-            for (int n = 0; n < pageSites.Length; n++)
+            for (int n = 0; n < _pageSites.Length; n++)
             {
-                pageSites[n].GetPageControl().Size = maxSize;
+                _pageSites[n].GetPageControl().Size = _maxSize;
             }
         }
 
         /// <summary>
         ///  Handles switching between pages.
         /// </summary>
-        protected virtual void OnSelChangeSelector(object source, TreeViewEventArgs e)
+        protected virtual void OnSelChangeSelector(object? source, TreeViewEventArgs e)
         {
-            if (firstActivate == true)
+            if (_firstActivate == true)
             {
                 // treeview seems to fire a change event when it is first setup before
                 // the form is activated
                 return;
             }
 
-            int newPage = selector.SelectedNode.Index;
-            Debug.Assert((newPage >= 0) && (newPage < pageSites.Length),
+            int newPage = _selector.SelectedNode.Index;
+            Debug.Assert((newPage >= 0) && (newPage < _pageSites.Length),
                          "Invalid page selected");
 
-            if (newPage == activePage)
+            if (newPage == _activePage)
             {
                 return;
             }
 
-            if (activePage != -1)
+            if (_activePage != -1)
             {
-                if (pageSites[activePage].AutoCommit)
+                if (_pageSites[_activePage].AutoCommit)
                 {
                     ApplyChanges(false);
                 }
 
-                pageSites[activePage].Active = false;
+                _pageSites[_activePage].Active = false;
             }
 
-            activePage = newPage;
-            pageSites[activePage].Active = true;
-            helpButton.Enabled = pageSites[activePage].GetPageControl().SupportsHelp();
+            _activePage = newPage;
+            _pageSites[_activePage].Active = true;
+            _helpButton.Enabled = _pageSites[_activePage].GetPageControl().SupportsHelp();
         }
 
         /// <summary>
@@ -414,7 +415,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override bool PreProcessMessage(ref Message msg)
         {
-            if (null != pageSites && pageSites[activePage].GetPageControl().IsPageMessage(ref msg))
+            if (null != _pageSites && _pageSites[_activePage].GetPageControl().IsPageMessage(ref msg))
             {
                 return true;
             }
@@ -428,9 +429,9 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal virtual void SetDirty()
         {
-            dirty = true;
-            applyButton.Enabled = true;
-            cancelButton.Text = SR.CancelCaption;
+            _dirty = true;
+            _applyButton.Enabled = true;
+            _cancelButton.Text = SR.CancelCaption;
         }
 
         /// <summary>
@@ -452,7 +453,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Shows the form with the specified owner.
         /// </summary>
-        public virtual DialogResult ShowForm(IWin32Window owner)
+        public virtual DialogResult ShowForm(IWin32Window? owner)
         {
             return ShowForm(owner, 0);
         }
@@ -460,9 +461,9 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Shows the form and the specified page with the specified owner.
         /// </summary>
-        public virtual DialogResult ShowForm(IWin32Window owner, int page)
+        public virtual DialogResult ShowForm(IWin32Window? owner, int page)
         {
-            initialActivePage = page;
+            _initialActivePage = page;
             ShowDialog(owner);
             return DialogResult;
         }
@@ -472,11 +473,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void ShowPageHelp()
         {
-            Debug.Assert(activePage != -1);
+            Debug.Assert(_activePage != -1);
 
-            if (pageSites[activePage].GetPageControl().SupportsHelp())
+            if (_pageSites[_activePage].GetPageControl().SupportsHelp())
             {
-                pageSites[activePage].GetPageControl().ShowHelp();
+                _pageSites[_activePage].GetPageControl().ShowHelp();
             }
         }
     }

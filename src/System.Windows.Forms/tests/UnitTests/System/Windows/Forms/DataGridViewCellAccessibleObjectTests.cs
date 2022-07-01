@@ -995,6 +995,24 @@ namespace System.Windows.Forms.Tests
             Assert.False(dataGridView.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_GetPropertyValue_AutomationId_ReturnsExpected()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add(new DataGridViewRow());
+
+            DataGridViewCellAccessibleObject dataGridViewCellAccessibleObject = new(dataGridView.Rows[0].Cells[0]);
+            string expected = string.Empty;
+            foreach (int runtimeIdPart in dataGridViewCellAccessibleObject.RuntimeId)
+            {
+                expected += runtimeIdPart.ToString();
+            }
+
+            Assert.Equal(expected, dataGridViewCellAccessibleObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
         private class SubDataGridViewCell : DataGridViewCell
         {
         }

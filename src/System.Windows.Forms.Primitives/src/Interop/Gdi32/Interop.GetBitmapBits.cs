@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern int GetBitmapBits(IntPtr hbit, int cbBuffer, byte[] lpvBits);
+        [LibraryImport(Libraries.Gdi32)]
+        public static partial int GetBitmapBits(IntPtr hbit, int cbBuffer, byte[] lpvBits);
     }
 }

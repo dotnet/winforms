@@ -6574,7 +6574,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
-        <target state="new">Cannot get accessiblity object when ListViewItem is not attached to a ListView.</target>
+        <target state="translated">Невозможно получить объект доступа, если ListViewItem не присоединен к ListView.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -8835,6 +8835,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ScrollBarVisibleDescr">
         <source>Gets or sets a Boolean value controlling whether the scrollbar is showing.</source>
         <target state="translated">Получает или задает логическое значение, определяющее, будет ли отображаться данная полоса прокрутки.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="translated">Родительское свойство активного элемента управления не может иметь значение NULL.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">

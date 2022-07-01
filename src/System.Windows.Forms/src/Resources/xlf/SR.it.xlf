@@ -6573,7 +6573,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
-        <target state="new">Cannot get accessiblity object when ListViewItem is not attached to a ListView.</target>
+        <target state="translated">Impossibile ottenere l'oggetto di accessibilità quando ListViewItem non è collegato a un controllo ListView.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -8834,6 +8834,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="ScrollBarVisibleDescr">
         <source>Gets or sets a Boolean value controlling whether the scrollbar is showing.</source>
         <target state="translated">Ottiene o imposta un valore Boolean che controlla se la barra di scorrimento è visualizzata.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ScrollableControlActiveControlParentNull">
+        <source>Parent property of the active control cannot be null.</source>
+        <target state="translated">La proprietà padre del controllo attivo non può essere Null.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">

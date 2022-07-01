@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal partial class Kernel32
     {
-        [DllImport(Libraries.Kernel32, ExactSpelling = true)]
-        public static extern LCID GetThreadLocale();
+        [LibraryImport(Libraries.Kernel32)]
+        public static partial LCID GetThreadLocale();
     }
 }

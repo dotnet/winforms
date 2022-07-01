@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Tests
         // otherwise an error can be thrown.
         private static Type[] s_controlsIgnoringTextChangesForTests = new Type[]
         {
-            typeof(DateTimePicker),
+            typeof(DateTimePicker), typeof(WebBrowser)
         };
 
         [WinFormsFact]
@@ -1566,6 +1566,17 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
             Assert.True(control.IsHandleCreated);
             Assert.True(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ControlAccessibleObject_GetPropertyValue_AutomationId_ReturnsExpected()
+        {
+            using Control ownerControl = new() { Name = "test name" };
+            string expected = ownerControl.Name;
+            object actual = ownerControl.AccessibilityObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId);
+
+            Assert.Equal(expected, actual);
+            Assert.False(ownerControl.IsHandleCreated);
         }
 
         // ContextMenuStrip, From, ToolStripDropDown, ToolStripDropDownMenu

@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        private unsafe static extern int DrawTextExW(
+        [LibraryImport(Libraries.User32)]
+        private static unsafe partial int DrawTextExW(
             Gdi32.HDC hdc,
             char* lpchText,
             int cchText,

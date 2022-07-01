@@ -1145,7 +1145,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            Control parent = control.ParentInternal;
+            Control? parent = control.ParentInternal;
             if (parent is not null)
             {
                 Rectangle gradientBounds = new Rectangle(Point.Empty, parent.Size);

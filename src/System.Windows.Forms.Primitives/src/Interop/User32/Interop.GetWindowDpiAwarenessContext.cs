@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, SetLastError = true, ExactSpelling = true)]
-        public static extern IntPtr GetWindowDpiAwarenessContext(IntPtr hWnd);
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        public static partial IntPtr GetWindowDpiAwarenessContext(IntPtr hWnd);
     }
 }

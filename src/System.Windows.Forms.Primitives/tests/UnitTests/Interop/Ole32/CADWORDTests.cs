@@ -11,26 +11,6 @@ namespace System.Windows.Forms.Primitives.Ole32Tests
     public class CADWORDTests
     {
         [Fact]
-        public void CADWORD_ConvertAndFree_FreesMemory()
-        {
-            List<IntPtr> allocations = new();
-            Ole32.CADWORD ca = CreateIntVector(allocations, 1970, 1999);
-
-            MallocSpy.FreeTracker tracker = new();
-            using MallocSpyScope scope = new(tracker);
-
-            uint[] values = ca.ConvertAndFree();
-            Assert.Equal(2, values.Length);
-            Assert.Equal(1970u, values[0]);
-            Assert.Equal(1999u, values[1]);
-
-            foreach (IntPtr allocation in allocations)
-            {
-                Assert.Contains(allocation, tracker.FreedBlocks);
-            }
-        }
-
-        [Fact]
         public void CADWORD_ConvertAndFree_SingleItem()
         {
             Ole32.CADWORD ca = CreateIntVector(2020);

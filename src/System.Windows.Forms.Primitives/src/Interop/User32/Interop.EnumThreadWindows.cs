@@ -10,8 +10,8 @@ internal static partial class Interop
     {
         public delegate BOOL EnumThreadWindowsCallback(IntPtr hWnd);
 
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        private static extern unsafe BOOL EnumThreadWindows(uint dwThreadId, delegate* unmanaged<IntPtr, IntPtr, BOOL> lpfn, IntPtr lParam);
+        [LibraryImport(Libraries.User32)]
+        private static unsafe partial BOOL EnumThreadWindows(uint dwThreadId, delegate* unmanaged<IntPtr, IntPtr, BOOL> lpfn, IntPtr lParam);
 
         public static unsafe BOOL EnumThreadWindows(uint dwThreadId, EnumThreadWindowsCallback lpfn)
         {

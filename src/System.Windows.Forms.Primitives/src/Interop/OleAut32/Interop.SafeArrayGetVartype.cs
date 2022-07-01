@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal static partial class Oleaut32
     {
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        public unsafe static extern HRESULT SafeArrayGetVartype(SAFEARRAY* psa, Ole32.VARENUM* pvt);
+        [LibraryImport(Libraries.Oleaut32)]
+        public static unsafe partial HRESULT SafeArrayGetVartype(SAFEARRAY* psa, Ole32.VARENUM* pvt);
     }
 }

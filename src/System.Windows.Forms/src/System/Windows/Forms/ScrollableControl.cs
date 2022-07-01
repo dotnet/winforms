@@ -885,6 +885,12 @@ namespace System.Windows.Forms
             if (activeControl.ParentInternal != this)
             {
                 Debug.WriteLineIf(s_autoScrolling!.TraceVerbose, "not direct child, original bounds: " + bounds);
+
+                if (activeControl.ParentInternal is null)
+                {
+                    throw new InvalidOperationException(SR.ScrollableControlActiveControlParentNull);
+                }
+
                 bounds = RectangleToClient(activeControl.ParentInternal.RectangleToScreen(bounds));
             }
 

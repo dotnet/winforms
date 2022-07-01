@@ -331,7 +331,7 @@ namespace System.Windows.Forms.UITests
             {
                 base.OnPaintAdornments(pe);
 
-                pe.Graphics.DrawString($"Design time \n{Control.Site.Name} !", Control.Font, SystemBrushes.WindowText, new PointF(12, 12));
+                pe.Graphics.DrawString($"Design time \n{Control.Site?.Name} !", Control.Font, SystemBrushes.WindowText, new PointF(12, 12));
             }
         }
     }

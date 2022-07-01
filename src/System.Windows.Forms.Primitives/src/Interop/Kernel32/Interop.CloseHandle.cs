@@ -8,8 +8,8 @@ internal partial class Interop
 {
     internal partial class Kernel32
     {
-        [DllImport(Libraries.Kernel32, ExactSpelling = true)]
-        public static extern BOOL CloseHandle(IntPtr handle);
+        [LibraryImport(Libraries.Kernel32)]
+        public static partial BOOL CloseHandle(IntPtr handle);
 
         public static BOOL CloseHandle(HandleRef handle)
         {

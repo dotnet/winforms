@@ -6,6 +6,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.ButtonInternal;
@@ -17,6 +18,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Identifies a button cell in the dataGridView.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     public partial class DataGridViewButtonCell : DataGridViewCell
     {
         private static readonly int PropButtonCellFlatStyle = PropertyStore.CreateKey();
@@ -64,6 +66,7 @@ namespace System.Windows.Forms
             }
         }
 
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
         public override Type EditType
         {
             get

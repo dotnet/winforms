@@ -25,7 +25,25 @@ namespace System.Windows.Forms
 
             public override Rectangle Bounds => _owner.IsHandleCreated ? _owner.RectangleToScreen(_owner.ClientRectangle) : Rectangle.Empty;
 
-            internal override Rectangle BoundingRectangle => _owner.IsHandleCreated ? _owner.Bounds : Rectangle.Empty;
+            internal override Rectangle BoundingRectangle
+            {
+                get
+                {
+                    if (!_owner.IsHandleCreated)
+                    {
+                        return Rectangle.Empty;
+                    }
+
+                    if (_owner.Parent is null)
+                    {
+                        // If the Forms is a main window and a root object. 
+                        return _owner.Bounds;
+                    }
+
+                    // If the Form is placed on another control, eg. Form or Panel.
+                    return _owner.Parent.RectangleToScreen(_owner.Bounds);
+                }
+            }
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {

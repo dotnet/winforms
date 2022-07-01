@@ -5194,6 +5194,9 @@ Stack trace where the illegal operation occurred was:
   <data name="ScrollableControlHorizontalScrollDescr" xml:space="preserve">
     <value>Gets the horizontal scroll bar for this ScrollableControl.</value>
   </data>
+  <data name="ScrollableControlActiveControlParentNull" xml:space="preserve">
+    <value>Parent property of the active control cannot be null.</value>
+  </data>
   <data name="ScrollableControlRaiseMouseEnterLeaveEventsForScrollBarsDescr" xml:space="preserve">
     <value>Property being set to false will not raise MouseEnter and MouseLeave events until the mouse leaves the client area and the scrollbars.</value>
   </data>

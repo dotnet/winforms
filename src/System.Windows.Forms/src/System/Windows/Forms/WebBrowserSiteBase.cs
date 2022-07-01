@@ -276,7 +276,7 @@ namespace System.Windows.Forms
                 lpFrameInfo->fMDIApp = BOOL.FALSE;
                 lpFrameInfo->hAccel = IntPtr.Zero;
                 lpFrameInfo->cAccelEntries = 0;
-                lpFrameInfo->hwndFrame = (Host.ParentInternal is null) ? IntPtr.Zero : Host.ParentInternal.Handle;
+                lpFrameInfo->hwndFrame = Host.ParentInternal?.Handle ?? IntPtr.Zero;
             }
 
             return HRESULT.S_OK;

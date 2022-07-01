@@ -6,6 +6,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -91,6 +92,7 @@ namespace System.Windows.Forms
         private const int LISTVIEWSTATE1_disposingImageLists = 0x00000004;
         private const int LISTVIEWSTATE1_useCompatibleStateImageBehavior = 0x00000008;
         private const int LISTVIEWSTATE1_selectedIndexChangedSkipped = 0x00000010;
+        private const int LISTVIEWSTATE1_clearingInnerListOnDispose = 0x00000020;
 
         private const int LVLABELEDITTIMER = 0x2A;
         private const int LVTOOLTIPTRACKING = 0x30;
@@ -128,11 +130,11 @@ namespace System.Windows.Forms
         private ListViewGroup? _defaultGroup;
         private ListViewGroup? _focusedGroup;
 
-        // Invariant: the dictionary always contains all Items in the ListView, and maps IDs -> Items.
+        // Invariant: the table always contains all Items in the ListView, and maps IDs -> Items.
         // listItemsArray is null if the handle is created; otherwise, it contains all Items.
         // We do not try to sort listItemsArray as items are added, but during a handle recreate
         // we will make sure we get the items in the same order the ListView displays them.
-        private readonly Dictionary<int, ListViewItem> _listItemsById = new();
+        private readonly Hashtable _listItemsTable = new Hashtable(); // elements are ListViewItem's
         private List<ListViewItem>? _listViewItems = new();
 
         private Size _tileSize = Size.Empty;
@@ -1649,6 +1651,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Bindable(false)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;
@@ -2504,7 +2507,7 @@ namespace System.Windows.Forms
             Debug.Assert(_listItemSorter is not null, "null sorter!");
             if (_listItemSorter is not null)
             {
-                return _listItemSorter.Compare(_listItemsById[(int)lparam1], _listItemsById[(int)lparam2]);
+                return _listItemSorter.Compare(_listItemsTable[(int)lparam1], _listItemsTable[(int)lparam2]);
             }
             else
             {
@@ -3141,8 +3144,11 @@ namespace System.Windows.Forms
                     Unhook();
                 }
 
-                // Remove any items we have
-                Items.Clear();
+                using (DisposingContext context = new(this))
+                {
+                    // Remove any items we have
+                    Items.Clear();
+                }
 
                 if (_odCacheFontHandleWrapper is not null)
                 {
@@ -3203,6 +3209,12 @@ namespace System.Windows.Forms
             }
 
             base.Dispose(disposing);
+        }
+
+        private bool ClearingInnerListOnDispose
+        {
+            get => _listViewState1 [LISTVIEWSTATE1_clearingInnerListOnDispose];
+            set => _listViewState1 [LISTVIEWSTATE1_clearingInnerListOnDispose] = value;
         }
 
         /// <summary>
@@ -4119,8 +4131,8 @@ namespace System.Windows.Forms
 
                 // create an ID..
                 int itemID = GenerateUniqueID();
-                Debug.Assert(!_listItemsById.ContainsKey(itemID), "internal hash table inconsistent -- inserting item, but it's already in the hash table");
-                _listItemsById.Add(itemID, item);
+                Debug.Assert(!_listItemsTable.ContainsKey(itemID), "internal hash table inconsistent -- inserting item, but it's already in the hash table");
+                _listItemsTable.Add(itemID, item);
 
                 _itemCount++;
                 item.Host(this, itemID, -1);
@@ -4742,10 +4754,9 @@ namespace System.Windows.Forms
                 }
 
                 Debug.Assert(_listViewItems is null, "listItemsArray not null, even though handle created");
-                ListViewItem[]? items = null;
                 ListViewItemCollection tempItems = Items;
 
-                items = new ListViewItem[tempItems.Count];
+                var items = new ListViewItem[tempItems.Count];
                 tempItems.CopyTo(items, 0);
 
                 _listViewItems = new List<ListViewItem>(items.Length);
@@ -4759,6 +4770,11 @@ namespace System.Windows.Forms
 
         protected override void OnGotFocus(EventArgs e)
         {
+            if (ClearingInnerListOnDispose)
+            {
+                return;
+            }
+
             base.OnGotFocus(e);
 
             if (ShowItemToolTips && Items.Count > 0 && (FocusedItem ?? Items[0]) is ListViewItem focusedItem)
@@ -4766,7 +4782,9 @@ namespace System.Windows.Forms
                 NotifyAboutGotFocus(focusedItem);
             }
 
-            if (IsHandleCreated && IsAccessibilityObjectCreated && AccessibilityObject.GetFocus() is AccessibleObject focusedAccessibleObject)
+            if (IsHandleCreated &&
+                IsAccessibilityObjectCreated &&
+                AccessibilityObject.GetFocus() is AccessibleObject focusedAccessibleObject)
             {
                 focusedAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
@@ -6131,7 +6149,7 @@ namespace System.Windows.Forms
                 _columnHeaderClicked = null;
                 _columnHeaderClickedWidth = -1;
 
-                ISite site = Site;
+                ISite? site = Site;
 
                 if (site is not null)
                 {

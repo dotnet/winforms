@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern RegionType GetClipBox(HDC hdc, ref RECT lprect);
+        [LibraryImport(Libraries.Gdi32)]
+        public static partial RegionType GetClipBox(HDC hdc, ref RECT lprect);
     }
 }

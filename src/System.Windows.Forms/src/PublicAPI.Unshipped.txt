@@ -23,3 +23,4 @@ System.Windows.Forms.GiveFeedbackEventArgs.DragImage.get -> System.Drawing.Bitma
 System.Windows.Forms.GiveFeedbackEventArgs.DragImage.set -> void
 System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultDragImage.get -> bool
 System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultDragImage.set -> void
+~override System.Windows.Forms.WebBrowser.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject

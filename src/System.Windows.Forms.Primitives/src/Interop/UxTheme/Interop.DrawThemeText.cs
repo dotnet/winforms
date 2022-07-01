@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [DllImport(Libraries.UxTheme, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        public static extern HRESULT DrawThemeText(
+        [LibraryImport(Libraries.UxTheme, StringMarshalling = StringMarshalling.Utf16)]
+        public static partial HRESULT DrawThemeText(
             IntPtr hTheme,
             Gdi32.HDC hdc,
             int iPartId,
