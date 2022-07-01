@@ -1163,6 +1163,10 @@ namespace System.Windows.Forms
                     {
                         ScaleControl(includedFactor, ourExternalContainerFactor, requestingControl);
                     }
+                    else
+                    {
+                        ScaleConstraintProperties(includedFactor);
+                    }
 
                     if (!_doNotScaleChildren)
                     {
@@ -1171,6 +1175,9 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+        internal virtual void ScaleConstraintProperties(SizeF factor)
+        { }
 
         /// <summary>
         ///  Process an arrowKey press by selecting the next control in the group that the activeControl

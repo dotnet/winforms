@@ -4866,26 +4866,13 @@ namespace System.Windows.Forms
             SuspendLayout();
             try
             {
+                //Get size values in advance to prevent one change from affecting another.
+                Size clientSize = ClientSize;
+                ScaleConstraintProperties(new SizeF(x, y));
                 if (WindowState == FormWindowState.Normal)
                 {
-                    //Get size values in advance to prevent one change from affecting another.
-                    Size clientSize = ClientSize;
-                    Size minSize = MinimumSize;
-                    Size maxSize = MaximumSize;
-                    if (!MinimumSize.IsEmpty)
-                    {
-                        MinimumSize = ScaleSize(minSize, x, y);
-                    }
-
-                    if (!MaximumSize.IsEmpty)
-                    {
-                        MaximumSize = ScaleSize(maxSize, x, y);
-                    }
-
                     ClientSize = ScaleSize(clientSize, x, y);
                 }
-
-                ScaleDockPadding(x, y);
 
                 foreach (Control control in Controls)
                 {
@@ -4899,6 +4886,31 @@ namespace System.Windows.Forms
             {
                 ResumeLayout();
             }
+        }
+
+        internal override void ScaleConstraintProperties(SizeF factor)
+        {
+            base.ScaleConstraintProperties(factor);
+            if (WindowState == FormWindowState.Normal)
+            {
+                //Get size values in advance to prevent one change from affecting another.
+                Size clientSize = ClientSize;
+                Size minSize = MinimumSize;
+                Size maxSize = MaximumSize;
+                if (!minSize.IsEmpty)
+                {
+                    MinimumSize = ScaleSize(minSize, factor.Width, factor.Height);
+                }
+
+                if (!maxSize.IsEmpty)
+                {
+                    MaximumSize = ScaleSize(maxSize, factor.Width, factor.Height);
+                }
+
+                ClientSize = ScaleSize(clientSize, factor.Width, factor.Height);
+            }
+
+            ScaleDockPadding(factor.Width, factor.Height);
         }
 
         /// <summary>
