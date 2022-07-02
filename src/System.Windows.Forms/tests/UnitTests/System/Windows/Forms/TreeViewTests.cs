@@ -4726,7 +4726,6 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, treeView.TreeViewNodeSorter);
         }
 
-
         [WinFormsFact]
         public void TreeViewNodeSorter_Set_SetSortedFalseIfNull()
         {
