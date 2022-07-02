@@ -1357,6 +1357,11 @@ namespace System.Windows.Forms
                     {
                         Sort();
                     }
+                    else
+                    {
+                        Sorted = false;
+                        RefreshNodes();
+                    }
                 }
             }
         }
