@@ -4726,25 +4726,17 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, treeView.TreeViewNodeSorter);
         }
 
-        public static IEnumerable<object[]> TreeViewNodeSorter_TestData_NullFirst()
-        {
-            yield return new object[] { StringComparer.CurrentCulture };
-            yield return new object[] { null };
-        }
 
-        [WinFormsTheory]
-        [MemberData(nameof(TreeViewNodeSorter_TestData_NullFirst))]
-        public void TreeViewNodeSorter_Set_SetSortedFalseIfNull(IComparer value)
+        [WinFormsFact]
+        public void TreeViewNodeSorter_Set_SetSortedFalseIfNull()
         {
             using var treeView = new TreeView
             {
-                TreeViewNodeSorter = value
+                TreeViewNodeSorter = StringComparer.CurrentCulture
             };
-            Assert.Same(value, treeView.TreeViewNodeSorter);
             Assert.True(treeView.Sorted);
 
-            treeView.TreeViewNodeSorter = value;
-            Assert.Same(value, treeView.TreeViewNodeSorter);
+            treeView.TreeViewNodeSorter = null;
             Assert.False(treeView.Sorted);
         }
 
