@@ -140,7 +140,7 @@ internal partial class Interop
                 try
                 {
                     var result = instance.Name;
-                    *pRetVal = Marshal.StringToCoTaskMemUni(result);
+                    *pRetVal = Marshal.StringToBSTR(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
@@ -162,7 +162,7 @@ internal partial class Interop
                 try
                 {
                     var result = instance.Value;
-                    *pRetVal = Marshal.StringToCoTaskMemUni(result);
+                    *pRetVal = Marshal.StringToBSTR(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
@@ -184,7 +184,7 @@ internal partial class Interop
                 try
                 {
                     var result = instance.Description;
-                    *pRetVal = Marshal.StringToCoTaskMemUni(result);
+                    *pRetVal = Marshal.StringToBSTR(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
@@ -248,7 +248,7 @@ internal partial class Interop
                 try
                 {
                     var result = instance.Help;
-                    *pRetVal = Marshal.StringToCoTaskMemUni(result);
+                    *pRetVal = Marshal.StringToBSTR(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
@@ -270,7 +270,7 @@ internal partial class Interop
                 try
                 {
                     var result = instance.KeyboardShortcut;
-                    *pRetVal = Marshal.StringToCoTaskMemUni(result);
+                    *pRetVal = Marshal.StringToBSTR(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)
@@ -320,7 +320,7 @@ internal partial class Interop
                 try
                 {
                     var result = instance.DefaultAction;
-                    *pRetVal = Marshal.StringToCoTaskMemUni(result);
+                    *pRetVal = Marshal.StringToBSTR(result);
                     return HRESULT.S_OK;
                 }
                 catch (Exception ex)

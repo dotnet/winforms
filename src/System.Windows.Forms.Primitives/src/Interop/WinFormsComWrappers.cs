@@ -123,10 +123,14 @@ internal partial class Interop
             IntPtr iRawElementProviderFragmentVtbl = IRawElementProviderFragmentVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
             IntPtr iRawElementProviderFragmentRootVtbl = IRawElementProviderFragmentRootVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
             IntPtr iLegacyIAccessibleProviderVtbl = ILegacyIAccessibleProviderVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+            IntPtr iAccessibleVtbl = IAccessibleVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+            IntPtr iEnumVariantVtbl = IEnumVariantVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+            IntPtr iOleWindowVtbl = IOleWindowVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+            IntPtr iDispatchVtbl = IDispatchVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
 
             ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(
                 typeof(WinFormsComWrappers),
-                sizeof(ComInterfaceEntry) * 4);
+                sizeof(ComInterfaceEntry) * 27);
 
             wrapperEntry[0].IID = IID.IRawElementProviderSimple;
             wrapperEntry[0].Vtable = iRawElementProviderSimpleVtbl;
@@ -137,8 +141,20 @@ internal partial class Interop
             wrapperEntry[2].IID = IID.IRawElementProviderFragmentRoot;
             wrapperEntry[2].Vtable = iRawElementProviderFragmentRootVtbl;
 
-            wrapperEntry[4].IID = IID.ILegacyIAccessibleProvider;
-            wrapperEntry[4].Vtable = iLegacyIAccessibleProviderVtbl;
+            wrapperEntry[3].IID = IID.ILegacyIAccessibleProvider;
+            wrapperEntry[3].Vtable = iLegacyIAccessibleProviderVtbl;
+
+            wrapperEntry[4].IID = IID.IAccessible;
+            wrapperEntry[4].Vtable = iAccessibleVtbl;
+
+            wrapperEntry[5].IID = IID.IEnumVariant;
+            wrapperEntry[5].Vtable = iEnumVariantVtbl;
+
+            wrapperEntry[6].IID = IID.IDispatch;
+            wrapperEntry[6].Vtable = iDispatchVtbl;
+
+            wrapperEntry[7].IID = IID.IOleWindow;
+            wrapperEntry[7].Vtable = iOleWindowVtbl;
 
             return wrapperEntry;
         }
@@ -189,7 +205,7 @@ internal partial class Interop
 
             if (obj is UiaCore.IRawElementProviderSimple)
             {
-                count = 4;
+                count = 8;
                 return s_accessibleObjectEntry;
             }
 
