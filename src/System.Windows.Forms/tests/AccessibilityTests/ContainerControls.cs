@@ -4,11 +4,11 @@
 
 using System.Windows.Forms;
 
-namespace AccessibilityTests
+namespace Accessibility_Core_App
 {
-    public partial class StripControls : Form
+    public partial class ContainerControls : Form
     {
-        public StripControls()
+        public ContainerControls()
         {
             InitializeComponent();
         }

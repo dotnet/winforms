@@ -1,14 +1,14 @@
-﻿namespace AccessibilityTests
+﻿namespace Accessibility_Core_App
 {
-    partial class PrintingTesting
+    partial class PrintingControls
     {
         /// <summary>
-        ///  Required designer variable.
+        /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        ///  Clean up any resources being used.
+        /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
@@ -23,12 +23,12 @@
         #region Windows Form Designer generated code
 
         /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PrintingTesting));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PrintingControls));
             this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
@@ -70,24 +70,28 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Location = new System.Drawing.Point(14, 10);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(146, 13);
+            this.label1.Size = new System.Drawing.Size(165, 15);
             this.label1.TabIndex = 0;
-            this.label1.Text = "&Input text you want to print";
+            this.label1.Text = "Please &input text you want to print";
             // 
             // txtPrint
             // 
-            this.txtPrint.Location = new System.Drawing.Point(164, 6);
+            this.txtPrint.Location = new System.Drawing.Point(191, 7);
+            this.txtPrint.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtPrint.Name = "txtPrint";
-            this.txtPrint.Size = new System.Drawing.Size(183, 20);
+            this.txtPrint.Size = new System.Drawing.Size(213, 23);
             this.txtPrint.TabIndex = 1;
+            this.txtPrint.Text = "This is the test message.";
             // 
             // btnSetting
             // 
-            this.btnSetting.Location = new System.Drawing.Point(15, 37);
+            this.btnSetting.Location = new System.Drawing.Point(18, 43);
+            this.btnSetting.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnSetting.Name = "btnSetting";
-            this.btnSetting.Size = new System.Drawing.Size(75, 23);
+            this.btnSetting.Size = new System.Drawing.Size(88, 27);
             this.btnSetting.TabIndex = 2;
             this.btnSetting.Text = "&Setting";
             this.btnSetting.UseVisualStyleBackColor = true;
@@ -95,9 +99,10 @@
             // 
             // btnPreView
             // 
-            this.btnPreView.Location = new System.Drawing.Point(96, 37);
+            this.btnPreView.Location = new System.Drawing.Point(112, 43);
+            this.btnPreView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnPreView.Name = "btnPreView";
-            this.btnPreView.Size = new System.Drawing.Size(75, 23);
+            this.btnPreView.Size = new System.Drawing.Size(88, 27);
             this.btnPreView.TabIndex = 3;
             this.btnPreView.Text = "P&review";
             this.btnPreView.UseVisualStyleBackColor = true;
@@ -105,9 +110,10 @@
             // 
             // btnPrint
             // 
-            this.btnPrint.Location = new System.Drawing.Point(177, 37);
+            this.btnPrint.Location = new System.Drawing.Point(206, 43);
+            this.btnPrint.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(75, 23);
+            this.btnPrint.Size = new System.Drawing.Size(88, 27);
             this.btnPrint.TabIndex = 4;
             this.btnPrint.Text = "&Print";
             this.btnPrint.UseVisualStyleBackColor = true;
@@ -115,9 +121,10 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(258, 37);
+            this.button1.Location = new System.Drawing.Point(301, 43);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(89, 23);
+            this.button1.Size = new System.Drawing.Size(104, 27);
             this.button1.TabIndex = 6;
             this.button1.Text = "Preview &Control";
             this.button1.UseVisualStyleBackColor = true;
@@ -126,9 +133,10 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 77);
+            this.label2.Location = new System.Drawing.Point(18, 86);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 13);
+            this.label2.Size = new System.Drawing.Size(91, 15);
             this.label2.TabIndex = 7;
             this.label2.Text = "View your page:";
             // 
@@ -136,17 +144,20 @@
             // 
             this.printPreviewControl1.AutoZoom = false;
             this.printPreviewControl1.Document = this.printDocument1;
-            this.printPreviewControl1.Location = new System.Drawing.Point(15, 93);
+            this.printPreviewControl1.Location = new System.Drawing.Point(18, 104);
+            this.printPreviewControl1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.printPreviewControl1.Name = "printPreviewControl1";
-            this.printPreviewControl1.Size = new System.Drawing.Size(332, 405);
+            this.printPreviewControl1.Rows = 24;
+            this.printPreviewControl1.Size = new System.Drawing.Size(387, 408);
+            this.printPreviewControl1.TabIndex = 0;
             this.printPreviewControl1.TabStop = false;
             this.printPreviewControl1.Zoom = 0.36454545454545456D;
             // 
-            // PrintingTesting
+            // PrintingControls
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(365, 510);
+            this.ClientSize = new System.Drawing.Size(426, 522);
             this.Controls.Add(this.printPreviewControl1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button1);
@@ -155,7 +166,8 @@
             this.Controls.Add(this.btnSetting);
             this.Controls.Add(this.txtPrint);
             this.Controls.Add(this.label1);
-            this.Name = "PrintingTesting";
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Name = "PrintingControls";
             this.Text = "PrintingTesting";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -178,4 +190,3 @@
         private System.Windows.Forms.PrintPreviewControl printPreviewControl1;
     }
 }
-

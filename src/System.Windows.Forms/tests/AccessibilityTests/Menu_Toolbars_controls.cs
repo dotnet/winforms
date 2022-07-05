@@ -4,11 +4,11 @@
 
 using System.Windows.Forms;
 
-namespace AccessibilityTests
+namespace Accessibility_Core_App
 {
-    public partial class CommonControl2 : Form
+    public partial class Menu_Toolbars_controls : Form
     {
-        public CommonControl2()
+        public Menu_Toolbars_controls()
         {
             InitializeComponent();
         }

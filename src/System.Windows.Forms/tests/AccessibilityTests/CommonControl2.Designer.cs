@@ -1,14 +1,14 @@
-﻿namespace AccessibilityTests
+﻿namespace Accessibility_Core_App
 {
     partial class CommonControl2
     {
         /// <summary>
-        ///  Required designer variable.
+        /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        ///  Clean up any resources being used.
+        /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
@@ -23,8 +23,8 @@
         #region Windows Form Designer generated code
 
         /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
@@ -66,7 +66,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(14, 294);
+            this.label3.Location = new System.Drawing.Point(18, 278);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(64, 15);
@@ -75,17 +75,19 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(14, 317);
+            this.pictureBox1.Image = global::Accessibility_Core_App.Properties.Resources.TestResult;
+            this.pictureBox1.Location = new System.Drawing.Point(18, 301);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(265, 151);
+            this.pictureBox1.Size = new System.Drawing.Size(231, 141);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(4, 479);
+            this.label4.Location = new System.Drawing.Point(517, 153);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(81, 15);
@@ -95,7 +97,7 @@
             // progressBar1
             // 
             this.progressBar1.BackColor = System.Drawing.Color.Lime;
-            this.progressBar1.Location = new System.Drawing.Point(7, 517);
+            this.progressBar1.Location = new System.Drawing.Point(517, 175);
             this.progressBar1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(223, 27);
@@ -106,13 +108,13 @@
             // 
             this.radioButton1.AutoSize = true;
             this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(7, 563);
+            this.radioButton1.Location = new System.Drawing.Point(18, 459);
             this.radioButton1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(94, 19);
             this.radioButton1.TabIndex = 8;
             this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "RadioButton1";
+            this.radioButton1.Text = "radioButton1";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
             // label5
@@ -123,7 +125,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(71, 15);
             this.label5.TabIndex = 9;
-            this.label5.Text = "RichtextBox";
+            this.label5.Text = "RichTextBox";
             // 
             // richTextBox1
             // 
@@ -138,7 +140,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(321, 162);
+            this.label6.Location = new System.Drawing.Point(313, 153);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(48, 15);
@@ -152,7 +154,7 @@
             "Team",
             "MTP",
             "FXBVT"});
-            this.textBox1.Location = new System.Drawing.Point(313, 200);
+            this.textBox1.Location = new System.Drawing.Point(313, 175);
             this.textBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(116, 23);
@@ -161,7 +163,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(309, 252);
+            this.label7.Location = new System.Drawing.Point(517, 10);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(53, 15);
@@ -170,7 +172,7 @@
             // 
             // treeView1
             // 
-            this.treeView1.Location = new System.Drawing.Point(313, 294);
+            this.treeView1.Location = new System.Drawing.Point(517, 36);
             this.treeView1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.treeView1.Name = "treeView1";
             treeNode1.Name = "Node10";
@@ -192,13 +194,13 @@
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode6,
             treeNode8});
-            this.treeView1.Size = new System.Drawing.Size(220, 147);
+            this.treeView1.Size = new System.Drawing.Size(220, 104);
             this.treeView1.TabIndex = 14;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(309, 457);
+            this.label8.Location = new System.Drawing.Point(313, 218);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(73, 15);
@@ -207,13 +209,14 @@
             // 
             // webBrowser1
             // 
-            this.webBrowser1.Location = new System.Drawing.Point(313, 479);
+            this.webBrowser1.Location = new System.Drawing.Point(313, 236);
             this.webBrowser1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(23, 23);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(701, 361);
+            this.webBrowser1.ScriptErrorsSuppressed = true;
+            this.webBrowser1.Size = new System.Drawing.Size(512, 242);
             this.webBrowser1.TabIndex = 16;
-            this.webBrowser1.Url = new System.Uri("https://docs.microsoft.com/en-us/", System.UriKind.Absolute);
+            //this.webBrowser1.Url = new System.Uri("https://www.bing.com/", System.UriKind.Absolute);
             // 
             // label1
             // 
@@ -228,14 +231,14 @@
             // monthCalendar1
             // 
             this.monthCalendar1.Location = new System.Drawing.Point(18, 36);
-            this.monthCalendar1.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
+            this.monthCalendar1.Margin = new System.Windows.Forms.Padding(10);
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 1;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 233);
+            this.label2.Location = new System.Drawing.Point(18, 218);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(102, 15);
@@ -244,7 +247,7 @@
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(15, 268);
+            this.numericUpDown1.Location = new System.Drawing.Point(18, 236);
             this.numericUpDown1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(140, 23);
@@ -254,7 +257,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1028, 854);
+            this.AutoScroll = true;
+            this.ClientSize = new System.Drawing.Size(850, 501);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.monthCalendar1);
             this.Controls.Add(this.label2);
@@ -274,6 +278,7 @@
             this.Controls.Add(this.webBrowser1);
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "CommonControl2";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CommonControl2";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
@@ -302,6 +307,3 @@
         private System.Windows.Forms.NumericUpDown numericUpDown1;
     }
 }
-
-
-

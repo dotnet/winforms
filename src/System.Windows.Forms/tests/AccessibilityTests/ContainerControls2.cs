@@ -4,16 +4,16 @@
 
 using System.Windows.Forms;
 
-namespace AccessibilityTests
+namespace Accessibility_Core_App
 {
-    public partial class ContainersTesting : Form
+    public partial class ContainerControls2 : Form
     {
-        public ContainersTesting()
+        public ContainerControls2()
         {
             InitializeComponent();
         }
 
-        private void Label2_Click(object sender, EventArgs e)
+        private void ContainerControls2_Load(object sender, EventArgs e)
         {
         }
     }
