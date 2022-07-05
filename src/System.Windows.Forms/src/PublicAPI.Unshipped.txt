@@ -1,1 +1,26 @@
+System.Windows.Forms.DropImageType
+System.Windows.Forms.DropImageType.Invalid = -1 -> System.Windows.Forms.DropImageType
+System.Windows.Forms.DropImageType.None = 0 -> System.Windows.Forms.DropImageType
+System.Windows.Forms.DropImageType.Copy = 1 -> System.Windows.Forms.DropImageType
+System.Windows.Forms.DropImageType.Move = 2 -> System.Windows.Forms.DropImageType
+System.Windows.Forms.DropImageType.Link = 4 -> System.Windows.Forms.DropImageType
+System.Windows.Forms.DropImageType.Label = 6 -> System.Windows.Forms.DropImageType
+System.Windows.Forms.DropImageType.Warning = 7 -> System.Windows.Forms.DropImageType
+System.Windows.Forms.DropImageType.NoImage = 8 -> System.Windows.Forms.DropImageType
+~System.Windows.Forms.Control.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
+~System.Windows.Forms.ToolStripItem.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
+System.Windows.Forms.DragEventArgs.DragEventArgs(System.Windows.Forms.IDataObject? data, int keyState, int x, int y, System.Windows.Forms.DragDropEffects allowedEffect, System.Windows.Forms.DragDropEffects effect, System.Windows.Forms.DropImageType dropImageType, string! message, string! messageReplacementToken) -> void
+System.Windows.Forms.DragEventArgs.DropImageType.get -> System.Windows.Forms.DropImageType
+System.Windows.Forms.DragEventArgs.DropImageType.set -> void
+System.Windows.Forms.DragEventArgs.Message.get -> string?
+System.Windows.Forms.DragEventArgs.Message.set -> void
+System.Windows.Forms.DragEventArgs.MessageReplacementToken.get -> string?
+System.Windows.Forms.DragEventArgs.MessageReplacementToken.set -> void
+System.Windows.Forms.GiveFeedbackEventArgs.GiveFeedbackEventArgs(System.Windows.Forms.DragDropEffects effect, bool useDefaultCursors, System.Drawing.Bitmap? dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> void
+System.Windows.Forms.GiveFeedbackEventArgs.CursorOffset.get -> System.Drawing.Point
+System.Windows.Forms.GiveFeedbackEventArgs.CursorOffset.set -> void
+System.Windows.Forms.GiveFeedbackEventArgs.DragImage.get -> System.Drawing.Bitmap?
+System.Windows.Forms.GiveFeedbackEventArgs.DragImage.set -> void
+System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultDragImage.get -> bool
+System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultDragImage.set -> void
 ~override System.Windows.Forms.WebBrowser.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject

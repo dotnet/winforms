@@ -562,6 +562,21 @@ namespace System.Windows.Forms
                 converter.OleDataObject.GetData(ref formatetc, out medium);
                 return;
             }
+            else if (_innerData is IDataObject dataObject && DragDropHelper.IsInDragLoop(dataObject))
+            {
+                string formatName = DataFormats.GetFormat(formatetc.cfFormat).Name;
+                if (dataObject.GetDataPresent(formatName) && dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
+                {
+                    medium = dragDropFormat.GetData();
+                    Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"    drag-and-drop private format retrieved '{formatName}'");
+                }
+                else
+                {
+                    medium = new STGMEDIUM();
+                }
+
+                return;
+            }
 
             medium = new STGMEDIUM();
 
@@ -668,6 +683,23 @@ namespace System.Windows.Forms
             if (_innerData is OleConverter converter)
             {
                 converter.OleDataObject.SetData(ref pFormatetcIn, ref pmedium, fRelease);
+                return;
+            }
+            else if (_innerData is IDataObject dataObject
+                && (DragDropHelper.IsInDragLoopFormat(pFormatetcIn) || DragDropHelper.IsInDragLoop(dataObject)))
+            {
+                string formatName = DataFormats.GetFormat(pFormatetcIn.cfFormat).Name;
+                if (dataObject.GetDataPresent(formatName) && dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
+                {
+                    dragDropFormat.RefreshData(pFormatetcIn.cfFormat, pmedium, !fRelease);
+                    Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   drag-and-drop private format refreshed '{formatName}'");
+                }
+                else
+                {
+                    dataObject.SetData(formatName, new DragDropFormat(pFormatetcIn.cfFormat, pmedium, !fRelease));
+                    Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"   drag-and-drop private format loaded '{formatName}'");
+                }
+
                 return;
             }
 

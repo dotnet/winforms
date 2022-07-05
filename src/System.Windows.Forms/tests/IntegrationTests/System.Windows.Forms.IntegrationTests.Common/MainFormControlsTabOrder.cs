@@ -38,6 +38,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         ScrollBarsButton,
         ToolTipsButton,
         AnchorLayoutButton,
-        DockLayoutButton
+        DockLayoutButton,
+        DragAndDrop
     }
 }
