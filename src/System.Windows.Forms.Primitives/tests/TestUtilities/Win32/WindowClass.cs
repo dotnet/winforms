@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -41,6 +42,7 @@ namespace System
         /// <param name="cursor">Use (IntPtr)(-1) for no cursor.</param>
         /// <param name="menuName">Menu name, can not set with <paramref name="menuId"/>.</param>
         /// <param name="menuId">Menu id, can not set with <paramref name="menuName"/>.</param>
+        [UnconditionalSuppressMessage("SingleFile", "IL3002:Avoid calling members marked with 'RequiresAssemblyFilesAttribute' when publishing as a single-file", Justification = "Test only binary and not shippable.")]
         public unsafe WindowClass(
             string className = default,
             IntPtr moduleInstance = default,
