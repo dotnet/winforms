@@ -21,7 +21,12 @@ internal static partial class Interop
             IntPtr hWndParent,
             IntPtr hMenu,
             IntPtr hInst,
+            // AsAny is obsoleted, but we currently allow (via CreateParams) specifying arbitrary objects
+            // when creating Controls. We could remove this if it is fully removed by manually doing the
+            // same conversions that the marshaller currently does.
+#pragma warning disable CS0618
             [MarshalAs(UnmanagedType.AsAny)] object? lpParam);
+#pragma warning restore CS0618
 
         public unsafe static IntPtr CreateWindowExW(
             WS_EX dwExStyle,
