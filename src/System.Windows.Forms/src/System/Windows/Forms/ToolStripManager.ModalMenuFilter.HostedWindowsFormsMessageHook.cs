@@ -6,6 +6,7 @@
 
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -72,7 +73,7 @@ namespace System.Windows.Forms
                             User32.WH.GETMESSAGE,
                             _hookProc,
                             IntPtr.Zero,
-                            Kernel32.GetCurrentThreadId());
+                            PInvoke.GetCurrentThreadId());
 
                         if (_messageHookHandle != IntPtr.Zero)
                         {

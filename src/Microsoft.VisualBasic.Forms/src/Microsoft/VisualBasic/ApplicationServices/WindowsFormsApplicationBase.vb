@@ -13,6 +13,7 @@ Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports System.Security
 Imports System.Threading
+Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.Utils
 
@@ -129,7 +130,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' has expired and it is OK to close the splash screen.
         Private _splashScreenCompletionSource As TaskCompletionSource(Of Boolean)
         Private _formLoadWaiter As AutoResetEvent
-        Private _splashScreen As Windows.Forms.Form
+        Private _splashScreen As Form
 
         ' Minimum amount of time to show the splash screen.  0 means hide as soon as the app comes up.
         Private _minimumSplashExposure As Integer = MINIMUM_SPLASH_EXPOSURE_DEFAULT
@@ -140,7 +141,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _saveMySettingsOnExit As Boolean
 
         ' The HighDpiMode the user picked from the AppDesigner or assigned to the ApplyHighDpiMode's Event.
-        Private _highDpiMode As Windows.Forms.HighDpiMode = Windows.Forms.HighDpiMode.SystemAware
+        Private _highDpiMode As HighDpiMode = HighDpiMode.SystemAware
 
 #Enable Warning IDE0032 ' Use auto property
 
@@ -233,7 +234,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                 ' Only add the listener once so we don't fire the UnHandledException event over and over for the same exception
                 If _unhandledExceptionHandlers.Count = 1 Then
-                    AddHandler Windows.Forms.Application.ThreadException, AddressOf OnUnhandledExceptionEventAdaptor
+                    AddHandler Application.ThreadException, AddressOf OnUnhandledExceptionEventAdaptor
                 End If
             End AddHandler
 
@@ -244,7 +245,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                     ' Last one to leave, turn out the lights...
                     If _unhandledExceptionHandlers.Count = 0 Then
-                        RemoveHandler Windows.Forms.Application.ThreadException, AddressOf OnUnhandledExceptionEventAdaptor
+                        RemoveHandler Application.ThreadException, AddressOf OnUnhandledExceptionEventAdaptor
                     End If
                 End If
             End RemoveHandler
@@ -367,20 +368,20 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' affinity meaning that this is the WinForms collection that contains Forms that may
         ''' have been opened on another thread then the one we are calling in on right now.
         ''' </summary>
-        Public ReadOnly Property OpenForms() As Windows.Forms.FormCollection
+        Public ReadOnly Property OpenForms() As FormCollection
             Get
-                Return Windows.Forms.Application.OpenForms
+                Return Application.OpenForms
             End Get
         End Property
 
         ''' <summary>
         ''' Provides access to the main form for this application
         ''' </summary>
-        Protected Property MainForm() As Windows.Forms.Form
+        Protected Property MainForm() As Form
             Get
                 Return _appContext?.MainForm
             End Get
-            Set(value As Windows.Forms.Form)
+            Set(value As Form)
                 If value Is Nothing Then
                     Throw ExceptionUtils.GetArgumentNullException("MainForm", SR.General_PropertyNothing, "MainForm")
                 End If
@@ -394,11 +395,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         ''' Provides access to the splash screen for this application
         ''' </summary>
-        Public Property SplashScreen() As Windows.Forms.Form
+        Public Property SplashScreen() As Form
             Get
                 Return _splashScreen
             End Get
-            Set(value As Windows.Forms.Form)
+            Set(value As Form)
 
                 ' Allow for the case where they set splash screen = nothing and mainForm is currently nothing.
                 If value IsNot Nothing AndAlso value Is _appContext.MainForm Then
@@ -450,7 +451,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' Provides the WinForms application context that we are running on
         ''' </summary>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
-        Public ReadOnly Property ApplicationContext() As Windows.Forms.ApplicationContext
+        Public ReadOnly Property ApplicationContext() As ApplicationContext
             Get
                 Return _appContext
             End Get
@@ -472,7 +473,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Processes all windows messages currently in the message queue
         ''' </summary>
         Public Sub DoEvents()
-            Windows.Forms.Application.DoEvents()
+            Application.DoEvents()
         End Sub
 
         ''' <summary>
@@ -510,27 +511,27 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
 
             If (applicationDefaultsEventArgs.Font IsNot Nothing) Then
-                Windows.Forms.Application.SetDefaultFont(applicationDefaultsEventArgs.Font)
+                Application.SetDefaultFont(applicationDefaultsEventArgs.Font)
             End If
 
             MinimumSplashScreenDisplayTime = applicationDefaultsEventArgs.MinimumSplashScreenDisplayTime
 
             ' This creates the native window, and that means, we can no longer apply a different Default Font.
             ' So, this is the earliest point in time to set the AsyncOperationManager's SyncContext.
-            AsyncOperationManager.SynchronizationContext = New Windows.Forms.WindowsFormsSynchronizationContext()
+            AsyncOperationManager.SynchronizationContext = New WindowsFormsSynchronizationContext()
 
             _highDpiMode = applicationDefaultsEventArgs.HighDpiMode
 
             ' Then, it's applying what we got back as HighDpiMode.
-            Dim dpiSetResult = Windows.Forms.Application.SetHighDpiMode(_highDpiMode)
+            Dim dpiSetResult = Application.SetHighDpiMode(_highDpiMode)
             If dpiSetResult Then
-                _highDpiMode = Windows.Forms.Application.HighDpiMode
+                _highDpiMode = Application.HighDpiMode
             End If
             Debug.Assert(dpiSetResult, "We could net set the HighDpiMode.")
 
             ' And finally we take care of EnableVisualStyles.
             If _enableVisualStyles Then
-                Windows.Forms.Application.EnableVisualStyles()
+                Application.EnableVisualStyles()
             End If
 
             ' We'll handle "/nosplash" for you.
@@ -590,8 +591,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             ' Activate the original instance.
             If eventArgs.BringToForeground = True AndAlso MainForm IsNot Nothing Then
-                If MainForm.WindowState = Windows.Forms.FormWindowState.Minimized Then
-                    MainForm.WindowState = Windows.Forms.FormWindowState.Normal
+                If MainForm.WindowState = FormWindowState.Minimized Then
+                    MainForm.WindowState = FormWindowState.Normal
                 End If
 
                 MainForm.Activate()
@@ -627,7 +628,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' (see Public Custom Event UnhandledException) which will raise our UnhandledException Event.
             ' If our user didn't write an UnhandledException event, then we land in the try/catch handler for Forms.Application.Run().
             Try
-                Windows.Forms.Application.Run(_appContext)
+                Application.Run(_appContext)
             Finally
 
                 ' When Run() returns, the context we pushed in our ctor (which was a WindowsFormsSynchronizationContext)
@@ -680,7 +681,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 ' We don't put a try/catch around the handler event so that exceptions in there will
                 ' bubble out - else we will have a recursive exception handler.
                 RaiseEvent UnhandledException(Me, e)
-                If e.ExitApplication = True Then Windows.Forms.Application.Exit()
+                If e.ExitApplication = True Then Application.Exit()
 
                 ' User handled the event.
                 Return True
@@ -787,11 +788,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' Gets or sets the HighDpiMode for the Application.
         ''' </summary>
         <EditorBrowsable(EditorBrowsableState.Never)>
-        Protected Property HighDpiMode() As Windows.Forms.HighDpiMode
+        Protected Property HighDpiMode() As HighDpiMode
             Get
                 Return _highDpiMode
             End Get
-            Set(value As Windows.Forms.HighDpiMode)
+            Set(value As HighDpiMode)
                 _highDpiMode = value
             End Set
         End Property
@@ -841,7 +842,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 _splashTimer.Enabled = True
             End If
 
-            Windows.Forms.Application.Run(_splashScreen)
+            Application.Run(_splashScreen)
         End Sub
 
         ''' <summary>
