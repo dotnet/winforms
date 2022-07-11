@@ -949,10 +949,8 @@ System.Drawing.Design.ToolboxItem.ToolboxItem() -> void
 System.Drawing.Design.ToolboxItemCollection
 System.Drawing.Design.ToolboxItemCreatorCallback
 System.Runtime.InteropServices.UCOMITypeLib
-System.Runtime.InteropServices.UCOMITypeLib.GetLibAttr(out System.IntPtr ppTLibAttr) -> void
 System.Runtime.InteropServices.UCOMITypeLib.GetTypeInfoCount() -> int
 System.Runtime.InteropServices.UCOMITypeLib.GetTypeInfoType(int index, out System.Runtime.InteropServices.ComTypes.TYPEKIND pTKind) -> void
-System.Runtime.InteropServices.UCOMITypeLib.ReleaseTLibAttr(System.IntPtr pTLibAttr) -> void
 System.Windows.Forms.Design.AnchorEditor
 System.Windows.Forms.Design.AnchorEditor.AnchorEditor() -> void
 System.Windows.Forms.Design.AxImporter
@@ -986,7 +984,6 @@ System.Windows.Forms.Design.Behavior.BehaviorService.Dispose() -> void
 System.Windows.Forms.Design.Behavior.BehaviorService.EndDrag -> System.Windows.Forms.Design.Behavior.BehaviorDragDropEventHandler
 System.Windows.Forms.Design.Behavior.BehaviorService.Invalidate() -> void
 System.Windows.Forms.Design.Behavior.BehaviorService.Invalidate(System.Drawing.Rectangle rect) -> void
-System.Windows.Forms.Design.Behavior.BehaviorService.MapAdornerWindowPoint(System.IntPtr handle, System.Drawing.Point pt) -> System.Drawing.Point
 System.Windows.Forms.Design.Behavior.BehaviorService.ScreenToAdornerWindow(System.Drawing.Point p) -> System.Drawing.Point
 System.Windows.Forms.Design.Behavior.BehaviorService.Synchronize -> System.EventHandler
 System.Windows.Forms.Design.Behavior.BehaviorService.SyncSelection() -> void
@@ -1129,7 +1126,6 @@ System.Windows.Forms.Design.ThemedScrollbarMode.All = 1 -> System.Windows.Forms.
 System.Windows.Forms.Design.ThemedScrollbarMode.None = 2 -> System.Windows.Forms.Design.ThemedScrollbarMode
 System.Windows.Forms.Design.ThemedScrollbarMode.OnlyTopLevel = 3 -> System.Windows.Forms.Design.ThemedScrollbarMode
 System.Windows.Forms.Design.ThemedScrollbarWindow
-System.Windows.Forms.Design.ThemedScrollbarWindow.Handle -> System.IntPtr
 System.Windows.Forms.Design.ThemedScrollbarWindow.Mode -> System.Windows.Forms.Design.ThemedScrollbarMode
 System.Windows.Forms.Design.ThemedScrollbarWindow.ThemedScrollbarWindow() -> void
 System.Windows.Forms.Design.WindowsFormsDesignerOptionService
