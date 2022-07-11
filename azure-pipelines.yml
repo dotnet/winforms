@@ -33,6 +33,7 @@ pr:
       - release/*
       - internal/release/*
       - internal/experimental/*
+      - feature/win32
   paths:
     include:
       - '*'
