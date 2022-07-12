@@ -16,7 +16,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     '''  A dialog that shows progress used for Network.Download and Network.Upload
     ''' </summary>
     Friend Class ProgressDialog
-        Inherits Windows.Forms.Form
+        Inherits Form
 
         ''' <summary>
         ''' Event raised when user cancels the dialog or closes it before the operation is completed
@@ -151,7 +151,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' We listen for this event since we want to make closing the dialog before it's
         ''' finished behave the same as a cancel
         '''</remarks>
-        Private Sub ProgressDialog_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        Private Sub ProgressDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
             If e.CloseReason = CloseReason.UserClosing And Not _closeDialogInvoked Then
                 ' If the progress bar isn't finished and the user hasn't already canceled
                 If ProgressBarWork.Value < 100 And Not _canceled Then
@@ -224,9 +224,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             End If
             MyBase.Dispose(disposing)
         End Sub
-        Friend WithEvents LabelInfo As Windows.Forms.Label
-        Friend WithEvents ProgressBarWork As Windows.Forms.ProgressBar
-        Friend WithEvents ButtonCloseDialog As Windows.Forms.Button
+        Friend WithEvents LabelInfo As Label
+        Friend WithEvents ProgressBarWork As ProgressBar
+        Friend WithEvents ButtonCloseDialog As Button
 
         'Required by the Windows Form Designer
         Private ReadOnly _components As System.ComponentModel.IContainer
@@ -237,9 +237,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         <DebuggerStepThrough()>
         Private Sub InitializeComponent()
             Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ProgressDialog))
-            LabelInfo = New Windows.Forms.Label
-            ProgressBarWork = New Windows.Forms.ProgressBar
-            ButtonCloseDialog = New Windows.Forms.Button
+            LabelInfo = New Label
+            ProgressBarWork = New ProgressBar
+            ButtonCloseDialog = New Button
             SuspendLayout()
             '
             'LabelInfo

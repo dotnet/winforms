@@ -6,6 +6,7 @@ Option Infer On
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Security
+Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -18,7 +19,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' last form closes, depending on the mode this application is running in.
         ''' </summary>
         Private Class WinFormsAppContext
-            Inherits Windows.Forms.ApplicationContext
+            Inherits ApplicationContext
 
             Private ReadOnly _app As WindowsFormsApplicationBase
 
@@ -38,7 +39,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 If _app.ShutdownStyle = ShutdownMode.AfterMainFormCloses Then
                     MyBase.OnMainFormClosed(sender, e)
                 Else 'identify a new main form so we can keep running
-                    Dim forms As Windows.Forms.FormCollection = Windows.Forms.Application.OpenForms
+                    Dim forms As FormCollection = Application.OpenForms
 
                     If forms.Count > 0 Then
                         'Note: Initially I used Process::MainWindowHandle to obtain an open form.  But that is bad for two reasons:

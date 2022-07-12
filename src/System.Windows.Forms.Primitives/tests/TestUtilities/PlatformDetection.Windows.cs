@@ -5,6 +5,7 @@
 using System.Runtime.InteropServices;
 using System.Security;
 using Microsoft.Win32;
+using Windows.Win32;
 using Xunit;
 using static Interop;
 
@@ -179,7 +180,7 @@ namespace System
                     return false;
                 }
 
-                Assert.True(OpenProcessToken(Kernel32.GetCurrentProcess(), TOKEN_READ, out IntPtr processToken));
+                Assert.True(OpenProcessToken(PInvoke.GetCurrentProcess(), TOKEN_READ, out IntPtr processToken));
 
                 try
                 {

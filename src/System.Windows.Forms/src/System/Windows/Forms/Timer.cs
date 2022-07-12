@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -238,7 +239,7 @@ namespace System.Windows.Forms
             {
                 if (hWnd != IntPtr.Zero)
                 {
-                    return User32.GetWindowThreadProcessId(hWnd, out _) != Kernel32.GetCurrentThreadId();
+                    return User32.GetWindowThreadProcessId(hWnd, out _) != PInvoke.GetCurrentThreadId();
                 }
 
                 return false;

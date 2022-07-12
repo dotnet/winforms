@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -242,7 +243,7 @@ namespace System.Windows.Forms
         internal bool IsHandleCreated => _handle != IntPtr.Zero;
 
         internal bool InvokeRequired => IsHandleCreated &&
-            User32.GetWindowThreadProcessId(_handle, out _) != Kernel32.GetCurrentThreadId();
+            User32.GetWindowThreadProcessId(_handle, out _) != PInvoke.GetCurrentThreadId();
 
         /// <summary>
         ///   Gets or sets the current count of stack frames that are in the

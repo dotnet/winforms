@@ -1,0 +1,4 @@
+﻿GetCurrentProcess
+GetCurrentThread
+GetCurrentThreadId
+DuplicateHandle
