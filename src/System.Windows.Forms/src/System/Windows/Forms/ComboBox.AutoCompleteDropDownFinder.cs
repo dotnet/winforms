@@ -4,6 +4,7 @@
 
 using System.Runtime.InteropServices;
 using System.Text;
+using Windows.Win32;
 using static Interop;
 using static Interop.User32;
 
@@ -36,7 +37,7 @@ namespace System.Windows.Forms
                 // Look for a popped up dropdown
                 _shouldSubClass = subclass;
                 EnumThreadWindows(
-                    Kernel32.GetCurrentThreadId(),
+                    PInvoke.GetCurrentThreadId(),
                     Callback);
             }
 

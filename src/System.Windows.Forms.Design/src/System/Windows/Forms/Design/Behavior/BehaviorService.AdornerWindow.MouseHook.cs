@@ -6,6 +6,7 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -77,7 +78,7 @@ namespace System.Windows.Forms.Design.Behavior
                             User32.WH.MOUSE,
                             hook,
                             IntPtr.Zero,
-                            Kernel32.GetCurrentThreadId());
+                            PInvoke.GetCurrentThreadId());
 
                         if (_mouseHookHandle != IntPtr.Zero)
                         {
