@@ -12,6 +12,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -4649,7 +4650,7 @@ namespace System.Windows.Forms
             {
                 // First put all the owned windows into a list
                 callback = new EnumThreadWindowsCallback(Handle);
-                User32.EnumThreadWindows(Kernel32.GetCurrentThreadId(), callback.Callback);
+                User32.EnumThreadWindows(PInvoke.GetCurrentThreadId(), callback.Callback);
 
                 // Reset the owner of the windows in the list
                 callback.ResetOwners();

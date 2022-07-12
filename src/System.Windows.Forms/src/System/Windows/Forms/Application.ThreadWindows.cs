@@ -6,6 +6,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -32,7 +33,7 @@ namespace System.Windows.Forms
                 _windows = new IntPtr[16];
                 _onlyWinForms = onlyWinForms;
                 User32.EnumThreadWindows(
-                    Kernel32.GetCurrentThreadId(),
+                    PInvoke.GetCurrentThreadId(),
                     Callback);
             }
 

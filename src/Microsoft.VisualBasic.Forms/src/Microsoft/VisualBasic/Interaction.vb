@@ -6,6 +6,7 @@ Imports System.Runtime.InteropServices
 Imports System.Security
 Imports System.Text
 Imports System.Threading
+Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Imports Microsoft.VisualBasic.CompilerServices.Utils
@@ -244,10 +245,10 @@ Namespace Microsoft.VisualBasic
             Private ReadOnly _xPos As Integer
             Private ReadOnly _yPos As Integer
             Private _result As String
-            Private ReadOnly _parentWindow As Windows.Forms.IWin32Window
+            Private ReadOnly _parentWindow As IWin32Window
             Private _exception As Exception
 
-            Sub New(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As Windows.Forms.IWin32Window)
+            Sub New(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As IWin32Window)
                 _prompt = Prompt
                 _title = Title
                 _defaultResponse = DefaultResponse
@@ -279,7 +280,7 @@ Namespace Microsoft.VisualBasic
 
         Public Function InputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer) As String
             Dim vbhost As IVbHost
-            Dim ParentWindow As Windows.Forms.IWin32Window = Nothing
+            Dim ParentWindow As IWin32Window = Nothing
 
             vbhost = CompilerServices.HostServices.VBHost
             If vbhost IsNot Nothing Then 'If we are hosted then we want to use the host as the parent window.  If no parent window that's fine.
@@ -341,7 +342,7 @@ Namespace Microsoft.VisualBasic
 
         End Function
 
-        Private Function InternalInputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As Windows.Forms.IWin32Window) As String
+        Private Function InternalInputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As IWin32Window) As String
             Dim Box As VBInputBox = New VBInputBox(Prompt, Title, DefaultResponse, XPos, YPos)
             Box.ShowDialog(ParentWindow)
 
@@ -353,7 +354,7 @@ Namespace Microsoft.VisualBasic
             Dim sPrompt As String = Nothing
             Dim sTitle As String
             Dim vbhost As IVbHost
-            Dim ParentWindow As Windows.Forms.IWin32Window = Nothing
+            Dim ParentWindow As IWin32Window = Nothing
 
             vbhost = CompilerServices.HostServices.VBHost
             If vbhost IsNot Nothing Then
@@ -405,10 +406,10 @@ Namespace Microsoft.VisualBasic
             End Try
 
             Return CType(System.Windows.Forms.MessageBox.Show(ParentWindow, sPrompt, sTitle,
-                 CType(Buttons And &HF, Windows.Forms.MessageBoxButtons),
-                 CType(Buttons And &HF0, Windows.Forms.MessageBoxIcon),
-                 CType(Buttons And &HF00, Windows.Forms.MessageBoxDefaultButton),
-                 CType(Buttons And &HFFFFF000, Windows.Forms.MessageBoxOptions)),
+                 CType(Buttons And &HF, MessageBoxButtons),
+                 CType(Buttons And &HF0, MessageBoxIcon),
+                 CType(Buttons And &HF00, MessageBoxDefaultButton),
+                 CType(Buttons And &HFFFFF000, MessageBoxOptions)),
                  MsgBoxResult)
         End Function
 

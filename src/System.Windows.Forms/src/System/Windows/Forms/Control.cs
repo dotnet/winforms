@@ -16,6 +16,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
+using Windows.Win32;
 using Microsoft.Win32;
 using static Interop;
 using Encoding = System.Text.Encoding;
@@ -1680,7 +1681,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal uint CreateThreadId => IsHandleCreated
             ? User32.GetWindowThreadProcessId(this, out _)
-            : Kernel32.GetCurrentThreadId();
+            : PInvoke.GetCurrentThreadId();
 
         /// <summary>
         ///  Retrieves the cursor that will be displayed when the mouse is over this
@@ -2681,7 +2682,7 @@ namespace System.Windows.Forms
                     control = marshalingControl;
                 }
 
-                return User32.GetWindowThreadProcessId(control, out _) != Kernel32.GetCurrentThreadId();
+                return User32.GetWindowThreadProcessId(control, out _) != PInvoke.GetCurrentThreadId();
             }
         }
 
@@ -5423,7 +5424,7 @@ namespace System.Windows.Forms
             if (!asyncResult.IsCompleted)
             {
                 Control marshaler = FindMarshalingControl();
-                if (User32.GetWindowThreadProcessId(marshaler, out _) == Kernel32.GetCurrentThreadId())
+                if (User32.GetWindowThreadProcessId(marshaler, out _) == PInvoke.GetCurrentThreadId())
                 {
                     marshaler.InvokeMarshaledCallbacks();
                 }
@@ -7022,7 +7023,7 @@ namespace System.Windows.Forms
 
             // We don't want to wait if we're on the same thread, or else we'll deadlock.
             // It is important that syncSameThread always be false for asynchronous calls.
-            bool syncSameThread = synchronous && User32.GetWindowThreadProcessId(this, out _) == Kernel32.GetCurrentThreadId();
+            bool syncSameThread = synchronous && User32.GetWindowThreadProcessId(this, out _) == PInvoke.GetCurrentThreadId();
 
             // Store the compressed stack information from the thread that is calling the Invoke()
             // so we can assign the same security context to the thread that will actually execute
