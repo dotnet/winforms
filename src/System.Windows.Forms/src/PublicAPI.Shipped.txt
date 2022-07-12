@@ -671,8 +671,6 @@ override System.Windows.Forms.TableLayoutPanel.OnPaintBackground(System.Windows.
 ~static System.Windows.Forms.AxHost.GetPictureFromIPicture(object picture) -> System.Drawing.Image
 ~static System.Windows.Forms.AxHost.GetPictureFromIPictureDisp(object picture) -> System.Drawing.Image
 ~static System.Windows.Forms.BindingContext.UpdateBinding(System.Windows.Forms.BindingContext newBindingContext, System.Windows.Forms.Binding binding) -> void
-~static System.Windows.Forms.Control.FromChildHandle(System.IntPtr handle) -> System.Windows.Forms.Control
-~static System.Windows.Forms.Control.FromHandle(System.IntPtr handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.Control.IsMnemonic(char charCode, string text) -> bool
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags) -> int
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags, out bool widthTruncated) -> int
@@ -733,7 +731,6 @@ override System.Windows.Forms.TableLayoutPanel.OnPaintBackground(System.Windows.
 ~static System.Windows.Forms.ToolStripManager.RevertMerge(System.Windows.Forms.ToolStrip targetToolStrip, System.Windows.Forms.ToolStrip sourceToolStrip) -> bool
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm) -> void
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm, string key) -> void
-~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, System.IntPtr handle) -> System.Windows.Forms.TreeNode
 ~System.Drawing.Design.IPropertyValueUIService.AddPropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler newHandler) -> void
 ~System.Drawing.Design.IPropertyValueUIService.GetPropertyUIValueItems(System.ComponentModel.ITypeDescriptorContext context, System.ComponentModel.PropertyDescriptor propDesc) -> System.Drawing.Design.PropertyValueUIItem[]
 ~System.Drawing.Design.IPropertyValueUIService.RemovePropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler newHandler) -> void
@@ -901,7 +898,6 @@ override System.Windows.Forms.TableLayoutPanel.OnPaintBackground(System.Windows.
 ~System.Windows.Forms.ComboBox.SelectedItem.set -> void
 ~System.Windows.Forms.ComboBox.SelectedText.get -> string
 ~System.Windows.Forms.ComboBox.SelectedText.set -> void
-~System.Windows.Forms.ComponentModel.Com2Interop.ICom2PropertyPageDisplayService.ShowPropertyPage(string title, object component, int dispid, System.Guid pageGuid, System.IntPtr parentHandle) -> void
 ~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.LoadState(Microsoft.Win32.RegistryKey key) -> void
 ~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.SaveState(Microsoft.Win32.RegistryKey key) -> void
 ~System.Windows.Forms.ContainerControl.ActiveControl.get -> System.Windows.Forms.Control
@@ -2439,7 +2435,6 @@ abstract System.Windows.Forms.BindingManagerBase.ResumeBinding() -> void
 abstract System.Windows.Forms.BindingManagerBase.SuspendBinding() -> void
 abstract System.Windows.Forms.BindingManagerBase.UpdateIsBinding() -> void
 abstract System.Windows.Forms.CommonDialog.Reset() -> void
-abstract System.Windows.Forms.CommonDialog.RunDialog(System.IntPtr hwndOwner) -> bool
 abstract System.Windows.Forms.Design.ComponentEditorPage.LoadComponent() -> void
 abstract System.Windows.Forms.Design.ComponentEditorPage.SaveComponent() -> void
 abstract System.Windows.Forms.Design.PropertyTab.GetProperties(object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection?
@@ -2571,7 +2566,6 @@ override System.Windows.Forms.CheckedListBox.SelectionMode.set -> void
 override System.Windows.Forms.CheckedListBox.WmReflectCommand(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.CheckedListBox.WndProc(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.ColorDialog.Reset() -> void
-override System.Windows.Forms.ColorDialog.RunDialog(System.IntPtr hwndOwner) -> bool
 override System.Windows.Forms.ColorDialog.ToString() -> string!
 override System.Windows.Forms.ColumnHeader.Dispose(bool disposing) -> void
 override System.Windows.Forms.ColumnHeader.ToString() -> string!
@@ -2904,9 +2898,7 @@ override System.Windows.Forms.FileDialog.ToString() -> string!
 override System.Windows.Forms.FlowLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
 override System.Windows.Forms.FlowLayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
 override System.Windows.Forms.FolderBrowserDialog.Reset() -> void
-override System.Windows.Forms.FontDialog.HookProc(System.IntPtr hWnd, int msg, System.IntPtr wparam, System.IntPtr lparam) -> System.IntPtr
 override System.Windows.Forms.FontDialog.Reset() -> void
-override System.Windows.Forms.FontDialog.RunDialog(System.IntPtr hWndOwner) -> bool
 override System.Windows.Forms.FontDialog.ToString() -> string!
 override System.Windows.Forms.Form.AdjustFormScrollbars(bool displayScrollbars) -> void
 override System.Windows.Forms.Form.AutoScroll.get -> bool
@@ -4101,11 +4093,7 @@ static System.Windows.Forms.Control.ModifierKeys.get -> System.Windows.Forms.Key
 static System.Windows.Forms.Control.MouseButtons.get -> System.Windows.Forms.MouseButtons
 static System.Windows.Forms.Control.MousePosition.get -> System.Drawing.Point
 static System.Windows.Forms.Control.PropagatingImeMode.get -> System.Windows.Forms.ImeMode
-static System.Windows.Forms.Control.ReflectMessage(System.IntPtr hWnd, ref System.Windows.Forms.Message m) -> bool
 static System.Windows.Forms.ControlPaint.ContrastControlDark.get -> System.Drawing.Color
-static System.Windows.Forms.ControlPaint.CreateHBitmap16Bit(System.Drawing.Bitmap! bitmap, System.Drawing.Color background) -> System.IntPtr
-static System.Windows.Forms.ControlPaint.CreateHBitmapColorMask(System.Drawing.Bitmap! bitmap, System.IntPtr monochromeMask) -> System.IntPtr
-static System.Windows.Forms.ControlPaint.CreateHBitmapTransparencyMask(System.Drawing.Bitmap! bitmap) -> System.IntPtr
 static System.Windows.Forms.ControlPaint.Dark(System.Drawing.Color baseColor) -> System.Drawing.Color
 static System.Windows.Forms.ControlPaint.Dark(System.Drawing.Color baseColor, float percOfDarkDark) -> System.Drawing.Color
 static System.Windows.Forms.ControlPaint.DarkDark(System.Drawing.Color baseColor) -> System.Drawing.Color
@@ -4211,12 +4199,6 @@ static System.Windows.Forms.GroupBoxRenderer.DrawParentBackground(System.Drawing
 static System.Windows.Forms.GroupBoxRenderer.IsBackgroundPartiallyTransparent(System.Windows.Forms.VisualStyles.GroupBoxState state) -> bool
 static System.Windows.Forms.GroupBoxRenderer.RenderMatchingApplicationState.get -> bool
 static System.Windows.Forms.GroupBoxRenderer.RenderMatchingApplicationState.set -> void
-static System.Windows.Forms.ImeContext.Disable(System.IntPtr handle) -> void
-static System.Windows.Forms.ImeContext.Enable(System.IntPtr handle) -> void
-static System.Windows.Forms.ImeContext.GetImeMode(System.IntPtr handle) -> System.Windows.Forms.ImeMode
-static System.Windows.Forms.ImeContext.IsOpen(System.IntPtr handle) -> bool
-static System.Windows.Forms.ImeContext.SetImeStatus(System.Windows.Forms.ImeMode imeMode, System.IntPtr handle) -> void
-static System.Windows.Forms.ImeContext.SetOpenStatus(bool open, System.IntPtr handle) -> void
 static System.Windows.Forms.ImeModeConversion.ImeModeConversionBits.get -> System.Collections.Generic.Dictionary<System.Windows.Forms.ImeMode, System.Windows.Forms.ImeModeConversion>!
 static System.Windows.Forms.ImeModeConversion.IsCurrentConversionTableSupported.get -> bool
 static System.Windows.Forms.InputLanguage.CurrentInputLanguage.get -> System.Windows.Forms.InputLanguage!
@@ -4226,7 +4208,6 @@ static System.Windows.Forms.InputLanguage.FromCulture(System.Globalization.Cultu
 static System.Windows.Forms.InputLanguage.InstalledInputLanguages.get -> System.Windows.Forms.InputLanguageCollection!
 static System.Windows.Forms.LinkArea.operator !=(System.Windows.Forms.LinkArea linkArea1, System.Windows.Forms.LinkArea linkArea2) -> bool
 static System.Windows.Forms.LinkArea.operator ==(System.Windows.Forms.LinkArea linkArea1, System.Windows.Forms.LinkArea linkArea2) -> bool
-static System.Windows.Forms.NativeWindow.FromHandle(System.IntPtr handle) -> System.Windows.Forms.NativeWindow?
 static System.Windows.Forms.OSFeature.Feature.get -> System.Windows.Forms.OSFeature!
 static System.Windows.Forms.OSFeature.IsPresent(System.Windows.Forms.SystemParameter enumVal) -> bool
 static System.Windows.Forms.OwnerDrawPropertyBag.Copy(System.Windows.Forms.OwnerDrawPropertyBag? value) -> System.Windows.Forms.OwnerDrawPropertyBag!
@@ -4306,7 +4287,6 @@ static System.Windows.Forms.RadioButtonRenderer.RenderMatchingApplicationState.g
 static System.Windows.Forms.RadioButtonRenderer.RenderMatchingApplicationState.set -> void
 static System.Windows.Forms.Screen.AllScreens.get -> System.Windows.Forms.Screen![]!
 static System.Windows.Forms.Screen.FromControl(System.Windows.Forms.Control! control) -> System.Windows.Forms.Screen!
-static System.Windows.Forms.Screen.FromHandle(System.IntPtr hwnd) -> System.Windows.Forms.Screen!
 static System.Windows.Forms.Screen.FromPoint(System.Drawing.Point point) -> System.Windows.Forms.Screen!
 static System.Windows.Forms.Screen.FromRectangle(System.Drawing.Rectangle rect) -> System.Windows.Forms.Screen!
 static System.Windows.Forms.Screen.GetBounds(System.Drawing.Point pt) -> System.Drawing.Rectangle
@@ -4455,7 +4435,6 @@ static System.Windows.Forms.TabRenderer.DrawTabItem(System.Drawing.Graphics! g, 
 static System.Windows.Forms.TabRenderer.DrawTabItem(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.TabItemState state) -> void
 static System.Windows.Forms.TabRenderer.DrawTabPage(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds) -> void
 static System.Windows.Forms.TabRenderer.IsSupported.get -> bool
-static System.Windows.Forms.TaskDialog.ShowDialog(System.IntPtr hwndOwner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Windows.Forms.TaskDialogButton!
 static System.Windows.Forms.TaskDialog.ShowDialog(System.Windows.Forms.IWin32Window! owner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Windows.Forms.TaskDialogButton!
 static System.Windows.Forms.TaskDialog.ShowDialog(System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Windows.Forms.TaskDialogButton!
 static System.Windows.Forms.TaskDialogButton.Abort.get -> System.Windows.Forms.TaskDialogButton!
@@ -5081,8 +5060,6 @@ System.Windows.Forms.AccessibleNavigation.Up = 1 -> System.Windows.Forms.Accessi
 System.Windows.Forms.AccessibleObject
 System.Windows.Forms.AccessibleObject.AccessibleObject() -> void
 System.Windows.Forms.AccessibleObject.RaiseAutomationNotification(System.Windows.Forms.Automation.AutomationNotificationKind notificationKind, System.Windows.Forms.Automation.AutomationNotificationProcessing notificationProcessing, string! notificationText) -> bool
-System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(System.IntPtr handle) -> void
-System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(System.IntPtr handle, int objid) -> void
 System.Windows.Forms.AccessibleRole
 System.Windows.Forms.AccessibleRole.Alert = 8 -> System.Windows.Forms.AccessibleRole
 System.Windows.Forms.AccessibleRole.Animation = 54 -> System.Windows.Forms.AccessibleRole
@@ -5739,7 +5716,6 @@ System.Windows.Forms.ComboBox.BackgroundImageChanged -> System.EventHandler
 System.Windows.Forms.ComboBox.BackgroundImageLayoutChanged -> System.EventHandler
 System.Windows.Forms.ComboBox.BeginUpdate() -> void
 System.Windows.Forms.ComboBox.ChildAccessibleObject
-System.Windows.Forms.ComboBox.ChildAccessibleObject.ChildAccessibleObject(System.Windows.Forms.ComboBox! owner, System.IntPtr handle) -> void
 System.Windows.Forms.ComboBox.ComboBox() -> void
 System.Windows.Forms.ComboBox.DoubleClick -> System.EventHandler
 System.Windows.Forms.ComboBox.DrawItem -> System.Windows.Forms.DrawItemEventHandler
@@ -5875,7 +5851,6 @@ System.Windows.Forms.Control.Control(System.Windows.Forms.Control? parent, strin
 System.Windows.Forms.Control.Control(System.Windows.Forms.Control? parent, string? text, int left, int top, int width, int height) -> void
 System.Windows.Forms.Control.ControlAccessibleObject
 System.Windows.Forms.Control.ControlAccessibleObject.ControlAccessibleObject(System.Windows.Forms.Control! ownerControl) -> void
-System.Windows.Forms.Control.ControlAccessibleObject.Handle.get -> System.IntPtr
 System.Windows.Forms.Control.ControlAccessibleObject.Handle.set -> void
 System.Windows.Forms.Control.ControlAccessibleObject.NotifyClients(System.Windows.Forms.AccessibleEvents accEvent) -> void
 System.Windows.Forms.Control.ControlAccessibleObject.NotifyClients(System.Windows.Forms.AccessibleEvents accEvent, int childID) -> void
@@ -5920,7 +5895,6 @@ System.Windows.Forms.Control.GetStyle(System.Windows.Forms.ControlStyles flag) -
 System.Windows.Forms.Control.GetTopLevel() -> bool
 System.Windows.Forms.Control.GiveFeedback -> System.Windows.Forms.GiveFeedbackEventHandler?
 System.Windows.Forms.Control.GotFocus -> System.EventHandler?
-System.Windows.Forms.Control.Handle.get -> System.IntPtr
 System.Windows.Forms.Control.HandleCreated -> System.EventHandler?
 System.Windows.Forms.Control.HandleDestroyed -> System.EventHandler?
 System.Windows.Forms.Control.HasChildren.get -> bool
@@ -6098,7 +6072,6 @@ System.Windows.Forms.CreateParams.Height.get -> int
 System.Windows.Forms.CreateParams.Height.set -> void
 System.Windows.Forms.CreateParams.Param.get -> object?
 System.Windows.Forms.CreateParams.Param.set -> void
-System.Windows.Forms.CreateParams.Parent.get -> System.IntPtr
 System.Windows.Forms.CreateParams.Parent.set -> void
 System.Windows.Forms.CreateParams.Style.get -> int
 System.Windows.Forms.CreateParams.Style.set -> void
@@ -6114,15 +6087,12 @@ System.Windows.Forms.CurrencyManager.ListChanged -> System.ComponentModel.ListCh
 System.Windows.Forms.CurrencyManager.MetaDataChanged -> System.EventHandler
 System.Windows.Forms.CurrencyManager.Refresh() -> void
 System.Windows.Forms.Cursor
-System.Windows.Forms.Cursor.CopyHandle() -> System.IntPtr
 System.Windows.Forms.Cursor.Cursor(string! fileName) -> void
-System.Windows.Forms.Cursor.Cursor(System.IntPtr handle) -> void
 System.Windows.Forms.Cursor.Cursor(System.IO.Stream! stream) -> void
 System.Windows.Forms.Cursor.Cursor(System.Type! type, string! resource) -> void
 System.Windows.Forms.Cursor.Dispose() -> void
 System.Windows.Forms.Cursor.Draw(System.Drawing.Graphics! g, System.Drawing.Rectangle targetRect) -> void
 System.Windows.Forms.Cursor.DrawStretched(System.Drawing.Graphics! g, System.Drawing.Rectangle targetRect) -> void
-System.Windows.Forms.Cursor.Handle.get -> System.IntPtr
 System.Windows.Forms.Cursor.HotSpot.get -> System.Drawing.Point
 System.Windows.Forms.Cursor.Size.get -> System.Drawing.Size
 System.Windows.Forms.Cursor.Tag.get -> object?
@@ -7949,7 +7919,6 @@ System.Windows.Forms.ImageList.ColorDepth.set -> void
 System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics! g, int x, int y, int index) -> void
 System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics! g, int x, int y, int width, int height, int index) -> void
 System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics! g, System.Drawing.Point pt, int index) -> void
-System.Windows.Forms.ImageList.Handle.get -> System.IntPtr
 System.Windows.Forms.ImageList.HandleCreated.get -> bool
 System.Windows.Forms.ImageList.ImageCollection
 System.Windows.Forms.ImageList.ImageCollection.Add(string! key, System.Drawing.Icon! icon) -> void
@@ -8012,7 +7981,6 @@ System.Windows.Forms.IMessageFilter
 System.Windows.Forms.IMessageFilter.PreFilterMessage(ref System.Windows.Forms.Message m) -> bool
 System.Windows.Forms.InputLanguage
 System.Windows.Forms.InputLanguage.Culture.get -> System.Globalization.CultureInfo!
-System.Windows.Forms.InputLanguage.Handle.get -> System.IntPtr
 System.Windows.Forms.InputLanguage.LayoutName.get -> string!
 System.Windows.Forms.InputLanguageChangedEventArgs
 System.Windows.Forms.InputLanguageChangedEventArgs.CharSet.get -> byte
@@ -8071,9 +8039,7 @@ System.Windows.Forms.ItemDragEventArgs.ItemDragEventArgs(System.Windows.Forms.Mo
 System.Windows.Forms.ItemDragEventArgs.ItemDragEventArgs(System.Windows.Forms.MouseButtons button, object? item) -> void
 System.Windows.Forms.ItemDragEventHandler
 System.Windows.Forms.IWin32Window
-System.Windows.Forms.IWin32Window.Handle.get -> System.IntPtr
 System.Windows.Forms.IWindowTarget
-System.Windows.Forms.IWindowTarget.OnHandleChange(System.IntPtr newHandle) -> void
 System.Windows.Forms.IWindowTarget.OnMessage(ref System.Windows.Forms.Message m) -> void
 System.Windows.Forms.KeyEventArgs
 System.Windows.Forms.KeyEventArgs.Control.get -> bool
@@ -9186,9 +9152,7 @@ System.Windows.Forms.MouseEventArgs.Y.get -> int
 System.Windows.Forms.MouseEventHandler
 System.Windows.Forms.NativeWindow
 System.Windows.Forms.NativeWindow.~NativeWindow() -> void
-System.Windows.Forms.NativeWindow.AssignHandle(System.IntPtr handle) -> void
 System.Windows.Forms.NativeWindow.DefWndProc(ref System.Windows.Forms.Message m) -> void
-System.Windows.Forms.NativeWindow.Handle.get -> System.IntPtr
 System.Windows.Forms.NativeWindow.NativeWindow() -> void
 System.Windows.Forms.NavigateEventArgs
 System.Windows.Forms.NavigateEventArgs.Forward.get -> bool
@@ -10618,7 +10582,6 @@ System.Windows.Forms.TabSizeMode.Fixed = 2 -> System.Windows.Forms.TabSizeMode
 System.Windows.Forms.TabSizeMode.Normal = 0 -> System.Windows.Forms.TabSizeMode
 System.Windows.Forms.TaskDialog
 System.Windows.Forms.TaskDialog.Close() -> void
-System.Windows.Forms.TaskDialog.Handle.get -> System.IntPtr
 System.Windows.Forms.TaskDialogButton
 System.Windows.Forms.TaskDialogButton.AllowCloseDialog.get -> bool
 System.Windows.Forms.TaskDialogButton.AllowCloseDialog.set -> void
@@ -10672,10 +10635,8 @@ System.Windows.Forms.TaskDialogFootnote.Text.get -> string?
 System.Windows.Forms.TaskDialogFootnote.Text.set -> void
 System.Windows.Forms.TaskDialogIcon
 System.Windows.Forms.TaskDialogIcon.Dispose() -> void
-System.Windows.Forms.TaskDialogIcon.IconHandle.get -> System.IntPtr
 System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(System.Drawing.Bitmap! image) -> void
 System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(System.Drawing.Icon! icon) -> void
-System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(System.IntPtr iconHandle) -> void
 System.Windows.Forms.TaskDialogPage
 System.Windows.Forms.TaskDialogPage.AllowCancel.get -> bool
 System.Windows.Forms.TaskDialogPage.AllowCancel.set -> void
@@ -11785,7 +11746,6 @@ System.Windows.Forms.TreeNode.ExpandAll() -> void
 System.Windows.Forms.TreeNode.ForeColor.get -> System.Drawing.Color
 System.Windows.Forms.TreeNode.ForeColor.set -> void
 System.Windows.Forms.TreeNode.GetNodeCount(bool includeSubTrees) -> int
-System.Windows.Forms.TreeNode.Handle.get -> System.IntPtr
 System.Windows.Forms.TreeNode.ImageIndex.get -> int
 System.Windows.Forms.TreeNode.ImageIndex.set -> void
 System.Windows.Forms.TreeNode.Index.get -> int
@@ -12541,10 +12501,8 @@ System.Windows.Forms.VisualStyles.VisualStyleRenderer.GetString(System.Windows.F
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.GetTextExtent(System.Drawing.IDeviceContext! dc, string! textToDraw, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Rectangle
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.GetTextExtent(System.Drawing.IDeviceContext! dc, System.Drawing.Rectangle bounds, string! textToDraw, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Rectangle
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.GetTextMetrics(System.Drawing.IDeviceContext! dc) -> System.Windows.Forms.VisualStyles.TextMetrics
-System.Windows.Forms.VisualStyles.VisualStyleRenderer.Handle.get -> System.IntPtr
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.HitTestBackground(System.Drawing.Graphics! g, System.Drawing.Rectangle backgroundRectangle, System.Drawing.Region! region, System.Drawing.Point pt, System.Windows.Forms.VisualStyles.HitTestOptions options) -> System.Windows.Forms.VisualStyles.HitTestCode
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.HitTestBackground(System.Drawing.IDeviceContext! dc, System.Drawing.Rectangle backgroundRectangle, System.Drawing.Point pt, System.Windows.Forms.VisualStyles.HitTestOptions options) -> System.Windows.Forms.VisualStyles.HitTestCode
-System.Windows.Forms.VisualStyles.VisualStyleRenderer.HitTestBackground(System.Drawing.IDeviceContext! dc, System.Drawing.Rectangle backgroundRectangle, System.IntPtr hRgn, System.Drawing.Point pt, System.Windows.Forms.VisualStyles.HitTestOptions options) -> System.Windows.Forms.VisualStyles.HitTestCode
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.IsBackgroundPartiallyTransparent() -> bool
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.LastHResult.get -> int
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.Part.get -> int
@@ -12788,15 +12746,12 @@ virtual System.Windows.Forms.ColorDialog.AnyColor.get -> bool
 virtual System.Windows.Forms.ColorDialog.AnyColor.set -> void
 virtual System.Windows.Forms.ColorDialog.FullOpen.get -> bool
 virtual System.Windows.Forms.ColorDialog.FullOpen.set -> void
-virtual System.Windows.Forms.ColorDialog.Instance.get -> System.IntPtr
 virtual System.Windows.Forms.ColorDialog.Options.get -> int
 virtual System.Windows.Forms.ColorDialog.ShowHelp.get -> bool
 virtual System.Windows.Forms.ColorDialog.ShowHelp.set -> void
 virtual System.Windows.Forms.ColorDialog.SolidColorOnly.get -> bool
 virtual System.Windows.Forms.ColorDialog.SolidColorOnly.set -> void
-virtual System.Windows.Forms.CommonDialog.HookProc(System.IntPtr hWnd, int msg, System.IntPtr wparam, System.IntPtr lparam) -> System.IntPtr
 virtual System.Windows.Forms.CommonDialog.OnHelpRequest(System.EventArgs! e) -> void
-virtual System.Windows.Forms.CommonDialog.OwnerWndProc(System.IntPtr hWnd, int msg, System.IntPtr wparam, System.IntPtr lparam) -> System.IntPtr
 virtual System.Windows.Forms.ContainerControl.AutoValidate.get -> System.Windows.Forms.AutoValidate
 virtual System.Windows.Forms.ContainerControl.AutoValidate.set -> void
 virtual System.Windows.Forms.ContainerControl.ProcessTabKey(bool forward) -> bool

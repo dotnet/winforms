@@ -1,3 +1,12 @@
+System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(nint handle) -> void
+System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(nint handle, int objid) -> void
+System.Windows.Forms.ComboBox.ChildAccessibleObject.ChildAccessibleObject(System.Windows.Forms.ComboBox! owner, nint handle) -> void
+System.Windows.Forms.Control.ControlAccessibleObject.Handle.get -> nint
+System.Windows.Forms.Control.Handle.get -> nint
+System.Windows.Forms.CreateParams.Parent.get -> nint
+System.Windows.Forms.Cursor.CopyHandle() -> nint
+System.Windows.Forms.Cursor.Cursor(nint handle) -> void
+System.Windows.Forms.Cursor.Handle.get -> nint
 System.Windows.Forms.DropImageType
 System.Windows.Forms.DropImageType.Invalid = -1 -> System.Windows.Forms.DropImageType
 System.Windows.Forms.DropImageType.None = 0 -> System.Windows.Forms.DropImageType
@@ -7,6 +16,39 @@ System.Windows.Forms.DropImageType.Link = 4 -> System.Windows.Forms.DropImageTyp
 System.Windows.Forms.DropImageType.Label = 6 -> System.Windows.Forms.DropImageType
 System.Windows.Forms.DropImageType.Warning = 7 -> System.Windows.Forms.DropImageType
 System.Windows.Forms.DropImageType.NoImage = 8 -> System.Windows.Forms.DropImageType
+System.Windows.Forms.IWin32Window.Handle.get -> nint
+System.Windows.Forms.IWindowTarget.OnHandleChange(nint newHandle) -> void
+System.Windows.Forms.ImageList.Handle.get -> nint
+System.Windows.Forms.InputLanguage.Handle.get -> nint
+System.Windows.Forms.NativeWindow.AssignHandle(nint handle) -> void
+System.Windows.Forms.NativeWindow.Handle.get -> nint
+System.Windows.Forms.TaskDialog.Handle.get -> nint
+System.Windows.Forms.TaskDialogIcon.IconHandle.get -> nint
+System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(nint iconHandle) -> void
+System.Windows.Forms.TreeNode.Handle.get -> nint
+System.Windows.Forms.VisualStyles.VisualStyleRenderer.Handle.get -> nint
+System.Windows.Forms.VisualStyles.VisualStyleRenderer.HitTestBackground(System.Drawing.IDeviceContext! dc, System.Drawing.Rectangle backgroundRectangle, nint hRgn, System.Drawing.Point pt, System.Windows.Forms.VisualStyles.HitTestOptions options) -> System.Windows.Forms.VisualStyles.HitTestCode
+abstract System.Windows.Forms.CommonDialog.RunDialog(nint hwndOwner) -> bool
+override System.Windows.Forms.ColorDialog.RunDialog(nint hwndOwner) -> bool
+override System.Windows.Forms.FontDialog.HookProc(nint hWnd, int msg, nint wparam, nint lparam) -> nint
+override System.Windows.Forms.FontDialog.RunDialog(nint hWndOwner) -> bool
+static System.Windows.Forms.Control.ReflectMessage(nint hWnd, ref System.Windows.Forms.Message m) -> bool
+static System.Windows.Forms.ControlPaint.CreateHBitmap16Bit(System.Drawing.Bitmap! bitmap, System.Drawing.Color background) -> nint
+static System.Windows.Forms.ControlPaint.CreateHBitmapColorMask(System.Drawing.Bitmap! bitmap, nint monochromeMask) -> nint
+static System.Windows.Forms.ControlPaint.CreateHBitmapTransparencyMask(System.Drawing.Bitmap! bitmap) -> nint
+static System.Windows.Forms.ImeContext.Disable(nint handle) -> void
+static System.Windows.Forms.ImeContext.Enable(nint handle) -> void
+static System.Windows.Forms.ImeContext.GetImeMode(nint handle) -> System.Windows.Forms.ImeMode
+static System.Windows.Forms.ImeContext.IsOpen(nint handle) -> bool
+static System.Windows.Forms.ImeContext.SetImeStatus(System.Windows.Forms.ImeMode imeMode, nint handle) -> void
+static System.Windows.Forms.ImeContext.SetOpenStatus(bool open, nint handle) -> void
+static System.Windows.Forms.NativeWindow.FromHandle(nint handle) -> System.Windows.Forms.NativeWindow?
+static System.Windows.Forms.Screen.FromHandle(nint hwnd) -> System.Windows.Forms.Screen!
+static System.Windows.Forms.TaskDialog.ShowDialog(nint hwndOwner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Windows.Forms.TaskDialogButton!
+virtual System.Windows.Forms.ColorDialog.Instance.get -> nint
+virtual System.Windows.Forms.CommonDialog.HookProc(nint hWnd, int msg, nint wparam, nint lparam) -> nint
+virtual System.Windows.Forms.CommonDialog.OwnerWndProc(nint hWnd, int msg, nint wparam, nint lparam) -> nint
+~System.Windows.Forms.ComponentModel.Com2Interop.ICom2PropertyPageDisplayService.ShowPropertyPage(string title, object component, int dispid, System.Guid pageGuid, nint parentHandle) -> void
 ~System.Windows.Forms.Control.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
 ~System.Windows.Forms.ToolStripItem.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
 System.Windows.Forms.DragEventArgs.DragEventArgs(System.Windows.Forms.IDataObject? data, int keyState, int x, int y, System.Windows.Forms.DragDropEffects allowedEffect, System.Windows.Forms.DragDropEffects effect, System.Windows.Forms.DropImageType dropImageType, string! message, string! messageReplacementToken) -> void
@@ -24,3 +66,6 @@ System.Windows.Forms.GiveFeedbackEventArgs.DragImage.set -> void
 System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultDragImage.get -> bool
 System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultDragImage.set -> void
 ~override System.Windows.Forms.WebBrowser.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
+~static System.Windows.Forms.Control.FromChildHandle(nint handle) -> System.Windows.Forms.Control
+~static System.Windows.Forms.Control.FromHandle(nint handle) -> System.Windows.Forms.Control
+~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, nint handle) -> System.Windows.Forms.TreeNode
