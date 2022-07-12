@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32;
 
 internal static partial class Interop
 {
@@ -14,6 +15,6 @@ internal static partial class Interop
 
         public static nint SetWinEventHook(uint eventId, WINEVENTPROC pfnWinEventProc)
             => SetWinEventHook(eventId, eventId, Kernel32.GetModuleHandleW(null), pfnWinEventProc,
-                (uint)Environment.ProcessId, Kernel32.GetCurrentThreadId(), WINEVENT.INCONTEXT);
+                (uint)Environment.ProcessId, PInvoke.GetCurrentThreadId(), WINEVENT.INCONTEXT);
     }
 }

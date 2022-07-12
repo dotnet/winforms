@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -105,7 +106,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         User32.WH.MOUSE,
                         hook,
                         IntPtr.Zero,
-                        Kernel32.GetCurrentThreadId());
+                        PInvoke.GetCurrentThreadId());
                     Debug.Assert(_mouseHookHandle != IntPtr.Zero, "Failed to install mouse hook");
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:HookMouse()");
                 }

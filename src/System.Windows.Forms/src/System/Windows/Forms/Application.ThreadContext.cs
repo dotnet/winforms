@@ -11,6 +11,8 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.Mso;
+using Windows.Win32;
+using Foundation = Windows.Win32.Foundation;
 
 namespace System.Windows.Forms
 {
@@ -32,11 +34,11 @@ namespace System.Windows.Forms
 
             private static readonly UIntPtr s_invalidId = (UIntPtr)0xFFFFFFFF;
 
-            private static readonly Hashtable s_contextHash = new Hashtable();
+            private static readonly Hashtable s_contextHash = new();
 
             // When this gets to zero, we'll invoke a full garbage
             // collect and check for root/window leaks.
-            private static readonly object s_tcInternalSyncObject = new object();
+            private static readonly object s_tcInternalSyncObject = new();
 
             private static int s_totalMessageLoopCount;
             private static msoloop s_baseLoopReason;
@@ -50,7 +52,7 @@ namespace System.Windows.Forms
             internal EventHandler _leaveModalHandler;
 
             // Parking window list
-            private readonly List<ParkingWindow> _parkingWindows = new List<ParkingWindow>();
+            private readonly List<ParkingWindow> _parkingWindows = new();
             private Control _marshalingControl;
             private List<IMessageFilter> _messageFilters;
             private List<IMessageFilter> _messageFilterSnapshot;
@@ -90,19 +92,22 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Creates a new thread context object.
             /// </summary>
-            public ThreadContext()
+            public unsafe ThreadContext()
             {
-                IntPtr address = IntPtr.Zero;
+                Foundation.HANDLE target;
 
-                Kernel32.DuplicateHandle(
-                    Kernel32.GetCurrentProcess(),
-                    Kernel32.GetCurrentThread(),
-                    Kernel32.GetCurrentProcess(),
-                    ref address);
+                PInvoke.DuplicateHandle(
+                    PInvoke.GetCurrentProcess(),
+                    PInvoke.GetCurrentThread(),
+                    PInvoke.GetCurrentProcess(),
+                    &target,
+                    0,
+                    false,
+                    Foundation.DUPLICATE_HANDLE_OPTIONS.DUPLICATE_SAME_ACCESS);
 
-                _handle = address;
+                _handle = target;
 
-                _id = Kernel32.GetCurrentThreadId();
+                _id = PInvoke.GetCurrentThreadId();
                 _messageLoopCount = 0;
                 t_currentThreadContext = this;
 
@@ -190,7 +195,7 @@ namespace System.Windows.Forms
                         object messageFilter = Marshal.GetObjectForIUnknown(messageFilterHandle);
                         Marshal.Release(messageFilterHandle);
 
-                        if (!(messageFilter is Ole32.IServiceProvider serviceProvider))
+                        if (messageFilter is not Ole32.IServiceProvider serviceProvider)
                         {
                             return null;
                         }
@@ -242,7 +247,7 @@ namespace System.Windows.Forms
                         _componentID = id;
                         Debug.Assert(_componentID != s_invalidId, "Our ID sentinel was returned as a valid ID");
 
-                        if (result && !(_componentManager is ComponentManager))
+                        if (result && _componentManager is not Application.ComponentManager)
                         {
                             _messageLoopCount++;
                         }
@@ -481,7 +486,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                bool ourThread = Kernel32.GetCurrentThreadId() == _id;
+                                bool ourThread = PInvoke.GetCurrentThreadId() == _id;
 
                                 try
                                 {
@@ -570,7 +575,7 @@ namespace System.Windows.Forms
                     // controls that are living on the parking window.
 
                     uint hwndThread = User32.GetWindowThreadProcessId(_parkingWindows[0], out _);
-                    uint currentThread = Kernel32.GetCurrentThreadId();
+                    uint currentThread = PInvoke.GetCurrentThreadId();
 
                     for (int i = 0; i < _parkingWindows.Count; i++)
                     {
@@ -719,7 +724,7 @@ namespace System.Windows.Forms
                 if (activate)
                 {
                     IMsoComponentManager cm = ComponentManager;
-                    if (cm is not null && !(cm is ComponentManager))
+                    if (cm is not null && cm is not Application.ComponentManager)
                     {
                         cm.FOnComponentActivate(_componentID);
                     }
@@ -736,7 +741,7 @@ namespace System.Windows.Forms
                 if (track != GetState(STATE_TRACKINGCOMPONENT))
                 {
                     IMsoComponentManager cm = ComponentManager;
-                    if (cm is not null && !(cm is ComponentManager))
+                    if (cm is not null && cm is not Application.ComponentManager)
                     {
                         cm.FSetTrackingComponent(_componentID, track.ToBOOL());
                         SetState(STATE_TRACKINGCOMPONENT, track);
@@ -756,7 +761,7 @@ namespace System.Windows.Forms
             internal static ThreadContext FromId(uint id)
             {
                 ThreadContext context = (ThreadContext)s_contextHash[id];
-                if (context is null && id == Kernel32.GetCurrentThreadId())
+                if (context is null && id == PInvoke.GetCurrentThreadId())
                 {
                     context = new ThreadContext();
                 }
@@ -842,7 +847,7 @@ namespace System.Windows.Forms
 
             internal ApartmentState OleRequired()
             {
-                Thread current = Thread.CurrentThread;
+                _ = Thread.CurrentThread;
                 if (!GetState(STATE_OLEINITIALIZED))
                 {
                     HRESULT ret = Ole32.OleInitialize(IntPtr.Zero);
@@ -1574,7 +1579,7 @@ namespace System.Windows.Forms
             /// <inheritdoc />
             void IMsoComponent.Terminate()
             {
-                if (_messageLoopCount > 0 && !(ComponentManager is ComponentManager))
+                if (_messageLoopCount > 0 && ComponentManager is not Application.ComponentManager)
                 {
                     _messageLoopCount--;
                 }
