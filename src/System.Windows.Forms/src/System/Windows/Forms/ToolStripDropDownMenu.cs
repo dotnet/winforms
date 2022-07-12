@@ -598,6 +598,10 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override void ReleaseToolStripItemsProviders(ToolStripItemCollection items)
+        {
+        }
+
         internal override void ResetScaling(int newDpi)
         {
             base.ResetScaling(newDpi);

@@ -3196,6 +3196,22 @@ namespace System.Windows.Forms
         internal void RaiseQueryContinueDragEvent(object key, QueryContinueDragEventArgs e)
             => ((QueryContinueDragEventHandler)Events[key])?.Invoke(this, e);
 
+        internal virtual void ReleaseUiaProvider()
+        {
+            if (TryGetAccessibilityObject(out AccessibleObject accessibleObject))
+            {
+                HRESULT result = UiaCore.UiaDisconnectProvider(accessibleObject);
+                Debug.Assert(result == HRESULT.S_OK);
+                Properties.SetObject(s_accessibilityProperty, null);
+            }
+
+            bool TryGetAccessibilityObject(out AccessibleObject accessibleObject)
+            {
+                accessibleObject = Properties.GetObject(s_accessibilityProperty) as AccessibleObject;
+                return accessibleObject is not null;
+            }
+        }
+
         private void ResetToolTipText() => _toolTipText = null;
 
         // This will only be called in PerMonitorV2 scenarios.

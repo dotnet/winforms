@@ -4256,6 +4256,35 @@ namespace System.Windows.Forms
             return null;
         }
 
+        internal override void ReleaseUiaProvider(IntPtr handle)
+        {
+            base.ReleaseUiaProvider(handle);
+            if (OsVersion.IsWindows8OrGreater)
+            {
+                ReleaseToolStripItemsProviders(Items);
+            }
+        }
+
+        /// <summary>
+        ///  Call UiaDisconnectProvider for all ToolsStripItem Accessible objects.
+        ///  This method is invoked from ReleaseUiaProvider method.
+        /// </summary>
+        /// <param name="items">contains ToolStrip or ToolStripDropDown items to disconnect</param>
+        internal virtual void ReleaseToolStripItemsProviders(ToolStripItemCollection items)
+        {
+            ToolStripItem[] itemsArray = items.Cast<ToolStripItem>().ToArray();
+            foreach (ToolStripItem toolStripItem in itemsArray)
+            {
+                if (toolStripItem is ToolStripDropDownItem dropDownItem && dropDownItem.DropDownItems.Count > 0)
+                {
+                    ToolStripItemCollection dropDownMenuItems = dropDownItem.DropDownItems;
+                    ReleaseToolStripItemsProviders(dropDownMenuItems);
+                }
+
+                toolStripItem.ReleaseUiaProvider();
+            }
+        }
+
         private void RestoreFocusInternal(bool wasInMenuMode)
         {
             // This is called from the RestoreFocusFilter.  If the state of MenuMode has changed

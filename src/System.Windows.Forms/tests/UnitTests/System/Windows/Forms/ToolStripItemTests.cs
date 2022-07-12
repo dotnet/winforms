@@ -7063,6 +7063,31 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
         }
 
+        [WinFormsFact]
+        public void ToolStripItem_Releases_UiaProvider()
+        {
+            using ToolStripWithDisconnectCount toolStrip = new();
+
+            using ToolStripDropDownItemWithDisconnectCount toolStripDropDownItem1 = new();
+            toolStrip.Items.Add(toolStripDropDownItem1);
+
+            using ToolStripDropDownItemWithDisconnectCount toolStripDropDownItem2 = new();
+            toolStripDropDownItem1.DropDownItems.Add(toolStripDropDownItem2);
+
+            _ = toolStrip.AccessibilityObject;
+            Assert.True(toolStrip.IsAccessibilityObjectCreated);
+
+            toolStrip.ReleaseUiaProvider(toolStrip.Handle);
+
+            Assert.True(toolStrip.IsAccessibilityObjectDisconnected);
+            Assert.Equal(1, toolStrip.Disconnects);
+            Assert.True(toolStripDropDownItem1.IsAccessibilityObjectDisconnected);
+            Assert.Equal(1, toolStripDropDownItem1.Disconnects);
+            Assert.True(toolStripDropDownItem2.IsAccessibilityObjectDisconnected);
+            Assert.Equal(1, toolStripDropDownItem2.Disconnects);
+            Assert.True(toolStrip.IsHandleCreated);
+        }
+
         [WinFormsTheory]
         [InlineData(RightToLeft.Inherit, RightToLeft.No)]
         [InlineData(RightToLeft.Yes, RightToLeft.Yes)]
@@ -15545,6 +15570,35 @@ namespace System.Windows.Forms.Tests
             public new void SetBounds(Rectangle bounds) => base.SetBounds(bounds);
 
             public new void SetVisibleCore(bool visible) => base.SetVisibleCore(visible);
+        }
+
+        private class  ToolStripWithDisconnectCount : ToolStrip
+        {
+            public ToolStripWithDisconnectCount() : base() { }
+
+            public int Disconnects { get; private set; }
+            public bool IsAccessibilityObjectDisconnected { get; private set; }
+
+            internal override void ReleaseUiaProvider(IntPtr handle)
+            {
+                base.ReleaseUiaProvider(handle);
+                Disconnects++;
+                IsAccessibilityObjectDisconnected = true;
+            }
+        }
+
+        private class ToolStripDropDownItemWithDisconnectCount : ToolStripDropDownItem
+        {
+            public ToolStripDropDownItemWithDisconnectCount() : base() { }
+            public int Disconnects { get; private set; }
+            public bool IsAccessibilityObjectDisconnected { get; private set; }
+
+            internal override void ReleaseUiaProvider()
+            {
+                base.ReleaseUiaProvider();
+                Disconnects++;
+                IsAccessibilityObjectDisconnected = true;
+            }
         }
     }
 }
