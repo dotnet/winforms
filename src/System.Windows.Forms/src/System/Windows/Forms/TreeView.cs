@@ -436,7 +436,15 @@ namespace System.Windows.Forms
         protected override bool DoubleBuffered
         {
             get => base.DoubleBuffered;
-            set => base.DoubleBuffered = value;
+            set
+            {
+                base.DoubleBuffered = value;
+
+                if (IsHandleCreated)
+                {
+                    UpdateTreeViewExtendedStyles();
+                }
+            }
         }
 
         /// <summary>
@@ -1959,6 +1967,9 @@ namespace System.Windows.Forms
 
             base.OnHandleCreated(e);
 
+            // The TreeView extended styles are independent of the window extended styles.
+            UpdateTreeViewExtendedStyles();
+
             int version = (int)User32.SendMessageW(this, (User32.WM)CCM.GETVERSION);
             if (version < 5)
             {
@@ -2063,6 +2074,27 @@ namespace System.Windows.Forms
             }
 
             SelectedNode = savedSelectedNode;
+        }
+
+        private void UpdateTreeViewExtendedStyles()
+        {
+            TVS_EX extendedStyles = (TVS_EX)User32.SendMessageW(this, (User32.WM)TVM.GETEXTENDEDSTYLE);
+
+            SetExtendedStyle(ref extendedStyles, TVS_EX.DOUBLEBUFFER, DoubleBuffered);
+
+            User32.SendMessageW(this, (User32.WM)TVM.SETEXTENDEDSTYLE, (int)extendedStyles, (int)extendedStyles);
+
+            static void SetExtendedStyle(ref TVS_EX extendedStyles, TVS_EX mask, bool value)
+            {
+                if (value)
+                {
+                    extendedStyles |= mask;
+                }
+                else
+                {
+                    extendedStyles &= ~mask;
+                }
+            }
         }
 
         // Replace the native control's ImageList with our current stateImageList
