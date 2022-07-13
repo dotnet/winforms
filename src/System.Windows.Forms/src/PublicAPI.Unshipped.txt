@@ -7,15 +7,6 @@ System.Windows.Forms.CreateParams.Parent.get -> nint
 System.Windows.Forms.Cursor.CopyHandle() -> nint
 System.Windows.Forms.Cursor.Cursor(nint handle) -> void
 System.Windows.Forms.Cursor.Handle.get -> nint
-System.Windows.Forms.DropImageType
-System.Windows.Forms.DropImageType.Invalid = -1 -> System.Windows.Forms.DropImageType
-System.Windows.Forms.DropImageType.None = 0 -> System.Windows.Forms.DropImageType
-System.Windows.Forms.DropImageType.Copy = 1 -> System.Windows.Forms.DropImageType
-System.Windows.Forms.DropImageType.Move = 2 -> System.Windows.Forms.DropImageType
-System.Windows.Forms.DropImageType.Link = 4 -> System.Windows.Forms.DropImageType
-System.Windows.Forms.DropImageType.Label = 6 -> System.Windows.Forms.DropImageType
-System.Windows.Forms.DropImageType.Warning = 7 -> System.Windows.Forms.DropImageType
-System.Windows.Forms.DropImageType.NoImage = 8 -> System.Windows.Forms.DropImageType
 System.Windows.Forms.IWin32Window.Handle.get -> nint
 System.Windows.Forms.IWindowTarget.OnHandleChange(nint newHandle) -> void
 System.Windows.Forms.ImageList.Handle.get -> nint
@@ -49,23 +40,6 @@ virtual System.Windows.Forms.ColorDialog.Instance.get -> nint
 virtual System.Windows.Forms.CommonDialog.HookProc(nint hWnd, int msg, nint wparam, nint lparam) -> nint
 virtual System.Windows.Forms.CommonDialog.OwnerWndProc(nint hWnd, int msg, nint wparam, nint lparam) -> nint
 ~System.Windows.Forms.ComponentModel.Com2Interop.ICom2PropertyPageDisplayService.ShowPropertyPage(string title, object component, int dispid, System.Guid pageGuid, nint parentHandle) -> void
-~System.Windows.Forms.Control.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
-~System.Windows.Forms.ToolStripItem.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
-System.Windows.Forms.DragEventArgs.DragEventArgs(System.Windows.Forms.IDataObject? data, int keyState, int x, int y, System.Windows.Forms.DragDropEffects allowedEffect, System.Windows.Forms.DragDropEffects effect, System.Windows.Forms.DropImageType dropImageType, string! message, string! messageReplacementToken) -> void
-System.Windows.Forms.DragEventArgs.DropImageType.get -> System.Windows.Forms.DropImageType
-System.Windows.Forms.DragEventArgs.DropImageType.set -> void
-System.Windows.Forms.DragEventArgs.Message.get -> string?
-System.Windows.Forms.DragEventArgs.Message.set -> void
-System.Windows.Forms.DragEventArgs.MessageReplacementToken.get -> string?
-System.Windows.Forms.DragEventArgs.MessageReplacementToken.set -> void
-System.Windows.Forms.GiveFeedbackEventArgs.GiveFeedbackEventArgs(System.Windows.Forms.DragDropEffects effect, bool useDefaultCursors, System.Drawing.Bitmap? dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> void
-System.Windows.Forms.GiveFeedbackEventArgs.CursorOffset.get -> System.Drawing.Point
-System.Windows.Forms.GiveFeedbackEventArgs.CursorOffset.set -> void
-System.Windows.Forms.GiveFeedbackEventArgs.DragImage.get -> System.Drawing.Bitmap?
-System.Windows.Forms.GiveFeedbackEventArgs.DragImage.set -> void
-System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultDragImage.get -> bool
-System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultDragImage.set -> void
-~override System.Windows.Forms.WebBrowser.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~static System.Windows.Forms.Control.FromChildHandle(nint handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.Control.FromHandle(nint handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, nint handle) -> System.Windows.Forms.TreeNode
