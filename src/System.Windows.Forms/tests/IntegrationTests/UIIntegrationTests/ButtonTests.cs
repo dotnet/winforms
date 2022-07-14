@@ -186,7 +186,8 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/7407")]
+        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/7407")]
         public async Task Button_Anchor_ResizeOnWindowSizeTallerAsync()
         {
             await RunTestAsync(async (form, button) =>
