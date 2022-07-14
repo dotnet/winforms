@@ -235,7 +235,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnClick(EventArgs e)
         {
-            Form form = FindForm();
+            Form? form = FindForm();
             if (form is not null)
             {
                 form.DialogResult = _dialogResult;

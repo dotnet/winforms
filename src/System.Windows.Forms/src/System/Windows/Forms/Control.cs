@@ -1591,7 +1591,7 @@ namespace System.Windows.Forms
         {
             bool valid = true;
             validatedControlAllowsFocusChange = false;
-            IContainerControl c = GetContainerControl();
+            IContainerControl? c = GetContainerControl();
             if (c is not null && CausesValidation)
             {
                 if (c is ContainerControl container)
@@ -4706,7 +4706,7 @@ namespace System.Windows.Forms
         /// </returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public IAsyncResult BeginInvoke(Action method) => BeginInvoke(method, null);
-#nullable disable
+
         /// <summary>
         ///  Executes the given delegate on the thread that owns this Control's
         ///  underlying window handle.  The delegate is called asynchronously and this
@@ -4724,7 +4724,7 @@ namespace System.Windows.Forms
         ///  the call to the control's thread.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public IAsyncResult BeginInvoke(Delegate method, params object[] args)
+        public IAsyncResult BeginInvoke(Delegate method, params object?[]? args)
         {
             using var scope = MultithreadSafeCallScope.Create();
             Control marshaler = FindMarshalingControl();
@@ -4795,7 +4795,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            for (Control ctl = this; ctl is not null; ctl = ctl._parent)
+            for (Control? ctl = this; ctl is not null; ctl = ctl._parent)
             {
                 if (!ctl.Enabled || !ctl.Visible)
                 {
@@ -4810,12 +4810,12 @@ namespace System.Windows.Forms
         ///  Searches the parent/owner tree for bottom to find any instance
         ///  of toFind in the parent/owner tree.
         /// </summary>
-        internal static void CheckParentingCycle(Control bottom, Control toFind)
+        internal static void CheckParentingCycle(Control? bottom, Control? toFind)
         {
-            Form lastOwner = null;
-            Control lastParent = null;
+            Form? lastOwner = null;
+            Control? lastParent = null;
 
-            for (Control ctl = bottom; ctl is not null; ctl = ctl.ParentInternal)
+            for (Control? ctl = bottom; ctl is not null; ctl = ctl.ParentInternal)
             {
                 lastParent = ctl;
                 if (ctl == toFind)
@@ -4828,7 +4828,7 @@ namespace System.Windows.Forms
             {
                 if (lastParent is Form f)
                 {
-                    for (Form form = f; form is not null; form = form.OwnerInternal)
+                    for (Form? form = f; form is not null; form = form.OwnerInternal)
                     {
                         lastOwner = form;
                         if (form == toFind)
@@ -4864,7 +4864,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Verifies if a control is a child of this control.
         /// </summary>
-        public bool Contains(Control ctl)
+        public bool Contains(Control? ctl)
         {
             while (ctl is not null)
             {
@@ -5054,7 +5054,7 @@ namespace System.Windows.Forms
 
                     // must snapshot this array because
                     // z-order updates from Windows may rearrange it!
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                    ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
                     if (controlsCollection is not null)
                     {
@@ -5171,7 +5171,7 @@ namespace System.Windows.Forms
         {
             if (GetState(States.OwnCtlBrush))
             {
-                object backBrush = Properties.GetObject(s_backBrushProperty);
+                object? backBrush = Properties.GetObject(s_backBrushProperty);
                 if (backBrush is not null)
                 {
                     Gdi32.HBRUSH p = (Gdi32.HBRUSH)backBrush;
@@ -5219,7 +5219,7 @@ namespace System.Windows.Forms
                         _parent.Controls.Remove(this);
                     }
 
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                    ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
                     if (controlsCollection is not null)
                     {
@@ -5261,7 +5261,7 @@ namespace System.Windows.Forms
         // Package scope to allow AxHost to override.
         internal virtual void DisposeAxControls()
         {
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
             if (controlsCollection is not null)
             {
@@ -5311,20 +5311,20 @@ namespace System.Windows.Forms
         ///   value.
         ///  </para>
         /// </remarks>
-        public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
+        public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
-            IComDataObject dataObject = null;
+            IComDataObject dataObject;
 
-            if (data is IComDataObject)
+            if (data is IComDataObject comDataObject)
             {
-                dataObject = (IComDataObject)data;
+                dataObject = comDataObject;
             }
             else
             {
-                DataObject iwdata = null;
-                if (data is IDataObject)
+                DataObject iwdata;
+                if (data is IDataObject dataAsDataObject)
                 {
-                    iwdata = new DataObject((IDataObject)data);
+                    iwdata = new DataObject(dataAsDataObject);
                 }
                 else
                 {
@@ -5332,7 +5332,7 @@ namespace System.Windows.Forms
                     iwdata.SetData(data);
                 }
 
-                dataObject = (IComDataObject)iwdata;
+                dataObject = iwdata;
             }
 
             Ole32.DROPEFFECT finalEffect;
@@ -5408,12 +5408,12 @@ namespace System.Windows.Forms
         ///  block until the result is available.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public object EndInvoke(IAsyncResult asyncResult)
+        public object? EndInvoke(IAsyncResult asyncResult)
         {
             using var scope = MultithreadSafeCallScope.Create();
             ArgumentNullException.ThrowIfNull(asyncResult);
 
-            if (!(asyncResult is ThreadMethodEntry entry))
+            if (asyncResult is not ThreadMethodEntry entry)
             {
                 throw new ArgumentException(SR.ControlBadAsyncResult, nameof(asyncResult));
             }
@@ -5475,15 +5475,15 @@ namespace System.Windows.Forms
         ///  Retrieves the form that this control is on. The control's parent may not be
         ///  the same as the form.
         /// </summary>
-        public Form FindForm()
+        public Form? FindForm()
         {
-            Control cur = this;
-            while (cur is not null && !(cur is Form))
+            Control? cur = this;
+            while (cur is not null && cur is not Form)
             {
                 cur = cur.ParentInternal;
             }
 
-            return (Form)cur;
+            return (Form?)cur;
         }
 
         /// <summary>
@@ -5496,11 +5496,11 @@ namespace System.Windows.Forms
         {
             lock (this)
             {
-                Control c = this;
+                Control? c = this;
 
                 while (c is not null && !c.IsHandleCreated)
                 {
-                    Control p = c.ParentInternal;
+                    Control? p = c.ParentInternal;
                     c = p;
                 }
 
@@ -5531,7 +5531,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void RaiseCreateHandleEvent(EventArgs e)
         {
-            ((EventHandler)Events[s_handleCreatedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_handleCreatedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -5541,7 +5541,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseKeyEvent(object key, KeyEventArgs e)
         {
-            ((KeyEventHandler)Events[key])?.Invoke(this, e);
+            ((KeyEventHandler?)Events[key])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -5551,7 +5551,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseMouseEvent(object key, MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[key])?.Invoke(this, e);
+            ((MouseEventHandler?)Events[key])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -5560,7 +5560,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool Focus()
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::Focus - " + Name);
+            Debug.WriteLineIf(s_focusTracing!.TraceVerbose, "Control::Focus - " + Name);
 
             // Call the internal method (which form overrides)
             return FocusInternal();
@@ -5573,7 +5573,7 @@ namespace System.Windows.Forms
         /// </summary>
         private protected virtual bool FocusInternal()
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::FocusInternal - " + Name);
+            Debug.WriteLineIf(s_focusTracing!.TraceVerbose, "Control::FocusInternal - " + Name);
             if (CanFocus)
             {
                 User32.SetFocus(new HandleRef(this, Handle));
@@ -5581,7 +5581,7 @@ namespace System.Windows.Forms
 
             if (Focused && ParentInternal is not null)
             {
-                IContainerControl c = ParentInternal.GetContainerControl();
+                IContainerControl? c = ParentInternal.GetContainerControl();
 
                 if (c is not null)
                 {
@@ -5607,11 +5607,11 @@ namespace System.Windows.Forms
         ///  that own more than one handle.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static Control FromChildHandle(IntPtr handle)
+        public static Control? FromChildHandle(IntPtr handle)
         {
             while (handle != IntPtr.Zero)
             {
-                Control ctl = FromHandle(handle);
+                Control? ctl = FromHandle(handle);
                 if (ctl is not null)
                 {
                     return ctl;
@@ -5627,10 +5627,10 @@ namespace System.Windows.Forms
         ///  Returns the control that is currently associated with handle.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static Control FromHandle(IntPtr handle)
+        public static Control? FromHandle(IntPtr handle)
         {
-            NativeWindow w = NativeWindow.FromHandle(handle);
-            while (w is not null && !(w is ControlNativeWindow))
+            NativeWindow? w = NativeWindow.FromHandle(handle);
+            while (w is not null && w is not ControlNativeWindow)
             {
                 w = w.PreviousWindow;
             }
@@ -5682,7 +5682,7 @@ namespace System.Windows.Forms
         ///  Retrieves the child control that is located at the specified client
         ///  coordinates.
         /// </summary>
-        public Control GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue)
+        public Control? GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue)
         {
             int value = (int)skipValue;
             // Since this is a Flags Enumeration... the only way to validate skipValue is by checking if its within the range.
@@ -5692,14 +5692,14 @@ namespace System.Windows.Forms
             }
 
             IntPtr hwnd = User32.ChildWindowFromPointEx(this, pt, (User32.CWP)value);
-            Control ctl = FromChildHandle(hwnd);
+            Control? ctl = FromChildHandle(hwnd);
 
             return (ctl == this) ? null : ctl;
         }
 
         private protected virtual string GetCaptionForTool(ToolTip toolTip)
         {
-            IKeyboardToolTip host = ToolStripControlHost;
+            IKeyboardToolTip? host = ToolStripControlHost;
 
             return host is null
                 ? toolTip.GetCaptionForTool(this)
@@ -5710,7 +5710,7 @@ namespace System.Windows.Forms
         ///  Retrieves the child control that is located at the specified client
         ///  coordinates.
         /// </summary>
-        public Control GetChildAtPoint(Point pt)
+        public Control? GetChildAtPoint(Point pt)
         {
             return GetChildAtPoint(pt, GetChildAtPointSkip.None);
         }
@@ -5719,9 +5719,9 @@ namespace System.Windows.Forms
         ///  Returns the closest ContainerControl in the control's chain of parent controls
         ///  and forms.
         /// </summary>
-        public IContainerControl GetContainerControl()
+        public IContainerControl? GetContainerControl()
         {
-            Control c = this;
+            Control? c = this;
 
             // Refer to IsContainerControl property for more details.
             if (c is not null && IsContainerControl)
@@ -5734,7 +5734,7 @@ namespace System.Windows.Forms
                 c = c.ParentInternal;
             }
 
-            return (IContainerControl)c;
+            return (IContainerControl?)c;
         }
 
         private static bool IsFocusManagingContainerControl(Control ctl)
@@ -5749,7 +5749,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsUpdating()
         {
-            return (_updateCount > 0);
+            return _updateCount > 0;
         }
 
         // Essentially an Hfont; see inner class for details.
@@ -5785,7 +5785,7 @@ namespace System.Windows.Forms
             bool scaleLoc = !GetState(States.TopLevel);
             if (scaleLoc)
             {
-                ISite site = Site;
+                ISite? site = Site;
                 if (site is not null && site.DesignMode)
                 {
                     if (site.GetService(typeof(IDesignerHost)) is IDesignerHost host && host.RootComponent == this)
@@ -5863,7 +5863,7 @@ namespace System.Windows.Forms
 
         internal bool GetAnyDisposingInHierarchy()
         {
-            Control up = this;
+            Control? up = this;
             bool isDisposing = false;
             while (up is not null)
             {
@@ -5878,7 +5878,7 @@ namespace System.Windows.Forms
 
             return isDisposing;
         }
-
+#nullable disable
         /// <summary>
         ///  Returns native child windows sorted according to their TabIndex property order. Controls with the same
         ///  TabIndex remain in original relative child index order (= z-order). Child windows with no corresponding
@@ -10027,7 +10027,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static bool ReflectMessage(IntPtr hWnd, ref Message m)
         {
-            Control control = FromHandle(hWnd);
+            Control? control = FromHandle(hWnd);
             if (control is null)
             {
                 return false;
@@ -11689,7 +11689,7 @@ namespace System.Windows.Forms
             IntPtr hWnd = ctl.InternalHandle;
             while ((hWnd = User32.GetWindow(hWnd, User32.GW.HWNDPREV)) != IntPtr.Zero)
             {
-                Control c = FromHandle(hWnd);
+                Control? c = FromHandle(hWnd);
                 if (c is not null)
                 {
                     newIndex = Controls.GetChildIndex(c, false) + 1;
@@ -11979,7 +11979,7 @@ namespace System.Windows.Forms
         private void WmCtlColorControl(ref Message m)
         {
             // We could simply reflect the message, but it's faster to handle it here if possible.
-            Control control = FromHandle(m.LParamInternal);
+            Control? control = FromHandle(m.LParamInternal);
             if (control is not null)
             {
                 m.ResultInternal = control.InitializeDCForWmCtlColor((Gdi32.HDC)m.WParamInternal, m.MsgInternal);
@@ -12584,7 +12584,7 @@ namespace System.Windows.Forms
                 IntPtr handle = NativeWindow.GetHandleFromWindowId((short)PARAM.LOWORD(m.WParamInternal));
                 if (handle != IntPtr.Zero)
                 {
-                    Control control = FromHandle(handle);
+                    Control? control = FromHandle(handle);
                     if (control is not null)
                     {
                         m.ResultInternal = User32.SendMessageW(control, User32.WM.REFLECT | m.MsgInternal, handle, m.LParamInternal);

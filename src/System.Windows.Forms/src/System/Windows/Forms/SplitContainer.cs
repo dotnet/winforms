@@ -2012,7 +2012,7 @@ namespace System.Windows.Forms
                 bool correctParentActiveControl = true;
                 if (container.ParentInternal is not null)
                 {
-                    IContainerControl c = container.ParentInternal.GetContainerControl();
+                    IContainerControl? c = container.ParentInternal.GetContainerControl();
                     if (c is not null)
                     {
                         c.ActiveControl = container;
