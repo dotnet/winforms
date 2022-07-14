@@ -11,14 +11,14 @@ namespace System.Windows.Forms
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public sealed class RelatedImageListAttribute : Attribute
     {
-        private readonly string _relatedImageList;
+        private readonly string? _relatedImageList;
 
-        public RelatedImageListAttribute(string relatedImageList)
+        public RelatedImageListAttribute(string? relatedImageList)
         {
             _relatedImageList = relatedImageList;
         }
 
-        public string RelatedImageList
+        public string? RelatedImageList
         {
             get
             {

@@ -148,6 +148,11 @@ namespace System.Windows.Forms.Design
 
             object parentInstance = instance;
 
+            if (imageListAttribute.RelatedImageList is null)
+            {
+                return null;
+            }
+
             string[] pathInfo = imageListAttribute.RelatedImageList.Split('.');
             for (int i = 0; i < pathInfo.Length; i++)
             {
