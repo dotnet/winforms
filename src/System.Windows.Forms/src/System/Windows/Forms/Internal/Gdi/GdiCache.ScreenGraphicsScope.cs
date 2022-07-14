@@ -21,7 +21,7 @@ namespace System.Windows.Forms
             private readonly ScreenDcCache.ScreenDcScope _dcScope;
             public Graphics Graphics { get; }
 
-            public ScreenGraphicsScope(ref ScreenDcCache.ScreenDcScope scope)
+            public ScreenGraphicsScope(scoped ref ScreenDcCache.ScreenDcScope scope)
             {
                 _dcScope = scope;
                 Graphics = scope.HDC.CreateGraphics();
