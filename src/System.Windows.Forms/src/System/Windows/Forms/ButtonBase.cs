@@ -17,21 +17,16 @@ namespace System.Windows.Forms
     ///  Implements the basic functionality required by a button control.
     /// </summary>
     [Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)]
-    public abstract partial class ButtonBase
-        : Control,
-          ICommandProvider
+    public abstract partial class ButtonBase : Control
     {
         private FlatStyle _flatStyle = FlatStyle.Standard;
         private ContentAlignment _imageAlign = ContentAlignment.MiddleCenter;
         private ContentAlignment _textAlign = ContentAlignment.MiddleCenter;
         private TextImageRelation _textImageRelation = TextImageRelation.Overlay;
-        private readonly ImageList.Indexer _imageIndex = new();
+        private readonly ImageList.Indexer _imageIndex = new ImageList.Indexer();
         private FlatButtonAppearance? _flatAppearance;
         private ImageList? _imageList;
         private Image? _image;
-
-        private System.Windows.Input.ICommand? _command;
-        private object? _commandParameter;
 
         private const int FlagMouseOver = 0x0001;
         private const int FlagMouseDown = 0x0002;
@@ -53,11 +48,6 @@ namespace System.Windows.Forms
 
         private ButtonBaseAdapter? _adapter;
         private FlatStyle _cachedAdapterType;
-
-        internal static readonly object s_commandChangedEvent = new();
-        internal static readonly object s_commandParameterChangedEvent = new();
-        internal static readonly object s_commandCanExecuteChangedEvent = new();
-        internal static readonly object s_commandExecuteEvent = new();
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="ButtonBase"/> class.
@@ -120,7 +110,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the control is automatically resized to fit its contents.
+        ///  Indicates whether the control is automatically resized to fit its contents
         /// </summary>
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
@@ -175,78 +165,6 @@ namespace System.Windows.Forms
 
                 base.BackColor = value;
             }
-        }
-
-        [Bindable(true)]
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [SRCategory(nameof(SR.CatData))]
-        public System.Windows.Input.ICommand? Command
-        {
-            get => _command;
-            set => ICommandProvider.CommandSetter(this, value, ref _command);
-        }
-
-        /// <summary>
-        /// Occurs when the Command has changed
-        /// </summary>
-        [SRCategory(nameof(SR.CatData))]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler? CommandChanged
-        {
-            add => Events.AddHandler(s_commandChangedEvent, value);
-            remove => Events.RemoveHandler(s_commandChangedEvent, value);
-        }
-
-        /// <summary>
-        /// Occurs when CommandCanExecute has changed because the assigned ICommand had called RaiseCanExecuteChanged.
-        /// </summary>
-        [SRCategory(nameof(SR.CatData))]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler? CommandCanExecuteChanged
-        {
-            add => Events.AddHandler(s_commandCanExecuteChangedEvent, value);
-            remove => Events.RemoveHandler(s_commandCanExecuteChangedEvent, value);
-        }
-
-        /// <summary>
-        /// Occurs when the Command has changed.
-        /// </summary>
-        [SRCategory(nameof(SR.CatData))]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event CancelEventHandler? CommandExecuting
-        {
-            add => Events.AddHandler(s_commandExecuteEvent, value);
-            remove => Events.RemoveHandler(s_commandExecuteEvent, value);
-        }
-
-        [Bindable(true)]
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [SRCategory(nameof(SR.CatData))]
-        public object? CommandParameter
-        {
-            get => _commandParameter;
-
-            set
-            {
-                if (!Equals(_commandParameter, value))
-                {
-                    _commandParameter = value;
-                    OnCommandParameterChanged(EventArgs.Empty);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Occurs when the CommandParameter has changed.
-        /// </summary>
-        [SRCategory(nameof(SR.CatData))]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler? CommandParameterChanged
-        {
-            add => Events.AddHandler(s_commandParameterChangedEvent, value);
-            remove => Events.RemoveHandler(s_commandParameterChangedEvent, value);
         }
 
         /// <summary>
@@ -712,17 +630,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Provides the previous Enabled value for the ICommandProvider implementation.
-        /// </summary>
-        /// <remarks>
-        /// The interface uses DFI to bring a consistent Command binding implementation along.
-        /// It therefore needs a backing field to save a previous Enabled setting, since
-        /// a components/controls Enabled property is automatically controlled by the Command
-        /// binding through the CanExecute functionality of the Command binding.
-        /// </remarks>
-        bool? ICommandProvider.PreviousEnabledStatus { get; set; }
-
-        /// <summary>
         ///  Indicates whether the tooltip should be shown
         /// </summary>
         internal bool ShowToolTip
@@ -915,18 +822,6 @@ namespace System.Windows.Forms
             base.OnGotFocus(e);
             Invalidate();
         }
-
-        // Called by the ICommandProvider's internal DIM-based logic.
-        void ICommandProvider.RaiseCommandChanged(EventArgs e)
-            => OnCommandChanged(e);
-
-        // Called by the ICommandProvider's internal DIM-based logic.
-        void ICommandProvider.RaiseCommandCanExecuteChanged([AllowNull] object sender, EventArgs e)
-            => OnCommandCanExecuteChanged(sender, e);
-
-        // Called by the ICommandProvider's internal DIM-based logic.
-        void ICommandProvider.RaiseCommandExecuting(CancelEventArgs e)
-            => OnCommandExecuting(e);
 
         /// <summary>
         ///  Raises the <see cref="OnLostFocus"/> event.
@@ -1147,42 +1042,6 @@ namespace System.Windows.Forms
             return Adapter.CreateTextFormatFlags();
         }
 
-        /// <summary>
-        ///  Raises the <see cref="ButtonBase.CommandChanged"/> event.
-        ///  Inheriting classes should override this method to handle this event.
-        ///  Call base.CommandChanged to send this event to any registered event listeners.
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnCommandChanged(EventArgs e)
-            => ((EventHandler?)Events[s_commandChangedEvent])?.Invoke(this, e);
-
-        /// <summary>
-        ///  Raises the <see cref="ButtonBase.CommandExecuting"/> event.
-        ///  Inheriting classes should override this method to handle this event.
-        ///  Call base.CommandExecute to send this event to any registered event listeners.
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnCommandExecuting(CancelEventArgs e)
-            => ((CancelEventHandler?)Events[s_commandExecuteEvent])?.Invoke(this, e);
-
-        /// <summary>
-        ///  Raises the <see cref="ToolStripItem.CommandCanExecuteChanged"/> event.
-        ///  Inheriting classes should override this method to handle this event.
-        ///  Call base.CommandCanExecuteChanged to send this event to any registered event listeners.
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnCommandCanExecuteChanged([AllowNull] object sender, EventArgs e)
-            => ((EventHandler?)Events[s_commandCanExecuteChangedEvent])?.Invoke(sender, e);
-
-        /// <summary>
-        ///  Raises the <see cref="ButtonBase.CommandParameterChanged"/> event.
-        ///  Inheriting classes should override this method to handle this event.
-        ///  Call base.CommandParameterChanged to send this event to any registered event listeners.
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnCommandParameterChanged(EventArgs e)
-            => ((EventHandler?)Events[s_commandParameterChangedEvent])?.Invoke(this, e);
-
         private void OnFrameChanged(object? o, EventArgs e)
         {
             if (Disposing || IsDisposed)
@@ -1197,17 +1056,6 @@ namespace System.Windows.Forms
             }
 
             Invalidate();
-        }
-
-        protected override void OnClick(EventArgs e)
-        {
-            base.OnClick(e);
-            OnRequestCommandExecute(e);
-        }
-
-        protected virtual void OnRequestCommandExecute(EventArgs e)
-        {
-            ICommandProvider.RequestCommandExecute(this);
         }
 
         protected override void OnEnabledChanged(EventArgs e)
