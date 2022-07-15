@@ -693,7 +693,7 @@
         {
           "name": "addMilestone",
           "parameters": {
-            "milestoneName": "7.0 Preview7"
+            "milestoneName": "7.0 RC1"
           }
         }
       ],

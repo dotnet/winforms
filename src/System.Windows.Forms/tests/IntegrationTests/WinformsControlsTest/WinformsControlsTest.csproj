@@ -13,9 +13,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <!-- NU1505 reports duplicate package download for Microsoft.NETCore.App.Host.win-x64.
-         Disabling this warning until https://github.com/dotnet/sdk/issues/24747 is fixed.-->
-    <NoWarn>$(NoWarn);WFDEV001;NU1505</NoWarn>
+    <NoWarn>$(NoWarn);WFDEV001</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

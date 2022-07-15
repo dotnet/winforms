@@ -8,19 +8,13 @@ namespace System.Windows.Forms
 {
     static internal class ClientUtils
     {
-        // ExecutionEngineException is obsolete and shouldn't be used (to catch, throw or reference) anymore.
-        // Pragma added to prevent converting the "type is obsolete" warning into build error.
-        // File owner should fix this.
         public static bool IsCriticalException(Exception ex)
-        {
-            return ex is NullReferenceException
-                    || ex is StackOverflowException
-                    || ex is OutOfMemoryException
-                    || ex is Threading.ThreadAbortException
-                    || ex is ExecutionEngineException
-                    || ex is IndexOutOfRangeException
-                    || ex is AccessViolationException;
-        }
+            => ex is NullReferenceException
+                || ex is StackOverflowException
+                || ex is OutOfMemoryException
+                || ex is ThreadAbortException
+                || ex is IndexOutOfRangeException
+                || ex is AccessViolationException;
 
         private enum CharType
         {
