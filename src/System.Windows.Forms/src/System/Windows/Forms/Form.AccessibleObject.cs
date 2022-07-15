@@ -55,6 +55,7 @@ namespace System.Windows.Forms
                     UiaCore.UIA.ControlTypePropertyId => Role == AccessibleRole.Client
                                                          ? UiaCore.UIA.WindowControlTypeId
                                                          : base.GetPropertyValue(propertyID),
+                    UiaCore.UIA.IsDialogPropertyId => _owner.Modal,
                     _ => base.GetPropertyValue(propertyID)
                 };
             }
