@@ -1,0 +1,4 @@
+System.Runtime.InteropServices.UCOMITypeLib.GetLibAttr(out nint ppTLibAttr) -> void
+System.Runtime.InteropServices.UCOMITypeLib.ReleaseTLibAttr(nint pTLibAttr) -> void
+System.Windows.Forms.Design.Behavior.BehaviorService.MapAdornerWindowPoint(nint handle, System.Drawing.Point pt) -> System.Drawing.Point
+System.Windows.Forms.Design.ThemedScrollbarWindow.Handle -> nint

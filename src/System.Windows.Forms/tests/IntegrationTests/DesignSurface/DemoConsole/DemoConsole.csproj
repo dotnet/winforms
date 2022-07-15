@@ -8,9 +8,7 @@
     <StartupObject />
     <EnableXlfLocalization>false</EnableXlfLocalization>
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
-    <!-- NU1505 reports duplicate package download for Microsoft.NETCore.App.Host.win-x64.
-         Disabling this warning until https://github.com/dotnet/sdk/issues/24747 is fixed.-->
-    <NoWarn>$(NoWarn);SA1633;CS8002;NU1505</NoWarn>
+    <NoWarn>$(NoWarn);SA1633;CS8002</NoWarn>
     <Copyright>Copyright © Paolo Foti 2008</Copyright>
     <Company />
     <Authors>Paolo Foti</Authors>

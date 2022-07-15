@@ -1,14 +1,14 @@
-﻿namespace AccessibilityTests
+﻿namespace Accessibility_Core_App
 {
     partial class MenuForm
     {
         /// <summary>
-        ///  Required designer variable.
+        /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        ///  Clean up any resources being used.
+        /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
@@ -23,8 +23,8 @@
         #region Windows Form Designer generated code
 
         /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
@@ -34,9 +34,10 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(23, 40);
+            this.button1.Location = new System.Drawing.Point(78, 46);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(88, 27);
             this.button1.TabIndex = 0;
             this.button1.Text = "StripControls";
             this.button1.UseVisualStyleBackColor = true;
@@ -44,9 +45,10 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(235, 40);
+            this.button2.Location = new System.Drawing.Point(264, 46);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(105, 23);
+            this.button2.Size = new System.Drawing.Size(122, 27);
             this.button2.TabIndex = 1;
             this.button2.Text = "ToolStripContainer";
             this.button2.UseVisualStyleBackColor = true;
@@ -54,11 +56,12 @@
             // 
             // MenuForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(400, 382);
+            this.ClientSize = new System.Drawing.Size(467, 441);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "MenuForm";
             this.Text = "MenuForm";
             this.ResumeLayout(false);

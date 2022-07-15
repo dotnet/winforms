@@ -1,14 +1,14 @@
-﻿namespace AccessibilityTests
+﻿namespace Accessibility_Core_App
 {
     partial class DataControls
     {
         /// <summary>
-        ///  Required designer variable.
+        /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        ///  Clean up any resources being used.
+        /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
@@ -23,8 +23,8 @@
         #region Windows Form Designer generated code
 
         /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
@@ -102,7 +102,7 @@
             this.bindingNavigator1.MovePreviousItem = this.bindingNavigatorMovePreviousItem;
             this.bindingNavigator1.Name = "bindingNavigator1";
             this.bindingNavigator1.PositionItem = this.bindingNavigatorPositionItem;
-            this.bindingNavigator1.Size = new System.Drawing.Size(1284, 25);
+            this.bindingNavigator1.Size = new System.Drawing.Size(868, 28);
             this.bindingNavigator1.TabIndex = 0;
             this.bindingNavigator1.TabStop = true;
             this.bindingNavigator1.Text = "bindingNavigator1";
@@ -113,14 +113,14 @@
             this.bindingNavigatorAddNewItem.Image = ((System.Drawing.Image)(resources.GetObject("bindingNavigatorAddNewItem.Image")));
             this.bindingNavigatorAddNewItem.Name = "bindingNavigatorAddNewItem";
             this.bindingNavigatorAddNewItem.RightToLeftAutoMirrorImage = true;
-            this.bindingNavigatorAddNewItem.Size = new System.Drawing.Size(23, 22);
+            this.bindingNavigatorAddNewItem.Size = new System.Drawing.Size(23, 25);
             this.bindingNavigatorAddNewItem.Text = "Add new";
             this.bindingNavigatorAddNewItem.Click += new System.EventHandler(this.bindingNavigatorAddNewItem_Click);
             // 
             // bindingNavigatorCountItem
             // 
             this.bindingNavigatorCountItem.Name = "bindingNavigatorCountItem";
-            this.bindingNavigatorCountItem.Size = new System.Drawing.Size(35, 22);
+            this.bindingNavigatorCountItem.Size = new System.Drawing.Size(35, 25);
             this.bindingNavigatorCountItem.Text = "of {0}";
             this.bindingNavigatorCountItem.ToolTipText = "Total number of items";
             // 
@@ -130,7 +130,7 @@
             this.bindingNavigatorDeleteItem.Image = ((System.Drawing.Image)(resources.GetObject("bindingNavigatorDeleteItem.Image")));
             this.bindingNavigatorDeleteItem.Name = "bindingNavigatorDeleteItem";
             this.bindingNavigatorDeleteItem.RightToLeftAutoMirrorImage = true;
-            this.bindingNavigatorDeleteItem.Size = new System.Drawing.Size(23, 22);
+            this.bindingNavigatorDeleteItem.Size = new System.Drawing.Size(23, 25);
             this.bindingNavigatorDeleteItem.Text = "Delete";
             // 
             // bindingNavigatorMoveFirstItem
@@ -139,7 +139,7 @@
             this.bindingNavigatorMoveFirstItem.Image = ((System.Drawing.Image)(resources.GetObject("bindingNavigatorMoveFirstItem.Image")));
             this.bindingNavigatorMoveFirstItem.Name = "bindingNavigatorMoveFirstItem";
             this.bindingNavigatorMoveFirstItem.RightToLeftAutoMirrorImage = true;
-            this.bindingNavigatorMoveFirstItem.Size = new System.Drawing.Size(23, 22);
+            this.bindingNavigatorMoveFirstItem.Size = new System.Drawing.Size(23, 25);
             this.bindingNavigatorMoveFirstItem.Text = "Move first";
             // 
             // bindingNavigatorMovePreviousItem
@@ -148,27 +148,27 @@
             this.bindingNavigatorMovePreviousItem.Image = ((System.Drawing.Image)(resources.GetObject("bindingNavigatorMovePreviousItem.Image")));
             this.bindingNavigatorMovePreviousItem.Name = "bindingNavigatorMovePreviousItem";
             this.bindingNavigatorMovePreviousItem.RightToLeftAutoMirrorImage = true;
-            this.bindingNavigatorMovePreviousItem.Size = new System.Drawing.Size(23, 22);
+            this.bindingNavigatorMovePreviousItem.Size = new System.Drawing.Size(23, 25);
             this.bindingNavigatorMovePreviousItem.Text = "Move previous";
             // 
             // bindingNavigatorSeparator
             // 
             this.bindingNavigatorSeparator.Name = "bindingNavigatorSeparator";
-            this.bindingNavigatorSeparator.Size = new System.Drawing.Size(6, 25);
+            this.bindingNavigatorSeparator.Size = new System.Drawing.Size(6, 28);
             // 
             // bindingNavigatorPositionItem
             // 
             this.bindingNavigatorPositionItem.AccessibleName = "Position";
             this.bindingNavigatorPositionItem.AutoSize = false;
             this.bindingNavigatorPositionItem.Name = "bindingNavigatorPositionItem";
-            this.bindingNavigatorPositionItem.Size = new System.Drawing.Size(50, 23);
+            this.bindingNavigatorPositionItem.Size = new System.Drawing.Size(58, 23);
             this.bindingNavigatorPositionItem.Text = "0";
             this.bindingNavigatorPositionItem.ToolTipText = "Current position";
             // 
             // bindingNavigatorSeparator1
             // 
             this.bindingNavigatorSeparator1.Name = "bindingNavigatorSeparator1";
-            this.bindingNavigatorSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.bindingNavigatorSeparator1.Size = new System.Drawing.Size(6, 28);
             // 
             // bindingNavigatorMoveNextItem
             // 
@@ -176,7 +176,7 @@
             this.bindingNavigatorMoveNextItem.Image = ((System.Drawing.Image)(resources.GetObject("bindingNavigatorMoveNextItem.Image")));
             this.bindingNavigatorMoveNextItem.Name = "bindingNavigatorMoveNextItem";
             this.bindingNavigatorMoveNextItem.RightToLeftAutoMirrorImage = true;
-            this.bindingNavigatorMoveNextItem.Size = new System.Drawing.Size(23, 22);
+            this.bindingNavigatorMoveNextItem.Size = new System.Drawing.Size(23, 25);
             this.bindingNavigatorMoveNextItem.Text = "Move next";
             // 
             // bindingNavigatorMoveLastItem
@@ -185,26 +185,26 @@
             this.bindingNavigatorMoveLastItem.Image = ((System.Drawing.Image)(resources.GetObject("bindingNavigatorMoveLastItem.Image")));
             this.bindingNavigatorMoveLastItem.Name = "bindingNavigatorMoveLastItem";
             this.bindingNavigatorMoveLastItem.RightToLeftAutoMirrorImage = true;
-            this.bindingNavigatorMoveLastItem.Size = new System.Drawing.Size(23, 22);
+            this.bindingNavigatorMoveLastItem.Size = new System.Drawing.Size(23, 25);
             this.bindingNavigatorMoveLastItem.Text = "Move last";
             // 
             // bindingNavigatorSeparator2
             // 
             this.bindingNavigatorSeparator2.Name = "bindingNavigatorSeparator2";
-            this.bindingNavigatorSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.bindingNavigatorSeparator2.Size = new System.Drawing.Size(6, 28);
             // 
             // toolStripButton1
             // 
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(114, 22);
+            this.toolStripButton1.Size = new System.Drawing.Size(114, 25);
             this.toolStripButton1.Text = "toolStripButton1";
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(86, 22);
+            this.toolStripLabel1.Size = new System.Drawing.Size(86, 25);
             this.toolStripLabel1.Text = "toolStripLabel1";
             // 
             // toolStripSplitButton1
@@ -212,7 +212,7 @@
             this.toolStripSplitButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton1.Image")));
             this.toolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripSplitButton1.Name = "toolStripSplitButton1";
-            this.toolStripSplitButton1.Size = new System.Drawing.Size(149, 22);
+            this.toolStripSplitButton1.Size = new System.Drawing.Size(149, 25);
             this.toolStripSplitButton1.Text = "toolStripSplitButton1";
             // 
             // toolStripDropDownButton1
@@ -220,13 +220,13 @@
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(180, 25);
             this.toolStripDropDownButton1.Text = "toolStripDropDownButton1";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 28);
             // 
             // toolStripComboBox1
             // 
@@ -235,13 +235,13 @@
             "Test1",
             "Test2"});
             this.toolStripComboBox1.Name = "toolStripComboBox1";
-            this.toolStripComboBox1.Size = new System.Drawing.Size(121, 25);
+            this.toolStripComboBox1.Size = new System.Drawing.Size(140, 23);
             this.toolStripComboBox1.Text = "Test1";
             // 
             // toolStripTextBox1
             // 
             this.toolStripTextBox1.Name = "toolStripTextBox1";
-            this.toolStripTextBox1.Size = new System.Drawing.Size(100, 25);
+            this.toolStripTextBox1.Size = new System.Drawing.Size(116, 23);
             this.toolStripTextBox1.Text = "Test1";
             // 
             // toolStripProgressBar1
@@ -249,7 +249,7 @@
             this.toolStripProgressBar1.AccessibleDescription = "This is PB";
             this.toolStripProgressBar1.AccessibleName = "PB1";
             this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 22);
+            this.toolStripProgressBar1.Size = new System.Drawing.Size(117, 25);
             this.toolStripProgressBar1.Tag = "PB";
             this.toolStripProgressBar1.ToolTipText = "ProgressBar1";
             this.toolStripProgressBar1.Value = 50;
@@ -262,6 +262,7 @@
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AccessibleName = "DGV1";
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
@@ -272,16 +273,17 @@
             this.Column6,
             this.Column7,
             this.Column8});
-            this.dataGridView1.Location = new System.Drawing.Point(0, 258);
+            this.dataGridView1.Location = new System.Drawing.Point(13, 323);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(844, 100);
+            this.dataGridView1.Size = new System.Drawing.Size(844, 115);
             this.dataGridView1.StandardTab = true;
             this.dataGridView1.TabIndex = 2;
             // 
             // Column1
             // 
             this.Column1.HeaderText = "Name";
-            this.Column1.Name = "A";
+            this.Column1.Name = "Column1";
             // 
             // Column2
             // 
@@ -289,7 +291,7 @@
             this.Column2.Items.AddRange(new object[] {
             "City1",
             "City2"});
-            this.Column2.Name = "B";
+            this.Column2.Name = "Column2";
             // 
             // Column3
             // 
@@ -298,12 +300,12 @@
             this.Column3.Items.AddRange(new object[] {
             "Country1",
             "Country2"});
-            this.Column3.Name = "C";
+            this.Column3.Name = "Column3";
             // 
             // Column4
             // 
             this.Column4.HeaderText = "IsHealthy";
-            this.Column4.Name = "D";
+            this.Column4.Name = "Column4";
             // 
             // Column5
             // 
@@ -312,43 +314,46 @@
             this.Column5.Items.AddRange(new object[] {
             "Male",
             "Female"});
-            this.Column5.Name = "E";
+            this.Column5.Name = "Column5";
             // 
             // Column6
             // 
             this.Column6.HeaderText = "Photo";
-            this.Column6.Name = "F";
+            this.Column6.Name = "Column6";
             // 
             // Column7
             // 
             this.Column7.HeaderText = "Address";
-            this.Column7.Name = "G";
+            this.Column7.Name = "Column7";
             this.Column7.Text = "Address1";
             this.Column7.UseColumnTextForLinkValue = true;
             // 
             // Column8
             // 
             this.Column8.HeaderText = "Comment";
-            this.Column8.Name = "H";
+            this.Column8.Name = "Column8";
             // 
             // dataGridView2
             // 
             this.dataGridView2.AccessibleName = "DGV2";
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(0, 28);
+            this.dataGridView2.Location = new System.Drawing.Point(13, 46);
+            this.dataGridView2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(350, 224);
+            this.dataGridView2.Size = new System.Drawing.Size(408, 258);
             this.dataGridView2.StandardTab = true;
             this.dataGridView2.TabIndex = 1;
             // 
             // DataControls
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1284, 360);
+            this.AutoScroll = true;
+            this.ClientSize = new System.Drawing.Size(868, 450);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.bindingNavigator1);
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "DataControls";
             this.Text = "DataControls";
             this.Load += new System.EventHandler(this.DataControls_Load);
@@ -399,5 +404,3 @@
         private System.Windows.Forms.ToolStripLabel toolStripLabel2;
     }
 }
-
-

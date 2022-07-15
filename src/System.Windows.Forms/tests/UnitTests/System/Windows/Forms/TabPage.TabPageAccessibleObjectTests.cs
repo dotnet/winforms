@@ -479,18 +479,20 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(createControl, tabPage.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void TabPageAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData((int)UIA.NamePropertyId, "TestName")]
+        [InlineData((int)UIA.AutomationIdPropertyId, "TabPage1")]
+        public void TabPageAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
         {
-            const string name = "Test name";
             using TabPage tabPage = new()
             {
-                AccessibleName = name
+                Name = "TabPage1",
+                AccessibleName = "TestName"
             };
 
-            object actual = tabPage.AccessibilityObject.GetPropertyValue(UIA.NamePropertyId);
+            object actual = tabPage.AccessibilityObject.GetPropertyValue((UIA)propertyID);
 
-            Assert.Equal(name, actual);
+            Assert.Equal(expected, actual);
             Assert.False(tabPage.IsHandleCreated);
         }
 

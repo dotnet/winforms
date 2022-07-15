@@ -138,6 +138,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         /// <summary>
         ///  Specifies whether the browser control Shortcuts are enabled.
         ///  Maps to IDocHostUIHandler:TranslateAccelerator event.
@@ -1122,13 +1124,7 @@ namespace System.Windows.Forms
             axIWebBrowser2 = null;
         }
 
-        /// <summary>
-        ///  Returns a WebBrowserSite object.
-        /// </summary>
-        protected override WebBrowserSiteBase CreateWebBrowserSiteBase()
-        {
-            return new WebBrowserSite(this);
-        }
+        protected override AccessibleObject CreateAccessibilityInstance() => new WebBrowserAccessibleObject(this);
 
         /// <summary>
         ///  Attaches to the DWebBrowserEvents2 connection point.
@@ -1157,6 +1153,14 @@ namespace System.Windows.Forms
                 cookie.Disconnect();
                 cookie = null;
             }
+        }
+
+        /// <summary>
+        ///  Returns a WebBrowserSite object.
+        /// </summary>
+        protected override WebBrowserSiteBase CreateWebBrowserSiteBase()
+        {
+            return new WebBrowserSite(this);
         }
 
         /// <summary>

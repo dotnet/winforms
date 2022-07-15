@@ -235,6 +235,17 @@ namespace System.Windows.Forms.Tests
             Assert.False(buttonBase.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void ButtonBaseAccessibleObject_GetPropertyValue_AutomationId_ReturnsExpected()
+        {
+            using SubButtonBase ownerControl = new() { Name = "test name" };
+            string expected = ownerControl.Name;
+            object actual = ownerControl.AccessibilityObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId);
+
+            Assert.Equal(expected, actual);
+            Assert.False(ownerControl.IsHandleCreated);
+        }
+
         private class SubButtonBase : ButtonBase
         {
             public Action PerformClickAction { get; set; }

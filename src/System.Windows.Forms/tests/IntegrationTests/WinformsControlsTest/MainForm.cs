@@ -186,6 +186,10 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.DockLayoutButton,
                 new InitInfo("DockLayout", (obj, e) => new DockLayoutTests().Show(this))
+            },
+            {
+                MainFormControlsTabOrder.DragAndDrop,
+                new InitInfo("Drag and Drop", (obj, e) => new DragDrop().Show(this))
             }
         };
 
