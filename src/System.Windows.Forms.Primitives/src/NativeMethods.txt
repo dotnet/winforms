@@ -2,3 +2,9 @@
 GetCurrentThread
 GetCurrentThreadId
 DuplicateHandle
+GlobalAlloc
+GlobalLock
+GlobalUnlock
+GetCurrentProcessId
+GlobalReAlloc
+GlobalFree

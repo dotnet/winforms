@@ -1,8 +1,10 @@
 ﻿using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using Windows.Win32;
 using Xunit;
 using static Interop;
 using static Interop.User32;
+using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 
 namespace System.Windows.Forms.Tests
 {
@@ -23,8 +25,8 @@ namespace System.Windows.Forms.Tests
             {
                 pUnkForRelease = null,
                 tymed = TYMED.TYMED_HGLOBAL,
-                unionmember = Kernel32.GlobalAlloc(
-                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                unionmember = PInvoke.GlobalAlloc(
+                    GMEM_MOVEABLE | GMEM_ZEROINIT,
                     sizeof(BOOL))
             };
 
@@ -185,12 +187,12 @@ namespace System.Windows.Forms.Tests
         {
             try
             {
-                IntPtr basePtr = Kernel32.GlobalLock(handle);
+                void* basePtr = PInvoke.GlobalLock(handle);
                 *(BOOL*)basePtr = inDragLoop ? BOOL.TRUE : BOOL.FALSE;
             }
             finally
             {
-                Kernel32.GlobalUnlock(handle);
+                PInvoke.GlobalUnlock(handle);
             }
         }
     }
