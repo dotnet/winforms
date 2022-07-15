@@ -11,7 +11,9 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using Windows.Win32;
 using static Interop;
+using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
@@ -72,7 +74,7 @@ namespace System.Windows.Forms
                 }
 
                 Ole32.IStream? pStream = null;
-                IntPtr hglobal = IntPtr.Zero;
+                nint hglobal = 0;
                 try
                 {
                     if (medium.tymed == TYMED.TYMED_ISTREAM && medium.unionmember != IntPtr.Zero)
@@ -80,16 +82,16 @@ namespace System.Windows.Forms
                         pStream = (Ole32.IStream)Marshal.GetObjectForIUnknown(medium.unionmember);
                         pStream.Stat(out Ole32.STATSTG sstg, Ole32.STATFLAG.DEFAULT);
 
-                        hglobal = Kernel32.GlobalAlloc(
-                            Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                        hglobal = PInvoke.GlobalAlloc(
+                            GMEM_MOVEABLE | GMEM_ZEROINIT,
                             (uint)sstg.cbSize);
                         // not throwing here because the other out of memory condition on GlobalAlloc
                         // happens inside innerData.GetData and gets turned into a null return value
-                        if (hglobal == IntPtr.Zero)
+                        if (hglobal == 0)
                             return null;
-                        IntPtr ptr = Kernel32.GlobalLock(hglobal);
+                        void* ptr = PInvoke.GlobalLock(hglobal);
                         pStream.Read((byte*)ptr, (uint)sstg.cbSize, null);
-                        Kernel32.GlobalUnlock(hglobal);
+                        PInvoke.GlobalUnlock(hglobal);
 
                         return GetDataFromHGLOBAL(format, hglobal);
                     }
@@ -98,8 +100,8 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (hglobal != IntPtr.Zero)
-                        Kernel32.GlobalFree(hglobal);
+                    if (hglobal != 0)
+                        PInvoke.GlobalFree(hglobal);
 
                     if (pStream is not null)
                         Marshal.ReleaseComObject(pStream);
@@ -304,10 +306,10 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Creates an Stream from the data stored in handle.
             /// </summary>
-            private static Stream ReadByteStreamFromHandle(IntPtr handle, out bool isSerializedObject)
+            private unsafe static Stream ReadByteStreamFromHandle(nint handle, out bool isSerializedObject)
             {
-                IntPtr ptr = Kernel32.GlobalLock(handle);
-                if (ptr == IntPtr.Zero)
+                void* ptr = PInvoke.GlobalLock(handle);
+                if (ptr is null)
                 {
                     throw new ExternalException(SR.ExternalException, (int)HRESULT.E_OUTOFMEMORY);
                 }
@@ -316,7 +318,7 @@ namespace System.Windows.Forms
                 {
                     int size = Kernel32.GlobalSize(handle);
                     byte[] bytes = new byte[size];
-                    Marshal.Copy(ptr, bytes, 0, size);
+                    Marshal.Copy((nint)ptr, bytes, 0, size);
                     int index = 0;
 
                     // The object here can either be a stream or a serialized
@@ -352,7 +354,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    Kernel32.GlobalUnlock(handle);
+                    PInvoke.GlobalUnlock(handle);
                 }
             }
 
@@ -419,11 +421,11 @@ namespace System.Windows.Forms
             ///  unicode is set to true, then the string is assume to be Unicode,
             ///  else DBCS (ASCI) is assumed.
             /// </summary>
-            private static unsafe string ReadStringFromHandle(IntPtr handle, bool unicode)
+            private static unsafe string ReadStringFromHandle(nint handle, bool unicode)
             {
                 string? stringData = null;
 
-                IntPtr ptr = Kernel32.GlobalLock(handle);
+                void* ptr = PInvoke.GlobalLock(handle);
                 try
                 {
                     if (unicode)
@@ -437,15 +439,15 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    Kernel32.GlobalUnlock(handle);
+                    PInvoke.GlobalUnlock(handle);
                 }
 
                 return stringData;
             }
 
-            private static unsafe string ReadHtmlFromHandle(IntPtr handle)
+            private static unsafe string ReadHtmlFromHandle(nint handle)
             {
-                IntPtr ptr = Kernel32.GlobalLock(handle);
+                void* ptr = PInvoke.GlobalLock(handle);
                 try
                 {
                     int size = Kernel32.GlobalSize(handle);
@@ -453,7 +455,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    Kernel32.GlobalUnlock(handle);
+                    PInvoke.GlobalUnlock(handle);
                 }
             }
 
