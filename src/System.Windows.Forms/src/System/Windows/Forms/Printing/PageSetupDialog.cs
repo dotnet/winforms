@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -346,8 +347,8 @@ namespace System.Windows.Forms
             }
             finally
             {
-                Kernel32.GlobalFree(data.hDevMode);
-                Kernel32.GlobalFree(data.hDevNames);
+                PInvoke.GlobalFree(data.hDevMode);
+                PInvoke.GlobalFree(data.hDevNames);
             }
         }
     }

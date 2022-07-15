@@ -18,10 +18,10 @@ namespace System.Windows.Forms
     public partial class NativeWindow : MarshalByRefObject, IWin32Window, IHandle
     {
 #if DEBUG
-        private static readonly BooleanSwitch AlwaysUseNormalWndProc = new BooleanSwitch("AlwaysUseNormalWndProc", "Skips checking for the debugger when choosing the debuggable WndProc handler");
+        private static readonly BooleanSwitch AlwaysUseNormalWndProc = new("AlwaysUseNormalWndProc", "Skips checking for the debugger when choosing the debuggable WndProc handler");
 #endif
 
-        private static readonly TraceSwitch WndProcChoice = new TraceSwitch("WndProcChoice", "Info about choice of WndProc");
+        private static readonly TraceSwitch WndProcChoice = new("WndProcChoice", "Info about choice of WndProc");
 
         private const int InitializedFlags = 0x01;
         private const int UseDebuggableWndProc = 0x04;
@@ -40,10 +40,10 @@ namespace System.Windows.Forms
 
         // Need to Store Table of Ids and Handles
         private static short s_globalID = 1;
-        private static readonly Dictionary<IntPtr, GCHandle> s_windowHandles = new Dictionary<IntPtr, GCHandle>();
-        private static readonly Dictionary<short, IntPtr> s_windowIds = new Dictionary<short, IntPtr>();
-        private static readonly object s_internalSyncObject = new object();
-        private static readonly object s_createWindowSyncObject = new object();
+        private static readonly Dictionary<IntPtr, GCHandle> s_windowHandles = new();
+        private static readonly Dictionary<short, IntPtr> s_windowIds = new();
+        private static readonly object s_internalSyncObject = new();
+        private static readonly object s_createWindowSyncObject = new();
 
         // Our window procedure delegate
         private User32.WNDPROC? _windowProc;

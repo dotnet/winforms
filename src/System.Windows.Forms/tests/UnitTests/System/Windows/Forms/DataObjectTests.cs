@@ -10,10 +10,12 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
 using Moq;
 using System.Windows.Forms.TestUtilities;
+using Windows.Win32;
 using Xunit;
 using static Interop;
 using static Interop.Shell32;
 using static Interop.User32;
+using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms.Tests
@@ -2160,8 +2162,8 @@ namespace System.Windows.Forms.Tests
             {
                 tymed = TYMED.TYMED_HGLOBAL
             };
-            IntPtr handle = Kernel32.GlobalAlloc(
-                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+            nint handle = PInvoke.GlobalAlloc(
+                GMEM_MOVEABLE | GMEM_ZEROINIT,
                 1);
             try
             {
@@ -2173,7 +2175,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Kernel32.GlobalFree(handle);
+                PInvoke.GlobalFree(handle);
             }
         }
 
@@ -2200,8 +2202,8 @@ namespace System.Windows.Forms.Tests
             {
                 tymed = TYMED.TYMED_HGLOBAL
             };
-            IntPtr handle = Kernel32.GlobalAlloc(
-                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+            nint handle = PInvoke.GlobalAlloc(
+                GMEM_MOVEABLE | GMEM_ZEROINIT,
                 1);
             try
             {
@@ -2273,8 +2275,8 @@ namespace System.Windows.Forms.Tests
             {
                 tymed = TYMED.TYMED_HGLOBAL
             };
-            IntPtr handle = Kernel32.GlobalAlloc(
-                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+            nint handle = PInvoke.GlobalAlloc(
+                GMEM_MOVEABLE | GMEM_ZEROINIT,
                 1);
             try
             {
@@ -2291,7 +2293,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Kernel32.GlobalFree(handle);
+                PInvoke.GlobalFree(handle);
             }
         }
 
@@ -2311,8 +2313,8 @@ namespace System.Windows.Forms.Tests
             {
                 tymed = TYMED.TYMED_HGLOBAL
             };
-            IntPtr handle = Kernel32.GlobalAlloc(
-                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+            nint handle = PInvoke.GlobalAlloc(
+               GMEM_MOVEABLE | GMEM_ZEROINIT,
                 (uint)sizeof(DROPFILES));
             try
             {
