@@ -7,9 +7,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using Windows.Win32;
 using static Interop;
 using static Interop.Shell32;
 using static Interop.User32;
+using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
@@ -168,12 +170,12 @@ namespace System.Windows.Forms
 
                 medium = new();
                 dataObject.GetData(ref formatEtc, out medium);
-                IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
-                return (basePtr != IntPtr.Zero) && (*(BOOL*)basePtr == BOOL.TRUE);
+                void* basePtr = PInvoke.GlobalLock(medium.unionmember);
+                return (basePtr is not null) && (*(BOOL*)basePtr == BOOL.TRUE);
             }
             finally
             {
-                Kernel32.GlobalUnlock(medium.unionmember);
+                PInvoke.GlobalUnlock(medium.unionmember);
                 Ole32.ReleaseStgMedium(ref medium);
             }
         }
@@ -193,12 +195,12 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
-                    return (basePtr != IntPtr.Zero) && (*(BOOL*)basePtr == BOOL.TRUE);
+                    void* basePtr = PInvoke.GlobalLock(dragDropFormat.Medium.unionmember);
+                    return (basePtr is not null) && (*(BOOL*)basePtr == BOOL.TRUE);
                 }
                 finally
                 {
-                    Kernel32.GlobalUnlock(dragDropFormat.Medium.unionmember);
+                    PInvoke.GlobalUnlock(dragDropFormat.Medium.unionmember);
                 }
             }
             else
@@ -269,8 +271,8 @@ namespace System.Windows.Forms
             {
                 pUnkForRelease = null,
                 tymed = TYMED.TYMED_HGLOBAL,
-                unionmember = Kernel32.GlobalAlloc(
-                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                unionmember = PInvoke.GlobalAlloc(
+                    GMEM_MOVEABLE | GMEM_ZEROINIT,
                     sizeof(BOOL))
             };
 
@@ -279,16 +281,16 @@ namespace System.Windows.Forms
                 throw new Win32Exception(Marshal.GetLastSystemError(), SR.ExternalException);
             }
 
-            IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
-            if (basePtr == IntPtr.Zero)
+            void* basePtr = PInvoke.GlobalLock(medium.unionmember);
+            if (basePtr is null)
             {
-                Kernel32.GlobalFree(medium.unionmember);
+                PInvoke.GlobalFree(medium.unionmember);
                 medium.unionmember = IntPtr.Zero;
                 throw new Win32Exception(Marshal.GetLastSystemError(), SR.ExternalException);
             }
 
             *(BOOL*)basePtr = value.ToBOOL();
-            Kernel32.GlobalUnlock(medium.unionmember);
+            PInvoke.GlobalUnlock(medium.unionmember);
             dataObject.SetData(ref formatEtc, ref medium, release: true);
         }
 
@@ -429,8 +431,8 @@ namespace System.Windows.Forms
             {
                 pUnkForRelease = null,
                 tymed = TYMED.TYMED_HGLOBAL,
-                unionmember = Kernel32.GlobalAlloc(
-                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                unionmember = PInvoke.GlobalAlloc(
+                    GMEM_MOVEABLE | GMEM_ZEROINIT,
                     (uint)sizeof(DROPDESCRIPTION))
             };
 
@@ -439,10 +441,10 @@ namespace System.Windows.Forms
                 throw new Win32Exception(Marshal.GetLastSystemError(), SR.ExternalException);
             }
 
-            IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
-            if (basePtr == IntPtr.Zero)
+            void* basePtr = PInvoke.GlobalLock(medium.unionmember);
+            if (basePtr is null)
             {
-                Kernel32.GlobalFree(medium.unionmember);
+                PInvoke.GlobalFree(medium.unionmember);
                 medium.unionmember = IntPtr.Zero;
                 throw new Win32Exception(Marshal.GetLastSystemError(), SR.ExternalException);
             }
@@ -451,7 +453,7 @@ namespace System.Windows.Forms
             pDropDescription->type = (DROPIMAGETYPE)dropImageType;
             pDropDescription->Message = message;
             pDropDescription->Insert = messageReplacementToken;
-            Kernel32.GlobalUnlock(medium.unionmember);
+            PInvoke.GlobalUnlock(medium.unionmember);
 
             // Set the InShellDragLoop flag to true to facilitate loading and retrieving arbitrary private formats. The
             // drag-and-drop helper object calls IDataObject::SetData to load private formats--used for cross-process support--into

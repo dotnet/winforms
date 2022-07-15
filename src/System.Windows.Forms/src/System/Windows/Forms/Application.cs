@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
+using Windows.Win32;
 using static Interop;
 using Directory = System.IO.Directory;
 
@@ -43,7 +44,7 @@ namespace System.Windows.Forms
         private static bool s_comCtlSupportsVisualStylesInitialized;
         private static bool s_comCtlSupportsVisualStyles;
         private static FormCollection s_forms;
-        private static readonly object s_internalSyncObject = new object();
+        private static readonly object s_internalSyncObject = new();
         private static bool s_useWaitCursor;
 
         private static bool s_useEverettThreadAffinity;
@@ -53,8 +54,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Events the user can hook into
         /// </summary>
-        private static readonly object s_eventApplicationExit = new object();
-        private static readonly object s_eventThreadExit = new object();
+        private static readonly object s_eventApplicationExit = new();
+        private static readonly object s_eventThreadExit = new();
 
         // Defines a new callback delegate type
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -594,7 +595,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe static BOOL SendThemeChanged(IntPtr handle)
         {
-            uint thisPID = Kernel32.GetCurrentProcessId();
+            uint thisPID = PInvoke.GetCurrentProcessId();
             User32.GetWindowThreadProcessId(handle, out uint processId);
             if (processId == thisPID && User32.IsWindowVisible(handle).IsTrue())
             {
@@ -1154,7 +1155,7 @@ namespace System.Windows.Forms
                     sb.Append('"');
                 }
 
-                ProcessStartInfo currentStartInfo = new ProcessStartInfo();
+                ProcessStartInfo currentStartInfo = new();
                 currentStartInfo.FileName = ExecutablePath;
                 if (sb.Length > 0)
                 {

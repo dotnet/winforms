@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Numerics;
 using System.Runtime.InteropServices.ComTypes;
+using Windows.Win32;
 using Xunit;
 using static Interop;
 using static Interop.Shell32;
@@ -104,12 +105,12 @@ namespace System.Windows.Forms.Tests
             {
                 DragDropHelper.SetDragImage(dataObject, dragImage, cursorOffset, useDefaultDragImage);
                 DragDropFormat dragDropFormat = (DragDropFormat)dataObject.GetData(DragDropHelper.CF_DRAGIMAGEBITS);
-                IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
+                void* basePtr = PInvoke.GlobalLock(dragDropFormat.Medium.unionmember);
                 SHDRAGIMAGE* pDragImage = (SHDRAGIMAGE*)basePtr;
                 bool isDragImageNull = BitOperations.LeadingZeroCount((uint)pDragImage->hbmpDragImage.Handle.ToInt64()).Equals(32);
                 Size dragImageSize = pDragImage->sizeDragImage;
                 Point offset = pDragImage->ptOffset;
-                Kernel32.GlobalUnlock(dragDropFormat.Medium.unionmember);
+                PInvoke.GlobalUnlock(dragDropFormat.Medium.unionmember);
                 Assert.Equal(dragImage is null, isDragImageNull);
                 Assert.Equal(dragImage is null ? new Size(0, 0) : dragImage.Size, dragImageSize);
                 Assert.Equal(cursorOffset, offset);
@@ -128,12 +129,12 @@ namespace System.Windows.Forms.Tests
             {
                 DragDropHelper.SetDragImage(dataObject, e);
                 DragDropFormat dragDropFormat = (DragDropFormat)dataObject.GetData(DragDropHelper.CF_DRAGIMAGEBITS);
-                IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
+                void* basePtr = PInvoke.GlobalLock(dragDropFormat.Medium.unionmember);
                 SHDRAGIMAGE* pDragImage = (SHDRAGIMAGE*)basePtr;
                 bool isDragImageNull = BitOperations.LeadingZeroCount((uint)pDragImage->hbmpDragImage.Handle.ToInt64()).Equals(32);
                 Size dragImageSize = pDragImage->sizeDragImage;
                 Point offset = pDragImage->ptOffset;
-                Kernel32.GlobalUnlock(dragDropFormat.Medium.unionmember);
+                PInvoke.GlobalUnlock(dragDropFormat.Medium.unionmember);
                 Assert.Equal(e.DragImage is null, isDragImageNull);
                 Assert.Equal(e.DragImage is null ? new Size(0, 0) : e.DragImage.Size, dragImageSize);
                 Assert.Equal(e.CursorOffset, offset);
@@ -175,12 +176,12 @@ namespace System.Windows.Forms.Tests
                 DragDropHelper.SetDropDescription(dataObject, dropImageType, message, messageReplacementToken);
                 DragDropHelper.ClearDropDescription(dataObject);
                 DragDropFormat dragDropFormat = (DragDropFormat)dataObject.GetData(DragDropHelper.CF_DROPDESCRIPTION);
-                IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
+                void* basePtr = PInvoke.GlobalLock(dragDropFormat.Medium.unionmember);
                 DROPDESCRIPTION* pDropDescription = (DROPDESCRIPTION*)basePtr;
                 DROPIMAGETYPE type = pDropDescription->type;
                 string szMessage = pDropDescription->Message.ToString();
                 string szInsert = pDropDescription->Insert.ToString();
-                Kernel32.GlobalUnlock(dragDropFormat.Medium.unionmember);
+                PInvoke.GlobalUnlock(dragDropFormat.Medium.unionmember);
                 Assert.Equal(DROPIMAGETYPE.DROPIMAGE_INVALID, type);
                 Assert.Equal(string.Empty, szMessage);
                 Assert.Equal(string.Empty, szInsert);
@@ -258,12 +259,12 @@ namespace System.Windows.Forms.Tests
             {
                 DragDropHelper.SetDropDescription(e);
                 DragDropFormat dragDropFormat = (DragDropFormat)e.Data.GetData(DragDropHelper.CF_DROPDESCRIPTION);
-                IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
+                void* basePtr = PInvoke.GlobalLock(dragDropFormat.Medium.unionmember);
                 DROPDESCRIPTION* pDropDescription = (DROPDESCRIPTION*)basePtr;
                 DROPIMAGETYPE type = pDropDescription->type;
                 string szMessage = pDropDescription->Message.ToString();
                 string szInsert = pDropDescription->Insert.ToString();
-                Kernel32.GlobalUnlock(dragDropFormat.Medium.unionmember);
+                PInvoke.GlobalUnlock(dragDropFormat.Medium.unionmember);
                 Assert.Equal((DROPIMAGETYPE)e.DropImageType, type);
                 Assert.Equal(e.Message, szMessage);
                 Assert.Equal(e.MessageReplacementToken, szInsert);
@@ -285,12 +286,12 @@ namespace System.Windows.Forms.Tests
             {
                 DragDropHelper.SetDropDescription(dataObject, dropImageType, message, messageReplacementToken);
                 DragDropFormat dragDropFormat = (DragDropFormat)dataObject.GetData(DragDropHelper.CF_DROPDESCRIPTION);
-                IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
+                void* basePtr = PInvoke.GlobalLock(dragDropFormat.Medium.unionmember);
                 DROPDESCRIPTION* pDropDescription = (DROPDESCRIPTION*)basePtr;
                 DROPIMAGETYPE type = pDropDescription->type;
                 string szMessage = pDropDescription->Message.ToString();
                 string szInsert = pDropDescription->Insert.ToString();
-                Kernel32.GlobalUnlock(dragDropFormat.Medium.unionmember);
+                PInvoke.GlobalUnlock(dragDropFormat.Medium.unionmember);
                 Assert.Equal((DROPIMAGETYPE)dropImageType, type);
                 Assert.Equal(message, szMessage);
                 Assert.Equal(messageReplacementToken, szInsert);
@@ -316,9 +317,9 @@ namespace System.Windows.Forms.Tests
             {
                 DragDropHelper.SetInDragLoop(dataObject, inDragLoop);
                 DragDropFormat dragDropFormat = (DragDropFormat)dataObject.GetData(DragDropHelper.CF_INSHELLDRAGLOOP);
-                IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
-                bool inShellDragLoop = (basePtr != IntPtr.Zero) && (*(BOOL*)basePtr == BOOL.TRUE);
-                Kernel32.GlobalUnlock(dragDropFormat.Medium.unionmember);
+                void* basePtr = PInvoke.GlobalLock(dragDropFormat.Medium.unionmember);
+                bool inShellDragLoop = (basePtr is not null) && (*(BOOL*)basePtr == BOOL.TRUE);
+                PInvoke.GlobalUnlock(dragDropFormat.Medium.unionmember);
                 Assert.Equal(inDragLoop, inShellDragLoop);
             }
             finally
