@@ -6,8 +6,10 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 using static Interop.Comdlg32;
+using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 
 namespace System.Windows.Forms
 {
@@ -293,7 +295,7 @@ namespace System.Windows.Forms
             data.ExclusionFlags = 0;
             data.nPageRanges = 0;
             data.nMaxPageRanges = 1;
-            data.pageRanges = Kernel32.GlobalAlloc(Kernel32.GMEM.GPTR, (uint)(data.nMaxPageRanges * sizeof(PRINTPAGERANGE)));
+            data.pageRanges = PInvoke.GlobalAlloc(GPTR, (uint)(data.nMaxPageRanges * sizeof(PRINTPAGERANGE)));
             data.nMinPage = 0;
             data.nMaxPage = 9999;
             data.nCopies = 1;
@@ -426,8 +428,8 @@ namespace System.Windows.Forms
             finally
             {
                 GC.KeepAlive(wndproc);
-                Kernel32.GlobalFree(data.hDevMode);
-                Kernel32.GlobalFree(data.hDevNames);
+                PInvoke.GlobalFree(data.hDevMode);
+                PInvoke.GlobalFree(data.hDevNames);
             }
         }
 
@@ -537,17 +539,17 @@ namespace System.Windows.Forms
             {
                 if (data.hDevMode != IntPtr.Zero)
                 {
-                    Kernel32.GlobalFree(data.hDevMode);
+                    PInvoke.GlobalFree(data.hDevMode);
                 }
 
                 if (data.hDevNames != IntPtr.Zero)
                 {
-                    Kernel32.GlobalFree(data.hDevNames);
+                    PInvoke.GlobalFree(data.hDevNames);
                 }
 
                 if (data.pageRanges != IntPtr.Zero)
                 {
-                    Kernel32.GlobalFree(data.pageRanges);
+                    PInvoke.GlobalFree(data.pageRanges);
                 }
             }
         }

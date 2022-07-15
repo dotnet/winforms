@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
 using Accessibility;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms.Design
@@ -23,7 +24,7 @@ namespace System.Windows.Forms.Design
     public partial class ControlDesigner : ComponentDesigner
     {
 #pragma warning disable IDE1006 // Naming Styles - Public API
-        protected static readonly Point InvalidPoint = new Point(int.MinValue, int.MinValue);
+        protected static readonly Point InvalidPoint = new(int.MinValue, int.MinValue);
 #pragma warning restore IDE1006
 
         private static uint s_currentProcessId;
@@ -2504,7 +2505,7 @@ namespace System.Windows.Forms.Design
             {
                 if (s_currentProcessId == 0)
                 {
-                    s_currentProcessId = Kernel32.GetCurrentProcessId();
+                    s_currentProcessId = PInvoke.GetCurrentProcessId();
                 }
 
                 return s_currentProcessId;

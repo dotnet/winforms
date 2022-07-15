@@ -11,7 +11,9 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using Windows.Win32;
 using static Interop;
+using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
@@ -588,8 +590,8 @@ namespace System.Windows.Forms
             if ((formatetc.tymed & TYMED.TYMED_HGLOBAL) != 0)
             {
                 medium.tymed = TYMED.TYMED_HGLOBAL;
-                medium.unionmember = Kernel32.GlobalAlloc(
-                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                medium.unionmember = PInvoke.GlobalAlloc(
+                    GMEM_MOVEABLE | GMEM_ZEROINIT,
                     1);
                 if (medium.unionmember == IntPtr.Zero)
                 {
@@ -602,7 +604,7 @@ namespace System.Windows.Forms
                 }
                 catch
                 {
-                    Kernel32.GlobalFree(medium.unionmember);
+                    PInvoke.GlobalFree(medium.unionmember);
                     medium.unionmember = IntPtr.Zero;
                     throw;
                 }
@@ -806,35 +808,35 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Saves stream out to handle.
         /// </summary>
-        private static unsafe HRESULT SaveStreamToHandle(ref IntPtr handle, Stream stream)
+        private static unsafe HRESULT SaveStreamToHandle(ref nint handle, Stream stream)
         {
-            if (handle != IntPtr.Zero)
+            if (handle != 0)
             {
-                Kernel32.GlobalFree(handle);
+                PInvoke.GlobalFree(handle);
             }
 
             int size = (int)stream.Length;
-            handle = Kernel32.GlobalAlloc(Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE, (uint)size);
-            if (handle == IntPtr.Zero)
+            handle = PInvoke.GlobalAlloc(GMEM_MOVEABLE, (uint)size);
+            if (handle == 0)
             {
                 return HRESULT.E_OUTOFMEMORY;
             }
 
-            IntPtr ptr = Kernel32.GlobalLock(handle);
-            if (ptr == IntPtr.Zero)
+            void* ptr = PInvoke.GlobalLock(handle);
+            if (ptr is null)
             {
                 return HRESULT.E_OUTOFMEMORY;
             }
 
             try
             {
-                var span = new Span<byte>(ptr.ToPointer(), size);
+                var span = new Span<byte>(ptr, size);
                 stream.Position = 0;
                 stream.Read(span);
             }
             finally
             {
-                Kernel32.GlobalUnlock(handle);
+                PInvoke.GlobalUnlock(handle);
             }
 
             return HRESULT.S_OK;
@@ -871,17 +873,17 @@ namespace System.Windows.Forms
             sizeInBytes += 2;
 
             // Allocate the Win32 memory
-            IntPtr newHandle = Kernel32.GlobalReAlloc(
+            nint newHandle = PInvoke.GlobalReAlloc(
                 handle,
                 sizeInBytes,
-                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE);
-            if (newHandle == IntPtr.Zero)
+                (uint)GMEM_MOVEABLE);
+            if (newHandle == 0)
             {
                 return HRESULT.E_OUTOFMEMORY;
             }
 
-            IntPtr basePtr = Kernel32.GlobalLock(newHandle);
-            if (basePtr == IntPtr.Zero)
+            void* basePtr = PInvoke.GlobalLock(newHandle);
+            if (basePtr is null)
             {
                 return HRESULT.E_OUTOFMEMORY;
             }
@@ -893,7 +895,7 @@ namespace System.Windows.Forms
             pDropFiles->fNC = BOOL.FALSE;
             pDropFiles->fWide = BOOL.TRUE;
 
-            char* dataPtr = (char*)(basePtr + (int)pDropFiles->pFiles);
+            char* dataPtr = (char*)((byte*)basePtr + pDropFiles->pFiles);
 
             // Write out the strings.
             for (int i = 0; i < files.Length; i++)
@@ -904,7 +906,7 @@ namespace System.Windows.Forms
                     Buffer.MemoryCopy(pFile, dataPtr, bytesToCopy, bytesToCopy);
                 }
 
-                dataPtr = (char*)((IntPtr)dataPtr + bytesToCopy);
+                dataPtr = (char*)((byte*)dataPtr + bytesToCopy);
                 *dataPtr = '\0';
                 dataPtr++;
             }
@@ -912,7 +914,7 @@ namespace System.Windows.Forms
             *dataPtr = '\0';
             dataPtr++;
 
-            Kernel32.GlobalUnlock(newHandle);
+            PInvoke.GlobalUnlock(newHandle);
             return HRESULT.S_OK;
         }
 
@@ -927,20 +929,20 @@ namespace System.Windows.Forms
                 return HRESULT.E_INVALIDARG;
             }
 
-            IntPtr newHandle = IntPtr.Zero;
+            nint newHandle = 0;
             if (unicode)
             {
                 uint byteSize = (uint)str.Length * 2 + 2;
-                newHandle = Kernel32.GlobalReAlloc(
+                newHandle = PInvoke.GlobalReAlloc(
                     handle,
                     byteSize,
-                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
-                if (newHandle == IntPtr.Zero)
+                    (uint)(GMEM_MOVEABLE | GMEM_ZEROINIT));
+                if (newHandle == 0)
                 {
                     return HRESULT.E_OUTOFMEMORY;
                 }
 
-                char* ptr = (char*)Kernel32.GlobalLock(newHandle);
+                char* ptr = (char*)PInvoke.GlobalLock(newHandle);
                 if (ptr is null)
                 {
                     return HRESULT.E_OUTOFMEMORY;
@@ -955,16 +957,16 @@ namespace System.Windows.Forms
                 fixed (char* pStr = str)
                 {
                     int pinvokeSize = Kernel32.WideCharToMultiByte(Kernel32.CP.ACP, 0, pStr, str.Length, null, 0, IntPtr.Zero, null);
-                    newHandle = Kernel32.GlobalReAlloc(
+                    newHandle = PInvoke.GlobalReAlloc(
                         handle,
                         (uint)pinvokeSize + 1,
-                        Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
-                    if (newHandle == IntPtr.Zero)
+                        (uint)GMEM_MOVEABLE | (uint)GMEM_ZEROINIT);
+                    if (newHandle == 0)
                     {
                         return HRESULT.E_OUTOFMEMORY;
                     }
 
-                    byte* ptr = (byte*)Kernel32.GlobalLock(newHandle);
+                    byte* ptr = (byte*)PInvoke.GlobalLock((nint)newHandle);
                     if (ptr is null)
                     {
                         return HRESULT.E_OUTOFMEMORY;
@@ -975,7 +977,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            Kernel32.GlobalUnlock(newHandle);
+            PInvoke.GlobalUnlock(newHandle);
             return HRESULT.S_OK;
         }
 
@@ -987,16 +989,16 @@ namespace System.Windows.Forms
             }
 
             int byteLength = Encoding.UTF8.GetByteCount(str);
-            IntPtr newHandle = Kernel32.GlobalReAlloc(
+            nint newHandle = PInvoke.GlobalReAlloc(
                 handle,
                 (uint)byteLength + 1,
-                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
-            if (newHandle == IntPtr.Zero)
+                (uint)(GMEM_MOVEABLE | GMEM_ZEROINIT));
+            if (newHandle == 0)
             {
                 return HRESULT.E_OUTOFMEMORY;
             }
 
-            byte* ptr = (byte*)Kernel32.GlobalLock(newHandle);
+            byte* ptr = (byte*)PInvoke.GlobalLock(newHandle);
             if (ptr is null)
             {
                 return HRESULT.E_OUTOFMEMORY;
@@ -1010,7 +1012,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                Kernel32.GlobalUnlock(newHandle);
+                PInvoke.GlobalUnlock(newHandle);
             }
 
             return HRESULT.S_OK;
