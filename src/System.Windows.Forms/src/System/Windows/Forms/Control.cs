@@ -4118,7 +4118,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatData))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler DataContextChanged
+        public event EventHandler? DataContextChanged
         {
             add => Events.AddHandler(s_dataContextEvent, value);
             remove => Events.RemoveHandler(s_dataContextEvent, value);

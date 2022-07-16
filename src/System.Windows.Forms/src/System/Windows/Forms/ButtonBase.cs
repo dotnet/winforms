@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     ///  Implements the basic functionality required by a button control.
     /// </summary>
     [Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)]
-    public abstract partial class ButtonBase : Control
+    public abstract partial class ButtonBase : CommandControl
     {
         private FlatStyle _flatStyle = FlatStyle.Standard;
         private ContentAlignment _imageAlign = ContentAlignment.MiddleCenter;
@@ -812,6 +812,12 @@ namespace System.Windows.Forms
             {
                 Invalidate();
             }
+        }
+
+        protected override void OnClick(EventArgs e)
+        {
+            base.OnClick(e);
+            base.OnRequestCommandExecute(e);
         }
 
         /// <summary>

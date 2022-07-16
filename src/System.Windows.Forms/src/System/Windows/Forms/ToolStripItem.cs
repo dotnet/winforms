@@ -22,7 +22,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(Click))]
     [ToolboxItem(false)]
     [DefaultProperty(nameof(Text))]
-    public abstract partial class ToolStripItem : Component,
+    public abstract partial class ToolStripItem : CommandComponent,
                               IDropTarget,
                               ISupportOleDropSource,
                               IArrangedElement,
@@ -743,7 +743,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [SRDescription(nameof(SR.ToolStripItemEnabledDescr))]
         [DefaultValue(true)]
-        public virtual bool Enabled
+        public override bool Enabled
         {
             get
             {
@@ -2635,7 +2635,11 @@ namespace System.Windows.Forms
             InternalLayout.PerformLayout();
         }
 
-        protected virtual void OnClick(EventArgs e) => RaiseEvent(s_clickEvent, e);
+        protected virtual void OnClick(EventArgs e)
+        {
+            RaiseEvent(s_clickEvent, e);
+            base.OnRequestCommandExecute(e);
+        }
 
         protected internal virtual void OnLayout(LayoutEventArgs e)
         {
@@ -3035,9 +3039,6 @@ namespace System.Windows.Forms
 
         internal void RaiseDragEvent(object key, DragEventArgs e)
             => ((DragEventHandler)Events[key])?.Invoke(this, e);
-
-        internal void RaiseEvent(object key, EventArgs e)
-            => ((EventHandler)Events[key])?.Invoke(this, e);
 
         internal void RaiseKeyEvent(object key, KeyEventArgs e)
             => ((KeyEventHandler)Events[key])?.Invoke(this, e);

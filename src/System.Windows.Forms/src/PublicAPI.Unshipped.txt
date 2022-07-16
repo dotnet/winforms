@@ -1,7 +1,12 @@
 System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(nint handle) -> void
 System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(nint handle, int objid) -> void
+System.Windows.Forms.BindableComponent.BindableComponent() -> void
+System.Windows.Forms.BindableComponent.BindingContext.get -> System.Windows.Forms.BindingContext!
+System.Windows.Forms.BindableComponent.BindingContext.set -> void
+System.Windows.Forms.BindableComponent.RaiseEvent(object! key, System.EventArgs! e) -> void
 System.Windows.Forms.ComboBox.ChildAccessibleObject.ChildAccessibleObject(System.Windows.Forms.ComboBox! owner, nint handle) -> void
 System.Windows.Forms.Control.ControlAccessibleObject.Handle.get -> nint
+System.Windows.Forms.Control.DataContextChanged -> System.EventHandler?
 System.Windows.Forms.Control.Handle.get -> nint
 System.Windows.Forms.CreateParams.Parent.get -> nint
 System.Windows.Forms.Cursor.CopyHandle() -> nint
@@ -19,10 +24,15 @@ System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(nint iconHandle) -> void
 System.Windows.Forms.TreeNode.Handle.get -> nint
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.Handle.get -> nint
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.HitTestBackground(System.Drawing.IDeviceContext! dc, System.Drawing.Rectangle backgroundRectangle, nint hRgn, System.Drawing.Point pt, System.Windows.Forms.VisualStyles.HitTestOptions options) -> System.Windows.Forms.VisualStyles.HitTestCode
+abstract System.Windows.Forms.CommandComponent.Enabled.get -> bool
+abstract System.Windows.Forms.CommandComponent.Enabled.set -> void
 abstract System.Windows.Forms.CommonDialog.RunDialog(nint hwndOwner) -> bool
+override System.Windows.Forms.ButtonBase.OnClick(System.EventArgs! e) -> void
 override System.Windows.Forms.ColorDialog.RunDialog(nint hwndOwner) -> bool
 override System.Windows.Forms.FontDialog.HookProc(nint hWnd, int msg, nint wparam, nint lparam) -> nint
 override System.Windows.Forms.FontDialog.RunDialog(nint hWndOwner) -> bool
+override System.Windows.Forms.ToolStripItem.Enabled.get -> bool
+override System.Windows.Forms.ToolStripItem.Enabled.set -> void
 static System.Windows.Forms.Control.ReflectMessage(nint hWnd, ref System.Windows.Forms.Message m) -> bool
 static System.Windows.Forms.ControlPaint.CreateHBitmap16Bit(System.Drawing.Bitmap! bitmap, System.Drawing.Color background) -> nint
 static System.Windows.Forms.ControlPaint.CreateHBitmapColorMask(System.Drawing.Bitmap! bitmap, nint monochromeMask) -> nint
@@ -64,15 +74,6 @@ System.Windows.Forms.CommandControl.CommandControl() -> void
 System.Windows.Forms.CommandControl.CommandParameter.get -> object?
 System.Windows.Forms.CommandControl.CommandParameter.set -> void
 System.Windows.Forms.CommandControl.CommandParameterChanged -> System.EventHandler!
-System.Windows.Forms.Control.DataContextChanged -> System.EventHandler
-System.Windows.Forms.ICommandProvider
-System.Windows.Forms.ICommandProvider.Command.get -> System.Windows.Input.ICommand?
-System.Windows.Forms.ICommandProvider.CommandCanExecuteChanged -> System.EventHandler?
-System.Windows.Forms.ICommandProvider.CommandChanged -> System.EventHandler?
-System.Windows.Forms.ICommandProvider.CommandExecuting -> System.ComponentModel.CancelEventHandler?
-System.Windows.Forms.ICommandProvider.CommandParameter.get -> object?
-System.Windows.Forms.ICommandProvider.Enabled.get -> bool
-System.Windows.Forms.ICommandProvider.Enabled.set -> void
 virtual System.Windows.Forms.BindableComponent.OnBindingContextChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.CommandComponent.OnCommandCanExecuteChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.CommandComponent.OnCommandChanged(System.EventArgs! e) -> void
@@ -84,7 +85,5 @@ virtual System.Windows.Forms.CommandControl.OnCommandParameterChanged(System.Eve
 virtual System.Windows.Forms.CommandControl.OnRequestCommandExecute(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.DataContext.get -> object?
 virtual System.Windows.Forms.Control.DataContext.set -> void
-System.Windows.Forms.ICommandProvider.Command.set -> void
-System.Windows.Forms.ICommandProvider.CommandParameter.set -> void
 ~virtual System.Windows.Forms.Control.OnDataContextChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnParentDataContextChanged(System.EventArgs e) -> void
