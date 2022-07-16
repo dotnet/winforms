@@ -16,6 +16,16 @@ namespace System.Windows.Forms
     /// </summary>
     public class ApplicationContext : IDisposable
     {
+        /// <summary>
+        /// These are subclasses of the <see cref="ApplicationContext"/> for which we don't need to call the finalizer, because it's empty.
+        /// See https://github.com/dotnet/winforms/issues/6858.
+        /// </summary>
+        private static readonly HashSet<Type> s_typesWithEmptyFinalizer = new()
+        {
+            typeof(ApplicationContext),
+            Application.s_typeOfModalApplicationContext
+        };
+
         private Form? _mainForm;
 
         /// <summary>
@@ -27,20 +37,25 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Creates a new ApplicationContext with the specified mainForm.
-        ///  If OnMainFormClosed is not overriden, the thread's message
+        ///  If OnMainFormClosed is not overridden, the thread's message
         ///  loop will be terminated when mainForm is closed.
         /// </summary>
         public ApplicationContext(Form? mainForm)
         {
+            if (s_typesWithEmptyFinalizer.Contains(GetType()))
+                GC.SuppressFinalize(this);
+
             MainForm = mainForm;
         }
 
+        // NOTE: currently this finalizer is unneeded (empty). See https://github.com/dotnet/winforms/issues/6858.
+        // All classes that are not need to be finalized contains in ApplicationContext.s_typesWithEmptyFinalizer collection. Consider to modify it if needed.
         ~ApplicationContext() => Dispose(false);
 
         /// <summary>
         ///  Determines the mainForm for this context. This may be changed
         ///  at anytime.
-        ///  If OnMainFormClosed is not overriden, the thread's message
+        ///  If OnMainFormClosed is not overridden, the thread's message
         ///  loop will be terminated when mainForm is closed.
         /// </summary>
         public Form? MainForm
@@ -102,6 +117,11 @@ namespace System.Windows.Forms
                     _mainForm = null;
                 }
             }
+
+            // If you are adding releasing unmanaged resources code here (disposing == false), you need to:
+            // remove GC.SuppressFinalize from constructor of this class and from all of its subclasses
+            // remove ApplicationContext_Subclasses_SuppressFinalizeCall test
+            // modify ~ApplicationContext() description.
         }
 
         /// <summary>
