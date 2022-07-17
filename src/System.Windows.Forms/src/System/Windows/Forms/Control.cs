@@ -8495,7 +8495,7 @@ namespace System.Windows.Forms
                 Invalidate();
             }
         }
-
+#nullable enable
         /// <summary>
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.onPaint to send this event to any registered event listeners.
@@ -8503,7 +8503,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPaint(PaintEventArgs e)
         {
-            ((PaintEventHandler)Events[s_paintEvent])?.Invoke(this, e);
+            ((PaintEventHandler?)Events[s_paintEvent])?.Invoke(this, e);
         }
 
         protected virtual void OnPaddingChanged(EventArgs e)
@@ -8513,7 +8513,7 @@ namespace System.Windows.Forms
                 Invalidate();
             }
 
-            ((EventHandler)Events[s_paddingChangedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_paddingChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8563,7 +8563,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnQueryContinueDrag(QueryContinueDragEventArgs qcdevent)
         {
-            ((QueryContinueDragEventHandler)Events[s_queryContinueDragEvent])?.Invoke(this, qcdevent);
+            ((QueryContinueDragEventHandler?)Events[s_queryContinueDragEvent])?.Invoke(this, qcdevent);
         }
 
         /// <summary>
@@ -8591,7 +8591,7 @@ namespace System.Windows.Forms
             }
 
             LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
-            ((EventHandler)Events[s_resizeEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_resizeEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8600,7 +8600,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
         {
-            ((PreviewKeyDownEventHandler)Events[s_previewKeyDownEvent])?.Invoke(this, e);
+            ((PreviewKeyDownEventHandler?)Events[s_previewKeyDownEvent])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -8620,7 +8620,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnChangeUICues(UICuesEventArgs e)
         {
-            ((UICuesEventHandler)Events[s_changeUICuesEvent])?.Invoke(this, e);
+            ((UICuesEventHandler?)Events[s_changeUICuesEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8629,7 +8629,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnStyleChanged(EventArgs e)
         {
-            ((EventHandler)Events[s_styleChangedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_styleChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8638,7 +8638,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnSystemColorsChanged(EventArgs e)
         {
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -8652,7 +8652,7 @@ namespace System.Windows.Forms
 
             Invalidate();
 
-            ((EventHandler)Events[s_systemColorsChangedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_systemColorsChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8662,7 +8662,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnValidating(CancelEventArgs e)
         {
-            ((CancelEventHandler)Events[s_validatingEvent])?.Invoke(this, e);
+            ((CancelEventHandler?)Events[s_validatingEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8671,7 +8671,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnValidated(EventArgs e)
         {
-            ((EventHandler)Events[s_validatedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_validatedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8811,9 +8811,9 @@ namespace System.Windows.Forms
         /// <param name="transparentRegion">
         ///  Region of the rectangle to be transparent, or null for the entire control.
         /// </param>
-        internal unsafe void PaintTransparentBackground(PaintEventArgs e, Rectangle rectangle, Region transparentRegion)
+        internal unsafe void PaintTransparentBackground(PaintEventArgs e, Rectangle rectangle, Region? transparentRegion)
         {
-            Control parent = ParentInternal;
+            Control? parent = ParentInternal;
 
             if (parent is null)
             {
@@ -8942,11 +8942,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Find ContainerControl that is the container of this control.
         /// </summary>
-        internal ContainerControl ParentContainerControl
+        internal ContainerControl? ParentContainerControl
         {
             get
             {
-                for (Control c = ParentInternal; c is not null; c = c.ParentInternal)
+                for (Control? c = ParentInternal; c is not null; c = c.ParentInternal)
                 {
                     if (c is ContainerControl)
                     {
@@ -8984,7 +8984,7 @@ namespace System.Windows.Forms
         ///  Forces the control to apply layout logic to all of the child controls.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public void PerformLayout(Control affectedControl, string affectedProperty)
+        public void PerformLayout(Control? affectedControl, string? affectedProperty)
         {
             PerformLayout(new LayoutEventArgs(affectedControl, affectedProperty));
         }
@@ -9248,7 +9248,7 @@ namespace System.Windows.Forms
         public PreProcessControlState PreProcessControlMessage(ref Message msg)
             => PreProcessControlMessageInternal(target: null, ref msg);
 
-        internal static PreProcessControlState PreProcessControlMessageInternal(Control target, ref Message message)
+        internal static PreProcessControlState PreProcessControlMessageInternal(Control? target, ref Message message)
         {
             target ??= FromChildHandle(message.HWnd);
 
@@ -9262,7 +9262,7 @@ namespace System.Windows.Forms
             target.SetExtendedState(ExtendedStates.InputChar, false);
             target.SetExtendedState(ExtendedStates.UiCues, true);
 
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.PreProcessControlMessageInternal {message}");
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.PreProcessControlMessageInternal {message}");
 
             try
             {
@@ -9342,7 +9342,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessCmdKey " + msg.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "Control.ProcessCmdKey " + msg.ToString());
 
             if (_parent is not null)
             {
@@ -9463,7 +9463,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessDialogChar(char charCode)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.ProcessDialogChar [{charCode.ToString()}]");
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.ProcessDialogChar [{charCode.ToString()}]");
             return _parent is null ? false : _parent.ProcessDialogChar(charCode);
         }
 
@@ -9484,7 +9484,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessDialogKey(Keys keyData)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessDialogKey " + keyData.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "Control.ProcessDialogKey " + keyData.ToString());
             return _parent is null ? false : _parent.ProcessDialogKey(keyData);
         }
 
@@ -9503,9 +9503,9 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessKeyEventArgs(ref Message m)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.ProcessKeyEventArgs {m}");
-            KeyEventArgs ke = null;
-            KeyPressEventArgs kpe = null;
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.ProcessKeyEventArgs {m}");
+            KeyEventArgs? ke = null;
+            KeyPressEventArgs? kpe = null;
             nint newWParam = 0;
 
             if (m.MsgInternal == User32.WM.CHAR || m.MsgInternal == User32.WM.SYSCHAR)
@@ -9572,8 +9572,8 @@ namespace System.Windows.Forms
             }
             else
             {
-                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"    processkeyeventarg returning: {ke.Handled}");
-                if (ke.SuppressKeyPress)
+                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"    processkeyeventarg returning: {ke!.Handled}");
+                if (ke!.SuppressKeyPress)
                 {
                     RemovePendingMessages(User32.WM.CHAR, User32.WM.CHAR);
                     RemovePendingMessages(User32.WM.SYSCHAR, User32.WM.SYSCHAR);
@@ -9601,7 +9601,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected internal virtual bool ProcessKeyMessage(ref Message m)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.ProcessKeyMessage {m}");
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.ProcessKeyMessage {m}");
             if (_parent is not null && _parent.ProcessKeyPreview(ref m))
             {
                 return true;
@@ -9630,7 +9630,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessKeyPreview(ref Message m)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.ProcessKeyPreview {m}");
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.ProcessKeyPreview {m}");
             return _parent is not null && _parent.ProcessKeyPreview(ref m);
         }
 
@@ -9672,7 +9672,7 @@ namespace System.Windows.Forms
                 return;  // PERF: don't WM_QUERYUISTATE if we don't have to.
             }
 
-            Control topMostParent = null;
+            Control? topMostParent = null;
             User32.UISF current = (User32.UISF)User32.SendMessageW(this, User32.WM.QUERYUISTATE);
 
             // don't trust when a control says the accelerators are showing.
@@ -9741,7 +9741,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseDragEvent(object key, DragEventArgs e)
         {
-            ((DragEventHandler)Events[key])?.Invoke(this, e);
+            ((DragEventHandler?)Events[key])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9751,9 +9751,9 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaisePaintEvent(object key, PaintEventArgs e)
         {
-            ((PaintEventHandler)Events[s_paintEvent])?.Invoke(this, e);
+            ((PaintEventHandler?)Events[s_paintEvent])?.Invoke(this, e);
         }
-#nullable enable
+
         private void RemovePendingMessages(User32.WM msgMin, User32.WM msgMax)
         {
             if (!IsDisposed)
