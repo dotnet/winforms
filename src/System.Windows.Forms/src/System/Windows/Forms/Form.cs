@@ -220,7 +220,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Form parentForm = ParentForm;
+                Form? parentForm = ParentForm;
                 if (parentForm is null)
                 {
                     return _formState[FormStateIsActive] != 0;
@@ -3928,7 +3928,7 @@ namespace System.Windows.Forms
             if (!DesignMode && Enabled && Active)
             {
                 // Make sure we activate the active control.
-                Control activeControl = ActiveControl;
+                Control? activeControl = ActiveControl;
 
                 if (activeControl is null)
                 {
@@ -4848,7 +4848,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                Form form = ParentForm;
+                Form? form = ParentForm;
                 if (form is not null)
                 {
                     form.ActiveControl = this;

@@ -838,7 +838,7 @@ namespace System.Windows.Forms
         ///  Scrolls the currently active control into view if we are an AutoScroll
         ///  Form that has the Horiz or Vert scrollbar displayed...
         /// </summary>
-        public void ScrollControlIntoView(Control activeControl)
+        public void ScrollControlIntoView(Control? activeControl)
         {
             if (activeControl is null)
             {
