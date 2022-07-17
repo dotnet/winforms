@@ -12,11 +12,11 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.ToolStripContainerDesc))]
     public partial class ToolStripContainer : ContainerControl
     {
-        private readonly ToolStripPanel topPanel;
-        private readonly ToolStripPanel bottomPanel;
-        private readonly ToolStripPanel leftPanel;
-        private readonly ToolStripPanel rightPanel;
-        private readonly ToolStripContentPanel contentPanel;
+        private readonly ToolStripPanel _topPanel;
+        private readonly ToolStripPanel _bottomPanel;
+        private readonly ToolStripPanel _leftPanel;
+        private readonly ToolStripPanel _rightPanel;
+        private readonly ToolStripContentPanel _contentPanel;
 
         public ToolStripContainer()
         {
@@ -26,26 +26,26 @@ namespace System.Windows.Forms
             try
             {
                 // undone - smart demand creation
-                topPanel = new ToolStripPanel(this);
-                bottomPanel = new ToolStripPanel(this);
-                leftPanel = new ToolStripPanel(this);
-                rightPanel = new ToolStripPanel(this);
-                contentPanel = new ToolStripContentPanel
+                _topPanel = new ToolStripPanel(this);
+                _bottomPanel = new ToolStripPanel(this);
+                _leftPanel = new ToolStripPanel(this);
+                _rightPanel = new ToolStripPanel(this);
+                _contentPanel = new ToolStripContentPanel
                 {
                     Dock = DockStyle.Fill
                 };
-                topPanel.Dock = DockStyle.Top;
-                bottomPanel.Dock = DockStyle.Bottom;
-                rightPanel.Dock = DockStyle.Right;
-                leftPanel.Dock = DockStyle.Left;
+                _topPanel.Dock = DockStyle.Top;
+                _bottomPanel.Dock = DockStyle.Bottom;
+                _rightPanel.Dock = DockStyle.Right;
+                _leftPanel.Dock = DockStyle.Left;
 
                 if (Controls is ToolStripContainerTypedControlCollection controlCollection)
                 {
-                    controlCollection.AddInternal(contentPanel);
-                    controlCollection.AddInternal(leftPanel);
-                    controlCollection.AddInternal(rightPanel);
-                    controlCollection.AddInternal(topPanel);
-                    controlCollection.AddInternal(bottomPanel);
+                    controlCollection.AddInternal(_contentPanel);
+                    controlCollection.AddInternal(_leftPanel);
+                    controlCollection.AddInternal(_rightPanel);
+                    controlCollection.AddInternal(_topPanel);
+                    controlCollection.AddInternal(_bottomPanel);
                 }
 
                 // else consider throw new exception
@@ -145,7 +145,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return bottomPanel;
+                return _bottomPanel;
             }
         }
 
@@ -172,7 +172,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return contentPanel;
+                return _contentPanel;
             }
         }
 
@@ -263,7 +263,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return leftPanel;
+                return _leftPanel;
             }
         }
 
@@ -290,7 +290,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return rightPanel;
+                return _rightPanel;
             }
         }
 
@@ -319,7 +319,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return topPanel;
+                return _topPanel;
             }
         }
 
