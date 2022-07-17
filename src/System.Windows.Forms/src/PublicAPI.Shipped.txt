@@ -534,17 +534,17 @@ override System.Windows.Forms.ToolStripContainer.OnSizeChanged(System.EventArgs!
 ~override System.Windows.Forms.ToolStripOverflow.Items.get -> System.Windows.Forms.ToolStripItemCollection
 ~override System.Windows.Forms.ToolStripOverflow.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
 ~override System.Windows.Forms.ToolStripOverflow.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~override System.Windows.Forms.ToolStripPanel.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-~override System.Windows.Forms.ToolStripPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
-~override System.Windows.Forms.ToolStripPanel.OnControlAdded(System.Windows.Forms.ControlEventArgs e) -> void
-~override System.Windows.Forms.ToolStripPanel.OnControlRemoved(System.Windows.Forms.ControlEventArgs e) -> void
-~override System.Windows.Forms.ToolStripPanel.OnDockChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripPanel.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~override System.Windows.Forms.ToolStripPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.ToolStripPanel.OnParentChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripPanel.OnRightToLeftChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripPanel.Text.get -> string
-~override System.Windows.Forms.ToolStripPanel.Text.set -> void
+override System.Windows.Forms.ToolStripPanel.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
+override System.Windows.Forms.ToolStripPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
+override System.Windows.Forms.ToolStripPanel.OnControlAdded(System.Windows.Forms.ControlEventArgs! e) -> void
+override System.Windows.Forms.ToolStripPanel.OnControlRemoved(System.Windows.Forms.ControlEventArgs! e) -> void
+override System.Windows.Forms.ToolStripPanel.OnDockChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripPanel.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
+override System.Windows.Forms.ToolStripPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.ToolStripPanel.OnParentChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripPanel.OnRightToLeftChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripPanel.Text.get -> string!
+override System.Windows.Forms.ToolStripPanel.Text.set -> void
 ~override System.Windows.Forms.ToolStripProgressBar.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.ToolStripProgressBar.BackgroundImage.set -> void
 ~override System.Windows.Forms.ToolStripProgressBar.OnSubscribeControlEvents(System.Windows.Forms.Control control) -> void
@@ -1593,14 +1593,14 @@ System.Windows.Forms.ToolStripContainer.TopToolStripPanel.get -> System.Windows.
 ~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text, System.Drawing.Image image, System.EventHandler onClick, System.Windows.Forms.Keys shortcutKeys) -> void
 ~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(System.Drawing.Image image) -> void
 ~System.Windows.Forms.ToolStripOverflow.ToolStripOverflow(System.Windows.Forms.ToolStripItem parentItem) -> void
-~System.Windows.Forms.ToolStripPanel.Join(System.Windows.Forms.ToolStrip toolStripToDrag) -> void
-~System.Windows.Forms.ToolStripPanel.Join(System.Windows.Forms.ToolStrip toolStripToDrag, int row) -> void
-~System.Windows.Forms.ToolStripPanel.Join(System.Windows.Forms.ToolStrip toolStripToDrag, int x, int y) -> void
-~System.Windows.Forms.ToolStripPanel.Join(System.Windows.Forms.ToolStrip toolStripToDrag, System.Drawing.Point location) -> void
-~System.Windows.Forms.ToolStripPanel.PointToRow(System.Drawing.Point clientLocation) -> System.Windows.Forms.ToolStripPanelRow
-~System.Windows.Forms.ToolStripPanel.Renderer.get -> System.Windows.Forms.ToolStripRenderer
-~System.Windows.Forms.ToolStripPanel.Renderer.set -> void
-~System.Windows.Forms.ToolStripPanel.Rows.get -> System.Windows.Forms.ToolStripPanelRow[]
+System.Windows.Forms.ToolStripPanel.Join(System.Windows.Forms.ToolStrip! toolStripToDrag) -> void
+System.Windows.Forms.ToolStripPanel.Join(System.Windows.Forms.ToolStrip! toolStripToDrag, int row) -> void
+System.Windows.Forms.ToolStripPanel.Join(System.Windows.Forms.ToolStrip! toolStripToDrag, int x, int y) -> void
+System.Windows.Forms.ToolStripPanel.Join(System.Windows.Forms.ToolStrip! toolStripToDrag, System.Drawing.Point location) -> void
+System.Windows.Forms.ToolStripPanel.PointToRow(System.Drawing.Point clientLocation) -> System.Windows.Forms.ToolStripPanelRow?
+System.Windows.Forms.ToolStripPanel.Renderer.get -> System.Windows.Forms.ToolStripRenderer!
+System.Windows.Forms.ToolStripPanel.Renderer.set -> void
+System.Windows.Forms.ToolStripPanel.Rows.get -> System.Windows.Forms.ToolStripPanelRow![]!
 ~System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Add(System.Windows.Forms.ToolStripPanelRow value) -> int
 ~System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection value) -> void
 ~System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanelRow[] value) -> void
@@ -2285,7 +2285,7 @@ System.Windows.Forms.ToolStripContainer.TopToolStripPanel.get -> System.Windows.
 ~virtual System.Windows.Forms.ToolStripItemCollection.this[string key].get -> System.Windows.Forms.ToolStripItem
 ~virtual System.Windows.Forms.ToolStripMenuItem.OnCheckedChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripMenuItem.OnCheckStateChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripPanel.OnRendererChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripPanel.OnRendererChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.this[int index].get -> System.Windows.Forms.ToolStripPanelRow
 ~virtual System.Windows.Forms.ToolStripPanelRow.OnControlAdded(System.Windows.Forms.Control control, int index) -> void
 ~virtual System.Windows.Forms.ToolStripPanelRow.OnControlRemoved(System.Windows.Forms.Control control, int index) -> void
@@ -11405,25 +11405,25 @@ System.Windows.Forms.ToolStripPanel.AutoScrollMargin.get -> System.Drawing.Size
 System.Windows.Forms.ToolStripPanel.AutoScrollMargin.set -> void
 System.Windows.Forms.ToolStripPanel.AutoScrollMinSize.get -> System.Drawing.Size
 System.Windows.Forms.ToolStripPanel.AutoScrollMinSize.set -> void
-System.Windows.Forms.ToolStripPanel.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.ToolStripPanel.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripPanel.BeginInit() -> void
 System.Windows.Forms.ToolStripPanel.EndInit() -> void
 System.Windows.Forms.ToolStripPanel.Locked.get -> bool
 System.Windows.Forms.ToolStripPanel.Locked.set -> void
 System.Windows.Forms.ToolStripPanel.Orientation.get -> System.Windows.Forms.Orientation
 System.Windows.Forms.ToolStripPanel.Orientation.set -> void
-System.Windows.Forms.ToolStripPanel.RendererChanged -> System.EventHandler
+System.Windows.Forms.ToolStripPanel.RendererChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripPanel.RenderMode.get -> System.Windows.Forms.ToolStripRenderMode
 System.Windows.Forms.ToolStripPanel.RenderMode.set -> void
 System.Windows.Forms.ToolStripPanel.RowMargin.get -> System.Windows.Forms.Padding
 System.Windows.Forms.ToolStripPanel.RowMargin.set -> void
 System.Windows.Forms.ToolStripPanel.TabIndex.get -> int
 System.Windows.Forms.ToolStripPanel.TabIndex.set -> void
-System.Windows.Forms.ToolStripPanel.TabIndexChanged -> System.EventHandler
+System.Windows.Forms.ToolStripPanel.TabIndexChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripPanel.TabStop.get -> bool
 System.Windows.Forms.ToolStripPanel.TabStop.set -> void
-System.Windows.Forms.ToolStripPanel.TabStopChanged -> System.EventHandler
-System.Windows.Forms.ToolStripPanel.TextChanged -> System.EventHandler
+System.Windows.Forms.ToolStripPanel.TabStopChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripPanel.TextChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripPanel.ToolStripPanel() -> void
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.RemoveAt(int index) -> void
