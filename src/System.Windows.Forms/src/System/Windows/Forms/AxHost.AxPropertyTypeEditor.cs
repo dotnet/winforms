@@ -32,7 +32,6 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    object? instance = context?.Instance;
                     _propertyDescriptor._owner.ShowPropertyPageForDispid(_propertyDescriptor.Dispid, _guid);
                 }
                 catch (Exception ex)
