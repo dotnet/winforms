@@ -2,15 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public class DataGridViewDataErrorEventArgs : DataGridViewCellCancelEventArgs
     {
         private bool _throwException;
 
-        public DataGridViewDataErrorEventArgs(Exception exception, int columnIndex, int rowIndex, DataGridViewDataErrorContexts context) : base(columnIndex, rowIndex)
+        public DataGridViewDataErrorEventArgs(Exception? exception, int columnIndex, int rowIndex, DataGridViewDataErrorContexts context)
+            : base(columnIndex, rowIndex)
         {
             Exception = exception;
             Context = context;
@@ -18,7 +17,7 @@ namespace System.Windows.Forms
 
         public DataGridViewDataErrorContexts Context { get; }
 
-        public Exception Exception { get; }
+        public Exception? Exception { get; }
 
         public bool ThrowException
         {

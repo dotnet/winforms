@@ -1109,9 +1109,11 @@ namespace System.Windows.Forms
 
                 if (DataGridView is not null)
                 {
-                    DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(
-                        new FormatException(SR.DataGridViewComboBoxCell_InvalidValue), ColumnIndex,
-                        rowIndex, context);
+                    DataGridViewDataErrorEventArgs dgvdee = new(
+                        new FormatException(SR.DataGridViewComboBoxCell_InvalidValue),
+                        ColumnIndex,
+                        rowIndex,
+                        context);
                     RaiseDataError(dgvdee);
                     if (dgvdee.ThrowException)
                     {
@@ -1138,9 +1140,11 @@ namespace System.Windows.Forms
                     }
                     else if (DataGridView is not null)
                     {
-                        DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(
-                            new ArgumentException(SR.DataGridViewComboBoxCell_InvalidValue), ColumnIndex,
-                            rowIndex, context);
+                        DataGridViewDataErrorEventArgs dgvdee = new(
+                            new ArgumentException(SR.DataGridViewComboBoxCell_InvalidValue),
+                            ColumnIndex,
+                            rowIndex,
+                            context);
                         RaiseDataError(dgvdee);
                         if (dgvdee.ThrowException)
                         {
@@ -1165,9 +1169,11 @@ namespace System.Windows.Forms
                 {
                     if (DataGridView is not null)
                     {
-                        DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(
-                            new ArgumentException(SR.DataGridViewComboBoxCell_InvalidValue), ColumnIndex,
-                            rowIndex, context);
+                        DataGridViewDataErrorEventArgs dgvdee = new(
+                            new ArgumentException(SR.DataGridViewComboBoxCell_InvalidValue),
+                            ColumnIndex,
+                            rowIndex,
+                            context);
                         RaiseDataError(dgvdee);
                         if (dgvdee.ThrowException)
                         {

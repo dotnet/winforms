@@ -1200,8 +1200,11 @@ namespace System.Windows.Forms
                         throw;
                     }
 
-                    DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(exception, -1 /*columnIndex*/, rowIndex,
-                                                                                               DataGridViewDataErrorContexts.Display);
+                    DataGridViewDataErrorEventArgs dgvdee = new(
+                        exception,
+                        columnIndex: -1,
+                        rowIndex,
+                        DataGridViewDataErrorContexts.Display);
                     _owner.OnDataErrorInternal(dgvdee);
                     if (dgvdee.ThrowException)
                     {
@@ -1235,8 +1238,11 @@ namespace System.Windows.Forms
                         throw;
                     }
 
-                    DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(exception, columnIndex, rowIndex,
-                                                                                               DataGridViewDataErrorContexts.Display);
+                    DataGridViewDataErrorEventArgs dgvdee = new(
+                        exception,
+                        columnIndex,
+                        rowIndex,
+                        DataGridViewDataErrorContexts.Display);
                     _owner.OnDataErrorInternal(dgvdee);
                     if (dgvdee.ThrowException)
                     {
@@ -1269,8 +1275,11 @@ namespace System.Windows.Forms
                         throw;
                     }
 
-                    DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(exception, columnIndex, rowIndex,
-                                                                                               DataGridViewDataErrorContexts.Display);
+                    DataGridViewDataErrorEventArgs dgvdee = new(
+                        exception,
+                        columnIndex,
+                        rowIndex,
+                        DataGridViewDataErrorContexts.Display);
                     _owner.OnDataErrorInternal(dgvdee);
                     if (dgvdee.ThrowException)
                     {
@@ -1521,10 +1530,10 @@ namespace System.Windows.Forms
 
             public void ProcessException(Exception exception, DataGridViewCellCancelEventArgs e, bool beginEdit)
             {
-                DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(exception, e.ColumnIndex,
+                DataGridViewDataErrorEventArgs dgvdee = new(
+                    exception,
+                    e.ColumnIndex,
                     e.RowIndex,
-                    // null,
-                    // null,
                     DataGridViewDataErrorContexts.Commit);
                 _owner.OnDataErrorInternal(dgvdee);
 
