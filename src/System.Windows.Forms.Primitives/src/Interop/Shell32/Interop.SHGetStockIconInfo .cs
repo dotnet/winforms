@@ -118,7 +118,6 @@ internal static partial class Interop
 #pragma warning restore CA1069 // Enums values should not be duplicated
             SMALLICON = 0x000000001,
             SHELLICONSIZE = 0x000000004
-
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
