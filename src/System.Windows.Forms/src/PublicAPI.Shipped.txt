@@ -465,12 +465,12 @@
 ~override System.Windows.Forms.ToolStripComboBox.OnSubscribeControlEvents(System.Windows.Forms.Control control) -> void
 ~override System.Windows.Forms.ToolStripComboBox.OnUnsubscribeControlEvents(System.Windows.Forms.Control control) -> void
 ~override System.Windows.Forms.ToolStripComboBox.ToString() -> string
-~override System.Windows.Forms.ToolStripContainer.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripContainer.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-~override System.Windows.Forms.ToolStripContainer.Cursor.get -> System.Windows.Forms.Cursor
-~override System.Windows.Forms.ToolStripContainer.Cursor.set -> void
-~override System.Windows.Forms.ToolStripContainer.OnRightToLeftChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripContainer.OnSizeChanged(System.EventArgs e) -> void
+override System.Windows.Forms.ToolStripContainer.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripContainer.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
+override System.Windows.Forms.ToolStripContainer.Cursor.get -> System.Windows.Forms.Cursor!
+override System.Windows.Forms.ToolStripContainer.Cursor.set -> void
+override System.Windows.Forms.ToolStripContainer.OnRightToLeftChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripContainer.OnSizeChanged(System.EventArgs! e) -> void
 ~override System.Windows.Forms.ToolStripControlHost.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.ToolStripControlHost.BackgroundImage.set -> void
 ~override System.Windows.Forms.ToolStripControlHost.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -1503,16 +1503,16 @@
 ~System.Windows.Forms.ToolStripComboBox.SelectedText.set -> void
 ~System.Windows.Forms.ToolStripComboBox.ToolStripComboBox(string name) -> void
 ~System.Windows.Forms.ToolStripComboBox.ToolStripComboBox(System.Windows.Forms.Control c) -> void
-~System.Windows.Forms.ToolStripContainer.BackgroundImage.get -> System.Drawing.Image
-~System.Windows.Forms.ToolStripContainer.BackgroundImage.set -> void
-~System.Windows.Forms.ToolStripContainer.BottomToolStripPanel.get -> System.Windows.Forms.ToolStripPanel
-~System.Windows.Forms.ToolStripContainer.ContentPanel.get -> System.Windows.Forms.ToolStripContentPanel
-~System.Windows.Forms.ToolStripContainer.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
-~System.Windows.Forms.ToolStripContainer.ContextMenuStrip.set -> void
-~System.Windows.Forms.ToolStripContainer.Controls.get -> System.Windows.Forms.Control.ControlCollection
-~System.Windows.Forms.ToolStripContainer.LeftToolStripPanel.get -> System.Windows.Forms.ToolStripPanel
-~System.Windows.Forms.ToolStripContainer.RightToolStripPanel.get -> System.Windows.Forms.ToolStripPanel
-~System.Windows.Forms.ToolStripContainer.TopToolStripPanel.get -> System.Windows.Forms.ToolStripPanel
+System.Windows.Forms.ToolStripContainer.BackgroundImage.get -> System.Drawing.Image?
+System.Windows.Forms.ToolStripContainer.BackgroundImage.set -> void
+System.Windows.Forms.ToolStripContainer.BottomToolStripPanel.get -> System.Windows.Forms.ToolStripPanel!
+System.Windows.Forms.ToolStripContainer.ContentPanel.get -> System.Windows.Forms.ToolStripContentPanel!
+System.Windows.Forms.ToolStripContainer.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
+System.Windows.Forms.ToolStripContainer.ContextMenuStrip.set -> void
+System.Windows.Forms.ToolStripContainer.Controls.get -> System.Windows.Forms.Control.ControlCollection!
+System.Windows.Forms.ToolStripContainer.LeftToolStripPanel.get -> System.Windows.Forms.ToolStripPanel!
+System.Windows.Forms.ToolStripContainer.RightToolStripPanel.get -> System.Windows.Forms.ToolStripPanel!
+System.Windows.Forms.ToolStripContainer.TopToolStripPanel.get -> System.Windows.Forms.ToolStripPanel!
 ~System.Windows.Forms.ToolStripControlHost.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c) -> void
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c, string name) -> void
@@ -10996,19 +10996,19 @@ System.Windows.Forms.ToolStripContainer.AutoScrollMinSize.get -> System.Drawing.
 System.Windows.Forms.ToolStripContainer.AutoScrollMinSize.set -> void
 System.Windows.Forms.ToolStripContainer.BackColor.get -> System.Drawing.Color
 System.Windows.Forms.ToolStripContainer.BackColor.set -> void
-System.Windows.Forms.ToolStripContainer.BackColorChanged -> System.EventHandler
-System.Windows.Forms.ToolStripContainer.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.ToolStripContainer.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.ToolStripContainer.BackColorChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripContainer.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripContainer.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripContainer.BottomToolStripPanelVisible.get -> bool
 System.Windows.Forms.ToolStripContainer.BottomToolStripPanelVisible.set -> void
 System.Windows.Forms.ToolStripContainer.CausesValidation.get -> bool
 System.Windows.Forms.ToolStripContainer.CausesValidation.set -> void
-System.Windows.Forms.ToolStripContainer.CausesValidationChanged -> System.EventHandler
-System.Windows.Forms.ToolStripContainer.ContextMenuStripChanged -> System.EventHandler
-System.Windows.Forms.ToolStripContainer.CursorChanged -> System.EventHandler
+System.Windows.Forms.ToolStripContainer.CausesValidationChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripContainer.ContextMenuStripChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripContainer.CursorChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripContainer.ForeColor.get -> System.Drawing.Color
 System.Windows.Forms.ToolStripContainer.ForeColor.set -> void
-System.Windows.Forms.ToolStripContainer.ForeColorChanged -> System.EventHandler
+System.Windows.Forms.ToolStripContainer.ForeColorChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripContainer.LeftToolStripPanelVisible.get -> bool
 System.Windows.Forms.ToolStripContainer.LeftToolStripPanelVisible.set -> void
 System.Windows.Forms.ToolStripContainer.RightToolStripPanelVisible.get -> bool
