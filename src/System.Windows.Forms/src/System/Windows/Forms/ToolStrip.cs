@@ -4816,10 +4816,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Updates item ToolTip.
+        ///  Updates a tooltip for the given toolstrip item.
         /// </summary>
-        /// <param name="item">The item.</param>
-        /// <param name="refresh">If set to <see langword="true"/>, the currently displayed ToolTip (if any) will be updated.</param>
+        /// <param name="item">The toolstrip item.</param>
+        /// <param name="refresh">see langword="true"/> to force-update the tooltip (if it is configured); otherwise <see langword="false"/>.</param>
         internal void UpdateToolTip(ToolStripItem item, bool refresh = false)
         {
             if (ShowItemToolTips)

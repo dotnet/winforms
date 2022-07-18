@@ -693,8 +693,9 @@ namespace System.Windows.Forms
                 dropDown.Location = DropDownLocation;
                 dropDown.Show();
                 Invalidate();
-                // Update the current ToolTip (if any) to appear above the dropDown.
-                ParentInternal?.UpdateToolTip(this, true);
+
+                // Render the current tooltip (if there is one) on top of the dropdown element.
+                ParentInternal?.UpdateToolTip(this, refresh: true);
 
                 AccessibilityNotifyClients(AccessibleEvents.StateChange);
                 AccessibilityNotifyClients(AccessibleEvents.NameChange);
