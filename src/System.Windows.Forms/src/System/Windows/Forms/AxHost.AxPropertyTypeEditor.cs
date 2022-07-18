@@ -37,13 +37,10 @@ namespace System.Windows.Forms
                 }
                 catch (Exception ex)
                 {
-                    if (provider is not null)
+                    IUIService? uiSvc = (IUIService?)provider?.GetService(typeof(IUIService));
+                    if (uiSvc is not null)
                     {
-                        IUIService? uiSvc = (IUIService?)provider.GetService(typeof(IUIService));
-                        if (uiSvc is not null)
-                        {
-                            uiSvc.ShowError(ex, SR.ErrorTypeConverterFailed);
-                        }
+                        uiSvc.ShowError(ex, SR.ErrorTypeConverterFailed);
                     }
                 }
 
