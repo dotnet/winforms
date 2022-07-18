@@ -11,18 +11,19 @@ namespace System.Windows.Forms
     {
         private class ToolStripMenuItemInternalLayout : ToolStripItemInternalLayout
         {
-            private readonly ToolStripMenuItem ownerItem;
+            private readonly ToolStripMenuItem _ownerItem;
 
-            public ToolStripMenuItemInternalLayout(ToolStripMenuItem ownerItem) : base(ownerItem)
+            public ToolStripMenuItemInternalLayout(ToolStripMenuItem ownerItem)
+                : base(ownerItem)
             {
-                this.ownerItem = ownerItem;
+                _ownerItem = ownerItem;
             }
 
             public bool ShowCheckMargin
             {
                 get
                 {
-                    if (ownerItem.Owner is ToolStripDropDownMenu menu)
+                    if (_ownerItem.Owner is ToolStripDropDownMenu menu)
                     {
                         return menu.ShowCheckMargin;
                     }
@@ -35,7 +36,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (ownerItem.Owner is ToolStripDropDownMenu menu)
+                    if (_ownerItem.Owner is ToolStripDropDownMenu menu)
                     {
                         return menu.ShowImageMargin;
                     }
@@ -66,12 +67,12 @@ namespace System.Windows.Forms
                 {
                     if (UseMenuLayout)
                     {
-                        if (ownerItem.Owner is ToolStripDropDownMenu menu)
+                        if (_ownerItem.Owner is ToolStripDropDownMenu menu)
                         {
                             // since menuItem.Padding isn't taken into consideration, we've got to recalc the centering of
                             // the arrow rect per item
                             Rectangle arrowRect = menu.ArrowRectangle;
-                            arrowRect.Y = LayoutUtils.VAlign(arrowRect.Size, ownerItem.ClientBounds, ContentAlignment.MiddleCenter).Y;
+                            arrowRect.Y = LayoutUtils.VAlign(arrowRect.Size, _ownerItem.ClientBounds, ContentAlignment.MiddleCenter).Y;
                             return arrowRect;
                         }
                     }
@@ -86,12 +87,12 @@ namespace System.Windows.Forms
                 {
                     if (UseMenuLayout)
                     {
-                        if (ownerItem.Owner is ToolStripDropDownMenu menu)
+                        if (_ownerItem.Owner is ToolStripDropDownMenu menu)
                         {
                             Rectangle checkRectangle = menu.CheckRectangle;
-                            if (ownerItem.CheckedImage is not null)
+                            if (_ownerItem.CheckedImage is not null)
                             {
-                                int imageHeight = ownerItem.CheckedImage.Height;
+                                int imageHeight = _ownerItem.CheckedImage.Height;
                                 // make sure we're vertically centered
                                 checkRectangle.Y += (checkRectangle.Height - imageHeight) / 2;
                                 checkRectangle.Height = imageHeight;
@@ -110,23 +111,23 @@ namespace System.Windows.Forms
                 {
                     if (UseMenuLayout)
                     {
-                        if (ownerItem.Owner is ToolStripDropDownMenu menu)
+                        if (_ownerItem.Owner is ToolStripDropDownMenu menu)
                         {
                             // since menuItem.Padding isn't taken into consideration, we've got to recalc the centering of
                             // the image rect per item
                             Rectangle imageRect = menu.ImageRectangle;
-                            if (ownerItem.ImageScaling == ToolStripItemImageScaling.SizeToFit)
+                            if (_ownerItem.ImageScaling == ToolStripItemImageScaling.SizeToFit)
                             {
                                 imageRect.Size = menu.ImageScalingSize;
                             }
                             else
                             {
                                 //If we don't have an image, use the CheckedImage
-                                Image image = ownerItem.Image ?? ownerItem.CheckedImage;
+                                Image image = _ownerItem.Image ?? _ownerItem.CheckedImage;
                                 imageRect.Size = image.Size;
                             }
 
-                            imageRect.Y = LayoutUtils.VAlign(imageRect.Size, ownerItem.ClientBounds, ContentAlignment.MiddleCenter).Y;
+                            imageRect.Y = LayoutUtils.VAlign(imageRect.Size, _ownerItem.ClientBounds, ContentAlignment.MiddleCenter).Y;
                             return imageRect;
                         }
                     }
@@ -141,7 +142,7 @@ namespace System.Windows.Forms
                 {
                     if (UseMenuLayout)
                     {
-                        if (ownerItem.Owner is ToolStripDropDownMenu menu)
+                        if (_ownerItem.Owner is ToolStripDropDownMenu menu)
                         {
                             return menu.TextRectangle;
                         }
@@ -155,7 +156,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return ownerItem.Owner is ToolStripDropDownMenu;
+                    return _ownerItem.Owner is ToolStripDropDownMenu;
                 }
             }
 
@@ -163,7 +164,7 @@ namespace System.Windows.Forms
             {
                 if (UseMenuLayout)
                 {
-                    if (ownerItem.Owner is ToolStripDropDownMenu menu)
+                    if (_ownerItem.Owner is ToolStripDropDownMenu menu)
                     {
                         return menu.MaxItemSize;
                     }

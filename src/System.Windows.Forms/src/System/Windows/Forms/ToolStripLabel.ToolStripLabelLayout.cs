@@ -13,7 +13,8 @@ namespace System.Windows.Forms
         /// </summary>
         private class ToolStripLabelLayout : ToolStripItemInternalLayout
         {
-            public ToolStripLabelLayout(ToolStripLabel owner) : base(owner)
+            public ToolStripLabelLayout(ToolStripLabel owner)
+                : base(owner)
             {
             }
 
