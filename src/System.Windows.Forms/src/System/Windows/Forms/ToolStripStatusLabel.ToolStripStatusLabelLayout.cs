@@ -13,11 +13,9 @@ namespace System.Windows.Forms
         /// </summary>
         private class ToolStripStatusLabelLayout : ToolStripItemInternalLayout
         {
-            readonly ToolStripStatusLabel owner;
-
-            public ToolStripStatusLabelLayout(ToolStripStatusLabel owner) : base(owner)
+            public ToolStripStatusLabelLayout(ToolStripStatusLabel owner)
+                : base(owner)
             {
-                this.owner = owner;
             }
 
             protected override ToolStripItemLayoutOptions CommonLayoutOptions()
