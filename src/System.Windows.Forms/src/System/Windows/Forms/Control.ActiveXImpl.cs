@@ -2210,7 +2210,7 @@ namespace System.Windows.Forms
                 if (needPreProcess)
                 {
                     Control? target = FromChildHandle(lpmsg->hwnd);
-                    if (target is not null && (_control == target || _control.Contains(target)))
+                    if (_control == target || _control.Contains(target))
                     {
                         PreProcessControlState messageState = PreProcessControlMessageInternal(target, ref msg);
                         switch (messageState)
