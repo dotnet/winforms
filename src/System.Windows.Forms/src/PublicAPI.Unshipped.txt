@@ -3,8 +3,9 @@ System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(nint handle, int o
 System.Windows.Forms.BindableComponent.BindableComponent() -> void
 System.Windows.Forms.BindableComponent.BindingContext.get -> System.Windows.Forms.BindingContext!
 System.Windows.Forms.BindableComponent.BindingContext.set -> void
-System.Windows.Forms.BindableComponent.RaiseEvent(object! key, System.EventArgs! e) -> void
 System.Windows.Forms.ComboBox.ChildAccessibleObject.ChildAccessibleObject(System.Windows.Forms.ComboBox! owner, nint handle) -> void
+System.Windows.Forms.CommandComponent.CommandParameterChanged -> System.EventHandler?
+System.Windows.Forms.CommandControl.CommandParameterChanged -> System.EventHandler?
 System.Windows.Forms.Control.ControlAccessibleObject.Handle.get -> nint
 System.Windows.Forms.Control.DataContextChanged -> System.EventHandler?
 System.Windows.Forms.Control.Handle.get -> nint
@@ -64,7 +65,6 @@ System.Windows.Forms.CommandComponent.CommandChanged -> System.EventHandler?
 System.Windows.Forms.CommandComponent.CommandComponent() -> void
 System.Windows.Forms.CommandComponent.CommandParameter.get -> object?
 System.Windows.Forms.CommandComponent.CommandParameter.set -> void
-System.Windows.Forms.CommandComponent.CommandParameterChanged -> System.EventHandler!
 System.Windows.Forms.CommandControl
 System.Windows.Forms.CommandControl.Command.get -> System.Windows.Input.ICommand?
 System.Windows.Forms.CommandControl.Command.set -> void
@@ -73,7 +73,6 @@ System.Windows.Forms.CommandControl.CommandChanged -> System.EventHandler?
 System.Windows.Forms.CommandControl.CommandControl() -> void
 System.Windows.Forms.CommandControl.CommandParameter.get -> object?
 System.Windows.Forms.CommandControl.CommandParameter.set -> void
-System.Windows.Forms.CommandControl.CommandParameterChanged -> System.EventHandler!
 virtual System.Windows.Forms.BindableComponent.OnBindingContextChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.CommandComponent.OnCommandCanExecuteChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.CommandComponent.OnCommandChanged(System.EventArgs! e) -> void

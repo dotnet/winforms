@@ -16,7 +16,6 @@ namespace System.Windows.Forms
             public CommandProviderManager(ICommandPropertyProvider commandPropertyProvider)
             {
                 _commandPropertyProvider = commandPropertyProvider;
-                _previousEnabledStatus = commandPropertyProvider.Enabled;
             }
 
             public void CommandSetter(

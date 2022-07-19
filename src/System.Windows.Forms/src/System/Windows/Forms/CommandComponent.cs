@@ -9,22 +9,20 @@ namespace System.Windows.Forms
     public abstract class CommandComponent : BindableComponent, ICommandPropertyProvider
     {
         // Holds the logic for controlling a command's execution context.
-        private ICommandPropertyProvider.CommandProviderManager _commandProviderManager;
+        private readonly ICommandPropertyProvider.CommandProviderManager _commandProviderManager;
 
         // Backing fields for the infrastructure to make ToolStripItem bindable and introduce (bindable) ICommand.
         private System.Windows.Input.ICommand? _command;
         private object? _commandParameter;
 
-        internal static readonly object s_commandChangedEvent = new object();
-        internal static readonly object s_commandParameterChangedEvent = new object();
-        internal static readonly object s_commandCanExecuteChangedEvent = new object();
+        internal static readonly object s_commandChangedEvent = new();
+        internal static readonly object s_commandParameterChangedEvent = new();
+        internal static readonly object s_commandCanExecuteChangedEvent = new();
 
         public CommandComponent() : base()
         {
             _commandProviderManager = new(this);
         }
-
-        public abstract bool Enabled { get; set; }
 
         [Bindable(true)]
         [Browsable(false)]
@@ -81,11 +79,13 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler CommandParameterChanged
+        public event EventHandler? CommandParameterChanged
         {
             add => Events.AddHandler(s_commandParameterChangedEvent, value);
             remove => Events.RemoveHandler(s_commandParameterChangedEvent, value);
         }
+
+        public abstract bool Enabled { get; set; }
 
         /// <summary>
         ///  Raises the <see cref="CommandComponent.CommandChanged"/> event.

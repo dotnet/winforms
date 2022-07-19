@@ -8,7 +8,7 @@ namespace System.Windows.Forms
 {
     public abstract class BindableComponent : Component, IBindableComponent
     {
-        internal static readonly object s_bindingContextChangedEvent = new object();
+        internal static readonly object s_bindingContextChangedEvent = new();
 
         private ControlBindingsCollection? _dataBindings;
         private BindingContext? _bindingContext;
@@ -68,7 +68,7 @@ namespace System.Windows.Forms
         public ControlBindingsCollection DataBindings
             => _dataBindings ??= new ControlBindingsCollection(this);
 
-        protected void RaiseEvent(object key, EventArgs e)
+        private protected void RaiseEvent(object key, EventArgs e)
             => ((EventHandler?)Events[key])?.Invoke(this, e);
     }
 }

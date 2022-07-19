@@ -894,10 +894,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  An ambient property to hold a data source for binding purposes.
-        ///  Reassignment to BindingSources or other binding mechanism is
-        ///  the responsibility of the control once notified by
-        ///  the <see cref="Control.DataContextChanged"/> event.
+        ///  Gets or sets the data source for binding purposes. This is an ambient property.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         public virtual object? DataContext
