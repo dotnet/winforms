@@ -15,6 +15,7 @@ using Windows.Win32;
 using static Interop;
 using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms
 {
@@ -136,7 +137,7 @@ namespace System.Windows.Forms
 
             // Select the new bitmap into a compatible DC and render the blt the original bitmap.
             using var destinationBitmapSelection = new Gdi32.SelectObjectScope(destinationDC, bitmap);
-            Gdi32.BitBlt(
+            PInvoke.BitBlt(
                 destinationDC,
                 0,
                 0,
@@ -145,7 +146,7 @@ namespace System.Windows.Forms
                 sourceDC,
                 0,
                 0,
-                Gdi32.ROP.SRCCOPY);
+                Gdi.ROP_CODE.SRCCOPY);
 
             return bitmap;
         }

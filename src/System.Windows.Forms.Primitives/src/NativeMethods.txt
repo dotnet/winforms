@@ -8,3 +8,4 @@ GlobalUnlock
 GetCurrentProcessId
 GlobalReAlloc
 GlobalFree
+BitBlt
