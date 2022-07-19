@@ -13,8 +13,8 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.Windows.Forms.Design.Behavior;
 using Windows.Win32;
-using Gdi = Windows.Win32.Graphics.Gdi;
 using static Interop;
+using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms.Design
 {

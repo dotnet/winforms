@@ -10,15 +10,15 @@ namespace Windows.Win32
     internal static partial class PInvoke
     {
         public static BOOL BitBlt(
-               IHandle hdc,
-               int x,
-               int y,
-               int cx,
-               int cy,
-               HDC hdcSrc,
-               int x1,
-               int y1,
-               ROP_CODE rop)
+            IHandle hdc,
+            int x,
+            int y,
+            int cx,
+            int cy,
+            HDC hdcSrc,
+            int x1,
+            int y1,
+            ROP_CODE rop)
         {
             BOOL result = BitBlt(
                 (HDC)hdc.Handle,
