@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using static Interop;
+using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms
 {
@@ -211,6 +212,7 @@ namespace System.Windows.Forms
         }
 
         public static implicit operator Gdi32.HDC(in DeviceContextHdcScope scope) => scope.HDC;
+        public static implicit operator Gdi.HDC(in DeviceContextHdcScope scope) => scope.HDC;
         public static implicit operator nint(in DeviceContextHdcScope scope) => scope.HDC.Handle;
 
         [Conditional("DEBUG")]

@@ -2,24 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Gdi;
 
-internal static partial class Interop
+namespace Windows.Win32
 {
-    internal static partial class Gdi32
+    internal static partial class PInvoke
     {
-        [LibraryImport(Libraries.Gdi32, SetLastError = true)]
-        public static partial BOOL BitBlt(
-            HDC hdc,
-            int x,
-            int y,
-            int cx,
-            int cy,
-            HDC hdcSrc,
-            int x1,
-            int y1,
-            ROP rop);
-
         public static BOOL BitBlt(
             IHandle hdc,
             int x,
@@ -29,7 +18,7 @@ internal static partial class Interop
             HDC hdcSrc,
             int x1,
             int y1,
-            ROP rop)
+            ROP_CODE rop)
         {
             BOOL result = BitBlt(
                 (HDC)hdc.Handle,
@@ -54,7 +43,7 @@ internal static partial class Interop
             IHandle hdcSrc,
             int x1,
             int y1,
-            ROP rop)
+            ROP_CODE rop)
         {
             BOOL result = BitBlt(
                 hdc,

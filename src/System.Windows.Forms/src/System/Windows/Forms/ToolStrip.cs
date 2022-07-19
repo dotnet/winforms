@@ -15,6 +15,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
+using Windows.Win32;
+using Windows.Win32.Graphics.Gdi;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -2908,7 +2910,7 @@ namespace System.Windows.Forms
                 (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
 
             // Now BLT the result to the destination bitmap.
-            Gdi32.BitBlt(
+            PInvoke.BitBlt(
                 hDC,
                 bounds.X,
                 bounds.Y,
@@ -2917,7 +2919,7 @@ namespace System.Windows.Forms
                 imageHdc,
                 0,
                 0,
-                Gdi32.ROP.SRCCOPY);
+                ROP_CODE.SRCCOPY);
         }
 
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
@@ -3868,7 +3870,7 @@ namespace System.Windows.Forms
 
                                 // PERF - consider - we only actually need to copy the clipping rect.
                                 // copy the background from the toolstrip onto the offscreen bitmap
-                                Gdi32.BitBlt(
+                                PInvoke.BitBlt(
                                     ItemHdcInfo,
                                     0,
                                     0,
@@ -3877,7 +3879,7 @@ namespace System.Windows.Forms
                                     toolStripHDC,
                                     item.Bounds.X,
                                     item.Bounds.Y,
-                                    Gdi32.ROP.SRCCOPY);
+                                    ROP_CODE.SRCCOPY);
 
                                 // Paint the item into the offscreen bitmap
                                 using (PaintEventArgs itemPaintEventArgs = new PaintEventArgs(itemGraphics, clippingRect))
@@ -3886,7 +3888,7 @@ namespace System.Windows.Forms
                                 }
 
                                 // copy the item back onto the toolstrip
-                                Gdi32.BitBlt(
+                                PInvoke.BitBlt(
                                     toolStripHDC,
                                     item.Bounds.X,
                                     item.Bounds.Y,
@@ -3895,7 +3897,7 @@ namespace System.Windows.Forms
                                     ItemHdcInfo,
                                     0,
                                     0,
-                                    Gdi32.ROP.SRCCOPY);
+                                    ROP_CODE.SRCCOPY);
 
                                 GC.KeepAlive(ItemHdcInfo);
                             }
