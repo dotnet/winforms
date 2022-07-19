@@ -76,6 +76,7 @@ namespace System.Windows.Forms
         private const int TREEVIEWSTATE_lastControlValidated = 0x00004000;
         private const int TREEVIEWSTATE_stopResizeWindowMsgs = 0x00008000;
         private const int TREEVIEWSTATE_ignoreSelects = 0x00010000;
+        private const int TREEVIEWSTATE_doubleBufferedPropertySet = 0x00020000;
 
         // PERF: take all the bools and put them into a state variable
         private Collections.Specialized.BitVector32 treeViewState; // see TREEVIEWSTATE_ consts above
@@ -441,6 +442,7 @@ namespace System.Windows.Forms
                 if (DoubleBuffered != value)
                 {
                     base.DoubleBuffered = value;
+                    treeViewState[TREEVIEWSTATE_doubleBufferedPropertySet] = true;
                     UpdateTreeViewExtendedStyles();
                 }
             }
@@ -2747,7 +2749,12 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(this, (User32.WM)TVM.SETEXTENDEDSTYLE, (nint)TVS_EX.DOUBLEBUFFER, (nint)(DoubleBuffered ? TVS_EX.DOUBLEBUFFER : 0));
+            // Only set the TVS_EX_DOUBLEBUFFER style if the DoubleBuffered property setter has been executed.
+            // This stops the style from being removed for any derived classes that set it using P/Invoke.
+            if (treeViewState[TREEVIEWSTATE_doubleBufferedPropertySet])
+            {
+                User32.SendMessageW(this, (User32.WM)TVM.SETEXTENDEDSTYLE, (nint)TVS_EX.DOUBLEBUFFER, (nint)(DoubleBuffered ? TVS_EX.DOUBLEBUFFER : 0)); 
+            }
         }
 
         /// <remarks>
