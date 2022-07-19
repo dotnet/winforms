@@ -11,10 +11,10 @@ namespace System.Windows.Forms
         private protected class ToolStripDropDownButtonInternalLayout : ToolStripItemInternalLayout
         {
             private ToolStripDropDownButton _ownerItem;
-            private static readonly Size s_dropDownArrowSizeUnscaled = new Size(5, 3);
+            private static readonly Size s_dropDownArrowSizeUnscaled = new(5, 3);
             private static Size s_dropDownArrowSize = s_dropDownArrowSizeUnscaled;
             private const int DROP_DOWN_ARROW_PADDING = 2;
-            private static Padding s_dropDownArrowPadding = new Padding(DROP_DOWN_ARROW_PADDING);
+            private static Padding s_dropDownArrowPadding = new(DROP_DOWN_ARROW_PADDING);
             private Padding _scaledDropDownArrowPadding = s_dropDownArrowPadding;
             private Rectangle _dropDownArrowRect = Rectangle.Empty;
 
