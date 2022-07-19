@@ -3969,7 +3969,7 @@ namespace System.Windows.Forms
                         }
 
                         DataGridViewDataErrorEventArgs dgvdee = new(
-                            null,
+                            exception: null,
                             _ptCurrentCell.X,
                             _ptCurrentCell.Y,
                             context)
@@ -4023,7 +4023,7 @@ namespace System.Windows.Forms
                             }
 
                             DataGridViewDataErrorEventArgs dgvdee = new(
-                                null,
+                                exception: null,
                                 _ptCurrentCell.X,
                                 _ptCurrentCell.Y,
                                 context)
