@@ -17,8 +17,8 @@ namespace System.Windows.Forms
     public class ApplicationContext : IDisposable
     {
         /// <summary>
-        /// These are subclasses of the <see cref="ApplicationContext"/> for which we don't need to call the finalizer, because it's empty.
-        /// See https://github.com/dotnet/winforms/issues/6858.
+        ///  These are subclasses of the <see cref="ApplicationContext"/> for which we don't need to call the finalizer,
+        ///  because it's empty. See https://github.com/dotnet/winforms/issues/6858.
         /// </summary>
         private static readonly HashSet<Type> s_typesWithEmptyFinalizer = new()
         {
@@ -49,7 +49,8 @@ namespace System.Windows.Forms
         }
 
         // NOTE: currently this finalizer is unneeded (empty). See https://github.com/dotnet/winforms/issues/6858.
-        // All classes that are not need to be finalized contains in ApplicationContext.s_typesWithEmptyFinalizer collection. Consider to modify it if needed.
+        // All classes that are not need to be finalized contains in ApplicationContext.s_typesWithEmptyFinalizer collection.
+        // Consider to modify it if needed.
         ~ApplicationContext() => Dispose(false);
 
         /// <summary>
@@ -119,9 +120,9 @@ namespace System.Windows.Forms
             }
 
             // If you are adding releasing unmanaged resources code here (disposing == false), you need to:
-            // remove GC.SuppressFinalize from constructor of this class and from all of its subclasses
-            // remove ApplicationContext_Subclasses_SuppressFinalizeCall test
-            // modify ~ApplicationContext() description.
+            // 1. remove GC.SuppressFinalize from constructor of this class and from all of its subclasses
+            // 2. remove ApplicationContext_Subclasses_SuppressFinalizeCall test
+            // 3. modify ~ApplicationContext() description.
         }
 
         /// <summary>
