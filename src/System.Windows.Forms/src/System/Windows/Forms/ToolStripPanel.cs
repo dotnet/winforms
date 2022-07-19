@@ -703,14 +703,14 @@ namespace System.Windows.Forms
 
             if (CurrentFeedbackRect is null)
             {
-                Debug.WriteLineIf(s_toolStripPanelFeedbackDebug!.TraceVerbose, "FEEDBACK: creating NEW feedback at " + screenLocation.ToString());
+                Debug.WriteLineIf(s_toolStripPanelFeedbackDebug!.TraceVerbose, $"FEEDBACK: creating NEW feedback at {screenLocation.ToString()}");
 
                 CurrentFeedbackRect = new FeedbackRectangle(toolStripToDrag.ClientRectangle);
             }
 
             if (!CurrentFeedbackRect.Visible)
             {
-                Debug.WriteLineIf(s_toolStripPanelFeedbackDebug!.TraceVerbose, "FEEDBACK: Showing NEW feedback at " + screenLocation.ToString());
+                Debug.WriteLineIf(s_toolStripPanelFeedbackDebug!.TraceVerbose, $"FEEDBACK: Showing NEW feedback at {screenLocation.ToString()}");
                 toolStripToDrag.SuspendCaptureMode();
                 try
                 {
@@ -724,7 +724,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                Debug.WriteLineIf(s_toolStripPanelFeedbackDebug!.TraceVerbose, "FEEDBACK: Moving feedback to " + screenLocation.ToString());
+                Debug.WriteLineIf(s_toolStripPanelFeedbackDebug!.TraceVerbose, $"FEEDBACK: Moving feedback to {screenLocation.ToString()}");
                 CurrentFeedbackRect.Move(screenLocation);
             }
         }
@@ -836,7 +836,7 @@ namespace System.Windows.Forms
             Point clientLocation = PointToClient(screenLocation);
             if (!DragBounds.Contains(clientLocation))
             {
-                Debug.WriteLineIf(s_toolStripPanelDebug!.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "RC.MoveControl - Point {0} is not in current rafting container drag bounds {1}, calling MoveOutsideContainer", clientLocation, DragBounds));
+                Debug.WriteLineIf(s_toolStripPanelDebug!.TraceVerbose, string.Format(CultureInfo.CurrentCulture, $"RC.MoveControl - Point {{0}} is not in current rafting container drag bounds {{1}}, calling MoveOutsideContainer", clientLocation, DragBounds));
                 MoveOutsideContainer(toolStripToDrag, screenLocation);
                 return;
             }
@@ -904,14 +904,14 @@ namespace System.Windows.Forms
             if (pointInCurrentRow)
             {
                 // Point INSIDE same rafting row
-                Debug.WriteLineIf(s_toolStripPanelDebug!.TraceVerbose, "RC.MoveControl - Point  " + clientLocation + "is in the same row as the control" + draggedControl.ToolStripPanelRow.DragBounds);
+                Debug.WriteLineIf(s_toolStripPanelDebug!.TraceVerbose, $"RC.MoveControl - Point  {clientLocation}is in the same row as the control{draggedControl.ToolStripPanelRow.DragBounds}");
                 draggedControl.ToolStripPanelRow.MoveControl(toolStripToDrag, GetStartLocation(toolStripToDrag), clientLocation);
             }
             else
             {
                 // Point OUTSIDE current rafting row.
 
-                Debug.WriteLineIf(s_toolStripPanelDebug!.TraceVerbose, "RC.MoveControl - Point " + clientLocation + " is outside the current rafting row.");
+                Debug.WriteLineIf(s_toolStripPanelDebug!.TraceVerbose, $"RC.MoveControl - Point {clientLocation} is outside the current rafting row.");
 
                 ToolStripPanelRow? row = PointToRow(clientLocation);
                 if (row is null)
@@ -966,8 +966,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // Create a new row and insert it.
-                        //
-                        Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, "Inserting a new row at " + index.ToString(CultureInfo.InvariantCulture));
+                        Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, $"Inserting a new row at {index.ToString(CultureInfo.InvariantCulture)}");
                         row = new ToolStripPanelRow(this);
                         RowsInternal.Insert(index, row);
                     }
