@@ -2082,22 +2082,16 @@ namespace System.Windows.Forms
                 return;
             }
 
-            TVS_EX extendedStyles = (TVS_EX)User32.SendMessageW(this, (User32.WM)TVM.GETEXTENDEDSTYLE);
+            TVS_EX extendedStyles = 0;
 
-            SetExtendedStyle(ref extendedStyles, TVS_EX.DOUBLEBUFFER, DoubleBuffered);
-
-            User32.SendMessageW(this, (User32.WM)TVM.SETEXTENDEDSTYLE, (int)extendedStyles, (int)extendedStyles);
-
-            static void SetExtendedStyle(ref TVS_EX extendedStyles, TVS_EX mask, bool value)
+            if (DoubleBuffered)
             {
-                if (value)
-                {
-                    extendedStyles |= mask;
-                }
-                else
-                {
-                    extendedStyles &= ~mask;
-                }
+                extendedStyles |= TVS_EX.DOUBLEBUFFER;
+            }
+
+            if (extendedStyles != 0)
+            {
+                User32.SendMessageW(this, (User32.WM)TVM.SETEXTENDEDSTYLE, (int)extendedStyles, (int)extendedStyles);
             }
         }
 
