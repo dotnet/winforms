@@ -6934,7 +6934,7 @@ namespace System.Windows.Forms
                         foreach (ListViewItem selectedItem in SelectedItems)
                         {
                             ListViewGroup group = selectedItem.Group;
-                            if (group is null || !groups.Add(group.ID) || group.CollapsedState is ListViewGroupCollapsedState.Default)
+                            if (group is null || group.CollapsedState is ListViewGroupCollapsedState.Default || !groups.Add(group.ID))
                             {
                                 continue;
                             }
