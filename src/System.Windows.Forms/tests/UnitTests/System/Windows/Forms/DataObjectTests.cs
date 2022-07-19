@@ -2215,7 +2215,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Kernel32.GlobalFree(handle);
+                PInvoke.GlobalFree(handle);
             }
         }
 
@@ -2329,7 +2329,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Kernel32.GlobalFree(handle);
+                PInvoke.GlobalFree(handle);
             }
         }
 

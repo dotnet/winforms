@@ -8,3 +8,6 @@ GlobalUnlock
 GetCurrentProcessId
 GlobalReAlloc
 GlobalFree
+GetExitCodeThread
+GetThreadLocale
+GetCurrentActCtx

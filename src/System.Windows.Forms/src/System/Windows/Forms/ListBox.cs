@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32;
 using static Interop;
 using static Interop.User32;
 
@@ -1798,7 +1799,7 @@ namespace System.Windows.Forms
 
             //for getting the current Locale to set the Scrollbars...
             //
-            SendMessageW(this, (WM)LB.SETLOCALE, (nint)Kernel32.GetThreadLocale().RawValue);
+            SendMessageW(this, (WM)LB.SETLOCALE, (nint)PInvoke.GetThreadLocale());
 
             if (_columnWidth != 0)
             {
