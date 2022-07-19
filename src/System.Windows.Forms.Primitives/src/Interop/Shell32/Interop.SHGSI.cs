@@ -8,7 +8,7 @@ internal static partial class Interop
     {
         public enum SHGSI
         {
-            ICON =      0x000000100,
+            ICON      = 0x000000100,
             SMALLICON = 0x000000001,
         }
     }
