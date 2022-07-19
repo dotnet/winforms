@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.Serialization;
@@ -19,7 +20,7 @@ namespace System.Windows.Forms
     [DesignTimeVisible(false)]
     [DefaultProperty(nameof(Header))]
     [Serializable] // This type is participating in resx serialization scenarios.
-    public sealed partial class ListViewGroup : ISerializable
+    public partial class ListViewGroup : ISerializable
     {
         private string? _header;
         private HorizontalAlignment _headerAlignment = HorizontalAlignment.Left;
@@ -48,7 +49,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates a ListViewItem object from an Stream.
         /// </summary>
-        private ListViewGroup(SerializationInfo info, StreamingContext context) : this()
+        protected ListViewGroup(SerializationInfo info, StreamingContext context) : this()
         {
             Deserialize(info);
         }
@@ -415,6 +416,15 @@ namespace System.Windows.Forms
             }
 
             return state.HasFlag(LVGS.COLLAPSED) ? ListViewGroupCollapsedState.Collapsed : ListViewGroupCollapsedState.Expanded;
+        }
+
+        internal virtual void ReleaseUiaProvider()
+        {
+            if (OsVersion.IsWindows8OrGreater && _accessibilityObject is ListViewGroupAccessibleObject accessibleObject)
+            {
+                HRESULT result = UiaCore.UiaDisconnectProvider(accessibleObject);
+                Debug.Assert(result == HRESULT.S_OK);
+            }
         }
 
         // Should be used for the cases when sending the message `LVM.SETGROUPINFO` isn't required

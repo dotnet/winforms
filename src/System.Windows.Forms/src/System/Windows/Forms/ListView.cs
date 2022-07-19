@@ -5127,6 +5127,36 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override void ReleaseUiaProvider(nint handle)
+        {
+            base.ReleaseUiaProvider(handle);
+
+            if (!OsVersion.IsWindows8OrGreater)
+            {
+                return;
+            }
+
+            for (int i = 0; i < Items.Count; i++)
+            {
+                Items[i].ReleaseUiaProvider();
+            }
+
+            DefaultGroup.ReleaseUiaProvider();
+
+            for (int i = 0; i < Groups.Count; i++)
+            {
+                Groups[i].ReleaseUiaProvider();
+            }
+
+            if (_columnHeaders is not null)
+            {
+                for (int i = 0; i < _columnHeaders.Length; i++)
+                {
+                    _columnHeaders[i].ReleaseUiaProvider();
+                }
+            }
+        }
+
         // makes sure that the list view items which are w/o a listView group are parented to the DefaultGroup - if necessary
         // and then tell win32 to remove this group
         internal void RemoveGroupFromListView(ListViewGroup group)

@@ -38,5 +38,72 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(testText, accessibleObject.GetPropertyValue(UIA.LegacyIAccessibleNamePropertyId));
             Assert.Null(accessibleObject.GetPropertyValue(UIA.LegacyIAccessibleDefaultActionPropertyId));
         }
+
+        [WinFormsFact]
+        public void ListViewColumnHeaderAccessibleObject_IsDisconnected_WhenListViewReleasesUiaProvider()
+        {
+            using ListView listView = new();
+            AccessibilityObjectDisconnectTrackingColumnHeader columnHeader = new();
+            listView.Columns.Add(columnHeader);
+
+            listView.ReleaseUiaProvider(listView.Handle);
+
+            Assert.True(columnHeader.IsAccessibilityObjectDisconnected);
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewColumnHeaderAccessibleObject_IsDisconnected_WhenListViewIsCleared()
+        {
+            using ListView listView = new();
+            AccessibilityObjectDisconnectTrackingColumnHeader columnHeader = new();
+            listView.Columns.Add(columnHeader);
+
+            listView.Clear();
+
+            Assert.True(columnHeader.IsAccessibilityObjectDisconnected);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewColumnHeaderAccessibleObject_IsDisconnected_WhenColumnsAreCleared()
+        {
+            using ListView listView = new();
+            AccessibilityObjectDisconnectTrackingColumnHeader columnHeader = new();
+            listView.Columns.Add(columnHeader);
+
+            listView.Columns.Clear();
+
+            Assert.True(columnHeader.IsAccessibilityObjectDisconnected);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewColumnHeaderAccessibleObject_IsDisconnected_WhenColumnIsRemoved()
+        {
+            using ListView listView = new();
+            AccessibilityObjectDisconnectTrackingColumnHeader columnHeader = new();
+            listView.Columns.Add(columnHeader);
+
+            listView.Columns.Remove(columnHeader);
+
+            Assert.True(columnHeader.IsAccessibilityObjectDisconnected);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        private class AccessibilityObjectDisconnectTrackingColumnHeader : ColumnHeader
+        {
+            public AccessibilityObjectDisconnectTrackingColumnHeader() : base()
+            {
+            }
+
+            public bool IsAccessibilityObjectDisconnected { get; private set; }
+
+            internal override void ReleaseUiaProvider()
+            {
+                base.ReleaseUiaProvider();
+                IsAccessibilityObjectDisconnected = true;
+            }
+        }
     }
 }

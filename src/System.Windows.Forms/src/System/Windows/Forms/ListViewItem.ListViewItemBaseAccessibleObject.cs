@@ -223,6 +223,14 @@ namespace System.Windows.Forms
                     _ => base.IsPatternSupported(patternId)
                 };
 
+            internal virtual void ReleaseChildUiaProviders()
+            {
+                for (int i = 0; i < _owningItem.SubItemCount; i++)
+                {
+                    _owningItem.SubItems[i].ReleaseUiaProvider();
+                }
+            }
+
             internal override void RemoveFromSelection()
             {
                 // Do nothing, C++ implementation returns UIA_E_INVALIDOPERATION 0x80131509

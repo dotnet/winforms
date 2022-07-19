@@ -992,6 +992,22 @@ namespace System.Windows.Forms
             KeyboardToolTipStateMachine.Instance.Hook(this, listView.KeyboardToolTip);
         }
 
+        internal virtual void ReleaseUiaProvider()
+        {
+            if (!OsVersion.IsWindows8OrGreater || !IsAccessibilityObjectCreated)
+            {
+                return;
+            }
+
+            if (AccessibilityObject is ListViewItemBaseAccessibleObject itemAccessibleObject)
+            {
+                itemAccessibleObject.ReleaseChildUiaProviders();
+            }
+
+            HRESULT result = UiaCore.UiaDisconnectProvider(AccessibilityObject);
+            Debug.Assert(result == HRESULT.S_OK);
+        }
+
         /// <summary>
         ///  This is used to map list view items w/ their respective groups in localized forms.
         /// </summary>
@@ -1135,23 +1151,7 @@ namespace System.Windows.Forms
                 KeyboardToolTipStateMachine.Instance.Unhook(this, listView.KeyboardToolTip);
             }
 
-            if (OsVersion.IsWindows8OrGreater)
-            {
-                for (int i = 0; i < SubItemCount; i++)
-                {
-                    if (SubItems[i].IsAccessibilityObjectCreated)
-                    {
-                        HRESULT result = UiaCore.UiaDisconnectProvider(SubItems[i].AccessibilityObject);
-                        Debug.Assert(result == HRESULT.S_OK);
-                    }
-                }
-
-                if (IsAccessibilityObjectCreated)
-                {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(AccessibilityObject);
-                    Debug.Assert(result == HRESULT.S_OK);
-                }
-            }
+            ReleaseUiaProvider();
 
             // Make sure you do these last, as the first several lines depends on this information
             ID = -1;

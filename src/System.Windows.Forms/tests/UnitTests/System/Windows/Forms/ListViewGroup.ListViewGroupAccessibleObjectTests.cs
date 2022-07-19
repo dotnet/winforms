@@ -1284,6 +1284,62 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void ListViewGroupAccessibleObject_IsDisconnected_WhenListViewReleasesUiaProvider()
+        {
+            using ListView listView = new();
+            listView.TestAccessor().Dynamic._defaultGroup = new AccessibilityObjectDisconnectTrackingListViewGroup();
+            AccessibilityObjectDisconnectTrackingListViewGroup group = new();
+            listView.Groups.Add(group);
+
+            listView.ReleaseUiaProvider(listView.Handle);
+
+            Assert.True(group.IsAccessibilityObjectDisconnected);
+            Assert.True(listView.TestAccessor().Dynamic.DefaultGroup.IsAccessibilityObjectDisconnected);
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewGroupAccessibleObject_IsDisconnected_WhenGroupsAreCleared()
+        {
+            using ListView listView = new();
+            AccessibilityObjectDisconnectTrackingListViewGroup group = new();
+            listView.Groups.Add(group);
+
+            listView.Groups.Clear();
+
+            Assert.True(group.IsAccessibilityObjectDisconnected);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewGroupAccessibleObject_IsDisconnected_WhenGroupIsRemoved()
+        {
+            using ListView listView = new();
+            AccessibilityObjectDisconnectTrackingListViewGroup group = new();
+            listView.Groups.Add(group);
+
+            listView.Groups.Remove(group);
+
+            Assert.True(group.IsAccessibilityObjectDisconnected);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        private class AccessibilityObjectDisconnectTrackingListViewGroup : ListViewGroup
+        {
+            public AccessibilityObjectDisconnectTrackingListViewGroup() : base()
+            {
+            }
+
+            public bool IsAccessibilityObjectDisconnected { get; private set; }
+
+            internal override void ReleaseUiaProvider()
+            {
+                base.ReleaseUiaProvider();
+                IsAccessibilityObjectDisconnected = true;
+            }
+        }
+
         private ListView GetListViewItemWithInvisibleItems(View view)
         {
             ListView listView = new ListView() { View = view };
