@@ -2075,16 +2075,6 @@ namespace System.Windows.Forms
             SelectedNode = savedSelectedNode;
         }
 
-        private void UpdateTreeViewExtendedStyles()
-        {
-            if (!IsHandleCreated)
-            {
-                return;
-            }
-
-            User32.SendMessageW(this, (User32.WM)TVM.SETEXTENDEDSTYLE, (nint)TVS_EX.DOUBLEBUFFER, (nint)(DoubleBuffered ? TVS_EX.DOUBLEBUFFER : 0));
-        }
-
         // Replace the native control's ImageList with our current stateImageList
         // set the value of internalStateImageList to the new list
         private void UpdateNativeStateImageList()
@@ -2748,6 +2738,16 @@ namespace System.Windows.Forms
                     }
                 }
             }
+        }
+
+        private void UpdateTreeViewExtendedStyles()
+        {
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
+            User32.SendMessageW(this, (User32.WM)TVM.SETEXTENDEDSTYLE, (nint)TVS_EX.DOUBLEBUFFER, (nint)(DoubleBuffered ? TVS_EX.DOUBLEBUFFER : 0));
         }
 
         /// <remarks>
