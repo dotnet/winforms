@@ -9,7 +9,9 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
+using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms
 {
@@ -332,12 +334,12 @@ namespace System.Windows.Forms
 
             Gdi32.SetBkColor(targetDC, 0x00ffffff);    // white
             Gdi32.SetTextColor(targetDC, 0x00000000);  // black
-            Gdi32.BitBlt(
+            PInvoke.BitBlt(
                 targetDC,
                 0, 0, size.Width, size.Height,
                 sourceDC,
                 0, 0,
-                (Gdi32.ROP)0x220326); // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
+                (Gdi.ROP_CODE)0x220326); // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
 
             return (IntPtr)colorMask;
         }

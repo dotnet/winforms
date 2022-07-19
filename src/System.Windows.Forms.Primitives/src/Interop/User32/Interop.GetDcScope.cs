@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Gdi = Windows.Win32.Graphics.Gdi;
+
 internal static partial class Interop
 {
     internal static partial class User32
@@ -51,8 +53,9 @@ internal static partial class Interop
 
             public bool IsNull => HDC.IsNull;
 
-            public static implicit operator IntPtr(in GetDcScope dcScope) => dcScope.HDC.Handle;
-            public static implicit operator Gdi32.HDC(in GetDcScope dcScope) => dcScope.HDC;
+            public static implicit operator IntPtr(in GetDcScope scope) => scope.HDC.Handle;
+            public static implicit operator Gdi32.HDC(in GetDcScope scope) => scope.HDC;
+            public static implicit operator Gdi.HDC(in GetDcScope scope) => scope.HDC;
 
             public void Dispose()
             {
