@@ -12,7 +12,9 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Windows.Forms.Design.Behavior;
+using Windows.Win32;
 using static Interop;
+using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms.Design
 {
@@ -418,7 +420,7 @@ namespace System.Windows.Forms.Design
             using var destDC = new DeviceContextHdcScope(gDest, applyGraphicsState: false);
 
             // Perform our bitblit operation to push the image into the dest bitmap
-            Gdi32.BitBlt(
+            PInvoke.BitBlt(
                 destDC,
                 0,
                 0,
@@ -427,7 +429,7 @@ namespace System.Windows.Forms.Design
                 controlDC,
                 0,
                 0,
-                Gdi32.ROP.SRCCOPY);
+                Gdi.ROP_CODE.SRCCOPY);
         }
 
         /// <summary>
