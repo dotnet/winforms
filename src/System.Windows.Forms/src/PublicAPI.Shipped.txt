@@ -891,17 +891,17 @@ override System.Windows.Forms.ToolStripContainer.OnSizeChanged(System.EventArgs!
 ~System.Windows.Forms.ContainerControl.ActiveControl.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.ContainerControl.ActiveControl.set -> void
 ~System.Windows.Forms.ContainerControl.ParentForm.get -> System.Windows.Forms.Form
-~System.Windows.Forms.Control.BeginInvoke(System.Delegate method, params object[] args) -> System.IAsyncResult
-~System.Windows.Forms.Control.Contains(System.Windows.Forms.Control ctl) -> bool
-~System.Windows.Forms.Control.CreateGraphics() -> System.Drawing.Graphics
-~System.Windows.Forms.Control.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects) -> System.Windows.Forms.DragDropEffects
-~System.Windows.Forms.Control.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
-~System.Windows.Forms.Control.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
-~System.Windows.Forms.Control.EndInvoke(System.IAsyncResult asyncResult) -> object
-~System.Windows.Forms.Control.FindForm() -> System.Windows.Forms.Form
-~System.Windows.Forms.Control.GetChildAtPoint(System.Drawing.Point pt) -> System.Windows.Forms.Control
-~System.Windows.Forms.Control.GetChildAtPoint(System.Drawing.Point pt, System.Windows.Forms.GetChildAtPointSkip skipValue) -> System.Windows.Forms.Control
-~System.Windows.Forms.Control.GetContainerControl() -> System.Windows.Forms.IContainerControl
+System.Windows.Forms.Control.BeginInvoke(System.Delegate! method, params object?[]? args) -> System.IAsyncResult!
+System.Windows.Forms.Control.Contains(System.Windows.Forms.Control? ctl) -> bool
+System.Windows.Forms.Control.CreateGraphics() -> System.Drawing.Graphics!
+System.Windows.Forms.Control.DoDragDrop(object! data, System.Windows.Forms.DragDropEffects allowedEffects) -> System.Windows.Forms.DragDropEffects
+System.Windows.Forms.Control.DoDragDrop(object! data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap? dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
+System.Windows.Forms.Control.DrawToBitmap(System.Drawing.Bitmap! bitmap, System.Drawing.Rectangle targetBounds) -> void
+System.Windows.Forms.Control.EndInvoke(System.IAsyncResult! asyncResult) -> object?
+System.Windows.Forms.Control.FindForm() -> System.Windows.Forms.Form?
+System.Windows.Forms.Control.GetChildAtPoint(System.Drawing.Point pt) -> System.Windows.Forms.Control?
+System.Windows.Forms.Control.GetChildAtPoint(System.Drawing.Point pt, System.Windows.Forms.GetChildAtPointSkip skipValue) -> System.Windows.Forms.Control?
+System.Windows.Forms.Control.GetContainerControl() -> System.Windows.Forms.IContainerControl?
 ~System.Windows.Forms.Control.GetNextControl(System.Windows.Forms.Control ctl, bool forward) -> System.Windows.Forms.Control
 ~System.Windows.Forms.Control.Invalidate(System.Drawing.Region region) -> void
 ~System.Windows.Forms.Control.Invalidate(System.Drawing.Region region, bool invalidateChildren) -> void
@@ -916,8 +916,8 @@ override System.Windows.Forms.ToolStripContainer.OnSizeChanged(System.EventArgs!
 ~System.Windows.Forms.Control.InvokePaintBackground(System.Windows.Forms.Control c, System.Windows.Forms.PaintEventArgs e) -> void
 ~System.Windows.Forms.Control.PerformLayout(System.Windows.Forms.Control affectedControl, string affectedProperty) -> void
 ~System.Windows.Forms.Control.RaiseDragEvent(object key, System.Windows.Forms.DragEventArgs e) -> void
-~System.Windows.Forms.Control.RaiseKeyEvent(object key, System.Windows.Forms.KeyEventArgs e) -> void
-~System.Windows.Forms.Control.RaiseMouseEvent(object key, System.Windows.Forms.MouseEventArgs e) -> void
+System.Windows.Forms.Control.RaiseKeyEvent(object! key, System.Windows.Forms.KeyEventArgs! e) -> void
+System.Windows.Forms.Control.RaiseMouseEvent(object! key, System.Windows.Forms.MouseEventArgs! e) -> void
 ~System.Windows.Forms.Control.RaisePaintEvent(object key, System.Windows.Forms.PaintEventArgs e) -> void
 ~System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitmap logicalBitmap) -> void
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember) -> System.Windows.Forms.Binding
@@ -1801,8 +1801,8 @@ System.Windows.Forms.ToolStripContainer.TopToolStripPanel.get -> System.Windows.
 ~virtual System.Windows.Forms.ComboBox.OnSelectionChangeCommitted(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ComboBox.OnTextUpdate(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ContainerControl.OnAutoValidateChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~virtual System.Windows.Forms.Control.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
+virtual System.Windows.Forms.Control.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+virtual System.Windows.Forms.Control.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
 ~virtual System.Windows.Forms.Control.OnAutoSizeChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnBackColorChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnBackgroundImageChanged(System.EventArgs e) -> void
