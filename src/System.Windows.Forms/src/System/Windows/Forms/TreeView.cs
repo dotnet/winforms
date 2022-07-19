@@ -438,10 +438,9 @@ namespace System.Windows.Forms
             get => base.DoubleBuffered;
             set
             {
-                base.DoubleBuffered = value;
-
-                if (IsHandleCreated)
+                if (DoubleBuffered != value)
                 {
+                    base.DoubleBuffered = value;
                     UpdateTreeViewExtendedStyles();
                 }
             }
@@ -2078,6 +2077,11 @@ namespace System.Windows.Forms
 
         private void UpdateTreeViewExtendedStyles()
         {
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
             TVS_EX extendedStyles = (TVS_EX)User32.SendMessageW(this, (User32.WM)TVM.GETEXTENDEDSTYLE);
 
             SetExtendedStyle(ref extendedStyles, TVS_EX.DOUBLEBUFFER, DoubleBuffered);
