@@ -1082,8 +1082,8 @@ override System.Windows.Forms.ToolStripContainer.OnSizeChanged(System.EventArgs!
 ~System.Windows.Forms.DataGridViewComboBoxColumn.Items.get -> System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection
 ~System.Windows.Forms.DataGridViewComboBoxColumn.ValueMember.get -> string
 ~System.Windows.Forms.DataGridViewComboBoxColumn.ValueMember.set -> void
-~System.Windows.Forms.DataGridViewDataErrorEventArgs.DataGridViewDataErrorEventArgs(System.Exception exception, int columnIndex, int rowIndex, System.Windows.Forms.DataGridViewDataErrorContexts context) -> void
-~System.Windows.Forms.DataGridViewDataErrorEventArgs.Exception.get -> System.Exception
+System.Windows.Forms.DataGridViewDataErrorEventArgs.DataGridViewDataErrorEventArgs(System.Exception? exception, int columnIndex, int rowIndex, System.Windows.Forms.DataGridViewDataErrorContexts context) -> void
+System.Windows.Forms.DataGridViewDataErrorEventArgs.Exception.get -> System.Exception?
 ~System.Windows.Forms.DataGridViewImageCell.Description.get -> string
 ~System.Windows.Forms.DataGridViewImageCell.Description.set -> void
 ~System.Windows.Forms.DataGridViewImageColumn.Description.get -> string
