@@ -2082,17 +2082,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            TVS_EX extendedStyles = 0;
-
-            if (DoubleBuffered)
-            {
-                extendedStyles |= TVS_EX.DOUBLEBUFFER;
-            }
-
-            if (extendedStyles != 0)
-            {
-                User32.SendMessageW(this, (User32.WM)TVM.SETEXTENDEDSTYLE, (int)extendedStyles, (int)extendedStyles);
-            }
+            User32.SendMessageW(this, (User32.WM)TVM.SETEXTENDEDSTYLE, (nint)TVS_EX.DOUBLEBUFFER, (nint)(DoubleBuffered ? TVS_EX.DOUBLEBUFFER : 0));
         }
 
         // Replace the native control's ImageList with our current stateImageList
