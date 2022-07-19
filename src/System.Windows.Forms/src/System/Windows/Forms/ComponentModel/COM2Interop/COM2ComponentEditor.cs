@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
+using Windows.Win32;
 using static Interop;
 using static Interop.Ole32;
 
@@ -74,7 +75,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             &pUnk,
                             1,
                             &guid,
-                            Kernel32.GetThreadLocale(),
+                            PInvoke.GetThreadLocale(),
                             0,
                             IntPtr.Zero);
                         return true;
@@ -109,7 +110,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             &pUnk,
                             uuids.cElems,
                             uuids.pElems,
-                            Kernel32.GetThreadLocale(),
+                            PInvoke.GetThreadLocale(),
                             0,
                             IntPtr.Zero);
                         return true;
