@@ -1,10 +1,11 @@
-﻿GetCurrentProcess
+﻿BitBlt
+DuplicateHandle
+GetCurrentProcess
+GetCurrentProcessId
 GetCurrentThread
 GetCurrentThreadId
-DuplicateHandle
 GlobalAlloc
-GlobalLock
-GlobalUnlock
-GetCurrentProcessId
-GlobalReAlloc
 GlobalFree
+GlobalLock
+GlobalReAlloc
+GlobalUnlock

@@ -16,10 +16,11 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
-using Windows.Win32;
 using Microsoft.Win32;
+using Windows.Win32;
 using static Interop;
 using Encoding = System.Text.Encoding;
+using Gdi = Windows.Win32.Graphics.Gdi;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
@@ -5390,7 +5391,7 @@ namespace System.Windows.Forms
             // Now BLT the result to the destination bitmap.
             using Graphics destGraphics = Graphics.FromImage(bitmap);
             using var desthDC = new DeviceContextHdcScope(destGraphics, applyGraphicsState: false);
-            Gdi32.BitBlt(
+            PInvoke.BitBlt(
                 desthDC,
                 targetBounds.X,
                 targetBounds.Y,
@@ -5399,7 +5400,7 @@ namespace System.Windows.Forms
                 hDc,
                 0,
                 0,
-                Gdi32.ROP.SRCCOPY);
+                Gdi.ROP_CODE.SRCCOPY);
         }
 
         /// <summary>
