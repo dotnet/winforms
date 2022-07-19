@@ -21,6 +21,10 @@ Windows Forms requires the following workloads and components be selected when i
   choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
   ```
   
+* Useful Visual Studio extensions:  
+  * [Editor guidelines](https://marketplace.visualstudio.com/items?itemName=PaulHarrington.EditorGuidelines), see https://github.com/dotnet/winforms/pull/4836 for more information
+  * [VS Color Output](https://marketplace.visualstudio.com/items?itemName=MikeWard-AnnArbor.VSColorOutput64)
+  * [Productivity Power Tools](https://marketplace.visualstudio.com/items?itemName=VisualStudioPlatformTeam.ProductivityPowerPack2022)
 
 ## Workflow
 
