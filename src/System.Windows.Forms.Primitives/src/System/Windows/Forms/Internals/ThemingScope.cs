@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Windows.Win32;
+using Foundation = Windows.Win32.Foundation;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -12,18 +14,19 @@ namespace System.Windows.Forms
     internal static class ThemingScope
     {
         private static Kernel32.ACTCTXW s_enableThemingActivationContext;
-        private static IntPtr s_hActCtx;
+        private static nint s_hActCtx;
         private static bool s_contextCreationSucceeded;
 
         /// <summary>
         ///  We now use explicitactivate everywhere and use this method to determine if we
         ///  really need to activate the activationcontext.  This should be pretty fast.
         /// </summary>
-        private static bool IsContextActive()
+        private unsafe static bool IsContextActive()
         {
+            Foundation.HANDLE current;
             return s_contextCreationSucceeded
-                && Kernel32.GetCurrentActCtx(out IntPtr current).IsTrue()
-                && current == s_hActCtx;
+                && PInvoke.GetCurrentActCtx(&current) == true
+                && (nint)current == s_hActCtx;
         }
 
         /// <summary>

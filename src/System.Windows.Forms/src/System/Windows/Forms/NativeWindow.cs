@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
+using Windows.Win32;
+using Foundation = Windows.Win32.Foundation;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -88,9 +90,9 @@ namespace System.Windows.Forms
         ///  can perform the exact same code without further changes.  If you make changes to the finalizer,
         ///  change this method -- try not to change NativeWindow's finalizer.
         /// </summary>
-        internal void ForceExitMessageLoop()
+        internal unsafe void ForceExitMessageLoop()
         {
-            IntPtr handle;
+            nint handle;
             bool ownedHandle;
 
             lock (this)
@@ -99,7 +101,7 @@ namespace System.Windows.Forms
                 ownedHandle = _ownHandle;
             }
 
-            if (handle != IntPtr.Zero)
+            if (handle != 0)
             {
                 // Now, before we set handle to zero and finish the finalizer, let's send
                 // a WM_NULL to the window.  Why?  Because if the main ui thread is INSIDE
@@ -109,11 +111,12 @@ namespace System.Windows.Forms
                 {
                     uint id = User32.GetWindowThreadProcessId(handle, out uint lpdwProcessId);
                     Application.ThreadContext ctx = Application.ThreadContext.FromId(id);
-                    IntPtr threadHandle = (ctx is null ? IntPtr.Zero : ctx.GetHandle());
+                    nint threadHandle = (ctx is null ? 0 : ctx.GetHandle());
 
-                    if (threadHandle != IntPtr.Zero)
+                    if (threadHandle != 0)
                     {
-                        Kernel32.GetExitCodeThread(threadHandle, out uint exitCode);
+                        uint exitCode;
+                        PInvoke.GetExitCodeThread((Foundation.HANDLE)threadHandle, &exitCode);
                         if (!AppDomain.CurrentDomain.IsFinalizingForUnload() && (NTSTATUS)exitCode == NTSTATUS.STATUS_PENDING)
                         {
                             User32.SendMessageTimeoutW(
@@ -128,14 +131,14 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (Handle != IntPtr.Zero)
+                if (Handle != 0)
                 {
                     // If the dest thread is gone, it should be safe to unsubclass here.
                     ReleaseHandle(true);
                 }
             }
 
-            if (handle != IntPtr.Zero && ownedHandle)
+            if (handle != 0 && ownedHandle)
             {
                 // If we owned the handle, post a WM_CLOSE to get rid of it.
                 User32.PostMessageW(handle, User32.WM.CLOSE);

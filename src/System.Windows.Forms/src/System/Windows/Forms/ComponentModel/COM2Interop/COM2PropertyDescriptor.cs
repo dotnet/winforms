@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using Windows.Win32;
 using static Interop;
 using static Interop.Ole32;
 
@@ -106,16 +107,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Our event signatures.
         /// </summary>
-        private static readonly object EventGetBaseAttributes = new object();
-        private static readonly object EventGetDynamicAttributes = new object();
-        private static readonly object EventShouldRefresh = new object();
-        private static readonly object EventGetDisplayName = new object();
-        private static readonly object EventGetDisplayValue = new object();
-        private static readonly object EventGetIsReadOnly = new object();
-        private static readonly object EventGetTypeConverterAndTypeEditor = new object();
-        private static readonly object EventShouldSerializeValue = new object();
-        private static readonly object EventCanResetValue = new object();
-        private static readonly object EventResetValue = new object();
+        private static readonly object EventGetBaseAttributes = new();
+        private static readonly object EventGetDynamicAttributes = new();
+        private static readonly object EventShouldRefresh = new();
+        private static readonly object EventGetDisplayName = new();
+        private static readonly object EventGetDisplayValue = new();
+        private static readonly object EventGetIsReadOnly = new();
+        private static readonly object EventGetTypeConverterAndTypeEditor = new();
+        private static readonly object EventShouldSerializeValue = new();
+        private static readonly object EventCanResetValue = new();
+        private static readonly object EventResetValue = new();
 
         private static readonly Guid GUID_COLOR = new Guid("{66504301-BE0F-101A-8BBB-00AA00300CAB}");
 
@@ -883,7 +884,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             HRESULT hr = pDisp.Invoke(
                 dispid,
                 &g,
-                Kernel32.GetThreadLocale(),
+                PInvoke.GetThreadLocale(),
                 Oleaut32.DISPATCH.PROPERTYGET,
                 &dispParams,
                 pVarResult,
@@ -1241,7 +1242,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 owner = ((ICustomTypeDescriptor)owner).GetPropertyOwner(this);
             }
 
-            if (owner is null || !Marshal.IsComObject(owner) || !(owner is Oleaut32.IDispatch))
+            if (owner is null || !Marshal.IsComObject(owner) || owner is not Oleaut32.IDispatch)
             {
                 return;
             }
@@ -1275,7 +1276,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             HRESULT hr = pDisp.Invoke(
                 dispid,
                 &g,
-                Kernel32.GetThreadLocale(),
+                PInvoke.GetThreadLocale(),
                 Oleaut32.DISPATCH.PROPERTYPUT,
                 &dispParams,
                 null,
@@ -1332,7 +1333,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             Kernel32.FormatMessageOptions.FROM_SYSTEM | Kernel32.FormatMessageOptions.IGNORE_INSERTS,
                             IntPtr.Zero,
                             (uint)hr,
-                            Kernel32.GetThreadLocale().RawValue,
+                            PInvoke.GetThreadLocale(),
                             strMessage,
                             255,
                             IntPtr.Zero);

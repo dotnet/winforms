@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -16,8 +16,9 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
-using Windows.Win32;
 using Microsoft.Win32;
+using Windows.Win32;
+using Foundation = Windows.Win32.Foundation;
 using static Interop;
 using Encoding = System.Text.Encoding;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
@@ -126,10 +127,10 @@ namespace System.Windows.Forms
 #endif
 
 #if DEBUG
-        private static readonly BooleanSwitch s_bufferPinkRect = new BooleanSwitch(
+        private static readonly BooleanSwitch s_bufferPinkRect = new(
             "BufferPinkRect",
             "Renders a pink rectangle with painting double buffered controls");
-        private static readonly BooleanSwitch s_bufferDisabled = new BooleanSwitch(
+        private static readonly BooleanSwitch s_bufferDisabled = new(
             "BufferDisabled",
             "Makes double buffered controls non-double buffered");
 #endif
@@ -1219,7 +1220,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatLayout))]
         public Rectangle Bounds
         {
-            get => new Rectangle(_x, _y, _width, _height);
+            get => new(_x, _y, _width, _height);
             set => SetBounds(value.X, value.Y, value.Width, value.Height, BoundsSpecified.All);
         }
 
@@ -1404,7 +1405,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlClientSizeDescr))]
         public Size ClientSize
         {
-            get => new Size(_clientWidth, _clientHeight);
+            get => new(_clientWidth, _clientHeight);
             set => SetClientSizeCore(value.Width, value.Height);
         }
 
@@ -1951,7 +1952,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlDisplayRectangleDescr))]
         public virtual Rectangle DisplayRectangle
-            => new Rectangle(0, 0, _clientWidth, _clientHeight);
+            => new(0, 0, _clientWidth, _clientHeight);
 
         /// <summary>
         ///  Indicates whether the control has been disposed. This
@@ -2855,7 +2856,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlLocationDescr))]
         public Point Location
         {
-            get => new Point(_x, _y);
+            get => new(_x, _y);
             set => SetBounds(value.X, value.Y, _width, _height, BoundsSpecified.Location);
         }
 
@@ -3486,7 +3487,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlSizeDescr))]
         public Size Size
         {
-            get => new Size(_width, _height);
+            get => new(_width, _height);
             set => SetBounds(_x, _y, value.Width, value.Height, BoundsSpecified.Size);
         }
 
@@ -3779,7 +3780,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        protected internal virtual bool ShowFocusCues
+        protected internal unsafe virtual bool ShowFocusCues
         {
             get
             {
@@ -3950,7 +3951,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Wait for the wait handle to receive a signal: throw an exception if the thread is no longer with us.
         /// </summary>
-        private void WaitForWaitHandle(WaitHandle waitHandle)
+        private unsafe void WaitForWaitHandle(WaitHandle waitHandle)
         {
             uint threadId = CreateThreadId;
             Application.ThreadContext ctx = Application.ThreadContext.FromId(threadId);
@@ -3960,23 +3961,23 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IntPtr threadHandle = ctx.GetHandle();
+            nint threadHandle = ctx.GetHandle();
             bool processed = false;
             // setting default exitcode to 0, though it won't be accessed in current code below due to short-circuit logic in condition (returnValue will be false when exitCode is undefined)
             uint exitCode = 0;
-            BOOL returnValue = BOOL.FALSE;
+            Foundation.BOOL returnValue = false;
             while (!processed)
             {
                 //Get the thread's exit code, if we found the thread as expected
-                if (threadHandle != IntPtr.Zero)
+                if (threadHandle != 0)
                 {
-                    returnValue = Kernel32.GetExitCodeThread(threadHandle, out exitCode);
+                    returnValue = PInvoke.GetExitCodeThread((Foundation.HANDLE)threadHandle, &exitCode);
                 }
 
                 //If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
                 //if we don't know, we shouldn't throw.
-                if ((returnValue.IsTrue() && exitCode != NativeMethods.STILL_ACTIVE) ||
-                    (returnValue.IsFalse() && Marshal.GetLastWin32Error() == ERROR.INVALID_HANDLE) ||
+                if ((returnValue == true && exitCode != NativeMethods.STILL_ACTIVE) ||
+                    (returnValue == false && Marshal.GetLastWin32Error() == ERROR.INVALID_HANDLE) ||
                     AppDomain.CurrentDomain.IsFinalizingForUnload())
                 {
                     if (waitHandle.WaitOne(1, false))
@@ -9513,7 +9514,7 @@ namespace System.Windows.Forms
         {
             // We assume the target does not want us to offset the root control in the metafile.
 
-            using (DCMapping mapping = new DCMapping(hDC, bounds))
+            using (DCMapping mapping = new(hDC, bounds))
             {
                 // print the non-client area
                 PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & (long)~User32.PRF.CLIENT));
@@ -14559,10 +14560,10 @@ namespace System.Windows.Forms
         }
 
         internal virtual ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(ComCtl32.TTF flags, string caption, ToolTip tooltip)
-            => new ComCtl32.ToolInfoWrapper<Control>(this, flags, caption);
+            => new(this, flags, caption);
 
         private readonly WeakReference<ToolStripControlHost?> toolStripControlHostReference
-            = new WeakReference<ToolStripControlHost?>(null);
+            = new(null);
 
         internal ToolStripControlHost? ToolStripControlHost
         {

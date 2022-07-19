@@ -15,6 +15,7 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -2299,7 +2300,7 @@ namespace System.Windows.Forms
                     return rval;
                 case Ole32.DispatchID.AMBIENT_LOCALEID:
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "asked for localeid");
-                    return Kernel32.GetThreadLocale().RawValue;
+                    return PInvoke.GetThreadLocale();
                 case Ole32.DispatchID.AMBIENT_RIGHTTOLEFT:
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "asked for right to left");
                     Control ctl = this;
@@ -2538,7 +2539,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            hr = icp.GetCategoryName(propcat, Kernel32.GetThreadLocale(), out string name);
+            hr = icp.GetCategoryName(propcat, PInvoke.GetThreadLocale(), out string name);
             if (hr == HRESULT.S_OK && name is not null)
             {
                 var rval = new CategoryAttribute(name);
@@ -3231,7 +3232,7 @@ namespace System.Windows.Forms
 
         private unsafe void ShowPropertyPageForDispid(Ole32.DispatchID dispid, Guid guid)
         {
-            IntPtr pUnk = Marshal.GetIUnknownForObject(GetOcx());
+            nint pUnk = Marshal.GetIUnknownForObject(GetOcx());
             try
             {
                 fixed (char* pName = Name)
@@ -3239,13 +3240,13 @@ namespace System.Windows.Forms
                     var opcparams = new Oleaut32.OCPFIPARAMS
                     {
                         cbStructSize = (uint)Marshal.SizeOf<Oleaut32.OCPFIPARAMS>(),
-                        hwndOwner = (ContainingControl is null) ? IntPtr.Zero : ContainingControl.Handle,
+                        hwndOwner = (ContainingControl is null) ? 0 : ContainingControl.Handle,
                         lpszCaption = pName,
                         cObjects = 1,
-                        ppUnk = (IntPtr)(&pUnk),
+                        ppUnk = (nint)(&pUnk),
                         cPages = 1,
-                        lpPages = (IntPtr)(&guid),
-                        lcid = Kernel32.GetThreadLocale(),
+                        lpPages = (nint)(&guid),
+                        lcid = PInvoke.GetThreadLocale(),
                         dispidInitialProperty = dispid
                     };
                     Oleaut32.OleCreatePropertyFrameIndirect(ref opcparams);
@@ -3313,8 +3314,8 @@ namespace System.Windows.Forms
                     trans = host.CreateTransaction(SR.AXEditProperties);
                 }
 
-                IntPtr handle = (ContainingControl is null) ? IntPtr.Zero : ContainingControl.Handle;
-                IntPtr pUnk = Marshal.GetIUnknownForObject(GetOcx());
+                nint handle = (ContainingControl is null) ? 0 : ContainingControl.Handle;
+                nint pUnk = Marshal.GetIUnknownForObject(GetOcx());
                 try
                 {
                     Oleaut32.OleCreatePropertyFrame(
@@ -3326,9 +3327,9 @@ namespace System.Windows.Forms
                         &pUnk,
                         uuids.cElems,
                         uuids.pElems,
-                        Kernel32.GetThreadLocale(),
+                        PInvoke.GetThreadLocale(),
                         0,
-                        IntPtr.Zero);
+                        0);
                 }
                 finally
                 {
@@ -3650,7 +3651,7 @@ namespace System.Windows.Forms
             qaContainer.pPropertyNotifySink = _oleSite;
             qaContainer.pFont = (Ole32.IFont)GetIFontFromFont(GetParentContainer()._parent.Font);
             qaContainer.dwAppearance = 0;
-            qaContainer.lcid = Kernel32.GetThreadLocale();
+            qaContainer.lcid = PInvoke.GetThreadLocale();
 
             Control p = ParentInternal;
 
