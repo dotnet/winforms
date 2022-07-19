@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 using static Interop.Mshtml;
 
@@ -432,7 +433,7 @@ namespace System.Windows.Forms
                     Guid g = Guid.Empty;
                     string[] names = new string[] { scriptName };
                     Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
-                    HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &dispid);
+                    HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
                     if (!hr.Succeeded() || dispid == Ole32.DispatchID.UNKNOWN)
                     {
                         return null;
@@ -458,7 +459,7 @@ namespace System.Windows.Forms
                         hr = scriptObject.Invoke(
                             dispid,
                             &g,
-                            Kernel32.GetThreadLocale(),
+                            PInvoke.GetThreadLocale(),
                             Oleaut32.DISPATCH.METHOD,
                             &dispParams,
                             retVals,

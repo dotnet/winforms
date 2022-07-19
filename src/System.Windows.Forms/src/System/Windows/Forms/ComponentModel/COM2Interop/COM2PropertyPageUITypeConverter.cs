@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -98,7 +99,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         pObjAddrs,
                         1,
                         &pageGuid,
-                        Kernel32.GetThreadLocale(),
+                        PInvoke.GetThreadLocale(),
                         0,
                         IntPtr.Zero);
                 }
