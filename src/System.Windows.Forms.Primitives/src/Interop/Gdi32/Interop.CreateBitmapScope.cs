@@ -2,12 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Windows.Win32;
+
 internal static partial class Interop
 {
     internal static partial class Gdi32
     {
         /// <summary>
-        ///  Helper to scope lifetime of a <see cref="HBITMAP"/> created via <see cref="CreateBitmap"/>
+        ///  Helper to scope lifetime of a <see cref="HBITMAP"/> created via <see cref="PInvoke.CreateBitmap"/>
         ///  Deletes the <see cref="HBITMAP"/> (if any) when disposed.
         /// </summary>
         /// <remarks>
@@ -23,11 +25,11 @@ internal static partial class Interop
             public HBITMAP HBitmap { get; }
 
             /// <summary>
-            ///  Creates a bitmap using <see cref="CreateBitmap"/>
+            ///  Creates a bitmap using <see cref="PInvoke.CreateBitmap"/>
             /// </summary>
             public unsafe CreateBitmapScope(int nWidth, int nHeight, uint nPlanes, uint nBitCount, void* lpvBits)
             {
-                HBitmap = CreateBitmap(nWidth, nHeight, nPlanes, nBitCount, lpvBits);
+                HBitmap = PInvoke.CreateBitmap(nWidth, nHeight, nPlanes, nBitCount, lpvBits);
             }
 
             /// <summary>

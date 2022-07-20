@@ -4,6 +4,7 @@
 
 using System.Diagnostics;
 using System.Drawing;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms.Design
@@ -69,7 +70,7 @@ namespace System.Windows.Forms.Design
                     unchecked((short)0x5555)
                 };
 
-                Gdi32.HBITMAP hbitmapTemp = Gdi32.CreateBitmap(8, 8, 1, 1, patternBits);
+                Gdi32.HBITMAP hbitmapTemp = PInvoke.CreateBitmap(8, 8, 1, 1, patternBits);
                 Debug.Assert(
                     !hbitmapTemp.IsNull,
                     "could not create dither bitmap. Page selector UI will not be correct");

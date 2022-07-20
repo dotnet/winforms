@@ -1,6 +1,7 @@
 BitBlt
 CloseEnhMetaFile
 CombineRgn
+CreateBitmap
 DuplicateHandle
 GetCurrentActCtx
 GetCurrentProcess

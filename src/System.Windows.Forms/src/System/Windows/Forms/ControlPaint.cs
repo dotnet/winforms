@@ -306,7 +306,7 @@ namespace System.Windows.Forms
             // Create 1bpp.
             fixed (byte* pBits = bits)
             {
-                return (IntPtr)Gdi32.CreateBitmap(size.Width, size.Height, 1, 1, pBits);
+                return (IntPtr)PInvoke.CreateBitmap(size.Width, size.Height, 1, 1, pBits);
             }
         }
 

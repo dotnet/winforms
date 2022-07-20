@@ -13,6 +13,7 @@ using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -1648,7 +1649,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     int planes = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.PLANES);
                     int bitsPixel = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.BITSPIXEL);
-                    Gdi32.HBITMAP compatibleBitmap = Gdi32.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpvBits: null);
+                    Gdi32.HBITMAP compatibleBitmap = PInvoke.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
                     using var targetBitmapSelection = new Gdi32.SelectObjectScope(compatibleDC, compatibleBitmap);
 
                     using var brush = new Gdi32.CreateBrushScope(backgroundColor);
