@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms.Metafiles
@@ -61,7 +62,7 @@ namespace System.Windows.Forms.Metafiles
                         return default;
                     }
 
-                    _hemf = Gdi32.CloseEnhMetaFile(HDC);
+                    _hemf = PInvoke.CloseEnhMetaFile(HDC);
                 }
 
                 return _hemf;
