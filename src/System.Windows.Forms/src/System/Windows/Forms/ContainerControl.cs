@@ -1163,10 +1163,6 @@ namespace System.Windows.Forms
                     {
                         ScaleControl(includedFactor, ourExternalContainerFactor, requestingControl);
                     }
-                    else
-                    {
-                        ScaleConstraintProperties(includedFactor);
-                    }
 
                     if (!_doNotScaleChildren)
                     {
@@ -1176,7 +1172,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal virtual void ScaleConstraintProperties(SizeF factor)
+        protected virtual void ScaleTopLevelWindowProperties(float widthFactor, float hightFactor)
         { }
 
         /// <summary>
@@ -1432,6 +1428,13 @@ namespace System.Windows.Forms
             SuspendAllLayout(this);
             try
             {
+
+                // Suggested rectangle comes from Windows and does not match with our calculations for scaling controls by Autoscale factor.
+                // Hence, we can not use AutoscaleFactor here for scaling control properties. Please below description for more details.
+                float widthFactor = (float)suggestedRectangle.Width / Width;
+                float hightFactor = (float)suggestedRectangle.Width / Height;
+                ScaleTopLevelWindowProperties(widthFactor, hightFactor);
+
                 // If this container is a top-level window, we would receive WM_DPICHANGED message that
                 // has SuggestedRectangle for the control. We are forced to use this in such cases to
                 // make the control placed in right location with respect to the new monitor that triggered
