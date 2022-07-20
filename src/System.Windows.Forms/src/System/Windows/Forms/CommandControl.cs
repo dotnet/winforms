@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Runtime.Versioning;
 
 namespace System.Windows.Forms
 {
@@ -19,11 +20,13 @@ namespace System.Windows.Forms
         internal static readonly object s_commandParameterChangedEvent = new();
         internal static readonly object s_commandCanExecuteChangedEvent = new();
 
+        [RequiresPreviewFeatures]
         public CommandControl() : base()
         {
             _commandProviderManager = new(this);
         }
 
+        [RequiresPreviewFeatures]
         [Bindable(true)]
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -37,6 +40,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Occurs when the Command.CanExecute status has changed.
         /// </summary>
+        [RequiresPreviewFeatures]
         [SRCategory(nameof(SR.CatData))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler? CommandCanExecuteChanged
@@ -48,6 +52,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Occurs when the Command has changed.
         /// </summary>
+        [RequiresPreviewFeatures]
         [SRCategory(nameof(SR.CatData))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler? CommandChanged
@@ -62,8 +67,10 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatData))]
         public object? CommandParameter
         {
+            [RequiresPreviewFeatures]
             get => _commandParameter;
 
+            [RequiresPreviewFeatures]
             set
             {
                 if (!Equals(_commandParameter, value))
@@ -77,6 +84,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Occurs when the CommandParameter has changed.
         /// </summary>
+        [RequiresPreviewFeatures]
         [SRCategory(nameof(SR.CatData))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler? CommandParameterChanged
@@ -90,6 +98,7 @@ namespace System.Windows.Forms
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.CommandChanged to send this event to any registered event listeners.
         /// </summary>
+        [RequiresPreviewFeatures]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCommandChanged(EventArgs e)
             => RaiseEvent(s_commandChangedEvent, e);
@@ -99,6 +108,7 @@ namespace System.Windows.Forms
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.CommandCanExecuteChanged to send this event to any registered event listeners.
         /// </summary>
+        [RequiresPreviewFeatures]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCommandCanExecuteChanged(EventArgs e)
             // TODO: Is passing 'this' correct here?
@@ -109,6 +119,7 @@ namespace System.Windows.Forms
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.CommandChanged to send this event to any registered event listeners.
         /// </summary>
+        [RequiresPreviewFeatures]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCommandParameterChanged(EventArgs e) => RaiseEvent(s_commandParameterChangedEvent, e);
 
@@ -116,14 +127,17 @@ namespace System.Windows.Forms
         ///  Called by the event of a Control deriving from this class to execute the command.
         /// </summary>
         /// <param name="e"></param>
+        [RequiresPreviewFeatures]
         protected virtual void OnRequestCommandExecute(EventArgs e)
             => _commandProviderManager.RequestCommandExecute();
 
         // Called by the CommandProviderManager's internal DIM-based logic.
+        [RequiresPreviewFeatures]
         void ICommandPropertyProvider.RaiseCommandChanged(EventArgs e)
             => OnCommandChanged(e);
 
         // Called by the CommandProviderManager's internal DIM-based logic.
+        [RequiresPreviewFeatures]
         void ICommandPropertyProvider.RaiseCommandCanExecuteChanged(EventArgs e)
             => OnCommandCanExecuteChanged(e);
 

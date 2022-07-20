@@ -2638,7 +2638,11 @@ namespace System.Windows.Forms
         protected virtual void OnClick(EventArgs e)
         {
             RaiseEvent(s_clickEvent, e);
+
+            // We won't let the preview feature warnings bubble further up beyond this point.
+#pragma warning disable CA2252 
             base.OnRequestCommandExecute(e);
+#pragma warning restore CA2252
         }
 
         protected internal virtual void OnLayout(LayoutEventArgs e)

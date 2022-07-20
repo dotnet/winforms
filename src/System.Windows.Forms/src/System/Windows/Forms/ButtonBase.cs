@@ -817,7 +817,11 @@ namespace System.Windows.Forms
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
+
+            // We won't let the preview feature warnings bubble further up beyond this point.
+#pragma warning disable CA2252 
             base.OnRequestCommandExecute(e);
+#pragma warning restore CA2252
         }
 
         /// <summary>
