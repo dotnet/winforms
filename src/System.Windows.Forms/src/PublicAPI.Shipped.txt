@@ -914,11 +914,11 @@ System.Windows.Forms.Control.GetContainerControl() -> System.Windows.Forms.ICont
 ~System.Windows.Forms.Control.InvokeOnClick(System.Windows.Forms.Control toInvoke, System.EventArgs e) -> void
 ~System.Windows.Forms.Control.InvokePaint(System.Windows.Forms.Control c, System.Windows.Forms.PaintEventArgs e) -> void
 ~System.Windows.Forms.Control.InvokePaintBackground(System.Windows.Forms.Control c, System.Windows.Forms.PaintEventArgs e) -> void
-~System.Windows.Forms.Control.PerformLayout(System.Windows.Forms.Control affectedControl, string affectedProperty) -> void
-~System.Windows.Forms.Control.RaiseDragEvent(object key, System.Windows.Forms.DragEventArgs e) -> void
+System.Windows.Forms.Control.PerformLayout(System.Windows.Forms.Control? affectedControl, string? affectedProperty) -> void
+System.Windows.Forms.Control.RaiseDragEvent(object! key, System.Windows.Forms.DragEventArgs! e) -> void
 System.Windows.Forms.Control.RaiseKeyEvent(object! key, System.Windows.Forms.KeyEventArgs! e) -> void
 System.Windows.Forms.Control.RaiseMouseEvent(object! key, System.Windows.Forms.MouseEventArgs! e) -> void
-~System.Windows.Forms.Control.RaisePaintEvent(object key, System.Windows.Forms.PaintEventArgs e) -> void
+System.Windows.Forms.Control.RaisePaintEvent(object! key, System.Windows.Forms.PaintEventArgs! e) -> void
 ~System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitmap logicalBitmap) -> void
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember) -> System.Windows.Forms.Binding
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled) -> System.Windows.Forms.Binding
@@ -1286,11 +1286,11 @@ System.Windows.Forms.IBindableComponent.DataBindings.get -> System.Windows.Forms
 ~System.Windows.Forms.IDropTarget.OnDragOver(System.Windows.Forms.DragEventArgs e) -> void
 ~System.Windows.Forms.IFileReaderService.OpenFileFromSource(string relativePath) -> System.IO.Stream
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
-~System.Windows.Forms.LayoutEventArgs.AffectedComponent.get -> System.ComponentModel.IComponent
-~System.Windows.Forms.LayoutEventArgs.AffectedControl.get -> System.Windows.Forms.Control
-~System.Windows.Forms.LayoutEventArgs.AffectedProperty.get -> string
-~System.Windows.Forms.LayoutEventArgs.LayoutEventArgs(System.ComponentModel.IComponent affectedComponent, string affectedProperty) -> void
-~System.Windows.Forms.LayoutEventArgs.LayoutEventArgs(System.Windows.Forms.Control affectedControl, string affectedProperty) -> void
+System.Windows.Forms.LayoutEventArgs.AffectedComponent.get -> System.ComponentModel.IComponent?
+System.Windows.Forms.LayoutEventArgs.AffectedControl.get -> System.Windows.Forms.Control?
+System.Windows.Forms.LayoutEventArgs.AffectedProperty.get -> string?
+System.Windows.Forms.LayoutEventArgs.LayoutEventArgs(System.ComponentModel.IComponent? affectedComponent, string? affectedProperty) -> void
+System.Windows.Forms.LayoutEventArgs.LayoutEventArgs(System.Windows.Forms.Control? affectedControl, string? affectedProperty) -> void
 ~System.Windows.Forms.LinkLabel.Link.Description.get -> string
 ~System.Windows.Forms.LinkLabel.Link.Description.set -> void
 ~System.Windows.Forms.LinkLabel.Link.Link(int start, int length, object linkData) -> void
@@ -1809,7 +1809,7 @@ virtual System.Windows.Forms.Control.CreateControlsInstance() -> System.Windows.
 ~virtual System.Windows.Forms.Control.OnBackgroundImageLayoutChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnBindingContextChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnCausesValidationChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnChangeUICues(System.Windows.Forms.UICuesEventArgs e) -> void
+virtual System.Windows.Forms.Control.OnChangeUICues(System.Windows.Forms.UICuesEventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnClick(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnClientSizeChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnContextMenuStripChanged(System.EventArgs e) -> void
@@ -1853,9 +1853,9 @@ virtual System.Windows.Forms.Control.CreateControlsInstance() -> System.Windows.
 ~virtual System.Windows.Forms.Control.OnMouseUp(System.Windows.Forms.MouseEventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnMouseWheel(System.Windows.Forms.MouseEventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnMove(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnPaddingChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnPaintBackground(System.Windows.Forms.PaintEventArgs pevent) -> void
+virtual System.Windows.Forms.Control.OnPaddingChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnPaintBackground(System.Windows.Forms.PaintEventArgs! pevent) -> void
 ~virtual System.Windows.Forms.Control.OnParentBackColorChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnParentBackgroundImageChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnParentBindingContextChanged(System.EventArgs e) -> void
@@ -1866,20 +1866,20 @@ virtual System.Windows.Forms.Control.CreateControlsInstance() -> System.Windows.
 ~virtual System.Windows.Forms.Control.OnParentForeColorChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnParentRightToLeftChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnParentVisibleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnPreviewKeyDown(System.Windows.Forms.PreviewKeyDownEventArgs e) -> void
+virtual System.Windows.Forms.Control.OnPreviewKeyDown(System.Windows.Forms.PreviewKeyDownEventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnPrint(System.Windows.Forms.PaintEventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnQueryContinueDrag(System.Windows.Forms.QueryContinueDragEventArgs qcdevent) -> void
-~virtual System.Windows.Forms.Control.OnRegionChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnResize(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnQueryContinueDrag(System.Windows.Forms.QueryContinueDragEventArgs! qcdevent) -> void
+virtual System.Windows.Forms.Control.OnRegionChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnResize(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnRightToLeftChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnSizeChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnStyleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnSystemColorsChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnSizeChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnStyleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnSystemColorsChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnTabIndexChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnTabStopChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnTextChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnValidated(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnValidating(System.ComponentModel.CancelEventArgs e) -> void
+virtual System.Windows.Forms.Control.OnValidated(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnValidating(System.ComponentModel.CancelEventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnVisibleChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridView.AdjustColumnHeaderBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder, bool isFirstDisplayedColumn, bool isLastVisibleColumn) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 ~virtual System.Windows.Forms.DataGridView.AdjustedTopLeftHeaderBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
