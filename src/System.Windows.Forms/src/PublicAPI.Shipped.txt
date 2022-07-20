@@ -659,7 +659,7 @@ override System.Windows.Forms.ToolStripPanel.Text.set -> void
 ~static System.Windows.Forms.AxHost.GetPictureFromIPicture(object picture) -> System.Drawing.Image
 ~static System.Windows.Forms.AxHost.GetPictureFromIPictureDisp(object picture) -> System.Drawing.Image
 ~static System.Windows.Forms.BindingContext.UpdateBinding(System.Windows.Forms.BindingContext newBindingContext, System.Windows.Forms.Binding binding) -> void
-~static System.Windows.Forms.Control.IsMnemonic(char charCode, string text) -> bool
+static System.Windows.Forms.Control.IsMnemonic(char charCode, string? text) -> bool
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags) -> int
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags, out bool widthTruncated) -> int
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
@@ -902,18 +902,18 @@ System.Windows.Forms.Control.FindForm() -> System.Windows.Forms.Form?
 System.Windows.Forms.Control.GetChildAtPoint(System.Drawing.Point pt) -> System.Windows.Forms.Control?
 System.Windows.Forms.Control.GetChildAtPoint(System.Drawing.Point pt, System.Windows.Forms.GetChildAtPointSkip skipValue) -> System.Windows.Forms.Control?
 System.Windows.Forms.Control.GetContainerControl() -> System.Windows.Forms.IContainerControl?
-~System.Windows.Forms.Control.GetNextControl(System.Windows.Forms.Control ctl, bool forward) -> System.Windows.Forms.Control
-~System.Windows.Forms.Control.Invalidate(System.Drawing.Region region) -> void
-~System.Windows.Forms.Control.Invalidate(System.Drawing.Region region, bool invalidateChildren) -> void
-~System.Windows.Forms.Control.Invoke(System.Action method) -> void
-~System.Windows.Forms.Control.Invoke(System.Delegate method) -> object
-~System.Windows.Forms.Control.Invoke(System.Delegate method, params object[] args) -> object
-~System.Windows.Forms.Control.Invoke<T>(System.Func<T> method) -> T
+System.Windows.Forms.Control.GetNextControl(System.Windows.Forms.Control? ctl, bool forward) -> System.Windows.Forms.Control?
+System.Windows.Forms.Control.Invalidate(System.Drawing.Region? region) -> void
+System.Windows.Forms.Control.Invalidate(System.Drawing.Region? region, bool invalidateChildren) -> void
+System.Windows.Forms.Control.Invoke(System.Action! method) -> void
+System.Windows.Forms.Control.Invoke(System.Delegate! method) -> object!
+System.Windows.Forms.Control.Invoke(System.Delegate! method, params object?[]? args) -> object!
+System.Windows.Forms.Control.Invoke<T>(System.Func<T>! method) -> T
 ~System.Windows.Forms.Control.InvokeGotFocus(System.Windows.Forms.Control toInvoke, System.EventArgs e) -> void
 ~System.Windows.Forms.Control.InvokeLostFocus(System.Windows.Forms.Control toInvoke, System.EventArgs e) -> void
 ~System.Windows.Forms.Control.InvokeOnClick(System.Windows.Forms.Control toInvoke, System.EventArgs e) -> void
-~System.Windows.Forms.Control.InvokePaint(System.Windows.Forms.Control c, System.Windows.Forms.PaintEventArgs e) -> void
-~System.Windows.Forms.Control.InvokePaintBackground(System.Windows.Forms.Control c, System.Windows.Forms.PaintEventArgs e) -> void
+System.Windows.Forms.Control.InvokePaint(System.Windows.Forms.Control! c, System.Windows.Forms.PaintEventArgs! e) -> void
+System.Windows.Forms.Control.InvokePaintBackground(System.Windows.Forms.Control! c, System.Windows.Forms.PaintEventArgs! e) -> void
 System.Windows.Forms.Control.PerformLayout(System.Windows.Forms.Control? affectedControl, string? affectedProperty) -> void
 System.Windows.Forms.Control.RaiseDragEvent(object! key, System.Windows.Forms.DragEventArgs! e) -> void
 System.Windows.Forms.Control.RaiseKeyEvent(object! key, System.Windows.Forms.KeyEventArgs! e) -> void

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public partial class Control
@@ -17,9 +15,9 @@ namespace System.Windows.Forms
         {
             internal readonly int _oldOrder;
             internal readonly int _newOrder;
-            internal readonly Control _control;
+            internal readonly Control? _control;
 
-            internal ControlTabOrderHolder(int oldOrder, int newOrder, Control control)
+            internal ControlTabOrderHolder(int oldOrder, int newOrder, Control? control)
             {
                 _oldOrder = oldOrder;
                 _newOrder = newOrder;
@@ -32,8 +30,21 @@ namespace System.Windows.Forms
         /// </summary>
         private class ControlTabOrderComparer : IComparer<ControlTabOrderHolder>
         {
-            public int Compare(ControlTabOrderHolder x, ControlTabOrderHolder y)
+            public int Compare(ControlTabOrderHolder? x, ControlTabOrderHolder? y)
             {
+                if (x is null && y is null)
+                {
+                    return 0;
+                }
+                else if (x is null)
+                {
+                    return -1;
+                }
+                else if (y is null)
+                {
+                    return 1;
+                }
+
                 int delta = x._newOrder - y._newOrder;
                 if (delta == 0)
                 {
