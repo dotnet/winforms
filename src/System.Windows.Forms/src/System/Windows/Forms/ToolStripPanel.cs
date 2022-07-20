@@ -313,6 +313,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -396,15 +398,11 @@ namespace System.Windows.Forms
 
         #endregion ISupportInitialize
 
-        private ToolStripPanelRowCollection CreateToolStripPanelRowCollection()
-        {
-            return new ToolStripPanelRowCollection(this);
-        }
+        private ToolStripPanelRowCollection CreateToolStripPanelRowCollection() => new(this);
 
-        protected override ControlCollection CreateControlsInstance()
-        {
-            return new ToolStripPanelControlCollection(this);
-        }
+        protected override AccessibleObject CreateAccessibilityInstance() => new ToolStripPanelAccessibleObject(this);
+
+        protected override ControlCollection CreateControlsInstance() => new ToolStripPanelControlCollection(this);
 
         /// <summary>
         ///  Disposes of the resources (other than memory) used by
