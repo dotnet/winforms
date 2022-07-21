@@ -13,6 +13,8 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using Windows.Win32;
+using Windows.Win32.Graphics.Gdi;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 using static Interop.User32;
@@ -3914,7 +3916,7 @@ namespace System.Windows.Forms
                         // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
                         bool getRegionSucceeded = GetUpdateRgn(Handle, windowRegion, bErase: BOOL.TRUE) != RegionType.ERROR;
 
-                        Gdi32.CombineRgn(dropDownRegion, windowRegion, dropDownRegion, Gdi32.RGN.DIFF);
+                        PInvoke.CombineRgn(dropDownRegion, windowRegion, dropDownRegion, RGN_COMBINE_MODE.RGN_DIFF);
                         RECT updateRegionBoundingRect = default;
                         Gdi32.GetRgnBox(windowRegion, ref updateRegionBoundingRect);
 

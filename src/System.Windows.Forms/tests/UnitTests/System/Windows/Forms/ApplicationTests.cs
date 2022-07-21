@@ -8,8 +8,8 @@ using System.Globalization;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.DotNet.RemoteExecutor;
 using System.Windows.Forms.TestUtilities;
+using Windows.Win32;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -52,14 +52,14 @@ namespace System.Windows.Forms.Tests
                         Assert.Same(value, Application.CurrentCulture);
                         Assert.Same(value, Thread.CurrentThread.CurrentCulture);
                         Assert.Same(value, CultureInfo.CurrentCulture);
-                        Assert.Equal(expectedLcid, Kernel32.GetThreadLocale());
+                        Assert.Equal(expectedLcid, PInvoke.GetThreadLocale());
 
                         // Set same.
                         Application.CurrentCulture = value;
                         Assert.Same(value, Application.CurrentCulture);
                         Assert.Same(value, Thread.CurrentThread.CurrentCulture);
                         Assert.Same(value, CultureInfo.CurrentCulture);
-                        Assert.Equal(expectedLcid, Kernel32.GetThreadLocale());
+                        Assert.Equal(expectedLcid, PInvoke.GetThreadLocale());
                     }
                     finally
                     {

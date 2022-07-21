@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 using static Interop.Ole32;
 using static Interop.Oleaut32;
@@ -76,7 +77,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     if (obj is IDispatch iDispatch)
                     {
-                        iDispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out pTypeInfo);
+                        iDispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out pTypeInfo);
                     }
                 }
             }
@@ -161,7 +162,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 DispatchID pDispid = DispatchID.UNKNOWN;
                 Guid g = Guid.Empty;
-                HRESULT hr = obj.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &pDispid);
+                HRESULT hr = obj.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &pDispid);
                 if (hr.Succeeded())
                 {
                     dispid = pDispid;

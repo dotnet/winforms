@@ -4,6 +4,8 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using Windows.Win32;
+using Windows.Win32.Graphics.Gdi;
 using Windows.Win32.UI.WindowsAndMessaging;
 using Foundation = Windows.Win32.Foundation;
 using static Interop;
@@ -304,7 +306,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
             }
 
-            if (Gdi32.CombineRgn(rgn1, rgn1, rgn2, Gdi32.RGN.DIFF) == 0)
+            if ((RegionType)PInvoke.CombineRgn(rgn1, rgn1, rgn2, RGN_COMBINE_MODE.RGN_DIFF) == RegionType.ERROR)
             {
                 throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
             }

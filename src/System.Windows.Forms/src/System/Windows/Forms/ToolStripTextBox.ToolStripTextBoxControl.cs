@@ -6,10 +6,11 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using Microsoft.Win32;
+using Windows.Win32;
+using Windows.Win32.Graphics.Gdi;
 using Windows.Win32.UI.WindowsAndMessaging;
 using Foundation = Windows.Win32.Foundation;
 using static Interop;
-using Windows.Win32;
 
 namespace System.Windows.Forms
 {
@@ -130,7 +131,7 @@ namespace System.Windows.Forms
                     absoluteClientRectangle.bottom);
                 using var hNonClientRegion = new Gdi32.RegionScope(0, 0, 0, 0);
 
-                Gdi32.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, Gdi32.RGN.XOR);
+                PInvoke.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, RGN_COMBINE_MODE.RGN_XOR);
 
                 // Call RedrawWindow with the region.
                 User32.RedrawWindow(
