@@ -1,6 +1,11 @@
-﻿BitBlt
+﻿AdjustWindowRectEx
+AdjustWindowRectExForDpi
+BeginPaint
+BitBlt
 CloseEnhMetaFile
 DuplicateHandle
+EndPaint
+GetClientRect
 GetCurrentProcess
 GetCurrentProcessId
 GetCurrentThread
