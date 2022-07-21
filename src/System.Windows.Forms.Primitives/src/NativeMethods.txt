@@ -1,5 +1,6 @@
 BitBlt
 CloseEnhMetaFile
+CombineRgn
 DuplicateHandle
 GetCurrentActCtx
 GetCurrentProcess
