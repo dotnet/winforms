@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 using static Interop.Ole32;
 using static System.TrimmingConstants;
@@ -151,7 +152,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             Guid g = Guid.Empty;
             try
             {
-                HRESULT hr = iDispatch.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &dispid);
+                HRESULT hr = iDispatch.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
                 if (dispid == DispatchID.UNKNOWN || !hr.Succeeded())
                 {
                     return null;
@@ -202,7 +203,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     HRESULT hr = iDispatch.Invoke(
                         dispid,
                         &g,
-                        Kernel32.GetThreadLocale(),
+                        PInvoke.GetThreadLocale(),
                         Oleaut32.DISPATCH.PROPERTYGET,
                         &dispParams,
                         retval,

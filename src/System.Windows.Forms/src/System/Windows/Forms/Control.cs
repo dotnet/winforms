@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -18,6 +18,7 @@ using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using Windows.Win32;
+using Foundation = Windows.Win32.Foundation;
 using static Interop;
 using Encoding = System.Text.Encoding;
 using Gdi = Windows.Win32.Graphics.Gdi;
@@ -127,10 +128,10 @@ namespace System.Windows.Forms
 #endif
 
 #if DEBUG
-        private static readonly BooleanSwitch s_bufferPinkRect = new BooleanSwitch(
+        private static readonly BooleanSwitch s_bufferPinkRect = new(
             "BufferPinkRect",
             "Renders a pink rectangle with painting double buffered controls");
-        private static readonly BooleanSwitch s_bufferDisabled = new BooleanSwitch(
+        private static readonly BooleanSwitch s_bufferDisabled = new(
             "BufferDisabled",
             "Makes double buffered controls non-double buffered");
 #endif
@@ -138,75 +139,75 @@ namespace System.Windows.Forms
         private static readonly User32.WM WM_GETCONTROLNAME = User32.RegisterWindowMessageW("WM_GETCONTROLNAME");
         private static readonly User32.WM WM_GETCONTROLTYPE = User32.RegisterWindowMessageW("WM_GETCONTROLTYPE");
 
-        private static readonly object s_autoSizeChangedEvent = new object();
-        private static readonly object s_keyDownEvent = new object();
-        private static readonly object s_keyPressEvent = new object();
-        private static readonly object s_keyUpEvent = new object();
-        private static readonly object s_mouseDownEvent = new object();
-        private static readonly object s_mouseEnterEvent = new object();
-        private static readonly object s_mouseLeaveEvent = new object();
-        private static readonly object s_dpiChangedBeforeParentEvent = new object();
-        private static readonly object s_dpiChangedAfterParentEvent = new object();
-        private static readonly object s_mouseHoverEvent = new object();
-        private static readonly object s_mouseMoveEvent = new object();
-        private static readonly object s_mouseUpEvent = new object();
-        private static readonly object s_mouseWheelEvent = new object();
-        private static readonly object s_clickEvent = new object();
-        private static readonly object s_clientSizeEvent = new object();
-        private static readonly object s_doubleClickEvent = new object();
-        private static readonly object s_mouseClickEvent = new object();
-        private static readonly object s_mouseDoubleClickEvent = new object();
-        private static readonly object s_mouseCaptureChangedEvent = new object();
-        private static readonly object s_moveEvent = new object();
-        private static readonly object s_resizeEvent = new object();
-        private static readonly object s_layoutEvent = new object();
-        private static readonly object s_gotFocusEvent = new object();
-        private static readonly object s_lostFocusEvent = new object();
-        private static readonly object s_enterEvent = new object();
-        private static readonly object s_leaveEvent = new object();
-        private static readonly object s_handleCreatedEvent = new object();
-        private static readonly object s_handleDestroyedEvent = new object();
-        private static readonly object s_controlAddedEvent = new object();
-        private static readonly object s_controlRemovedEvent = new object();
-        private static readonly object s_changeUICuesEvent = new object();
-        private static readonly object s_systemColorsChangedEvent = new object();
-        private static readonly object s_validatingEvent = new object();
-        private static readonly object s_validatedEvent = new object();
-        private static readonly object s_styleChangedEvent = new object();
-        private static readonly object s_imeModeChangedEvent = new object();
-        private static readonly object s_helpRequestedEvent = new object();
-        private static readonly object s_paintEvent = new object();
-        private static readonly object s_invalidatedEvent = new object();
-        private static readonly object s_queryContinueDragEvent = new object();
-        private static readonly object s_giveFeedbackEvent = new object();
-        private static readonly object s_dragEnterEvent = new object();
-        private static readonly object s_dragLeaveEvent = new object();
-        private static readonly object s_dragOverEvent = new object();
-        private static readonly object s_dragDropEvent = new object();
-        private static readonly object s_queryAccessibilityHelpEvent = new object();
-        private static readonly object s_backgroundImageEvent = new object();
-        private static readonly object s_backgroundImageLayoutEvent = new object();
-        private static readonly object s_bindingContextEvent = new object();
-        private static readonly object s_backColorEvent = new object();
-        private static readonly object s_parentEvent = new object();
-        private static readonly object s_visibleEvent = new object();
-        private static readonly object s_textEvent = new object();
-        private static readonly object s_tabStopEvent = new object();
-        private static readonly object s_tabIndexEvent = new object();
-        private static readonly object s_sizeEvent = new object();
-        private static readonly object s_rightToLeftEvent = new object();
-        private static readonly object s_locationEvent = new object();
-        private static readonly object s_foreColorEvent = new object();
-        private static readonly object s_fontEvent = new object();
-        private static readonly object s_enabledEvent = new object();
-        private static readonly object s_dockEvent = new object();
-        private static readonly object s_cursorEvent = new object();
-        private static readonly object s_contextMenuStripEvent = new object();
-        private static readonly object s_causesValidationEvent = new object();
-        private static readonly object s_regionChangedEvent = new object();
-        private static readonly object s_marginChangedEvent = new object();
-        private protected static readonly object s_paddingChangedEvent = new object();
-        private static readonly object s_previewKeyDownEvent = new object();
+        private static readonly object s_autoSizeChangedEvent = new();
+        private static readonly object s_keyDownEvent = new();
+        private static readonly object s_keyPressEvent = new();
+        private static readonly object s_keyUpEvent = new ();
+        private static readonly object s_mouseDownEvent = new();
+        private static readonly object s_mouseEnterEvent = new();
+        private static readonly object s_mouseLeaveEvent = new();
+        private static readonly object s_dpiChangedBeforeParentEvent = new();
+        private static readonly object s_dpiChangedAfterParentEvent = new();
+        private static readonly object s_mouseHoverEvent = new();
+        private static readonly object s_mouseMoveEvent = new();
+        private static readonly object s_mouseUpEvent = new();
+        private static readonly object s_mouseWheelEvent = new();
+        private static readonly object s_clickEvent = new();
+        private static readonly object s_clientSizeEvent = new();
+        private static readonly object s_doubleClickEvent = new();
+        private static readonly object s_mouseClickEvent = new();
+        private static readonly object s_mouseDoubleClickEvent = new();
+        private static readonly object s_mouseCaptureChangedEvent = new();
+        private static readonly object s_moveEvent = new();
+        private static readonly object s_resizeEvent = new();
+        private static readonly object s_layoutEvent = new();
+        private static readonly object s_gotFocusEvent = new();
+        private static readonly object s_lostFocusEvent = new();
+        private static readonly object s_enterEvent = new();
+        private static readonly object s_leaveEvent = new();
+        private static readonly object s_handleCreatedEvent = new();
+        private static readonly object s_handleDestroyedEvent = new();
+        private static readonly object s_controlAddedEvent = new();
+        private static readonly object s_controlRemovedEvent = new();
+        private static readonly object s_changeUICuesEvent = new();
+        private static readonly object s_systemColorsChangedEvent = new();
+        private static readonly object s_validatingEvent = new();
+        private static readonly object s_validatedEvent = new();
+        private static readonly object s_styleChangedEvent = new();
+        private static readonly object s_imeModeChangedEvent = new();
+        private static readonly object s_helpRequestedEvent = new();
+        private static readonly object s_paintEvent = new();
+        private static readonly object s_invalidatedEvent = new();
+        private static readonly object s_queryContinueDragEvent = new();
+        private static readonly object s_giveFeedbackEvent = new();
+        private static readonly object s_dragEnterEvent = new();
+        private static readonly object s_dragLeaveEvent = new();
+        private static readonly object s_dragOverEvent = new();
+        private static readonly object s_dragDropEvent = new();
+        private static readonly object s_queryAccessibilityHelpEvent = new();
+        private static readonly object s_backgroundImageEvent = new();
+        private static readonly object s_backgroundImageLayoutEvent = new();
+        private static readonly object s_bindingContextEvent = new();
+        private static readonly object s_backColorEvent = new();
+        private static readonly object s_parentEvent = new();
+        private static readonly object s_visibleEvent = new();
+        private static readonly object s_textEvent = new();
+        private static readonly object s_tabStopEvent = new();
+        private static readonly object s_tabIndexEvent = new();
+        private static readonly object s_sizeEvent = new();
+        private static readonly object s_rightToLeftEvent = new();
+        private static readonly object s_locationEvent = new();
+        private static readonly object s_foreColorEvent = new();
+        private static readonly object s_fontEvent = new();
+        private static readonly object s_enabledEvent = new();
+        private static readonly object s_dockEvent = new();
+        private static readonly object s_cursorEvent = new();
+        private static readonly object s_contextMenuStripEvent = new();
+        private static readonly object s_causesValidationEvent = new();
+        private static readonly object s_regionChangedEvent = new();
+        private static readonly object s_marginChangedEvent = new();
+        private protected static readonly object s_paddingChangedEvent = new();
+        private static readonly object s_previewKeyDownEvent = new();
 
         private static User32.WM s_threadCallbackMessage;
         private static ContextCallback? s_invokeMarshaledCallbackHelperDelegate;
@@ -1164,7 +1165,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatLayout))]
         public Rectangle Bounds
         {
-            get => new Rectangle(_x, _y, _width, _height);
+            get => new(_x, _y, _width, _height);
             set => SetBounds(value.X, value.Y, value.Width, value.Height, BoundsSpecified.All);
         }
 
@@ -1349,7 +1350,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlClientSizeDescr))]
         public Size ClientSize
         {
-            get => new Size(_clientWidth, _clientHeight);
+            get => new(_clientWidth, _clientHeight);
             set => SetClientSizeCore(value.Width, value.Height);
         }
 
@@ -1896,7 +1897,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlDisplayRectangleDescr))]
         public virtual Rectangle DisplayRectangle
-            => new Rectangle(0, 0, _clientWidth, _clientHeight);
+            => new(0, 0, _clientWidth, _clientHeight);
 
         /// <summary>
         ///  Indicates whether the control has been disposed. This
@@ -2800,7 +2801,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlLocationDescr))]
         public Point Location
         {
-            get => new Point(_x, _y);
+            get => new(_x, _y);
             set => SetBounds(value.X, value.Y, _width, _height, BoundsSpecified.Location);
         }
 
@@ -3431,7 +3432,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlSizeDescr))]
         public Size Size
         {
-            get => new Size(_width, _height);
+            get => new(_width, _height);
             set => SetBounds(_x, _y, value.Width, value.Height, BoundsSpecified.Size);
         }
 
@@ -3724,7 +3725,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        protected internal virtual bool ShowFocusCues
+        protected internal unsafe virtual bool ShowFocusCues
         {
             get
             {
@@ -3895,7 +3896,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Wait for the wait handle to receive a signal: throw an exception if the thread is no longer with us.
         /// </summary>
-        private void WaitForWaitHandle(WaitHandle waitHandle)
+        private unsafe void WaitForWaitHandle(WaitHandle waitHandle)
         {
             uint threadId = CreateThreadId;
             Application.ThreadContext ctx = Application.ThreadContext.FromId(threadId);
@@ -3905,23 +3906,23 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IntPtr threadHandle = ctx.GetHandle();
+            nint threadHandle = ctx.GetHandle();
             bool processed = false;
             // setting default exitcode to 0, though it won't be accessed in current code below due to short-circuit logic in condition (returnValue will be false when exitCode is undefined)
             uint exitCode = 0;
-            BOOL returnValue = BOOL.FALSE;
+            Foundation.BOOL returnValue = false;
             while (!processed)
             {
                 //Get the thread's exit code, if we found the thread as expected
-                if (threadHandle != IntPtr.Zero)
+                if (threadHandle != 0)
                 {
-                    returnValue = Kernel32.GetExitCodeThread(threadHandle, out exitCode);
+                    returnValue = PInvoke.GetExitCodeThread((Foundation.HANDLE)threadHandle, &exitCode);
                 }
 
                 //If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
                 //if we don't know, we shouldn't throw.
-                if ((returnValue.IsTrue() && exitCode != NativeMethods.STILL_ACTIVE) ||
-                    (returnValue.IsFalse() && Marshal.GetLastWin32Error() == ERROR.INVALID_HANDLE) ||
+                if ((returnValue == true && exitCode != NativeMethods.STILL_ACTIVE) ||
+                    (returnValue == false && Marshal.GetLastWin32Error() == ERROR.INVALID_HANDLE) ||
                     AppDomain.CurrentDomain.IsFinalizingForUnload())
                 {
                     if (waitHandle.WaitOne(1, false))
@@ -9390,7 +9391,7 @@ namespace System.Windows.Forms
         {
             // We assume the target does not want us to offset the root control in the metafile.
 
-            using (DCMapping mapping = new DCMapping(hDC, bounds))
+            using (DCMapping mapping = new(hDC, bounds))
             {
                 // print the non-client area
                 PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & (long)~User32.PRF.CLIENT));
@@ -14428,10 +14429,10 @@ namespace System.Windows.Forms
         }
 
         internal virtual ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(ComCtl32.TTF flags, string caption, ToolTip tooltip)
-            => new ComCtl32.ToolInfoWrapper<Control>(this, flags, caption);
+            => new(this, flags, caption);
 
         private readonly WeakReference<ToolStripControlHost?> toolStripControlHostReference
-            = new WeakReference<ToolStripControlHost?>(null);
+            = new(null);
 
         internal ToolStripControlHost? ToolStripControlHost
         {

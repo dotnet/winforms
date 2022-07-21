@@ -4,6 +4,7 @@
 
 using System.Drawing;
 using System.Windows.Forms.Primitives.Tests.Interop.Mocks;
+using Windows.Win32;
 using Xunit;
 using static Interop;
 using static Interop.Ole32;
@@ -26,7 +27,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             var rgDispId = new DispatchID[rgszNames.Length];
             fixed (DispatchID* pRgDispId = rgDispId)
             {
-                HRESULT hr = dispatch.GetIDsOfNames(&riid, rgszNames, (uint)rgszNames.Length, Kernel32.GetThreadLocale(), pRgDispId);
+                HRESULT hr = dispatch.GetIDsOfNames(&riid, rgszNames, (uint)rgszNames.Length, PInvoke.GetThreadLocale(), pRgDispId);
                 Assert.Equal(HRESULT.S_OK, hr);
                 Assert.Equal(new string[] { "Width", "Other" }, rgszNames);
                 Assert.Equal(new DispatchID[] { (DispatchID)4, DispatchID.UNKNOWN }, rgDispId);
@@ -41,7 +42,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
 
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
             Assert.NotNull(typeInfo);
             System.Runtime.InteropServices.Marshal.ReleaseComObject(typeInfo);
@@ -75,7 +76,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             HRESULT hr = dispatch.Invoke(
                 (DispatchID)4,
                 &riid,
-                Kernel32.GetThreadLocale(),
+                PInvoke.GetThreadLocale(),
                 DISPATCH.PROPERTYGET,
                 &dispParams,
                 varResult,

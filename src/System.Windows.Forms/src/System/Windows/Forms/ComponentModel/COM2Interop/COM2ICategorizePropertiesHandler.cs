@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -50,7 +51,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     return SR.PropertyCategoryDDE;
             }
 
-            if (catObj.GetCategoryName(categoryID, Kernel32.GetThreadLocale(), out string categoryName) == HRESULT.S_OK)
+            if (catObj.GetCategoryName(categoryID, PInvoke.GetThreadLocale(), out string categoryName) == HRESULT.S_OK)
             {
                 return categoryName;
             }

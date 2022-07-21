@@ -1,10 +1,13 @@
-﻿BitBlt
+BitBlt
 CloseEnhMetaFile
 DuplicateHandle
+GetCurrentActCtx
 GetCurrentProcess
 GetCurrentProcessId
 GetCurrentThread
 GetCurrentThreadId
+GetExitCodeThread
+GetThreadLocale
 GlobalAlloc
 GlobalFree
 GlobalLock

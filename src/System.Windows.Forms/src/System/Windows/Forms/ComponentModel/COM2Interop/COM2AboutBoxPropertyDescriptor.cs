@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -170,7 +171,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     HRESULT hr = pDisp.Invoke(
                         Ole32.DispatchID.ABOUTBOX,
                         &g,
-                        Kernel32.GetThreadLocale(),
+                        PInvoke.GetThreadLocale(),
                         Oleaut32.DISPATCH.METHOD,
                         &dispParams,
                         null,

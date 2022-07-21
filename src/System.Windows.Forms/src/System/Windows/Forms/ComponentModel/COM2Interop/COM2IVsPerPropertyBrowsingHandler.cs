@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -78,7 +79,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             // should we localize this?
             string[] pHelpString = new string[1];
-            HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, Kernel32.GetThreadLocale(), null, pHelpString);
+            HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, PInvoke.GetThreadLocale(), null, pHelpString);
             if (hr == HRESULT.S_OK && pHelpString[0] is not null)
             {
                 attrEvent.Add(new DescriptionAttribute(pHelpString[0]));
@@ -149,7 +150,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 // get the localized name, if applicable
                 string[] pNameString = new string[1];
-                HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, Kernel32.GetThreadLocale(), pNameString, null);
+                HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, PInvoke.GetThreadLocale(), pNameString, null);
                 if (hr == HRESULT.S_OK && pNameString[0] is not null)
                 {
                     nameItem.Name = pNameString[0];
