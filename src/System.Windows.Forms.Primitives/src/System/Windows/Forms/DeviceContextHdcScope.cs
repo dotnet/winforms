@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using Windows.Win32;
 using static Interop;
 using Gdi = Windows.Win32.Graphics.Gdi;
 
@@ -190,7 +191,7 @@ namespace System.Windows.Forms
                     using var dcRegion = new Gdi32.RegionScope(HDC);
                     if (!dcRegion.IsNull)
                     {
-                        type = Gdi32.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, Gdi32.RGN.AND);
+                        type = (RegionType)PInvoke.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, Gdi.RGN_COMBINE_MODE.RGN_AND);
                         if (type == RegionType.ERROR)
                         {
                             throw new Win32Exception();
