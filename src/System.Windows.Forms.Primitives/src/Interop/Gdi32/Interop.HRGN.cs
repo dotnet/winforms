@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Buffers;
+using Gdi = Windows.Win32.Graphics.Gdi;
 
 internal static partial class Interop
 {
@@ -19,6 +20,8 @@ internal static partial class Interop
             public static implicit operator HGDIOBJ(HRGN hrgn) => new HGDIOBJ(hrgn.Handle);
             public static explicit operator IntPtr(HRGN hrgn) => hrgn.Handle;
             public static explicit operator HRGN(IntPtr hrgn) => new HRGN(hrgn);
+            public static implicit operator Gdi.HRGN(HRGN hrgn) => new(hrgn.Handle);
+            public static implicit operator HRGN(Gdi.HRGN hrgn) => new(hrgn.Value);
 
             public unsafe RECT[] GetRegionRects()
             {

@@ -4,6 +4,8 @@
 
 using System.Diagnostics;
 using System.Drawing;
+using Windows.Win32;
+using Windows.Win32.Graphics.Gdi;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -75,11 +77,11 @@ namespace System.Windows.Forms
                     {
                         // Find the intersection of our clipping region and the current clipping region (our parent's)
 
-                        RegionType combineResult = Gdi32.CombineRgn(
+                        RegionType combineResult = (RegionType)PInvoke.CombineRgn(
                             hClippingRegion,
                             hClippingRegion,
                             hOriginalClippingRegion,
-                            Gdi32.RGN.AND);
+                            RGN_COMBINE_MODE.RGN_AND);
 
                         Debug.Assert(
                             (combineResult == RegionType.SIMPLEREGION) || (combineResult == RegionType.NULLREGION),

@@ -4,6 +4,7 @@
 
 using System.Diagnostics;
 using System.Drawing;
+using Gdi = Windows.Win32.Graphics.Gdi;
 
 internal static partial class Interop
 {
@@ -98,6 +99,7 @@ internal static partial class Interop
             public bool IsNull => Region.Handle == IntPtr.Zero;
 
             public static implicit operator HRGN(RegionScope regionScope) => regionScope.Region;
+            public static implicit operator Gdi.HRGN(RegionScope regionScope) => regionScope.Region;
 
             /// <summary>
             ///  Creates a GDI+ region for this region.
@@ -117,7 +119,9 @@ internal static partial class Interop
                     DeleteObject(Region);
                 }
 
-                DisposalTracking.SuppressFinalize(this!);
+#if DEBUG
+                GC.SuppressFinalize(this);
+#endif
             }
         }
     }
