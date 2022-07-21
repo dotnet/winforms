@@ -354,14 +354,14 @@ namespace System.Windows.Forms
 
             using var hBitmap = new Gdi32.CreateBitmapScope(8, 8, 1, 1, grayPattern);
 
-            var lb = new Gdi32.LOGBRUSH
+            Gdi.LOGBRUSH lb = new()
             {
-                lbColor = Color.Black,
-                lbStyle = Gdi32.BS.PATTERN,
-                lbHatch = (IntPtr)hBitmap
+                lbStyle = (uint)Gdi32.BS.PATTERN,
+                lbColor = default, // color is ignored since style is BS.PATTERN
+                lbHatch = (nuint)(IntPtr)hBitmap
             };
 
-            return Gdi32.CreateBrushIndirect(ref lb);
+            return PInvoke.CreateBrushIndirect(&lb);
         }
 
         /// <summary>

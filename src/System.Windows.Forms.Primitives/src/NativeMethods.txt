@@ -2,6 +2,7 @@ BitBlt
 CloseEnhMetaFile
 CombineRgn
 CreateBitmap
+CreateBrushIndirect
 DuplicateHandle
 GetCurrentActCtx
 GetCurrentProcess
