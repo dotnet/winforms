@@ -33,11 +33,11 @@ internal static partial class Interop
             }
 
             /// <summary>
-            ///  Creates a bitmap compatible with the given <see cref="HDC"/> via <see cref="CreateCompatibleBitmap"/>
+            ///  Creates a bitmap compatible with the given <see cref="HDC"/> via <see cref="PInvoke.CreateCompatibleBitmap(Windows.Win32.Graphics.Gdi.HDC, int, int)"/>
             /// </summary>
             public CreateBitmapScope(HDC hdc, int cx, int cy)
             {
-                HBitmap = CreateCompatibleBitmap(hdc, cx, cy);
+                HBitmap = PInvoke.CreateCompatibleBitmap(hdc, cx, cy);
             }
 
             public static implicit operator HBITMAP(in CreateBitmapScope scope) => scope.HBitmap;

@@ -3,6 +3,7 @@ CloseEnhMetaFile
 CombineRgn
 CreateBitmap
 CreateBrushIndirect
+CreateCompatibleBitmap
 DuplicateHandle
 GetCurrentActCtx
 GetCurrentProcess
