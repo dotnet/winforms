@@ -49,8 +49,10 @@ internal static class CodeDomCompileHelper
             stream.Position = 0;
             return stream;
         }
-
-        throw new InvalidOperationException();
+        else
+        {
+            throw new InvalidOperationException(string.Join('\n', result.Diagnostics.Select(d => d.GetMessage())));
+        }
     }
 
     internal static Type CompileClass(

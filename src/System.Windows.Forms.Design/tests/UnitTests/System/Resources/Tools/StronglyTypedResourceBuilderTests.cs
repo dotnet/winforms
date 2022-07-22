@@ -4,8 +4,12 @@
 
 using System.CodeDom.Compiler;
 using System.Collections;
+using System.ComponentModel;
+using System.Drawing;
 using Microsoft.CSharp;
+using Newtonsoft.Json.Linq;
 using Xunit;
+using static Interop.Gdi32;
 
 namespace System.Resources.Tools.Tests;
 
@@ -246,6 +250,37 @@ public partial class StronglyTypedResourceBuilderTests
     }
 
     [Fact]
+    public static void Create_StringResource_FromResxWriterFile()
+    {
+        using var temp = TempFile.Create();
+        using (ResXResourceWriter writer = new(temp.Path))
+        {
+            writer.AddResource("TestName", "TestValue");
+            writer.Generate();
+        }
+
+        var compileUnit = StronglyTypedResourceBuilder.Create(
+            resxFile: temp.Path,
+            baseName: "Resources",
+            generatedCodeNamespace: "Namespace",
+            s_cSharpProvider,
+            internalClass: false,
+            out _);
+
+        MemoryStream resourceStream = new();
+        using ResourceWriter resourceWriter = new(resourceStream);
+        resourceWriter.AddResource("TestName", "TestValue");
+        resourceWriter.Generate();
+        resourceStream.Position = 0;
+
+        Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
+        Assert.NotNull(type);
+        var nameProperty = type.GetProperty("TestName");
+        Assert.NotNull(nameProperty);
+        Assert.Equal("TestValue", (string)nameProperty.GetValue(obj: null));
+    }
+
+    [Fact]
     public static void Create_StringResource_FromResxDataNode()
     {
         Hashtable values = new()
@@ -272,5 +307,96 @@ public partial class StronglyTypedResourceBuilderTests
         var nameProperty = type.GetProperty("TestName");
         Assert.NotNull(nameProperty);
         Assert.Equal("TestValue", (string)nameProperty.GetValue(obj: null));
+    }
+
+    [Fact]
+    public static void Create_BitmapResource_FromFile()
+    {
+        const string data = """
+            <data name="Image1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+                <value>Resources\Image1.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+            </data>
+            """;
+
+        using var temp = TempFile.Create(CreateResx(data));
+
+        var compileUnit = StronglyTypedResourceBuilder.Create(
+            resxFile: temp.Path,
+            baseName: "Resources",
+            generatedCodeNamespace: "Namespace",
+            s_cSharpProvider,
+            internalClass: false,
+            out _);
+
+        MemoryStream resourceStream = new();
+        using ResXResourceReader reader = new(temp.Path);
+        var enumerator = reader.GetEnumerator();
+        using ResourceWriter resourceWriter = new(resourceStream);
+
+        while (enumerator.MoveNext())
+        {
+            resourceWriter.AddResource((string)enumerator.Key, enumerator.Value);
+        }
+
+        resourceWriter.Generate();
+        resourceStream.Position = 0;
+
+        Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
+        Assert.NotNull(type);
+        var imageProperty = type.GetProperty("Image1");
+        Assert.NotNull(imageProperty);
+        byte[] resourceBytes = Assert.IsType<byte[]>(imageProperty.GetValue(obj: null));
+
+        var converter = TypeDescriptor.GetConverter(typeof(Bitmap));
+        var result = converter.ConvertFrom(resourceBytes);
+    }
+
+    [Fact]
+    public static void Create_BitmapResource_FromMemory()
+    {
+        using Bitmap bitmap = new(10, 10);
+        var converter = TypeDescriptor.GetConverter(bitmap);
+
+        // StronglyTypedResourceBuilder can't handle embedded byte data, need to investigate further.
+        // (Doing it this way uses the Image TypeConverter to serialize the bitmap as a UUEncoded byte array.)
+        //
+        // using var temp = TempFile.Create();
+        // using (ResXResourceWriter writer = new(temp.Path))
+        // {
+        //     writer.AddResource("Image1", converter.ConvertTo(bitmap, typeof(byte[])));
+        //     writer.Generate();
+        // }
+
+        const string data = """
+            <data name="Image1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+                <value>Resources\Image1.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+            </data>
+            """;
+
+        using var temp = TempFile.Create(CreateResx(data));
+
+        var compileUnit = StronglyTypedResourceBuilder.Create(
+            resxFile: temp.Path,
+            baseName: "Resources",
+            generatedCodeNamespace: "Namespace",
+            s_cSharpProvider,
+            internalClass: false,
+            out _);
+
+        MemoryStream resourceStream = new();
+        using ResourceWriter resourceWriter = new(resourceStream);
+        resourceWriter.AddResource("Image1", converter.ConvertTo(bitmap, typeof(byte[])));
+
+        resourceWriter.Generate();
+
+        resourceStream.Position = 0;
+
+        Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
+        Assert.NotNull(type);
+        var imageProperty = type.GetProperty("Image1");
+        Assert.NotNull(imageProperty);
+        byte[] resourceBytes = Assert.IsType<byte[]>(imageProperty.GetValue(obj: null));
+        Bitmap result = Assert.IsType<Bitmap>(converter.ConvertFrom(resourceBytes));
+        Assert.Equal(result.Size, bitmap.Size);
     }
 }
