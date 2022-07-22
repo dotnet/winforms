@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -57,7 +58,7 @@ namespace System.Windows.Forms
                         eventmsg->paramL = @event.ParamL;
                         eventmsg->paramH = @event.ParamH;
                         eventmsg->hwnd = @event.HWND;
-                        eventmsg->time = Kernel32.GetTickCount();
+                        eventmsg->time = PInvoke.GetTickCount();
                         break;
                     default:
                         if (nCode < 0)

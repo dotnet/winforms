@@ -1920,7 +1920,7 @@ namespace System.Windows.Forms
                         message = User32.WM.SYSKEYDOWN,
                         wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                         lParam = (IntPtr)0x20180001,
-                        time = Kernel32.GetTickCount()
+                        time = PInvoke.GetTickCount()
                     };
                     User32.GetCursorPos(out Point p);
                     msg.pt = p;
@@ -3232,7 +3232,7 @@ namespace System.Windows.Forms
 
         private unsafe void ShowPropertyPageForDispid(Ole32.DispatchID dispid, Guid guid)
         {
-            nint pUnk = Marshal.GetIUnknownForObject(GetOcx());
+            IntPtr pUnk = Marshal.GetIUnknownForObject(GetOcx());
             try
             {
                 fixed (char* pName = Name)
