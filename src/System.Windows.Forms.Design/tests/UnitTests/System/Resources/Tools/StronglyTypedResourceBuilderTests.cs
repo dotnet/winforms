@@ -221,7 +221,7 @@ public partial class StronglyTypedResourceBuilderTests
         resourceWriter.Generate();
         resourceStream.Position = 0;
 
-        Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", null);
+        Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
         Assert.NotNull(type);
         var nameProperty = type.GetProperty("TestName");
         Assert.NotNull(nameProperty);

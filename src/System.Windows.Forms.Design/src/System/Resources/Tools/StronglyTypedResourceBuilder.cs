@@ -50,7 +50,7 @@ namespace System.Resources.Tools
         private const string CultureInfoPropertyName = "Culture";
 
         // When fixing up identifiers, we will replace all these chars with ReplacementChar ('_').
-        private static readonly char[] CharsToReplace = new char[]
+        private static ReadOnlySpan<char> CharsToReplace => new char[]
         {
             ' ', '\u00A0' /* non-breaking space */, '.', ',', ';', '|', '~','@', '#', '%', '^', '&', '*', '+', '-',
             '/', '\\', '<', '>', '?', '[', ']', '(', ')', '{', '}', '\"', '\'', ':', '!'
