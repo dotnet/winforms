@@ -182,6 +182,23 @@ public partial class StronglyTypedResourceBuilderTests
     }
 
     [Fact]
+    public static void Create_MismatchedResxDataNode_Throws()
+    {
+        Hashtable values = new()
+        {
+            { "TestName", new ResXDataNode("WrongName", "TestValue") }
+        };
+
+        Assert.Throws<ArgumentException>(() => StronglyTypedResourceBuilder.Create(
+            resourceList: values,
+            baseName: "Resources",
+            generatedCodeNamespace: "Namespace",
+            s_cSharpProvider,
+            internalClass: false,
+            out _));
+    }
+
+    [Fact]
     public static void Create_EmptyResx()
     {
         using var temp = TempFile.Create(CreateResx());
@@ -209,6 +226,35 @@ public partial class StronglyTypedResourceBuilderTests
         using var temp = TempFile.Create(CreateResx(data));
         var compileUnit = StronglyTypedResourceBuilder.Create(
             resxFile: temp.Path,
+            baseName: "Resources",
+            generatedCodeNamespace: "Namespace",
+            s_cSharpProvider,
+            internalClass: false,
+            out _);
+
+        MemoryStream resourceStream = new();
+        using ResourceWriter resourceWriter = new(resourceStream);
+        resourceWriter.AddResource("TestName", "TestValue");
+        resourceWriter.Generate();
+        resourceStream.Position = 0;
+
+        Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
+        Assert.NotNull(type);
+        var nameProperty = type.GetProperty("TestName");
+        Assert.NotNull(nameProperty);
+        Assert.Equal("TestValue", (string)nameProperty.GetValue(obj: null));
+    }
+
+    [Fact]
+    public static void Create_StringResource_FromResxDataNode()
+    {
+        Hashtable values = new()
+        {
+            { "TestName", new ResXDataNode("TestName", "TestValue") }
+        };
+
+        var compileUnit = StronglyTypedResourceBuilder.Create(
+            resourceList: values,
             baseName: "Resources",
             generatedCodeNamespace: "Namespace",
             s_cSharpProvider,
