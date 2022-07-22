@@ -243,7 +243,7 @@ namespace System.Windows.Forms.Tests
             {
                 if (dataObject.GetData(format) is DragDropFormat dragDropFormat)
                 {
-                    Assert.Equal(0, Kernel32.GlobalSize(dragDropFormat.Medium.unionmember));
+                    Assert.Equal(0, (int)PInvoke.GlobalSize(dragDropFormat.Medium.unionmember));
                     Assert.Null(dragDropFormat.Medium.pUnkForRelease);
                     Assert.Equal(TYMED.TYMED_NULL, dragDropFormat.Medium.tymed);
                     Assert.Equal(IntPtr.Zero, dragDropFormat.Medium.unionmember);
