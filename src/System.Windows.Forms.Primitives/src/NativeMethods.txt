@@ -14,3 +14,9 @@ GlobalFree
 GlobalLock
 GlobalReAlloc
 GlobalUnlock
+GetProcAddress
+GetModuleHandleEx
+GET_MODULE_HANDLE_EX_FLAG*
+GetTickCount
+GlobalSize
+FormatMessage

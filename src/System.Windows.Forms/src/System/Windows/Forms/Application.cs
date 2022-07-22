@@ -15,6 +15,7 @@ using System.Text;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 using Windows.Win32;
+using Foundation = Windows.Win32.Foundation;
 using static Interop;
 using Directory = System.IO.Directory;
 
@@ -102,7 +103,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private static bool InitializeComCtlSupportsVisualStyles()
+        private unsafe static bool InitializeComCtlSupportsVisualStyles()
         {
             if (UseVisualStyles)
             {
@@ -118,20 +119,28 @@ namespace System.Windows.Forms
             //
             // GetModuleHandle  returns a handle to a mapped module without incrementing its
             // reference count.
-            IntPtr hModule = Kernel32.GetModuleHandleW(Libraries.Comctl32);
-            if (hModule != IntPtr.Zero)
+            var hModule = PInvoke.GetModuleHandle(Libraries.Comctl32);
+            string IpProcName = "ImageList_WriteEx";
+            byte[] test = Encoding.ASCII.GetBytes(IpProcName);
+            fixed (byte* ptr = &test[0])
             {
-                return Kernel32.GetProcAddress(hModule, "ImageList_WriteEx") != IntPtr.Zero;
+                if (hModule != 0)
+                {
+                    return PInvoke.GetProcAddress(hModule,(Foundation.PCSTR)ptr) != 0;
+                }
             }
 
             // Load comctl since GetModuleHandle failed to find it
-            hModule = Kernel32.LoadComctl32(StartupPath);
-            if (hModule == IntPtr.Zero)
+            nint ninthModule = Kernel32.LoadComctl32(StartupPath);
+            if (ninthModule == 0)
             {
                 return false;
             }
 
-            return Kernel32.GetProcAddress(hModule, "ImageList_WriteEx") != IntPtr.Zero;
+            fixed (byte* ptr = &test[0])
+            {
+                return PInvoke.GetProcAddress(hModule, (Foundation.PCSTR)ptr) != 0;
+            }
         }
 
         /// <summary>

@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Windows.Win32;
-using Foundation = Windows.Win32.Foundation;
+using Windows.Win32.Foundation;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -23,9 +23,9 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe static bool IsContextActive()
         {
-            Foundation.HANDLE current;
+            HANDLE current;
             return s_contextCreationSucceeded
-                && PInvoke.GetCurrentActCtx(&current) == true
+                && PInvoke.GetCurrentActCtx(&current)
                 && (nint)current == s_hActCtx;
         }
 

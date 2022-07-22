@@ -2400,7 +2400,7 @@ namespace System.Windows.Forms.Design
         {
             bool doubleClick = false;
             int wait = SystemInformation.DoubleClickTime;
-            uint elapsed = Kernel32.GetTickCount() - _lastClickMessageTime;
+            uint elapsed = PInvoke.GetTickCount() - _lastClickMessageTime;
             if (elapsed <= wait)
             {
                 Size dblClick = SystemInformation.DoubleClickSize;
@@ -2417,7 +2417,7 @@ namespace System.Windows.Forms.Design
             {
                 _lastClickMessagePositionX = x;
                 _lastClickMessagePositionY = y;
-                _lastClickMessageTime = Kernel32.GetTickCount();
+                _lastClickMessageTime = PInvoke.GetTickCount();
             }
             else
             {
