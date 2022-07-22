@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -349,7 +350,7 @@ namespace System.Windows.Forms
                             message = User32.WM.SYSKEYDOWN,
                             wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                             lParam = (IntPtr)0x20180001,
-                            time = Kernel32.GetTickCount()
+                            time = PInvoke.GetTickCount()
                         };
 
                         User32.GetCursorPos(out Point p);

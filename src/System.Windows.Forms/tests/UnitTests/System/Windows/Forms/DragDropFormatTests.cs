@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Tests
             {
                 dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, copyData: false);
                 dragDropFormat.Dispose();
-                int handleSize = Kernel32.GlobalSize(dragDropFormat.Medium.unionmember);
+                int handleSize = (int)PInvoke.GlobalSize(dragDropFormat.Medium.unionmember);
                 Assert.Equal(0, handleSize);
                 Assert.Null(dragDropFormat.Medium.pUnkForRelease);
                 Assert.Equal(TYMED.TYMED_NULL, dragDropFormat.Medium.tymed);
