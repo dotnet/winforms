@@ -5878,7 +5878,7 @@ namespace System.Windows.Forms
 
             return isDisposing;
         }
-#nullable disable
+
         /// <summary>
         ///  Returns native child windows sorted according to their TabIndex property order. Controls with the same
         ///  TabIndex remain in original relative child index order (= z-order). Child windows with no corresponding
@@ -5896,7 +5896,7 @@ namespace System.Windows.Forms
                 hWndChild != IntPtr.Zero;
                 hWndChild = User32.GetWindow(hWndChild, User32.GW.HWNDNEXT))
             {
-                Control ctl = FromHandle(hWndChild);
+                Control? ctl = FromHandle(hWndChild);
                 int tabIndex = (ctl is null) ? -1 : ctl.TabIndex;
                 holders.Add(new ControlTabOrderHolder(holders.Count, tabIndex, ctl));
             }
@@ -5935,17 +5935,17 @@ namespace System.Windows.Forms
             Control[] ctls = new Control[holders.Count];
             for (int i = 0; i < holders.Count; i++)
             {
-                ctls[i] = holders[i]._control;
+                ctls[i] = holders[i]._control!;
             }
 
             return ctls;
         }
 
-        internal virtual Control GetFirstChildControlInTabOrder(bool forward)
+        internal virtual Control? GetFirstChildControlInTabOrder(bool forward)
         {
-            ControlCollection ctlControls = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? ctlControls = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
-            Control found = null;
+            Control? found = null;
             if (ctlControls is not null)
             {
                 if (forward)
@@ -5992,7 +5992,7 @@ namespace System.Windows.Forms
                 return ScaledControlFont;
             }
 
-            if (TryGetExplicitlySetFont(out Font font))
+            if (TryGetExplicitlySetFont(out Font? font))
             {
                 return font;
             }
@@ -6012,7 +6012,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            AmbientProperties ambient = AmbientPropertiesService;
+            AmbientProperties? ambient = AmbientPropertiesService;
             if (ambient is not null && ambient.Font is not null)
             {
                 return ambient.Font;
@@ -6022,12 +6022,12 @@ namespace System.Windows.Forms
         }
 
         private protected virtual IList<Rectangle> GetNeighboringToolsRectangles()
-            => ((IKeyboardToolTip)ToolStripControlHost)?.GetNeighboringToolsRectangles() ?? GetOwnNeighboringToolsRectangles();
+            => ((IKeyboardToolTip?)ToolStripControlHost)?.GetNeighboringToolsRectangles() ?? GetOwnNeighboringToolsRectangles();
 
         /// <summary>
         ///  Retrieves the next control in the tab order of child controls.
         /// </summary>
-        public Control GetNextControl(Control ctl, bool forward)
+        public Control? GetNextControl(Control? ctl, bool forward)
         {
             if (!Contains(ctl))
             {
@@ -6036,11 +6036,11 @@ namespace System.Windows.Forms
 
             if (forward)
             {
-                ControlCollection ctlControls = (ControlCollection)ctl.Properties.GetObject(s_controlsCollectionProperty);
+                ControlCollection? ctlControls = (ControlCollection?)ctl!.Properties.GetObject(s_controlsCollectionProperty);
 
                 if (ctlControls is not null && ctlControls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
                 {
-                    Control found = ctl.GetFirstChildControlInTabOrder(/*forward=*/true);
+                    Control? found = ctl.GetFirstChildControlInTabOrder(/*forward=*/true);
                     if (found is not null)
                     {
                         return found;
@@ -6049,18 +6049,17 @@ namespace System.Windows.Forms
 
                 while (ctl != this)
                 {
-                    int targetIndex = ctl._tabIndex;
+                    int targetIndex = ctl!._tabIndex;
                     bool hitCtl = false;
-                    Control found = null;
-                    Control p = ctl._parent;
+                    Control? found = null;
+                    Control? p = ctl._parent;
 
                     // Cycle through the controls in z-order looking for the one with the next highest
                     // tab index.  Because there can be dups, we have to start with the existing tab index and
                     // remember to exclude the current control.
-                    //
                     int parentControlCount = 0;
 
-                    ControlCollection parentControls = (ControlCollection)p.Properties.GetObject(s_controlsCollectionProperty);
+                    ControlCollection? parentControls = (ControlCollection?)p?.Properties.GetObject(s_controlsCollectionProperty);
 
                     if (parentControls is not null)
                     {
@@ -6073,7 +6072,7 @@ namespace System.Windows.Forms
                         // clauses:
 
                         // We are not interested in ourself.
-                        if (parentControls[c] != ctl)
+                        if (parentControls![c] != ctl)
                         {
                             // We are interested in controls with >= tab indexes to ctl.  We must include those
                             // controls with equal indexes to account for duplicate indexes.
@@ -6113,10 +6112,10 @@ namespace System.Windows.Forms
             {
                 if (ctl != this)
                 {
-                    int targetIndex = ctl._tabIndex;
+                    int targetIndex = ctl!._tabIndex;
                     bool hitCtl = false;
-                    Control found = null;
-                    Control parent = ctl._parent;
+                    Control? found = null;
+                    Control? parent = ctl._parent;
 
                     if (parent is null)
                     {
@@ -6124,7 +6123,7 @@ namespace System.Windows.Forms
                             string.Format(SR.ParentPropertyNotSetInGetNextControl, nameof(Control.Parent), ctl));
                     }
 
-                    ControlCollection siblings = GetControlCollection(parent);
+                    ControlCollection? siblings = GetControlCollection(parent);
 
                     if (siblings is null)
                     {
@@ -6207,11 +6206,11 @@ namespace System.Windows.Forms
                 }
 
                 // We found a control.  Walk into this control to find the proper child control within it to select.
-                ControlCollection children = GetControlCollection(ctl);
+                ControlCollection? children = GetControlCollection(ctl);
 
                 while (children is not null && children.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
                 {
-                    Control found = ctl.GetFirstChildControlInTabOrder(forward: false);
+                    Control? found = ctl.GetFirstChildControlInTabOrder(forward: false);
                     if (found is not null)
                     {
                         ctl = found;
@@ -6226,8 +6225,8 @@ namespace System.Windows.Forms
 
             return ctl == this ? null : ctl;
 
-            static ControlCollection GetControlCollection(Control control)
-               => (ControlCollection)control.Properties.GetObject(s_controlsCollectionProperty);
+            static ControlCollection? GetControlCollection(Control control)
+               => (ControlCollection?)control.Properties.GetObject(s_controlsCollectionProperty);
         }
 
         /// <summary>
@@ -6343,7 +6342,7 @@ namespace System.Windows.Forms
         ///  occur, calling update after invalidate will force a
         ///  synchronous paint.
         /// </summary>
-        public void Invalidate(Region region)
+        public void Invalidate(Region? region)
         {
             Invalidate(region, false);
         }
@@ -6354,7 +6353,7 @@ namespace System.Windows.Forms
         ///  occur, calling update after invalidate will force a
         ///  synchronous paint.
         /// </summary>
-        public unsafe void Invalidate(Region region, bool invalidateChildren)
+        public unsafe void Invalidate(Region? region, bool invalidateChildren)
         {
             if (region is null)
             {
@@ -6513,7 +6512,7 @@ namespace System.Windows.Forms
         ///  For all other method calls, you should use one of the invoke methods to marshal
         ///  the call to the control's thread.
         /// </summary>
-        public object Invoke(Delegate method, params object[] args)
+        public object Invoke(Delegate method, params object?[]? args)
         {
             using var scope = MultithreadSafeCallScope.Create();
             Control marshaler = FindMarshalingControl();
@@ -6570,13 +6569,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Worker for invoking marshaled callbacks.
         /// </summary>
-        private static void InvokeMarshaledCallbackHelper(object obj)
+        private static void InvokeMarshaledCallbackHelper(object? obj)
         {
-            ThreadMethodEntry tme = (ThreadMethodEntry)obj;
+            ThreadMethodEntry? tme = (ThreadMethodEntry?)obj;
 
-            if (tme._syncContext is not null)
+            if (tme?._syncContext is not null)
             {
-                SynchronizationContext oldContext = SynchronizationContext.Current;
+                SynchronizationContext? oldContext = SynchronizationContext.Current;
 
                 try
                 {
@@ -6595,8 +6594,13 @@ namespace System.Windows.Forms
             }
         }
 
-        private static void InvokeMarshaledCallbackDo(ThreadMethodEntry tme)
+        private static void InvokeMarshaledCallbackDo(ThreadMethodEntry? tme)
         {
+            if (tme is null)
+            {
+                return;
+            }
+
             // We short-circuit a couple of common cases for speed.
             if (tme._method is EventHandler handler)
             {
@@ -6623,13 +6627,13 @@ namespace System.Windows.Forms
             }
             else if (tme._method is WaitCallback)
             {
-                Debug.Assert(tme._args.Length == 1,
+                Debug.Assert(tme._args!.Length == 1,
                              "Arguments are wrong for WaitCallback");
                 ((WaitCallback)tme._method)(tme._args[0]);
             }
             else
             {
-                tme._retVal = tme._method.DynamicInvoke(tme._args);
+                tme._retVal = tme._method!.DynamicInvoke(tme._args);
             }
         }
 
@@ -6640,12 +6644,15 @@ namespace System.Windows.Forms
         /// </summary>
         private void InvokeMarshaledCallbacks()
         {
-            ThreadMethodEntry current = null;
-            lock (_threadCallbackList)
+            ThreadMethodEntry? current = null;
+            if (_threadCallbackList is not null)
             {
-                if (_threadCallbackList.Count > 0)
+                lock (_threadCallbackList)
                 {
-                    current = _threadCallbackList.Dequeue();
+                    if (_threadCallbackList.Count > 0)
+                    {
+                        current = _threadCallbackList.Dequeue();
+                    }
                 }
             }
 
@@ -6690,15 +6697,18 @@ namespace System.Windows.Forms
                     }
                 }
 
-                lock (_threadCallbackList)
+                if (_threadCallbackList is not null)
                 {
-                    if (_threadCallbackList.Count > 0)
+                    lock (_threadCallbackList)
                     {
-                        current = _threadCallbackList.Dequeue();
-                    }
-                    else
-                    {
-                        current = null;
+                        if (_threadCallbackList.Count > 0)
+                        {
+                            current = _threadCallbackList.Dequeue();
+                        }
+                        else
+                        {
+                            current = null;
+                        }
                     }
                 }
             }
@@ -6734,7 +6744,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsDescendant(Control descendant)
         {
-            Control control = descendant;
+            Control? control = descendant;
             while (control is not null)
             {
                 if (control == this)
@@ -6791,7 +6801,7 @@ namespace System.Windows.Forms
         /// </returns>
         protected virtual bool IsInputChar(char charCode)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.IsInputChar 0x{((int)charCode):X}");
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.IsInputChar 0x{((int)charCode):X}");
 
             int mask = 0;
             if (charCode == (char)(int)Keys.Tab)
@@ -6821,7 +6831,7 @@ namespace System.Windows.Forms
         /// </returns>
         protected virtual bool IsInputKey(Keys keyData)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.IsInputKey {keyData}");
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.IsInputKey {keyData}");
 
             if ((keyData & Keys.Alt) == Keys.Alt)
             {
@@ -6851,7 +6861,7 @@ namespace System.Windows.Forms
         ///  The mnemonic character is the character immediately following the first
         ///  instance of "&amp;" in text
         /// </summary>
-        public static bool IsMnemonic(char charCode, string text)
+        public static bool IsMnemonic(char charCode, string? text)
         {
 #if DEBUG
             if (s_controlKeyboardRouting.TraceVerbose)
@@ -6874,7 +6884,7 @@ namespace System.Windows.Forms
             // Special case handling:
             if (charCode == '&')
             {
-                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...returning false");
+                Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "   ...returning false");
                 return false;
             }
 
@@ -6896,7 +6906,7 @@ namespace System.Windows.Forms
                     }
 
                     char c1 = char.ToUpper(text[pos], CultureInfo.CurrentCulture);
-                    Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"   ...& found... char={c1}");
+                    Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"   ...& found... char={c1}");
                     if (c1 == c2 || char.ToLower(c1, CultureInfo.CurrentCulture) == char.ToLower(c2, CultureInfo.CurrentCulture))
                     {
                         Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...returning true");
@@ -6904,17 +6914,17 @@ namespace System.Windows.Forms
                     }
                 }
 
-                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose && pos == 0, "   ...no & found");
+                Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose && pos == 0, "   ...no & found");
             }
 
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...returning false");
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "   ...returning false");
             return false;
         }
 
         // Checks if this is a container control and will be scaled by parent.
         private static bool IsScaledByParent(Control control)
         {
-            Control parentControl = control.Parent;
+            Control? parentControl = control.Parent;
             while (parentControl is not null and not ContainerControl)
             {
                 parentControl = parentControl.Parent;
@@ -6959,7 +6969,7 @@ namespace System.Windows.Forms
         {
             return DpiHelper.LogicalToDeviceUnits(value, DeviceDpi);
         }
-
+#nullable disable
         /// <summary>
         ///  Create a new bitmap scaled for the device units. When displayed on the device,
         ///  the scaled image will have same size as the original image would have when

@@ -1860,7 +1860,7 @@ namespace System.Windows.Forms
                     firstPanel = panel;
                 }
 
-                if (!forward && firstPanel is not null && ctl.ParentInternal != firstPanel)
+                if (!forward && firstPanel is not null && ctl?.ParentInternal != firstPanel)
                 {
                     //goback to start correct re-ordering ....
                     ctl = firstPanel;
