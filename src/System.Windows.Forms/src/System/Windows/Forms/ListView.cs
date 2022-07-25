@@ -5131,7 +5131,7 @@ namespace System.Windows.Forms
         {
             base.ReleaseUiaProvider(handle);
 
-            if (!OsVersion.IsWindows8OrGreater)
+            if (!OsVersion.IsWindows8OrGreater || !IsAccessibilityObjectCreated)
             {
                 return;
             }
@@ -5143,17 +5143,14 @@ namespace System.Windows.Forms
 
             DefaultGroup.ReleaseUiaProvider();
 
-            for (int i = 0; i < Groups.Count; i++)
+            foreach (ListViewGroup group in Groups)
             {
-                Groups[i].ReleaseUiaProvider();
+                group.ReleaseUiaProvider();
             }
 
-            if (_columnHeaders is not null)
+            foreach (ColumnHeader columnHeader in Columns)
             {
-                for (int i = 0; i < _columnHeaders.Length; i++)
-                {
-                    _columnHeaders[i].ReleaseUiaProvider();
-                }
+                columnHeader.ReleaseUiaProvider();
             }
         }
 

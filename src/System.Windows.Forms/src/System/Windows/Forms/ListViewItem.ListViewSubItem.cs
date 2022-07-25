@@ -247,12 +247,13 @@ namespace System.Windows.Forms
             {
             }
 
-            internal virtual void ReleaseUiaProvider()
+            internal void ReleaseUiaProvider()
             {
                 if (OsVersion.IsWindows8OrGreater && _accessibilityObject is not null)
                 {
                     HRESULT result = UiaCore.UiaDisconnectProvider(_accessibilityObject);
                     Debug.Assert(result == HRESULT.S_OK);
+                    _accessibilityObject = null;
                 }
             }
 

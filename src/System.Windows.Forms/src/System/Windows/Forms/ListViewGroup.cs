@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     [DesignTimeVisible(false)]
     [DefaultProperty(nameof(Header))]
     [Serializable] // This type is participating in resx serialization scenarios.
-    public partial class ListViewGroup : ISerializable
+    public sealed partial class ListViewGroup : ISerializable
     {
         private string? _header;
         private HorizontalAlignment _headerAlignment = HorizontalAlignment.Left;
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates a ListViewItem object from an Stream.
         /// </summary>
-        protected ListViewGroup(SerializationInfo info, StreamingContext context) : this()
+        private ListViewGroup(SerializationInfo info, StreamingContext context) : this()
         {
             Deserialize(info);
         }
@@ -418,12 +418,13 @@ namespace System.Windows.Forms
             return state.HasFlag(LVGS.COLLAPSED) ? ListViewGroupCollapsedState.Collapsed : ListViewGroupCollapsedState.Expanded;
         }
 
-        internal virtual void ReleaseUiaProvider()
+        internal void ReleaseUiaProvider()
         {
             if (OsVersion.IsWindows8OrGreater && _accessibilityObject is ListViewGroupAccessibleObject accessibleObject)
             {
                 HRESULT result = UiaCore.UiaDisconnectProvider(accessibleObject);
                 Debug.Assert(result == HRESULT.S_OK);
+                _accessibilityObject = null;
             }
         }
 

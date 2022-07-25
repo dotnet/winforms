@@ -484,12 +484,13 @@ namespace System.Windows.Forms
             base.Dispose(disposing);
         }
 
-        internal virtual void ReleaseUiaProvider()
+        internal void ReleaseUiaProvider()
         {
             if (OsVersion.IsWindows8OrGreater && _accessibilityObject is not null)
             {
                 HRESULT result = UiaCore.UiaDisconnectProvider(AccessibilityObject);
                 Debug.Assert(result == HRESULT.S_OK);
+                _accessibilityObject = null;
             }
         }
 

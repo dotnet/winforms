@@ -1288,14 +1288,15 @@ namespace System.Windows.Forms.Tests
         public void ListViewGroupAccessibleObject_IsDisconnected_WhenListViewReleasesUiaProvider()
         {
             using ListView listView = new();
-            listView.TestAccessor().Dynamic._defaultGroup = new AccessibilityObjectDisconnectTrackingListViewGroup();
-            AccessibilityObjectDisconnectTrackingListViewGroup group = new();
+            ListViewGroup group = new();
             listView.Groups.Add(group);
+            EnforceAccessibleObjectCreation(group);
+            EnforceAccessibleObjectCreation(listView.DefaultGroup);
 
             listView.ReleaseUiaProvider(listView.Handle);
 
-            Assert.True(group.IsAccessibilityObjectDisconnected);
-            Assert.True(listView.TestAccessor().Dynamic.DefaultGroup.IsAccessibilityObjectDisconnected);
+            Assert.Null(group.TestAccessor().Dynamic._accessibilityObject);
+            Assert.Null(listView.DefaultGroup.TestAccessor().Dynamic._accessibilityObject);
             Assert.True(listView.IsHandleCreated);
         }
 
@@ -1303,12 +1304,13 @@ namespace System.Windows.Forms.Tests
         public void ListViewGroupAccessibleObject_IsDisconnected_WhenGroupsAreCleared()
         {
             using ListView listView = new();
-            AccessibilityObjectDisconnectTrackingListViewGroup group = new();
+            ListViewGroup group = new();
             listView.Groups.Add(group);
+            EnforceAccessibleObjectCreation(group);
 
             listView.Groups.Clear();
 
-            Assert.True(group.IsAccessibilityObjectDisconnected);
+            Assert.Null(group.TestAccessor().Dynamic._accessibilityObject);
             Assert.False(listView.IsHandleCreated);
         }
 
@@ -1316,28 +1318,20 @@ namespace System.Windows.Forms.Tests
         public void ListViewGroupAccessibleObject_IsDisconnected_WhenGroupIsRemoved()
         {
             using ListView listView = new();
-            AccessibilityObjectDisconnectTrackingListViewGroup group = new();
+            ListViewGroup group = new();
             listView.Groups.Add(group);
+            EnforceAccessibleObjectCreation(group);
 
             listView.Groups.Remove(group);
 
-            Assert.True(group.IsAccessibilityObjectDisconnected);
+            Assert.Null(group.TestAccessor().Dynamic._accessibilityObject);
             Assert.False(listView.IsHandleCreated);
         }
 
-        private class AccessibilityObjectDisconnectTrackingListViewGroup : ListViewGroup
+        private static void EnforceAccessibleObjectCreation(ListViewGroup group)
         {
-            public AccessibilityObjectDisconnectTrackingListViewGroup() : base()
-            {
-            }
-
-            public bool IsAccessibilityObjectDisconnected { get; private set; }
-
-            internal override void ReleaseUiaProvider()
-            {
-                base.ReleaseUiaProvider();
-                IsAccessibilityObjectDisconnected = true;
-            }
+            _ = group.AccessibilityObject;
+            Assert.NotNull(group.TestAccessor().Dynamic._accessibilityObject);
         }
 
         private ListView GetListViewItemWithInvisibleItems(View view)

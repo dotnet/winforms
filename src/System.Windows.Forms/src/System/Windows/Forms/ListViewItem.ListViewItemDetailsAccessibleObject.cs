@@ -127,6 +127,8 @@ namespace System.Windows.Forms
                     HRESULT result = UiaCore.UiaDisconnectProvider(accessibleObject);
                     Debug.Assert(result == HRESULT.S_OK);
                 }
+
+                _listViewSubItemAccessibleObjects.Clear();
             }
         }
     }

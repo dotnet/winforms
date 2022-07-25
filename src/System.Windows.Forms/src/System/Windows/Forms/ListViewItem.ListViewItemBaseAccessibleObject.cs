@@ -225,9 +225,9 @@ namespace System.Windows.Forms
 
             internal virtual void ReleaseChildUiaProviders()
             {
-                for (int i = 0; i < _owningItem.SubItemCount; i++)
+                foreach (ListViewSubItem subItem in _owningItem.SubItems)
                 {
-                    _owningItem.SubItems[i].ReleaseUiaProvider();
+                    subItem.ReleaseUiaProvider();
                 }
             }
 

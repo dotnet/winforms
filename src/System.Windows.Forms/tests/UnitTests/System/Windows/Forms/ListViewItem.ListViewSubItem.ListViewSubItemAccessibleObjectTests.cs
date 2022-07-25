@@ -990,16 +990,14 @@ namespace System.Windows.Forms.Tests
         {
             using ListView listView = new();
             ListViewItem listViewItem = new();
-            AccessibilityObjectDisconnectTrackingListViewSubItem listViewSubItem = new();
+            ListViewItem.ListViewSubItem listViewSubItem = new();
             listViewItem.SubItems.Add(listViewSubItem);
             listView.Items.Add(listViewItem);
-
-            // Enforce accessible object creation.
-            _ = listViewItem.AccessibilityObject;
+            EnforceAccessibleObjectCreation(listViewItem);
 
             listView.ReleaseUiaProvider(listView.Handle);
 
-            Assert.True(listViewSubItem.IsAccessibilityObjectDisconnected);
+            Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
             Assert.True(listView.IsHandleCreated);
         }
 
@@ -1008,16 +1006,14 @@ namespace System.Windows.Forms.Tests
         {
             using ListView listView = new();
             ListViewItem listViewItem = new();
-            AccessibilityObjectDisconnectTrackingListViewSubItem listViewSubItem = new();
+            ListViewItem.ListViewSubItem listViewSubItem = new();
             listViewItem.SubItems.Add(listViewSubItem);
             listView.Items.Add(listViewItem);
-
-            // Enforce accessible object creation.
-            _ = listViewItem.AccessibilityObject;
+            EnforceAccessibleObjectCreation(listViewItem);
 
             listView.Clear();
 
-            Assert.True(listViewSubItem.IsAccessibilityObjectDisconnected);
+            Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
             Assert.False(listView.IsHandleCreated);
         }
 
@@ -1026,16 +1022,14 @@ namespace System.Windows.Forms.Tests
         {
             using ListView listView = new();
             ListViewItem listViewItem = new();
-            AccessibilityObjectDisconnectTrackingListViewSubItem listViewSubItem = new();
+            ListViewItem.ListViewSubItem listViewSubItem = new();
             listViewItem.SubItems.Add(listViewSubItem);
             listView.Items.Add(listViewItem);
-
-            // Enforce accessible object creation.
-            _ = listViewItem.AccessibilityObject;
+            EnforceAccessibleObjectCreation(listViewItem);
 
             listView.Items.RemoveAt(0);
 
-            Assert.True(listViewSubItem.IsAccessibilityObjectDisconnected);
+            Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
             Assert.False(listView.IsHandleCreated);
         }
 
@@ -1044,16 +1038,14 @@ namespace System.Windows.Forms.Tests
         {
             using ListView listView = new();
             ListViewItem listViewItem = new();
-            AccessibilityObjectDisconnectTrackingListViewSubItem listViewSubItem = new();
+            ListViewItem.ListViewSubItem listViewSubItem = new();
             listViewItem.SubItems.Add(listViewSubItem);
             listView.Items.Add(listViewItem);
-
-            // Enforce accessible object creation.
-            _ = listViewItem.AccessibilityObject;
+            EnforceAccessibleObjectCreation(listViewItem);
 
             listView.Items[0].SubItems.Remove(listViewSubItem);
 
-            Assert.True(listViewSubItem.IsAccessibilityObjectDisconnected);
+            Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
             Assert.False(listView.IsHandleCreated);
         }
 
@@ -1062,16 +1054,14 @@ namespace System.Windows.Forms.Tests
         {
             using ListView listView = new();
             ListViewItem listViewItem = new();
-            AccessibilityObjectDisconnectTrackingListViewSubItem listViewSubItem = new();
+            ListViewItem.ListViewSubItem listViewSubItem = new();
             listViewItem.SubItems.Add(listViewSubItem);
             listView.Items.Add(listViewItem);
-
-            // Enforce accessible object creation.
-            _ = listViewItem.AccessibilityObject;
+            EnforceAccessibleObjectCreation(listViewItem);
 
             listView.Items[0].SubItems.Clear();
 
-            Assert.True(listViewSubItem.IsAccessibilityObjectDisconnected);
+            Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
             Assert.False(listView.IsHandleCreated);
         }
 
@@ -1080,16 +1070,14 @@ namespace System.Windows.Forms.Tests
         {
             using ListView listView = new();
             ListViewItem listViewItem = new();
-            AccessibilityObjectDisconnectTrackingListViewSubItem listViewSubItem = new();
+            ListViewItem.ListViewSubItem listViewSubItem = new();
             listViewItem.SubItems.Add(listViewSubItem);
             listView.Items.Add(listViewItem);
-
-            // Enforce accessible object creation.
-            _ = listViewItem.AccessibilityObject;
+            EnforceAccessibleObjectCreation(listViewItem);
 
             listView.Items[0] = new ListViewItem();
 
-            Assert.True(listViewSubItem.IsAccessibilityObjectDisconnected);
+            Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
             Assert.False(listView.IsHandleCreated);
         }
 
@@ -1098,32 +1086,26 @@ namespace System.Windows.Forms.Tests
         {
             using ListView listView = new();
             ListViewItem listViewItem = new();
-            AccessibilityObjectDisconnectTrackingListViewSubItem listViewSubItem = new();
+            ListViewItem.ListViewSubItem listViewSubItem = new();
             listViewItem.SubItems.Add(listViewSubItem);
             listView.Items.Add(listViewItem);
-
-            // Enforce accessible object creation.
-            _ = listViewItem.AccessibilityObject;
+            EnforceAccessibleObjectCreation(listViewItem);
 
             int subItemIndex = listView.Items[0].SubItems.IndexOf(listViewSubItem);
             listView.Items[0].SubItems[subItemIndex] = new ListViewItem.ListViewSubItem();
 
-            Assert.True(listViewSubItem.IsAccessibilityObjectDisconnected);
+            Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
             Assert.False(listView.IsHandleCreated);
         }
 
-        private class AccessibilityObjectDisconnectTrackingListViewSubItem : ListViewItem.ListViewSubItem
+        private static void EnforceAccessibleObjectCreation(ListViewItem item)
         {
-            public AccessibilityObjectDisconnectTrackingListViewSubItem() : base()
+            _ = item.AccessibilityObject;
+            Assert.NotNull(item.TestAccessor().Dynamic._accessibilityObject);
+            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
             {
-            }
-
-            public bool IsAccessibilityObjectDisconnected { get; private set; }
-
-            internal override void ReleaseUiaProvider()
-            {
-                base.ReleaseUiaProvider();
-                IsAccessibilityObjectDisconnected = true;
+                _ = subItem.AccessibilityObject;
+                Assert.NotNull(subItem.TestAccessor().Dynamic._accessibilityObject);
             }
         }
     }

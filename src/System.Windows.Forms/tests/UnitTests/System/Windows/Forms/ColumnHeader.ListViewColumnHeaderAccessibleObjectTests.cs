@@ -43,12 +43,14 @@ namespace System.Windows.Forms.Tests
         public void ListViewColumnHeaderAccessibleObject_IsDisconnected_WhenListViewReleasesUiaProvider()
         {
             using ListView listView = new();
-            AccessibilityObjectDisconnectTrackingColumnHeader columnHeader = new();
+            using ColumnHeader columnHeader = new();
             listView.Columns.Add(columnHeader);
+            EnforceAccessibleObjectCreation(columnHeader);
+            _ = listView.AccessibilityObject;
 
             listView.ReleaseUiaProvider(listView.Handle);
 
-            Assert.True(columnHeader.IsAccessibilityObjectDisconnected);
+            Assert.Null(columnHeader.TestAccessor().Dynamic._accessibilityObject);
             Assert.True(listView.IsHandleCreated);
         }
 
@@ -56,12 +58,13 @@ namespace System.Windows.Forms.Tests
         public void ListViewColumnHeaderAccessibleObject_IsDisconnected_WhenListViewIsCleared()
         {
             using ListView listView = new();
-            AccessibilityObjectDisconnectTrackingColumnHeader columnHeader = new();
+            using ColumnHeader columnHeader = new();
             listView.Columns.Add(columnHeader);
+            EnforceAccessibleObjectCreation(columnHeader);
 
             listView.Clear();
 
-            Assert.True(columnHeader.IsAccessibilityObjectDisconnected);
+            Assert.Null(columnHeader.TestAccessor().Dynamic._accessibilityObject);
             Assert.False(listView.IsHandleCreated);
         }
 
@@ -69,12 +72,13 @@ namespace System.Windows.Forms.Tests
         public void ListViewColumnHeaderAccessibleObject_IsDisconnected_WhenColumnsAreCleared()
         {
             using ListView listView = new();
-            AccessibilityObjectDisconnectTrackingColumnHeader columnHeader = new();
+            using ColumnHeader columnHeader = new();
             listView.Columns.Add(columnHeader);
+            EnforceAccessibleObjectCreation(columnHeader);
 
             listView.Columns.Clear();
 
-            Assert.True(columnHeader.IsAccessibilityObjectDisconnected);
+            Assert.Null(columnHeader.TestAccessor().Dynamic._accessibilityObject);
             Assert.False(listView.IsHandleCreated);
         }
 
@@ -82,28 +86,20 @@ namespace System.Windows.Forms.Tests
         public void ListViewColumnHeaderAccessibleObject_IsDisconnected_WhenColumnIsRemoved()
         {
             using ListView listView = new();
-            AccessibilityObjectDisconnectTrackingColumnHeader columnHeader = new();
+            using ColumnHeader columnHeader = new();
             listView.Columns.Add(columnHeader);
+            EnforceAccessibleObjectCreation(columnHeader);
 
             listView.Columns.Remove(columnHeader);
 
-            Assert.True(columnHeader.IsAccessibilityObjectDisconnected);
+            Assert.Null(columnHeader.TestAccessor().Dynamic._accessibilityObject);
             Assert.False(listView.IsHandleCreated);
         }
 
-        private class AccessibilityObjectDisconnectTrackingColumnHeader : ColumnHeader
+        private static void EnforceAccessibleObjectCreation(ColumnHeader columnHeader)
         {
-            public AccessibilityObjectDisconnectTrackingColumnHeader() : base()
-            {
-            }
-
-            public bool IsAccessibilityObjectDisconnected { get; private set; }
-
-            internal override void ReleaseUiaProvider()
-            {
-                base.ReleaseUiaProvider();
-                IsAccessibilityObjectDisconnected = true;
-            }
+            _ = columnHeader.AccessibilityObject;
+            Assert.NotNull(columnHeader.TestAccessor().Dynamic._accessibilityObject);
         }
     }
 }

@@ -992,7 +992,7 @@ namespace System.Windows.Forms
             KeyboardToolTipStateMachine.Instance.Hook(this, listView.KeyboardToolTip);
         }
 
-        internal virtual void ReleaseUiaProvider()
+        internal void ReleaseUiaProvider()
         {
             if (!OsVersion.IsWindows8OrGreater || !IsAccessibilityObjectCreated)
             {
@@ -1006,6 +1006,7 @@ namespace System.Windows.Forms
 
             HRESULT result = UiaCore.UiaDisconnectProvider(AccessibilityObject);
             Debug.Assert(result == HRESULT.S_OK);
+            _accessibilityObject = null;
         }
 
         /// <summary>

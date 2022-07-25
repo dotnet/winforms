@@ -11,7 +11,6 @@ System.Windows.Forms.IWin32Window.Handle.get -> nint
 System.Windows.Forms.IWindowTarget.OnHandleChange(nint newHandle) -> void
 System.Windows.Forms.ImageList.Handle.get -> nint
 System.Windows.Forms.InputLanguage.Handle.get -> nint
-System.Windows.Forms.ListViewGroup.ListViewGroup(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
 System.Windows.Forms.NativeWindow.AssignHandle(nint handle) -> void
 System.Windows.Forms.NativeWindow.Handle.get -> nint
 System.Windows.Forms.TaskDialog.Handle.get -> nint
