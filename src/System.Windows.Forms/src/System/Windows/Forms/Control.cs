@@ -1571,7 +1571,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal virtual void NotifyValidationResult(object sender, CancelEventArgs ev)
+        internal virtual void NotifyValidationResult(object? sender, CancelEventArgs ev)
         {
             ValidationCancelled = ev.Cancel;
         }
@@ -6742,7 +6742,7 @@ namespace System.Windows.Forms
         ///  The method returns true if "descendant" (the argument) is a descendant
         ///  of "this". I'd expect it to be the other way around, but oh well too late.
         /// </summary>
-        internal bool IsDescendant(Control descendant)
+        internal bool IsDescendant(Control? descendant)
         {
             Control? control = descendant;
             while (control is not null)

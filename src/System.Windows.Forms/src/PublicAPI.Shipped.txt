@@ -52,14 +52,14 @@
 ~override System.Windows.Forms.ComboBox.Text.get -> string
 ~override System.Windows.Forms.ComboBox.Text.set -> void
 ~override System.Windows.Forms.ComboBox.ToString() -> string
-~override System.Windows.Forms.ContainerControl.BindingContext.get -> System.Windows.Forms.BindingContext
-~override System.Windows.Forms.ContainerControl.BindingContext.set -> void
-~override System.Windows.Forms.ContainerControl.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.ContainerControl.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ContainerControl.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~override System.Windows.Forms.ContainerControl.OnMove(System.EventArgs e) -> void
-~override System.Windows.Forms.ContainerControl.OnParentChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ContainerControl.OnResize(System.EventArgs e) -> void
+override System.Windows.Forms.ContainerControl.BindingContext.get -> System.Windows.Forms.BindingContext?
+override System.Windows.Forms.ContainerControl.BindingContext.set -> void
+override System.Windows.Forms.ContainerControl.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.ContainerControl.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ContainerControl.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
+override System.Windows.Forms.ContainerControl.OnMove(System.EventArgs! e) -> void
+override System.Windows.Forms.ContainerControl.OnParentChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ContainerControl.OnResize(System.EventArgs! e) -> void
 ~override System.Windows.Forms.ControlBindingsCollection.AddCore(System.Windows.Forms.Binding dataBinding) -> void
 ~override System.Windows.Forms.ControlBindingsCollection.RemoveCore(System.Windows.Forms.Binding dataBinding) -> void
 ~override System.Windows.Forms.CurrencyManager.Current.get -> object
@@ -888,9 +888,9 @@ static System.Windows.Forms.Control.IsMnemonic(char charCode, string? text) -> b
 ~System.Windows.Forms.ComboBox.SelectedText.set -> void
 ~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.LoadState(Microsoft.Win32.RegistryKey key) -> void
 ~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.SaveState(Microsoft.Win32.RegistryKey key) -> void
-~System.Windows.Forms.ContainerControl.ActiveControl.get -> System.Windows.Forms.Control
-~System.Windows.Forms.ContainerControl.ActiveControl.set -> void
-~System.Windows.Forms.ContainerControl.ParentForm.get -> System.Windows.Forms.Form
+System.Windows.Forms.ContainerControl.ActiveControl.get -> System.Windows.Forms.Control?
+System.Windows.Forms.ContainerControl.ActiveControl.set -> void
+System.Windows.Forms.ContainerControl.ParentForm.get -> System.Windows.Forms.Form?
 System.Windows.Forms.Control.BeginInvoke(System.Delegate! method, params object?[]? args) -> System.IAsyncResult!
 System.Windows.Forms.Control.Contains(System.Windows.Forms.Control? ctl) -> bool
 System.Windows.Forms.Control.CreateGraphics() -> System.Drawing.Graphics!
@@ -1271,9 +1271,9 @@ System.Windows.Forms.IBindableComponent.BindingContext.get -> System.Windows.For
 System.Windows.Forms.IBindableComponent.BindingContext.set -> void
 System.Windows.Forms.IBindableComponent.DataBindings.get -> System.Windows.Forms.ControlBindingsCollection!
 ~System.Windows.Forms.IComponentEditorPageSite.GetControl() -> System.Windows.Forms.Control
-~System.Windows.Forms.IContainerControl.ActivateControl(System.Windows.Forms.Control active) -> bool
-~System.Windows.Forms.IContainerControl.ActiveControl.get -> System.Windows.Forms.Control
-~System.Windows.Forms.IContainerControl.ActiveControl.set -> void
+System.Windows.Forms.IContainerControl.ActivateControl(System.Windows.Forms.Control! active) -> bool
+System.Windows.Forms.IContainerControl.ActiveControl.get -> System.Windows.Forms.Control?
+System.Windows.Forms.IContainerControl.ActiveControl.set -> void
 ~System.Windows.Forms.ICurrencyManagerProvider.CurrencyManager.get -> System.Windows.Forms.CurrencyManager
 ~System.Windows.Forms.ICurrencyManagerProvider.GetRelatedCurrencyManager(string dataMember) -> System.Windows.Forms.CurrencyManager
 ~System.Windows.Forms.IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing(System.Windows.Forms.Control editingControl) -> void
@@ -1800,7 +1800,7 @@ System.Windows.Forms.ToolStripPanel.Rows.get -> System.Windows.Forms.ToolStripPa
 ~virtual System.Windows.Forms.ComboBox.OnSelectedItemChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ComboBox.OnSelectionChangeCommitted(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ComboBox.OnTextUpdate(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ContainerControl.OnAutoValidateChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ContainerControl.OnAutoValidateChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 virtual System.Windows.Forms.Control.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
 ~virtual System.Windows.Forms.Control.OnAutoSizeChanged(System.EventArgs e) -> void
@@ -5741,7 +5741,7 @@ System.Windows.Forms.ContainerControl.AutoScaleDimensions.set -> void
 System.Windows.Forms.ContainerControl.AutoScaleFactor.get -> System.Drawing.SizeF
 System.Windows.Forms.ContainerControl.AutoScaleMode.get -> System.Windows.Forms.AutoScaleMode
 System.Windows.Forms.ContainerControl.AutoScaleMode.set -> void
-System.Windows.Forms.ContainerControl.AutoValidateChanged -> System.EventHandler
+System.Windows.Forms.ContainerControl.AutoValidateChanged -> System.EventHandler?
 System.Windows.Forms.ContainerControl.ContainerControl() -> void
 System.Windows.Forms.ContainerControl.CurrentAutoScaleDimensions.get -> System.Drawing.SizeF
 System.Windows.Forms.ContainerControl.PerformAutoScale() -> void
@@ -9891,7 +9891,7 @@ System.Windows.Forms.ScrollableControl.HScroll.get -> bool
 System.Windows.Forms.ScrollableControl.HScroll.set -> void
 System.Windows.Forms.ScrollableControl.Scroll -> System.Windows.Forms.ScrollEventHandler?
 System.Windows.Forms.ScrollableControl.ScrollableControl() -> void
-System.Windows.Forms.ScrollableControl.ScrollControlIntoView(System.Windows.Forms.Control! activeControl) -> void
+System.Windows.Forms.ScrollableControl.ScrollControlIntoView(System.Windows.Forms.Control? activeControl) -> void
 System.Windows.Forms.ScrollableControl.SetAutoScrollMargin(int x, int y) -> void
 System.Windows.Forms.ScrollableControl.SetDisplayRectLocation(int x, int y) -> void
 System.Windows.Forms.ScrollableControl.SetScrollState(int bit, bool value) -> void
