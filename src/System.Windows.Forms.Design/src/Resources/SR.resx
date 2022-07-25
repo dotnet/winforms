@@ -1309,7 +1309,7 @@ Press Ctrl+Enter to accept Text.</value>
     <value>   Returns the cached ResourceManager instance used by this class.</value>
   </data>
   <data name="StringPropertyComment" xml:space="preserve">
-    <value>   A strongly-typed resource class, for looking up localized strings, etc.</value>
+    <value>    Looks up a localized string similar to {0}.</value>
   </data>
   <data name="StringPropertyTruncatedComment" xml:space="preserve">
     <value> {0} [rest of string was truncated]";</value>
