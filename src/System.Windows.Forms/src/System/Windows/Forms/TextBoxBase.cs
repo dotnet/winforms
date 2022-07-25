@@ -1562,7 +1562,7 @@ namespace System.Windows.Forms
                 _doubleClickFired = false;
             }
 
-            base.OnMouseUp(mevent);
+            base.OnMouseUp(mevent!);
         }
 
         protected virtual void OnMultilineChanged(EventArgs e)

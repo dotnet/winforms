@@ -625,7 +625,7 @@ namespace System.Windows.Forms
             }
 
             AdjustFormScrollbars(AutoScroll);
-            base.OnLayout(levent);
+            base.OnLayout(levent!);
         }
 
         /// <summary>

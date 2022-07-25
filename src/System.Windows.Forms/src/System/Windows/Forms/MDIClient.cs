@@ -382,7 +382,7 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
         }
 
-        internal override void OnInvokedSetScrollPosition(object sender, EventArgs e)
+        internal override void OnInvokedSetScrollPosition(object? sender, EventArgs e)
         {
             Application.Idle += new EventHandler(OnIdle); //do this on idle (it must be mega-delayed).
         }
