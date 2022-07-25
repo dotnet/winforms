@@ -1,6 +1,9 @@
 ﻿BitBlt
 CloseEnhMetaFile
 CombineRgn
+CreateBitmap
+CreateBrushIndirect
+CreateCompatibleBitmap
 DuplicateHandle
 FormatMessage
 GET_MODULE_HANDLE_EX_FLAG*

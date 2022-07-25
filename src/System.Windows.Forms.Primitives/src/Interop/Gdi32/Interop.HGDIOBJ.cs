@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Gdi = Windows.Win32.Graphics.Gdi;
+
 internal static partial class Interop
 {
     internal static partial class Gdi32
@@ -16,6 +18,7 @@ internal static partial class Interop
 
             public static explicit operator nint(HGDIOBJ hgdiobj) => hgdiobj.Handle;
             public static explicit operator HGDIOBJ(nint hgdiobj) => new(hgdiobj);
+            public static implicit operator HGDIOBJ(Gdi.HBITMAP hBITMAP) => new(hBITMAP.Value);
 
             public static bool operator ==(HGDIOBJ value1, HGDIOBJ value2) => value1.Handle == value2.Handle;
             public static bool operator !=(HGDIOBJ value1, HGDIOBJ value2) => value1.Handle != value2.Handle;
