@@ -1280,10 +1280,10 @@ System.Windows.Forms.IContainerControl.ActiveControl.set -> void
 ~System.Windows.Forms.IDataGridViewEditingCell.EditingCellFormattedValue.get -> object
 ~System.Windows.Forms.IDataGridViewEditingCell.EditingCellFormattedValue.set -> void
 ~System.Windows.Forms.IDataGridViewEditingCell.GetEditingCellFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
-~System.Windows.Forms.IDropTarget.OnDragDrop(System.Windows.Forms.DragEventArgs e) -> void
-~System.Windows.Forms.IDropTarget.OnDragEnter(System.Windows.Forms.DragEventArgs e) -> void
-~System.Windows.Forms.IDropTarget.OnDragLeave(System.EventArgs e) -> void
-~System.Windows.Forms.IDropTarget.OnDragOver(System.Windows.Forms.DragEventArgs e) -> void
+System.Windows.Forms.IDropTarget.OnDragDrop(System.Windows.Forms.DragEventArgs! e) -> void
+System.Windows.Forms.IDropTarget.OnDragEnter(System.Windows.Forms.DragEventArgs! e) -> void
+System.Windows.Forms.IDropTarget.OnDragLeave(System.EventArgs! e) -> void
+System.Windows.Forms.IDropTarget.OnDragOver(System.Windows.Forms.DragEventArgs! e) -> void
 ~System.Windows.Forms.IFileReaderService.OpenFileFromSource(string relativePath) -> System.IO.Stream
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
 System.Windows.Forms.LayoutEventArgs.AffectedComponent.get -> System.ComponentModel.IComponent?
