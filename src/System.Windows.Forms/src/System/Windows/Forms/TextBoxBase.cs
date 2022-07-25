@@ -1599,7 +1599,12 @@ namespace System.Windows.Forms
         }
 
         private protected virtual void RaiseAccessibilityTextChangedEvent()
-            => AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextChangedEventId);
+        {
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextChangedEventId);
+            }
+        }
 
         /// <summary>
         ///  Returns the character nearest to the given point.

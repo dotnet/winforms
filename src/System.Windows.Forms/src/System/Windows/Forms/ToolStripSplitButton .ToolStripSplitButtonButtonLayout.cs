@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -19,9 +17,10 @@ namespace System.Windows.Forms
         {
             readonly ToolStripSplitButton _owner;
 
-            public ToolStripSplitButtonButtonLayout(ToolStripSplitButton owner) : base(owner.SplitButtonButton)
+            public ToolStripSplitButtonButtonLayout(ToolStripSplitButton owner)
+                : base(owner.SplitButtonButton)
             {
-                this._owner = owner;
+                _owner = owner;
             }
 
             protected override ToolStripItem Owner

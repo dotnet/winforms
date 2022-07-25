@@ -4,7 +4,7 @@
 
 using System.Windows.Forms;
 
-namespace AccessibilityTests
+namespace Accessibility_Core_App
 {
     public partial class RemainingControls : Form
     {

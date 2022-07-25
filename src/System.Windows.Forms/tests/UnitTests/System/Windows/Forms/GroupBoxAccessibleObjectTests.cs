@@ -119,5 +119,16 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
             Assert.False(groupBox.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void GroupBoxAccessibleObject_GetPropertyValue_AutomationId_ReturnsExpected()
+        {
+            using GroupBox ownerControl = new() { Name = "test name" };
+            string expected = ownerControl.Name;
+            object actual = ownerControl.AccessibilityObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId);
+
+            Assert.Equal(expected, actual);
+            Assert.False(ownerControl.IsHandleCreated);
+        }
     }
 }

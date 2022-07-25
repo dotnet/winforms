@@ -108,7 +108,7 @@ namespace System.Windows.Forms.UITests
             var rect = control.DisplayRectangle;
             var centerOfRect = new Point(rect.Left, rect.Top) + new Size(rect.Width / 2, rect.Height / 2);
             var centerOnScreen = control.PointToScreen(centerOfRect);
-            await MoveMouseAsync(control.FindForm(), centerOnScreen);
+            await MoveMouseAsync(control.FindForm()!, centerOnScreen);
         }
 
         protected Point ToVirtualPoint(Point point)

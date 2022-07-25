@@ -1571,7 +1571,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal virtual void NotifyValidationResult(object sender, CancelEventArgs ev)
+        internal virtual void NotifyValidationResult(object? sender, CancelEventArgs ev)
         {
             ValidationCancelled = ev.Cancel;
         }
@@ -1591,7 +1591,7 @@ namespace System.Windows.Forms
         {
             bool valid = true;
             validatedControlAllowsFocusChange = false;
-            IContainerControl c = GetContainerControl();
+            IContainerControl? c = GetContainerControl();
             if (c is not null && CausesValidation)
             {
                 if (c is ContainerControl container)
@@ -4706,7 +4706,7 @@ namespace System.Windows.Forms
         /// </returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public IAsyncResult BeginInvoke(Action method) => BeginInvoke(method, null);
-#nullable disable
+
         /// <summary>
         ///  Executes the given delegate on the thread that owns this Control's
         ///  underlying window handle.  The delegate is called asynchronously and this
@@ -4724,7 +4724,7 @@ namespace System.Windows.Forms
         ///  the call to the control's thread.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public IAsyncResult BeginInvoke(Delegate method, params object[] args)
+        public IAsyncResult BeginInvoke(Delegate method, params object?[]? args)
         {
             using var scope = MultithreadSafeCallScope.Create();
             Control marshaler = FindMarshalingControl();
@@ -4795,7 +4795,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            for (Control ctl = this; ctl is not null; ctl = ctl._parent)
+            for (Control? ctl = this; ctl is not null; ctl = ctl._parent)
             {
                 if (!ctl.Enabled || !ctl.Visible)
                 {
@@ -4810,12 +4810,12 @@ namespace System.Windows.Forms
         ///  Searches the parent/owner tree for bottom to find any instance
         ///  of toFind in the parent/owner tree.
         /// </summary>
-        internal static void CheckParentingCycle(Control bottom, Control toFind)
+        internal static void CheckParentingCycle(Control? bottom, Control? toFind)
         {
-            Form lastOwner = null;
-            Control lastParent = null;
+            Form? lastOwner = null;
+            Control? lastParent = null;
 
-            for (Control ctl = bottom; ctl is not null; ctl = ctl.ParentInternal)
+            for (Control? ctl = bottom; ctl is not null; ctl = ctl.ParentInternal)
             {
                 lastParent = ctl;
                 if (ctl == toFind)
@@ -4828,7 +4828,7 @@ namespace System.Windows.Forms
             {
                 if (lastParent is Form f)
                 {
-                    for (Form form = f; form is not null; form = form.OwnerInternal)
+                    for (Form? form = f; form is not null; form = form.OwnerInternal)
                     {
                         lastOwner = form;
                         if (form == toFind)
@@ -4864,7 +4864,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Verifies if a control is a child of this control.
         /// </summary>
-        public bool Contains(Control ctl)
+        public bool Contains(Control? ctl)
         {
             while (ctl is not null)
             {
@@ -5054,7 +5054,7 @@ namespace System.Windows.Forms
 
                     // must snapshot this array because
                     // z-order updates from Windows may rearrange it!
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                    ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
                     if (controlsCollection is not null)
                     {
@@ -5171,7 +5171,7 @@ namespace System.Windows.Forms
         {
             if (GetState(States.OwnCtlBrush))
             {
-                object backBrush = Properties.GetObject(s_backBrushProperty);
+                object? backBrush = Properties.GetObject(s_backBrushProperty);
                 if (backBrush is not null)
                 {
                     Gdi32.HBRUSH p = (Gdi32.HBRUSH)backBrush;
@@ -5219,7 +5219,7 @@ namespace System.Windows.Forms
                         _parent.Controls.Remove(this);
                     }
 
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                    ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
                     if (controlsCollection is not null)
                     {
@@ -5261,7 +5261,7 @@ namespace System.Windows.Forms
         // Package scope to allow AxHost to override.
         internal virtual void DisposeAxControls()
         {
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
             if (controlsCollection is not null)
             {
@@ -5285,20 +5285,46 @@ namespace System.Windows.Forms
         /// </summary>
         public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects)
         {
-            Ole32.IDropSource dropSource = new DropSource(this);
+            return DoDragDrop(data, allowedEffects, dragImage: null, cursorOffset: default, useDefaultDragImage: false);
+        }
 
-            IComDataObject dataObject = null;
+        /// <summary>
+        ///  Begins a drag operation. The <paramref name="allowedEffects"/> determine which drag operations can occur. If the drag operation
+        ///  needs to interop with applications in another process, <paramref name="data"/> should either be a base managed class
+        ///  (<see cref="string"/>, <see cref="Bitmap"/>, or <see cref="Drawing.Imaging.Metafile"/>) or some <see cref="object"/> that implements
+        ///  <see cref="Runtime.Serialization.ISerializable"/>. <paramref name="data"/> can also be any <see cref="object"/> that implements
+        ///  <see cref="IDataObject"/>. <paramref name="dragImage"/> is the bitmap that will be displayed during the  drag operation and
+        ///  <paramref name="cursorOffset"/> specifies the location of the cursor within <paramref name="dragImage"/>, which is an offset from the
+        ///  upper-left corner. Specify <see langword="true"/> for <paramref name="useDefaultDragImage"/> to use a layered window drag image with a
+        ///  size of 96x96; otherwise <see langword="false"/>. Note the outer edges of <paramref name="dragImage"/> are blended out if the image width
+        ///  or height exceeds 300 pixels.
+        /// </summary>
+        /// <returns>
+        ///  A value from the <see cref="DragDropEffects"/> enumeration that represents the final effect that was performed during the drag-and-drop
+        ///  operation.
+        /// </returns>
+        /// <remarks>
+        ///  <para>
+        ///   Because <see cref="DoDragDrop(object, DragDropEffects, Bitmap, Point, bool)"/> always performs the RGB multiplication step in calculating
+        ///   the alpha value, you should always pass a <see cref="Bitmap"/> without premultiplied alpha blending. Note that no error will result from
+        ///   passing a <see cref="Bitmap"/> with premultiplied alpha blending, but this method will multiply it again, doubling the resulting alpha
+        ///   value.
+        ///  </para>
+        /// </remarks>
+        public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
+        {
+            IComDataObject dataObject;
 
-            if (data is IComDataObject)
+            if (data is IComDataObject comDataObject)
             {
-                dataObject = (IComDataObject)data;
+                dataObject = comDataObject;
             }
             else
             {
-                DataObject iwdata = null;
-                if (data is IDataObject)
+                DataObject iwdata;
+                if (data is IDataObject dataAsDataObject)
                 {
-                    iwdata = new DataObject((IDataObject)data);
+                    iwdata = new DataObject(dataAsDataObject);
                 }
                 else
                 {
@@ -5306,13 +5332,26 @@ namespace System.Windows.Forms
                     iwdata.SetData(data);
                 }
 
-                dataObject = (IComDataObject)iwdata;
+                dataObject = iwdata;
             }
 
-            HRESULT hr = Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out Ole32.DROPEFFECT finalEffect);
-            if (!hr.Succeeded())
+            Ole32.DROPEFFECT finalEffect;
+
+            try
             {
-                return DragDropEffects.None;
+                Ole32.IDropSource dropSource = new DropSource(this, dataObject, dragImage, cursorOffset, useDefaultDragImage);
+                HRESULT hr = Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out finalEffect);
+                if (!hr.Succeeded())
+                {
+                    return DragDropEffects.None;
+                }
+            }
+            finally
+            {
+                if (DragDropHelper.IsInDragLoop(dataObject))
+                {
+                    DragDropHelper.SetInDragLoop(dataObject, inDragLoop: false);
+                }
             }
 
             return (DragDropEffects)finalEffect;
@@ -5369,12 +5408,12 @@ namespace System.Windows.Forms
         ///  block until the result is available.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public object EndInvoke(IAsyncResult asyncResult)
+        public object? EndInvoke(IAsyncResult asyncResult)
         {
             using var scope = MultithreadSafeCallScope.Create();
             ArgumentNullException.ThrowIfNull(asyncResult);
 
-            if (!(asyncResult is ThreadMethodEntry entry))
+            if (asyncResult is not ThreadMethodEntry entry)
             {
                 throw new ArgumentException(SR.ControlBadAsyncResult, nameof(asyncResult));
             }
@@ -5436,15 +5475,15 @@ namespace System.Windows.Forms
         ///  Retrieves the form that this control is on. The control's parent may not be
         ///  the same as the form.
         /// </summary>
-        public Form FindForm()
+        public Form? FindForm()
         {
-            Control cur = this;
-            while (cur is not null && !(cur is Form))
+            Control? cur = this;
+            while (cur is not null && cur is not Form)
             {
                 cur = cur.ParentInternal;
             }
 
-            return (Form)cur;
+            return (Form?)cur;
         }
 
         /// <summary>
@@ -5457,11 +5496,11 @@ namespace System.Windows.Forms
         {
             lock (this)
             {
-                Control c = this;
+                Control? c = this;
 
                 while (c is not null && !c.IsHandleCreated)
                 {
-                    Control p = c.ParentInternal;
+                    Control? p = c.ParentInternal;
                     c = p;
                 }
 
@@ -5492,7 +5531,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void RaiseCreateHandleEvent(EventArgs e)
         {
-            ((EventHandler)Events[s_handleCreatedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_handleCreatedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -5502,7 +5541,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseKeyEvent(object key, KeyEventArgs e)
         {
-            ((KeyEventHandler)Events[key])?.Invoke(this, e);
+            ((KeyEventHandler?)Events[key])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -5512,7 +5551,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseMouseEvent(object key, MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[key])?.Invoke(this, e);
+            ((MouseEventHandler?)Events[key])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -5521,7 +5560,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool Focus()
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::Focus - " + Name);
+            Debug.WriteLineIf(s_focusTracing!.TraceVerbose, "Control::Focus - " + Name);
 
             // Call the internal method (which form overrides)
             return FocusInternal();
@@ -5534,7 +5573,7 @@ namespace System.Windows.Forms
         /// </summary>
         private protected virtual bool FocusInternal()
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::FocusInternal - " + Name);
+            Debug.WriteLineIf(s_focusTracing!.TraceVerbose, "Control::FocusInternal - " + Name);
             if (CanFocus)
             {
                 User32.SetFocus(new HandleRef(this, Handle));
@@ -5542,7 +5581,7 @@ namespace System.Windows.Forms
 
             if (Focused && ParentInternal is not null)
             {
-                IContainerControl c = ParentInternal.GetContainerControl();
+                IContainerControl? c = ParentInternal.GetContainerControl();
 
                 if (c is not null)
                 {
@@ -5568,11 +5607,11 @@ namespace System.Windows.Forms
         ///  that own more than one handle.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static Control FromChildHandle(IntPtr handle)
+        public static Control? FromChildHandle(IntPtr handle)
         {
             while (handle != IntPtr.Zero)
             {
-                Control ctl = FromHandle(handle);
+                Control? ctl = FromHandle(handle);
                 if (ctl is not null)
                 {
                     return ctl;
@@ -5588,10 +5627,10 @@ namespace System.Windows.Forms
         ///  Returns the control that is currently associated with handle.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static Control FromHandle(IntPtr handle)
+        public static Control? FromHandle(IntPtr handle)
         {
-            NativeWindow w = NativeWindow.FromHandle(handle);
-            while (w is not null && !(w is ControlNativeWindow))
+            NativeWindow? w = NativeWindow.FromHandle(handle);
+            while (w is not null && w is not ControlNativeWindow)
             {
                 w = w.PreviousWindow;
             }
@@ -5643,7 +5682,7 @@ namespace System.Windows.Forms
         ///  Retrieves the child control that is located at the specified client
         ///  coordinates.
         /// </summary>
-        public Control GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue)
+        public Control? GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue)
         {
             int value = (int)skipValue;
             // Since this is a Flags Enumeration... the only way to validate skipValue is by checking if its within the range.
@@ -5653,14 +5692,14 @@ namespace System.Windows.Forms
             }
 
             IntPtr hwnd = User32.ChildWindowFromPointEx(this, pt, (User32.CWP)value);
-            Control ctl = FromChildHandle(hwnd);
+            Control? ctl = FromChildHandle(hwnd);
 
             return (ctl == this) ? null : ctl;
         }
 
         private protected virtual string GetCaptionForTool(ToolTip toolTip)
         {
-            IKeyboardToolTip host = ToolStripControlHost;
+            IKeyboardToolTip? host = ToolStripControlHost;
 
             return host is null
                 ? toolTip.GetCaptionForTool(this)
@@ -5671,7 +5710,7 @@ namespace System.Windows.Forms
         ///  Retrieves the child control that is located at the specified client
         ///  coordinates.
         /// </summary>
-        public Control GetChildAtPoint(Point pt)
+        public Control? GetChildAtPoint(Point pt)
         {
             return GetChildAtPoint(pt, GetChildAtPointSkip.None);
         }
@@ -5680,9 +5719,9 @@ namespace System.Windows.Forms
         ///  Returns the closest ContainerControl in the control's chain of parent controls
         ///  and forms.
         /// </summary>
-        public IContainerControl GetContainerControl()
+        public IContainerControl? GetContainerControl()
         {
-            Control c = this;
+            Control? c = this;
 
             // Refer to IsContainerControl property for more details.
             if (c is not null && IsContainerControl)
@@ -5695,7 +5734,7 @@ namespace System.Windows.Forms
                 c = c.ParentInternal;
             }
 
-            return (IContainerControl)c;
+            return (IContainerControl?)c;
         }
 
         private static bool IsFocusManagingContainerControl(Control ctl)
@@ -5710,7 +5749,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsUpdating()
         {
-            return (_updateCount > 0);
+            return _updateCount > 0;
         }
 
         // Essentially an Hfont; see inner class for details.
@@ -5746,7 +5785,7 @@ namespace System.Windows.Forms
             bool scaleLoc = !GetState(States.TopLevel);
             if (scaleLoc)
             {
-                ISite site = Site;
+                ISite? site = Site;
                 if (site is not null && site.DesignMode)
                 {
                     if (site.GetService(typeof(IDesignerHost)) is IDesignerHost host && host.RootComponent == this)
@@ -5824,7 +5863,7 @@ namespace System.Windows.Forms
 
         internal bool GetAnyDisposingInHierarchy()
         {
-            Control up = this;
+            Control? up = this;
             bool isDisposing = false;
             while (up is not null)
             {
@@ -5857,7 +5896,7 @@ namespace System.Windows.Forms
                 hWndChild != IntPtr.Zero;
                 hWndChild = User32.GetWindow(hWndChild, User32.GW.HWNDNEXT))
             {
-                Control ctl = FromHandle(hWndChild);
+                Control? ctl = FromHandle(hWndChild);
                 int tabIndex = (ctl is null) ? -1 : ctl.TabIndex;
                 holders.Add(new ControlTabOrderHolder(holders.Count, tabIndex, ctl));
             }
@@ -5896,17 +5935,17 @@ namespace System.Windows.Forms
             Control[] ctls = new Control[holders.Count];
             for (int i = 0; i < holders.Count; i++)
             {
-                ctls[i] = holders[i]._control;
+                ctls[i] = holders[i]._control!;
             }
 
             return ctls;
         }
 
-        internal virtual Control GetFirstChildControlInTabOrder(bool forward)
+        internal virtual Control? GetFirstChildControlInTabOrder(bool forward)
         {
-            ControlCollection ctlControls = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? ctlControls = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
-            Control found = null;
+            Control? found = null;
             if (ctlControls is not null)
             {
                 if (forward)
@@ -5953,7 +5992,7 @@ namespace System.Windows.Forms
                 return ScaledControlFont;
             }
 
-            if (TryGetExplicitlySetFont(out Font font))
+            if (TryGetExplicitlySetFont(out Font? font))
             {
                 return font;
             }
@@ -5973,7 +6012,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            AmbientProperties ambient = AmbientPropertiesService;
+            AmbientProperties? ambient = AmbientPropertiesService;
             if (ambient is not null && ambient.Font is not null)
             {
                 return ambient.Font;
@@ -5983,12 +6022,12 @@ namespace System.Windows.Forms
         }
 
         private protected virtual IList<Rectangle> GetNeighboringToolsRectangles()
-            => ((IKeyboardToolTip)ToolStripControlHost)?.GetNeighboringToolsRectangles() ?? GetOwnNeighboringToolsRectangles();
+            => ((IKeyboardToolTip?)ToolStripControlHost)?.GetNeighboringToolsRectangles() ?? GetOwnNeighboringToolsRectangles();
 
         /// <summary>
         ///  Retrieves the next control in the tab order of child controls.
         /// </summary>
-        public Control GetNextControl(Control ctl, bool forward)
+        public Control? GetNextControl(Control? ctl, bool forward)
         {
             if (!Contains(ctl))
             {
@@ -5997,11 +6036,11 @@ namespace System.Windows.Forms
 
             if (forward)
             {
-                ControlCollection ctlControls = (ControlCollection)ctl.Properties.GetObject(s_controlsCollectionProperty);
+                ControlCollection? ctlControls = (ControlCollection?)ctl!.Properties.GetObject(s_controlsCollectionProperty);
 
                 if (ctlControls is not null && ctlControls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
                 {
-                    Control found = ctl.GetFirstChildControlInTabOrder(/*forward=*/true);
+                    Control? found = ctl.GetFirstChildControlInTabOrder(/*forward=*/true);
                     if (found is not null)
                     {
                         return found;
@@ -6010,18 +6049,17 @@ namespace System.Windows.Forms
 
                 while (ctl != this)
                 {
-                    int targetIndex = ctl._tabIndex;
+                    int targetIndex = ctl!._tabIndex;
                     bool hitCtl = false;
-                    Control found = null;
-                    Control p = ctl._parent;
+                    Control? found = null;
+                    Control? p = ctl._parent;
 
                     // Cycle through the controls in z-order looking for the one with the next highest
                     // tab index.  Because there can be dups, we have to start with the existing tab index and
                     // remember to exclude the current control.
-                    //
                     int parentControlCount = 0;
 
-                    ControlCollection parentControls = (ControlCollection)p.Properties.GetObject(s_controlsCollectionProperty);
+                    ControlCollection? parentControls = (ControlCollection?)p?.Properties.GetObject(s_controlsCollectionProperty);
 
                     if (parentControls is not null)
                     {
@@ -6034,7 +6072,7 @@ namespace System.Windows.Forms
                         // clauses:
 
                         // We are not interested in ourself.
-                        if (parentControls[c] != ctl)
+                        if (parentControls![c] != ctl)
                         {
                             // We are interested in controls with >= tab indexes to ctl.  We must include those
                             // controls with equal indexes to account for duplicate indexes.
@@ -6074,10 +6112,10 @@ namespace System.Windows.Forms
             {
                 if (ctl != this)
                 {
-                    int targetIndex = ctl._tabIndex;
+                    int targetIndex = ctl!._tabIndex;
                     bool hitCtl = false;
-                    Control found = null;
-                    Control parent = ctl._parent;
+                    Control? found = null;
+                    Control? parent = ctl._parent;
 
                     if (parent is null)
                     {
@@ -6085,7 +6123,7 @@ namespace System.Windows.Forms
                             string.Format(SR.ParentPropertyNotSetInGetNextControl, nameof(Control.Parent), ctl));
                     }
 
-                    ControlCollection siblings = GetControlCollection(parent);
+                    ControlCollection? siblings = GetControlCollection(parent);
 
                     if (siblings is null)
                     {
@@ -6168,11 +6206,11 @@ namespace System.Windows.Forms
                 }
 
                 // We found a control.  Walk into this control to find the proper child control within it to select.
-                ControlCollection children = GetControlCollection(ctl);
+                ControlCollection? children = GetControlCollection(ctl);
 
                 while (children is not null && children.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
                 {
-                    Control found = ctl.GetFirstChildControlInTabOrder(forward: false);
+                    Control? found = ctl.GetFirstChildControlInTabOrder(forward: false);
                     if (found is not null)
                     {
                         ctl = found;
@@ -6187,8 +6225,8 @@ namespace System.Windows.Forms
 
             return ctl == this ? null : ctl;
 
-            static ControlCollection GetControlCollection(Control control)
-               => (ControlCollection)control.Properties.GetObject(s_controlsCollectionProperty);
+            static ControlCollection? GetControlCollection(Control control)
+               => (ControlCollection?)control.Properties.GetObject(s_controlsCollectionProperty);
         }
 
         /// <summary>
@@ -6304,7 +6342,7 @@ namespace System.Windows.Forms
         ///  occur, calling update after invalidate will force a
         ///  synchronous paint.
         /// </summary>
-        public void Invalidate(Region region)
+        public void Invalidate(Region? region)
         {
             Invalidate(region, false);
         }
@@ -6315,7 +6353,7 @@ namespace System.Windows.Forms
         ///  occur, calling update after invalidate will force a
         ///  synchronous paint.
         /// </summary>
-        public unsafe void Invalidate(Region region, bool invalidateChildren)
+        public unsafe void Invalidate(Region? region, bool invalidateChildren)
         {
             if (region is null)
             {
@@ -6474,7 +6512,7 @@ namespace System.Windows.Forms
         ///  For all other method calls, you should use one of the invoke methods to marshal
         ///  the call to the control's thread.
         /// </summary>
-        public object Invoke(Delegate method, params object[] args)
+        public object Invoke(Delegate method, params object?[]? args)
         {
             using var scope = MultithreadSafeCallScope.Create();
             Control marshaler = FindMarshalingControl();
@@ -6531,13 +6569,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Worker for invoking marshaled callbacks.
         /// </summary>
-        private static void InvokeMarshaledCallbackHelper(object obj)
+        private static void InvokeMarshaledCallbackHelper(object? obj)
         {
-            ThreadMethodEntry tme = (ThreadMethodEntry)obj;
+            ThreadMethodEntry? tme = (ThreadMethodEntry?)obj;
 
-            if (tme._syncContext is not null)
+            if (tme?._syncContext is not null)
             {
-                SynchronizationContext oldContext = SynchronizationContext.Current;
+                SynchronizationContext? oldContext = SynchronizationContext.Current;
 
                 try
                 {
@@ -6556,8 +6594,13 @@ namespace System.Windows.Forms
             }
         }
 
-        private static void InvokeMarshaledCallbackDo(ThreadMethodEntry tme)
+        private static void InvokeMarshaledCallbackDo(ThreadMethodEntry? tme)
         {
+            if (tme is null)
+            {
+                return;
+            }
+
             // We short-circuit a couple of common cases for speed.
             if (tme._method is EventHandler handler)
             {
@@ -6584,13 +6627,13 @@ namespace System.Windows.Forms
             }
             else if (tme._method is WaitCallback)
             {
-                Debug.Assert(tme._args.Length == 1,
+                Debug.Assert(tme._args!.Length == 1,
                              "Arguments are wrong for WaitCallback");
                 ((WaitCallback)tme._method)(tme._args[0]);
             }
             else
             {
-                tme._retVal = tme._method.DynamicInvoke(tme._args);
+                tme._retVal = tme._method!.DynamicInvoke(tme._args);
             }
         }
 
@@ -6601,12 +6644,15 @@ namespace System.Windows.Forms
         /// </summary>
         private void InvokeMarshaledCallbacks()
         {
-            ThreadMethodEntry current = null;
-            lock (_threadCallbackList)
+            ThreadMethodEntry? current = null;
+            if (_threadCallbackList is not null)
             {
-                if (_threadCallbackList.Count > 0)
+                lock (_threadCallbackList)
                 {
-                    current = _threadCallbackList.Dequeue();
+                    if (_threadCallbackList.Count > 0)
+                    {
+                        current = _threadCallbackList.Dequeue();
+                    }
                 }
             }
 
@@ -6651,15 +6697,18 @@ namespace System.Windows.Forms
                     }
                 }
 
-                lock (_threadCallbackList)
+                if (_threadCallbackList is not null)
                 {
-                    if (_threadCallbackList.Count > 0)
+                    lock (_threadCallbackList)
                     {
-                        current = _threadCallbackList.Dequeue();
-                    }
-                    else
-                    {
-                        current = null;
+                        if (_threadCallbackList.Count > 0)
+                        {
+                            current = _threadCallbackList.Dequeue();
+                        }
+                        else
+                        {
+                            current = null;
+                        }
                     }
                 }
             }
@@ -6693,9 +6742,9 @@ namespace System.Windows.Forms
         ///  The method returns true if "descendant" (the argument) is a descendant
         ///  of "this". I'd expect it to be the other way around, but oh well too late.
         /// </summary>
-        internal bool IsDescendant(Control descendant)
+        internal bool IsDescendant(Control? descendant)
         {
-            Control control = descendant;
+            Control? control = descendant;
             while (control is not null)
             {
                 if (control == this)
@@ -6752,7 +6801,7 @@ namespace System.Windows.Forms
         /// </returns>
         protected virtual bool IsInputChar(char charCode)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.IsInputChar 0x{((int)charCode):X}");
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.IsInputChar 0x{((int)charCode):X}");
 
             int mask = 0;
             if (charCode == (char)(int)Keys.Tab)
@@ -6782,7 +6831,7 @@ namespace System.Windows.Forms
         /// </returns>
         protected virtual bool IsInputKey(Keys keyData)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.IsInputKey {keyData}");
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.IsInputKey {keyData}");
 
             if ((keyData & Keys.Alt) == Keys.Alt)
             {
@@ -6812,7 +6861,7 @@ namespace System.Windows.Forms
         ///  The mnemonic character is the character immediately following the first
         ///  instance of "&amp;" in text
         /// </summary>
-        public static bool IsMnemonic(char charCode, string text)
+        public static bool IsMnemonic(char charCode, string? text)
         {
 #if DEBUG
             if (s_controlKeyboardRouting.TraceVerbose)
@@ -6835,7 +6884,7 @@ namespace System.Windows.Forms
             // Special case handling:
             if (charCode == '&')
             {
-                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...returning false");
+                Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "   ...returning false");
                 return false;
             }
 
@@ -6857,7 +6906,7 @@ namespace System.Windows.Forms
                     }
 
                     char c1 = char.ToUpper(text[pos], CultureInfo.CurrentCulture);
-                    Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"   ...& found... char={c1}");
+                    Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"   ...& found... char={c1}");
                     if (c1 == c2 || char.ToLower(c1, CultureInfo.CurrentCulture) == char.ToLower(c2, CultureInfo.CurrentCulture))
                     {
                         Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...returning true");
@@ -6865,17 +6914,17 @@ namespace System.Windows.Forms
                     }
                 }
 
-                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose && pos == 0, "   ...no & found");
+                Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose && pos == 0, "   ...no & found");
             }
 
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...returning false");
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "   ...returning false");
             return false;
         }
 
         // Checks if this is a container control and will be scaled by parent.
         private static bool IsScaledByParent(Control control)
         {
-            Control parentControl = control.Parent;
+            Control? parentControl = control.Parent;
             while (parentControl is not null and not ContainerControl)
             {
                 parentControl = parentControl.Parent;
@@ -6920,7 +6969,7 @@ namespace System.Windows.Forms
         {
             return DpiHelper.LogicalToDeviceUnits(value, DeviceDpi);
         }
-
+#nullable disable
         /// <summary>
         ///  Create a new bitmap scaled for the device units. When displayed on the device,
         ///  the scaled image will have same size as the original image would have when
@@ -8456,7 +8505,7 @@ namespace System.Windows.Forms
                 Invalidate();
             }
         }
-
+#nullable enable
         /// <summary>
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.onPaint to send this event to any registered event listeners.
@@ -8464,7 +8513,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPaint(PaintEventArgs e)
         {
-            ((PaintEventHandler)Events[s_paintEvent])?.Invoke(this, e);
+            ((PaintEventHandler?)Events[s_paintEvent])?.Invoke(this, e);
         }
 
         protected virtual void OnPaddingChanged(EventArgs e)
@@ -8474,7 +8523,7 @@ namespace System.Windows.Forms
                 Invalidate();
             }
 
-            ((EventHandler)Events[s_paddingChangedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_paddingChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8524,7 +8573,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnQueryContinueDrag(QueryContinueDragEventArgs qcdevent)
         {
-            ((QueryContinueDragEventHandler)Events[s_queryContinueDragEvent])?.Invoke(this, qcdevent);
+            ((QueryContinueDragEventHandler?)Events[s_queryContinueDragEvent])?.Invoke(this, qcdevent);
         }
 
         /// <summary>
@@ -8552,7 +8601,7 @@ namespace System.Windows.Forms
             }
 
             LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
-            ((EventHandler)Events[s_resizeEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_resizeEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8561,7 +8610,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
         {
-            ((PreviewKeyDownEventHandler)Events[s_previewKeyDownEvent])?.Invoke(this, e);
+            ((PreviewKeyDownEventHandler?)Events[s_previewKeyDownEvent])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -8581,7 +8630,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnChangeUICues(UICuesEventArgs e)
         {
-            ((UICuesEventHandler)Events[s_changeUICuesEvent])?.Invoke(this, e);
+            ((UICuesEventHandler?)Events[s_changeUICuesEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8590,7 +8639,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnStyleChanged(EventArgs e)
         {
-            ((EventHandler)Events[s_styleChangedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_styleChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8599,7 +8648,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnSystemColorsChanged(EventArgs e)
         {
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -8613,7 +8662,7 @@ namespace System.Windows.Forms
 
             Invalidate();
 
-            ((EventHandler)Events[s_systemColorsChangedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_systemColorsChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8623,7 +8672,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnValidating(CancelEventArgs e)
         {
-            ((CancelEventHandler)Events[s_validatingEvent])?.Invoke(this, e);
+            ((CancelEventHandler?)Events[s_validatingEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8632,7 +8681,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnValidated(EventArgs e)
         {
-            ((EventHandler)Events[s_validatedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_validatedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8772,9 +8821,9 @@ namespace System.Windows.Forms
         /// <param name="transparentRegion">
         ///  Region of the rectangle to be transparent, or null for the entire control.
         /// </param>
-        internal unsafe void PaintTransparentBackground(PaintEventArgs e, Rectangle rectangle, Region transparentRegion)
+        internal unsafe void PaintTransparentBackground(PaintEventArgs e, Rectangle rectangle, Region? transparentRegion)
         {
-            Control parent = ParentInternal;
+            Control? parent = ParentInternal;
 
             if (parent is null)
             {
@@ -8903,11 +8952,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Find ContainerControl that is the container of this control.
         /// </summary>
-        internal ContainerControl ParentContainerControl
+        internal ContainerControl? ParentContainerControl
         {
             get
             {
-                for (Control c = ParentInternal; c is not null; c = c.ParentInternal)
+                for (Control? c = ParentInternal; c is not null; c = c.ParentInternal)
                 {
                     if (c is ContainerControl)
                     {
@@ -8945,7 +8994,7 @@ namespace System.Windows.Forms
         ///  Forces the control to apply layout logic to all of the child controls.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public void PerformLayout(Control affectedControl, string affectedProperty)
+        public void PerformLayout(Control? affectedControl, string? affectedProperty)
         {
             PerformLayout(new LayoutEventArgs(affectedControl, affectedProperty));
         }
@@ -9209,7 +9258,7 @@ namespace System.Windows.Forms
         public PreProcessControlState PreProcessControlMessage(ref Message msg)
             => PreProcessControlMessageInternal(target: null, ref msg);
 
-        internal static PreProcessControlState PreProcessControlMessageInternal(Control target, ref Message message)
+        internal static PreProcessControlState PreProcessControlMessageInternal(Control? target, ref Message message)
         {
             target ??= FromChildHandle(message.HWnd);
 
@@ -9223,7 +9272,7 @@ namespace System.Windows.Forms
             target.SetExtendedState(ExtendedStates.InputChar, false);
             target.SetExtendedState(ExtendedStates.UiCues, true);
 
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.PreProcessControlMessageInternal {message}");
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.PreProcessControlMessageInternal {message}");
 
             try
             {
@@ -9303,7 +9352,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessCmdKey " + msg.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "Control.ProcessCmdKey " + msg.ToString());
 
             if (_parent is not null)
             {
@@ -9424,7 +9473,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessDialogChar(char charCode)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.ProcessDialogChar [{charCode.ToString()}]");
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.ProcessDialogChar [{charCode.ToString()}]");
             return _parent is null ? false : _parent.ProcessDialogChar(charCode);
         }
 
@@ -9445,7 +9494,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessDialogKey(Keys keyData)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessDialogKey " + keyData.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "Control.ProcessDialogKey " + keyData.ToString());
             return _parent is null ? false : _parent.ProcessDialogKey(keyData);
         }
 
@@ -9464,9 +9513,9 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessKeyEventArgs(ref Message m)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.ProcessKeyEventArgs {m}");
-            KeyEventArgs ke = null;
-            KeyPressEventArgs kpe = null;
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.ProcessKeyEventArgs {m}");
+            KeyEventArgs? ke = null;
+            KeyPressEventArgs? kpe = null;
             nint newWParam = 0;
 
             if (m.MsgInternal == User32.WM.CHAR || m.MsgInternal == User32.WM.SYSCHAR)
@@ -9533,8 +9582,8 @@ namespace System.Windows.Forms
             }
             else
             {
-                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"    processkeyeventarg returning: {ke.Handled}");
-                if (ke.SuppressKeyPress)
+                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"    processkeyeventarg returning: {ke!.Handled}");
+                if (ke!.SuppressKeyPress)
                 {
                     RemovePendingMessages(User32.WM.CHAR, User32.WM.CHAR);
                     RemovePendingMessages(User32.WM.SYSCHAR, User32.WM.SYSCHAR);
@@ -9562,7 +9611,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected internal virtual bool ProcessKeyMessage(ref Message m)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.ProcessKeyMessage {m}");
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.ProcessKeyMessage {m}");
             if (_parent is not null && _parent.ProcessKeyPreview(ref m))
             {
                 return true;
@@ -9591,7 +9640,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessKeyPreview(ref Message m)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.ProcessKeyPreview {m}");
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.ProcessKeyPreview {m}");
             return _parent is not null && _parent.ProcessKeyPreview(ref m);
         }
 
@@ -9633,7 +9682,7 @@ namespace System.Windows.Forms
                 return;  // PERF: don't WM_QUERYUISTATE if we don't have to.
             }
 
-            Control topMostParent = null;
+            Control? topMostParent = null;
             User32.UISF current = (User32.UISF)User32.SendMessageW(this, User32.WM.QUERYUISTATE);
 
             // don't trust when a control says the accelerators are showing.
@@ -9702,7 +9751,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseDragEvent(object key, DragEventArgs e)
         {
-            ((DragEventHandler)Events[key])?.Invoke(this, e);
+            ((DragEventHandler?)Events[key])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9712,9 +9761,9 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaisePaintEvent(object key, PaintEventArgs e)
         {
-            ((PaintEventHandler)Events[s_paintEvent])?.Invoke(this, e);
+            ((PaintEventHandler?)Events[s_paintEvent])?.Invoke(this, e);
         }
-#nullable enable
+
         private void RemovePendingMessages(User32.WM msgMin, User32.WM msgMax)
         {
             if (!IsDisposed)
@@ -9988,7 +10037,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static bool ReflectMessage(IntPtr hWnd, ref Message m)
         {
-            Control control = FromHandle(hWnd);
+            Control? control = FromHandle(hWnd);
             if (control is null)
             {
                 return false;
@@ -11650,7 +11699,7 @@ namespace System.Windows.Forms
             IntPtr hWnd = ctl.InternalHandle;
             while ((hWnd = User32.GetWindow(hWnd, User32.GW.HWNDPREV)) != IntPtr.Zero)
             {
-                Control c = FromHandle(hWnd);
+                Control? c = FromHandle(hWnd);
                 if (c is not null)
                 {
                     newIndex = Controls.GetChildIndex(c, false) + 1;
@@ -11940,7 +11989,7 @@ namespace System.Windows.Forms
         private void WmCtlColorControl(ref Message m)
         {
             // We could simply reflect the message, but it's faster to handle it here if possible.
-            Control control = FromHandle(m.LParamInternal);
+            Control? control = FromHandle(m.LParamInternal);
             if (control is not null)
             {
                 m.ResultInternal = control.InitializeDCForWmCtlColor((Gdi32.HDC)m.WParamInternal, m.MsgInternal);
@@ -12545,7 +12594,7 @@ namespace System.Windows.Forms
                 IntPtr handle = NativeWindow.GetHandleFromWindowId((short)PARAM.LOWORD(m.WParamInternal));
                 if (handle != IntPtr.Zero)
                 {
-                    Control control = FromHandle(handle);
+                    Control? control = FromHandle(handle);
                     if (control is not null)
                     {
                         m.ResultInternal = User32.SendMessageW(control, User32.WM.REFLECT | m.MsgInternal, handle, m.LParamInternal);

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
 using Xunit;
 using static System.Windows.Forms.Form;
 using static Interop;
@@ -31,6 +32,42 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(AccessibleRole.Client, accessibleObject.Role);
             Assert.Equal(UiaCore.UIA.WindowControlTypeId, actual);
+            Assert.False(form.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void FormAccessibleObject_ControlType_IsDialog_True()
+        {
+            using Form form = new();
+
+            bool? actualValue = null;
+            form.Load += (_, _) =>
+            {
+                AccessibleObject accessibleObject = form.AccessibilityObject;
+                actualValue = (bool?)accessibleObject.GetPropertyValue(UiaCore.UIA.IsDialogPropertyId);
+                form.Close();
+            };
+            form.ShowDialog();
+
+            Assert.True(actualValue);
+            Assert.False(form.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void FormAccessibleObject_ControlType_IsDialog_False()
+        {
+            using Form form = new();
+
+            bool? actualValue = null;
+            form.Load += (_, _) =>
+            {
+                AccessibleObject accessibleObject = form.AccessibilityObject;
+                actualValue = (bool?)accessibleObject.GetPropertyValue(UiaCore.UIA.IsDialogPropertyId);
+                form.Close();
+            };
+            form.Show();
+
+            Assert.False(actualValue);
             Assert.False(form.IsHandleCreated);
         }
 
@@ -126,6 +163,45 @@ namespace System.Windows.Forms.Tests
             // The child control gets the focus changed event instead of the form.
             // Native control does it itself, so a screen reader should focus on the inner control.
             Assert.Equal(0, accessibleObject.RaiseAutomationFocusEventCallsCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void FormAccessibleObject_BoundingRectangle_ReturnsExpected_ForRootForm(bool createControl)
+        {
+            using Form form = new();
+
+            if (createControl)
+            {
+                form.CreateControl(true);
+            }
+
+            Rectangle actual = form.AccessibilityObject.BoundingRectangle;
+            Rectangle expected = createControl ? form.Bounds : Rectangle.Empty;
+
+            Assert.Equal(expected, actual);
+            Assert.Equal(createControl, form.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void FormAccessibleObject_BoundingRectangle_ReturnsExpected_ForEmbeddedForm(bool createControl)
+        {
+            using Form form = new();
+            using Form embeddedForm = new() { TopLevel = false };
+            form.Controls.Add(embeddedForm);
+
+            if (createControl)
+            {
+                form.CreateControl(true);
+            }
+
+            Rectangle actual = form.AccessibilityObject.BoundingRectangle;
+
+            Assert.Equal(createControl, actual.Location != Point.Empty);
+            Assert.Equal(createControl, form.IsHandleCreated);
         }
 
         private class FocusEventsCounterForm : Form

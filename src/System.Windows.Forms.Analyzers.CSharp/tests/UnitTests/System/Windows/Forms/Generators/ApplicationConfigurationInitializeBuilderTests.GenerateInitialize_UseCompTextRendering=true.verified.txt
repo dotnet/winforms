@@ -14,15 +14,15 @@ internal static partial class ApplicationConfiguration
     /// <summary>
     ///  Bootstrap the application as follows:
     ///  <code>
-    ///  Application.EnableVisualStyles();
-    ///  Application.SetCompatibleTextRenderingDefault(true);
-    ///  Application.SetHighDpiMode(HighDpiMode.SystemAware);
+    ///  global::System.Windows.Forms.Application.EnableVisualStyles();
+    ///  global::System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(true);
+    ///  global::System.Windows.Forms.Application.SetHighDpiMode(HighDpiMode.SystemAware);
     /// </code>
     /// </summary>
     public static void Initialize()
     {
-        Application.EnableVisualStyles();
-        Application.SetCompatibleTextRenderingDefault(true);
-        Application.SetHighDpiMode(HighDpiMode.SystemAware);
+        global::System.Windows.Forms.Application.EnableVisualStyles();
+        global::System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(true);
+        global::System.Windows.Forms.Application.SetHighDpiMode(HighDpiMode.SystemAware);
     }
 }

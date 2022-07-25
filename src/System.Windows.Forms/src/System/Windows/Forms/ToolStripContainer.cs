@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -13,11 +12,11 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.ToolStripContainerDesc))]
     public partial class ToolStripContainer : ContainerControl
     {
-        private readonly ToolStripPanel topPanel;
-        private readonly ToolStripPanel bottomPanel;
-        private readonly ToolStripPanel leftPanel;
-        private readonly ToolStripPanel rightPanel;
-        private readonly ToolStripContentPanel contentPanel;
+        private readonly ToolStripPanel _topPanel;
+        private readonly ToolStripPanel _bottomPanel;
+        private readonly ToolStripPanel _leftPanel;
+        private readonly ToolStripPanel _rightPanel;
+        private readonly ToolStripContentPanel _contentPanel;
 
         public ToolStripContainer()
         {
@@ -27,26 +26,26 @@ namespace System.Windows.Forms
             try
             {
                 // undone - smart demand creation
-                topPanel = new ToolStripPanel(this);
-                bottomPanel = new ToolStripPanel(this);
-                leftPanel = new ToolStripPanel(this);
-                rightPanel = new ToolStripPanel(this);
-                contentPanel = new ToolStripContentPanel
+                _topPanel = new ToolStripPanel(this);
+                _bottomPanel = new ToolStripPanel(this);
+                _leftPanel = new ToolStripPanel(this);
+                _rightPanel = new ToolStripPanel(this);
+                _contentPanel = new ToolStripContentPanel
                 {
                     Dock = DockStyle.Fill
                 };
-                topPanel.Dock = DockStyle.Top;
-                bottomPanel.Dock = DockStyle.Bottom;
-                rightPanel.Dock = DockStyle.Right;
-                leftPanel.Dock = DockStyle.Left;
+                _topPanel.Dock = DockStyle.Top;
+                _bottomPanel.Dock = DockStyle.Bottom;
+                _rightPanel.Dock = DockStyle.Right;
+                _leftPanel.Dock = DockStyle.Left;
 
                 if (Controls is ToolStripContainerTypedControlCollection controlCollection)
                 {
-                    controlCollection.AddInternal(contentPanel);
-                    controlCollection.AddInternal(leftPanel);
-                    controlCollection.AddInternal(rightPanel);
-                    controlCollection.AddInternal(topPanel);
-                    controlCollection.AddInternal(bottomPanel);
+                    controlCollection.AddInternal(_contentPanel);
+                    controlCollection.AddInternal(_leftPanel);
+                    controlCollection.AddInternal(_rightPanel);
+                    controlCollection.AddInternal(_topPanel);
+                    controlCollection.AddInternal(_bottomPanel);
                 }
 
                 // else consider throw new exception
@@ -96,7 +95,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new event EventHandler BackColorChanged
+        public new event EventHandler? BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
@@ -105,7 +104,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new Image BackgroundImage
+        public new Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -114,7 +113,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new event EventHandler BackgroundImageChanged
+        public new event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -132,7 +131,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged += value;
@@ -146,7 +145,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return bottomPanel;
+                return _bottomPanel;
             }
         }
 
@@ -173,7 +172,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return contentPanel;
+                return _contentPanel;
             }
         }
 
@@ -188,7 +187,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler CausesValidationChanged
+        public new event EventHandler? CausesValidationChanged
         {
             add => base.CausesValidationChanged += value;
             remove => base.CausesValidationChanged -= value;
@@ -197,7 +196,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new ContextMenuStrip ContextMenuStrip
+        public new ContextMenuStrip? ContextMenuStrip
         {
             get => base.ContextMenuStrip;
             set => base.ContextMenuStrip = value;
@@ -205,7 +204,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ContextMenuStripChanged
+        public new event EventHandler? ContextMenuStripChanged
         {
             add => base.ContextMenuStripChanged += value;
             remove => base.ContextMenuStripChanged -= value;
@@ -214,6 +213,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [AllowNull]
         public override Cursor Cursor
         {
             get => base.Cursor;
@@ -223,7 +223,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new event EventHandler CursorChanged
+        public new event EventHandler? CursorChanged
         {
             add => base.CursorChanged += value;
             remove => base.CursorChanged -= value;
@@ -249,7 +249,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new event EventHandler ForeColorChanged
+        public new event EventHandler? ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -263,7 +263,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return leftPanel;
+                return _leftPanel;
             }
         }
 
@@ -290,7 +290,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return rightPanel;
+                return _rightPanel;
             }
         }
 
@@ -319,7 +319,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return topPanel;
+                return _topPanel;
             }
         }
 

@@ -2,11 +2,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <!-- NU1505 reports duplicate package download for Microsoft.NETCore.App.Host.win-x64.
-         Disabling this warning until https://github.com/dotnet/sdk/issues/24747 is fixed.-->
-    <NoWarn>$(NoWarn);NU1505</NoWarn>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Microsoft.VisualBasic.Facade.csproj" />
   </ItemGroup>

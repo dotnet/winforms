@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.Layout;
 
@@ -11,7 +10,7 @@ namespace System.Windows.Forms
 {
     internal partial class ToolStripGrip : ToolStripButton
     {
-        private Cursor _oldCursor;
+        private Cursor? _oldCursor;
         private Point _startLocation = Point.Empty;
         private bool _movingToolStrip;
         private Point _lastEndLocation = ToolStrip.s_invalidMouseEnter;
@@ -60,6 +59,7 @@ namespace System.Windows.Forms
 
         internal int GripThickness { get; private set; }
 
+        [MemberNotNullWhen(true, nameof(ToolStripPanelRow))]
         internal bool MovingToolStrip
         {
             get
@@ -93,7 +93,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private ToolStripPanelRow ToolStripPanelRow
+        private ToolStripPanelRow? ToolStripPanelRow
         {
             get
             {
@@ -274,7 +274,7 @@ namespace System.Windows.Forms
             _scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(_defaultPadding, newDpi);
             _scaledGripThickness = DpiHelper.LogicalToDeviceUnits(GripThicknessDefault, newDpi);
             _scaledGripThicknessVisualStylesEnabled = DpiHelper.LogicalToDeviceUnits(GripThicknessVisualStylesEnabled, newDpi);
-            this.Margin = DefaultMargin;
+            Margin = DefaultMargin;
 
             GripThickness = ToolStripManager.VisualStylesEnabled ? _scaledGripThicknessVisualStylesEnabled : _scaledGripThickness;
 

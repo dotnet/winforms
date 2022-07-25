@@ -17,8 +17,6 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UIA propertyID)
                 => propertyID switch
                 {
-                    UIA.AutomationIdPropertyId
-                        => Owner.Name,
                     UIA.ControlTypePropertyId
                         // If we don't set a default role for Button and ButtonBase accessible objects
                         // it will be retrieved from Windows.

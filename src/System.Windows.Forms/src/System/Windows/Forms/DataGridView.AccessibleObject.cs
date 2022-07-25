@@ -184,13 +184,11 @@ namespace System.Windows.Forms
                             // increment the childIndex because the first child in the TopRowAccessibleObject is the TopLeftHeaderCellAccObj
                             return TopRowAccessibilityObject.GetChild(actualDisplayIndex + 1);
                         }
-                        else
-                        {
-                            return TopRowAccessibilityObject.GetChild(actualDisplayIndex);
-                        }
+
+                        return TopRowAccessibilityObject.GetChild(actualDisplayIndex);
 
                     case DataGridViewHitTestType.RowHeader:
-                        return _ownerDataGridView.Rows[hti.RowIndex].AccessibilityObject;
+                        return _ownerDataGridView.Rows[hti.RowIndex].HeaderCell.AccessibilityObject;
                     case DataGridViewHitTestType.TopLeftHeader:
                         return _ownerDataGridView.TopLeftHeaderCell.AccessibilityObject;
                     case DataGridViewHitTestType.VerticalScrollBar:

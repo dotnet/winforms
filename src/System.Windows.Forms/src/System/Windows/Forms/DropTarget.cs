@@ -14,12 +14,25 @@ namespace System.Windows.Forms
     {
         private IDataObject? _lastDataObject;
         private DragDropEffects _lastEffect = DragDropEffects.None;
+        private DragEventArgs? _lastDragEventArgs;
+        private readonly IntPtr _hwndTarget;
         private readonly IDropTarget _owner;
 
         public DropTarget(IDropTarget owner)
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DropTarget created");
             _owner = owner.OrThrowIfNull();
+
+            if (_owner is Control control && control.IsHandleCreated)
+            {
+                _hwndTarget = control.Handle;
+            }
+            else if (_owner is ToolStripDropTargetManager toolStripTargetManager
+                && toolStripTargetManager?.Owner is ToolStrip toolStrip
+                && toolStrip.IsHandleCreated)
+            {
+                _hwndTarget = toolStrip.Handle;
+            }
         }
 
 #if DEBUG
@@ -28,6 +41,12 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DropTarget destroyed");
         }
 #endif
+
+        private void ClearDropDescription()
+        {
+            _lastDragEventArgs = null;
+            DragDropHelper.ClearDropDescription(_lastDataObject);
+        }
 
         private DragEventArgs? CreateDragEventArgs(object? pDataObj, uint grfKeyState, Point pt, uint pdwEffect)
         {
@@ -53,7 +72,19 @@ namespace System.Windows.Forms
                 }
             }
 
-            DragEventArgs drgevent = new DragEventArgs(data, (int)grfKeyState, pt.X, pt.Y, (DragDropEffects)pdwEffect, _lastEffect);
+            DragEventArgs drgevent = _lastDragEventArgs is null
+                ? new DragEventArgs(data, (int)grfKeyState, pt.X, pt.Y, (DragDropEffects)pdwEffect, _lastEffect)
+                : new DragEventArgs(
+                    data,
+                    (int)grfKeyState,
+                    pt.X,
+                    pt.Y,
+                    (DragDropEffects)pdwEffect,
+                    _lastEffect,
+                    _lastDragEventArgs.DropImageType,
+                    _lastDragEventArgs.Message ?? string.Empty,
+                    _lastDragEventArgs.MessageReplacementToken ?? string.Empty);
+
             _lastDataObject = data;
             return drgevent;
         }
@@ -70,6 +101,12 @@ namespace System.Windows.Forms
                 _owner.OnDragEnter(drgevent);
                 pdwEffect = (uint)drgevent.Effect;
                 _lastEffect = drgevent.Effect;
+
+                if (drgevent.DropImageType > DropImageType.Invalid)
+                {
+                    UpdateDropDescription(drgevent);
+                    DragDropHelper.DragEnter(_hwndTarget, drgevent);
+                }
             }
             else
             {
@@ -89,6 +126,12 @@ namespace System.Windows.Forms
                 _owner.OnDragOver(drgevent);
                 pdwEffect = (uint)drgevent.Effect;
                 _lastEffect = drgevent.Effect;
+
+                if (drgevent.DropImageType > DropImageType.Invalid)
+                {
+                    UpdateDropDescription(drgevent);
+                    DragDropHelper.DragOver(drgevent);
+                }
             }
             else
             {
@@ -102,6 +145,13 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragLeave received");
             _owner.OnDragLeave(EventArgs.Empty);
+
+            if (_lastDragEventArgs?.DropImageType > DropImageType.Invalid)
+            {
+                ClearDropDescription();
+                DragDropHelper.DragLeave();
+            }
+
             return HRESULT.S_OK;
         }
 
@@ -115,6 +165,12 @@ namespace System.Windows.Forms
             {
                 _owner.OnDragDrop(drgevent);
                 pdwEffect = (uint)drgevent.Effect;
+
+                if (_lastDragEventArgs?.DropImageType > DropImageType.Invalid)
+                {
+                    ClearDropDescription();
+                    DragDropHelper.Drop(drgevent);
+                }
             }
             else
             {
@@ -124,6 +180,15 @@ namespace System.Windows.Forms
             _lastEffect = DragDropEffects.None;
             _lastDataObject = null;
             return HRESULT.S_OK;
+        }
+
+        private void UpdateDropDescription(DragEventArgs e)
+        {
+            if (!e.Equals(_lastDragEventArgs))
+            {
+                _lastDragEventArgs = e.Clone();
+                DragDropHelper.SetDropDescription(_lastDragEventArgs);
+            }
         }
     }
 }

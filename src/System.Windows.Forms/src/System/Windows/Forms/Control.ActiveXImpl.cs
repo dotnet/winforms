@@ -327,7 +327,7 @@ namespace System.Windows.Forms
                                 // check to see if this message should really go to a child
                                 //  control, and if so, map the point into that child's window
                                 //  coordinates
-                                Control realTarget = target.GetChildAtPoint(pt);
+                                Control? realTarget = target.GetChildAtPoint(pt);
                                 if (realTarget is not null && realTarget != target)
                                 {
                                     pt = WindowsFormsUtils.TranslatePoint(pt, target, realTarget);
@@ -2209,8 +2209,8 @@ namespace System.Windows.Forms
                 Message msg = Message.Create(lpmsg->hwnd, lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                 if (needPreProcess)
                 {
-                    Control target = FromChildHandle(lpmsg->hwnd);
-                    if (target is not null && (_control == target || _control.Contains(target)))
+                    Control? target = FromChildHandle(lpmsg->hwnd);
+                    if (_control == target || _control.Contains(target))
                     {
                         PreProcessControlState messageState = PreProcessControlMessageInternal(target, ref msg);
                         switch (messageState)

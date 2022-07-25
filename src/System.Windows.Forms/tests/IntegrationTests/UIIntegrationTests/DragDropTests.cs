@@ -11,6 +11,7 @@ namespace System.Windows.Forms.UITests;
 public class DragDropTests : ControlTestBase
 {
     public const int DragDropDelayMS = 100;
+    private readonly Bitmap _dragImage = new("./Resources/move.bmp");
 
     public DragDropTests(ITestOutputHelper testOutputHelper)
         : base(testOutputHelper)
@@ -33,7 +34,7 @@ public class DragDropTests : ControlTestBase
                 form,
                 inputSimulator => inputSimulator.Mouse
                     .LeftButtonDown()
-                    .Sleep(100)
+                    .Sleep(DragDropDelayMS)
                     .MoveMouseTo(targetMousePosition.X - 40, targetMousePosition.Y)
                     .Sleep(DragDropDelayMS)
                     .MoveMouseTo(targetMousePosition.X, targetMousePosition.Y)
@@ -46,6 +47,117 @@ public class DragDropTests : ControlTestBase
                     .Sleep(DragDropDelayMS));
 
             Assert.Equal(1, form.ListDragTarget.Items.Count);
+        });
+    }
+
+    [WinFormsFact]
+    public async Task DragEnter_Set_DropImageType_Message_MessageReplacementToken_ReturnsExptected()
+    {
+        await RunFormWithoutControlAsync(() => new DragDropForm(TestOutputHelper), async (form) =>
+        {
+            DropImageType dropImageType = DropImageType.Move;
+            string message = "Move to %1";
+            string messageReplacementToken = "Drop Target";
+
+            form.ListDragSource.GiveFeedback += (s, e) =>
+            {
+                e.DragImage = _dragImage;
+                e.CursorOffset = new Point(0, 48);
+                e.UseDefaultCursors = false;
+            };
+
+            form.ListDragTarget.DragEnter += (s, e) =>
+            {
+                e.DropImageType = dropImageType;
+                e.Message = message;
+                e.MessageReplacementToken = messageReplacementToken;
+                e.Effect = DragDropEffects.Copy;
+            };
+
+            form.ListDragTarget.DragOver += (s, e) =>
+            {
+                Assert.Equal(dropImageType, e.DropImageType);
+                Assert.Equal(message, e.Message);
+                Assert.Equal(messageReplacementToken, e.MessageReplacementToken);
+            };
+
+            form.ListDragTarget.DragDrop += (s, e) =>
+            {
+                Assert.Equal(dropImageType, e.DropImageType);
+                Assert.Equal(message, e.Message);
+                Assert.Equal(messageReplacementToken, e.MessageReplacementToken);
+            };
+
+            await MoveMouseToControlAsync(form.ListDragSource);
+
+            await InputSimulator.SendAsync(
+                form,
+                inputSimulator => inputSimulator.Mouse.LeftButtonDown());
+
+            var targetMousePosition = ToVirtualPoint(form.ListDragTarget.PointToScreen(new Point(20, 20)));
+            await InputSimulator.SendAsync(
+                form,
+                inputSimulator => inputSimulator.Mouse
+                    .LeftButtonDown()
+                    .Sleep(DragDropDelayMS)
+                    .MoveMouseTo(targetMousePosition.X - 40, targetMousePosition.Y)
+                    .Sleep(DragDropDelayMS)
+                    .MoveMouseTo(targetMousePosition.X, targetMousePosition.Y)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4)
+                    .Sleep(DragDropDelayMS)
+                    .LeftButtonUp()
+                    .Sleep(DragDropDelayMS));
+
+            await MoveMouseToControlAsync(form.ListDragSource);
+
+            await InputSimulator.SendAsync(
+                form,
+                inputSimulator => inputSimulator.Mouse.LeftButtonDown());
+
+            await InputSimulator.SendAsync(
+                form,
+                inputSimulator => inputSimulator.Mouse
+                    .LeftButtonDown()
+                    .Sleep(DragDropDelayMS)
+                    .MoveMouseTo(targetMousePosition.X - 40, targetMousePosition.Y)
+                    .Sleep(DragDropDelayMS)
+                    .MoveMouseTo(targetMousePosition.X, targetMousePosition.Y)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2)
+                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4)
+                    .Sleep(DragDropDelayMS)
+                    .LeftButtonUp()
+                    .Sleep(DragDropDelayMS));
+
+            Assert.Equal(2, form.ListDragTarget.Items.Count);
         });
     }
 
@@ -64,68 +176,70 @@ public class DragDropTests : ControlTestBase
 
         private Cursor? MyNoDropCursor;
         private Cursor? MyNormalCursor;
-        private readonly ITestOutputHelper testOutputHelper;
+
+        private readonly ITestOutputHelper _testOutputHelper;
 
         public DragDropForm(ITestOutputHelper testOutputHelper)
         {
-            this.ListDragSource = new ListBox();
-            this.ListDragTarget = new ListBox();
-            this.UseCustomCursorsCheck = new CheckBox();
-            this.DropLocationLabel = new Label();
+            ListDragSource = new ListBox();
+            ListDragTarget = new ListBox();
+            UseCustomCursorsCheck = new CheckBox();
+            DropLocationLabel = new Label();
 
-            this.SuspendLayout();
+            SuspendLayout();
 
             // ListDragSource
-            this.ListDragSource.Items.AddRange(new object[]
+            ListDragSource.Items.AddRange(new object[]
             {
                 "one", "two", "three", "four",
                 "five", "six", "seven", "eight",
                 "nine", "ten"
             });
-            this.ListDragSource.Location = new Point(10, 17);
-            this.ListDragSource.Size = new Size(120, 225);
-            this.ListDragSource.MouseDown += this.ListDragSource_MouseDown;
-            this.ListDragSource.QueryContinueDrag += this.ListDragSource_QueryContinueDrag;
-            this.ListDragSource.MouseUp += this.ListDragSource_MouseUp;
-            this.ListDragSource.MouseMove += this.ListDragSource_MouseMove;
-            this.ListDragSource.GiveFeedback += this.ListDragSource_GiveFeedback;
+            ListDragSource.Location = new Point(10, 17);
+            ListDragSource.Size = new Size(120, 225);
+            ListDragSource.MouseDown += ListDragSource_MouseDown;
+            ListDragSource.QueryContinueDrag += ListDragSource_QueryContinueDrag;
+            ListDragSource.MouseUp += ListDragSource_MouseUp;
+            ListDragSource.MouseMove += ListDragSource_MouseMove;
+            ListDragSource.GiveFeedback += ListDragSource_GiveFeedback;
 
             // ListDragTarget
-            this.ListDragTarget.AllowDrop = true;
-            this.ListDragTarget.Location = new Point(154, 17);
-            this.ListDragTarget.Size = new Size(120, 225);
-            this.ListDragTarget.DragOver += this.ListDragTarget_DragOver;
-            this.ListDragTarget.DragDrop += this.ListDragTarget_DragDrop;
-            this.ListDragTarget.DragEnter += this.ListDragTarget_DragEnter;
-            this.ListDragTarget.DragLeave += this.ListDragTarget_DragLeave;
+            ListDragTarget.AllowDrop = true;
+            ListDragTarget.Location = new Point(154, 17);
+            ListDragTarget.Size = new Size(120, 225);
+            ListDragTarget.DragOver += ListDragTarget_DragOver;
+            ListDragTarget.DragDrop += ListDragTarget_DragDrop;
+            ListDragTarget.DragEnter += ListDragTarget_DragEnter;
+            ListDragTarget.DragLeave += ListDragTarget_DragLeave;
 
             // UseCustomCursorsCheck
-            this.UseCustomCursorsCheck.Location = new Point(10, 243);
-            this.UseCustomCursorsCheck.Size = new Size(137, 24);
-            this.UseCustomCursorsCheck.Text = "Use Custom Cursors";
+            UseCustomCursorsCheck.Location = new Point(10, 243);
+            UseCustomCursorsCheck.Size = new Size(137, 24);
+            UseCustomCursorsCheck.Text = "Use Custom Cursors";
 
             // DropLocationLabel
-            this.DropLocationLabel.Location = new Point(154, 245);
-            this.DropLocationLabel.Size = new Size(137, 24);
-            this.DropLocationLabel.Text = "None";
+            DropLocationLabel.Location = new Point(154, 245);
+            DropLocationLabel.Size = new Size(137, 24);
+            DropLocationLabel.Text = "None";
 
             // Form1
-            this.ClientSize = new Size(292, 270);
-            this.Controls.AddRange(new Control[]
+            ClientSize = new Size(292, 270);
+            Controls.AddRange(new Control[]
             {
-                this.ListDragSource,
-                this.ListDragTarget,
-                this.UseCustomCursorsCheck,
-                this.DropLocationLabel
+                ListDragSource,
+                ListDragTarget,
+                UseCustomCursorsCheck,
+                DropLocationLabel
             });
-            this.testOutputHelper = testOutputHelper;
+
+            _testOutputHelper = testOutputHelper;
         }
 
         private void ListDragSource_MouseDown(object? sender, MouseEventArgs e)
         {
             // Get the index of the item the mouse is below.
             indexOfItemUnderMouseToDrag = ListDragSource.IndexFromPoint(e.X, e.Y);
-            testOutputHelper.WriteLine($"Mouse down on drag source at position ({e.X},{e.Y}). Index of element under mouse: {indexOfItemUnderMouseToDrag}");
+            _testOutputHelper.WriteLine($"Mouse down on drag source at position ({e.X},{e.Y}). Index of element under mouse: {indexOfItemUnderMouseToDrag}");
 
             if (indexOfItemUnderMouseToDrag != ListBox.NoMatches)
             {
@@ -151,12 +265,12 @@ public class DragDropTests : ControlTestBase
         {
             // Reset the drag rectangle when the mouse button is raised.
             dragBoxFromMouseDown = Rectangle.Empty;
-            testOutputHelper.WriteLine($"Mouse up on drag source at position ({e.X},{e.Y}).");
+            _testOutputHelper.WriteLine($"Mouse up on drag source at position ({e.X},{e.Y}).");
         }
 
         private void ListDragSource_MouseMove(object? sender, MouseEventArgs e)
         {
-            testOutputHelper.WriteLine($"Mouse move on drag source to position ({e.X},{e.Y}) with buttons {e.Button}.");
+            _testOutputHelper.WriteLine($"Mouse move on drag source to position ({e.X},{e.Y}) with buttons {e.Button}.");
             if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
             {
                 // If the mouse moves outside the rectangle, start the drag.
@@ -166,8 +280,8 @@ public class DragDropTests : ControlTestBase
                     // Create custom cursors for the drag-and-drop operation.
                     try
                     {
-                        MyNormalCursor = new Cursor("3dwarro.cur");
-                        MyNoDropCursor = new Cursor("3dwno.cur");
+                        MyNormalCursor = new Cursor("./Resources/3dwarro.cur");
+                        MyNoDropCursor = new Cursor("./Resources/3dwno.cur");
                     }
                     catch
                     {
@@ -183,7 +297,9 @@ public class DragDropTests : ControlTestBase
                         screenOffset = SystemInformation.WorkingArea.Location;
 
                         // Proceed with the drag-and-drop, passing in the list item.
-                        DragDropEffects dropEffect = ListDragSource.DoDragDrop(ListDragSource.Items[indexOfItemUnderMouseToDrag], DragDropEffects.All | DragDropEffects.Link);
+                        DragDropEffects dropEffect = ListDragSource.DoDragDrop(
+                            ListDragSource.Items[indexOfItemUnderMouseToDrag],
+                            DragDropEffects.All | DragDropEffects.Link);
 
                         // If the drag operation was a move then remove the item.
                         if (dropEffect == DragDropEffects.Move)
@@ -212,7 +328,7 @@ public class DragDropTests : ControlTestBase
 
         private void ListDragSource_GiveFeedback(object? sender, GiveFeedbackEventArgs e)
         {
-            testOutputHelper.WriteLine($"Give feedback on drag source.");
+            _testOutputHelper.WriteLine($"Give feedback on drag source.");
 
             // Use custom cursors if the check box is checked.
             if (UseCustomCursorsCheck.Checked)
@@ -228,7 +344,7 @@ public class DragDropTests : ControlTestBase
 
         private void ListDragTarget_DragOver(object? sender, DragEventArgs e)
         {
-            testOutputHelper.WriteLine($"Drag over on the drag target.");
+            _testOutputHelper.WriteLine($"Drag over on the drag target.");
 
             // Determine whether string data exists in the drop data. If not, then
             // the drop effect reflects that the drop cannot occur.
@@ -297,7 +413,7 @@ public class DragDropTests : ControlTestBase
 
         private void ListDragTarget_DragDrop(object? sender, DragEventArgs e)
         {
-            testOutputHelper.WriteLine($"Drag drop on drag target.");
+            _testOutputHelper.WriteLine($"Drag drop on drag target.");
 
             // Ensure that the list item index is contained in the data.
             if (e.Data is not null && e.Data.GetDataPresent(typeof(string)))
@@ -321,22 +437,22 @@ public class DragDropTests : ControlTestBase
 
         private void ListDragSource_QueryContinueDrag(object? sender, QueryContinueDragEventArgs e)
         {
-            testOutputHelper.WriteLine($"Query for drag continuation.");
+            _testOutputHelper.WriteLine($"Query for drag continuation.");
 
             // Cancel the drag if the mouse moves off the form.
             if (sender is ListBox lb)
             {
-                Form form = lb.FindForm();
+                Form form = lb.FindForm()!;
 
                 // Cancel the drag if the mouse moves off the form. The screenOffset
                 // takes into account any desktop bands that may be at the top or left
                 // side of the screen.
-                if (((Control.MousePosition.X - screenOffset.X) < form.DesktopBounds.Left) ||
-                    ((Control.MousePosition.X - screenOffset.X) > form.DesktopBounds.Right) ||
-                    ((Control.MousePosition.Y - screenOffset.Y) < form.DesktopBounds.Top) ||
-                    ((Control.MousePosition.Y - screenOffset.Y) > form.DesktopBounds.Bottom))
+                if (((MousePosition.X - screenOffset.X) < form.DesktopBounds.Left) ||
+                    ((MousePosition.X - screenOffset.X) > form.DesktopBounds.Right) ||
+                    ((MousePosition.Y - screenOffset.Y) < form.DesktopBounds.Top) ||
+                    ((MousePosition.Y - screenOffset.Y) > form.DesktopBounds.Bottom))
                 {
-                    testOutputHelper.WriteLine($"Cancelling drag.");
+                    _testOutputHelper.WriteLine($"Cancelling drag.");
                     e.Action = DragAction.Cancel;
                 }
             }
@@ -344,7 +460,7 @@ public class DragDropTests : ControlTestBase
 
         private void ListDragTarget_DragEnter(object? sender, DragEventArgs e)
         {
-            testOutputHelper.WriteLine($"Drag enter on target.");
+            _testOutputHelper.WriteLine($"Drag enter on target.");
 
             // Reset the label text.
             DropLocationLabel.Text = "None";
@@ -352,7 +468,7 @@ public class DragDropTests : ControlTestBase
 
         private void ListDragTarget_DragLeave(object? sender, EventArgs e)
         {
-            testOutputHelper.WriteLine($"Drag leave on target.");
+            _testOutputHelper.WriteLine($"Drag leave on target.");
 
             // Reset the label text.
             DropLocationLabel.Text = "None";

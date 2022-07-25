@@ -1806,7 +1806,8 @@ namespace System.Windows.Forms
                     }
 
                     // Formatting failed, raise OnDataError event.
-                    DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(exception,
+                    DataGridViewDataErrorEventArgs dgvdee = new(
+                        exception,
                         ColumnIndex,
                         rowIndex,
                         context);
@@ -1842,7 +1843,8 @@ namespace System.Windows.Forms
                     exception = new FormatException(SR.DataGridViewCell_FormattedValueHasWrongType);
                 }
 
-                DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(exception,
+                DataGridViewDataErrorEventArgs dgvdee = new(
+                    exception,
                     ColumnIndex,
                     rowIndex,
                     context);

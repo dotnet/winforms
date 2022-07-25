@@ -9,20 +9,23 @@ namespace System.Windows.Forms.Tests
 {
     public class LabelAccessibleObjectTests
     {
-        [WinFormsFact]
-        public void LabelAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.UIA.NamePropertyId, "Address")]
+        [InlineData((int)UiaCore.UIA.AutomationIdPropertyId, "Label1")]
+        public void LabelAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
         {
-            string testAccName = "Address";
-            using var label = new Label();
-            label.Text = "Some test label text";
-            label.Name = "Label1";
-            label.AccessibleName = testAccName;
-            AccessibleObject labelAccessibleObject = label.AccessibilityObject;
+            using Label label = new()
+            {
+                Text = "Some test label text",
+                Name = "Label1",
+                AccessibleName = "Address"
+            };
 
+            Label.LabelAccessibleObject accessibilityObject = (Label.LabelAccessibleObject)label.AccessibilityObject;
+
+            object value = accessibilityObject.GetPropertyValue((UiaCore.UIA)propertyID);
+            Assert.Equal(expected, value);
             Assert.False(label.IsHandleCreated);
-
-            var accessibleName = labelAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.NamePropertyId);
-            Assert.Equal(testAccName, accessibleName);
         }
 
         [WinFormsFact]
@@ -117,6 +120,60 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(expected, actual);
             Assert.False(label.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void LabelAccessibleObject_TextChanged_AutomationPropertyChanged_Raised()
+        {
+            const string newText = "New text";
+            using var control = new LabelWithCustomAccessibleObject(
+                (propertyId, value) => propertyId == UiaCore.UIA.NamePropertyId && ReferenceEquals(value, newText))
+            {
+                Text = "Text"
+            };
+
+            var accessibilityObject = control.AccessibilityObject as ControlAccessibleObjectWithNotificationCounter;
+            Assert.NotNull(accessibilityObject);
+            Assert.True(control.IsAccessibilityObjectCreated);
+            Assert.Equal(0, accessibilityObject.RaiseAutomationNotificationCallCount);
+
+            control.Text = newText;
+
+            Assert.Equal(1, accessibilityObject.RaiseAutomationNotificationCallCount);
+        }
+
+        private class LabelWithCustomAccessibleObject : Label
+        {
+            private readonly Func<UiaCore.UIA, object, bool> _checkRaisedEvent;
+
+            public LabelWithCustomAccessibleObject(Func<UiaCore.UIA, object, bool> checkRaisedEvent)
+            {
+                _checkRaisedEvent = checkRaisedEvent;
+            }
+
+            protected override AccessibleObject CreateAccessibilityInstance() => new ControlAccessibleObjectWithNotificationCounter(this, _checkRaisedEvent);
+        }
+
+        private class ControlAccessibleObjectWithNotificationCounter : Control.ControlAccessibleObject
+        {
+            private readonly Func<UiaCore.UIA, object, bool> _checkRaisedEvent;
+
+            public ControlAccessibleObjectWithNotificationCounter(Control ownerControl, Func<UiaCore.UIA, object, bool> checkRaisedEvent) : base(ownerControl)
+            {
+                _checkRaisedEvent = checkRaisedEvent;
+            }
+
+            internal int RaiseAutomationNotificationCallCount { get; private set; }
+
+            internal override bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object oldValue, object newValue)
+            {
+                if (_checkRaisedEvent(propertyId, newValue))
+                {
+                    RaiseAutomationNotificationCallCount++;
+                }
+
+                return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
+            }
         }
     }
 }

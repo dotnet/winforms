@@ -50,8 +50,6 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.AutomationIdPropertyId
-                        => Owner.Name,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
                         // This is necessary for compatibility with MSAA proxy:
                         // IsKeyboardFocusable = true regardless the control is enabled/disabled.

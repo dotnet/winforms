@@ -6,7 +6,10 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms.Automation;
 using System.Windows.Forms.TestUtilities;
+using Moq;
+using Moq.Protected;
 using Xunit;
 using static Interop;
 using static Interop.Richedit;
@@ -10615,6 +10618,42 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void RichTextBox_OnGotFocus_RaisesAutomationNotification_WithText(EventArgs eventArgs)
+        {
+            Mock<Control> mockParent = new() { CallBase = true };
+            Mock<Control.ControlAccessibleObject> mockAccessibleObject = new(MockBehavior.Strict, mockParent.Object);
+            mockAccessibleObject
+                .Setup(a => a.InternalRaiseAutomationNotification(
+                    It.IsAny<AutomationNotificationKind>(),
+                    It.IsAny<AutomationNotificationProcessing>(),
+                    It.IsAny<string>()))
+                .Returns(true)
+                .Verifiable();
+            mockParent.Protected().Setup<AccessibleObject>("CreateAccessibilityInstance")
+                .Returns(mockAccessibleObject.Object);
+
+            using Control parent = mockParent.Object;
+            string richTextBoxContent = "RichTextBox";
+            using var control = new SubRichTextBox
+            {
+                Parent = parent,
+                Text = richTextBoxContent,
+            };
+
+            // Enforce accessible object creation
+            Assert.Equal(mockAccessibleObject.Object, parent.AccessibilityObject);
+
+            control.OnGotFocus(eventArgs);
+
+            mockAccessibleObject.Verify(a => a.InternalRaiseAutomationNotification(
+                AutomationNotificationKind.Other,
+                AutomationNotificationProcessing.MostRecent,
+                richTextBoxContent),
+                Times.Once);
+        }
+
         private class CustomGetParaFormatRichTextBox : RichTextBox
         {
             public bool MakeCustom { get; set; }
@@ -10728,6 +10767,8 @@ namespace System.Windows.Forms.Tests
             public new void OnBackColorChanged(EventArgs e) => base.OnBackColorChanged(e);
 
             public new void OnContentsResized(ContentsResizedEventArgs e) => base.OnContentsResized(e);
+
+            public new void OnGotFocus(EventArgs e) => base.OnGotFocus(e);
 
             public new void OnHScroll(EventArgs e) => base.OnHScroll(e);
 

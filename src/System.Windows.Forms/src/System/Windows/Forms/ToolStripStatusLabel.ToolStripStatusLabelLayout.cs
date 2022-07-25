@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public partial class ToolStripStatusLabel
@@ -15,11 +13,9 @@ namespace System.Windows.Forms
         /// </summary>
         private class ToolStripStatusLabelLayout : ToolStripItemInternalLayout
         {
-            readonly ToolStripStatusLabel owner;
-
-            public ToolStripStatusLabelLayout(ToolStripStatusLabel owner) : base(owner)
+            public ToolStripStatusLabelLayout(ToolStripStatusLabel owner)
+                : base(owner)
             {
-                this.owner = owner;
             }
 
             protected override ToolStripItemLayoutOptions CommonLayoutOptions()
