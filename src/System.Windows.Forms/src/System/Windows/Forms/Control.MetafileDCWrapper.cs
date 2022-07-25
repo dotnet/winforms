@@ -5,6 +5,7 @@
 using System.Buffers;
 using System.Diagnostics;
 using System.Drawing;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -45,7 +46,7 @@ namespace System.Windows.Forms
 
                 int planes = Gdi32.GetDeviceCaps(HDC, Gdi32.DeviceCapability.PLANES);
                 int bitsPixel = Gdi32.GetDeviceCaps(HDC, Gdi32.DeviceCapability.BITSPIXEL);
-                _hBitmap = Gdi32.CreateBitmap(size.Width, size.Height, (uint)planes, (uint)bitsPixel, null);
+                _hBitmap = PInvoke.CreateBitmap(size.Width, size.Height, (uint)planes, (uint)bitsPixel, null);
                 _hOriginalBmp = (Gdi32.HBITMAP)Gdi32.SelectObject(HDC, _hBitmap);
             }
 
@@ -92,7 +93,7 @@ namespace System.Windows.Forms
                 long i;
 
                 // Get the bitmap from the DC by selecting in a 1x1 pixel temp bitmap
-                Gdi32.HBITMAP hNullBitmap = Gdi32.CreateBitmap(1, 1, 1, 1, null);
+                Gdi32.HBITMAP hNullBitmap = PInvoke.CreateBitmap(1, 1, 1, 1, null);
                 if (hNullBitmap.IsNull)
                 {
                     return false;

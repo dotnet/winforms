@@ -118,14 +118,14 @@ namespace System.Windows.Forms
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
         }
 
-        private static Gdi32.HBITMAP GetCompatibleBitmap(Bitmap bm)
+        private static Gdi.HBITMAP GetCompatibleBitmap(Bitmap bm)
         {
             using var screenDC = User32.GetDcScope.ScreenDC;
 
             // GDI+ returns a DIBSECTION based HBITMAP. The clipboard deals well
             // only with bitmaps created using CreateCompatibleBitmap(). So, we
             // convert the DIBSECTION into a compatible bitmap.
-            Gdi32.HBITMAP hBitmap = bm.GetHBITMAP();
+            Gdi.HBITMAP hBitmap = bm.GetHBITMAP();
 
             // Create a compatible DC to render the source bitmap.
             using var sourceDC = new Gdi32.CreateDcScope(screenDC);
@@ -133,7 +133,7 @@ namespace System.Windows.Forms
 
             // Create a compatible DC and a new compatible bitmap.
             using var destinationDC = new Gdi32.CreateDcScope(screenDC);
-            Gdi32.HBITMAP bitmap = Gdi32.CreateCompatibleBitmap(screenDC, bm.Size.Width, bm.Size.Height);
+            Gdi.HBITMAP bitmap = PInvoke.CreateCompatibleBitmap(screenDC, bm.Size.Width, bm.Size.Height);
 
             // Select the new bitmap into a compatible DC and render the blt the original bitmap.
             using var destinationBitmapSelection = new Gdi32.SelectObjectScope(destinationDC, bitmap);
