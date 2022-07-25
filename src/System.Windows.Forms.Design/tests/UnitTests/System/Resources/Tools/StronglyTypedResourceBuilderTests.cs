@@ -7,9 +7,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using Microsoft.CSharp;
-using Newtonsoft.Json.Linq;
 using Xunit;
-using static Interop.Gdi32;
 
 namespace System.Resources.Tools.Tests;
 
@@ -39,7 +37,7 @@ public partial class StronglyTypedResourceBuilderTests
         """;
 
     [Fact]
-    public void Create_NullBaseName_ThrowsArgumentNull()
+    public void StronglyTypedResourceBuilder_Create_NullBaseName_ThrowsArgumentNull()
     {
         Hashtable resources = new();
         Assert.Throws<ArgumentNullException>(
@@ -87,7 +85,7 @@ public partial class StronglyTypedResourceBuilderTests
     }
 
     [Fact]
-    public void Create_NullCodeProvider_ThrowsArgumentNull()
+    public void StronglyTypedResourceBuilder_Create_NullCodeProvider_ThrowsArgumentNull()
     {
         Hashtable resources = new();
         Assert.Throws<ArgumentNullException>(
@@ -135,7 +133,7 @@ public partial class StronglyTypedResourceBuilderTests
     }
 
     [Fact]
-    public void Create_NullResourceList_ThrowsArgumentNull()
+    public void StronglyTypedResourceBuilder_Create_NullResourceList_ThrowsArgumentNull()
     {
         Hashtable resources = new();
         Assert.Throws<ArgumentNullException>(
@@ -161,7 +159,7 @@ public partial class StronglyTypedResourceBuilderTests
     }
 
     [Fact]
-    public void Create_NullResxFile_ThrowsArgumentNull()
+    public void StronglyTypedResourceBuilder_Create_NullResxFile_ThrowsArgumentNull()
     {
         Assert.Throws<ArgumentNullException>(
             "resxFile",
@@ -186,7 +184,7 @@ public partial class StronglyTypedResourceBuilderTests
     }
 
     [Fact]
-    public static void Create_MismatchedResxDataNode_Throws()
+    public static void StronglyTypedResourceBuilder_Create_MismatchedResxDataNode_Throws()
     {
         Hashtable values = new()
         {
@@ -203,7 +201,7 @@ public partial class StronglyTypedResourceBuilderTests
     }
 
     [Fact]
-    public static void Create_EmptyResx()
+    public static void StronglyTypedResourceBuilder_Create_EmptyResx()
     {
         using var temp = TempFile.Create(CreateResx());
         var compileUnit = StronglyTypedResourceBuilder.Create(
@@ -219,7 +217,7 @@ public partial class StronglyTypedResourceBuilderTests
     }
 
     [Fact]
-    public static void Create_StringResource_FromFile()
+    public static void StronglyTypedResourceBuilder_Create_StringResource_FromFile()
     {
         const string data = """
             <data name="TestName" xml:space="preserve">
@@ -250,7 +248,7 @@ public partial class StronglyTypedResourceBuilderTests
     }
 
     [Fact]
-    public static void Create_StringResource_FromResxWriterFile()
+    public static void StronglyTypedResourceBuilder_Create_StringResource_FromResxWriterFile()
     {
         using var temp = TempFile.Create();
         using (ResXResourceWriter writer = new(temp.Path))
@@ -281,7 +279,7 @@ public partial class StronglyTypedResourceBuilderTests
     }
 
     [Fact]
-    public static void Create_StringResource_FromResxDataNode()
+    public static void StronglyTypedResourceBuilder_Create_StringResource_FromResxDataNode()
     {
         Hashtable values = new()
         {
@@ -310,7 +308,7 @@ public partial class StronglyTypedResourceBuilderTests
     }
 
     [Fact]
-    public static void Create_BitmapResource_FromFile()
+    public static void StronglyTypedResourceBuilder_Create_BitmapResource_FromFile()
     {
         const string data = """
             <data name="Image1" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -352,7 +350,7 @@ public partial class StronglyTypedResourceBuilderTests
     }
 
     [Fact]
-    public static void Create_BitmapResource_FromMemory()
+    public static void StronglyTypedResourceBuilder_Create_BitmapResource_FromMemory()
     {
         using Bitmap bitmap = new(10, 10);
         var converter = TypeDescriptor.GetConverter(bitmap);
