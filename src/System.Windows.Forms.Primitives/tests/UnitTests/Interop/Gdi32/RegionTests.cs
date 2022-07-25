@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using Windows.Win32;
 using Xunit;
 using static Interop;
 using static Interop.Gdi32;
@@ -20,7 +21,7 @@ namespace System.Windows.Forms.Tests.Interop.Gdi32
 
             try
             {
-                HBITMAP hbitmap = CreateCompatibleBitmap(hdc, 20, 20);
+                HBITMAP hbitmap = PInvoke.CreateCompatibleBitmap(hdc, 20, 20);
                 Assert.False(hdc.IsNull);
 
                 try
@@ -61,7 +62,7 @@ namespace System.Windows.Forms.Tests.Interop.Gdi32
 
             try
             {
-                HBITMAP hbitmap = CreateCompatibleBitmap(hdc, 20, 20);
+                HBITMAP hbitmap = PInvoke.CreateCompatibleBitmap(hdc, 20, 20);
                 Assert.False(hdc.IsNull);
 
                 try
@@ -89,7 +90,7 @@ namespace System.Windows.Forms.Tests.Interop.Gdi32
 
             try
             {
-                HBITMAP hbitmap = CreateCompatibleBitmap(hdc, 20, 20);
+                HBITMAP hbitmap = PInvoke.CreateCompatibleBitmap(hdc, 20, 20);
                 Assert.False(hdc.IsNull);
 
                 try
