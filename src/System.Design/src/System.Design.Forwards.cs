@@ -57,3 +57,6 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.UserControlDocumentDesigner))]
 
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TabOrder))]
+
+[assembly: TypeForwardedTo(typeof(System.Resources.Tools.StronglyTypedResourceBuilder))]
+[assembly: TypeForwardedTo(typeof(System.Resources.Tools.ITargetAwareCodeDomProvider))]

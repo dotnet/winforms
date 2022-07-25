@@ -184,7 +184,7 @@ namespace System.Resources.Tools
                 {
                     // If the object is null, we don't have a good way of guessing the type. Use Object. This will be
                     // rare after WinForms gets away from their resource pull model in Whidbey M3.
-                    Type type = (entry.Value == null) ? typeof(object) : entry.Value.GetType();
+                    Type type = (entry.Value is null) ? typeof(object) : entry.Value.GetType();
                     data = new ResourceData(type, entry.Value?.ToString());
                 }
 
@@ -367,7 +367,7 @@ namespace System.Resources.Tools
             codeCompileUnit.Namespaces.Add(codeNamespace);
 
             // Generate class
-            CodeTypeDeclaration classType = new CodeTypeDeclaration(className);
+            CodeTypeDeclaration classType = new(className);
             codeNamespace.Types.Add(classType);
             AddGeneratedCodeAttributeforMember(classType);
 
@@ -768,7 +768,7 @@ namespace System.Resources.Tools
             else
             {
                 // Stream or Object
-                if (valueAsString == null || string.Equals(typeName, valueAsString))
+                if (valueAsString is null || string.Equals(typeName, valueAsString))
                 {
                     // If the type did not override ToString(), ToString() just returns the type name.
                     text = string.Format(SR.NonStringPropertyComment, typeName);
