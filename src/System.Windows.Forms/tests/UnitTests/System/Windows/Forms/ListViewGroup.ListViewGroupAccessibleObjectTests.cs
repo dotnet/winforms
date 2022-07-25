@@ -110,6 +110,25 @@ namespace System.Windows.Forms.Tests
             Assert.False(list.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void ListViewGroupAccessibleObject_GetPropertyValue_ReturnsExpected_WithSubtitle()
+        {
+            using ListView list = new ListView();
+            const string name = "Group1";
+            const string subtitle = "Subtitle";
+            ListViewGroup listGroup = new ListViewGroup(name) { Subtitle = subtitle };
+            listGroup.Items.Add(new ListViewItem());
+            list.Groups.Add(listGroup);
+
+            AccessibleObject accessibleObject = listGroup.AccessibilityObject;
+            Assert.False(list.IsHandleCreated);
+
+            object accessibleName = accessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+            Assert.Equal($"{name}. {subtitle}", accessibleName);
+
+            Assert.False(list.IsHandleCreated);
+        }
+
         [WinFormsTheory]
         [MemberData(nameof(ListViewGroupAccessibleObject_TestData))]
         public void ListViewGroupAccessibleObject_FragmentNavigate_ReturnsExpected_WithDefaultGroup(View view, bool showGroups, bool createHandle)
