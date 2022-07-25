@@ -307,7 +307,7 @@ override System.Windows.Forms.ContainerControl.OnResize(System.EventArgs! e) -> 
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates cellState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.PaintBorder(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle bounds, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.ToString() -> string
-~override System.Windows.Forms.Design.ComponentEditorPage.CreateParams.get -> System.Windows.Forms.CreateParams
+override System.Windows.Forms.Design.ComponentEditorPage.CreateParams.get -> System.Windows.Forms.CreateParams!
 ~override System.Windows.Forms.ErrorProvider.Site.set -> void
 ~override System.Windows.Forms.HelpProvider.ToString() -> string
 ~override System.Windows.Forms.HtmlDocument.Equals(object obj) -> bool
@@ -1129,13 +1129,13 @@ System.Windows.Forms.DataGridViewDataErrorEventArgs.Exception.get -> System.Exce
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue2.get -> object
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.DataGridViewSortCompareEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, object cellValue1, object cellValue2, int rowIndex1, int rowIndex2) -> void
-~System.Windows.Forms.Design.ComponentEditorPage.Component.get -> System.ComponentModel.IComponent
-~System.Windows.Forms.Design.ComponentEditorPage.Component.set -> void
-~System.Windows.Forms.Design.ComponentEditorPage.GetSelectedComponent() -> System.ComponentModel.IComponent
-~System.Windows.Forms.Design.ComponentEditorPage.Icon.get -> System.Drawing.Icon
-~System.Windows.Forms.Design.ComponentEditorPage.Icon.set -> void
-~System.Windows.Forms.Design.ComponentEditorPage.PageSite.get -> System.Windows.Forms.IComponentEditorPageSite
-~System.Windows.Forms.Design.ComponentEditorPage.PageSite.set -> void
+System.Windows.Forms.Design.ComponentEditorPage.Component.get -> System.ComponentModel.IComponent?
+System.Windows.Forms.Design.ComponentEditorPage.Component.set -> void
+System.Windows.Forms.Design.ComponentEditorPage.GetSelectedComponent() -> System.ComponentModel.IComponent?
+System.Windows.Forms.Design.ComponentEditorPage.Icon.get -> System.Drawing.Icon!
+System.Windows.Forms.Design.ComponentEditorPage.Icon.set -> void
+System.Windows.Forms.Design.ComponentEditorPage.PageSite.get -> System.Windows.Forms.IComponentEditorPageSite?
+System.Windows.Forms.Design.ComponentEditorPage.PageSite.set -> void
 ~System.Windows.Forms.Design.IUIService.CanShowComponentEditor(object component) -> bool
 ~System.Windows.Forms.Design.IUIService.GetDialogOwnerWindow() -> System.Windows.Forms.IWin32Window
 ~System.Windows.Forms.Design.IUIService.ShowComponentEditor(object component, System.Windows.Forms.IWin32Window parent) -> bool
@@ -2114,10 +2114,10 @@ virtual System.Windows.Forms.Control.OnValidating(System.ComponentModel.CancelEv
 ~virtual System.Windows.Forms.DataGridViewRowCollection.InsertRange(int rowIndex, params System.Windows.Forms.DataGridViewRow[] dataGridViewRows) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.Remove(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
-~virtual System.Windows.Forms.Design.ComponentEditorPage.GetControl() -> System.Windows.Forms.Control
-~virtual System.Windows.Forms.Design.ComponentEditorPage.SetComponent(System.ComponentModel.IComponent component) -> void
-~virtual System.Windows.Forms.Design.ComponentEditorPage.SetSite(System.Windows.Forms.IComponentEditorPageSite site) -> void
-~virtual System.Windows.Forms.Design.ComponentEditorPage.Title.get -> string
+virtual System.Windows.Forms.Design.ComponentEditorPage.GetControl() -> System.Windows.Forms.Control!
+virtual System.Windows.Forms.Design.ComponentEditorPage.SetComponent(System.ComponentModel.IComponent? component) -> void
+virtual System.Windows.Forms.Design.ComponentEditorPage.SetSite(System.Windows.Forms.IComponentEditorPageSite? site) -> void
+virtual System.Windows.Forms.Design.ComponentEditorPage.Title.get -> string!
 ~virtual System.Windows.Forms.ErrorProvider.OnRightToLeftChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.HelpProvider.CanExtend(object target) -> bool
 ~virtual System.Windows.Forms.HelpProvider.GetHelpKeyword(System.Windows.Forms.Control ctl) -> string
@@ -7095,7 +7095,7 @@ System.Windows.Forms.Design.ComponentEditorForm
 System.Windows.Forms.Design.ComponentEditorForm.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.Design.ComponentEditorForm.ComponentEditorForm(object! component, System.Type![]! pageTypes) -> void
 System.Windows.Forms.Design.ComponentEditorPage
-System.Windows.Forms.Design.ComponentEditorPage.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.Design.ComponentEditorPage.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.Design.ComponentEditorPage.CommitOnDeactivate.get -> bool
 System.Windows.Forms.Design.ComponentEditorPage.CommitOnDeactivate.set -> void
 System.Windows.Forms.Design.ComponentEditorPage.ComponentEditorPage() -> void

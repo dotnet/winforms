@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using static Interop;
 
@@ -15,7 +14,7 @@ namespace System.Windows.Forms.Design
     /// </summary>
     public abstract class ComponentEditorPage : Panel
     {
-        private Icon _icon;
+        private Icon? _icon;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="ComponentEditorPage"/> class.
@@ -39,7 +38,7 @@ namespace System.Windows.Forms.Design
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler AutoSizeChanged
+        public new event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -48,12 +47,12 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Gets or sets the page site
         /// </summary>
-        protected IComponentEditorPageSite PageSite { get; set; }
+        protected IComponentEditorPageSite? PageSite { get; set; }
 
         /// <summary>
         ///  Gets or sets the component to edit
         /// </summary>
-        protected IComponent Component { get; set; }
+        protected IComponent? Component { get; set; }
 
         /// <summary>
         ///  Indicates whether the page is being activated for the first time
@@ -91,6 +90,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Gets or sets the icon for this page
         /// </summary>
+        [AllowNull]
         public Icon Icon
         {
             get => _icon ??= new Icon(typeof(ComponentEditorPage), "ComponentEditorPage");
@@ -159,7 +159,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Gets the component that is to be edited
         /// </summary>
-        protected IComponent GetSelectedComponent() => Component;
+        protected IComponent? GetSelectedComponent() => Component;
 
         /// <summary>
         ///  Processes messages that could be handled by the page
@@ -216,7 +216,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Sets the component to be edited
         /// </summary>
-        public virtual void SetComponent(IComponent component)
+        public virtual void SetComponent(IComponent? component)
         {
             Component = component;
             LoadRequired = true;
@@ -225,7 +225,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Sets the site for this page.
         /// </summary>
-        public virtual void SetSite(IComponentEditorPageSite site)
+        public virtual void SetSite(IComponentEditorPageSite? site)
         {
             PageSite = site;
             site?.GetControl()?.Controls.Add(this);
