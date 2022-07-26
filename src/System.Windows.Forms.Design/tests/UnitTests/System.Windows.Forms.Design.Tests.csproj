@@ -46,6 +46,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Resources\Icon1.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Image1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

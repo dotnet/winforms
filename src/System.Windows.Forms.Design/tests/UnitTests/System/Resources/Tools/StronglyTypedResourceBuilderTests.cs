@@ -346,7 +346,8 @@ public partial class StronglyTypedResourceBuilderTests
         byte[] resourceBytes = Assert.IsType<byte[]>(imageProperty.GetValue(obj: null));
 
         var converter = TypeDescriptor.GetConverter(typeof(Bitmap));
-        var result = converter.ConvertFrom(resourceBytes);
+        Bitmap result = Assert.IsType<Bitmap>(converter.ConvertFrom(resourceBytes));
+        Assert.Equal(new(800, 600), result.Size);
     }
 
     [Fact]
@@ -390,6 +391,93 @@ public partial class StronglyTypedResourceBuilderTests
         Assert.NotNull(imageProperty);
         byte[] resourceBytes = Assert.IsType<byte[]>(imageProperty.GetValue(obj: null));
         Bitmap result = Assert.IsType<Bitmap>(converter.ConvertFrom(resourceBytes));
-        Assert.Equal(result.Size, bitmap.Size);
+        Assert.Equal(bitmap.Size, result.Size);
+    }
+
+    [Fact]
+    public static void StronglyTypedResourceBuilder_Create_IconResource_FromFile()
+    {
+        const string data = """
+            <data name="Icon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+              <value>Resources\Icon1.ico;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+            </data>
+            """;
+
+        using var temp = TempFile.Create(CreateResx(data));
+
+        var compileUnit = StronglyTypedResourceBuilder.Create(
+            resxFile: temp.Path,
+            baseName: "Resources",
+            generatedCodeNamespace: "Namespace",
+            s_cSharpProvider,
+            internalClass: false,
+            out _);
+
+        MemoryStream resourceStream = new();
+        using ResXResourceReader reader = new(temp.Path);
+        var enumerator = reader.GetEnumerator();
+        using ResourceWriter resourceWriter = new(resourceStream);
+
+        while (enumerator.MoveNext())
+        {
+            resourceWriter.AddResource((string)enumerator.Key, enumerator.Value);
+        }
+
+        resourceWriter.Generate();
+        resourceStream.Position = 0;
+
+        Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
+        Assert.NotNull(type);
+        var iconProperty = type.GetProperty("Icon1");
+        Assert.NotNull(iconProperty);
+        byte[] resourceByte = Assert.IsType<byte[]>(iconProperty.GetValue(obj: null));
+
+        var converter = TypeDescriptor.GetConverter(typeof(Icon));
+        Icon result = Assert.IsType<Icon>(converter.ConvertFrom(resourceByte));
+        Assert.Equal(new(32, 32), result.Size);
+    }
+
+    [Fact]
+    public static void StronglyTypedResourceBuilder_Create_IconResource_FromMemory()
+    {
+        using Icon icon = new(SystemIcons.Exclamation, 16, 16);
+        var converter = TypeDescriptor.GetConverter(icon);
+
+        ResXDataNode node = new("Icon1", converter.ConvertTo(icon, typeof(byte[])));
+        using var temp = TempFile.Create();
+        using (ResXResourceWriter resxWriter = new(temp.Path))
+        {
+            resxWriter.AddResource(node);
+            resxWriter.Generate();
+        }
+
+        var compileUnit = StronglyTypedResourceBuilder.Create(
+            resxFile: temp.Path,
+            baseName: "Resources",
+            generatedCodeNamespace: "Namespace",
+            s_cSharpProvider,
+            internalClass: false,
+            out _);
+
+        MemoryStream resourceStream = new();
+        using ResXResourceReader resXReader = new(temp.Path);
+        using ResourceWriter resourceWriter = new(resourceStream);
+        var enumerator = resXReader.GetEnumerator();
+        while (enumerator.MoveNext())
+        {
+            resourceWriter.AddResource((string)enumerator.Key, enumerator.Value);
+        }
+
+        resourceWriter.Generate();
+
+        resourceStream.Position = 0;
+
+        Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
+        Assert.NotNull(type);
+        var imageProperty = type.GetProperty("Icon1");
+        Assert.NotNull(imageProperty);
+        byte[] resourceBytes = Assert.IsType<byte[]>(imageProperty.GetValue(obj: null));
+        Icon result = Assert.IsType<Icon>(converter.ConvertFrom(resourceBytes));
+        Assert.Equal(icon.Size, result.Size);
     }
 }
