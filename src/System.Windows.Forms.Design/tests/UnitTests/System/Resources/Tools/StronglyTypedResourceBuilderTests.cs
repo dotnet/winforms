@@ -355,23 +355,13 @@ public partial class StronglyTypedResourceBuilderTests
         using Bitmap bitmap = new(10, 10);
         var converter = TypeDescriptor.GetConverter(bitmap);
 
-        // StronglyTypedResourceBuilder can't handle embedded byte data, need to investigate further.
-        // (Doing it this way uses the Image TypeConverter to serialize the bitmap as a UUEncoded byte array.)
-        //
-        // using var temp = TempFile.Create();
-        // using (ResXResourceWriter writer = new(temp.Path))
-        // {
-        //     writer.AddResource("Image1", converter.ConvertTo(bitmap, typeof(byte[])));
-        //     writer.Generate();
-        // }
-
-        const string data = """
-            <data name="Image1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-                <value>Resources\Image1.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-            </data>
-            """;
-
-        using var temp = TempFile.Create(CreateResx(data));
+        ResXDataNode node = new("Image1", converter.ConvertTo(bitmap, typeof(byte[])));
+        using var temp = TempFile.Create();
+        using (ResXResourceWriter resxWriter = new(temp.Path))
+        {
+            resxWriter.AddResource(node);
+            resxWriter.Generate();
+        }
 
         var compileUnit = StronglyTypedResourceBuilder.Create(
             resxFile: temp.Path,
@@ -382,8 +372,13 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         MemoryStream resourceStream = new();
+        using ResXResourceReader resXReader = new(temp.Path);
         using ResourceWriter resourceWriter = new(resourceStream);
-        resourceWriter.AddResource("Image1", converter.ConvertTo(bitmap, typeof(byte[])));
+        var enumerator = resXReader.GetEnumerator();
+        while (enumerator.MoveNext())
+        {
+            resourceWriter.AddResource((string)enumerator.Key, enumerator.Value);
+        }
 
         resourceWriter.Generate();
 
