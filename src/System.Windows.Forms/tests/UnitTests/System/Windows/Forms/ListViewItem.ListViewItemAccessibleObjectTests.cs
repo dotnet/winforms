@@ -1839,6 +1839,82 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(createControl, listView.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void ListViewItemAccessibleObject_IsDisconnected_WhenListViewReleasesUiaProvider()
+        {
+            using ListView listView = new();
+            ListViewItem item = new("ListItem");
+            listView.Items.Add(item);
+            EnforceAccessibleObjectCreation(item);
+
+            listView.ReleaseUiaProvider(listView.Handle);
+
+            Assert.Null(item.TestAccessor().Dynamic._accessibilityObject);
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewItemAccessibleObject_IsDisconnected_WhenListViewIsCleared()
+        {
+            using ListView listView = new();
+            ListViewItem item = new("ListItem");
+            listView.Items.Add(item);
+            EnforceAccessibleObjectCreation(item);
+
+            listView.Clear();
+
+            Assert.Null(item.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewItemAccessibleObject_IsDisconnected_WhenItemsAreCleared()
+        {
+            using ListView listView = new();
+            ListViewItem item = new("ListItem");
+            listView.Items.Add(item);
+            EnforceAccessibleObjectCreation(item);
+
+            listView.Items.Clear();
+
+            Assert.Null(item.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewItemAccessibleObject_IsDisconnected_WhenItemIsRemoved()
+        {
+            using ListView listView = new();
+            ListViewItem item = new("ListItem");
+            listView.Items.Add(item);
+            EnforceAccessibleObjectCreation(item);
+
+            listView.Items.Remove(item);
+
+            Assert.Null(item.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewItemAccessibleObject_IsDisconnected_WhenItemIsReplaced()
+        {
+            using ListView listView = new();
+            ListViewItem item = new("ListItem");
+            listView.Items.Add(item);
+            EnforceAccessibleObjectCreation(item);
+
+            listView.Items[0] = new ListViewItem();
+
+            Assert.Null(item.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        private static void EnforceAccessibleObjectCreation(ListViewItem listViewItem)
+        {
+            _ = listViewItem.AccessibilityObject;
+            Assert.NotNull(listViewItem.TestAccessor().Dynamic._accessibilityObject);
+        }
+
         private ListView GetBoundsListView(View view, bool showGroups, bool virtualMode)
         {
             ListView listView = new()

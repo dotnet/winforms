@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.Serialization;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -70,8 +71,6 @@ namespace System.Windows.Forms
                     return _accessibilityObject;
                 }
             }
-
-            internal bool IsAccessibilityObjectCreated => _accessibilityObject is not null;
 
             public Color BackColor
             {
@@ -246,6 +245,16 @@ namespace System.Windows.Forms
             [OnSerialized]
             private static void OnSerialized(StreamingContext ctx)
             {
+            }
+
+            internal void ReleaseUiaProvider()
+            {
+                if (OsVersion.IsWindows8OrGreater && _accessibilityObject is not null)
+                {
+                    HRESULT result = UiaCore.UiaDisconnectProvider(_accessibilityObject);
+                    Debug.Assert(result == HRESULT.S_OK);
+                    _accessibilityObject = null;
+                }
             }
 
             public void ResetStyle()

@@ -38,5 +38,68 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(testText, accessibleObject.GetPropertyValue(UIA.LegacyIAccessibleNamePropertyId));
             Assert.Null(accessibleObject.GetPropertyValue(UIA.LegacyIAccessibleDefaultActionPropertyId));
         }
+
+        [WinFormsFact]
+        public void ListViewColumnHeaderAccessibleObject_IsDisconnected_WhenListViewReleasesUiaProvider()
+        {
+            using ListView listView = new();
+            using ColumnHeader columnHeader = new();
+            listView.Columns.Add(columnHeader);
+            EnforceAccessibleObjectCreation(columnHeader);
+            _ = listView.AccessibilityObject;
+
+            listView.ReleaseUiaProvider(listView.Handle);
+
+            Assert.Null(columnHeader.TestAccessor().Dynamic._accessibilityObject);
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewColumnHeaderAccessibleObject_IsDisconnected_WhenListViewIsCleared()
+        {
+            using ListView listView = new();
+            using ColumnHeader columnHeader = new();
+            listView.Columns.Add(columnHeader);
+            EnforceAccessibleObjectCreation(columnHeader);
+
+            listView.Clear();
+
+            Assert.Null(columnHeader.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewColumnHeaderAccessibleObject_IsDisconnected_WhenColumnsAreCleared()
+        {
+            using ListView listView = new();
+            using ColumnHeader columnHeader = new();
+            listView.Columns.Add(columnHeader);
+            EnforceAccessibleObjectCreation(columnHeader);
+
+            listView.Columns.Clear();
+
+            Assert.Null(columnHeader.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewColumnHeaderAccessibleObject_IsDisconnected_WhenColumnIsRemoved()
+        {
+            using ListView listView = new();
+            using ColumnHeader columnHeader = new();
+            listView.Columns.Add(columnHeader);
+            EnforceAccessibleObjectCreation(columnHeader);
+
+            listView.Columns.Remove(columnHeader);
+
+            Assert.Null(columnHeader.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        private static void EnforceAccessibleObjectCreation(ColumnHeader columnHeader)
+        {
+            _ = columnHeader.AccessibilityObject;
+            Assert.NotNull(columnHeader.TestAccessor().Dynamic._accessibilityObject);
+        }
     }
 }

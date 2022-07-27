@@ -1284,6 +1284,56 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void ListViewGroupAccessibleObject_IsDisconnected_WhenListViewReleasesUiaProvider()
+        {
+            using ListView listView = new();
+            ListViewGroup group = new();
+            listView.Groups.Add(group);
+            EnforceAccessibleObjectCreation(group);
+            EnforceAccessibleObjectCreation(listView.DefaultGroup);
+
+            listView.ReleaseUiaProvider(listView.Handle);
+
+            Assert.Null(group.TestAccessor().Dynamic._accessibilityObject);
+            Assert.Null(listView.DefaultGroup.TestAccessor().Dynamic._accessibilityObject);
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewGroupAccessibleObject_IsDisconnected_WhenGroupsAreCleared()
+        {
+            using ListView listView = new();
+            ListViewGroup group = new();
+            listView.Groups.Add(group);
+            EnforceAccessibleObjectCreation(group);
+
+            listView.Groups.Clear();
+
+            Assert.Null(group.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewGroupAccessibleObject_IsDisconnected_WhenGroupIsRemoved()
+        {
+            using ListView listView = new();
+            ListViewGroup group = new();
+            listView.Groups.Add(group);
+            EnforceAccessibleObjectCreation(group);
+
+            listView.Groups.Remove(group);
+
+            Assert.Null(group.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        private static void EnforceAccessibleObjectCreation(ListViewGroup group)
+        {
+            _ = group.AccessibilityObject;
+            Assert.NotNull(group.TestAccessor().Dynamic._accessibilityObject);
+        }
+
         private ListView GetListViewItemWithInvisibleItems(View view)
         {
             ListView listView = new ListView() { View = view };
