@@ -98,6 +98,8 @@ namespace System.Windows.Forms
                 mediumDestination.tymed = mediumSource.tymed;
                 mediumDestination.pUnkForRelease = mediumSource.pUnkForRelease;
 
+                // If the object is non-null, perform an indirect AddRef() by
+                // requesting the IUnknown.
                 if (mediumSource.pUnkForRelease is not null)
                 {
                     Marshal.GetIUnknownForObject(mediumSource.pUnkForRelease);
