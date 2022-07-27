@@ -11,18 +11,21 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.Runtime.Versioning;
 using System.Windows.Forms.Layout;
 using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
+#pragma warning disable CA2252 
     [DesignTimeVisible(false)]
     [Designer("System.Windows.Forms.Design.ToolStripItemDesigner, " + AssemblyRef.SystemDesign)]
     [DefaultEvent(nameof(Click))]
     [ToolboxItem(false)]
     [DefaultProperty(nameof(Text))]
-    public abstract partial class ToolStripItem : CommandComponent,
+    public abstract partial class ToolStripItem : BindableComponent,
+                              ICommandBindingTargetProvider,
                               IDropTarget,
                               ISupportOleDropSource,
                               IArrangedElement,
@@ -59,6 +62,10 @@ namespace System.Windows.Forms
 
         private ToolStripItemDisplayStyle _displayStyle = ToolStripItemDisplayStyle.ImageAndText;
 
+        // Backing fields for the infrastructure to make ToolStripItem bindable and introduce (bindable) ICommand.
+        private System.Windows.Input.ICommand _command;
+        private object _commandParameter;
+
         private static readonly ArrangedElementCollection s_emptyChildCollection = new ArrangedElementCollection();
 
         internal static readonly object s_mouseDownEvent = new object();
@@ -89,6 +96,10 @@ namespace System.Windows.Forms
         internal static readonly object s_ownerChangedEvent = new object();
         internal static readonly object s_paintEvent = new object();
         internal static readonly object s_textChangedEvent = new object();
+
+        internal static readonly object s_commandChangedEvent = new();
+        internal static readonly object s_commandParameterChangedEvent = new();
+        internal static readonly object s_commandCanExecuteChangedEvent = new();
 
         // Property store keys for properties. The property store allocates most efficiently
         // in groups of four, so we try to lump properties in groups of four based on how
@@ -405,6 +416,74 @@ namespace System.Windows.Forms
                     Invalidate();
                 }
             }
+        }
+
+        [RequiresPreviewFeatures]
+        [Bindable(true)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatData))]
+        public System.Windows.Input.ICommand Command
+        {
+            get => _command;
+            set => ICommandBindingTargetProvider.CommandSetter(this, value, ref _command);
+        }
+
+        /// <summary>
+        /// Occurs when the Command.CanExecute status has changed.
+        /// </summary>
+        [RequiresPreviewFeatures]
+        [SRCategory(nameof(SR.CatData))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event EventHandler CommandCanExecuteChanged
+        {
+            add => Events.AddHandler(s_commandCanExecuteChangedEvent, value);
+            remove => Events.RemoveHandler(s_commandCanExecuteChangedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the Command has changed.
+        /// </summary>
+        [RequiresPreviewFeatures]
+        [SRCategory(nameof(SR.CatData))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event EventHandler CommandChanged
+        {
+            add => Events.AddHandler(s_commandChangedEvent, value);
+            remove => Events.RemoveHandler(s_commandChangedEvent, value);
+        }
+
+        [Bindable(true)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatData))]
+        public object CommandParameter
+        {
+            [RequiresPreviewFeatures]
+            get => _commandParameter;
+
+            // We need to opt into previre features here, because we calling a preview feature from the setter.
+            [RequiresPreviewFeatures]
+            set
+            {
+                if (!Equals(_commandParameter, value))
+                {
+                    _commandParameter = value;
+                    OnCommandParameterChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Occurs when the CommandParameter has changed.
+        /// </summary>
+        [RequiresPreviewFeatures]
+        [SRCategory(nameof(SR.CatData))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event EventHandler CommandParameterChanged
+        {
+            add => Events.AddHandler(s_commandParameterChangedEvent, value);
+            remove => Events.RemoveHandler(s_commandParameterChangedEvent, value);
         }
 
         // Every ToolStripItem needs to cache its last/current Parent's DeviceDpi
@@ -743,7 +822,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [SRDescription(nameof(SR.ToolStripItemEnabledDescr))]
         [DefaultValue(true)]
-        public override bool Enabled
+        public virtual bool Enabled
         {
             get
             {
@@ -1717,6 +1796,8 @@ namespace System.Windows.Forms
             }
         }
 
+        bool? ICommandBindingTargetProvider.PreviousEnabledStatus { get; set; }
+
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ToolStripItemOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged
@@ -2640,9 +2721,7 @@ namespace System.Windows.Forms
             RaiseEvent(s_clickEvent, e);
 
             // We won't let the preview feature warnings bubble further up beyond this point.
-#pragma warning disable CA2252 
-            base.OnRequestCommandExecute(e);
-#pragma warning restore CA2252
+            OnRequestCommandExecute(e);
         }
 
         protected internal virtual void OnLayout(LayoutEventArgs e)
@@ -2684,6 +2763,54 @@ namespace System.Windows.Forms
         }
 
         protected virtual void OnAvailableChanged(EventArgs e) => RaiseEvent(s_availableChangedEvent, e);
+
+        /// <summary>
+        ///  Raises the <see cref="ToolStripItem.CommandChanged"/> event.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.CommandChanged to send this event to any registered event listeners.
+        /// </summary>
+        [RequiresPreviewFeatures]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnCommandChanged(EventArgs e)
+            => RaiseEvent(s_commandChangedEvent, e);
+
+        /// <summary>
+        ///  Raises the <see cref="ToolStripItem.CommandCanExecuteChanged"/> event.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.CommandCanExecuteChanged to send this event to any registered event listeners.
+        /// </summary>
+        [RequiresPreviewFeatures]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnCommandCanExecuteChanged(EventArgs e)
+            // TODO: Is passing 'this' correct here?
+            => ((EventHandler)Events[s_commandCanExecuteChangedEvent])?.Invoke(this, e);
+
+        /// <summary>
+        ///  Raises the <see cref="ToolStripItem.CommandParameterChanged"/> event.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.CommandChanged to send this event to any registered event listeners.
+        /// </summary>
+        [RequiresPreviewFeatures]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnCommandParameterChanged(EventArgs e) => RaiseEvent(s_commandParameterChangedEvent, e);
+
+        /// <summary>
+        ///  Called by the event of a Control deriving from this class to execute the command.
+        /// </summary>
+        /// <param name="e"></param>
+        [RequiresPreviewFeatures]
+        protected virtual void OnRequestCommandExecute(EventArgs e)
+            => ICommandBindingTargetProvider.RequestCommandExecute(this);
+
+        // Called by the CommandProviderManager's internal DIM-based logic.
+        [RequiresPreviewFeatures]
+        void ICommandBindingTargetProvider.RaiseCommandChanged(EventArgs e)
+            => OnCommandChanged(e);
+
+        // Called by the CommandProviderManager's internal DIM-based logic.
+        [RequiresPreviewFeatures]
+        void ICommandBindingTargetProvider.RaiseCommandCanExecuteChanged(EventArgs e)
+            => OnCommandCanExecuteChanged(e);
 
         /// <summary>
         ///  Raises the <see cref="ToolStripItem.DragEnter"/> event.
@@ -3605,4 +3732,5 @@ namespace System.Windows.Forms
             return local is not null;
         }
     }
+#pragma warning restore CA2252 
 }

@@ -398,7 +398,8 @@ namespace System.Windows.Forms
         {
             OnTextUpdate(e);
         }
-
+        
+#pragma warning disable CA2252 
         protected virtual void OnDropDown(EventArgs e)
         {
             if (ParentInternal is not null)
@@ -442,6 +443,7 @@ namespace System.Windows.Forms
         {
             RaiseEvent(s_eventTextUpdate, e);
         }
+#pragma warning restore CA2252 
 
         protected override void OnSubscribeControlEvents(Control control)
         {

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
+using System.Runtime.Versioning;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -17,7 +18,7 @@ namespace System.Windows.Forms
     ///  Implements the basic functionality required by a button control.
     /// </summary>
     [Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)]
-    public abstract partial class ButtonBase : CommandControl
+    public abstract partial class ButtonBase : Control, ICommandBindingTargetProvider
     {
         private FlatStyle _flatStyle = FlatStyle.Standard;
         private ContentAlignment _imageAlign = ContentAlignment.MiddleCenter;
@@ -48,6 +49,14 @@ namespace System.Windows.Forms
 
         private ButtonBaseAdapter? _adapter;
         private FlatStyle _cachedAdapterType;
+
+        // Backing fields for the infrastructure to make ToolStripItem bindable and introduce (bindable) ICommand.
+        private System.Windows.Input.ICommand? _command;
+        private object? _commandParameter;
+
+        internal static readonly object s_commandChangedEvent = new();
+        internal static readonly object s_commandParameterChangedEvent = new();
+        internal static readonly object s_commandCanExecuteChangedEvent = new();
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="ButtonBase"/> class.
@@ -165,6 +174,74 @@ namespace System.Windows.Forms
 
                 base.BackColor = value;
             }
+        }
+
+        [RequiresPreviewFeatures]
+        [Bindable(true)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatData))]
+        public System.Windows.Input.ICommand? Command
+        {
+            get => _command;
+            set => ICommandBindingTargetProvider.CommandSetter(this, value, ref _command);
+        }
+
+        /// <summary>
+        /// Occurs when the Command.CanExecute status has changed.
+        /// </summary>
+        [RequiresPreviewFeatures]
+        [SRCategory(nameof(SR.CatData))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event EventHandler? CommandCanExecuteChanged
+        {
+            add => Events.AddHandler(s_commandCanExecuteChangedEvent, value);
+            remove => Events.RemoveHandler(s_commandCanExecuteChangedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the Command has changed.
+        /// </summary>
+        [RequiresPreviewFeatures]
+        [SRCategory(nameof(SR.CatData))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event EventHandler? CommandChanged
+        {
+            add => Events.AddHandler(s_commandChangedEvent, value);
+            remove => Events.RemoveHandler(s_commandChangedEvent, value);
+        }
+
+        [Bindable(true)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatData))]
+        public object? CommandParameter
+        {
+            [RequiresPreviewFeatures]
+            get => _commandParameter;
+
+            // We need to opt into previre features here, because we calling a preview feature from the setter.
+            [RequiresPreviewFeatures]
+            set
+            {
+                if (!Equals(_commandParameter, value))
+                {
+                    _commandParameter = value;
+                    OnCommandParameterChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Occurs when the CommandParameter has changed.
+        /// </summary>
+        [RequiresPreviewFeatures]
+        [SRCategory(nameof(SR.CatData))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public event EventHandler? CommandParameterChanged
+        {
+            add => Events.AddHandler(s_commandParameterChangedEvent, value);
+            remove => Events.RemoveHandler(s_commandParameterChangedEvent, value);
         }
 
         /// <summary>
@@ -586,6 +663,8 @@ namespace System.Windows.Forms
             }
         }
 
+        bool? ICommandBindingTargetProvider.PreviousEnabledStatus { get; set; }
+
         /// <summary>
         ///  The area of the button encompassing any changes between the button's
         ///  appearance when the mouse is over it but not pressed and when it is pressed.
@@ -820,7 +899,7 @@ namespace System.Windows.Forms
 
             // We won't let the preview feature warnings bubble further up beyond this point.
 #pragma warning disable CA2252 
-            base.OnRequestCommandExecute(e);
+            OnRequestCommandExecute(e);
 #pragma warning restore CA2252
         }
 
@@ -1052,6 +1131,54 @@ namespace System.Windows.Forms
             return Adapter.CreateTextFormatFlags();
         }
 
+        /// <summary>
+        ///  Raises the <see cref="ButtonBase.CommandChanged"/> event.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.CommandChanged to send this event to any registered event listeners.
+        /// </summary>
+        [RequiresPreviewFeatures]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnCommandChanged(EventArgs e)
+            => RaiseEvent(s_commandChangedEvent, e);
+
+        /// <summary>
+        ///  Raises the <see cref="ButtonBase.CommandCanExecuteChanged"/> event.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.CommandCanExecuteChanged to send this event to any registered event listeners.
+        /// </summary>
+        [RequiresPreviewFeatures]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnCommandCanExecuteChanged(EventArgs e)
+            // TODO: Is passing 'this' correct here?
+            => ((EventHandler?)Events[s_commandCanExecuteChangedEvent])?.Invoke(this, e);
+
+        /// <summary>
+        ///  Raises the <see cref="ButtonBase.CommandParameterChanged"/> event.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.CommandChanged to send this event to any registered event listeners.
+        /// </summary>
+        [RequiresPreviewFeatures]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnCommandParameterChanged(EventArgs e) => RaiseEvent(s_commandParameterChangedEvent, e);
+
+        /// <summary>
+        ///  Called by the event of a Control deriving from this class to execute the command.
+        /// </summary>
+        /// <param name="e"></param>
+        [RequiresPreviewFeatures]
+        protected virtual void OnRequestCommandExecute(EventArgs e)
+            => ICommandBindingTargetProvider.RequestCommandExecute(this);
+
+        // Called by the CommandProviderManager's internal DIM-based logic.
+        [RequiresPreviewFeatures]
+        void ICommandBindingTargetProvider.RaiseCommandChanged(EventArgs e)
+            => OnCommandChanged(e);
+
+        // Called by the CommandProviderManager's internal DIM-based logic.
+        [RequiresPreviewFeatures]
+        void ICommandBindingTargetProvider.RaiseCommandCanExecuteChanged(EventArgs e)
+            => OnCommandCanExecuteChanged(e);
+
         private void OnFrameChanged(object? o, EventArgs e)
         {
             if (Disposing || IsDisposed)
@@ -1189,6 +1316,9 @@ namespace System.Windows.Forms
             base.OnVisibleChanged(e);
             Animate();
         }
+
+        private void RaiseEvent(object key, EventArgs e)
+            => ((EventHandler?)Events[key])?.Invoke(this, e);
 
         private void ResetImage()
         {

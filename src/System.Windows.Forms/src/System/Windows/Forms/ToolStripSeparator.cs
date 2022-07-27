@@ -304,7 +304,9 @@ namespace System.Windows.Forms
         protected override void OnFontChanged(EventArgs e)
         {
             // Perf: don't call base, we don't care if the font changes
+#pragma warning disable CA2252 
             RaiseEvent(s_fontChangedEvent, e);
+#pragma warning restore CA2252 
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]

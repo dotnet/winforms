@@ -7,6 +7,7 @@ using System.Runtime.Versioning;
 
 namespace System.Windows.Forms
 {
+    [RequiresPreviewFeatures]
     public abstract class BindableComponent : Component, IBindableComponent
     {
         internal static readonly object s_bindingContextChangedEvent = new();
@@ -14,7 +15,6 @@ namespace System.Windows.Forms
         private ControlBindingsCollection? _dataBindings;
         private BindingContext? _bindingContext;
 
-        [RequiresPreviewFeatures]
         public BindableComponent()
         {
         }
@@ -43,7 +43,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// Occurs when the binding context has changed
         /// </summary>
-        [RequiresPreviewFeatures]
         [SRCategory(nameof(SR.CatData))]
         [SRDescription(nameof(SR.ToolStripItemOnBindingContextChangedDescr))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -58,7 +57,6 @@ namespace System.Windows.Forms
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.OnBindingContextChanged to send this event to any registered event listeners.
         /// </summary>
-        [RequiresPreviewFeatures]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindingContextChanged(EventArgs e)
         {
@@ -73,7 +71,6 @@ namespace System.Windows.Forms
             RaiseEvent(s_bindingContextChangedEvent, e);
         }
 
-        [RequiresPreviewFeatures]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [RefreshProperties(RefreshProperties.All)]
         [ParenthesizePropertyName(true)]

@@ -257,7 +257,9 @@ namespace System.Windows.Forms
 
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e)
         {
+#pragma warning disable CA2252 
             RaiseEvent(EventRightToLeftLayoutChanged, e);
+#pragma warning restore CA2252 
         }
 
         protected override void OnSubscribeControlEvents(Control control)

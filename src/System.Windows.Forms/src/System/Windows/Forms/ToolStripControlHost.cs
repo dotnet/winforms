@@ -528,6 +528,7 @@ namespace System.Windows.Forms
             RaiseMouseEvent(ToolStripItem.s_mouseDownEvent, e);
         }
 
+#pragma warning disable CA2252 
         private void HandleMouseEnter(object sender, EventArgs e)
         {
             OnMouseEnter(e);
@@ -545,6 +546,7 @@ namespace System.Windows.Forms
             OnMouseHover(e);
             RaiseEvent(ToolStripItem.s_mouseHoverEvent, e);
         }
+#pragma warning disable CA2252 
 
         private void HandleMouseMove(object sender, MouseEventArgs e)
         {
@@ -622,6 +624,7 @@ namespace System.Windows.Forms
             Control.AccessibleRole = AccessibleRole;
         }
 
+#pragma warning disable CA2252 
         protected virtual void OnEnter(EventArgs e) => RaiseEvent(s_enterEvent, e);
 
         /// <summary>
@@ -635,6 +638,7 @@ namespace System.Windows.Forms
         ///  called when the control has lost focus
         /// </summary>
         protected virtual void OnLostFocus(EventArgs e) => RaiseEvent(s_lostFocusEvent, e);
+#pragma warning restore CA2252 
 
         protected virtual void OnKeyDown(KeyEventArgs e) => RaiseKeyEvent(s_keyDownEvent, e);
 
@@ -801,7 +805,9 @@ namespace System.Windows.Forms
 
         protected virtual void OnValidating(CancelEventArgs e) => RaiseCancelEvent(s_validatingEvent, e);
 
+#pragma warning disable CA2252 
         protected virtual void OnValidated(EventArgs e) => RaiseEvent(s_validatedEvent, e);
+#pragma warning disable CA2252 
 
         private static ReadOnlyControlCollection GetControlCollection(ToolStrip toolStrip)
             => (ReadOnlyControlCollection)toolStrip?.Controls;
