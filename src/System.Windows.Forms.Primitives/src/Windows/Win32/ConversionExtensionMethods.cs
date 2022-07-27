@@ -9,14 +9,14 @@ namespace Windows.Win32
 {
     internal static class ConversionExtensionMethods
     {
-        public static Rectangle ToRectangle(this RECT rect) => Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
+        public static Rectangle ToRectangle(this in RECT rect) => Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
 
-        public static int Width(this RECT rect) => rect.right - rect.left;
+        public static int Width(this in RECT rect) => rect.right - rect.left;
 
-        public static int Height(this RECT rect) => rect.bottom - rect.top;
+        public static int Height(this in RECT rect) => rect.bottom - rect.top;
 
-        public static RECT ToRect(this Size size) => new() { right = size.Width, bottom = size.Height };
+        public static RECT ToRect(this in Size size) => new() { right = size.Width, bottom = size.Height };
 
-        public static Size Size(this RECT rect) => new(rect.Width(), rect.Height());
+        public static Size Size(this in RECT rect) => new(rect.Width(), rect.Height());
     }
 }

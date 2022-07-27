@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
 using Windows.Win32.Foundation;
 using Gdi = Windows.Win32.Graphics.Gdi;
 
@@ -24,17 +25,19 @@ namespace Windows.Win32
         internal readonly ref struct BeginPaintScope
 #endif
         {
-            private readonly Gdi.PAINTSTRUCT _paintStruct;
+            private readonly Interop.User32.PAINTSTRUCT _paintStruct;
 
             public Gdi.HDC HDC { get; }
             public HWND HWND { get; }
+            public Rectangle PaintRectangle => _paintStruct.rcPaint;
 
-            public Gdi.PAINTSTRUCT PaintStruct => _paintStruct;
-
-            public BeginPaintScope(HWND hwnd)
+            public unsafe BeginPaintScope(HWND hwnd)
             {
-                HDC = BeginPaint(hwnd, out _paintStruct);
-                HWND = hwnd;
+                fixed (void* ps = &_paintStruct)
+                {
+                    HDC = BeginPaint(hwnd, (Gdi.PAINTSTRUCT*)ps);
+                    HWND = hwnd;
+                }
             }
 
             public static implicit operator Interop.Gdi32.HDC(in BeginPaintScope scope) => scope.HDC;
@@ -42,9 +45,9 @@ namespace Windows.Win32
 
             public unsafe void Dispose()
             {
-                if (!HDC.IsNull)
+                fixed (void* ps = &_paintStruct)
                 {
-                    EndPaint(HWND, _paintStruct);
+                    EndPaint(HWND, (Gdi.PAINTSTRUCT*)ps);
                 }
 
 #if DEBUG

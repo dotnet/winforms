@@ -2350,7 +2350,7 @@ namespace System.Windows.Forms
                     if (OwnerDraw && !_isBalloon && !_trackPosition)
                     {
                         using var paintScope = new PInvoke.BeginPaintScope((Foundation.HWND)Handle);
-                        Rectangle bounds = paintScope.PaintStruct.rcPaint.ToRectangle();
+                        Rectangle bounds = paintScope.PaintRectangle;
                         if (bounds == Rectangle.Empty)
                         {
                             return;
