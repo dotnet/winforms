@@ -120,9 +120,7 @@ namespace System.Windows.Forms
             // GetModuleHandle  returns a handle to a mapped module without incrementing its
             // reference count.
             var hModule = PInvoke.GetModuleHandle(Libraries.Comctl32);
-            const string ipProcName = "ImageList_WriteEx";
-            byte[] test = Encoding.ASCII.GetBytes(ipProcName);
-            fixed (byte* ptr = &test[0])
+            fixed (byte* ptr = "ImageList_WriteEx\0"u8)
             {
                 if (hModule != 0)
                 {
@@ -137,7 +135,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            fixed (byte* ptr = &test[0])
+            fixed (byte* ptr = "ImageList_WriteEx\0"u8)
             {
                 return PInvoke.GetProcAddress(hModule, (Foundation.PCSTR)ptr) != 0;
             }

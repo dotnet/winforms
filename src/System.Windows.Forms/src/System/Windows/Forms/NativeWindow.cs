@@ -168,10 +168,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                var hModule = PInvoke.GetModuleHandle(Libraries.Comctl32);
-                string IpProcName = "DefWindowProcW";
-                byte[] test = Encoding.ASCII.GetBytes(IpProcName);
-                fixed (byte* ptr = &test[0])
+                var hModule = PInvoke.GetModuleHandle(Libraries.User32);
+                fixed (byte* ptr = "DefWindowProcW\0"u8)
                 {
                     if (s_defaultWindowProc == IntPtr.Zero)
                     {
