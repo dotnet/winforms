@@ -173,12 +173,12 @@ namespace System.Windows.Forms
                 byte[] test = Encoding.ASCII.GetBytes(IpProcName);
                 fixed (byte* ptr = &test[0])
                 {
-                    if (s_defaultWindowProc == 0)
+                    if (s_defaultWindowProc == IntPtr.Zero)
                     {
                         // Cache the default windows procedure address
                         s_defaultWindowProc = PInvoke.GetProcAddress(hModule, (PCSTR)ptr);
 
-                        if (s_defaultWindowProc == 0)
+                        if (s_defaultWindowProc == IntPtr.Zero)
                         {
                             throw new Win32Exception();
                         }
