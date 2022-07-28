@@ -19,7 +19,7 @@ namespace System.Windows.Forms.UITests
         {
             Control.CheckForIllegalCrossThreadCalls = true;
 
-            Form form = InitFormWithControlToGarbageCollect();
+            using Form form = InitFormWithControlToGarbageCollect();
 
             try
             {
