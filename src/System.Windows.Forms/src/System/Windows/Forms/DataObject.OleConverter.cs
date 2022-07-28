@@ -316,7 +316,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    int size = Kernel32.GlobalSize(handle);
+                    int size = (int)PInvoke.GlobalSize(handle);
                     byte[] bytes = new byte[size];
                     Marshal.Copy((nint)ptr, bytes, 0, size);
                     int index = 0;
@@ -450,7 +450,7 @@ namespace System.Windows.Forms
                 void* ptr = PInvoke.GlobalLock(handle);
                 try
                 {
-                    int size = Kernel32.GlobalSize(handle);
+                    int size = (int)PInvoke.GlobalSize(handle);
                     return Encoding.UTF8.GetString((byte*)ptr, size - 1);
                 }
                 finally

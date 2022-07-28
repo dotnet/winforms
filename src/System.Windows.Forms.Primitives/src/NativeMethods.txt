@@ -9,6 +9,7 @@ CreateBrushIndirect
 CreateCompatibleBitmap
 DuplicateHandle
 EndPaint
+GET_MODULE_HANDLE_EX_FLAG*
 GetClientRect
 GetCurrentActCtx
 GetCurrentProcess
@@ -16,9 +17,13 @@ GetCurrentProcessId
 GetCurrentThread
 GetCurrentThreadId
 GetExitCodeThread
+GetModuleHandleEx
+GetProcAddress
 GetThreadLocale
+GetTickCount
 GlobalAlloc
 GlobalFree
 GlobalLock
 GlobalReAlloc
+GlobalSize
 GlobalUnlock

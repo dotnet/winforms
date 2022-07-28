@@ -8,7 +8,7 @@ using System.Globalization;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using Windows.Win32;
-using Foundation = Windows.Win32.Foundation;
+using Windows.Win32.Foundation;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -116,7 +116,7 @@ namespace System.Windows.Forms
                     if (threadHandle != 0)
                     {
                         uint exitCode;
-                        PInvoke.GetExitCodeThread((Foundation.HANDLE)threadHandle, &exitCode);
+                        PInvoke.GetExitCodeThread((HANDLE)threadHandle, &exitCode);
                         if (!AppDomain.CurrentDomain.IsFinalizingForUnload() && (NTSTATUS)exitCode == NTSTATUS.STATUS_PENDING)
                         {
                             User32.SendMessageTimeoutW(
@@ -163,20 +163,22 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Address of the Windows default WNDPROC (DefWindowProcW).
         /// </summary>
-        internal static IntPtr DefaultWindowProc
+        internal unsafe static nint DefaultWindowProc
         {
             get
             {
-                if (s_defaultWindowProc == IntPtr.Zero)
+                var hModule = PInvoke.GetModuleHandle(Libraries.User32);
+                fixed (byte* ptr = "DefWindowProcW\0"u8)
                 {
-                    // Cache the default windows procedure address
-                    s_defaultWindowProc = Kernel32.GetProcAddress(
-                        Kernel32.GetModuleHandleW(Libraries.User32),
-                        "DefWindowProcW");
-
                     if (s_defaultWindowProc == IntPtr.Zero)
                     {
-                        throw new Win32Exception();
+                        // Cache the default windows procedure address
+                        s_defaultWindowProc = PInvoke.GetProcAddress(hModule, (PCSTR)ptr);
+
+                        if (s_defaultWindowProc == IntPtr.Zero)
+                        {
+                            throw new Win32Exception();
+                        }
                     }
                 }
 
