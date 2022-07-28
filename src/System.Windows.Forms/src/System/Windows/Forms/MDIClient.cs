@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Drawing;
 using Windows.Win32;
 using Windows.Win32.Graphics.Gdi;
+using Windows.Win32.UI.WindowsAndMessaging;
+using Foundation = Windows.Win32.Foundation;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -286,10 +288,10 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetWindowRgn()
         {
-            RECT rect = new RECT();
+            Foundation.RECT rect = new();
             CreateParams cp = CreateParams;
 
-            AdjustWindowRectExForControlDpi(ref rect, cp.Style, false, cp.ExStyle);
+            AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
 
             Rectangle bounds = Bounds;
             using var rgn1 = new Gdi32.RegionScope(0, 0, bounds.Width, bounds.Height);

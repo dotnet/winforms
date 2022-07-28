@@ -1,3 +1,6 @@
+AdjustWindowRectEx
+AdjustWindowRectExForDpi
+BeginPaint
 BitBlt
 CloseEnhMetaFile
 CombineRgn
@@ -5,6 +8,8 @@ CreateBitmap
 CreateBrushIndirect
 CreateCompatibleBitmap
 DuplicateHandle
+EndPaint
+GetClientRect
 GetCurrentActCtx
 GetCurrentProcess
 GetCurrentProcessId

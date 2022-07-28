@@ -834,24 +834,19 @@ namespace System.Windows.Forms
 
             if (maxDigitsReached)
             {
-                string shortText;
-                if (Hexadecimal)
-                {
-                    shortText = ((long)testNumber).ToString("X", CultureInfo.InvariantCulture);
-                }
-                else
-                {
-                    shortText = testNumber.ToString(CultureInfo.CurrentCulture);
-                }
+                string shortText = Hexadecimal
+                    ? ((long)testNumber).ToString("X", CultureInfo.InvariantCulture)
+                    : testNumber.ToString(CultureInfo.CurrentCulture);
 
                 int shortTextWidth = TextRenderer.MeasureText(shortText, Font).Width;
+
                 // Adding the width of the one digit that was dropped earlier.
                 // This assumes that no additional thousand separator is added by that digit which is correct.
                 textWidth += shortTextWidth / (numDigits + 1);
             }
 
             // Call AdjustWindowRect to add space for the borders
-            int width = SizeFromClientSize(textWidth, height).Width + _upDownButtons.Width;
+            int width = SizeFromClientSizeInternal(new(textWidth, height)).Width + _upDownButtons.Width;
             return new Size(width, height) + Padding.Size;
         }
 

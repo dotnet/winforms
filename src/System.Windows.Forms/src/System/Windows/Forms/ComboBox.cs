@@ -18,6 +18,8 @@ using Windows.Win32.Graphics.Gdi;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 using static Interop.User32;
+using Foundation = Windows.Win32.Foundation;
+using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms
 {
@@ -3919,9 +3921,9 @@ namespace System.Windows.Forms
 
                         // Call the base class to do its painting (with a clipped DC).
                         bool useBeginPaint = m.WParamInternal == 0;
-                        using var paintScope = useBeginPaint ? new BeginPaintScope(Handle) : default;
+                        using var paintScope = useBeginPaint ? new PInvoke.BeginPaintScope((Foundation.HWND)Handle) : default;
 
-                        Gdi32.HDC dc = useBeginPaint ? paintScope : (Gdi32.HDC)m.WParamInternal;
+                        Gdi.HDC dc = useBeginPaint ? paintScope : (Gdi.HDC)m.WParamInternal;
 
                         using var savedDcState = new Gdi32.SaveDcScope(dc);
 

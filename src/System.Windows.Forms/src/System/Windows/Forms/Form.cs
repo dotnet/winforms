@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using Windows.Win32;
+using Windows.Win32.UI.WindowsAndMessaging;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -3072,16 +3073,16 @@ namespace System.Windows.Forms
         private Size ComputeWindowSize(Size clientSize)
         {
             CreateParams cp = CreateParams;
-            return ComputeWindowSize(clientSize, cp.Style, cp.ExStyle);
+            return ComputeWindowSize(clientSize, (WINDOW_STYLE)cp.Style, (WINDOW_EX_STYLE)cp.ExStyle);
         }
 
         /// <summary>
         ///  Computes the window size from the clientSize base on the specified
         ///  window styles. This will not return the correct size if menus wrap.
         /// </summary>
-        private Size ComputeWindowSize(Size clientSize, int style, int exStyle)
+        private Size ComputeWindowSize(Size clientSize, WINDOW_STYLE style, WINDOW_EX_STYLE exStyle)
         {
-            RECT result = new RECT(0, 0, clientSize.Width, clientSize.Height);
+            var result = clientSize.ToRect();
             AdjustWindowRectExForControlDpi(ref result, style, false, exStyle);
             return new Size(result.right - result.left, result.bottom - result.top);
         }
@@ -3498,7 +3499,7 @@ namespace System.Windows.Forms
                 // When computing the client window size, don't tell them that
                 // we are going to be maximized!
                 int maskedStyle = cp.Style & ~(int)(User32.WS.MAXIMIZE | User32.WS.MINIMIZE);
-                Size correct = ComputeWindowSize(ClientSize, maskedStyle, cp.ExStyle);
+                Size correct = ComputeWindowSize(ClientSize, (WINDOW_STYLE)maskedStyle, (WINDOW_EX_STYLE)cp.ExStyle);
                 cp.Width = correct.Width;
                 cp.Height = correct.Height;
             }
@@ -4791,7 +4792,7 @@ namespace System.Windows.Forms
                 Size restoredSize = _restoredWindowBounds.Size;
                 if ((_restoredWindowBoundsSpecified & BoundsSpecified.Size) != 0)
                 {
-                    restoredSize = SizeFromClientSize(restoredSize.Width, restoredSize.Height);
+                    restoredSize = SizeFromClientSizeInternal(restoredSize);
                 }
 
                 SetBounds(_restoredWindowBounds.X, _restoredWindowBounds.Y,
