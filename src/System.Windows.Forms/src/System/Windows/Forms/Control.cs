@@ -18,9 +18,10 @@ using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using Windows.Win32;
-using Foundation = Windows.Win32.Foundation;
+using Windows.Win32.UI.WindowsAndMessaging;
 using static Interop;
 using Encoding = System.Text.Encoding;
+using Foundation = Windows.Win32.Foundation;
 using Gdi = Windows.Win32.Graphics.Gdi;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -431,11 +432,11 @@ namespace System.Windows.Forms
 
             if (_width != 0 && _height != 0)
             {
-                RECT rect = default;
+                Foundation.RECT rect = default;
 
                 CreateParams cp = CreateParams;
 
-                AdjustWindowRectExForControlDpi(ref rect, cp.Style, false, cp.ExStyle);
+                AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
                 _clientWidth = _width - (rect.right - rect.left);
                 _clientHeight = _height - (rect.bottom - rect.top);
             }
@@ -5816,16 +5817,16 @@ namespace System.Windows.Forms
 
             // We should not include the window adornments in our calculation,
             // because windows scales them for us.
-            RECT adornmentsBeforeDpiChange = default;
-            RECT adornmentsAfterDpiChange = default;
+            Foundation.RECT adornmentsBeforeDpiChange = default;
+            Foundation.RECT adornmentsAfterDpiChange = default;
             CreateParams cp = CreateParams;
 
             // We would need to get adornments metrics for both (old and new) Dpi in case application is in PerMonitorV2 mode and Dpi changed.
-            AdjustWindowRectExForControlDpi(ref adornmentsAfterDpiChange, cp.Style, bMenu: false, cp.ExStyle);
+            AdjustWindowRectExForControlDpi(ref adornmentsAfterDpiChange, (WINDOW_STYLE)cp.Style, bMenu: false, (WINDOW_EX_STYLE)cp.ExStyle);
 
             if (_oldDeviceDpi != _deviceDpi && OsVersion.IsWindows10_1703OrGreater)
             {
-                AdjustWindowRectExForDpi(ref adornmentsBeforeDpiChange, cp.Style, bMenu: false, cp.ExStyle, _oldDeviceDpi);
+                AdjustWindowRectExForDpi(ref adornmentsBeforeDpiChange, (WINDOW_STYLE)cp.Style, bMenu: false, (WINDOW_EX_STYLE)cp.ExStyle, _oldDeviceDpi);
             }
             else
             {
@@ -5836,14 +5837,14 @@ namespace System.Windows.Forms
             // they are anchored.
             if ((_controlStyle & ControlStyles.FixedWidth) != ControlStyles.FixedWidth && (specified & BoundsSpecified.Width) != 0)
             {
-                int localWidth = bounds.Width - adornmentsBeforeDpiChange.Width;
-                sw = (int)Math.Round(localWidth * dx) + adornmentsAfterDpiChange.Width;
+                int localWidth = bounds.Width - adornmentsBeforeDpiChange.Width();
+                sw = (int)Math.Round(localWidth * dx) + adornmentsAfterDpiChange.Width();
             }
 
             if ((_controlStyle & ControlStyles.FixedHeight) != ControlStyles.FixedHeight && (specified & BoundsSpecified.Height) != 0)
             {
-                int localHeight = bounds.Height - adornmentsBeforeDpiChange.Height;
-                sh = (int)Math.Round(localHeight * dy) + adornmentsAfterDpiChange.Height;
+                int localHeight = bounds.Height - adornmentsBeforeDpiChange.Height();
+                sh = (int)Math.Round(localHeight * dy) + adornmentsAfterDpiChange.Height();
             }
 
             return new Rectangle(sx, sy, sw, sh);
@@ -6974,20 +6975,20 @@ namespace System.Windows.Forms
             DpiHelper.ScaleBitmapLogicalToDevice(ref logicalBitmap, DeviceDpi);
         }
 
-        private protected void AdjustWindowRectExForControlDpi(ref RECT rect, int style, bool bMenu, int exStyle)
+        private protected void AdjustWindowRectExForControlDpi(ref Foundation.RECT rect, WINDOW_STYLE style, bool bMenu, WINDOW_EX_STYLE exStyle)
         {
             AdjustWindowRectExForDpi(ref rect, style, bMenu, exStyle, _deviceDpi);
         }
 
-        private static void AdjustWindowRectExForDpi(ref RECT rect, int style, bool bMenu, int exStyle, int dpi)
+        private static void AdjustWindowRectExForDpi(ref Foundation.RECT rect, WINDOW_STYLE style, bool bMenu, WINDOW_EX_STYLE exStyle, int dpi)
         {
             if ((DpiHelper.IsPerMonitorV2Awareness || DpiHelper.IsScalingRequired) && OsVersion.IsWindows10_1703OrGreater)
             {
-                User32.AdjustWindowRectExForDpi(ref rect, style, bMenu.ToBOOL(), exStyle, (uint)dpi);
+                PInvoke.AdjustWindowRectExForDpi(ref rect, style, bMenu, exStyle, (uint)dpi);
             }
             else
             {
-                User32.AdjustWindowRectEx(ref rect, style, bMenu.ToBOOL(), exStyle);
+                PInvoke.AdjustWindowRectEx(ref rect, style, bMenu, exStyle);
             }
         }
 
@@ -10461,8 +10462,8 @@ namespace System.Windows.Forms
         protected virtual void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
             CreateParams cp = CreateParams;
-            RECT adornments = default;
-            AdjustWindowRectExForControlDpi(ref adornments, cp.Style, false, cp.ExStyle);
+            Foundation.RECT adornments = default;
+            AdjustWindowRectExForControlDpi(ref adornments, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
             Size minSize = MinimumSize;
             Size maxSize = MaximumSize;
 
@@ -10520,7 +10521,7 @@ namespace System.Windows.Forms
             // make sure we consider the adornments as fixed.  rather than scaling the entire size,
             // we should pull out the fixed things such as the border, scale the rest, then apply the fixed
             // adornment size.
-            Size adornmentSize = adornments.Size;
+            Size adornmentSize = adornments.Size();
             if (!minSize.IsEmpty)
             {
                 minSize -= adornmentSize;
@@ -10926,24 +10927,21 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void SetClientSizeCore(int x, int y)
         {
-            Size = SizeFromClientSize(x, y);
+            Size = SizeFromClientSizeInternal(new(x, y));
             _clientWidth = x;
             _clientHeight = y;
             OnClientSizeChanged(EventArgs.Empty);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual Size SizeFromClientSize(Size clientSize)
-        {
-            return SizeFromClientSize(clientSize.Width, clientSize.Height);
-        }
+        protected virtual Size SizeFromClientSize(Size clientSize) => SizeFromClientSizeInternal(clientSize);
 
-        internal Size SizeFromClientSize(int width, int height)
+        internal Size SizeFromClientSizeInternal(Size size)
         {
-            RECT rect = new RECT(0, 0, width, height);
+            Foundation.RECT rect = size.ToRect();
             CreateParams cp = CreateParams;
-            AdjustWindowRectExForControlDpi(ref rect, cp.Style, false, cp.ExStyle);
-            return rect.Size;
+            AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
+            return rect.Size();
         }
 
         private void SetHandle(IntPtr value)
@@ -11577,14 +11575,11 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void UpdateBounds(int x, int y, int width, int height)
         {
-            // reverse-engineer the AdjustWindowRectEx call to figure out
-            // the appropriate clientWidth and clientHeight
-            RECT rect = new RECT();
-            rect.left = rect.right = rect.top = rect.bottom = 0;
-
+            // reverse-engineer the AdjustWindowRectEx call to figure out the appropriate clientWidth and clientHeight
+            Foundation.RECT rect = default;
             CreateParams cp = CreateParams;
 
-            AdjustWindowRectExForControlDpi(ref rect, cp.Style, false, cp.ExStyle);
+            AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
             int clientWidth = width - (rect.right - rect.left);
             int clientHeight = height - (rect.bottom - rect.top);
             UpdateBounds(x, y, width, height, clientWidth, clientHeight);
@@ -12622,12 +12617,12 @@ namespace System.Windows.Forms
             Gdi32.HDC dc = (Gdi32.HDC)m.WParamInternal;
 
             bool usingBeginPaint = dc.IsNull;
-            using var paintScope = usingBeginPaint ? new User32.BeginPaintScope(Handle) : default;
+            using var paintScope = usingBeginPaint ? new PInvoke.BeginPaintScope((Foundation.HWND)Handle) : default;
 
             if (usingBeginPaint)
             {
                 dc = paintScope!.HDC;
-                clip = paintScope.PaintStruct.rcPaint;
+                clip = paintScope.PaintRectangle;
             }
             else
             {

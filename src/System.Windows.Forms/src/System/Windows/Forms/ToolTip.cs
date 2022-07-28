@@ -11,6 +11,8 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.ComCtl32;
+using Windows.Win32;
+using Foundation = Windows.Win32.Foundation;
 
 namespace System.Windows.Forms
 {
@@ -2347,8 +2349,8 @@ namespace System.Windows.Forms
                 case (int)User32.WM.PAINT:
                     if (OwnerDraw && !_isBalloon && !_trackPosition)
                     {
-                        using var paintScope = new User32.BeginPaintScope(Handle);
-                        Rectangle bounds = paintScope.PaintStruct.rcPaint;
+                        using var paintScope = new PInvoke.BeginPaintScope((Foundation.HWND)Handle);
+                        Rectangle bounds = paintScope.PaintRectangle;
                         if (bounds == Rectangle.Empty)
                         {
                             return;

@@ -15,6 +15,7 @@ using System.Windows.Forms.Design.Behavior;
 using Accessibility;
 using Windows.Win32;
 using static Interop;
+using Foundation = Windows.Win32.Foundation;
 
 namespace System.Windows.Forms.Design
 {
@@ -2140,7 +2141,7 @@ namespace System.Windows.Forms.Design
                         }
                         else
                         {
-                            using var scope = new User32.BeginPaintScope(m.HWnd);
+                            using var scope = new PInvoke.BeginPaintScope((Foundation.HWND)m.HWnd);
                             PaintException(pevent, _thrownException);
                         }
 
