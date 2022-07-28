@@ -4,14 +4,14 @@
 
 using System.Drawing;
 using Windows.Win32.Foundation;
-using Gdi = Windows.Win32.Graphics.Gdi;
+using Windows.Win32.Graphics.Gdi;
 
 namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
         /// <summary>
-        ///  Helper to scope lifetime of an HDC retrieved via <see cref="BeginPaint(HWND, out Gdi.PAINTSTRUCT)"/>
+        ///  Helper to scope lifetime of an HDC retrieved via <see cref="BeginPaint(HWND, out PAINTSTRUCT)"/>
         /// </summary>
         /// <remarks>
         ///  <para>
@@ -25,30 +25,24 @@ namespace Windows.Win32
         internal readonly ref struct BeginPaintScope
 #endif
         {
-            private readonly Interop.User32.PAINTSTRUCT _paintStruct;
+            private readonly PAINTSTRUCT _paintStruct;
 
-            public Gdi.HDC HDC { get; }
+            public HDC HDC { get; }
             public HWND HWND { get; }
-            public Rectangle PaintRectangle => _paintStruct.rcPaint;
+            public Rectangle PaintRectangle => _paintStruct.rcPaint.ToRectangle();
 
-            public unsafe BeginPaintScope(HWND hwnd)
+            public BeginPaintScope(HWND hwnd)
             {
-                fixed (void* ps = &_paintStruct)
-                {
-                    HDC = BeginPaint(hwnd, (Gdi.PAINTSTRUCT*)ps);
-                    HWND = hwnd;
-                }
+                HDC = BeginPaint(hwnd, out _paintStruct);
+                HWND = hwnd;
             }
 
             public static implicit operator Interop.Gdi32.HDC(in BeginPaintScope scope) => scope.HDC;
-            public static implicit operator Gdi.HDC(in BeginPaintScope scope) => scope.HDC;
+            public static implicit operator HDC(in BeginPaintScope scope) => scope.HDC;
 
-            public unsafe void Dispose()
+            public void Dispose()
             {
-                fixed (void* ps = &_paintStruct)
-                {
-                    EndPaint(HWND, (Gdi.PAINTSTRUCT*)ps);
-                }
+                EndPaint(HWND, _paintStruct);
 
 #if DEBUG
                 GC.SuppressFinalize(this);
