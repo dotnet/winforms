@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Gdi = Windows.Win32.Graphics.Gdi;
+
 internal static partial class Interop
 {
     internal static partial class Gdi32
@@ -18,6 +20,8 @@ internal static partial class Interop
             public static explicit operator HBITMAP(HGDIOBJ hbitmap) => new HBITMAP(hbitmap.Handle);
             public static explicit operator HBITMAP(IntPtr hbitmap) => new HBITMAP(hbitmap);
             public static explicit operator IntPtr(HBITMAP hbitmap) => hbitmap.Handle;
+            public static implicit operator Gdi.HBITMAP(HBITMAP hbitmap) => new Gdi.HBITMAP(hbitmap.Handle);
+            public static implicit operator HBITMAP(Gdi.HBITMAP hbitmap) => new HBITMAP(hbitmap.Value);
         }
     }
 }
