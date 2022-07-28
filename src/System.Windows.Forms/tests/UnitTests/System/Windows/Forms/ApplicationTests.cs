@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Windows.Forms.TestUtilities;
 using System.Windows.Forms.VisualStyles;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -22,16 +21,16 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> CurrentCulture_Set_TestData()
         {
-            yield return new object[] { CultureInfo.InvariantCulture, 0x7Fu };
-            yield return new object[] { new CultureInfo("en"), 0x9u };
-            yield return new object[] { new CultureInfo("fr-FR"), 0x40Cu };
-            yield return new object[] { new CultureInfo("en-DK"), 0xC00u };
-            yield return new object[] { new CultureInfo("haw"), 0x00000075u };
-            yield return new object[] { new CultureInfo("en-US"), 0x00000409u };
-            yield return new object[] { new CultureInfo("de-DE_phoneb"), 0x00010407u };
-            yield return new object[] { new CustomLCIDCultureInfo(10), 0x409u };
-            yield return new object[] { new CustomLCIDCultureInfo(0), 0x409u };
-            yield return new object[] { new CustomLCIDCultureInfo(-1), 0x409u };
+            yield return new object[] { CultureInfo.InvariantCulture };
+            yield return new object[] { new CultureInfo("en") };
+            yield return new object[] { new CultureInfo("fr-FR") };
+            yield return new object[] { new CultureInfo("en-DK") };
+            yield return new object[] { new CultureInfo("haw") };
+            yield return new object[] { new CultureInfo("en-US") };
+            yield return new object[] { new CultureInfo("de-DE_phoneb") };
+            yield return new object[] { new CustomLCIDCultureInfo(10) };
+            yield return new object[] { new CustomLCIDCultureInfo(0) };
+            yield return new object[] { new CustomLCIDCultureInfo(-1) };
         }
 
         [WinFormsFact]
@@ -40,7 +39,6 @@ namespace System.Windows.Forms.Tests
             foreach (object[] testData in CurrentCulture_Set_TestData())
             {
                 CultureInfo value = (CultureInfo)testData[0];
-                uint expectedLcid = (uint)testData[1];
 
                 CultureInfo oldValue = Application.CurrentCulture;
                 try
@@ -49,14 +47,14 @@ namespace System.Windows.Forms.Tests
                     Assert.Same(value, Application.CurrentCulture);
                     Assert.Same(value, Thread.CurrentThread.CurrentCulture);
                     Assert.Same(value, CultureInfo.CurrentCulture);
-                    Assert.Equal(expectedLcid, Kernel32.GetThreadLocale());
+                    Assert.Equal(value.LCID, CultureInfo.CurrentCulture.LCID);
 
                     // Set same.
                     Application.CurrentCulture = value;
                     Assert.Same(value, Application.CurrentCulture);
                     Assert.Same(value, Thread.CurrentThread.CurrentCulture);
                     Assert.Same(value, CultureInfo.CurrentCulture);
-                    Assert.Equal(expectedLcid, Kernel32.GetThreadLocale());
+                    Assert.Equal(value.LCID, CultureInfo.CurrentCulture.LCID);
                 }
                 finally
                 {
