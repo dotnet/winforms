@@ -5,9 +5,8 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using System.Windows.Forms.VisualStyles;
-using Microsoft.DotNet.RemoteExecutor;
 using System.Windows.Forms.TestUtilities;
+using System.Windows.Forms.VisualStyles;
 using Xunit;
 using static Interop;
 
@@ -35,38 +34,35 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new CustomLCIDCultureInfo(-1), 0x409u };
         }
 
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public void Application_CurrentCulture_Set_GetReturnsExpected()
         {
-            RemoteExecutor.Invoke(() =>
+            foreach (object[] testData in CurrentCulture_Set_TestData())
             {
-                foreach (object[] testData in CurrentCulture_Set_TestData())
+                CultureInfo value = (CultureInfo)testData[0];
+                uint expectedLcid = (uint)testData[1];
+
+                CultureInfo oldValue = Application.CurrentCulture;
+                try
                 {
-                    CultureInfo value = (CultureInfo)testData[0];
-                    uint expectedLcid = (uint)testData[1];
+                    Application.CurrentCulture = value;
+                    Assert.Same(value, Application.CurrentCulture);
+                    Assert.Same(value, Thread.CurrentThread.CurrentCulture);
+                    Assert.Same(value, CultureInfo.CurrentCulture);
+                    Assert.Equal(expectedLcid, Kernel32.GetThreadLocale());
 
-                    CultureInfo oldValue = Application.CurrentCulture;
-                    try
-                    {
-                        Application.CurrentCulture = value;
-                        Assert.Same(value, Application.CurrentCulture);
-                        Assert.Same(value, Thread.CurrentThread.CurrentCulture);
-                        Assert.Same(value, CultureInfo.CurrentCulture);
-                        Assert.Equal(expectedLcid, Kernel32.GetThreadLocale());
-
-                        // Set same.
-                        Application.CurrentCulture = value;
-                        Assert.Same(value, Application.CurrentCulture);
-                        Assert.Same(value, Thread.CurrentThread.CurrentCulture);
-                        Assert.Same(value, CultureInfo.CurrentCulture);
-                        Assert.Equal(expectedLcid, Kernel32.GetThreadLocale());
-                    }
-                    finally
-                    {
-                        Application.CurrentCulture = oldValue;
-                    }
+                    // Set same.
+                    Application.CurrentCulture = value;
+                    Assert.Same(value, Application.CurrentCulture);
+                    Assert.Same(value, Thread.CurrentThread.CurrentCulture);
+                    Assert.Same(value, CultureInfo.CurrentCulture);
+                    Assert.Equal(expectedLcid, Kernel32.GetThreadLocale());
                 }
-            }).Dispose();
+                finally
+                {
+                    Application.CurrentCulture = oldValue;
+                }
+            }
         }
 
         [WinFormsFact]
@@ -75,31 +71,23 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("value", () => Application.CurrentCulture = null);
         }
 
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public void Application_EnableVisualStyles_InvokeBeforeGettingRenderWithVisualStyles_Success()
         {
-            RemoteExecutor.Invoke(() =>
-            {
-                Application.EnableVisualStyles();
-                Assert.True(Application.UseVisualStyles);
-                Assert.True(Application.RenderWithVisualStyles);
-            }).Dispose();
+            Application.EnableVisualStyles();
+            Assert.True(Application.UseVisualStyles);
+            Assert.True(Application.RenderWithVisualStyles);
         }
 
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public void Application_EnableVisualStyles_InvokeAfterGettingRenderWithVisualStyles_Success()
         {
-            // This is not a recommended scenario per https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.application.enablevisualstyles
-            // EnableVisualStyles should be executed before any control-related code is.
-            RemoteExecutor.Invoke(() =>
-            {
-                Assert.False(Application.UseVisualStyles);
-                Assert.False(Application.RenderWithVisualStyles);
+            Assert.True(Application.UseVisualStyles);
+            Assert.True(Application.RenderWithVisualStyles);
 
-                Application.EnableVisualStyles();
-                Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on Winforms app. This is a high priority bug and must be looked into");
-                Assert.True(Application.RenderWithVisualStyles);
-            }).Dispose();
+            Application.EnableVisualStyles();
+            Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on Winforms app. This is a high priority bug and must be looked into");
+            Assert.True(Application.RenderWithVisualStyles);
         }
 
         [WinFormsFact]
@@ -117,27 +105,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(state, Application.VisualStyleState);
         }
 
-        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(VisualStyleState))]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(VisualStyleState))]
-        public void Application_VisualStyleState_Set_ReturnsExpected(VisualStyleState valueParam)
+        public void Application_VisualStyleState_Set_ReturnsExpected(VisualStyleState value)
         {
             // This needs to be in RemoteExecutor.Invoke because changing Application.VisualStyleState
             // sends WM_THEMECHANGED to all controls, which can cause a deadlock if another test fails.
-            RemoteExecutor.Invoke((valueString) =>
+            VisualStyleState state = Application.VisualStyleState;
+            try
             {
-                VisualStyleState value = Enum.Parse<VisualStyleState>(valueString);
-                VisualStyleState state = Application.VisualStyleState;
-                try
-                {
-                    Application.VisualStyleState = value;
-                    Assert.Equal(value, Application.VisualStyleState);
-                }
-                finally
-                {
-                    Application.VisualStyleState = state;
-                }
-            }, valueParam.ToString());
+                Application.VisualStyleState = value;
+                Assert.Equal(value, Application.VisualStyleState);
+            }
+            finally
+            {
+                Application.VisualStyleState = state;
+            }
         }
 
         [Fact]
