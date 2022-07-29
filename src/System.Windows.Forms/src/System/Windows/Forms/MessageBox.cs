@@ -7,6 +7,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 using static Interop.User32;
 
@@ -374,7 +375,7 @@ namespace System.Windows.Forms
             if (Application.UseVisualStyles)
             {
                 // CLR4.0 or later, shell32.dll needs to be loaded explicitly.
-                if (Kernel32.GetModuleHandleW(Libraries.Shell32) == IntPtr.Zero)
+                if (PInvoke.GetModuleHandle(Libraries.Shell32) == 0)
                 {
                     if (Kernel32.LoadLibraryFromSystemPathIfAvailable(Libraries.Shell32) == IntPtr.Zero)
                     {

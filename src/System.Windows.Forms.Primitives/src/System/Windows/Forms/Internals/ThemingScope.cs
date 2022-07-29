@@ -4,6 +4,7 @@
 
 using Windows.Win32;
 using Windows.Win32.Foundation;
+using Windows.Win32.System.ApplicationInstallationAndServicing;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -13,7 +14,7 @@ namespace System.Windows.Forms
     /// </summary>
     internal static class ThemingScope
     {
-        private static Kernel32.ACTCTXW s_enableThemingActivationContext;
+        private static ACTCTXW s_enableThemingActivationContext;
         private static nint s_hActCtx;
         private static bool s_contextCreationSucceeded;
 
@@ -67,15 +68,18 @@ namespace System.Windows.Forms
             {
                 if (!s_contextCreationSucceeded)
                 {
-                    s_enableThemingActivationContext = new Kernel32.ACTCTXW
+                    s_enableThemingActivationContext = new ACTCTXW
                     {
-                        cbSize = (uint)sizeof(Kernel32.ACTCTXW),
-                        lpResourceName = (IntPtr)nativeResourceManifestID,
-                        dwFlags = Kernel32.ACTCTX_FLAG.HMODULE_VALID | Kernel32.ACTCTX_FLAG.RESOURCE_NAME_VALID,
-                        hModule = module
+                        cbSize = (uint)sizeof(ACTCTXW),
+                        lpResourceName = (char*)nativeResourceManifestID,
+                        dwFlags = PInvoke.ACTCTX_FLAG_HMODULE_VALID | PInvoke.ACTCTX_FLAG_RESOURCE_NAME_VALID,
+                        hModule = (HINSTANCE)module
                     };
 
-                    s_hActCtx = Kernel32.CreateActCtxW(ref s_enableThemingActivationContext);
+                    fixed (ACTCTXW* act = &s_enableThemingActivationContext)
+                    {
+                        s_hActCtx = PInvoke.CreateActCtx(act);
+                    }
 
                     s_contextCreationSucceeded = (s_hActCtx != new IntPtr(-1));
                 }
@@ -104,13 +108,16 @@ namespace System.Windows.Forms
 
                     fixed (char* p = tempFilePath)
                     {
-                        s_enableThemingActivationContext = new Kernel32.ACTCTXW
+                        s_enableThemingActivationContext = new ACTCTXW
                         {
-                            cbSize = (uint)sizeof(Kernel32.ACTCTXW),
+                            cbSize = (uint)sizeof(ACTCTXW),
                             lpSource = p
                         };
 
-                        s_hActCtx = Kernel32.CreateActCtxW(ref s_enableThemingActivationContext);
+                        fixed (ACTCTXW* act = &s_enableThemingActivationContext)
+                        {
+                            s_hActCtx = PInvoke.CreateActCtx(act);
+                        }
                     }
 
                     s_contextCreationSucceeded = (s_hActCtx != new IntPtr(-1));

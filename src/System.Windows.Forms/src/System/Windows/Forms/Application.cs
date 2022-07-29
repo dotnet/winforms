@@ -828,9 +828,9 @@ namespace System.Windows.Forms
         {
             // Pull manifest from our resources
             Module module = typeof(Application).Module;
-            IntPtr moduleHandle = Kernel32.GetModuleHandleW(module.Name);
+            var moduleHandle = PInvoke.GetModuleHandle(module.Name);
 
-            if (moduleHandle != IntPtr.Zero)
+            if (moduleHandle != 0)
             {
                 // We have a native module, point to our native embedded manifest resource.
                 // CSC embeds DLL manifests as native resource ID 2

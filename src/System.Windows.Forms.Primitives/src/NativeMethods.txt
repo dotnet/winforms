@@ -1,14 +1,17 @@
+ACTCTX_FLAG_*
 AdjustWindowRectEx
 AdjustWindowRectExForDpi
 BeginPaint
 BitBlt
 CloseEnhMetaFile
 CombineRgn
+CreateActCtx
 CreateBitmap
 CreateBrushIndirect
 CreateCompatibleBitmap
 DuplicateHandle
 EndPaint
+FormatMessage
 GET_MODULE_HANDLE_EX_FLAG*
 GetClientRect
 GetCurrentActCtx
