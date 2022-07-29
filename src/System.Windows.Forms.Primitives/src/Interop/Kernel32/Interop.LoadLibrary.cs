@@ -53,8 +53,7 @@ internal partial class Interop
         /// <returns>A handle to the loaded module, if successful; <see cref="IntPtr.Zero"/> otherwise.</returns>
         public static nint LoadLibraryFromSystemPathIfAvailable(string libraryName)
         {
-            var kernel32 = PInvoke.GetModuleHandle(Libraries.Kernel32);
-            if (kernel32 == 0)
+            if (PInvoke.GetModuleHandle(Libraries.Kernel32) == 0)
             {
                 return 0;
             }
