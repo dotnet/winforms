@@ -6,6 +6,7 @@ using System.CodeDom.Compiler;
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
+using System.Text;
 using Microsoft.CSharp;
 using Xunit;
 
@@ -338,22 +339,24 @@ public partial class StronglyTypedResourceBuilderTests
 
         resourceWriter.Generate();
         resourceStream.Position = 0;
+        var converter = TypeDescriptor.GetConverter(typeof(Bitmap));
+        Bitmap bitmap = (Bitmap)Image.FromFile(@"Resources\Image1.png");
 
         Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
         Assert.NotNull(type);
         var imageProperty = type.GetProperty("Image1");
         Assert.NotNull(imageProperty);
         byte[] resourceBytes = Assert.IsType<byte[]>(imageProperty.GetValue(obj: null));
-
-        var converter = TypeDescriptor.GetConverter(typeof(Bitmap));
-        Bitmap result = Assert.IsType<Bitmap>(converter.ConvertFrom(resourceBytes));
-        Assert.Equal(new(800, 600), result.Size);
+        Bitmap resourceBitmap = Assert.IsType<Bitmap>(converter.ConvertFrom(resourceBytes));
+        Assert.Equal(bitmap.Size, resourceBitmap.Size);
+        Assert.Equal(bitmap.GetPixel(0, 0), resourceBitmap.GetPixel(0, 0));
     }
 
     [Fact]
     public static void StronglyTypedResourceBuilder_Create_BitmapResource_FromMemory()
     {
         using Bitmap bitmap = new(10, 10);
+        bitmap.SetPixel(0, 0, Color.Red);
         var converter = TypeDescriptor.GetConverter(bitmap);
 
         ResXDataNode node = new("Image1", converter.ConvertTo(bitmap, typeof(byte[])));
@@ -390,8 +393,58 @@ public partial class StronglyTypedResourceBuilderTests
         var imageProperty = type.GetProperty("Image1");
         Assert.NotNull(imageProperty);
         byte[] resourceBytes = Assert.IsType<byte[]>(imageProperty.GetValue(obj: null));
-        Bitmap result = Assert.IsType<Bitmap>(converter.ConvertFrom(resourceBytes));
-        Assert.Equal(bitmap.Size, result.Size);
+        Bitmap resourceBitmap = Assert.IsType<Bitmap>(converter.ConvertFrom(resourceBytes));
+        Assert.Equal(bitmap.GetPixel(0, 0), resourceBitmap.GetPixel(0, 0));
+        Assert.Equal(bitmap.Size, resourceBitmap.Size);
+    }
+
+    [Fact]
+    public static void StronglyTypedResourceBuilder_Create_BitmapResource_FromFileRef()
+    {
+        ResXFileRef fileRef = new(@"Resources\Image1.png",
+            "System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
+        Hashtable values = new()
+        {
+            { "Image1", new ResXDataNode("Image1", fileRef) }
+        };
+
+        var compileUnit = StronglyTypedResourceBuilder.Create(
+            resourceList: values,
+            baseName: "Resources",
+            generatedCodeNamespace: "Namespace",
+            s_cSharpProvider,
+            internalClass: false,
+            out _);
+
+        MemoryStream resxStream = new();
+        ResXResourceWriter resxWriter = new(resxStream);
+        resxWriter.AddResource(new ResXDataNode("Image1", fileRef));
+        resxWriter.Generate();
+        resxStream.Position = 0;
+        
+        MemoryStream resourceStream = new();
+        using ResXResourceReader reader = new(resxStream);
+        var enumerator = reader.GetEnumerator();
+        using ResourceWriter resourceWriter = new(resourceStream);
+
+        while (enumerator.MoveNext())
+        {
+            resourceWriter.AddResource((string)enumerator.Key, enumerator.Value);
+        }
+
+        resourceWriter.Generate();
+        resourceStream.Position = 0;
+        var converter = TypeDescriptor.GetConverter(typeof(Image));
+        Bitmap bitmap = (Bitmap)Image.FromFile(@"Resources\Image1.png");
+
+        Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
+        Assert.NotNull(type);
+        var imageProperty = type.GetProperty("Image1");
+        Assert.NotNull(imageProperty);
+        byte[] resourceBytes = Assert.IsType<byte[]>(imageProperty.GetValue(obj: null));
+        Bitmap resouceBitmap = Assert.IsType<Bitmap>(converter.ConvertFrom(resourceBytes));
+        Assert.Equal(bitmap.GetPixel(0, 0), resouceBitmap.GetPixel(0, 0));
+        Assert.Equal(bitmap.Size, resouceBitmap.Size);
     }
 
     [Fact]
@@ -425,16 +478,16 @@ public partial class StronglyTypedResourceBuilderTests
 
         resourceWriter.Generate();
         resourceStream.Position = 0;
+        var converter = TypeDescriptor.GetConverter(typeof(Icon));
+        Icon icon = new(@"Resources\Icon1.ico");
 
         Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
         Assert.NotNull(type);
         var iconProperty = type.GetProperty("Icon1");
         Assert.NotNull(iconProperty);
         byte[] resourceByte = Assert.IsType<byte[]>(iconProperty.GetValue(obj: null));
-
-        var converter = TypeDescriptor.GetConverter(typeof(Icon));
-        Icon result = Assert.IsType<Icon>(converter.ConvertFrom(resourceByte));
-        Assert.Equal(new(32, 32), result.Size);
+        Icon resourceIcon = Assert.IsType<Icon>(converter.ConvertFrom(resourceByte));
+        Assert.Equal(icon.Size, resourceIcon.Size);
     }
 
     [Fact]
@@ -469,7 +522,6 @@ public partial class StronglyTypedResourceBuilderTests
         }
 
         resourceWriter.Generate();
-
         resourceStream.Position = 0;
 
         Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
@@ -477,7 +529,242 @@ public partial class StronglyTypedResourceBuilderTests
         var imageProperty = type.GetProperty("Icon1");
         Assert.NotNull(imageProperty);
         byte[] resourceBytes = Assert.IsType<byte[]>(imageProperty.GetValue(obj: null));
-        Icon result = Assert.IsType<Icon>(converter.ConvertFrom(resourceBytes));
-        Assert.Equal(icon.Size, result.Size);
+        Icon resourceIcon = Assert.IsType<Icon>(converter.ConvertFrom(resourceBytes));
+        Assert.Equal(icon.Size, resourceIcon.Size);
+    }
+
+    [Fact]
+    public static void StronglyTypedResourceBuilder_Create_IconResource_FromFileRef()
+    {
+        ResXFileRef fileRef = new(@"Resources\Icon1.ico",
+            "System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
+        Hashtable values = new()
+        {
+            { "Icon1", new ResXDataNode("Icon1", fileRef) }
+        };
+
+        var compileUnit = StronglyTypedResourceBuilder.Create(
+            resourceList: values,
+            baseName: "Resources",
+            generatedCodeNamespace: "Namespace",
+            s_cSharpProvider,
+            internalClass: false,
+            out _);
+
+        MemoryStream resxStream = new();
+        ResXResourceWriter resxWriter = new(resxStream);
+        resxWriter.AddResource(new ResXDataNode("Icon1", fileRef));
+        resxWriter.Generate();
+        resxStream.Position = 0;
+
+        MemoryStream resourceStream = new();
+        using ResXResourceReader reader = new(resxStream);
+        var enumerator = reader.GetEnumerator();
+        using ResourceWriter resourceWriter = new(resourceStream);
+
+        while (enumerator.MoveNext())
+        {
+            resourceWriter.AddResource((string)enumerator.Key, enumerator.Value);
+        }
+
+        resourceWriter.Generate();
+        resourceStream.Position = 0;
+        var converter = TypeDescriptor.GetConverter(typeof(Icon));
+        Icon icon = new(@"Resources\Icon1.ico");
+
+        Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
+        Assert.NotNull(type);
+        var iconProperty = type.GetProperty("Icon1");
+        Assert.NotNull(iconProperty);
+        byte[] resourceBytes = Assert.IsType<byte[]>(iconProperty.GetValue(obj: null));
+        Icon resourceIcon = Assert.IsType<Icon>(converter.ConvertFrom(resourceBytes));
+        Assert.Equal(icon.Size, resourceIcon.Size);
+    }
+
+    [Fact]
+    public static void StronglyTypedResourceBuilder_Create_TxtFileResource_FromFile()
+    {
+        const string data = """
+            <data name="TextFile1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+              <value>Resources\TextFile1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+            </data>
+            """;
+
+        using var temp = TempFile.Create(CreateResx(data));
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+        var compileUnit = StronglyTypedResourceBuilder.Create(
+            resxFile: temp.Path,
+            baseName: "Resources",
+            generatedCodeNamespace: "Namespace",
+            s_cSharpProvider,
+            internalClass: false,
+            out _);
+
+        MemoryStream resourceStream = new();
+        using ResXResourceReader reader = new(temp.Path);
+        var enumerator = reader.GetEnumerator();
+        using ResourceWriter resourceWriter = new(resourceStream);
+
+        while (enumerator.MoveNext())
+        {
+            resourceWriter.AddResource((string)enumerator.Key, enumerator.Value);
+        }
+
+        resourceWriter.Generate();
+        resourceStream.Position = 0;
+
+        Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
+        Assert.NotNull(type);
+        var txtFileProperty = type.GetProperty("TextFile1");
+        Assert.NotNull(txtFileProperty);
+        string resourceTxtFileContents = Assert.IsType<string>(txtFileProperty.GetValue(obj: null));
+        Assert.Equal("hello test\r\n!", resourceTxtFileContents);
+    }
+
+    [Fact]
+    public static void StronglyTypedResourceBuilder_Create_TxtFileResource_FromFileRef()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        ResXFileRef fileRef = new(@"Resources\TextFile1.txt",
+            "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+            Encoding.GetEncoding("Windows-1252"));
+        Hashtable values = new()
+        {
+            { "TextFile1", new ResXDataNode("TextFile1", fileRef) }
+        };
+
+        var compileUnit = StronglyTypedResourceBuilder.Create(
+            resourceList: values,
+            baseName: "Resources",
+            generatedCodeNamespace: "Namespace",
+            s_cSharpProvider,
+            internalClass: false,
+            out _);
+
+        MemoryStream resxStream = new();
+        ResXResourceWriter resxWriter = new(resxStream);
+        resxWriter.AddResource(new ResXDataNode("TextFile1", fileRef));
+        resxWriter.Generate();
+        resxStream.Position = 0;
+
+        MemoryStream resourceStream = new();
+        using ResXResourceReader reader = new(resxStream);
+        var enumerator = reader.GetEnumerator();
+        using ResourceWriter resourceWriter = new(resourceStream);
+
+        while (enumerator.MoveNext())
+        {
+            resourceWriter.AddResource((string)enumerator.Key, enumerator.Value);
+        }
+
+        resourceWriter.Generate();
+        resourceStream.Position = 0;
+
+        Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
+        Assert.NotNull(type);
+        var txtFileProperty = type.GetProperty("TextFile1");
+        Assert.NotNull(txtFileProperty);
+        string resourceTxtFileContents = Assert.IsType<string>(txtFileProperty.GetValue(obj: null));
+        Assert.Equal("hello test\r\n!", resourceTxtFileContents);
+    }
+
+    [Fact]
+    public static void StronglyTypedResourceBuilder_Create_AudioResource_FromFile()
+    {
+        const string data = """
+            <data name="Audio1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+              <value>Resources\Audio1.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+            </data>
+            """;
+
+        using var temp = TempFile.Create(CreateResx(data));
+
+        var compileUnit = StronglyTypedResourceBuilder.Create(
+            resxFile: temp.Path,
+            baseName: "Resources",
+            generatedCodeNamespace: "Namespace",
+            s_cSharpProvider,
+            internalClass: false,
+            out _);
+
+        MemoryStream resourceStream = new();
+        using ResXResourceReader reader = new(temp.Path);
+        var enumerator = reader.GetEnumerator();
+        using ResourceWriter resourceWriter = new(resourceStream);
+
+        while (enumerator.MoveNext())
+        {
+            resourceWriter.AddResource((string)enumerator.Key, enumerator.Value);
+        }
+
+        resourceWriter.Generate();
+        resourceStream.Position = 0;
+
+        Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
+        Assert.NotNull(type);
+        var audioProperty = type.GetProperty("Audio1");
+        Assert.NotNull(audioProperty);
+        UnmanagedMemoryStream resourceUms = Assert.IsType<UnmanagedMemoryStream>(audioProperty.GetValue(obj: null));
+        var contents = new byte[resourceUms.Length];
+        int pos = (int)(resourceUms.Position = 0);
+        while (pos < resourceUms.Length)
+        {
+            pos += resourceUms.Read(contents, pos, (int)(resourceUms.Length - pos));
+        }
+
+        Assert.Equal("HELLO", Encoding.UTF8.GetString(contents));
+    }
+
+    [Fact]
+    public static void StronglyTypedResourceBuilder_Create_AudioResource_FromFileRef()
+    {
+        ResXFileRef fileRef = new(@"Resources\Audio1.wav",
+            "System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
+        Hashtable values = new()
+        {
+            { "Audio1", new ResXDataNode("Audio1", fileRef) }
+        };
+
+        var compileUnit = StronglyTypedResourceBuilder.Create(
+            resourceList: values,
+            baseName: "Resources",
+            generatedCodeNamespace: "Namespace",
+            s_cSharpProvider,
+            internalClass: false,
+            out _);
+
+        MemoryStream resxStream = new();
+        ResXResourceWriter resxWriter = new(resxStream);
+        resxWriter.AddResource(new ResXDataNode("Audio1", fileRef));
+        resxWriter.Generate();
+        resxStream.Position = 0;
+
+        MemoryStream resourceStream = new();
+        using ResXResourceReader reader = new(resxStream);
+        var enumerator = reader.GetEnumerator();
+        using ResourceWriter resourceWriter = new(resourceStream);
+
+        while (enumerator.MoveNext())
+        {
+            resourceWriter.AddResource((string)enumerator.Key, enumerator.Value);
+        }
+
+        resourceWriter.Generate();
+        resourceStream.Position = 0;
+
+        Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
+        Assert.NotNull(type);
+        var audioProperty = type.GetProperty("Audio1");
+        Assert.NotNull(audioProperty);
+        UnmanagedMemoryStream resourceUms = Assert.IsType<UnmanagedMemoryStream>(audioProperty.GetValue(obj: null));
+        var contents = new byte[resourceUms.Length];
+        int pos = (int)(resourceUms.Position = 0);
+        while (pos < resourceUms.Length)
+        {
+            pos += resourceUms.Read(contents, pos, (int)(resourceUms.Length - pos));
+        }
+
+        Assert.Equal("HELLO", Encoding.UTF8.GetString(contents));
     }
 }
