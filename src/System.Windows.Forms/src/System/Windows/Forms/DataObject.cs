@@ -957,7 +957,7 @@ namespace System.Windows.Forms
             {
                 fixed (char* pStr = str)
                 {
-                    int pinvokeSize = Kernel32.WideCharToMultiByte(Kernel32.CP.ACP, 0, pStr, str.Length, null, 0, IntPtr.Zero, null);
+                    int pinvokeSize = PInvoke.WideCharToMultiByte(PInvoke.CP_ACP, 0, str, str.Length, null, 0, null, null);
                     newHandle = PInvoke.GlobalReAlloc(
                         handle,
                         (uint)pinvokeSize + 1,
@@ -973,7 +973,7 @@ namespace System.Windows.Forms
                         return HRESULT.E_OUTOFMEMORY;
                     }
 
-                    Kernel32.WideCharToMultiByte(Kernel32.CP.ACP, 0, pStr, str.Length, ptr, pinvokeSize, IntPtr.Zero, null);
+                    PInvoke.WideCharToMultiByte(PInvoke.CP_ACP, 0, str, str.Length, ptr, pinvokeSize, null, null);
                     ptr[pinvokeSize] = 0; // Null terminator
                 }
             }

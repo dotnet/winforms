@@ -2,13 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
+using Windows.Win32;
+using Windows.Win32.System.Power;
 
 namespace System.Windows.Forms
 {
     public class PowerStatus
     {
-        private Kernel32.SYSTEM_POWER_STATUS _systemPowerStatus;
+        private SYSTEM_POWER_STATUS _systemPowerStatus;
 
         internal PowerStatus()
         {
@@ -37,7 +38,7 @@ namespace System.Windows.Forms
             get
             {
                 UpdateSystemPowerStatus();
-                return _systemPowerStatus.BatteryFullLifeTime;
+                return (int)_systemPowerStatus.BatteryFullLifeTime;
             }
         }
 
@@ -56,10 +57,10 @@ namespace System.Windows.Forms
             get
             {
                 UpdateSystemPowerStatus();
-                return _systemPowerStatus.BatteryLifeTime;
+                return (int)_systemPowerStatus.BatteryLifeTime;
             }
         }
 
-        private void UpdateSystemPowerStatus() => Kernel32.GetSystemPowerStatus(ref _systemPowerStatus);
+        private void UpdateSystemPowerStatus() => PInvoke.GetSystemPowerStatus(out _systemPowerStatus);
     }
 }

@@ -99,7 +99,8 @@ public class PropertyGridTests
 
         try
         {
-            if (Kernel32.ActivateActCtx(handle, out var cookie).IsFalse())
+            nuint cookie;
+            if (PInvoke.ActivateActCtx(handle, &cookie) == false)
             {
                 throw new Win32Exception();
             }
@@ -110,7 +111,7 @@ public class PropertyGridTests
             }
             finally
             {
-                if (Kernel32.DeactivateActCtx(0, cookie).IsFalse())
+                if (PInvoke.DeactivateActCtx(0, cookie) == false)
                 {
                     throw new Win32Exception();
                 }
