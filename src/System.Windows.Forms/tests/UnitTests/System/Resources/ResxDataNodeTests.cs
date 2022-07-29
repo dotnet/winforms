@@ -23,9 +23,8 @@ namespace System.Resources.Tests
         }
 
         [Fact]
-        public void ResxDataNode_GetValue_ByteArray_FromDataNodeInfo()
+        public void ResxDataNode_GetValue_ByteArray_FromDataNodeInfo_Framework()
         {
-            // Ensure value is correct for byte[] created in Framework
             using Bitmap bitmap = new(10, 10);
             var converter = TypeDescriptor.GetConverter(bitmap);
             ResXDataNode temp = new("test", converter.ConvertTo(bitmap, typeof(byte[])));
@@ -35,11 +34,20 @@ namespace System.Resources.Tests
             var bitmapBytes = dataNode.GetValue(typeResolver: null);
             Bitmap result = Assert.IsType<Bitmap>(converter.ConvertFrom(bitmapBytes));
             Assert.Equal(bitmap.Size, result.Size);
+        }
 
-            // Ensure value is correct for byte[] created in Core
+        [Fact]
+        public void ResxDataNode_GetValue_ByteArray_FromDataNodeInfo_Core()
+        {
+            using Bitmap bitmap = new(10, 10);
+            var converter = TypeDescriptor.GetConverter(bitmap);
+            ResXDataNode temp = new("test", converter.ConvertTo(bitmap, typeof(byte[])));
+            var dataNodeInfo = temp.GetDataNodeInfo();
             dataNodeInfo.TypeName = "System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-            bitmapBytes = dataNode.GetValue(typeResolver: null);
-            result = Assert.IsType<Bitmap>(converter.ConvertFrom(bitmapBytes));
+            ResXDataNode dataNode = new(dataNodeInfo, basePath: null);
+
+            var bitmapBytes = dataNode.GetValue(typeResolver: null);
+            var result = Assert.IsType<Bitmap>(converter.ConvertFrom(bitmapBytes));
             Assert.Equal(bitmap.Size, result.Size);
         }
 
