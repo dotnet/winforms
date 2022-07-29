@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -161,7 +162,7 @@ namespace System.Windows.Forms
                 _windowClassName = GetFullClassName(localClassName!);
                 _windProc = new User32.WNDPROC(Callback);
                 windowClass.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(_windProc);
-                windowClass.hInstance = Kernel32.GetModuleHandleW(null);
+                windowClass.hInstance = PInvoke.GetModuleHandle(null);
 
                 fixed (char* c = _windowClassName)
                 {
