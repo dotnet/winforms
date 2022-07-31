@@ -418,6 +418,11 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Gets or sets the <see cref="System.Windows.Input.ICommand"/> object whose <see cref="System.Windows.Input.ICommand.Execute(object?)"/>
+        ///  method will be called when the ToolStripItem's <see cref="Click"/> event gets invoked and
+        ///  <see cref="System.Windows.Input.ICommand.CanExecute(object?)"/> indicates that the command can be executed.
+        /// </summary>
         [RequiresPreviewFeatures]
         [Bindable(true)]
         [Browsable(false)]
@@ -430,11 +435,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the Command.CanExecute status has changed.
+        ///  Occurs when the <see cref="System.Windows.Input.ICommand.CanExecute(object?)"/> status of the command
+        ///  which is assigned to the <see cref="Command"/> property has changed.
         /// </summary>
         [RequiresPreviewFeatures]
         [SRCategory(nameof(SR.CatData))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRDescription(nameof(SR.CommandCanExecuteChangedEventDescr))]
         public event EventHandler CommandCanExecuteChanged
         {
             add => Events.AddHandler(s_commandCanExecuteChangedEvent, value);
@@ -442,17 +449,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the Command has changed.
+        ///  Occurs when the assigned <see cref="System.Windows.Input.ICommand"/> object of the <see cref="Command"/> property has changed.
         /// </summary>
         [RequiresPreviewFeatures]
         [SRCategory(nameof(SR.CatData))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRDescription(nameof(SR.CommandChangedEventDescr))]
         public event EventHandler CommandChanged
         {
             add => Events.AddHandler(s_commandChangedEvent, value);
             remove => Events.RemoveHandler(s_commandChangedEvent, value);
         }
 
+        /// <summary>
+        ///  Gets or sets the parameter that is passed to the <see cref="System.Windows.Input.ICommand"/>
+        ///  which is assigned to the <see cref="Command"/> property.
+        /// </summary>
         [Bindable(true)]
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -475,11 +487,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the CommandParameter has changed.
+        ///  Occurs when the value of the <see cref="CommandParameter"/> property has changed.
         /// </summary>
         [RequiresPreviewFeatures]
         [SRCategory(nameof(SR.CatData))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRDescription(nameof(SR.CommandParameterChangedEventDescr))]
         public event EventHandler CommandParameterChanged
         {
             add => Events.AddHandler(s_commandParameterChangedEvent, value);
@@ -2766,9 +2779,12 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Raises the <see cref="ToolStripItem.CommandChanged"/> event.
+        /// </summary>
+        /// <remarks>
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.CommandChanged to send this event to any registered event listeners.
-        /// </summary>
+        /// </remarks>
+        /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
         [RequiresPreviewFeatures]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCommandChanged(EventArgs e)
@@ -2776,9 +2792,12 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Raises the <see cref="ToolStripItem.CommandCanExecuteChanged"/> event.
+        /// </summary>
+        /// <remarks>
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.CommandCanExecuteChanged to send this event to any registered event listeners.
-        /// </summary>
+        /// </remarks>
+        /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
         [RequiresPreviewFeatures]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCommandCanExecuteChanged(EventArgs e)
@@ -2787,9 +2806,12 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Raises the <see cref="ToolStripItem.CommandParameterChanged"/> event.
-        ///  Inheriting classes should override this method to handle this event.
-        ///  Call base.CommandChanged to send this event to any registered event listeners.
         /// </summary>
+        /// <remarks>
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.CommandParameterChanged to send this event to any registered event listeners.
+        ///  </remarks>
+        /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
         [RequiresPreviewFeatures]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCommandParameterChanged(EventArgs e) => RaiseEvent(s_commandParameterChangedEvent, e);
@@ -2797,7 +2819,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Called by the event of a Control deriving from this class to execute the command.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
         [RequiresPreviewFeatures]
         protected virtual void OnRequestCommandExecute(EventArgs e)
             => ICommandBindingTargetProvider.RequestCommandExecute(this);

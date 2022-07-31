@@ -894,9 +894,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the data source for binding purposes. This is an ambient property.
+        ///  Gets or sets the data context for the purpose of data binding.
+        ///  This is an ambient property.
         /// </summary>
+        /// <remarks>
+        ///  Data context is a concept that allows elements to inherit information from their parent elements
+        ///  about the data source that is used for binding. It's the duty of deriving controls which inherit from
+        ///  this class to handle the provided data source accordingly. For example, UserControls, which using
+        ///  <see cref="BindingSource"/> components for data binding scenarios could either handle the
+        ///  <see cref="DataContextChanged"/> event or overwriting <see cref="OnDataContextChanged(EventArgs)"/> to provide
+        ///  the relevant data from the data context to a BindingSource component's <see cref="BindingSource.DataSource"/>.
+        /// </remarks>
         [SRCategory(nameof(SR.CatData))]
+        [Browsable(false)]
+        [Bindable(true)]
         public virtual object? DataContext
         {
             get
@@ -4110,11 +4121,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when a control is removed.
+        ///  Occurs when the value of the <see cref="DataContext"/> property changes.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRDescription(nameof(SR.ControlDataContextChangedDescr))]
         public event EventHandler? DataContextChanged
         {
             add => Events.AddHandler(s_dataContextEvent, value);

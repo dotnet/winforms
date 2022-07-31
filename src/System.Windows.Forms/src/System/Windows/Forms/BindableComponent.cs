@@ -7,6 +7,10 @@ using System.Runtime.Versioning;
 
 namespace System.Windows.Forms
 {
+    /// <summary>
+    /// Base class for components which provide properties which can be 
+    /// data bound with the WinForms Designer. 
+    /// </summary>
     [RequiresPreviewFeatures]
     public abstract class BindableComponent : Component, IBindableComponent
     {
@@ -19,11 +23,14 @@ namespace System.Windows.Forms
         {
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="BindingContext"/> for this bindable <see cref="Component"/>.
+        /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRCategory(nameof(SR.CatData))]
-        [SRDescription(nameof(SR.ToolStripItemBindingContextDescr))]
+        [SRDescription(nameof(SR.BindingComponentBindingContextDescr))]
         public BindingContext BindingContext
         {
             [RequiresPreviewFeatures]
@@ -41,10 +48,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the binding context has changed
+        /// Occurs when the binding context has changed.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
-        [SRDescription(nameof(SR.ToolStripItemOnBindingContextChangedDescr))]
+        [SRDescription(nameof(SR.BindableComponentBindingContextChangedDescr))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler BindingContextChanged
         {
@@ -71,6 +78,9 @@ namespace System.Windows.Forms
             RaiseEvent(s_bindingContextChangedEvent, e);
         }
 
+        /// <summary>
+        /// Gets the <see cref="ControlBindingsCollection"/> for this bindable <see cref="Component"/>.
+        /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [RefreshProperties(RefreshProperties.All)]
         [ParenthesizePropertyName(true)]

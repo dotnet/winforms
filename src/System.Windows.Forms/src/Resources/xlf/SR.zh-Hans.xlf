@@ -262,6 +262,16 @@
         <target state="translated">复杂的 DataBinding 接受 IList 或 IListSource 作为数据源。</target>
         <note />
       </trans-unit>
+      <trans-unit id="BindableComponentBindingContextChangedDescr">
+        <source>Occurs when the binding context has changed.</source>
+        <target state="new">Occurs when the binding context has changed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingComponentBindingContextDescr">
+        <source>Gets or sets the BindingContext for this bindable Component.</source>
+        <target state="new">Gets or sets the BindingContext for this bindable Component.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindingManagerBadIndex">
         <source>ListManager for {0} cannot be found.</source>
         <target state="translated">无法找到 {0} 的 ListManager。</target>
@@ -1147,9 +1157,24 @@
         <target state="translated">打开</target>
         <note />
       </trans-unit>
+      <trans-unit id="CommandCanExecuteChangedEventDescr">
+        <source>Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</source>
+        <target state="new">Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandChangedEventDescr">
+        <source>Occurs when the assigned ICommand object of the Command property has changed.</source>
+        <target state="new">Occurs when the assigned ICommand object of the Command property has changed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">无法分配新的命令 ID。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandParameterChangedEventDescr">
+        <source>Occurs when the value of the CommandParameter property has changed.</source>
+        <target state="new">Occurs when the value of the CommandParameter property has changed.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommonDialogHelpRequested">
@@ -1455,6 +1480,11 @@
       <trans-unit id="ControlCursorDescr">
         <source>The cursor that appears when the pointer moves over the control.</source>
         <target state="translated">指针移过该控件时显示的光标。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlDataContextChangedDescr">
+        <source>Occurs when the value of the DataContext property changes.</source>
+        <target state="new">Occurs when the value of the DataContext property changes.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDisplayRectangleDescr">
