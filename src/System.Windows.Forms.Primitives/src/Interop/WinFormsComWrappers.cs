@@ -245,6 +245,14 @@ internal partial class Interop
                 return new EnumVariantWrapper(enumVariantComObject);
             }
 
+            Guid dataObjectIID = IID.IDataObject;
+            hr = Marshal.QueryInterface(externalComObject, ref dataObjectIID, out IntPtr dataObjectComObject);
+            if (hr == S_OK)
+            {
+                Marshal.Release(externalComObject);
+                return new DataObjectWrapper(dataObjectComObject);
+            }
+
             throw new NotImplementedException();
         }
 
