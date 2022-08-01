@@ -14,6 +14,7 @@ using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using Windows.Win32;
 using Windows.Win32.UI.WindowsAndMessaging;
+using Windows.Win32.System.Threading;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -6057,13 +6058,12 @@ namespace System.Windows.Forms
         private void WmCreate(ref Message m)
         {
             base.WndProc(ref m);
-            var si = new Kernel32.STARTUPINFOW();
-            Kernel32.GetStartupInfoW(ref si);
+            PInvoke.GetStartupInfo(out STARTUPINFOW si);
 
             // If we've been created from explorer, it may
             // force us to show up normal.  Force our current window state to
             // the specified state, unless it's _specified_ max or min
-            if (TopLevel && (si.dwFlags & Kernel32.STARTF.USESHOWWINDOW) != 0)
+            if (TopLevel && (si.dwFlags & STARTUPINFOW_FLAGS.STARTF_USESHOWWINDOW) != 0)
             {
                 switch ((User32.SW)si.wShowWindow)
                 {
