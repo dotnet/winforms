@@ -3,14 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Drawing;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using Microsoft.DotNet.RemoteExecutor;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -203,50 +199,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        // Need to verify test once RE fixed.
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        public unsafe void ListViewGroup_TitleImageIndex_GetGroupInfo_Success()
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
-            {
-                var data = new (int, int)[] { (-1, -1), (0, 0), (1, 1), (2, -1) };
-                foreach ((int Index, int Expected) value in data)
-                {
-                    Application.EnableVisualStyles();
-
-                    using var listView = new ListView();
-
-                    using var groupImageList = new ImageList();
-                    groupImageList.Images.Add(new Bitmap(10, 10));
-                    groupImageList.Images.Add(new Bitmap(20, 20));
-                    listView.GroupImageList = groupImageList;
-                    Assert.Equal((nint)groupImageList.Handle,
-                        User32.SendMessageW(listView.Handle, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.GROUPHEADER, groupImageList.Handle));
-
-                    var group = new ListViewGroup();
-                    listView.Groups.Add(group);
-
-                    Assert.NotEqual(IntPtr.Zero, listView.Handle);
-                    group.TitleImageIndex = value.Index;
-
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
-                    var lvgroup = new LVGROUPW
-                    {
-                        cbSize = (uint)sizeof(LVGROUPW),
-                        mask = LVGF.TITLEIMAGE | LVGF.GROUPID,
-                    };
-
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
-                    Assert.Equal(value.Expected, lvgroup.iTitleImage);
-                    Assert.True(lvgroup.iGroupId >= 0);
-                }
-            });
-
-            // verify the remote process succeeded
-            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
-        }
-
         [WinFormsFact]
         public void ListViewGroup_TitleImageIndex_SetInvalid_ThrowsArgumentOutOfRangeException()
         {
@@ -342,49 +294,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-        }
-
-        // Need to verify test once RE fixed.
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        public unsafe void ListViewGroup_TitleImageKey_GetGroupInfo_Success()
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
-            {
-                var data = new (string, int)[] { (null, -1), (string.Empty, -1), ("text", 0), ("te\0t", 0) };
-                foreach ((string Key, int ExpectedIndex) value in data)
-                {
-                    Application.EnableVisualStyles();
-
-                    using var listView = new ListView();
-
-                    using var groupImageList = new ImageList();
-                    groupImageList.Images.Add(value.Key, new Bitmap(10, 10));
-                    listView.GroupImageList = groupImageList;
-                    Assert.Equal((nint)groupImageList.Handle,
-                        User32.SendMessageW(listView.Handle, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.GROUPHEADER, groupImageList.Handle));
-
-                    var group = new ListViewGroup();
-                    listView.Groups.Add(group);
-
-                    Assert.NotEqual(IntPtr.Zero, listView.Handle);
-                    group.TitleImageKey = value.Key;
-
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
-                    var lvgroup = new LVGROUPW
-                    {
-                        cbSize = (uint)sizeof(LVGROUPW),
-                        mask = LVGF.TITLEIMAGE | LVGF.GROUPID
-                    };
-
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
-                    Assert.Equal(value.ExpectedIndex, lvgroup.iTitleImage);
-                    Assert.True(lvgroup.iGroupId >= 0);
-                }
-            });
-
-            // verify the remote process succeeded
-            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -484,49 +393,6 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { "te\0t", "te" };
         }
 
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        public unsafe void ListViewGroup_Subtitle_GetGroupInfo_Success()
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
-            {
-                // This needs to be initialized out of the loop.
-                char* buffer = stackalloc char[256];
-
-                foreach (object[] data in Property_TypeString_GetGroupInfo_TestData())
-                {
-                    string value = (string)data[0];
-                    string expected = (string)data[1];
-
-                    Application.EnableVisualStyles();
-
-                    using var listView = new ListView();
-                    var group = new ListViewGroup();
-                    listView.Groups.Add(group);
-
-                    Assert.NotEqual(IntPtr.Zero, listView.Handle);
-                    group.Subtitle = value;
-
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
-
-                    var lvgroup = new LVGROUPW
-                    {
-                        cbSize = (uint)sizeof(LVGROUPW),
-                        mask = LVGF.SUBTITLE | LVGF.GROUPID,
-                        pszSubtitle = buffer,
-                        cchSubtitle = 256
-                    };
-
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
-                    Assert.Equal(expected, new string(lvgroup.pszSubtitle));
-                    Assert.True(lvgroup.iGroupId >= 0);
-                }
-            });
-
-            // verify the remote process succeeded
-            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
-        }
-
         [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         [InlineData("te\0xt", "te\0xt")]
@@ -596,47 +462,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-        }
-
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        public unsafe void ListViewGroup_Footer_GetGroupInfo_Success()
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
-            {
-                foreach (object[] data in Property_TypeString_GetGroupInfo_TestData())
-                {
-                    string value = (string)data[0];
-                    string expected = (string)data[1];
-
-                    Application.EnableVisualStyles();
-
-                    using var listView = new ListView();
-                    var group = new ListViewGroup();
-                    listView.Groups.Add(group);
-
-                    Assert.NotEqual(IntPtr.Zero, listView.Handle);
-                    group.Footer = value;
-
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
-                    char* buffer = stackalloc char[256];
-                    var lvgroup = new LVGROUPW
-                    {
-                        cbSize = (uint)sizeof(LVGROUPW),
-                        mask = LVGF.FOOTER | LVGF.GROUPID | LVGF.ALIGN,
-                        pszFooter = buffer,
-                        cchFooter = 256
-                    };
-
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
-                    Assert.Equal(expected, new string(lvgroup.pszFooter));
-                    Assert.True(lvgroup.iGroupId >= 0);
-                    Assert.Equal(LVGA.HEADER_LEFT | LVGA.FOOTER_LEFT, lvgroup.uAlign);
-                }
-            });
-
-            // verify the remote process succeeded
-            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
         }
 
         public static IEnumerable<object[]> Alignment_Set_TestData()
@@ -729,56 +554,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        public static IEnumerable<object[]> FooterAlignment_GetGroupInfo_TestData()
-        {
-            yield return new object[] { string.Empty, HorizontalAlignment.Left, 0x00000008 | (int)LVGA.HEADER_LEFT };
-            yield return new object[] { string.Empty, HorizontalAlignment.Center, 0x00000010 | (int)LVGA.HEADER_LEFT };
-            yield return new object[] { string.Empty, HorizontalAlignment.Right, 0x00000020 | (int)LVGA.HEADER_LEFT };
-
-            yield return new object[] { "footer", HorizontalAlignment.Left, 0x00000008 | (int)LVGA.HEADER_LEFT };
-            yield return new object[] { "footer", HorizontalAlignment.Center, 0x00000010 | (int)LVGA.HEADER_LEFT };
-            yield return new object[] { "footer", HorizontalAlignment.Right, 0x00000020 | (int)LVGA.HEADER_LEFT };
-        }
-
-        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        [MemberData(nameof(FooterAlignment_GetGroupInfo_TestData))]
-        public unsafe void ListView_FooterAlignment_GetGroupInfo_Success(string footerParam, HorizontalAlignment valueParam, int expectedAlignParam)
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((footer, valueString, expectedAlignString) =>
-            {
-                HorizontalAlignment value = (HorizontalAlignment)Enum.Parse(typeof(HorizontalAlignment), valueString);
-                int expectedAlign = int.Parse(expectedAlignString);
-
-                Application.EnableVisualStyles();
-                using var listView = new ListView();
-                var group1 = new ListViewGroup
-                {
-                    Footer = footer
-                };
-
-                listView.Groups.Add(group1);
-
-                Assert.NotEqual(IntPtr.Zero, listView.Handle);
-                group1.FooterAlignment = value;
-
-                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
-                char* buffer = stackalloc char[256];
-                var lvgroup = new LVGROUPW
-                {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.FOOTER | LVGF.GROUPID | LVGF.ALIGN,
-                    pszFooter = buffer,
-                    cchFooter = 256
-                };
-
-                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
-                Assert.Equal(footer, new string(lvgroup.pszFooter));
-                Assert.True(lvgroup.iGroupId >= 0);
-                Assert.Equal(expectedAlign, (int)lvgroup.uAlign);
-            }, footerParam, valueParam.ToString(), expectedAlignParam.ToString()).Dispose();
-        }
-
         [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HorizontalAlignment))]
         public void ListViewGroup_FooterAlignment_SetInvalid_ThrowsInvalidEnumArgumentException(HorizontalAlignment value)
@@ -856,47 +631,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-        }
-
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        public unsafe void ListViewGroup_Header_GetGroupInfo_Success()
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
-            {
-                foreach (object[] data in Property_TypeString_GetGroupInfo_TestData())
-                {
-                    string value = (string)data[0];
-                    string expected = (string)data[1];
-
-                    Application.EnableVisualStyles();
-
-                    using var listView = new ListView();
-                    var group = new ListViewGroup();
-                    listView.Groups.Add(group);
-
-                    Assert.NotEqual(IntPtr.Zero, listView.Handle);
-                    group.Header = value;
-
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
-                    char* buffer = stackalloc char[256];
-                    var lvgroup = new LVGROUPW
-                    {
-                        cbSize = (uint)sizeof(LVGROUPW),
-                        mask = LVGF.HEADER | LVGF.GROUPID | LVGF.ALIGN,
-                        pszHeader = buffer,
-                        cchHeader = 256
-                    };
-
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
-                    Assert.Equal(expected, new string(lvgroup.pszHeader));
-                    Assert.True(lvgroup.iGroupId >= 0);
-                    Assert.Equal(LVGA.HEADER_LEFT | LVGA.FOOTER_LEFT, lvgroup.uAlign);
-                }
-            });
-
-            // verify the remote process succeeded
-            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -977,56 +711,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-        }
-
-        public static IEnumerable<object[]> HeaderAlignment_GetGroupInfo_TestData()
-        {
-            yield return new object[] { string.Empty, HorizontalAlignment.Left, 0x00000001 | (int)LVGA.FOOTER_LEFT };
-            yield return new object[] { string.Empty, HorizontalAlignment.Center, 0x00000002 | (int)LVGA.FOOTER_LEFT };
-            yield return new object[] { string.Empty, HorizontalAlignment.Right, 0x00000004 | (int)LVGA.FOOTER_LEFT };
-
-            yield return new object[] { "header", HorizontalAlignment.Left, 0x00000001 | (int)LVGA.FOOTER_LEFT };
-            yield return new object[] { "header", HorizontalAlignment.Center, 0x00000002 | (int)LVGA.FOOTER_LEFT };
-            yield return new object[] { "header", HorizontalAlignment.Right, 0x00000004 | (int)LVGA.FOOTER_LEFT };
-        }
-
-        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        [MemberData(nameof(HeaderAlignment_GetGroupInfo_TestData))]
-        public unsafe void ListView_HeaderAlignment_GetGroupInfo_Success(string headerParam, HorizontalAlignment valueParam, int expectedAlignParam)
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((header, valueString, expectedAlignString) =>
-            {
-                HorizontalAlignment value = (HorizontalAlignment)Enum.Parse(typeof(HorizontalAlignment), valueString);
-                int expectedAlign = int.Parse(expectedAlignString);
-
-                Application.EnableVisualStyles();
-                using var listView = new ListView();
-                var group1 = new ListViewGroup
-                {
-                    Header = header
-                };
-
-                listView.Groups.Add(group1);
-
-                Assert.NotEqual(IntPtr.Zero, listView.Handle);
-                group1.HeaderAlignment = value;
-
-                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
-                char* buffer = stackalloc char[256];
-                var lvgroup = new LVGROUPW
-                {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.HEADER | LVGF.GROUPID | LVGF.ALIGN,
-                    pszHeader = buffer,
-                    cchHeader = 256
-                };
-
-                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
-                Assert.Equal(header, new string(lvgroup.pszHeader));
-                Assert.True(lvgroup.iGroupId >= 0);
-                Assert.Equal(expectedAlign, (int)lvgroup.uAlign);
-            }, headerParam, valueParam.ToString(), expectedAlignParam.ToString()).Dispose();
         }
 
         [WinFormsTheory]
@@ -1115,54 +799,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-        }
-
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        public unsafe void ListViewGroup_Collapse_GetGroupInfo_Success()
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
-            {
-                foreach (object[] data in CollapsedState_TestData())
-                {
-                    Application.EnableVisualStyles();
-
-                    using var listView = new ListView();
-                    var group = new ListViewGroup();
-                    listView.Groups.Add(group);
-
-                    Assert.NotEqual(IntPtr.Zero, listView.Handle);
-                    group.CollapsedState = (ListViewGroupCollapsedState)data[0];
-                    ListViewGroupCollapsedState expectedCollapsedState = (ListViewGroupCollapsedState)data[1];
-
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
-                    var lvgroup = new LVGROUPW
-                    {
-                        cbSize = (uint)sizeof(LVGROUPW),
-                        mask = LVGF.STATE | LVGF.GROUPID,
-                        stateMask = LVGS.COLLAPSIBLE | LVGS.COLLAPSED
-                    };
-
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
-                    Assert.True(lvgroup.iGroupId >= 0);
-                    Assert.Equal(expectedCollapsedState, group.CollapsedState);
-                    if (expectedCollapsedState == ListViewGroupCollapsedState.Default)
-                    {
-                        Assert.Equal(LVGS.NORMAL, lvgroup.state);
-                    }
-                    else if (expectedCollapsedState == ListViewGroupCollapsedState.Expanded)
-                    {
-                        Assert.Equal(LVGS.COLLAPSIBLE, lvgroup.state);
-                    }
-                    else
-                    {
-                        Assert.Equal(LVGS.COLLAPSIBLE | LVGS.COLLAPSED, lvgroup.state);
-                    }
-                }
-            });
-
-            // verify the remote process succeeded
-            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -1258,48 +894,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-        }
-
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        public unsafe void ListViewGroup_Task_GetGroupInfo_Success()
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
-            {
-                // This needs to be outside the loop.
-                char* buffer = stackalloc char[256];
-
-                foreach (object[] data in Property_TypeString_GetGroupInfo_TestData())
-                {
-                    string value = (string)data[0];
-                    string expected = (string)data[1];
-
-                    Application.EnableVisualStyles();
-
-                    using var listView = new ListView();
-                    var group = new ListViewGroup();
-                    listView.Groups.Add(group);
-
-                    Assert.NotEqual(IntPtr.Zero, listView.Handle);
-                    group.TaskLink = value;
-
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
-                    var lvgroup = new LVGROUPW
-                    {
-                        cbSize = (uint)sizeof(LVGROUPW),
-                        mask = LVGF.TASK | LVGF.GROUPID,
-                        pszTask = buffer,
-                        cchTask = 256
-                    };
-
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
-                    Assert.Equal(expected, new string(lvgroup.pszTask));
-                    Assert.True(lvgroup.iGroupId >= 0);
-                }
-            });
-
-            // Verify the remote process succeeded.
-            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]

@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Windows.Forms.VisualStyles;
-using Microsoft.DotNet.RemoteExecutor;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 
@@ -3833,63 +3831,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ButtonState.Normal, cell.ButtonState);
         }
 
-        public static IEnumerable<object[]> MouseDownUnsharesRow_WithDataGridView_TestData()
-        {
-            foreach (bool enableHeadersVisualStyles in new bool[] { true, false })
-            {
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), false };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), VisualStyleRenderer.IsSupported && enableHeadersVisualStyles };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), false };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, -1, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), false };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, -1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), VisualStyleRenderer.IsSupported && enableHeadersVisualStyles };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, -1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), false };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, 0, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), false };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, 0, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), VisualStyleRenderer.IsSupported && enableHeadersVisualStyles };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, 0, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), false };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 0, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), false };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 0, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), VisualStyleRenderer.IsSupported && enableHeadersVisualStyles };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 0, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), false };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(1, 0, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), false };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(1, 0, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), VisualStyleRenderer.IsSupported && enableHeadersVisualStyles };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), false };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), false };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), VisualStyleRenderer.IsSupported && enableHeadersVisualStyles };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), false };
-            }
-        }
-
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        public void DataGridViewHeaderCell_MouseDownUnsharesRow_InvokeWithDataGridView_ReturnsExpected()
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
-            {
-                foreach (object[] testData in MouseDownUnsharesRow_WithDataGridView_TestData())
-                {
-                    bool enableHeadersVisualStyles = (bool)testData[0];
-                    DataGridViewCellMouseEventArgs e = (DataGridViewCellMouseEventArgs)testData[1];
-                    bool expected = (bool)testData[2];
-
-                    Application.EnableVisualStyles();
-
-                    using var cellTemplate = new SubDataGridViewHeaderCell();
-                    using var column = new DataGridViewColumn
-                    {
-                        CellTemplate = cellTemplate
-                    };
-                    using var control = new DataGridView
-                    {
-                        EnableHeadersVisualStyles = enableHeadersVisualStyles
-                    };
-                    control.Columns.Add(column);
-                    SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
-                    Assert.Equal(expected, cell.MouseDownUnsharesRow(e));
-                    Assert.Equal(ButtonState.Normal, cell.ButtonState);
-                    Assert.False(control.IsHandleCreated);
-                }
-            }).Dispose();
-        }
-
         public static IEnumerable<object[]> MouseDownUnsharesRow_ButtonLeftNullDataGridView_TestData()
         {
             yield return new object[] { new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)) };
@@ -3995,50 +3936,6 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        public static IEnumerable<object[]> MouseLeaveUnsharesRow_WithDataGridViewMouseDown_TestData()
-        {
-            ButtonState expected = VisualStyleRenderer.IsSupported ? ButtonState.Pushed : ButtonState.Normal;
-            yield return new object[] { true, -2, expected };
-            yield return new object[] { true, -1, expected };
-            yield return new object[] { true, 0, expected };
-            yield return new object[] { true, 1, expected };
-            yield return new object[] { false, -2, ButtonState.Normal };
-            yield return new object[] { false, -1, ButtonState.Normal };
-            yield return new object[] { false, 0, ButtonState.Normal };
-            yield return new object[] { false, 1, ButtonState.Normal };
-        }
-
-        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        [MemberData(nameof(MouseLeaveUnsharesRow_WithDataGridViewMouseDown_TestData))]
-        public void DataGridViewHeaderCell_MouseLeaveUnsharesRow_InvokeWithDataGridViewMouseDown_ReturnsExpected(bool enableHeadersVisualStylesParam, int rowIndexParam, ButtonState expectedButtonStateParam)
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((enableHeadersVisualStylesString, rowIndexString, expectedButtonStateString) =>
-            {
-                bool enableHeadersVisualStyles = bool.Parse(enableHeadersVisualStylesString);
-                int rowIndex = int.Parse(rowIndexString);
-                ButtonState expectedButtonState = (ButtonState)Enum.Parse(typeof(ButtonState), expectedButtonStateString);
-
-                Application.EnableVisualStyles();
-
-                using var cellTemplate = new SubDataGridViewHeaderCell();
-                using var column = new DataGridViewColumn
-                {
-                    CellTemplate = cellTemplate
-                };
-                using var control = new DataGridView
-                {
-                    EnableHeadersVisualStyles = enableHeadersVisualStyles
-                };
-                control.Columns.Add(column);
-                SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
-                cell.OnMouseDown(new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)));
-                Assert.Equal(enableHeadersVisualStyles && VisualStyleRenderer.IsSupported, cell.MouseLeaveUnsharesRow(rowIndex));
-                Assert.Equal(expectedButtonState, cell.ButtonState);
-                Assert.False(control.IsHandleCreated);
-            }, enableHeadersVisualStylesParam.ToString(), rowIndexParam.ToString(), expectedButtonStateParam.ToString()).Dispose();
-        }
-
         [WinFormsTheory]
         [MemberData(nameof(MouseDownUnsharesRow_TestData))]
         public void DataGridViewHeaderCell_MouseUpUnsharesRow_Invoke_ReturnsFalse(DataGridViewCellMouseEventArgs e)
@@ -4046,38 +3943,6 @@ namespace System.Windows.Forms.Tests
             using var cell = new SubDataGridViewHeaderCell();
             Assert.False(cell.MouseUpUnsharesRow(e));
             Assert.Equal(ButtonState.Normal, cell.ButtonState);
-        }
-
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        public void DataGridViewHeaderCell_MouseUpUnsharesRow_InvokeWithDataGridView_ReturnsExpected()
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
-            {
-                foreach (object[] testData in MouseDownUnsharesRow_WithDataGridView_TestData())
-                {
-                    bool enableHeadersVisualStyles = (bool)testData[0];
-                    DataGridViewCellMouseEventArgs e = (DataGridViewCellMouseEventArgs)testData[1];
-                    bool expected = (bool)testData[2];
-
-                    Application.EnableVisualStyles();
-
-                    using var cellTemplate = new SubDataGridViewHeaderCell();
-                    using var column = new DataGridViewColumn
-                    {
-                        CellTemplate = cellTemplate
-                    };
-                    using var control = new DataGridView
-                    {
-                        EnableHeadersVisualStyles = enableHeadersVisualStyles
-                    };
-                    control.Columns.Add(column);
-                    SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
-                    Assert.Equal(expected, cell.MouseUpUnsharesRow(e));
-                    Assert.Equal(ButtonState.Normal, cell.ButtonState);
-                    Assert.False(control.IsHandleCreated);
-                }
-            }).Dispose();
         }
 
         [WinFormsFact]
@@ -4127,89 +3992,6 @@ namespace System.Windows.Forms.Tests
             using var cell = new SubDataGridViewHeaderCell();
             cell.OnMouseDown(e);
             Assert.Equal(ButtonState.Normal, cell.ButtonState);
-        }
-
-        public static IEnumerable<object[]> OnMouseDown_WithDataGridView_TestData()
-        {
-            foreach (bool enableHeadersVisualStyles in new bool[] { true, false })
-            {
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), ButtonState.Normal };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), VisualStyleRenderer.IsSupported && enableHeadersVisualStyles ? ButtonState.Pushed : ButtonState.Normal };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), ButtonState.Normal };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, -1, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), ButtonState.Normal };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, -1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), VisualStyleRenderer.IsSupported && enableHeadersVisualStyles ? ButtonState.Pushed : ButtonState.Normal };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, -1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), ButtonState.Normal };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, 0, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), ButtonState.Normal };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, 0, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), VisualStyleRenderer.IsSupported && enableHeadersVisualStyles ? ButtonState.Pushed : ButtonState.Normal };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, 0, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), ButtonState.Normal };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 0, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), ButtonState.Normal };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 0, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), VisualStyleRenderer.IsSupported && enableHeadersVisualStyles ? ButtonState.Pushed : ButtonState.Normal };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 0, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), ButtonState.Normal };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(1, 0, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), ButtonState.Normal };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(1, 0, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), VisualStyleRenderer.IsSupported && enableHeadersVisualStyles ? ButtonState.Pushed : ButtonState.Normal };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), ButtonState.Normal };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), ButtonState.Normal };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), ButtonState.Normal };
-            }
-
-            yield return new object[] { false, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), ButtonState.Normal };
-        }
-
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        public void DataGridViewHeaderCell_OnMouseDown_InvokeWithDataGridView_Nop()
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
-            {
-                foreach (object[] testData in OnMouseDown_WithDataGridView_TestData())
-                {
-                    bool enableHeadersVisualStyles = (bool)testData[0];
-                    DataGridViewCellMouseEventArgs e = (DataGridViewCellMouseEventArgs)testData[1];
-                    ButtonState expectedButtonState = (ButtonState)testData[2];
-
-                    Application.EnableVisualStyles();
-
-                    using var cellTemplate = new SubDataGridViewHeaderCell();
-                    using var column = new DataGridViewColumn
-                    {
-                        CellTemplate = cellTemplate
-                    };
-                    using var control = new DataGridView
-                    {
-                        EnableHeadersVisualStyles = enableHeadersVisualStyles
-                    };
-                    control.Columns.Add(column);
-                    SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
-                    cell.OnMouseDown(e);
-                    Assert.Equal(expectedButtonState, cell.ButtonState);
-                    Assert.False(control.IsHandleCreated);
-                }
-            }).Dispose();
-        }
-
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        public void DataGridViewHeaderCell_OnMouseDown_InvalidRowIndexVisualStyles_ThrowsArgumentOutOfRangeException()
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
-            {
-                Application.EnableVisualStyles();
-
-                using var cellTemplate = new SubDataGridViewHeaderCell();
-                using var column = new DataGridViewColumn
-                {
-                    CellTemplate = cellTemplate
-                };
-                using var control = new DataGridView
-                {
-                    EnableHeadersVisualStyles = true
-                };
-                control.Columns.Add(column);
-                SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
-                var e = new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0));
-                Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.OnMouseDown(e));
-                Assert.Equal(VisualStyleRenderer.IsSupported ? ButtonState.Pushed : ButtonState.Normal, cell.ButtonState);
-            }).Dispose();
         }
 
         [WinFormsFact]
@@ -4359,70 +4141,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>(() => cell.OnMouseLeave(rowIndex));
         }
 
-        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        [InlineData(true, -1)]
-        [InlineData(true, 0)]
-        [InlineData(false, -2)]
-        [InlineData(false, -1)]
-        [InlineData(false, 0)]
-        [InlineData(false, 1)]
-        public void DataGridViewHeaderCell_OnMouseLeave_InvokeWithDataGridViewMouseDown_Nop(bool enableHeadersVisualStylesParam, int rowIndexParam)
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((enableHeadersVisualStylesString, rowIndexString) =>
-            {
-                bool enableHeadersVisualStyles = bool.Parse(enableHeadersVisualStylesString);
-                int rowIndex = int.Parse(rowIndexString);
-
-                Application.EnableVisualStyles();
-
-                using var cellTemplate = new SubDataGridViewHeaderCell();
-                using var column = new DataGridViewColumn
-                {
-                    CellTemplate = cellTemplate
-                };
-                using var control = new DataGridView
-                {
-                    EnableHeadersVisualStyles = enableHeadersVisualStyles
-                };
-                control.Columns.Add(column);
-                SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
-                cell.OnMouseDown(new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)));
-                cell.OnMouseLeave(rowIndex);
-                Assert.Equal(ButtonState.Normal, cell.ButtonState);
-                Assert.False(control.IsHandleCreated);
-            }, enableHeadersVisualStylesParam.ToString(), rowIndexParam.ToString()).Dispose();
-        }
-
-        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        [InlineData(-2)]
-        [InlineData(1)]
-        public void DataGridViewHeaderCell_OnMouseLeave_InvalidRowIndexVisualStyles_ThrowsArgumentOutOfRangeException(int rowIndexParam)
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((rowIndexString) =>
-            {
-                int rowIndex = int.Parse(rowIndexString);
-
-                Application.EnableVisualStyles();
-
-                using var cellTemplate = new SubDataGridViewHeaderCell();
-                using var column = new DataGridViewColumn
-                {
-                    CellTemplate = cellTemplate
-                };
-                using var control = new DataGridView
-                {
-                    EnableHeadersVisualStyles = true
-                };
-                control.Columns.Add(column);
-                SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
-                cell.OnMouseDown(new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)));
-                Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.OnMouseLeave(rowIndex));
-                Assert.Equal(ButtonState.Normal, cell.ButtonState);
-            }, rowIndexParam.ToString()).Dispose();
-        }
-
         [WinFormsTheory]
         [MemberData(nameof(OnMouseDown_TestData))]
         public void DataGridViewHeaderCell_OnMouseUp_Invoke_Nop(DataGridViewCellMouseEventArgs e)
@@ -4503,92 +4221,6 @@ namespace System.Windows.Forms.Tests
 
             var e = new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0));
             Assert.Throws<ArgumentOutOfRangeException>(() => cell.OnMouseUp(e));
-        }
-
-        public static IEnumerable<object[]> OnMouseUp_WithDataGridViewMouseDown_TestData()
-        {
-            foreach (bool enableHeadersVisualStyles in new bool[] { true, false })
-            {
-                ButtonState expectedButtonState1 = enableHeadersVisualStyles && VisualStyleRenderer.IsSupported ? ButtonState.Pushed : ButtonState.Normal;
-                ButtonState expectedButtonState2 = enableHeadersVisualStyles && VisualStyleRenderer.IsSupported ? ButtonState.Normal : expectedButtonState1;
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), expectedButtonState1 };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), expectedButtonState2 };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), expectedButtonState1 };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, -1, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), expectedButtonState1 };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, -1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), expectedButtonState2 };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, -1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), expectedButtonState1 };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, 0, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), expectedButtonState1 };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, 0, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), expectedButtonState2 };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, 0, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), expectedButtonState1 };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 0, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), expectedButtonState1 };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 0, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), expectedButtonState2 };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 0, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), expectedButtonState1 };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(1, 0, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), expectedButtonState1 };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(1, 0, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), expectedButtonState2 };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), expectedButtonState1 };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)), expectedButtonState1 };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)), expectedButtonState1 };
-            }
-
-            yield return new object[] { false, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), ButtonState.Normal };
-        }
-
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        public void DataGridViewHeaderCell_OnMouseUp_InvokeWithDataGridViewMouseDown_ReturnsExpected()
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
-            {
-                foreach (object[] testData in OnMouseUp_WithDataGridViewMouseDown_TestData())
-                {
-                    bool enableHeadersVisualStyles = (bool)testData[0];
-                    DataGridViewCellMouseEventArgs e = (DataGridViewCellMouseEventArgs)testData[1];
-                    ButtonState expectedButtonState = (ButtonState)testData[2];
-
-                    Application.EnableVisualStyles();
-
-                    using var cellTemplate = new SubDataGridViewHeaderCell();
-                    using var column = new DataGridViewColumn
-                    {
-                        CellTemplate = cellTemplate
-                    };
-                    using var control = new DataGridView
-                    {
-                        EnableHeadersVisualStyles = enableHeadersVisualStyles
-                    };
-                    control.Columns.Add(column);
-                    SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
-                    cell.OnMouseDown(new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)));
-                    cell.OnMouseUp(e);
-                    Assert.Equal(expectedButtonState, cell.ButtonState);
-                    Assert.False(control.IsHandleCreated);
-                }
-            }).Dispose();
-        }
-
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        public void DataGridViewHeaderCell_OnMouseUp_InvalidRowIndexVisualStyles_ThrowsArgumentOutOfRangeException()
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
-            {
-                Application.EnableVisualStyles();
-
-                using var cellTemplate = new SubDataGridViewHeaderCell();
-                using var column = new DataGridViewColumn
-                {
-                    CellTemplate = cellTemplate
-                };
-                using var control = new DataGridView
-                {
-                    EnableHeadersVisualStyles = true
-                };
-                control.Columns.Add(column);
-                SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
-                var e = new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0));
-                Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.OnMouseUp(e));
-                Assert.Equal(ButtonState.Normal, cell.ButtonState);
-            }).Dispose();
         }
 
         [WinFormsFact]

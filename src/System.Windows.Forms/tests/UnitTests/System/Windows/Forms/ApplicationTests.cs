@@ -70,25 +70,6 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Application_EnableVisualStyles_InvokeBeforeGettingRenderWithVisualStyles_Success()
-        {
-            Application.EnableVisualStyles();
-            Assert.True(Application.UseVisualStyles);
-            Assert.True(Application.RenderWithVisualStyles);
-        }
-
-        [WinFormsFact]
-        public void Application_EnableVisualStyles_InvokeAfterGettingRenderWithVisualStyles_Success()
-        {
-            Assert.True(Application.UseVisualStyles);
-            Assert.True(Application.RenderWithVisualStyles);
-
-            Application.EnableVisualStyles();
-            Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on Winforms app. This is a high priority bug and must be looked into");
-            Assert.True(Application.RenderWithVisualStyles);
-        }
-
-        [WinFormsFact]
         public void Application_OpenForms_Get_ReturnsExpected()
         {
             FormCollection forms = Application.OpenForms;
@@ -101,25 +82,6 @@ namespace System.Windows.Forms.Tests
             VisualStyleState state = Application.VisualStyleState;
             Assert.True(Enum.IsDefined(typeof(VisualStyleState), state));
             Assert.Equal(state, Application.VisualStyleState);
-        }
-
-        [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(VisualStyleState))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(VisualStyleState))]
-        public void Application_VisualStyleState_Set_ReturnsExpected(VisualStyleState value)
-        {
-            // This needs to be in RemoteExecutor.Invoke because changing Application.VisualStyleState
-            // sends WM_THEMECHANGED to all controls, which can cause a deadlock if another test fails.
-            VisualStyleState state = Application.VisualStyleState;
-            try
-            {
-                Application.VisualStyleState = value;
-                Assert.Equal(value, Application.VisualStyleState);
-            }
-            finally
-            {
-                Application.VisualStyleState = state;
-            }
         }
 
         [Fact]

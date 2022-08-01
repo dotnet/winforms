@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Reflection;
-using Microsoft.DotNet.RemoteExecutor;
 using Xunit;
 using static System.Windows.Forms.ListView;
 using static System.Windows.Forms.ListViewGroup;
@@ -247,52 +246,6 @@ namespace System.Windows.Forms.Tests
                 Assert.Null(groups[1].AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
                 Assert.Null(groups[1].AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
             }
-        }
-
-        [WinFormsFact]
-        public void ListViewGroupAccessibleObject_Bounds_ReturnsCorrectValue()
-        {
-            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
-            {
-                Control.CheckForIllegalCrossThreadCalls = true;
-                using Form form = new Form();
-
-                using ListView list = new ListView();
-                ListViewGroup listGroup = new ListViewGroup("Group1");
-                ListViewItem listItem1 = new ListViewItem("Item1");
-                ListViewItem listItem2 = new ListViewItem("Item2");
-                list.Groups.Add(listGroup);
-                listItem1.Group = listGroup;
-                listItem2.Group = listGroup;
-                list.Items.Add(listItem1);
-                list.Items.Add(listItem2);
-                list.CreateControl();
-                form.Controls.Add(list);
-                form.Show();
-
-                AccessibleObject accessibleObject = list.AccessibilityObject;
-                AccessibleObject group1AccObj = listGroup.AccessibilityObject;
-                Assert.True(list.IsHandleCreated);
-
-                RECT groupRect = new RECT();
-                User32.SendMessageW(list, (User32.WM)ComCtl32.LVM.GETGROUPRECT, listGroup.ID, ref groupRect);
-
-                int actualWidth = group1AccObj.Bounds.Width;
-                int expectedWidth = groupRect.Width;
-                Assert.Equal(expectedWidth, actualWidth);
-
-                int actualHeight = group1AccObj.Bounds.Height;
-                int expectedHeight = groupRect.Height;
-                Assert.Equal(expectedHeight, actualHeight);
-
-                Rectangle actualBounds = group1AccObj.Bounds;
-                actualBounds.Location = new Point(0, 0);
-                Rectangle expectedBounds = groupRect;
-                Assert.Equal(expectedBounds, actualBounds);
-            });
-
-            // verify the remote process succeeded
-            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]

@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Reflection;
-using Microsoft.DotNet.RemoteExecutor;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
@@ -120,31 +119,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner.Object));
         }
 
-        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        [InlineData(true, DialogResult.OK)]
-        [InlineData(false, DialogResult.Cancel)]
-        public void ShowDialog_NonControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResultParam, DialogResult expectedDialogResultParam)
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((runDialogResultString, expectedDialogResultString) =>
-            {
-                bool runDialogResult = bool.Parse(runDialogResultString);
-                DialogResult expectedDialogResult = (DialogResult)Enum.Parse(typeof(DialogResult), expectedDialogResultString);
-
-                Application.EnableVisualStyles();
-
-                using var dialog = new SubCommonDialog
-                {
-                    RunDialogResult = runDialogResult
-                };
-                var owner = new Mock<IWin32Window>(MockBehavior.Strict);
-                owner
-                    .Setup(o => o.Handle)
-                    .Returns(IntPtr.Zero);
-                Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner.Object));
-            }, runDialogResultParam.ToString(), expectedDialogResultParam.ToString()).Dispose();
-        }
-
         [WinFormsTheory]
         [InlineData(true, DialogResult.OK)]
         [InlineData(false, DialogResult.Cancel)]
@@ -156,28 +130,6 @@ namespace System.Windows.Forms.Tests
             };
             using var owner = new Control();
             Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
-        }
-
-        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        [InlineData(true, DialogResult.OK)]
-        [InlineData(false, DialogResult.Cancel)]
-        public void ShowDialog_ControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResultParam, DialogResult expectedDialogResultParam)
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((runDialogResultString, expectedDialogResultString) =>
-            {
-                bool runDialogResult = bool.Parse(runDialogResultString);
-                DialogResult expectedDialogResult = (DialogResult)Enum.Parse(typeof(DialogResult), expectedDialogResultString);
-
-                Application.EnableVisualStyles();
-
-                using var dialog = new SubCommonDialog
-                {
-                    RunDialogResult = runDialogResult
-                };
-                using var owner = new Control();
-                Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
-            }, runDialogResultParam.ToString(), expectedDialogResultParam.ToString()).Dispose();
         }
 
         [WinFormsTheory]
@@ -192,29 +144,6 @@ namespace System.Windows.Forms.Tests
             using var owner = new Control();
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
             Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
-        }
-
-        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        [InlineData(true, DialogResult.OK)]
-        [InlineData(false, DialogResult.Cancel)]
-        public void ShowDialog_ControlOwnerWithHandleWithVisualStyles_ReturnsExpected(bool runDialogResultParam, DialogResult expectedDialogResultParam)
-        {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((runDialogResultString, expectedDialogResultString) =>
-            {
-                bool runDialogResult = bool.Parse(runDialogResultString);
-                DialogResult expectedDialogResult = (DialogResult)Enum.Parse(typeof(DialogResult), expectedDialogResultString);
-
-                Application.EnableVisualStyles();
-
-                using var dialog = new SubCommonDialog
-                {
-                    RunDialogResult = runDialogResult
-                };
-                using var owner = new Control();
-                Assert.NotEqual(IntPtr.Zero, owner.Handle);
-                Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
-            }, runDialogResultParam.ToString(), expectedDialogResultParam.ToString()).Dispose();
         }
 
         [WinFormsFact]
