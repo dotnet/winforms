@@ -7,7 +7,7 @@ BeginPaint
 BitBlt
 CloseEnhMetaFile
 CombineRgn
-CP*
+CP_ACP
 CreateActCtx
 CreateBitmap
 CreateBrushIndirect

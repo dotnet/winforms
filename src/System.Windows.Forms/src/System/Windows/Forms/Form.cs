@@ -6058,8 +6058,7 @@ namespace System.Windows.Forms
         private void WmCreate(ref Message m)
         {
             base.WndProc(ref m);
-            var si = new STARTUPINFOW();
-            PInvoke.GetStartupInfo(out si);
+            PInvoke.GetStartupInfo(out STARTUPINFOW si);
 
             // If we've been created from explorer, it may
             // force us to show up normal.  Force our current window state to
