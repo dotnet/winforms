@@ -1167,6 +1167,16 @@
         <target state="new">Occurs when the assigned ICommand object of the Command property has changed.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CommandComponentCommandDescr">
+        <source>Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</source>
+        <target state="new">Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandComponentCommandParameterDescr">
+        <source>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</source>
+        <target state="new">Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">No se puede asignar un nuevo id. de comando.</target>
@@ -9939,11 +9949,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="ToolStripItemBackColorDescr">
         <source>The background color used to display text and graphics in the control.</source>
         <target state="translated">Color de fondo utilizado para mostrar texto y gráficos en el control.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolStripItemCommandDescr">
-        <source>Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</source>
-        <target state="new">Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemBindingContextDescr">

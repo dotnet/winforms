@@ -912,27 +912,30 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!Properties.ContainsObject(s_dataContextProperty))
+                if (Properties.ContainsObject(s_dataContextProperty))
                 {
-                    return ParentInternal?.DataContext;
+                    return Properties.GetObject(s_dataContextProperty);
                 }
-
-                return Properties.GetObject(s_dataContextProperty);
+                
+                return ParentInternal?.DataContext;
             }
             set
             {
-                if (!Equals(value, DataContext))
+                // Nothing changed, nothing to do.
+                if (Equals(value, DataContext))
                 {
-                    if (Properties.ContainsObject(s_dataContextProperty) && Equals(ParentInternal?.DataContext, value))
-                    {
-                        Properties.RemoveObject(s_dataContextProperty);
-                        OnDataContextChanged(EventArgs.Empty);
-                        return;
-                    }
-
-                    Properties.SetObject(s_dataContextProperty, value);
-                    OnDataContextChanged(EventArgs.Empty);
+                    return;
                 }
+                
+                if (Properties.ContainsObject(s_dataContextProperty) && Equals(ParentInternal?.DataContext, value))
+                {
+                    Properties.RemoveObject(s_dataContextProperty);
+                    OnDataContextChanged(EventArgs.Empty);
+                    return;
+                }
+
+                Properties.SetObject(s_dataContextProperty, value);
+                OnDataContextChanged(EventArgs.Empty);
             }
         }
 
@@ -7631,10 +7634,10 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentDataContextChanged(EventArgs e)
         {
-            // We don't test on null here, because a root's (Form's) DataContext 
-            // could be {}, this control's parent then became set to null, and now 
-            // its children in that case _need_ to receive the DataContextChanged event as well.
-            // The parent DataContext value, though, in that case would be null.
+            // A bit of background, why we don't test for null here, but instead test if we have an object in the Properties bag:
+            // Remember that DataContext is ambient. So, a root's (Form's) DataContext could be {}, and then this control's 
+            // parent became set to null, and now _its_ children in that case _need_ to receive the DataContextChanged
+            // event as well. The parent DataContext value, though, in that case would be null.
             if (Properties.ContainsObject(s_dataContextProperty))
             {
                 OnDataContextChanged(e);

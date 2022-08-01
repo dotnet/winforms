@@ -6916,8 +6916,8 @@ Stack trace where the illegal operation occurred was:
   <data name="ToolStripItemOnBindingContextChangedDescr" xml:space="preserve">
     <value>Occurs whenever the binding context changes.</value>
   </data>
-  <data name="ToolStripItemCommandDescr" xml:space="preserve">
-    <value>Gets or sets the ICommand which gets executed whenever a user causes the click event of this toolstrip item.</value>
+  <data name="CommandComponentCommandDescr" xml:space="preserve">
+    <value>Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</value>
   </data>
   <data name="ToolStripItemBindingContextDescr" xml:space="preserve">
     <value>Gets or sets the BindingContext for this toolstrip item.</value>
@@ -6942,5 +6942,8 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="ControlDataContextChangedDescr" xml:space="preserve">
     <value>Occurs when the value of the DataContext property changes.</value>
+  </data>
+  <data name="CommandComponentCommandParameterDescr" xml:space="preserve">
+    <value>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</value>
   </data>
 </root>

@@ -186,6 +186,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.CommandComponentCommandDescr))]
         public System.Windows.Input.ICommand? Command
         {
             get => _command;
@@ -227,6 +228,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.CommandComponentCommandParameterDescr))]
         public object? CommandParameter
         {
             [RequiresPreviewFeatures]
@@ -1160,10 +1162,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Raises the <see cref="ButtonBase.CommandCanExecuteChanged"/> event.
         /// </summary>
-        /// <remarks>
-        ///  Inheriting classes should override this method to handle this event.
-        ///  Call base.CommandCanExecuteChanged to send this event to any registered event listeners.
-        /// </remarks>
         /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
         [RequiresPreviewFeatures]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -1174,10 +1172,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Raises the <see cref="ButtonBase.CommandParameterChanged"/> event.
         /// </summary>
-        /// <remarks>
-        ///  Inheriting classes should override this method to handle this event.
-        ///  Call base.CommandParameterChanged to send this event to any registered event listeners.
-        /// </remarks>
         /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
         [RequiresPreviewFeatures]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
