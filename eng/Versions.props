@@ -54,7 +54,6 @@
   <!-- Arcade -->
   <PropertyGroup>
     <MicrosoftDotNetGenFacadesPackageVersion>7.0.0-beta.22375.4</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetRemoteExecutorVersion>7.0.0-beta.22375.4</MicrosoftDotNetRemoteExecutorVersion>
     <MicrosoftDotNetXUnitExtensionsPackageVersion>7.0.0-beta.22375.4</MicrosoftDotNetXUnitExtensionsPackageVersion>
     <MicrosoftNETTestSdkVersion>16.5.0</MicrosoftNETTestSdkVersion>
   </PropertyGroup>
