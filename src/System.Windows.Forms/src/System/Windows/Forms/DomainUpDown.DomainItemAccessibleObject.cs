@@ -2,13 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+
 namespace System.Windows.Forms
 {
     public partial class DomainUpDown
     {
-        // This class is not used anyhow for building of DomainUpDown accessibility tree, but
-        // we can't remove this class just like that because it's a public API.
-        // See https://github.com/dotnet/winforms/issues/7344 for more details.
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete(
+            Obsoletions.DomainItemAccessibleObjectMessage,
+            error: false,
+            DiagnosticId = Obsoletions.DomainItemAccessibleObjectDiagnosticId,
+            UrlFormat = Obsoletions.SharedUrlFormat)]
         public class DomainItemAccessibleObject : AccessibleObject
         {
             private string? _name;

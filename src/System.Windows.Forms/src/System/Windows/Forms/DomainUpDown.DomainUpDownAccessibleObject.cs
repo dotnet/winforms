@@ -2,14 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+
 namespace System.Windows.Forms
 {
     public partial class DomainUpDown
     {
-        // This class can be removed in the future when it is marked as obsolete.
-        // This class is not needed to be used as an accessible object of DomainUpDown,
-        // UpDownBaseAccessibleObject does it well.
-        // We can't remove this class just like that because it's a public API.
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete(
+            Obsoletions.DomainUpDownAccessibleObjectMessage,
+            error: false,
+            DiagnosticId = Obsoletions.DomainUpDownAccessibleObjectDiagnosticId,
+            UrlFormat = Obsoletions.SharedUrlFormat)]
         public class DomainUpDownAccessibleObject : ControlAccessibleObject
         {
             private readonly UpDownBaseAccessibleObject _upDownBaseAccessibleObject;
