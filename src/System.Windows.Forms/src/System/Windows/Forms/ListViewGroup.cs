@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.Serialization;
@@ -415,6 +416,16 @@ namespace System.Windows.Forms
             }
 
             return state.HasFlag(LVGS.COLLAPSED) ? ListViewGroupCollapsedState.Collapsed : ListViewGroupCollapsedState.Expanded;
+        }
+
+        internal void ReleaseUiaProvider()
+        {
+            if (OsVersion.IsWindows8OrGreater && _accessibilityObject is ListViewGroupAccessibleObject accessibleObject)
+            {
+                HRESULT result = UiaCore.UiaDisconnectProvider(accessibleObject);
+                Debug.Assert(result == HRESULT.S_OK);
+                _accessibilityObject = null;
+            }
         }
 
         // Should be used for the cases when sending the message `LVM.SETGROUPINFO` isn't required

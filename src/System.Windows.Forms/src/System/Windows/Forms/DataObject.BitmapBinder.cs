@@ -25,7 +25,7 @@ namespace System.Windows.Forms
             private const string AllowedTypeName = "System.Drawing.Bitmap";
             private const string AllowedAssemblyName = "System.Drawing";
             // PublicKeyToken=b03f5f7f11d50a3a
-            private static readonly byte[] s_allowedToken = new byte[] { 0xB0, 0x3F, 0x5F, 0x7F, 0x11, 0xD5, 0x0A, 0x3A };
+            private static ReadOnlySpan<byte> AllowedToken => new byte[] { 0xB0, 0x3F, 0x5F, 0x7F, 0x11, 0xD5, 0x0A, 0x3A };
 
             /// <summary>
             ///  Only safe to deserialize types are bypassing this callback, Strings
@@ -48,31 +48,11 @@ namespace System.Windows.Forms
                     {
                     }
 
-                    if (nameToBind is not null)
+                    if (nameToBind is not null
+                        && string.Equals(nameToBind.Name, AllowedAssemblyName, StringComparison.Ordinal)
+                        && nameToBind.GetPublicKeyToken().AsSpan().SequenceEqual(AllowedToken))
                     {
-                        if (string.CompareOrdinal(nameToBind.Name, AllowedAssemblyName) == 0)
-                        {
-                            byte[]? tokenToBind = nameToBind.GetPublicKeyToken();
-                            if ((tokenToBind is not null) &&
-                                (s_allowedToken is not null) &&
-                                (tokenToBind.Length == s_allowedToken.Length))
-                            {
-                                bool block = false;
-                                for (int i = 0; i < s_allowedToken.Length; i++)
-                                {
-                                    if (s_allowedToken[i] != tokenToBind[i])
-                                    {
-                                        block = true;
-                                        break;
-                                    }
-                                }
-
-                                if (!block)
-                                {
-                                    return null;
-                                }
-                            }
-                        }
+                        return null;
                     }
                 }
 

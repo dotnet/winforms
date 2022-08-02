@@ -1231,6 +1231,11 @@ namespace System.Windows.Forms
                 base.OnTextChanged(e);
                 Invalidate();
             }
+
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.NamePropertyId, Text, Text);
+            }
         }
 
         /// <summary>

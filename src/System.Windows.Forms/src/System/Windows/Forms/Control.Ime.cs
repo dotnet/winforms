@@ -677,7 +677,7 @@ namespace System.Windows.Forms
                 PropagatingImeMode = ImeMode.Off;
             }
 
-            Form form = FindForm();
+            Form? form = FindForm();
 
             if (form is not null)
             {
@@ -701,7 +701,7 @@ namespace System.Windows.Forms
             Debug.Indent();
 
             InputLanguageChangingEventArgs e = InputLanguage.CreateInputLanguageChangingEventArgs(m);
-            Form form = FindForm();
+            Form? form = FindForm();
 
             if (form is not null)
             {

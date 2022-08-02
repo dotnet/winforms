@@ -108,5 +108,25 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(control.Columns.Count, accessibleObject.GetChildCount());
             Assert.True(control.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void ListViewItemDetailsAccessibleObject_SubItemAccessibleObjects_AreDisconnected_WhenItemIsReleased()
+        {
+            using ListView control = new() { View = View.Details };
+            ListViewItem item = new();
+            control.Items.Add(item);
+            control.Columns.AddRange(new ColumnHeader[] { new(), new(), new() });
+
+            // Enforce subitems' accessible objects creation.
+            Assert.NotNull(item.AccessibilityObject.GetChild(0));
+            Assert.NotNull(item.AccessibilityObject.GetChild(1));
+            Assert.NotNull(item.AccessibilityObject.GetChild(2));
+            Assert.NotEmpty(item.AccessibilityObject.TestAccessor().Dynamic._listViewSubItemAccessibleObjects);
+
+            item.ReleaseUiaProvider();
+
+            Assert.Empty(item.AccessibilityObject.TestAccessor().Dynamic._listViewSubItemAccessibleObjects);
+            Assert.False(control.IsHandleCreated);
+        }
     }
 }

@@ -250,6 +250,7 @@ internal static partial class Interop
             CenterPointPropertyId = 30165,
             RotationPropertyId = 30166,
             SizePropertyId = 30167,
+            IsDialogPropertyId = 30174,
 
             // UIA_ControlTypeIds
             ButtonControlTypeId = 50000,

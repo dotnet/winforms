@@ -38,6 +38,9 @@ override System.Windows.Forms.ButtonBase.OnClick(System.EventArgs! e) -> void
 override System.Windows.Forms.ColorDialog.RunDialog(nint hwndOwner) -> bool
 override System.Windows.Forms.FontDialog.HookProc(nint hWnd, int msg, nint wparam, nint lparam) -> nint
 override System.Windows.Forms.FontDialog.RunDialog(nint hWndOwner) -> bool
+override System.Windows.Forms.ToolStripPanel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+static System.Windows.Forms.Control.FromChildHandle(nint handle) -> System.Windows.Forms.Control?
+static System.Windows.Forms.Control.FromHandle(nint handle) -> System.Windows.Forms.Control?
 static System.Windows.Forms.Control.ReflectMessage(nint hWnd, ref System.Windows.Forms.Message m) -> bool
 static System.Windows.Forms.ControlPaint.CreateHBitmap16Bit(System.Drawing.Bitmap! bitmap, System.Drawing.Color background) -> nint
 static System.Windows.Forms.ControlPaint.CreateHBitmapColorMask(System.Drawing.Bitmap! bitmap, nint monochromeMask) -> nint
@@ -80,3 +83,4 @@ virtual System.Windows.Forms.Control.DataContext.set -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnCommandChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnCommandParameterChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnRequestCommandExecute(System.EventArgs e) -> void
+~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, nint handle) -> System.Windows.Forms.TreeNode

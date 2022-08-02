@@ -168,7 +168,7 @@ namespace System.Windows.Forms
             string windowText = User32.GetWindowText(hwnd);
             string typeOfControl = "Unknown";
             string nameOfControl = "Name: ";
-            Control c = Control.FromHandle(hwnd);
+            Control? c = Control.FromHandle(hwnd);
             if (c is not null)
             {
                 typeOfControl = c.GetType().ToString();

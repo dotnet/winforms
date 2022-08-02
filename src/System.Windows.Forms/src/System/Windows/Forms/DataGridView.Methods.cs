@@ -3218,7 +3218,9 @@ namespace System.Windows.Forms
                                 throw;
                             }
 
-                            dgvdee2 = new DataGridViewDataErrorEventArgs(exception, _ptCurrentCell.X,
+                            dgvdee2 = new(
+                                exception,
+                                _ptCurrentCell.X,
                                 _ptCurrentCell.Y,
                                 DataGridViewDataErrorContexts.InitialValueRestoration);
                         }
@@ -3966,12 +3968,11 @@ namespace System.Windows.Forms
                             return null;
                         }
 
-                        DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(null,
-                                                                                    _ptCurrentCell.X,
-                                                                                    _ptCurrentCell.Y,
-                                                                                    // null,
-                                                                                    // null,
-                                                                                    context)
+                        DataGridViewDataErrorEventArgs dgvdee = new(
+                            exception: null,
+                            _ptCurrentCell.X,
+                            _ptCurrentCell.Y,
+                            context)
                         {
                             Cancel = true
                         };
@@ -4021,10 +4022,11 @@ namespace System.Windows.Forms
                                 return null;
                             }
 
-                            DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(null,
-                                                                                                       _ptCurrentCell.X,
-                                                                                                       _ptCurrentCell.Y,
-                                                                                                       context)
+                            DataGridViewDataErrorEventArgs dgvdee = new(
+                                exception: null,
+                                _ptCurrentCell.X,
+                                _ptCurrentCell.Y,
+                                context)
                             {
                                 Cancel = true
                             };
@@ -4051,12 +4053,11 @@ namespace System.Windows.Forms
                             return null;
                         }
 
-                        DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(exception,
-                                                                                    _ptCurrentCell.X,
-                                                                                    _ptCurrentCell.Y,
-                                                                                    // dataGridViewCurrentCell.Value,
-                                                                                    // formattedValue,
-                                                                                    context)
+                        DataGridViewDataErrorEventArgs dgvdee = new(
+                            exception,
+                            _ptCurrentCell.X,
+                            _ptCurrentCell.Y,
+                            context)
                         {
                             Cancel = true
                         };
@@ -9947,7 +9948,9 @@ namespace System.Windows.Forms
                     throw;
                 }
 
-                dgvdee = new DataGridViewDataErrorEventArgs(exception, _ptCurrentCell.X,
+                dgvdee = new(
+                    exception,
+                    _ptCurrentCell.X,
                     _ptCurrentCell.Y,
                     DataGridViewDataErrorContexts.InitialValueRestoration);
                 OnDataErrorInternal(dgvdee);
@@ -9992,7 +9995,9 @@ namespace System.Windows.Forms
                     throw;
                 }
 
-                dgvdee = new DataGridViewDataErrorEventArgs(exception, _ptCurrentCell.X,
+                dgvdee = new(
+                    exception,
+                    _ptCurrentCell.X,
                     _ptCurrentCell.Y,
                     DataGridViewDataErrorContexts.InitialValueRestoration);
                 OnDataErrorInternal(dgvdee);
@@ -20629,12 +20634,11 @@ namespace System.Windows.Forms
                                                 // the back-end threw an exception. At that stage, we did not delete the dataGridView row
                                                 // from our collection of dataGridView rows.
                                                 // So all we do is to throw the exception if the user wants. Otherwise we don't do anything.
-                                                dgvdee = new DataGridViewDataErrorEventArgs(exception,
-                                                                                            -1,
-                                                                                            rowIndex,
-                                                                                            // null,
-                                                                                            // null,
-                                                                                            DataGridViewDataErrorContexts.RowDeletion);
+                                                dgvdee = new(
+                                                    exception,
+                                                    -1,
+                                                    rowIndex,
+                                                    DataGridViewDataErrorContexts.RowDeletion);
                                                 OnDataErrorInternal(dgvdee);
 
                                                 if (dgvdee.ThrowException)

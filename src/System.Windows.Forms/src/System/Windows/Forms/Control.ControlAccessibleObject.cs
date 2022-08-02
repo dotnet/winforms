@@ -364,7 +364,7 @@ namespace System.Windows.Forms
                     }
 
                     // Walk backwards through peer controls...
-                    for (Control previous = container.GetNextControl(Owner, false);
+                    for (Control? previous = container.GetNextControl(Owner, false);
                          previous is not null;
                          previous = container.GetNextControl(previous, false))
                     {

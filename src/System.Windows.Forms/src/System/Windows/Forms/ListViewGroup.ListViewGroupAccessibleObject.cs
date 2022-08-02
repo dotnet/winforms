@@ -99,7 +99,9 @@ namespace System.Windows.Forms
                 => _owningListView.AccessibilityObject;
 
             public override string Name
-                => _owningGroup.Header;
+                => !string.IsNullOrEmpty(_owningGroup.Subtitle)
+                    ? $"{_owningGroup.Header}. {_owningGroup.Subtitle}"
+                    : _owningGroup.Header;
 
             public override AccessibleRole Role
                 => AccessibleRole.Grouping;
@@ -117,7 +119,7 @@ namespace System.Windows.Forms
                         owningListViewRuntimeId[0],
                         owningListViewRuntimeId[1],
                         4, // Win32-control specific RuntimeID constant, is used in similar Win32 controls and is used in WinForms controls for consistency.
-                        CurrentIndex
+                        GetHashCode()
                     };
                 }
             }

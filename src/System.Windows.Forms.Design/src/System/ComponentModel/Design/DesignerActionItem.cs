@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design
             Description = description;
         }
 
-        [RegexGenerator(@"\(\&.\)")]
+        [GeneratedRegex(@"\(\&.\)")]
         private static partial Regex SanitizeNameRegex();
 
         public bool AllowAssociate { get; set; }

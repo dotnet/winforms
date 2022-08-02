@@ -35,6 +35,42 @@ namespace System.Windows.Forms.Tests
             Assert.False(form.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void FormAccessibleObject_ControlType_IsDialog_True()
+        {
+            using Form form = new();
+
+            bool? actualValue = null;
+            form.Load += (_, _) =>
+            {
+                AccessibleObject accessibleObject = form.AccessibilityObject;
+                actualValue = (bool?)accessibleObject.GetPropertyValue(UiaCore.UIA.IsDialogPropertyId);
+                form.Close();
+            };
+            form.ShowDialog();
+
+            Assert.True(actualValue);
+            Assert.False(form.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void FormAccessibleObject_ControlType_IsDialog_False()
+        {
+            using Form form = new();
+
+            bool? actualValue = null;
+            form.Load += (_, _) =>
+            {
+                AccessibleObject accessibleObject = form.AccessibilityObject;
+                actualValue = (bool?)accessibleObject.GetPropertyValue(UiaCore.UIA.IsDialogPropertyId);
+                form.Close();
+            };
+            form.Show();
+
+            Assert.False(actualValue);
+            Assert.False(form.IsHandleCreated);
+        }
+
         public static IEnumerable<object[]> FormAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
         {
             Array roles = Enum.GetValues(typeof(AccessibleRole));

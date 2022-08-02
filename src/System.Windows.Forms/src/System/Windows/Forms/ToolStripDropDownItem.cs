@@ -694,6 +694,9 @@ namespace System.Windows.Forms
                 dropDown.Show();
                 Invalidate();
 
+                // Render the current tooltip (if there is one) on top of the dropdown element.
+                ParentInternal?.UpdateToolTip(this, refresh: true);
+
                 AccessibilityNotifyClients(AccessibleEvents.StateChange);
                 AccessibilityNotifyClients(AccessibleEvents.NameChange);
             }

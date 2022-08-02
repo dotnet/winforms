@@ -1860,7 +1860,7 @@ namespace System.Windows.Forms
                     firstPanel = panel;
                 }
 
-                if (!forward && firstPanel is not null && ctl.ParentInternal != firstPanel)
+                if (!forward && firstPanel is not null && ctl?.ParentInternal != firstPanel)
                 {
                     //goback to start correct re-ordering ....
                     ctl = firstPanel;
@@ -2012,7 +2012,7 @@ namespace System.Windows.Forms
                 bool correctParentActiveControl = true;
                 if (container.ParentInternal is not null)
                 {
-                    IContainerControl c = container.ParentInternal.GetContainerControl();
+                    IContainerControl? c = container.ParentInternal.GetContainerControl();
                     if (c is not null)
                     {
                         c.ActiveControl = container;
