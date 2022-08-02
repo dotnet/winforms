@@ -110,6 +110,25 @@ namespace System.Windows.Forms.Tests
             Assert.False(list.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void ListViewGroupAccessibleObject_GetPropertyValue_ReturnsExpected_WithSubtitle()
+        {
+            using ListView list = new ListView();
+            const string name = "Group1";
+            const string subtitle = "Subtitle";
+            ListViewGroup listGroup = new ListViewGroup(name) { Subtitle = subtitle };
+            listGroup.Items.Add(new ListViewItem());
+            list.Groups.Add(listGroup);
+
+            AccessibleObject accessibleObject = listGroup.AccessibilityObject;
+            Assert.False(list.IsHandleCreated);
+
+            object accessibleName = accessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+            Assert.Equal($"{name}. {subtitle}", accessibleName);
+
+            Assert.False(list.IsHandleCreated);
+        }
+
         [WinFormsTheory]
         [MemberData(nameof(ListViewGroupAccessibleObject_TestData))]
         public void ListViewGroupAccessibleObject_FragmentNavigate_ReturnsExpected_WithDefaultGroup(View view, bool showGroups, bool createHandle)
@@ -785,6 +804,79 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(ListViewGroupCollapsedState.Collapsed)]
+        [InlineData(ListViewGroupCollapsedState.Expanded)]
+        public void ListViewGroupAccessibleObject_GroupCollapsedStateChanged_IsExpected_ForMultipleSelection(ListViewGroupCollapsedState firstGroupSate)
+        {
+            using ListView listView = new() { ShowGroups = true };
+
+            // This test checks the case of collapsing of the second group.
+            // The first group state might affect behaviour, so check both states.
+            ListViewGroup group1 = new("Group 1") { CollapsedState = firstGroupSate };
+            ListViewGroup group2 = new("Group 2") { CollapsedState = ListViewGroupCollapsedState.Expanded };
+            ListViewGroup group3 = new("Group 3") { CollapsedState = ListViewGroupCollapsedState.Expanded };
+            listView.Groups.AddRange(new[] { group1, group2, group3 });
+            ListViewItem item1 = new("Item 1", group1);
+            ListViewItem item2 = new("Item 2", group2);
+            ListViewItem item3 = new("Item 2", group3);
+            listView.Items.AddRange(new[] { item1, item2, item3 });
+            listView.CreateControl();
+            item1.Focused = true;
+
+            // Keep indices of groups, that GroupCollapsedStateChanged event was raised for.
+            // It will help to understand if the event was raised for a correct group and was raised at all.
+            List<int> eventGroupIndices = new();
+            listView.GroupCollapsedStateChanged += (_, e) => eventGroupIndices.Add(e.GroupIndex);
+
+            // Navigate to the second group
+            SimulateKeyPress(Keys.Down);
+
+            if (firstGroupSate == ListViewGroupCollapsedState.Collapsed)
+            {
+                // This action is necessary to navigate to the second group correctly in this specific case.
+                SimulateKeyPress(Keys.Up);
+            }
+
+            // Simulate multiple selection of several groups to test a specific case,
+            // described in https://github.com/dotnet/winforms/issues/6708
+            item1.Selected = true;
+            item2.Selected = true;
+            item3.Selected = true;
+
+            // Simulate the second group collapse action via keyboard.
+            SimulateKeyPress(Keys.Left);
+
+            Assert.Equal(firstGroupSate, group1.GetNativeCollapsedState());
+            Assert.Equal(firstGroupSate, group1.CollapsedState);
+            Assert.Equal(ListViewGroupCollapsedState.Collapsed, group2.GetNativeCollapsedState());
+            Assert.Equal(ListViewGroupCollapsedState.Collapsed, group2.CollapsedState);
+            Assert.Equal(ListViewGroupCollapsedState.Expanded, group3.GetNativeCollapsedState());
+            Assert.Equal(ListViewGroupCollapsedState.Expanded, group3.CollapsedState);
+
+            // GroupCollapsedStateChanged event should be raised
+            // for the second group only in this specific case.
+            Assert.Equal(1, eventGroupIndices.Count);
+            Assert.Equal(1, eventGroupIndices[0]); 
+
+            // Make sure that we really cheched multiple selection case and the items
+            // are still selected after keyboard navigation simulations.
+            Assert.Equal(3, listView.SelectedItems.Count);
+            Assert.True(listView.IsHandleCreated);
+
+            void SimulateKeyPress(Keys key)
+            {
+                // https://docs.microsoft.com/windows/win32/inputdev/wm-keyup
+                // The MSDN page tells us what bits of lParam to use for each of the parameters.
+                // All we need to do is some bit shifting to assemble lParam
+                // lParam = repeatCount | (scanCode << 16)
+                nint keyCode = (nint)key;
+                nint lParam = 0x00000001 | keyCode << 16;
+                User32.SendMessageW(listView, User32.WM.KEYDOWN, keyCode, lParam);
+                User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
+            }
+        }
+
+        [WinFormsTheory]
         [InlineData(View.Details)]
         [InlineData(View.LargeIcon)]
         [InlineData(View.SmallIcon)]
@@ -1282,6 +1374,56 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(expectedPatternSupported, accessibleObject.IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId));
             Assert.Equal(createHandle, listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewGroupAccessibleObject_IsDisconnected_WhenListViewReleasesUiaProvider()
+        {
+            using ListView listView = new();
+            ListViewGroup group = new();
+            listView.Groups.Add(group);
+            EnforceAccessibleObjectCreation(group);
+            EnforceAccessibleObjectCreation(listView.DefaultGroup);
+
+            listView.ReleaseUiaProvider(listView.Handle);
+
+            Assert.Null(group.TestAccessor().Dynamic._accessibilityObject);
+            Assert.Null(listView.DefaultGroup.TestAccessor().Dynamic._accessibilityObject);
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewGroupAccessibleObject_IsDisconnected_WhenGroupsAreCleared()
+        {
+            using ListView listView = new();
+            ListViewGroup group = new();
+            listView.Groups.Add(group);
+            EnforceAccessibleObjectCreation(group);
+
+            listView.Groups.Clear();
+
+            Assert.Null(group.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewGroupAccessibleObject_IsDisconnected_WhenGroupIsRemoved()
+        {
+            using ListView listView = new();
+            ListViewGroup group = new();
+            listView.Groups.Add(group);
+            EnforceAccessibleObjectCreation(group);
+
+            listView.Groups.Remove(group);
+
+            Assert.Null(group.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        private static void EnforceAccessibleObjectCreation(ListViewGroup group)
+        {
+            _ = group.AccessibilityObject;
+            Assert.NotNull(group.TestAccessor().Dynamic._accessibilityObject);
         }
 
         private ListView GetListViewItemWithInvisibleItems(View view)

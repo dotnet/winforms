@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Drawing;
 using static Interop;
 
@@ -41,24 +40,6 @@ namespace System.Windows.Forms
                 }
 
                 return base.FragmentNavigate(direction);
-            }
-
-            internal override int[] RuntimeId
-            {
-                get
-                {
-                    var owningListViewRuntimeId = _owningListView.AccessibilityObject.RuntimeId;
-
-                    Debug.Assert(owningListViewRuntimeId.Length >= 2);
-
-                    return new int[]
-                    {
-                        owningListViewRuntimeId[0],
-                        owningListViewRuntimeId[1],
-                        4, // Win32-control specific RuntimeID constant.
-                        CurrentIndex
-                    };
-                }
             }
         }
     }

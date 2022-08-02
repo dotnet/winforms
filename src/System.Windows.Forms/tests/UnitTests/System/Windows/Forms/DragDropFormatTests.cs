@@ -70,7 +70,6 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Ole32.ReleaseStgMedium(ref medium);
                 dragDropFormat?.Dispose();
             }
         }
@@ -80,12 +79,11 @@ namespace System.Windows.Forms.Tests
         public void DragDropFormat_Set_GetData_ReturnsExpected(FORMATETC formatEtc, STGMEDIUM medium)
         {
             DragDropFormat dragDropFormat = default;
-            STGMEDIUM data = default;
 
             try
             {
                 dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, copyData: false);
-                data = dragDropFormat.GetData();
+                STGMEDIUM data = dragDropFormat.GetData();
                 Assert.Equal(medium.pUnkForRelease, data.pUnkForRelease);
                 Assert.Equal(medium.tymed, data.tymed);
 
@@ -111,8 +109,6 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Ole32.ReleaseStgMedium(ref medium);
-                Ole32.ReleaseStgMedium(ref data);
                 dragDropFormat?.Dispose();
             }
         }
@@ -122,29 +118,34 @@ namespace System.Windows.Forms.Tests
         public void DragDropFormat_Set_RefreshData_ReturnsExpected(FORMATETC formatEtc, STGMEDIUM medium)
         {
             DragDropFormat dragDropFormat = default;
-            STGMEDIUM data = default;
-            STGMEDIUM dataRefresh = default;
 
             try
             {
                 dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, copyData: false);
-                dataRefresh = new()
+                STGMEDIUM dataRefresh = new()
                 {
                     pUnkForRelease = dragDropFormat.Medium.pUnkForRelease,
                     tymed = dragDropFormat.Medium.tymed,
                     unionmember = dragDropFormat.Medium.tymed switch
                     {
-                        TYMED.TYMED_HGLOBAL or TYMED.TYMED_FILE or TYMED.TYMED_ENHMF or TYMED.TYMED_GDI or TYMED.TYMED_MFPICT
-                        => Ole32.OleDuplicateData(
-                            dragDropFormat.Medium.unionmember,
-                            formatEtc.cfFormat,
-                            Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT),
+                        TYMED.TYMED_HGLOBAL
+                        or TYMED.TYMED_FILE
+                        or TYMED.TYMED_ENHMF
+                        or TYMED.TYMED_GDI
+                        or TYMED.TYMED_MFPICT => Ole32.OleDuplicateData(
+                                dragDropFormat.Medium.unionmember,
+                                formatEtc.cfFormat,
+                                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT),
+
+                        TYMED.TYMED_ISTORAGE
+                        or TYMED.TYMED_ISTREAM
+                        or TYMED.TYMED_NULL => ComPtrType(dragDropFormat.Medium.unionmember),
                         _ => dragDropFormat.Medium.unionmember,
                     }
                 };
 
                 dragDropFormat.RefreshData(formatEtc.cfFormat, dataRefresh, copyData: false);
-                data = dragDropFormat.GetData();
+                STGMEDIUM data = dragDropFormat.GetData();
 
                 switch (dragDropFormat.Medium.tymed)
                 {
@@ -168,10 +169,15 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Ole32.ReleaseStgMedium(ref medium);
-                Ole32.ReleaseStgMedium(ref data);
-                Ole32.ReleaseStgMedium(ref dataRefresh);
                 dragDropFormat?.Dispose();
+            }
+
+            static IntPtr ComPtrType(IntPtr ptr)
+            {
+                if (ptr != IntPtr.Zero)
+                    Marshal.AddRef(ptr);
+
+                return ptr;
             }
         }
 

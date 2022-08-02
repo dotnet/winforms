@@ -911,8 +911,7 @@ namespace System.Windows.Forms.Tests
             ListViewItem listViewItem = new("Test item");
             listView.Items.Add(listViewItem);
             ListViewItem.ListViewSubItem listViewSubItem = new(listViewItem, "Test subItem");
-            ListViewSubItemAccessibleObject listViewSubItemAccessibleObject = new(listViewSubItem, listViewItem);
-            object actual = listViewSubItemAccessibleObject.GetPropertyValue(UiaCore.UIA.RuntimeIdPropertyId);
+            object actual = listViewSubItem.AccessibilityObject.GetPropertyValue(UiaCore.UIA.RuntimeIdPropertyId);
 
             Assert.Equal(listViewSubItem.AccessibilityObject.RuntimeId, actual);
             Assert.False(listView.IsHandleCreated);
@@ -984,6 +983,130 @@ namespace System.Windows.Forms.Tests
             listview.Items.Add(listViewItem);
 
             Assert.Equal(AccessibleStates.Focusable, listViewSubItem.AccessibilityObject.State);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemAccessibleObject_IsDisconnected_WhenListViewReleasesUiaProvider()
+        {
+            using ListView listView = new();
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem listViewSubItem = new();
+            listViewItem.SubItems.Add(listViewSubItem);
+            listView.Items.Add(listViewItem);
+            EnforceAccessibleObjectCreation(listViewItem);
+
+            listView.ReleaseUiaProvider(listView.Handle);
+
+            Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemAccessibleObject_IsDisconnected_WhenListViewIsCleared()
+        {
+            using ListView listView = new();
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem listViewSubItem = new();
+            listViewItem.SubItems.Add(listViewSubItem);
+            listView.Items.Add(listViewItem);
+            EnforceAccessibleObjectCreation(listViewItem);
+
+            listView.Clear();
+
+            Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemAccessibleObject_IsDisconnected_WhenOwningItemIsRemoved()
+        {
+            using ListView listView = new();
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem listViewSubItem = new();
+            listViewItem.SubItems.Add(listViewSubItem);
+            listView.Items.Add(listViewItem);
+            EnforceAccessibleObjectCreation(listViewItem);
+
+            listView.Items.RemoveAt(0);
+
+            Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemAccessibleObject_IsDisconnected_WhenSubItemIsRemoved()
+        {
+            using ListView listView = new();
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem listViewSubItem = new();
+            listViewItem.SubItems.Add(listViewSubItem);
+            listView.Items.Add(listViewItem);
+            EnforceAccessibleObjectCreation(listViewItem);
+
+            listView.Items[0].SubItems.Remove(listViewSubItem);
+
+            Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemAccessibleObject_IsDisconnected_WhenSubItemsAreCleared()
+        {
+            using ListView listView = new();
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem listViewSubItem = new();
+            listViewItem.SubItems.Add(listViewSubItem);
+            listView.Items.Add(listViewItem);
+            EnforceAccessibleObjectCreation(listViewItem);
+
+            listView.Items[0].SubItems.Clear();
+
+            Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemAccessibleObject_IsDisconnected_WhenSubItemIsReplaced()
+        {
+            using ListView listView = new();
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem listViewSubItem = new();
+            listViewItem.SubItems.Add(listViewSubItem);
+            listView.Items.Add(listViewItem);
+            EnforceAccessibleObjectCreation(listViewItem);
+
+            listView.Items[0] = new ListViewItem();
+
+            Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemAccessibleObject_IsDisconnected_WhenOwningItemIsReplaced()
+        {
+            using ListView listView = new();
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem listViewSubItem = new();
+            listViewItem.SubItems.Add(listViewSubItem);
+            listView.Items.Add(listViewItem);
+            EnforceAccessibleObjectCreation(listViewItem);
+
+            int subItemIndex = listView.Items[0].SubItems.IndexOf(listViewSubItem);
+            listView.Items[0].SubItems[subItemIndex] = new ListViewItem.ListViewSubItem();
+
+            Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        private static void EnforceAccessibleObjectCreation(ListViewItem item)
+        {
+            _ = item.AccessibilityObject;
+            Assert.NotNull(item.TestAccessor().Dynamic._accessibilityObject);
+            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+            {
+                _ = subItem.AccessibilityObject;
+                Assert.NotNull(subItem.TestAccessor().Dynamic._accessibilityObject);
+            }
         }
     }
 }

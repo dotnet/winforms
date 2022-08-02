@@ -554,11 +554,40 @@ namespace System.Windows.Forms
                 {
                     lock (typeof(ErrorProvider))
                     {
-                        t_defaultIcon ??= new Icon(typeof(ErrorProvider), "Error");
+                        t_defaultIcon ??= GetDefaultIcon();
                     }
                 }
 
                 return t_defaultIcon;
+
+                static unsafe Icon GetDefaultIcon()
+                {
+                    Icon systemErrorIcon = null;
+
+                    Shell32.SHSTOCKICONINFO sii = new Shell32.SHSTOCKICONINFO()
+                    {
+                        cbSize = (uint)sizeof(Shell32.SHSTOCKICONINFO)
+                    };
+
+                    HRESULT hr = Shell32.SHGetStockIconInfo(Shell32.SHSTOCKICONID.ERROR,
+                                                            Shell32.SHGSI.ICON | Shell32.SHGSI.SMALLICON,
+                                                            &sii);
+
+                    if (hr.Succeeded())
+                    {
+                        try
+                        {
+                            // Icon.FromHandle does not take ownership of the handle.
+                            systemErrorIcon = (Icon)Icon.FromHandle(sii.hIcon).Clone();
+                        }
+                        finally
+                        {
+                            User32.DestroyIcon(sii.hIcon);
+                        }
+                    }
+
+                    return systemErrorIcon ?? new Icon(typeof(ErrorProvider), "Error");
+                }
             }
         }
 
