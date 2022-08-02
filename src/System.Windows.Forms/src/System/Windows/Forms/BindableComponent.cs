@@ -31,7 +31,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRCategory(nameof(SR.CatData))]
         [SRDescription(nameof(SR.BindingComponentBindingContextDescr))]
-        public BindingContext BindingContext
+        public BindingContext? BindingContext
         {
             [RequiresPreviewFeatures]
             get => _bindingContext ??= new BindingContext();
