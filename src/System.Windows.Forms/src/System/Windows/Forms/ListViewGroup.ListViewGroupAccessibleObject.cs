@@ -99,7 +99,9 @@ namespace System.Windows.Forms
                 => _owningListView.AccessibilityObject;
 
             public override string Name
-                => _owningGroup.Header;
+                => !string.IsNullOrEmpty(_owningGroup.Subtitle)
+                    ? $"{_owningGroup.Header}. {_owningGroup.Subtitle}"
+                    : _owningGroup.Header;
 
             public override AccessibleRole Role
                 => AccessibleRole.Grouping;
