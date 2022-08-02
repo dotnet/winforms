@@ -5141,7 +5141,10 @@ namespace System.Windows.Forms
                 Items[i].ReleaseUiaProvider();
             }
 
-            DefaultGroup.ReleaseUiaProvider();
+            if (_defaultGroup is not null)
+            {
+                DefaultGroup.ReleaseUiaProvider();
+            }
 
             foreach (ListViewGroup group in Groups)
             {
