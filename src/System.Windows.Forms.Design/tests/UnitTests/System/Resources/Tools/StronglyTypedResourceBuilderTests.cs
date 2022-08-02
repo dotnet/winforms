@@ -239,7 +239,7 @@ public partial class StronglyTypedResourceBuilderTests
             internalClass: false,
             out _);
 
-        MemoryStream resourceStream = new();
+        using MemoryStream resourceStream = new();
         using ResourceWriter resourceWriter = new(resourceStream);
         resourceWriter.AddResource("TestName", "TestValue");
         resourceWriter.Generate();
@@ -270,7 +270,7 @@ public partial class StronglyTypedResourceBuilderTests
             internalClass: false,
             out _);
 
-        MemoryStream resourceStream = new();
+        using MemoryStream resourceStream = new();
         using ResourceWriter resourceWriter = new(resourceStream);
         resourceWriter.AddResource("TestName", "TestValue");
         resourceWriter.Generate();
@@ -299,7 +299,7 @@ public partial class StronglyTypedResourceBuilderTests
             internalClass: false,
             out _);
 
-        MemoryStream resourceStream = new();
+        using MemoryStream resourceStream = new();
         using ResourceWriter resourceWriter = new(resourceStream);
         resourceWriter.AddResource("TestName", "TestValue");
         resourceWriter.Generate();
@@ -310,34 +310,6 @@ public partial class StronglyTypedResourceBuilderTests
         var nameProperty = type.GetProperty("TestName");
         Assert.NotNull(nameProperty);
         Assert.Equal("TestValue", (string)nameProperty.GetValue(obj: null));
-    }
-
-    private static PropertyInfo getPropertyInfo(IDictionaryEnumerator enumerator,
-        CodeCompileUnit compileUnit, string propertyName)
-    {
-        MemoryStream resourceStream = new();
-        using ResourceWriter resourceWriter = new(resourceStream);
-        while (enumerator.MoveNext())
-        {
-            resourceWriter.AddResource((string)enumerator.Key, enumerator.Value);
-        }
-
-        resourceWriter.Generate();
-        resourceStream.Position = 0;
-
-        Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
-        Assert.NotNull(type);
-        var propertyInfo = type.GetProperty(propertyName);
-        Assert.NotNull(propertyInfo);
-        return propertyInfo;
-    }
-
-    private static void validateResultBitmap(PropertyInfo imagePropertyInfo, Bitmap expected, TypeConverter converter)
-    {
-        byte[] resourceBytes = Assert.IsType<byte[]>(imagePropertyInfo.GetValue(obj: null));
-        using Bitmap resourceBitmap = Assert.IsType<Bitmap>(converter.ConvertFrom(resourceBytes));
-        Assert.Equal(expected.Size, resourceBitmap.Size);
-        Assert.Equal(expected.GetPixel(0, 0), resourceBitmap.GetPixel(0, 0));
     }
 
     [Fact]
@@ -360,9 +332,9 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        var imagePropertyInfo = getPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
+        var imagePropertyInfo = GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
         using Bitmap expected = (Bitmap)Image.FromFile(@"Resources\Image1.png");
-        validateResultBitmap(imagePropertyInfo, expected, TypeDescriptor.GetConverter(typeof(Bitmap)));
+        ValidateResultBitmap(imagePropertyInfo, expected, TypeDescriptor.GetConverter(typeof(Bitmap)));
     }
 
     [Fact]
@@ -389,15 +361,14 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        var imagePropertyInfo = getPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
-        validateResultBitmap(imagePropertyInfo, bitmap, converter);
+        var imagePropertyInfo = GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
+        ValidateResultBitmap(imagePropertyInfo, bitmap, converter);
     }
 
     [Fact]
     public static void StronglyTypedResourceBuilder_Create_BitmapResource_FromFileRef()
     {
-        ResXFileRef fileRef = new(@"Resources\Image1.png",
-            $"System.Byte[], {TypeAssembly}");
+        ResXFileRef fileRef = new(@"Resources\Image1.png", $"System.Byte[], {TypeAssembly}");
         Hashtable values = new()
         {
             { "Image1", new ResXDataNode("Image1", fileRef) }
@@ -411,25 +382,18 @@ public partial class StronglyTypedResourceBuilderTests
             internalClass: false,
             out _);
 
-        MemoryStream resxStream = new();
+        using MemoryStream resxStream = new();
         using ResXResourceWriter resxWriter = new(resxStream);
         resxWriter.AddResource(new ResXDataNode("Image1", fileRef));
         resxWriter.Generate();
         resxStream.Position = 0;
         using ResXResourceReader reader = new(resxStream);
-        var imagePropertyInfo = getPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
+        var imagePropertyInfo = GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
         using Bitmap expected = (Bitmap)Image.FromFile(@"Resources\Image1.png");
-        validateResultBitmap(imagePropertyInfo, expected, TypeDescriptor.GetConverter(typeof(Bitmap)));
+        ValidateResultBitmap(imagePropertyInfo, expected, TypeDescriptor.GetConverter(typeof(Bitmap)));
     }
 
-    private static void validateResultIcon(PropertyInfo iconPropertyInfo, Icon expected, TypeConverter converter)
-    {
-        byte[] resourceByte = Assert.IsType<byte[]>(iconPropertyInfo.GetValue(obj: null));
-        using Icon resourceIcon = Assert.IsType<Icon>(converter.ConvertFrom(resourceByte));
-        Assert.Equal(expected.Size, resourceIcon.Size);
-    }
-
-[Fact]
+    [Fact]
     public static void StronglyTypedResourceBuilder_Create_IconResource_FromFile()
     {
         const string data = $"""
@@ -449,9 +413,9 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        var iconPropertyInfo = getPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
+        var iconPropertyInfo = GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
         using Icon expected = new(@"Resources\Icon1.ico");
-        validateResultIcon(iconPropertyInfo, expected, TypeDescriptor.GetConverter(typeof(Icon)));
+        ValidateResultIcon(iconPropertyInfo, expected, TypeDescriptor.GetConverter(typeof(Icon)));
     }
 
     [Fact]
@@ -477,15 +441,14 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        var iconPropertyInfo = getPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
-        validateResultIcon(iconPropertyInfo, icon, converter);
+        var iconPropertyInfo = GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
+        ValidateResultIcon(iconPropertyInfo, icon, converter);
     }
 
     [Fact]
     public static void StronglyTypedResourceBuilder_Create_IconResource_FromFileRef()
     {
-        ResXFileRef fileRef = new(@"Resources\Icon1.ico",
-            $"System.Byte[], {TypeAssembly}");
+        ResXFileRef fileRef = new(@"Resources\Icon1.ico", $"System.Byte[], {TypeAssembly}");
         Hashtable values = new()
         {
             { "Icon1", new ResXDataNode("Icon1", fileRef) }
@@ -499,21 +462,15 @@ public partial class StronglyTypedResourceBuilderTests
             internalClass: false,
             out _);
 
-        MemoryStream resxStream = new();
+        using MemoryStream resxStream = new();
         using ResXResourceWriter resxWriter = new(resxStream);
         resxWriter.AddResource(new ResXDataNode("Icon1", fileRef));
         resxWriter.Generate();
         resxStream.Position = 0;
         using ResXResourceReader reader = new(resxStream);
-        var iconPropertyInfo = getPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
+        var iconPropertyInfo = GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
         using Icon expected = new(@"Resources\Icon1.ico");
-        validateResultIcon(iconPropertyInfo, expected, TypeDescriptor.GetConverter(typeof(Icon)));
-    }
-
-    private static void validateResultTxtFileContent(PropertyInfo txtFilePropertyInfo)
-    {
-        string resourceTxtFileContents = Assert.IsType<string>(txtFilePropertyInfo.GetValue(obj: null));
-        Assert.Equal("hello test\r\n!", resourceTxtFileContents);
+        ValidateResultIcon(iconPropertyInfo, expected, TypeDescriptor.GetConverter(typeof(Icon)));
     }
 
     [Fact]
@@ -537,14 +494,15 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        validateResultTxtFileContent(getPropertyInfo(reader.GetEnumerator(), compileUnit, "TextFile1"));
+        ValidateResultTxtFileContent(GetPropertyInfo(reader.GetEnumerator(), compileUnit, "TextFile1"));
     }
 
     [Fact]
     public static void StronglyTypedResourceBuilder_Create_TxtFileResource_FromFileRef()
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        ResXFileRef fileRef = new(@"Resources\TextFile1.txt",
+        ResXFileRef fileRef = new(
+            @"Resources\TextFile1.txt",
             $"System.String, {TypeAssembly}",
             Encoding.GetEncoding(TxtFileEncoding));
         Hashtable values = new()
@@ -560,27 +518,13 @@ public partial class StronglyTypedResourceBuilderTests
             internalClass: false,
             out _);
 
-        MemoryStream resxStream = new();
+        using MemoryStream resxStream = new();
         using ResXResourceWriter resxWriter = new(resxStream);
         resxWriter.AddResource(new ResXDataNode("TextFile1", fileRef));
         resxWriter.Generate();
         resxStream.Position = 0;
         using ResXResourceReader reader = new(resxStream);
-        validateResultTxtFileContent(getPropertyInfo(reader.GetEnumerator(), compileUnit, "TextFile1"));
-    }
-
-    private static void validateResultAudio(PropertyInfo audioPropertyInfo)
-    {
-        using UnmanagedMemoryStream resourceAudio =
-            Assert.IsType<UnmanagedMemoryStream>(audioPropertyInfo.GetValue(obj: null));
-        var contents = new byte[resourceAudio.Length];
-        int pos = (int)(resourceAudio.Position = 0);
-        while (pos < resourceAudio.Length)
-        {
-            pos += resourceAudio.Read(contents, pos, (int)(resourceAudio.Length - pos));
-        }
-
-        Assert.Equal("HELLO", Encoding.UTF8.GetString(contents));
+        ValidateResultTxtFileContent(GetPropertyInfo(reader.GetEnumerator(), compileUnit, "TextFile1"));
     }
 
     [Fact]
@@ -603,14 +547,13 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        validateResultAudio(getPropertyInfo(reader.GetEnumerator(), compileUnit, "Audio1"));
+        ValidateResultAudio(GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Audio1"));
     }
 
     [Fact]
     public static void StronglyTypedResourceBuilder_Create_AudioResource_FromFileRef()
     {
-        ResXFileRef fileRef = new(@"Resources\Audio1.wav",
-            $"System.IO.MemoryStream, {TypeAssembly}");
+        ResXFileRef fileRef = new(@"Resources\Audio1.wav", $"System.IO.MemoryStream, {TypeAssembly}");
         Hashtable values = new()
         {
             { "Audio1", new ResXDataNode("Audio1", fileRef) }
@@ -624,12 +567,69 @@ public partial class StronglyTypedResourceBuilderTests
             internalClass: false,
             out _);
 
-        MemoryStream resxStream = new();
+        using MemoryStream resxStream = new();
         using ResXResourceWriter resxWriter = new(resxStream);
         resxWriter.AddResource(new ResXDataNode("Audio1", fileRef));
         resxWriter.Generate();
         resxStream.Position = 0;
         using ResXResourceReader reader = new(resxStream);
-        validateResultAudio(getPropertyInfo(reader.GetEnumerator(), compileUnit, "Audio1"));
+        ValidateResultAudio(GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Audio1"));
+    }
+
+    private static PropertyInfo GetPropertyInfo(
+        IDictionaryEnumerator enumerator,
+        CodeCompileUnit compileUnit,
+        string propertyName)
+    {
+        using MemoryStream resourceStream = new();
+        using ResourceWriter resourceWriter = new(resourceStream);
+        while (enumerator.MoveNext())
+        {
+            resourceWriter.AddResource((string)enumerator.Key, enumerator.Value);
+        }
+
+        resourceWriter.Generate();
+        resourceStream.Position = 0;
+
+        Type type = CodeDomCompileHelper.CompileClass(compileUnit, "Resources", "Namespace", resourceStream);
+        Assert.NotNull(type);
+        var propertyInfo = type.GetProperty(propertyName);
+        Assert.NotNull(propertyInfo);
+        return propertyInfo;
+    }
+
+    private static void ValidateResultBitmap(PropertyInfo imagePropertyInfo, Bitmap expected, TypeConverter converter)
+    {
+        byte[] resourceBytes = Assert.IsType<byte[]>(imagePropertyInfo.GetValue(obj: null));
+        using Bitmap resourceBitmap = Assert.IsType<Bitmap>(converter.ConvertFrom(resourceBytes));
+        Assert.Equal(expected.Size, resourceBitmap.Size);
+        Assert.Equal(expected.GetPixel(0, 0), resourceBitmap.GetPixel(0, 0));
+    }
+
+    private static void ValidateResultIcon(PropertyInfo iconPropertyInfo, Icon expected, TypeConverter converter)
+    {
+        byte[] resourceByte = Assert.IsType<byte[]>(iconPropertyInfo.GetValue(obj: null));
+        using Icon resourceIcon = Assert.IsType<Icon>(converter.ConvertFrom(resourceByte));
+        Assert.Equal(expected.Size, resourceIcon.Size);
+    }
+
+    private static void ValidateResultTxtFileContent(PropertyInfo txtFilePropertyInfo)
+    {
+        string resourceTxtFileContents = Assert.IsType<string>(txtFilePropertyInfo.GetValue(obj: null));
+        Assert.Equal("hello test\r\n!", resourceTxtFileContents);
+    }
+
+    private static void ValidateResultAudio(PropertyInfo audioPropertyInfo)
+    {
+        using UnmanagedMemoryStream resourceAudio =
+            Assert.IsType<UnmanagedMemoryStream>(audioPropertyInfo.GetValue(obj: null));
+        var contents = new byte[resourceAudio.Length];
+        int pos = (int)(resourceAudio.Position = 0);
+        while (pos < resourceAudio.Length)
+        {
+            pos += resourceAudio.Read(contents, pos, (int)(resourceAudio.Length - pos));
+        }
+
+        Assert.Equal("HELLO", Encoding.UTF8.GetString(contents));
     }
 }
