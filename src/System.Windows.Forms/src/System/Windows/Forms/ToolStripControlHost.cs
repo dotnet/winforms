@@ -528,7 +528,7 @@ namespace System.Windows.Forms
             RaiseMouseEvent(ToolStripItem.s_mouseDownEvent, e);
         }
 
-#pragma warning disable CA2252 
+#pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
         private void HandleMouseEnter(object sender, EventArgs e)
         {
             OnMouseEnter(e);
@@ -546,7 +546,7 @@ namespace System.Windows.Forms
             OnMouseHover(e);
             RaiseEvent(ToolStripItem.s_mouseHoverEvent, e);
         }
-#pragma warning disable CA2252 
+#pragma warning restore CA2252 
 
         private void HandleMouseMove(object sender, MouseEventArgs e)
         {
@@ -624,7 +624,7 @@ namespace System.Windows.Forms
             Control.AccessibleRole = AccessibleRole;
         }
 
-#pragma warning disable CA2252 
+#pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
         protected virtual void OnEnter(EventArgs e) => RaiseEvent(s_enterEvent, e);
 
         /// <summary>
@@ -805,9 +805,9 @@ namespace System.Windows.Forms
 
         protected virtual void OnValidating(CancelEventArgs e) => RaiseCancelEvent(s_validatingEvent, e);
 
-#pragma warning disable CA2252 
+#pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
         protected virtual void OnValidated(EventArgs e) => RaiseEvent(s_validatedEvent, e);
-#pragma warning disable CA2252 
+#pragma warning restore CA2252 
 
         private static ReadOnlyControlCollection GetControlCollection(ToolStrip toolStrip)
             => (ReadOnlyControlCollection)toolStrip?.Controls;

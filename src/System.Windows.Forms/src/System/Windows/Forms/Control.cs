@@ -900,9 +900,9 @@ namespace System.Windows.Forms
         /// <remarks>
         ///  Data context is a concept that allows elements to inherit information from their parent elements
         ///  about the data source that is used for binding. It's the duty of deriving controls which inherit from
-        ///  this class to handle the provided data source accordingly. For example, UserControls, which using
+        ///  this class to handle the provided data source accordingly. For example, UserControls, which use
         ///  <see cref="BindingSource"/> components for data binding scenarios could either handle the
-        ///  <see cref="DataContextChanged"/> event or overwriting <see cref="OnDataContextChanged(EventArgs)"/> to provide
+        ///  <see cref="DataContextChanged"/> event or override <see cref="OnDataContextChanged(EventArgs)"/> to provide
         ///  the relevant data from the data context to a BindingSource component's <see cref="BindingSource.DataSource"/>.
         /// </remarks>
         [SRCategory(nameof(SR.CatData))]
@@ -921,7 +921,6 @@ namespace System.Windows.Forms
             }
             set
             {
-                // Nothing changed, nothing to do.
                 if (Equals(value, DataContext))
                 {
                     return;

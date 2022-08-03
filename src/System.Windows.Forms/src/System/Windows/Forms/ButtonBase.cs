@@ -194,8 +194,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the <see cref="System.Windows.Input.ICommand.CanExecute(object?)"/> status of the command
-        ///  which is assigned to the <see cref="Command"/> property has changed.
+        ///  Occurs when the <see cref="System.Windows.Input.ICommand.CanExecute(object?)"/> status of the
+        ///  <see cref="System.Windows.Input.ICommand"/> which is assigned to the <see cref="Command"/> property has changed.
         /// </summary>
         [RequiresPreviewFeatures]
         [SRCategory(nameof(SR.CatData))]
@@ -208,7 +208,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the assigned <see cref="System.Windows.Input.ICommand"/> object of the <see cref="Command"/> property has changed.
+        ///  Occurs when the assigned <see cref="System.Windows.Input.ICommand"/> of the <see cref="Command"/> property has changed.
         /// </summary>
         [RequiresPreviewFeatures]
         [SRCategory(nameof(SR.CatData))]
@@ -234,7 +234,8 @@ namespace System.Windows.Forms
             [RequiresPreviewFeatures]
             get => _commandParameter;
 
-            // We need to opt into previre features here, because we calling a preview feature from the setter.
+            // We need to opt into preview features on the getter and the setter rather than on top of the property,
+            // because we calling a preview feature from the setter.
             [RequiresPreviewFeatures]
             set
             {
@@ -913,7 +914,7 @@ namespace System.Windows.Forms
             base.OnClick(e);
 
             // We won't let the preview feature warnings bubble further up beyond this point.
-#pragma warning disable CA2252 
+#pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
             OnRequestCommandExecute(e);
 #pragma warning restore CA2252
         }
@@ -1149,10 +1150,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Raises the <see cref="ButtonBase.CommandChanged"/> event.
         /// </summary>
-        /// <remarks>
-        ///  Inheriting classes should override this method to handle this event.
-        ///  Call base.CommandChanged to send this event to any registered event listeners.
-        /// </remarks>
         /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
         [RequiresPreviewFeatures]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -1178,19 +1175,19 @@ namespace System.Windows.Forms
         protected virtual void OnCommandParameterChanged(EventArgs e) => RaiseEvent(s_commandParameterChangedEvent, e);
 
         /// <summary>
-        ///  Called by the Control when the button is clicked to execute the command.
+        ///  Called in the context of <see cref="OnClick(EventArgs)"/> to invoke <see cref="System.Windows.Input.ICommand.Execute(object?)"/> if the context allows.
         /// </summary>
         /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
         [RequiresPreviewFeatures]
         protected virtual void OnRequestCommandExecute(EventArgs e)
             => ICommandBindingTargetProvider.RequestCommandExecute(this);
 
-        // Called by the CommandProviderManager's internal DIM-based logic.
+        // Called by the CommandProviderManager's command handling logic.
         [RequiresPreviewFeatures]
         void ICommandBindingTargetProvider.RaiseCommandChanged(EventArgs e)
             => OnCommandChanged(e);
 
-        // Called by the CommandProviderManager's internal DIM-based logic.
+        // Called by the CommandProviderManager's command handling logic.
         [RequiresPreviewFeatures]
         void ICommandBindingTargetProvider.RaiseCommandCanExecuteChanged(EventArgs e)
             => OnCommandCanExecuteChanged(e);

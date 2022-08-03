@@ -398,8 +398,8 @@ namespace System.Windows.Forms
         {
             OnTextUpdate(e);
         }
-        
-#pragma warning disable CA2252 
+
+#pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
         protected virtual void OnDropDown(EventArgs e)
         {
             if (ParentInternal is not null)

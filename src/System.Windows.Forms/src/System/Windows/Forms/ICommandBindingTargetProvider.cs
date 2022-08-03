@@ -10,18 +10,17 @@ namespace System.Windows.Forms
     internal interface ICommandBindingTargetProvider
     {
         /// <summary>
-        /// Occurs, when the Command property has changed.
+        /// Occurs when the <see cref="Command"/> property has changed.
         /// </summary>
         event EventHandler? CommandChanged;
 
         /// <summary>
-        /// Occurs, when the execution context of the command was changed.
+        /// Occurs when the execution context of the <see cref="Command"/> was changed.
         /// </summary>
         event EventHandler? CommandCanExecuteChanged;
 
         /// <summary>
-        /// Gets or sets the Command to invoke, when the implementing 
-        /// Component or Control is triggered by the user.
+        /// Gets or sets the Command to invoke, when the implementing Component or Control is triggered by the user.
         /// </summary>
         ICommand? Command { get; set; }
 
@@ -31,20 +30,19 @@ namespace System.Windows.Forms
         object? CommandParameter { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the control 
-        /// can respond to user interaction.
+        /// Gets or sets a value indicating whether the control can respond to user interaction.
         /// </summary>
         bool Enabled { get; set; }
 
         /// <summary>
-        /// Gets or sets the previous value of the <see cref="Enabled"/> property, so
-        /// that it can be restored to its original value on assignment of a new command.
+        /// Gets or sets the previous value of the <see cref="Enabled"/> property, so that it can be restored to
+        /// its original value on assignment of a new command.
         /// </summary>
         protected bool? PreviousEnabledStatus { get; set; }
 
         /// <summary>
-        /// An implementation should raise the <see cref="CommandChanged"/> event 
-        /// by calling component's or control's OnRaiseCommandChanged method.
+        /// An implementation should raise the <see cref="CommandChanged"/> event  by calling component's or
+        /// control's OnRaiseCommandChanged method.
         /// </summary>
         /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
         protected void RaiseCommandChanged(EventArgs e);
@@ -57,8 +55,8 @@ namespace System.Windows.Forms
         protected void RaiseCommandCanExecuteChanged(EventArgs e);
 
         /// <summary>
-        /// Method which should be called by a class implementing this 
-        /// interface in the setter of the <see cref="Command"/> property.
+        /// Method which should be called by a class implementing this interface in the setter of the
+        /// <see cref="Command"/> property.
         /// </summary>
         /// <param name="commandComponent">Instance of the class implementing this interface.</param>
         /// <param name="newCommand">The new value of the <see cref="Command"/>
@@ -72,13 +70,14 @@ namespace System.Windows.Forms
             => commandComponent.CommandSetter(newCommand, ref commandBackingField);
 
         /// <summary>
-        /// Method which should be called by the class implementing this
-        /// interface, when the assigned <see cref="Command"/> should be executed.
+        /// Method which should be called by the class implementing this interface, when the assigned
+        /// <see cref="Command"/> should be executed.
         /// </summary>
         /// <remarks>
         /// As an example, a <see cref="Button"/> should call this method inside the method which
         /// also raises the <see cref="Control.Click"/> Event of that Button, which
         /// would be the <see cref="Button.OnClick(EventArgs)"/> OnClick method.
+        /// See <see cref="ButtonBase"/> for an exmaple implementation.
         /// </remarks>
         /// <param name="commandComponent"></param>
         protected static void RequestCommandExecute(ICommandBindingTargetProvider commandComponent)

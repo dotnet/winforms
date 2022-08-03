@@ -19,10 +19,6 @@ namespace System.Windows.Forms
         private ControlBindingsCollection? _dataBindings;
         private BindingContext? _bindingContext;
 
-        public BindableComponent()
-        {
-        }
-
         /// <summary>
         /// Gets or sets the <see cref="BindingContext"/> for this bindable <see cref="Component"/>.
         /// </summary>
@@ -61,9 +57,22 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Raises the <see cref="BindableComponent.BindingContextChanged"/> event.
-        ///  Inheriting classes should override this method to handle this event.
-        ///  Call base.OnBindingContextChanged to send this event to any registered event listeners.
         /// </summary>
+        /// <remarks>
+        ///   <para>
+        ///     Raising an event invokes the event handler through a delegate. For more information,
+        ///     see <see href="https://docs.microsoft.com/dotnet/standard/events/">Handling and Raising Events</see>.
+        ///   </para>
+        ///   <para>
+        ///     The <see cref="OnBindingContextChanged"/> method also allows derived classes to handle the event
+        ///     without attaching a delegate. This is the preferred technique for handling the event in a derived class.
+        ///   </para>
+        ///   <para>
+        ///    <block subset = "none" type="overrides">
+        ///     Override this method to handle the event. In the overriding method, call ...
+        ///    </block>
+        ///   </para>
+        /// </remarks>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindingContextChanged(EventArgs e)
         {
