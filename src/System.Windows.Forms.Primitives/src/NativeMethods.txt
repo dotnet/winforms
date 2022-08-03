@@ -40,4 +40,5 @@ GlobalReAlloc
 GlobalSize
 GlobalUnlock
 MultiByteToWideChar
+SetSuspendState
 WideCharToMultiByte
