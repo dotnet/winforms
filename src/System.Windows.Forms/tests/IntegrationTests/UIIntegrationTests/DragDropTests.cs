@@ -11,6 +11,8 @@ namespace System.Windows.Forms.UITests;
 public class DragDropTests : ControlTestBase
 {
     public const int DragDropDelayMS = 100;
+    public const string DragAcceptRtf = "DragAccept.rtf";
+    public const string Resources = "Resources";
     private readonly Bitmap _dragImage = new("./Resources/move.bmp");
 
     public DragDropTests(ITestOutputHelper testOutputHelper)
@@ -51,7 +53,7 @@ public class DragDropTests : ControlTestBase
     }
 
     [WinFormsFact]
-    public async Task DragEnter_Set_DropImageType_Message_MessageReplacementToken_ReturnsExptected()
+    public async Task DragEnter_Set_DropImageType_Message_MessageReplacementToken_ReturnsExptected_Async()
     {
         await RunFormWithoutControlAsync(() => new DragDropForm(TestOutputHelper), async (form) =>
         {
@@ -158,6 +160,39 @@ public class DragDropTests : ControlTestBase
                     .Sleep(DragDropDelayMS));
 
             Assert.Equal(2, form.ListDragTarget.Items.Count);
+        });
+    }
+
+    [WinFormsFact]
+    public async Task PictureBox_SetData_DoDragDrop_RichTextBox_ReturnsExptected_Async()
+    {
+        await RunFormWithoutControlAsync(() => new DragDropFormPictureBoxRichTextBox(TestOutputHelper), async (form) =>
+        {
+            string dragAcceptRtfPath = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
+            using RichTextBox richTextBox = new();
+            richTextBox.Rtf = File.ReadAllText(dragAcceptRtfPath);
+            string dragAcceptRtfContent = richTextBox.Rtf;
+            string dragAcceptRtfTextContent = richTextBox.Text;
+            Point startCoordinates = form.PictureBoxDragSource.PointToScreen(new Point(20, 20));
+            Point virtualPointStart = ToVirtualPoint(startCoordinates);
+            startCoordinates.Offset(155, 0);
+            Point virtualPointEnd = ToVirtualPoint(startCoordinates);
+            await InputSimulator.SendAsync(
+                        form,
+                        inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X, virtualPointStart.Y)
+                                                                .LeftButtonDown()
+                                                                .Sleep(DragDropDelayMS)
+                                                                .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
+                                                                .Sleep(DragDropDelayMS)
+                                                                .LeftButtonUp()
+                                                                .Sleep(DragDropDelayMS));
+
+            Assert.NotNull(form);
+            Assert.NotNull(form.RichTextBoxDropTarget);
+            Assert.False(string.IsNullOrWhiteSpace(form.RichTextBoxDropTarget.Rtf));
+            Assert.False(string.IsNullOrWhiteSpace(form.RichTextBoxDropTarget.Text));
+            Assert.Equal(dragAcceptRtfContent, form.RichTextBoxDropTarget?.Rtf);
+            Assert.Equal(dragAcceptRtfTextContent, form.RichTextBoxDropTarget?.Text);
         });
     }
 
@@ -472,6 +507,109 @@ public class DragDropTests : ControlTestBase
 
             // Reset the label text.
             DropLocationLabel.Text = "None";
+        }
+    }
+
+    class DragDropFormPictureBoxRichTextBox : Form
+    {
+        private readonly Bitmap _dragImage = new("./Resources/image.png");
+        private readonly ITestOutputHelper _testOutputHelper;
+
+        public PictureBox PictureBoxDragSource;
+        public RichTextBox RichTextBoxDropTarget;
+
+        public DragDropFormPictureBoxRichTextBox(ITestOutputHelper testOutputHelper)
+        {
+            _testOutputHelper = testOutputHelper;
+            PictureBoxDragSource = new PictureBox();
+            RichTextBoxDropTarget = new RichTextBox();
+
+            SuspendLayout();
+
+            // PictureBoxDragSource
+            PictureBoxDragSource.AllowDrop = true;
+            PictureBoxDragSource.BorderStyle = BorderStyle.FixedSingle;
+            PictureBoxDragSource.Location = new Point(10, 10);
+            PictureBoxDragSource.Size = new Size(125, 119);
+            PictureBoxDragSource.DragEnter += PictureBoxDragSource_DragEnter;
+            PictureBoxDragSource.DragOver += PictureBoxDragSource_DragOver;
+            PictureBoxDragSource.MouseDown += PictureBoxDragSource_MouseDown;
+
+            // RichTextBoxDropTarget
+            RichTextBoxDropTarget.AllowDrop = true;
+            RichTextBoxDropTarget.EnableAutoDragDrop = true;
+            RichTextBoxDropTarget.Location = new Point(145, 10);
+            RichTextBoxDropTarget.Size = new Size(125, 119);
+            RichTextBoxDropTarget.DragEnter += RichTextBoxDropTarget_DragEnter;
+            RichTextBoxDropTarget.DragDrop += RichTextBoxDropTarget_DragDrop;
+
+            // Form1
+            ClientSize = new Size(285, 140);
+            Controls.AddRange(new Control[]
+            {
+                PictureBoxDragSource,
+                RichTextBoxDropTarget
+            });
+        }
+
+        private void PictureBoxDragSource_DragOver(object? sender, DragEventArgs e)
+        {
+            _testOutputHelper.WriteLine($"Drag over on source.");
+
+            e.DropImageType = DropImageType.None;
+            e.Effect = DragDropEffects.None;
+        }
+
+        private void RichTextBoxDropTarget_DragDrop(object? sender, DragEventArgs e)
+        {
+            _testOutputHelper.WriteLine($"Drag drop on target.");
+
+            if (e.Data is not null
+                && e.Data.GetDataPresent(DataFormats.FileDrop)
+                && e.Data.GetData(DataFormats.FileDrop) is string[] fileNames
+                && fileNames.Length > 0 && fileNames[0].Contains(DragAcceptRtf))
+            {
+                RichTextBoxDropTarget.Clear();
+                RichTextBoxDropTarget.LoadFile(fileNames[0], RichTextBoxStreamType.RichText);
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void RichTextBoxDropTarget_DragEnter(object? sender, DragEventArgs e)
+        {
+            _testOutputHelper.WriteLine($"Drag enter on target.");
+
+            if (e.Data is not null
+                && e.Data.GetDataPresent(DataFormats.FileDrop)
+                && e.Data.GetData(DataFormats.FileDrop) is string[] fileNames
+                && fileNames.Length > 0 && fileNames[0].Contains(DragAcceptRtf))
+            {
+                e.DropImageType = DropImageType.Link;
+                e.Message = "%1 (shellapi.h)";
+                e.MessageReplacementToken = "DragAcceptFiles";
+                e.Effect = DragDropEffects.Link;
+            }
+        }
+
+        private void PictureBoxDragSource_DragEnter(object? sender, DragEventArgs e)
+        {
+            _testOutputHelper.WriteLine($"Drag enter on source.");
+
+            e.DropImageType = DropImageType.None;
+            e.Effect = DragDropEffects.None;
+        }
+
+        private void PictureBoxDragSource_MouseDown(object? sender, MouseEventArgs e)
+        {
+            _testOutputHelper.WriteLine($"Mouse down on drag source at position ({e.X},{e.Y}).");
+
+            string dragAcceptRtf = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
+            if (File.Exists(dragAcceptRtf))
+            {
+                string[] dropFiles = new string[] { dragAcceptRtf };
+                DataObject data = new(DataFormats.FileDrop, dropFiles);
+                PictureBoxDragSource.DoDragDrop(data, DragDropEffects.All, _dragImage, new Point(0, 16), false);
+            }
         }
     }
 }
