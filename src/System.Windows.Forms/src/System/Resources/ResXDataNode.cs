@@ -431,7 +431,8 @@ namespace System.Resources
                     {
                         result = null;
                     }
-                    else if (typeName.IndexOf("System.Byte[]") != -1 && typeName.IndexOf("mscorlib") != -1)
+                    else if (type == typeof(byte[]) ||
+                        (typeName.Contains("System.Byte[]") && (typeName.Contains("mscorlib") || typeName.Contains("System.Private.CoreLib"))))
                     {
                         // Handle byte[]'s, which are stored as base-64 encoded strings.
                         // We can't hard-code byte[] type name due to version number
