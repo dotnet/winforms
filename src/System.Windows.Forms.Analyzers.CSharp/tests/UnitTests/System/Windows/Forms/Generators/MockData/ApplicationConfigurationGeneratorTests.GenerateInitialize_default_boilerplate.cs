@@ -15,16 +15,16 @@ namespace MyProject
         /// <summary>
         ///  Bootstrap the application as follows:
         ///  <code>
-        ///  Application.EnableVisualStyles();
-        ///  Application.SetCompatibleTextRenderingDefault(false);
-        ///  Application.SetHighDpiMode(HighDpiMode.SystemAware);
+        ///  global::System.Windows.Forms.Application.EnableVisualStyles();
+        ///  global::System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
+        ///  global::System.Windows.Forms.Application.SetHighDpiMode(HighDpiMode.SystemAware);
         /// </code>
         /// </summary>
         public static void Initialize()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.{|CS0117:SetHighDpiMode|}({|CS0103:HighDpiMode|}.SystemAware);
+            global::System.Windows.Forms.Application.EnableVisualStyles();
+            global::System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
+            global::System.Windows.Forms.Application.{|CS0117:SetHighDpiMode|}({|CS0103:HighDpiMode|}.SystemAware);
         }
     }
 }

@@ -22,19 +22,20 @@ namespace System.Windows.Forms.Generators
             static string GenerateCode(ApplicationConfig projectConfig, string? defaultFont, string indent)
             {
                 StringBuilder code = new();
+                const string qualifier = "global::System.Windows.Forms.Application.";
                 if (projectConfig.EnableVisualStyles)
                 {
-                    code.AppendLine($"{indent}Application.EnableVisualStyles();");
+                    code.AppendLine($"{indent}{qualifier}EnableVisualStyles();");
                 }
 
-                code.AppendLine($"{indent}Application.SetCompatibleTextRenderingDefault({projectConfig.UseCompatibleTextRendering.ToString().ToLowerInvariant()});");
+                code.AppendLine($"{indent}{qualifier}SetCompatibleTextRenderingDefault({projectConfig.UseCompatibleTextRendering.ToString().ToLowerInvariant()});");
 
-                code.AppendLine($"{indent}Application.SetHighDpiMode(HighDpiMode.{projectConfig.HighDpiMode});");
+                code.AppendLine($"{indent}{qualifier}SetHighDpiMode(HighDpiMode.{projectConfig.HighDpiMode});");
 
                 // Note: we need to set the font _after_ we set the DPI scaling, as it affects how we scale the font.
                 if (!string.IsNullOrWhiteSpace(defaultFont))
                 {
-                    code.AppendLine($"{indent}Application.SetDefaultFont({defaultFont});");
+                    code.AppendLine($"{indent}{qualifier}SetDefaultFont({defaultFont});");
                 }
 
                 // Don't append line as we don't need the trailing \r\n!
