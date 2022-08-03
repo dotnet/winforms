@@ -177,7 +177,40 @@ namespace System.Windows.Forms
 
             internal void ResetListItemAccessibleObjects()
             {
+                if (OsVersion.IsWindows8OrGreater)
+                { 
+                    foreach (ListBoxItemAccessibleObject itemAccessibleObject in _itemAccessibleObjects.Values)
+                    {
+                        HRESULT result = UiaCore.UiaDisconnectProvider(itemAccessibleObject);
+                        Debug.Assert(result == HRESULT.S_OK);
+                    }
+                }
+
                 _itemAccessibleObjects.Clear();
+            }
+
+            internal void RemoveListItemAccessibleObjectAt(int index)
+            {
+                IReadOnlyList<ItemArray.Entry?> entries = _owningListBox.Items.InnerArray.Entries;
+                if (index >= entries.Count)
+                {
+                    return;
+                }
+
+                ItemArray.Entry? item = entries[index];
+
+                if (item is null || !_itemAccessibleObjects.ContainsKey(item))
+                {
+                    return;
+                }
+
+                if (OsVersion.IsWindows8OrGreater)
+                {
+                    HRESULT result = UiaCore.UiaDisconnectProvider(_itemAccessibleObjects[item]);
+                    Debug.Assert(result == HRESULT.S_OK);
+                }
+
+                _itemAccessibleObjects.Remove(item);
             }
 
             internal override void SelectItem()
