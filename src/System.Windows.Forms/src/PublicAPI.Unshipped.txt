@@ -13,6 +13,9 @@ System.Windows.Forms.ImageList.Handle.get -> nint
 System.Windows.Forms.InputLanguage.Handle.get -> nint
 System.Windows.Forms.NativeWindow.AssignHandle(nint handle) -> void
 System.Windows.Forms.NativeWindow.Handle.get -> nint
+System.Windows.Forms.PrintPreviewControl.TabStop.get -> bool
+System.Windows.Forms.PrintPreviewControl.TabStop.set -> void
+System.Windows.Forms.PrintPreviewControl.TabStopChanged -> System.EventHandler?
 System.Windows.Forms.TaskDialog.Handle.get -> nint
 System.Windows.Forms.TaskDialogIcon.IconHandle.get -> nint
 System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(nint iconHandle) -> void
