@@ -4,13 +4,15 @@
 
 using System.Collections;
 using System.ComponentModel;
-using System.ComponentModel.Design.Serialization;
 using System.ComponentModel.Design;
+using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Design.Behavior;
+using Windows.Win32;
 using static Interop;
+using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms.Design
 {
@@ -537,7 +539,7 @@ namespace System.Windows.Forms.Design
             }
 
             using var dc = new User32.GetDcScope(handle);
-            using var pen = new Gdi32.ObjectScope(Gdi32.CreatePen(Gdi32.PS.SOLID, 2, ColorTranslator.ToWin32(backColor)));
+            using var pen = new Gdi32.ObjectScope(PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, 2, (uint)ColorTranslator.ToWin32(backColor)));
 
             using var rop2Scope = new Gdi32.SetRop2Scope(dc, rop2);
             using var brushSelection = new Gdi32.SelectObjectScope(dc, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));

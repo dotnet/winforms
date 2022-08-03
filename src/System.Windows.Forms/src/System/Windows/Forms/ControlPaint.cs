@@ -1861,8 +1861,8 @@ namespace System.Windows.Forms
 
             using var pen = new Gdi32.ObjectScope(style switch
             {
-                FrameStyle.Dashed => Gdi32.CreatePen(Gdi32.PS.DOT, 1, ColorTranslator.ToWin32(backColor)),
-                FrameStyle.Thick => Gdi32.CreatePen(Gdi32.PS.SOLID, 2, ColorTranslator.ToWin32(backColor)),
+                FrameStyle.Dashed => PInvoke.CreatePen(Gdi.PEN_STYLE.PS_DOT, 1, (uint)ColorTranslator.ToWin32(backColor)),
+                FrameStyle.Thick => PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, 2, (uint)ColorTranslator.ToWin32(backColor)),
                 _ => default
             });
 
@@ -1886,7 +1886,7 @@ namespace System.Windows.Forms
                 IntPtr.Zero,
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
 
-            using var pen = new Gdi32.ObjectScope(Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(backColor)));
+            using var pen = new Gdi32.ObjectScope(PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, 1, (uint)ColorTranslator.ToWin32(backColor)));
             using var ropScope = new Gdi32.SetRop2Scope(desktopDC, rop2);
             using var brushSelection = new Gdi32.SelectObjectScope(
                 desktopDC,
