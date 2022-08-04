@@ -31,8 +31,7 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId
-                        => true,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => true,
                     _ => base.GetPropertyValue(propertyID)
                 };
         }

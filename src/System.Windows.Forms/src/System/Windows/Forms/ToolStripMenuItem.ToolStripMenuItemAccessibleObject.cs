@@ -46,15 +46,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.AcceleratorKeyPropertyId)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
-                    return _owningToolStripMenuItem.GetShortcutText();
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                    UiaCore.UIA.AcceleratorKeyPropertyId => _owningToolStripMenuItem.GetShortcutText(),
+                    _ => base.GetPropertyValue(propertyID)
+                };
         }
     }
 }

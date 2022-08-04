@@ -153,9 +153,9 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.ControlTypePropertyId => _owningTrackBar.AccessibleRole == AccessibleRole.Default
-                                                            ? UiaCore.UIA.SliderControlTypeId
-                                                            : base.GetPropertyValue(propertyID),
+                    UiaCore.UIA.ControlTypePropertyId when
+                        _owningTrackBar.AccessibleRole == AccessibleRole.Default
+                        => UiaCore.UIA.SliderControlTypeId,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => _owningTrackBar.Focused,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
                         // This is necessary for compatibility with MSAA proxy:

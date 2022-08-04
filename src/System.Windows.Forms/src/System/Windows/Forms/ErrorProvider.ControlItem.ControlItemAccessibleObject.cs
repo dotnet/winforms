@@ -28,8 +28,6 @@ namespace System.Windows.Forms
                     _provider = provider;
                 }
 
-                internal override Rectangle BoundingRectangle => Bounds;
-
                 public override Rectangle Bounds
                     => _control.IsHandleCreated
                         ? _control.RectangleToScreen(_controlItem.GetIconBounds(_provider.Region.Size))
@@ -97,20 +95,13 @@ namespace System.Windows.Forms
                 /// </summary>
                 /// <param name="propertyID">The accessible property ID.</param>
                 /// <returns>The accessible property value.</returns>
-                internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-                {
-                    switch (propertyID)
+                internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                    propertyID switch
                     {
-                        case UiaCore.UIA.ControlTypePropertyId:
-                            return UiaCore.UIA.ImageControlTypeId;
-                        case UiaCore.UIA.BoundingRectanglePropertyId:
-                            return BoundingRectangle;
-                        case UiaCore.UIA.NativeWindowHandlePropertyId:
-                            return _window.Handle;
-                        default:
-                            return base.GetPropertyValue(propertyID);
-                    }
-                }
+                        UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ImageControlTypeId,
+                        UiaCore.UIA.NativeWindowHandlePropertyId => _window.Handle,
+                        _ => base.GetPropertyValue(propertyID)
+                    };
 
                 internal override bool IsIAccessibleExSupported() => true;
 
