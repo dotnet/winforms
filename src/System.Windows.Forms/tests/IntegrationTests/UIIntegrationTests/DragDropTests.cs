@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
 using System.Drawing;
 using Xunit;
 using Xunit.Abstractions;
@@ -166,7 +167,7 @@ public class DragDropTests : ControlTestBase
     [WinFormsFact]
     public async Task PictureBox_SetData_DoDragDrop_RichTextBox_ReturnsExptected_Async()
     {
-        await RunFormWithoutControlAsync(() => new DragDropFormPictureBoxRichTextBox(TestOutputHelper), async (form) =>
+        await RunFormWithoutControlAsync(() => new DragImageDropDescriptionForm(TestOutputHelper), async (form) =>
         {
             string dragAcceptRtfPath = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
             using RichTextBox richTextBox = new();
@@ -177,6 +178,53 @@ public class DragDropTests : ControlTestBase
             Point virtualPointStart = ToVirtualPoint(startCoordinates);
             startCoordinates.Offset(155, 0);
             Point virtualPointEnd = ToVirtualPoint(startCoordinates);
+            await InputSimulator.SendAsync(
+                        form,
+                        inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X, virtualPointStart.Y)
+                                                                .LeftButtonDown()
+                                                                .Sleep(DragDropDelayMS)
+                                                                .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
+                                                                .Sleep(DragDropDelayMS)
+                                                                .LeftButtonUp()
+                                                                .Sleep(DragDropDelayMS));
+
+            Assert.NotNull(form);
+            Assert.NotNull(form.RichTextBoxDropTarget);
+            Assert.False(string.IsNullOrWhiteSpace(form.RichTextBoxDropTarget.Rtf));
+            Assert.False(string.IsNullOrWhiteSpace(form.RichTextBoxDropTarget.Text));
+            Assert.Equal(dragAcceptRtfContent, form.RichTextBoxDropTarget?.Rtf);
+            Assert.Equal(dragAcceptRtfTextContent, form.RichTextBoxDropTarget?.Text);
+        });
+    }
+
+    [WinFormsFact]
+    public async Task ToolStripItem_SetData_DoDragDrop_RichTextBox_ReturnsExptected_Async()
+    {
+        await RunFormWithoutControlAsync(() => new DragImageDropDescriptionForm(TestOutputHelper), async (form) =>
+        {
+            string dragAcceptRtfPath = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
+            using RichTextBox richTextBox = new();
+            richTextBox.Rtf = File.ReadAllText(dragAcceptRtfPath);
+            string dragAcceptRtfContent = richTextBox.Rtf;
+            string dragAcceptRtfTextContent = richTextBox.Text;
+
+            await MoveMouseToControlAsync(form.ToolStrip);
+            await InputSimulator.SendAsync(
+                form,
+                inputSimulator => inputSimulator.Mouse.LeftButtonClick()
+                                                      .Sleep(DragDropDelayMS));
+
+            Point toolStripItemCoordinates = form.ToolStrip.PointToScreen(new Point(5, 5));
+            toolStripItemCoordinates.Offset(0, 40);
+            Point virtualToolStripItemCoordinates = ToVirtualPoint(toolStripItemCoordinates);
+
+            await InputSimulator.SendAsync(
+                        form,
+                        inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualToolStripItemCoordinates.X, virtualToolStripItemCoordinates.Y));
+
+            Point virtualPointStart = virtualToolStripItemCoordinates;
+            toolStripItemCoordinates.Offset(50, 50);
+            Point virtualPointEnd = ToVirtualPoint(toolStripItemCoordinates);
             await InputSimulator.SendAsync(
                         form,
                         inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X, virtualPointStart.Y)
@@ -510,15 +558,19 @@ public class DragDropTests : ControlTestBase
         }
     }
 
-    class DragDropFormPictureBoxRichTextBox : Form
+    class DragImageDropDescriptionForm : Form
     {
         private readonly Bitmap _dragImage = new("./Resources/image.png");
+        private readonly Bitmap _dragAcceptBmp = new("./Resources/DragAccept.bmp");
         private readonly ITestOutputHelper _testOutputHelper;
+
+        private ContextMenuStrip? _contextMenuStrip;
 
         public PictureBox PictureBoxDragSource;
         public RichTextBox RichTextBoxDropTarget;
+        public ToolStrip ToolStrip = new();
 
-        public DragDropFormPictureBoxRichTextBox(ITestOutputHelper testOutputHelper)
+        public DragImageDropDescriptionForm(ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
             PictureBoxDragSource = new PictureBox();
@@ -529,7 +581,7 @@ public class DragDropTests : ControlTestBase
             // PictureBoxDragSource
             PictureBoxDragSource.AllowDrop = true;
             PictureBoxDragSource.BorderStyle = BorderStyle.FixedSingle;
-            PictureBoxDragSource.Location = new Point(10, 10);
+            PictureBoxDragSource.Location = new Point(10, 45);
             PictureBoxDragSource.Size = new Size(125, 119);
             PictureBoxDragSource.DragEnter += PictureBoxDragSource_DragEnter;
             PictureBoxDragSource.DragOver += PictureBoxDragSource_DragOver;
@@ -538,18 +590,119 @@ public class DragDropTests : ControlTestBase
             // RichTextBoxDropTarget
             RichTextBoxDropTarget.AllowDrop = true;
             RichTextBoxDropTarget.EnableAutoDragDrop = true;
-            RichTextBoxDropTarget.Location = new Point(145, 10);
+            RichTextBoxDropTarget.Location = new Point(145, 45);
             RichTextBoxDropTarget.Size = new Size(125, 119);
             RichTextBoxDropTarget.DragEnter += RichTextBoxDropTarget_DragEnter;
             RichTextBoxDropTarget.DragDrop += RichTextBoxDropTarget_DragDrop;
 
+            // ToolStrip
+            CreateToolStrip();
+
             // Form1
-            ClientSize = new Size(285, 140);
+            ClientSize = new Size(285, 175);
             Controls.AddRange(new Control[]
             {
                 PictureBoxDragSource,
                 RichTextBoxDropTarget
             });
+        }
+
+        private void CreateToolStrip()
+        {
+            TableLayoutPanel tableLayoutPanel = new()
+            {
+                ColumnCount = 1,
+                Dock = DockStyle.Top,
+                Height = 35,
+                RowCount = 1
+            };
+
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+
+            _contextMenuStrip = new ContextMenuStrip
+            {
+                AllowDrop = true,
+                AutoSize = true,
+                ImageScalingSize = new Size(25, 25)
+            };
+
+            _contextMenuStrip.Opening += new CancelEventHandler(ContextMenuStrip_Opening);
+
+            ToolStrip = new()
+            {
+                DefaultDropDownDirection = ToolStripDropDownDirection.BelowLeft,
+                Dock = DockStyle.Right,
+                GripStyle = ToolStripGripStyle.Hidden
+            };
+
+            ToolStripDropDownButton toolStripDropDownButton = new()
+            {
+                AutoSize = false,
+                AutoToolTip = false,
+                DropDown = _contextMenuStrip,
+                Height = 35,
+                Name = "toolStripDropDownButton",
+                Text = "Drag Images",
+                ToolTipText = string.Empty,
+                Width = 100
+            };
+
+            ToolStrip.Items.Add(toolStripDropDownButton);
+            tableLayoutPanel.Controls.Add(ToolStrip, 0, 0);
+            Controls.Add(tableLayoutPanel);
+            ContextMenuStrip = _contextMenuStrip;
+        }
+
+        void ContextMenuStrip_Opening(object? sender, CancelEventArgs e)
+        {
+            if (_contextMenuStrip is null)
+            {
+                return;
+            }
+
+            _contextMenuStrip.DefaultDropDownDirection = ToolStripDropDownDirection.BelowLeft;
+            _contextMenuStrip.Items.Clear();
+
+            ToolStripItem dragAcceptItem = new ToolStripMenuItem()
+            {
+                AllowDrop = true,
+                Image = _dragAcceptBmp,
+                ImageScaling = ToolStripItemImageScaling.SizeToFit,
+                Text = "DragAccept",
+                Name = "dragAcceptItem",
+            };
+            dragAcceptItem.DragEnter += DragAcceptItem_DragEnter;
+            dragAcceptItem.MouseDown += DragAcceptItem_MouseDown;
+
+            _contextMenuStrip.Items.Add(dragAcceptItem);
+            e.Cancel = false;
+        }
+
+        private void DragAcceptItem_DragEnter(object? sender, DragEventArgs e)
+        {
+            _testOutputHelper.WriteLine($"Drag enter on target.");
+
+            e.DropImageType = DropImageType.Link;
+            e.Message = "DragAcceptFiles";
+            e.Effect = DragDropEffects.Link;
+        }
+
+        private void DragAcceptItem_MouseDown(object? sender, MouseEventArgs e)
+        {
+            _testOutputHelper.WriteLine($"Mouse down on drag source at position ({e.X},{e.Y}).");
+
+            if (sender is not ToolStripItem dragAcceptItem)
+            {
+                return;
+            }
+
+            string dragAcceptRtf = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
+            if (File.Exists(dragAcceptRtf))
+            {
+                string[] dropFiles = new string[] { dragAcceptRtf };
+                DataObject data = new(DataFormats.FileDrop, dropFiles);
+                dragAcceptItem.DoDragDrop(data, DragDropEffects.All, _dragAcceptBmp, new Point(0, 16), false);
+            }
         }
 
         private void PictureBoxDragSource_DragOver(object? sender, DragEventArgs e)
