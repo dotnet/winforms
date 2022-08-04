@@ -15,6 +15,7 @@ CreateActCtx
 CreateBitmap
 CreateBrushIndirect
 CreateCompatibleBitmap
+CreateDIBSection
 CreateHalftonePalette
 CreatePen
 DeactivateActCtx

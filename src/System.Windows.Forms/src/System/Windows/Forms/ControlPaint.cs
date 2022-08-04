@@ -164,8 +164,8 @@ namespace System.Windows.Forms
             Size size = bitmap.Size;
 
             // Don't use the cached DC here as this isn't a common API and we're manipulating the state.
-            using var screen = new Gdi32.CreateDcScope(default);
-            using var dc = new Gdi32.CreateDcScope(screen);
+            using Gdi32.CreateDcScope screen = new(default);
+            using Gdi32.CreateDcScope dc = new(screen);
 
             HPALETTE palette = PInvoke.CreateHalftonePalette(dc);
             Gdi32.GetObjectW((HGDIOBJ)palette.Value, out uint entryCount);
@@ -173,53 +173,56 @@ namespace System.Windows.Forms
             byte[] imageBuffer = ArrayPool<byte>.Shared.Rent(bitmap.Width * bitmap.Height);
 
             byte[] bitmapInfoBuffer = ArrayPool<byte>.Shared
-                .Rent(checked((int)(sizeof(Gdi32.BITMAPINFOHEADER) + (sizeof(Gdi32.RGBQUAD) * entryCount))));
+                .Rent(checked((int)(sizeof(Gdi.BITMAPINFOHEADER) + (sizeof(Gdi.RGBQUAD) * entryCount))));
 
             // Create a DIB based on the screen DC to write into with a halftone palette
             fixed (byte* bi = bitmapInfoBuffer)
             {
-                *((Gdi32.BITMAPINFOHEADER*)bi) = new Gdi32.BITMAPINFOHEADER
+                fixed (void* ib = imageBuffer)
                 {
-                    biSize = (uint)sizeof(Gdi32.BITMAPINFOHEADER),
-                    biWidth = bitmap.Width,
-                    biHeight = bitmap.Height,
-                    biPlanes = 1,
-                    biBitCount = 16,
-                    biCompression = Gdi32.BI.RGB
-                };
-
-                var colors = new Span<Gdi32.RGBQUAD>(bi + sizeof(Gdi32.BITMAPINFOHEADER), (int)entryCount);
-                Span<Gdi32.PALETTEENTRY> entries = stackalloc Gdi32.PALETTEENTRY[(int)entryCount];
-                Gdi32.GetPaletteEntries(palette, entries);
-
-                // Set up color table
-                for (int i = 0; i < entryCount; i++)
-                {
-                    Gdi32.PALETTEENTRY entry = entries[i];
-                    colors[i] = new Gdi32.RGBQUAD()
+                    *((Gdi32.BITMAPINFOHEADER*)bi) = new Gdi32.BITMAPINFOHEADER
                     {
-                        rgbRed = entry.peRed,
-                        rgbGreen = entry.peGreen,
-                        rgbBlue = entry.peBlue
+                        biSize = (uint)sizeof(Gdi32.BITMAPINFOHEADER),
+                        biWidth = bitmap.Width,
+                        biHeight = bitmap.Height,
+                        biPlanes = 1,
+                        biBitCount = 16,
+                        biCompression = Gdi32.BI.RGB
                     };
+
+                    Span<Gdi.RGBQUAD> colors = new(bi + sizeof(Gdi.BITMAPINFOHEADER), (int)entryCount);
+                    Span<Gdi32.PALETTEENTRY> entries = stackalloc Gdi32.PALETTEENTRY[(int)entryCount];
+                    Gdi32.GetPaletteEntries(palette, entries);
+
+                    // Set up color table
+                    for (int i = 0; i < entryCount; i++)
+                    {
+                        Gdi32.PALETTEENTRY entry = entries[i];
+                        colors[i] = new Gdi.RGBQUAD
+                        {
+                            rgbRed = entry.peRed,
+                            rgbGreen = entry.peGreen,
+                            rgbBlue = entry.peBlue
+                        };
+                    }
+
+                    Gdi32.DeleteObject((HGDIOBJ)palette.Value);
+
+                    hbitmap = PInvoke.CreateDIBSection(
+                        screen,
+                        (Gdi.BITMAPINFO*)&bi,
+                        Gdi.DIB_USAGE.DIB_RGB_COLORS,
+                        &ib,
+                        hSection: default,
+                        offset: 0);
+
+                    if (hbitmap.IsNull)
+                    {
+                        throw new Win32Exception();
+                    }
+
+                    ArrayPool<byte>.Shared.Return(bitmapInfoBuffer);
                 }
-
-                Gdi32.DeleteObject((HGDIOBJ)palette.Value);
-
-                hbitmap = Gdi32.CreateDIBSection(
-                    screen,
-                    (IntPtr)bi,
-                    Gdi32.DIB.RGB_COLORS,
-                    imageBuffer,
-                    IntPtr.Zero,
-                    0);
-
-                if (hbitmap.IsNull)
-                {
-                    throw new Win32Exception();
-                }
-
-                ArrayPool<byte>.Shared.Return(bitmapInfoBuffer);
             }
 
             try
