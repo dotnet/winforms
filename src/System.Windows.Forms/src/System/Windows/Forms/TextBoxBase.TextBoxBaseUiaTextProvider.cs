@@ -310,7 +310,8 @@ namespace System.Windows.Forms
                     visibleStart = GetLineIndex(FirstVisibleLine);
 
                     int lastVisibleLine = FirstVisibleLine + LinesPerPage - 1;
-                    visibleEnd = GetLineIndex(lastVisibleLine + 1); // Index of the next line is the end caret position of the previous line.
+                    // Index of the next line is the end caret position of the previous line.
+                    visibleEnd = GetLineIndex(lastVisibleLine + 1);
                     if (visibleEnd == -1)
                     {
                         visibleEnd = Text.Length;
@@ -319,7 +320,8 @@ namespace System.Windows.Forms
                 else
                 {
                     visibleStart = _owningTextBoxBase.GetCharIndexFromPosition(ptStart);
-                    visibleEnd = _owningTextBoxBase.GetCharIndexFromPosition(ptEnd) + 1; // Add 1 to get a caret position after received character
+                    // Add 1 to get a caret position after received character.
+                    visibleEnd = _owningTextBoxBase.GetCharIndexFromPosition(ptEnd) + 1;
                 }
 
                 return;
