@@ -23,7 +23,7 @@ namespace System.Windows.Forms
         ///  TLS is really just an unfortunate artifact of using Win 32.  We want the world to be free
         ///  threaded.
         /// </summary>
-        internal sealed class ThreadContext : MarshalByRefObject, IMsoComponent
+        internal sealed class ThreadContext : MarshalByRefObject, IMsoComponent, IHandle
         {
             private const int STATE_OLEINITIALIZED = 0x00000001;
             private const int STATE_EXTERNALOLEINIT = 0x00000002;
@@ -35,7 +35,7 @@ namespace System.Windows.Forms
             private static readonly UIntPtr s_invalidId = (UIntPtr)0xFFFFFFFF;
 
             private static readonly Hashtable s_contextHash = new();
-
+            
             // When this gets to zero, we'll invoke a full garbage
             // collect and check for root/window leaks.
             private static readonly object s_tcInternalSyncObject = new();
@@ -522,7 +522,7 @@ namespace System.Windows.Forms
                                     // We can always clean up this handle, though
                                     if (_handle != IntPtr.Zero)
                                     {
-                                        Kernel32.CloseHandle(new HandleRef(this, _handle));
+                                        PInvoke.CloseHandle(this);
                                         _handle = IntPtr.Zero;
                                     }
 
@@ -712,7 +712,7 @@ namespace System.Windows.Forms
                 // We can always clean up this handle, though.
                 if (_handle != IntPtr.Zero)
                 {
-                    Kernel32.CloseHandle(new HandleRef(this, _handle));
+                    PInvoke.CloseHandle((Foundation.HANDLE)_handle);
                     _handle = IntPtr.Zero;
                 }
             }
@@ -779,7 +779,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the handle to this thread.
             /// </summary>
-            internal IntPtr GetHandle() => _handle;
+            nint IHandle.Handle => _handle;
 
             /// <summary>
             ///  Retrieves the ID of this thread.

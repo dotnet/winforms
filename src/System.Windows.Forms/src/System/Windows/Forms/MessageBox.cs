@@ -377,7 +377,7 @@ namespace System.Windows.Forms
                 // CLR4.0 or later, shell32.dll needs to be loaded explicitly.
                 if (PInvoke.GetModuleHandle(Libraries.Shell32) == 0)
                 {
-                    if (Kernel32.LoadLibraryFromSystemPathIfAvailable(Libraries.Shell32) == IntPtr.Zero)
+                    if (PInvoke.LoadLibraryFromSystemPathIfAvailable(Libraries.Shell32) == IntPtr.Zero)
                     {
                         int lastWin32Error = Marshal.GetLastWin32Error();
                         throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, Libraries.Shell32));

@@ -129,7 +129,7 @@ namespace System.Windows.Forms
             }
 
             // Load comctl since GetModuleHandle failed to find it
-            nint ninthModule = Kernel32.LoadComctl32(StartupPath);
+            nint ninthModule = PInvoke.LoadComctl32(StartupPath);
             if (ninthModule == 0)
             {
                 return false;

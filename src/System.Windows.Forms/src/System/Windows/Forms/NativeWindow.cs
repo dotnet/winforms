@@ -111,7 +111,7 @@ namespace System.Windows.Forms
                 {
                     uint id = User32.GetWindowThreadProcessId(handle, out uint lpdwProcessId);
                     Application.ThreadContext ctx = Application.ThreadContext.FromId(id);
-                    nint threadHandle = (ctx is null ? 0 : ctx.GetHandle());
+                    nint threadHandle = (ctx is null ? 0 : ((IHandle)ctx).Handle);
 
                     if (threadHandle != 0)
                     {
