@@ -779,7 +779,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the handle to this thread.
             /// </summary>
-            nint IHandle.Handle => _handle;
+            public nint Handle => _handle;
 
             /// <summary>
             ///  Retrieves the ID of this thread.

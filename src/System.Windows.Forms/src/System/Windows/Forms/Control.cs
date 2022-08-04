@@ -3907,7 +3907,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            nint threadHandle = ((IHandle)ctx).Handle;
+            nint threadHandle = ctx.Handle;
             bool processed = false;
             // setting default exitcode to 0, though it won't be accessed in current code below due to short-circuit logic in condition (returnValue will be false when exitCode is undefined)
             uint exitCode = 0;
