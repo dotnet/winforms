@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Tests.Interop.Gdi32
         public void GetClipRgn_NoRegion()
         {
             // Create a bitmap using the screen's stats
-            HDC hdc = CreateCompatibleDC((HDC)default);
+            HDC hdc = CreateCompatibleDC(hDC: default);
             Assert.False(hdc.IsNull);
 
             try
@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests.Interop.Gdi32
                 try
                 {
                     SelectObject(hdc, hbitmap);
-                    HRGN hregion = CreateRectRgn(0, 0, 0, 0);
+                    HRGN hregion = PInvoke.CreateRectRgn(0, 0, 0, 0);
 
                     Assert.False(hregion.IsNull);
                     try

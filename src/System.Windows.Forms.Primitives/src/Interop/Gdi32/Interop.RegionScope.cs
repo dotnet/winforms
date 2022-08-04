@@ -25,19 +25,19 @@ internal static partial class Interop
             public HRGN Region { get; private set; }
 
             /// <summary>
-            ///  Creates a region with the given rectangle via <see cref="CreateRectRgn(int, int, int, int)"/>.
+            ///  Creates a region with the given rectangle via <see cref="PInvoke.CreateRectRgn(int, int, int, int)"/>.
             /// </summary>
             public RegionScope(Rectangle rectangle)
             {
-                Region = CreateRectRgn(rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
+                Region = PInvoke.CreateRectRgn(rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
             }
 
             /// <summary>
-            ///  Creates a region with the given rectangle via <see cref="CreateRectRgn(int, int, int, int)"/>.
+            ///  Creates a region with the given rectangle via <see cref="PInvoke.CreateRectRgn(int, int, int, int)"/>.
             /// </summary>
             public RegionScope(int x1, int y1, int x2, int y2)
             {
-                Region = CreateRectRgn(x1, y1, x2, y2);
+                Region = PInvoke.CreateRectRgn(x1, y1, x2, y2);
             }
 
             /// <summary>
@@ -46,7 +46,7 @@ internal static partial class Interop
             /// <param name="hdc">Handle to a device context to copy the clipping region from.</param>
             public RegionScope(HDC hdc)
             {
-                HRGN region = CreateRectRgn(0, 0, 0, 0);
+                HRGN region = PInvoke.CreateRectRgn(0, 0, 0, 0);
                 int result = GetClipRgn(hdc, region);
                 Debug.Assert(result != -1, "GetClipRgn failed");
 
@@ -112,7 +112,7 @@ internal static partial class Interop
 
             public void Dispose()
             {
-                if (!Region.IsNull)
+                if (!IsNull)
                 {
                     DeleteObject(Region);
                 }
