@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Tests.Interop.Gdi32
         public void GetClipRgn_NoRegion()
         {
             // Create a bitmap using the screen's stats
-            HDC hdc = CreateCompatibleDC(hDC: default);
+            HDC hdc = PInvoke.CreateCompatibleDC((HDC)default);
             Assert.False(hdc.IsNull);
 
             try
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Tests.Interop.Gdi32
         public void RegionScope_NullWithNoClippingRegion()
         {
             // Create a bitmap using the screen's stats
-            HDC hdc = CreateCompatibleDC((HDC)default);
+            HDC hdc = PInvoke.CreateCompatibleDC((HDC)default);
             Assert.False(hdc.IsNull);
 
             try
@@ -84,7 +84,7 @@ namespace System.Windows.Forms.Tests.Interop.Gdi32
         public void RegionScope_GetRegion()
         {
             // Create a bitmap using the screen's stats
-            HDC hdc = CreateCompatibleDC((HDC)default);
+            HDC hdc = PInvoke.CreateCompatibleDC((HDC)default);
             Assert.False(hdc.IsNull);
 
             try
@@ -94,10 +94,10 @@ namespace System.Windows.Forms.Tests.Interop.Gdi32
 
                 try
                 {
-                    Rectangle rectangle = new Rectangle(1, 2, 3, 4);
-                    using var originalRegion = new RegionScope(rectangle);
+                    Rectangle rectangle = new(1, 2, 3, 4);
+                    using RegionScope originalRegion = new(rectangle);
                     SelectClipRgn(hdc, originalRegion);
-                    using var retrievedRegion = new RegionScope(hdc);
+                    using RegionScope retrievedRegion = new(hdc);
                     RECT rect = default;
                     RegionType type = GetRgnBox(retrievedRegion, ref rect);
                     Assert.Equal(RegionType.SIMPLEREGION, type);

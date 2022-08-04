@@ -23,14 +23,14 @@ internal static partial class Interop
             public HDC HDC { get; }
 
             /// <summary>
-            ///  Creates a compatible HDC for <paramref name="hdc"/> using <see cref="CreateCompatibleDC(HDC)"/>.
+            ///  Creates a compatible HDC for <paramref name="hdc"/> using <see cref="PInvoke.CreateCompatibleDC(HDC)"/>.
             /// </summary>
             /// <remarks>
             ///  Passing a null HDC will use the current screen.
             /// </remarks>
             public CreateDcScope(HDC hdc)
             {
-                HDC = CreateCompatibleDC(hdc);
+                HDC = PInvoke.CreateCompatibleDC(hdc);
             }
 
             public CreateDcScope(

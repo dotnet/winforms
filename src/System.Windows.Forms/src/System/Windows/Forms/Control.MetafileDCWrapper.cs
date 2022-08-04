@@ -41,11 +41,11 @@ namespace System.Windows.Forms
 
                 _hMetafileDC = hOriginalDC;
                 _destRect = new(size);
-                HDC = Gdi32.CreateCompatibleDC(default);
+                HDC = PInvoke.CreateCompatibleDC(default);
 
                 int planes = Gdi32.GetDeviceCaps(HDC, Gdi32.DeviceCapability.PLANES);
                 int bitsPixel = Gdi32.GetDeviceCaps(HDC, Gdi32.DeviceCapability.BITSPIXEL);
-                _hBitmap = PInvoke.CreateBitmap(size.Width, size.Height, (uint)planes, (uint)bitsPixel, null);
+                _hBitmap = PInvoke.CreateBitmap(size.Width, size.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
                 _hOriginalBmp = (HBITMAP)Gdi32.SelectObject(HDC, _hBitmap);
             }
 
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    success = DICopy(_hMetafileDC, HDC, _destRect, true);
+                    success = DICopy(_hMetafileDC, HDC, _destRect, bStretch: true);
                     Debug.Assert(success, "DICopy() failed.");
                     Gdi32.SelectObject(HDC, _hOriginalBmp);
                     success = Gdi32.DeleteObject(_hBitmap);
