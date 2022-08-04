@@ -12,6 +12,7 @@ CreateActCtx
 CreateBitmap
 CreateBrushIndirect
 CreateCompatibleBitmap
+CreatePen
 DeactivateActCtx
 DuplicateHandle
 EndPaint
