@@ -25,19 +25,19 @@ namespace System.Windows.Forms.Design
     {
         private static Size s_minDragSize = Size.Empty;
         //brush used to draw a 'hover' state over a designer action glyph
-        private static SolidBrush s_hoverBrush = new SolidBrush(Color.FromArgb(50, SystemColors.Highlight));
+        private static SolidBrush s_hoverBrush = new(Color.FromArgb(alpha: 50, SystemColors.Highlight));
         //brush used to draw the resizeable selection borders around controls/components
         private static HatchBrush s_selectionBorderBrush =
-            new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
+            new(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
         //Pens and Brushes used via GDI to render our grabhandles
         private static Gdi32.HBRUSH s_grabHandleFillBrushPrimary =
             Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
         private static Gdi32.HBRUSH s_grabHandleFillBrush =
             Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
         private static Gdi.HPEN s_grabHandlePenPrimary =
-            PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, 1, (uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+            PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (uint)ColorTranslator.ToWin32(SystemColors.ControlText));
         private static Gdi.HPEN s_grabHandlePen =
-            PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, 1, (uint)ColorTranslator.ToWin32(SystemColors.Window));
+            PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (uint)ColorTranslator.ToWin32(SystemColors.Window));
 
         //The box-like image used as the user is dragging comps from the toolbox
         private static Bitmap s_boxImage;
@@ -184,10 +184,10 @@ namespace System.Windows.Forms.Design
             s_grabHandleFillBrush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
 
             Gdi32.DeleteObject(s_grabHandlePenPrimary);
-            s_grabHandlePenPrimary = PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, 1, (uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+            s_grabHandlePenPrimary = PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (uint)ColorTranslator.ToWin32(SystemColors.ControlText));
 
             Gdi32.DeleteObject(s_grabHandlePen);
-            s_grabHandlePen = PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, 1, (uint)ColorTranslator.ToWin32(SystemColors.Window));
+            s_grabHandlePen = PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (uint)ColorTranslator.ToWin32(SystemColors.Window));
         }
 
         /// <summary>
@@ -290,19 +290,19 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static void DrawLockedHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
         {
-            using var hDC = new DeviceContextHdcScope(graphics, applyGraphicsState: false);
+            using DeviceContextHdcScope hDC = new(graphics, applyGraphicsState: false);
 
-            using var penSelection = new Gdi32.SelectObjectScope(hDC, s_grabHandlePenPrimary);
+            using Gdi32.SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
 
             // Upper rect - upper rect is always filled with the primary brush
-            using var brushSelection = new Gdi32.SelectObjectScope(hDC, s_grabHandleFillBrushPrimary);
+            using Gdi32.SelectObjectScope brushSelection = new(hDC, s_grabHandleFillBrushPrimary);
             Gdi32.RoundRect(
                 hDC,
                 bounds.Left + LOCKHANDLEUPPER_OFFSET,
                 bounds.Top, bounds.Left + LOCKHANDLEUPPER_OFFSET + LOCKHANDLESIZE_UPPER,
                 bounds.Top + LOCKHANDLESIZE_UPPER,
-                2,
-                2);
+                width: 2,
+                height: 2);
 
             // Lower rect - its fillbrush depends on the primary selection
             Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
@@ -420,7 +420,7 @@ namespace System.Windows.Forms.Design
         public static void GenerateSnapShotWithBitBlt(Control control, ref Image image)
         {
             // Get the DC's and create our image
-            using var controlDC = new User32.GetDcScope(control.Handle);
+            using User32.GetDcScope controlDC = new(control.Handle);
             image = new Bitmap(
                 Math.Max(control.Width, MINCONTROLBITMAPSIZE),
                 Math.Max(control.Height, MINCONTROLBITMAPSIZE),
@@ -433,18 +433,18 @@ namespace System.Windows.Forms.Design
                 gDest.Clear(SystemColors.Control);
             }
 
-            using var destDC = new DeviceContextHdcScope(gDest, applyGraphicsState: false);
+            using DeviceContextHdcScope destDC = new(gDest, applyGraphicsState: false);
 
             // Perform our bitblit operation to push the image into the dest bitmap
             PInvoke.BitBlt(
                 destDC,
-                0,
-                0,
+                x: 0,
+                y: 0,
                 image.Width,
                 image.Height,
                 controlDC,
-                0,
-                0,
+                x1: 0,
+                y1: 0,
                 Gdi.ROP_CODE.SRCCOPY);
         }
 

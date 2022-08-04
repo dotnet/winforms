@@ -538,12 +538,13 @@ namespace System.Windows.Forms.Design
                 graphicsColor = Color.Black;
             }
 
-            using var dc = new User32.GetDcScope(handle);
-            using var pen = new Gdi32.ObjectScope(PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, 2, (uint)ColorTranslator.ToWin32(backColor)));
+            using User32.GetDcScope dc = new(handle);
+            using Gdi32.ObjectScope pen =
+                new(PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 2, (uint)ColorTranslator.ToWin32(backColor)));
 
-            using var rop2Scope = new Gdi32.SetRop2Scope(dc, rop2);
-            using var brushSelection = new Gdi32.SelectObjectScope(dc, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
-            using var penSelection = new Gdi32.SelectObjectScope(dc, pen);
+            using Gdi32.SetRop2Scope rop2Scope = new(dc, rop2);
+            using Gdi32.SelectObjectScope brushSelection = new(dc, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
+            using Gdi32.SelectObjectScope penSelection = new(dc, pen);
 
             Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(graphicsColor));
             Gdi32.Rectangle(dc, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
