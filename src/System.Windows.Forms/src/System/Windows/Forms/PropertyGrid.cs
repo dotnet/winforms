@@ -3299,10 +3299,10 @@ namespace System.Windows.Forms
                     // If we're not hosted in a windows forms thing, just give the parent the focus.
                     if (!result && Parent is null)
                     {
-                        IntPtr hWndParent = User32.GetParent(this);
-                        if (hWndParent != IntPtr.Zero)
+                        Foundation.HWND hWndParent = PInvoke.GetParent(this);
+                        if (!hWndParent.IsNull)
                         {
-                            User32.SetFocus(hWndParent);
+                            PInvoke.SetFocus(hWndParent);
                         }
                     }
 

@@ -19,9 +19,19 @@ namespace System.Windows.Forms
                 _owningListView = owningListView;
             }
 
-            internal override Rectangle BoundingRectangle => _owningListView.IsHandleCreated
-                ? User32.GetWindowRect(_owningListView)
-                : Rectangle.Empty;
+            internal override Rectangle BoundingRectangle
+            {
+                get
+                {
+                    if (_owningListView.IsHandleCreated)
+                    {
+                        PInvoke.GetWindowRect(_owningListView, out var rect);
+                        return rect.ToRectangle();
+                    }
+
+                    return Rectangle.Empty;
+                }
+            }
 
             internal override bool CanSelectMultiple
                 => _owningListView.IsHandleCreated;

@@ -151,7 +151,7 @@ namespace System.Windows.Forms
                     return tool;
                 }
 
-                return Control.FromHandle(User32.GetFocus());
+                return Control.FromHandle(PInvoke.GetFocus());
             }
         }
 

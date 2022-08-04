@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Tests.Dpi
                 DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED_BEFOREPARENT, toolStrip, newDpi);
                 var factor = newDpi / DpiHelper.LogicalDpi;
 
-                Assert.Equal((float)initialFont.Size * factor, toolStrip.Font.Size);
+                Assert.Equal((float)initialFont.Size * factor, toolStrip.Font.Size, precision: 1);
                 form.Close();
             }
             finally

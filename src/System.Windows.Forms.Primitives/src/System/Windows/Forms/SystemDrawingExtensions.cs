@@ -45,14 +45,6 @@ namespace System.Windows.Forms
         /// </summary>
         internal static bool IsFullyTransparent(this Color color) => color.A == 0;
 
-        internal static void ThrowIfFailed(this GdiPlus.GpStatus status)
-        {
-            if (status != GdiPlus.GpStatus.Ok)
-            {
-                throw new InvalidOperationException(status.ToString());
-            }
-        }
-
         /// <summary>
         ///  Draws lines with the <paramref name="pen"/> using points defined in <paramref name="lines"/>.
         /// </summary>
