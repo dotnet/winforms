@@ -2106,7 +2106,7 @@ namespace System.Windows.Forms.Design
                         // First, save off the update region and call our base class.
 
                         RECT clip = new();
-                        using var hrgn = new Gdi32.RegionScope(0, 0, 0, 0);
+                        using var hrgn = new PInvoke.RegionScope(0, 0, 0, 0);
                         User32.GetUpdateRgn(m.HWnd, hrgn, false);
                         PInvoke.GetUpdateRect(m.HWND, &clip, false);
                         using Region region = hrgn.CreateGdiPlusRegion();
@@ -2130,7 +2130,7 @@ namespace System.Windows.Forms.Design
                         }
 
                         Rectangle paintRect = clip;
-                        using PaintEventArgs pevent = new PaintEventArgs(graphics, paintRect);
+                        using PaintEventArgs pevent = new(graphics, paintRect);
 
                         graphics.Clip = region;
                         if (_thrownException is null)
@@ -2143,7 +2143,7 @@ namespace System.Windows.Forms.Design
                             PaintException(pevent, _thrownException);
                         }
 
-                        if (OverlayService != null)
+                        if (OverlayService is not null)
                         {
                             // This will allow any Glyphs to re-paint after this control and its designer has painted
                             paintRect.Location = Control.PointToScreen(paintRect.Location);

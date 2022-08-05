@@ -6,8 +6,9 @@ using System.Drawing;
 using Xunit;
 using static Interop;
 using static Interop.Gdi32;
+using static Windows.Win32.PInvoke;
 
-namespace System.Windows.Forms.Tests.Interop.Gdi32
+namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
 {
     public class RegionTests
     {
@@ -15,18 +16,18 @@ namespace System.Windows.Forms.Tests.Interop.Gdi32
         public void GetClipRgn_NoRegion()
         {
             // Create a bitmap using the screen's stats
-            HDC hdc = PInvoke.CreateCompatibleDC((HDC)default);
+            HDC hdc = CreateCompatibleDC((HDC)default);
             Assert.False(hdc.IsNull);
 
             try
             {
-                HBITMAP hbitmap = PInvoke.CreateCompatibleBitmap(hdc, 20, 20);
+                HBITMAP hbitmap = CreateCompatibleBitmap(hdc, 20, 20);
                 Assert.False(hdc.IsNull);
 
                 try
                 {
                     SelectObject(hdc, hbitmap);
-                    HRGN hregion = PInvoke.CreateRectRgn(0, 0, 0, 0);
+                    HRGN hregion = CreateRectRgn(0, 0, 0, 0);
 
                     Assert.False(hregion.IsNull);
                     try
@@ -38,7 +39,7 @@ namespace System.Windows.Forms.Tests.Interop.Gdi32
                     }
                     finally
                     {
-                        DeleteObject(hregion);
+                        Gdi32.DeleteObject(hregion);
                     }
                 }
                 finally

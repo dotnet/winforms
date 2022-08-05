@@ -11,6 +11,7 @@ using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
+using Windows.Win32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -753,7 +754,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(TextRenderer_DrawText_ApplyState_TestData))]
         public void TextRenderer_DrawText_ApplyState(TextFormatFlags flags, Rectangle expectedBounds)
         {
-            using var hdc = new Interop.Gdi32.CreateDcScope(default);
+            using var hdc = new PInvoke.CreateDcScope(default);
             DeviceContextState state = new DeviceContextState(hdc);
 
             using MemoryStream stream = new MemoryStream(1024);

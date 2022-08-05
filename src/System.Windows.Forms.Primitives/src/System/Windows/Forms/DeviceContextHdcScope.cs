@@ -169,7 +169,7 @@ namespace System.Windows.Forms
                 applyTransform = applyTransform && !offset.IsEmpty;
                 applyClipping = clipRegion is not null;
 
-                using var graphicsRegion = applyClipping ? new Gdi32.RegionScope(clipRegion!, graphics) : default;
+                using PInvoke.RegionScope graphicsRegion = applyClipping ? new(clipRegion!, graphics) : default;
                 applyClipping = applyClipping && !graphicsRegion!.Region.IsNull;
 
                 HDC = (HDC)graphics.GetHdc();
@@ -187,7 +187,7 @@ namespace System.Windows.Forms
 
                     RegionType type;
 
-                    using var dcRegion = new Gdi32.RegionScope(HDC);
+                    using PInvoke.RegionScope dcRegion = new(HDC);
                     if (!dcRegion.IsNull)
                     {
                         type = (RegionType)PInvoke.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, Gdi.RGN_COMBINE_MODE.RGN_AND);
@@ -206,7 +206,7 @@ namespace System.Windows.Forms
 
                 if (applyTransform)
                 {
-                    Gdi32.OffsetViewportOrgEx(HDC, (int)offset.X, (int)offset.Y, null);
+                    Gdi32.OffsetViewportOrgEx(HDC, (int)offset.X, (int)offset.Y, lppt: null);
                 }
             }
         }
