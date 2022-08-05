@@ -5,6 +5,8 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
+using System.Runtime.CompilerServices;
+using System.Runtime.Versioning;
 using System.Windows.Forms.TestUtilities;
 using Moq;
 using Xunit;
@@ -760,6 +762,56 @@ namespace System.Windows.Forms.Tests
             control.BackColorChanged -= handler;
             control.BackColor = Color.Red;
             Assert.Equal(Color.Red, control.BackColor);
+            Assert.Equal(2, callCount);
+        }
+
+        [WinFormsFact]
+        [RequiresPreviewFeatures]
+        public void ButtonBase_BasicCommandBinding()
+        {
+            const string CommandParameter = nameof(CommandParameter);
+
+            using var button = new SubButtonBase();
+
+            // TestCommandExecutionAbility is controlling the execution context.
+            var viewModel = new CommandViewModel() { TestCommandExecutionAbility = true };
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(button, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+
+            button.CommandChanged += handler;
+            button.Command = viewModel.TestCommand;
+            Assert.Equal(1, callCount);
+
+            button.CommandParameterChanged += handler;
+            button.CommandParameter = CommandParameter;
+            Assert.Equal(2, callCount);
+
+            Assert.Same(viewModel.TestCommand, button.Command);
+            Assert.True(button.Enabled);
+
+            // OnClick is invoking the command in the ViewModel.
+            // The CommandParameter should make its way into the viewmodel's CommandExecuteResult property.
+            button.OnClick(EventArgs.Empty);
+            Assert.Same(CommandParameter, viewModel.CommandExecuteResult);
+
+            // We're changing the execution context.
+            // The ViewModel calls RaiseCanExecuteChanged, which the Button should handle.
+            viewModel.TestCommandExecutionAbility = false;
+            Assert.False(button.Enabled);
+
+            // Remove handler.
+            button.CommandChanged -= handler;
+            button.Command = null;
+            Assert.Equal(2, callCount);
+
+            button.CommandParameterChanged -= handler;
+            button.CommandParameter = null;
             Assert.Equal(2, callCount);
         }
 
@@ -9276,6 +9328,8 @@ namespace System.Windows.Forms.Tests
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
             public new bool GetTopLevel() => base.GetTopLevel();
+            
+            public new void OnClick(EventArgs e) => base.OnClick(e);
 
             public new void OnEnabledChanged(EventArgs e) => base.OnEnabledChanged(e);
 
@@ -9315,5 +9369,131 @@ namespace System.Windows.Forms.Tests
 
             public new void WndProc(ref Message m) => base.WndProc(ref m);
         }
+
+#nullable enable
+
+        /// <summary>
+        /// Provides the basic implementation of <see cref="INotifyPropertyChanged"/>
+        /// to simplify the creation of UI ViewModels/Controllers.
+        /// </summary>
+        private abstract class BindableBase : INotifyPropertyChanged
+        {
+            /// <summary>
+            /// Creates an instance of the BindableBase class.
+            /// </summary>
+            public BindableBase() : base()
+            {
+            }
+
+            /// <summary>
+            /// Event for property change notification.
+            /// </summary>
+            public event PropertyChangedEventHandler? PropertyChanged;
+
+            /// <summary>
+            /// Checks if a property already matches a desired value.  Sets the property and notifies
+            /// listeners only when necessary.
+            /// </summary>
+            /// <typeparam name="T">Type of the property.</typeparam>
+            /// <param name="storage">Reference to a property with both getter and setter.</param>
+            /// <param name="value">New value for the property.</param>
+            /// <param name="propertyName">Name of the property used to notify listeners.  This value
+            /// is optional and can be provided automatically when invoked with support of
+            /// <see cref="CallerMemberNameAttribute"/>.</param>
+            protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+            {
+                if (object.Equals(storage, value))
+                {
+                    return false;
+                }
+
+                storage = value;
+                OnPropertyChanged(propertyName);
+                return true;
+            }
+
+            /// <summary>
+            /// Notifies listeners that a property value has changed.
+            /// </summary>
+            /// <param name="propertyName">Name of the property used to notify listeners.  This value
+            /// is optional and can be provided automatically when invoked from compilers that support
+            /// <see cref="CallerMemberNameAttribute"/>.</param>
+            protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+                => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private class CommandViewModel : BindableBase
+        {
+            private bool _testCommandExecutionAbility;
+            
+            /// <summary>
+            ///  Defines a command in a ViewModel/UI-Controller which can be bound to a property of type 
+            ///  <see cref="System.Windows.Input.ICommand"/>.
+            /// </summary>
+            public class RelayCommand : System.Windows.Input.ICommand
+            {
+                public event EventHandler? CanExecuteChanged;
+
+                private readonly Action<object?> _execute;
+                private readonly Func<object?, bool>? _canExecute;
+
+                public RelayCommand(Action<object?> execute) : this(execute, null)
+                {
+                }
+
+                public RelayCommand(Action<object?> execute, Func<object?, bool>? canExecute)
+                {
+                    _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+                    _canExecute = canExecute;
+                }
+
+                public void RaiseCanExecuteChanged()
+                    => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+
+                public bool CanExecute(object? parameter)
+                    => _canExecute is null || _canExecute(parameter);
+
+                public void Execute(object? parameter)
+                    => _execute(parameter);
+            }
+
+            public CommandViewModel()
+            {
+                _testCommand = new RelayCommand(TestCommandExecute, TestCommandCanExecute);
+            }
+
+            private RelayCommand? _testCommand;
+            
+            public RelayCommand? TestCommand
+            {
+                get => _testCommand;
+                set => SetProperty(ref _testCommand, value);
+            }
+
+            public bool TestCommandExecutionAbility
+            {
+                get => _testCommandExecutionAbility;
+                set
+                {
+                    if (SetProperty(ref _testCommandExecutionAbility, value))
+                    {
+                        TestCommand?.RaiseCanExecuteChanged();
+                    }
+                }
+            }
+            
+            public object? CommandExecuteResult { get; private set; }
+
+            private void TestCommandExecute(object? parameter)
+            {
+                CommandExecuteResult = parameter;
+            }
+
+            private bool TestCommandCanExecute(object? parameter)
+            {
+                return TestCommandExecutionAbility;
+            }
+        }
     }
 }
+#nullable disable

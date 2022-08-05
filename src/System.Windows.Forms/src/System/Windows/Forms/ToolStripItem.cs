@@ -419,9 +419,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the <see cref="System.Windows.Input.ICommand"/> object whose <see cref="System.Windows.Input.ICommand.Execute(object?)"/>
-        ///  method will be called when the ToolStripItem's <see cref="Click"/> event gets invoked and
-        ///  <see cref="System.Windows.Input.ICommand.CanExecute(object?)"/> indicates that the command can be executed.
+        ///  Gets or sets the <see cref="System.Windows.Input.ICommand"/> whose <see cref="System.Windows.Input.ICommand.Execute(object?)"/>
+        ///  method will be called when the ToolStripItem's <see cref="Click"/> event gets invoked.
         /// </summary>
         [RequiresPreviewFeatures]
         [Bindable(true)]
