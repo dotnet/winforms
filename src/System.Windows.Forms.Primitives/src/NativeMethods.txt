@@ -10,6 +10,7 @@ CallNextHookEx
 CloseEnhMetaFile
 CloseHandle
 CombineRgn
+CommDlgExtendedError
 CP_ACP
 CW_USEDEFAULT
 CreateActCtx
