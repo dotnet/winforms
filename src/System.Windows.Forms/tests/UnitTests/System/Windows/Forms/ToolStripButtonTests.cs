@@ -4,6 +4,8 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.Versioning;
+using System.Windows.Forms.DataBinding.TestUtilities;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 
@@ -564,6 +566,56 @@ namespace System.Windows.Forms.Tests
             // Set different.
             item.AutoToolTip = !value;
             Assert.Equal(!value, item.AutoToolTip);
+        }
+
+        [WinFormsFact]
+        [RequiresPreviewFeatures]
+        public void ToolStripButton_BasicCommandBinding()
+        {
+            const string CommandParameter = nameof(CommandParameter);
+
+            using var button = new SubToolStripButton();
+
+            // TestCommandExecutionAbility is controlling the execution context.
+            var viewModel = new CommandViewModel() { TestCommandExecutionAbility = true };
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(button, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+
+            button.CommandChanged += handler;
+            button.Command = viewModel.TestCommand;
+            Assert.Equal(1, callCount);
+
+            button.CommandParameterChanged += handler;
+            button.CommandParameter = CommandParameter;
+            Assert.Equal(2, callCount);
+
+            Assert.Same(viewModel.TestCommand, button.Command);
+            Assert.True(button.Enabled);
+
+            // OnClick is invoking the command in the ViewModel.
+            // The CommandParameter should make its way into the viewmodel's CommandExecuteResult property.
+            button.OnClick(EventArgs.Empty);
+            Assert.Same(CommandParameter, viewModel.CommandExecuteResult);
+
+            // We're changing the execution context.
+            // The ViewModel calls RaiseCanExecuteChanged, which the Button should handle.
+            viewModel.TestCommandExecutionAbility = false;
+            Assert.False(button.Enabled);
+
+            // Remove handler.
+            button.CommandChanged -= handler;
+            button.Command = null;
+            Assert.Equal(2, callCount);
+
+            button.CommandParameterChanged -= handler;
+            button.CommandParameter = null;
+            Assert.Equal(2, callCount);
         }
 
         [WinFormsTheory]
