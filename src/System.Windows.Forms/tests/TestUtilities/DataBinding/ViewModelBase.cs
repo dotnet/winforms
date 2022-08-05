@@ -32,7 +32,7 @@ public abstract class ViewModelBase : INotifyPropertyChanged
     /// <param name="propertyName">Name of the property used to notify listeners. This value
     /// is optional and can be provided automatically when invoked with support of
     /// <see cref="CallerMemberNameAttribute"/>.</param>
-    protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+    protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
     {
         if (object.Equals(storage, value))
         {

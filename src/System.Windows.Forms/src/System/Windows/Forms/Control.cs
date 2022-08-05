@@ -7643,14 +7643,23 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentDataContextChanged(EventArgs e)
         {
-            // A bit of background, why we don't test for null here, but instead test if we have an object in the Properties bag:
-            // Remember that DataContext is ambient. So, a root's (Form's) DataContext could be {}, and then this control's 
-            // parent became set to null, and now _its_ children in that case _need_ to receive the DataContextChanged
-            // event as well. The parent DataContext value, though, in that case would be null.
             if (Properties.ContainsObject(s_dataContextProperty))
             {
-                OnDataContextChanged(e);
+                // If this DataContext was the same as the Parent's just became,
+                if (Equals(Properties.GetObject(s_dataContextProperty), Parent.DataContext))
+                {
+                    // we need to make it ambient again by removing it.
+                    Properties.RemoveObject(s_dataContextProperty);
+
+                    // Even though internally we don't store it any longer, and the
+                    // value we had stored therefore changed, technically the value
+                    // remains the same, so we don't raise the DataContextChanged event.
+                    return;
+                }
             }
+
+            // In every other case we're going to raise the event.
+            OnDataContextChanged(e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
