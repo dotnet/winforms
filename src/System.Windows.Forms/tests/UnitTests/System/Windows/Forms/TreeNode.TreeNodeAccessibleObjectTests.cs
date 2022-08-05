@@ -488,5 +488,95 @@ namespace System.Windows.Forms.Tests
             Assert.True(node.childCount > 0);
             Assert.False(control.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void TreeNodeAccessibleObject_IsDisconnected_WhenTreeViewIsReleased()
+        {
+            using TreeView control = new();
+            AccessibilityObjectDisconnectTrackingTreeNode firstLevelNode = new(control);
+            control.Nodes.Add(firstLevelNode);
+            AccessibilityObjectDisconnectTrackingTreeNode secondLevelNode = new(control);
+            firstLevelNode.Nodes.Add(secondLevelNode);
+            AccessibilityObjectDisconnectTrackingTreeNode thirdLevelNode = new(control);
+            secondLevelNode.Nodes.Add(thirdLevelNode);
+            control.CreateControl();
+
+            control.ReleaseUiaProvider(control.Handle);
+
+            Assert.True(firstLevelNode.IsAccessibilityObjectDisconnected);
+            Assert.True(secondLevelNode.IsAccessibilityObjectDisconnected);
+            Assert.True(thirdLevelNode.IsAccessibilityObjectDisconnected);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TreeNodeAccessibleObject_IsDisconnected_WhenRemoved()
+        {
+            using TreeView control = new();
+            AccessibilityObjectDisconnectTrackingTreeNode firstLevelNode = new(control);
+            control.Nodes.Add(firstLevelNode);
+            AccessibilityObjectDisconnectTrackingTreeNode secondLevelNode = new(control);
+            firstLevelNode.Nodes.Add(secondLevelNode);
+            control.CreateControl();
+
+            control.Nodes.Remove(firstLevelNode);
+
+            Assert.True(firstLevelNode.IsAccessibilityObjectDisconnected);
+            Assert.True(secondLevelNode.IsAccessibilityObjectDisconnected);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TreeNodeAccessibleObject_IsDisconnected_WhenCleared()
+        {
+            using TreeView control = new();
+            AccessibilityObjectDisconnectTrackingTreeNode firstLevelNode = new(control);
+            control.Nodes.Add(firstLevelNode);
+            AccessibilityObjectDisconnectTrackingTreeNode secondLevelNode = new(control);
+            firstLevelNode.Nodes.Add(secondLevelNode);
+            AccessibilityObjectDisconnectTrackingTreeNode thirdLevelNode = new(control);
+            secondLevelNode.Nodes.Add(thirdLevelNode);
+            control.CreateControl();
+
+            control.Nodes.Clear();
+
+            Assert.True(firstLevelNode.IsAccessibilityObjectDisconnected);
+            Assert.True(secondLevelNode.IsAccessibilityObjectDisconnected);
+            Assert.True(thirdLevelNode.IsAccessibilityObjectDisconnected);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TreeNodeAccessibleObject_IsDisconnected_WhenReplacedByIndex()
+        {
+            using TreeView control = new();
+            AccessibilityObjectDisconnectTrackingTreeNode firstLevelNode = new(control);
+            control.Nodes.Add(firstLevelNode);
+            AccessibilityObjectDisconnectTrackingTreeNode secondLevelNode = new(control);
+            firstLevelNode.Nodes.Add(secondLevelNode);
+            AccessibilityObjectDisconnectTrackingTreeNode thirdLevelNode = new(control);
+            secondLevelNode.Nodes.Add(thirdLevelNode);
+            control.CreateControl();
+
+            control.Nodes[0] = new TreeNode();
+
+            Assert.True(firstLevelNode.IsAccessibilityObjectDisconnected);
+            Assert.True(secondLevelNode.IsAccessibilityObjectDisconnected);
+            Assert.True(thirdLevelNode.IsAccessibilityObjectDisconnected);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        private class AccessibilityObjectDisconnectTrackingTreeNode : TreeNode
+        {
+            public AccessibilityObjectDisconnectTrackingTreeNode(TreeView treeView) : base(treeView) { }
+
+            public bool IsAccessibilityObjectDisconnected { get; private set; }
+
+            internal override void ReleaseUiaProvider()
+            {
+                base.ReleaseUiaProvider();
+                IsAccessibilityObjectDisconnected = true;
+            }
+        }
     }
 }
