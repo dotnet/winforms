@@ -320,7 +320,7 @@ namespace System.Windows.Forms.Design
         internal Point GetOffsetToClientArea()
         {
             var nativeOffset = new Point();
-            User32.MapWindowPoint(Control, Control.Parent, ref nativeOffset);
+            PInvoke.MapWindowPoints(Control, Control.Parent, ref nativeOffset);
             Point offset = Control.Location;
 
             // If the 2 controls do not have the same orientation, then force one to make sure we calculate the correct offset
@@ -902,7 +902,7 @@ namespace System.Windows.Forms.Design
 
                 // No designer means we must replace the window target in this control.
                 IWindowTarget oldTarget = child.WindowTarget;
-                if (!(oldTarget is ChildWindowTarget))
+                if (oldTarget is not ChildWindowTarget)
                 {
                     child.WindowTarget = new ChildWindowTarget(this, child, oldTarget);
                     child.ControlAdded += new ControlEventHandler(OnControlAdded);
@@ -912,7 +912,7 @@ namespace System.Windows.Forms.Design
                 {
                     Application.OleRequired();
                     Ole32.RevokeDragDrop(child.Handle);
-                    HookChildHandles(child.Handle);
+                    HookChildHandles((HWND)child.Handle);
                 }
                 else
                 {
@@ -929,12 +929,12 @@ namespace System.Windows.Forms.Design
         {
             Control child = sender as Control;
 
-            Debug.Assert(child != null);
+            Debug.Assert(child is not null);
 
-            if (child != null)
+            if (child is not null)
             {
                 Debug.Assert(child.IsHandleCreated);
-                HookChildHandles(child.Handle);
+                HookChildHandles((HWND)child.Handle);
             }
         }
 
@@ -1808,7 +1808,7 @@ namespace System.Windows.Forms.Design
             if (m.MsgInternal >= User32.WM.MOUSEFIRST && m.MsgInternal <= User32.WM.MOUSELAST)
             {
                 location = PARAM.ToPoint(m.LParamInternal);
-                User32.MapWindowPoints(m.HWnd, IntPtr.Zero, &location, 1);
+                PInvoke.MapWindowPoints(m, (HWND)default, ref location);
             }
             else if (m.MsgInternal >= User32.WM.NCMOUSEMOVE && m.MsgInternal <= User32.WM.NCMBUTTONDBLCLK)
             {
@@ -2105,10 +2105,10 @@ namespace System.Windows.Forms.Design
 
                         // First, save off the update region and call our base class.
 
-                        RECT clip = new RECT();
+                        Foundation.RECT clip = new();
                         using var hrgn = new Gdi32.RegionScope(0, 0, 0, 0);
                         User32.GetUpdateRgn(m.HWnd, hrgn, BOOL.FALSE);
-                        User32.GetUpdateRect(m.HWnd, ref clip, BOOL.FALSE);
+                        PInvoke.GetUpdateRect(m.HWND, &clip, false);
                         using Region region = hrgn.CreateGdiPlusRegion();
 
                         // Call the base class to do its own painting.
@@ -2124,12 +2124,12 @@ namespace System.Windows.Forms.Design
                         {
                             // Re-map the clip rect we pass to the paint event args to our child coordinates.
                             Point point = default;
-                            User32.MapWindowPoint(m.HWnd, Control, ref point);
+                            PInvoke.MapWindowPoints(m.HWND, Control, ref point);
                             graphics.TranslateTransform(-point.X, -point.Y);
-                            User32.MapWindowPoints(m.HWnd, Control.Handle, ref clip);
+                            PInvoke.MapWindowPoints(m.HWND, Control, ref clip);
                         }
 
-                        Rectangle paintRect = clip;
+                        Rectangle paintRect = clip.ToRectangle();
                         using PaintEventArgs pevent = new PaintEventArgs(graphics, paintRect);
 
                         graphics.Clip = region;
@@ -2451,10 +2451,10 @@ namespace System.Windows.Forms.Design
             return PARAM.ToInt(pt.X, pt.Y);
         }
 
-        internal void HookChildHandles(IntPtr firstChild)
+        internal void HookChildHandles(HWND firstChild)
         {
-            IntPtr hwndChild = firstChild;
-            while (hwndChild != IntPtr.Zero)
+            HWND hwndChild = firstChild;
+            while (!hwndChild.IsNull)
             {
                 if (!IsWindowInCurrentProcess(hwndChild))
                 {
@@ -2485,10 +2485,10 @@ namespace System.Windows.Forms.Design
                 if (child is null || Control is UserControl)
                 {
                     // Now do the children of this window.
-                    HookChildHandles(User32.GetWindow(hwndChild, User32.GW.CHILD));
+                    HookChildHandles(PInvoke.GetWindow(hwndChild, GET_WINDOW_CMD.GW_CHILD));
                 }
 
-                hwndChild = User32.GetWindow(hwndChild, User32.GW.HWNDNEXT);
+                hwndChild = PInvoke.GetWindow(hwndChild, GET_WINDOW_CMD.GW_HWNDNEXT);
             }
         }
 
@@ -2523,7 +2523,7 @@ namespace System.Windows.Forms.Design
             //      We must hook the WindowTarget on these controls and prevent them from getting design-time events.
             //  3. Child handles that do have a Control associated with them, and the control has a designer. We ignore
             //      these and let the designer handle their messages.
-            HookChildHandles(User32.GetWindow(Control.Handle, User32.GW.CHILD));
+            HookChildHandles(PInvoke.GetWindow(Control, GET_WINDOW_CMD.GW_CHILD));
             HookChildControls(Control);
         }
 

@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static Interop;
 
@@ -250,14 +249,13 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            IntPtr hwndFocus = User32.GetFocus();
-            if (hwndFocus == IntPtr.Zero)
+            HWND hwndFocus = PInvoke.GetFocus();
+            if (hwndFocus.IsNull)
             {
                 return false;
             }
 
-            IntPtr hwnd = Handle;
-            return hwnd == hwndFocus || User32.IsChild(new HandleRef(this, hwnd), hwndFocus).IsTrue();
+            return HWND == hwndFocus || PInvoke.IsChild(this, hwndFocus);
         }
 
         /// <summary>

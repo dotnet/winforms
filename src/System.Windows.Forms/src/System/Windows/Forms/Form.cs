@@ -274,20 +274,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the currently active form for this application.
         /// </summary>
-        public static Form? ActiveForm
-        {
-            get
-            {
-                IntPtr hwnd = User32.GetForegroundWindow();
-                Control? c = FromHandle(hwnd);
-                if (c is not null && c is Form form)
-                {
-                    return form;
-                }
-
-                return null;
-            }
-        }
+        public static Form? ActiveForm => FromHandle(PInvoke.GetForegroundWindow()) as Form;
 
         /// <summary>
         ///
@@ -807,7 +794,7 @@ namespace System.Windows.Forms
                 IWin32Window? dialogOwner = (IWin32Window?)Properties.GetObject(PropDialogOwner);
                 if (dialogOwner is not null)
                 {
-                    cp.Parent = GetSafeHandle(dialogOwner);
+                    cp.Parent = GetSafeHandle(dialogOwner).Handle;
                 }
 
                 FillInCreateParamsBorderStyles(cp);
@@ -2811,7 +2798,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                IntPtr hmenu = User32.GetSystemMenu(new HandleRef(this, Handle), bRevert: BOOL.FALSE);
+                HMENU hmenu = PInvoke.GetSystemMenu(this, bRevert: false);
                 AdjustSystemMenu(hmenu);
             }
         }
@@ -3539,8 +3526,11 @@ namespace System.Windows.Forms
                         IWin32Window? dialogOwner = (IWin32Window?)Properties.GetObject(PropDialogOwner);
                         if ((OwnerInternal is not null) || (dialogOwner is not null))
                         {
-                            IntPtr ownerHandle = (dialogOwner is not null) ? GetSafeHandle(dialogOwner) : OwnerInternal!.Handle;
-                            desktop = Screen.FromHandle(ownerHandle);
+                            HandleRef<HWND> ownerHandle = dialogOwner is not null
+                                ? GetSafeHandle(dialogOwner)
+                                : new(OwnerInternal!);
+                            desktop = Screen.FromHandle(ownerHandle.Handle);
+                            GC.KeepAlive(ownerHandle.Wrapper);
                         }
                         else
                         {
@@ -3727,14 +3717,13 @@ namespace System.Windows.Forms
 
             Point p = new Point();
             Size s = Size;
-            IntPtr ownerHandle = User32.GetWindowLong(this, User32.GWL.HWNDPARENT);
+            HWND ownerHandle = (HWND)User32.GetWindowLong(this, User32.GWL.HWNDPARENT);
 
-            if (ownerHandle != IntPtr.Zero)
+            if (!ownerHandle.IsNull)
             {
                 Screen desktop = Screen.FromHandle(ownerHandle);
                 Rectangle screenRect = desktop.WorkingArea;
-                var ownerRect = new RECT();
-                User32.GetWindowRect(ownerHandle, ref ownerRect);
+                PInvoke.GetWindowRect(ownerHandle, out var ownerRect);
 
                 p.X = (ownerRect.left + ownerRect.right - s.Width) / 2;
                 if (p.X < screenRect.X)
@@ -5157,8 +5146,8 @@ namespace System.Windows.Forms
                 }
             }
 
-            IntPtr activeHwnd = User32.GetActiveWindow();
-            IntPtr ownerHwnd = owner is null ? activeHwnd : GetSafeHandle(owner);
+            HWND activeHwnd = PInvoke.GetActiveWindow();
+            HandleRef<HWND> ownerHwnd = owner is null ? GetHandleRef(activeHwnd) : GetSafeHandle(owner);
             Properties.SetObject(PropDialogOwner, owner);
             Form? oldOwner = OwnerInternal;
             if (owner is Form ownerForm && owner != oldOwner)
@@ -5166,19 +5155,19 @@ namespace System.Windows.Forms
                 Owner = ownerForm;
             }
 
-            if (ownerHwnd != IntPtr.Zero && ownerHwnd != Handle)
+            if (!ownerHwnd.IsNull && ownerHwnd.Handle != HWND)
             {
                 // Catch the case of a window trying to own its owner
-                if (User32.GetWindowLong(ownerHwnd, User32.GWL.HWNDPARENT) == Handle)
+                if (User32.GetWindowLong(ownerHwnd.Handle, User32.GWL.HWNDPARENT) == HWND)
                 {
                     throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, nameof(Show)), nameof(owner));
                 }
 
                 // Set the new owner.
-                User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHwnd);
+                User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHwnd.Handle);
             }
 
-            GC.KeepAlive(owner);
+            GC.KeepAlive(ownerHwnd.Wrapper);
 
             Visible = true;
         }
@@ -5238,15 +5227,15 @@ namespace System.Windows.Forms
             // for modal dialogs make sure we reset close reason.
             CloseReason = CloseReason.None;
 
-            IntPtr captureHwnd = User32.GetCapture();
-            if (captureHwnd != IntPtr.Zero)
+            HWND captureHwnd = PInvoke.GetCapture();
+            if (!captureHwnd.IsNull)
             {
                 User32.SendMessageW(captureHwnd, User32.WM.CANCELMODE);
                 User32.ReleaseCapture();
             }
 
-            IntPtr activeHwnd = User32.GetActiveWindow();
-            IntPtr ownerHwnd = owner is null ? activeHwnd : GetSafeHandle(owner);
+            HWND activeHwnd = PInvoke.GetActiveWindow();
+            HandleRef<HWND> ownerHwnd = owner is null ? GetHandleRef(activeHwnd) : GetSafeHandle(owner);
 
             Form? oldOwner = OwnerInternal;
 
@@ -5269,10 +5258,10 @@ namespace System.Windows.Forms
                 // GetActiveWindow.
                 CreateControl();
 
-                if (ownerHwnd != IntPtr.Zero && ownerHwnd != Handle)
+                if (!ownerHwnd.IsNull && ownerHwnd.Handle != HWND)
                 {
                     // Catch the case of a window trying to own its owner
-                    if (User32.GetWindowLong(ownerHwnd, User32.GWL.HWNDPARENT) == Handle)
+                    if (User32.GetWindowLong(ownerHwnd.Handle, User32.GWL.HWNDPARENT) == Handle)
                     {
                         throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, nameof(ShowDialog)), nameof(owner));
                     }
@@ -5291,7 +5280,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // Set the new parent.
-                        User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHwnd);
+                        User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHwnd.Handle);
                     }
                 }
 
@@ -5308,18 +5297,18 @@ namespace System.Windows.Forms
                 {
                     // Call SetActiveWindow before setting Visible = false.
 
-                    if (User32.IsWindow(activeHwnd).IsFalse())
+                    if (!PInvoke.IsWindow(activeHwnd))
                     {
-                        activeHwnd = ownerHwnd;
+                        activeHwnd = ownerHwnd.Handle;
                     }
 
-                    if (User32.IsWindow(activeHwnd).IsTrue() && User32.IsWindowVisible(activeHwnd).IsTrue())
+                    if (PInvoke.IsWindow(activeHwnd) && PInvoke.IsWindowVisible(activeHwnd))
                     {
-                        User32.SetActiveWindow(activeHwnd);
+                        PInvoke.SetActiveWindow(activeHwnd);
                     }
-                    else if (User32.IsWindow(ownerHwnd).IsTrue() && User32.IsWindowVisible(ownerHwnd).IsTrue())
+                    else if (PInvoke.IsWindow(ownerHwnd) && PInvoke.IsWindowVisible(ownerHwnd))
                     {
-                        User32.SetActiveWindow(ownerHwnd);
+                        PInvoke.SetActiveWindow(ownerHwnd);
                     }
 
                     SetVisibleCore(false);
@@ -5345,7 +5334,7 @@ namespace System.Windows.Forms
             {
                 Owner = oldOwner;
                 Properties.SetObject(PropDialogOwner, null);
-                GC.KeepAlive(owner);
+                GC.KeepAlive(ownerHwnd.Wrapper);
             }
 
             return DialogResult;

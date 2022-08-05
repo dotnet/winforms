@@ -4,6 +4,8 @@
 
 using System.ComponentModel;
 using System.Globalization;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Security;
 using static Interop;
 
@@ -78,8 +80,7 @@ namespace System.Windows.Forms
         private const int AltKeyPressed = 0x0400;
 
         private static bool s_stopHook;
-        private static IntPtr s_hhook;
-        private static User32.HOOKPROC? s_hook;
+        private static HHOOK s_hhook;
 
         /// <summary>
         ///  Vector of events that we have yet to post to the journaling hook.
@@ -129,7 +130,7 @@ namespace System.Windows.Forms
         private static bool AddSimpleKey(
             char character,
             int repeat,
-            IntPtr hwnd,
+            HWND hwnd,
             (int HaveShift, int HaveCtrl, int HaveAlt) haveKeys,
             bool startNewChar,
             int cGrp)
@@ -182,7 +183,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Given the vk, add the appropriate messages for it.
         /// </summary>
-        private static void AddMsgsForVK(int vk, int repeat, bool altnoctrldown, IntPtr hwnd)
+        private static void AddMsgsForVK(int vk, int repeat, bool altnoctrldown, HWND hwnd)
         {
             for (int i = 0; i < repeat; i++)
             {
@@ -195,7 +196,7 @@ namespace System.Windows.Forms
         ///  Called whenever there is a closing parenthesis, or the end of a character. This generates events for the
         ///  end of a modifier.
         /// </summary>
-        private static void CancelMods(ref (int HaveShift, int HaveCtrl, int HaveAlt) haveKeys, int level, IntPtr hwnd)
+        private static void CancelMods(ref (int HaveShift, int HaveCtrl, int HaveAlt) haveKeys, int level, HWND hwnd)
         {
             if (haveKeys.HaveShift == level)
             {
@@ -219,41 +220,40 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Install the hook.
         /// </summary>
-        private static void InstallHook()
+        private static unsafe void InstallHook()
         {
-            if (s_hhook == IntPtr.Zero)
+            if (s_hhook.IsNull)
             {
-                s_hook = new User32.HOOKPROC(new SendKeysHookProc().Callback);
                 s_stopHook = false;
-                s_hhook = User32.SetWindowsHookExW(
-                    User32.WH.JOURNALPLAYBACK,
-                    s_hook,
+                s_hhook = PInvoke.SetWindowsHookEx(
+                    WINDOWS_HOOK_ID.WH_JOURNALPLAYBACK,
+                    &SendKeysHookProc.Callback,
                     PInvoke.GetModuleHandle(null),
                     0);
 
-                if (s_hhook == IntPtr.Zero)
+                if (s_hhook.IsNull)
                 {
                     throw new SecurityException(SR.SendKeysHookFailed);
                 }
             }
         }
 
-        private static void TestHook()
+        private static unsafe void TestHook()
         {
             s_hookSupported = false;
             try
             {
-                var hookProc = new User32.HOOKPROC(EmptyHookCallback);
-                IntPtr hookHandle = User32.SetWindowsHookExW(
-                    User32.WH.JOURNALPLAYBACK,
-                    hookProc,
+                HHOOK hookHandle = PInvoke.SetWindowsHookEx(
+                    WINDOWS_HOOK_ID.WH_JOURNALPLAYBACK,
+                    &EmptyHookCallback,
                     PInvoke.GetModuleHandle(null),
                     0);
-                s_hookSupported = (hookHandle != IntPtr.Zero);
 
-                if (hookHandle != IntPtr.Zero)
+                s_hookSupported = !hookHandle.IsNull;
+
+                if (!hookHandle.IsNull)
                 {
-                    User32.UnhookWindowsHookEx(hookHandle);
+                    PInvoke.UnhookWindowsHookEx(hookHandle);
                 }
             }
             catch
@@ -262,7 +262,10 @@ namespace System.Windows.Forms
             }
         }
 
-        private static nint EmptyHookCallback(User32.HC nCode, nint wparam, nint lparam) => 0;
+#pragma warning disable CS3016 // Arrays as attribute arguments is not CLS-compliant
+        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+#pragma warning restore CS3016
+        private unsafe static LRESULT EmptyHookCallback(int nCode, WPARAM wparam, LPARAM lparam) => (LRESULT)0;
 
         private static void LoadSendMethodFromConfig()
         {
@@ -298,12 +301,12 @@ namespace System.Windows.Forms
         /// </summary>
         private static void JournalCancel()
         {
-            if (s_hhook != IntPtr.Zero)
+            if (!s_hhook.IsNull)
             {
                 s_stopHook = false;
                 s_events.Clear();
 
-                s_hhook = IntPtr.Zero;
+                s_hhook = default;
             }
         }
 
@@ -377,7 +380,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Parse the string the user has given us, and generate the appropriate events for the journaling hook.
         /// </summary>
-        private static void ParseKeys(string keys, IntPtr hwnd)
+        private static void ParseKeys(string keys, HWND hwnd)
         {
             int i = 0;
 
@@ -664,7 +667,7 @@ namespace System.Windows.Forms
             lock (s_lock)
             {
                 // Block keyboard and mouse input events from reaching applications.
-                BOOL blockInputSuccess = User32.BlockInput(BOOL.TRUE);
+                bool blockInputSuccess = PInvoke.BlockInput(true);
 
                 try
                 {
@@ -729,9 +732,9 @@ namespace System.Windows.Forms
                     SetKeyboardState(oldKeyboardState);
 
                     // Unblock input if it was previously blocked.
-                    if (blockInputSuccess.IsTrue())
+                    if (blockInputSuccess)
                     {
-                        User32.BlockInput(BOOL.FALSE);
+                        PInvoke.BlockInput(false);
                     }
                 }
             }
@@ -792,15 +795,15 @@ namespace System.Windows.Forms
 
             if (shift)
             {
-                AddEvent(new SKEvent(User32.WM.KEYUP, (int)Keys.ShiftKey, false, IntPtr.Zero));
+                AddEvent(new SKEvent(User32.WM.KEYUP, (int)Keys.ShiftKey, false, default));
             }
             else if (ctrl)
             {
-                AddEvent(new SKEvent(User32.WM.KEYUP, (int)Keys.ControlKey, false, IntPtr.Zero));
+                AddEvent(new SKEvent(User32.WM.KEYUP, (int)Keys.ControlKey, false, default));
             }
             else if (alt)
             {
-                AddEvent(new SKEvent(User32.WM.SYSKEYUP, (int)Keys.Menu, false, IntPtr.Zero));
+                AddEvent(new SKEvent(User32.WM.SYSKEYUP, (int)Keys.Menu, false, default));
             }
         }
 
@@ -921,7 +924,7 @@ namespace System.Windows.Forms
             }
 
             // Generate the list of events that we're going to fire off with the hook.
-            ParseKeys(keys, (control is not null) ? control.Handle : IntPtr.Zero);
+            ParseKeys(keys, (control is not null) ? (HWND)control.Handle : default);
 
             // If there weren't any events posted as a result, we're done!
             if (s_events.Count == 0)
@@ -999,13 +1002,13 @@ namespace System.Windows.Forms
         /// </summary>
         private static void UninstallJournalingHook()
         {
-            if (s_hhook != IntPtr.Zero)
+            if (!s_hhook.IsNull)
             {
                 s_stopHook = false;
                 s_events.Clear();
 
-                User32.UnhookWindowsHookEx(s_hhook);
-                s_hhook = IntPtr.Zero;
+                PInvoke.UnhookWindowsHookEx(s_hhook);
+                s_hhook = default;
             }
         }
     }

@@ -10,7 +10,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
@@ -601,8 +600,10 @@ namespace System.Windows.Forms
         private unsafe static BOOL SendThemeChanged(IntPtr handle)
         {
             uint thisPID = PInvoke.GetCurrentProcessId();
-            User32.GetWindowThreadProcessId(handle, out uint processId);
-            if (processId == thisPID && User32.IsWindowVisible(handle).IsTrue())
+            uint processId;
+            Foundation.HWND hwnd = (Foundation.HWND)handle;
+            PInvoke.GetWindowThreadProcessId(hwnd, &processId);
+            if (processId == thisPID && PInvoke.IsWindowVisible(hwnd))
             {
                 SendThemeChangedRecursive(handle);
                 User32.RedrawWindow(
@@ -1002,14 +1003,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Locates a thread context given a window handle.
         /// </summary>
-        internal static ThreadContext GetContextForHandle(HandleRef handle)
+        internal static unsafe ThreadContext GetContextForHandle<T>(T handle) where T : IHandle<Foundation.HWND>
         {
-            ThreadContext threadContext = ThreadContext.FromId(User32.GetWindowThreadProcessId(handle.Handle, out _));
+            ThreadContext threadContext = ThreadContext.FromId(PInvoke.GetWindowThreadProcessId(handle.Handle, null));
             Debug.Assert(
                 threadContext is not null,
                 "No thread context for handle.  This is expected if you saw a previous assert about the handle being invalid.");
 
-            GC.KeepAlive(handle.Wrapper);
+            GC.KeepAlive(handle);
             return threadContext;
         }
 
@@ -1065,12 +1066,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  "Parks" the given HWND to a temporary HWND. This allows WS_CHILD windows to be parked.
         /// </summary>
-        internal static void ParkHandle(HandleRef handle, IntPtr dpiAwarenessContext)
+        internal static void ParkHandle(HandleRef<Foundation.HWND> handle, IntPtr dpiAwarenessContext)
         {
-            Debug.Assert(User32.IsWindow(handle).IsTrue(), "Handle being parked is not a valid window handle");
-            Debug.Assert(((User32.WS)User32.GetWindowLong(handle, User32.GWL.STYLE)).HasFlag(User32.WS.CHILD), "Only WS_CHILD windows should be parked.");
+            Debug.Assert(PInvoke.IsWindow(handle), "Handle being parked is not a valid window handle");
+            Debug.Assert(
+                ((User32.WS)User32.GetWindowLong(handle.Handle, User32.GWL.STYLE)).HasFlag(User32.WS.CHILD),
+                "Only WS_CHILD windows should be parked.");
 
             GetContextForHandle(handle)?.GetParkingWindow(dpiAwarenessContext).ParkHandle(handle);
+
+            GC.KeepAlive(handle);
         }
 
         /// <summary>
@@ -1103,7 +1108,7 @@ namespace System.Windows.Forms
         ///  "Unparks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///  be parked.
         /// </summary>
-        internal static void UnparkHandle(HandleRef handle, IntPtr context)
+        internal static void UnparkHandle(IHandle<Foundation.HWND> handle, IntPtr context)
         {
             ThreadContext threadContext = GetContextForHandle(handle);
             if (threadContext is not null)

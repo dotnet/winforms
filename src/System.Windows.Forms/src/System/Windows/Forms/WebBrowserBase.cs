@@ -458,7 +458,7 @@ namespace System.Windows.Forms
                         IntPtr hwndInPlaceObject = IntPtr.Zero;
                         if (AXInPlaceObject.GetWindow(&hwndInPlaceObject).Succeeded())
                         {
-                            Application.ParkHandle(new HandleRef(AXInPlaceObject, hwndInPlaceObject), DpiAwarenessContext);
+                            Application.ParkHandle(new HandleRef<HWND>(AXInPlaceObject, (HWND)hwndInPlaceObject), DpiAwarenessContext);
                         }
                     }
 
@@ -831,9 +831,9 @@ namespace System.Windows.Forms
             return retVal;
         }
 
-        internal void AttachWindow(IntPtr hwnd)
+        internal void AttachWindow(HWND hwnd)
         {
-            User32.SetParent(hwnd, new HandleRef(this, Handle));
+            PInvoke.SetParent(hwnd, this);
 
             if (axWindow is not null)
             {
@@ -1261,7 +1261,7 @@ namespace System.Windows.Forms
 
             if (cc is null && IsHandleCreated)
             {
-                cc = Control.FromHandle(User32.GetParent(this)) as ContainerControl;
+                cc = Control.FromHandle(PInvoke.GetParent(this)) as ContainerControl;
             }
 
             // Never use the parking window for this: its hwnd can be destroyed at any time.

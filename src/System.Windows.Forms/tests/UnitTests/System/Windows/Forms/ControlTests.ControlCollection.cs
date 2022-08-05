@@ -8,7 +8,6 @@ using System.Windows.Forms.Layout;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -448,7 +447,7 @@ namespace System.Windows.Forms.Tests
             control.HandleCreated += (sender, e) => createdCallCount++;
 
             collection.Add(control);
-            Assert.Equal(owner.Handle, User32.GetParent(control.Handle));
+            Assert.Equal(owner.Handle, PInvoke.GetParent(control));
             Assert.Same(control, Assert.Single(collection));
             Assert.Same(owner, control.Parent);
             Assert.Equal(visible, control.Visible);

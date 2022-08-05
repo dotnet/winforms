@@ -407,7 +407,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// <returns>Whether or not the key(s) were pressed on the process</returns>
         /// <seealso cref="System.Diagnostics.Process.MainWindowHandle"/>
         /// <seealso cref="SetForegroundWindow(IntPtr)"/>
-        /// <seealso cref="GetForegroundWindow()"/>
+        /// <seealso cref="PInvoke.GetForegroundWindow()"/>
         /// <seealso cref="System.Windows.Forms.SendKeys.SendWait(string)"/>
         /// <seealso cref="System.Threading.Thread.Sleep(int)"/>
         internal static bool SendKeysToProcess(Process process, string keys, bool switchToMainWindow = true)
@@ -434,7 +434,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
                 SetForegroundWindow(mainWindowHandle);
             }
 
-            IntPtr foregroundWindow = GetForegroundWindow();
+            HWND foregroundWindow = PInvoke.GetForegroundWindow();
 
             string windowTitle = GetWindowText(foregroundWindow);
 

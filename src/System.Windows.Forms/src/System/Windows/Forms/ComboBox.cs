@@ -598,8 +598,9 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                IntPtr focus = GetFocus();
-                return focus != IntPtr.Zero && ((_childEdit is not null && focus == _childEdit.Handle) || (_childListBox is not null && focus == _childListBox.Handle));
+                Foundation.HWND focus = PInvoke.GetFocus();
+                return !focus.IsNull
+                    && ((_childEdit is not null && focus == _childEdit.Handle) || (_childListBox is not null && focus == _childListBox.Handle));
             }
         }
 
@@ -1540,12 +1541,10 @@ namespace System.Windows.Forms
             }
 
             // Get the Combobox Rect
-            var comboRectMid = new RECT();
-            GetWindowRect(this, ref comboRectMid);
+            PInvoke.GetWindowRect(this, out var comboRectMid);
 
             // Get the Edit Rectangle.
-            var editRectMid = new RECT();
-            GetWindowRect(_childEdit, ref editRectMid);
+            PInvoke.GetWindowRect(_childEdit, out var editRectMid);
 
             // Get the delta.
             int comboXMid = PARAM.SignedLOWORD(m.LParamInternal) + (editRectMid.left - comboRectMid.left);
@@ -1817,9 +1816,8 @@ namespace System.Windows.Forms
                         _mouseEvents = false;
                         if (_mousePressed)
                         {
-                            RECT rect = default;
-                            GetWindowRect(this, ref rect);
-                            Rectangle clientRect = rect;
+                            PInvoke.GetWindowRect(this, out var rect);
+                            Rectangle clientRect = rect.ToRectangle();
 
                             if (clientRect.Contains(PointToScreen(PARAM.ToPoint(m.LParamInternal))))
                             {
@@ -1966,9 +1964,8 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnMouseLeaveInternal(EventArgs args)
         {
-            var rect = new RECT();
-            GetWindowRect(this, ref rect);
-            Rectangle rectangle = rect;
+            PInvoke.GetWindowRect(this, out var rect);
+            Rectangle rectangle = rect.ToRectangle();
             Point p = MousePosition;
             if (!rectangle.Contains(p))
             {
@@ -2470,8 +2467,8 @@ namespace System.Windows.Forms
 
             if (ok && DropDownStyle != ComboBoxStyle.DropDownList)
             {
-                IntPtr hwnd = GetWindow(new HandleRef(this, Handle), GW.CHILD);
-                if (hwnd != IntPtr.Zero)
+                HWND hwnd = PInvoke.GetWindow(this, GET_WINDOW_CMD.GW_CHILD);
+                if (!hwnd.IsNull)
                 {
                     // If it's a simple dropdown list, the first HWND is the list box.
                     if (DropDownStyle == ComboBoxStyle.Simple)
@@ -2480,7 +2477,7 @@ namespace System.Windows.Forms
                         _childListBox.AssignHandle(hwnd);
 
                         // Get the edits hwnd...
-                        hwnd = GetWindow(new HandleRef(this, hwnd), GW.HWNDNEXT);
+                        hwnd = PInvoke.GetWindow(new HandleRef<HWND>(this, hwnd), GET_WINDOW_CMD.GW_HWNDNEXT);
                     }
 
                     _childEdit = new ComboBoxChildNativeWindow(this, ChildWindowType.Edit);
@@ -3871,9 +3868,8 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     break;
                 case WM.LBUTTONUP:
-                    RECT rect = default;
-                    GetWindowRect(this, ref rect);
-                    Rectangle clientRect = rect;
+                    PInvoke.GetWindowRect(this, out var rect);
+                    Rectangle clientRect = rect.ToRectangle();
 
                     Point point = PointToScreen(PARAM.ToPoint(m.LParamInternal));
 

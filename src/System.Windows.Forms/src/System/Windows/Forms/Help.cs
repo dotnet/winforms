@@ -8,7 +8,6 @@ using System.Buffers;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.Hhctl;
 
@@ -158,14 +157,14 @@ namespace System.Windows.Forms
                 }
             }
 
-            HandleRef handle;
+            HandleRef<HWND> handle;
             if (parent is not null)
             {
-                handle = new HandleRef(parent, parent.Handle);
+                handle = new(parent);
             }
             else
             {
-                handle = new HandleRef(null, User32.GetActiveWindow());
+                handle = Control.GetHandleRef(PInvoke.GetActiveWindow());
             }
 
             object htmlParam;
@@ -202,7 +201,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Debug.Fail("Cannot handle HTML parameter of type: " + htmlParam.GetType());
+                    Debug.Fail($"Cannot handle HTML parameter of type: {htmlParam.GetType()}");
                     HtmlHelpW(handle, pathAndFileName, htmlCommand, (string)param);
                 }
             }
@@ -225,7 +224,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static void ShowHTMLFile(Control parent, string url, HelpNavigator command, object param)
         {
-            Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "Help:: ShowHTMLHelp:: " + url + ", " + command.ToString("G") + ", " + param);
+            Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, $"Help:: ShowHTMLHelp:: {url}, {command.ToString("G")}, {param}");
 
             Uri file = Resolve(url);
 
@@ -243,31 +242,32 @@ namespace System.Windows.Forms
                     //
                     break;
                 case HelpNavigator.Topic:
-                    if (param is not null && param is string)
+                    if (param is string stringParam)
                     {
-                        file = new Uri(file.ToString() + "#" + (string)param);
+                        file = new Uri($"{file}#{stringParam}");
                     }
 
                     break;
             }
 
-            HandleRef handle;
+            HandleRef<HWND> handle;
             if (parent is not null)
             {
-                handle = new HandleRef(parent, parent.Handle);
+                handle= new(parent);
             }
             else
             {
-                handle = new HandleRef(null, User32.GetActiveWindow());
+                handle = Control.GetHandleRef(PInvoke.GetActiveWindow());
             }
 
-            Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "\tExecuting '" + file.ToString() + "'");
-            Shell32.ShellExecuteW(handle, null, file.ToString(), null, null, User32.SW.NORMAL);
+            Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, $"\tExecuting '{file}'");
+            Shell32.ShellExecuteW(handle.Handle, null, file.ToString(), null, null, User32.SW.NORMAL);
+            GC.KeepAlive(handle.Wrapper);
         }
 
         private static Uri Resolve(string partialUri)
         {
-            Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "Help:: Resolve " + partialUri);
+            Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, $"Help:: Resolve {partialUri}");
             Debug.Indent();
 
             Uri file = null;

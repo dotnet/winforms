@@ -20,16 +20,16 @@ namespace System.Windows.Forms
         /// </summary>
         private sealed class ThreadWindows
         {
-            private IntPtr[] _windows;
+            private HWND[] _windows;
             private int _windowCount;
-            private IntPtr _activeHwnd;
-            private IntPtr _focusedHwnd;
+            private HWND _activeHwnd;
+            private HWND _focusedHwnd;
             internal ThreadWindows _previousThreadWindows;
             private readonly bool _onlyWinForms = true;
 
             internal ThreadWindows(bool onlyWinForms)
             {
-                _windows = new IntPtr[16];
+                _windows = new HWND[16];
                 _onlyWinForms = onlyWinForms;
                 User32.EnumThreadWindows(
                     PInvoke.GetCurrentThreadId(),
@@ -41,7 +41,7 @@ namespace System.Windows.Forms
                 // We only do visible and enabled windows.  Also, we only do top level windows.
                 // Finally, we only include windows that are DNA windows, since other MSO components
                 // will be responsible for disabling their own windows.
-                if (User32.IsWindowVisible(hWnd).IsTrue() && User32.IsWindowEnabled(hWnd).IsTrue())
+                if (PInvoke.IsWindowVisible((HWND)hWnd) && User32.IsWindowEnabled(hWnd).IsTrue())
                 {
                     bool add = true;
 
@@ -58,12 +58,12 @@ namespace System.Windows.Forms
                     {
                         if (_windowCount == _windows.Length)
                         {
-                            IntPtr[] newWindows = new IntPtr[_windowCount * 2];
+                            HWND[] newWindows = new HWND[_windowCount * 2];
                             Array.Copy(_windows, 0, newWindows, 0, _windowCount);
                             _windows = newWindows;
                         }
 
-                        _windows[_windowCount++] = hWnd;
+                        _windows[_windowCount++] = (HWND)hWnd;
                     }
                 }
 
@@ -75,8 +75,8 @@ namespace System.Windows.Forms
             {
                 for (int i = 0; i < _windowCount; i++)
                 {
-                    IntPtr hWnd = _windows[i];
-                    if (User32.IsWindow(hWnd).IsTrue())
+                    HWND hWnd = _windows[i];
+                    if (PInvoke.IsWindow(hWnd))
                     {
                         Control c = Control.FromHandle(hWnd);
                         if (c is not null)
@@ -92,23 +92,26 @@ namespace System.Windows.Forms
             {
                 if (!_onlyWinForms && !state)
                 {
-                    _activeHwnd = User32.GetActiveWindow();
+                    _activeHwnd = PInvoke.GetActiveWindow();
                     Control activatingControl = ThreadContext.FromCurrent().ActivatingControl;
                     if (activatingControl is not null)
                     {
-                        _focusedHwnd = activatingControl.Handle;
+                        _focusedHwnd = activatingControl.HWND;
                     }
                     else
                     {
-                        _focusedHwnd = User32.GetFocus();
+                        _focusedHwnd = PInvoke.GetFocus();
                     }
                 }
 
                 for (int i = 0; i < _windowCount; i++)
                 {
-                    IntPtr hWnd = _windows[i];
-                    Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Changing enabled on window: " + hWnd.ToString() + " : " + state.ToString());
-                    if (User32.IsWindow(hWnd).IsTrue())
+                    HWND hWnd = _windows[i];
+                    Debug.WriteLineIf(
+                        CompModSwitches.MSOComponentManager.TraceInfo,
+                        $"ComponentManager : Changing enabled on window: {hWnd} : {state}");
+
+                    if (PInvoke.IsWindow(hWnd))
                     {
                         User32.EnableWindow(hWnd, state.ToBOOL());
                     }
@@ -124,14 +127,14 @@ namespace System.Windows.Forms
                 // we are created with a TRUE for onlyWinForms.
                 if (!_onlyWinForms && state)
                 {
-                    if (_activeHwnd != IntPtr.Zero && User32.IsWindow(_activeHwnd).IsTrue())
+                    if (!_activeHwnd.IsNull && PInvoke.IsWindow(_activeHwnd))
                     {
-                        User32.SetActiveWindow(_activeHwnd);
+                        PInvoke.SetActiveWindow(_activeHwnd);
                     }
 
-                    if (_focusedHwnd != IntPtr.Zero && User32.IsWindow(_focusedHwnd).IsTrue())
+                    if (!_focusedHwnd.IsNull && PInvoke.IsWindow(_focusedHwnd))
                     {
-                        User32.SetFocus(_focusedHwnd);
+                        PInvoke.SetFocus(_focusedHwnd);
                     }
                 }
             }

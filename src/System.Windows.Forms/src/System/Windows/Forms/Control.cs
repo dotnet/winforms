@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -28,13 +27,17 @@ namespace System.Windows.Forms
     ///  Defines the base class for controls, which are components with visual representation.
     /// </summary>
     /// <remarks>
-    ///  Do not add instance variables to Control absolutely necessary. Every control on a form has the overhead of
-    ///  all of these variables.
+    ///  <para>
+    ///   Do not add instance variables to Control absolutely necessary. Every control on a form has the overhead of
+    ///   all of these variables.
+    ///  </para>
     /// </remarks>
     [DefaultProperty(nameof(Text))]
     [DefaultEvent(nameof(Click))]
-    [Designer("System.Windows.Forms.Design.ControlDesigner, " + AssemblyRef.SystemDesign)]
-    [DesignerSerializer("System.Windows.Forms.Design.ControlCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.ControlDesigner, {AssemblyRef.SystemDesign}")]
+    [DesignerSerializer(
+        $"System.Windows.Forms.Design.ControlCodeDomSerializer, {AssemblyRef.SystemDesign}",
+        $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {AssemblyRef.SystemDesign}")]
     [ToolboxItemFilter("System.Windows.Forms")]
     public partial class Control :
         Component,
@@ -57,7 +60,8 @@ namespace System.Windows.Forms
         IArrangedElement,
         IBindableComponent,
         IKeyboardToolTip,
-        IHandle
+        IHandle,
+        IHandle<HWND>
     {
 #if DEBUG
         internal static readonly TraceSwitch s_paletteTracing = new(
@@ -1220,7 +1224,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlCaptureDescr))]
         public bool Capture
         {
-            get => IsHandleCreated && User32.GetCapture() == Handle;
+            get => IsHandleCreated && PInvoke.GetCapture() == HWND;
             set
             {
                 if (Capture != value)
@@ -1389,13 +1393,13 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                IntPtr focusHwnd = User32.GetFocus();
-                if (focusHwnd == IntPtr.Zero)
+                HWND focusHwnd = PInvoke.GetFocus();
+                if (focusHwnd.IsNull)
                 {
                     return false;
                 }
 
-                return focusHwnd == Handle || User32.IsChild(new HandleRef(this, Handle), focusHwnd).IsTrue();
+                return focusHwnd == Handle || PInvoke.IsChild(this, focusHwnd);
             }
         }
 
@@ -1737,16 +1741,14 @@ namespace System.Windows.Forms
                     Properties.SetObject(s_cursorProperty, value);
                 }
 
-                // Other things can change the cursor... we
-                // really want to force the correct cursor always...
+                // Other things can change the cursor. We always want to force the correct cursor.
                 if (IsHandleCreated)
                 {
                     // We want to instantly change the cursor if the mouse is within our bounds.
-                    // This includes the case where the mouse is over one of our children
-                    var r = new RECT();
+                    // This includes the case where the mouse is over one of our children.
                     User32.GetCursorPos(out Point p);
-                    User32.GetWindowRect(this, ref r);
-                    if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
+                    PInvoke.GetWindowRect(this, out Foundation.RECT r);
+                    if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                     {
                         User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (nint)User32.HT.CLIENT);
                     }
@@ -2066,7 +2068,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlFocusedDescr))]
         public virtual bool Focused
-            => IsHandleCreated && User32.GetFocus() == Handle;
+            => IsHandleCreated && PInvoke.GetFocus() == InternalHandle;
 
         /// <summary>
         ///  Retrieves the current font for this control. This will be the font used
@@ -2515,14 +2517,14 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        IntPtr parentHandle = User32.GetParent(this);
-                        IntPtr lastParentHandle = parentHandle;
+                        HWND parentHandle = PInvoke.GetParent(this);
+                        HWND lastParentHandle = parentHandle;
 
                         StringBuilder sb = new StringBuilder(32);
 
                         SetState(States.HostedInDialog, false);
 
-                        while (parentHandle != IntPtr.Zero)
+                        while (!parentHandle.IsNull)
                         {
                             int len = UnsafeNativeMethods.GetClassName(new HandleRef(null, lastParentHandle), null, 0);
                             if (len > sb.Capacity)
@@ -2539,7 +2541,7 @@ namespace System.Windows.Forms
                             }
 
                             lastParentHandle = parentHandle;
-                            parentHandle = User32.GetParent(parentHandle);
+                            parentHandle = PInvoke.GetParent(parentHandle);
                         }
                     }
 
@@ -2557,7 +2559,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlHandleCreatedDescr))]
-        public bool IsHandleCreated => _window.Handle != IntPtr.Zero;
+        public bool IsHandleCreated => _window.Handle != 0;
 
         private protected virtual bool IsHoveredWithMouse() => ClientRectangle.Contains(PointToClient(MousePosition));
 
@@ -2575,10 +2577,6 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                bool emptyRegion = false;
-
-                RECT temp = new RECT();
-                Region working;
                 Control? parent = ParentInternal;
                 if (parent is not null)
                 {
@@ -2588,50 +2586,26 @@ namespace System.Windows.Forms
                     }
                 }
 
-                User32.GetWindowRect(this, ref temp);
-                working = new Region(temp);
+                PInvoke.GetWindowRect(this, out var temp);
+                using Region working = new(temp.ToRectangle());
 
-                try
+                HWND prev;
+                HWND next;
+                HWND start = parent is not null ? parent.HWND : HWND;
+
+                for (prev = start;
+                    !(next = PInvoke.GetWindow(prev, GET_WINDOW_CMD.GW_HWNDPREV)).IsNull;
+                    prev = next)
                 {
-                    IntPtr prev;
-                    IntPtr next;
-                    IntPtr start;
-                    if (parent is not null)
+                    PInvoke.GetWindowRect(next, out temp);
+                    if (PInvoke.IsWindowVisible(next))
                     {
-                        start = parent.Handle;
-                    }
-                    else
-                    {
-                        start = Handle;
-                    }
-
-                    for (prev = start;
-                         (next = User32.GetWindow(prev, User32.GW.HWNDPREV)) != IntPtr.Zero;
-                         prev = next)
-                    {
-                        User32.GetWindowRect(next, ref temp);
-                        if (User32.IsWindowVisible(next).IsTrue())
-                        {
-                            working.Exclude(temp);
-                        }
-                    }
-
-                    Graphics g = CreateGraphics();
-                    try
-                    {
-                        emptyRegion = working.IsEmpty(g);
-                    }
-                    finally
-                    {
-                        g.Dispose();
+                        working.Exclude(temp.ToRectangle());
                     }
                 }
-                finally
-                {
-                    working.Dispose();
-                }
 
-                return emptyRegion;
+                using Graphics g = CreateGraphics();
+                return working.IsEmpty(g);
             }
         }
 
@@ -2639,7 +2613,7 @@ namespace System.Windows.Forms
         ///  Returns the current value of the handle. This may be zero if the handle
         ///  has not been created.
         /// </summary>
-        internal IntPtr InternalHandle => !IsHandleCreated ? IntPtr.Zero : Handle;
+        internal HWND InternalHandle => !IsHandleCreated ? default : (HWND)Handle;
 
         /// <summary>
         ///  Determines if the caller must call invoke when making method
@@ -2893,17 +2867,17 @@ namespace System.Windows.Forms
             {
                 Keys modifiers = 0;
 
-                if (User32.GetKeyState((int)Keys.ShiftKey) < 0)
+                if (PInvoke.GetKeyState((int)Keys.ShiftKey) < 0)
                 {
                     modifiers |= Keys.Shift;
                 }
 
-                if (User32.GetKeyState((int)Keys.ControlKey) < 0)
+                if (PInvoke.GetKeyState((int)Keys.ControlKey) < 0)
                 {
                     modifiers |= Keys.Control;
                 }
 
-                if (User32.GetKeyState((int)Keys.Menu) < 0)
+                if (PInvoke.GetKeyState((int)Keys.Menu) < 0)
                 {
                     modifiers |= Keys.Alt;
                 }
@@ -2922,27 +2896,27 @@ namespace System.Windows.Forms
             {
                 MouseButtons buttons = default;
 
-                if (User32.GetKeyState((int)Keys.LButton) < 0)
+                if (PInvoke.GetKeyState((int)Keys.LButton) < 0)
                 {
                     buttons |= MouseButtons.Left;
                 }
 
-                if (User32.GetKeyState((int)Keys.RButton) < 0)
+                if (PInvoke.GetKeyState((int)Keys.RButton) < 0)
                 {
                     buttons |= MouseButtons.Right;
                 }
 
-                if (User32.GetKeyState((int)Keys.MButton) < 0)
+                if (PInvoke.GetKeyState((int)Keys.MButton) < 0)
                 {
                     buttons |= MouseButtons.Middle;
                 }
 
-                if (User32.GetKeyState((int)Keys.XButton1) < 0)
+                if (PInvoke.GetKeyState((int)Keys.XButton1) < 0)
                 {
                     buttons |= MouseButtons.XButton1;
                 }
 
-                if (User32.GetKeyState((int)Keys.XButton2) < 0)
+                if (PInvoke.GetKeyState((int)Keys.XButton2) < 0)
                 {
                     buttons |= MouseButtons.XButton2;
                 }
@@ -5066,7 +5040,7 @@ namespace System.Windows.Forms
                         {
                             if (ctl.IsHandleCreated)
                             {
-                                ctl.SetParentHandle(Handle);
+                                ctl.SetParentHandle(HWND);
                             }
 
                             ctl.CreateControl(fIgnoreVisible);
@@ -5165,8 +5139,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Disposes of the resources (other than memory) used by the
-        ///  <see cref="Control"/>.
+        ///  Disposes of the resources (other than memory) used by the <see cref="Control"/>.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -5185,7 +5158,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            //set reflectparent = null regardless of whether we are in the finalizer thread or not.
+            // Set reflectparent = null regardless of whether we are in the finalizer thread or not.
             UpdateReflectParent(false);
             if (disposing)
             {
@@ -5574,25 +5547,25 @@ namespace System.Windows.Forms
         /// </summary>
         private protected virtual bool FocusInternal()
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::FocusInternal - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, $"Control::FocusInternal - {Name}");
             if (CanFocus)
             {
-                User32.SetFocus(new HandleRef(this, Handle));
+                PInvoke.SetFocus(this);
             }
 
             if (Focused && ParentInternal is not null)
             {
-                IContainerControl c = ParentInternal.GetContainerControl();
+                IContainerControl control = ParentInternal.GetContainerControl();
 
-                if (c is not null)
+                if (control is not null)
                 {
-                    if (c is ContainerControl)
+                    if (control is ContainerControl containerControl)
                     {
-                        ((ContainerControl)c).SetActiveControl(this);
+                        containerControl.SetActiveControl(this);
                     }
                     else
                     {
-                        c.ActiveControl = this;
+                        control.ActiveControl = this;
                     }
                 }
             }
@@ -5610,19 +5583,26 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static Control FromChildHandle(IntPtr handle)
         {
-            while (handle != IntPtr.Zero)
+            HWND hwnd = (HWND)handle;
+            while (!hwnd.IsNull)
             {
-                Control ctl = FromHandle(handle);
-                if (ctl is not null)
+                Control control = FromHandle(hwnd);
+                if (control is not null)
                 {
-                    return ctl;
+                    return control;
                 }
 
-                handle = User32.GetAncestor(handle, User32.GA.PARENT);
+                hwnd = PInvoke.GetAncestor(hwnd, GET_ANCESTOR_FLAGS.GA_PARENT);
             }
 
             return null;
         }
+
+        /// <summary>
+        ///  Creates a <see cref="HandleRef{THandle}"/> for the given <paramref name="hwnd"/>, associating
+        ///  it with the first parent <see cref="Control"/> if possible.
+        /// </summary>
+        internal static HandleRef<HWND> GetHandleRef(HWND hwnd) => new(FromChildHandle(hwnd), hwnd);
 
         /// <summary>
         ///  Returns the control that is currently associated with handle.
@@ -5631,7 +5611,7 @@ namespace System.Windows.Forms
         public static Control FromHandle(IntPtr handle)
         {
             NativeWindow w = NativeWindow.FromHandle(handle);
-            while (w is not null && !(w is ControlNativeWindow))
+            while (w is not null && w is not ControlNativeWindow)
             {
                 w = w.PreviousWindow;
             }
@@ -5893,9 +5873,9 @@ namespace System.Windows.Forms
         {
             List<ControlTabOrderHolder> holders = new List<ControlTabOrderHolder>();
 
-            for (IntPtr hWndChild = User32.GetWindow(Handle, User32.GW.CHILD);
-                hWndChild != IntPtr.Zero;
-                hWndChild = User32.GetWindow(hWndChild, User32.GW.HWNDNEXT))
+            for (HWND hWndChild = PInvoke.GetWindow(this, GET_WINDOW_CMD.GW_CHILD);
+                !hWndChild.IsNull;
+                hWndChild = PInvoke.GetWindow(new HandleRef<HWND>(this, hWndChild), GET_WINDOW_CMD.GW_HWNDNEXT))
             {
                 Control ctl = FromHandle(hWndChild);
                 int tabIndex = (ctl is null) ? -1 : ctl.TabIndex;
@@ -6232,22 +6212,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Return <see cref="Control.Handle"/> if <paramref name="window"/> is a <see cref="Control"/>.
+        ///  Return <see cref="Handle"/> if <paramref name="window"/> is a <see cref="Control"/>.
         ///  Otherwise, returns <see cref="IWin32Window.Handle"/> after validating the handle is valid.
         /// </summary>
-        internal static IntPtr GetSafeHandle(IWin32Window window)
+        internal static HandleRef<HWND> GetSafeHandle(IWin32Window window)
         {
             Debug.Assert(window is not null, "window is null in Control.GetSafeHandle");
             if (window is Control control)
             {
-                return control.Handle;
+                return new(control);
             }
             else
             {
-                IntPtr hwnd = window.Handle;
-                if (hwnd == IntPtr.Zero || User32.IsWindow(hwnd).IsTrue())
+                HWND hwnd = (HWND)window.Handle;
+                if (hwnd.IsNull || PInvoke.IsWindow(hwnd))
                 {
-                    return hwnd;
+                    return new(window, hwnd);
                 }
                 else
                 {
@@ -6756,7 +6736,7 @@ namespace System.Windows.Forms
         {
             if (keyVal == Keys.Insert || keyVal == Keys.NumLock || keyVal == Keys.CapsLock || keyVal == Keys.Scroll)
             {
-                int result = User32.GetKeyState((int)keyVal);
+                int result = PInvoke.GetKeyState((int)keyVal);
 
                 // If the high-order bit is 1, the key is down; otherwise, it is up.
                 // If the low-order bit is 1, the key is toggled. A key, such as the CAPS LOCK key,
@@ -7574,31 +7554,27 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the parent of this control has recreated
-        ///  its handle.
+        ///  Occurs when the parent of this control has recreated its handle.
         /// </summary>
         internal virtual void OnParentHandleRecreated()
         {
-            // restore ourselves over to the original control.
-            // use SetParent directly so as to not raise ParentChanged events
+            // Restore ourselves over to the original control.
+            // Use SetParent directly so as to not raise ParentChanged events.
             Control parent = ParentInternal;
-            if (parent is not null)
+            if (parent is not null && IsHandleCreated)
             {
-                if (IsHandleCreated)
+                if (PInvoke.SetParent(this, parent).IsNull)
                 {
-                    if (User32.SetParent(new HandleRef(this, Handle), new HandleRef(parent, parent.Handle)) == IntPtr.Zero)
-                    {
-                        throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
-                    }
-
-                    UpdateZOrder();
+                    throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
                 }
+
+                UpdateZOrder();
             }
 
             SetState(States.ParentRecreating, false);
 
-            // if our parent was initially the parent who's handle just got recreated, we need
-            // to recreate ourselves so that we get notification.  See UpdateReflectParent for more details.
+            // If our parent was initially the parent who's handle just got recreated, we need
+            // to recreate ourselves so that we get notification. See UpdateReflectParent for more details.
             if (ReflectParent == ParentInternal)
             {
                 RecreateHandle();
@@ -7606,24 +7582,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Occurs when the parent of this control is recreating
-        ///   its handle.
+        ///  Occurs when the parent of this control is recreating its handle.
         /// </summary>
         internal virtual void OnParentHandleRecreating()
         {
             SetState(States.ParentRecreating, true);
 
-            // swoop this control over to the parking window.
+            // Move this control over to the parking window.
 
-            // if we left it parented to the parent control, the DestroyWindow
-            // would force us to destroy our handle as well... hopefully
-            // parenting us over to the parking window and restoring ourselves
-            // should help improve recreate perf.
+            // If we left it parented to the parent control, DestroyWindow would force us to destroy our handle as well.
+            // Temporarilty parenting to the parking window avoids having to recreate our handle from scratch.
 
-            // use SetParent directly so as to not raise ParentChanged events
             if (IsHandleCreated)
             {
-                Application.ParkHandle(new HandleRef(this, Handle), DpiAwarenessContext);
+                Application.ParkHandle(handle: new(this), DpiAwarenessContext);
             }
         }
 
@@ -9135,7 +9107,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Point PointToClient(Point p)
         {
-            User32.MapWindowPoint(IntPtr.Zero, this, ref p);
+            PInvoke.MapWindowPoints((HWND)default, this, ref p);
             return p;
         }
 
@@ -9144,7 +9116,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Point PointToScreen(Point p)
         {
-            User32.MapWindowPoint(this, IntPtr.Zero, ref p);
+            PInvoke.MapWindowPoints(this, (HWND)default, ref p);
             return p;
         }
 
@@ -9389,34 +9361,31 @@ namespace System.Windows.Forms
         {
             // We assume the target does not want us to offset the root control in the metafile.
 
-            using (DCMapping mapping = new(hDC, bounds))
+            using DCMapping mapping = new(hDC, bounds);
+
+            // Print the non-client area.
+            PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & (long)~User32.PRF.CLIENT));
+
+            // Figure out mapping for the client area.
+            bool success = PInvoke.GetWindowRect(this, out var windowRect);
+            Debug.Assert(success, "GetWindowRect() failed.");
+            Point clientOffset = PointToScreen(Point.Empty);
+            clientOffset = new(clientOffset.X - windowRect.left, clientOffset.Y - windowRect.top);
+            Rectangle clientBounds = new(clientOffset, ClientSize);
+
+            using DCMapping clientMapping = new(hDC, clientBounds);
+
+            // Print the client area.
+            PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & (long)~User32.PRF.NONCLIENT));
+
+            // Paint children in reverse Z-Order.
+            int count = Controls.Count;
+            for (int i = count - 1; i >= 0; i--)
             {
-                // print the non-client area
-                PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & (long)~User32.PRF.CLIENT));
-
-                // figure out mapping for the client area
-                RECT windowRect = new RECT();
-                BOOL success = User32.GetWindowRect(this, ref windowRect);
-                Debug.Assert(success.IsTrue(), "GetWindowRect() failed.");
-                Point clientOffset = PointToScreen(Point.Empty);
-                clientOffset = new Point(clientOffset.X - windowRect.left, clientOffset.Y - windowRect.top);
-                Rectangle clientBounds = new Rectangle(clientOffset, ClientSize);
-
-                using (DCMapping clientMapping = new DCMapping(hDC, clientBounds))
+                Control child = Controls[i];
+                if (child.Visible)
                 {
-                    // print the client area
-                    PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & (long)~User32.PRF.NONCLIENT));
-
-                    // Paint children in reverse Z-Order
-                    int count = Controls.Count;
-                    for (int i = count - 1; i >= 0; i--)
-                    {
-                        Control child = Controls[i];
-                        if (child.Visible)
-                        {
-                            child.PrintToMetaFileRecursive(hDC, lParam, child.Bounds);
-                        }
-                    }
+                    child.PrintToMetaFileRecursive(hDC, lParam, child.Bounds);
                 }
             }
         }
@@ -9730,7 +9699,7 @@ namespace System.Windows.Forms
                 //           (we're in charge here, we've got to change the state of the root window)
                 User32.SendMessageW(
                     topMostParent,
-                    User32.GetParent(topMostParent.Handle) == IntPtr.Zero ? User32.WM.CHANGEUISTATE : User32.WM.UPDATEUISTATE,
+                    PInvoke.GetParent(topMostParent).IsNull ? User32.WM.CHANGEUISTATE : User32.WM.UPDATEUISTATE,
                     (int)User32.UIS.CLEAR | ((int)toClear << 16));
             }
         }
@@ -9879,7 +9848,7 @@ namespace System.Windows.Forms
                     UnhookMouseEvent();
                 }
 
-                HandleRef parentHandle = new HandleRef(this, User32.GetParent(this));
+                HWND parentHandle = PInvoke.GetParent(this);
 
                 Control?[]? controlSnapshot = null;
                 SetState(States.Recreate, true);
@@ -9977,17 +9946,18 @@ namespace System.Windows.Forms
                     CreateControl();
                 }
 
-                if (// The window has a parent Win32 window before re-creation
-                    parentHandle.Handle != IntPtr.Zero
+                if (
+                    // The window has a parent Win32 window before re-creation
+                    !parentHandle.IsNull
                     // But the parent is not a managed WinForm Control, or this.Parent is null
-                    && (FromHandle(parentHandle.Handle) is null || _parent is null)
+                    && (FromHandle(parentHandle) is null || _parent is null)
                     // Still, parentHandle is a valid native Win32 window handle, e.g. the desktop window.
-                    && User32.IsWindow(parentHandle).IsTrue())
+                    && PInvoke.IsWindow(parentHandle))
                 {
                     // correctly parent back up to where we were before.
                     // if we were parented to a proper windows forms control, CreateControl would have properly parented
                     // us back.
-                    if (User32.SetParent(new HandleRef(this, Handle), parentHandle) == IntPtr.Zero)
+                    if (PInvoke.SetParent(this, parentHandle) == IntPtr.Zero)
                     {
                         // Somehow we failed to SetParent due to, e.g., different Dpi awareness setting.
                         throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
@@ -9999,6 +9969,8 @@ namespace System.Windows.Forms
                 {
                     Focus();
                 }
+
+                GC.KeepAlive(this);
             }
         }
 
@@ -10007,9 +9979,9 @@ namespace System.Windows.Forms
         /// </summary>
         public Rectangle RectangleToClient(Rectangle r)
         {
-            RECT rect = r;
-            User32.MapWindowPoints(IntPtr.Zero, this, ref rect);
-            return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
+            Foundation.RECT rect = r.ToRect();
+            PInvoke.MapWindowPoints(default, this, ref rect);
+            return rect.ToRectangle();
         }
 
         /// <summary>
@@ -10017,9 +9989,9 @@ namespace System.Windows.Forms
         /// </summary>
         public Rectangle RectangleToScreen(Rectangle r)
         {
-            RECT rect = r;
-            User32.MapWindowPoints(this, IntPtr.Zero, ref rect);
-            return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
+            Foundation.RECT rect = r.ToRect();
+            PInvoke.MapWindowPoints(this, default, ref rect);
+            return rect.ToRectangle();
         }
 
         /// <summary>
@@ -10951,20 +10923,20 @@ namespace System.Windows.Forms
             UpdateRoot();
         }
 
-        private void SetParentHandle(IntPtr value)
+        private void SetParentHandle(HWND value)
         {
             Debug.Assert(value != NativeMethods.InvalidIntPtr, "Outdated call to SetParentHandle");
 
             if (IsHandleCreated)
             {
-                IntPtr parentHandle = User32.GetParent(this);
+                HWND parentHandle = PInvoke.GetParent(this);
                 bool topLevel = GetTopLevel();
-                if (parentHandle != value || (parentHandle == IntPtr.Zero && !topLevel))
+                if (parentHandle != value || (parentHandle.IsNull && !topLevel))
                 {
                     Debug.Assert(Handle != value, "Cycle created in SetParentHandle");
 
-                    bool recreate = (parentHandle == IntPtr.Zero && !topLevel)
-                        || (value == IntPtr.Zero && topLevel);
+                    bool recreate = (parentHandle.IsNull && !topLevel)
+                        || (value.IsNull && topLevel);
 
                     if (recreate)
                     {
@@ -10989,14 +10961,14 @@ namespace System.Windows.Forms
 
                     if (!GetTopLevel())
                     {
-                        if (value == IntPtr.Zero)
+                        if (value.IsNull)
                         {
-                            Application.ParkHandle(new HandleRef(_window, Handle), DpiAwarenessContext);
+                            Application.ParkHandle(handle: new(this), DpiAwarenessContext);
                             UpdateRoot();
                         }
                         else
                         {
-                            if (User32.SetParent(new HandleRef(_window, Handle), value) == IntPtr.Zero)
+                            if (PInvoke.SetParent(this, value).IsNull)
                             {
                                 // Somehow we failed to SetParent, e.g. due to different Dpi awareness setting.
                                 // Throwing exception will keep the handle parked inside ParkingWindow if recreate == true.
@@ -11008,21 +10980,21 @@ namespace System.Windows.Forms
                                 _parent.UpdateChildZOrder(this);
                             }
 
-                            Application.UnparkHandle(new HandleRef(_window, Handle), _window.DpiAwarenessContext);
+                            Application.UnparkHandle(this, _window.DpiAwarenessContext);
                         }
                     }
                 }
-                else if (value == IntPtr.Zero && parentHandle == IntPtr.Zero && topLevel)
+                else if (value.IsNull && parentHandle.IsNull && topLevel)
                 {
                     // The handle was previously parented to the parking window. Its TopLevel property was
                     // then changed to true so the above call to GetParent returns null even though the parent of the control is
                     // not null. We need to explicitly set the parent to null.
-                    if (User32.SetParent(new HandleRef(_window, Handle), IntPtr.Zero) == IntPtr.Zero)
+                    if (PInvoke.SetParent(this, (HWND)default).IsNull)
                     {
                         throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
                     }
 
-                    Application.UnparkHandle(new HandleRef(_window, Handle), _window.DpiAwarenessContext);
+                    Application.UnparkHandle(this, _window.DpiAwarenessContext);
                 }
             }
         }
@@ -11084,7 +11056,7 @@ namespace System.Windows.Forms
                 }
 
                 UpdateStyles();
-                SetParentHandle(IntPtr.Zero);
+                SetParentHandle(default);
                 if (value && Visible)
                 {
                     CreateControl();
@@ -11543,25 +11515,30 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Updates the bounds of the control based on the handle the control is bound to.
         /// </summary>
-        // Internal for ScrollableControl
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal void UpdateBounds()
         {
-            RECT rect = new RECT();
-            User32.GetClientRect(new HandleRef(_window, InternalHandle), ref rect);
-            int clientWidth = rect.right;
-            int clientHeight = rect.bottom;
-            User32.GetWindowRect(new HandleRef(_window, InternalHandle), ref rect);
-            if (!GetTopLevel())
+            Foundation.RECT rect = new();
+            int clientWidth = 0;
+            int clientHeight = 0;
+
+            if (IsHandleCreated)
             {
-                User32.MapWindowPoints(IntPtr.Zero, User32.GetParent(new HandleRef(_window, InternalHandle)), ref rect);
+                PInvoke.GetClientRect(this, out rect);
+                clientWidth = rect.right;
+                clientHeight = rect.bottom;
+                PInvoke.GetWindowRect(this, out rect);
+                if (!GetTopLevel())
+                {
+                    PInvoke.MapWindowPoints(default, PInvoke.GetParent(this), ref rect);
+                }
             }
 
             UpdateBounds(
                 rect.left,
                 rect.top,
-                rect.right - rect.left,
-                rect.bottom - rect.top,
+                rect.Width(),
+                rect.Height(),
                 clientWidth,
                 clientHeight);
         }
@@ -11639,7 +11616,7 @@ namespace System.Windows.Forms
 #if DEBUG
                 if (Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning)
                 {
-                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "WARNING: Bounds changed during OnSizeChanged()\r\nbefore={0} after={1}", originalBounds, Bounds));
+                    Debug.WriteLine($"WARNING: Bounds changed during OnSizeChanged()\r\nbefore={originalBounds} after={Bounds}");
                 }
 #endif
             }
@@ -11647,7 +11624,7 @@ namespace System.Windows.Forms
 #if DEBUG
             if (CompModSwitches.SetBounds.TraceVerbose)
             {
-                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "newBounds={{x={0} y={1} width={2} height={3} clientWidth={4} clientHeight={5}}}", x, y, width, height, clientWidth, clientHeight));
+                Debug.WriteLine($"newBounds={{x={x} y={y} width={width} height={height} clientWidth={clientWidth} clientHeight={clientHeight}}}");
                 Debug.Unindent();
             }
 #endif
@@ -11670,7 +11647,7 @@ namespace System.Windows.Forms
         ///  Updates the child control's position in the control array to correctly
         ///  reflect its index.
         /// </summary>
-        private void UpdateChildControlIndex(Control ctl)
+        private void UpdateChildControlIndex(Control control)
         {
             // Don't reorder the child control array for tab controls. Implemented as a special case
             // in order to keep the method private.
@@ -11680,14 +11657,14 @@ namespace System.Windows.Forms
             }
 
             int newIndex = 0;
-            int curIndex = Controls.GetChildIndex(ctl);
-            IntPtr hWnd = ctl.InternalHandle;
-            while ((hWnd = User32.GetWindow(hWnd, User32.GW.HWNDPREV)) != IntPtr.Zero)
+            int curIndex = Controls.GetChildIndex(control);
+            HWND hWnd = control.InternalHandle;
+            while (!(hWnd = PInvoke.GetWindow(hWnd, GET_WINDOW_CMD.GW_HWNDPREV)).IsNull)
             {
                 Control c = FromHandle(hWnd);
                 if (c is not null)
                 {
-                    newIndex = Controls.GetChildIndex(c, false) + 1;
+                    newIndex = Controls.GetChildIndex(c, throwException: false) + 1;
                     break;
                 }
             }
@@ -11699,7 +11676,7 @@ namespace System.Windows.Forms
 
             if (newIndex != curIndex)
             {
-                Controls.SetChildIndex(ctl, newIndex);
+                Controls.SetChildIndex(control, newIndex);
             }
         }
 
@@ -11714,8 +11691,8 @@ namespace System.Windows.Forms
         {
             if (!Disposing && findNewParent && IsHandleCreated)
             {
-                IntPtr parentHandle = User32.GetParent(this);
-                if (parentHandle != IntPtr.Zero)
+                HWND parentHandle = PInvoke.GetParent(this);
+                if (!parentHandle.IsNull)
                 {
                     ReflectParent = FromHandle(parentHandle);
                     return;
@@ -11747,18 +11724,18 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IntPtr prevHandle = User32.HWND_TOP;
+            HWND prevHandle = (HWND)User32.HWND_TOP;
             for (int i = Controls.GetChildIndex(ctl); --i >= 0;)
             {
                 Control c = Controls[i];
                 if (c.IsHandleCreated && c._parent == this)
                 {
-                    prevHandle = c.Handle;
+                    prevHandle = c.HWND;
                     break;
                 }
             }
 
-            if (User32.GetWindow(new HandleRef(ctl._window, ctl.Handle), User32.GW.HWNDPREV) != prevHandle)
+            if (PInvoke.GetWindow(ctl, GET_WINDOW_CMD.GW_HWNDPREV) != prevHandle)
             {
                 _state |= States.NoZOrder;
                 try
@@ -11868,13 +11845,13 @@ namespace System.Windows.Forms
         {
             if (ParentInternal is not null)
             {
-                IntPtr parentHandle = Handle;
-                IntPtr lastParentHandle = parentHandle;
+                HWND parentHandle = HWND;
+                HWND lastParentHandle = parentHandle;
 
-                while (parentHandle != IntPtr.Zero)
+                while (!parentHandle.IsNull)
                 {
                     lastParentHandle = parentHandle;
-                    parentHandle = User32.GetParent(parentHandle);
+                    parentHandle = PInvoke.GetParent(parentHandle);
 
                     if (((User32.WS)User32.GetWindowLong(lastParentHandle, User32.GWL.STYLE)).HasFlag(User32.WS.CHILD))
                     {
@@ -11882,7 +11859,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (lastParentHandle != IntPtr.Zero)
+                if (!lastParentHandle.IsNull)
                 {
                     User32.PostMessageW(lastParentHandle, User32.WM.CLOSE);
                 }
@@ -12614,7 +12591,7 @@ namespace System.Windows.Forms
             Gdi32.HDC dc = (Gdi32.HDC)m.WParamInternal;
 
             bool usingBeginPaint = dc.IsNull;
-            using var paintScope = usingBeginPaint ? new PInvoke.BeginPaintScope((Foundation.HWND)Handle) : default;
+            using var paintScope = usingBeginPaint ? new PInvoke.BeginPaintScope(HWND) : default;
 
             if (usingBeginPaint)
             {
@@ -13030,8 +13007,9 @@ namespace System.Windows.Forms
 
             // Update new size / position
             UpdateBounds();
-            if (_parent is not null
-                && User32.GetParent(new HandleRef(_window, InternalHandle)) == _parent.InternalHandle
+            if (IsHandleCreated
+                && _parent is not null
+                && PInvoke.GetParent(this) == _parent.InternalHandle
                 && (_state & States.NoZOrder) == 0)
             {
                 User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParamInternal;
@@ -13812,7 +13790,7 @@ namespace System.Windows.Forms
             Debug.Indent();
             try
             {
-                return ActiveXInstance.DoVerb(iVerb, lpmsg, pActiveSite, lindex, hwndParent, lprcPosRect);
+                return ActiveXInstance.DoVerb(iVerb, lpmsg, pActiveSite, lindex, (HWND)hwndParent, lprcPosRect);
             }
             finally
             {
@@ -14381,9 +14359,8 @@ namespace System.Windows.Forms
 
         internal virtual Rectangle GetToolNativeScreenRectangle()
         {
-            Unsafe.SkipInit(out RECT rectangle);
-            User32.GetWindowRect(this, ref rectangle);
-            return rectangle;
+            PInvoke.GetWindowRect(this, out var rect);
+            return rect.ToRectangle();
         }
 
         internal virtual bool AllowsKeyboardToolTip()
@@ -14438,6 +14415,10 @@ namespace System.Windows.Forms
                 toolStripControlHostReference.SetTarget(value);
             }
         }
+
+        HWND IHandle<HWND>.Handle => HWND;
+
+        internal HWND HWND => (HWND)Handle;
 
         internal virtual bool AllowsChildrenToShowToolTips() => true;
     }
