@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using Windows.Win32;
 using Windows.Win32.Graphics.Gdi;
 using static Interop;
 

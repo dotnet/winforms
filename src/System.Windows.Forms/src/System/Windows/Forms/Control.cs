@@ -17,11 +17,8 @@ using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
-using Windows.Win32;
-using Windows.Win32.UI.WindowsAndMessaging;
 using static Interop;
 using Encoding = System.Text.Encoding;
-using Foundation = Windows.Win32.Foundation;
 using Gdi = Windows.Win32.Graphics.Gdi;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 

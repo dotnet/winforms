@@ -13,9 +13,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
 using Accessibility;
-using Windows.Win32;
 using static Interop;
-using Foundation = Windows.Win32.Foundation;
 
 namespace System.Windows.Forms.Design
 {

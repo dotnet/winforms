@@ -11,8 +11,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.Mso;
-using Windows.Win32;
-using Foundation = Windows.Win32.Foundation;
 
 namespace System.Windows.Forms
 {

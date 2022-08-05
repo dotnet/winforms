@@ -13,12 +13,10 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
-using Windows.Win32;
 using Windows.Win32.Graphics.Gdi;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 using static Interop.User32;
-using Foundation = Windows.Win32.Foundation;
 using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms

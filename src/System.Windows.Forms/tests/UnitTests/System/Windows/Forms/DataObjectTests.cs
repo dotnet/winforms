@@ -10,7 +10,6 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
 using Moq;
 using System.Windows.Forms.TestUtilities;
-using Windows.Win32;
 using Xunit;
 using static Interop;
 using static Interop.Shell32;

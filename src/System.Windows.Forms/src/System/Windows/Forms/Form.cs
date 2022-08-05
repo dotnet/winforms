@@ -12,8 +12,6 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
-using Windows.Win32;
-using Windows.Win32.UI.WindowsAndMessaging;
 using Windows.Win32.System.Threading;
 using static Interop;
 

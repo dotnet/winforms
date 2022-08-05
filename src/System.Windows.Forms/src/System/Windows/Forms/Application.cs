@@ -14,8 +14,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
-using Windows.Win32;
-using Foundation = Windows.Win32.Foundation;
 using static Interop;
 using Directory = System.IO.Directory;
 

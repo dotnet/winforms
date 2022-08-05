@@ -11,8 +11,6 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.ComCtl32;
-using Windows.Win32;
-using Foundation = Windows.Win32.Foundation;
 
 namespace System.Windows.Forms
 {

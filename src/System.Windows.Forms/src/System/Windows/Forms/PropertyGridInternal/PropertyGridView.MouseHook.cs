@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
