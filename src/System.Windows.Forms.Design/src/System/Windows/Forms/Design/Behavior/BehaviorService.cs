@@ -482,10 +482,10 @@ namespace System.Windows.Forms.Design.Behavior
             // which would have activated the app. So if the DialogOwnerWindow (e.g. VS) is not the active window,
             // let's activate it here.
             IUIService uiService = (IUIService)_serviceProvider.GetService(typeof(IUIService));
-            if (uiService != null)
+            if (uiService is not null)
             {
                 IWin32Window hwnd = uiService.GetDialogOwnerWindow();
-                if (hwnd != null && hwnd.Handle != IntPtr.Zero && hwnd.Handle != PInvoke.GetActiveWindow())
+                if (hwnd is not null && hwnd.Handle != 0 && hwnd.Handle != PInvoke.GetActiveWindow())
                 {
                     PInvoke.SetActiveWindow(new HandleRef<HWND>(hwnd, (HWND)hwnd.Handle));
                 }

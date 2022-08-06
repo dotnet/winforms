@@ -21,7 +21,7 @@ internal readonly struct HandleRef<THandle> : IHandle<THandle>, IEquatable<Handl
     }
 
     [SetsRequiredMembers]
-    public HandleRef(IHandle<THandle> handle)
+    public HandleRef(IHandle<THandle>? handle)
     {
         Wrapper = handle;
         Handle = handle?.Handle ?? default;

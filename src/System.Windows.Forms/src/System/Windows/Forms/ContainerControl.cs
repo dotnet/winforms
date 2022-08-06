@@ -666,7 +666,7 @@ namespace System.Windows.Forms
             if (_activeControl is not null && _activeControl.Visible)
             {
                 // Avoid focus loops, especially with ComboBoxes.
-                var focusHandle = PInvoke.GetFocus();
+                HWND focusHandle = PInvoke.GetFocus();
                 if (focusHandle.IsNull || FromChildHandle(focusHandle) != _activeControl)
                 {
                     PInvoke.SetFocus(_activeControl);
