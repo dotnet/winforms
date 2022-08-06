@@ -525,6 +525,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        // See https://github.com/dotnet/winforms/pull/6957
+        // Note if we fix this issue https://github.com/dotnet/winforms/issues/6930#issuecomment-1090213559 then we will have to edit this test.
         [WinFormsTheory]
         [MemberData(nameof(Displayed_GetWithSharedDataGridView_TestData))]
         public void DataGridViewCell_Displayed_GetWithSharedDataGridViewWithHandle_ReturnsExpected(bool gridVisible, bool rowHeadersVisible, bool columnHeadersVisible, bool columnVisible)
@@ -542,8 +544,27 @@ namespace System.Windows.Forms.Tests
                 Visible = columnVisible
             };
             control.Columns.Add(column);
+            // We create default row with State = DataGridViewElementStates.Visible;
+            // After that we have only one such shared row in the collection.
+            // And there 2 rows in the collection overall (+ 1 new_row because of AllowUserToAddRows == true).
             control.Rows.Add();
+            // Store it. Note that if we put this line after Assert.NotEqual(IntPtr.Zero, control.Handle),
+            // with previews implementation (prior #6957) test will fail.
             DataGridViewRow row = control.Rows.SharedRow(0);
+            // While calling control.Handle we will create a new handle.
+            // During this process DataGridView call MakeFirstDisplayedCellCurrentCell().
+            // Where if we have cell to display (columnVisible) we will set it as CurrentCell.
+            // Which in turn will lead to unsharing of the raw in any case.
+            // MakeFirstDisplayedCellCurrentCell() -> SetAndSelectCurrentCellAddress() -> SetCurrentCellAddressCore()
+            //   -> OnCurrentCellChanged() -> CurrentCell.get() -> Rows[index]
+            // See https://github.com/dotnet/winforms/issues/6930#issuecomment-1090213559.
+            // Note that the cell is Displayed (Displayed == true) only if the owning row IS NOT shared and Displayed and owning column is Displayed.
+            // So we have these options:
+            // 1. columnVisible == false - our row remain shared and therefore cell will not be Displayed;
+            // 2. gridVisible == false - our row and column are not Displayed, so and the cell too.
+            // 3. (gridVisible && columnVisible) == true - our row became unshared and Displayed.
+            //    But because this is the only one such row in the collection and Count of all rows = 2,
+            //    with previous implementation (prior #6957) we will clone it and LOST.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -552,8 +573,18 @@ namespace System.Windows.Forms.Tests
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
 
+            // Test for shared row (if row.Index == -1 this is shared row).
+            Assert.Equal(columnVisible, row.Index != -1);
             DataGridViewCell cell = row.Cells[0];
-            Assert.Equal(gridVisible && columnVisible, cell.Displayed);
+            // 
+            // Here 3 our ways with previous implementation (prior #6957) in relation to the old test implementation (Assert.False(cell.Displayed)):
+            // 1. All correct - we have shared and therefore not Displayed row.
+            // 2. All correct - we have not Displayed row.
+            // 3. control.Rows.SharedRow(0) unshared and Displayed BUT our stored row (LOST) still shared and therefore not Displayed.
+            //    So test will pass of course.
+            // Test must check: Assert.Equal(gridVisible && columnVisible, cell.Displayed);
+            // And with new implementation it will work no mater where you put row = control.Rows.SharedRow(0);
+            Assert.Equal(gridVisible && columnVisible, cell.Displayed); //old test implementation: Assert.False(cell.Displayed);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
