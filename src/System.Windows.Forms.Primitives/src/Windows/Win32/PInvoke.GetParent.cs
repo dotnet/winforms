@@ -11,7 +11,7 @@ namespace Windows.Win32
         public static HWND GetParent<T>(in T hwnd) where T : IHandle<HWND>
         {
             HWND result = GetParent(hwnd.Handle);
-            GC.KeepAlive(hwnd);
+            GC.KeepAlive(hwnd.Wrapper);
             return result;
         }
     }

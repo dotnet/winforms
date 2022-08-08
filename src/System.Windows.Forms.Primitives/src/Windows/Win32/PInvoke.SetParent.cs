@@ -11,22 +11,22 @@ namespace Windows.Win32
         public static HWND SetParent<T>(in T hWndChild, HWND hWndNewParent) where T : IHandle<HWND>
         {
             HWND result = SetParent(hWndChild.Handle, hWndNewParent);
-            GC.KeepAlive(hWndChild);
+            GC.KeepAlive(hWndChild.Wrapper);
             return result;
         }
 
         public static HWND SetParent<T>(HWND hWndChild, in T hWndNewParent) where T : IHandle<HWND>
         {
             HWND result = SetParent(hWndChild, hWndNewParent.Handle);
-            GC.KeepAlive(hWndNewParent);
+            GC.KeepAlive(hWndNewParent.Wrapper);
             return result;
         }
 
         public static HWND SetParent<T>(in T hWndChild, in T hWndNewParent) where T : IHandle<HWND>
         {
             HWND result = SetParent(hWndChild.Handle, hWndNewParent.Handle);
-            GC.KeepAlive(hWndChild);
-            GC.KeepAlive(hWndNewParent);
+            GC.KeepAlive(hWndChild.Wrapper);
+            GC.KeepAlive(hWndNewParent.Wrapper);
             return result;
         }
     }

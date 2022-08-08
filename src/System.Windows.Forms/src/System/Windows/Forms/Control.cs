@@ -18,7 +18,6 @@ using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using static Interop;
 using Encoding = System.Text.Encoding;
-using Gdi = Windows.Win32.Graphics.Gdi;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms

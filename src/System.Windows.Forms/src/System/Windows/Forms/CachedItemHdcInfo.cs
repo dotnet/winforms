@@ -7,17 +7,17 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    internal class CachedItemHdcInfo : IDisposable, IHandle
+    internal class CachedItemHdcInfo : IDisposable, IHandle<Gdi.HDC>
     {
         internal CachedItemHdcInfo()
         {
         }
 
-        private Gdi32.HDC _cachedItemHDC;
+        private Gdi.HDC _cachedItemHDC;
         private Size _cachedHDCSize = Size.Empty;
         private Gdi32.HBITMAP _cachedItemBitmap;
 
-        public IntPtr Handle => (IntPtr)_cachedItemHDC;
+        public Gdi.HDC Handle => _cachedItemHDC;
 
         // this DC is cached and should only be deleted on Dispose or when the size changes.
 

@@ -23,7 +23,7 @@ namespace Windows.Win32
             fixed (void* p = &lpRect)
             {
                 int result = MapWindowPoints(hWndFrom.Handle, hWndTo, (POINT*)p, cPoints: 2);
-                GC.KeepAlive(hWndFrom);
+                GC.KeepAlive(hWndFrom.Wrapper);
                 return result;
             }
         }
@@ -34,7 +34,7 @@ namespace Windows.Win32
             fixed (void* p = &lpRect)
             {
                 int result = MapWindowPoints(hWndFrom, hWndTo.Handle, (POINT*)p, cPoints: 2);
-                GC.KeepAlive(hWndTo);
+                GC.KeepAlive(hWndTo.Wrapper);
                 return result;
             }
         }
@@ -54,7 +54,7 @@ namespace Windows.Win32
             fixed (void* p = &lpPoint)
             {
                 int result = MapWindowPoints(hWndFrom, hWndTo.Handle, (POINT*)p, cPoints: 1);
-                GC.KeepAlive(hWndTo);
+                GC.KeepAlive(hWndTo.Wrapper);
                 return result;
             }
         }
@@ -65,7 +65,7 @@ namespace Windows.Win32
             fixed (void* p = &lpPoint)
             {
                 int result = MapWindowPoints(hWndFrom.Handle, hWndTo, (POINT*)p, cPoints: 1);
-                GC.KeepAlive(hWndFrom);
+                GC.KeepAlive(hWndFrom.Wrapper);
                 return result;
             }
         }
@@ -76,8 +76,8 @@ namespace Windows.Win32
             fixed (void* p = &lpPoint)
             {
                 int result = MapWindowPoints(hWndFrom.Handle, hWndTo.Handle, (POINT*)p, cPoints: 1);
-                GC.KeepAlive(hWndFrom);
-                GC.KeepAlive(hWndTo);
+                GC.KeepAlive(hWndFrom.Wrapper);
+                GC.KeepAlive(hWndTo.Wrapper);
                 return result;
             }
         }

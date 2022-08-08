@@ -17,7 +17,6 @@ using Windows.Win32.Graphics.Gdi;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 using static Interop.User32;
-using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms
 {

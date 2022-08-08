@@ -16,7 +16,7 @@ namespace Windows.Win32
            LPARAM lParam = default)
         {
             BOOL result = PostMessage(hWnd.Handle, (uint)Msg, wParam, lParam);
-            GC.KeepAlive(hWnd);
+            GC.KeepAlive(hWnd.Wrapper);
             return result;
         }
     }

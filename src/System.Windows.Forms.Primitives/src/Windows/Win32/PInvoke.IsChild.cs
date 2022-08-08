@@ -11,22 +11,22 @@ namespace Windows.Win32
         public static BOOL IsChild<T>(HWND hWndParent, T hWnd) where T : IHandle<HWND>
         {
             BOOL result = IsChild(hWndParent, hWnd.Handle);
-            GC.KeepAlive(hWnd);
+            GC.KeepAlive(hWnd.Wrapper);
             return result;
         }
 
         public static BOOL IsChild<T>(in T hWndParent, HWND hWnd) where T : IHandle<HWND>
         {
             BOOL result = IsChild(hWndParent.Handle, hWnd);
-            GC.KeepAlive(hWndParent);
+            GC.KeepAlive(hWndParent.Wrapper);
             return result;
         }
 
         public static BOOL IsChild<T>(in T hWndParent, T hWnd) where T : IHandle<HWND>
         {
             BOOL result = IsChild(hWndParent.Handle, hWnd.Handle);
-            GC.KeepAlive(hWndParent);
-            GC.KeepAlive(hWnd);
+            GC.KeepAlive(hWndParent.Wrapper);
+            GC.KeepAlive(hWnd.Wrapper);
             return result;
         }
     }
