@@ -574,10 +574,10 @@ namespace System.Windows.Forms.Tests
         {
             const string CommandParameter = nameof(CommandParameter);
 
-            using var button = new SubToolStripButton();
+            using SubToolStripButton button = new();
 
             // TestCommandExecutionAbility is controlling the execution context.
-            var viewModel = new CommandViewModel() { TestCommandExecutionAbility = true };
+            CommandViewModel viewModel = new() { TestCommandExecutionAbility = true };
 
             int callCount = 0;
             EventHandler handler = (sender, e) =>

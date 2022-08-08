@@ -724,8 +724,8 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void Control_DataContext_AmbientBehaviorTest()
         {
-            using var control = new SubControl();
-            using var childControl = new SubControl();
+            using SubControl control = new();
+            using SubControl childControl = new();
 
             control.Controls.Add(childControl);
             string dataContext = "dataContext";

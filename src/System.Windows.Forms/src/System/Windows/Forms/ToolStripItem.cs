@@ -2794,7 +2794,6 @@ namespace System.Windows.Forms
         [RequiresPreviewFeatures]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCommandCanExecuteChanged(EventArgs e)
-            // TODO: Is passing 'this' correct here?
             => ((EventHandler)Events[s_commandCanExecuteChangedEvent])?.Invoke(this, e);
 
         /// <summary>
