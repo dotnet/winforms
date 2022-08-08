@@ -13,7 +13,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
-using Windows.Win32;
 using static Interop;
 using static Interop.Richedit;
 

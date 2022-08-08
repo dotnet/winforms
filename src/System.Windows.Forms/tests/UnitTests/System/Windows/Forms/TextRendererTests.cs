@@ -7,11 +7,10 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Windows.Forms.Metafiles;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 using Xunit;
 using static Interop;
-using Windows.Win32;
 
 namespace System.Windows.Forms.Tests
 {
