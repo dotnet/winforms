@@ -115,7 +115,7 @@ namespace System.Windows.Forms.Design
             }
 
             var pt = new Point(c.Left, c.Top);
-            User32.MapWindowPoint(c.Parent, _toolStripAdornerWindow, ref pt);
+            PInvoke.MapWindowPoints(c.Parent, _toolStripAdornerWindow, ref pt);
             return pt;
         }
 

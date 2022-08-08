@@ -11,8 +11,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.Mso;
-using Windows.Win32;
-using Foundation = Windows.Win32.Foundation;
 
 namespace System.Windows.Forms
 {
@@ -1379,11 +1377,11 @@ namespace System.Windows.Forms
                         // winforms code.  This can happen with ActiveX controls that launch dialogs specifically
 
                         // First, get the first top-level window in the hierarchy.
-                        IntPtr hwndRoot = User32.GetAncestor(msg.hwnd, User32.GA.ROOT);
+                        Foundation.HWND hwndRoot = PInvoke.GetAncestor((Foundation.HWND)msg.hwnd, GET_ANCESTOR_FLAGS.GA_ROOT);
 
                         // If we got a valid HWND, then call IsDialogMessage on it.  If that returns true, it's been processed
                         // so we should return true to prevent Translate/Dispatch from being called.
-                        if (hwndRoot != IntPtr.Zero && User32.IsDialogMessageW(hwndRoot, ref msg).IsTrue())
+                        if (!hwndRoot.IsNull && User32.IsDialogMessageW(hwndRoot, ref msg).IsTrue())
                         {
                             return true;
                         }
@@ -1535,7 +1533,7 @@ namespace System.Windows.Forms
                         case msoloop.FocusWait:
 
                             // For focus wait, check to see if we are now the active application.
-                            User32.GetWindowThreadProcessId(User32.GetActiveWindow(), out uint pid);
+                            User32.GetWindowThreadProcessId(PInvoke.GetActiveWindow(), out uint pid);
                             if (pid == PInvoke.GetCurrentProcessId())
                             {
                                 continueLoop = false;

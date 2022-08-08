@@ -24,7 +24,7 @@ namespace System.Windows.Forms
 
         private IntPtr _hookedWndProc;
 
-        private IntPtr _defaultControlHwnd;
+        private Foundation.HWND _defaultControlHwnd;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="CommonDialog"/> class.
@@ -60,12 +60,12 @@ namespace System.Windows.Forms
         {
             if (msg == (int)User32.WM.INITDIALOG)
             {
-                MoveToScreenCenter(hWnd);
+                MoveToScreenCenter((HWND)hWnd);
 
                 // Under some circumstances, the dialog does not initially focus on any
                 // control. We fix that by explicitly setting focus ourselves.
-                _defaultControlHwnd = wparam;
-                User32.SetFocus(wparam);
+                _defaultControlHwnd = (HWND)wparam;
+                PInvoke.SetFocus((HWND)wparam);
             }
             else if (msg == (int)User32.WM.SETFOCUS)
             {
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
                 // If the dialog box gets focus, bounce it to the default control.
                 // So we post a message back to ourselves to wait for the focus change
                 // then push it to the default control.
-                User32.SetFocus(new HandleRef(this, _defaultControlHwnd));
+                PInvoke.SetFocus(_defaultControlHwnd);
             }
 
             return IntPtr.Zero;
@@ -87,15 +87,14 @@ namespace System.Windows.Forms
         ///  common dialog hook procedure to center the dialog on the screen before it
         ///  is shown.
         /// </summary>
-        private protected static void MoveToScreenCenter(IntPtr hWnd)
+        private protected static void MoveToScreenCenter(Foundation.HWND hwnd)
         {
-            var r = new RECT();
-            User32.GetWindowRect(hWnd, ref r);
+            PInvoke.GetWindowRect(hwnd, out var r);
             Rectangle screen = Screen.GetWorkingArea(Control.MousePosition);
             int x = screen.X + (screen.Width - r.right + r.left) / 2;
             int y = screen.Y + (screen.Height - r.bottom + r.top) / 3;
             User32.SetWindowPos(
-                hWnd,
+                hwnd,
                 User32.HWND_TOP,
                 x,
                 y,
@@ -170,7 +169,7 @@ namespace System.Windows.Forms
             // Declared here so it can be kept alive.
             NativeWindow? nativeWindow = null;
 
-            IntPtr ownerHwnd = IntPtr.Zero;
+            HandleRef<HWND> ownerHwnd = default;
             DialogResult result = DialogResult.Cancel;
             try
             {
@@ -179,17 +178,17 @@ namespace System.Windows.Forms
                     ownerHwnd = Control.GetSafeHandle(owner);
                 }
 
-                if (ownerHwnd == IntPtr.Zero)
+                if (ownerHwnd.IsNull)
                 {
-                    ownerHwnd = User32.GetActiveWindow();
+                    ownerHwnd = Control.GetHandleRef(PInvoke.GetActiveWindow());
                 }
 
-                if (ownerHwnd == IntPtr.Zero)
+                if (ownerHwnd.IsNull)
                 {
                     // We will have to create our own Window
                     nativeWindow = new NativeWindow();
                     nativeWindow.CreateHandle(new CreateParams());
-                    ownerHwnd = nativeWindow.Handle;
+                    ownerHwnd = new(nativeWindow, nativeWindow.HWND);
                 }
 
                 if (s_helpMessage == User32.WM.NULL)
@@ -204,7 +203,7 @@ namespace System.Windows.Forms
                 IntPtr userCookie = IntPtr.Zero;
                 try
                 {
-                    _priorWindowProcedure = User32.SetWindowLong(ownerHwnd, User32.GWL.WNDPROC, ownerWindowProcedure);
+                    _priorWindowProcedure = User32.SetWindowLong(ownerHwnd.Handle, User32.GWL.WNDPROC, ownerWindowProcedure);
 
                     if (Application.UseVisualStyles)
                     {
@@ -214,7 +213,7 @@ namespace System.Windows.Forms
                     Application.BeginModalMessageLoop();
                     try
                     {
-                        result = RunDialog(ownerHwnd) ? DialogResult.OK : DialogResult.Cancel;
+                        result = RunDialog(ownerHwnd.Handle) ? DialogResult.OK : DialogResult.Cancel;
                     }
                     finally
                     {
@@ -223,10 +222,10 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    IntPtr currentSubClass = User32.GetWindowLong(ownerHwnd, User32.GWL.WNDPROC);
+                    IntPtr currentSubClass = User32.GetWindowLong(ownerHwnd.Handle, User32.GWL.WNDPROC);
                     if (_priorWindowProcedure != IntPtr.Zero || currentSubClass != _hookedWndProc)
                     {
-                        User32.SetWindowLong(ownerHwnd, User32.GWL.WNDPROC, _priorWindowProcedure);
+                        User32.SetWindowLong(ownerHwnd.Handle, User32.GWL.WNDPROC, _priorWindowProcedure);
                     }
 
                     ThemingScope.Deactivate(userCookie);
@@ -243,7 +242,7 @@ namespace System.Windows.Forms
                 nativeWindow?.DestroyHandle();
             }
 
-            GC.KeepAlive(owner);
+            GC.KeepAlive(ownerHwnd.Wrapper);
 
             return result;
         }

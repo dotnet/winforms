@@ -1622,7 +1622,7 @@ namespace System.Windows.Forms
         private void ReparentToActiveToolStripWindow()
         {
             ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this);
-            User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ToolStripManager.ModalMenuFilter.ActiveHwnd);
+            User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ToolStripManager.ModalMenuFilter.ActiveHwnd.Handle);
         }
 
         private void ReparentToDropDownOwnerWindow()
@@ -1775,7 +1775,7 @@ namespace System.Windows.Forms
                         // Snap the foreground window BEFORE calling any user events so they
                         // don't have a chance to activate something else. This covers the case
                         // where someone handles the opening event and throws up a messagebox.
-                        IntPtr foregroundWindow = User32.GetForegroundWindow();
+                        HWND foregroundWindow = PInvoke.GetForegroundWindow();
 
                         // Fire Opening event
                         // Cancellable event in which default value of e.Cancel depends on
@@ -2124,12 +2124,12 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            Debug.Fail($"Why are we being activated when we're not visible? Deactivating thing is {WindowsFormsUtils.GetControlInformation(m.LParamInternal)}");
+                            Debug.Fail($"Why are we being activated when we're not visible? Deactivating thing is {WindowsFormsUtils.GetControlInformation((HWND)m.LParamInternal)}");
                         }
                     }
                     else
                     {
-                        Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, $"[ToolStripDropDown.WndProc] activating thing is {WindowsFormsUtils.GetControlInformation(m.LParamInternal)}");
+                        Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, $"[ToolStripDropDown.WndProc] activating thing is {WindowsFormsUtils.GetControlInformation((HWND)m.LParamInternal)}");
                     }
 
                     base.WndProc(ref m);
@@ -2199,10 +2199,12 @@ namespace System.Windows.Forms
                     _sendingActivateMessage = true;
                     try
                     {
-                        Debug.WriteLineIf(DropDownActivateDebug.TraceVerbose, $"Sending WM_NCACTIVATE to toplevel hwnd {ToolStripManager.ModalMenuFilter.ActiveHwnd}");
+                        Debug.WriteLineIf(
+                            DropDownActivateDebug.TraceVerbose,
+                            $"Sending WM_NCACTIVATE to toplevel hwnd {ToolStripManager.ModalMenuFilter.ActiveHwnd}");
 
                         // We're activating - notify the previous guy that we're activating.
-                        HandleRef activeHwndHandleRef = ToolStripManager.ModalMenuFilter.ActiveHwnd;
+                        HandleRef<HWND> activeHwndHandleRef = ToolStripManager.ModalMenuFilter.ActiveHwnd;
 
                         User32.SendMessageW(activeHwndHandleRef.Handle, User32.WM.NCACTIVATE, (nint)BOOL.TRUE, -1);
                         User32.RedrawWindow(

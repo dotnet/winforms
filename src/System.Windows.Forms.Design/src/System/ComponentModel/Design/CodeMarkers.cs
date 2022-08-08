@@ -5,7 +5,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
-using Windows.Win32;
 
 namespace System.ComponentModel.Design
 {

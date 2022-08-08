@@ -5,6 +5,8 @@
 #if DEBUG
 #endif
 using System.Drawing;
+using Windows.Win32;
+using Gdi = Windows.Win32.Graphics.Gdi;
 
 internal static partial class Interop
 {
@@ -27,15 +29,15 @@ internal static partial class Interop
 
             /// <summary>
             ///  Creates a solid pen based on the <paramref name="color"/> and <paramref name="width"/> using
-            ///  <see cref="CreatePen(PS, int, int)" />.
+            ///  <see cref="PInvoke.CreatePen(Gdi.PEN_STYLE, int, uint)" />.
             /// </summary>
             public CreatePenScope(Color color, int width = 1)
             {
                 // From MSDN: if width > 1, the style must be PS_NULL, PS_SOLID, or PS_INSIDEFRAME.
-                HPen = CreatePen(
-                    width > 1 ? PS.GEOMETRIC | PS.SOLID : default,
+                HPen = PInvoke.CreatePen(
+                    width > 1 ? (Gdi.PEN_STYLE.PS_GEOMETRIC | Gdi.PEN_STYLE.PS_SOLID) : default,
                     width,
-                    ColorTranslator.ToWin32(color));
+                    (uint)ColorTranslator.ToWin32(color));
             }
 
             public static implicit operator HPEN(in CreatePenScope scope) => scope.HPen;

@@ -7,7 +7,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 using Microsoft.Win32;
-using Windows.Win32;
 using Windows.Win32.UI.TextServices;
 using static Interop;
 

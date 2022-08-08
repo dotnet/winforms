@@ -15,7 +15,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
-using Windows.Win32;
 using Windows.Win32.Graphics.Gdi;
 using static Interop;
 
@@ -40,7 +39,7 @@ namespace System.Windows.Forms
         private ToolStripItemCollection _displayedItems;
         private ToolStripItemCollection _overflowItems;
         private ToolStripDropTargetManager _dropTargetManager;
-        private IntPtr _hwndThatLostFocus = IntPtr.Zero;
+        private HWND _hwndThatLostFocus;
         private ToolStripItem _lastMouseActiveItem;
         private ToolStripItem _lastMouseDownedItem;
         private LayoutEngine _layoutEngine;
@@ -1903,7 +1902,7 @@ namespace System.Windows.Forms
                 {
                     if (_hwndThatLostFocus == IntPtr.Zero)
                     {
-                        SnapFocus(User32.GetFocus());
+                        SnapFocus(PInvoke.GetFocus());
                     }
 
                     controlHost.Control.Select();
@@ -4314,25 +4313,28 @@ namespace System.Windows.Forms
         {
             bool focusSuccess = false;
 
-            if ((_hwndThatLostFocus != IntPtr.Zero) && (_hwndThatLostFocus != Handle))
+            if (!_hwndThatLostFocus.IsNull && (_hwndThatLostFocus != Handle))
             {
-                Control c = Control.FromHandle(_hwndThatLostFocus);
+                Control control = FromHandle(_hwndThatLostFocus);
 
-                Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip RestoreFocus]: Will Restore Focus to: " + WindowsFormsUtils.GetControlInformation(_hwndThatLostFocus));
-                _hwndThatLostFocus = IntPtr.Zero;
+                Debug.WriteLineIf(
+                    s_snapFocusDebug.TraceVerbose,
+                    $"[ToolStrip RestoreFocus]: Will Restore Focus to: {WindowsFormsUtils.GetControlInformation(_hwndThatLostFocus)}");
 
-                if ((c is not null) && c.Visible)
+                _hwndThatLostFocus = default;
+
+                if ((control is not null) && control.Visible)
                 {
-                    focusSuccess = c.Focus();
+                    focusSuccess = control.Focus();
                 }
             }
 
-            _hwndThatLostFocus = IntPtr.Zero;
+            _hwndThatLostFocus = default;
 
             if (!focusSuccess)
             {
-                // clear out the focus, we have focus, we're not supposed to anymore.
-                User32.SetFocus(IntPtr.Zero);
+                // Clear out the focus, we have focus, we're not supposed to anymore.
+                PInvoke.SetFocus(default);
             }
         }
 
@@ -4728,7 +4730,7 @@ namespace System.Windows.Forms
         ///  - make sure it's not a child control of this control.
         ///  - make sure the control is on this window
         /// </summary>
-        private void SnapFocus(IntPtr otherHwnd)
+        private void SnapFocus(HWND otherHwnd)
         {
 #if DEBUG
             Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, $"{!Environment.StackTrace.Contains("FocusInternal")}", "who is setting focus to us?");
@@ -4756,17 +4758,20 @@ namespace System.Windows.Forms
                     SnapMouseLocation();
 
                     // make sure the otherHandle is not a child of thisHandle
-                    if ((Handle != otherHwnd) && !User32.IsChild(new HandleRef(this, Handle), otherHwnd).IsTrue())
+                    if ((Handle != otherHwnd) && !PInvoke.IsChild(this, otherHwnd))
                     {
                         // make sure the root window of the otherHwnd is the same as
                         // the root window of thisHwnd.
-                        IntPtr thisHwndRoot = User32.GetAncestor(this, User32.GA.ROOT);
-                        IntPtr otherHwndRoot = User32.GetAncestor(otherHwnd, User32.GA.ROOT);
+                        HWND thisHwndRoot = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
+                        HWND otherHwndRoot = PInvoke.GetAncestor(otherHwnd, GET_ANCESTOR_FLAGS.GA_ROOT);
 
-                        if (thisHwndRoot == otherHwndRoot && (thisHwndRoot != IntPtr.Zero))
+                        if (thisHwndRoot == otherHwndRoot && !thisHwndRoot.IsNull)
                         {
-                            Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip SnapFocus]: Caching for return focus:" + WindowsFormsUtils.GetControlInformation(otherHwnd));
-                            // we know we're in the same window heirarchy.
+                            Debug.WriteLineIf(
+                                s_snapFocusDebug.TraceVerbose,
+                                $"[ToolStrip SnapFocus]: Caching for return focus:{WindowsFormsUtils.GetControlInformation(otherHwnd)}");
+
+                            // We know we're in the same window heirarchy.
                             _hwndThatLostFocus = otherHwnd;
                         }
                     }
@@ -4915,7 +4920,7 @@ namespace System.Windows.Forms
         {
             if (m.MsgInternal == User32.WM.SETFOCUS)
             {
-                SnapFocus(m.WParamInternal);
+                SnapFocus((HWND)m.WParamInternal);
             }
 
             if (m.MsgInternal == User32.WM.MOUSEACTIVATE)
@@ -4936,13 +4941,12 @@ namespace System.Windows.Forms
 
                     if (!IsDropDown && !IsInDesignMode)
                     {
-                        // If our root HWND is not the active hwnd,
-                        // eat the mouse message and bring the form to the front.
-                        IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
-                        if (rootHwnd != IntPtr.Zero)
+                        // If our root HWND is not the active hwnd,eat the mouse message and bring the form to the front.
+                        HWND rootHwnd = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
+                        if (!rootHwnd.IsNull)
                         {
                             // snap the active window and compare to our root window.
-                            IntPtr hwndActive = User32.GetActiveWindow();
+                            HWND hwndActive = PInvoke.GetActiveWindow();
                             if (hwndActive != rootHwnd)
                             {
                                 // Activate the window, and discard the mouse message.
@@ -4958,7 +4962,7 @@ namespace System.Windows.Forms
                 {
                     // we're setting focus to a child control - remember who gave it to us
                     // so we can restore it on ESC.
-                    SnapFocus(User32.GetFocus());
+                    SnapFocus(PInvoke.GetFocus());
                     if (!IsDropDown && !TabStop)
                     {
                         Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "Installing restoreFocusFilter");
