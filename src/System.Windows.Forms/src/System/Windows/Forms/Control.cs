@@ -926,6 +926,8 @@ namespace System.Windows.Forms
                     return;
                 }
                 
+                // When DataContext was different than its parent before, but now is is about to become the same,
+                // we're removing it altogether, so it can inherit the value from its parent.
                 if (Properties.ContainsObject(s_dataContextProperty) && Equals(ParentInternal?.DataContext, value))
                 {
                     Properties.RemoveObject(s_dataContextProperty);

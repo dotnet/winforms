@@ -29,10 +29,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.BindingComponentBindingContextDescr))]
         public BindingContext? BindingContext
         {
-            [RequiresPreviewFeatures]
             get => _bindingContext ??= new BindingContext();
 
-            [RequiresPreviewFeatures]
             set
             {
                 if (!Equals(_bindingContext, value))
