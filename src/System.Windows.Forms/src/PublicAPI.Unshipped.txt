@@ -1,7 +1,18 @@
 System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(nint handle) -> void
 System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(nint handle, int objid) -> void
+System.Windows.Forms.BindableComponent.BindableComponent() -> void
+System.Windows.Forms.BindableComponent.BindingContext.get -> System.Windows.Forms.BindingContext?
+System.Windows.Forms.BindableComponent.BindingContext.set -> void
+System.Windows.Forms.ButtonBase.Command.get -> System.Windows.Input.ICommand?
+System.Windows.Forms.ButtonBase.Command.set -> void
+System.Windows.Forms.ButtonBase.CommandCanExecuteChanged -> System.EventHandler?
+System.Windows.Forms.ButtonBase.CommandChanged -> System.EventHandler?
+System.Windows.Forms.ButtonBase.CommandParameter.get -> object?
+System.Windows.Forms.ButtonBase.CommandParameter.set -> void
+System.Windows.Forms.ButtonBase.CommandParameterChanged -> System.EventHandler?
 System.Windows.Forms.ComboBox.ChildAccessibleObject.ChildAccessibleObject(System.Windows.Forms.ComboBox! owner, nint handle) -> void
 System.Windows.Forms.Control.ControlAccessibleObject.Handle.get -> nint
+System.Windows.Forms.Control.DataContextChanged -> System.EventHandler?
 System.Windows.Forms.Control.Handle.get -> nint
 System.Windows.Forms.CreateParams.Parent.get -> nint
 System.Windows.Forms.Cursor.CopyHandle() -> nint
@@ -16,10 +27,14 @@ System.Windows.Forms.NativeWindow.Handle.get -> nint
 System.Windows.Forms.TaskDialog.Handle.get -> nint
 System.Windows.Forms.TaskDialogIcon.IconHandle.get -> nint
 System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(nint iconHandle) -> void
+System.Windows.Forms.ToolStripItem.CommandCanExecuteChanged -> System.EventHandler
+System.Windows.Forms.ToolStripItem.CommandChanged -> System.EventHandler
+System.Windows.Forms.ToolStripItem.CommandParameterChanged -> System.EventHandler
 System.Windows.Forms.TreeNode.Handle.get -> nint
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.Handle.get -> nint
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.HitTestBackground(System.Drawing.IDeviceContext! dc, System.Drawing.Rectangle backgroundRectangle, nint hRgn, System.Drawing.Point pt, System.Windows.Forms.VisualStyles.HitTestOptions options) -> System.Windows.Forms.VisualStyles.HitTestCode
 abstract System.Windows.Forms.CommonDialog.RunDialog(nint hwndOwner) -> bool
+override System.Windows.Forms.ButtonBase.OnClick(System.EventArgs! e) -> void
 override System.Windows.Forms.ColorDialog.RunDialog(nint hwndOwner) -> bool
 override System.Windows.Forms.FontDialog.HookProc(nint hWnd, int msg, nint wparam, nint lparam) -> nint
 override System.Windows.Forms.FontDialog.RunDialog(nint hWndOwner) -> bool
@@ -39,8 +54,32 @@ static System.Windows.Forms.ImeContext.SetOpenStatus(bool open, nint handle) -> 
 static System.Windows.Forms.NativeWindow.FromHandle(nint handle) -> System.Windows.Forms.NativeWindow?
 static System.Windows.Forms.Screen.FromHandle(nint hwnd) -> System.Windows.Forms.Screen!
 static System.Windows.Forms.TaskDialog.ShowDialog(nint hwndOwner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Windows.Forms.TaskDialogButton!
+virtual System.Windows.Forms.ButtonBase.OnCommandCanExecuteChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ButtonBase.OnCommandChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ButtonBase.OnCommandParameterChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ButtonBase.OnRequestCommandExecute(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ColorDialog.Instance.get -> nint
 virtual System.Windows.Forms.CommonDialog.HookProc(nint hWnd, int msg, nint wparam, nint lparam) -> nint
 virtual System.Windows.Forms.CommonDialog.OwnerWndProc(nint hWnd, int msg, nint wparam, nint lparam) -> nint
+virtual System.Windows.Forms.ToolStripItem.Enabled.get -> bool
+virtual System.Windows.Forms.ToolStripItem.Enabled.set -> void
 ~System.Windows.Forms.ComponentModel.Com2Interop.ICom2PropertyPageDisplayService.ShowPropertyPage(string title, object component, int dispid, System.Guid pageGuid, nint parentHandle) -> void
+~System.Windows.Forms.ToolStripItem.Command.get -> System.Windows.Input.ICommand
+~System.Windows.Forms.ToolStripItem.Command.set -> void
+~System.Windows.Forms.ToolStripItem.CommandParameter.get -> object
+~System.Windows.Forms.ToolStripItem.CommandParameter.set -> void
+~static System.Windows.Forms.Control.FromChildHandle(nint handle) -> System.Windows.Forms.Control
+~static System.Windows.Forms.Control.FromHandle(nint handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, nint handle) -> System.Windows.Forms.TreeNode
+System.Windows.Forms.BindableComponent
+System.Windows.Forms.BindableComponent.BindingContextChanged -> System.EventHandler!
+System.Windows.Forms.BindableComponent.DataBindings.get -> System.Windows.Forms.ControlBindingsCollection!
+virtual System.Windows.Forms.BindableComponent.OnBindingContextChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.DataContext.get -> object?
+virtual System.Windows.Forms.Control.DataContext.set -> void
+~virtual System.Windows.Forms.Control.OnDataContextChanged(System.EventArgs e) -> void
+~virtual System.Windows.Forms.Control.OnParentDataContextChanged(System.EventArgs e) -> void
+~virtual System.Windows.Forms.ToolStripItem.OnCommandCanExecuteChanged(System.EventArgs e) -> void
+~virtual System.Windows.Forms.ToolStripItem.OnCommandChanged(System.EventArgs e) -> void
+~virtual System.Windows.Forms.ToolStripItem.OnCommandParameterChanged(System.EventArgs e) -> void
+~virtual System.Windows.Forms.ToolStripItem.OnRequestCommandExecute(System.EventArgs e) -> void

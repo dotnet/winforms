@@ -5,6 +5,8 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
+using System.Runtime.Versioning;
+using System.Windows.Forms.DataBinding.TestUtilities;
 using System.Windows.Forms.TestUtilities;
 using Moq;
 using Xunit;
@@ -760,6 +762,56 @@ namespace System.Windows.Forms.Tests
             control.BackColorChanged -= handler;
             control.BackColor = Color.Red;
             Assert.Equal(Color.Red, control.BackColor);
+            Assert.Equal(2, callCount);
+        }
+
+        [WinFormsFact]
+        [RequiresPreviewFeatures]
+        public void ButtonBase_BasicCommandBinding()
+        {
+            const string CommandParameter = nameof(CommandParameter);
+
+            using SubButtonBase button = new();
+
+            // TestCommandExecutionAbility is controlling the execution context.
+            CommandViewModel viewModel = new() { TestCommandExecutionAbility = true };
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(button, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+
+            button.CommandChanged += handler;
+            button.Command = viewModel.TestCommand;
+            Assert.Equal(1, callCount);
+
+            button.CommandParameterChanged += handler;
+            button.CommandParameter = CommandParameter;
+            Assert.Equal(2, callCount);
+
+            Assert.Same(viewModel.TestCommand, button.Command);
+            Assert.True(button.Enabled);
+
+            // OnClick is invoking the command in the ViewModel.
+            // The CommandParameter should make its way into the viewmodel's CommandExecuteResult property.
+            button.OnClick(EventArgs.Empty);
+            Assert.Same(CommandParameter, viewModel.CommandExecuteResult);
+
+            // We're changing the execution context.
+            // The ViewModel calls RaiseCanExecuteChanged, which the Button should handle.
+            viewModel.TestCommandExecutionAbility = false;
+            Assert.False(button.Enabled);
+
+            // Remove handler.
+            button.CommandChanged -= handler;
+            button.Command = null;
+            Assert.Equal(2, callCount);
+
+            button.CommandParameterChanged -= handler;
+            button.CommandParameter = null;
             Assert.Equal(2, callCount);
         }
 
@@ -9276,6 +9328,8 @@ namespace System.Windows.Forms.Tests
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
             public new bool GetTopLevel() => base.GetTopLevel();
+            
+            public new void OnClick(EventArgs e) => base.OnClick(e);
 
             public new void OnEnabledChanged(EventArgs e) => base.OnEnabledChanged(e);
 

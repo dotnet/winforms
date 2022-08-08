@@ -13335,8 +13335,6 @@ virtual System.Windows.Forms.ToolStripItem.DefaultSize.get -> System.Drawing.Siz
 virtual System.Windows.Forms.ToolStripItem.DismissWhenClicked.get -> bool
 virtual System.Windows.Forms.ToolStripItem.DisplayStyle.get -> System.Windows.Forms.ToolStripItemDisplayStyle
 virtual System.Windows.Forms.ToolStripItem.DisplayStyle.set -> void
-virtual System.Windows.Forms.ToolStripItem.Enabled.get -> bool
-virtual System.Windows.Forms.ToolStripItem.Enabled.set -> void
 virtual System.Windows.Forms.ToolStripItem.ForeColor.get -> System.Drawing.Color
 virtual System.Windows.Forms.ToolStripItem.ForeColor.set -> void
 virtual System.Windows.Forms.ToolStripItem.GetPreferredSize(System.Drawing.Size constrainingSize) -> System.Drawing.Size
