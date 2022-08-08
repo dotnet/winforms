@@ -6,7 +6,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -25,13 +24,13 @@ namespace System.Windows.Forms
 
         private IWin32Window _target;
 
-        /// <summary> target is ideally the MDI Child to send the system commands to.
-        ///  although there's nothing MDI child specific to it... you could have this
-        ///  a toplevel window.
+        /// <summary>
+        ///  <paramref name="target"/> is ideally the MDI Child to send the system commands to.
+        ///  Although there's nothing MDI child specific to it- it could be a top level window.
         /// </summary>
         public MdiControlStrip(IWin32Window target)
         {
-            IntPtr hMenu = User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(target)), bRevert: BOOL.FALSE);
+            HMENU hMenu = PInvoke.GetSystemMenu(GetSafeHandle(target), bRevert: false);
             _target = target;
 
             // The menu item itself takes care of enabledness and sending WM_SYSCOMMAND messages to the target.
@@ -139,7 +138,7 @@ namespace System.Windows.Forms
             _close.SetNativeTargetWindow(_target);
             _restore.SetNativeTargetWindow(_target);
 
-            IntPtr hMenu = User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(_target)), bRevert: BOOL.FALSE);
+            HMENU hMenu = PInvoke.GetSystemMenu(Control.GetSafeHandle(_target), bRevert: false);
             _system.SetNativeTargetMenu(hMenu);
             _minimize.SetNativeTargetMenu(hMenu);
             _close.SetNativeTargetMenu(hMenu);
@@ -161,7 +160,7 @@ namespace System.Windows.Forms
         {
             if (!_system.HasDropDownItems && (_target is not null))
             {
-                _system.DropDown = ToolStripDropDownMenu.FromHMenu(User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(_target)), bRevert: BOOL.FALSE), _target);
+                _system.DropDown = ToolStripDropDownMenu.FromHMenu(PInvoke.GetSystemMenu(GetSafeHandle(_target), bRevert: false), _target);
             }
             else if (MergedMenu is null)
             {

@@ -13,6 +13,6 @@ namespace System.Windows.Forms
             _window = window;
         }
 
-        public IntPtr Handle => Control.GetSafeHandle(_window);
+        public IntPtr Handle => Control.GetSafeHandle(_window).Handle;
     }
 }

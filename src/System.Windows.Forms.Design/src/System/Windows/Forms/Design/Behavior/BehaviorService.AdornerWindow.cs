@@ -288,7 +288,7 @@ namespace System.Windows.Forms.Design.Behavior
             ///  for appropriate actions.  Note that Paint and HitTest messages are correctly parsed and translated
             ///  to AdornerWindow coords.
             /// </summary>
-            protected override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 //special test hooks
                 if (m.Msg == (int)WM_GETALLSNAPLINES)
@@ -310,9 +310,9 @@ namespace System.Windows.Forms.Design.Behavior
 
                             // The region we have to update in terms of the smallest rectangle that completely encloses
                             // the update region of the window gives us the clip rectangle.
-                            RECT clip = new RECT();
-                            User32.GetUpdateRect(m.HWnd, ref clip, BOOL.TRUE);
-                            Rectangle paintRect = clip;
+                            Foundation.RECT clip = default;
+                            PInvoke.GetUpdateRect(m.HWND, &clip, true);
+                            Rectangle paintRect = clip.ToRectangle();
 
                             using Region region = hrgn.CreateGdiPlusRegion();
 

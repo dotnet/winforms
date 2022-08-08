@@ -666,10 +666,10 @@ namespace System.Windows.Forms
             if (_activeControl is not null && _activeControl.Visible)
             {
                 // Avoid focus loops, especially with ComboBoxes.
-                IntPtr focusHandle = User32.GetFocus();
-                if (focusHandle == IntPtr.Zero || FromChildHandle(focusHandle) != _activeControl)
+                HWND focusHandle = PInvoke.GetFocus();
+                if (focusHandle.IsNull || FromChildHandle(focusHandle) != _activeControl)
                 {
-                    User32.SetFocus(new HandleRef(_activeControl, _activeControl.Handle));
+                    PInvoke.SetFocus(_activeControl);
                 }
             }
             else
@@ -691,7 +691,7 @@ namespace System.Windows.Forms
 
                 if (cc is not null && cc.Visible)
                 {
-                    User32.SetFocus(new HandleRef(cc, cc.Handle));
+                    PInvoke.SetFocus(cc);
                 }
             }
         }

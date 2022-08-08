@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Reflection;
-using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -65,7 +64,7 @@ namespace System.Windows.Forms.Design
                 _fileDialog.Filter = filter;
             }
 
-            IntPtr hwndFocus = User32.GetFocus();
+            HWND hwndFocus = PInvoke.GetFocus();
             try
             {
                 if (_fileDialog.ShowDialog() == DialogResult.OK)
@@ -81,9 +80,9 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (hwndFocus != IntPtr.Zero)
+                if (!hwndFocus.IsNull)
                 {
-                    User32.SetFocus(hwndFocus);
+                    PInvoke.SetFocus(hwndFocus);
                 }
             }
 

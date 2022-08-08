@@ -426,7 +426,7 @@ namespace System.Windows.Forms
             // user arrows onto the control..
             if (MouseButtons == MouseButtons.None)
             {
-                if (User32.GetKeyState((int)Keys.Tab) >= 0)
+                if (PInvoke.GetKeyState((int)Keys.Tab) >= 0)
                 {
                     //We enter the radioButton by using arrow keys
                     //Paint in raised state...

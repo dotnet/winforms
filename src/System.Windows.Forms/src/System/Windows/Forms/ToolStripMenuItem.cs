@@ -37,7 +37,7 @@ namespace System.Windows.Forms
         /// It corresponds to <see cref="User32.MENUITEMINFOW.wID"/>.
         /// </summary>
         private readonly int _nativeMenuCommandID = -1;
-        private IntPtr _targetWindowHandle = IntPtr.Zero;
+        private HandleRef<HWND> _targetWindowHandle;
         private IntPtr _nativeMenuHandle = IntPtr.Zero;
 
         // Keep checked images shared between menu items, but per thread so we don't have locking issues in GDI+
@@ -253,7 +253,7 @@ namespace System.Windows.Forms
                 {
                     // if we're based off a native menu item,
                     // we need to ask it if it's enabled.
-                    if (base.Enabled && _nativeMenuHandle != IntPtr.Zero && _targetWindowHandle != IntPtr.Zero)
+                    if (base.Enabled && _nativeMenuHandle != IntPtr.Zero && !_targetWindowHandle.IsNull)
                     {
                         return GetNativeMenuItemEnabled();
                     }
@@ -909,14 +909,14 @@ namespace System.Windows.Forms
                 // use PostMessage instead of SendMessage so that the DefWndProc can appropriately handle
                 // the system message... if we use SendMessage the dismissal of our window
                 // breaks things like the modal sizing loop.
-                User32.PostMessageW(new HandleRef(this, _targetWindowHandle), User32.WM.SYSCOMMAND, (IntPtr)_nativeMenuCommandID);
+                PInvoke.PostMessage(_targetWindowHandle, User32.WM.SYSCOMMAND, (WPARAM)(uint)_nativeMenuCommandID);
             }
             else
             {
                 // These are user added items like ".Net Window..."
 
                 // be consistent with sending a WM_SYSCOMMAND, use POST not SEND.
-                User32.PostMessageW(new HandleRef(this, _targetWindowHandle), User32.WM.COMMAND, (IntPtr)_nativeMenuCommandID);
+                PInvoke.PostMessage(_targetWindowHandle, User32.WM.COMMAND, (WPARAM)(uint)_nativeMenuCommandID);
             }
 
             Invalidate();

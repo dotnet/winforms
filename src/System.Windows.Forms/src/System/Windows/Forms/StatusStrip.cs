@@ -172,8 +172,8 @@ namespace System.Windows.Forms
                         return true;  // we don't care about the state of VS.
                     }
 
-                    IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
-                    if (rootHwnd != IntPtr.Zero)
+                    HWND rootHwnd = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
+                    if (!rootHwnd.IsNull)
                     {
                         return !User32.IsZoomed(rootHwnd).IsTrue();
                     }
@@ -582,7 +582,7 @@ namespace System.Windows.Forms
 
                 if (sizeGripBounds.Contains(PointToClient(PARAM.ToPoint(m.LParamInternal))))
                 {
-                    IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
+                    HWND rootHwnd = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
 
                     // if the main window isn't maximized - we should paint a resize grip.
                     // double check that we're at the bottom right hand corner of the window.
@@ -604,7 +604,7 @@ namespace System.Windows.Forms
                             gripLocation = new Point(SizeGripBounds.Right, SizeGripBounds.Bottom);
                         }
 
-                        User32.MapWindowPoint(this, rootHwnd, ref gripLocation);
+                        PInvoke.MapWindowPoints(this, rootHwnd, ref gripLocation);
 
                         int deltaBottomEdge = Math.Abs(rootHwndClientArea.bottom - gripLocation.Y);
                         int deltaRightEdge = Math.Abs(rootHwndClientArea.right - gripLocation.X);
