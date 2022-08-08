@@ -8,6 +8,7 @@ BitBlt
 BlockInput
 CallNextHookEx
 CloseEnhMetaFile
+CloseHandle
 CombineRgn
 CP_ACP
 CreateActCtx
@@ -20,7 +21,6 @@ DuplicateHandle
 EndPaint
 EVENTMSG
 FormatMessage
-GET_MODULE_HANDLE_EX_FLAG*
 GetActiveWindow
 GetAncestor
 GetAsyncKeyState
@@ -34,9 +34,10 @@ GetCurrentThreadId
 GetExitCodeThread
 GetFocus
 GetForegroundWindow
-GetKeyState
 GetKeyboardLayout
 GetKeyboardLayoutList
+GetKeyState
+GetLocaleInfoEx
 GetModuleHandleEx
 GetParent
 GetProcAddress
@@ -50,6 +51,7 @@ GetUpdateRect
 GetWindow
 GetWindowRect
 GetWindowThreadProcessId
+GET_MODULE_HANDLE_EX_FLAG*
 GlobalAlloc
 GlobalFree
 GlobalLock
@@ -60,8 +62,12 @@ HC_*
 IsChild
 IsWindow
 IsWindowVisible
+LoadLibraryEx
+LOCALE_IMEASURE
+LOCALE_NAME_SYSTEM_DEFAULT
 MapWindowPoints
 MOUSEHOOKSTRUCT
+MultiByteToWideChar
 PeekMessage
 PostMessage
 SetActiveWindow
@@ -70,5 +76,4 @@ SetParent
 SetSuspendState
 SetWindowLong
 SetWindowsHookEx
-MultiByteToWideChar
 WideCharToMultiByte

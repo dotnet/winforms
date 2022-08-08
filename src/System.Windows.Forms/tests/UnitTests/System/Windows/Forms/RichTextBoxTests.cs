@@ -10832,7 +10832,7 @@ namespace System.Windows.Forms.Tests
 
                     if (_nativeDllHandle == IntPtr.Zero)
                     {
-                        _nativeDllHandle = Kernel32.LoadLibraryFromSystemPathIfAvailable(NativeDll);
+                        _nativeDllHandle = PInvoke.LoadLibraryFromSystemPathIfAvailable(NativeDll);
 
                         int lastWin32Error = Marshal.GetLastWin32Error();
                         if ((ulong)_nativeDllHandle < (ulong)32)

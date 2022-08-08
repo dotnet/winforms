@@ -288,7 +288,7 @@ namespace System.Windows.Forms
                 if (moduleHandle == IntPtr.Zero)
                 {
                     string richEditControlDllVersion = Libraries.RichEdit41;
-                    moduleHandle = Kernel32.LoadLibraryFromSystemPathIfAvailable(richEditControlDllVersion);
+                    moduleHandle = PInvoke.LoadLibraryFromSystemPathIfAvailable(richEditControlDllVersion);
 
                     int lastWin32Error = Marshal.GetLastWin32Error();
 
