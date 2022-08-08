@@ -179,6 +179,8 @@ namespace System.Windows.Forms
 
         private bool _blockLabelEdit;
 
+        private ListViewLabelEditNativeWindow? _labelEdit;
+
         // Background image stuff
         // Because we have to create a temporary file and the OS does not clean up the temporary files from the machine
         // we have to do that ourselves
@@ -6466,6 +6468,14 @@ namespace System.Windows.Forms
 
                 case (int)LVN.BEGINLABELEDITW:
                     {
+                        Debug.Assert(_labelEdit is null,
+                            "A new label editing shouldn't start before the previous one ended");
+                        if (_labelEdit is not null)
+                        {
+                            _labelEdit.ReleaseHandle();
+                            _labelEdit = null;
+                        }
+
                         bool cancelEdit;
                         if (_blockLabelEdit)
                         {
@@ -6481,6 +6491,13 @@ namespace System.Windows.Forms
 
                         m.ResultInternal = cancelEdit ? 1 : 0;
                         _listViewState[LISTVIEWSTATE_inLabelEdit] = !cancelEdit;
+
+                        if (!cancelEdit)
+                        {
+                            _labelEdit = new ListViewLabelEditNativeWindow(this);
+                            _labelEdit.AssignHandle(User32.SendMessageW(this, (User32.WM)LVM.GETEDITCONTROL));
+                        }
+
                         break;
                     }
 
@@ -6510,6 +6527,15 @@ namespace System.Windows.Forms
 
                 case (int)LVN.ENDLABELEDITW:
                     {
+                        Debug.Assert(_labelEdit is not null, "There is no active label edit to end");
+                        if (_labelEdit is null)
+                        {
+                            break;
+                        }
+
+                        _labelEdit.ReleaseHandle();
+                        _labelEdit = null;
+
                         _listViewState[LISTVIEWSTATE_inLabelEdit] = false;
                         NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParamInternal;
                         string? text = dispInfo->item.pszText is null ? null : new string(dispInfo->item.pszText);
