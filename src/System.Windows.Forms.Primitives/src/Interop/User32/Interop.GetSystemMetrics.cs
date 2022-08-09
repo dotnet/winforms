@@ -90,11 +90,11 @@ internal static partial class Interop
             SM_CYSIZEFRAME = SM_CYFRAME
         }
 
-        [LibraryImport(Libraries.User32)]
-        public static partial int GetSystemMetrics(SystemMetric nIndex);
+        [DllImport(Libraries.User32)]
+        public static extern int GetSystemMetrics(SystemMetric nIndex);
 
-        [LibraryImport(Libraries.User32)]
-        private static partial int GetSystemMetricsForDpi(SystemMetric nIndex, uint dpi);
+        [DllImport(Libraries.User32)]
+        private static extern int GetSystemMetricsForDpi(SystemMetric nIndex, uint dpi);
 
         /// <summary>
         ///  Tries to get system metrics for the dpi. dpi is ignored if "GetSystemMetricsForDpi" is not available on the OS that this application is running.

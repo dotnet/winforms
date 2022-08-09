@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms
 {
     internal sealed partial class FontCache
@@ -11,7 +9,7 @@ namespace System.Windows.Forms
         private sealed class FontCacheEntry : CacheEntry
         {
             public FontCacheEntry(Data data, bool tracked) : base(data, tracked) { }
-            public override Gdi32.HFONT Object => Data.HFONT;
+            public override HFONT Object => Data.HFONT;
         }
     }
 }

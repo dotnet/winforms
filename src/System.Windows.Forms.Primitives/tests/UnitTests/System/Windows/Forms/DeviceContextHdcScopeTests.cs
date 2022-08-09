@@ -241,7 +241,7 @@ namespace System.Windows.Forms.Tests
             using Bitmap b = new Bitmap(10, 10);
             using Graphics g = Graphics.FromImage(b);
 
-            Gdi32.HDC mockHdc = new Gdi32.HDC((IntPtr)1234);
+            HDC mockHdc = new HDC((IntPtr)1234);
             var mockHdcProvider = new Mock<IGraphicsHdcProvider>();
             var mockIDeviceContext = mockHdcProvider.As<IDeviceContext>();
             mockHdcProvider

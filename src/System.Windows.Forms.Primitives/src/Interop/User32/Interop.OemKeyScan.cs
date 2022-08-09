@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial uint OemKeyScan(ushort wAsciiVal);
+        [DllImport(Libraries.User32)]
+        public static extern uint OemKeyScan(ushort wAsciiVal);
     }
 }

@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal static partial class Ole32
     {
-        [LibraryImport(Libraries.Ole32)]
-        public static partial HRESULT OleInitialize(IntPtr pvReserved);
+        [DllImport(Libraries.Ole32)]
+        public static extern HRESULT OleInitialize(IntPtr pvReserved);
     }
 }

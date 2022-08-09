@@ -426,7 +426,7 @@ namespace System.Windows.Forms.Design
         ///  want to block it from getting to Windows itself because it causes other messages to be generated.
         /// </summary>
         protected void BaseWndProc(ref Message m)
-            => m.ResultInternal = User32.DefWindowProcW(m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+            => m.ResultInternal = (LRESULT)User32.DefWindowProcW(m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
 
         /// <summary>
         ///  Determines if the this designer can be parented to the specified designer -- generally this means if the
@@ -1841,7 +1841,7 @@ namespace System.Windows.Forms.Design
                         if (iacc is null)
                         {
                             // Accessibility is not supported on this control
-                            m.ResultInternal = 0;
+                            m.ResultInternal = (LRESULT)0;
                         }
                         else
                         {
@@ -1849,7 +1849,7 @@ namespace System.Windows.Forms.Design
                             IntPtr punkAcc = Marshal.GetIUnknownForObject(iacc);
                             try
                             {
-                                m.ResultInternal = Oleacc.LresultFromObject(in IID.IAccessible, m.WParamInternal, punkAcc);
+                                m.ResultInternal = (LRESULT)Oleacc.LresultFromObject(in IID.IAccessible, m.WParamInternal, punkAcc);
                             }
                             finally
                             {
@@ -1995,11 +1995,11 @@ namespace System.Windows.Forms.Design
 
                 case User32.WM.NCMOUSEMOVE:
                 case User32.WM.MOUSEMOVE:
-                    if (((User32.MK)m.WParamInternal).HasFlag(User32.MK.LBUTTON))
+                    if (((User32.MK)(nint)m.WParamInternal).HasFlag(User32.MK.LBUTTON))
                     {
                         button = MouseButtons.Left;
                     }
-                    else if (((User32.MK)m.WParamInternal).HasFlag(User32.MK.RBUTTON))
+                    else if (((User32.MK)(nint)m.WParamInternal).HasFlag(User32.MK.RBUTTON))
                     {
                         button = MouseButtons.Right;
                         _toolPassThrough = false;
@@ -2105,9 +2105,9 @@ namespace System.Windows.Forms.Design
 
                         // First, save off the update region and call our base class.
 
-                        Foundation.RECT clip = new();
+                        RECT clip = new();
                         using var hrgn = new Gdi32.RegionScope(0, 0, 0, 0);
-                        User32.GetUpdateRgn(m.HWnd, hrgn, BOOL.FALSE);
+                        User32.GetUpdateRgn(m.HWnd, hrgn, false);
                         PInvoke.GetUpdateRect(m.HWND, &clip, false);
                         using Region region = hrgn.CreateGdiPlusRegion();
 
@@ -2129,7 +2129,7 @@ namespace System.Windows.Forms.Design
                             PInvoke.MapWindowPoints(m.HWND, Control, ref clip);
                         }
 
-                        Rectangle paintRect = clip.ToRectangle();
+                        Rectangle paintRect = clip;
                         using PaintEventArgs pevent = new PaintEventArgs(graphics, paintRect);
 
                         graphics.Clip = region;
@@ -2139,7 +2139,7 @@ namespace System.Windows.Forms.Design
                         }
                         else
                         {
-                            using var scope = new PInvoke.BeginPaintScope((Foundation.HWND)m.HWnd);
+                            using var scope = new PInvoke.BeginPaintScope((HWND)m.HWnd);
                             PaintException(pevent, _thrownException);
                         }
 

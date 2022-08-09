@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial BOOL GetClientRect(IntPtr hWnd, ref RECT lpRect);
+        [DllImport(Libraries.User32)]
+        public static extern BOOL GetClientRect(IntPtr hWnd, ref RECT lpRect);
 
         public static BOOL GetClientRect(IHandle hWnd, ref RECT lpRect)
         {

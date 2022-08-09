@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Design
             private const int STATE_SELECTED = 1;
             private const int STATE_HOT = 2;
 
-            private Gdi32.HBRUSH _hbrushDither;
+            private HBRUSH _hbrushDither;
 
             public PageSelector()
             {
@@ -69,7 +69,7 @@ namespace System.Windows.Forms.Design
                     unchecked((short)0x5555)
                 };
 
-                Gdi32.HBITMAP hbitmapTemp = PInvoke.CreateBitmap(8, 8, 1, 1, patternBits);
+                HBITMAP hbitmapTemp = PInvoke.CreateBitmap(8, 8, 1, 1, patternBits);
                 Debug.Assert(
                     !hbitmapTemp.IsNull,
                     "could not create dither bitmap. Page selector UI will not be correct");
@@ -89,22 +89,22 @@ namespace System.Windows.Forms.Design
             private unsafe void DrawTreeItem(
                 string itemText,
                 int imageIndex,
-                Gdi32.HDC dc,
+                HDC dc,
                 RECT rcIn,
                 int state,
                 int backColor,
                 int textColor)
             {
-                Size size = new Size();
-                var rc2 = new RECT();
-                var rc = new RECT(rcIn.left, rcIn.top, rcIn.right, rcIn.bottom);
+                Size size = new();
+                RECT rc2 = new();
+                RECT rc = rcIn;
                 ImageList imagelist = ImageList;
 
                 // Select the font of the dialog, so we don't get the underlined font
                 // when the item is being tracked
                 using var fontSelection = new Gdi32.SelectObjectScope(
                     dc,
-                    (state & STATE_HOT) != 0 ? (Gdi32.HGDIOBJ)Parent!.FontHandle : default);
+                    (state & STATE_HOT) != 0 ? (HGDIOBJ)Parent!.FontHandle : default);
 
                 GC.KeepAlive(Parent);
 
@@ -191,11 +191,11 @@ namespace System.Windows.Forms.Design
 
             private unsafe void OnCustomDraw(ref Message m)
             {
-                ComCtl32.NMTVCUSTOMDRAW* nmtvcd = (ComCtl32.NMTVCUSTOMDRAW*)m.LParamInternal;
+                ComCtl32.NMTVCUSTOMDRAW* nmtvcd = (ComCtl32.NMTVCUSTOMDRAW*)(nint)m.LParamInternal;
                 switch (nmtvcd->nmcd.dwDrawStage)
                 {
                     case ComCtl32.CDDS.PREPAINT:
-                        m.ResultInternal = (nint)(ComCtl32.CDRF.NOTIFYITEMDRAW | ComCtl32.CDRF.NOTIFYPOSTPAINT);
+                        m.ResultInternal = (LRESULT)(nint)(ComCtl32.CDRF.NOTIFYITEMDRAW | ComCtl32.CDRF.NOTIFYPOSTPAINT);
                         break;
                     case ComCtl32.CDDS.ITEMPREPAINT:
                         {
@@ -224,15 +224,15 @@ namespace System.Windows.Forms.Design
                                     ColorTranslator.ToWin32(SystemColors.ControlText));
                             }
 
-                            m.ResultInternal = (nint)ComCtl32.CDRF.SKIPDEFAULT;
+                            m.ResultInternal = (LRESULT)(nint)ComCtl32.CDRF.SKIPDEFAULT;
                         }
 
                         break;
                     case ComCtl32.CDDS.POSTPAINT:
-                        m.ResultInternal = (nint)ComCtl32.CDRF.SKIPDEFAULT;
+                        m.ResultInternal = (LRESULT)(nint)ComCtl32.CDRF.SKIPDEFAULT;
                         break;
                     default:
-                        m.ResultInternal = (nint)ComCtl32.CDRF.DODEFAULT;
+                        m.ResultInternal = (LRESULT)(nint)ComCtl32.CDRF.DODEFAULT;
                         break;
                 }
             }
@@ -248,9 +248,9 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            private void FillRectDither(Gdi32.HDC dc, RECT rc)
+            private void FillRectDither(HDC dc, RECT rc)
             {
-                Gdi32.HGDIOBJ hbrushOld = Gdi32.SelectObject(dc, _hbrushDither);
+                HGDIOBJ hbrushOld = Gdi32.SelectObject(dc, _hbrushDither);
 
                 if (!hbrushOld.IsNull)
                 {
@@ -267,7 +267,7 @@ namespace System.Windows.Forms.Design
             {
                 if (m.MsgInternal == User32.WM.REFLECT_NOTIFY)
                 {
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
                     if (nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW)
                     {
                         OnCustomDraw(ref m);

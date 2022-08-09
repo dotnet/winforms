@@ -252,7 +252,7 @@ namespace System.Windows.Forms
             }
 
             // Convert Message to MSG
-            User32.MSG win32Message = msg;
+            MSG win32Message = msg;
             SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
             try
             {
@@ -272,7 +272,7 @@ namespace System.Windows.Forms
                 else
                 {
                     // win32Message may have been modified. Lets copy it back.
-                    msg.MsgInternal = win32Message.message;
+                    msg.MsgInternal = (User32.WM)win32Message.message;
                     msg.WParamInternal = win32Message.wParam;
                     msg.LParamInternal = win32Message.lParam;
                     msg.HWnd = win32Message.hwnd;
@@ -336,25 +336,25 @@ namespace System.Windows.Forms
                     {
                         cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>()
                     };
+
                     HRESULT hr = axOleControl.GetControlInfo(&ctlInfo);
                     if (hr.Succeeded())
                     {
-                        //
                         // Sadly, we don't have a message so we must fake one ourselves.
                         // The message we are faking is a WM_SYSKEYDOWN with the right
                         // alt key setting.
-                        var msg = new User32.MSG
+                        var msg = new MSG
                         {
-                            hwnd = IntPtr.Zero,
-                            message = User32.WM.SYSKEYDOWN,
+                            hwnd = (HWND)0,
+                            message = (uint)User32.WM.SYSKEYDOWN,
                             wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
-                            lParam = (IntPtr)0x20180001,
+                            lParam = 0x20180001,
                             time = PInvoke.GetTickCount()
                         };
 
                         User32.GetCursorPos(out Point p);
                         msg.pt = p;
-                        if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null).IsFalse())
+                        if (!Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
                         {
                             axOleControl.OnMnemonic(&msg);
                             Focus();
@@ -485,7 +485,7 @@ namespace System.Windows.Forms
                 default:
                     if (m.MsgInternal == WebBrowserHelper.REGMSG_MSG)
                     {
-                        m.ResultInternal = WebBrowserHelper.REGMSG_RETVAL;
+                        m.ResultInternal = (LRESULT)WebBrowserHelper.REGMSG_RETVAL;
                     }
                     else
                     {

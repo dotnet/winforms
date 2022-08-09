@@ -94,13 +94,13 @@ namespace System.Drawing.Design
                             (User32.WM)User32.EM.SETMARGINS,
                             (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN));
                         IntPtr hwndCtl = User32.GetDlgItem(hwnd, (User32.DialogItemID)Comdlg32.COLOR.MIX);
-                        User32.EnableWindow(hwndCtl, BOOL.FALSE);
+                        User32.EnableWindow(hwndCtl, false);
                         User32.SetWindowPos(
                             hwndCtl,
                             User32.HWND_TOP,
                             flags: User32.SWP.HIDEWINDOW);
                         hwndCtl = User32.GetDlgItem(hwnd, (User32.DialogItemID)User32.ID.OK);
-                        User32.EnableWindow(hwndCtl, BOOL.FALSE);
+                        User32.EnableWindow(hwndCtl, false);
                         User32.SetWindowPos(
                             hwndCtl,
                             User32.HWND_TOP,
@@ -111,15 +111,15 @@ namespace System.Drawing.Design
                     case User32.WM.COMMAND:
                         if (PARAM.LOWORD(wParam) == (int)Comdlg32.COLOR.ADD)
                         {
-                            BOOL success = BOOL.FALSE;
-                            byte red = (byte)User32.GetDlgItemInt(hwnd, (int)Comdlg32.COLOR.RED, &success, BOOL.FALSE);
-                            Debug.Assert(success.IsFalse(), "Couldn't find dialog member COLOR_RED");
+                            BOOL success = false;
+                            byte red = (byte)User32.GetDlgItemInt(hwnd, (int)Comdlg32.COLOR.RED, &success, false);
+                            Debug.Assert(!success, "Couldn't find dialog member COLOR_RED");
 
-                            byte green = (byte)User32.GetDlgItemInt(hwnd, (int)Comdlg32.COLOR.GREEN, &success, BOOL.FALSE);
-                            Debug.Assert(success.IsFalse(), "Couldn't find dialog member COLOR_GREEN");
+                            byte green = (byte)User32.GetDlgItemInt(hwnd, (int)Comdlg32.COLOR.GREEN, &success, false);
+                            Debug.Assert(!success, "Couldn't find dialog member COLOR_GREEN");
 
-                            byte blue = (byte)User32.GetDlgItemInt(hwnd, (int)Comdlg32.COLOR.BLUE, &success, BOOL.FALSE);
-                            Debug.Assert(success.IsFalse(), "Couldn't find dialog member COLOR_BLUE");
+                            byte blue = (byte)User32.GetDlgItemInt(hwnd, (int)Comdlg32.COLOR.BLUE, &success, false);
+                            Debug.Assert(!success, "Couldn't find dialog member COLOR_BLUE");
 
                             Color = Color.FromArgb(red, green, blue);
                             User32.PostMessageW(

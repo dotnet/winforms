@@ -333,7 +333,7 @@ namespace System.Windows.Forms
                 // is merely a matter of offsetting and clipping.
                 Gdi32.IntersectClipRect(this, targetX, targetY, targetX + clipWidth, targetY + clipHeight);
                 User32.DrawIconEx(
-                    (Gdi32.HDC)dc,
+                    (HDC)dc,
                     targetX - imageX,
                     targetY - imageY,
                     this,
@@ -385,7 +385,7 @@ namespace System.Windows.Forms
         ///  Hides the cursor. For every call to Cursor.hide() there must be a
         ///  balancing call to Cursor.show().
         /// </summary>
-        public static void Hide() => User32.ShowCursor(BOOL.FALSE);
+        public static void Hide() => User32.ShowCursor(false);
 
         // this code is adapted from Icon.GetIconSize please take this into account when changing this
         private Size GetIconSize(IntPtr iconHandle)
@@ -479,7 +479,7 @@ namespace System.Windows.Forms
         ///  Displays the cursor. For every call to Cursor.show() there must have been
         ///  a previous call to Cursor.hide().
         /// </summary>
-        public static void Show() => User32.ShowCursor(BOOL.TRUE);
+        public static void Show() => User32.ShowCursor(true);
 
         /// <summary>
         ///  Retrieves a human readable string representing this <see cref="Cursor"/>.

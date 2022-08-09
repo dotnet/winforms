@@ -58,8 +58,8 @@ namespace System.Windows.Forms
                             // protect against re-entrancy.
                             try
                             {
-                                var msg = new User32.MSG();
-                                while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE).IsTrue())
+                                var msg = new MSG();
+                                while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE))
                                 {
                                     User32.UpdateWindow(msg.hwnd);
 
@@ -108,7 +108,7 @@ namespace System.Windows.Forms
                 {
                     if (m.MsgInternal == User32.WM.NCHITTEST)
                     {
-                        m.ResultInternal = (nint)User32.HT.TRANSPARENT;
+                        m.ResultInternal = (LRESULT)(nint)User32.HT.TRANSPARENT;
                     }
 
                     base.WndProc(ref m);

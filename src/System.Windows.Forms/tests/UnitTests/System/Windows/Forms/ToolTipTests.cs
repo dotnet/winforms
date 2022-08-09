@@ -852,9 +852,9 @@ namespace System.Windows.Forms.Tests
 
             // Post MOUSEMOVE to the tooltip queue and then just remove it from the queue without handling.
             // This will update the point returned by GetMessagePos which is used by TTM.POPUP to determine the tool to display.
-            Assert.True(User32.PostMessageW(toolTip, User32.WM.MOUSEMOVE, lParam: PARAM.FromPoint(tabPage.GetToolNativeScreenRectangle().Location)).IsTrue());
-            User32.MSG msg = default;
-            Assert.True(User32.PeekMessageW(ref msg, toolTip, User32.WM.MOUSEMOVE, User32.WM.MOUSEMOVE, User32.PM.REMOVE).IsTrue());
+            Assert.True(User32.PostMessageW(toolTip, User32.WM.MOUSEMOVE, lParam: PARAM.FromPoint(tabPage.GetToolNativeScreenRectangle().Location)));
+            MSG msg = default;
+            Assert.True(User32.PeekMessageW(ref msg, toolTip, User32.WM.MOUSEMOVE, User32.WM.MOUSEMOVE, User32.PM.REMOVE));
 
             // Show the tooltip.
             User32.SendMessageW(toolTip, (User32.WM)ComCtl32.TTM.POPUP);

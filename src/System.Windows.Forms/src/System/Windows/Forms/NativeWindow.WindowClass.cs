@@ -130,7 +130,7 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe void RegisterClass()
             {
-                User32.WNDCLASS windowClass = new User32.WNDCLASS();
+                WNDCLASSW windowClass = new();
 
                 string? localClassName = _className;
 
@@ -140,34 +140,38 @@ namespace System.Windows.Forms
                     // creates a little bit if flicker.  This happens even though we are overriding wm_erasebackgnd.
                     // Make this hollow to avoid all flicker.
 
-                    windowClass.hbrBackground = (Gdi32.HBRUSH)Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH);
-                    windowClass.style = _classStyle;
+                    windowClass.hbrBackground = (HBRUSH)Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH);
+                    windowClass.style = (WNDCLASS_STYLES)_classStyle;
 
                     _defaultWindProc = DefaultWindowProc;
-                    localClassName = "Window." + Convert.ToString((int)_classStyle, 16);
+                    localClassName = $"Window.{Convert.ToString((int)_classStyle, 16)}";
                 }
                 else
                 {
                     // A system defined Window class was specified, get its info.
-                    if (User32.GetClassInfoW(NativeMethods.NullHandleRef, localClassName, ref windowClass).IsFalse())
+                    fixed (char* n = localClassName)
                     {
-                        throw new Win32Exception(Marshal.GetLastWin32Error(), SR.InvalidWndClsName);
+                        if (!PInvoke.GetClassInfo((HINSTANCE)0, n, &windowClass))
+                        {
+                            throw new Win32Exception(Marshal.GetLastWin32Error(), SR.InvalidWndClsName);
+                        }
                     }
 
                     localClassName = _className;
-                    _defaultWindProc = windowClass.lpfnWndProc;
+                    _defaultWindProc = (nint)windowClass.lpfnWndProc;
                 }
 
                 _windowClassName = GetFullClassName(localClassName!);
                 _windProc = new User32.WNDPROC(Callback);
-                windowClass.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(_windProc);
+                nint callback = Marshal.GetFunctionPointerForDelegate(_windProc);
+                windowClass.lpfnWndProc = (delegate* unmanaged[Stdcall]<HWND, uint, WPARAM, LPARAM, LRESULT>)callback;
                 windowClass.hInstance = PInvoke.GetModuleHandle(null);
 
                 fixed (char* c = _windowClassName)
                 {
                     windowClass.lpszClassName = c;
 
-                    if (User32.RegisterClassW(ref windowClass) == 0)
+                    if (PInvoke.RegisterClass(&windowClass) == 0)
                     {
                         _windProc = null;
                         throw new Win32Exception();

@@ -29,9 +29,9 @@ internal static partial class Interop
 
         public unsafe static bool SystemParametersInfoW(SPI uiAction, ref bool value, uint fWinIni = 0)
         {
-            BOOL nativeBool = value ? BOOL.TRUE : BOOL.FALSE;
+            BOOL nativeBool = value;
             bool result = SystemParametersInfoW(uiAction, 0, &nativeBool, fWinIni);
-            value = nativeBool.IsTrue();
+            value = nativeBool;
             return result;
         }
 

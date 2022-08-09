@@ -150,7 +150,7 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            unsafe HRESULT IDocHostUIHandler.TranslateAccelerator(User32.MSG* lpMsg, Guid* pguidCmdGroup, uint nCmdID)
+            unsafe HRESULT IDocHostUIHandler.TranslateAccelerator(MSG* lpMsg, Guid* pguidCmdGroup, uint nCmdID)
             {
                 if (lpMsg is null || pguidCmdGroup is null)
                 {
@@ -162,8 +162,8 @@ namespace System.Windows.Forms
                 WebBrowser wb = (WebBrowser)Host;
                 if (!wb.WebBrowserShortcutsEnabled)
                 {
-                    int keyCode = (int)lpMsg->wParam | (int)Control.ModifierKeys;
-                    if (lpMsg->message != User32.WM.CHAR && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
+                    int keyCode = (int)(uint)lpMsg->wParam | (int)ModifierKeys;
+                    if (lpMsg->message != (uint)User32.WM.CHAR && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
                     {
                         return HRESULT.S_OK;
                     }

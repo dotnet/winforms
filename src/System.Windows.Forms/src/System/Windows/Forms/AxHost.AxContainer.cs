@@ -877,7 +877,7 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            unsafe HRESULT IOleInPlaceFrame.TranslateAccelerator(User32.MSG* lpmsg, ushort wID)
+            unsafe HRESULT IOleInPlaceFrame.TranslateAccelerator(MSG* lpmsg, ushort wID)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in IOleInPlaceFrame.TranslateAccelerator");
                 return HRESULT.S_FALSE;
@@ -987,12 +987,12 @@ namespace System.Windows.Forms
                     get
                     {
                         Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getEnabled for proxy for {GetP()}");
-                        return GetP().Enabled.ToBOOL();
+                        return GetP().Enabled;
                     }
                     set
                     {
                         Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setEnabled for proxy for {GetP()} {value}");
-                        GetP().Enabled = value.IsTrue();
+                        GetP().Enabled = value;
                     }
                 }
 
@@ -1066,12 +1066,12 @@ namespace System.Windows.Forms
                     get
                     {
                         Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getTabStop for proxy for {GetP()}");
-                        return GetP().TabStop.ToBOOL();
+                        return GetP().TabStop;
                     }
                     set
                     {
                         Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setTabStop for proxy for {GetP()} {value}");
-                        GetP().TabStop = value.IsTrue();
+                        GetP().TabStop = value;
                     }
                 }
 
@@ -1094,12 +1094,12 @@ namespace System.Windows.Forms
                     get
                     {
                         Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getVisible for proxy for {GetP()}");
-                        return GetP().Visible.ToBOOL();
+                        return GetP().Visible;
                     }
                     set
                     {
                         Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setVisible for proxy for {GetP()} {value}");
-                        GetP().Visible = value.IsTrue();
+                        GetP().Visible = value;
                     }
                 }
 

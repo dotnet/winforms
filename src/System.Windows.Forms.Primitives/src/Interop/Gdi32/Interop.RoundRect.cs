@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [LibraryImport(Libraries.Gdi32)]
-        public static partial BOOL RoundRect(HDC hdc, int left, int top, int right, int bottom, int width, int height);
+        [DllImport(Libraries.Gdi32)]
+        public static extern BOOL RoundRect(HDC hdc, int left, int top, int right, int bottom, int width, int height);
     }
 }

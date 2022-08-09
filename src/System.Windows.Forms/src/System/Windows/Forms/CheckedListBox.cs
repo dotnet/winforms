@@ -429,7 +429,7 @@ namespace System.Windows.Forms
             {
                 var rect = new RECT();
                 SendMessageW(this, (WM)LB.GETITEMRECT, index, ref rect);
-                InvalidateRect(new HandleRef(this, Handle), &rect, BOOL.FALSE);
+                InvalidateRect(new HandleRef(this, Handle), &rect, false);
             }
         }
 
@@ -792,7 +792,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                InvalidateRect(new HandleRef(this, Handle), null, BOOL.TRUE);
+                InvalidateRect(new HandleRef(this, Handle), null, true);
             }
         }
 
@@ -979,7 +979,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            m.ResultInternal = -1;
+            m.ResultInternal = (LRESULT)(-1);
         }
 
         /// <summary>
@@ -992,7 +992,7 @@ namespace System.Windows.Forms
             switch (m.MsgInternal)
             {
                 case WM.REFLECT_CHARTOITEM:
-                    m.ResultInternal = -1;
+                    m.ResultInternal = (LRESULT)(-1);
                     break;
                 case WM.REFLECT_VKEYTOITEM:
                     WmReflectVKeyToItem(ref m);
@@ -1003,11 +1003,11 @@ namespace System.Windows.Forms
                         int item = (int)m.WParamInternal;
                         if (item < 0 || item >= Items.Count)
                         {
-                            m.ResultInternal = LB_ERR;
+                            m.ResultInternal = (LRESULT)LB_ERR;
                         }
                         else
                         {
-                            m.ResultInternal = GetItemChecked(item) ? LB_CHECKED : LB_UNCHECKED;
+                            m.ResultInternal = (LRESULT)(GetItemChecked(item) ? LB_CHECKED : LB_UNCHECKED);
                         }
                     }
                     else if (m.MsgInternal == LBC_SETCHECKSTATE)
@@ -1016,12 +1016,12 @@ namespace System.Windows.Forms
                         int state = (int)m.LParamInternal;
                         if (item < 0 || item >= Items.Count || (state != LB_CHECKED && state != LB_UNCHECKED))
                         {
-                            m.ResultInternal = 0;
+                            m.ResultInternal = (LRESULT)0;
                         }
                         else
                         {
                             SetItemChecked(item, (state == LB_CHECKED));
-                            m.ResultInternal = 1;
+                            m.ResultInternal = (LRESULT)1;
                         }
                     }
                     else

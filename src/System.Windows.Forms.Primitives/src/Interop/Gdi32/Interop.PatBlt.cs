@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [LibraryImport(Libraries.Gdi32)]
-        public static partial BOOL PatBlt(HDC hdc, int x, int y, int w, int h, ROP rop);
+        [DllImport(Libraries.Gdi32)]
+        public static extern BOOL PatBlt(HDC hdc, int x, int y, int w, int h, ROP rop);
 
         public static BOOL PatBlt(HandleRef hdc, int x, int y, int w, int h, ROP rop)
         {

@@ -63,7 +63,7 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT TranslateAccelerator(
-                User32.MSG* lpmsg,
+                MSG* lpmsg,
                 ushort wID);
         }
     }

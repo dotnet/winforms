@@ -237,11 +237,11 @@ namespace System.Windows.Forms
             {
                 if (_marqueeAnimationSpeed == 0)
                 {
-                    User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETMARQUEE, (nint)BOOL.FALSE, _marqueeAnimationSpeed);
+                    User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETMARQUEE, (nint)(BOOL)false, _marqueeAnimationSpeed);
                 }
                 else
                 {
-                    User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETMARQUEE, (nint)BOOL.TRUE, _marqueeAnimationSpeed);
+                    User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETMARQUEE, (nint)(BOOL)true, _marqueeAnimationSpeed);
                 }
             }
         }

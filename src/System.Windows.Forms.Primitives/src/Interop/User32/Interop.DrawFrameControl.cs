@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial BOOL DrawFrameControl(Gdi32.HDC hdc, ref RECT rect, DFC type, DFCS state);
+        [DllImport(Libraries.User32)]
+        public static extern BOOL DrawFrameControl(HDC hdc, ref RECT rect, DFC type, DFCS state);
     }
 }

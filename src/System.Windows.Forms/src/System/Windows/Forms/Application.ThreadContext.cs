@@ -92,7 +92,7 @@ namespace System.Windows.Forms
             /// </summary>
             public unsafe ThreadContext()
             {
-                Foundation.HANDLE target;
+                HANDLE target;
 
                 PInvoke.DuplicateHandle(
                     PInvoke.GetCurrentProcess(),
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
                     &target,
                     0,
                     false,
-                    Foundation.DUPLICATE_HANDLE_OPTIONS.DUPLICATE_SAME_ACCESS);
+                    DUPLICATE_HANDLE_OPTIONS.DUPLICATE_SAME_ACCESS);
 
                 _handle = target;
 
@@ -241,7 +241,7 @@ namespace System.Windows.Forms
                         };
 
                         UIntPtr id;
-                        bool result = _componentManager.FRegisterComponent(this, &info, &id).IsTrue();
+                        bool result = _componentManager.FRegisterComponent(this, &info, &id);
                         _componentID = id;
                         Debug.Assert(_componentID != s_invalidId, "Our ID sentinel was returned as a valid ID");
 
@@ -710,7 +710,7 @@ namespace System.Windows.Forms
                 // We can always clean up this handle, though.
                 if (_handle != IntPtr.Zero)
                 {
-                    PInvoke.CloseHandle((Foundation.HANDLE)_handle);
+                    PInvoke.CloseHandle((HANDLE)_handle);
                     _handle = IntPtr.Zero;
                 }
             }
@@ -741,7 +741,7 @@ namespace System.Windows.Forms
                     IMsoComponentManager cm = ComponentManager;
                     if (cm is not null && cm is not Application.ComponentManager)
                     {
-                        cm.FSetTrackingComponent(_componentID, track.ToBOOL());
+                        cm.FSetTrackingComponent(_componentID, track);
                         SetState(STATE_TRACKINGCOMPONENT, track);
                     }
                 }
@@ -811,7 +811,7 @@ namespace System.Windows.Forms
                     }
 
                     void* component;
-                    if (ComponentManager.FGetActiveComponent(msogac.Active, &component, null, 0).IsTrue())
+                    if (ComponentManager.FGetActiveComponent(msogac.Active, &component, null, 0))
                     {
                         IntPtr pUnk = Marshal.GetIUnknownForObject(this);
                         bool matches = ((void*)pUnk == component);
@@ -1073,9 +1073,9 @@ namespace System.Windows.Forms
                     hwndOwner = User32.GetWindowLong(_currentForm, User32.GWL.HWNDPARENT);
                     if (hwndOwner != IntPtr.Zero)
                     {
-                        if (User32.IsWindowEnabled(hwndOwner).IsTrue())
+                        if (User32.IsWindowEnabled(hwndOwner))
                         {
-                            User32.EnableWindow(hwndOwner, BOOL.FALSE);
+                            User32.EnableWindow(hwndOwner, false);
                         }
                         else
                         {
@@ -1086,9 +1086,9 @@ namespace System.Windows.Forms
 
                     // The second half of the modalEnabled flag above.  Here, if we were previously
                     // enabled, make sure that's still the case.
-                    if (_currentForm is not null && _currentForm.IsHandleCreated && User32.IsWindowEnabled(_currentForm).IsTrue() != modalEnabled)
+                    if (_currentForm is not null && _currentForm.IsHandleCreated && User32.IsWindowEnabled(_currentForm) != modalEnabled)
                     {
-                        User32.EnableWindow(new HandleRef(_currentForm, _currentForm.Handle), modalEnabled.ToBOOL());
+                        User32.EnableWindow(new HandleRef(_currentForm, _currentForm.Handle), modalEnabled);
                     }
                 }
 
@@ -1117,7 +1117,7 @@ namespace System.Windows.Forms
 
                     if ((!fullModal && !localModal) || ComponentManager is ComponentManager)
                     {
-                        result = ComponentManager.FPushMessageLoop(_componentID, reason, null).IsTrue();
+                        result = ComponentManager.FPushMessageLoop(_componentID, reason, null);
                     }
                     else if (reason == msoloop.DoEvents || reason == msoloop.DoEventsModal)
                     {
@@ -1145,7 +1145,7 @@ namespace System.Windows.Forms
                         // Again, if the hwndOwner was valid and disabled above, re-enable it.
                         if (hwndOwner != IntPtr.Zero)
                         {
-                            User32.EnableWindow(hwndOwner, BOOL.TRUE);
+                            User32.EnableWindow(hwndOwner, true);
                         }
                     }
 
@@ -1181,21 +1181,21 @@ namespace System.Windows.Forms
                 try
                 {
                     // Execute the message loop until the active component tells us to stop.
-                    var msg = new User32.MSG();
+                    var msg = new MSG();
                     bool unicodeWindow = false;
                     bool continueLoop = true;
 
                     while (continueLoop)
                     {
-                        if (User32.PeekMessageW(ref msg).IsTrue())
+                        if (User32.PeekMessageW(ref msg))
                         {
                             // If the component wants us to process the message, do it.
                             // The component manager hosts windows from many places.  We must be sensitive
                             // to ansi / Unicode windows here.
-                            if (msg.hwnd != IntPtr.Zero && User32.IsWindowUnicode(msg.hwnd).IsTrue())
+                            if (!msg.hwnd.IsNull && User32.IsWindowUnicode(msg.hwnd))
                             {
                                 unicodeWindow = true;
-                                if (User32.GetMessageW(ref msg).IsFalse())
+                                if (!User32.GetMessageW(ref msg))
                                 {
                                     continue;
                                 }
@@ -1203,7 +1203,7 @@ namespace System.Windows.Forms
                             else
                             {
                                 unicodeWindow = false;
-                                if (User32.GetMessageA(ref msg).IsFalse())
+                                if (!User32.GetMessageA(ref msg))
                                 {
                                     continue;
                                 }
@@ -1231,7 +1231,7 @@ namespace System.Windows.Forms
                         {
                             break;
                         }
-                        else if (User32.PeekMessageW(ref msg).IsFalse())
+                        else if (!User32.PeekMessageW(ref msg))
                         {
                             User32.WaitMessage();
                         }
@@ -1245,7 +1245,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal bool ProcessFilters(ref User32.MSG msg, out bool modified)
+            internal bool ProcessFilters(ref MSG msg, out bool modified)
             {
                 bool filtered = false;
 
@@ -1287,8 +1287,8 @@ namespace System.Windows.Forms
                             // PreFilterMessage.
                             if (f is IMessageModifyAndFilter)
                             {
-                                msg.hwnd = m.HWnd;
-                                msg.message = m.MsgInternal;
+                                msg.hwnd = (HWND)m.HWnd;
+                                msg.message = (uint)m.MsgInternal;
                                 msg.wParam = m.WParamInternal;
                                 msg.lParam = m.LParamInternal;
                                 modified = true;
@@ -1316,7 +1316,7 @@ namespace System.Windows.Forms
             ///  false, the message should be allowed to continue through the dispatch
             ///  mechanism.
             /// </summary>
-            internal bool PreTranslateMessage(ref User32.MSG msg)
+            internal bool PreTranslateMessage(ref MSG msg)
             {
                 if (ProcessFilters(ref msg, out _))
                 {
@@ -1325,10 +1325,10 @@ namespace System.Windows.Forms
 
                 if (msg.IsKeyMessage())
                 {
-                    if (msg.message == User32.WM.CHAR)
+                    if (msg.message == (uint)User32.WM.CHAR)
                     {
                         int breakLParamMask = 0x1460000; // 1 = extended keyboard, 46 = scan code
-                        if (unchecked((int)(long)msg.wParam) == 3 && (unchecked((int)(long)msg.lParam) & breakLParamMask) == breakLParamMask) // ctrl-brk
+                        if (unchecked((int)(uint)msg.wParam) == 3 && (unchecked((int)msg.lParam) & breakLParamMask) == breakLParamMask) // ctrl-brk
                         {
                             // wParam is the key character, which for ctrl-brk is the same as ctrl-C.
                             // So we need to go to the lparam to distinguish the two cases.
@@ -1377,11 +1377,11 @@ namespace System.Windows.Forms
                         // winforms code.  This can happen with ActiveX controls that launch dialogs specifically
 
                         // First, get the first top-level window in the hierarchy.
-                        Foundation.HWND hwndRoot = PInvoke.GetAncestor((Foundation.HWND)msg.hwnd, GET_ANCESTOR_FLAGS.GA_ROOT);
+                        HWND hwndRoot = PInvoke.GetAncestor((HWND)msg.hwnd, GET_ANCESTOR_FLAGS.GA_ROOT);
 
                         // If we got a valid HWND, then call IsDialogMessage on it.  If that returns true, it's been processed
                         // so we should return true to prevent Translate/Dispatch from being called.
-                        if (!hwndRoot.IsNull && User32.IsDialogMessageW(hwndRoot, ref msg).IsTrue())
+                        if (!hwndRoot.IsNull && User32.IsDialogMessageW(hwndRoot, ref msg))
                         {
                             return true;
                         }
@@ -1450,11 +1450,11 @@ namespace System.Windows.Forms
 
             /// <inheritdoc />
             BOOL IMsoComponent.FDebugMessage(IntPtr hInst, uint msg, IntPtr wparam, IntPtr lparam)
-                => BOOL.TRUE;
+                => true;
 
             /// <inheritdoc />
-            unsafe BOOL IMsoComponent.FPreTranslateMessage(User32.MSG* msg)
-                => PreTranslateMessage(ref Unsafe.AsRef<User32.MSG>(msg)).ToBOOL();
+            unsafe BOOL IMsoComponent.FPreTranslateMessage(MSG* msg)
+                => PreTranslateMessage(ref Unsafe.AsRef<MSG>(msg));
 
             /// <inheritdoc />
             void IMsoComponent.OnEnterState(msocstate uStateID, BOOL fEnter)
@@ -1470,7 +1470,7 @@ namespace System.Windows.Forms
                 if (uStateID == msocstate.Modal)
                 {
                     // We should only be messing with windows we own.  See the "ctrl-shift-N" test above.
-                    if (fEnter.IsTrue())
+                    if (fEnter)
                     {
                         DisableWindowsForModalLoop(true, null); // WinFormsOnly = true
                     }
@@ -1508,14 +1508,14 @@ namespace System.Windows.Forms
             BOOL IMsoComponent.FDoIdle(msoidlef grfidlef)
             {
                 _idleHandler?.Invoke(Thread.CurrentThread, EventArgs.Empty);
-                return BOOL.FALSE;
+                return false;
             }
 
             /// <inheritdoc />
             unsafe BOOL IMsoComponent.FContinueMessageLoop(
                 msoloop uReason,
                 void* pvLoopData,
-                User32.MSG* pMsgPeeked)
+                MSG* pMsgPeeked)
             {
                 bool continueLoop = true;
 
@@ -1558,8 +1558,8 @@ namespace System.Windows.Forms
                         case msoloop.DoEvents:
                         case msoloop.DoEventsModal:
                             // For DoEvents, just see if there are more messages on the queue.
-                            User32.MSG temp = default;
-                            if (User32.PeekMessageW(ref temp).IsFalse())
+                            MSG temp = default;
+                            if (!User32.PeekMessageW(ref temp))
                             {
                                 continueLoop = false;
                             }
@@ -1568,11 +1568,11 @@ namespace System.Windows.Forms
                     }
                 }
 
-                return continueLoop.ToBOOL();
+                return continueLoop;
             }
 
             /// <inheritdoc />
-            BOOL IMsoComponent.FQueryTerminate(BOOL fPromptUser) => BOOL.TRUE;
+            BOOL IMsoComponent.FQueryTerminate(BOOL fPromptUser) => true;
 
             /// <inheritdoc />
             void IMsoComponent.Terminate()

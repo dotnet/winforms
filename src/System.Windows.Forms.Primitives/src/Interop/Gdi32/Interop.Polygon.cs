@@ -9,7 +9,7 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [LibraryImport(Libraries.Gdi32)]
-        public unsafe static partial BOOL Polygon(HDC hdc, Point* apt, int cpt);
+        [DllImport(Libraries.Gdi32)]
+        public unsafe static extern BOOL Polygon(HDC hdc, Point* apt, int cpt);
     }
 }

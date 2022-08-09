@@ -697,7 +697,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // Dropdownholder in PropertyGridView is already scaled based on the parent font and other
                     // properties that were already set for the new DPI. This case is to avoid rescaling
                     // (double scaling) of this form.
-                    m.ResultInternal = 0;
+                    m.ResultInternal = (LRESULT)0;
                     return;
                 }
 

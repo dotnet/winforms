@@ -386,7 +386,7 @@ namespace System.Windows.Forms
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "Initializing PropagatingImeMode");
 
                     ImeMode imeMode = ImeMode.Inherit;
-                    Foundation.HWND focusHandle = PInvoke.GetFocus();
+                    HWND focusHandle = PInvoke.GetFocus();
 
                     if (!focusHandle.IsNull)
                     {
@@ -719,7 +719,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                m.ResultInternal = 0;
+                m.ResultInternal = (LRESULT)0;
             }
 
             Debug.Unindent();
@@ -1086,7 +1086,7 @@ namespace System.Windows.Forms
                     goto cleanup;
                 }
 
-                if (!Imm32.ImmGetOpenStatus(inputContext).IsTrue())
+                if (!Imm32.ImmGetOpenStatus(inputContext))
                 {
                     status = string.Format(CultureInfo.CurrentCulture, "Ime closed for handle=[{0}]", handle);
                     goto cleanup;
@@ -1147,7 +1147,7 @@ namespace System.Windows.Forms
             if (inputContext != IntPtr.Zero)
             {
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetOpenStatus(" + inputContext + ")");
-                retval = Imm32.ImmGetOpenStatus(inputContext).IsTrue();
+                retval = Imm32.ImmGetOpenStatus(inputContext);
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
                 Imm32.ImmReleaseContext(handle, inputContext);
             }
@@ -1275,13 +1275,13 @@ namespace System.Windows.Forms
                 if (inputContext != IntPtr.Zero)
                 {
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmSetOpenStatus(" + inputContext + ", " + open + ")");
-                    bool succeeded = Imm32.ImmSetOpenStatus(inputContext, open.ToBOOL()).IsTrue();
+                    bool succeeded = Imm32.ImmSetOpenStatus(inputContext, open);
                     Debug.Assert(succeeded, "Could not set the IME open status.");
 
                     if (succeeded)
                     {
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
-                        succeeded = Imm32.ImmReleaseContext(handle, inputContext).IsTrue();
+                        succeeded = Imm32.ImmReleaseContext(handle, inputContext);
                         Debug.Assert(succeeded, "Could not release IME context.");
                     }
                 }

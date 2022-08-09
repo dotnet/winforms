@@ -10,10 +10,10 @@ internal partial class Interop
     {
         public static partial class ImageList
         {
-            [LibraryImport(Libraries.Comctl32, EntryPoint = "ImageList_Add")]
-            public static partial int Add(IntPtr himl, Gdi32.HBITMAP hbmImage, Gdi32.HBITMAP hbmMask);
+            [DllImport(Libraries.Comctl32, EntryPoint = "ImageList_Add")]
+            public static extern int Add(IntPtr himl, HBITMAP hbmImage, HBITMAP hbmMask);
 
-            public static int Add(IHandle himl, Gdi32.HBITMAP hbmImage, Gdi32.HBITMAP hbmMask)
+            public static int Add(IHandle himl, HBITMAP hbmImage, HBITMAP hbmMask)
             {
                 int result = Add(himl.Handle, hbmImage, hbmMask);
                 GC.KeepAlive(himl);

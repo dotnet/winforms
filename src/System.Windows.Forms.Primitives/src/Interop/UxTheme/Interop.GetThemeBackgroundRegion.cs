@@ -8,22 +8,22 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [LibraryImport(Libraries.UxTheme)]
-        public static partial HRESULT GetThemeBackgroundRegion(
+        [DllImport(Libraries.UxTheme)]
+        public static extern HRESULT GetThemeBackgroundRegion(
             IntPtr hTheme,
-            Gdi32.HDC hdc,
+            HDC hdc,
             int iPartId,
             int iStateId,
             ref RECT pRect,
-            out Gdi32.HRGN pRegion);
+            out HRGN pRegion);
 
         public static HRESULT GetThemeBackgroundRegion(
             IHandle hTheme,
-            Gdi32.HDC hdc,
+            HDC hdc,
             int iPartId,
             int iStateId,
             ref RECT pRect,
-            out Gdi32.HRGN pRegion)
+            out HRGN pRegion)
         {
             HRESULT hr = GetThemeBackgroundRegion(hTheme.Handle, hdc, iPartId, iStateId, ref pRect, out pRegion);
             GC.KeepAlive(hTheme);

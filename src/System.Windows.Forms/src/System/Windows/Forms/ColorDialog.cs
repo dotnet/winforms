@@ -185,7 +185,7 @@ namespace System.Windows.Forms
                 cc.Flags = flags;
 
                 cc.lpfnHook = hookProcPtr;
-                if (!Comdlg32.ChooseColorW(ref cc).IsTrue())
+                if (!Comdlg32.ChooseColorW(ref cc))
                 {
                     return false;
                 }

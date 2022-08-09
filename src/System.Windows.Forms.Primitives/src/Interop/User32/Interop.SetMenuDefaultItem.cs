@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial BOOL SetMenuDefaultItem(IntPtr hwnd, int uItem, BOOL fByPos);
+        [DllImport(Libraries.User32)]
+        public static extern BOOL SetMenuDefaultItem(IntPtr hwnd, int uItem, BOOL fByPos);
 
         public static BOOL SetMenuDefaultItem(HandleRef hwnd, int uItem, BOOL fByPos)
         {

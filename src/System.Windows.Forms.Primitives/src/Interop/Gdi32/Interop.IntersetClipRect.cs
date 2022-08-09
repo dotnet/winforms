@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [LibraryImport(Libraries.Gdi32)]
-        public static partial RegionType IntersectClipRect(IntPtr hDC, int left, int top, int right, int bottom);
+        [DllImport(Libraries.Gdi32)]
+        public static extern RegionType IntersectClipRect(IntPtr hDC, int left, int top, int right, int bottom);
 
         public static RegionType IntersectClipRect(IHandle hDC, int left, int top, int right, int bottom)
         {

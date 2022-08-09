@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [LibraryImport(Libraries.UxTheme)]
-        public static unsafe partial HRESULT GetThemeString(IntPtr hTheme, int iPartId, int iStateId, int iPropId, char* pszBuff, int cchMaxBuffChars);
+        [DllImport(Libraries.UxTheme)]
+        public static unsafe extern HRESULT GetThemeString(IntPtr hTheme, int iPartId, int iStateId, int iPropId, char* pszBuff, int cchMaxBuffChars);
 
         public unsafe static HRESULT GetThemeString(IHandle hTheme, int iPartId, int iStateId, int iPropId, char* pszBuff, int cchMaxBuffChars)
         {

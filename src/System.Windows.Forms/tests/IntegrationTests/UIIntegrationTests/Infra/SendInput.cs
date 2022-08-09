@@ -104,7 +104,7 @@ namespace System.Windows.Forms.UITests
             User32.SetWindowPos(window, User32.HWND_TOPMOST, 0, 0, 0, 0, User32.SWP.NOSIZE | User32.SWP.NOMOVE);
 
             // Move the window into the foreground as it may not have been achieved by the 'SetWindowPos' call
-            if (User32.SetForegroundWindow(window).IsFalse())
+            if (!User32.SetForegroundWindow(window))
             {
                 string windowTitle = User32.GetWindowText(window);
                 if (User32.GetWindowThreadProcessId(window, out uint processId) == 0 || processId != Environment.ProcessId)

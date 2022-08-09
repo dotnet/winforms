@@ -2156,7 +2156,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmDateChanged(ref Message m)
         {
-            NMSELCHANGE* nmmcsc = (NMSELCHANGE*)m.LParamInternal;
+            NMSELCHANGE* nmmcsc = (NMSELCHANGE*)(nint)m.LParamInternal;
             DateTime start = nmmcsc->stSelStart;
             DateTime end = nmmcsc->stSelEnd;
 
@@ -2215,7 +2215,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmDateBold(ref Message m)
         {
-            NMDAYSTATE* nmmcds = (NMDAYSTATE*)m.LParamInternal;
+            NMDAYSTATE* nmmcds = (NMDAYSTATE*)(nint)m.LParamInternal;
             Span<int> boldDates = new Span<int>((int*)nmmcds->prgDayState, nmmcds->cDayState);
             WriteBoldDates(boldDates);
         }
@@ -2225,7 +2225,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmCalViewChanged(ref Message m)
         {
-            NMVIEWCHANGE* nmmcvm = (NMVIEWCHANGE*)m.LParamInternal;
+            NMVIEWCHANGE* nmmcvm = (NMVIEWCHANGE*)(nint)m.LParamInternal;
             Debug.Assert(_mcCurView == nmmcvm->uOldView, "Calendar view mode is out of sync with native control");
             if (_mcCurView != nmmcvm->uNewView)
             {
@@ -2243,7 +2243,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmDateSelected(ref Message m)
         {
-            NMSELCHANGE* nmmcsc = (NMSELCHANGE*)m.LParamInternal;
+            NMSELCHANGE* nmmcsc = (NMSELCHANGE*)(nint)m.LParamInternal;
             DateTime start = _selectionStart = nmmcsc->stSelStart;
             DateTime end = _selectionEnd = nmmcsc->stSelEnd;
 
@@ -2273,7 +2273,7 @@ namespace System.Windows.Forms
         private static void WmGetDlgCode(ref Message m)
         {
             // The MonthCalendar does its own handling of arrow keys.
-            m.ResultInternal = (nint)User32.DLGC.WANTARROWS;
+            m.ResultInternal = (LRESULT)(nint)User32.DLGC.WANTARROWS;
         }
 
         /// <summary>
@@ -2283,7 +2283,7 @@ namespace System.Windows.Forms
         {
             if (m.HWnd == Handle)
             {
-                User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
+                User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
 
                 switch ((MCN)nmhdr->code)
                 {

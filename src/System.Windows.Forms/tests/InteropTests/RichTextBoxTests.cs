@@ -4,7 +4,6 @@
 
 using System.Runtime.InteropServices;
 using Xunit;
-using static Interop;
 using static Interop.Richedit;
 
 namespace System.Windows.Forms.Interop.Tests;

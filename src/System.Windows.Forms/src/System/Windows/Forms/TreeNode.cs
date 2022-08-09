@@ -1967,7 +1967,7 @@ namespace System.Windows.Forms
                 {
                     // Currently editing.
                     editing = true;
-                    User32.SendMessageW(tv, (User32.WM)TVM.ENDEDITLABELNOW, (nint)BOOL.FALSE);
+                    User32.SendMessageW(tv, (User32.WM)TVM.ENDEDITLABELNOW, (nint)(BOOL)false);
                 }
 
                 _handle = User32.SendMessageW(tv, (User32.WM)TVM.INSERTITEMW, 0, ref tvis);
@@ -1983,7 +1983,7 @@ namespace System.Windows.Forms
                     User32.PostMessageW(tv, (User32.WM)TVM.EDITLABELW, 0, _handle);
                 }
 
-                User32.InvalidateRect(new HandleRef(tv, tv.Handle), null, BOOL.FALSE);
+                User32.InvalidateRect(new HandleRef(tv, tv.Handle), null, false);
 
                 if (parent.nodesCleared && (insertFirst || prev is null) && !tv.Scrollable)
                 {
@@ -1992,7 +1992,7 @@ namespace System.Windows.Forms
                     // and this is the FIRST NODE to get added..
                     // This is Comctl quirk where it just doesn't draw
                     // the first node after a Clear( ) if Scrollable == false.
-                    User32.SendMessageW(tv, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
+                    User32.SendMessageW(tv, User32.WM.SETREDRAW, (nint)(BOOL)true);
                     nodesCleared = false;
                 }
             }

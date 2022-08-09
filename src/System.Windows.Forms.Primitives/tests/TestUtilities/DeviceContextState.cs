@@ -25,7 +25,7 @@ namespace System
         /// <summary>
         ///  Initialize the current state of <paramref name="hdc"/>.
         /// </summary>
-        public DeviceContextState(Gdi32.HDC hdc)
+        public DeviceContextState(HDC hdc)
         {
             MapMode = Gdi32.GetMapMode(hdc);
             BackColor = Gdi32.GetBkColor(hdc);
@@ -142,7 +142,7 @@ namespace System
 
             if (selectionRecord->IsStockObject)
             {
-                Gdi32.HGDIOBJ hgdiobj = Gdi32.GetStockObject(selectionRecord->StockObject);
+                HGDIOBJ hgdiobj = Gdi32.GetStockObject(selectionRecord->StockObject);
 
                 switch (selectionRecord->StockObject)
                 {

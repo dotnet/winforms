@@ -1440,7 +1440,7 @@ namespace System.Windows.Forms
             UpdateMaxLength();
             if (_textBoxFlags[modified])
             {
-                SendMessageW(this, (WM)EM.SETMODIFY, (nint)BOOL.TRUE);
+                SendMessageW(this, (WM)EM.SETMODIFY, (nint)(BOOL)true);
             }
 
             if (_textBoxFlags[scrollToCaretOnHandleCreated])
@@ -1592,7 +1592,7 @@ namespace System.Windows.Forms
             CommonProperties.xClearPreferredSizeCache(this);
             base.OnTextChanged(e);
 
-            if (UiaCore.UiaClientsAreListening().IsTrue())
+            if (UiaCore.UiaClientsAreListening())
             {
                 RaiseAccessibilityTextChangedEvent();
             }
@@ -2079,7 +2079,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override Gdi32.HBRUSH InitializeDCForWmCtlColor(Gdi32.HDC dc, User32.WM msg)
+        internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, User32.WM msg)
         {
             if (msg == WM.CTLCOLORSTATIC && !ShouldSerializeBackColor())
             {
@@ -2126,12 +2126,12 @@ namespace System.Windows.Forms
             if (AcceptsTab)
             {
                 Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "TextBox wants tabs");
-                m.ResultInternal = m.ResultInternal | (int)DLGC.WANTTAB;
+                m.ResultInternal = (LRESULT)(m.ResultInternal | (int)DLGC.WANTTAB);
             }
             else
             {
                 Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "TextBox doesn't want tabs");
-                m.ResultInternal = m.ResultInternal & ~(int)(DLGC.WANTTAB | DLGC.WANTALLKEYS);
+                m.ResultInternal = (LRESULT)(m.ResultInternal & ~(int)(DLGC.WANTTAB | DLGC.WANTALLKEYS));
             }
         }
 

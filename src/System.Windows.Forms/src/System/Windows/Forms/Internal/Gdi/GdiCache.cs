@@ -19,12 +19,12 @@ namespace System.Windows.Forms
         private static readonly FontCache s_fontCache = new FontCache();
 
         /// <summary>
-        ///  Gets an <see cref="Gdi32.HDC"/> based off of the primary display.
+        ///  Gets an <see cref="HDC"/> based off of the primary display.
         /// </summary>
         /// <remarks>
         ///  Use in a using statement for proper cleanup.
         ///
-        ///  When disposed the <see cref="Gdi32.HDC"/> will be returned to the cache. Do NOT change the state of the
+        ///  When disposed the <see cref="HDC"/> will be returned to the cache. Do NOT change the state of the
         ///  DC (clipping, selecting objects into it) without restoring the state. If you must pass the scope to
         ///  another method it must be passed by reference or you risk accidentally returning extra copies to the
         ///  cache.
@@ -37,7 +37,7 @@ namespace System.Windows.Forms
         /// <remarks>
         ///  Use in a using statement for proper cleanup.
         ///
-        ///  When disposed the <see cref="Graphics"/> object will be disposed and the underlying <see cref="Gdi32.HDC"/>
+        ///  When disposed the <see cref="Graphics"/> object will be disposed and the underlying <see cref="HDC"/>
         ///  will be returned to the cache. Do NOT change the state of the underlying DC (clipping, selecting objects
         ///  into it) without restoring the state. If you must pass the scope to another method it must be passed by
         ///  reference or you risk double disposal and accidentally returning extra copies to the cache.
@@ -71,13 +71,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets a cached <see cref="Gdi32.HFONT"/> based off of the given <paramref name="font"/> and
+        ///  Gets a cached <see cref="HFONT"/> based off of the given <paramref name="font"/> and
         ///  <paramref name="quality"/>.
         /// </summary>
         /// <remarks>
         ///  Use in a using statement for proper cleanup.
         ///
-        ///  When disposed the <see cref="Gdi32.HFONT"/> will be returned to the cache.  If you must pass the scope to
+        ///  When disposed the <see cref="HFONT"/> will be returned to the cache.  If you must pass the scope to
         ///  another method it must be passed by reference or you risk double disposal and accidentally returning extra
         ///  copies to the cache.
         /// </remarks>
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
             return font is null ? new FontCache.Scope() : s_fontCache.GetEntry(font, quality);
         }
 
-        public static FontCache.Scope GetHFONT(Font? font, Gdi32.QUALITY quality, Gdi32.HDC hdc)
+        public static FontCache.Scope GetHFONT(Font? font, Gdi32.QUALITY quality, HDC hdc)
         {
             if (font is not null)
             {
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
             }
 
             // Font is null, build off of the specified HDC's current font.
-            Gdi32.HFONT hfont = (Gdi32.HFONT)Gdi32.GetCurrentObject(hdc, Gdi32.OBJ.FONT);
+            HFONT hfont = (HFONT)Gdi32.GetCurrentObject(hdc, Gdi32.OBJ.FONT);
             return new FontCache.Scope(hfont);
         }
     }

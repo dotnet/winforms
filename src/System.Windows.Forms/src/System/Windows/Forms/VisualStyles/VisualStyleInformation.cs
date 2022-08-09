@@ -33,7 +33,7 @@ namespace System.Windows.Forms.VisualStyles
         /// <summary>
         ///  Returns true if a visual style has currently been applied by the user, else false.
         /// </summary>
-        public static bool IsEnabledByUser => UxTheme.IsAppThemed().IsTrue();
+        public static bool IsEnabledByUser => UxTheme.IsAppThemed();
 
         internal static unsafe string ThemeFilename
         {
@@ -228,7 +228,7 @@ namespace System.Windows.Forms.VisualStyles
                         t_visualStyleRenderer.SetParameters(VisualStyleElement.Window.Caption.Active);
                     }
 
-                    return UxTheme.GetThemeSysBool(t_visualStyleRenderer, UxTheme.TMT.FLATMENUS).IsTrue();
+                    return UxTheme.GetThemeSysBool(t_visualStyleRenderer, UxTheme.TMT.FLATMENUS);
                 }
 
                 return false;

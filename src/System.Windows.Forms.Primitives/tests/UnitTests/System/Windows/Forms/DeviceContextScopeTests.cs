@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Tests
     public class DeviceContextScopeTests
     {
         [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true)]
-        private static extern int GetRandomRgn(Gdi32.HDC hdc, Gdi32.HRGN hrgn, int i);
+        private static extern int GetRandomRgn(HDC hdc, HRGN hrgn, int i);
 
         [Fact]
         public void Scope_ApplyGraphicsProperties()
@@ -73,7 +73,7 @@ namespace System.Windows.Forms.Tests
             Gdi32.SelectObject(dcScope, blueBrush);
 
             using Graphics graphics = dcScope.CreateGraphics();
-            Gdi32.HGDIOBJ current = Gdi32.GetCurrentObject(dcScope, Gdi32.OBJ.BRUSH);
+            HGDIOBJ current = Gdi32.GetCurrentObject(dcScope, Gdi32.OBJ.BRUSH);
 
             Gdi32.MM currentMode = Gdi32.GetMapMode(dcScope);
             Assert.Equal(Gdi32.MM.HIMETRIC, currentMode);
@@ -84,9 +84,9 @@ namespace System.Windows.Forms.Tests
             try
             {
                 // We get the same HDC out
-                Assert.Equal(dcScope.HDC.Handle, (nint)hdc);
+                Assert.Equal(dcScope.HDC, (HDC)hdc);
                 current = Gdi32.GetCurrentObject(dcScope, Gdi32.OBJ.BRUSH);
-                Assert.Equal(blueBrush.HBrush.Handle, current.Handle);
+                Assert.Equal(blueBrush.HBRUSH, (HBRUSH)current);
                 Gdi32.SelectObject(dcScope, redBrush);
             }
             finally

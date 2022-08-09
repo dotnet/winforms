@@ -60,7 +60,7 @@ internal partial class Interop
 
             [PreserveSig]
             HRESULT TranslateAccelerator(
-                User32.MSG* lpMsg,
+                MSG* lpMsg,
                 Guid* pguidCmdGroup,
                 uint nCmdID);
 

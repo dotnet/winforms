@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial int ShowCursor(BOOL bShow);
+        [DllImport(Libraries.User32)]
+        public static extern int ShowCursor(BOOL bShow);
     }
 }

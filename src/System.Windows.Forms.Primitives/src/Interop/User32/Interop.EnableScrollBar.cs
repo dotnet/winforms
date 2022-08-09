@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32, SetLastError = true)]
-        public static partial BOOL EnableScrollBar(IntPtr hWnd, SB wSBflags, ESB wArrows);
+        [DllImport(Libraries.User32, SetLastError = true)]
+        public static extern BOOL EnableScrollBar(IntPtr hWnd, SB wSBflags, ESB wArrows);
 
         public static BOOL EnableScrollBar(IHandle hWnd, SB wSBflags, ESB wArrows)
         {

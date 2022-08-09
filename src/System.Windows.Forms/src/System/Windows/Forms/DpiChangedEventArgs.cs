@@ -22,7 +22,7 @@ namespace System.Windows.Forms
             DeviceDpiOld = old;
             DeviceDpiNew = PARAM.SignedLOWORD(m.WParamInternal);
             Debug.Assert(PARAM.SignedHIWORD(m.WParamInternal) == DeviceDpiNew, "Non-square pixels!");
-            RECT suggestedRect = *(RECT*)m.LParamInternal;
+            RECT suggestedRect = *(RECT*)(nint)m.LParamInternal;
             SuggestedRectangle = Rectangle.FromLTRB(suggestedRect.left, suggestedRect.top, suggestedRect.right, suggestedRect.bottom);
         }
 

@@ -170,7 +170,7 @@ namespace System.Windows.Forms
                 medium = new();
                 dataObject.GetData(ref formatEtc, out medium);
                 void* basePtr = PInvoke.GlobalLock(medium.unionmember);
-                return (basePtr is not null) && (*(BOOL*)basePtr == BOOL.TRUE);
+                return (basePtr is not null) && (*(BOOL*)basePtr == true);
             }
             finally
             {
@@ -195,7 +195,7 @@ namespace System.Windows.Forms
                 try
                 {
                     void* basePtr = PInvoke.GlobalLock(dragDropFormat.Medium.unionmember);
-                    return (basePtr is not null) && (*(BOOL*)basePtr == BOOL.TRUE);
+                    return (basePtr is not null) && (*(BOOL*)basePtr == true);
                 }
                 finally
                 {
@@ -272,7 +272,7 @@ namespace System.Windows.Forms
                 tymed = TYMED.TYMED_HGLOBAL,
                 unionmember = PInvoke.GlobalAlloc(
                     GMEM_MOVEABLE | GMEM_ZEROINIT,
-                    sizeof(BOOL))
+                    (nuint)sizeof(BOOL))
             };
 
             if (medium.unionmember == IntPtr.Zero)
@@ -288,7 +288,7 @@ namespace System.Windows.Forms
                 throw new Win32Exception(Marshal.GetLastSystemError(), SR.ExternalException);
             }
 
-            *(BOOL*)basePtr = value.ToBOOL();
+            *(BOOL*)basePtr = value;
             PInvoke.GlobalUnlock(medium.unionmember);
             dataObject.SetData(ref formatEtc, ref medium, release: true);
         }
@@ -338,7 +338,7 @@ namespace System.Windows.Forms
                 SetInDragLoop(dataObject, inDragLoop: true);
             }
 
-            Gdi32.HBITMAP hbmpDragImage = (Gdi32.HBITMAP)IntPtr.Zero;
+            HBITMAP hbmpDragImage = (HBITMAP)IntPtr.Zero;
 
             try
             {

@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests
                 tymed = TYMED.TYMED_HGLOBAL,
                 unionmember = PInvoke.GlobalAlloc(
                     GMEM_MOVEABLE | GMEM_ZEROINIT,
-                    sizeof(BOOL))
+                    BOOL.Size)
             };
 
             SaveInDragLoopToHandle(medium.unionmember, inDragLoop: true);
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.Tests
             try
             {
                 void* basePtr = PInvoke.GlobalLock(handle);
-                *(BOOL*)basePtr = inDragLoop ? BOOL.TRUE : BOOL.FALSE;
+                *(BOOL*)basePtr = (BOOL)inDragLoop;
             }
             finally
             {

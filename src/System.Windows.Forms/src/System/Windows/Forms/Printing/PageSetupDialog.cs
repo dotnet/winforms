@@ -335,7 +335,7 @@ namespace System.Windows.Forms
 
             try
             {
-                if (Comdlg32.PageSetupDlgW(ref data).IsFalse())
+                if (!Comdlg32.PageSetupDlgW(ref data))
                 {
                     return false;
                 }

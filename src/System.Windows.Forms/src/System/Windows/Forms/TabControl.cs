@@ -1976,7 +1976,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmNeedText(ref Message m)
         {
-            NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)m.LParamInternal;
+            NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)(nint)m.LParamInternal;
 
             int commandID = (int)ttt->hdr.idFrom;
 
@@ -1999,7 +1999,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmReflectDrawItem(ref Message m)
         {
-            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParamInternal;
+            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)(nint)m.LParamInternal;
 
             using var e = new DrawItemEventArgs(
                 dis->hDC,
@@ -2010,7 +2010,7 @@ namespace System.Windows.Forms
 
             OnDrawItem(e);
 
-            m.ResultInternal = 1;
+            m.ResultInternal = (LRESULT)1;
         }
 
         private bool WmSelChange()
@@ -2077,8 +2077,8 @@ namespace System.Windows.Forms
             Invalidate(true);
 
             // Remove other TabBaseReLayout messages from the message queue
-            var msg = new User32.MSG();
-            while (User32.PeekMessageW(ref msg, this, _tabBaseReLayoutMessage, _tabBaseReLayoutMessage, User32.PM.REMOVE).IsTrue())
+            var msg = new MSG();
+            while (User32.PeekMessageW(ref msg, this, _tabBaseReLayoutMessage, _tabBaseReLayoutMessage, User32.PM.REMOVE))
             {
                 // No-op.
             }
@@ -2103,7 +2103,7 @@ namespace System.Windows.Forms
 
                 case User32.WM.NOTIFY:
                 case User32.WM.REFLECT_NOTIFY:
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
                     switch (nmhdr->code)
                     {
                         // new switch added to prevent the TabControl from changing to next TabPage ...
@@ -2115,14 +2115,14 @@ namespace System.Windows.Forms
                         case (int)TCN.SELCHANGING:
                             if (WmSelChanging())
                             {
-                                m.ResultInternal = 1;
+                                m.ResultInternal = (LRESULT)1;
                                 SetState(State.UISelection, false);
                                 return;
                             }
 
                             if (ValidationCancelled)
                             {
-                                m.ResultInternal = 1;
+                                m.ResultInternal = (LRESULT)1;
                                 SetState(State.UISelection, false);
                                 return;
                             }
@@ -2135,7 +2135,7 @@ namespace System.Windows.Forms
                         case (int)TCN.SELCHANGE:
                             if (WmSelChange())
                             {
-                                m.ResultInternal = 1;
+                                m.ResultInternal = (LRESULT)1;
                                 SetState(State.UISelection, false);
                                 return;
                             }
@@ -2149,7 +2149,7 @@ namespace System.Windows.Forms
                             // Setting the max width has the added benefit of enabling Multiline tool tips
                             User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
-                            m.ResultInternal = 1;
+                            m.ResultInternal = (LRESULT)1;
                             return;
                     }
 

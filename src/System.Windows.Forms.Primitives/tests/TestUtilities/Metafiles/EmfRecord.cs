@@ -10,15 +10,15 @@ namespace System.Windows.Forms.Metafiles
 {
     internal unsafe readonly struct EmfRecord
     {
-        public Gdi32.HDC HDC { get; }
-        private readonly Gdi32.HGDIOBJ* _lpht;
+        public HDC HDC { get; }
+        private readonly HGDIOBJ* _lpht;
         private readonly Gdi32.ENHMETARECORD* _lpmr;
         private readonly int _nHandles;
         public IntPtr Data { get; }
 
         public EmfRecord(
-            Gdi32.HDC hdc,
-            Gdi32.HGDIOBJ* lpht,
+            HDC hdc,
+            HGDIOBJ* lpht,
             Gdi32.ENHMETARECORD* lpmr,
             int nHandles,
             IntPtr data)
@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Metafiles
 
         public Gdi32.EMR Type => _lpmr->iType;
         public ReadOnlySpan<uint> Params => _lpmr->dParm;
-        public ReadOnlySpan<Gdi32.HGDIOBJ> Handles => new ReadOnlySpan<Gdi32.HGDIOBJ>(_lpht, _nHandles);
+        public ReadOnlySpan<HGDIOBJ> Handles => new(_lpht, _nHandles);
 
         public ENHMETAHEADER* HeaderRecord => Type == Gdi32.EMR.HEADER ? (ENHMETAHEADER*)_lpmr : null;
         public EMREXTSELECTCLIPRGN* ExtSelectClipRgnRecord

@@ -255,7 +255,7 @@ namespace System.Windows.Forms
                 {
                     if (suspendRedraw && IsHandleCreated)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)(BOOL)false);
                     }
 
                     base.Text = value;
@@ -264,7 +264,7 @@ namespace System.Windows.Forms
                 {
                     if (suspendRedraw && IsHandleCreated)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)(BOOL)true);
                     }
                 }
 
@@ -658,7 +658,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmEraseBkgnd(ref Message m)
         {
-            if (m.WParamInternal == 0)
+            if (m.WParamInternal == 0u)
             {
                 return;
             }
@@ -676,12 +676,12 @@ namespace System.Windows.Forms
             }
             else
             {
-                var hdc = (Gdi32.HDC)m.WParamInternal;
+                var hdc = (HDC)(nint)m.WParamInternal;
                 using var hbrush = new Gdi32.CreateBrushScope(backColor);
                 User32.FillRect(hdc, ref rect, hbrush);
             }
 
-            m.ResultInternal = 1;
+            m.ResultInternal = (LRESULT)1;
         }
 
         protected override void WndProc(ref Message m)
@@ -707,7 +707,7 @@ namespace System.Windows.Forms
                     // of buttons to MSAA (because it assumes buttons won't have children).
                     if (m.LParamInternal == User32.OBJID.QUERYCLASSNAMEIDX)
                     {
-                        m.ResultInternal = 0;
+                        m.ResultInternal = (LRESULT)0;
                     }
 
                     break;

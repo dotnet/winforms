@@ -41,7 +41,7 @@ namespace System.Windows.Forms
                 // We only do visible and enabled windows.  Also, we only do top level windows.
                 // Finally, we only include windows that are DNA windows, since other MSO components
                 // will be responsible for disabling their own windows.
-                if (PInvoke.IsWindowVisible((HWND)hWnd) && User32.IsWindowEnabled(hWnd).IsTrue())
+                if (PInvoke.IsWindowVisible((HWND)hWnd) && User32.IsWindowEnabled(hWnd))
                 {
                     bool add = true;
 
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                return BOOL.TRUE;
+                return true;
             }
 
             // Disposes all top-level Controls on this thread
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
 
                     if (PInvoke.IsWindow(hWnd))
                     {
-                        User32.EnableWindow(hWnd, state.ToBOOL());
+                        User32.EnableWindow(hWnd, state);
                     }
                 }
 

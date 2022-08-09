@@ -8,8 +8,8 @@ internal partial class Interop
 {
     internal static partial class Ole32
     {
-        [LibraryImport(Libraries.Ole32)]
-        public static partial HRESULT RevokeDragDrop(IntPtr hwnd);
+        [DllImport(Libraries.Ole32)]
+        public static extern HRESULT RevokeDragDrop(IntPtr hwnd);
 
         public static HRESULT RevokeDragDrop(HandleRef hwnd)
         {

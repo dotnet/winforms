@@ -9,11 +9,11 @@ internal static partial class Interop
     internal static partial class User32
     {
         // We only ever call this on 32 bit so IntPtr is correct
-        [LibraryImport(Libraries.User32, SetLastError = true)]
-        private static partial nint GetWindowLongW(IntPtr hWnd, GWL nIndex);
+        [DllImport(Libraries.User32, SetLastError = true)]
+        private static extern nint GetWindowLongW(IntPtr hWnd, GWL nIndex);
 
-        [LibraryImport(Libraries.User32, SetLastError = true)]
-        public static partial nint GetWindowLongPtrW(IntPtr hWnd, GWL nIndex);
+        [DllImport(Libraries.User32, SetLastError = true)]
+        public static extern nint GetWindowLongPtrW(IntPtr hWnd, GWL nIndex);
 
         public static nint GetWindowLong(IntPtr hWnd, GWL nIndex)
         {

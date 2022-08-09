@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32, SetLastError = true)]
-        public static partial Atom RegisterClassW(ref WNDCLASS lpWndClass);
+        [DllImport(Libraries.User32, SetLastError = true)]
+        public static extern Atom RegisterClassW(ref WNDCLASS lpWndClass);
     }
 }

@@ -8,12 +8,12 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial IntPtr WindowFromDC(Gdi32.HDC hDC);
+        [DllImport(Libraries.User32)]
+        public static extern nint WindowFromDC(HDC hDC);
 
         public static IntPtr WindowFromDC(IHandle hDC)
         {
-            IntPtr result = WindowFromDC((Gdi32.HDC)hDC.Handle);
+            IntPtr result = WindowFromDC((HDC)hDC.Handle);
             GC.KeepAlive(hDC);
             return result;
         }

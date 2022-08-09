@@ -332,7 +332,7 @@ namespace System.Windows.Forms
             Color backColor,
             TextFormatFlags flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter)
         {
-            Gdi32.HDC hdc = e.HDC;
+            HDC hdc = e.HDC;
             if (hdc.IsNull)
             {
                 // This MUST come before retrieving the HDC, which locks the Graphics object
@@ -348,7 +348,7 @@ namespace System.Windows.Forms
         }
 
         internal static void DrawTextInternal(
-            Gdi32.HDC hdc,
+            HDC hdc,
             string? text,
             Font? font,
             Rectangle bounds,
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
             => DrawTextInternal(hdc, text, font, bounds, foreColor, fontQuality, Color.Empty, flags);
 
         private static void DrawTextInternal(
-            Gdi32.HDC hdc,
+            HDC hdc,
             ReadOnlySpan<char> text,
             Font? font,
             Rectangle bounds,
