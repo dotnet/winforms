@@ -2,85 +2,34 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
+using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
     public partial class DomainUpDown
     {
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete(
+            Obsoletions.DomainUpDownAccessibleObjectMessage,
+            error: false,
+            DiagnosticId = Obsoletions.DomainUpDownAccessibleObjectDiagnosticId,
+            UrlFormat = Obsoletions.SharedUrlFormat)]
         public class DomainUpDownAccessibleObject : ControlAccessibleObject
         {
-            private DomainItemListAccessibleObject? _domainItemList;
-            private readonly UpDownBase _owningDomainUpDown;
+            private readonly UpDownBaseAccessibleObject _upDownBaseAccessibleObject;
 
-            /// <summary>
-            /// </summary>
             public DomainUpDownAccessibleObject(DomainUpDown owner) : base(owner)
             {
-                _owningDomainUpDown = owner;
+                _upDownBaseAccessibleObject = new(owner);
             }
 
-            private DomainItemListAccessibleObject ItemList
-            {
-                get
-                {
-                    if (_domainItemList is null)
-                    {
-                        _domainItemList = new DomainItemListAccessibleObject(this);
-                    }
+            public override AccessibleRole Role => _upDownBaseAccessibleObject.Role;
 
-                    return _domainItemList;
-                }
-            }
+            public override AccessibleObject? GetChild(int index) => _upDownBaseAccessibleObject.GetChild(index);
 
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
+            public override int GetChildCount() => _upDownBaseAccessibleObject.GetChildCount();
 
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-
-                    return AccessibleRole.SpinButton;
-                }
-            }
-
-            /// <summary>
-            /// </summary>
-            public override AccessibleObject? GetChild(int index)
-            {
-                switch (index)
-                {
-                    // TextBox child
-                    case 0:
-                        return _owningDomainUpDown.TextBox.AccessibilityObject.Parent;
-                    // Up/down buttons
-                    case 1:
-                        return _owningDomainUpDown.UpDownButtonsInternal.AccessibilityObject.Parent;
-                    case 2:
-                        return ItemList;
-                    default:
-                        return null;
-                }
-            }
-
-            public override int GetChildCount()
-            {
-                return 3;
-            }
-
-            // We need to provide a unique ID. Others are implementing this in the same manner. First item is static - 0x2a (RuntimeIDFirstItem).
-            // Second item can be anything, but it's good to supply HWND.
-            internal override int[] RuntimeId
-                => new int[]
-                {
-                    RuntimeIDFirstItem,
-                    PARAM.ToInt(_owningDomainUpDown.InternalHandle),
-                    _owningDomainUpDown.GetHashCode()
-                };
+            internal override int[] RuntimeId => _upDownBaseAccessibleObject.RuntimeId;
         }
     }
 }

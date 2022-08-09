@@ -2816,7 +2816,6 @@ override System.Windows.Forms.DockingAttribute.IsDefaultAttribute() -> bool
 override System.Windows.Forms.DomainUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.get -> string?
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.set -> void
-override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Role.get -> System.Windows.Forms.AccessibleRole
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.State.get -> System.Windows.Forms.AccessibleStates
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Value.get -> string?
@@ -3138,7 +3137,6 @@ override System.Windows.Forms.MonthCalendar.IsInputKey(System.Windows.Forms.Keys
 override System.Windows.Forms.MonthCalendar.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
 override System.Windows.Forms.MonthCalendar.SetBoundsCore(int x, int y, int width, int height, System.Windows.Forms.BoundsSpecified specified) -> void
 override System.Windows.Forms.MonthCalendar.WndProc(ref System.Windows.Forms.Message m) -> void
-override System.Windows.Forms.NumericUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.NumericUpDown.DownButton() -> void
 override System.Windows.Forms.NumericUpDown.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
 override System.Windows.Forms.NumericUpDown.OnKeyUp(System.Windows.Forms.KeyEventArgs! e) -> void
