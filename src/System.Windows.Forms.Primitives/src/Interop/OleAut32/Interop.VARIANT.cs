@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Primitives.Resources;
+using Windows.Win32;
 using static Interop.Ole32;
 
 internal static partial class Interop
@@ -176,7 +177,7 @@ internal static partial class Interop
                             break;
                         }
 
-                        return (*(Kernel32.FILETIME*)data).ToDateTime();
+                        return (*(PInvoke.FILETIME*)data).ToDateTime();
                     case VARENUM.VOID:
                         return null;
                     case VARENUM.RECORD:
@@ -815,7 +816,7 @@ internal static partial class Interop
 
                     case VARENUM.FILETIME:
                         {
-                            var data = new Span<Kernel32.FILETIME>(ca.pElems, (int)ca.cElems);
+                            var data = new Span<PInvoke.FILETIME>(ca.pElems, (int)ca.cElems);
                             var result = new DateTime[data.Length];
                             for (int i = 0; i < data.Length; i++)
                             {
@@ -1007,7 +1008,7 @@ internal static partial class Interop
                 public Guid* puuid;
 
                 [FieldOffset(0)]
-                public Kernel32.FILETIME filetime;
+                public PInvoke.FILETIME filetime;
 
                 [FieldOffset(0)]
                 public CA ca;

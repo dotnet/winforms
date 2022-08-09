@@ -595,7 +595,7 @@ namespace System.Windows.Forms
                     HRESULT hr = disp.Invoke(
                         dispid,
                         &g,
-                        Kernel32.LCID.USER_DEFAULT,
+                        PInvoke.LCID.USER_DEFAULT,
                         Oleaut32.DISPATCH.PROPERTYGET,
                         &dispParams,
                         pvt,

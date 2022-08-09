@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using static Interop.Kernel32;
+using Windows.Win32;
 
 internal partial class Interop
 {
@@ -19,7 +19,7 @@ internal partial class Interop
             IntPtr* pobjs,
             uint cPages,
             Guid* pClsid,
-            LCID lcid,
+            PInvoke.LCID lcid,
             uint dwReserved,
             IntPtr pvReserved);
 
@@ -32,7 +32,7 @@ internal partial class Interop
             IntPtr* pobjs,
             uint cPages,
             Guid* pClsid,
-            LCID lcid,
+            PInvoke.LCID lcid,
             uint dwReserved,
             IntPtr pvReserved)
         {

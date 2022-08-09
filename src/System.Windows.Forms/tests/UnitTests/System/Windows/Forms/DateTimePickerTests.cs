@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop.Kernel32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -212,7 +211,7 @@ namespace System.Windows.Forms.Tests
             {
                 // An empty SYSTEMTIME has year, month and day as 0, but DateTime can't have these parameters.
                 // So an empty SYSTEMTIME is incorrect in this case.
-                SYSTEMTIME systemTime = new SYSTEMTIME();
+                PInvoke.SYSTEMTIME systemTime = new PInvoke.SYSTEMTIME();
                 DateTime dateTime = systemTime;
                 Assert.Equal(DateTime.MinValue, dateTime);
             }

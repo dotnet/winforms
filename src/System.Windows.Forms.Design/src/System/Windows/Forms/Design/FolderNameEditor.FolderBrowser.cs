@@ -71,7 +71,7 @@ namespace System.Windows.Forms.Design
                         Application.OleRequired();
                     }
 
-                    char[] displayName = ArrayPool<char>.Shared.Rent(Kernel32.MAX_PATH + 1);
+                    char[] displayName = ArrayPool<char>.Shared.Rent(PInvoke.MAX_PATH + 1);
                     try
                     {
                         fixed (char* pDisplayName = displayName)

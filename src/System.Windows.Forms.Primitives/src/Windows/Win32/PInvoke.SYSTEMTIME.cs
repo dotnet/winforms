@@ -4,9 +4,9 @@
 
 using System.Diagnostics;
 
-internal partial class Interop
+namespace Windows.Win32
 {
-    internal partial class Kernel32
+    internal static partial class PInvoke
     {
         public struct SYSTEMTIME
         {
@@ -36,7 +36,7 @@ internal partial class Interop
             /// <summary>
             ///  Converts <see cref="DateTime"/> value with a 1 second granularity.
             /// </summary>
-            public static implicit operator SYSTEMTIME(DateTime time) => new Kernel32.SYSTEMTIME
+            public static implicit operator SYSTEMTIME(DateTime time) => new PInvoke.SYSTEMTIME
             {
                 wYear = (short)time.Year,
                 wMonth = (short)time.Month,

@@ -8,7 +8,6 @@ using Xunit.Abstractions;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop;
 using static Interop.ComCtl32;
-using static Interop.Kernel32;
 using static Interop.User32;
 
 namespace System.Windows.Forms.UITests
@@ -61,7 +60,7 @@ namespace System.Windows.Forms.UITests
                                                     .KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT));
 
                 DateTime selectedDate = new DateTime(2020, 4, 10);
-                SYSTEMTIME date = new()
+                PInvoke.SYSTEMTIME date = new()
                 {
                     wYear = (short)selectedDate.Year,
                     wMonth = (short)selectedDate.Month,
