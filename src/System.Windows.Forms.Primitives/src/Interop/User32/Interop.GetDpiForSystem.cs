@@ -9,7 +9,7 @@ internal static partial class Interop
     internal static partial class User32
     {
         // This is only available on Windows 1607 and later. Avoids needing a DC to get the DPI.
-        [LibraryImport(Libraries.User32)]
-        public static partial uint GetDpiForSystem();
+        [DllImport(Libraries.User32)]
+        public static extern uint GetDpiForSystem();
     }
 }

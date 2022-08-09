@@ -8,8 +8,8 @@ internal partial class Interop
 {
     internal static partial class Oleaut32
     {
-        [LibraryImport(Libraries.Oleaut32)]
-        private static partial HRESULT GetErrorInfo(uint dwReserved, out IntPtr pperrinfo);
+        [DllImport(Libraries.Oleaut32)]
+        private static extern HRESULT GetErrorInfo(uint dwReserved, out IntPtr pperrinfo);
 
         public static void GetErrorInfo(out WinFormsComWrappers.ErrorInfoWrapper? errinfo)
         {

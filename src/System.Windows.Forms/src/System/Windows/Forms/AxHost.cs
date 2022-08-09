@@ -164,7 +164,7 @@ namespace System.Windows.Forms
         private ContainerControl _newParent;
         private AxContainer _axContainer;
         private State _ocxState;
-        private Foundation.HWND _hwndFocus;
+        private HWND _hwndFocus;
 
         // CustomTypeDescriptor related state
 
@@ -889,7 +889,7 @@ namespace System.Windows.Forms
             return _axState[s_fOwnWindow] || _axState[s_fFakingWindow];
         }
 
-        private Foundation.HWND GetHandleNoCreate() => IsHandleCreated ? (Foundation.HWND)Handle : default;
+        private HWND GetHandleNoCreate() => IsHandleCreated ? (HWND)Handle : default;
 
         private ISelectionService GetSelectionService()
         {
@@ -1820,7 +1820,7 @@ namespace System.Windows.Forms
                     return base.PreProcessMessage(ref msg);
                 }
 
-                User32.MSG win32Message = msg;
+                MSG win32Message = msg;
                 _axState[s_siteProcessedInputKey] = false;
                 try
                 {
@@ -1828,7 +1828,7 @@ namespace System.Windows.Forms
                     if (activeObj is not null)
                     {
                         HRESULT hr = activeObj.TranslateAccelerator(&win32Message);
-                        msg.MsgInternal = win32Message.message;
+                        msg.MsgInternal = (User32.WM)win32Message.message;
                         msg.WParamInternal = win32Message.wParam;
                         msg.LParamInternal = win32Message.lParam;
                         msg.HWnd = win32Message.hwnd;
@@ -1902,20 +1902,20 @@ namespace System.Windows.Forms
                         return false;
                     }
 
-                    var msg = new User32.MSG
+                    var msg = new MSG
                     {
                         // Sadly, we don't have a message so we must fake one ourselves...
                         // A bit of ugliness here (a bit?  more like a bucket...)
                         // The message we are faking is a WM_SYSKEYDOWN w/ the right alt key setting...
-                        hwnd = (ContainingControl is null) ? IntPtr.Zero : ContainingControl.Handle,
-                        message = User32.WM.SYSKEYDOWN,
+                        hwnd = (ContainingControl is null) ? (HWND)0 : ContainingControl.HWND,
+                        message = (uint)User32.WM.SYSKEYDOWN,
                         wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
-                        lParam = (IntPtr)0x20180001,
+                        lParam = 0x20180001,
                         time = PInvoke.GetTickCount()
                     };
                     User32.GetCursorPos(out Point p);
                     msg.pt = p;
-                    if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null).IsTrue())
+                    if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
                     {
                         GetOleControl().OnMnemonic(&msg);
                         Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"\t Processed mnemonic {msg}");
@@ -2031,7 +2031,7 @@ namespace System.Windows.Forms
                     if (_iPersistPropBag is not null)
                     {
                         propBag = new PropertyBagStream();
-                        _iPersistPropBag.Save(propBag, BOOL.TRUE, BOOL.TRUE);
+                        _iPersistPropBag.Save(propBag, true, true);
                     }
 
                     MemoryStream ms = null;
@@ -2042,11 +2042,11 @@ namespace System.Windows.Forms
                             ms = new MemoryStream();
                             if (_storageType == STG_STREAM)
                             {
-                                _iPersistStream.Save(new Ole32.GPStream(ms), BOOL.TRUE);
+                                _iPersistStream.Save(new Ole32.GPStream(ms), true);
                             }
                             else
                             {
-                                _iPersistStreamInit.Save(new Ole32.GPStream(ms), BOOL.TRUE);
+                                _iPersistStreamInit.Save(new Ole32.GPStream(ms), true);
                             }
 
                             break;
@@ -2337,12 +2337,12 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"freezing {v}");
             if (v)
             {
-                GetOleControl().FreezeEvents(BOOL.TRUE);
+                GetOleControl().FreezeEvents(true);
                 _freezeCount++;
             }
             else
             {
-                GetOleControl().FreezeEvents(BOOL.FALSE);
+                GetOleControl().FreezeEvents(false);
                 _freezeCount--;
             }
 
@@ -2409,7 +2409,7 @@ namespace System.Windows.Forms
                 cbLicInfo = sizeof(Ole32.LICINFO)
             };
             icf2.GetLicInfo(&licInfo);
-            if (licInfo.fRuntimeAvailable.IsTrue())
+            if (licInfo.fRuntimeAvailable)
             {
                 var rval = new string[1];
                 icf2.RequestLicKey(0, rval);
@@ -3346,7 +3346,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override Gdi32.HBRUSH InitializeDCForWmCtlColor(Gdi32.HDC dc, User32.WM msg)
+        internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, User32.WM msg)
         {
             if (_isMaskEdit)
             {
@@ -3411,7 +3411,7 @@ namespace System.Windows.Forms
 
                 case User32.WM.KILLFOCUS:
                     {
-                        _hwndFocus = (Foundation.HWND)m.WParamInternal;
+                        _hwndFocus = (HWND)(nint)m.WParamInternal;
                         try
                         {
                             base.WndProc(ref m);
@@ -3514,7 +3514,7 @@ namespace System.Windows.Forms
                 default:
                     if (m.MsgInternal == _registeredMessage)
                     {
-                        m.ResultInternal = REGMSG_RETVAL;
+                        m.ResultInternal = (LRESULT)REGMSG_RETVAL;
                         return;
                     }
 
@@ -3530,7 +3530,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 IntPtr wndProc = User32.GetWindowLong(this, User32.GWL.WNDPROC);
-                m.ResultInternal = User32.CallWindowProcW(wndProc, Handle, (User32.WM)m.Msg, m.WParamInternal, m.LParamInternal);
+                m.ResultInternal = (LRESULT)User32.CallWindowProcW(wndProc, Handle, (User32.WM)m.Msg, m.WParamInternal, m.LParamInternal);
             }
         }
 
@@ -3968,7 +3968,7 @@ namespace System.Windows.Forms
             }
 
             Ole32.PICTDESC pictdesc = GetPICTDESCFromPicture(image);
-            return Ole32.OleCreatePictureIndirect(ref pictdesc, in s_ipicture_Guid, fOwn: BOOL.TRUE);
+            return Ole32.OleCreatePictureIndirect(ref pictdesc, in s_ipicture_Guid, fOwn: true);
         }
 
         /// <summary>
@@ -3983,7 +3983,7 @@ namespace System.Windows.Forms
             }
 
             Ole32.PICTDESC desc = Ole32.PICTDESC.FromIcon(Icon.FromHandle(cursor.Handle), copy: true);
-            return Ole32.OleCreatePictureIndirect(ref desc, in s_ipicture_Guid, fOwn: BOOL.TRUE);
+            return Ole32.OleCreatePictureIndirect(ref desc, in s_ipicture_Guid, fOwn: true);
         }
 
         /// <summary>
@@ -3998,7 +3998,7 @@ namespace System.Windows.Forms
             }
 
             Ole32.PICTDESC desc = GetPICTDESCFromPicture(image);
-            return Ole32.OleCreatePictureIndirect(ref desc, in s_ipictureDisp_Guid, fOwn: BOOL.TRUE);
+            return Ole32.OleCreatePictureIndirect(ref desc, in s_ipictureDisp_Guid, fOwn: true);
         }
 
         /// <summary>
@@ -4120,9 +4120,9 @@ namespace System.Windows.Forms
                 cySize = (long)(font.SizeInPoints * 10000),
                 sWeight = (short)logfont.lfWeight,
                 sCharset = logfont.lfCharSet,
-                fItalic = font.Italic.ToBOOL(),
-                fUnderline = font.Underline.ToBOOL(),
-                fStrikethrough = font.Strikeout.ToBOOL()
+                fItalic = font.Italic,
+                fUnderline = font.Underline,
+                fStrikethrough = font.Strikeout
             };
             s_fontTable[font] = fdesc;
             return fdesc;

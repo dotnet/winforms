@@ -8,8 +8,8 @@ internal partial class Interop
 {
     internal partial class Imm32
     {
-        [LibraryImport(Libraries.Imm32)]
-        public static partial BOOL ImmReleaseContext(IntPtr hWnd, IntPtr hIMC);
+        [DllImport(Libraries.Imm32)]
+        public static extern BOOL ImmReleaseContext(IntPtr hWnd, IntPtr hIMC);
 
         public static BOOL ImmReleaseContext(IHandle hWnd, IntPtr hIMC)
         {

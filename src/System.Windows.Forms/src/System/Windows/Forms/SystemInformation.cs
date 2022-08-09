@@ -637,7 +637,7 @@ namespace System.Windows.Forms
                     int lengthNeeded = 0;
 
                     USEROBJECTFLAGS flags = default;
-                    if (GetUserObjectInformationW(hwinsta, UOI.FLAGS, ref flags, sizeof(USEROBJECTFLAGS), ref lengthNeeded).IsTrue())
+                    if (GetUserObjectInformationW(hwinsta, UOI.FLAGS, ref flags, sizeof(USEROBJECTFLAGS), ref lengthNeeded))
                     {
                         if ((flags.dwFlags & (int)WSF.VISIBLE) == 0)
                         {
@@ -985,7 +985,7 @@ namespace System.Windows.Forms
             {
                 // Try to open the input desktop. If it fails with access denied assume
                 // the app is running on a secure desktop.
-                IntPtr hDsk = User32.OpenInputDesktop(0, BOOL.FALSE, User32.DESKTOP.SWITCHDESKTOP);
+                IntPtr hDsk = User32.OpenInputDesktop(0, false, User32.DESKTOP.SWITCHDESKTOP);
                 if (hDsk == IntPtr.Zero)
                 {
                     return Marshal.GetLastWin32Error() == ERROR.ACCESS_DENIED;

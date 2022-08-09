@@ -785,7 +785,7 @@ namespace System.Windows.Forms
         {
             EnsureControlItem(control).Error = value;
 
-            if (UiaCore.UiaClientsAreListening().IsTrue())
+            if (UiaCore.UiaClientsAreListening())
             {
                 control.AccessibilityObject.RaiseAutomationNotification(
                     Automation.AutomationNotificationKind.ActionAborted,

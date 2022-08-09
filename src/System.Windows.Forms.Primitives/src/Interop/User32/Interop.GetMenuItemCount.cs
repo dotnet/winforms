@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial int GetMenuItemCount(IntPtr hMenu);
+        [DllImport(Libraries.User32)]
+        public static extern int GetMenuItemCount(IntPtr hMenu);
 
         public static int GetMenuItemCount(HandleRef hMenu)
         {

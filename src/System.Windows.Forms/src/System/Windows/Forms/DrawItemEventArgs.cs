@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         }
 
         internal DrawItemEventArgs(
-            Gdi32.HDC hdc,
+            HDC hdc,
             Font? font,
             Rectangle rect,
             uint index,
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
         { }
 
         internal DrawItemEventArgs(
-            Gdi32.HDC hdc,
+            HDC hdc,
             Font? font,
             Rectangle rect,
             uint index,
@@ -156,13 +156,13 @@ namespace System.Windows.Forms
         internal Graphics GraphicsInternal => _event.GetOrCreateGraphicsInternal();
 
         /// <summary>
-        ///  Returns the <see cref="Gdi32.HDC"/> the event was created off of, if any.
+        ///  Returns the <see cref="HDC"/> the event was created off of, if any.
         /// </summary>
-        internal Gdi32.HDC HDC => _event.HDC;
+        internal HDC HDC => _event.HDC;
 
         IntPtr IDeviceContext.GetHdc() => Graphics?.GetHdc() ?? IntPtr.Zero;
         void IDeviceContext.ReleaseHdc() => Graphics?.ReleaseHdc();
-        Gdi32.HDC IGraphicsHdcProvider.GetHDC() => _event.GetHDC();
+        HDC IGraphicsHdcProvider.GetHDC() => _event.GetHDC();
         Graphics? IGraphicsHdcProvider.GetGraphics(bool create) => _event.GetGraphics(create);
         bool IGraphicsHdcProvider.IsGraphicsStateClean => _event.IsStateClean;
     }

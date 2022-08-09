@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Windows.Win32.Graphics.Gdi;
 using static Interop;
 
 namespace WinformsControlsTest
@@ -31,7 +32,7 @@ namespace WinformsControlsTest
         {
             x = LogicalDpi;
             y = LogicalDpi;
-            Gdi32.HDC hDC = User32.GetDC(handleRef);
+            HDC hDC = User32.GetDC(handleRef);
             if (!hDC.IsNull)
             {
                 x = Gdi32.GetDeviceCaps(hDC, Gdi32.DeviceCapability.LOGPIXELSX);

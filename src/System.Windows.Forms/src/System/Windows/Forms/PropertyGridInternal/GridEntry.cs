@@ -1648,14 +1648,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     int planes = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.PLANES);
                     int bitsPixel = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.BITSPIXEL);
-                    Gdi32.HBITMAP compatibleBitmap = PInvoke.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
+                    HBITMAP compatibleBitmap = PInvoke.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
                     using var targetBitmapSelection = new Gdi32.SelectObjectScope(compatibleDC, compatibleBitmap);
 
                     using var brush = new Gdi32.CreateBrushScope(backgroundColor);
                     compatibleDC.HDC.FillRectangle(new Rectangle(0, 0, rectangle.Width, rectangle.Height), brush);
                     explorerTreeRenderer.DrawBackground(compatibleDC, new Rectangle(0, 0, rectangle.Width, rectangle.Height), handle);
 
-                    using Bitmap bitmap = Image.FromHbitmap(compatibleBitmap.Handle);
+                    using Bitmap bitmap = Image.FromHbitmap(compatibleBitmap);
                     ControlPaint.InvertForeColorIfNeeded(bitmap, backgroundColor);
                     graphics.DrawImage(bitmap, rectangle, 0, 0, bitmap.Width, bitmap.Height, GraphicsUnit.Pixel);
                 }

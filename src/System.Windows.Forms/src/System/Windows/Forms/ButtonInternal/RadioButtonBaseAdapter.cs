@@ -97,7 +97,7 @@ namespace System.Windows.Forms.ButtonInternal
         }
 
         // Helper method to overcome the poor GDI ellipse drawing routine
-        private static void DrawAndFillEllipse(Gdi32.HDC hdc, Gdi32.HPEN borderPen, Gdi32.HBRUSH fieldBrush, Rectangle bounds)
+        private static void DrawAndFillEllipse(HDC hdc, HPEN borderPen, HBRUSH fieldBrush, Rectangle bounds)
         {
             Debug.Assert(!hdc.IsNull, "Calling DrawAndFillEllipse with null wg");
             if (hdc.IsNull)

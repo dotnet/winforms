@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
-using static Interop.Gdi32;
 
 internal partial class Interop
 {

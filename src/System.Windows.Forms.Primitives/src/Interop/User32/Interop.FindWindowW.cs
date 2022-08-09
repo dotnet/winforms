@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal partial class User32
     {
-        [LibraryImport(Libraries.User32, SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
-        public static partial IntPtr FindWindowW(string lpClassName, string lpWindowName);
+        [DllImport(Libraries.User32, SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern IntPtr FindWindowW(string lpClassName, string lpWindowName);
     }
 }

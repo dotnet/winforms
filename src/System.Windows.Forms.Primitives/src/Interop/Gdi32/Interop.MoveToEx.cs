@@ -9,8 +9,8 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [LibraryImport(Libraries.Gdi32)]
-        public unsafe static partial BOOL MoveToEx(HDC hdc, int x, int y, Point* lppt);
+        [DllImport(Libraries.Gdi32)]
+        public unsafe static extern BOOL MoveToEx(HDC hdc, int x, int y, Point* lppt);
 
         public unsafe static BOOL MoveToEx(IHandle hdc, int x, int y, Point* lppt)
         {

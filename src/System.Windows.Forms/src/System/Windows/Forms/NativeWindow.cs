@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
-using Windows.Win32.Foundation;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -368,7 +367,7 @@ namespace System.Windows.Forms
             // Note: if you change this code be sure to change the
             // corresponding code in DebuggableCallback below!
 
-            Message m = Message.Create(hWnd, msg, wparam, lparam);
+            Message m = Message.Create((HWND)hWnd, (uint)msg, wparam, lparam);
 
             try
             {
@@ -516,15 +515,15 @@ namespace System.Windows.Forms
 
                     // At this point, there isn't much we can do.  There's a small chance the following
                     // line will allow the rest of the program to run, but don't get your hopes up.
-                    m.ResultInternal = User32.DefWindowProcW(m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                    m.ResultInternal = (LRESULT)User32.DefWindowProcW(m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return;
                 }
 
-                m.ResultInternal = User32.CallWindowProcW(_priorWindowProcHandle, m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                m.ResultInternal = (LRESULT)User32.CallWindowProcW(_priorWindowProcHandle, m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
             }
             else
             {
-                m.ResultInternal = PreviousWindow.Callback(m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                m.ResultInternal = (LRESULT)PreviousWindow.Callback(m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
             }
         }
 
@@ -537,7 +536,7 @@ namespace System.Windows.Forms
             {
                 if (Handle != IntPtr.Zero)
                 {
-                    if (User32.DestroyWindow(this).IsFalse())
+                    if (!User32.DestroyWindow(this))
                     {
                         UnSubclass();
 

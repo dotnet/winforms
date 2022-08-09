@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial IntPtr SendDlgItemMessageW(IntPtr hDlg, DialogItemID nIDDlgItem, WM Msg, IntPtr wParam = default, IntPtr lParam = default);
+        [DllImport(Libraries.User32)]
+        public static extern nint SendDlgItemMessageW(IntPtr hDlg, DialogItemID nIDDlgItem, WM Msg, IntPtr wParam = default, IntPtr lParam = default);
     }
 }

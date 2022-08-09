@@ -1208,7 +1208,7 @@ namespace System.Windows.Forms.Design
             Control control = Control;
             if (control is not null && control.IsHandleCreated)
             {
-                User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE, (nint)BOOL.FALSE);
+                User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE, (nint)(BOOL)false);
                 User32.RedrawWindow(control.Handle, flags: User32.RDW.FRAME);
             }
         }

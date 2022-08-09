@@ -47,7 +47,7 @@ namespace System
             string className = default,
             IntPtr moduleInstance = default,
             User32.CS classStyle = User32.CS.HREDRAW | User32.CS.VREDRAW,
-            Gdi32.HBRUSH backgroundBrush = default,
+            HBRUSH backgroundBrush = default,
             IntPtr icon = default,
             IntPtr cursor = default,
             string menuName = null,
@@ -62,7 +62,7 @@ namespace System
             {
                 backgroundBrush = User32.GetSysColorBrush(User32.COLOR.WINDOW);
             }
-            else if (backgroundBrush.Handle == (IntPtr)(-1))
+            else if (backgroundBrush == (HBRUSH)(-1))
             {
                 backgroundBrush = default;
             }
@@ -71,16 +71,16 @@ namespace System
             {
                 icon = LoadIconW(IntPtr.Zero, (IntPtr)IDI_APPLICATION);
             }
-            else if (icon == (IntPtr)(-1))
+            else if (icon == (-1))
             {
                 icon = default;
             }
 
             if (cursor == default)
             {
-                cursor = User32.LoadCursorW(IntPtr.Zero, (IntPtr)User32.CursorResourceId.IDC_ARROW);
+                cursor = User32.LoadCursorW(IntPtr.Zero, User32.CursorResourceId.IDC_ARROW);
             }
-            else if (cursor == (IntPtr)(-1))
+            else if (cursor == (-1))
             {
                 cursor = default;
             }

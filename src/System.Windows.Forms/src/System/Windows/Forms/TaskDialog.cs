@@ -936,7 +936,7 @@ namespace System.Windows.Forms
                             // notifications until we receive the posted message.
                             if (User32.PostMessageW(
                                 hWnd,
-                                ContinueButtonClickHandlingMessage).IsTrue())
+                                ContinueButtonClickHandlingMessage))
                             {
                                 _ignoreButtonClickedNotifications = true;
                             }

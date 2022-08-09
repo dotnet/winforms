@@ -1857,7 +1857,7 @@ namespace System.Windows.Forms
                 _tools[tool] = tipInfo;
 
                 IntPtr result = toolInfo.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
-                result = toolInfo.SendMessage(this, (User32.WM)TTM.TRACKACTIVATE, BOOL.TRUE);
+                result = toolInfo.SendMessage(this, (User32.WM)TTM.TRACKACTIVATE, true);
             }
             else
             {
@@ -1893,7 +1893,7 @@ namespace System.Windows.Forms
 
                 toolInfo.Text = text;
                 IntPtr result = toolInfo.SendMessage(this, (User32.WM)TTM.ADDTOOLW);
-                result = toolInfo.SendMessage(this, (User32.WM)TTM.TRACKACTIVATE, BOOL.TRUE);
+                result = toolInfo.SendMessage(this, (User32.WM)TTM.TRACKACTIVATE, true);
             }
 
             if (tool is not null)
@@ -2022,7 +2022,7 @@ namespace System.Windows.Forms
             PInvoke.GetWindowRect(this, out var rectangle);
             if (tipInfo.Position != Point.Empty)
             {
-                Reposition(tipInfo.Position, rectangle.Size());
+                Reposition(tipInfo.Position, rectangle.Size);
             }
         }
 
@@ -2045,7 +2045,7 @@ namespace System.Windows.Forms
             if (cursorLocation.X >= r.left && cursorLocation.X <= r.right &&
                 cursorLocation.Y >= r.top && cursorLocation.Y <= r.bottom)
             {
-                message.ResultInternal = (nint)User32.MA.NOACTIVATE;
+                message.ResultInternal = (LRESULT)(nint)User32.MA.NOACTIVATE;
             }
         }
 
@@ -2054,9 +2054,9 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmWindowFromPoint(ref Message message)
         {
-            var lpPoint = (Point*)message.LParamInternal;
+            var lpPoint = (Point*)(nint)message.LParamInternal;
             bool result = false;
-            message.ResultInternal = GetWindowFromPoint(*lpPoint, ref result);
+            message.ResultInternal = (LRESULT)GetWindowFromPoint(*lpPoint, ref result);
         }
 
         /// <summary>
@@ -2075,7 +2075,7 @@ namespace System.Windows.Forms
 
             Control toolControl = window as Control;
 
-            Size currentTooltipSize = rect.Size();
+            Size currentTooltipSize = rect.Size;
             PopupEventArgs e = new PopupEventArgs(window, toolControl, IsBalloon, currentTooltipSize);
             OnPopup(e);
 
@@ -2097,15 +2097,15 @@ namespace System.Windows.Forms
             // during the popup event; in which case the size of the tooltip is
             // affected. e.ToolTipSize is respected over rect.Size
             PInvoke.GetWindowRect(this, out rect);
-            currentTooltipSize = (e.ToolTipSize == currentTooltipSize) ? rect.Size() : e.ToolTipSize;
+            currentTooltipSize = (e.ToolTipSize == currentTooltipSize) ? rect.Size : e.ToolTipSize;
 
             if (IsBalloon)
             {
                 // Get the text display rectangle
-                User32.SendMessageW(this, (User32.WM)TTM.ADJUSTRECT, (nint)BOOL.TRUE, ref rect);
-                if (rect.Height() > currentTooltipSize.Height)
+                User32.SendMessageW(this, (User32.WM)TTM.ADJUSTRECT, (nint)(BOOL)true, ref rect);
+                if (rect.Height > currentTooltipSize.Height)
                 {
-                    currentTooltipSize.Height = rect.Height();
+                    currentTooltipSize.Height = rect.Height;
                 }
             }
 
@@ -2113,7 +2113,7 @@ namespace System.Windows.Forms
             // This prevents the operating system from drawing incorrect rectangles
             // when determining the correct display rectangle
             // Set the MaxWidth only if user has changed the width.
-            if (currentTooltipSize != rect.Size())
+            if (currentTooltipSize != rect.Size)
             {
                 Screen screen = Screen.FromPoint(Cursor.Position);
                 int maxwidth = (IsBalloon)
@@ -2172,7 +2172,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.WINDOWPOS* wp = (User32.WINDOWPOS*)message.LParamInternal;
+            User32.WINDOWPOS* wp = (User32.WINDOWPOS*)(nint)message.LParamInternal;
 
             Cursor currentCursor = Cursor.Current;
             Point cursorPos = Cursor.Position;
@@ -2249,7 +2249,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            message.ResultInternal = 0;
+            message.ResultInternal = (LRESULT)0;
         }
 
         /// <summary>
@@ -2305,7 +2305,7 @@ namespace System.Windows.Forms
             switch (message.Msg)
             {
                 case (int)(User32.WM.REFLECT_NOTIFY):
-                    var nmhdr = (User32.NMHDR*)message.LParamInternal;
+                    var nmhdr = (User32.NMHDR*)(nint)message.LParamInternal;
                     if (nmhdr->code == (int)TTN.SHOW && !_trackPosition)
                     {
                         WmShow();
@@ -2348,7 +2348,7 @@ namespace System.Windows.Forms
                 case (int)User32.WM.PAINT:
                     if (OwnerDraw && !_isBalloon && !_trackPosition)
                     {
-                        using var paintScope = new PInvoke.BeginPaintScope((Foundation.HWND)Handle);
+                        using var paintScope = new PInvoke.BeginPaintScope((HWND)Handle);
                         Rectangle bounds = paintScope.PaintRectangle;
                         if (bounds == Rectangle.Empty)
                         {

@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using Windows.Win32.Foundation;
-using Windows.Win32.Graphics.Gdi;
 
 namespace Windows.Win32
 {
@@ -29,7 +27,7 @@ namespace Windows.Win32
 
             public HDC HDC { get; }
             public HWND HWND { get; }
-            public Rectangle PaintRectangle => _paintStruct.rcPaint.ToRectangle();
+            public Rectangle PaintRectangle => _paintStruct.rcPaint;
 
             public BeginPaintScope(HWND hwnd)
             {
@@ -37,7 +35,6 @@ namespace Windows.Win32
                 HWND = hwnd;
             }
 
-            public static implicit operator Interop.Gdi32.HDC(in BeginPaintScope scope) => scope.HDC;
             public static implicit operator HDC(in BeginPaintScope scope) => scope.HDC;
 
             public void Dispose()

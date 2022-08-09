@@ -301,7 +301,7 @@ namespace System.Windows.Forms
 
                 _owningListBox.SelectedIndex = CurrentIndex;
 
-                User32.InvalidateRect(new HandleRef(this, _owningListBox.Handle), null, BOOL.FALSE);
+                User32.InvalidateRect(new HandleRef(this, _owningListBox.Handle), null, false);
                 RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                 RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
             }

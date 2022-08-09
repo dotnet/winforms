@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using Windows.Win32.Foundation;
 
 namespace Windows.Win32
 {
@@ -13,7 +12,7 @@ namespace Windows.Win32
         {
             fixed (void* p = &lpRect)
             {
-                return MapWindowPoints(hWndFrom, hWndTo, (POINT*)p, cPoints: 2);
+                return MapWindowPoints(hWndFrom, hWndTo, (Point*)p, cPoints: 2);
             }
         }
 
@@ -22,7 +21,7 @@ namespace Windows.Win32
         {
             fixed (void* p = &lpRect)
             {
-                int result = MapWindowPoints(hWndFrom.Handle, hWndTo, (POINT*)p, cPoints: 2);
+                int result = MapWindowPoints(hWndFrom.Handle, hWndTo, (Point*)p, cPoints: 2);
                 GC.KeepAlive(hWndFrom.Wrapper);
                 return result;
             }
@@ -33,7 +32,7 @@ namespace Windows.Win32
         {
             fixed (void* p = &lpRect)
             {
-                int result = MapWindowPoints(hWndFrom, hWndTo.Handle, (POINT*)p, cPoints: 2);
+                int result = MapWindowPoints(hWndFrom, hWndTo.Handle, (Point*)p, cPoints: 2);
                 GC.KeepAlive(hWndTo.Wrapper);
                 return result;
             }
@@ -43,7 +42,7 @@ namespace Windows.Win32
         {
             fixed (void* p = &lpPoint)
             {
-                int result = MapWindowPoints(hWndFrom, hWndTo, (POINT*)p, cPoints: 1);
+                int result = MapWindowPoints(hWndFrom, hWndTo, (Point*)p, cPoints: 1);
                 return result;
             }
         }
@@ -53,7 +52,7 @@ namespace Windows.Win32
         {
             fixed (void* p = &lpPoint)
             {
-                int result = MapWindowPoints(hWndFrom, hWndTo.Handle, (POINT*)p, cPoints: 1);
+                int result = MapWindowPoints(hWndFrom, hWndTo.Handle, (Point*)p, cPoints: 1);
                 GC.KeepAlive(hWndTo.Wrapper);
                 return result;
             }
@@ -64,7 +63,7 @@ namespace Windows.Win32
         {
             fixed (void* p = &lpPoint)
             {
-                int result = MapWindowPoints(hWndFrom.Handle, hWndTo, (POINT*)p, cPoints: 1);
+                int result = MapWindowPoints(hWndFrom.Handle, hWndTo, (Point*)p, cPoints: 1);
                 GC.KeepAlive(hWndFrom.Wrapper);
                 return result;
             }
@@ -75,7 +74,7 @@ namespace Windows.Win32
         {
             fixed (void* p = &lpPoint)
             {
-                int result = MapWindowPoints(hWndFrom.Handle, hWndTo.Handle, (POINT*)p, cPoints: 1);
+                int result = MapWindowPoints(hWndFrom.Handle, hWndTo.Handle, (Point*)p, cPoints: 1);
                 GC.KeepAlive(hWndFrom.Wrapper);
                 GC.KeepAlive(hWndTo.Wrapper);
                 return result;

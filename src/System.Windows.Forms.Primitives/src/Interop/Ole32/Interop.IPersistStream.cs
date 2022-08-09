@@ -22,7 +22,7 @@ internal static partial class Interop
 
             void Load(IStream pstm);
 
-            void Save(IStream pstm, Interop.BOOL fClearDirty);
+            void Save(IStream pstm, BOOL fClearDirty);
 
             long GetSizeMax();
         }

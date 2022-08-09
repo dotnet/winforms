@@ -9,8 +9,8 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         // This does set last error but *only* in one error case that doesn't add any real value.
-        [LibraryImport(Libraries.Gdi32)]
-        public static partial OBJ GetObjectType(HGDIOBJ h);
+        [DllImport(Libraries.Gdi32)]
+        public static extern OBJ GetObjectType(HGDIOBJ h);
 
         public static OBJ GetObjectType(HandleRef h)
         {

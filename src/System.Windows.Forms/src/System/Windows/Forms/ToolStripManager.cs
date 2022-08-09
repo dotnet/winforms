@@ -925,8 +925,8 @@ namespace System.Windows.Forms
                             ToolStrip topMostToolStrip = toolStrip.GetToplevelOwnerToolStrip();
                             if (topMostToolStrip is not null && activeControl is not null)
                             {
-                                Foundation.HWND rootWindowOfToolStrip = PInvoke.GetAncestor(topMostToolStrip, GET_ANCESTOR_FLAGS.GA_ROOT);
-                                Foundation.HWND rootWindowOfControl = PInvoke.GetAncestor(activeControl, GET_ANCESTOR_FLAGS.GA_ROOT);
+                                HWND rootWindowOfToolStrip = PInvoke.GetAncestor(topMostToolStrip, GET_ANCESTOR_FLAGS.GA_ROOT);
+                                HWND rootWindowOfControl = PInvoke.GetAncestor(activeControl, GET_ANCESTOR_FLAGS.GA_ROOT);
                                 rootWindowsMatch = rootWindowOfToolStrip == rootWindowOfControl;
 
                                 if (rootWindowsMatch)
@@ -989,7 +989,7 @@ namespace System.Windows.Forms
 
             Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ProcessMenuKey] Determining whether we should send focus to MenuStrip");
 
-            Keys keyData = (Keys)m.LParamInternal;
+            Keys keyData = (Keys)(nint)m.LParamInternal;
 
             // Search for our menu to work with
             Control intendedControl = Control.FromHandle(m.HWnd);
@@ -1048,8 +1048,8 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ProcessMenuKey] attempting to set focus to menustrip");
 
                         // If we've alt-tabbed away don't snap/restore focus.
-                        Foundation.HWND topmostParentOfMenu = PInvoke.GetAncestor(menuStripToActivate, GET_ANCESTOR_FLAGS.GA_ROOT);
-                        Foundation.HWND foregroundWindow = PInvoke.GetForegroundWindow();
+                        HWND topmostParentOfMenu = PInvoke.GetAncestor(menuStripToActivate, GET_ANCESTOR_FLAGS.GA_ROOT);
+                        HWND foregroundWindow = PInvoke.GetForegroundWindow();
 
                         if (topmostParentOfMenu == foregroundWindow)
                         {

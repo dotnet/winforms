@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial BOOL EndDialog(IntPtr hDlg, IntPtr nResult);
+        [DllImport(Libraries.User32)]
+        public static extern BOOL EndDialog(IntPtr hDlg, IntPtr nResult);
 
         public static BOOL EndDialog(HandleRef hDlg, IntPtr nResult)
         {

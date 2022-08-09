@@ -6,7 +6,6 @@
 
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Windows.Win32.Foundation;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -87,13 +86,13 @@ namespace System.Windows.Forms
                         && (PEEK_MESSAGE_REMOVE_TYPE)(nuint)wparam == PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE)
                     {
                         // Only process messages we've pulled off the queue.
-                        User32.MSG* msg = (User32.MSG*)(nint)lparam;
+                        MSG* msg = (MSG*)(nint)lparam;
                         if (msg is not null)
                         {
                             // Call pretranslate on the message to execute the message filters and preprocess message.
                             if (Application.ThreadContext.FromCurrent().PreTranslateMessage(ref *msg))
                             {
-                                msg->message = User32.WM.NULL;
+                                msg->message = (uint)User32.WM.NULL;
                             }
                         }
                     }

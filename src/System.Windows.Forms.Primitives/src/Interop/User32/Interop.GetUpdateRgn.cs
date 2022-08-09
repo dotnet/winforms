@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32, SetLastError = true)]
-        public static partial RegionType GetUpdateRgn(IntPtr hWnd, Gdi32.HRGN hRgn, BOOL bErase);
+        [DllImport(Libraries.User32, SetLastError = true)]
+        public static extern RegionType GetUpdateRgn(IntPtr hWnd, HRGN hRgn, BOOL bErase);
     }
 }

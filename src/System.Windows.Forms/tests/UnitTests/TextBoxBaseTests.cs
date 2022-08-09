@@ -1820,7 +1820,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_SETMODIFY.
-            User32.SendMessageW(control.Handle, (User32.WM)User32.EM.SETMODIFY, (nint)BOOL.TRUE);
+            User32.SendMessageW(control.Handle, (User32.WM)User32.EM.SETMODIFY, (nint)(BOOL)true);
             Assert.Equal(0, modifiedChangedCallCount);
 
             Assert.True(control.Modified);
@@ -2322,7 +2322,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_SETREADONLY.
-            User32.SendMessageW(control.Handle, (User32.WM)User32.EM.SETREADONLY, (nint)BOOL.TRUE);
+            User32.SendMessageW(control.Handle, (User32.WM)User32.EM.SETREADONLY, (nint)(BOOL)true);
             Assert.Equal(0, readOnlyChangedCallCount);
 
             Assert.False(control.ReadOnly);

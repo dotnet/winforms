@@ -5,7 +5,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -261,7 +260,7 @@ namespace System.Windows.Forms
             return GetGlyphSize(hdc, state, hwnd);
         }
 
-        internal static Size GetGlyphSize(Gdi32.HDC hdc, CheckBoxState state, IntPtr hwnd)
+        internal static Size GetGlyphSize(HDC hdc, CheckBoxState state, IntPtr hwnd)
         {
             if (RenderWithVisualStyles)
             {

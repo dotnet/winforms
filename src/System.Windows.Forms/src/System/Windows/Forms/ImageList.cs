@@ -219,14 +219,14 @@ namespace System.Windows.Forms
                     DestroyHandle();
                     _originals = null;
                     _nativeImageList = himl.Duplicate();
-                    if (ComCtl32.ImageList.GetIconSize(new HandleRef(this, _nativeImageList.Handle), out int x, out int y).IsTrue())
+                    if (ComCtl32.ImageList.GetIconSize(new HandleRef(this, _nativeImageList.Handle), out int x, out int y))
                     {
                         _imageSize = new Size(x, y);
                     }
 
                     // need to get the image bpp
                     var imageInfo = new ComCtl32.IMAGEINFO();
-                    if (ComCtl32.ImageList.GetImageInfo(new HandleRef(this, _nativeImageList.Handle), 0, ref imageInfo).IsTrue())
+                    if (ComCtl32.ImageList.GetImageInfo(new HandleRef(this, _nativeImageList.Handle), 0, ref imageInfo))
                     {
                         Gdi32.GetObjectW(imageInfo.hbmImage, out Gdi32.BITMAP bmp);
                         _colorDepth = bmp.bmBitsPixel switch
@@ -385,10 +385,10 @@ namespace System.Windows.Forms
             Debug.Assert(HandleCreated, "Calling AddToHandle when there is no handle");
 
             // Calls GDI to create Bitmap.
-            Gdi32.HBITMAP hMask = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
+            HBITMAP hMask = (HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
 
             // Calls GDI+ to create Bitmap
-            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, (IntPtr)hMask);
+            HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, (IntPtr)hMask);
 
             int index;
             try
@@ -658,7 +658,7 @@ namespace System.Windows.Forms
             if (ColorDepth == ColorDepth.Depth32Bit)
             {
                 var imageInfo = new ComCtl32.IMAGEINFO();
-                if (ComCtl32.ImageList.GetImageInfo(new HandleRef(this, Handle), index, ref imageInfo).IsTrue())
+                if (ComCtl32.ImageList.GetImageInfo(new HandleRef(this, Handle), index, ref imageInfo))
                 {
                     Bitmap? tmpBitmap = null;
                     BitmapData? bmpData = null;

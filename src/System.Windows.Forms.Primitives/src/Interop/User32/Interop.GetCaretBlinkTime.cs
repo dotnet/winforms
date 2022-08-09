@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial uint GetCaretBlinkTime();
+        [DllImport(Libraries.User32)]
+        public static extern uint GetCaretBlinkTime();
     }
 }

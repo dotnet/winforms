@@ -115,7 +115,7 @@ namespace System.Windows.Forms.Design
 
                     if (m.ResultInternal == (int)User32.HT.TRANSPARENT)
                     {
-                        m.ResultInternal = (nint)User32.HT.CLIENT;
+                        m.ResultInternal = (LRESULT)(nint)User32.HT.CLIENT;
                     }
 
                     break;

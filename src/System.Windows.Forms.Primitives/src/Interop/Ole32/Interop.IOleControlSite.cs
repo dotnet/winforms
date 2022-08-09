@@ -33,7 +33,7 @@ internal partial class Interop
 
             [PreserveSig]
             HRESULT TranslateAccelerator(
-                User32.MSG* pMsg,
+                MSG* pMsg,
                 KEYMODIFIERS grfModifiers);
 
             [PreserveSig]

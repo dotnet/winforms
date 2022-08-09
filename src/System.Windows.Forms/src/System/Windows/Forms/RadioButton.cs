@@ -383,7 +383,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (nint)_isChecked.ToBOOL());
+                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (nint)(BOOL)_isChecked);
             }
         }
 

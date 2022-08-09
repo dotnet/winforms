@@ -591,9 +591,8 @@ namespace System.Windows.Forms.Design
             // We make sure we're painted before we start the drag.  Then, we disable window painting to
             // ensure that the drag can proceed without leaving artifacts lying around.  We should be calling LockWindowUpdate,
             // but that causes a horrible flashing because GDI+ uses direct draw.
-            //
-            User32.MSG msg = default;
-            while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE).IsTrue())
+            MSG msg = default;
+            while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE))
             {
                 User32.TranslateMessage(ref msg);
                 User32.DispatchMessageW(ref msg);
@@ -899,7 +898,7 @@ namespace System.Windows.Forms.Design
                                     if (updateLocation)
                                     {
                                         oldDesignerControl = client.GetDesignerControl();
-                                        User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
+                                        User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW, (nint)(BOOL)false);
                                     }
 
                                     Point dropPt = client.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
@@ -951,7 +950,7 @@ namespace System.Windows.Forms.Design
                                     if (oldDesignerControl is not null)
                                     {
                                         //((ComponentDataObject)dataObj).ShowControls();
-                                        User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
+                                        User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW, (nint)(BOOL)true);
                                         oldDesignerControl.Invalidate(true);
                                     }
 

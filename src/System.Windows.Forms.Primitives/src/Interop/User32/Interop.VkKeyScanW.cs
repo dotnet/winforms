@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32, StringMarshalling = StringMarshalling.Utf16)]
-        public static partial short VkKeyScanW(char key);
+        [DllImport(Libraries.User32, CharSet = CharSet.Unicode)]
+        public static extern short VkKeyScanW(char key);
     }
 }

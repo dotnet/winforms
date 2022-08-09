@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         private bool _ignoreSecondFileOkNotification;
         private int _okNotificationCount;
         private UnicodeCharBuffer? _charBuffer;
-        private Foundation.HWND _dialogHWnd;
+        private HWND _dialogHWnd;
 
         /// <summary>
         ///  In an inherited class, initializes a new instance of the <see cref="FileDialog"/>
@@ -529,7 +529,7 @@ namespace System.Windows.Forms
         {
             if (msg == (int)User32.WM.NOTIFY)
             {
-                _dialogHWnd = PInvoke.GetParent((Foundation.HWND)hWnd);
+                _dialogHWnd = PInvoke.GetParent((HWND)hWnd);
                 try
                 {
                     Comdlg32.OFNOTIFYW* notify = (Comdlg32.OFNOTIFYW*)lparam;
@@ -722,7 +722,7 @@ namespace System.Windows.Forms
             MessageBoxButtons buttons,
             MessageBoxIcon icon)
         {
-            Foundation.HWND focusHandle = PInvoke.GetFocus();
+            HWND focusHandle = PInvoke.GetFocus();
             try
             {
                 return RTLAwareMessageBox.Show(null, message, caption, buttons, icon, MessageBoxDefaultButton.Button1, 0)

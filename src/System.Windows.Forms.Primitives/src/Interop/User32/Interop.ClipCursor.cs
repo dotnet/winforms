@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static unsafe partial BOOL ClipCursor(RECT* rcClip);
+        [DllImport(Libraries.User32)]
+        public static unsafe extern BOOL ClipCursor(RECT* rcClip);
     }
 }

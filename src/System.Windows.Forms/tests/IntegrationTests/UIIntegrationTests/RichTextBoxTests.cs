@@ -4,6 +4,7 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.Foundation;
 using Xunit;
 using Xunit.Abstractions;
 using static Interop;
@@ -52,7 +53,7 @@ namespace System.Windows.Forms.UITests
                     await InputSimulator.SendAsync(
                         form,
                         inputSimulator => inputSimulator.Mouse.LeftButtonClick());
-                    if (setOldCursorPos.IsTrue())
+                    if (setOldCursorPos)
                     {
                         await MoveMouseAsync(form, previousPosition);
                     }
@@ -64,7 +65,7 @@ namespace System.Windows.Forms.UITests
                 {
                     richTextBox.LinkClicked -= handler;
 
-                    if (setOldCursorPos.IsTrue())
+                    if (setOldCursorPos)
                     {
                         // Move cursor to the old position.
                         await InputSimulator.SendAsync(
@@ -128,7 +129,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                     await InputSimulator.SendAsync(
                         form,
                         inputSimulator => inputSimulator.Mouse.LeftButtonClick());
-                    if (setOldCursorPos.IsTrue())
+                    if (setOldCursorPos)
                     {
                         await MoveMouseAsync(form, previousPosition);
                     }
@@ -140,7 +141,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                 {
                     richTextBox.LinkClicked -= handler;
 
-                    if (setOldCursorPos.IsTrue())
+                    if (setOldCursorPos)
                     {
                         // Move cursor to the old position.
                         await InputSimulator.SendAsync(
@@ -205,7 +206,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                     await InputSimulator.SendAsync(
                         form,
                         inputSimulator => inputSimulator.Mouse.LeftButtonClick());
-                    if (setOldCursorPos.IsTrue())
+                    if (setOldCursorPos)
                     {
                         await MoveMouseAsync(form, previousPosition);
                     }
@@ -217,7 +218,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                 {
                     richTextBox.LinkClicked -= handler;
 
-                    if (setOldCursorPos.IsTrue())
+                    if (setOldCursorPos)
                     {
                         // Move cursor to the old position.
                         await InputSimulator.SendAsync(

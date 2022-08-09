@@ -49,7 +49,7 @@ namespace System.Windows.Forms
                 item = Interlocked.Exchange(ref _itemsCache[i], IntPtr.Zero);
                 if (item != IntPtr.Zero)
                 {
-                    return new ScreenDcScope(this, (Gdi32.HDC)item);
+                    return new ScreenDcScope(this, (HDC)item);
                 }
             }
 
@@ -62,7 +62,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Release an item back to the cache, disposing if no room is available.
         /// </summary>
-        private void Release(Gdi32.HDC hdc)
+        private void Release(HDC hdc)
         {
             ArgumentValidation.ThrowIfNull(hdc);
             ValidateHdc(hdc);
@@ -80,7 +80,7 @@ namespace System.Windows.Forms
             }
 
             // Too many to store, delete the last item we swapped.
-            Gdi32.DeleteDC((Gdi32.HDC)temp);
+            Gdi32.DeleteDC((HDC)temp);
         }
 
         ~ScreenDcCache() => Dispose();
@@ -92,17 +92,17 @@ namespace System.Windows.Forms
                 IntPtr hdc = _itemsCache[i];
                 if (hdc != IntPtr.Zero)
                 {
-                    Gdi32.DeleteDC((Gdi32.HDC)hdc);
+                    Gdi32.DeleteDC((HDC)hdc);
                 }
             }
         }
 
         [Conditional("DEBUG")]
-        private static void ValidateHdc(Gdi32.HDC hdc)
+        private static void ValidateHdc(HDC hdc)
         {
             // A few sanity checks against the HDC to see if it was left in a dirty state
 
-            Gdi32.HRGN hrgn = Gdi32.CreateRectRgn(0, 0, 0, 0);
+            HRGN hrgn = Gdi32.CreateRectRgn(0, 0, 0, 0);
             Debug.Assert(Gdi32.GetClipRgn(hdc, hrgn) == 0, "Should not have a clipping region");
             Gdi32.DeleteObject(hrgn);
 
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
             Debug.Assert(Gdi32.GetBkMode(hdc) == Gdi32.BKMODE.OPAQUE);
 
             Matrix3x2 matrix = default;
-            Debug.Assert(Gdi32.GetWorldTransform(hdc, ref matrix).IsTrue());
+            Debug.Assert(Gdi32.GetWorldTransform(hdc, ref matrix));
             Debug.Assert(matrix.IsIdentity);
         }
     }

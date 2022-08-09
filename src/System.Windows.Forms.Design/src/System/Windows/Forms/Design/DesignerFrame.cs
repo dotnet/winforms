@@ -105,7 +105,7 @@ namespace System.Windows.Forms.Design
         {
             if (_designer != null && _designer.IsHandleCreated)
             {
-                User32.SendMessageW(_designer.Handle, User32.WM.NCACTIVATE, (nint)focus.ToBOOL());
+                User32.SendMessageW(_designer.Handle, User32.WM.NCACTIVATE, (nint)(BOOL)focus);
                 User32.RedrawWindow(_designer.Handle, flags: User32.RDW.FRAME);
             }
         }

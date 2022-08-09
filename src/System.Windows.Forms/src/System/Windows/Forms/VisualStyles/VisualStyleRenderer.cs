@@ -106,7 +106,7 @@ namespace System.Windows.Forms.VisualStyles
                 }
                 else
                 {
-                    result = IsThemePartDefined(hTheme, part, 0).IsTrue();
+                    result = IsThemePartDefined(hTheme, part, 0);
                 }
             }
 
@@ -117,7 +117,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 if (handle is not null)
                 {
-                    result = IsThemePartDefined(handle, part, 0).IsTrue();
+                    result = IsThemePartDefined(handle, part, 0);
                 }
 
                 // If we did, in fact get a new correct theme handle, our cache is out of date -- update it now.
@@ -226,7 +226,7 @@ namespace System.Windows.Forms.VisualStyles
             DrawBackground(hdc, bounds, IntPtr.Zero);
         }
 
-        internal unsafe void DrawBackground(Gdi32.HDC dc, Rectangle bounds, IntPtr hwnd = default)
+        internal unsafe void DrawBackground(HDC dc, Rectangle bounds, IntPtr hwnd = default)
         {
             if (bounds.Width < 0 || bounds.Height < 0)
                 return;
@@ -260,7 +260,7 @@ namespace System.Windows.Forms.VisualStyles
             DrawBackground(hdc, bounds, clipRectangle, IntPtr.Zero);
         }
 
-        internal unsafe void DrawBackground(Gdi32.HDC dc, Rectangle bounds, Rectangle clipRectangle, IntPtr hwnd)
+        internal unsafe void DrawBackground(HDC dc, Rectangle bounds, Rectangle clipRectangle, IntPtr hwnd)
         {
             if (bounds.Width < 0 || bounds.Height < 0 || clipRectangle.Width < 0 || clipRectangle.Height < 0)
                 return;
@@ -296,7 +296,7 @@ namespace System.Windows.Forms.VisualStyles
             return DrawEdge(hdc, bounds, edges, style, effects);
         }
 
-        internal Rectangle DrawEdge(Gdi32.HDC dc, Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects)
+        internal Rectangle DrawEdge(HDC dc, Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects)
         {
             SourceGenerated.EnumValidator.Validate(edges, nameof(edges));
             SourceGenerated.EnumValidator.Validate(style, nameof(style));
@@ -400,7 +400,7 @@ namespace System.Windows.Forms.VisualStyles
             DrawText(hdc, bounds, textToDraw, drawDisabled, flags);
         }
 
-        internal void DrawText(Gdi32.HDC dc, Rectangle bounds, string? textToDraw, bool drawDisabled, TextFormatFlags flags)
+        internal void DrawText(HDC dc, Rectangle bounds, string? textToDraw, bool drawDisabled, TextFormatFlags flags)
         {
             if (bounds.Width < 0 || bounds.Height < 0)
                 return;
@@ -424,7 +424,7 @@ namespace System.Windows.Forms.VisualStyles
             return GetBackgroundContentRectangle(hdc, bounds);
         }
 
-        internal Rectangle GetBackgroundContentRectangle(Gdi32.HDC dc, Rectangle bounds)
+        internal Rectangle GetBackgroundContentRectangle(HDC dc, Rectangle bounds)
         {
             if (bounds.Width < 0 || bounds.Height < 0)
                 return Rectangle.Empty;
@@ -464,7 +464,7 @@ namespace System.Windows.Forms.VisualStyles
 
             using var hdc = new DeviceContextHdcScope(dc);
             RECT boundsRect = bounds;
-            _lastHResult = GetThemeBackgroundRegion(this, hdc, Part, State, ref boundsRect, out Gdi32.HRGN hRegion);
+            _lastHResult = GetThemeBackgroundRegion(this, hdc, Part, State, ref boundsRect, out HRGN hRegion);
 
             // GetThemeBackgroundRegion returns a null hRegion if it fails to create one, it could be because the bounding
             // box is too big. For more info see code in %xpsrc%\shell\themes\uxtheme\imagefile.cpp if you have an enlistment to it.
@@ -476,7 +476,7 @@ namespace System.Windows.Forms.VisualStyles
 
             // From the GDI+ sources it doesn't appear as if they take ownership of the hRegion, so this is safe to do.
             // We need to DeleteObject in order to not leak.
-            Region region = Region.FromHrgn(hRegion.Handle);
+            Region region = Region.FromHrgn(hRegion);
             Gdi32.DeleteObject(hRegion);
             return region;
         }
@@ -488,9 +488,9 @@ namespace System.Windows.Forms.VisualStyles
         {
             SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
-            BOOL val = BOOL.FALSE;
+            BOOL val = false;
             _lastHResult = GetThemeBool(this, Part, State, (int)prop, ref val);
-            return val.IsTrue();
+            return val;
         }
 
         /// <summary>
@@ -595,7 +595,7 @@ namespace System.Windows.Forms.VisualStyles
             return GetPartSize(hdc, type, IntPtr.Zero);
         }
 
-        internal unsafe Size GetPartSize(Gdi32.HDC dc, ThemeSizeType type, IntPtr hwnd = default)
+        internal unsafe Size GetPartSize(HDC dc, ThemeSizeType type, IntPtr hwnd = default)
         {
             // Valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(type, nameof(type));
@@ -759,7 +759,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public bool IsBackgroundPartiallyTransparent()
         {
-            return IsThemeBackgroundPartiallyTransparent(this, Part, State).IsTrue();
+            return IsThemeBackgroundPartiallyTransparent(this, Part, State);
         }
 
         /// <summary>

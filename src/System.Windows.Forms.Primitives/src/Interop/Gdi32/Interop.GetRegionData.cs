@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [LibraryImport(Libraries.Gdi32)]
-        public static partial uint GetRegionData(IntPtr hRgn, uint nCount, IntPtr lpRgnData);
+        [DllImport(Libraries.Gdi32)]
+        public static extern uint GetRegionData(IntPtr hRgn, uint nCount, IntPtr lpRgnData);
     }
 }

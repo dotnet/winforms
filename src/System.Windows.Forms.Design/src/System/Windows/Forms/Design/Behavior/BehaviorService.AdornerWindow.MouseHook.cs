@@ -6,7 +6,6 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using Windows.Win32.Foundation;
 using static Interop;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -97,7 +96,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                         try
                         {
-                            if (ProcessMouseMessage(mhs->hwnd, (User32.WM)(nuint)wparam, mhs->pt.x, mhs->pt.y))
+                            if (ProcessMouseMessage(mhs->hwnd, (User32.WM)(nuint)wparam, mhs->pt.X, mhs->pt.Y))
                             {
                                 return (LRESULT)1;
                             }
@@ -179,7 +178,7 @@ namespace System.Windows.Forms.Design.Behavior
                                 _processingMessage = true;
                                 var pt = new Point(x, y);
                                 adornerWindow.PointToClient(pt);
-                                Message m = Message.Create(hwnd, msg, 0, PARAM.FromLowHigh(pt.Y, pt.X));
+                                Message m = Message.Create(hwnd, msg, 0u, PARAM.FromLowHigh(pt.Y, pt.X));
 
                                 // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
                                 if (m.Msg == (int)User32.WM.LBUTTONDOWN)

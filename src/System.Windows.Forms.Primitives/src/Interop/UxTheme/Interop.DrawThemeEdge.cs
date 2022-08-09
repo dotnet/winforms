@@ -8,10 +8,10 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [LibraryImport(Libraries.UxTheme)]
-        public static partial HRESULT DrawThemeEdge(
+        [DllImport(Libraries.UxTheme)]
+        public static extern HRESULT DrawThemeEdge(
             IntPtr hTheme,
-            Gdi32.HDC hdc,
+            HDC hdc,
             int iPartId,
             int iStateId,
             ref RECT pDestRect,
@@ -21,7 +21,7 @@ internal static partial class Interop
 
         public static HRESULT DrawThemeEdge(
             IHandle hTheme,
-            Gdi32.HDC hdc,
+            HDC hdc,
             int iPartId,
             int iStateId,
             ref RECT pDestRect,

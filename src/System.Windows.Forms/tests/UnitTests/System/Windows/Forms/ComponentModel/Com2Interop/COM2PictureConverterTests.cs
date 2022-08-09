@@ -79,7 +79,7 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
             }
             finally
             {
-                Gdi32.DeleteObject((Gdi32.HGDIOBJ)hBitmap);
+                Gdi32.DeleteObject((HGDIOBJ)hBitmap);
             }
         }
 

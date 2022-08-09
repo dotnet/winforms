@@ -16,14 +16,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private unsafe bool GetBuilderGuidString(VSSDK.IProvidePropertyBuilder target, Ole32.DispatchID dispid, [NotNullWhen(true)] ref string? strGuidBldr, VSSDK.CTLBLDTYPE* bldrType)
         {
-            BOOL valid = BOOL.FALSE;
+            BOOL valid = false;
             var pGuidBldr = new string[1];
             if (!target.MapPropertyToBuilder(dispid, bldrType, pGuidBldr, &valid).Succeeded())
             {
                 return false;
             }
 
-            if (valid.IsTrue() && (*bldrType & VSSDK.CTLBLDTYPE.FINTERNALBUILDER) == 0)
+            if (valid && (*bldrType & VSSDK.CTLBLDTYPE.FINTERNALBUILDER) == 0)
             {
                 Debug.Fail("Property Browser doesn't support standard builders -- NYI");
                 return false;

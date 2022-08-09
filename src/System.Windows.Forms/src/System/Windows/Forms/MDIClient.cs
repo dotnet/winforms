@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using Windows.Win32.Graphics.Gdi;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -285,7 +284,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetWindowRgn()
         {
-            Foundation.RECT rect = new();
+            RECT rect = new();
             CreateParams cp = CreateParams;
 
             AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
@@ -308,7 +307,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
             }
 
-            if (User32.SetWindowRgn(this, rgn1, BOOL.TRUE) == 0)
+            if (User32.SetWindowRgn(this, rgn1, true) == 0)
             {
                 throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
             }

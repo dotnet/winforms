@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Primitives.Resources;
-using Windows.Win32;
 using static Interop.Ole32;
 
 internal static partial class Interop

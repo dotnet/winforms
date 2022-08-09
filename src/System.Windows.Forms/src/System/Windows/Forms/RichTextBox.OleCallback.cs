@@ -39,7 +39,7 @@ namespace System.Windows.Forms
                     return HRESULT.E_FAIL;
                 }
 
-                WinFormsComWrappers.LockBytesWrapper pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, BOOL.TRUE);
+                WinFormsComWrappers.LockBytesWrapper pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, true);
                 storage = Ole32.StgCreateDocfileOnILockBytes(
                     pLockBytes,
                     Ole32.STGM.SHARE_EXCLUSIVE | Ole32.STGM.CREATE | Ole32.STGM.READWRITE);
@@ -228,7 +228,7 @@ namespace System.Windows.Forms
 
                 if (owner.AllowDrop || owner.EnableAutoDragDrop)
                 {
-                    if (fDrag.IsTrue() && grfKeyState == (User32.MK)0)
+                    if (fDrag && grfKeyState == (User32.MK)0)
                     {
                         // This is the very first call we receive in a Drag-Drop operation,
                         // so we will let the control know what we support.
@@ -258,7 +258,7 @@ namespace System.Windows.Forms
                         // We only care about the drag.
                         //
                         // When we drop, lastEffect will have the right state
-                        if (fDrag.IsFalse() && lastDataObject is not null && grfKeyState != (User32.MK)0)
+                        if (!fDrag && lastDataObject is not null && grfKeyState != (User32.MK)0)
                         {
                             DragEventArgs e = _lastDragEventArgs is null
                                 ? new DragEventArgs(lastDataObject,
@@ -269,8 +269,8 @@ namespace System.Windows.Forms
                                     lastEffect)
                                 : new DragEventArgs(lastDataObject,
                                     (int)grfKeyState,
-                                    Control.MousePosition.X,
-                                    Control.MousePosition.Y,
+                                    MousePosition.X,
+                                    MousePosition.Y,
                                     DragDropEffects.All,
                                     lastEffect,
                                     _lastDragEventArgs.DropImageType,

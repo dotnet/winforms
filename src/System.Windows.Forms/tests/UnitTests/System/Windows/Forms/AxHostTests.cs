@@ -1438,10 +1438,10 @@ namespace System.Windows.Forms.Tests
             Ole32.IFont iFont = (Ole32.IFont)disp;
             Assert.Equal(font.Name, iFont.Name);
             Assert.Equal(97500, iFont.Size);
-            Assert.False(iFont.Bold.IsTrue());
-            Assert.False(iFont.Italic.IsTrue());
-            Assert.False(iFont.Underline.IsTrue());
-            Assert.False(iFont.Strikethrough.IsTrue());
+            Assert.False(iFont.Bold);
+            Assert.False(iFont.Italic);
+            Assert.False(iFont.Underline);
+            Assert.False(iFont.Strikethrough);
             // Charset is locale specific
             // Assert.Equal(0, iFont.Charset);
             Assert.NotEqual(IntPtr.Zero, iFont.hFont);
@@ -1478,10 +1478,10 @@ namespace System.Windows.Forms.Tests
             Ole32.IFont iFont = (Ole32.IFont)disp;
             Assert.Equal(font.Name, iFont.Name);
             Assert.Equal(97500, iFont.Size);
-            Assert.True(iFont.Bold.IsTrue());
-            Assert.True(iFont.Italic.IsTrue());
-            Assert.True(iFont.Underline.IsTrue());
-            Assert.True(iFont.Strikethrough.IsTrue());
+            Assert.True(iFont.Bold);
+            Assert.True(iFont.Italic);
+            Assert.True(iFont.Underline);
+            Assert.True(iFont.Strikethrough);
             Assert.Equal(0, iFont.Charset);
             Assert.NotEqual(IntPtr.Zero, iFont.hFont);
 
@@ -1532,10 +1532,10 @@ namespace System.Windows.Forms.Tests
             Ole32.IFont iFont = (Ole32.IFont)SubAxHost.GetIFontFromFont(font);
             Assert.Equal(font.Name, iFont.Name);
             Assert.Equal(97500, iFont.Size);
-            Assert.False(iFont.Bold.IsTrue());
-            Assert.False(iFont.Italic.IsTrue());
-            Assert.False(iFont.Underline.IsTrue());
-            Assert.False(iFont.Strikethrough.IsTrue());
+            Assert.False(iFont.Bold);
+            Assert.False(iFont.Italic);
+            Assert.False(iFont.Underline);
+            Assert.False(iFont.Strikethrough);
             // Charset is locale specific
             // Assert.Equal(0, iFont.Charset);
             Assert.NotEqual(IntPtr.Zero, iFont.hFont);
@@ -1554,10 +1554,10 @@ namespace System.Windows.Forms.Tests
             Ole32.IFont iFont = (Ole32.IFont)SubAxHost.GetIFontFromFont(font);
             Assert.Equal(font.Name, iFont.Name);
             Assert.Equal(97500, iFont.Size);
-            Assert.True(iFont.Bold.IsTrue());
-            Assert.True(iFont.Italic.IsTrue());
-            Assert.True(iFont.Underline.IsTrue());
-            Assert.True(iFont.Strikethrough.IsTrue());
+            Assert.True(iFont.Bold);
+            Assert.True(iFont.Italic);
+            Assert.True(iFont.Underline);
+            Assert.True(iFont.Strikethrough);
             Assert.Equal(0, iFont.Charset);
             Assert.NotEqual(IntPtr.Zero, iFont.hFont);
 

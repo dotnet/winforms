@@ -1091,7 +1091,7 @@ namespace System.ComponentModel.Design
 
         private void WmActivate(ref Message m)
         {
-            if ((User32.WA)m.WParamInternal == User32.WA.INACTIVE)
+            if ((User32.WA)(nint)m.WParamInternal == User32.WA.INACTIVE)
             {
                 IntPtr hwndActivating = m.LParamInternal;
                 if (WindowOwnsWindow(Handle, hwndActivating))

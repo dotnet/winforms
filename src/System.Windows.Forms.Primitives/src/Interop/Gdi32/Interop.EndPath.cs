@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [LibraryImport(Libraries.Gdi32)]
-        public static partial BOOL EndPath(HDC hdc);
+        [DllImport(Libraries.Gdi32)]
+        public static extern BOOL EndPath(HDC hdc);
     }
 }
