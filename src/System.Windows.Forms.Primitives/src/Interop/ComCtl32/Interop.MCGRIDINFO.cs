@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32;
 
 internal static partial class Interop
 {
@@ -22,8 +23,8 @@ internal static partial class Interop
             public int iRow;
             public int iCol;
             public BOOL bSelected;
-            public Kernel32.SYSTEMTIME stStart;
-            public Kernel32.SYSTEMTIME stEnd;
+            public PInvoke.SYSTEMTIME stStart;
+            public PInvoke.SYSTEMTIME stEnd;
             public RECT rc;
             public char* pszName;
             public UIntPtr cchName;

@@ -139,7 +139,7 @@ namespace System.Windows.Forms.Tests
                         => Ole32.OleDuplicateData(
                             dragDropFormat.Medium.unionmember,
                             formatEtc.cfFormat,
-                            Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT),
+                            PInvoke.GMEM.MOVEABLE | PInvoke.GMEM.DDESHARE | PInvoke.GMEM.ZEROINIT),
                         _ => dragDropFormat.Medium.unionmember,
                     }
                 };

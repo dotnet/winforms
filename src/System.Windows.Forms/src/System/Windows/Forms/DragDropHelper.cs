@@ -407,12 +407,12 @@ namespace System.Windows.Forms
             ArgumentNullException.ThrowIfNull(dataObject);
             SourceGenerated.EnumValidator.Validate(dropImageType, nameof(dropImageType));
 
-            if (message.Length >= Kernel32.MAX_PATH)
+            if (message.Length >= PInvoke.MAX_PATH)
             {
                 throw new ArgumentOutOfRangeException(nameof(message));
             }
 
-            if (messageReplacementToken.Length >= Kernel32.MAX_PATH)
+            if (messageReplacementToken.Length >= PInvoke.MAX_PATH)
             {
                 throw new ArgumentOutOfRangeException(nameof(messageReplacementToken));
             }

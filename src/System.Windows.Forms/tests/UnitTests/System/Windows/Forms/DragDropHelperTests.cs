@@ -52,8 +52,8 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> DropDescription_LengthExceedsMaxPath_TestData()
         {
-            yield return new object[] { new DataObject(), DropImageType.Copy, new string('*', Kernel32.MAX_PATH), string.Empty };
-            yield return new object[] { new DataObject(), DropImageType.Copy, string.Empty, new string('*', Kernel32.MAX_PATH) };
+            yield return new object[] { new DataObject(), DropImageType.Copy, new string('*', PInvoke.MAX_PATH), string.Empty };
+            yield return new object[] { new DataObject(), DropImageType.Copy, string.Empty, new string('*', PInvoke.MAX_PATH) };
         }
 
         public static IEnumerable<object[]> InDragLoop_TestData()

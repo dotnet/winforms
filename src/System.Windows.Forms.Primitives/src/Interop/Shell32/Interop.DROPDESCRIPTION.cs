@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32;
 
 internal partial class Interop
 {
@@ -12,17 +13,17 @@ internal partial class Interop
         public unsafe struct DROPDESCRIPTION
         {
             public DROPIMAGETYPE type;
-            private fixed char _szMessage[Kernel32.MAX_PATH];
-            private fixed char _szInsert[Kernel32.MAX_PATH];
+            private fixed char _szMessage[PInvoke.MAX_PATH];
+            private fixed char _szInsert[PInvoke.MAX_PATH];
 
             private Span<char> szMessage
             {
-                get { fixed (char* c = _szMessage) { return new Span<char>(c, Kernel32.MAX_PATH); } }
+                get { fixed (char* c = _szMessage) { return new Span<char>(c, PInvoke.MAX_PATH); } }
             }
 
             private Span<char> szInsert
             {
-                get { fixed (char* c = _szInsert) { return new Span<char>(c, Kernel32.MAX_PATH); } }
+                get { fixed (char* c = _szInsert) { return new Span<char>(c, PInvoke.MAX_PATH); } }
             }
 
             public ReadOnlySpan<char> Message
