@@ -260,6 +260,13 @@ namespace System.Windows.Forms
             return new UiaTextRange(_owningChildEditAccessibilityObject, this, start, start);
         }
 
+        public override Rectangle RectangleToScreen(Rectangle rect)
+        {
+            RECT r = rect;
+            User32.MapWindowPoints(_owningChildEdit.Handle, IntPtr.Zero, ref r);
+            return Rectangle.FromLTRB(r.left, r.top, r.right, r.bottom);
+        }
+
         public override void SetSelection(int start, int end)
         {
             if (start < 0 || start > TextLength)
