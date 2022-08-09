@@ -9,8 +9,8 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static BOOL BitBlt(
-            IHandle hdc,
+        public static BOOL BitBlt<T>(
+            in T hdc,
             int x,
             int y,
             int cx,
@@ -18,10 +18,10 @@ namespace Windows.Win32
             HDC hdcSrc,
             int x1,
             int y1,
-            ROP_CODE rop)
+            ROP_CODE rop) where T : IHandle<HDC>
         {
             BOOL result = BitBlt(
-                (HDC)hdc.Handle,
+                hdc.Handle,
                 x,
                 y,
                 cx,
@@ -30,20 +30,20 @@ namespace Windows.Win32
                 x1,
                 y1,
                 rop);
-            GC.KeepAlive(hdc);
+            GC.KeepAlive(hdc.Handle);
             return result;
         }
 
-        public static BOOL BitBlt(
+        public static BOOL BitBlt<T>(
             HDC hdc,
             int x,
             int y,
             int cx,
             int cy,
-            IHandle hdcSrc,
+            in T hdcSrc,
             int x1,
             int y1,
-            ROP_CODE rop)
+            ROP_CODE rop) where T : IHandle<HDC>
         {
             BOOL result = BitBlt(
                 hdc,
@@ -51,11 +51,11 @@ namespace Windows.Win32
                 y,
                 cx,
                 cy,
-                (HDC)hdcSrc.Handle,
+                hdcSrc.Handle,
                 x1,
                 y1,
                 rop);
-            GC.KeepAlive(hdcSrc);
+            GC.KeepAlive(hdcSrc.Handle);
             return result;
         }
     }

@@ -12,7 +12,7 @@ namespace Windows.Win32
         public static HWND GetWindow<T>(in T hWnd, GET_WINDOW_CMD uCmd) where T : IHandle<HWND>
         {
             HWND result = GetWindow(hWnd.Handle, uCmd);
-            GC.KeepAlive(hWnd);
+            GC.KeepAlive(hWnd.Wrapper);
             return result;
         }
     }
