@@ -2207,7 +2207,10 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     if (IsAccessibilityObjectCreated && !RecreatingHandle)
                     {
-                        if (OsVersion.IsWindows8OrGreater)
+                        // The SupportsUiaProviders check prevents double disconnection after Control.ReleaseUiaProvider.
+                        // ReleaseUiaProvider works only for controls that support UIA, so this check allows to avoid
+                        // double disconnection when TextBoxBase will start UIA supporting.
+                        if (OsVersion.IsWindows8OrGreater && !SupportsUiaProviders)
                         {
                             UiaCore.UiaDisconnectProvider(AccessibilityObject);
                         }

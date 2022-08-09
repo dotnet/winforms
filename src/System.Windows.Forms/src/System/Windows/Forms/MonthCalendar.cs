@@ -1580,6 +1580,16 @@ namespace System.Windows.Forms
             _onRightToLeftLayoutChanged?.Invoke(this, e);
         }
 
+        internal override void ReleaseUiaProvider(nint handle)
+        {
+            if (OsVersion.IsWindows8OrGreater && IsAccessibilityObjectCreated)
+            {
+                (AccessibilityObject as MonthCalendarAccessibleObject)?.DisconnectChildren();
+            }
+
+            base.ReleaseUiaProvider(handle);
+        }
+
         /// <summary>
         ///  Removes all annually bolded days. Be sure to call UpdateBoldedDates() afterwards.
         /// </summary>
@@ -2322,20 +2332,6 @@ namespace System.Windows.Forms
                 case User32.WM.REFLECT_NOTIFY:
                     WmReflectCommand(ref m);
                     base.WndProc(ref m);
-                    break;
-                case User32.WM.DESTROY:
-                    base.WndProc(ref m);
-                    if (IsHandleCreated && IsAccessibilityObjectCreated)
-                    {
-                        UiaCore.UiaReturnRawElementProvider(Handle, wParam: IntPtr.Zero, lParam: IntPtr.Zero, el: null);
-
-                        if (OsVersion.IsWindows8OrGreater)
-                        {
-                            (AccessibilityObject as MonthCalendarAccessibleObject)?.DisconnectChildren();
-                            UiaCore.UiaDisconnectProvider(AccessibilityObject);
-                        }
-                    }
-
                     break;
                 case User32.WM.PAINT:
                     base.WndProc(ref m);

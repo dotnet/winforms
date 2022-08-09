@@ -528,10 +528,14 @@ namespace System.Windows.Forms
 
                 foreach (CalendarAccessibleObject calendar in CalendarsAccessibleObjects)
                 {
+                    calendar.DisconnectChildren();
+                    UiaCore.UiaDisconnectProvider(calendar);
                     calendar.CalendarBodyAccessibleObject.ClearChildCollection();
                 }
 
                 _calendarsAccessibleObjects = null;
+
+                UiaCore.UiaDisconnectProvider(_focusedCellAccessibleObject);
                 _focusedCellAccessibleObject = null;
 
                 // Recreate the calendars child collection and check if it is correct
