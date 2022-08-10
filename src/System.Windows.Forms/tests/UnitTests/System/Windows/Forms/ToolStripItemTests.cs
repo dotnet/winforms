@@ -7068,10 +7068,10 @@ namespace System.Windows.Forms.Tests
         {
             using ToolStripWithDisconnectCount toolStrip = new();
 
-            using ToolStripDropDownItemWithDisconnectCount toolStripDropDownItem1 = new();
+            using ToolStripDropDownItemWithAccessibleObjectFieldAccessor toolStripDropDownItem1 = new();
             toolStrip.Items.Add(toolStripDropDownItem1);
 
-            using ToolStripDropDownItemWithDisconnectCount toolStripDropDownItem2 = new();
+            using ToolStripDropDownItemWithAccessibleObjectFieldAccessor toolStripDropDownItem2 = new();
             toolStripDropDownItem1.DropDownItems.Add(toolStripDropDownItem2);
 
             _ = toolStrip.AccessibilityObject;
@@ -7079,12 +7079,9 @@ namespace System.Windows.Forms.Tests
 
             toolStrip.ReleaseUiaProvider(toolStrip.Handle);
 
-            Assert.True(toolStrip.IsAccessibilityObjectDisconnected);
             Assert.Equal(1, toolStrip.Disconnects);
-            Assert.True(toolStripDropDownItem1.IsAccessibilityObjectDisconnected);
-            Assert.Equal(1, toolStripDropDownItem1.Disconnects);
-            Assert.True(toolStripDropDownItem2.IsAccessibilityObjectDisconnected);
-            Assert.Equal(1, toolStripDropDownItem2.Disconnects);
+            Assert.True(toolStripDropDownItem1.IsAccessibleObjectCleared());
+            Assert.True(toolStripDropDownItem2.IsAccessibleObjectCleared());
             Assert.True(toolStrip.IsHandleCreated);
         }
 
@@ -15577,27 +15574,25 @@ namespace System.Windows.Forms.Tests
             public ToolStripWithDisconnectCount() : base() { }
 
             public int Disconnects { get; private set; }
-            public bool IsAccessibilityObjectDisconnected { get; private set; }
 
-            internal override void ReleaseUiaProvider(IntPtr handle)
+            internal new void ReleaseUiaProvider(IntPtr handle)
             {
                 base.ReleaseUiaProvider(handle);
+
                 Disconnects++;
-                IsAccessibilityObjectDisconnected = true;
             }
         }
 
-        private class ToolStripDropDownItemWithDisconnectCount : ToolStripDropDownItem
+        private class ToolStripDropDownItemWithAccessibleObjectFieldAccessor : ToolStripDropDownItem
         {
-            public ToolStripDropDownItemWithDisconnectCount() : base() { }
-            public int Disconnects { get; private set; }
-            public bool IsAccessibilityObjectDisconnected { get; private set; }
+            public ToolStripDropDownItemWithAccessibleObjectFieldAccessor() : base() { }
 
-            internal override void ReleaseUiaProvider()
+            public bool IsAccessibleObjectCleared()
             {
-                base.ReleaseUiaProvider();
-                Disconnects++;
-                IsAccessibilityObjectDisconnected = true;
+                var key = this.TestAccessor().Dynamic.s_accessibilityProperty;
+                var accessibleObject = Properties.GetObject(key) as AccessibleObject;
+
+                return accessibleObject is null;
             }
         }
     }

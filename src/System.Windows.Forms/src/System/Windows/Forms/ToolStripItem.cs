@@ -3196,7 +3196,7 @@ namespace System.Windows.Forms
         internal void RaiseQueryContinueDragEvent(object key, QueryContinueDragEventArgs e)
             => ((QueryContinueDragEventHandler)Events[key])?.Invoke(this, e);
 
-        internal virtual void ReleaseUiaProvider()
+        internal void ReleaseUiaProvider()
         {
             if (TryGetAccessibilityObject(out AccessibleObject accessibleObject))
             {
