@@ -205,6 +205,7 @@ namespace System.Windows.Forms
         private static readonly object s_marginChangedEvent = new object();
         private protected static readonly object s_paddingChangedEvent = new object();
         private static readonly object s_previewKeyDownEvent = new object();
+        private static readonly object s_dataContextEvent = new object();
 
         private static User32.WM s_threadCallbackMessage;
         private static ContextCallback? s_invokeMarshaledCallbackHelperDelegate;
@@ -277,6 +278,8 @@ namespace System.Windows.Forms
         private static readonly int s_cacheTextCountProperty = PropertyStore.CreateKey();
         private static readonly int s_acheTextFieldProperty = PropertyStore.CreateKey();
         private static readonly int s_ambientPropertiesServiceProperty = PropertyStore.CreateKey();
+
+        private static readonly int s_dataContextProperty = PropertyStore.CreateKey();
 
         private static bool s_needToLoadComCtl = true;
 
@@ -889,6 +892,59 @@ namespace System.Windows.Forms
                 return backBrush;
             }
         }
+
+        /// <summary>
+        ///  Gets or sets the data context for the purpose of data binding.
+        ///  This is an ambient property.
+        /// </summary>
+        /// <remarks>
+        ///  Data context is a concept that allows elements to inherit information from their parent elements
+        ///  about the data source that is used for binding. It's the duty of deriving controls which inherit from
+        ///  this class to handle the provided data source accordingly. For example, UserControls, which use
+        ///  <see cref="BindingSource"/> components for data binding scenarios could either handle the
+        ///  <see cref="DataContextChanged"/> event or override <see cref="OnDataContextChanged(EventArgs)"/> to provide
+        ///  the relevant data from the data context to a BindingSource component's <see cref="BindingSource.DataSource"/>.
+        /// </remarks>
+        [SRCategory(nameof(SR.CatData))]
+        [Browsable(false)]
+        [Bindable(true)]
+        public virtual object? DataContext
+        {
+            get
+            {
+                if (Properties.ContainsObject(s_dataContextProperty))
+                {
+                    return Properties.GetObject(s_dataContextProperty);
+                }
+                
+                return ParentInternal?.DataContext;
+            }
+            set
+            {
+                if (Equals(value, DataContext))
+                {
+                    return;
+                }
+                
+                // When DataContext was different than its parent before, but now it is about to become the same,
+                // we're removing it altogether, so it can inherit the value from its parent.
+                if (Properties.ContainsObject(s_dataContextProperty) && Equals(ParentInternal?.DataContext, value))
+                {
+                    Properties.RemoveObject(s_dataContextProperty);
+                    OnDataContextChanged(EventArgs.Empty);
+                    return;
+                }
+
+                Properties.SetObject(s_dataContextProperty, value);
+                OnDataContextChanged(EventArgs.Empty);
+            }
+        }
+
+        private bool ShouldSerializeDataContext()
+            => Properties.ContainsObject(s_dataContextProperty);
+
+        private void ResetDataContext()
+            => Properties.RemoveObject(s_dataContextProperty);
 
         /// <summary>
         ///  The background color of this control. This is an ambient property and
@@ -4066,6 +4122,19 @@ namespace System.Windows.Forms
         {
             add => Events.AddHandler(s_controlRemovedEvent, value);
             remove => Events.RemoveHandler(s_controlRemovedEvent, value);
+        }
+
+        /// <summary>
+        ///  Occurs when the value of the <see cref="DataContext"/> property changes.
+        /// </summary>
+        [SRCategory(nameof(SR.CatData))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRDescription(nameof(SR.ControlDataContextChangedDescr))]
+        public event EventHandler? DataContextChanged
+        {
+            add => Events.AddHandler(s_dataContextEvent, value);
+            remove => Events.RemoveHandler(s_dataContextEvent, value);
         }
 
         [SRCategory(nameof(SR.CatDragDrop))]
@@ -7341,6 +7410,29 @@ namespace System.Windows.Forms
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnDataContextChanged(EventArgs e)
+        {
+            if (GetAnyDisposingInHierarchy())
+            {
+                return;
+            }
+
+            if (Events[s_dataContextEvent] is EventHandler eventHandler)
+            {
+                eventHandler(this, e);
+            }
+
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            if (controlsCollection is not null)
+            {
+                for (int i = 0; i < controlsCollection.Count; i++)
+                {
+                    controlsCollection[i].OnParentDataContextChanged(e);
+                }
+            }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDockChanged(EventArgs e)
         {
             if (Events[s_dockEvent] is EventHandler eh)
@@ -7548,6 +7640,28 @@ namespace System.Windows.Forms
             {
                 OnCursorChanged(e);
             }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnParentDataContextChanged(EventArgs e)
+        {
+            if (Properties.ContainsObject(s_dataContextProperty))
+            {
+                // If this DataContext was the same as the Parent's just became,
+                if (Equals(Properties.GetObject(s_dataContextProperty), Parent.DataContext))
+                {
+                    // we need to make it ambient again by removing it.
+                    Properties.RemoveObject(s_dataContextProperty);
+
+                    // Even though internally we don't store it any longer, and the
+                    // value we had stored therefore changed, technically the value
+                    // remains the same, so we don't raise the DataContextChanged event.
+                    return;
+                }
+            }
+
+            // In every other case we're going to raise the event.
+            OnDataContextChanged(e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]

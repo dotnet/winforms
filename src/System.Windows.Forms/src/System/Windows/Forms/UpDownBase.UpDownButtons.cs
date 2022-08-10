@@ -341,6 +341,18 @@ namespace System.Windows.Forms
             protected virtual void OnUpDown(UpDownEventArgs upevent)
                 => _upDownEventHandler?.Invoke(this, upevent);
 
+            internal override void ReleaseUiaProvider(IntPtr handle)
+            {
+                if (IsAccessibilityObjectCreated
+                    && OsVersion.IsWindows8OrGreater
+                    && AccessibilityObject is UpDownButtonsAccessibleObject buttonsAccessibilityObject)
+                {
+                    buttonsAccessibilityObject.ReleaseChildUiaProviders();
+                }
+
+                base.ReleaseUiaProvider(handle);
+            }
+
             /// <summary>
             ///  Starts the timer for generating updown events
             /// </summary>
