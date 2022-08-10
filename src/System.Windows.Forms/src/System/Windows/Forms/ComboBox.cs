@@ -3245,13 +3245,13 @@ namespace System.Windows.Forms
 
         internal override void ReleaseUiaProvider(IntPtr handle)
         {
-            base.ReleaseUiaProvider(handle);
-
             if (IsAccessibilityObjectCreated)
             {
                 var uiaProvider = AccessibilityObject as ComboBoxAccessibleObject;
                 uiaProvider?.ResetListItemAccessibleObjects();
             }
+
+            base.ReleaseUiaProvider(handle);
         }
 
         private void ResetAutoCompleteCustomSource()

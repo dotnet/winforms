@@ -3215,8 +3215,8 @@ namespace System.Windows.Forms
 
         private bool ClearingInnerListOnDispose
         {
-            get => _listViewState1 [LISTVIEWSTATE1_clearingInnerListOnDispose];
-            set => _listViewState1 [LISTVIEWSTATE1_clearingInnerListOnDispose] = value;
+            get => _listViewState1[LISTVIEWSTATE1_clearingInnerListOnDispose];
+            set => _listViewState1[LISTVIEWSTATE1_clearingInnerListOnDispose] = value;
         }
 
         /// <summary>
@@ -5131,8 +5131,6 @@ namespace System.Windows.Forms
 
         internal override void ReleaseUiaProvider(nint handle)
         {
-            base.ReleaseUiaProvider(handle);
-
             if (!OsVersion.IsWindows8OrGreater || !IsAccessibilityObjectCreated)
             {
                 return;
@@ -5157,6 +5155,8 @@ namespace System.Windows.Forms
             {
                 columnHeader.ReleaseUiaProvider();
             }
+
+            base.ReleaseUiaProvider(handle);
         }
 
         // makes sure that the list view items which are w/o a listView group are parented to the DefaultGroup - if necessary

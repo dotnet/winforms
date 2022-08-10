@@ -2102,8 +2102,8 @@ namespace System.Windows.Forms
 
         internal override void ReleaseUiaProvider(IntPtr handle)
         {
-            base.ReleaseUiaProvider(handle);
             ClearListItemAccessibleObjects();
+            base.ReleaseUiaProvider(handle);
         }
 
         private void RemoveListItemAccessibleObjectAt(int index)
