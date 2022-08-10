@@ -33,7 +33,7 @@ internal static partial class Interop
             {
                 if (!HGDIOBJ.IsNull)
                 {
-                    DeleteObject(HGDIOBJ);
+                    PInvoke.DeleteObject(HGDIOBJ);
                 }
 
                 DisposalTracking.SuppressFinalize(this!);

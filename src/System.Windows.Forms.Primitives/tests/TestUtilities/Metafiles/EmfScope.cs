@@ -237,7 +237,7 @@ namespace System.Windows.Forms.Metafiles
         {
             if (!HDC.IsNull)
             {
-                Gdi32.DeleteEnhMetaFile(HENHMETAFILE);
+                PInvoke.DeleteEnhMetaFile(HENHMETAFILE);
             }
 
             GC.SuppressFinalize(this);

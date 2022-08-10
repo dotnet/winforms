@@ -82,7 +82,7 @@ namespace System.Windows.Forms
 
                 if (hdc.IsNull)
                 {
-                    screenDC = Gdi32.CreateDC(_deviceName, null, null, IntPtr.Zero);
+                    screenDC = Gdi32.CreateDC(_deviceName, lpszDeviceName: null, lpszOutput: null, devMode: 0);
                 }
             }
 
@@ -93,7 +93,7 @@ namespace System.Windows.Forms
 
             if (hdc != screenDC)
             {
-                Gdi32.DeleteDC(screenDC);
+                PInvoke.DeleteDC(screenDC);
             }
         }
 

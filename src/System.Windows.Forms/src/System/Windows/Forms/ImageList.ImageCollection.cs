@@ -172,8 +172,8 @@ namespace System.Windows.Forms
                         }
                         finally
                         {
-                            Gdi32.DeleteObject((HGDIOBJ)hBitmap);
-                            Gdi32.DeleteObject((HGDIOBJ)hMask);
+                            PInvoke.DeleteObject((HGDIOBJ)hBitmap);
+                            PInvoke.DeleteObject((HGDIOBJ)hMask);
                         }
 
                         if (!ok)

@@ -175,16 +175,16 @@ namespace System.Windows.Forms.Design
             s_selectionBorderBrush.Dispose();
             s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
 
-            Gdi32.DeleteObject(s_grabHandleFillBrushPrimary);
+            PInvoke.DeleteObject(s_grabHandleFillBrushPrimary);
             s_grabHandleFillBrushPrimary = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
 
-            Gdi32.DeleteObject(s_grabHandleFillBrush);
+            PInvoke.DeleteObject(s_grabHandleFillBrush);
             s_grabHandleFillBrush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
 
-            Gdi32.DeleteObject(s_grabHandlePenPrimary);
+            PInvoke.DeleteObject(s_grabHandlePenPrimary);
             s_grabHandlePenPrimary = PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (uint)ColorTranslator.ToWin32(SystemColors.ControlText));
 
-            Gdi32.DeleteObject(s_grabHandlePen);
+            PInvoke.DeleteObject(s_grabHandlePen);
             s_grabHandlePen = PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (uint)ColorTranslator.ToWin32(SystemColors.Window));
         }
 

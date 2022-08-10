@@ -78,7 +78,7 @@ namespace System.Windows.Forms
             }
 
             // Too many to store, delete the last item we swapped.
-            Gdi32.DeleteDC((HDC)temp);
+            PInvoke.DeleteDC((HDC)temp);
         }
 
         ~ScreenDcCache() => Dispose();
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
                 IntPtr hdc = _itemsCache[i];
                 if (hdc != IntPtr.Zero)
                 {
-                    Gdi32.DeleteDC((HDC)hdc);
+                    PInvoke.DeleteDC((HDC)hdc);
                 }
             }
         }
@@ -102,7 +102,7 @@ namespace System.Windows.Forms
 
             HRGN hrgn = PInvoke.CreateRectRgn(0, 0, 0, 0);
             Debug.Assert(Gdi32.GetClipRgn(hdc, hrgn) == 0, "Should not have a clipping region");
-            Gdi32.DeleteObject(hrgn);
+            PInvoke.DeleteObject(hrgn);
 
             Gdi32.GetViewportOrgEx(hdc, out Point point);
             Debug.Assert(point.IsEmpty, "Viewport origin shouldn't be shifted");

@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Gdi32.DeleteObject(hBitmap);
+                PInvoke.DeleteObject(hBitmap);
             }
         }
 
@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Gdi32.DeleteObject(hBitmap);
+                PInvoke.DeleteObject(hBitmap);
             }
         }
 
@@ -119,7 +119,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Gdi32.DeleteObject(hBitmap);
+                PInvoke.DeleteObject(hBitmap);
             }
         }
 
@@ -154,12 +154,12 @@ namespace System.Windows.Forms.Tests
                 }
                 finally
                 {
-                    Gdi32.DeleteObject(hBitmap);
+                    PInvoke.DeleteObject(hBitmap);
                 }
             }
             finally
             {
-                Gdi32.DeleteObject(monochromeMask);
+                PInvoke.DeleteObject(monochromeMask);
             }
         }
 
@@ -187,7 +187,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Gdi32.DeleteObject(hBitmap);
+                PInvoke.DeleteObject(hBitmap);
             }
         }
 
@@ -227,7 +227,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Gdi32.DeleteObject(hBitmap);
+                PInvoke.DeleteObject(hBitmap);
             }
         }
 
@@ -255,7 +255,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Gdi32.DeleteObject(hBitmap);
+                PInvoke.DeleteObject(hBitmap);
             }
         }
 

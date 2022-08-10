@@ -46,7 +46,7 @@ internal static partial class Interop
                 if (!HBRUSH.IsNull)
                 {
                     // Note that this is a no-op if the original brush was a system brush
-                    DeleteObject(HBRUSH);
+                    PInvoke.DeleteObject(HBRUSH);
                 }
 
 #if DEBUG

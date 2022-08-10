@@ -39,12 +39,12 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
                     }
                     finally
                     {
-                        Gdi32.DeleteObject(hregion);
+                        DeleteObject(hregion);
                     }
                 }
                 finally
                 {
-                    Gdi32.DeleteObject(hbitmap);
+                    DeleteObject(hbitmap);
                 }
             }
             finally
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
 
             try
             {
-                HBITMAP hbitmap = PInvoke.CreateCompatibleBitmap(hdc, 20, 20);
+                HBITMAP hbitmap = CreateCompatibleBitmap(hdc, 20, 20);
                 Assert.False(hdc.IsNull);
 
                 try
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
                 }
                 finally
                 {
-                    Gdi32.DeleteObject(hbitmap);
+                    DeleteObject(hbitmap);
                 }
             }
             finally
@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
                 }
                 finally
                 {
-                    Gdi32.DeleteObject(hbitmap);
+                    DeleteObject(hbitmap);
                 }
             }
             finally

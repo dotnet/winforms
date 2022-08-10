@@ -202,7 +202,7 @@ namespace System.Windows.Forms
                     };
                 }
 
-                    Gdi32.DeleteObject((HGDIOBJ)palette.Value);
+                PInvoke.DeleteObject((HGDIOBJ)palette.Value);
 
                 void* bitsBuffer;
                 hbitmap = PInvoke.CreateDIBSection(
@@ -232,7 +232,7 @@ namespace System.Windows.Forms
                     throw new Win32Exception();
                 }
 
-                Gdi32.DeleteObject(previousBitmap);
+                PInvoke.DeleteObject(previousBitmap);
 
                 using Graphics graphics = dc.CreateGraphics();
                 using var brush = background.GetCachedSolidBrushScope();
@@ -242,7 +242,7 @@ namespace System.Windows.Forms
             catch
             {
                 // As we're throwing out, we can't return this and need to delete it.
-                Gdi32.DeleteObject(hbitmap);
+                PInvoke.DeleteObject(hbitmap);
                 throw;
             }
 

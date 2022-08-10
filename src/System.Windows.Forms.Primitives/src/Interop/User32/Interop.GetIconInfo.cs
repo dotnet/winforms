@@ -37,13 +37,13 @@ internal static partial class Interop
             {
                 if (!hbmMask.IsNull)
                 {
-                    Gdi32.DeleteObject((HGDIOBJ)hbmMask.Value);
+                    PInvoke.DeleteObject((HGDIOBJ)hbmMask.Value);
                     hbmMask = default;
                 }
 
                 if (!hbmColor.IsNull)
                 {
-                    Gdi32.DeleteObject((HGDIOBJ)hbmColor.Value);
+                    PInvoke.DeleteObject((HGDIOBJ)hbmColor.Value);
                     hbmColor = default;
                 }
             }

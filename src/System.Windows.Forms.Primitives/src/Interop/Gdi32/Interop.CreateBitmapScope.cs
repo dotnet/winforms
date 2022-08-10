@@ -48,7 +48,7 @@ internal static partial class Interop
             {
                 if (!HBITMAP.IsNull)
                 {
-                    DeleteObject(HBITMAP);
+                    PInvoke.DeleteObject(HBITMAP);
                 }
 
 #if DEBUG

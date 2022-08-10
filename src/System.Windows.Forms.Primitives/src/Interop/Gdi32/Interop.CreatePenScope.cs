@@ -46,7 +46,7 @@ internal static partial class Interop
             {
                 if (!HPEN.IsNull)
                 {
-                    DeleteObject(HPEN);
+                    PInvoke.DeleteObject(HPEN);
                 }
 
 #if DEBUG
