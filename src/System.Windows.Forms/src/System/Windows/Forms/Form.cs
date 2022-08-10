@@ -774,21 +774,21 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
 
-                if (IsHandleCreated && WindowStyle.HasFlag(User32.WS.DISABLED))
+                if (IsHandleCreated && WindowStyle.HasFlag(WINDOW_STYLE.WS_DISABLED))
                 {
                     // Forms that are parent of a modal dialog must keep their WS_DISABLED style
-                    cp.Style |= (int)User32.WS.DISABLED;
+                    cp.Style |= (int)WINDOW_STYLE.WS_DISABLED;
                 }
                 else if (TopLevel)
                 {
                     // It doesn't seem to make sense to allow a top-level form to be disabled
                     //
-                    cp.Style &= ~(int)User32.WS.DISABLED;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_DISABLED;
                 }
 
                 if (TopLevel && (_formState[FormStateLayered] != 0))
                 {
-                    cp.ExStyle |= (int)User32.WS_EX.LAYERED;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYERED;
                 }
 
                 IWin32Window? dialogOwner = (IWin32Window?)Properties.GetObject(PropDialogOwner);
@@ -803,7 +803,7 @@ namespace System.Windows.Forms
 
                 if (_formState[FormStateTaskBar] != 0)
                 {
-                    cp.ExStyle |= (int)User32.WS_EX.APPWINDOW;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_APPWINDOW;
                 }
 
                 FormBorderStyle borderStyle = FormBorderStyle;
@@ -812,7 +812,7 @@ namespace System.Windows.Forms
                      borderStyle == FormBorderStyle.Fixed3D ||
                      borderStyle == FormBorderStyle.FixedSingle))
                 {
-                    cp.ExStyle |= (int)User32.WS_EX.DLGMODALFRAME;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_DLGMODALFRAME;
                 }
 
                 if (IsMdiChild)
@@ -827,7 +827,7 @@ namespace System.Windows.Forms
                         if (form is not null
                             && form.WindowState == FormWindowState.Maximized)
                         {
-                            cp.Style |= (int)User32.WS.MAXIMIZE;
+                            cp.Style |= (int)WINDOW_STYLE.WS_MAXIMIZE;
                             _formState[FormStateWindowState] = (int)FormWindowState.Maximized;
                             SetState(States.SizeLockedByOS, true);
                         }
@@ -835,10 +835,10 @@ namespace System.Windows.Forms
 
                     if (_formState[FormStateMdiChildMax] != 0)
                     {
-                        cp.Style |= (int)User32.WS.MAXIMIZE;
+                        cp.Style |= (int)WINDOW_STYLE.WS_MAXIMIZE;
                     }
 
-                    cp.ExStyle |= (int)User32.WS_EX.MDICHILD;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_MDICHILD;
                 }
 
                 if (TopLevel || IsMdiChild)
@@ -848,10 +848,10 @@ namespace System.Windows.Forms
                     // to allow applyClientSize to adjust the size before displaying
                     // the form.
                     //
-                    if ((cp.Style & (int)User32.WS.VISIBLE) != 0)
+                    if ((cp.Style & (int)WINDOW_STYLE.WS_VISIBLE) != 0)
                     {
                         _formState[FormStateShowWindowOnCreate] = 1;
-                        cp.Style &= ~(int)User32.WS.VISIBLE;
+                        cp.Style &= ~(int)WINDOW_STYLE.WS_VISIBLE;
                     }
                     else
                     {
@@ -862,9 +862,9 @@ namespace System.Windows.Forms
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     //We want to turn on mirroring for Form explicitly.
-                    cp.ExStyle |= (int)(User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT);
+                    cp.ExStyle |= (int)(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT);
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -2092,7 +2092,7 @@ namespace System.Windows.Forms
                 {
                     CreateParams cp = new CreateParams
                     {
-                        ExStyle = (int)User32.WS_EX.TOOLWINDOW
+                        ExStyle = (int)WINDOW_EX_STYLE.WS_EX_TOOLWINDOW
                     };
 
                     _ownerWindow.CreateHandle(cp);
@@ -3396,34 +3396,34 @@ namespace System.Windows.Forms
             {
                 if (!string.IsNullOrEmpty(Text))
                 {
-                    cp.Style |= (int)User32.WS.CAPTION;
+                    cp.Style |= (int)WINDOW_STYLE.WS_CAPTION;
                 }
 
                 if (ControlBox)
                 {
-                    cp.Style |= (int)(User32.WS.SYSMENU | User32.WS.CAPTION);
+                    cp.Style |= (int)(WINDOW_STYLE.WS_SYSMENU | WINDOW_STYLE.WS_CAPTION);
                 }
                 else
                 {
-                    cp.Style &= ~(int)User32.WS.SYSMENU;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_SYSMENU;
                 }
 
                 if (MaximizeBox)
                 {
-                    cp.Style |= (int)User32.WS.MAXIMIZEBOX;
+                    cp.Style |= (int)WINDOW_STYLE.WS_MAXIMIZEBOX;
                 }
                 else
                 {
-                    cp.Style &= ~(int)User32.WS.MAXIMIZEBOX;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_MAXIMIZEBOX;
                 }
 
                 if (MinimizeBox)
                 {
-                    cp.Style |= (int)User32.WS.MINIMIZEBOX;
+                    cp.Style |= (int)WINDOW_STYLE.WS_MINIMIZEBOX;
                 }
                 else
                 {
-                    cp.Style &= ~(int)User32.WS.MINIMIZEBOX;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_MINIMIZEBOX;
                 }
 
                 if (HelpButton && !MaximizeBox && !MinimizeBox && ControlBox)
@@ -3432,11 +3432,11 @@ namespace System.Windows.Forms
                     // But someone must have failed the check, because Windows 2000
                     // will show a help button if either the maximize or
                     // minimize button is disabled.
-                    cp.ExStyle |= (int)User32.WS_EX.CONTEXTHELP;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CONTEXTHELP;
                 }
                 else
                 {
-                    cp.ExStyle &= ~(int)User32.WS_EX.CONTEXTHELP;
+                    cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_CONTEXTHELP;
                 }
             }
         }
@@ -3451,26 +3451,26 @@ namespace System.Windows.Forms
                 case FormBorderStyle.None:
                     break;
                 case FormBorderStyle.FixedSingle:
-                    cp.Style |= (int)User32.WS.BORDER;
+                    cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                     break;
                 case FormBorderStyle.Sizable:
-                    cp.Style |= (int)(User32.WS.BORDER | User32.WS.THICKFRAME);
+                    cp.Style |= (int)(WINDOW_STYLE.WS_BORDER | WINDOW_STYLE.WS_THICKFRAME);
                     break;
                 case FormBorderStyle.Fixed3D:
-                    cp.Style |= (int)User32.WS.BORDER;
-                    cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
+                    cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                     break;
                 case FormBorderStyle.FixedDialog:
-                    cp.Style |= (int)User32.WS.BORDER;
-                    cp.ExStyle |= (int)User32.WS_EX.DLGMODALFRAME;
+                    cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_DLGMODALFRAME;
                     break;
                 case FormBorderStyle.FixedToolWindow:
-                    cp.Style |= (int)User32.WS.BORDER;
-                    cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
+                    cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_TOOLWINDOW;
                     break;
                 case FormBorderStyle.SizableToolWindow:
-                    cp.Style |= (int)(User32.WS.BORDER | User32.WS.THICKFRAME);
-                    cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
+                    cp.Style |= (int)(WINDOW_STYLE.WS_BORDER | WINDOW_STYLE.WS_THICKFRAME);
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_TOOLWINDOW;
                     break;
             }
         }
@@ -3484,7 +3484,7 @@ namespace System.Windows.Forms
             {
                 // When computing the client window size, don't tell them that
                 // we are going to be maximized!
-                int maskedStyle = cp.Style & ~(int)(User32.WS.MAXIMIZE | User32.WS.MINIMIZE);
+                int maskedStyle = cp.Style & ~(int)(WINDOW_STYLE.WS_MAXIMIZE | WINDOW_STYLE.WS_MINIMIZE);
                 Size correct = ComputeWindowSize(ClientSize, (WINDOW_STYLE)maskedStyle, (WINDOW_EX_STYLE)cp.ExStyle);
                 cp.Width = correct.Width;
                 cp.Height = correct.Height;
@@ -3558,10 +3558,10 @@ namespace System.Windows.Forms
             switch ((FormWindowState)_formState[FormStateWindowState])
             {
                 case FormWindowState.Maximized:
-                    cp.Style |= (int)User32.WS.MAXIMIZE;
+                    cp.Style |= (int)WINDOW_STYLE.WS_MAXIMIZE;
                     break;
                 case FormWindowState.Minimized:
-                    cp.Style |= (int)User32.WS.MINIMIZE;
+                    cp.Style |= (int)WINDOW_STYLE.WS_MINIMIZE;
                     break;
             }
         }
@@ -5137,7 +5137,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
 
-            if ((owner is not null) && owner.GetExtendedStyle().HasFlag(User32.WS_EX.TOPMOST))
+            if ((owner is not null) && owner.GetExtendedStyle().HasFlag(WINDOW_EX_STYLE.WS_EX_TOPMOST))
             {
                 // It's not the top-most window
                 if (owner is Control ownerControl)
@@ -5212,7 +5212,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
 
-            if ((owner is not null) && owner.GetExtendedStyle().HasFlag(User32.WS_EX.TOPMOST))
+            if ((owner is not null) && owner.GetExtendedStyle().HasFlag(WINDOW_EX_STYLE.WS_EX_TOPMOST))
             {
                 // It's not the top-most window
                 if (owner is Control ownerControl)

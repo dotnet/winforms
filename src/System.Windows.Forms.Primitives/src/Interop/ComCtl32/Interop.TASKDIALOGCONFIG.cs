@@ -39,7 +39,7 @@ internal static partial class Interop
             public char* pszCollapsedControlText;
             public IconUnion footerIcon;
             public char* pszFooter;
-            public delegate* unmanaged<IntPtr, TDN, IntPtr, IntPtr, IntPtr, HRESULT> pfCallback;
+            public delegate* unmanaged<HWND, TDN, IntPtr, IntPtr, IntPtr, HRESULT> pfCallback;
             public IntPtr lpCallbackData;
             /// <summary>
             ///   "width of the Task Dialog's client area in DLU's. If 0, Task Dialog

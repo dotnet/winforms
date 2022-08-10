@@ -2,14 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-internal static partial class Interop
+namespace Windows.Win32.Foundation
 {
-    internal static partial class ComCtl32
+    internal partial struct HWND : IHandle<HWND>
     {
-        public struct NMLVDISPINFO
-        {
-            public NMHDR hdr;
-            public LVITEMW item;
-        }
+        HWND IHandle<HWND>.Handle => this;
+        object? IHandle<HWND>.Wrapper => null;
     }
 }

@@ -28,7 +28,7 @@ namespace System.Windows.Forms
                 EnumChildWindows(new HandleRef(this, acHandle), RegisterACWindowRecursive);
             }
 
-            private static BOOL RegisterACWindowRecursive(IntPtr handle)
+            private static BOOL RegisterACWindowRecursive(HWND handle)
             {
                 if (!s_ACWindows.ContainsKey(handle))
                 {

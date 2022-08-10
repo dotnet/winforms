@@ -912,9 +912,9 @@ namespace System.Windows.Forms.Design
                     if (_designerHost is not null)
                     {
                         baseComponent = (Control)_designerHost.RootComponent;
-                        User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (nint)(BOOL)false);
+                        User32.SendMessageW(baseComponent, User32.WM.SETREDRAW, (nint)(BOOL)false);
                         tb.Focus();
-                        User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (nint)(BOOL)true);
+                        User32.SendMessageW(baseComponent, User32.WM.SETREDRAW, (nint)(BOOL)true);
                     }
                 }
                 finally
@@ -998,9 +998,9 @@ namespace System.Windows.Forms.Design
                 && _designerHost is not null)
             {
                 Control baseComponent = (Control)_designerHost.RootComponent;
-                User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (nint)(BOOL)false);
+                User32.SendMessageW(baseComponent, User32.WM.SETREDRAW, (nint)(BOOL)false);
                 designerFrame.Focus();
-                User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (nint)(BOOL)true);
+                User32.SendMessageW(baseComponent, User32.WM.SETREDRAW, (nint)(BOOL)true);
             }
         }
 

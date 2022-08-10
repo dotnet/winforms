@@ -11,7 +11,7 @@ internal static partial class Interop
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public unsafe struct NMTTDISPINFOW
         {
-            public User32.NMHDR hdr;
+            public NMHDR hdr;
             public IntPtr lpszText;
             public fixed char szText[80];
             public IntPtr hinst;

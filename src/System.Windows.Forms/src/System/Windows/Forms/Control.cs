@@ -1519,41 +1519,41 @@ namespace System.Windows.Forms
                 cp.Width = _width;
                 cp.Height = _height;
 
-                cp.Style = (int)User32.WS.CLIPCHILDREN;
+                cp.Style = (int)WINDOW_STYLE.WS_CLIPCHILDREN;
                 if (GetStyle(ControlStyles.ContainerControl))
                 {
-                    cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CONTROLPARENT;
                 }
 
-                cp.ClassStyle = (int)User32.CS.DBLCLKS;
+                cp.ClassStyle = (int)WNDCLASS_STYLES.CS_DBLCLKS;
 
-                if ((_state & States.TopLevel) == 0)
+                if (!_state.HasFlag(States.TopLevel))
                 {
                     // When the window is actually created, we will parent WS_CHILD windows to the
                     // parking form if cp.parent == 0.
                     cp.Parent = _parent is null ? IntPtr.Zero : _parent.InternalHandle;
-                    cp.Style |= (int)(User32.WS.CHILD | User32.WS.CLIPSIBLINGS);
+                    cp.Style |= (int)(WINDOW_STYLE.WS_CHILD | WINDOW_STYLE.WS_CLIPSIBLINGS);
                 }
                 else
                 {
                     cp.Parent = IntPtr.Zero;
                 }
 
-                if ((_state & States.TabStop) != 0)
+                if (_state.HasFlag(States.TabStop))
                 {
-                    cp.Style |= (int)User32.WS.TABSTOP;
+                    cp.Style |= (int)WINDOW_STYLE.WS_TABSTOP;
                 }
 
-                if ((_state & States.Visible) != 0)
+                if (_state.HasFlag(States.Visible))
                 {
-                    cp.Style |= (int)User32.WS.VISIBLE;
+                    cp.Style |= (int)WINDOW_STYLE.WS_VISIBLE;
                 }
 
                 // Unlike Visible, Windows doesn't correctly inherit disabledness from its parent -- an enabled child
                 // of a disabled parent will look enabled but not get mouse events
                 if (!Enabled)
                 {
-                    cp.Style |= (int)User32.WS.DISABLED;
+                    cp.Style |= (int)WINDOW_STYLE.WS_DISABLED;
                 }
 
                 // If we are being hosted as an Ax control, try to prevent the parking window
@@ -1566,9 +1566,9 @@ namespace System.Windows.Forms
                 // Set Rtl bits
                 if (RightToLeft == RightToLeft.Yes)
                 {
-                    cp.ExStyle |= (int)User32.WS_EX.RTLREADING;
-                    cp.ExStyle |= (int)User32.WS_EX.RIGHT;
-                    cp.ExStyle |= (int)User32.WS_EX.LEFTSCROLLBAR;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_RTLREADING;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_RIGHT;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR;
                 }
 
                 return cp;
@@ -2720,7 +2720,7 @@ namespace System.Windows.Forms
                 if (!IsHandleCreated)
                 {
                     CreateParams cp = CreateParams;
-                    SetState(States.Mirrored, (cp.ExStyle & (int)User32.WS_EX.LAYOUTRTL) != 0);
+                    SetState(States.Mirrored, (cp.ExStyle & (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL) != 0);
                 }
 
                 return GetState(States.Mirrored);
@@ -3466,7 +3466,7 @@ namespace System.Windows.Forms
                     TabStopInternal = value;
                     if (IsHandleCreated)
                     {
-                        SetWindowStyle((int)User32.WS.TABSTOP, value);
+                        SetWindowStyle((int)WINDOW_STYLE.WS_TABSTOP, value);
                     }
 
                     OnTabStopChanged(EventArgs.Empty);
@@ -3939,18 +3939,18 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The current exStyle of the hWnd
         /// </summary>
-        private protected User32.WS_EX ExtendedWindowStyle
+        private protected WINDOW_EX_STYLE ExtendedWindowStyle
         {
-            get => (User32.WS_EX)User32.GetWindowLong(this, User32.GWL.EXSTYLE);
+            get => (WINDOW_EX_STYLE)User32.GetWindowLong(this, User32.GWL.EXSTYLE);
             set => User32.SetWindowLong(this, User32.GWL.EXSTYLE, (nint)value);
         }
 
         /// <summary>
         ///  The current style of the hWnd
         /// </summary>
-        internal User32.WS WindowStyle
+        internal WINDOW_STYLE WindowStyle
         {
-            get => (User32.WS)User32.GetWindowLong(this, User32.GWL.STYLE);
+            get => (WINDOW_STYLE)User32.GetWindowLong(this, User32.GWL.STYLE);
             set => User32.SetWindowLong(this, User32.GWL.STYLE, (nint)value);
         }
 
@@ -4931,7 +4931,7 @@ namespace System.Windows.Forms
                 }
 
                 CreateParams cp = CreateParams;
-                SetState(States.Mirrored, (cp.ExStyle & (int)User32.WS_EX.LAYOUTRTL) != 0);
+                SetState(States.Mirrored, (cp.ExStyle & (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL) != 0);
 
                 // Adjust for scrolling of parent...
                 if (_parent is not null)
@@ -4953,9 +4953,9 @@ namespace System.Windows.Forms
                 }
 
                 // And if we are WS_CHILD, ensure we have a parent handle.
-                if (cp.Parent == IntPtr.Zero && (cp.Style & (int)User32.WS.CHILD) != 0)
+                if (cp.Parent == IntPtr.Zero && (cp.Style & (int)WINDOW_STYLE.WS_CHILD) != 0)
                 {
-                    Debug.Assert((cp.ExStyle & (int)User32.WS_EX.MDICHILD) == 0, "Can't put MDI child forms on the parking form");
+                    Debug.Assert((cp.ExStyle & (int)WINDOW_EX_STYLE.WS_EX_MDICHILD) == 0, "Can't put MDI child forms on the parking form");
                     Application.ParkHandle(cp, DpiAwarenessContext);
                 }
 
@@ -5125,7 +5125,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (((User32.WS_EX)User32.GetWindowLong(_window, User32.GWL.EXSTYLE)).HasFlag(User32.WS_EX.MDICHILD))
+            if (((WINDOW_EX_STYLE)User32.GetWindowLong(_window, User32.GWL.EXSTYLE)).HasFlag(WINDOW_EX_STYLE.WS_EX_MDICHILD))
             {
                 User32.DefMDIChildProcW(InternalHandle, User32.WM.CLOSE, IntPtr.Zero, IntPtr.Zero);
             }
@@ -9979,7 +9979,7 @@ namespace System.Windows.Forms
         public Rectangle RectangleToClient(Rectangle r)
         {
             RECT rect = r;
-            PInvoke.MapWindowPoints(default, this, ref rect);
+            PInvoke.MapWindowPoints(HWND.Null, this, ref rect);
             return rect;
         }
 
@@ -9989,7 +9989,7 @@ namespace System.Windows.Forms
         public Rectangle RectangleToScreen(Rectangle r)
         {
             RECT rect = r;
-            PInvoke.MapWindowPoints(this, default, ref rect);
+            PInvoke.MapWindowPoints(this, HWND.Null, ref rect);
             return rect;
         }
 
@@ -10988,7 +10988,7 @@ namespace System.Windows.Forms
                     // The handle was previously parented to the parking window. Its TopLevel property was
                     // then changed to true so the above call to GetParent returns null even though the parent of the control is
                     // not null. We need to explicitly set the parent to null.
-                    if (PInvoke.SetParent(this, (HWND)default).IsNull)
+                    if (PInvoke.SetParent(this, HWND.Null).IsNull)
                     {
                         throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
                     }
@@ -11529,7 +11529,7 @@ namespace System.Windows.Forms
                 PInvoke.GetWindowRect(this, out rect);
                 if (!GetTopLevel())
                 {
-                    PInvoke.MapWindowPoints(default, PInvoke.GetParent(this), ref rect);
+                    PInvoke.MapWindowPoints(HWND.Null, PInvoke.GetParent(this), ref rect);
                 }
             }
 
@@ -11780,24 +11780,24 @@ namespace System.Windows.Forms
             }
 
             CreateParams cp = CreateParams;
-            User32.WS currentStyle = WindowStyle;
-            User32.WS_EX currentExtendedStyle = ExtendedWindowStyle;
+            WINDOW_STYLE currentStyle = WindowStyle;
+            WINDOW_EX_STYLE currentExtendedStyle = ExtendedWindowStyle;
 
             // Resolve the Form's lazy visibility.
             if ((_state & States.Visible) != 0)
             {
-                cp.Style |= (int)User32.WS.VISIBLE;
+                cp.Style |= (int)WINDOW_STYLE.WS_VISIBLE;
             }
 
-            if (currentStyle != (User32.WS)cp.Style)
+            if (currentStyle != (WINDOW_STYLE)cp.Style)
             {
-                WindowStyle = (User32.WS)cp.Style;
+                WindowStyle = (WINDOW_STYLE)cp.Style;
             }
 
-            if (currentExtendedStyle != (User32.WS_EX)cp.ExStyle)
+            if (currentExtendedStyle != (WINDOW_EX_STYLE)cp.ExStyle)
             {
-                ExtendedWindowStyle = (User32.WS_EX)cp.ExStyle;
-                SetState(States.Mirrored, ((User32.WS_EX)cp.ExStyle).HasFlag(User32.WS_EX.LAYOUTRTL));
+                ExtendedWindowStyle = (WINDOW_EX_STYLE)cp.ExStyle;
+                SetState(States.Mirrored, ((WINDOW_EX_STYLE)cp.ExStyle).HasFlag(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL));
             }
 
             User32.SetWindowPos(
@@ -11852,7 +11852,7 @@ namespace System.Windows.Forms
                     lastParentHandle = parentHandle;
                     parentHandle = PInvoke.GetParent(parentHandle);
 
-                    if (((User32.WS)User32.GetWindowLong(lastParentHandle, User32.GWL.STYLE)).HasFlag(User32.WS.CHILD))
+                    if (((WINDOW_STYLE)User32.GetWindowLong(lastParentHandle, User32.GWL.STYLE)).HasFlag(WINDOW_STYLE.WS_CHILD))
                     {
                         break;
                     }
@@ -12503,16 +12503,24 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmNotify(ref Message m)
         {
-            User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
+            NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
             if (!ReflectMessage(nmhdr->hwndFrom, ref m))
             {
                 switch ((ComCtl32.TTN)nmhdr->code)
                 {
                     case ComCtl32.TTN.SHOW:
-                        m.ResultInternal = (LRESULT)User32.SendMessageW(nmhdr->hwndFrom, User32.WM.REFLECT | m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                        m.ResultInternal = (LRESULT)User32.SendMessageW(
+                            nmhdr->hwndFrom,
+                            User32.WM.REFLECT | m.MsgInternal,
+                            m.WParamInternal,
+                            m.LParamInternal);
                         return;
                     case ComCtl32.TTN.POP:
-                        User32.SendMessageW(nmhdr->hwndFrom, User32.WM.REFLECT | m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                        User32.SendMessageW(
+                            nmhdr->hwndFrom,
+                            User32.WM.REFLECT | m.MsgInternal,
+                            m.WParamInternal,
+                            m.LParamInternal);
                         break;
                 }
 

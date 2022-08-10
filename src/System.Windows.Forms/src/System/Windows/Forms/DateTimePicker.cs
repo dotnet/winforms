@@ -410,14 +410,14 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
+                cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     //We want to turn on mirroring for DateTimePicker explicitly.
-                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -1527,9 +1527,9 @@ namespace System.Windows.Forms
                 IntPtr handle = User32.SendMessageW(this, (User32.WM)DTM.GETMONTHCAL);
                 if (handle != IntPtr.Zero)
                 {
-                    User32.WS_EX style = (User32.WS_EX)User32.GetWindowLong(handle, User32.GWL.EXSTYLE);
-                    style |= User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT;
-                    style &= ~(User32.WS_EX.RIGHT | User32.WS_EX.RTLREADING);
+                    WINDOW_EX_STYLE style = (WINDOW_EX_STYLE)User32.GetWindowLong(handle, User32.GWL.EXSTYLE);
+                    style |= WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT;
+                    style &= ~(WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_RTLREADING);
                     User32.SetWindowLong(handle, User32.GWL.EXSTYLE, (nint)style);
                     GC.KeepAlive(this);
                 }
@@ -1554,7 +1554,7 @@ namespace System.Windows.Forms
         {
             if (m.HWnd == Handle)
             {
-                User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
+                NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
                 switch ((DTN)nmhdr->code)
                 {
                     case DTN.CLOSEUP:

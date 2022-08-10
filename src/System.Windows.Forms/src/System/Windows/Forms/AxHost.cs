@@ -278,7 +278,7 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
                 if (_axState[s_fOwnWindow] && IsUserMode())
                 {
-                    cp.Style &= ~(int)User32.WS.VISIBLE;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_VISIBLE;
                 }
 
                 return cp;

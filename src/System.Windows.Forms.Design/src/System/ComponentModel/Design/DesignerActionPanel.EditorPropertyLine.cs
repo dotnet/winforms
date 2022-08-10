@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.UI.WindowsAndMessaging;
 using static Interop;
 
 namespace System.ComponentModel.Design
@@ -529,9 +530,9 @@ namespace System.ComponentModel.Design
                     get
                     {
                         CreateParams cp = base.CreateParams;
-                        cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
-                        cp.Style |= unchecked((int)(User32.WS.POPUP | User32.WS.BORDER));
-                        cp.ClassStyle |= (int)User32.CS.SAVEBITS;
+                        cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_TOOLWINDOW;
+                        cp.Style |= unchecked((int)(WINDOW_STYLE.WS_POPUP | WINDOW_STYLE.WS_BORDER));
+                        cp.ClassStyle |= (int)WNDCLASS_STYLES.CS_SAVEBITS;
                         if (_parentControl is not null)
                         {
                             if (!_parentControl.IsDisposed)

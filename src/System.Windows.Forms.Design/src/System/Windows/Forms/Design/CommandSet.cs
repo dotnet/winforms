@@ -779,8 +779,8 @@ namespace System.Windows.Forms.Design
                     tbx.SelectedToolboxItemUsed();
 
                     User32.GetCursorPos(out Point p);
-                    IntPtr hwnd = User32.WindowFromPoint(p);
-                    if (hwnd != IntPtr.Zero)
+                    HWND hwnd = (HWND)User32.WindowFromPoint(p);
+                    if (!hwnd.IsNull)
                     {
                         User32.SendMessageW(hwnd, User32.WM.SETCURSOR, hwnd, (nint)User32.HT.CLIENT);
                     }

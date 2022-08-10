@@ -898,7 +898,7 @@ namespace System.Windows.Forms.Design
                                     if (updateLocation)
                                     {
                                         oldDesignerControl = client.GetDesignerControl();
-                                        User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW, (nint)(BOOL)false);
+                                        User32.SendMessageW(oldDesignerControl, User32.WM.SETREDRAW, (nint)(BOOL)false);
                                     }
 
                                     Point dropPt = client.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
@@ -950,7 +950,7 @@ namespace System.Windows.Forms.Design
                                     if (oldDesignerControl is not null)
                                     {
                                         //((ComponentDataObject)dataObj).ShowControls();
-                                        User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW, (nint)(BOOL)true);
+                                        User32.SendMessageW(oldDesignerControl, User32.WM.SETREDRAW, (nint)(BOOL)true);
                                         oldDesignerControl.Invalidate(true);
                                     }
 

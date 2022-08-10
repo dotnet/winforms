@@ -11,7 +11,7 @@ internal partial class Interop
         [StructLayout(LayoutKind.Sequential, Pack = RichEditPack)]
         public struct ENPROTECTED
         {
-            public User32.NMHDR nmhdr;
+            public NMHDR nmhdr;
             public int msg;
             public nuint wParam;
             public nint lParam;

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -40,33 +38,33 @@ namespace System.Windows.Forms
         private static Cursor? s_panWest;
         private static Cursor? s_hand;
 
-        public static Cursor AppStarting => s_appStarting ??= new Cursor(User32.CursorResourceId.IDC_APPSTARTING);
+        public static Cursor AppStarting => s_appStarting ??= new Cursor(PInvoke.IDC_APPSTARTING);
 
-        public static Cursor Arrow => s_arrow ??= new Cursor(User32.CursorResourceId.IDC_ARROW);
+        public static Cursor Arrow => s_arrow ??= new Cursor(PInvoke.IDC_ARROW);
 
-        public static Cursor Cross => s_cross ??= new Cursor(User32.CursorResourceId.IDC_CROSS);
+        public static Cursor Cross => s_cross ??= new Cursor(PInvoke.IDC_CROSS);
 
-        public static Cursor Default => s_defaultCursor ??= new Cursor(User32.CursorResourceId.IDC_ARROW);
+        public static Cursor Default => s_defaultCursor ??= new Cursor(PInvoke.IDC_ARROW);
 
-        public static Cursor IBeam => s_iBeam ??= new Cursor(User32.CursorResourceId.IDC_IBEAM);
+        public static Cursor IBeam => s_iBeam ??= new Cursor(PInvoke.IDC_IBEAM);
 
-        public static Cursor No => s_no ??= new Cursor(User32.CursorResourceId.IDC_NO);
+        public static Cursor No => s_no ??= new Cursor(PInvoke.IDC_NO);
 
-        public static Cursor SizeAll => s_sizeAll ??= new Cursor(User32.CursorResourceId.IDC_SIZEALL);
+        public static Cursor SizeAll => s_sizeAll ??= new Cursor(PInvoke.IDC_SIZEALL);
 
-        public static Cursor SizeNESW => s_sizeNESW ??= new Cursor(User32.CursorResourceId.IDC_SIZENESW);
+        public static Cursor SizeNESW => s_sizeNESW ??= new Cursor(PInvoke.IDC_SIZENESW);
 
-        public static Cursor SizeNS => s_sizeNS ??= new Cursor(User32.CursorResourceId.IDC_SIZENS);
+        public static Cursor SizeNS => s_sizeNS ??= new Cursor(PInvoke.IDC_SIZENS);
 
-        public static Cursor SizeNWSE => s_sizeNWSE ??= new Cursor(User32.CursorResourceId.IDC_SIZENWSE);
+        public static Cursor SizeNWSE => s_sizeNWSE ??= new Cursor(PInvoke.IDC_SIZENWSE);
 
-        public static Cursor SizeWE => s_sizeWE ??= new Cursor(User32.CursorResourceId.IDC_SIZEWE);
+        public static Cursor SizeWE => s_sizeWE ??= new Cursor(PInvoke.IDC_SIZEWE);
 
-        public static Cursor UpArrow => s_upArrow ??= new Cursor(User32.CursorResourceId.IDC_UPARROW);
+        public static Cursor UpArrow => s_upArrow ??= new Cursor(PInvoke.IDC_UPARROW);
 
-        public static Cursor WaitCursor => s_wait ??= new Cursor(User32.CursorResourceId.IDC_WAIT);
+        public static Cursor WaitCursor => s_wait ??= new Cursor(PInvoke.IDC_WAIT);
 
-        public static Cursor Help => s_help ??= new Cursor(User32.CursorResourceId.IDC_HELP);
+        public static Cursor Help => s_help ??= new Cursor(PInvoke.IDC_HELP);
 
         public static Cursor HSplit => s_hSplit ??= new Cursor(typeof(Cursor), "hsplit.cur");
 
@@ -94,6 +92,6 @@ namespace System.Windows.Forms
 
         public static Cursor PanWest => s_panWest ??= new Cursor(typeof(Cursor), "west.cur");
 
-        public static Cursor Hand => s_hand ??= new Cursor(User32.CursorResourceId.IDC_HAND);
+        public static Cursor Hand => s_hand ??= new Cursor(PInvoke.IDC_HAND);
     }
 }

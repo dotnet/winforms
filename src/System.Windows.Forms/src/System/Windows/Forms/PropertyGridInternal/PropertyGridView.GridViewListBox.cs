@@ -27,8 +27,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.Style &= ~(int)User32.WS.BORDER;
-                    cp.ExStyle &= ~(int)User32.WS_EX.CLIENTEDGE;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
+                    cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                     return cp;
                 }
             }

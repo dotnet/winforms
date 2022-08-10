@@ -752,7 +752,7 @@ namespace System.Windows.Forms
             if (OwnerDraw)
             {
                 int style = unchecked((int)((long)User32.GetWindowLong(this, User32.GWL.STYLE)));
-                style &= ~(int)User32.WS.BORDER;
+                style &= ~(int)WINDOW_STYLE.WS_BORDER;
                 User32.SetWindowLong(this, User32.GWL.STYLE, (IntPtr)style);
             }
 
@@ -1016,7 +1016,7 @@ namespace System.Windows.Forms
             {
                 // Indicates that the ToolTip text will be displayed in the opposite direction
                 // to the text in the parent window.
-                if (!window.GetExtendedStyle().HasFlag(User32.WS_EX.LAYOUTRTL))
+                if (!window.GetExtendedStyle().HasFlag(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL))
                 {
                     flags |= TTF.RTLREADING;
                 }
@@ -2305,12 +2305,12 @@ namespace System.Windows.Forms
             switch (message.Msg)
             {
                 case (int)(User32.WM.REFLECT_NOTIFY):
-                    var nmhdr = (User32.NMHDR*)(nint)message.LParamInternal;
-                    if (nmhdr->code == (int)TTN.SHOW && !_trackPosition)
+                    var nmhdr = (NMHDR*)(nint)message.LParamInternal;
+                    if ((int)nmhdr->code == (int)TTN.SHOW && !_trackPosition)
                     {
                         WmShow();
                     }
-                    else if (nmhdr->code == (int)TTN.POP)
+                    else if ((int)nmhdr->code == (int)TTN.POP)
                     {
                         WmPop();
                         _window?.DefWndProc(ref message);

@@ -109,7 +109,7 @@ namespace System.Windows.Forms.Tests
                 using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
                 ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-                Assert.Equal(WS.OVERLAPPED, provider.WindowStyle);
+                Assert.Equal(WINDOW_STYLE.WS_OVERLAPPED, provider.WindowStyle);
                 Assert.False(comboBox.IsHandleCreated);
                 Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
             }
@@ -687,8 +687,8 @@ namespace System.Windows.Forms.Tests
             using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
             comboBox.CreateControl();
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
-            WS_EX actual = provider.WindowExStyle;
-            Assert.Equal(WS_EX.DEFAULT, actual);
+            WINDOW_EX_STYLE actual = provider.WindowExStyle;
+            Assert.Equal((WINDOW_EX_STYLE)0, actual);
             Assert.True(comboBox.IsHandleCreated);
             Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
         }
@@ -703,9 +703,9 @@ namespace System.Windows.Forms.Tests
                 using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
                 ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-                WS_EX actual = provider.WindowExStyle;
+                WINDOW_EX_STYLE actual = provider.WindowExStyle;
 
-                Assert.Equal(WS_EX.LEFT, actual);
+                Assert.Equal(WINDOW_EX_STYLE.WS_EX_LEFT, actual);
                 Assert.False(comboBox.IsHandleCreated);
                 Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
             }

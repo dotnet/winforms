@@ -30349,8 +30349,8 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
-            if (nmhdr->code == (int)ComCtl32.TTN.GETDISPINFOW && !DesignMode)
+            NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
+            if ((int)nmhdr->code == (int)ComCtl32.TTN.GETDISPINFOW && !DesignMode)
             {
                 string toolTip = ToolTipPrivate;
 

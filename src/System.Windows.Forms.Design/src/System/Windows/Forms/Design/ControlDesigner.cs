@@ -1934,7 +1934,7 @@ namespace System.Windows.Forms.Design
 
                     // We don't really want the focus, but we want to focus the designer. Below we handle WM_SETFOCUS
                     // and do the right thing.
-                    User32.SendMessageW(Control.Handle, User32.WM.SETFOCUS);
+                    User32.SendMessageW(Control, User32.WM.SETFOCUS);
 
                     // We simulate doubleclick for things that don't...
                     if (button == MouseButtons.Left && IsDoubleClick(location.X, location.Y))
@@ -2014,7 +2014,7 @@ namespace System.Windows.Forms.Design
                         if (_toolPassThrough)
                         {
                             User32.SendMessageW(
-                                Control.Parent.Handle,
+                                Control.Parent,
                                 m.MsgInternal,
                                 m.WParamInternal,
                                 GetParentPointFromLparam(m.LParamInternal));
@@ -2061,7 +2061,7 @@ namespace System.Windows.Forms.Design
                         if (_toolPassThrough)
                         {
                             User32.SendMessageW(
-                                Control.Parent.Handle,
+                                Control.Parent,
                                 m.MsgInternal,
                                 m.WParamInternal,
                                 GetParentPointFromLparam(m.LParamInternal));

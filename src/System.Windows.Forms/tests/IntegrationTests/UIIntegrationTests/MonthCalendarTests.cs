@@ -71,13 +71,13 @@ namespace System.Windows.Forms.UITests
                 {
                     nmhdr = new NMHDR
                     {
-                        code = (int)MCN.SELCHANGE,
+                        code = unchecked((uint)MCN.SELCHANGE),
                     },
                     stSelStart = date,
                     stSelEnd = date,
                 };
 
-                SendMessageW(calendar.Handle, WM.REFLECT | WM.NOTIFY, 0, ref lParam);
+                SendMessageW(calendar, WM.REFLECT | WM.NOTIFY, 0, ref lParam);
             });
         }
 

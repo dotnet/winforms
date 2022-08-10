@@ -211,7 +211,7 @@ namespace System.ComponentModel.Design
 
                         break;
                     case User32.WM.REFLECT_NOTIFY:
-                        User32.NMHDR* nmtv = (User32.NMHDR*)(nint)m.LParamInternal;
+                        NMHDR* nmtv = (NMHDR*)(nint)m.LParamInternal;
                         if (nmtv->code == (int)ComCtl32.NM.CLICK)
                         {
                             clickSeen = true;
