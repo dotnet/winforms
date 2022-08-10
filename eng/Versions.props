@@ -56,7 +56,7 @@
     <MicrosoftDotNetGenFacadesPackageVersion>7.0.0-beta.22403.1</MicrosoftDotNetGenFacadesPackageVersion>
     <MicrosoftDotNetRemoteExecutorVersion>7.0.0-beta.22403.1</MicrosoftDotNetRemoteExecutorVersion>
     <MicrosoftDotNetXUnitExtensionsPackageVersion>7.0.0-beta.22403.1</MicrosoftDotNetXUnitExtensionsPackageVersion>
-    <MicrosoftNETTestSdkVersion>16.5.0</MicrosoftNETTestSdkVersion>
+    <MicrosoftNETTestSdkVersion>17.4.0-preview-20220707-01</MicrosoftNETTestSdkVersion>
   </PropertyGroup>
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
   <!-- XUnit-related (not extensions) -->
@@ -79,7 +79,7 @@
   </PropertyGroup>
   <!-- Code Coverage -->
   <PropertyGroup>
-    <CoverletMSBuildPackageVersion>2.7.0</CoverletMSBuildPackageVersion>
+    <CoverletMSBuildPackageVersion>3.1.2</CoverletMSBuildPackageVersion>
     <CodecovVersion>1.9.0</CodecovVersion>
     <ReportGeneratorVersion>4.0.9</ReportGeneratorVersion>
   </PropertyGroup>
@@ -89,7 +89,7 @@
     <MicrosoftCodeAnalysisCSharpPackageVersion>4.2.0</MicrosoftCodeAnalysisCSharpPackageVersion>
     <MicrosoftCodeAnalysisCSharpWorkspacesVersion>4.0.0-2.final</MicrosoftCodeAnalysisCSharpWorkspacesVersion>
     <MicrosoftCodeAnalysisVisualBasicWorkspacesVersion>4.0.0-2.final</MicrosoftCodeAnalysisVisualBasicWorkspacesVersion>
-    <MicrosoftCodeAnalysisPackagesVersion>1.0.1-beta1.21265.1</MicrosoftCodeAnalysisPackagesVersion>
+    <MicrosoftCodeAnalysisPackagesVersion>1.1.2-beta1.22403.2</MicrosoftCodeAnalysisPackagesVersion>
     <MicrosoftCodeAnalysisPublicApiAnalyzers>3.3.0-beta1.final</MicrosoftCodeAnalysisPublicApiAnalyzers>
     <!--
       TODO: Remove pinned version once arcade supplies a compiler that enables the repo to compile.
