@@ -179,6 +179,8 @@ namespace System.Windows.Forms
 
         private bool _blockLabelEdit;
 
+        private ListViewLabelEditNativeWindow? _labelEdit;
+
         // Background image stuff
         // Because we have to create a temporary file and the OS does not clean up the temporary files from the machine
         // we have to do that ourselves
@@ -5127,6 +5129,36 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override void ReleaseUiaProvider(nint handle)
+        {
+            base.ReleaseUiaProvider(handle);
+
+            if (!OsVersion.IsWindows8OrGreater || !IsAccessibilityObjectCreated)
+            {
+                return;
+            }
+
+            for (int i = 0; i < Items.Count; i++)
+            {
+                Items[i].ReleaseUiaProvider();
+            }
+
+            if (_defaultGroup is not null)
+            {
+                DefaultGroup.ReleaseUiaProvider();
+            }
+
+            foreach (ListViewGroup group in Groups)
+            {
+                group.ReleaseUiaProvider();
+            }
+
+            foreach (ColumnHeader columnHeader in Columns)
+            {
+                columnHeader.ReleaseUiaProvider();
+            }
+        }
+
         // makes sure that the list view items which are w/o a listView group are parented to the DefaultGroup - if necessary
         // and then tell win32 to remove this group
         internal void RemoveGroupFromListView(ListViewGroup group)
@@ -6436,6 +6468,14 @@ namespace System.Windows.Forms
 
                 case (int)LVN.BEGINLABELEDITW:
                     {
+                        Debug.Assert(_labelEdit is null,
+                            "A new label editing shouldn't start before the previous one ended");
+                        if (_labelEdit is not null)
+                        {
+                            _labelEdit.ReleaseHandle();
+                            _labelEdit = null;
+                        }
+
                         bool cancelEdit;
                         if (_blockLabelEdit)
                         {
@@ -6451,6 +6491,13 @@ namespace System.Windows.Forms
 
                         m.ResultInternal = cancelEdit ? 1 : 0;
                         _listViewState[LISTVIEWSTATE_inLabelEdit] = !cancelEdit;
+
+                        if (!cancelEdit)
+                        {
+                            _labelEdit = new ListViewLabelEditNativeWindow(this);
+                            _labelEdit.AssignHandle(User32.SendMessageW(this, (User32.WM)LVM.GETEDITCONTROL));
+                        }
+
                         break;
                     }
 
@@ -6480,6 +6527,15 @@ namespace System.Windows.Forms
 
                 case (int)LVN.ENDLABELEDITW:
                     {
+                        Debug.Assert(_labelEdit is not null, "There is no active label edit to end");
+                        if (_labelEdit is null)
+                        {
+                            break;
+                        }
+
+                        _labelEdit.ReleaseHandle();
+                        _labelEdit = null;
+
                         _listViewState[LISTVIEWSTATE_inLabelEdit] = false;
                         NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParamInternal;
                         string? text = dispInfo->item.pszText is null ? null : new string(dispInfo->item.pszText);
@@ -6926,21 +6982,25 @@ namespace System.Windows.Forms
                 case User32.WM.KEYUP:
                     int key = (int)m.WParamInternal;
 
-                    // User can collapse/expand a group using the keyboard by focusing the group header and using left/right
+                    // User can collapse/expand a group using the keyboard by focusing the group header and using left/right.
                     if (GroupsDisplayed && (key is User32.VK.LEFT or User32.VK.RIGHT) && SelectedItems.Count > 0)
                     {
-                        ListViewGroup group = SelectedItems[0].Group;
-
-                        if (group is null || group.CollapsedState is ListViewGroupCollapsedState.Default)
+                        // User can select more than one group.
+                        HashSet<int> groups = new();
+                        foreach (ListViewItem selectedItem in SelectedItems)
                         {
-                            break;
-                        }
+                            ListViewGroup group = selectedItem.Group;
+                            if (group is null || group.CollapsedState is ListViewGroupCollapsedState.Default || !groups.Add(group.ID))
+                            {
+                                continue;
+                            }
 
-                        ListViewGroupCollapsedState nativeState = group.GetNativeCollapsedState();
-                        if (nativeState != group.CollapsedState)
-                        {
-                            group.SetCollapsedStateInternal(nativeState);
-                            OnGroupCollapsedStateChanged(new ListViewGroupEventArgs(Groups.IndexOf(group)));
+                            ListViewGroupCollapsedState nativeState = group.GetNativeCollapsedState();
+                            if (nativeState != group.CollapsedState)
+                            {
+                                group.SetCollapsedStateInternal(nativeState);
+                                OnGroupCollapsedStateChanged(new ListViewGroupEventArgs(Groups.IndexOf(group)));
+                            }
                         }
                     }
 

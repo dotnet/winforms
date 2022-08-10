@@ -2491,12 +2491,14 @@ namespace System.Windows.Forms
         {
             base.OnGotFocus(e);
 
-            if (IsAccessibilityObjectCreated)
+            // Use parent's accessible object because RichTextBox doesn't support UIA Providers, and its
+            // AccessibilityObject doesn't get created even when assistive tech (e.g. Narrator) is used
+            if (Parent?.IsAccessibilityObjectCreated == true)
             {
-                AccessibilityObject.RaiseAutomationNotification(
-                        Automation.AutomationNotificationKind.Other,
-                        Automation.AutomationNotificationProcessing.MostRecent,
-                        Text);
+                Parent.AccessibilityObject.InternalRaiseAutomationNotification(
+                    Automation.AutomationNotificationKind.Other,
+                    Automation.AutomationNotificationProcessing.MostRecent,
+                    Text);
             }
         }
 

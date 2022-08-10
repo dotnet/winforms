@@ -199,6 +199,7 @@ namespace System.Windows.Forms
             for (int i = 0; i < Count; i++)
             {
                 this[i].ListView = null;
+                this[i].ReleaseUiaProvider();
             }
 
             List.Clear();
@@ -281,6 +282,7 @@ namespace System.Windows.Forms
         {
             group.ListView = null;
             List.Remove(group);
+            group.ReleaseUiaProvider();
 
             if (_listView.IsHandleCreated)
             {

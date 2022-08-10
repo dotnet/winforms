@@ -114,7 +114,7 @@ namespace System.Windows.Forms
                             owningItemRuntimeId[1],
                             owningItemRuntimeId[2],
                             owningItemRuntimeId[3],
-                            ParentInternal.GetChildIndex(this)
+                            GetHashCode()
                         };
                     }
                 }

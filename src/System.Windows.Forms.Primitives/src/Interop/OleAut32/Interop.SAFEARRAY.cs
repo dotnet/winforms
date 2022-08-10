@@ -18,7 +18,16 @@ internal partial class Interop
             public void* pvData;
             public SAFEARRAYBOUND _rgsabound;
 
-            public ReadOnlySpan<SAFEARRAYBOUND> rgsabound => TrailingArray<SAFEARRAYBOUND>.GetBuffer(ref _rgsabound, cDims);
+            public ReadOnlySpan<SAFEARRAYBOUND> rgsabound
+            {
+                get
+                {
+                    fixed (SAFEARRAYBOUND* b = &_rgsabound)
+                    {
+                        return new(b, cDims);
+                    }
+                }
+            }
 
             public VARENUM VarType
             {

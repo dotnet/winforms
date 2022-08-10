@@ -329,6 +329,7 @@ namespace System.Windows.Forms
                         {
                             int w = _owner._columnHeaders[colIdx].Width; // Update width before detaching from ListView
                             _owner._columnHeaders[colIdx].OwnerListview = null;
+                            _owner._columnHeaders[colIdx].ReleaseUiaProvider();
                         }
 
                         _owner._columnHeaders = null;
@@ -348,6 +349,7 @@ namespace System.Windows.Forms
                             }
 
                             _owner._columnHeaders[colIdx].OwnerListview = null;
+                            _owner._columnHeaders[colIdx].ReleaseUiaProvider();
                         }
 
                         _owner._columnHeaders = null;
@@ -547,6 +549,7 @@ namespace System.Windows.Forms
                 }
 
                 removeHdr.DisplayIndexInternal = -1;
+                removeHdr.ReleaseUiaProvider();
 
                 _owner._columnHeaders[index].OwnerListview = null;
                 int columnCount = _owner._columnHeaders.Length;

@@ -13,12 +13,16 @@ namespace System
         {
             Application.EnableVisualStyles();
 
+            // This is done to avoid the effect of the mouse cursor on some tests with invalidates count: https://github.com/dotnet/winforms/pull/7031
+            Cursor.Position = new Drawing.Point(Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height);
+
             Application.ThreadException += OnThreadException;
         }
 
         public virtual void Dispose()
         {
             Application.ThreadException -= OnThreadException;
+            //Xunit.Assert.Equal(new Drawing.Point(Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height), Cursor.Position);
         }
 
         private void OnThreadException(object sender, ThreadExceptionEventArgs e)

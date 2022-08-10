@@ -11,18 +11,21 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.Runtime.Versioning;
 using System.Windows.Forms.Layout;
 using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
+#pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
     [DesignTimeVisible(false)]
     [Designer("System.Windows.Forms.Design.ToolStripItemDesigner, " + AssemblyRef.SystemDesign)]
     [DefaultEvent(nameof(Click))]
     [ToolboxItem(false)]
     [DefaultProperty(nameof(Text))]
-    public abstract partial class ToolStripItem : Component,
+    public abstract partial class ToolStripItem : BindableComponent,
+                              ICommandBindingTargetProvider,
                               IDropTarget,
                               ISupportOleDropSource,
                               IArrangedElement,
@@ -59,6 +62,10 @@ namespace System.Windows.Forms
 
         private ToolStripItemDisplayStyle _displayStyle = ToolStripItemDisplayStyle.ImageAndText;
 
+        // Backing fields for the infrastructure to make ToolStripItem bindable and introduce (bindable) ICommand.
+        private System.Windows.Input.ICommand _command;
+        private object _commandParameter;
+
         private static readonly ArrangedElementCollection s_emptyChildCollection = new ArrangedElementCollection();
 
         internal static readonly object s_mouseDownEvent = new object();
@@ -89,6 +96,10 @@ namespace System.Windows.Forms
         internal static readonly object s_ownerChangedEvent = new object();
         internal static readonly object s_paintEvent = new object();
         internal static readonly object s_textChangedEvent = new object();
+
+        internal static readonly object s_commandChangedEvent = new();
+        internal static readonly object s_commandParameterChangedEvent = new();
+        internal static readonly object s_commandCanExecuteChangedEvent = new();
 
         // Property store keys for properties. The property store allocates most efficiently
         // in groups of four, so we try to lump properties in groups of four based on how
@@ -405,6 +416,88 @@ namespace System.Windows.Forms
                     Invalidate();
                 }
             }
+        }
+
+        /// <summary>
+        ///  Gets or sets the <see cref="System.Windows.Input.ICommand"/> whose <see cref="System.Windows.Input.ICommand.Execute(object?)"/>
+        ///  method will be called when the ToolStripItem's <see cref="Click"/> event gets invoked.
+        /// </summary>
+        [RequiresPreviewFeatures]
+        [Bindable(true)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.CommandComponentCommandDescr))]
+        public System.Windows.Input.ICommand Command
+        {
+            get => _command;
+            set => ICommandBindingTargetProvider.CommandSetter(this, value, ref _command);
+        }
+
+        /// <summary>
+        ///  Occurs when the <see cref="System.Windows.Input.ICommand.CanExecute(object?)"/> status of the
+        ///  <see cref="System.Windows.Input.ICommand"/> which is assigned to the <see cref="Command"/> property has changed.
+        /// </summary>
+        [RequiresPreviewFeatures]
+        [SRCategory(nameof(SR.CatData))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRDescription(nameof(SR.CommandCanExecuteChangedEventDescr))]
+        public event EventHandler CommandCanExecuteChanged
+        {
+            add => Events.AddHandler(s_commandCanExecuteChangedEvent, value);
+            remove => Events.RemoveHandler(s_commandCanExecuteChangedEvent, value);
+        }
+
+        /// <summary>
+        ///  Occurs when the assigned <see cref="System.Windows.Input.ICommand"/> of the <see cref="Command"/> property has changed.
+        /// </summary>
+        [RequiresPreviewFeatures]
+        [SRCategory(nameof(SR.CatData))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRDescription(nameof(SR.CommandChangedEventDescr))]
+        public event EventHandler CommandChanged
+        {
+            add => Events.AddHandler(s_commandChangedEvent, value);
+            remove => Events.RemoveHandler(s_commandChangedEvent, value);
+        }
+
+        /// <summary>
+        ///  Gets or sets the parameter that is passed to the <see cref="System.Windows.Input.ICommand"/>
+        ///  which is assigned to the <see cref="Command"/> property.
+        /// </summary>
+        [Bindable(true)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.CommandComponentCommandParameterDescr))]
+        public object CommandParameter
+        {
+            [RequiresPreviewFeatures]
+            get => _commandParameter;
+
+            // We need to opt into previre features here, because we calling a preview feature from the setter.
+            [RequiresPreviewFeatures]
+            set
+            {
+                if (!Equals(_commandParameter, value))
+                {
+                    _commandParameter = value;
+                    OnCommandParameterChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        /// <summary>
+        ///  Occurs when the value of the <see cref="CommandParameter"/> property has changed.
+        /// </summary>
+        [RequiresPreviewFeatures]
+        [SRCategory(nameof(SR.CatData))]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRDescription(nameof(SR.CommandParameterChangedEventDescr))]
+        public event EventHandler CommandParameterChanged
+        {
+            add => Events.AddHandler(s_commandParameterChangedEvent, value);
+            remove => Events.RemoveHandler(s_commandParameterChangedEvent, value);
         }
 
         // Every ToolStripItem needs to cache its last/current Parent's DeviceDpi
@@ -734,27 +827,6 @@ namespace System.Windows.Forms
         {
             add => Events.AddHandler(s_dragLeaveEvent, value);
             remove => Events.RemoveHandler(s_dragLeaveEvent, value);
-        }
-
-        /// <summary>
-        ///  This represents what we're actually going to drag. If the parent has set AllowItemReorder to true,
-        ///  then the item should call back on the private OnQueryContinueDrag/OnGiveFeedback that is implemented
-        ///  in the parent ToolStrip.
-        ///
-        ///  Else if the parent does not support reordering of items (Parent.AllowItemReorder = false) -
-        ///  then call back on the ToolStripItem's OnQueryContinueDrag/OnGiveFeedback methods.
-        /// </summary>
-        private DropSource DropSource
-        {
-            get
-            {
-                if ((ParentInternal is not null) && (ParentInternal.AllowItemReorder) && (ParentInternal.ItemReorderDropSource is not null))
-                {
-                    return new DropSource(ParentInternal.ItemReorderDropSource);
-                }
-
-                return new DropSource(this);
-            }
         }
 
         /// <summary>
@@ -1738,6 +1810,8 @@ namespace System.Windows.Forms
             }
         }
 
+        bool? ICommandBindingTargetProvider.PreviousEnabledStatus { get; set; }
+
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ToolStripItemOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged
@@ -2132,7 +2206,35 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects)
         {
-            Ole32.IDropSource dropSource = DropSource;
+            return DoDragDrop(data, allowedEffects, dragImage: null, cursorOffset: default, useDefaultDragImage: false);
+        }
+
+        /// <summary>
+        ///  Begins a drag operation. The <paramref name="allowedEffects"/> determine which drag operations can occur. If the drag operation
+        ///  needs to interop with applications in another process, <paramref name="data"/> should either be a base managed class
+        ///  (<see cref="string"/>, <see cref="Bitmap"/>, or <see cref="Drawing.Imaging.Metafile"/>) or some <see cref="object"/> that implements
+        ///  <see cref="Runtime.Serialization.ISerializable"/>. <paramref name="data"/> can also be any <see cref="object"/> that implements
+        ///  <see cref="IDataObject"/>. <paramref name="dragImage"/> is the bitmap that will be displayed during the  drag operation and
+        ///  <paramref name="cursorOffset"/> specifies the location of the cursor within <paramref name="dragImage"/>, which is an offset from the
+        ///  upper-left corner. Specify <see langword="true"/> for <paramref name="useDefaultDragImage"/> to use a layered window drag image with a
+        ///  size of 96x96; otherwise <see langword="false"/>. Note the outer edges of <paramref name="dragImage"/> are blended out if the image width
+        ///  or height exceeds 300 pixels.
+        /// </summary>
+        /// <returns>
+        ///  A value from the <see cref="DragDropEffects"/> enumeration that represents the final effect that was performed during the drag-and-drop
+        ///  operation.
+        /// </returns>
+        /// <remarks>
+        ///  <para>
+        ///   Because <see cref="DoDragDrop(object, DragDropEffects, Bitmap, Point, bool)"/> always performs the RGB multiplication step in calculating
+        ///   the alpha value, you should always pass a <see cref="Bitmap"/> without premultiplied alpha blending. Note that no error will result from
+        ///   passing a <see cref="Bitmap"/> with premultiplied alpha blending, but this method will multiply it again, doubling the resulting alpha
+        ///   value.
+        ///  </para>
+        /// </remarks>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
+        {
             IComDataObject dataObject = null;
 
             dataObject = data as IComDataObject;
@@ -2163,13 +2265,44 @@ namespace System.Windows.Forms
                 dataObject = (IComDataObject)iwdata;
             }
 
-            HRESULT hr = Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out Ole32.DROPEFFECT finalEffect);
-            if (!hr.Succeeded())
+            Ole32.DROPEFFECT finalEffect;
+
+            try
             {
-                return DragDropEffects.None;
+                Ole32.IDropSource dropSource = CreateDropSource(dataObject, dragImage, cursorOffset, useDefaultDragImage);
+                HRESULT hr = Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out finalEffect);
+                if (!hr.Succeeded())
+                {
+                    return DragDropEffects.None;
+                }
+            }
+            finally
+            {
+                if (DragDropHelper.IsInDragLoop(dataObject))
+                {
+                    DragDropHelper.SetInDragLoop(dataObject, inDragLoop: false);
+                }
             }
 
             return (DragDropEffects)finalEffect;
+        }
+
+        /// <summary>
+        ///  This represents what we're actually going to drag. If the parent has set AllowItemReorder to true,
+        ///  then the item should call back on the private OnQueryContinueDrag/OnGiveFeedback that is implemented
+        ///  in the parent ToolStrip.
+        ///
+        ///  Else if the parent does not support reordering of items (Parent.AllowItemReorder = false) -
+        ///  then call back on the ToolStripItem's OnQueryContinueDrag/OnGiveFeedback methods.
+        /// </summary>
+        internal Ole32.IDropSource CreateDropSource(IComDataObject dataObject, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
+        {
+            if (ParentInternal is not null && ParentInternal.AllowItemReorder && ParentInternal.ItemReorderDropSource is not null)
+            {
+                return new DropSource(ParentInternal.ItemReorderDropSource, dataObject, dragImage, cursorOffset, useDefaultDragImage);
+            }
+
+            return new DropSource(this, dataObject, dragImage, cursorOffset, useDefaultDragImage);
         }
 
         internal void FireEvent(ToolStripItemEventType met)
@@ -2597,7 +2730,13 @@ namespace System.Windows.Forms
             InternalLayout.PerformLayout();
         }
 
-        protected virtual void OnClick(EventArgs e) => RaiseEvent(s_clickEvent, e);
+        protected virtual void OnClick(EventArgs e)
+        {
+            RaiseEvent(s_clickEvent, e);
+
+            // We won't let the preview feature warnings bubble further up beyond this point.
+            OnRequestCommandExecute(e);
+        }
 
         protected internal virtual void OnLayout(LayoutEventArgs e)
         {
@@ -2638,6 +2777,50 @@ namespace System.Windows.Forms
         }
 
         protected virtual void OnAvailableChanged(EventArgs e) => RaiseEvent(s_availableChangedEvent, e);
+
+        /// <summary>
+        ///  Raises the <see cref="ToolStripItem.CommandChanged"/> event.
+        /// </summary>
+        /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
+        [RequiresPreviewFeatures]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnCommandChanged(EventArgs e)
+            => RaiseEvent(s_commandChangedEvent, e);
+
+        /// <summary>
+        ///  Raises the <see cref="ToolStripItem.CommandCanExecuteChanged"/> event.
+        /// </summary>
+        /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
+        [RequiresPreviewFeatures]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnCommandCanExecuteChanged(EventArgs e)
+            => ((EventHandler)Events[s_commandCanExecuteChangedEvent])?.Invoke(this, e);
+
+        /// <summary>
+        ///  Raises the <see cref="ToolStripItem.CommandParameterChanged"/> event.
+        /// </summary>
+        /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
+        [RequiresPreviewFeatures]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected virtual void OnCommandParameterChanged(EventArgs e) => RaiseEvent(s_commandParameterChangedEvent, e);
+
+        /// <summary>
+        ///  Called in the context of <see cref="OnClick(EventArgs)"/> to invoke <see cref="System.Windows.Input.ICommand.Execute(object?)"/> if the context allows.
+        /// </summary>
+        /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
+        [RequiresPreviewFeatures]
+        protected virtual void OnRequestCommandExecute(EventArgs e)
+            => ICommandBindingTargetProvider.RequestCommandExecute(this);
+
+        // Called by the CommandProviderManager's command handling logic.
+        [RequiresPreviewFeatures]
+        void ICommandBindingTargetProvider.RaiseCommandChanged(EventArgs e)
+            => OnCommandChanged(e);
+
+        // Called by the CommandProviderManager's command handling logic.
+        [RequiresPreviewFeatures]
+        void ICommandBindingTargetProvider.RaiseCommandCanExecuteChanged(EventArgs e)
+            => OnCommandCanExecuteChanged(e);
 
         /// <summary>
         ///  Raises the <see cref="ToolStripItem.DragEnter"/> event.
@@ -2997,9 +3180,6 @@ namespace System.Windows.Forms
 
         internal void RaiseDragEvent(object key, DragEventArgs e)
             => ((DragEventHandler)Events[key])?.Invoke(this, e);
-
-        internal void RaiseEvent(object key, EventArgs e)
-            => ((EventHandler)Events[key])?.Invoke(this, e);
 
         internal void RaiseKeyEvent(object key, KeyEventArgs e)
             => ((KeyEventHandler)Events[key])?.Invoke(this, e);
@@ -3562,4 +3742,5 @@ namespace System.Windows.Forms
             return local is not null;
         }
     }
+#pragma warning restore CA2252 
 }

@@ -1271,10 +1271,17 @@ namespace System.Windows.Forms
                 Invalidate();
             }
 
-            if (IsAccessibilityObjectCreated && LiveSetting != AutomationLiveSetting.Off)
+            if (!IsAccessibilityObjectCreated)
+            {
+                return;
+            }
+
+            if (LiveSetting != AutomationLiveSetting.Off)
             {
                 AccessibilityObject.RaiseLiveRegionChanged();
             }
+
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.NamePropertyId, Text, Text);
         }
 
         protected virtual void OnTextAlignChanged(EventArgs e)

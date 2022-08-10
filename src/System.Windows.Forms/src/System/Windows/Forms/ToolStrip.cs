@@ -4815,15 +4815,22 @@ namespace System.Windows.Forms
             return sb.ToString();
         }
 
-        internal void UpdateToolTip(ToolStripItem item)
+        /// <summary>
+        ///  Updates a tooltip for the given toolstrip item.
+        /// </summary>
+        /// <param name="item">The toolstrip item.</param>
+        /// <param name="refresh">see langword="true"/> to force-update the tooltip (if it is configured); otherwise <see langword="false"/>.</param>
+        internal void UpdateToolTip(ToolStripItem item, bool refresh = false)
         {
             if (ShowItemToolTips)
             {
-                if (item != _currentlyActiveTooltipItem && ToolTip is not null)
+                if ((item != _currentlyActiveTooltipItem || refresh) && ToolTip is not null)
                 {
-                    ToolTip.Hide(this);
-
-                    _currentlyActiveTooltipItem = item;
+                    if (item != _currentlyActiveTooltipItem)
+                    {
+                        ToolTip.Hide(this);
+                        _currentlyActiveTooltipItem = item;
+                    }
 
                     if (_currentlyActiveTooltipItem is not null && !GetToolStripState(STATE_DRAGGING))
                     {

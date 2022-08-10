@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
@@ -17,11 +15,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         private class ExceptionEditor : UITypeEditor
         {
-            public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+            public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
             {
                 if (value is Exception ex)
                 {
-                    if (context.TryGetService(out IUIService uiService))
+                    if (context.TryGetService(out IUIService? uiService))
                     {
                         uiService.ShowError(ex);
                     }
@@ -51,7 +49,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  Retrieves the editing style of the Edit method.  If the method
             ///  is not supported, this will return None.
             /// </summary>
-            public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+            public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
                 => UITypeEditorEditStyle.Modal;
         }
     }

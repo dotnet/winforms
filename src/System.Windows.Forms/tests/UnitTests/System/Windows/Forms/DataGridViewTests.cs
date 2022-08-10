@@ -1121,7 +1121,12 @@ namespace System.Windows.Forms.Tests
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            control.Invalidated += (sender, e) =>
+            {
+                Assert.True(++invalidatedCallCount <= expectedInvalidatedCallCount,
+                    $"Extra ({invalidatedCallCount}) invalidate, must be <= {expectedInvalidatedCallCount}.");
+            };
+
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -1973,7 +1978,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [ActiveIssue("https://github.com/dotnet/winforms/issues/6926")]
-        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6926")]
+        [WinFormsTheory]
         [MemberData(nameof(OnColumnHeadersHeightChanged_TestData))]
         public void DataGridView_OnColumnHeadersHeightChanged_InvokeWithHandle_CallsColumnHeadersHeightChanged(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode, bool columnHeadersVisible, EventArgs eventArgs)
         {
@@ -1983,8 +1988,11 @@ namespace System.Windows.Forms.Tests
                 ColumnHeadersVisible = columnHeadersVisible
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            control.Invalidated += (sender, e) =>
+            {
+                throw new Xunit.Sdk.XunitException("Invalidated event occurred.");
+            };
+
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -2002,7 +2010,6 @@ namespace System.Windows.Forms.Tests
             control.OnColumnHeadersHeightChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -2011,7 +2018,6 @@ namespace System.Windows.Forms.Tests
             control.OnColumnHeadersHeightChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }

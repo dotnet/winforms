@@ -5773,6 +5773,18 @@ namespace System.Windows.Forms.Tests
             Assert.Null(listView.FocusedItem);
         }
 
+        [WinFormsFact]
+        public void ListView_ReleaseUiaProvider_DoesNotForceDefaultGroupCreation()
+        {
+            using ListView listView = new();
+            _ = listView.AccessibilityObject;
+
+            listView.ReleaseUiaProvider(listView.Handle);
+
+            Assert.Null(listView.TestAccessor().Dynamic._defaultGroup);
+            Assert.True(listView.IsHandleCreated);
+        }
+
         private class SubListViewItem : ListViewItem
         {
             public AccessibleObject CustomAccessibleObject { get; set; }

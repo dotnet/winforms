@@ -27,23 +27,38 @@ namespace System.IO
         {
             Path = path;
 
-            if (data != null)
+            if (data is not null)
             {
                 File.WriteAllBytes(path, data);
             }
         }
 
+        public TempFile(string path, string text)
+        {
+            Path = path;
+
+            File.WriteAllText(path, text);
+        }
+
         ~TempFile() => DeleteFile();
 
-        public static TempFile Create(byte[] bytes, [CallerMemberName] string memberName = null, [CallerLineNumber] int lineNumber = 0)
-        {
-            return new TempFile(GetFilePath(memberName, lineNumber), bytes);
-        }
+        public static TempFile Create(
+            byte[] bytes,
+            [CallerMemberName] string memberName = null,
+            [CallerLineNumber] int lineNumber = 0)
+            => new(GetFilePath(memberName, lineNumber), bytes);
 
-        public static TempFile Create(long length = -1, [CallerMemberName] string memberName = null, [CallerLineNumber] int lineNumber = 0)
-        {
-            return new TempFile(GetFilePath(memberName, lineNumber), length);
-        }
+        public static TempFile Create(
+            string text,
+            [CallerMemberName] string memberName = null,
+            [CallerLineNumber] int lineNumber = 0)
+            => new(GetFilePath(memberName, lineNumber), text);
+
+        public static TempFile Create(
+            long length = -1,
+            [CallerMemberName] string memberName = null,
+            [CallerLineNumber] int lineNumber = 0)
+            => new(GetFilePath(memberName, lineNumber), length);
 
         public void AssertExists() => Assert.True(File.Exists(Path));
 

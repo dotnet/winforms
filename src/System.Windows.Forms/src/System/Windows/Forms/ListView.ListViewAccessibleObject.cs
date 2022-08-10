@@ -89,6 +89,11 @@ namespace System.Windows.Forms
                     return null;
                 }
 
+                if (_owningListView._labelEdit is {} labelEdit && index == GetChildCount() - 1)
+                {
+                    return labelEdit.AccessibilityObject;
+                }
+
                 if (_owningListView.GroupsDisplayed)
                 {
                     IReadOnlyList<ListViewGroup> visibleGroups = GetVisibleGroups();
@@ -105,7 +110,13 @@ namespace System.Windows.Forms
                     return InvalidIndex;
                 }
 
-                return _owningListView.GroupsDisplayed ? GetVisibleGroups().Count : _owningListView.Items.Count;
+                int count = _owningListView.GroupsDisplayed ? GetVisibleGroups().Count : _owningListView.Items.Count;
+                if (_owningListView._labelEdit is not null)
+                {
+                    count++;
+                }
+
+                return count;
             }
 
             private int GetItemIndex(AccessibleObject? child)
@@ -143,7 +154,10 @@ namespace System.Windows.Forms
                 return InvalidIndex;
             }
 
-            internal override int GetChildIndex(AccessibleObject? child) => _owningListView.GroupsDisplayed ? GetGroupIndex(child) : GetItemIndex(child);
+            internal override int GetChildIndex(AccessibleObject? child)
+                => _owningListView._labelEdit is {} labelEdit && child == labelEdit.AccessibilityObject
+                    ? GetChildCount() - 1
+                    : _owningListView.GroupsDisplayed ? GetGroupIndex(child) : GetItemIndex(child);
 
             private string GetItemStatus()
                 => _owningListView.Sorting switch
@@ -158,7 +172,7 @@ namespace System.Windows.Forms
                 UiaCore.IRawElementProviderSimple[] columnHeaders = new UiaCore.IRawElementProviderSimple[_owningListView.Columns.Count];
                 for (int i = 0; i < columnHeaders.Length; i++)
                 {
-                    columnHeaders[i] = new ColumnHeader.ListViewColumnHeaderAccessibleObject(_owningListView.Columns[i]);
+                    columnHeaders[i] = _owningListView.Columns[i].AccessibilityObject;
                 }
 
                 return columnHeaders;
@@ -195,6 +209,11 @@ namespace System.Windows.Forms
 
             private AccessibleObject? GetLastChild()
             {
+                if (_owningListView._labelEdit is {} labelEdit)
+                {
+                    return labelEdit.AccessibilityObject;
+                }
+
                 if (_owningListView.GroupsDisplayed)
                 {
                     IReadOnlyList<ListViewGroup> visibleGroups = GetVisibleGroups();

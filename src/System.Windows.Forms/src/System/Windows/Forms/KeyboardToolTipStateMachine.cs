@@ -142,7 +142,7 @@ namespace System.Windows.Forms
             OnFormDeactivation(sender);
         }
 
-        internal IKeyboardToolTip LastFocusedTool
+        internal IKeyboardToolTip? LastFocusedTool
         {
             get
             {

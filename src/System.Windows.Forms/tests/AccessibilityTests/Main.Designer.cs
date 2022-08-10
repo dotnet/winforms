@@ -1,4 +1,5 @@
-﻿namespace AccessibilityTests
+﻿using System.Windows.Forms;
+namespace Accessibility_Core_App
 {
     partial class Main
     {
@@ -23,8 +24,8 @@
         #region Windows Form Designer generated code
 
         /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
@@ -36,15 +37,18 @@
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
-            this.btnDataBindingExample = new System.Windows.Forms.Button();
-            this.customAccessiblePropertiesButton = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
+            this.button12 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 12);
+            this.button1.Location = new System.Drawing.Point(14, 14);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(455, 23);
+            this.button1.Size = new System.Drawing.Size(531, 27);
             this.button1.TabIndex = 0;
             this.button1.Text = "Common_Controls1: Testing the controls under the Common_Controls Tab";
             this.button1.UseVisualStyleBackColor = true;
@@ -52,9 +56,10 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(12, 58);
+            this.button2.Location = new System.Drawing.Point(14, 60);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(455, 23);
+            this.button2.Size = new System.Drawing.Size(531, 27);
             this.button2.TabIndex = 1;
             this.button2.Text = "Common_Controls2: Testing the controls under the Common_Controls Tab";
             this.button2.UseVisualStyleBackColor = true;
@@ -62,9 +67,10 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(12, 104);
+            this.button3.Location = new System.Drawing.Point(13, 105);
+            this.button3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(455, 23);
+            this.button3.Size = new System.Drawing.Size(531, 27);
             this.button3.TabIndex = 2;
             this.button3.Text = "Data_Controls: Testing the controls under the Data Tab";
             this.button3.UseVisualStyleBackColor = true;
@@ -72,19 +78,21 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(12, 150);
+            this.button4.Location = new System.Drawing.Point(13, 152);
+            this.button4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(455, 23);
+            this.button4.Size = new System.Drawing.Size(531, 27);
             this.button4.TabIndex = 3;
-            this.button4.Text = "TaskDialog: Testing the task dialog";
+            this.button4.Text = "Dialogs_Controls: Testing the controls under the Dialogs Tab";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(12, 196);
+            this.button5.Location = new System.Drawing.Point(13, 199);
+            this.button5.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(455, 23);
+            this.button5.Size = new System.Drawing.Size(531, 27);
             this.button5.TabIndex = 4;
             this.button5.Text = "MenuToolbars_Controls: Testing the controls under the Menu & Toolbars Tab";
             this.button5.UseVisualStyleBackColor = true;
@@ -92,9 +100,10 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(12, 242);
+            this.button6.Location = new System.Drawing.Point(14, 247);
+            this.button6.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(455, 23);
+            this.button6.Size = new System.Drawing.Size(531, 27);
             this.button6.TabIndex = 5;
             this.button6.Text = "Printing_Controls: Testing the controls under the Printing Tab";
             this.button6.UseVisualStyleBackColor = true;
@@ -102,9 +111,10 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(12, 288);
+            this.button7.Location = new System.Drawing.Point(13, 292);
+            this.button7.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(455, 23);
+            this.button7.Size = new System.Drawing.Size(531, 27);
             this.button7.TabIndex = 6;
             this.button7.Text = "Remaining_Controls_Testing";
             this.button7.UseVisualStyleBackColor = true;
@@ -112,41 +122,66 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(12, 334);
+            this.button8.Location = new System.Drawing.Point(14, 336);
+            this.button8.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(455, 23);
+            this.button8.Size = new System.Drawing.Size(531, 27);
             this.button8.TabIndex = 7;
             this.button8.Text = "Containers_Controls: Testing the controls under the Containers Tab";
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.Button8_Click);
             // 
-            // BtnDataBindingExample
+            // button9
             // 
-            this.btnDataBindingExample.Location = new System.Drawing.Point(12, 370);
-            this.btnDataBindingExample.Name = "dataBindingExample";
-            this.btnDataBindingExample.Size = new System.Drawing.Size(455, 23);
-            this.btnDataBindingExample.TabIndex = 8;
-            this.btnDataBindingExample.Text = "DataBinding Example";
-            this.btnDataBindingExample.UseVisualStyleBackColor = true;
-            this.btnDataBindingExample.Click += new System.EventHandler(this.btnDataBindingExample_Click);
+            this.button9.Location = new System.Drawing.Point(13, 380);
+            this.button9.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(531, 27);
+            this.button9.TabIndex = 8;
+            this.button9.Text = "Containers_Controls_2: Testing the controls under the Containers Tab";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
-            // customAccessiblePropertiesButton
+            // button10
             // 
-            this.customAccessiblePropertiesButton.Location = new System.Drawing.Point(12, 410);
-            this.customAccessiblePropertiesButton.Name = "cusAccName";
-            this.customAccessiblePropertiesButton.Size = new System.Drawing.Size(455, 23);
-            this.customAccessiblePropertiesButton.TabIndex = 9;
-            this.customAccessiblePropertiesButton.Text = "Accessible properties: Testing controls with custom accessible name, role, and description";
-            this.customAccessiblePropertiesButton.UseVisualStyleBackColor = true;
-            this.customAccessiblePropertiesButton.Click += new System.EventHandler(this.customAccessiblePropertiesButton_Click);
+            this.button10.Location = new System.Drawing.Point(14, 425);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(530, 27);
+            this.button10.TabIndex = 9;
+            this.button10.Text = "TaskDialog: Testing the task dialog";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
+            // 
+            // button11
+            // 
+            this.button11.Location = new System.Drawing.Point(14, 469);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(530, 28);
+            this.button11.TabIndex = 10;
+            this.button11.Text = "Accessible properties: Testing controls with custom accessible name, role, and de" +
+    "scription";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
+            // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(14, 514);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(530, 23);
+            this.button12.TabIndex = 11;
+            this.button12.Text = "DataBinding Example";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(486, 450);
-            this.Controls.Add(this.customAccessiblePropertiesButton);
-            this.Controls.Add(this.btnDataBindingExample);
+            this.ClientSize = new System.Drawing.Size(576, 538);
+            this.Controls.Add(this.button12);
+            this.Controls.Add(this.button11);
+            this.Controls.Add(this.button10);
+            this.Controls.Add(this.button9);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
@@ -155,9 +190,12 @@
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "Main";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MainForm";
             this.ResumeLayout(false);
+
         }
 
         #endregion
@@ -170,8 +208,10 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button btnDataBindingExample;
-        private System.Windows.Forms.Button customAccessiblePropertiesButton;
+        private Button button9;
+        private Button button10;
+        private Button button11;
+        private Button button12;
     }
 }
 

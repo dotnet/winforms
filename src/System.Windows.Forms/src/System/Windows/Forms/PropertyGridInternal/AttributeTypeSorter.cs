@@ -21,11 +21,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return 0;
             }
-            else if (x is null)
+
+            if (x is null)
             {
                 return -1;
             }
-            else if (y is null)
+
+            if (y is null)
             {
                 return 1;
             }

@@ -207,7 +207,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [RegexGenerator("\\S+")]
+        [GeneratedRegex("\\S+")]
         private static partial Regex ContiguousNonWhitespace();
 
         private Dictionary<string, ToolStrip> BuildItemOriginationHash()

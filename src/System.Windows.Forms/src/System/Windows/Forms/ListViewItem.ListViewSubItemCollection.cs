@@ -65,6 +65,7 @@ namespace System.Windows.Forms
                     value._owner = _owner;
 
                     oldSubItem._owner = null;
+                    oldSubItem.ReleaseUiaProvider();
 
                     _owner.UpdateSubItems(index);
                 }
@@ -200,6 +201,7 @@ namespace System.Windows.Forms
                     for (int i = 0; i < oldCount; i++)
                     {
                         _owner.SubItems[i]._owner = null;
+                        _owner.subItems[i].ReleaseUiaProvider();
                     }
 
                     _owner.SubItemCount = 0;
@@ -396,6 +398,7 @@ namespace System.Windows.Forms
 
                 // Remove ourselves as the owner.
                 _owner.subItems[index]._owner = null;
+                _owner.subItems[index].ReleaseUiaProvider();
 
                 // Collapse the items
                 for (int i = index + 1; i < _owner.SubItemCount; i++)

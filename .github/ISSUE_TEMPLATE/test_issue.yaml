@@ -1,0 +1,21 @@
+name: Windows Forms test failure
+description: Report a local or CI test failure
+labels: ["untriaged"]
+assignees: []
+body:
+  - type: textarea
+    id: test
+    attributes:
+      label: Test
+      description: What is the fully qualified name of the test?
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Issue description
+      description: |
+        Be as specific and detailed as possible to help track down the test issue. Call stacks and links should be provided when available. Please describe which test runs this happens on (Debug, X64, etc.).
+    validations:
+      required: true
+  

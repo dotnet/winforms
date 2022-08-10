@@ -2074,7 +2074,18 @@ namespace System.Windows.Forms
                 _handle = IntPtr.Zero;
             }
 
+            ReleaseUiaProvider();
+
             treeView = null;
+        }
+
+        internal virtual void ReleaseUiaProvider()
+        {
+            if (OsVersion.IsWindows8OrGreater && _accessibleObject is not null)
+            {
+                UiaCore.UiaDisconnectProvider(AccessibilityObject);
+                _accessibleObject = null;
+            }
         }
 
         /// <summary>

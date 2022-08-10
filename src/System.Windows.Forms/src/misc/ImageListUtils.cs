@@ -20,7 +20,7 @@ namespace System.Windows.Forms
             PropertyDescriptor? imageListProp = null;
             object? parentInstance = instance;
 
-            if (currentComponent.TryGetAttribute(out RelatedImageListAttribute? relatedAttribute))
+            if (currentComponent.TryGetAttribute(out RelatedImageListAttribute? relatedAttribute) && relatedAttribute.RelatedImageList is not null)
             {
                 string[] pathInfo = relatedAttribute.RelatedImageList.Split('.');
                 for (int i = 0; i < pathInfo.Length; i++)

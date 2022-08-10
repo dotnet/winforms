@@ -52,16 +52,14 @@
 ~override System.Windows.Forms.ComboBox.Text.get -> string
 ~override System.Windows.Forms.ComboBox.Text.set -> void
 ~override System.Windows.Forms.ComboBox.ToString() -> string
-~override System.Windows.Forms.ContainerControl.BindingContext.get -> System.Windows.Forms.BindingContext
-~override System.Windows.Forms.ContainerControl.BindingContext.set -> void
-~override System.Windows.Forms.ContainerControl.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.ContainerControl.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ContainerControl.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~override System.Windows.Forms.ContainerControl.OnMove(System.EventArgs e) -> void
-~override System.Windows.Forms.ContainerControl.OnParentChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ContainerControl.OnResize(System.EventArgs e) -> void
-override System.Windows.Forms.Control.Site.get -> System.ComponentModel.ISite?
-override System.Windows.Forms.Control.Site.set -> void
+override System.Windows.Forms.ContainerControl.BindingContext.get -> System.Windows.Forms.BindingContext?
+override System.Windows.Forms.ContainerControl.BindingContext.set -> void
+override System.Windows.Forms.ContainerControl.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.ContainerControl.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ContainerControl.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
+override System.Windows.Forms.ContainerControl.OnMove(System.EventArgs! e) -> void
+override System.Windows.Forms.ContainerControl.OnParentChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ContainerControl.OnResize(System.EventArgs! e) -> void
 ~override System.Windows.Forms.ControlBindingsCollection.AddCore(System.Windows.Forms.Binding dataBinding) -> void
 ~override System.Windows.Forms.ControlBindingsCollection.RemoveCore(System.Windows.Forms.Binding dataBinding) -> void
 ~override System.Windows.Forms.CurrencyManager.Current.get -> object
@@ -302,11 +300,6 @@ override System.Windows.Forms.Control.Site.set -> void
 ~override System.Windows.Forms.DataGridViewTextBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell
 ~override System.Windows.Forms.DataGridViewTextBoxColumn.CellTemplate.set -> void
 ~override System.Windows.Forms.DataGridViewTextBoxColumn.ToString() -> string
-override System.Windows.Forms.DataGridViewTextBoxEditingControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
-override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnGotFocus(System.EventArgs! e) -> void
-override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnHandleCreated(System.EventArgs! e) -> void
-override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
-override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnTextChanged(System.EventArgs! e) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.GetErrorIconBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
@@ -314,9 +307,7 @@ override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnTextChanged(Sy
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates cellState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.PaintBorder(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle bounds, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.ToString() -> string
-override System.Windows.Forms.Design.ComponentEditorForm.OnActivated(System.EventArgs! e) -> void
-override System.Windows.Forms.Design.ComponentEditorForm.OnHelpRequested(System.Windows.Forms.HelpEventArgs! e) -> void
-~override System.Windows.Forms.Design.ComponentEditorPage.CreateParams.get -> System.Windows.Forms.CreateParams
+override System.Windows.Forms.Design.ComponentEditorPage.CreateParams.get -> System.Windows.Forms.CreateParams!
 ~override System.Windows.Forms.ErrorProvider.Site.set -> void
 ~override System.Windows.Forms.HelpProvider.ToString() -> string
 ~override System.Windows.Forms.HtmlDocument.Equals(object obj) -> bool
@@ -435,10 +426,6 @@ override System.Windows.Forms.Design.ComponentEditorForm.OnHelpRequested(System.
 ~override System.Windows.Forms.TabControl.Text.get -> string
 ~override System.Windows.Forms.TabControl.Text.set -> void
 ~override System.Windows.Forms.TabControl.ToString() -> string
-override System.Windows.Forms.TableLayoutPanel.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
-override System.Windows.Forms.TableLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
-override System.Windows.Forms.TableLayoutPanel.OnLayout(System.Windows.Forms.LayoutEventArgs! levent) -> void
-override System.Windows.Forms.TableLayoutPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
 ~override System.Windows.Forms.TableLayoutPanelCellPosition.Equals(object other) -> bool
 ~override System.Windows.Forms.TableLayoutPanelCellPosition.ToString() -> string
 ~override System.Windows.Forms.ToolStrip.BindingContext.get -> System.Windows.Forms.BindingContext
@@ -478,12 +465,12 @@ override System.Windows.Forms.TableLayoutPanel.OnPaintBackground(System.Windows.
 ~override System.Windows.Forms.ToolStripComboBox.OnSubscribeControlEvents(System.Windows.Forms.Control control) -> void
 ~override System.Windows.Forms.ToolStripComboBox.OnUnsubscribeControlEvents(System.Windows.Forms.Control control) -> void
 ~override System.Windows.Forms.ToolStripComboBox.ToString() -> string
-~override System.Windows.Forms.ToolStripContainer.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripContainer.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-~override System.Windows.Forms.ToolStripContainer.Cursor.get -> System.Windows.Forms.Cursor
-~override System.Windows.Forms.ToolStripContainer.Cursor.set -> void
-~override System.Windows.Forms.ToolStripContainer.OnRightToLeftChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripContainer.OnSizeChanged(System.EventArgs e) -> void
+override System.Windows.Forms.ToolStripContainer.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripContainer.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
+override System.Windows.Forms.ToolStripContainer.Cursor.get -> System.Windows.Forms.Cursor!
+override System.Windows.Forms.ToolStripContainer.Cursor.set -> void
+override System.Windows.Forms.ToolStripContainer.OnRightToLeftChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripContainer.OnSizeChanged(System.EventArgs! e) -> void
 ~override System.Windows.Forms.ToolStripControlHost.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.ToolStripControlHost.BackgroundImage.set -> void
 ~override System.Windows.Forms.ToolStripControlHost.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -547,17 +534,17 @@ override System.Windows.Forms.TableLayoutPanel.OnPaintBackground(System.Windows.
 ~override System.Windows.Forms.ToolStripOverflow.Items.get -> System.Windows.Forms.ToolStripItemCollection
 ~override System.Windows.Forms.ToolStripOverflow.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
 ~override System.Windows.Forms.ToolStripOverflow.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~override System.Windows.Forms.ToolStripPanel.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-~override System.Windows.Forms.ToolStripPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
-~override System.Windows.Forms.ToolStripPanel.OnControlAdded(System.Windows.Forms.ControlEventArgs e) -> void
-~override System.Windows.Forms.ToolStripPanel.OnControlRemoved(System.Windows.Forms.ControlEventArgs e) -> void
-~override System.Windows.Forms.ToolStripPanel.OnDockChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripPanel.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~override System.Windows.Forms.ToolStripPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.ToolStripPanel.OnParentChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripPanel.OnRightToLeftChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripPanel.Text.get -> string
-~override System.Windows.Forms.ToolStripPanel.Text.set -> void
+override System.Windows.Forms.ToolStripPanel.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
+override System.Windows.Forms.ToolStripPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
+override System.Windows.Forms.ToolStripPanel.OnControlAdded(System.Windows.Forms.ControlEventArgs! e) -> void
+override System.Windows.Forms.ToolStripPanel.OnControlRemoved(System.Windows.Forms.ControlEventArgs! e) -> void
+override System.Windows.Forms.ToolStripPanel.OnDockChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripPanel.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
+override System.Windows.Forms.ToolStripPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.ToolStripPanel.OnParentChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripPanel.OnRightToLeftChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripPanel.Text.get -> string!
+override System.Windows.Forms.ToolStripPanel.Text.set -> void
 ~override System.Windows.Forms.ToolStripProgressBar.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.ToolStripProgressBar.BackgroundImage.set -> void
 ~override System.Windows.Forms.ToolStripProgressBar.OnSubscribeControlEvents(System.Windows.Forms.Control control) -> void
@@ -608,6 +595,7 @@ override System.Windows.Forms.TableLayoutPanel.OnPaintBackground(System.Windows.
 ~override System.Windows.Forms.TreeView.Text.set -> void
 ~override System.Windows.Forms.TreeView.ToString() -> string
 ~override System.Windows.Forms.WebBrowser.AttachInterfaces(object nativeActiveXObject) -> void
+~override System.Windows.Forms.WebBrowser.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.WebBrowser.CreateWebBrowserSiteBase() -> System.Windows.Forms.WebBrowserSiteBase
 ~override System.Windows.Forms.WebBrowserBase.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.WebBrowserBase.BackgroundImage.set -> void
@@ -671,9 +659,7 @@ override System.Windows.Forms.TableLayoutPanel.OnPaintBackground(System.Windows.
 ~static System.Windows.Forms.AxHost.GetPictureFromIPicture(object picture) -> System.Drawing.Image
 ~static System.Windows.Forms.AxHost.GetPictureFromIPictureDisp(object picture) -> System.Drawing.Image
 ~static System.Windows.Forms.BindingContext.UpdateBinding(System.Windows.Forms.BindingContext newBindingContext, System.Windows.Forms.Binding binding) -> void
-~static System.Windows.Forms.Control.FromChildHandle(System.IntPtr handle) -> System.Windows.Forms.Control
-~static System.Windows.Forms.Control.FromHandle(System.IntPtr handle) -> System.Windows.Forms.Control
-~static System.Windows.Forms.Control.IsMnemonic(char charCode, string text) -> bool
+static System.Windows.Forms.Control.IsMnemonic(char charCode, string? text) -> bool
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags) -> int
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags, out bool widthTruncated) -> int
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
@@ -733,7 +719,6 @@ override System.Windows.Forms.TableLayoutPanel.OnPaintBackground(System.Windows.
 ~static System.Windows.Forms.ToolStripManager.RevertMerge(System.Windows.Forms.ToolStrip targetToolStrip, System.Windows.Forms.ToolStrip sourceToolStrip) -> bool
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm) -> void
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm, string key) -> void
-~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, System.IntPtr handle) -> System.Windows.Forms.TreeNode
 ~System.Drawing.Design.IPropertyValueUIService.AddPropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler newHandler) -> void
 ~System.Drawing.Design.IPropertyValueUIService.GetPropertyUIValueItems(System.ComponentModel.ITypeDescriptorContext context, System.ComponentModel.PropertyDescriptor propDesc) -> System.Drawing.Design.PropertyValueUIItem[]
 ~System.Drawing.Design.IPropertyValueUIService.RemovePropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler newHandler) -> void
@@ -901,55 +886,40 @@ override System.Windows.Forms.TableLayoutPanel.OnPaintBackground(System.Windows.
 ~System.Windows.Forms.ComboBox.SelectedItem.set -> void
 ~System.Windows.Forms.ComboBox.SelectedText.get -> string
 ~System.Windows.Forms.ComboBox.SelectedText.set -> void
-~System.Windows.Forms.ComponentModel.Com2Interop.ICom2PropertyPageDisplayService.ShowPropertyPage(string title, object component, int dispid, System.Guid pageGuid, System.IntPtr parentHandle) -> void
 ~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.LoadState(Microsoft.Win32.RegistryKey key) -> void
 ~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.SaveState(Microsoft.Win32.RegistryKey key) -> void
-~System.Windows.Forms.ContainerControl.ActiveControl.get -> System.Windows.Forms.Control
-~System.Windows.Forms.ContainerControl.ActiveControl.set -> void
-~System.Windows.Forms.ContainerControl.ParentForm.get -> System.Windows.Forms.Form
-System.Windows.Forms.Control.BeginInvoke(System.Action! method) -> System.IAsyncResult!
-System.Windows.Forms.Control.BeginInvoke(System.Delegate! method) -> System.IAsyncResult!
-~System.Windows.Forms.Control.BeginInvoke(System.Delegate method, params object[] args) -> System.IAsyncResult
-~System.Windows.Forms.Control.Contains(System.Windows.Forms.Control ctl) -> bool
-~System.Windows.Forms.Control.CreateGraphics() -> System.Drawing.Graphics
-~System.Windows.Forms.Control.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects) -> System.Windows.Forms.DragDropEffects
-~System.Windows.Forms.Control.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
-~System.Windows.Forms.Control.EndInvoke(System.IAsyncResult asyncResult) -> object
-~System.Windows.Forms.Control.FindForm() -> System.Windows.Forms.Form
-~System.Windows.Forms.Control.GetChildAtPoint(System.Drawing.Point pt) -> System.Windows.Forms.Control
-~System.Windows.Forms.Control.GetChildAtPoint(System.Drawing.Point pt, System.Windows.Forms.GetChildAtPointSkip skipValue) -> System.Windows.Forms.Control
-~System.Windows.Forms.Control.GetContainerControl() -> System.Windows.Forms.IContainerControl
-~System.Windows.Forms.Control.GetNextControl(System.Windows.Forms.Control ctl, bool forward) -> System.Windows.Forms.Control
-~System.Windows.Forms.Control.Invalidate(System.Drawing.Region region) -> void
-~System.Windows.Forms.Control.Invalidate(System.Drawing.Region region, bool invalidateChildren) -> void
-~System.Windows.Forms.Control.Invoke(System.Action method) -> void
-~System.Windows.Forms.Control.Invoke(System.Delegate method) -> object
-~System.Windows.Forms.Control.Invoke(System.Delegate method, params object[] args) -> object
-~System.Windows.Forms.Control.Invoke<T>(System.Func<T> method) -> T
+System.Windows.Forms.ContainerControl.ActiveControl.get -> System.Windows.Forms.Control?
+System.Windows.Forms.ContainerControl.ActiveControl.set -> void
+System.Windows.Forms.ContainerControl.ParentForm.get -> System.Windows.Forms.Form?
+System.Windows.Forms.Control.BeginInvoke(System.Delegate! method, params object?[]? args) -> System.IAsyncResult!
+System.Windows.Forms.Control.Contains(System.Windows.Forms.Control? ctl) -> bool
+System.Windows.Forms.Control.CreateGraphics() -> System.Drawing.Graphics!
+System.Windows.Forms.Control.DoDragDrop(object! data, System.Windows.Forms.DragDropEffects allowedEffects) -> System.Windows.Forms.DragDropEffects
+System.Windows.Forms.Control.DoDragDrop(object! data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap? dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
+System.Windows.Forms.Control.DrawToBitmap(System.Drawing.Bitmap! bitmap, System.Drawing.Rectangle targetBounds) -> void
+System.Windows.Forms.Control.EndInvoke(System.IAsyncResult! asyncResult) -> object?
+System.Windows.Forms.Control.FindForm() -> System.Windows.Forms.Form?
+System.Windows.Forms.Control.GetChildAtPoint(System.Drawing.Point pt) -> System.Windows.Forms.Control?
+System.Windows.Forms.Control.GetChildAtPoint(System.Drawing.Point pt, System.Windows.Forms.GetChildAtPointSkip skipValue) -> System.Windows.Forms.Control?
+System.Windows.Forms.Control.GetContainerControl() -> System.Windows.Forms.IContainerControl?
+System.Windows.Forms.Control.GetNextControl(System.Windows.Forms.Control? ctl, bool forward) -> System.Windows.Forms.Control?
+System.Windows.Forms.Control.Invalidate(System.Drawing.Region? region) -> void
+System.Windows.Forms.Control.Invalidate(System.Drawing.Region? region, bool invalidateChildren) -> void
+System.Windows.Forms.Control.Invoke(System.Action! method) -> void
+System.Windows.Forms.Control.Invoke(System.Delegate! method) -> object!
+System.Windows.Forms.Control.Invoke(System.Delegate! method, params object?[]? args) -> object!
+System.Windows.Forms.Control.Invoke<T>(System.Func<T>! method) -> T
 ~System.Windows.Forms.Control.InvokeGotFocus(System.Windows.Forms.Control toInvoke, System.EventArgs e) -> void
 ~System.Windows.Forms.Control.InvokeLostFocus(System.Windows.Forms.Control toInvoke, System.EventArgs e) -> void
 ~System.Windows.Forms.Control.InvokeOnClick(System.Windows.Forms.Control toInvoke, System.EventArgs e) -> void
-~System.Windows.Forms.Control.InvokePaint(System.Windows.Forms.Control c, System.Windows.Forms.PaintEventArgs e) -> void
-~System.Windows.Forms.Control.InvokePaintBackground(System.Windows.Forms.Control c, System.Windows.Forms.PaintEventArgs e) -> void
-System.Windows.Forms.Control.Name.get -> string!
-System.Windows.Forms.Control.Name.set -> void
-System.Windows.Forms.Control.Parent.get -> System.Windows.Forms.Control?
-System.Windows.Forms.Control.Parent.set -> void
-~System.Windows.Forms.Control.PerformLayout(System.Windows.Forms.Control affectedControl, string affectedProperty) -> void
-System.Windows.Forms.Control.ProductName.get -> string!
-System.Windows.Forms.Control.ProductVersion.get -> string!
-~System.Windows.Forms.Control.RaiseDragEvent(object key, System.Windows.Forms.DragEventArgs e) -> void
-~System.Windows.Forms.Control.RaiseKeyEvent(object key, System.Windows.Forms.KeyEventArgs e) -> void
-~System.Windows.Forms.Control.RaiseMouseEvent(object key, System.Windows.Forms.MouseEventArgs e) -> void
-~System.Windows.Forms.Control.RaisePaintEvent(object key, System.Windows.Forms.PaintEventArgs e) -> void
-System.Windows.Forms.Control.Region.get -> System.Drawing.Region?
-System.Windows.Forms.Control.Region.set -> void
+System.Windows.Forms.Control.InvokePaint(System.Windows.Forms.Control! c, System.Windows.Forms.PaintEventArgs! e) -> void
+System.Windows.Forms.Control.InvokePaintBackground(System.Windows.Forms.Control! c, System.Windows.Forms.PaintEventArgs! e) -> void
+System.Windows.Forms.Control.PerformLayout(System.Windows.Forms.Control? affectedControl, string? affectedProperty) -> void
+System.Windows.Forms.Control.RaiseDragEvent(object! key, System.Windows.Forms.DragEventArgs! e) -> void
+System.Windows.Forms.Control.RaiseKeyEvent(object! key, System.Windows.Forms.KeyEventArgs! e) -> void
+System.Windows.Forms.Control.RaiseMouseEvent(object! key, System.Windows.Forms.MouseEventArgs! e) -> void
+System.Windows.Forms.Control.RaisePaintEvent(object! key, System.Windows.Forms.PaintEventArgs! e) -> void
 ~System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitmap logicalBitmap) -> void
-System.Windows.Forms.Control.Tag.get -> object?
-System.Windows.Forms.Control.Tag.set -> void
-System.Windows.Forms.Control.TopLevelControl.get -> System.Windows.Forms.Control?
-System.Windows.Forms.Control.WindowTarget.get -> System.Windows.Forms.IWindowTarget!
-System.Windows.Forms.Control.WindowTarget.set -> void
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember) -> System.Windows.Forms.Binding
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled) -> System.Windows.Forms.Binding
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode) -> System.Windows.Forms.Binding
@@ -1112,8 +1082,8 @@ System.Windows.Forms.Control.WindowTarget.set -> void
 ~System.Windows.Forms.DataGridViewComboBoxColumn.Items.get -> System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection
 ~System.Windows.Forms.DataGridViewComboBoxColumn.ValueMember.get -> string
 ~System.Windows.Forms.DataGridViewComboBoxColumn.ValueMember.set -> void
-~System.Windows.Forms.DataGridViewDataErrorEventArgs.DataGridViewDataErrorEventArgs(System.Exception exception, int columnIndex, int rowIndex, System.Windows.Forms.DataGridViewDataErrorContexts context) -> void
-~System.Windows.Forms.DataGridViewDataErrorEventArgs.Exception.get -> System.Exception
+System.Windows.Forms.DataGridViewDataErrorEventArgs.DataGridViewDataErrorEventArgs(System.Exception? exception, int columnIndex, int rowIndex, System.Windows.Forms.DataGridViewDataErrorContexts context) -> void
+System.Windows.Forms.DataGridViewDataErrorEventArgs.Exception.get -> System.Exception?
 ~System.Windows.Forms.DataGridViewImageCell.Description.get -> string
 ~System.Windows.Forms.DataGridViewImageCell.Description.set -> void
 ~System.Windows.Forms.DataGridViewImageColumn.Description.get -> string
@@ -1159,14 +1129,13 @@ System.Windows.Forms.Control.WindowTarget.set -> void
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue2.get -> object
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.DataGridViewSortCompareEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, object cellValue1, object cellValue2, int rowIndex1, int rowIndex2) -> void
-System.Windows.Forms.Design.ComponentEditorForm.ComponentEditorForm(object! component, System.Type![]! pageTypes) -> void
-~System.Windows.Forms.Design.ComponentEditorPage.Component.get -> System.ComponentModel.IComponent
-~System.Windows.Forms.Design.ComponentEditorPage.Component.set -> void
-~System.Windows.Forms.Design.ComponentEditorPage.GetSelectedComponent() -> System.ComponentModel.IComponent
-~System.Windows.Forms.Design.ComponentEditorPage.Icon.get -> System.Drawing.Icon
-~System.Windows.Forms.Design.ComponentEditorPage.Icon.set -> void
-~System.Windows.Forms.Design.ComponentEditorPage.PageSite.get -> System.Windows.Forms.IComponentEditorPageSite
-~System.Windows.Forms.Design.ComponentEditorPage.PageSite.set -> void
+System.Windows.Forms.Design.ComponentEditorPage.Component.get -> System.ComponentModel.IComponent?
+System.Windows.Forms.Design.ComponentEditorPage.Component.set -> void
+System.Windows.Forms.Design.ComponentEditorPage.GetSelectedComponent() -> System.ComponentModel.IComponent?
+System.Windows.Forms.Design.ComponentEditorPage.Icon.get -> System.Drawing.Icon!
+System.Windows.Forms.Design.ComponentEditorPage.Icon.set -> void
+System.Windows.Forms.Design.ComponentEditorPage.PageSite.get -> System.Windows.Forms.IComponentEditorPageSite?
+System.Windows.Forms.Design.ComponentEditorPage.PageSite.set -> void
 ~System.Windows.Forms.Design.IUIService.CanShowComponentEditor(object component) -> bool
 ~System.Windows.Forms.Design.IUIService.GetDialogOwnerWindow() -> System.Windows.Forms.IWin32Window
 ~System.Windows.Forms.Design.IUIService.ShowComponentEditor(object component, System.Windows.Forms.IWin32Window parent) -> bool
@@ -1298,37 +1267,30 @@ System.Windows.Forms.Design.ComponentEditorForm.ComponentEditorForm(object! comp
 ~System.Windows.Forms.HtmlWindowCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.HtmlWindowCollection.this[int index].get -> System.Windows.Forms.HtmlWindow
 ~System.Windows.Forms.HtmlWindowCollection.this[string windowId].get -> System.Windows.Forms.HtmlWindow
-~System.Windows.Forms.IBindableComponent.BindingContext.get -> System.Windows.Forms.BindingContext
-~System.Windows.Forms.IBindableComponent.BindingContext.set -> void
-~System.Windows.Forms.IBindableComponent.DataBindings.get -> System.Windows.Forms.ControlBindingsCollection
+System.Windows.Forms.IBindableComponent.BindingContext.get -> System.Windows.Forms.BindingContext?
+System.Windows.Forms.IBindableComponent.BindingContext.set -> void
+System.Windows.Forms.IBindableComponent.DataBindings.get -> System.Windows.Forms.ControlBindingsCollection!
 ~System.Windows.Forms.IComponentEditorPageSite.GetControl() -> System.Windows.Forms.Control
-~System.Windows.Forms.IContainerControl.ActivateControl(System.Windows.Forms.Control active) -> bool
-~System.Windows.Forms.IContainerControl.ActiveControl.get -> System.Windows.Forms.Control
-~System.Windows.Forms.IContainerControl.ActiveControl.set -> void
+System.Windows.Forms.IContainerControl.ActivateControl(System.Windows.Forms.Control! active) -> bool
+System.Windows.Forms.IContainerControl.ActiveControl.get -> System.Windows.Forms.Control?
+System.Windows.Forms.IContainerControl.ActiveControl.set -> void
 ~System.Windows.Forms.ICurrencyManagerProvider.CurrencyManager.get -> System.Windows.Forms.CurrencyManager
 ~System.Windows.Forms.ICurrencyManagerProvider.GetRelatedCurrencyManager(string dataMember) -> System.Windows.Forms.CurrencyManager
 ~System.Windows.Forms.IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing(System.Windows.Forms.Control editingControl) -> void
 ~System.Windows.Forms.IDataGridViewEditingCell.EditingCellFormattedValue.get -> object
 ~System.Windows.Forms.IDataGridViewEditingCell.EditingCellFormattedValue.set -> void
 ~System.Windows.Forms.IDataGridViewEditingCell.GetEditingCellFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
-System.Windows.Forms.IDataGridViewEditingControl.ApplyCellStyleToEditingControl(System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
-System.Windows.Forms.IDataGridViewEditingControl.EditingControlDataGridView.get -> System.Windows.Forms.DataGridView?
-System.Windows.Forms.IDataGridViewEditingControl.EditingControlDataGridView.set -> void
-System.Windows.Forms.IDataGridViewEditingControl.EditingControlFormattedValue.get -> object!
-System.Windows.Forms.IDataGridViewEditingControl.EditingControlFormattedValue.set -> void
-System.Windows.Forms.IDataGridViewEditingControl.EditingPanelCursor.get -> System.Windows.Forms.Cursor!
-System.Windows.Forms.IDataGridViewEditingControl.GetEditingControlFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object!
-~System.Windows.Forms.IDropTarget.OnDragDrop(System.Windows.Forms.DragEventArgs e) -> void
-~System.Windows.Forms.IDropTarget.OnDragEnter(System.Windows.Forms.DragEventArgs e) -> void
-~System.Windows.Forms.IDropTarget.OnDragLeave(System.EventArgs e) -> void
-~System.Windows.Forms.IDropTarget.OnDragOver(System.Windows.Forms.DragEventArgs e) -> void
+System.Windows.Forms.IDropTarget.OnDragDrop(System.Windows.Forms.DragEventArgs! e) -> void
+System.Windows.Forms.IDropTarget.OnDragEnter(System.Windows.Forms.DragEventArgs! e) -> void
+System.Windows.Forms.IDropTarget.OnDragLeave(System.EventArgs! e) -> void
+System.Windows.Forms.IDropTarget.OnDragOver(System.Windows.Forms.DragEventArgs! e) -> void
 ~System.Windows.Forms.IFileReaderService.OpenFileFromSource(string relativePath) -> System.IO.Stream
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
-~System.Windows.Forms.LayoutEventArgs.AffectedComponent.get -> System.ComponentModel.IComponent
-~System.Windows.Forms.LayoutEventArgs.AffectedControl.get -> System.Windows.Forms.Control
-~System.Windows.Forms.LayoutEventArgs.AffectedProperty.get -> string
-~System.Windows.Forms.LayoutEventArgs.LayoutEventArgs(System.ComponentModel.IComponent affectedComponent, string affectedProperty) -> void
-~System.Windows.Forms.LayoutEventArgs.LayoutEventArgs(System.Windows.Forms.Control affectedControl, string affectedProperty) -> void
+System.Windows.Forms.LayoutEventArgs.AffectedComponent.get -> System.ComponentModel.IComponent?
+System.Windows.Forms.LayoutEventArgs.AffectedControl.get -> System.Windows.Forms.Control?
+System.Windows.Forms.LayoutEventArgs.AffectedProperty.get -> string?
+System.Windows.Forms.LayoutEventArgs.LayoutEventArgs(System.ComponentModel.IComponent? affectedComponent, string? affectedProperty) -> void
+System.Windows.Forms.LayoutEventArgs.LayoutEventArgs(System.Windows.Forms.Control? affectedControl, string? affectedProperty) -> void
 ~System.Windows.Forms.LinkLabel.Link.Description.get -> string
 ~System.Windows.Forms.LinkLabel.Link.Description.set -> void
 ~System.Windows.Forms.LinkLabel.Link.Link(int start, int length, object linkData) -> void
@@ -1447,8 +1409,8 @@ System.Windows.Forms.IDataGridViewEditingControl.GetEditingControlFormattedValue
 ~System.Windows.Forms.PropertyGrid.SelectedTab.get -> System.Windows.Forms.Design.PropertyTab
 ~System.Windows.Forms.PropertyGrid.ToolStripRenderer.get -> System.Windows.Forms.ToolStripRenderer
 ~System.Windows.Forms.PropertyGrid.ToolStripRenderer.set -> void
-~System.Windows.Forms.RelatedImageListAttribute.RelatedImageList.get -> string
-~System.Windows.Forms.RelatedImageListAttribute.RelatedImageListAttribute(string relatedImageList) -> void
+System.Windows.Forms.RelatedImageListAttribute.RelatedImageList.get -> string?
+System.Windows.Forms.RelatedImageListAttribute.RelatedImageListAttribute(string? relatedImageList) -> void
 ~System.Windows.Forms.RichTextBox.CanPaste(System.Windows.Forms.DataFormats.Format clipFormat) -> bool
 ~System.Windows.Forms.RichTextBox.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
 ~System.Windows.Forms.RichTextBox.Find(char[] characterSet) -> int
@@ -1496,25 +1458,6 @@ System.Windows.Forms.IDataGridViewEditingControl.GetEditingControlFormattedValue
 ~System.Windows.Forms.TableLayoutColumnStyleCollection.this[int index].set -> void
 ~System.Windows.Forms.TableLayoutControlCollection.Container.get -> System.Windows.Forms.TableLayoutPanel
 ~System.Windows.Forms.TableLayoutControlCollection.TableLayoutControlCollection(System.Windows.Forms.TableLayoutPanel container) -> void
-System.Windows.Forms.TableLayoutPanel.ColumnStyles.get -> System.Windows.Forms.TableLayoutColumnStyleCollection!
-System.Windows.Forms.TableLayoutPanel.Controls.get -> System.Windows.Forms.TableLayoutControlCollection!
-System.Windows.Forms.TableLayoutPanel.GetCellPosition(System.Windows.Forms.Control! control) -> System.Windows.Forms.TableLayoutPanelCellPosition
-System.Windows.Forms.TableLayoutPanel.GetColumn(System.Windows.Forms.Control! control) -> int
-System.Windows.Forms.TableLayoutPanel.GetColumnSpan(System.Windows.Forms.Control! control) -> int
-System.Windows.Forms.TableLayoutPanel.GetColumnWidths() -> int[]!
-System.Windows.Forms.TableLayoutPanel.GetControlFromPosition(int column, int row) -> System.Windows.Forms.Control?
-System.Windows.Forms.TableLayoutPanel.GetPositionFromControl(System.Windows.Forms.Control? control) -> System.Windows.Forms.TableLayoutPanelCellPosition
-System.Windows.Forms.TableLayoutPanel.GetRow(System.Windows.Forms.Control! control) -> int
-System.Windows.Forms.TableLayoutPanel.GetRowHeights() -> int[]!
-System.Windows.Forms.TableLayoutPanel.GetRowSpan(System.Windows.Forms.Control! control) -> int
-System.Windows.Forms.TableLayoutPanel.LayoutSettings.get -> System.Windows.Forms.TableLayoutSettings!
-System.Windows.Forms.TableLayoutPanel.LayoutSettings.set -> void
-System.Windows.Forms.TableLayoutPanel.RowStyles.get -> System.Windows.Forms.TableLayoutRowStyleCollection!
-System.Windows.Forms.TableLayoutPanel.SetCellPosition(System.Windows.Forms.Control! control, System.Windows.Forms.TableLayoutPanelCellPosition position) -> void
-System.Windows.Forms.TableLayoutPanel.SetColumn(System.Windows.Forms.Control! control, int column) -> void
-System.Windows.Forms.TableLayoutPanel.SetColumnSpan(System.Windows.Forms.Control! control, int value) -> void
-System.Windows.Forms.TableLayoutPanel.SetRow(System.Windows.Forms.Control! control, int row) -> void
-System.Windows.Forms.TableLayoutPanel.SetRowSpan(System.Windows.Forms.Control! control, int value) -> void
 ~System.Windows.Forms.TableLayoutRowStyleCollection.Add(System.Windows.Forms.RowStyle rowStyle) -> int
 ~System.Windows.Forms.TableLayoutRowStyleCollection.Contains(System.Windows.Forms.RowStyle rowStyle) -> bool
 ~System.Windows.Forms.TableLayoutRowStyleCollection.IndexOf(System.Windows.Forms.RowStyle rowStyle) -> int
@@ -1560,16 +1503,16 @@ System.Windows.Forms.TableLayoutPanel.SetRowSpan(System.Windows.Forms.Control! c
 ~System.Windows.Forms.ToolStripComboBox.SelectedText.set -> void
 ~System.Windows.Forms.ToolStripComboBox.ToolStripComboBox(string name) -> void
 ~System.Windows.Forms.ToolStripComboBox.ToolStripComboBox(System.Windows.Forms.Control c) -> void
-~System.Windows.Forms.ToolStripContainer.BackgroundImage.get -> System.Drawing.Image
-~System.Windows.Forms.ToolStripContainer.BackgroundImage.set -> void
-~System.Windows.Forms.ToolStripContainer.BottomToolStripPanel.get -> System.Windows.Forms.ToolStripPanel
-~System.Windows.Forms.ToolStripContainer.ContentPanel.get -> System.Windows.Forms.ToolStripContentPanel
-~System.Windows.Forms.ToolStripContainer.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
-~System.Windows.Forms.ToolStripContainer.ContextMenuStrip.set -> void
-~System.Windows.Forms.ToolStripContainer.Controls.get -> System.Windows.Forms.Control.ControlCollection
-~System.Windows.Forms.ToolStripContainer.LeftToolStripPanel.get -> System.Windows.Forms.ToolStripPanel
-~System.Windows.Forms.ToolStripContainer.RightToolStripPanel.get -> System.Windows.Forms.ToolStripPanel
-~System.Windows.Forms.ToolStripContainer.TopToolStripPanel.get -> System.Windows.Forms.ToolStripPanel
+System.Windows.Forms.ToolStripContainer.BackgroundImage.get -> System.Drawing.Image?
+System.Windows.Forms.ToolStripContainer.BackgroundImage.set -> void
+System.Windows.Forms.ToolStripContainer.BottomToolStripPanel.get -> System.Windows.Forms.ToolStripPanel!
+System.Windows.Forms.ToolStripContainer.ContentPanel.get -> System.Windows.Forms.ToolStripContentPanel!
+System.Windows.Forms.ToolStripContainer.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
+System.Windows.Forms.ToolStripContainer.ContextMenuStrip.set -> void
+System.Windows.Forms.ToolStripContainer.Controls.get -> System.Windows.Forms.Control.ControlCollection!
+System.Windows.Forms.ToolStripContainer.LeftToolStripPanel.get -> System.Windows.Forms.ToolStripPanel!
+System.Windows.Forms.ToolStripContainer.RightToolStripPanel.get -> System.Windows.Forms.ToolStripPanel!
+System.Windows.Forms.ToolStripContainer.TopToolStripPanel.get -> System.Windows.Forms.ToolStripPanel!
 ~System.Windows.Forms.ToolStripControlHost.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c) -> void
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c, string name) -> void
@@ -1603,6 +1546,7 @@ System.Windows.Forms.TableLayoutPanel.SetRowSpan(System.Windows.Forms.Control! c
 ~System.Windows.Forms.ToolStripItem.AccessibleName.get -> string
 ~System.Windows.Forms.ToolStripItem.AccessibleName.set -> void
 ~System.Windows.Forms.ToolStripItem.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects) -> System.Windows.Forms.DragDropEffects
+~System.Windows.Forms.ToolStripItem.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
 ~System.Windows.Forms.ToolStripItem.GetCurrentParent() -> System.Windows.Forms.ToolStrip
 ~System.Windows.Forms.ToolStripItem.ImageKey.get -> string
 ~System.Windows.Forms.ToolStripItem.ImageKey.set -> void
@@ -1649,14 +1593,14 @@ System.Windows.Forms.TableLayoutPanel.SetRowSpan(System.Windows.Forms.Control! c
 ~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text, System.Drawing.Image image, System.EventHandler onClick, System.Windows.Forms.Keys shortcutKeys) -> void
 ~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(System.Drawing.Image image) -> void
 ~System.Windows.Forms.ToolStripOverflow.ToolStripOverflow(System.Windows.Forms.ToolStripItem parentItem) -> void
-~System.Windows.Forms.ToolStripPanel.Join(System.Windows.Forms.ToolStrip toolStripToDrag) -> void
-~System.Windows.Forms.ToolStripPanel.Join(System.Windows.Forms.ToolStrip toolStripToDrag, int row) -> void
-~System.Windows.Forms.ToolStripPanel.Join(System.Windows.Forms.ToolStrip toolStripToDrag, int x, int y) -> void
-~System.Windows.Forms.ToolStripPanel.Join(System.Windows.Forms.ToolStrip toolStripToDrag, System.Drawing.Point location) -> void
-~System.Windows.Forms.ToolStripPanel.PointToRow(System.Drawing.Point clientLocation) -> System.Windows.Forms.ToolStripPanelRow
-~System.Windows.Forms.ToolStripPanel.Renderer.get -> System.Windows.Forms.ToolStripRenderer
-~System.Windows.Forms.ToolStripPanel.Renderer.set -> void
-~System.Windows.Forms.ToolStripPanel.Rows.get -> System.Windows.Forms.ToolStripPanelRow[]
+System.Windows.Forms.ToolStripPanel.Join(System.Windows.Forms.ToolStrip! toolStripToDrag) -> void
+System.Windows.Forms.ToolStripPanel.Join(System.Windows.Forms.ToolStrip! toolStripToDrag, int row) -> void
+System.Windows.Forms.ToolStripPanel.Join(System.Windows.Forms.ToolStrip! toolStripToDrag, int x, int y) -> void
+System.Windows.Forms.ToolStripPanel.Join(System.Windows.Forms.ToolStrip! toolStripToDrag, System.Drawing.Point location) -> void
+System.Windows.Forms.ToolStripPanel.PointToRow(System.Drawing.Point clientLocation) -> System.Windows.Forms.ToolStripPanelRow?
+System.Windows.Forms.ToolStripPanel.Renderer.get -> System.Windows.Forms.ToolStripRenderer!
+System.Windows.Forms.ToolStripPanel.Renderer.set -> void
+System.Windows.Forms.ToolStripPanel.Rows.get -> System.Windows.Forms.ToolStripPanelRow![]!
 ~System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Add(System.Windows.Forms.ToolStripPanelRow value) -> int
 ~System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection value) -> void
 ~System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanelRow[] value) -> void
@@ -1856,16 +1800,16 @@ System.Windows.Forms.TableLayoutPanel.SetRowSpan(System.Windows.Forms.Control! c
 ~virtual System.Windows.Forms.ComboBox.OnSelectedItemChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ComboBox.OnSelectionChangeCommitted(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ComboBox.OnTextUpdate(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ContainerControl.OnAutoValidateChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~virtual System.Windows.Forms.Control.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
+virtual System.Windows.Forms.ContainerControl.OnAutoValidateChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+virtual System.Windows.Forms.Control.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
 ~virtual System.Windows.Forms.Control.OnAutoSizeChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnBackColorChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnBackgroundImageChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnBackgroundImageLayoutChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnBindingContextChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnCausesValidationChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnChangeUICues(System.Windows.Forms.UICuesEventArgs e) -> void
+virtual System.Windows.Forms.Control.OnChangeUICues(System.Windows.Forms.UICuesEventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnClick(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnClientSizeChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnContextMenuStripChanged(System.EventArgs e) -> void
@@ -1909,9 +1853,9 @@ System.Windows.Forms.TableLayoutPanel.SetRowSpan(System.Windows.Forms.Control! c
 ~virtual System.Windows.Forms.Control.OnMouseUp(System.Windows.Forms.MouseEventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnMouseWheel(System.Windows.Forms.MouseEventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnMove(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnPaddingChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnPaintBackground(System.Windows.Forms.PaintEventArgs pevent) -> void
+virtual System.Windows.Forms.Control.OnPaddingChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnPaintBackground(System.Windows.Forms.PaintEventArgs! pevent) -> void
 ~virtual System.Windows.Forms.Control.OnParentBackColorChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnParentBackgroundImageChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnParentBindingContextChanged(System.EventArgs e) -> void
@@ -1922,23 +1866,21 @@ System.Windows.Forms.TableLayoutPanel.SetRowSpan(System.Windows.Forms.Control! c
 ~virtual System.Windows.Forms.Control.OnParentForeColorChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnParentRightToLeftChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnParentVisibleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnPreviewKeyDown(System.Windows.Forms.PreviewKeyDownEventArgs e) -> void
+virtual System.Windows.Forms.Control.OnPreviewKeyDown(System.Windows.Forms.PreviewKeyDownEventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnPrint(System.Windows.Forms.PaintEventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnQueryContinueDrag(System.Windows.Forms.QueryContinueDragEventArgs qcdevent) -> void
-~virtual System.Windows.Forms.Control.OnRegionChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnResize(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnQueryContinueDrag(System.Windows.Forms.QueryContinueDragEventArgs! qcdevent) -> void
+virtual System.Windows.Forms.Control.OnRegionChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnResize(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnRightToLeftChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnSizeChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnStyleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnSystemColorsChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnSizeChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnStyleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnSystemColorsChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnTabIndexChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnTabStopChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnTextChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnValidated(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnValidating(System.ComponentModel.CancelEventArgs e) -> void
+virtual System.Windows.Forms.Control.OnValidated(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnValidating(System.ComponentModel.CancelEventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnVisibleChanged(System.EventArgs e) -> void
-virtual System.Windows.Forms.Control.Text.get -> string!
-virtual System.Windows.Forms.Control.Text.set -> void
 ~virtual System.Windows.Forms.DataGridView.AdjustColumnHeaderBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder, bool isFirstDisplayedColumn, bool isLastVisibleColumn) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 ~virtual System.Windows.Forms.DataGridView.AdjustedTopLeftHeaderBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 ~virtual System.Windows.Forms.DataGridView.CreateColumnsInstance() -> System.Windows.Forms.DataGridViewColumnCollection
@@ -2172,20 +2114,10 @@ virtual System.Windows.Forms.Control.Text.set -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.InsertRange(int rowIndex, params System.Windows.Forms.DataGridViewRow[] dataGridViewRows) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.Remove(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
-virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.ApplyCellStyleToEditingControl(System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
-virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlDataGridView.get -> System.Windows.Forms.DataGridView?
-virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlDataGridView.set -> void
-virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlFormattedValue.get -> object!
-virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlFormattedValue.set -> void
-virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingPanelCursor.get -> System.Windows.Forms.Cursor!
-virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.GetEditingControlFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object!
-virtual System.Windows.Forms.Design.ComponentEditorForm.OnSelChangeSelector(object? source, System.Windows.Forms.TreeViewEventArgs! e) -> void
-virtual System.Windows.Forms.Design.ComponentEditorForm.ShowForm(System.Windows.Forms.IWin32Window? owner) -> System.Windows.Forms.DialogResult
-virtual System.Windows.Forms.Design.ComponentEditorForm.ShowForm(System.Windows.Forms.IWin32Window? owner, int page) -> System.Windows.Forms.DialogResult
-~virtual System.Windows.Forms.Design.ComponentEditorPage.GetControl() -> System.Windows.Forms.Control
-~virtual System.Windows.Forms.Design.ComponentEditorPage.SetComponent(System.ComponentModel.IComponent component) -> void
-~virtual System.Windows.Forms.Design.ComponentEditorPage.SetSite(System.Windows.Forms.IComponentEditorPageSite site) -> void
-~virtual System.Windows.Forms.Design.ComponentEditorPage.Title.get -> string
+virtual System.Windows.Forms.Design.ComponentEditorPage.GetControl() -> System.Windows.Forms.Control!
+virtual System.Windows.Forms.Design.ComponentEditorPage.SetComponent(System.ComponentModel.IComponent? component) -> void
+virtual System.Windows.Forms.Design.ComponentEditorPage.SetSite(System.Windows.Forms.IComponentEditorPageSite? site) -> void
+virtual System.Windows.Forms.Design.ComponentEditorPage.Title.get -> string!
 ~virtual System.Windows.Forms.ErrorProvider.OnRightToLeftChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.HelpProvider.CanExtend(object target) -> bool
 ~virtual System.Windows.Forms.HelpProvider.GetHelpKeyword(System.Windows.Forms.Control ctl) -> string
@@ -2260,7 +2192,6 @@ virtual System.Windows.Forms.Design.ComponentEditorForm.ShowForm(System.Windows.
 ~virtual System.Windows.Forms.TabControl.OnSelectedIndexChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.TabControl.OnSelecting(System.Windows.Forms.TabControlCancelEventArgs e) -> void
 ~virtual System.Windows.Forms.TableLayoutControlCollection.Add(System.Windows.Forms.Control control, int column, int row) -> void
-virtual System.Windows.Forms.TableLayoutPanel.OnCellPaint(System.Windows.Forms.TableLayoutCellPaintEventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStrip.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
 ~virtual System.Windows.Forms.ToolStrip.CreateLayoutSettings(System.Windows.Forms.ToolStripLayoutStyle layoutStyle) -> System.Windows.Forms.LayoutSettings
 ~virtual System.Windows.Forms.ToolStrip.DisplayedItems.get -> System.Windows.Forms.ToolStripItemCollection
@@ -2354,7 +2285,7 @@ virtual System.Windows.Forms.TableLayoutPanel.OnCellPaint(System.Windows.Forms.T
 ~virtual System.Windows.Forms.ToolStripItemCollection.this[string key].get -> System.Windows.Forms.ToolStripItem
 ~virtual System.Windows.Forms.ToolStripMenuItem.OnCheckedChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripMenuItem.OnCheckStateChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripPanel.OnRendererChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripPanel.OnRendererChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.this[int index].get -> System.Windows.Forms.ToolStripPanelRow
 ~virtual System.Windows.Forms.ToolStripPanelRow.OnControlAdded(System.Windows.Forms.Control control, int index) -> void
 ~virtual System.Windows.Forms.ToolStripPanelRow.OnControlRemoved(System.Windows.Forms.Control control, int index) -> void
@@ -2439,7 +2370,6 @@ abstract System.Windows.Forms.BindingManagerBase.ResumeBinding() -> void
 abstract System.Windows.Forms.BindingManagerBase.SuspendBinding() -> void
 abstract System.Windows.Forms.BindingManagerBase.UpdateIsBinding() -> void
 abstract System.Windows.Forms.CommonDialog.Reset() -> void
-abstract System.Windows.Forms.CommonDialog.RunDialog(System.IntPtr hwndOwner) -> bool
 abstract System.Windows.Forms.Design.ComponentEditorPage.LoadComponent() -> void
 abstract System.Windows.Forms.Design.ComponentEditorPage.SaveComponent() -> void
 abstract System.Windows.Forms.Design.PropertyTab.GetProperties(object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection?
@@ -2571,7 +2501,6 @@ override System.Windows.Forms.CheckedListBox.SelectionMode.set -> void
 override System.Windows.Forms.CheckedListBox.WmReflectCommand(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.CheckedListBox.WndProc(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.ColorDialog.Reset() -> void
-override System.Windows.Forms.ColorDialog.RunDialog(System.IntPtr hwndOwner) -> bool
 override System.Windows.Forms.ColorDialog.ToString() -> string!
 override System.Windows.Forms.ColumnHeader.Dispose(bool disposing) -> void
 override System.Windows.Forms.ColumnHeader.ToString() -> string!
@@ -2630,6 +2559,8 @@ override System.Windows.Forms.Control.ControlAccessibleObject.Role.get -> System
 override System.Windows.Forms.Control.ControlAccessibleObject.ToString() -> string!
 override System.Windows.Forms.Control.ControlCollection.GetEnumerator() -> System.Collections.IEnumerator!
 override System.Windows.Forms.Control.Dispose(bool disposing) -> void
+override System.Windows.Forms.Control.Site.get -> System.ComponentModel.ISite?
+override System.Windows.Forms.Control.Site.set -> void
 override System.Windows.Forms.ControlBindingsCollection.ClearCore() -> void
 override System.Windows.Forms.CreateParams.ToString() -> string!
 override System.Windows.Forms.CurrencyManager.AddNew() -> void
@@ -2815,6 +2746,11 @@ override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCel
 override System.Windows.Forms.DataGridViewTextBoxCell.DetachEditingControl() -> void
 override System.Windows.Forms.DataGridViewTextBoxCell.OnEnter(int rowIndex, bool throughMouseClick) -> void
 override System.Windows.Forms.DataGridViewTextBoxCell.OnLeave(int rowIndex, bool throughMouseClick) -> void
+override System.Windows.Forms.DataGridViewTextBoxEditingControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnTextChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.DataGridViewTextBoxEditingControl.ProcessKeyEventArgs(ref System.Windows.Forms.Message m) -> bool
 override System.Windows.Forms.DataGridViewTopLeftHeaderCell.DataGridViewTopLeftHeaderCellAccessibleObject.Bounds.get -> System.Drawing.Rectangle
 override System.Windows.Forms.DataGridViewTopLeftHeaderCell.DataGridViewTopLeftHeaderCellAccessibleObject.DefaultAction.get -> string!
@@ -2859,6 +2795,8 @@ override System.Windows.Forms.DateTimePicker.ToString() -> string!
 override System.Windows.Forms.DateTimePicker.WndProc(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.Design.ComponentEditorForm.AutoSize.get -> bool
 override System.Windows.Forms.Design.ComponentEditorForm.AutoSize.set -> void
+override System.Windows.Forms.Design.ComponentEditorForm.OnActivated(System.EventArgs! e) -> void
+override System.Windows.Forms.Design.ComponentEditorForm.OnHelpRequested(System.Windows.Forms.HelpEventArgs! e) -> void
 override System.Windows.Forms.Design.ComponentEditorForm.PreProcessMessage(ref System.Windows.Forms.Message msg) -> bool
 override System.Windows.Forms.Design.ComponentEditorPage.AutoSize.get -> bool
 override System.Windows.Forms.Design.ComponentEditorPage.AutoSize.set -> void
@@ -2878,7 +2816,6 @@ override System.Windows.Forms.DockingAttribute.IsDefaultAttribute() -> bool
 override System.Windows.Forms.DomainUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.get -> string?
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.set -> void
-override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Role.get -> System.Windows.Forms.AccessibleRole
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.State.get -> System.Windows.Forms.AccessibleStates
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Value.get -> string?
@@ -2904,9 +2841,7 @@ override System.Windows.Forms.FileDialog.ToString() -> string!
 override System.Windows.Forms.FlowLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
 override System.Windows.Forms.FlowLayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
 override System.Windows.Forms.FolderBrowserDialog.Reset() -> void
-override System.Windows.Forms.FontDialog.HookProc(System.IntPtr hWnd, int msg, System.IntPtr wparam, System.IntPtr lparam) -> System.IntPtr
 override System.Windows.Forms.FontDialog.Reset() -> void
-override System.Windows.Forms.FontDialog.RunDialog(System.IntPtr hWndOwner) -> bool
 override System.Windows.Forms.FontDialog.ToString() -> string!
 override System.Windows.Forms.Form.AdjustFormScrollbars(bool displayScrollbars) -> void
 override System.Windows.Forms.Form.AutoScroll.get -> bool
@@ -3202,7 +3137,6 @@ override System.Windows.Forms.MonthCalendar.IsInputKey(System.Windows.Forms.Keys
 override System.Windows.Forms.MonthCalendar.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
 override System.Windows.Forms.MonthCalendar.SetBoundsCore(int x, int y, int width, int height, System.Windows.Forms.BoundsSpecified specified) -> void
 override System.Windows.Forms.MonthCalendar.WndProc(ref System.Windows.Forms.Message m) -> void
-override System.Windows.Forms.NumericUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.NumericUpDown.DownButton() -> void
 override System.Windows.Forms.NumericUpDown.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
 override System.Windows.Forms.NumericUpDown.OnKeyUp(System.Windows.Forms.KeyEventArgs! e) -> void
@@ -3530,6 +3464,10 @@ override System.Windows.Forms.TabControl.IsInputKey(System.Windows.Forms.Keys ke
 override System.Windows.Forms.TabControl.ProcessKeyPreview(ref System.Windows.Forms.Message m) -> bool
 override System.Windows.Forms.TabControl.ScaleCore(float dx, float dy) -> void
 override System.Windows.Forms.TabControl.WndProc(ref System.Windows.Forms.Message m) -> void
+override System.Windows.Forms.TableLayoutPanel.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
+override System.Windows.Forms.TableLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
+override System.Windows.Forms.TableLayoutPanel.OnLayout(System.Windows.Forms.LayoutEventArgs! levent) -> void
+override System.Windows.Forms.TableLayoutPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
 override System.Windows.Forms.TableLayoutPanel.ScaleControl(System.Drawing.SizeF factor, System.Windows.Forms.BoundsSpecified specified) -> void
 override System.Windows.Forms.TableLayoutPanel.ScaleCore(float dx, float dy) -> void
 override System.Windows.Forms.TableLayoutPanelCellPosition.GetHashCode() -> int
@@ -4101,11 +4039,7 @@ static System.Windows.Forms.Control.ModifierKeys.get -> System.Windows.Forms.Key
 static System.Windows.Forms.Control.MouseButtons.get -> System.Windows.Forms.MouseButtons
 static System.Windows.Forms.Control.MousePosition.get -> System.Drawing.Point
 static System.Windows.Forms.Control.PropagatingImeMode.get -> System.Windows.Forms.ImeMode
-static System.Windows.Forms.Control.ReflectMessage(System.IntPtr hWnd, ref System.Windows.Forms.Message m) -> bool
 static System.Windows.Forms.ControlPaint.ContrastControlDark.get -> System.Drawing.Color
-static System.Windows.Forms.ControlPaint.CreateHBitmap16Bit(System.Drawing.Bitmap! bitmap, System.Drawing.Color background) -> System.IntPtr
-static System.Windows.Forms.ControlPaint.CreateHBitmapColorMask(System.Drawing.Bitmap! bitmap, System.IntPtr monochromeMask) -> System.IntPtr
-static System.Windows.Forms.ControlPaint.CreateHBitmapTransparencyMask(System.Drawing.Bitmap! bitmap) -> System.IntPtr
 static System.Windows.Forms.ControlPaint.Dark(System.Drawing.Color baseColor) -> System.Drawing.Color
 static System.Windows.Forms.ControlPaint.Dark(System.Drawing.Color baseColor, float percOfDarkDark) -> System.Drawing.Color
 static System.Windows.Forms.ControlPaint.DarkDark(System.Drawing.Color baseColor) -> System.Drawing.Color
@@ -4211,12 +4145,6 @@ static System.Windows.Forms.GroupBoxRenderer.DrawParentBackground(System.Drawing
 static System.Windows.Forms.GroupBoxRenderer.IsBackgroundPartiallyTransparent(System.Windows.Forms.VisualStyles.GroupBoxState state) -> bool
 static System.Windows.Forms.GroupBoxRenderer.RenderMatchingApplicationState.get -> bool
 static System.Windows.Forms.GroupBoxRenderer.RenderMatchingApplicationState.set -> void
-static System.Windows.Forms.ImeContext.Disable(System.IntPtr handle) -> void
-static System.Windows.Forms.ImeContext.Enable(System.IntPtr handle) -> void
-static System.Windows.Forms.ImeContext.GetImeMode(System.IntPtr handle) -> System.Windows.Forms.ImeMode
-static System.Windows.Forms.ImeContext.IsOpen(System.IntPtr handle) -> bool
-static System.Windows.Forms.ImeContext.SetImeStatus(System.Windows.Forms.ImeMode imeMode, System.IntPtr handle) -> void
-static System.Windows.Forms.ImeContext.SetOpenStatus(bool open, System.IntPtr handle) -> void
 static System.Windows.Forms.ImeModeConversion.ImeModeConversionBits.get -> System.Collections.Generic.Dictionary<System.Windows.Forms.ImeMode, System.Windows.Forms.ImeModeConversion>!
 static System.Windows.Forms.ImeModeConversion.IsCurrentConversionTableSupported.get -> bool
 static System.Windows.Forms.InputLanguage.CurrentInputLanguage.get -> System.Windows.Forms.InputLanguage!
@@ -4226,7 +4154,6 @@ static System.Windows.Forms.InputLanguage.FromCulture(System.Globalization.Cultu
 static System.Windows.Forms.InputLanguage.InstalledInputLanguages.get -> System.Windows.Forms.InputLanguageCollection!
 static System.Windows.Forms.LinkArea.operator !=(System.Windows.Forms.LinkArea linkArea1, System.Windows.Forms.LinkArea linkArea2) -> bool
 static System.Windows.Forms.LinkArea.operator ==(System.Windows.Forms.LinkArea linkArea1, System.Windows.Forms.LinkArea linkArea2) -> bool
-static System.Windows.Forms.NativeWindow.FromHandle(System.IntPtr handle) -> System.Windows.Forms.NativeWindow?
 static System.Windows.Forms.OSFeature.Feature.get -> System.Windows.Forms.OSFeature!
 static System.Windows.Forms.OSFeature.IsPresent(System.Windows.Forms.SystemParameter enumVal) -> bool
 static System.Windows.Forms.OwnerDrawPropertyBag.Copy(System.Windows.Forms.OwnerDrawPropertyBag? value) -> System.Windows.Forms.OwnerDrawPropertyBag!
@@ -4306,7 +4233,6 @@ static System.Windows.Forms.RadioButtonRenderer.RenderMatchingApplicationState.g
 static System.Windows.Forms.RadioButtonRenderer.RenderMatchingApplicationState.set -> void
 static System.Windows.Forms.Screen.AllScreens.get -> System.Windows.Forms.Screen![]!
 static System.Windows.Forms.Screen.FromControl(System.Windows.Forms.Control! control) -> System.Windows.Forms.Screen!
-static System.Windows.Forms.Screen.FromHandle(System.IntPtr hwnd) -> System.Windows.Forms.Screen!
 static System.Windows.Forms.Screen.FromPoint(System.Drawing.Point point) -> System.Windows.Forms.Screen!
 static System.Windows.Forms.Screen.FromRectangle(System.Drawing.Rectangle rect) -> System.Windows.Forms.Screen!
 static System.Windows.Forms.Screen.GetBounds(System.Drawing.Point pt) -> System.Drawing.Rectangle
@@ -4455,7 +4381,6 @@ static System.Windows.Forms.TabRenderer.DrawTabItem(System.Drawing.Graphics! g, 
 static System.Windows.Forms.TabRenderer.DrawTabItem(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.TabItemState state) -> void
 static System.Windows.Forms.TabRenderer.DrawTabPage(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds) -> void
 static System.Windows.Forms.TabRenderer.IsSupported.get -> bool
-static System.Windows.Forms.TaskDialog.ShowDialog(System.IntPtr hwndOwner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Windows.Forms.TaskDialogButton!
 static System.Windows.Forms.TaskDialog.ShowDialog(System.Windows.Forms.IWin32Window! owner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Windows.Forms.TaskDialogButton!
 static System.Windows.Forms.TaskDialog.ShowDialog(System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Windows.Forms.TaskDialogButton!
 static System.Windows.Forms.TaskDialogButton.Abort.get -> System.Windows.Forms.TaskDialogButton!
@@ -5081,8 +5006,6 @@ System.Windows.Forms.AccessibleNavigation.Up = 1 -> System.Windows.Forms.Accessi
 System.Windows.Forms.AccessibleObject
 System.Windows.Forms.AccessibleObject.AccessibleObject() -> void
 System.Windows.Forms.AccessibleObject.RaiseAutomationNotification(System.Windows.Forms.Automation.AutomationNotificationKind notificationKind, System.Windows.Forms.Automation.AutomationNotificationProcessing notificationProcessing, string! notificationText) -> bool
-System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(System.IntPtr handle) -> void
-System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(System.IntPtr handle, int objid) -> void
 System.Windows.Forms.AccessibleRole
 System.Windows.Forms.AccessibleRole.Alert = 8 -> System.Windows.Forms.AccessibleRole
 System.Windows.Forms.AccessibleRole.Animation = 54 -> System.Windows.Forms.AccessibleRole
@@ -5739,7 +5662,6 @@ System.Windows.Forms.ComboBox.BackgroundImageChanged -> System.EventHandler
 System.Windows.Forms.ComboBox.BackgroundImageLayoutChanged -> System.EventHandler
 System.Windows.Forms.ComboBox.BeginUpdate() -> void
 System.Windows.Forms.ComboBox.ChildAccessibleObject
-System.Windows.Forms.ComboBox.ChildAccessibleObject.ChildAccessibleObject(System.Windows.Forms.ComboBox! owner, System.IntPtr handle) -> void
 System.Windows.Forms.ComboBox.ComboBox() -> void
 System.Windows.Forms.ComboBox.DoubleClick -> System.EventHandler
 System.Windows.Forms.ComboBox.DrawItem -> System.Windows.Forms.DrawItemEventHandler
@@ -5817,7 +5739,7 @@ System.Windows.Forms.ContainerControl.AutoScaleDimensions.set -> void
 System.Windows.Forms.ContainerControl.AutoScaleFactor.get -> System.Drawing.SizeF
 System.Windows.Forms.ContainerControl.AutoScaleMode.get -> System.Windows.Forms.AutoScaleMode
 System.Windows.Forms.ContainerControl.AutoScaleMode.set -> void
-System.Windows.Forms.ContainerControl.AutoValidateChanged -> System.EventHandler
+System.Windows.Forms.ContainerControl.AutoValidateChanged -> System.EventHandler?
 System.Windows.Forms.ContainerControl.ContainerControl() -> void
 System.Windows.Forms.ContainerControl.CurrentAutoScaleDimensions.get -> System.Drawing.SizeF
 System.Windows.Forms.ContainerControl.PerformAutoScale() -> void
@@ -5847,6 +5769,8 @@ System.Windows.Forms.Control.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.Control.BackColorChanged -> System.EventHandler?
 System.Windows.Forms.Control.BackgroundImageChanged -> System.EventHandler?
 System.Windows.Forms.Control.BackgroundImageLayoutChanged -> System.EventHandler?
+System.Windows.Forms.Control.BeginInvoke(System.Action! method) -> System.IAsyncResult!
+System.Windows.Forms.Control.BeginInvoke(System.Delegate! method) -> System.IAsyncResult!
 System.Windows.Forms.Control.BindingContextChanged -> System.EventHandler?
 System.Windows.Forms.Control.Bottom.get -> int
 System.Windows.Forms.Control.Bounds.get -> System.Drawing.Rectangle
@@ -5875,7 +5799,6 @@ System.Windows.Forms.Control.Control(System.Windows.Forms.Control? parent, strin
 System.Windows.Forms.Control.Control(System.Windows.Forms.Control? parent, string? text, int left, int top, int width, int height) -> void
 System.Windows.Forms.Control.ControlAccessibleObject
 System.Windows.Forms.Control.ControlAccessibleObject.ControlAccessibleObject(System.Windows.Forms.Control! ownerControl) -> void
-System.Windows.Forms.Control.ControlAccessibleObject.Handle.get -> System.IntPtr
 System.Windows.Forms.Control.ControlAccessibleObject.Handle.set -> void
 System.Windows.Forms.Control.ControlAccessibleObject.NotifyClients(System.Windows.Forms.AccessibleEvents accEvent) -> void
 System.Windows.Forms.Control.ControlAccessibleObject.NotifyClients(System.Windows.Forms.AccessibleEvents accEvent, int childID) -> void
@@ -5920,7 +5843,6 @@ System.Windows.Forms.Control.GetStyle(System.Windows.Forms.ControlStyles flag) -
 System.Windows.Forms.Control.GetTopLevel() -> bool
 System.Windows.Forms.Control.GiveFeedback -> System.Windows.Forms.GiveFeedbackEventHandler?
 System.Windows.Forms.Control.GotFocus -> System.EventHandler?
-System.Windows.Forms.Control.Handle.get -> System.IntPtr
 System.Windows.Forms.Control.HandleCreated -> System.EventHandler?
 System.Windows.Forms.Control.HandleDestroyed -> System.EventHandler?
 System.Windows.Forms.Control.HasChildren.get -> bool
@@ -5970,10 +5892,14 @@ System.Windows.Forms.Control.MouseMove -> System.Windows.Forms.MouseEventHandler
 System.Windows.Forms.Control.MouseUp -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.Control.MouseWheel -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.Control.Move -> System.EventHandler?
+System.Windows.Forms.Control.Name.get -> string!
+System.Windows.Forms.Control.Name.set -> void
 System.Windows.Forms.Control.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.Control.Padding.set -> void
 System.Windows.Forms.Control.PaddingChanged -> System.EventHandler?
 System.Windows.Forms.Control.Paint -> System.Windows.Forms.PaintEventHandler?
+System.Windows.Forms.Control.Parent.get -> System.Windows.Forms.Control?
+System.Windows.Forms.Control.Parent.set -> void
 System.Windows.Forms.Control.ParentChanged -> System.EventHandler?
 System.Windows.Forms.Control.PerformLayout() -> void
 System.Windows.Forms.Control.PointToClient(System.Drawing.Point p) -> System.Drawing.Point
@@ -5981,12 +5907,16 @@ System.Windows.Forms.Control.PointToScreen(System.Drawing.Point p) -> System.Dra
 System.Windows.Forms.Control.PreferredSize.get -> System.Drawing.Size
 System.Windows.Forms.Control.PreProcessControlMessage(ref System.Windows.Forms.Message msg) -> System.Windows.Forms.PreProcessControlState
 System.Windows.Forms.Control.PreviewKeyDown -> System.Windows.Forms.PreviewKeyDownEventHandler?
+System.Windows.Forms.Control.ProductName.get -> string!
+System.Windows.Forms.Control.ProductVersion.get -> string!
 System.Windows.Forms.Control.QueryAccessibilityHelp -> System.Windows.Forms.QueryAccessibilityHelpEventHandler?
 System.Windows.Forms.Control.QueryContinueDrag -> System.Windows.Forms.QueryContinueDragEventHandler?
 System.Windows.Forms.Control.RecreateHandle() -> void
 System.Windows.Forms.Control.RecreatingHandle.get -> bool
 System.Windows.Forms.Control.RectangleToClient(System.Drawing.Rectangle r) -> System.Drawing.Rectangle
 System.Windows.Forms.Control.RectangleToScreen(System.Drawing.Rectangle r) -> System.Drawing.Rectangle
+System.Windows.Forms.Control.Region.get -> System.Drawing.Region?
+System.Windows.Forms.Control.Region.set -> void
 System.Windows.Forms.Control.RegionChanged -> System.EventHandler?
 System.Windows.Forms.Control.RenderRightToLeft.get -> bool
 System.Windows.Forms.Control.ResetBindings() -> void
@@ -6029,9 +5959,12 @@ System.Windows.Forms.Control.TabIndexChanged -> System.EventHandler?
 System.Windows.Forms.Control.TabStop.get -> bool
 System.Windows.Forms.Control.TabStop.set -> void
 System.Windows.Forms.Control.TabStopChanged -> System.EventHandler?
+System.Windows.Forms.Control.Tag.get -> object?
+System.Windows.Forms.Control.Tag.set -> void
 System.Windows.Forms.Control.TextChanged -> System.EventHandler?
 System.Windows.Forms.Control.Top.get -> int
 System.Windows.Forms.Control.Top.set -> void
+System.Windows.Forms.Control.TopLevelControl.get -> System.Windows.Forms.Control?
 System.Windows.Forms.Control.Update() -> void
 System.Windows.Forms.Control.UpdateBounds() -> void
 System.Windows.Forms.Control.UpdateBounds(int x, int y, int width, int height) -> void
@@ -6047,6 +5980,8 @@ System.Windows.Forms.Control.Visible.set -> void
 System.Windows.Forms.Control.VisibleChanged -> System.EventHandler?
 System.Windows.Forms.Control.Width.get -> int
 System.Windows.Forms.Control.Width.set -> void
+System.Windows.Forms.Control.WindowTarget.get -> System.Windows.Forms.IWindowTarget!
+System.Windows.Forms.Control.WindowTarget.set -> void
 System.Windows.Forms.ControlBindingsCollection
 System.Windows.Forms.ControlBindingsCollection.Clear() -> void
 System.Windows.Forms.ControlBindingsCollection.DefaultDataSourceUpdateMode.get -> System.Windows.Forms.DataSourceUpdateMode
@@ -6098,7 +6033,6 @@ System.Windows.Forms.CreateParams.Height.get -> int
 System.Windows.Forms.CreateParams.Height.set -> void
 System.Windows.Forms.CreateParams.Param.get -> object?
 System.Windows.Forms.CreateParams.Param.set -> void
-System.Windows.Forms.CreateParams.Parent.get -> System.IntPtr
 System.Windows.Forms.CreateParams.Parent.set -> void
 System.Windows.Forms.CreateParams.Style.get -> int
 System.Windows.Forms.CreateParams.Style.set -> void
@@ -6114,15 +6048,12 @@ System.Windows.Forms.CurrencyManager.ListChanged -> System.ComponentModel.ListCh
 System.Windows.Forms.CurrencyManager.MetaDataChanged -> System.EventHandler
 System.Windows.Forms.CurrencyManager.Refresh() -> void
 System.Windows.Forms.Cursor
-System.Windows.Forms.Cursor.CopyHandle() -> System.IntPtr
 System.Windows.Forms.Cursor.Cursor(string! fileName) -> void
-System.Windows.Forms.Cursor.Cursor(System.IntPtr handle) -> void
 System.Windows.Forms.Cursor.Cursor(System.IO.Stream! stream) -> void
 System.Windows.Forms.Cursor.Cursor(System.Type! type, string! resource) -> void
 System.Windows.Forms.Cursor.Dispose() -> void
 System.Windows.Forms.Cursor.Draw(System.Drawing.Graphics! g, System.Drawing.Rectangle targetRect) -> void
 System.Windows.Forms.Cursor.DrawStretched(System.Drawing.Graphics! g, System.Drawing.Rectangle targetRect) -> void
-System.Windows.Forms.Cursor.Handle.get -> System.IntPtr
 System.Windows.Forms.Cursor.HotSpot.get -> System.Drawing.Point
 System.Windows.Forms.Cursor.Size.get -> System.Drawing.Size
 System.Windows.Forms.Cursor.Tag.get -> object?
@@ -7160,8 +7091,9 @@ System.Windows.Forms.Day.Tuesday = 1 -> System.Windows.Forms.Day
 System.Windows.Forms.Day.Wednesday = 2 -> System.Windows.Forms.Day
 System.Windows.Forms.Design.ComponentEditorForm
 System.Windows.Forms.Design.ComponentEditorForm.AutoSizeChanged -> System.EventHandler?
+System.Windows.Forms.Design.ComponentEditorForm.ComponentEditorForm(object! component, System.Type![]! pageTypes) -> void
 System.Windows.Forms.Design.ComponentEditorPage
-System.Windows.Forms.Design.ComponentEditorPage.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.Design.ComponentEditorPage.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.Design.ComponentEditorPage.CommitOnDeactivate.get -> bool
 System.Windows.Forms.Design.ComponentEditorPage.CommitOnDeactivate.set -> void
 System.Windows.Forms.Design.ComponentEditorPage.ComponentEditorPage() -> void
@@ -7268,9 +7200,16 @@ System.Windows.Forms.DragEventArgs
 System.Windows.Forms.DragEventArgs.AllowedEffect.get -> System.Windows.Forms.DragDropEffects
 System.Windows.Forms.DragEventArgs.Data.get -> System.Windows.Forms.IDataObject?
 System.Windows.Forms.DragEventArgs.DragEventArgs(System.Windows.Forms.IDataObject? data, int keyState, int x, int y, System.Windows.Forms.DragDropEffects allowedEffect, System.Windows.Forms.DragDropEffects effect) -> void
+System.Windows.Forms.DragEventArgs.DragEventArgs(System.Windows.Forms.IDataObject? data, int keyState, int x, int y, System.Windows.Forms.DragDropEffects allowedEffect, System.Windows.Forms.DragDropEffects effect, System.Windows.Forms.DropImageType dropImageType, string! message, string! messageReplacementToken) -> void
+System.Windows.Forms.DragEventArgs.DropImageType.get -> System.Windows.Forms.DropImageType
+System.Windows.Forms.DragEventArgs.DropImageType.set -> void
 System.Windows.Forms.DragEventArgs.Effect.get -> System.Windows.Forms.DragDropEffects
 System.Windows.Forms.DragEventArgs.Effect.set -> void
 System.Windows.Forms.DragEventArgs.KeyState.get -> int
+System.Windows.Forms.DragEventArgs.Message.get -> string?
+System.Windows.Forms.DragEventArgs.Message.set -> void
+System.Windows.Forms.DragEventArgs.MessageReplacementToken.get -> string?
+System.Windows.Forms.DragEventArgs.MessageReplacementToken.set -> void
 System.Windows.Forms.DragEventArgs.X.get -> int
 System.Windows.Forms.DragEventArgs.Y.get -> int
 System.Windows.Forms.DragEventHandler
@@ -7372,6 +7311,15 @@ System.Windows.Forms.DrawTreeNodeEventArgs.Graphics.get -> System.Drawing.Graphi
 System.Windows.Forms.DrawTreeNodeEventArgs.Node.get -> System.Windows.Forms.TreeNode?
 System.Windows.Forms.DrawTreeNodeEventArgs.State.get -> System.Windows.Forms.TreeNodeStates
 System.Windows.Forms.DrawTreeNodeEventHandler
+System.Windows.Forms.DropImageType
+System.Windows.Forms.DropImageType.Copy = 1 -> System.Windows.Forms.DropImageType
+System.Windows.Forms.DropImageType.Invalid = -1 -> System.Windows.Forms.DropImageType
+System.Windows.Forms.DropImageType.Label = 6 -> System.Windows.Forms.DropImageType
+System.Windows.Forms.DropImageType.Link = 4 -> System.Windows.Forms.DropImageType
+System.Windows.Forms.DropImageType.Move = 2 -> System.Windows.Forms.DropImageType
+System.Windows.Forms.DropImageType.NoImage = 8 -> System.Windows.Forms.DropImageType
+System.Windows.Forms.DropImageType.None = 0 -> System.Windows.Forms.DropImageType
+System.Windows.Forms.DropImageType.Warning = 7 -> System.Windows.Forms.DropImageType
 System.Windows.Forms.ErrorBlinkStyle
 System.Windows.Forms.ErrorBlinkStyle.AlwaysBlink = 1 -> System.Windows.Forms.ErrorBlinkStyle
 System.Windows.Forms.ErrorBlinkStyle.BlinkIfDifferentError = 0 -> System.Windows.Forms.ErrorBlinkStyle
@@ -7698,10 +7646,17 @@ System.Windows.Forms.GetChildAtPointSkip.Invisible = 1 -> System.Windows.Forms.G
 System.Windows.Forms.GetChildAtPointSkip.None = 0 -> System.Windows.Forms.GetChildAtPointSkip
 System.Windows.Forms.GetChildAtPointSkip.Transparent = 4 -> System.Windows.Forms.GetChildAtPointSkip
 System.Windows.Forms.GiveFeedbackEventArgs
+System.Windows.Forms.GiveFeedbackEventArgs.CursorOffset.get -> System.Drawing.Point
+System.Windows.Forms.GiveFeedbackEventArgs.CursorOffset.set -> void
+System.Windows.Forms.GiveFeedbackEventArgs.DragImage.get -> System.Drawing.Bitmap?
+System.Windows.Forms.GiveFeedbackEventArgs.DragImage.set -> void
 System.Windows.Forms.GiveFeedbackEventArgs.Effect.get -> System.Windows.Forms.DragDropEffects
 System.Windows.Forms.GiveFeedbackEventArgs.GiveFeedbackEventArgs(System.Windows.Forms.DragDropEffects effect, bool useDefaultCursors) -> void
+System.Windows.Forms.GiveFeedbackEventArgs.GiveFeedbackEventArgs(System.Windows.Forms.DragDropEffects effect, bool useDefaultCursors, System.Drawing.Bitmap? dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> void
 System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultCursors.get -> bool
 System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultCursors.set -> void
+System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultDragImage.get -> bool
+System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultDragImage.set -> void
 System.Windows.Forms.GiveFeedbackEventHandler
 System.Windows.Forms.GridItem
 System.Windows.Forms.GridItem.GridItem() -> void
@@ -7907,11 +7862,18 @@ System.Windows.Forms.IDataGridViewEditingCell.EditingCellValueChanged.get -> boo
 System.Windows.Forms.IDataGridViewEditingCell.EditingCellValueChanged.set -> void
 System.Windows.Forms.IDataGridViewEditingCell.PrepareEditingCellForEdit(bool selectAll) -> void
 System.Windows.Forms.IDataGridViewEditingControl
+System.Windows.Forms.IDataGridViewEditingControl.ApplyCellStyleToEditingControl(System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
+System.Windows.Forms.IDataGridViewEditingControl.EditingControlDataGridView.get -> System.Windows.Forms.DataGridView?
+System.Windows.Forms.IDataGridViewEditingControl.EditingControlDataGridView.set -> void
+System.Windows.Forms.IDataGridViewEditingControl.EditingControlFormattedValue.get -> object!
+System.Windows.Forms.IDataGridViewEditingControl.EditingControlFormattedValue.set -> void
 System.Windows.Forms.IDataGridViewEditingControl.EditingControlRowIndex.get -> int
 System.Windows.Forms.IDataGridViewEditingControl.EditingControlRowIndex.set -> void
 System.Windows.Forms.IDataGridViewEditingControl.EditingControlValueChanged.get -> bool
 System.Windows.Forms.IDataGridViewEditingControl.EditingControlValueChanged.set -> void
 System.Windows.Forms.IDataGridViewEditingControl.EditingControlWantsInputKey(System.Windows.Forms.Keys keyData, bool dataGridViewWantsInputKey) -> bool
+System.Windows.Forms.IDataGridViewEditingControl.EditingPanelCursor.get -> System.Windows.Forms.Cursor!
+System.Windows.Forms.IDataGridViewEditingControl.GetEditingControlFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object!
 System.Windows.Forms.IDataGridViewEditingControl.PrepareEditingControlForEdit(bool selectAll) -> void
 System.Windows.Forms.IDataGridViewEditingControl.RepositionEditingControlOnValueChange.get -> bool
 System.Windows.Forms.IDataObject
@@ -7949,7 +7911,6 @@ System.Windows.Forms.ImageList.ColorDepth.set -> void
 System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics! g, int x, int y, int index) -> void
 System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics! g, int x, int y, int width, int height, int index) -> void
 System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics! g, System.Drawing.Point pt, int index) -> void
-System.Windows.Forms.ImageList.Handle.get -> System.IntPtr
 System.Windows.Forms.ImageList.HandleCreated.get -> bool
 System.Windows.Forms.ImageList.ImageCollection
 System.Windows.Forms.ImageList.ImageCollection.Add(string! key, System.Drawing.Icon! icon) -> void
@@ -8012,7 +7973,6 @@ System.Windows.Forms.IMessageFilter
 System.Windows.Forms.IMessageFilter.PreFilterMessage(ref System.Windows.Forms.Message m) -> bool
 System.Windows.Forms.InputLanguage
 System.Windows.Forms.InputLanguage.Culture.get -> System.Globalization.CultureInfo!
-System.Windows.Forms.InputLanguage.Handle.get -> System.IntPtr
 System.Windows.Forms.InputLanguage.LayoutName.get -> string!
 System.Windows.Forms.InputLanguageChangedEventArgs
 System.Windows.Forms.InputLanguageChangedEventArgs.CharSet.get -> byte
@@ -8071,9 +8031,7 @@ System.Windows.Forms.ItemDragEventArgs.ItemDragEventArgs(System.Windows.Forms.Mo
 System.Windows.Forms.ItemDragEventArgs.ItemDragEventArgs(System.Windows.Forms.MouseButtons button, object? item) -> void
 System.Windows.Forms.ItemDragEventHandler
 System.Windows.Forms.IWin32Window
-System.Windows.Forms.IWin32Window.Handle.get -> System.IntPtr
 System.Windows.Forms.IWindowTarget
-System.Windows.Forms.IWindowTarget.OnHandleChange(System.IntPtr newHandle) -> void
 System.Windows.Forms.IWindowTarget.OnMessage(ref System.Windows.Forms.Message m) -> void
 System.Windows.Forms.KeyEventArgs
 System.Windows.Forms.KeyEventArgs.Control.get -> bool
@@ -9186,9 +9144,7 @@ System.Windows.Forms.MouseEventArgs.Y.get -> int
 System.Windows.Forms.MouseEventHandler
 System.Windows.Forms.NativeWindow
 System.Windows.Forms.NativeWindow.~NativeWindow() -> void
-System.Windows.Forms.NativeWindow.AssignHandle(System.IntPtr handle) -> void
 System.Windows.Forms.NativeWindow.DefWndProc(ref System.Windows.Forms.Message m) -> void
-System.Windows.Forms.NativeWindow.Handle.get -> System.IntPtr
 System.Windows.Forms.NativeWindow.NativeWindow() -> void
 System.Windows.Forms.NavigateEventArgs
 System.Windows.Forms.NavigateEventArgs.Forward.get -> bool
@@ -9933,7 +9889,7 @@ System.Windows.Forms.ScrollableControl.HScroll.get -> bool
 System.Windows.Forms.ScrollableControl.HScroll.set -> void
 System.Windows.Forms.ScrollableControl.Scroll -> System.Windows.Forms.ScrollEventHandler?
 System.Windows.Forms.ScrollableControl.ScrollableControl() -> void
-System.Windows.Forms.ScrollableControl.ScrollControlIntoView(System.Windows.Forms.Control! activeControl) -> void
+System.Windows.Forms.ScrollableControl.ScrollControlIntoView(System.Windows.Forms.Control? activeControl) -> void
 System.Windows.Forms.ScrollableControl.SetAutoScrollMargin(int x, int y) -> void
 System.Windows.Forms.ScrollableControl.SetDisplayRectLocation(int x, int y) -> void
 System.Windows.Forms.ScrollableControl.SetScrollState(int bit, bool value) -> void
@@ -10527,10 +10483,29 @@ System.Windows.Forms.TableLayoutPanel.CellBorderStyle.set -> void
 System.Windows.Forms.TableLayoutPanel.CellPaint -> System.Windows.Forms.TableLayoutCellPaintEventHandler?
 System.Windows.Forms.TableLayoutPanel.ColumnCount.get -> int
 System.Windows.Forms.TableLayoutPanel.ColumnCount.set -> void
+System.Windows.Forms.TableLayoutPanel.ColumnStyles.get -> System.Windows.Forms.TableLayoutColumnStyleCollection!
+System.Windows.Forms.TableLayoutPanel.Controls.get -> System.Windows.Forms.TableLayoutControlCollection!
+System.Windows.Forms.TableLayoutPanel.GetCellPosition(System.Windows.Forms.Control! control) -> System.Windows.Forms.TableLayoutPanelCellPosition
+System.Windows.Forms.TableLayoutPanel.GetColumn(System.Windows.Forms.Control! control) -> int
+System.Windows.Forms.TableLayoutPanel.GetColumnSpan(System.Windows.Forms.Control! control) -> int
+System.Windows.Forms.TableLayoutPanel.GetColumnWidths() -> int[]!
+System.Windows.Forms.TableLayoutPanel.GetControlFromPosition(int column, int row) -> System.Windows.Forms.Control?
+System.Windows.Forms.TableLayoutPanel.GetPositionFromControl(System.Windows.Forms.Control? control) -> System.Windows.Forms.TableLayoutPanelCellPosition
+System.Windows.Forms.TableLayoutPanel.GetRow(System.Windows.Forms.Control! control) -> int
+System.Windows.Forms.TableLayoutPanel.GetRowHeights() -> int[]!
+System.Windows.Forms.TableLayoutPanel.GetRowSpan(System.Windows.Forms.Control! control) -> int
 System.Windows.Forms.TableLayoutPanel.GrowStyle.get -> System.Windows.Forms.TableLayoutPanelGrowStyle
 System.Windows.Forms.TableLayoutPanel.GrowStyle.set -> void
+System.Windows.Forms.TableLayoutPanel.LayoutSettings.get -> System.Windows.Forms.TableLayoutSettings!
+System.Windows.Forms.TableLayoutPanel.LayoutSettings.set -> void
 System.Windows.Forms.TableLayoutPanel.RowCount.get -> int
 System.Windows.Forms.TableLayoutPanel.RowCount.set -> void
+System.Windows.Forms.TableLayoutPanel.RowStyles.get -> System.Windows.Forms.TableLayoutRowStyleCollection!
+System.Windows.Forms.TableLayoutPanel.SetCellPosition(System.Windows.Forms.Control! control, System.Windows.Forms.TableLayoutPanelCellPosition position) -> void
+System.Windows.Forms.TableLayoutPanel.SetColumn(System.Windows.Forms.Control! control, int column) -> void
+System.Windows.Forms.TableLayoutPanel.SetColumnSpan(System.Windows.Forms.Control! control, int value) -> void
+System.Windows.Forms.TableLayoutPanel.SetRow(System.Windows.Forms.Control! control, int row) -> void
+System.Windows.Forms.TableLayoutPanel.SetRowSpan(System.Windows.Forms.Control! control, int value) -> void
 System.Windows.Forms.TableLayoutPanel.TableLayoutPanel() -> void
 System.Windows.Forms.TableLayoutPanelCellBorderStyle
 System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset = 2 -> System.Windows.Forms.TableLayoutPanelCellBorderStyle
@@ -10618,7 +10593,6 @@ System.Windows.Forms.TabSizeMode.Fixed = 2 -> System.Windows.Forms.TabSizeMode
 System.Windows.Forms.TabSizeMode.Normal = 0 -> System.Windows.Forms.TabSizeMode
 System.Windows.Forms.TaskDialog
 System.Windows.Forms.TaskDialog.Close() -> void
-System.Windows.Forms.TaskDialog.Handle.get -> System.IntPtr
 System.Windows.Forms.TaskDialogButton
 System.Windows.Forms.TaskDialogButton.AllowCloseDialog.get -> bool
 System.Windows.Forms.TaskDialogButton.AllowCloseDialog.set -> void
@@ -10672,10 +10646,8 @@ System.Windows.Forms.TaskDialogFootnote.Text.get -> string?
 System.Windows.Forms.TaskDialogFootnote.Text.set -> void
 System.Windows.Forms.TaskDialogIcon
 System.Windows.Forms.TaskDialogIcon.Dispose() -> void
-System.Windows.Forms.TaskDialogIcon.IconHandle.get -> System.IntPtr
 System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(System.Drawing.Bitmap! image) -> void
 System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(System.Drawing.Icon! icon) -> void
-System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(System.IntPtr iconHandle) -> void
 System.Windows.Forms.TaskDialogPage
 System.Windows.Forms.TaskDialogPage.AllowCancel.get -> bool
 System.Windows.Forms.TaskDialogPage.AllowCancel.set -> void
@@ -11022,19 +10994,19 @@ System.Windows.Forms.ToolStripContainer.AutoScrollMinSize.get -> System.Drawing.
 System.Windows.Forms.ToolStripContainer.AutoScrollMinSize.set -> void
 System.Windows.Forms.ToolStripContainer.BackColor.get -> System.Drawing.Color
 System.Windows.Forms.ToolStripContainer.BackColor.set -> void
-System.Windows.Forms.ToolStripContainer.BackColorChanged -> System.EventHandler
-System.Windows.Forms.ToolStripContainer.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.ToolStripContainer.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.ToolStripContainer.BackColorChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripContainer.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripContainer.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripContainer.BottomToolStripPanelVisible.get -> bool
 System.Windows.Forms.ToolStripContainer.BottomToolStripPanelVisible.set -> void
 System.Windows.Forms.ToolStripContainer.CausesValidation.get -> bool
 System.Windows.Forms.ToolStripContainer.CausesValidation.set -> void
-System.Windows.Forms.ToolStripContainer.CausesValidationChanged -> System.EventHandler
-System.Windows.Forms.ToolStripContainer.ContextMenuStripChanged -> System.EventHandler
-System.Windows.Forms.ToolStripContainer.CursorChanged -> System.EventHandler
+System.Windows.Forms.ToolStripContainer.CausesValidationChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripContainer.ContextMenuStripChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripContainer.CursorChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripContainer.ForeColor.get -> System.Drawing.Color
 System.Windows.Forms.ToolStripContainer.ForeColor.set -> void
-System.Windows.Forms.ToolStripContainer.ForeColorChanged -> System.EventHandler
+System.Windows.Forms.ToolStripContainer.ForeColorChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripContainer.LeftToolStripPanelVisible.get -> bool
 System.Windows.Forms.ToolStripContainer.LeftToolStripPanelVisible.set -> void
 System.Windows.Forms.ToolStripContainer.RightToolStripPanelVisible.get -> bool
@@ -11431,25 +11403,25 @@ System.Windows.Forms.ToolStripPanel.AutoScrollMargin.get -> System.Drawing.Size
 System.Windows.Forms.ToolStripPanel.AutoScrollMargin.set -> void
 System.Windows.Forms.ToolStripPanel.AutoScrollMinSize.get -> System.Drawing.Size
 System.Windows.Forms.ToolStripPanel.AutoScrollMinSize.set -> void
-System.Windows.Forms.ToolStripPanel.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.ToolStripPanel.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripPanel.BeginInit() -> void
 System.Windows.Forms.ToolStripPanel.EndInit() -> void
 System.Windows.Forms.ToolStripPanel.Locked.get -> bool
 System.Windows.Forms.ToolStripPanel.Locked.set -> void
 System.Windows.Forms.ToolStripPanel.Orientation.get -> System.Windows.Forms.Orientation
 System.Windows.Forms.ToolStripPanel.Orientation.set -> void
-System.Windows.Forms.ToolStripPanel.RendererChanged -> System.EventHandler
+System.Windows.Forms.ToolStripPanel.RendererChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripPanel.RenderMode.get -> System.Windows.Forms.ToolStripRenderMode
 System.Windows.Forms.ToolStripPanel.RenderMode.set -> void
 System.Windows.Forms.ToolStripPanel.RowMargin.get -> System.Windows.Forms.Padding
 System.Windows.Forms.ToolStripPanel.RowMargin.set -> void
 System.Windows.Forms.ToolStripPanel.TabIndex.get -> int
 System.Windows.Forms.ToolStripPanel.TabIndex.set -> void
-System.Windows.Forms.ToolStripPanel.TabIndexChanged -> System.EventHandler
+System.Windows.Forms.ToolStripPanel.TabIndexChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripPanel.TabStop.get -> bool
 System.Windows.Forms.ToolStripPanel.TabStop.set -> void
-System.Windows.Forms.ToolStripPanel.TabStopChanged -> System.EventHandler
-System.Windows.Forms.ToolStripPanel.TextChanged -> System.EventHandler
+System.Windows.Forms.ToolStripPanel.TabStopChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripPanel.TextChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripPanel.ToolStripPanel() -> void
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.RemoveAt(int index) -> void
@@ -11785,7 +11757,6 @@ System.Windows.Forms.TreeNode.ExpandAll() -> void
 System.Windows.Forms.TreeNode.ForeColor.get -> System.Drawing.Color
 System.Windows.Forms.TreeNode.ForeColor.set -> void
 System.Windows.Forms.TreeNode.GetNodeCount(bool includeSubTrees) -> int
-System.Windows.Forms.TreeNode.Handle.get -> System.IntPtr
 System.Windows.Forms.TreeNode.ImageIndex.get -> int
 System.Windows.Forms.TreeNode.ImageIndex.set -> void
 System.Windows.Forms.TreeNode.Index.get -> int
@@ -12541,10 +12512,8 @@ System.Windows.Forms.VisualStyles.VisualStyleRenderer.GetString(System.Windows.F
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.GetTextExtent(System.Drawing.IDeviceContext! dc, string! textToDraw, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Rectangle
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.GetTextExtent(System.Drawing.IDeviceContext! dc, System.Drawing.Rectangle bounds, string! textToDraw, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Rectangle
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.GetTextMetrics(System.Drawing.IDeviceContext! dc) -> System.Windows.Forms.VisualStyles.TextMetrics
-System.Windows.Forms.VisualStyles.VisualStyleRenderer.Handle.get -> System.IntPtr
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.HitTestBackground(System.Drawing.Graphics! g, System.Drawing.Rectangle backgroundRectangle, System.Drawing.Region! region, System.Drawing.Point pt, System.Windows.Forms.VisualStyles.HitTestOptions options) -> System.Windows.Forms.VisualStyles.HitTestCode
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.HitTestBackground(System.Drawing.IDeviceContext! dc, System.Drawing.Rectangle backgroundRectangle, System.Drawing.Point pt, System.Windows.Forms.VisualStyles.HitTestOptions options) -> System.Windows.Forms.VisualStyles.HitTestCode
-System.Windows.Forms.VisualStyles.VisualStyleRenderer.HitTestBackground(System.Drawing.IDeviceContext! dc, System.Drawing.Rectangle backgroundRectangle, System.IntPtr hRgn, System.Drawing.Point pt, System.Windows.Forms.VisualStyles.HitTestOptions options) -> System.Windows.Forms.VisualStyles.HitTestCode
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.IsBackgroundPartiallyTransparent() -> bool
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.LastHResult.get -> int
 System.Windows.Forms.VisualStyles.VisualStyleRenderer.Part.get -> int
@@ -12788,15 +12757,12 @@ virtual System.Windows.Forms.ColorDialog.AnyColor.get -> bool
 virtual System.Windows.Forms.ColorDialog.AnyColor.set -> void
 virtual System.Windows.Forms.ColorDialog.FullOpen.get -> bool
 virtual System.Windows.Forms.ColorDialog.FullOpen.set -> void
-virtual System.Windows.Forms.ColorDialog.Instance.get -> System.IntPtr
 virtual System.Windows.Forms.ColorDialog.Options.get -> int
 virtual System.Windows.Forms.ColorDialog.ShowHelp.get -> bool
 virtual System.Windows.Forms.ColorDialog.ShowHelp.set -> void
 virtual System.Windows.Forms.ColorDialog.SolidColorOnly.get -> bool
 virtual System.Windows.Forms.ColorDialog.SolidColorOnly.set -> void
-virtual System.Windows.Forms.CommonDialog.HookProc(System.IntPtr hWnd, int msg, System.IntPtr wparam, System.IntPtr lparam) -> System.IntPtr
 virtual System.Windows.Forms.CommonDialog.OnHelpRequest(System.EventArgs! e) -> void
-virtual System.Windows.Forms.CommonDialog.OwnerWndProc(System.IntPtr hWnd, int msg, System.IntPtr wparam, System.IntPtr lparam) -> System.IntPtr
 virtual System.Windows.Forms.ContainerControl.AutoValidate.get -> System.Windows.Forms.AutoValidate
 virtual System.Windows.Forms.ContainerControl.AutoValidate.set -> void
 virtual System.Windows.Forms.ContainerControl.ProcessTabKey(bool forward) -> bool
@@ -12901,6 +12867,8 @@ virtual System.Windows.Forms.Control.SetVisibleCore(bool value) -> void
 virtual System.Windows.Forms.Control.ShowFocusCues.get -> bool
 virtual System.Windows.Forms.Control.ShowKeyboardCues.get -> bool
 virtual System.Windows.Forms.Control.SizeFromClientSize(System.Drawing.Size clientSize) -> System.Drawing.Size
+virtual System.Windows.Forms.Control.Text.get -> string!
+virtual System.Windows.Forms.Control.Text.set -> void
 virtual System.Windows.Forms.Control.WndProc(ref System.Windows.Forms.Message m) -> void
 virtual System.Windows.Forms.DataGridView.AccessibilityNotifyCurrentCellChanged(System.Drawing.Point cellAddress) -> void
 virtual System.Windows.Forms.DataGridView.BeginEdit(bool selectAll) -> bool
@@ -12985,11 +12953,18 @@ virtual System.Windows.Forms.DataGridViewRowCollection.InsertCopy(int indexSourc
 virtual System.Windows.Forms.DataGridViewRowCollection.RemoveAt(int index) -> void
 virtual System.Windows.Forms.DataGridViewTextBoxCell.MaxInputLength.get -> int
 virtual System.Windows.Forms.DataGridViewTextBoxCell.MaxInputLength.set -> void
+virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.ApplyCellStyleToEditingControl(System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
+virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlDataGridView.get -> System.Windows.Forms.DataGridView?
+virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlDataGridView.set -> void
+virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlFormattedValue.get -> object!
+virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlFormattedValue.set -> void
 virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlRowIndex.get -> int
 virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlRowIndex.set -> void
 virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlValueChanged.get -> bool
 virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlValueChanged.set -> void
 virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingControlWantsInputKey(System.Windows.Forms.Keys keyData, bool dataGridViewWantsInputKey) -> bool
+virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.EditingPanelCursor.get -> System.Windows.Forms.Cursor!
+virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.GetEditingControlFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object!
 virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.PrepareEditingControlForEdit(bool selectAll) -> void
 virtual System.Windows.Forms.DataGridViewTextBoxEditingControl.RepositionEditingControlOnValueChange.get -> bool
 virtual System.Windows.Forms.DataObject.ContainsAudio() -> bool
@@ -13027,8 +13002,11 @@ virtual System.Windows.Forms.DateTimePicker.OnRightToLeftLayoutChanged(System.Ev
 virtual System.Windows.Forms.DateTimePicker.OnValueChanged(System.EventArgs! eventargs) -> void
 virtual System.Windows.Forms.DateTimePicker.RightToLeftLayout.get -> bool
 virtual System.Windows.Forms.DateTimePicker.RightToLeftLayout.set -> void
+virtual System.Windows.Forms.Design.ComponentEditorForm.OnSelChangeSelector(object? source, System.Windows.Forms.TreeViewEventArgs! e) -> void
 virtual System.Windows.Forms.Design.ComponentEditorForm.ShowForm() -> System.Windows.Forms.DialogResult
 virtual System.Windows.Forms.Design.ComponentEditorForm.ShowForm(int page) -> System.Windows.Forms.DialogResult
+virtual System.Windows.Forms.Design.ComponentEditorForm.ShowForm(System.Windows.Forms.IWin32Window? owner) -> System.Windows.Forms.DialogResult
+virtual System.Windows.Forms.Design.ComponentEditorForm.ShowForm(System.Windows.Forms.IWin32Window? owner, int page) -> System.Windows.Forms.DialogResult
 virtual System.Windows.Forms.Design.ComponentEditorPage.Activate() -> void
 virtual System.Windows.Forms.Design.ComponentEditorPage.ApplyChanges() -> void
 virtual System.Windows.Forms.Design.ComponentEditorPage.Deactivate() -> void
@@ -13301,6 +13279,7 @@ virtual System.Windows.Forms.TabControl.TabPageCollection.RemoveByKey(string? ke
 virtual System.Windows.Forms.TabControl.TabPageCollection.this[int index].get -> System.Windows.Forms.TabPage!
 virtual System.Windows.Forms.TabControl.TabPageCollection.this[int index].set -> void
 virtual System.Windows.Forms.TabControl.TabPageCollection.this[string? key].get -> System.Windows.Forms.TabPage?
+virtual System.Windows.Forms.TableLayoutPanel.OnCellPaint(System.Windows.Forms.TableLayoutCellPaintEventArgs! e) -> void
 virtual System.Windows.Forms.TextBox.OnTextAlignChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.TextBox.PlaceholderText.get -> string!
 virtual System.Windows.Forms.TextBox.PlaceholderText.set -> void
@@ -13354,8 +13333,6 @@ virtual System.Windows.Forms.ToolStripItem.DefaultSize.get -> System.Drawing.Siz
 virtual System.Windows.Forms.ToolStripItem.DismissWhenClicked.get -> bool
 virtual System.Windows.Forms.ToolStripItem.DisplayStyle.get -> System.Windows.Forms.ToolStripItemDisplayStyle
 virtual System.Windows.Forms.ToolStripItem.DisplayStyle.set -> void
-virtual System.Windows.Forms.ToolStripItem.Enabled.get -> bool
-virtual System.Windows.Forms.ToolStripItem.Enabled.set -> void
 virtual System.Windows.Forms.ToolStripItem.ForeColor.get -> System.Drawing.Color
 virtual System.Windows.Forms.ToolStripItem.ForeColor.set -> void
 virtual System.Windows.Forms.ToolStripItem.GetPreferredSize(System.Drawing.Size constrainingSize) -> System.Drawing.Size

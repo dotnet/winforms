@@ -76,6 +76,7 @@ namespace System.Windows.Forms
         private const int TREEVIEWSTATE_lastControlValidated = 0x00004000;
         private const int TREEVIEWSTATE_stopResizeWindowMsgs = 0x00008000;
         private const int TREEVIEWSTATE_ignoreSelects = 0x00010000;
+        private const int TREEVIEWSTATE_doubleBufferedPropertySet = 0x00020000;
 
         // PERF: take all the bools and put them into a state variable
         private Collections.Specialized.BitVector32 treeViewState; // see TREEVIEWSTATE_ consts above
@@ -180,6 +181,19 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.UserPaint, false);
             SetStyle(ControlStyles.StandardClick, false);
             SetStyle(ControlStyles.UseTextForAccessibility, false);
+        }
+
+        internal override void ReleaseUiaProvider(IntPtr handle)
+        {
+            base.ReleaseUiaProvider(handle);
+
+            foreach (TreeNode rootNode in Nodes)
+            {
+                foreach (TreeNode node in rootNode.GetSelfAndChildNodes())
+                {
+                    node.ReleaseUiaProvider();
+                }
+            }
         }
 
         /// <summary>
@@ -436,7 +450,15 @@ namespace System.Windows.Forms
         protected override bool DoubleBuffered
         {
             get => base.DoubleBuffered;
-            set => base.DoubleBuffered = value;
+            set
+            {
+                if (DoubleBuffered != value)
+                {
+                    base.DoubleBuffered = value;
+                    treeViewState[TREEVIEWSTATE_doubleBufferedPropertySet] = true;
+                    UpdateTreeViewExtendedStyles();
+                }
+            }
         }
 
         /// <summary>
@@ -1959,6 +1981,9 @@ namespace System.Windows.Forms
 
             base.OnHandleCreated(e);
 
+            // The TreeView extended styles are independent of the window extended styles.
+            UpdateTreeViewExtendedStyles();
+
             int version = (int)User32.SendMessageW(this, (User32.WM)CCM.GETVERSION);
             if (version < 5)
             {
@@ -2727,6 +2752,21 @@ namespace System.Windows.Forms
                         SetStateImageList(internalStateImageList.Handle);
                     }
                 }
+            }
+        }
+
+        private void UpdateTreeViewExtendedStyles()
+        {
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
+            // Only set the TVS_EX_DOUBLEBUFFER style if the DoubleBuffered property setter has been executed.
+            // This stops the style from being removed for any derived classes that set it using P/Invoke.
+            if (treeViewState[TREEVIEWSTATE_doubleBufferedPropertySet])
+            {
+                User32.SendMessageW(this, (User32.WM)TVM.SETEXTENDEDSTYLE, (nint)TVS_EX.DOUBLEBUFFER, (nint)(DoubleBuffered ? TVS_EX.DOUBLEBUFFER : 0)); 
             }
         }
 

@@ -77,7 +77,9 @@ namespace System.Windows.Forms
             ///  Gets the accessible role.
             /// </summary>
             public override AccessibleRole Role
-                => AccessibleRole.ListItem;
+                => _owningListView.CheckBoxes
+                    ? AccessibleRole.CheckButton
+                    : AccessibleRole.ListItem;
 
             /// <summary>
             ///  Gets the accessible state.
@@ -107,10 +109,29 @@ namespace System.Windows.Forms
                 => SelectItem();
 
             public override string DefaultAction
-                => SR.AccessibleActionDoubleClick;
+            {
+                get
+                {
+                    if (_owningListView.CheckBoxes)
+                    {
+                        return _owningItem.Checked
+                            ? SR.AccessibleActionUncheck
+                            : SR.AccessibleActionCheck;
+                    }
+
+                    return SR.AccessibleActionDoubleClick;
+                }
+            }
 
             public override void DoDefaultAction()
-                => SetFocus();
+            {
+                if (_owningListView.CheckBoxes)
+                {
+                    Toggle();
+                }
+
+                SetFocus();
+            }
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
@@ -222,6 +243,14 @@ namespace System.Windows.Forms
                     UiaCore.UIA.TogglePatternId => _owningListView.CheckBoxes,
                     _ => base.IsPatternSupported(patternId)
                 };
+
+            internal virtual void ReleaseChildUiaProviders()
+            {
+                foreach (ListViewSubItem subItem in _owningItem.SubItems)
+                {
+                    subItem.ReleaseUiaProvider();
+                }
+            }
 
             internal override void RemoveFromSelection()
             {
