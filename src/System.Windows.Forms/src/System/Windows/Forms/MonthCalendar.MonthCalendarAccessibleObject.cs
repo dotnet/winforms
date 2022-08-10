@@ -88,24 +88,28 @@ namespace System.Windows.Forms
                 {
                     HRESULT result = UiaCore.UiaDisconnectProvider(_previousButtonAccessibleObject);
                     Debug.Assert(result == 0);
+                    _previousButtonAccessibleObject = null;
                 }
 
                 if (_nextButtonAccessibleObject is not null)
                 {
                     HRESULT result = UiaCore.UiaDisconnectProvider(_nextButtonAccessibleObject);
                     Debug.Assert(result == 0);
+                    _nextButtonAccessibleObject = null;
                 }
 
                 if (_todayLinkAccessibleObject is not null)
                 {
                     HRESULT result = UiaCore.UiaDisconnectProvider(_todayLinkAccessibleObject);
                     Debug.Assert(result == 0);
+                    _todayLinkAccessibleObject = null;
                 }
 
                 if (_focusedCellAccessibleObject is not null)
                 {
                     HRESULT result = UiaCore.UiaDisconnectProvider(_focusedCellAccessibleObject);
                     Debug.Assert(result == 0);
+                    _focusedCellAccessibleObject = null;
                 }
 
                 if (_calendarsAccessibleObjects is null)
@@ -119,6 +123,9 @@ namespace System.Windows.Forms
                     HRESULT result = UiaCore.UiaDisconnectProvider(calendarAccessibleObject);
                     Debug.Assert(result == 0);
                 }
+
+                _calendarsAccessibleObjects.Clear();
+                _calendarsAccessibleObjects = null;
             }
 
             /// <summary>

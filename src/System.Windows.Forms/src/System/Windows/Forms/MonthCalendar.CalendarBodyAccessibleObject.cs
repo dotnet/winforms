@@ -65,6 +65,9 @@ namespace System.Windows.Forms
                     HRESULT result = UiaCore.UiaDisconnectProvider(row);
                     Debug.Assert(result == 0);
                 }
+
+                _rowsAccessibleObjects.Clear();
+                _rowsAccessibleObjects = null;
             }
 
             internal void ClearChildCollection()

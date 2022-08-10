@@ -117,6 +117,9 @@ namespace System.Windows.Forms
                     HRESULT result = UiaCore.UiaDisconnectProvider(cell);
                     Debug.Assert(result == 0);
                 }
+
+                _cellsAccessibleObjects.Clear();
+                _cellsAccessibleObjects = null;
             }
 
             public override string? Description

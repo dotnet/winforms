@@ -46,6 +46,7 @@ namespace System.Windows.Forms
                 {
                     HRESULT result = UiaCore.UiaDisconnectProvider(_calendarHeaderAccessibleObject);
                     Debug.Assert(result == 0);
+                    _calendarHeaderAccessibleObject = null;
                 }
 
                 if (_calendarBodyAccessibleObject is not null)
@@ -53,6 +54,7 @@ namespace System.Windows.Forms
                     _calendarBodyAccessibleObject.DisconnectChildren();
                     HRESULT result = UiaCore.UiaDisconnectProvider(_calendarBodyAccessibleObject);
                     Debug.Assert(result == 0);
+                    _calendarBodyAccessibleObject = null;
                 }
             }
 
