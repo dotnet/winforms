@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
         public void RegionScope_NullWithNoClippingRegion()
         {
             // Create a bitmap using the screen's stats
-            HDC hdc = PInvoke.CreateCompatibleDC((HDC)default);
+            HDC hdc = CreateCompatibleDC((HDC)default);
             Assert.False(hdc.IsNull);
 
             try
@@ -85,12 +85,12 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
         public void RegionScope_GetRegion()
         {
             // Create a bitmap using the screen's stats
-            HDC hdc = PInvoke.CreateCompatibleDC((HDC)default);
+            HDC hdc = CreateCompatibleDC((HDC)default);
             Assert.False(hdc.IsNull);
 
             try
             {
-                HBITMAP hbitmap = PInvoke.CreateCompatibleBitmap(hdc, 20, 20);
+                HBITMAP hbitmap = CreateCompatibleBitmap(hdc, 20, 20);
                 Assert.False(hdc.IsNull);
 
                 try

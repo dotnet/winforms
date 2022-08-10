@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -329,7 +328,7 @@ namespace System.Windows.Forms
                 bounds.Width - 2, boxTop - 1, bounds.Width - 2, bounds.Height - 2                   // Right
             };
 
-            using var hpenDark = new Gdi32.CreatePenScope(SystemColors.ControlDark);
+            using PInvoke.CreatePenScope hpenDark = new(SystemColors.ControlDark);
             hdc.DrawLines(hpenDark, darkLines);
 
             ReadOnlySpan<int> lightLines = stackalloc int[]
@@ -341,7 +340,7 @@ namespace System.Windows.Forms
                 bounds.Width - 1, boxTop, bounds.Width - 1, bounds.Height - 1                       // Right
             };
 
-            using var hpenLight = new Gdi32.CreatePenScope(SystemColors.ControlLight);
+            using PInvoke.CreatePenScope hpenLight = new(SystemColors.ControlLight);
             hdc.DrawLines(hpenLight, lightLines);
         }
 

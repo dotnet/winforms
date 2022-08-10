@@ -2,13 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-internal static partial class Interop
+namespace Windows.Win32
 {
-    internal static partial class Gdi32
+    internal static partial class PInvoke
     {
         /// <summary>
-        ///  Helper to scope lifetime of a <see cref="Windows.Win32.Graphics.Gdi.HBITMAP"/> created via <see cref="PInvoke.CreateBitmap"/>
-        ///  Deletes the <see cref="Windows.Win32.Graphics.Gdi.HBITMAP"/> (if any) when disposed.
+        ///  Helper to scope lifetime of a <see cref="HBITMAP"/> created via <see cref="CreateBitmap"/>
+        ///  Deletes the <see cref="HBITMAP"/> (if any) when disposed.
         /// </summary>
         /// <remarks>
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
@@ -23,19 +23,19 @@ internal static partial class Interop
             public HBITMAP HBITMAP { get; }
 
             /// <summary>
-            ///  Creates a bitmap using <see cref="PInvoke.CreateBitmap"/>
+            ///  Creates a bitmap using <see cref="CreateBitmap"/>
             /// </summary>
             public unsafe CreateBitmapScope(int nWidth, int nHeight, uint nPlanes, uint nBitCount, void* lpvBits)
             {
-                HBITMAP = PInvoke.CreateBitmap(nWidth, nHeight, nPlanes, nBitCount, lpvBits);
+                HBITMAP = CreateBitmap(nWidth, nHeight, nPlanes, nBitCount, lpvBits);
             }
 
             /// <summary>
-            ///  Creates a bitmap compatible with the given <see cref="HDC"/> via <see cref="PInvoke.CreateCompatibleBitmap(Windows.Win32.Graphics.Gdi.HDC, int, int)"/>
+            ///  Creates a bitmap compatible with the given <see cref="HDC"/> via <see cref="CreateCompatibleBitmap(Windows.Win32.Graphics.Gdi.HDC, int, int)"/>
             /// </summary>
             public CreateBitmapScope(HDC hdc, int cx, int cy)
             {
-                HBITMAP = PInvoke.CreateCompatibleBitmap(hdc, cx, cy);
+                HBITMAP = CreateCompatibleBitmap(hdc, cx, cy);
             }
 
             public static implicit operator HBITMAP(in CreateBitmapScope scope) => scope.HBITMAP;
@@ -48,7 +48,7 @@ internal static partial class Interop
             {
                 if (!HBITMAP.IsNull)
                 {
-                    PInvoke.DeleteObject(HBITMAP);
+                    DeleteObject(HBITMAP);
                 }
 
 #if DEBUG

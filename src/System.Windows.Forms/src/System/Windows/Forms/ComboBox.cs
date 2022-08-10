@@ -3615,7 +3615,7 @@ namespace System.Windows.Forms
                 RECT rect = default;
                 GetClientRect(this, ref rect);
                 HDC hdc = (HDC)(nint)m.WParamInternal;
-                using var hbrush = new Gdi32.CreateBrushScope(ParentInternal?.BackColor ?? SystemColors.Control);
+                using PInvoke.CreateBrushScope hbrush = new(ParentInternal?.BackColor ?? SystemColors.Control);
                 hdc.FillRectangle(rect, hbrush);
                 m.ResultInternal = (LRESULT)1;
                 return;

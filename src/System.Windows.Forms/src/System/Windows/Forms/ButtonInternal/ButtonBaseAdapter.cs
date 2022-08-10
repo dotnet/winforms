@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms.ButtonInternal
 {
@@ -148,14 +147,16 @@ namespace System.Windows.Forms.ButtonInternal
             Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);    // Inner bottom right
 
             // Top + left
-            using var penTopLeft = new Gdi32.CreatePenScope(
-                disabledHighContrast ? colors.WindowDisabled : stockColor ? SystemColors.ControlLightLight : colors.Highlight);
+            using PInvoke.CreatePenScope penTopLeft = new(
+                disabledHighContrast
+                ? colors.WindowDisabled
+                : stockColor ? SystemColors.ControlLightLight : colors.Highlight);
 
             hdc.DrawLine(penTopLeft, p1, p2);           // Top  (right-left)
             hdc.DrawLine(penTopLeft, p2, p3);           // Left (up-down)
 
             // Bottom + right
-            using var penBottomRight = new Gdi32.CreatePenScope(
+            using PInvoke.CreatePenScope penBottomRight = new(
                 disabledHighContrast
                     ? colors.WindowDisabled
                     : stockColor ? SystemColors.ControlDarkDark : colors.ButtonShadowDark);
@@ -165,7 +166,7 @@ namespace System.Windows.Forms.ButtonInternal
             hdc.DrawLine(penBottomRight, p4, p1);       // Right  (bottom-up)
 
             // Draw inset using the background color to make the top and left lines thinner
-            using var insetPen = new Gdi32.CreatePenScope(
+            using PInvoke.CreatePenScope insetPen = new(
                 stockColor
                     ? SystemInformation.HighContrast ? SystemColors.ControlLight : SystemColors.Control
                     : SystemInformation.HighContrast ? colors.Highlight : colors.ButtonFace);
@@ -180,8 +181,10 @@ namespace System.Windows.Forms.ButtonInternal
             hdc.DrawLine(insetPen, p2, p3);             // Left (up-down)
 
             // Bottom + right inset
-            using var bottomRightInsetPen = new Gdi32.CreatePenScope(
-                disabledHighContrast ? colors.WindowDisabled : stockColor ? SystemColors.ControlDark : colors.ButtonShadow);
+            using PInvoke.CreatePenScope bottomRightInsetPen = new(
+                disabledHighContrast
+                ? colors.WindowDisabled
+                : stockColor ? SystemColors.ControlDark : colors.ButtonShadow);
 
             p1.Offset(0, -1);                           // Need to paint last pixel too.
             hdc.DrawLine(bottomRightInsetPen, p3, p4);  // Bottom (left-right)
@@ -199,19 +202,19 @@ namespace System.Windows.Forms.ButtonInternal
             Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);    // Inner bottom right
 
             // Top + left
-            using var shadowPen = new Gdi32.CreatePenScope(colors.ButtonShadowDark);
+            using PInvoke.CreatePenScope shadowPen = new(colors.ButtonShadowDark);
             hdc.DrawLine(shadowPen, p1, p2);                                                    // Top (right-left)
             hdc.DrawLine(shadowPen, p2, p3);                                                    // Left(up-down)
 
             // Bottom + right
-            using var highlightPen = new Gdi32.CreatePenScope(colors.Highlight);
+            using PInvoke.CreatePenScope highlightPen = new(colors.Highlight);
             p1.Offset(0, -1);                       // Need to paint last pixel too.
             hdc.DrawLine(highlightPen, p3, p4);     // Bottom (left-right)
             hdc.DrawLine(highlightPen, p4, p1);     // Right  (bottom-up)
 
             // Draw inset
 
-            using var facePen = new Gdi32.CreatePenScope(colors.ButtonFace);
+            using PInvoke.CreatePenScope facePen = new(colors.ButtonFace);
 
             p1.Offset(-1, 2);
             p2.Offset(1, 1);
@@ -223,7 +226,7 @@ namespace System.Windows.Forms.ButtonInternal
             hdc.DrawLine(facePen, p2, p3);          // Left (up-down)
 
             // Bottom + right inset
-            using var insetPen = new Gdi32.CreatePenScope(
+            using PInvoke.CreatePenScope insetPen = new(
                 colors.ButtonFace.ToKnownColor() == SystemColors.Control.ToKnownColor()
                     ? SystemColors.ControlLight
                     : colors.ButtonFace);
@@ -247,7 +250,7 @@ namespace System.Windows.Forms.ButtonInternal
             Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);    // Inner bottom right
 
             // Top + left
-            using var topLeftPen = new Gdi32.CreatePenScope(
+            using PInvoke.CreatePenScope topLeftPen = new(
                 disabledHighContrast
                     ? colors.WindowDisabled
                     : stockColor ? SystemColors.ControlLightLight : colors.Highlight);
@@ -256,8 +259,10 @@ namespace System.Windows.Forms.ButtonInternal
             hdc.DrawLine(topLeftPen, p2, p3);           // Left (up-down)
 
             // Bottom + right
-            using var bottomRightPen = new Gdi32.CreatePenScope(
-                disabledHighContrast ? colors.WindowDisabled : stockColor ? SystemColors.ControlDarkDark : colors.ButtonShadowDark);
+            using PInvoke.CreatePenScope bottomRightPen = new(
+                disabledHighContrast
+                ? colors.WindowDisabled
+                : stockColor ? SystemColors.ControlDarkDark : colors.ButtonShadowDark);
 
             p1.Offset(0, -1);                           // Need to paint last pixel too.
             hdc.DrawLine(bottomRightPen, p3, p4);       // Bottom (left-right)
@@ -269,7 +274,7 @@ namespace System.Windows.Forms.ButtonInternal
             p3.Offset(1, -1);
             p4.Offset(-1, -1);
 
-            using var topLeftInsetPen = new Gdi32.CreatePenScope(
+            using PInvoke.CreatePenScope topLeftInsetPen = new(
                 !stockColor
                     ? colors.ButtonFace
                     : SystemInformation.HighContrast ? SystemColors.ControlLight : SystemColors.Control);
@@ -280,8 +285,10 @@ namespace System.Windows.Forms.ButtonInternal
 
             // Bottom + right inset
 
-            using var bottomRightInsetPen = new Gdi32.CreatePenScope(
-                disabledHighContrast ? colors.WindowDisabled : stockColor ? SystemColors.ControlDark : colors.ButtonShadow);
+            using PInvoke.CreatePenScope bottomRightInsetPen = new(
+                disabledHighContrast
+                ? colors.WindowDisabled
+                : stockColor ? SystemColors.ControlDark : colors.ButtonShadow);
 
             p1.Offset(0, -1);                           // Need to paint last pixel too.
             hdc.DrawLine(bottomRightInsetPen, p3, p4);  // Bottom (left-right)
@@ -303,13 +310,13 @@ namespace System.Windows.Forms.ButtonInternal
             Color color = GetContrastingBorderColor(colors.ButtonShadow);
 
             // Top, left
-            using var topLeftPen = new Gdi32.CreatePenScope(up ? colors.Highlight : color);
+            using PInvoke.CreatePenScope topLeftPen = new(up ? colors.Highlight : color);
 
             hdc.DrawLine(topLeftPen, p1, p2);                   // top  (right-left)
             hdc.DrawLine(topLeftPen, p2, p3);                   // left (top-down)
 
             // Bottom, right
-            using var bottomRightPen = new Gdi32.CreatePenScope(up ? color : colors.Highlight);
+            using PInvoke.CreatePenScope bottomRightPen = new(up ? color : colors.Highlight);
 
             p1.Offset(0, -1);                                   // Need to paint last pixel too.
             hdc.DrawLine(bottomRightPen, p3, p4);               // Bottom (left-right)
@@ -346,8 +353,8 @@ namespace System.Windows.Forms.ButtonInternal
                 return;
             }
 
-            using var hdc = new DeviceContextHdcScope(e);
-            using var hbrush = new Gdi32.CreateBrushScope(color);
+            using DeviceContextHdcScope hdc = new(e);
+            using PInvoke.CreateBrushScope hbrush = new(color);
             hdc.FillRectangle(left, hbrush);
             hdc.FillRectangle(right, hbrush);
             hdc.FillRectangle(top, hbrush);
@@ -356,8 +363,8 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal static void DrawFlatFocus(IDeviceContext deviceContext, Rectangle r, Color color)
         {
-            using var hdc = new DeviceContextHdcScope(deviceContext);
-            using var focusPen = new Gdi32.CreatePenScope(color);
+            using DeviceContextHdcScope hdc = new(deviceContext);
+            using PInvoke.CreatePenScope focusPen = new(color);
             hdc.DrawRectangle(r, focusPen);
         }
 
@@ -442,8 +449,8 @@ namespace System.Windows.Forms.ButtonInternal
                 }
             }
 
-            using var hpen = new Gdi32.CreatePenScope(color);
-            using var hdc = new DeviceContextHdcScope(deviceContext);
+            using PInvoke.CreatePenScope hpen = new(color);
+            using DeviceContextHdcScope hdc = new(deviceContext);
             hdc.DrawRectangle(r, hpen);
         }
 

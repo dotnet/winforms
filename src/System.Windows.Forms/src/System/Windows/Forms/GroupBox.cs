@@ -566,8 +566,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    using var hdc = new DeviceContextHdcScope(e);
-                    using var hpen = new Gdi32.CreatePenScope(boxColor);
+                    using DeviceContextHdcScope hdc = new(e);
+                    using PInvoke.CreatePenScope hpen = new(boxColor);
                     hdc.DrawLines(hpen, lines);
                 }
             }
@@ -591,10 +591,10 @@ namespace System.Windows.Forms
                     Width - 2, boxTop - 1, Width - 2, Height - 2    // Right
                 };
 
-                using var hdc = new DeviceContextHdcScope(e);
-                using var hpenLight = new Gdi32.CreatePenScope(ControlPaint.Light(backColor, 1.0f));
+                using DeviceContextHdcScope hdc = new(e);
+                using PInvoke.CreatePenScope hpenLight = new(ControlPaint.Light(backColor, 1.0f));
                 hdc.DrawLines(hpenLight, lightLines);
-                using var hpenDark = new Gdi32.CreatePenScope(ControlPaint.Dark(backColor, 0f));
+                using PInvoke.CreatePenScope hpenDark = new(ControlPaint.Dark(backColor, 0f));
                 hdc.DrawLines(hpenDark, darkLines);
             }
         }
@@ -677,7 +677,7 @@ namespace System.Windows.Forms
             else
             {
                 var hdc = (HDC)(nint)m.WParamInternal;
-                using var hbrush = new Gdi32.CreateBrushScope(backColor);
+                using PInvoke.CreateBrushScope hbrush = new(backColor);
                 User32.FillRect(hdc, ref rect, hbrush);
             }
 

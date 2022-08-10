@@ -5,13 +5,14 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using static Interop;
 
-internal static partial class Interop
+namespace Windows.Win32
 {
-    internal static partial class Gdi32
+    internal static partial class PInvoke
     {
         /// <summary>
-        ///  Helper to scope the lifetime of a <see cref="Windows.Win32.Graphics.Gdi.HBRUSH"/>.
+        ///  Helper to scope the lifetime of a <see cref="HBRUSH"/>.
         /// </summary>
         /// <remarks>
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
@@ -26,13 +27,13 @@ internal static partial class Interop
             public HBRUSH HBRUSH { get; }
 
             /// <summary>
-            ///  Creates a solid brush based on the <paramref name="color"/> using <see cref="CreateSolidBrush(int)"/>.
+            ///  Creates a solid brush based on the <paramref name="color"/> using <see cref="Gdi32.CreateSolidBrush(int)"/>.
             /// </summary>
             public CreateBrushScope(Color color)
             {
                 HBRUSH = color.IsSystemColor
                     ? User32.GetSysColorBrush(color)
-                    : CreateSolidBrush(ColorTranslator.ToWin32(color));
+                    : Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(color));
                 ValidateBrushHandle();
             }
 

@@ -655,8 +655,8 @@ namespace System.Windows.Forms
 
                 if (!backColor.HasTransparency())
                 {
-                    using var hdc = new DeviceContextHdcScope(e);
-                    using var hbrush = new Gdi32.CreateBrushScope(backColor);
+                    using DeviceContextHdcScope hdc = new(e);
+                    using PInvoke.CreateBrushScope hbrush = new(backColor);
                     hdc.FillRectangle(textBounds, hbrush);
                 }
                 else

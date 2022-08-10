@@ -575,9 +575,9 @@ namespace System.Windows.Forms.Design
             Rectangle face = ctrl.ClientRectangle;
 
             using Graphics g = ctrl.CreateGraphics();
-            using var dc = new DeviceContextHdcScope(g, applyGraphicsState: false);
-            using var hFont = new Gdi32.ObjectScope(ctrl.Font.ToHFONT());
-            using var hFontOld = new Gdi32.SelectObjectScope(dc, hFont);
+            using DeviceContextHdcScope dc = new(g, applyGraphicsState: false);
+            using PInvoke.ObjectScope hFont = new(ctrl.Font.ToHFONT());
+            using Gdi32.SelectObjectScope hFontOld = new(dc, hFont);
 
             var metrics = new Gdi32.TEXTMETRICW();
             Gdi32.GetTextMetricsW(dc, ref metrics);

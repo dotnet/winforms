@@ -8734,8 +8734,8 @@ namespace System.Windows.Forms
             // to use it without enough bookkeeping to negate any performance gain of using GDI.
             if (!color.HasTransparency())
             {
-                using var hdc = new DeviceContextHdcScope(e);
-                using var hbrush = new Gdi32.CreateBrushScope(hdc.FindNearestColor(color));
+                using DeviceContextHdcScope hdc = new(e);
+                using PInvoke.CreateBrushScope hbrush = new(hdc.FindNearestColor(color));
                 hdc.FillRectangle(rectangle, hbrush);
             }
             else if (!color.IsFullyTransparent())
@@ -8791,8 +8791,8 @@ namespace System.Windows.Forms
             {
                 // For whatever reason, our parent can't paint our background, but we need some kind of background
                 // since we're transparent.
-                using var hdcNoParent = new DeviceContextHdcScope(e);
-                using var hbrush = new Gdi32.CreateBrushScope(SystemColors.Control);
+                using DeviceContextHdcScope hdcNoParent = new(e);
+                using PInvoke.CreateBrushScope hbrush = new(SystemColors.Control);
                 hdcNoParent.FillRectangle(rectangle, hbrush);
                 return;
             }
