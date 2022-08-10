@@ -746,7 +746,7 @@ namespace System.Windows.Forms
             // Windows uses CreateCompatibleDC(NULL) to get a memory DC for
             // the monitor the application is currently on.
 
-            using var dc = new Gdi32.CreateDcScope(default);
+            using var dc = new PInvoke.CreateDcScope(default);
             if (dc.IsNull)
             {
                 throw new Win32Exception();
@@ -759,9 +759,9 @@ namespace System.Windows.Forms
             // We must do the same here if our dialogs are to scale in a
             // similar fashion.
 
-            using var fontSelection = new Gdi32.SelectObjectScope(dc, FontHandle);
+            using Gdi32.SelectObjectScope fontSelection = new(dc, FontHandle);
 
-            var tm = new Gdi32.TEXTMETRICW();
+            Gdi32.TEXTMETRICW tm = new();
             Gdi32.GetTextMetricsW(dc, ref tm);
 
             retval.Height = tm.tmHeight;

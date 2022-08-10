@@ -41,7 +41,7 @@ namespace System.Windows.Forms
             Debug.Assert(success, "GetViewportOrgEx() failed.");
 
             // Create a new rectangular clipping region based off of the bounds specified, shifted over by the x & y specified in the viewport origin.
-            var hClippingRegion = new Gdi32.RegionScope(
+            PInvoke.RegionScope hClippingRegion = new(
                 viewportOrg.X + bounds.Left,
                 viewportOrg.Y + bounds.Top,
                 viewportOrg.X + bounds.Right,
@@ -50,7 +50,7 @@ namespace System.Windows.Forms
 
             try
             {
-                var hOriginalClippingRegion = new Gdi32.RegionScope(hdc);
+                PInvoke.RegionScope hOriginalClippingRegion = new(hdc);
 
                 // Shift the viewpoint origin by coordinates specified in "bounds".
                 var lastViewPort = new Point();

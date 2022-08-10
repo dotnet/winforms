@@ -290,8 +290,8 @@ namespace System.Windows.Forms
             AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
 
             Rectangle bounds = Bounds;
-            using var rgn1 = new Gdi32.RegionScope(0, 0, bounds.Width, bounds.Height);
-            using var rgn2 = new Gdi32.RegionScope(
+            using PInvoke.RegionScope rgn1 = new(0, 0, bounds.Width, bounds.Height);
+            using PInvoke.RegionScope rgn2 = new(
                 -rect.left,
                 -rect.top,
                 bounds.Width - rect.right,

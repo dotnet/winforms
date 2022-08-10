@@ -126,15 +126,15 @@ namespace System.Windows.Forms
             HBITMAP hBitmap = bm.GetHBITMAP();
 
             // Create a compatible DC to render the source bitmap.
-            using var sourceDC = new Gdi32.CreateDcScope(screenDC);
-            using var sourceBitmapSelection = new Gdi32.SelectObjectScope(sourceDC, hBitmap);
+            using PInvoke.CreateDcScope sourceDC = new(screenDC);
+            using Gdi32.SelectObjectScope sourceBitmapSelection = new(sourceDC, hBitmap);
 
             // Create a compatible DC and a new compatible bitmap.
-            using var destinationDC = new Gdi32.CreateDcScope(screenDC);
+            using PInvoke.CreateDcScope destinationDC = new(screenDC);
             HBITMAP bitmap = PInvoke.CreateCompatibleBitmap(screenDC, bm.Size.Width, bm.Size.Height);
 
             // Select the new bitmap into a compatible DC and render the blt the original bitmap.
-            using var destinationBitmapSelection = new Gdi32.SelectObjectScope(destinationDC, bitmap);
+            using Gdi32.SelectObjectScope destinationBitmapSelection = new(destinationDC, bitmap);
             PInvoke.BitBlt(
                 destinationDC,
                 0,

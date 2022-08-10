@@ -305,7 +305,7 @@ namespace System.Windows.Forms.Design.Behavior
                     case User32.WM.PAINT:
                         {
                             // Stash off the region we have to update.
-                            using var hrgn = new Gdi32.RegionScope(0, 0, 0, 0);
+                            using PInvoke.RegionScope hrgn = new(0, 0, 0, 0);
                             User32.GetUpdateRgn(m.HWnd, hrgn, true);
 
                             // The region we have to update in terms of the smallest rectangle that completely encloses
@@ -321,7 +321,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                             // Now do our own painting.
                             using Graphics g = Graphics.FromHwnd(m.HWnd);
-                            using PaintEventArgs pevent = new PaintEventArgs(g, paintRect);
+                            using PaintEventArgs pevent = new(g, paintRect);
                             g.Clip = region;
                             _behaviorService.PropagatePaint(pevent);
 

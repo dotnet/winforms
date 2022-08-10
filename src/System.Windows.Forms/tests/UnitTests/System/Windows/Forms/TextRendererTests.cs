@@ -7,8 +7,8 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Windows.Forms.Metafiles;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 using Xunit;
 using static Interop;
 
@@ -753,7 +753,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(TextRenderer_DrawText_ApplyState_TestData))]
         public void TextRenderer_DrawText_ApplyState(TextFormatFlags flags, Rectangle expectedBounds)
         {
-            using var hdc = new Interop.Gdi32.CreateDcScope(default);
+            using var hdc = new PInvoke.CreateDcScope(default);
             DeviceContextState state = new DeviceContextState(hdc);
 
             using MemoryStream stream = new MemoryStream(1024);

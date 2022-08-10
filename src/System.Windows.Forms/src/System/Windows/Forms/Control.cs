@@ -3120,7 +3120,7 @@ namespace System.Windows.Forms
 
             // If we're an ActiveX control, clone the region so it can potentially be modified
             using Region? regionCopy = IsActiveX ? ActiveXMergeRegion(region.Clone()) : null;
-            using var regionHandle = new Gdi32.RegionScope(regionCopy ?? region, Handle);
+            using PInvoke.RegionScope regionHandle = new(regionCopy ?? region, Handle);
 
             if (User32.SetWindowRgn(this, regionHandle, User32.IsWindowVisible(this)) != 0)
             {
@@ -6343,7 +6343,7 @@ namespace System.Windows.Forms
             else if (IsHandleCreated)
             {
                 using Graphics graphics = CreateGraphicsInternal();
-                using var regionHandle = new Gdi32.RegionScope(region, graphics);
+                using var regionHandle = new PInvoke.RegionScope(region, graphics);
 
                 if (invalidateChildren)
                 {
@@ -9339,7 +9339,7 @@ namespace System.Windows.Forms
             bool success = Gdi32.GetViewportOrgEx(hDC, out Point viewportOrg);
             Debug.Assert(success, "GetViewportOrgEx() failed.");
 
-            using var hClippingRegion = new Gdi32.RegionScope(
+            using var hClippingRegion = new PInvoke.RegionScope(
                 viewportOrg.X,
                 viewportOrg.Y,
                 viewportOrg.X + Width,

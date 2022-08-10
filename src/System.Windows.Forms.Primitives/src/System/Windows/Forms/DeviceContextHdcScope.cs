@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using static Interop;
-using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms
 {
@@ -169,7 +168,7 @@ namespace System.Windows.Forms
                 applyTransform = applyTransform && !offset.IsEmpty;
                 applyClipping = clipRegion is not null;
 
-                using var graphicsRegion = applyClipping ? new Gdi32.RegionScope(clipRegion!, graphics) : default;
+                using var graphicsRegion = applyClipping ? new PInvoke.RegionScope(clipRegion!, graphics) : default;
                 applyClipping = applyClipping && !graphicsRegion!.Region.IsNull;
 
                 HDC = (HDC)graphics.GetHdc();
@@ -187,10 +186,10 @@ namespace System.Windows.Forms
 
                     RegionType type;
 
-                    using var dcRegion = new Gdi32.RegionScope(HDC);
+                    using PInvoke.RegionScope dcRegion = new(HDC);
                     if (!dcRegion.IsNull)
                     {
-                        type = (RegionType)PInvoke.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, Gdi.RGN_COMBINE_MODE.RGN_AND);
+                        type = (RegionType)PInvoke.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, RGN_COMBINE_MODE.RGN_AND);
                         if (type == RegionType.ERROR)
                         {
                             throw new Win32Exception();

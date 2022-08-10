@@ -19,16 +19,16 @@ namespace System.Windows.Forms.Tests
         public void Scope_ApplyGraphicsProperties()
         {
             // Create a bitmap using the screen's stats
-            using var dcScope = new Gdi32.CreateDcScope(default);
+            using var dcScope = new PInvoke.CreateDcScope(default);
             using var bitmapScope = new Gdi32.CreateBitmapScope(dcScope, 20, 20);
             Gdi32.SelectObject(dcScope, bitmapScope);
 
             // Select a clipping region into the DC
-            using var dcRegion = new Gdi32.RegionScope(2, 1, 4, 7);
+            using var dcRegion = new PInvoke.RegionScope(2, 1, 4, 7);
             RegionType type = Gdi32.SelectClipRgn(dcScope, dcRegion);
             Assert.Equal(RegionType.SIMPLEREGION, type);
 
-            using var test = new Gdi32.RegionScope(0, 0, 0, 0);
+            using var test = new PInvoke.RegionScope(0, 0, 0, 0);
             int result = GetRandomRgn(dcScope, test, 1);
             RECT rect2 = default;
             type = Gdi32.GetRgnBox(test, ref rect2);
@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Tests
 
             using (var hdcScope = new DeviceContextHdcScope(graphics))
             {
-                using var regionScope = new Gdi32.RegionScope(hdcScope);
+                using var regionScope = new PInvoke.RegionScope(hdcScope);
                 Assert.False(regionScope.IsNull);
                 RECT rect = default;
                 type = Gdi32.GetRgnBox(regionScope, ref rect);
@@ -61,7 +61,7 @@ namespace System.Windows.Forms.Tests
         public void Graphics_HdcStatePersistence()
         {
             // Create a bitmap using the screen's stats
-            using var dcScope = new Gdi32.CreateDcScope(default);
+            using var dcScope = new PInvoke.CreateDcScope(default);
             using var bitmapScope = new Gdi32.CreateBitmapScope(dcScope, 20, 20);
             Gdi32.MM originalMapMode = Gdi32.SetMapMode(dcScope, Gdi32.MM.HIMETRIC);
             Gdi32.SelectObject(dcScope, bitmapScope);
