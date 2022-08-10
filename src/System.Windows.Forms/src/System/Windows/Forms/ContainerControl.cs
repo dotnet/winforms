@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Primitives;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -1172,7 +1173,7 @@ namespace System.Windows.Forms
             }
         }
 
-        protected virtual void ScaleTopLevelWindowProperties(float widthFactor, float hightFactor)
+        protected virtual void ScaleTopLevelWindowProperties(float xScaleFactor, float yScaleFactor, bool updateFormSize = true)
         { }
 
         /// <summary>
@@ -1428,12 +1429,14 @@ namespace System.Windows.Forms
             SuspendAllLayout(this);
             try
             {
-
-                // Suggested rectangle comes from Windows and does not match with our calculations for scaling controls by Autoscale factor.
-                // Hence, we can not use AutoscaleFactor here for scaling control properties. Please below description for more details.
-                float widthFactor = (float)suggestedRectangle.Width / Width;
-                float hightFactor = (float)suggestedRectangle.Width / Height;
-                ScaleTopLevelWindowProperties(widthFactor, hightFactor);
+                if (LocalAppContextSwitches.ScaleTopLevelFormMinMaxSize)
+                {
+                    // Suggested rectangle comes from Windows operating system and does not match with our calculations for scaling controls by Autoscale factor.
+                    // Hence, we can not use AutoscaleFactor here for scaling control properties. Please see below description for more details.
+                    float xScaleFactor = (float)suggestedRectangle.Width / Width;
+                    float yScaleFactor = (float)suggestedRectangle.Height / Height;
+                    ScaleTopLevelWindowProperties(xScaleFactor, yScaleFactor, updateFormSize: false);
+                }
 
                 // If this container is a top-level window, we would receive WM_DPICHANGED message that
                 // has SuggestedRectangle for the control. We are forced to use this in such cases to

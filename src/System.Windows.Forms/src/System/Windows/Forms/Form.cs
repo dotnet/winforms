@@ -1297,12 +1297,12 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(MaximumSize));
                     }
 
-                    UpdateMaximumSizeProperty(value);
+                    UpdateMaximumSize(value);
                 }
             }
         }
 
-        private void UpdateMaximumSizeProperty(Size value, bool UpdateFormSize = true)
+        private void UpdateMaximumSize(Size value, bool UpdateFormSize = true)
         {
             Properties.SetInteger(PropMaxTrackSizeWidth, value.Width);
             Properties.SetInteger(PropMaxTrackSizeHeight, value.Height);
@@ -1420,12 +1420,12 @@ namespace System.Windows.Forms
                     bounds.Size = value;
                     value = WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(bounds).Size;
 
-                    UpdateMinimumSizeProperty(value);
+                    UpdateMinimumSize(value);
                 }
             }
         }
 
-        private void UpdateMinimumSizeProperty(Size value, bool UpdateFormSize = true)
+        private void UpdateMinimumSize(Size value, bool UpdateFormSize = true)
         {
             Properties.SetInteger(PropMinTrackSizeWidth, value.Width);
             Properties.SetInteger(PropMinTrackSizeHeight, value.Height);
@@ -4908,25 +4908,25 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override void ScaleTopLevelWindowProperties(float widthFactor, float hightFactor)
+        protected override void ScaleTopLevelWindowProperties(float xScaleFactor, float yScaleFactor, bool updateFormSize = true)
         {
-            base.ScaleTopLevelWindowProperties(widthFactor, hightFactor);
+            base.ScaleTopLevelWindowProperties(xScaleFactor, yScaleFactor, updateFormSize);
             if (WindowState == FormWindowState.Normal)
             {
                 Size minSize = MinimumSize;
                 Size maxSize = MaximumSize;
                 if (!minSize.IsEmpty)
                 {
-                    UpdateMinimumSizeProperty(ScaleSize(minSize, widthFactor, hightFactor), UpdateFormSize: false);
+                    UpdateMinimumSize(ScaleSize(minSize, xScaleFactor, yScaleFactor), updateFormSize);
                 }
 
                 if (!maxSize.IsEmpty)
                 {
-                    UpdateMaximumSizeProperty(ScaleSize(maxSize, widthFactor, hightFactor), UpdateFormSize: false);
+                    UpdateMaximumSize(ScaleSize(maxSize, xScaleFactor, yScaleFactor), updateFormSize);
                 }
             }
 
-            ScaleDockPadding(widthFactor, hightFactor);
+            ScaleDockPadding(xScaleFactor, yScaleFactor);
         }
 
         /// <summary>

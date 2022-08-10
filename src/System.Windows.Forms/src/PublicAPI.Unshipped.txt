@@ -1,3 +1,3 @@
+override System.Windows.Forms.Form.ScaleTopLevelWindowProperties(float xScaleFactor, float yScaleFactor, bool updateFormSize = true) -> void
+virtual System.Windows.Forms.ContainerControl.ScaleTopLevelWindowProperties(float xScaleFactor, float yScaleFactor, bool updateFormSize = true) -> void
 ~override System.Windows.Forms.WebBrowser.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-virtual System.Windows.Forms.ContainerControl.ScaleTopLevelWindowProperties(float widthFactor, float hightFactor) -> void
-override System.Windows.Forms.Form.ScaleTopLevelWindowProperties(float widthFactor, float hightFactor) -> void
