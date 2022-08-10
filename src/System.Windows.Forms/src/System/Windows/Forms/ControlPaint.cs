@@ -171,12 +171,12 @@ namespace System.Windows.Forms
             Gdi32.GetObjectW((HGDIOBJ)palette.Value, out uint entryCount);
 
             byte[] bitmapInfoBuffer = ArrayPool<byte>.Shared
-                .Rent(checked((int)(sizeof(Gdi.BITMAPINFOHEADER) + (sizeof(Gdi.RGBQUAD) * entryCount))));
+                .Rent(checked((int)(sizeof(BITMAPINFOHEADER) + (sizeof(RGBQUAD) * entryCount))));
 
             // Create a DIB based on the screen DC to write into with a halftone palette
             fixed (byte* bi = bitmapInfoBuffer)
             {
-                *((Gdi.BITMAPINFOHEADER*)bi) = new Gdi.BITMAPINFOHEADER
+                *((BITMAPINFOHEADER*)bi) = new BITMAPINFOHEADER
                 {
                     biSize = (uint)sizeof(Gdi32.BITMAPINFOHEADER),
                     biWidth = bitmap.Width,
@@ -186,7 +186,7 @@ namespace System.Windows.Forms
                     biCompression = (uint)Gdi32.BI.RGB
                 };
 
-                Span<Gdi.RGBQUAD> colors = new(bi + sizeof(Gdi.BITMAPINFOHEADER), (int)entryCount);
+                Span<RGBQUAD> colors = new(bi + sizeof(BITMAPINFOHEADER), (int)entryCount);
                 Span<Gdi32.PALETTEENTRY> entries = stackalloc Gdi32.PALETTEENTRY[(int)entryCount];
                 Gdi32.GetPaletteEntries(palette, entries);
 
@@ -194,7 +194,7 @@ namespace System.Windows.Forms
                 for (int i = 0; i < entryCount; i++)
                 {
                     Gdi32.PALETTEENTRY entry = entries[i];
-                    colors[i] = new Gdi.RGBQUAD
+                    colors[i] = new RGBQUAD
                     {
                         rgbRed = entry.peRed,
                         rgbGreen = entry.peGreen,
@@ -207,8 +207,8 @@ namespace System.Windows.Forms
                 void* bitsBuffer;
                 hbitmap = PInvoke.CreateDIBSection(
                     screen,
-                    (Gdi.BITMAPINFO*)bi,
-                    Gdi.DIB_USAGE.DIB_RGB_COLORS,
+                    (BITMAPINFO*)bi,
+                    DIB_USAGE.DIB_RGB_COLORS,
                     &bitsBuffer,
                     hSection: default,
                     offset: 0);

@@ -54,7 +54,7 @@ namespace System.Windows.Forms
             }
 
             // Didn't find anything in the cache, create a new HDC
-            return new ScreenDcScope(this, PInvoke.CreateCompatibleDC((Gdi32.HDC)default));
+            return new ScreenDcScope(this, PInvoke.CreateCompatibleDC((HDC)default));
         }
 
         /// <summary>

@@ -41,7 +41,7 @@ namespace System.Windows.Forms
 
                 _hMetafileDC = hOriginalDC;
                 _destRect = new(size);
-                HDC = PInvoke.CreateCompatibleDC(default);
+                HDC = PInvoke.CreateCompatibleDC((HDC)default);
 
                 int planes = Gdi32.GetDeviceCaps(HDC, Gdi32.DeviceCapability.PLANES);
                 int bitsPixel = Gdi32.GetDeviceCaps(HDC, Gdi32.DeviceCapability.BITSPIXEL);

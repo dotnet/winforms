@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
                 }
                 finally
                 {
-                    DeleteObject(hbitmap);
+                    Gdi32.DeleteObject(hbitmap);
                 }
             }
             finally
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
                 }
                 finally
                 {
-                    DeleteObject(hbitmap);
+                    Gdi32.DeleteObject(hbitmap);
                 }
             }
             finally
@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
                 }
                 finally
                 {
-                    DeleteObject(hbitmap);
+                    Gdi32.DeleteObject(hbitmap);
                 }
             }
             finally

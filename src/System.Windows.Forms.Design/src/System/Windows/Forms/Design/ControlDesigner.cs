@@ -2139,7 +2139,7 @@ namespace System.Windows.Forms.Design
                         }
                         else
                         {
-                            using var scope = new PInvoke.BeginPaintScope((HWND)m.HWnd);
+                            using PInvoke.BeginPaintScope scope = new((HWND)m.HWnd);
                             PaintException(pevent, _thrownException);
                         }
 

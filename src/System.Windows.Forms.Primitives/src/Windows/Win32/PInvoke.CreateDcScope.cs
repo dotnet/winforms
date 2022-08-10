@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop.Gdi32;
+
 namespace Windows.Win32
 {
     internal static partial class PInvoke
@@ -23,7 +25,7 @@ namespace Windows.Win32
             public HDC HDC { get; }
 
             /// <summary>
-            ///  Creates a compatible HDC for <paramref name="hdc"/> using <see cref="PInvoke.CreateCompatibleDC(HDC)"/>.
+            ///  Creates a compatible HDC for <paramref name="hdc"/> using <see cref="CreateCompatibleDC(HDC)"/>.
             /// </summary>
             /// <remarks>
             ///  Passing a null HDC will use the current screen.
