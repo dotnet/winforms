@@ -8,6 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -619,6 +620,18 @@ namespace System.Windows.Forms
             else
             {
                 base.OnPaintBackground(e);
+            }
+        }
+
+        internal override void ReleaseUiaProvider(IntPtr handle)
+        {
+            base.ReleaseUiaProvider(handle);
+
+            if (_tabAccessibilityObject is not null && OsVersion.IsWindows8OrGreater)
+            {
+                HRESULT result = UiaCore.UiaDisconnectProvider(_tabAccessibilityObject);
+                Debug.Assert(result == HRESULT.S_OK);
+                _tabAccessibilityObject = null;
             }
         }
 

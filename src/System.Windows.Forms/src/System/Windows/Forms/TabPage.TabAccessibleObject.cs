@@ -73,7 +73,7 @@ namespace System.Windows.Forms
                     OwningTabControl is null
                         ? PARAM.ToInt(IntPtr.Zero)
                         : PARAM.ToInt(OwningTabControl.InternalHandle),
-                    GetChildId()
+                    GetHashCode()
                 };
 
             private int CurrentIndex => OwningTabControl?.TabPages.IndexOf(_owningTabPage) ?? -1;
