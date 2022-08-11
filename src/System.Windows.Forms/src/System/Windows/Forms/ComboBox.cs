@@ -343,6 +343,10 @@ namespace System.Windows.Forms
             }
         }
 
+        internal void ClearChildEditAccessibleObject() => _childEditAccessibleObject = null;
+
+        internal void ClearChildListAccessibleObject() => _childListAccessibleObject = null;
+
         /// <summary>
         ///  Returns the parameters needed to create the handle.  Inheriting classes
         ///  can override this to provide extra functionality.  They should not,
@@ -3219,25 +3223,18 @@ namespace System.Windows.Forms
         {
             if (_childEdit is not null)
             {
-                // We do not use UI Automation provider for child edit, so do not need to release providers.
                 _childEdit.ReleaseHandle();
                 _childEdit = null;
             }
 
             if (_childListBox is not null)
             {
-                // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
-                ReleaseUiaProvider(_childListBox.Handle);
-
                 _childListBox.ReleaseHandle();
                 _childListBox = null;
             }
 
             if (_childDropDown is not null)
             {
-                // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
-                ReleaseUiaProvider(_childDropDown.Handle);
-
                 _childDropDown.ReleaseHandle();
                 _childDropDown = null;
             }
@@ -3245,10 +3242,22 @@ namespace System.Windows.Forms
 
         internal override void ReleaseUiaProvider(IntPtr handle)
         {
-            if (IsAccessibilityObjectCreated)
+            if (!IsAccessibilityObjectCreated)
             {
-                var uiaProvider = AccessibilityObject as ComboBoxAccessibleObject;
-                uiaProvider?.ResetListItemAccessibleObjects();
+                return;
+            }
+
+            if (_childTextAccessibleObject is not null && OsVersion.IsWindows8OrGreater)
+            {
+                HRESULT result = UiaCore.UiaDisconnectProvider(_childTextAccessibleObject);
+                Debug.Assert(result == HRESULT.S_OK);
+                _childTextAccessibleObject = null;
+            }
+
+            if (AccessibilityObject is ComboBoxAccessibleObject accessibilityObject)
+            {
+                accessibilityObject.ResetListItemAccessibleObjects();
+                accessibilityObject.ReleaseDropDownButtonUiaProvider();
             }
 
             base.ReleaseUiaProvider(handle);
@@ -3638,9 +3647,6 @@ namespace System.Windows.Forms
                 // So release the old references here.
                 if (_childDropDown is not null)
                 {
-                    // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
-                    ReleaseUiaProvider(_childDropDown.Handle);
-
                     _childDropDown.ReleaseHandle();
                 }
 
