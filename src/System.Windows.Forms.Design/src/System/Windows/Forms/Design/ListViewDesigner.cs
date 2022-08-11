@@ -136,7 +136,7 @@ namespace System.Windows.Forms.Design
                 case (int)User32.WM.NOTIFY:
                 case (int)User32.WM.REFLECT_NOTIFY:
                     NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
-                    if (nmhdr->code == (int)ComCtl32.HDN.ENDTRACKW)
+                    if ((int)nmhdr->code == (int)ComCtl32.HDN.ENDTRACKW)
                     {
                         // Re-codegen if the columns have been resized
                         try

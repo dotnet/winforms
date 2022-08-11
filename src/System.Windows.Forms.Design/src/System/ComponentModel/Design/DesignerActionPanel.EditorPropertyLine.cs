@@ -9,7 +9,6 @@ using System.Globalization;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
-using Windows.Win32.UI.WindowsAndMessaging;
 using static Interop;
 
 namespace System.ComponentModel.Design

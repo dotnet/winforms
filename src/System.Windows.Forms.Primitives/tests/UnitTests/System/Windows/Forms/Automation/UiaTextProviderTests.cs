@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Windows.Forms.Automation;
 using Moq;
-using Windows.Win32.UI.WindowsAndMessaging;
 using Xunit;
 using static Interop.User32;
 
