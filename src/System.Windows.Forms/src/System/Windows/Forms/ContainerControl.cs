@@ -1171,7 +1171,13 @@ namespace System.Windows.Forms
             }
         }
 
-        protected virtual void ScaleTopLevelWindowProperties(float xScaleFactor, float yScaleFactor, bool updateFormSize = true)
+        /// <summary>
+        /// Scales container's properties Min and Max size with the scale factor provided.
+        /// </summary>
+        /// <param name="xScaleFactor">Scale factor to be applied on width of the property being scaled</param>
+        /// <param name="yScaleFactor">Scale factor to be applied on height of the property being scaled</param>
+        /// <param name="updateContainerSize">Specifies if container size need to be updated along with properties being scaled</param>
+        protected virtual void ScaleMinMaxSize(float xScaleFactor, float yScaleFactor, bool updateContainerSize = true)
         { }
 
         /// <summary>
@@ -1429,11 +1435,11 @@ namespace System.Windows.Forms
             {
                 if (LocalAppContextSwitches.ScaleTopLevelFormMinMaxSize)
                 {
-                    // Suggested rectangle comes from Windows operating system and does not match with our calculations for scaling controls by Autoscale factor.
-                    // Hence, we can not use AutoscaleFactor here for scaling control properties. Please see below description for more details.
+                    // The suggested rectangle comes from Windows, and it does not match with our calculations for scaling controls by AutoscaleFactor.
+                    // Hence, we cannot use AutoscaleFactor here for scaling the control properties. See the below description for more details.
                     float xScaleFactor = (float)suggestedRectangle.Width / Width;
                     float yScaleFactor = (float)suggestedRectangle.Height / Height;
-                    ScaleTopLevelWindowProperties(xScaleFactor, yScaleFactor, updateFormSize: false);
+                    ScaleMinMaxSize(xScaleFactor, yScaleFactor, updateContainerSize: false);
                 }
 
                 // If this container is a top-level window, we would receive WM_DPICHANGED message that

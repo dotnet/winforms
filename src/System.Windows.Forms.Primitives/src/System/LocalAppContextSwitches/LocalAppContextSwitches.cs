@@ -3,17 +3,29 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.CompilerServices;
+using System.Runtime.Versioning;
 
 namespace System.Windows.Forms.Primitives
 {
     // Barrowed from https://github.com/dotnet/runtime/blob/main/src/libraries/Common/src/System/LocalAppContextSwitches.Common.cs
     internal static partial class LocalAppContextSwitches
     {
+        private const string SwitchScaleTopLevelFormMinMaxSizeForDpi = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
         private static int s_scaleTopLevelFormMinMaxSize;
         public static bool ScaleTopLevelFormMinMaxSize
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => GetCachedSwitchValue("Switch.System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi", ref s_scaleTopLevelFormMinMaxSize);
+            get => GetCachedSwitchValue(SwitchScaleTopLevelFormMinMaxSizeForDpi, ref s_scaleTopLevelFormMinMaxSize);
+        }
+
+        private static readonly FrameworkName? s_targetFrameworkName = GetTargetFrameworkName();
+
+        private static readonly bool s_isNetCoreApp = (s_targetFrameworkName?.Identifier) == ".NETCoreApp";
+
+        private static FrameworkName? GetTargetFrameworkName()
+        {
+            string? targetFrameworkName = AppContext.TargetFrameworkName;
+            return targetFrameworkName is null ? null : new FrameworkName(targetFrameworkName);
         }
 
         private static bool GetCachedSwitchValue(string switchName, ref int cachedSwitchValue)
@@ -24,10 +36,10 @@ namespace System.Windows.Forms.Primitives
             if (cachedSwitchValue > 0)
                 return true;
 
-            return GetCachedSwitchValueInternal(switchName, ref cachedSwitchValue);
+            return GetSwitchValue(switchName, ref cachedSwitchValue);
         }
 
-        private static bool GetCachedSwitchValueInternal(string switchName, ref int cachedSwitchValue)
+        private static bool GetSwitchValue(string switchName, ref int cachedSwitchValue)
         {
             bool hasSwitch = AppContext.TryGetSwitch(switchName, out bool isSwitchEnabled);
             if (!hasSwitch)
@@ -43,24 +55,27 @@ namespace System.Windows.Forms.Primitives
             }
 
             return isSwitchEnabled;
-        }
 
-        // Provides default values for switches based on OS and Targetframework versions.
-        private static bool GetSwitchDefaultValue(string switchName)
-        {
-            if (OsVersion.IsWindows10_1703OrGreater)
+            static bool GetSwitchDefaultValue(string switchName)
             {
-                var tfm = new TargetFramework(AppContext.TargetFrameworkName);
-                if (tfm.Name == ".NETCoreApp" && string.Compare(tfm.Version, "v8.0", StringComparison.OrdinalIgnoreCase) >= 0)
+                if (!s_isNetCoreApp)
                 {
-                    if (switchName == "Switch.System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi")
+                    return false;
+                }
+
+                if (OsVersion.IsWindows10_1703OrGreater)
+                {
+                    if (s_targetFrameworkName!.Version.CompareTo(new Version("8.0")) >= 0)
                     {
-                        return true;
+                        if (switchName == SwitchScaleTopLevelFormMinMaxSizeForDpi)
+                        {
+                            return true;
+                        }
                     }
                 }
-            }
 
-            return false;
+                return false;
+            }
         }
     }
 }
