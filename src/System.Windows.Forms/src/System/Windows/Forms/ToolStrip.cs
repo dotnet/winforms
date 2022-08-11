@@ -4258,11 +4258,17 @@ namespace System.Windows.Forms
 
         internal override void ReleaseUiaProvider(IntPtr handle)
         {
-            base.ReleaseUiaProvider(handle);
+            if (!IsAccessibilityObjectCreated)
+            {
+                return;
+            }
+
             if (OsVersion.IsWindows8OrGreater)
             {
                 ReleaseToolStripItemsProviders(Items);
             }
+
+            base.ReleaseUiaProvider(handle);
         }
 
         /// <summary>
