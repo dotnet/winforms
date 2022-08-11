@@ -10188,6 +10188,7 @@ namespace System.Windows.Forms
             if (OsVersion.IsWindows8OrGreater && IsAccessibilityObjectCreated)
             {
                 UiaCore.UiaDisconnectProvider(AccessibilityObject);
+                Properties.SetObject(s_accessibilityProperty, null);
             }
         }
 

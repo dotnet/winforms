@@ -625,14 +625,14 @@ namespace System.Windows.Forms
 
         internal override void ReleaseUiaProvider(IntPtr handle)
         {
-            base.ReleaseUiaProvider(handle);
-
             if (_tabAccessibilityObject is not null && OsVersion.IsWindows8OrGreater)
             {
                 HRESULT result = UiaCore.UiaDisconnectProvider(_tabAccessibilityObject);
                 Debug.Assert(result == HRESULT.S_OK);
                 _tabAccessibilityObject = null;
             }
+
+            base.ReleaseUiaProvider(handle);
         }
 
         internal override void RemoveToolTip(ToolTip toolTip)

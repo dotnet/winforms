@@ -185,8 +185,6 @@ namespace System.Windows.Forms
 
         internal override void ReleaseUiaProvider(IntPtr handle)
         {
-            base.ReleaseUiaProvider(handle);
-
             foreach (TreeNode rootNode in Nodes)
             {
                 foreach (TreeNode node in rootNode.GetSelfAndChildNodes())
@@ -194,6 +192,8 @@ namespace System.Windows.Forms
                     node.ReleaseUiaProvider();
                 }
             }
+
+            base.ReleaseUiaProvider(handle);
         }
 
         /// <summary>
