@@ -422,8 +422,9 @@ namespace System.Windows.Forms
             if (OsVersion.IsWindows8OrGreater && _accessibilityObject is ListViewGroupAccessibleObject accessibleObject)
             {
                 UiaCore.UiaDisconnectProvider(accessibleObject);
-                _accessibilityObject = null;
             }
+
+            _accessibilityObject = null;
         }
 
         // Should be used for the cases when sending the message `LVM.SETGROUPINFO` isn't required

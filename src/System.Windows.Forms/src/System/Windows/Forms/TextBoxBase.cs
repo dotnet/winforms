@@ -2205,17 +2205,18 @@ namespace System.Windows.Forms
                     break;
                 case WM.DESTROY:
                     base.WndProc(ref m);
-                    if (IsAccessibilityObjectCreated && !RecreatingHandle)
+
+                    if (TryGetAccessibilityObject(out AccessibleObject? @object) && !RecreatingHandle)
                     {
                         // The SupportsUiaProviders check prevents double disconnection after Control.ReleaseUiaProvider.
                         // ReleaseUiaProvider works only for controls that support UIA, so this check allows to avoid
                         // double disconnection when TextBoxBase will start UIA supporting.
                         if (OsVersion.IsWindows8OrGreater && !SupportsUiaProviders)
                         {
-                            UiaCore.UiaDisconnectProvider(AccessibilityObject);
+                            UiaCore.UiaDisconnectProvider(@object);
                         }
 
-                        if (AccessibilityObject is TextBoxBaseAccessibleObject accessibleObject)
+                        if (@object is TextBoxBaseAccessibleObject accessibleObject)
                         {
                             accessibleObject.ClearObjects();
                         }

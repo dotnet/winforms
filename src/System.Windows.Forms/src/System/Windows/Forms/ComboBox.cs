@@ -3247,11 +3247,12 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (_childTextAccessibleObject is not null && OsVersion.IsWindows8OrGreater)
+            if (OsVersion.IsWindows8OrGreater)
             {
                 UiaCore.UiaDisconnectProvider(_childTextAccessibleObject);
-                _childTextAccessibleObject = null;
             }
+
+            _childTextAccessibleObject = null;
 
             if (AccessibilityObject is ComboBoxAccessibleObject accessibilityObject)
             {

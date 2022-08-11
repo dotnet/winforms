@@ -625,11 +625,12 @@ namespace System.Windows.Forms
 
         internal override void ReleaseUiaProvider(IntPtr handle)
         {
-            if (_tabAccessibilityObject is not null && OsVersion.IsWindows8OrGreater)
+            if (OsVersion.IsWindows8OrGreater)
             {
                 UiaCore.UiaDisconnectProvider(_tabAccessibilityObject);
-                _tabAccessibilityObject = null;
             }
+
+            _tabAccessibilityObject = null;
 
             base.ReleaseUiaProvider(handle);
         }

@@ -117,17 +117,11 @@ namespace System.Windows.Forms
 
                 internal void ReleaseChildUiaProviders()
                 {
-                    if (_upButton is not null)
-                    {
-                        UiaCore.UiaDisconnectProvider(_upButton);
-                        _upButton = null;
-                    }
+                    UiaCore.UiaDisconnectProvider(_upButton);
+                    _upButton = null;
 
-                    if (_downButton is not null)
-                    {
-                        UiaCore.UiaDisconnectProvider(_downButton);
-                        _downButton = null;
-                    }
+                    UiaCore.UiaDisconnectProvider(_downButton);
+                    _downButton = null;
                 }
 
                 public override AccessibleRole Role

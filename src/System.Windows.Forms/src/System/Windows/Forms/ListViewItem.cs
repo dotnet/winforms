@@ -994,17 +994,21 @@ namespace System.Windows.Forms
 
         internal void ReleaseUiaProvider()
         {
-            if (!OsVersion.IsWindows8OrGreater || !IsAccessibilityObjectCreated)
+            if (!IsAccessibilityObjectCreated)
             {
                 return;
             }
 
-            if (AccessibilityObject is ListViewItemBaseAccessibleObject itemAccessibleObject)
+            if (OsVersion.IsWindows8OrGreater)
             {
-                itemAccessibleObject.ReleaseChildUiaProviders();
+                if (_accessibilityObject is ListViewItemBaseAccessibleObject itemAccessibleObject)
+                {
+                    itemAccessibleObject.ReleaseChildUiaProviders();
+                }
+
+                UiaCore.UiaDisconnectProvider(_accessibilityObject);
             }
 
-            UiaCore.UiaDisconnectProvider(AccessibilityObject);
             _accessibilityObject = null;
         }
 

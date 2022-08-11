@@ -117,6 +117,9 @@ namespace System.Windows.Forms
                     ? _owningListView.GetSubItemRect(_owningItem.Index, subItemIndex)
                     : Rectangle.Empty;
 
+            /// <devdoc>
+            /// .Caller should ensure that the current OS is Windows 8 or greater.
+            /// </devdoc>
             internal override void ReleaseChildUiaProviders()
             {
                 base.ReleaseChildUiaProviders();

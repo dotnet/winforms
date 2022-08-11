@@ -236,11 +236,12 @@ namespace System.Windows.Forms
 
             internal void ReleaseDropDownButtonUiaProvider()
             {
-                if (OsVersion.IsWindows8OrGreater && _dropDownButtonUiaProvider is not null)
+                if (OsVersion.IsWindows8OrGreater)
                 {
                     UiaCore.UiaDisconnectProvider(_dropDownButtonUiaProvider);
-                    _dropDownButtonUiaProvider = null;
                 }
+
+                _dropDownButtonUiaProvider = null;
             }
 
             internal void ResetListItemAccessibleObjects()

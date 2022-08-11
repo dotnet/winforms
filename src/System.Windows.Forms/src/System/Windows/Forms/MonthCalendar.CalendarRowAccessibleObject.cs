@@ -101,11 +101,9 @@ namespace System.Windows.Forms
             internal void DisconnectChildren()
             {
                 Debug.Assert(OsVersion.IsWindows8OrGreater);
-                if (_weekNumberCellAccessibleObject is not null)
-                {
-                    UiaCore.UiaDisconnectProvider(_weekNumberCellAccessibleObject);
-                    _weekNumberCellAccessibleObject = null;
-                }
+
+                UiaCore.UiaDisconnectProvider(_weekNumberCellAccessibleObject);
+                _weekNumberCellAccessibleObject = null;
 
                 if (_cellsAccessibleObjects is null)
                 {

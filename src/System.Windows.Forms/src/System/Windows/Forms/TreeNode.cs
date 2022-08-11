@@ -2081,11 +2081,12 @@ namespace System.Windows.Forms
 
         internal virtual void ReleaseUiaProvider()
         {
-            if (OsVersion.IsWindows8OrGreater && _accessibleObject is not null)
+            if (OsVersion.IsWindows8OrGreater)
             {
                 UiaCore.UiaDisconnectProvider(_accessibleObject);
-                _accessibleObject = null;
             }
+
+            _accessibleObject = null;
         }
 
         /// <summary>

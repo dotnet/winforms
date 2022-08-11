@@ -249,11 +249,12 @@ namespace System.Windows.Forms
 
             internal void ReleaseUiaProvider()
             {
-                if (OsVersion.IsWindows8OrGreater && _accessibilityObject is not null)
+                if (OsVersion.IsWindows8OrGreater)
                 {
                     UiaCore.UiaDisconnectProvider(_accessibilityObject);
-                    _accessibilityObject = null;
                 }
+
+                _accessibilityObject = null;
             }
 
             public void ResetStyle()

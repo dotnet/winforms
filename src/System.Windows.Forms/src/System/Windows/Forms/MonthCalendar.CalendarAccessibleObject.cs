@@ -42,18 +42,14 @@ namespace System.Windows.Forms
             internal void DisconnectChildren()
             {
                 Debug.Assert(OsVersion.IsWindows8OrGreater);
-                if (_calendarHeaderAccessibleObject is not null)
-                {
-                    UiaCore.UiaDisconnectProvider(_calendarHeaderAccessibleObject);
-                    _calendarHeaderAccessibleObject = null;
-                }
 
-                if (_calendarBodyAccessibleObject is not null)
-                {
-                    _calendarBodyAccessibleObject.DisconnectChildren();
-                    UiaCore.UiaDisconnectProvider(_calendarBodyAccessibleObject);
-                    _calendarBodyAccessibleObject = null;
-                }
+                UiaCore.UiaDisconnectProvider(_calendarHeaderAccessibleObject);
+                _calendarHeaderAccessibleObject = null;
+
+                _calendarBodyAccessibleObject?.DisconnectChildren();
+                UiaCore.UiaDisconnectProvider(_calendarBodyAccessibleObject);
+
+                _calendarBodyAccessibleObject = null;
             }
 
             public override Rectangle Bounds
