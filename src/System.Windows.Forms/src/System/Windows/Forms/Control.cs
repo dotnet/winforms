@@ -6961,7 +6961,7 @@ namespace System.Windows.Forms
             {
                 int pos = -1; // start with -1 to handle double &'s
                 char c2 = char.ToUpper(charCode, CultureInfo.CurrentCulture);
-                for (; ;)
+                for (; ; )
                 {
                     if (pos + 1 >= text.Length)
                     {

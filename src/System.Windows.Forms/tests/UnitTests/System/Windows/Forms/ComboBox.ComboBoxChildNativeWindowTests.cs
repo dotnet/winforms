@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
 
             foreach (var childWindowType in Enum.GetValues(childWindowTypeEnum))
             {
-                Assert.True(childNativeWindow.TestAccessor().Dynamic.GetChildAccessibleObject(childWindowType) is ComboBox.ChildAccessibleObject);
+                Assert.True(childNativeWindow.TestAccessor().Dynamic.GetChildAccessibleObject() is ComboBox.ChildAccessibleObject);
             }
         }
     }
