@@ -13,23 +13,35 @@ namespace System.Windows.Forms
         {
             private static VisualStyleRenderer? s_visualStyleRenderer;
 
-            public static VisualStyleRenderer CheckBoxRenderer
-            {
-                get
-                {
-                    if (s_visualStyleRenderer is null)
-                    {
-                        s_visualStyleRenderer = new VisualStyleRenderer(CheckBoxElement);
-                    }
-
-                    return s_visualStyleRenderer;
-                }
-            }
+            public static VisualStyleRenderer CheckBoxRenderer => s_visualStyleRenderer ??= new VisualStyleRenderer(CheckBoxElement);
 
             public static void DrawCheckBox(Graphics g, Rectangle bounds, int state)
             {
-                CheckBoxRenderer.SetParameters(CheckBoxElement.ClassName, CheckBoxElement.Part, (int)state);
+                CheckBoxRenderer.SetParameters(CheckBoxElement.ClassName, CheckBoxElement.Part, state);
                 CheckBoxRenderer.DrawBackground(g, bounds, Rectangle.Truncate(g.ClipBounds));
+
+                // It uses because the checked style of the checkbox in a selected cell has a low contrast ratio with the background. Only for Windows 11.
+                // State 5 is selected, unfocused.
+                // State 6 is selected, focused.
+                if (OsVersion.IsWindows11_OrGreater && (state == 5 || state == 6))
+                {
+                    DrawContrastBorder(g, bounds);
+                }
+            }
+
+            private static void DrawContrastBorder(Graphics g, Rectangle bounds)
+            {
+                const int penWidth = 1;
+                const int cornerRadius = 3;
+
+                var focusPen = new Pen(SystemColors.ControlText, penWidth);
+                var rectangleBounds = bounds with
+                {
+                    Width = bounds.Width - penWidth,
+                    Height = bounds.Height - penWidth
+                };
+
+                RoundedRectangle.Paint(g, focusPen, rectangleBounds, cornerRadius);
             }
         }
     }
