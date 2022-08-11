@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Design
                 {
                     CreateParams cp = base.CreateParams;
 
-                    cp.ExStyle |= (int)User32.WS_EX.STATICEDGE;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_STATICEDGE;
                     return cp;
                 }
             }
@@ -267,8 +267,8 @@ namespace System.Windows.Forms.Design
             {
                 if (m.MsgInternal == User32.WM.REFLECT_NOTIFY)
                 {
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
-                    if (nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW)
+                    NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
+                    if ((int)nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW)
                     {
                         OnCustomDraw(ref m);
                         return;

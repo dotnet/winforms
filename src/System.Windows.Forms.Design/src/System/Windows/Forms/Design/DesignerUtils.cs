@@ -451,7 +451,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static bool GenerateSnapShotWithWM_PRINT(Control control, ref Image image)
         {
-            IntPtr hWnd = control.Handle;
             image = new Bitmap(
                 Math.Max(control.Width, MINCONTROLBITMAPSIZE),
                 Math.Max(control.Height, MINCONTROLBITMAPSIZE),
@@ -474,7 +473,7 @@ namespace System.Windows.Forms.Design
             {
                 IntPtr hDc = g.GetHdc();
                 User32.SendMessageW(
-                    hWnd,
+                    control,
                     User32.WM.PRINT,
                     hDc,
                     (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
@@ -890,7 +889,7 @@ namespace System.Windows.Forms.Design
         private static int ScaleLogicalToDeviceUnitsX(int unit)
             => DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(unit) : unit;
 
-        private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(IntPtr handle)
+        private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(HWND handle)
             => (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
 
         /// <summary>
@@ -903,11 +902,11 @@ namespace System.Windows.Forms.Design
 
             treeView.HotTracking = true;
             treeView.ShowLines = false;
-            IntPtr hwnd = treeView.Handle;
+            HWND hwnd = (HWND)treeView.Handle;
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
             ComCtl32.TVS_EX exstyle = TreeView_GetExtendedStyle(hwnd);
             exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
-            User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, 0, (nint)exstyle);
+            User32.SendMessageW(treeView, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, 0, (nint)exstyle);
         }
 
         /// <summary>
@@ -918,10 +917,10 @@ namespace System.Windows.Forms.Design
         {
             ArgumentNullException.ThrowIfNull(listView);
 
-            IntPtr hwnd = listView.Handle;
+            HWND hwnd = (HWND)listView.Handle;
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
             User32.SendMessageW(
-                hwnd,
+                listView,
                 (User32.WM)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE,
                 (nint)ComCtl32.LVS_EX.DOUBLEBUFFER,
                 (nint)ComCtl32.LVS_EX.DOUBLEBUFFER);

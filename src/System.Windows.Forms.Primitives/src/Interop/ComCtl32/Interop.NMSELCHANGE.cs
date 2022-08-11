@@ -8,7 +8,7 @@ internal static partial class Interop
     {
         public struct NMSELCHANGE
         {
-            public User32.NMHDR nmhdr;
+            public NMHDR nmhdr;
             public PInvoke.SYSTEMTIME stSelStart;
             public PInvoke.SYSTEMTIME stSelEnd;
         }

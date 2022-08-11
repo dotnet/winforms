@@ -440,16 +440,16 @@ namespace System.Windows.Forms
                     cp.Style |= (int)ES.READONLY;
                 }
 
-                cp.Style &= ~(int)WS.BORDER;
-                cp.ExStyle &= ~(int)WS_EX.CLIENTEDGE;
+                cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
+                cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
 
                 switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= (int)WS_EX.CLIENTEDGE;
+                        cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= (int)WS.BORDER;
+                        cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                         break;
                 }
 

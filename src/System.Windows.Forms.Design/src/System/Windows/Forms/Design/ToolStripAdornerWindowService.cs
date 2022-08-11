@@ -188,8 +188,8 @@ namespace System.Windows.Forms.Design
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.Style &= ~(int)(User32.WS.CLIPCHILDREN | User32.WS.CLIPSIBLINGS);
-                    cp.ExStyle |= (int)User32.WS_EX.TRANSPARENT;
+                    cp.Style &= ~(int)(WINDOW_STYLE.WS_CLIPCHILDREN | WINDOW_STYLE.WS_CLIPSIBLINGS);
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_TRANSPARENT;
                     return cp;
                 }
             }

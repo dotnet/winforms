@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Windows.Forms.Primitives.Tests.Interop.Mocks;
 using Xunit;
 using static Interop.Ole32;
-using static Interop.User32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
 {
@@ -16,7 +15,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
         [StaFact]
         public void GetIPictureFromCursor()
         {
-            using MockCursor arrow = new MockCursor(CursorResourceId.IDC_ARROW);
+            using MockCursor arrow = new MockCursor(PInvoke.IDC_ARROW);
 
             IPicture picture = MockAxHost.GetIPictureFromCursor(arrow.Handle);
             Assert.NotNull(picture);
@@ -29,7 +28,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
         [StaFact]
         public void GetIPictureFromImage()
         {
-            using MockCursor arrow = new MockCursor(CursorResourceId.IDC_ARROW);
+            using MockCursor arrow = new MockCursor(PInvoke.IDC_ARROW);
             using Icon icon = Icon.FromHandle(arrow.Handle);
             using Bitmap bitmap = icon.ToBitmap();
             IPicture picture = MockAxHost.GetIPictureFromPicture(bitmap);

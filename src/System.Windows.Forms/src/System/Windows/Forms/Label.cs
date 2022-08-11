@@ -257,7 +257,7 @@ namespace System.Windows.Forms
 
                     // Since we're owner draw, I don't see any point in setting the
                     // SS_CENTER/SS_RIGHT styles.
-                    cp.ExStyle &= ~(int)User32.WS_EX.RIGHT;   // WS_EX_RIGHT overrides the SS_XXXX alignment styles
+                    cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the SS_XXXX alignment styles
                 }
 
                 if (!OwnerDraw)
@@ -289,7 +289,7 @@ namespace System.Windows.Forms
                 switch (BorderStyle)
                 {
                     case BorderStyle.FixedSingle:
-                        cp.Style |= (int)User32.WS.BORDER;
+                        cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                         break;
                     case BorderStyle.Fixed3D:
                         cp.Style |= (int)User32.SS.SUNKEN;
@@ -824,14 +824,14 @@ namespace System.Windows.Forms
                 // Set windowStyle directly instead of recreating handle to increase efficiency.
                 if (IsHandleCreated)
                 {
-                    User32.WS style = WindowStyle;
+                    WINDOW_STYLE style = WindowStyle;
                     if (!UseMnemonic)
                     {
-                        style |= (User32.WS)User32.SS.NOPREFIX;
+                        style |= (WINDOW_STYLE)User32.SS.NOPREFIX;
                     }
                     else
                     {
-                        style &= ~(User32.WS)User32.SS.NOPREFIX;
+                        style &= ~(WINDOW_STYLE)User32.SS.NOPREFIX;
                     }
 
                     WindowStyle = style;

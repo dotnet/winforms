@@ -8,7 +8,7 @@ internal static partial class Interop
     {
         public struct NMTBHOTITEM
         {
-            public User32.NMHDR hdr;
+            public NMHDR hdr;
             public int idOld;
             public int idNew;
             public HICF dwFlags;

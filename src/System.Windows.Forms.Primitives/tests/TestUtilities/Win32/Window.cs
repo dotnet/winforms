@@ -3,26 +3,25 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
 
 namespace System
 {
-    internal class Window : IDisposable, IHandle
+    internal class Window : IDisposable, IHandle<HWND>
     {
         private readonly WindowClass _windowClass;
 
-        public IntPtr Handle { get; }
+        public HWND Handle { get; }
 
         public Window(
             WindowClass windowClass,
             Rectangle bounds,
             string windowName = default,
-            User32.WS style = User32.WS.OVERLAPPED,
-            User32.WS_EX extendedStyle = User32.WS_EX.DEFAULT,
+            WINDOW_STYLE style = WINDOW_STYLE.WS_OVERLAPPED,
+            WINDOW_EX_STYLE extendedStyle = default,
             bool isMainWindow = false,
             Window parentWindow = default,
-            IntPtr parameters = default,
-            IntPtr menuHandle = default)
+            nint parameters = default,
+            HMENU menuHandle = default)
         {
             _windowClass = windowClass;
             if (!_windowClass.IsRegistered)
@@ -43,9 +42,9 @@ namespace System
 
         public void Dispose()
         {
-            if (Handle != IntPtr.Zero)
+            if (!Handle.IsNull)
             {
-                User32.DestroyWindow(this);
+                PInvoke.DestroyWindow(Handle);
             }
 
             GC.SuppressFinalize(this);

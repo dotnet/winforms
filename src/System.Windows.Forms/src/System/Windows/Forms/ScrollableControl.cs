@@ -178,20 +178,20 @@ namespace System.Windows.Forms
 
                 if (HScroll || HorizontalScroll.Visible)
                 {
-                    cp.Style |= (int)User32.WS.HSCROLL;
+                    cp.Style |= (int)WINDOW_STYLE.WS_HSCROLL;
                 }
                 else
                 {
-                    cp.Style &= ~(int)User32.WS.HSCROLL;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_HSCROLL;
                 }
 
                 if (VScroll || VerticalScroll.Visible)
                 {
-                    cp.Style |= (int)User32.WS.VSCROLL;
+                    cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL;
                 }
                 else
                 {
-                    cp.Style &= ~(int)User32.WS.VSCROLL;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_VSCROLL;
                 }
 
                 return cp;

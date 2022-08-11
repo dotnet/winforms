@@ -12,7 +12,7 @@ internal static partial class Interop
         [DllImport(Libraries.Shell32, ExactSpelling = true)]
         public static extern CoTaskMemSafeHandle SHBrowseForFolderW(ref BROWSEINFO lpbi);
 
-        public delegate int BrowseCallbackProc(IntPtr hwnd, int msg, IntPtr lParam, IntPtr lpData);
+        public delegate int BrowseCallbackProc(HWND hwnd, int msg, IntPtr lParam, IntPtr lpData);
 
         public static class BrowseInfoFlags
         {

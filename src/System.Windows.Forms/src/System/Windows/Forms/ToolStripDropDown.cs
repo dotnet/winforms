@@ -244,28 +244,30 @@ namespace System.Windows.Forms
                 // If we're using themes then go ahead
                 if (DropShadowEnabled)
                 {
-                    cp.ClassStyle |= (int)User32.CS.DROPSHADOW;
+                    cp.ClassStyle |= (int)WNDCLASS_STYLES.CS_DROPSHADOW;
                 }
 
-                // we're a borderless menuless control with no min/max boxes
-                // we don't want to show in the taskbar either
+                // We're a borderless menuless control with no min/max boxes. We don't want to show in the taskbar either.
 
-                //HOWTO: Prevent a Window from Appearing on the Taskbar
-                //Give the window the WS_EX_TOOLWINDOW extended style, and remove the WS_EX_APPWINDOW style. As a side effect, the window will have a smaller caption than a normal window.
-                //Give the window the WS_POPUP style and make it owned by a hidden window. (Form)
+                // HOWTO: Prevent a Window from Appearing on the Taskbar
+                // Give the window the WS_EX_TOOLWINDOW extended style, and remove the WS_EX_APPWINDOW style. As a side
+                // effect, the window will have a smaller caption than a normal window.
 
-                cp.Style &= ~(int)(User32.WS.CAPTION | User32.WS.CLIPSIBLINGS);         /* no caption, no siblings */
-                cp.ExStyle &= ~(int)User32.WS_EX.APPWINDOW;  /* show in taskbar = false */
-                // | NativeMethods.WS_EX_TOOLWINDOW
-                cp.Style |= TopLevel ? unchecked((int)User32.WS.POPUP) : (int)User32.WS.CHILD;
-                cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;  /* show in taskbar = false */
+                // Give the window the WS_POPUP style and make it owned by a hidden window. (Form)
+
+                // No caption, no siblings.
+                cp.Style &= ~(int)(WINDOW_STYLE.WS_CAPTION | WINDOW_STYLE.WS_CLIPSIBLINGS);
+                // Don't show in the taskbar
+                cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_APPWINDOW;
+                cp.Style |= TopLevel ? unchecked((int)WINDOW_STYLE.WS_POPUP) : (int)WINDOW_STYLE.WS_CHILD;
+                cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CONTROLPARENT;
 
                 bool topLevel = TopLevel;
 
                 // opacity
                 if (topLevel && state[stateLayered])
                 {
-                    cp.ExStyle |= (int)User32.WS_EX.LAYERED;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYERED;
                 }
                 else if (topLevel)
                 {
@@ -274,11 +276,11 @@ namespace System.Windows.Forms
                     //If the display driver has enough memory, it saves the bits for Windows. If the display driver does not have enough memory, Window
                     //saves the bits itself as a bitmap in global memory and also uses some of User's local heap for housekeeping structures for each window.
                     //When the application removes the window, Windows can restore the screen image quickly by using the stored bits.
-                    cp.ClassStyle |= (int)User32.CS.SAVEBITS;
+                    cp.ClassStyle |= (int)WNDCLASS_STYLES.CS_SAVEBITS;
                 }
                 else if (!topLevel)
                 {
-                    cp.Style |= (int)User32.WS.CLIPSIBLINGS;
+                    cp.Style |= (int)WINDOW_STYLE.WS_CLIPSIBLINGS;
                 }
 
                 // We're turning off CLIPSIBLINGS because in the designer the elements of the form beneath
@@ -1731,19 +1733,19 @@ namespace System.Windows.Forms
 
             // We need to swap they style bits on the window handle
             // we could recreate the handle, but that seems rather expensive.
-            User32.WS styleFlags = WindowStyle;
+            WINDOW_STYLE styleFlags = WindowStyle;
 
             if (value)
             {
                 // Setting toplevel = true
-                styleFlags &= ~User32.WS.CHILD;
-                styleFlags |= User32.WS.POPUP;
+                styleFlags &= ~WINDOW_STYLE.WS_CHILD;
+                styleFlags |= WINDOW_STYLE.WS_POPUP;
             }
             else
             {
                 // This is a child window
-                styleFlags &= ~User32.WS.POPUP;
-                styleFlags |= User32.WS.CHILD;
+                styleFlags &= ~WINDOW_STYLE.WS_POPUP;
+                styleFlags |= WINDOW_STYLE.WS_CHILD;
             }
 
             WindowStyle = styleFlags;

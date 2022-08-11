@@ -74,9 +74,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.Style |= unchecked((int)(User32.WS.POPUP | User32.WS.BORDER));
-                    cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
-                    cp.ClassStyle |= (int)User32.CS.DROPSHADOW;
+                    cp.Style |= unchecked((int)(WINDOW_STYLE.WS_POPUP | WINDOW_STYLE.WS_BORDER));
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_TOOLWINDOW;
+                    cp.ClassStyle |= (int)WNDCLASS_STYLES.CS_DROPSHADOW;
                     if (_gridView is not null)
                     {
                         cp.Parent = _gridView.ParentInternal.Handle;

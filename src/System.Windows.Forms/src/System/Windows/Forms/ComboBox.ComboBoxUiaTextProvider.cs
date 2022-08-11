@@ -47,7 +47,7 @@ namespace System.Windows.Forms
 
             public override ES EditStyle
                 => _owningComboBox.IsHandleCreated
-                    ? GetEditStyle((IHandle)_owningChildEdit)
+                    ? GetEditStyle(_owningChildEdit)
                     : ES.LEFT;
 
             public override int FirstVisibleLine
@@ -58,9 +58,7 @@ namespace System.Windows.Forms
             public override bool IsMultiline => false;
 
             public override bool IsReadingRTL
-                => _owningComboBox.IsHandleCreated
-                    ? WindowExStyle.HasFlag(WS_EX.RTLREADING)
-                    : false;
+                => _owningComboBox.IsHandleCreated && WindowExStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING);
 
             public override bool IsReadOnly => false;
 
@@ -118,15 +116,15 @@ namespace System.Windows.Forms
                     ? (int)SendMessageW((IHandle)_owningChildEdit, WM.GETTEXTLENGTH)
                     : -1;
 
-            public override WS_EX WindowExStyle
+            public override WINDOW_EX_STYLE WindowExStyle
                 => _owningComboBox.IsHandleCreated
-                    ? GetWindowExStyle((IHandle)_owningChildEdit)
-                    : WS_EX.LEFT;
+                    ? GetWindowExStyle(_owningChildEdit)
+                    : WINDOW_EX_STYLE.WS_EX_LEFT;
 
-            public override WS WindowStyle
+            public override WINDOW_STYLE WindowStyle
                 => _owningComboBox.IsHandleCreated
-                    ? GetWindowStyle((IHandle)_owningChildEdit)
-                    : WS.OVERLAPPED;
+                    ? GetWindowStyle(_owningChildEdit)
+                    : WINDOW_STYLE.WS_OVERLAPPED;
 
             public override UiaCore.ITextRangeProvider? GetCaretRange(out BOOL isActive)
             {

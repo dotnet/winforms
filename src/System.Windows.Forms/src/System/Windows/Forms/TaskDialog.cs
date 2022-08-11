@@ -82,7 +82,7 @@ namespace System.Windows.Forms
         /// </summary>
         private IntPtr _instanceHandlePtr;
 
-        private IntPtr _handle;
+        private HWND _handle;
 
         private WindowSubclassHandler? _windowSubclassHandler;
 
@@ -263,7 +263,7 @@ namespace System.Windows.Forms
 
         [UnmanagedCallersOnly]
         private static HRESULT HandleTaskDialogNativeCallback(
-            IntPtr hwnd,
+            HWND hwnd,
             ComCtl32.TDN msg,
             IntPtr wParam,
             IntPtr lParam,
@@ -534,7 +534,7 @@ namespace System.Windows.Forms
                     // raiseClosed/raisePageDestroyed flags are is cleared even if
                     // the TDN_DESTROYED notification did not occur (although that
                     // should only happen when there was an exception).
-                    _handle = IntPtr.Zero;
+                    _handle = HWND.Null;
                     _raisedPageCreated = false;
 
                     // Clear cached objects and other fields.
@@ -802,14 +802,14 @@ namespace System.Windows.Forms
         }
 
         private HRESULT HandleTaskDialogCallback(
-            IntPtr hWnd,
+            HWND hWnd,
             ComCtl32.TDN notification,
             IntPtr wParam)
         {
             Debug.Assert(_boundPage is not null);
 
             // Set the hWnd as this may be the first time that we get it.
-            bool isFirstNotification = _handle == IntPtr.Zero;
+            bool isFirstNotification = _handle.IsNull;
             _handle = hWnd;
 
             try
@@ -904,7 +904,7 @@ namespace System.Windows.Forms
                             // must not continue to send any notifications to the dialog
                             // after the callback function has returned from being called
                             // with the 'Destroyed' notification.
-                            _handle = IntPtr.Zero;
+                            _handle = HWND.Null;
                         }
 
                         break;

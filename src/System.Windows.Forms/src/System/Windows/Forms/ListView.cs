@@ -654,7 +654,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     int currentStyle = unchecked((int)((long)User32.GetWindowLong(this, User32.GWL.STYLE)));
-                    cp.Style |= (currentStyle & (int)(User32.WS.HSCROLL | User32.WS.VSCROLL));
+                    cp.Style |= (currentStyle & (int)(WINDOW_STYLE.WS_HSCROLL | WINDOW_STYLE.WS_VSCROLL));
                 }
 
                 cp.Style |= (int)LVS.SHAREIMAGELISTS;
@@ -677,10 +677,10 @@ namespace System.Windows.Forms
                 switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
+                        cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= (int)User32.WS.BORDER;
+                        cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                         break;
                 }
 
@@ -743,9 +743,9 @@ namespace System.Windows.Forms
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     //We want to turn on mirroring for Form explicitly.
-                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -2215,8 +2215,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IntPtr hwnd = User32.SendMessageW(this, (User32.WM)LVM.GETHEADER);
-            if (hwnd == IntPtr.Zero)
+            HWND hwnd = (HWND)User32.SendMessageW(this, (User32.WM)LVM.GETHEADER);
+            if (hwnd.IsNull)
             {
                 return;
             }
@@ -5988,9 +5988,9 @@ namespace System.Windows.Forms
 
         private unsafe bool WmNotify(ref Message m)
         {
-            User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
+            NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
-            if (nmhdr->code == (int)NM.CUSTOMDRAW && UiaCore.UiaClientsAreListening())
+            if ((int)nmhdr->code == (int)NM.CUSTOMDRAW && UiaCore.UiaClientsAreListening())
             {
                 // Checking that mouse buttons are not pressed is necessary to avoid
                 // multiple annotation of the column header when resizing the column with the mouse
@@ -6001,7 +6001,7 @@ namespace System.Windows.Forms
             }
 
             // Column header custom draw message handling.
-            if (nmhdr->code == (int)NM.CUSTOMDRAW && OwnerDraw)
+            if ((int)nmhdr->code == (int)NM.CUSTOMDRAW && OwnerDraw)
             {
                 try
                 {
@@ -6054,13 +6054,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (nmhdr->code == (int)NM.RELEASEDCAPTURE && _listViewState[LISTVIEWSTATE_columnClicked])
+            if ((int)nmhdr->code == (int)NM.RELEASEDCAPTURE && _listViewState[LISTVIEWSTATE_columnClicked])
             {
                 _listViewState[LISTVIEWSTATE_columnClicked] = false;
                 OnColumnClick(new ColumnClickEventArgs(_columnIndex));
             }
 
-            if (nmhdr->code == (int)HDN.BEGINTRACKW)
+            if ((int)nmhdr->code == (int)HDN.BEGINTRACKW)
             {
                 _listViewState[LISTVIEWSTATE_headerControlTracking] = true;
 
@@ -6082,7 +6082,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (nmhdr->code == (int)HDN.ITEMCHANGINGW)
+            if ((int)nmhdr->code == (int)HDN.ITEMCHANGINGW)
             {
                 NMHEADERW* nmheader = (NMHEADERW*)(nint)m.LParamInternal;
 
@@ -6117,7 +6117,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if ((nmhdr->code == (int)HDN.ITEMCHANGEDW) &&
+            if (((int)nmhdr->code == (int)HDN.ITEMCHANGEDW) &&
                 !_listViewState[LISTVIEWSTATE_headerControlTracking])
             {
                 NMHEADERW* nmheader = (NMHEADERW*)(nint)m.LParamInternal;
@@ -6173,7 +6173,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (nmhdr->code == (int)HDN.ENDTRACKW)
+            if ((int)nmhdr->code == (int)HDN.ENDTRACKW)
             {
                 Debug.Assert(_listViewState[LISTVIEWSTATE_headerControlTracking], "HDN_ENDTRACK and HDN_BEGINTRACK are out of sync.");
                 _listViewState[LISTVIEWSTATE_headerControlTracking] = false;
@@ -6201,7 +6201,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (nmhdr->code == (int)HDN.ENDDRAG)
+            if ((int)nmhdr->code == (int)HDN.ENDDRAG)
             {
                 NMHEADERW* header = (NMHEADERW*)(nint)m.LParamInternal;
                 if (header->pitem is not null)
@@ -6268,7 +6268,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (nmhdr->code == (int)HDN.DIVIDERDBLCLICKW)
+            if ((int)nmhdr->code == (int)HDN.DIVIDERDBLCLICKW)
             {
                 // We need to keep track that the user double clicked the column header divider
                 // so we know that the column header width is changing.
@@ -6340,8 +6340,8 @@ namespace System.Windows.Forms
 
         private Font GetListHeaderFont()
         {
-            IntPtr hwndHdr = User32.SendMessageW(this, (User32.WM)LVM.GETHEADER);
-            IntPtr hFont = User32.SendMessageW(hwndHdr, User32.WM.GETFONT);
+            HWND hwndHdr = (HWND)User32.SendMessageW(this, (User32.WM)LVM.GETHEADER);
+            HFONT hFont = (HFONT)User32.SendMessageW(hwndHdr, User32.WM.GETFONT);
             return Font.FromHfont(hFont);
         }
 
@@ -6426,9 +6426,9 @@ namespace System.Windows.Forms
 
         private unsafe void WmReflectNotify(ref Message m)
         {
-            User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
+            NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
-            switch (nmhdr->code)
+            switch ((int)nmhdr->code)
             {
                 case (int)NM.CUSTOMDRAW:
                     CustomDraw(ref m);
@@ -6652,7 +6652,7 @@ namespace System.Windows.Forms
                 case (int)NM.RCLICK:
                     int displayIndex = GetIndexOfClickedItem();
 
-                    MouseButtons button = nmhdr->code == (int)NM.CLICK ? MouseButtons.Left : MouseButtons.Right;
+                    MouseButtons button = (int)nmhdr->code == (int)NM.CLICK ? MouseButtons.Left : MouseButtons.Right;
                     Point pos = Cursor.Position;
                     pos = PointToClient(pos);
 
@@ -6746,7 +6746,7 @@ namespace System.Windows.Forms
                     break;
 
                 default:
-                    if (nmhdr->code == (int)LVN.GETDISPINFOW)
+                    if ((int)nmhdr->code == (int)LVN.GETDISPINFOW)
                     {
                         // we use the LVN_GETDISPINFO message only in virtual mode
                         if (VirtualMode && m.LParamInternal != 0)
@@ -6796,7 +6796,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
-                    else if (nmhdr->code == (int)LVN.ODSTATECHANGED)
+                    else if ((int)nmhdr->code == (int)LVN.ODSTATECHANGED)
                     {
                         if (VirtualMode && m.LParamInternal != 0)
                         {
@@ -6811,7 +6811,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
-                    else if (nmhdr->code == (int)LVN.GETINFOTIPW)
+                    else if ((int)nmhdr->code == (int)LVN.GETINFOTIPW)
                     {
                         if (ShowItemToolTips && m.LParamInternal != 0)
                         {
@@ -6833,7 +6833,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
-                    else if (nmhdr->code == (int)LVN.ODFINDITEMW)
+                    else if ((int)nmhdr->code == (int)LVN.ODFINDITEMW)
                     {
                         if (VirtualMode)
                         {

@@ -81,7 +81,7 @@ namespace System.Windows.Forms.Tests
         {
             using TextBoxBase textBoxBase = new SubTextBoxBase();
             TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
-            Assert.Equal(WS.OVERLAPPED, provider.WindowStyle);
+            Assert.Equal(WINDOW_STYLE.WS_OVERLAPPED, provider.WindowStyle);
             Assert.False(textBoxBase.IsHandleCreated);
         }
 
@@ -579,8 +579,8 @@ namespace System.Windows.Forms.Tests
             using TextBoxBase textBoxBase = new SubTextBoxBase();
             textBoxBase.CreateControl();
             TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
-            WS_EX actual = provider.WindowExStyle;
-            Assert.Equal(WS_EX.CLIENTEDGE, actual);
+            WINDOW_EX_STYLE actual = provider.WindowExStyle;
+            Assert.Equal(WINDOW_EX_STYLE.WS_EX_CLIENTEDGE, actual);
             Assert.True(textBoxBase.IsHandleCreated);
         }
 
@@ -589,8 +589,8 @@ namespace System.Windows.Forms.Tests
         {
             using TextBoxBase textBoxBase = new SubTextBoxBase();
             TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
-            WS_EX actual = provider.WindowExStyle;
-            Assert.Equal(WS_EX.LEFT, actual);
+            WINDOW_EX_STYLE actual = provider.WindowExStyle;
+            Assert.Equal(WINDOW_EX_STYLE.WS_EX_LEFT, actual);
             Assert.False(textBoxBase.IsHandleCreated);
         }
 

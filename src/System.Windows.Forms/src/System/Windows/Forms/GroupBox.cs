@@ -127,7 +127,7 @@ namespace System.Windows.Forms
                     cp.Style &= ~(int)User32.BS.GROUPBOX;
                 }
 
-                cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;
+                cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CONTROLPARENT;
 
                 return cp;
             }

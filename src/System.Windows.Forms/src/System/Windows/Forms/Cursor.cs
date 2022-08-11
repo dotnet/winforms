@@ -13,31 +13,30 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents the image used to paint the mouse pointer.
-    ///  Different cursor shapes are used to inform the user what operation the mouse will
-    ///  have.
+    ///  Represents the image used to paint the mouse pointer. Different cursor shapes are used to inform the user
+    ///  what operation the mouse will have.
     /// </summary>
     [TypeConverter(typeof(CursorConverter))]
-    [Editor("System.Drawing.Design.CursorEditor, " + AssemblyRef.SystemDrawingDesign, typeof(UITypeEditor))]
+    [Editor($"System.Drawing.Design.CursorEditor, {AssemblyRef.SystemDrawingDesign}", typeof(UITypeEditor))]
     public sealed class Cursor : IDisposable, ISerializable, IHandle
     {
         private static Size s_cursorSize = Size.Empty;
 
         private readonly byte[]? _cursorData;
-        private IntPtr _handle = IntPtr.Zero;       // handle to loaded image
+        private HCURSOR _handle;
         private bool _ownHandle = true;
-        private readonly int _resourceId;
+        private readonly PCWSTR _resourceId;
 
         /// <summary>
         ///  Private constructor. If you want a standard system cursor, use one of the
         ///  definitions in the Cursors class.
         /// </summary>
-        internal Cursor(int nResourceId)
+        internal unsafe Cursor(PCWSTR nResourceId)
         {
             // We don't delete stock cursors.
             _ownHandle = false;
             _resourceId = nResourceId;
-            _handle = User32.LoadCursorW(IntPtr.Zero, (IntPtr)nResourceId);
+            _handle = PInvoke.LoadCursor((HINSTANCE)0, nResourceId);
         }
 
         /// <summary>
@@ -50,7 +49,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.InvalidGDIHandle, (typeof(Cursor)).Name), nameof(handle));
             }
 
-            _handle = handle;
+            _handle = (HCURSOR)handle;
             _ownHandle = false;
         }
 
@@ -223,14 +222,14 @@ namespace System.Windows.Forms
 
         private void Dispose(bool disposing)
         {
-            if (_handle != IntPtr.Zero)
+            if (!_handle.IsNull)
             {
                 if (_ownHandle)
                 {
                     User32.DestroyCursor(_handle);
                 }
 
-                _handle = IntPtr.Zero;
+                _handle = default;
             }
         }
 
@@ -370,7 +369,7 @@ namespace System.Windows.Forms
         /// </summary>
         ~Cursor()
         {
-            Dispose(false);
+            Dispose(disposing: false);
         }
 
         /// <summary>
@@ -432,7 +431,7 @@ namespace System.Windows.Forms
                             picSize = DpiHelper.LogicalToDeviceUnits(picSize);
                         }
 
-                        _handle = User32.CopyImage(
+                        _handle = (HCURSOR)User32.CopyImage(
                             cursorHandle,
                             User32.IMAGE.CURSOR,
                             picSize.Width,
@@ -460,9 +459,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Saves a picture from the requested stream.
         /// </summary>
-        internal byte[] GetData()
+        internal unsafe byte[] GetData()
         {
-            if (_resourceId != 0)
+            if (_resourceId.Value != null)
             {
                 throw new FormatException(SR.CursorCannotCovertToBytes);
             }

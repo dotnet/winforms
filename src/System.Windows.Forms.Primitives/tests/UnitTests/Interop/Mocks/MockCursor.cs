@@ -11,14 +11,14 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
     {
         private IntPtr _handle = IntPtr.Zero;       // handle to loaded image
         private bool _ownHandle = true;
-        private readonly int _resourceId;
+        private readonly PCWSTR _resourceId;
 
-        public MockCursor(int nResourceId)
+        internal MockCursor(PCWSTR nResourceId)
         {
             // We don't delete stock cursors.
             _ownHandle = false;
             _resourceId = nResourceId;
-            _handle = LoadCursorW(IntPtr.Zero, (IntPtr)nResourceId);
+            _handle = PInvoke.LoadCursor(HINSTANCE.Null, nResourceId);
         }
 
         public void Dispose()

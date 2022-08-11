@@ -8,9 +8,9 @@ namespace System.Windows.Forms
     {
         private sealed class EnumChildren
         {
-            public IntPtr hwndFound = IntPtr.Zero;
+            public HWND hwndFound;
 
-            public BOOL enumChildren(IntPtr hwnd)
+            public BOOL enumChildren(HWND hwnd)
             {
                 hwndFound = hwnd;
                 return true;

@@ -17,7 +17,7 @@ namespace System.Windows.Forms
             EmfScope emf,
             User32.PRF prf = User32.PRF.CHILDREN | User32.PRF.CLIENT)
         {
-            User32.SendMessageW(control.Handle, User32.WM.PRINT, (IntPtr)emf.HDC, (nint)prf);
+            User32.SendMessageW(control, User32.WM.PRINT, (IntPtr)emf.HDC, (nint)prf);
         }
     }
 }

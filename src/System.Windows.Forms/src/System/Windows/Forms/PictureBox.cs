@@ -198,10 +198,10 @@ namespace System.Windows.Forms
                 switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
+                        cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= (int)User32.WS.BORDER;
+                        cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                         break;
                 }
 
