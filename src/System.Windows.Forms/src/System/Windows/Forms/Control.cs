@@ -10185,11 +10185,18 @@ namespace System.Windows.Forms
                 UiaCore.UiaReturnRawElementProvider(handle, 0, 0, null);
             }
 
-            if (OsVersion.IsWindows8OrGreater && IsAccessibilityObjectCreated)
+            if (OsVersion.IsWindows8OrGreater && TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
             {
-                UiaCore.UiaDisconnectProvider(AccessibilityObject);
-                Properties.SetObject(s_accessibilityProperty, null);
+                UiaCore.UiaDisconnectProvider(accessibleObject);
             }
+
+            Properties.SetObject(s_accessibilityProperty, null);
+        }
+
+        private protected bool TryGetAccessibilityObject([NotNullWhen(true)] out AccessibleObject? accessibleObject)
+        {
+            accessibleObject = Properties.GetObject(s_accessibilityProperty) as AccessibleObject;
+            return accessibleObject is not null;
         }
 
         /// <summary>

@@ -83,11 +83,12 @@ namespace System.Windows.Forms
                 UiaCore.UiaReturnRawElementProvider(Handle, wParam: 0, lParam: 0, el: null);
             }
 
-            if (OsVersion.IsWindows8OrGreater && IsAccessibilityObjectCreated)
+            if (OsVersion.IsWindows8OrGreater)
             {
-                UiaCore.UiaDisconnectProvider(AccessibilityObject);
+                UiaCore.UiaDisconnectProvider(_accessibilityObject);
             }
 
+            _accessibilityObject = null;
             base.ReleaseHandle();
         }
 

@@ -3200,8 +3200,7 @@ namespace System.Windows.Forms
         {
             if (TryGetAccessibilityObject(out AccessibleObject accessibleObject))
             {
-                HRESULT result = UiaCore.UiaDisconnectProvider(accessibleObject);
-                Debug.Assert(result == HRESULT.S_OK);
+                UiaCore.UiaDisconnectProvider(accessibleObject);
                 Properties.SetObject(s_accessibilityProperty, null);
             }
 
