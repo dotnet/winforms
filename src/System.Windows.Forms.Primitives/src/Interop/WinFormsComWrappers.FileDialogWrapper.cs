@@ -32,14 +32,14 @@ internal partial class Interop
                     (_wrappedInstance, parent);
             }
 
-            HRESULT Shell32.IFileDialog.SetFileTypes(uint cFileTypes, Shell32.COMDLG_FILTERSPEC[] rgFilterSpec)
+            HRESULT Shell32.IFileDialog.SetFileTypes(uint cFileTypes, PInvoke.COMDLG_FILTERSPEC[] rgFilterSpec)
             {
-                ref Shell32.COMDLG_FILTERSPEC rgFilterSpecRef = ref rgFilterSpec == null
-                    ? ref *(Shell32.COMDLG_FILTERSPEC*)0
+                ref PInvoke.COMDLG_FILTERSPEC rgFilterSpecRef = ref rgFilterSpec == null
+                    ? ref *(PInvoke.COMDLG_FILTERSPEC*)0
                     : ref MemoryMarshal.GetArrayDataReference(rgFilterSpec);
-                fixed (Shell32.COMDLG_FILTERSPEC* rgFilterSpec_local = &rgFilterSpecRef)
+                fixed (PInvoke.COMDLG_FILTERSPEC* rgFilterSpec_local = &rgFilterSpecRef)
                 {
-                    return ((delegate* unmanaged<IntPtr, uint, Shell32.COMDLG_FILTERSPEC*, HRESULT>)(*(*(void***)_wrappedInstance + 4)))
+                    return ((delegate* unmanaged<IntPtr, uint, PInvoke.COMDLG_FILTERSPEC*, HRESULT>)(*(*(void***)_wrappedInstance + 4)))
                         (_wrappedInstance, cFileTypes, rgFilterSpec_local);
                 }
             }

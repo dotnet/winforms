@@ -4,6 +4,7 @@
 
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using Windows.Win32.UI.Shell;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -48,7 +49,7 @@ namespace System.Windows.Forms
         ///  This is the method that binds the custom source with the IAutoComplete interface.The "hWndEdit" is the handle
         ///  to the edit Control and the "options' are the options that need to be set in the AUTOCOMPLETE mode.
         /// </summary>
-        public bool Bind(HandleRef edit, Shell32.AUTOCOMPLETEOPTIONS options)
+        public bool Bind(HandleRef edit, AUTOCOMPLETEOPTIONS options)
         {
             if (_autoCompleteObject2 is null)
             {

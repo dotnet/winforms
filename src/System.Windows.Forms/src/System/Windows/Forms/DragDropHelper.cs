@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using Windows.Win32.UI.Shell;
 using static Interop;
 using static Interop.Shell32;
 using static Interop.User32;
@@ -450,8 +451,8 @@ namespace System.Windows.Forms
 
             DROPDESCRIPTION* pDropDescription = (DROPDESCRIPTION*)basePtr;
             pDropDescription->type = (DROPIMAGETYPE)dropImageType;
-            pDropDescription->Message = message;
-            pDropDescription->Insert = messageReplacementToken;
+            pDropDescription->szMessage = message;
+            pDropDescription->szInsert = messageReplacementToken;
             PInvoke.GlobalUnlock(medium.unionmember);
 
             // Set the InShellDragLoop flag to true to facilitate loading and retrieving arbitrary private formats. The
