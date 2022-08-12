@@ -68,9 +68,9 @@ namespace System.Windows.Forms
                     success = DICopy(_hMetafileDC, HDC, _destRect, bStretch: true);
                     Debug.Assert(success, "DICopy() failed.");
                     Gdi32.SelectObject(HDC, _hOriginalBmp);
-                    success = Gdi32.DeleteObject(_hBitmap);
+                    success = PInvoke.DeleteObject(_hBitmap);
                     Debug.Assert(success, "DeleteObject() failed.");
-                    success = Gdi32.DeleteDC(HDC);
+                    success = PInvoke.DeleteDC(HDC);
                     Debug.Assert(success, "DeleteObject() failed.");
                 }
                 finally
@@ -219,7 +219,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    Gdi32.DeleteObject(hNullBitmap);
+                    PInvoke.DeleteObject(hNullBitmap);
                 }
 
                 return true;

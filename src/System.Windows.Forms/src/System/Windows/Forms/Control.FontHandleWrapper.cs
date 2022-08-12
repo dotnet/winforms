@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -39,7 +38,7 @@ namespace System.Windows.Forms
             {
                 if (!_handle.IsNull)
                 {
-                    Gdi32.DeleteObject(_handle);
+                    PInvoke.DeleteObject(_handle);
                     _handle = default;
                 }
             }

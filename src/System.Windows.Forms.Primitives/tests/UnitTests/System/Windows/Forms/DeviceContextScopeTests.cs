@@ -19,8 +19,8 @@ namespace System.Windows.Forms.Tests
         public void Scope_ApplyGraphicsProperties()
         {
             // Create a bitmap using the screen's stats
-            using var dcScope = new PInvoke.CreateDcScope(default);
-            using var bitmapScope = new Gdi32.CreateBitmapScope(dcScope, 20, 20);
+            using PInvoke.CreateDcScope dcScope = new(default);
+            using PInvoke.CreateBitmapScope bitmapScope = new(dcScope, 20, 20);
             Gdi32.SelectObject(dcScope, bitmapScope);
 
             // Select a clipping region into the DC
@@ -61,15 +61,15 @@ namespace System.Windows.Forms.Tests
         public void Graphics_HdcStatePersistence()
         {
             // Create a bitmap using the screen's stats
-            using var dcScope = new PInvoke.CreateDcScope(default);
-            using var bitmapScope = new Gdi32.CreateBitmapScope(dcScope, 20, 20);
+            using PInvoke.CreateDcScope dcScope = new(default);
+            using PInvoke.CreateBitmapScope bitmapScope = new(dcScope, 20, 20);
             Gdi32.MM originalMapMode = Gdi32.SetMapMode(dcScope, Gdi32.MM.HIMETRIC);
             Gdi32.SelectObject(dcScope, bitmapScope);
 
             Gdi32.OBJ type = Gdi32.GetObjectType(dcScope);
 
-            using var blueBrush = new Gdi32.CreateBrushScope(Color.Blue);
-            using var redBrush = new Gdi32.CreateBrushScope(Color.Red);
+            using PInvoke.CreateBrushScope blueBrush = new(Color.Blue);
+            using PInvoke.CreateBrushScope redBrush = new(Color.Red);
             Gdi32.SelectObject(dcScope, blueBrush);
 
             using Graphics graphics = dcScope.CreateGraphics();

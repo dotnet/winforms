@@ -538,7 +538,7 @@ namespace System.Windows.Forms.Design
             }
 
             using User32.GetDcScope dc = new(handle);
-            using Gdi32.ObjectScope pen =
+            using PInvoke.ObjectScope pen =
                 new(PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 2, (uint)ColorTranslator.ToWin32(backColor)));
 
             using Gdi32.SetRop2Scope rop2Scope = new(dc, rop2);

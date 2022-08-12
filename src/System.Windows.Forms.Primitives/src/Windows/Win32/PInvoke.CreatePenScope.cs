@@ -3,14 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using Gdi = Windows.Win32.Graphics.Gdi;
 
-internal static partial class Interop
+namespace Windows.Win32
 {
-    internal static partial class Gdi32
+    internal static partial class PInvoke
     {
         /// <summary>
-        ///  Helper to scope the lifetime of a <see cref="Gdi.HPEN"/>.
+        ///  Helper to scope the lifetime of a <see cref="HPEN"/>.
         /// </summary>
         /// <remarks>
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
@@ -26,13 +25,13 @@ internal static partial class Interop
 
             /// <summary>
             ///  Creates a solid pen based on the <paramref name="color"/> and <paramref name="width"/> using
-            ///  <see cref="PInvoke.CreatePen(Gdi.PEN_STYLE, int, uint)" />.
+            ///  <see cref="CreatePen(PEN_STYLE, int, uint)" />.
             /// </summary>
             public CreatePenScope(Color color, int width = 1)
             {
                 // From MSDN: if width > 1, the style must be PS_NULL, PS_SOLID, or PS_INSIDEFRAME.
-                HPEN = PInvoke.CreatePen(
-                    width > 1 ? (Gdi.PEN_STYLE.PS_GEOMETRIC | Gdi.PEN_STYLE.PS_SOLID) : default,
+                HPEN = CreatePen(
+                    width > 1 ? (PEN_STYLE.PS_GEOMETRIC | PEN_STYLE.PS_SOLID) : default,
                     width,
                     (uint)ColorTranslator.ToWin32(color));
             }

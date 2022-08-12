@@ -712,10 +712,10 @@ namespace System.Windows.Forms
             }
 
             Rectangle r = CalcSplitLine(_splitTarget, splitSize, 3);
-            using var dc = new User32.GetDcScope(ParentInternal.Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
+            using User32.GetDcScope dc = new(ParentInternal.Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
             HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
-            using var halftoneScope = new Gdi32.ObjectScope(halftone);
-            using var selection = new Gdi32.SelectObjectScope(dc, halftone);
+            using PInvoke.ObjectScope halftoneScope = new(halftone);
+            using Gdi32.SelectObjectScope selection = new(dc, halftone);
             Gdi32.PatBlt(dc, r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);
 
             GC.KeepAlive(ParentInternal);

@@ -82,7 +82,7 @@ namespace System.Windows.Forms.Design
                         !_hbrushDither.IsNull,
                         "Unable to created dithered brush. Page selector UI will not be correct");
 
-                    Gdi32.DeleteObject(hbitmapTemp);
+                    PInvoke.DeleteObject(hbitmapTemp);
                 }
             }
 
@@ -243,7 +243,7 @@ namespace System.Windows.Forms.Design
 
                 if (!RecreatingHandle && !_hbrushDither.IsNull)
                 {
-                    Gdi32.DeleteObject(_hbrushDither);
+                    PInvoke.DeleteObject(_hbrushDither);
                     _hbrushDither = default;
                 }
             }

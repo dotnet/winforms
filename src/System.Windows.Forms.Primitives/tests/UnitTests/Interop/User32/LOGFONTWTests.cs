@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
             LOGFONTW logFont = default;
             HFONT handle = Gdi32.CreateFontIndirectW(ref logFont);
             Assert.False(handle.IsNull);
-            Assert.True(Gdi32.DeleteObject(handle));
+            Assert.True(PInvoke.DeleteObject(handle));
         }
     }
 }

@@ -5150,15 +5150,15 @@ namespace System.Windows.Forms
                     HBRUSH p = (HBRUSH)backBrush;
                     if (!p.IsNull)
                     {
-                        Gdi32.DeleteObject(p);
+                        PInvoke.DeleteObject(p);
                     }
 
-                    Properties.SetObject(s_backBrushProperty, null);
+                    Properties.SetObject(s_backBrushProperty, value: null);
                 }
             }
 
             // Set reflectparent = null regardless of whether we are in the finalizer thread or not.
-            UpdateReflectParent(false);
+            UpdateReflectParent(findNewParent: false);
             if (disposing)
             {
                 if (GetState(States.Disposing))
@@ -7162,11 +7162,11 @@ namespace System.Windows.Forms
                     HBRUSH p = (HBRUSH)backBrush;
                     if (!p.IsNull)
                     {
-                        Gdi32.DeleteObject(p);
+                        PInvoke.DeleteObject(p);
                     }
                 }
 
-                Properties.SetObject(s_backBrushProperty, null);
+                Properties.SetObject(s_backBrushProperty, value: null);
             }
 
             Invalidate();
@@ -8015,7 +8015,7 @@ namespace System.Windows.Forms
                 ncAccObj.Handle = IntPtr.Zero;
             }
 
-            UpdateReflectParent(false);
+            UpdateReflectParent(findNewParent: false);
 
             if (!RecreatingHandle)
             {
@@ -8024,16 +8024,16 @@ namespace System.Windows.Forms
                     object backBrush = Properties.GetObject(s_backBrushProperty);
                     if (backBrush is not null)
                     {
-                        Properties.SetObject(s_backBrushProperty, null);
+                        Properties.SetObject(s_backBrushProperty, value: null);
                         HBRUSH p = (HBRUSH)backBrush;
                         if (!p.IsNull)
                         {
-                            Gdi32.DeleteObject(p);
+                            PInvoke.DeleteObject(p);
                         }
                     }
                 }
 
-                ListenToUserPreferenceChanged(false /*listen*/);
+                ListenToUserPreferenceChanged(listen: false);
             }
 
             // this code is important -- it is critical that we stash away
@@ -8734,8 +8734,8 @@ namespace System.Windows.Forms
             // to use it without enough bookkeeping to negate any performance gain of using GDI.
             if (!color.HasTransparency())
             {
-                using var hdc = new DeviceContextHdcScope(e);
-                using var hbrush = new Gdi32.CreateBrushScope(hdc.FindNearestColor(color));
+                using DeviceContextHdcScope hdc = new(e);
+                using PInvoke.CreateBrushScope hbrush = new(hdc.FindNearestColor(color));
                 hdc.FillRectangle(rectangle, hbrush);
             }
             else if (!color.IsFullyTransparent())
@@ -8791,8 +8791,8 @@ namespace System.Windows.Forms
             {
                 // For whatever reason, our parent can't paint our background, but we need some kind of background
                 // since we're transparent.
-                using var hdcNoParent = new DeviceContextHdcScope(e);
-                using var hbrush = new Gdi32.CreateBrushScope(SystemColors.Control);
+                using DeviceContextHdcScope hdcNoParent = new(e);
+                using PInvoke.CreateBrushScope hbrush = new(SystemColors.Control);
                 hdcNoParent.FillRectangle(rectangle, hbrush);
                 return;
             }
