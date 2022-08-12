@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
                     Assert.False(hregion.IsNull);
                     try
                     {
-                        int result = GetClipRgn(hdc, hregion);
+                        int result = PInvoke.GetClipRgn(hdc, hregion);
 
                         // We should have no clipping region
                         Assert.Equal(0, result);
@@ -99,7 +99,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
                     SelectClipRgn(hdc, originalRegion);
                     using PInvoke.RegionScope retrievedRegion = new(hdc);
                     RECT rect = default;
-                    RegionType type = (RegionType)GetRgnBox(retrievedRegion, &rect);
+                    RegionType type = (RegionType)PInvoke.GetRgnBox(retrievedRegion, &rect);
                     Assert.Equal(RegionType.SIMPLEREGION, type);
                     Assert.Equal(rectangle, (Rectangle)rect);
                 }
