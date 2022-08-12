@@ -1297,35 +1297,43 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(MaximumSize));
                     }
 
-                    Properties.SetInteger(PropMaxTrackSizeWidth, value.Width);
-                    Properties.SetInteger(PropMaxTrackSizeHeight, value.Height);
-
-                    // Bump minimum size if necessary
-                    //
-                    if (!MinimumSize.IsEmpty && !value.IsEmpty)
-                    {
-                        if (Properties.GetInteger(PropMinTrackSizeWidth) > value.Width)
-                        {
-                            Properties.SetInteger(PropMinTrackSizeWidth, value.Width);
-                        }
-
-                        if (Properties.GetInteger(PropMinTrackSizeHeight) > value.Height)
-                        {
-                            Properties.SetInteger(PropMinTrackSizeHeight, value.Height);
-                        }
-                    }
-
-                    // Keep form size within new limits
-                    //
-                    Size size = Size;
-                    if (!value.IsEmpty && (size.Width > value.Width || size.Height > value.Height))
-                    {
-                        Size = new Size(Math.Min(size.Width, value.Width), Math.Min(size.Height, value.Height));
-                    }
-
-                    OnMaximumSizeChanged(EventArgs.Empty);
+                    UpdateMaximumSize(value);
                 }
             }
+        }
+
+        private void UpdateMaximumSize(Size value, bool updateFormSize = true)
+        {
+            Properties.SetInteger(PropMaxTrackSizeWidth, value.Width);
+            Properties.SetInteger(PropMaxTrackSizeHeight, value.Height);
+
+            // Bump minimum size if necessary
+            if (!MinimumSize.IsEmpty && !value.IsEmpty)
+            {
+                if (Properties.GetInteger(PropMinTrackSizeWidth) > value.Width)
+                {
+                    Properties.SetInteger(PropMinTrackSizeWidth, value.Width);
+                }
+
+                if (Properties.GetInteger(PropMinTrackSizeHeight) > value.Height)
+                {
+                    Properties.SetInteger(PropMinTrackSizeHeight, value.Height);
+                }
+            }
+
+            // UpdateFormSize=false when Minimum/Maximum sizes get updated as a result of DPI_CHANGED message.
+            // DPI_CHANGED message updates the Form size with the SuggestedRectangle provided by Windows.
+            if (updateFormSize)
+            {
+                // Keep form size within new limits
+                Size size = Size;
+                if (!value.IsEmpty && (size.Width > value.Width || size.Height > value.Height))
+                {
+                    Size = new Size(Math.Min(size.Width, value.Width), Math.Min(size.Height, value.Height));
+                }
+            }
+
+            OnMaximumSizeChanged(EventArgs.Empty);
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
@@ -1410,47 +1418,57 @@ namespace System.Windows.Forms
                     bounds.Size = value;
                     value = WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(bounds).Size;
 
-                    Properties.SetInteger(PropMinTrackSizeWidth, value.Width);
-                    Properties.SetInteger(PropMinTrackSizeHeight, value.Height);
-
-                    // Bump maximum size if necessary
-                    if (!MaximumSize.IsEmpty && !value.IsEmpty)
-                    {
-                        if (Properties.GetInteger(PropMaxTrackSizeWidth) < value.Width)
-                        {
-                            Properties.SetInteger(PropMaxTrackSizeWidth, value.Width);
-                        }
-
-                        if (Properties.GetInteger(PropMaxTrackSizeHeight) < value.Height)
-                        {
-                            Properties.SetInteger(PropMaxTrackSizeHeight, value.Height);
-                        }
-                    }
-
-                    // Keep form size within new limits
-                    Size size = Size;
-                    if (size.Width < value.Width || size.Height < value.Height)
-                    {
-                        Size = new Size(Math.Max(size.Width, value.Width), Math.Max(size.Height, value.Height));
-                    }
-
-                    if (IsHandleCreated)
-                    {
-                        // "Move" the form to the same size and position to prevent windows from moving it
-                        // when the user tries to grab a resizing border.
-                        User32.SetWindowPos(
-                            new HandleRef(this, Handle),
-                            User32.HWND_TOP,
-                            Location.X,
-                            Location.Y,
-                            Size.Width,
-                            Size.Height,
-                            User32.SWP.NOZORDER);
-                    }
-
-                    OnMinimumSizeChanged(EventArgs.Empty);
+                    UpdateMinimumSize(value);
                 }
             }
+        }
+
+        private void UpdateMinimumSize(Size value, bool updateFormSize = true)
+        {
+            Properties.SetInteger(PropMinTrackSizeWidth, value.Width);
+            Properties.SetInteger(PropMinTrackSizeHeight, value.Height);
+
+            // Bump maximum size if necessary
+            if (!MaximumSize.IsEmpty && !value.IsEmpty)
+            {
+                if (Properties.GetInteger(PropMaxTrackSizeWidth) < value.Width)
+                {
+                    Properties.SetInteger(PropMaxTrackSizeWidth, value.Width);
+                }
+
+                if (Properties.GetInteger(PropMaxTrackSizeHeight) < value.Height)
+                {
+                    Properties.SetInteger(PropMaxTrackSizeHeight, value.Height);
+                }
+            }
+
+            // UpdateFormSize=false when Minimum/Maximum sizes get updated as a result of DPI_CHANGED message.
+            // DPI_CHANGED message updates the Form size with the SuggestedRectangle provided by Windows.
+            if (updateFormSize)
+            {
+                // Keep form size within new limits
+                Size size = Size;
+                if (size.Width < value.Width || size.Height < value.Height)
+                {
+                    Size = new Size(Math.Max(size.Width, value.Width), Math.Max(size.Height, value.Height));
+                }
+
+                if (IsHandleCreated)
+                {
+                    // "Move" the form to the same size and position to prevent windows from moving it
+                    // when the user tries to grab a resizing border.
+                    User32.SetWindowPos(
+                        new HandleRef(this, Handle),
+                        User32.HWND_TOP,
+                        Location.X,
+                        Location.Y,
+                        Size.Width,
+                        Size.Height,
+                        User32.SWP.NOZORDER);
+                }
+            }
+
+            OnMinimumSizeChanged(EventArgs.Empty);
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
@@ -4866,26 +4884,14 @@ namespace System.Windows.Forms
             SuspendLayout();
             try
             {
+                // Get size values in advance to prevent one change from affecting another.
+                Size clientSize = ClientSize;
+                ScaleMinMaxSize(x, y);
+                ScaleDockPadding(x, y);
                 if (WindowState == FormWindowState.Normal)
                 {
-                    //Get size values in advance to prevent one change from affecting another.
-                    Size clientSize = ClientSize;
-                    Size minSize = MinimumSize;
-                    Size maxSize = MaximumSize;
-                    if (!MinimumSize.IsEmpty)
-                    {
-                        MinimumSize = ScaleSize(minSize, x, y);
-                    }
-
-                    if (!MaximumSize.IsEmpty)
-                    {
-                        MaximumSize = ScaleSize(maxSize, x, y);
-                    }
-
                     ClientSize = ScaleSize(clientSize, x, y);
                 }
-
-                ScaleDockPadding(x, y);
 
                 foreach (Control control in Controls)
                 {
@@ -4898,6 +4904,31 @@ namespace System.Windows.Forms
             finally
             {
                 ResumeLayout();
+            }
+        }
+
+        /// <summary>
+        /// Scales Form's properties Min and Max size with the scale factor provided.
+        /// </summary>
+        /// <param name="xScaleFactor">The scale factor to be applied on width of the property being scaled.</param>
+        /// <param name="yScaleFactor">The scale factor to be applied on height of the property being scaled.</param>
+        /// <param name="updateContainerSize"><see langword="true"/> to resize of the Form along with properties being scaled; otherwise, <see langword="false"/>.</param>
+        protected override void ScaleMinMaxSize(float xScaleFactor, float yScaleFactor, bool updateContainerSize = true)
+        {
+            base.ScaleMinMaxSize(xScaleFactor, yScaleFactor, updateContainerSize);
+            if (WindowState == FormWindowState.Normal)
+            {
+                Size minSize = MinimumSize;
+                Size maxSize = MaximumSize;
+                if (!minSize.IsEmpty)
+                {
+                    UpdateMinimumSize(ScaleSize(minSize, xScaleFactor, yScaleFactor), updateContainerSize);
+                }
+
+                if (!maxSize.IsEmpty)
+                {
+                    UpdateMaximumSize(ScaleSize(maxSize, xScaleFactor, yScaleFactor), updateContainerSize);
+                }
             }
         }
 

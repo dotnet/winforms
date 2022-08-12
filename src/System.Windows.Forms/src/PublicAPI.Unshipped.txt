@@ -85,3 +85,5 @@ virtual System.Windows.Forms.Control.DataContext.set -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnCommandChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnCommandParameterChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnRequestCommandExecute(System.EventArgs e) -> void
+override System.Windows.Forms.Form.ScaleMinMaxSize(float xScaleFactor, float yScaleFactor, bool updateContainerSize = true) -> void
+virtual System.Windows.Forms.ContainerControl.ScaleMinMaxSize(float xScaleFactor, float yScaleFactor, bool updateContainerSize = true) -> void
