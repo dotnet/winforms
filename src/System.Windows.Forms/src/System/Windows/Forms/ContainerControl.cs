@@ -1433,7 +1433,7 @@ namespace System.Windows.Forms
             SuspendAllLayout(this);
             try
             {
-                if (LocalAppContextSwitches.ScaleTopLevelFormMinMaxSize)
+                if (LocalAppContextSwitches.ScaleTopLevelFormMinMaxSizeForDpi)
                 {
                     // The suggested rectangle comes from Windows, and it does not match with our calculations for scaling controls by AutoscaleFactor.
                     // Hence, we cannot use AutoscaleFactor here for scaling the control properties. See the below description for more details.

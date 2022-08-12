@@ -39,15 +39,15 @@ Unlike above, these settings are used by the user application. These are commonl
 ```XML
  <userSettings>
         <WinFormsApp2.Properties.Settings>
-            <setting name="Settingdfsd" serializeAs="String">
-                <value>dfds</value>
+            <setting name="ButtonName" serializeAs="String">
+                <value>LocalButton</value>
             </setting>
         </WinFormsApp2.Properties.Settings>
     </userSettings>
     <applicationSettings>
         <WinFormsApp2.Properties.Settings>
-            <setting name="dfsd" serializeAs="String">
-                <value>sdfsdgs</value>
+            <setting name="BoxName" serializeAs="String">
+                <value>LocalBox</value>
             </setting>
         </WinFormsApp2.Properties.Settings>
     </applicationSettings>
@@ -102,7 +102,7 @@ Windows Forms switches will be added to [`configProperties` section](https://doc
       "System.Threading.ThreadPool.MaxThreads": 25,
       
       <!-- Windows Forms specific switches -->
-      "System.Windows.Forms.ScaleTopLevelFormMinMaxSize": true,
+      "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi": true,
       "System.Windows.Forms.<CustomEnumProperty>": "EnumValue"
     }
 }
@@ -135,7 +135,7 @@ For example, the content of _[appname].runtimeconfig.json_ generated from above 
       "System.GC.Concurrent": false,
       "System.Threading.ThreadPool.MinThreads": 4,
       "System.Threading.ThreadPool.MaxThreads": 25,
-      "Switch.System.Windows.Forms.ScaleTopLevelFormMinMaxSize": true,
+      "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi": true,
       "System.Windows.Forms.<StringProperty>": "string"
       "System.Windows.Forms.<CustomProperty>": "CustomValue"
     }
@@ -157,13 +157,13 @@ internal static partial class LocalAppContextSwitches
     private static readonly FrameworkName? s_targetFrameworkName = GetTargetFrameworkName();
     private static readonly bool s_isNetCoreApp = (s_targetFrameworkName?.Identifier) == ".NETCoreApp";
 
-    private const string SwitchScaleTopLevelFormMinMaxSizeForDpi = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
+    private const string ScaleTopLevelFormMinMaxSizeForDpiSwitchName = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
     private static int s_scaleTopLevelFormMinMaxSize;
 
-    public static bool ScaleTopLevelFormMinMaxSize
+    public static bool ScaleTopLevelFormMinMaxSizeForDpi
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => GetCachedSwitchValue(SwitchScaleTopLevelFormMinMaxSizeForDpi, ref s_scaleTopLevelFormMinMaxSize);
+        get => GetCachedSwitchValue(ScaleTopLevelFormMinMaxSizeForDpiSwitchName, ref s_scaleTopLevelFormMinMaxSize);
     }
 
     private static FrameworkName? GetTargetFrameworkName()
@@ -213,7 +213,7 @@ internal static partial class LocalAppContextSwitches
         {
             if (s_targetFrameworkName!.Version.CompareTo(new Version("8.0")) >= 0)
             {
-                if (switchName == SwitchScaleTopLevelFormMinMaxSizeForDpi)
+                if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
                 {
                     return true;
                 }
@@ -226,7 +226,7 @@ internal static partial class LocalAppContextSwitches
 ```
 
 
-WinForms runtime then uses the static `LocalAppContextSwitches` class to access the runtime configurations. The below sample demonstrates how to access the feature switch `Switch.System.Windows.Forms.ScaleTopLevelFormMinMaxSize`:
+WinForms runtime then uses the static `LocalAppContextSwitches` class to access the runtime configurations. The below sample demonstrates how to access the feature switch `System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi`:
 
 Ex: Use of feature switch in ScaleContainerForDpi() method in ContainerControl.cs to scale Min/Max size of the Container.
 
@@ -237,7 +237,7 @@ internal void ScaleContainerForDpi(int deviceDpiNew, int deviceDpiOld, Rectangle
     SuspendAllLayout(this);
     try
     {
-        if (LocalAppContextSwitches.ScaleTopLevelFormMinMaxSize)
+        if (LocalAppContextSwitches.ScaleTopLevelFormMinMaxSizeForDpi)
         {
             // The suggested rectangle comes from Windows, and it does not match with our calculations for scaling controls by AutoscaleFactor.
             // Hence, we cannot use AutoscaleFactor here for scaling the control properties. See the below description for more details.

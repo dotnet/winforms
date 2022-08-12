@@ -7,16 +7,16 @@ using System.Runtime.Versioning;
 
 namespace System.Windows.Forms.Primitives
 {
-    // Barrowed from https://github.com/dotnet/runtime/blob/main/src/libraries/Common/src/System/LocalAppContextSwitches.Common.cs
+    // Borrowed from https://github.com/dotnet/runtime/blob/main/src/libraries/Common/src/System/LocalAppContextSwitches.Common.cs
     internal static partial class LocalAppContextSwitches
     {
-        private const string SwitchScaleTopLevelFormMinMaxSizeForDpi = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
+        private const string ScaleTopLevelFormMinMaxSizeForDpiSwitchName = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
 
-        private static int s_scaleTopLevelFormMinMaxSize;
-        public static bool ScaleTopLevelFormMinMaxSize
+        private static int s_scaleTopLevelFormMinMaxSizeForDpi;
+        public static bool ScaleTopLevelFormMinMaxSizeForDpi
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => GetCachedSwitchValue(SwitchScaleTopLevelFormMinMaxSizeForDpi, ref s_scaleTopLevelFormMinMaxSize);
+            get => GetCachedSwitchValue(ScaleTopLevelFormMinMaxSizeForDpiSwitchName, ref s_scaleTopLevelFormMinMaxSizeForDpi);
         }
 
         private static readonly FrameworkName? s_targetFrameworkName = GetTargetFrameworkName();
@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Primitives
                 {
                     if (s_targetFrameworkName!.Version.CompareTo(new Version("8.0")) >= 0)
                     {
-                        if (switchName == SwitchScaleTopLevelFormMinMaxSizeForDpi)
+                        if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
                         {
                             return true;
                         }

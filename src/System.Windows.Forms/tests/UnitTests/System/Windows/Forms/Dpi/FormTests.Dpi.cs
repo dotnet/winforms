@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Tests.Dpi
 
         [WinFormsTheory]
         [InlineData(3.5 * DpiHelper.LogicalDpi)]
-        public void Form_DpiChanged_MinMaxSizeNotChanged_default(int newDpi)
+        public void Form_DpiChanged_MinMaxSizeNotChanged_Default(int newDpi)
         {
             // Run tests only on Windows 10 versions that support thread dpi awareness.
             if (!PlatformDetection.IsWindows10Version1803OrGreater)
@@ -80,8 +80,7 @@ namespace System.Windows.Forms.Tests.Dpi
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/7579")]
-        [WinFormsTheory(Skip = "Lab machines seems not setting thread's Dpi context. See https://github.com/dotnet/winforms/issues/7579")]
+        [WinFormsTheory]
         [InlineData(3.5 * DpiHelper.LogicalDpi)]
         public void Form_DpiChanged_MinMaxSizeChanged_WithRuntimeSetting(int newDpi)
         {
@@ -103,12 +102,18 @@ namespace System.Windows.Forms.Tests.Dpi
                 form.Show();
 
                 // Explicitly opt-in to resize min and max sizes with Dpi changed event.
-                AppContext.SetSwitch("Switch.System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi", true);
+                const string runtimeSwitchName = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
+                AppContext.SetSwitch(runtimeSwitchName, true);
+
                 DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
                 var factor = newDpi / DpiHelper.LogicalDpi;
 
                 Assert.NotEqual(form.MinimumSize, minSize);
                 Assert.NotEqual(form.MaximumSize, maxSize);
+
+                // Reset switch.
+                AppContext.SetSwitch(runtimeSwitchName, false);
+
                 form.Close();
             }
             finally
