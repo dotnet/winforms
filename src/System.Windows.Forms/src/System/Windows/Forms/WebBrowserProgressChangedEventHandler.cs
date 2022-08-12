@@ -7,5 +7,10 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Delegate to the WebBrowser ProgressChanged event.
     /// </summary>
+    [Obsolete(
+        Obsoletions.WebBrowserMessage,
+        error: false,
+        DiagnosticId = Obsoletions.WebBrowserDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     public delegate void WebBrowserProgressChangedEventHandler(object? sender, WebBrowserProgressChangedEventArgs e);
 }

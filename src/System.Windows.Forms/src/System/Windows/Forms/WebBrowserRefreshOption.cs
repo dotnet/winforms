@@ -7,6 +7,11 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Specifies the RefreshOptions in the <see cref="WebBrowser.Refresh(WebBrowserRefreshOption)"/> method.
     /// </summary>
+    [Obsolete(
+        Obsoletions.WebBrowserMessage,
+        error: false,
+        DiagnosticId = Obsoletions.WebBrowserDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     public enum WebBrowserRefreshOption
     {
         Normal = 0,

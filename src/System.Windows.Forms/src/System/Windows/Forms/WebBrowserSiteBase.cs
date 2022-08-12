@@ -25,6 +25,11 @@ namespace System.Windows.Forms
     ///  means that inheritors who want to override even a single method of one
     ///  of these interfaces will have to implement the whole interface.
     /// </summary>
+    [Obsolete(
+        Obsoletions.WebBrowserMessage,
+        error: false,
+        DiagnosticId = Obsoletions.WebBrowserDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     public class WebBrowserSiteBase :
         IOleControlSite,
         IOleInPlaceSite,

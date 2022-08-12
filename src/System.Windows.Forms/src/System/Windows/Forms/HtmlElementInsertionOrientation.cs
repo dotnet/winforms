@@ -4,6 +4,11 @@
 
 namespace System.Windows.Forms
 {
+    [Obsolete(
+       Obsoletions.WebBrowserMessage,
+       error: false,
+       DiagnosticId = Obsoletions.WebBrowserDiagnosticId,
+       UrlFormat = Obsoletions.SharedUrlFormat)]
     public enum HtmlElementInsertionOrientation
     {
         BeforeBegin,

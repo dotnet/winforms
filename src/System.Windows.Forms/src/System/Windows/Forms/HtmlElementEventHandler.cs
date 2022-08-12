@@ -4,5 +4,10 @@
 
 namespace System.Windows.Forms
 {
+    [Obsolete(
+       Obsoletions.WebBrowserMessage,
+       error: false,
+       DiagnosticId = Obsoletions.WebBrowserDiagnosticId,
+       UrlFormat = Obsoletions.SharedUrlFormat)]
     public delegate void HtmlElementEventHandler(object? sender, HtmlElementEventArgs e);
 }

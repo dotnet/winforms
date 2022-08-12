@@ -14,6 +14,11 @@ using static Interop.Mshtml;
 
 namespace System.Windows.Forms
 {
+    [Obsolete(
+       Obsoletions.WebBrowserMessage,
+       error: false,
+       DiagnosticId = Obsoletions.WebBrowserDiagnosticId,
+       UrlFormat = Obsoletions.SharedUrlFormat)]
     public sealed partial class HtmlDocument
     {
         internal static object s_eventClick = new();

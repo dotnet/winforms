@@ -21,7 +21,12 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(DocumentCompleted))]
     [Docking(DockingBehavior.AutoDock)]
     [SRDescription(nameof(SR.DescriptionWebBrowser))]
-    [Designer("System.Windows.Forms.Design.WebBrowserDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.WebBrowserDesigner, {AssemblyRef.SystemDesign}")]
+    [Obsolete(
+        Obsoletions.WebBrowserMessage,
+        error: false,
+        DiagnosticId = Obsoletions.WebBrowserDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     public partial class WebBrowser : WebBrowserBase
     {
         // Reference to the native ActiveX control's IWebBrowser2

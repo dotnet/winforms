@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <NoWarn>$(NoWarn),1573,1591,1712,WFDEV001</NoWarn>
+    <NoWarn>$(NoWarn),1573,1591,1712,WFDEV001,WFDEV004</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

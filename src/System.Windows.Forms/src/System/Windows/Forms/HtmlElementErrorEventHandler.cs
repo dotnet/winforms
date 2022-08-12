@@ -7,5 +7,10 @@ namespace System.Windows.Forms
     /// <summary>
     ///  EventHandler for HtmlElementErrorEventArgs
     /// </summary>
+    [Obsolete(
+       Obsoletions.WebBrowserMessage,
+       error: false,
+       DiagnosticId = Obsoletions.WebBrowserDiagnosticId,
+       UrlFormat = Obsoletions.SharedUrlFormat)]
     public delegate void HtmlElementErrorEventHandler(object? sender, HtmlElementErrorEventArgs e);
 }

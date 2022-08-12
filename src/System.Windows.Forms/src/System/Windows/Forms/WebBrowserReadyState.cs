@@ -10,6 +10,11 @@ namespace System.Windows.Forms
     ///  Specifies the ReadyState of the WebBrowser control.
     ///  Returned by the <see cref="WebBrowser.ReadyState"/> property.
     /// </summary>
+    [Obsolete(
+        Obsoletions.WebBrowserMessage,
+        error: false,
+        DiagnosticId = Obsoletions.WebBrowserDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     public enum WebBrowserReadyState
     {
         Uninitialized = Ole32.READYSTATE.UNINITIALIZED,

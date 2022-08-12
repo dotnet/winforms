@@ -7,5 +7,10 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Delegate to the WebBrowser Navigated event.
     /// </summary>
+    [Obsolete(
+        Obsoletions.WebBrowserMessage,
+        error: false,
+        DiagnosticId = Obsoletions.WebBrowserDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     public delegate void WebBrowserNavigatedEventHandler(object? sender, WebBrowserNavigatedEventArgs e);
 }

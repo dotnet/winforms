@@ -7,6 +7,11 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Provides data for the <see cref="WebBrowser.OnDocumentCompleted"/> event.
     /// </summary>
+    [Obsolete(
+        Obsoletions.WebBrowserMessage,
+        error: false,
+        DiagnosticId = Obsoletions.WebBrowserDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     public class WebBrowserDocumentCompletedEventArgs : EventArgs
     {
         /// <summary>

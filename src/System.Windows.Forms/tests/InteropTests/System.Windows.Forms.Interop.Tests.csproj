@@ -4,6 +4,7 @@
     <AssemblyName>System.Windows.Forms.Interop.Tests</AssemblyName>
     <Platforms>x86;x64</Platforms>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>$(NoWarn);WFDEV004</NoWarn>
   </PropertyGroup>
 
   <Import Project="ProjectReference.targets" Sdk="Microsoft.DotNet.CMake.Sdk" />

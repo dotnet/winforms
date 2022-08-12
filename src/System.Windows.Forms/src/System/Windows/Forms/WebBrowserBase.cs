@@ -31,7 +31,12 @@ namespace System.Windows.Forms
     /// </summary>
     [DefaultProperty(nameof(Name))]
     [DefaultEvent(nameof(Enter))]
-    [Designer("System.Windows.Forms.Design.AxDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.AxDesigner, {AssemblyRef.SystemDesign}")]
+    [Obsolete(
+            Obsoletions.WebBrowserMessage,
+            error: false,
+            DiagnosticId = Obsoletions.WebBrowserDiagnosticId,
+            UrlFormat = Obsoletions.SharedUrlFormat)]
     public partial class WebBrowserBase : Control
     {
         private WebBrowserHelper.AXState axState = WebBrowserHelper.AXState.Passive;

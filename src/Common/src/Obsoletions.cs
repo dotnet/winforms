@@ -17,4 +17,7 @@ internal static class Obsoletions
 
     internal const string DomainItemAccessibleObjectMessage = $"{nameof(System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject)} is no longer used to provide accessible support for {nameof(System.Windows.Forms.DomainUpDown)} items.";
     internal const string DomainItemAccessibleObjectDiagnosticId = "WFDEV003";
+
+    internal const string WebBrowserMessage = $"{nameof(System.Windows.Forms.WebBrowser)}, {nameof(System.Windows.Forms.HtmlDocument)} and associated types are deprecated. Consider WebView2 as replacement.";
+    internal const string WebBrowserDiagnosticId = "WFDEV004";
 }

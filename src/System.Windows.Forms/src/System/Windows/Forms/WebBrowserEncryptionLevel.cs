@@ -8,6 +8,11 @@ namespace System.Windows.Forms
     ///  Specifies the EncryptionLevel of the document in the WebBrowser control.
     ///  Returned by the <see cref="WebBrowser.EncryptionLevel"/> property.
     /// </summary>
+    [Obsolete(
+        Obsoletions.WebBrowserMessage,
+        error: false,
+        DiagnosticId = Obsoletions.WebBrowserDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     public enum WebBrowserEncryptionLevel
     {
         Insecure = 0,

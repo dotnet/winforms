@@ -17,6 +17,11 @@ namespace System.Windows.Forms
         ///  Provides a default WebBrowserSite implementation for use in the CreateWebBrowserSite
         ///  method in the WebBrowser class.
         /// </summary>
+        [Obsolete(
+            Obsoletions.WebBrowserMessage,
+            error: false,
+            DiagnosticId = Obsoletions.WebBrowserDiagnosticId,
+            UrlFormat = Obsoletions.SharedUrlFormat)]
         protected class WebBrowserSite : WebBrowserSiteBase, IDocHostUIHandler
         {
             /// <summary>

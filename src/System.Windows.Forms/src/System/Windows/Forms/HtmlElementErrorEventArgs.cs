@@ -7,6 +7,11 @@ namespace System.Windows.Forms
     /// <summary>
     ///  EventArgs for onerror event of HtmlElement
     /// </summary>
+    [Obsolete(
+       Obsoletions.WebBrowserMessage,
+       error: false,
+       DiagnosticId = Obsoletions.WebBrowserDiagnosticId,
+       UrlFormat = Obsoletions.SharedUrlFormat)]
     public sealed class HtmlElementErrorEventArgs : EventArgs
     {
         private readonly string _urlString;

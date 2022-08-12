@@ -9,6 +9,11 @@ using static Interop.Mshtml;
 
 namespace System.Windows.Forms
 {
+    [Obsolete(
+       Obsoletions.WebBrowserMessage,
+       error: false,
+       DiagnosticId = Obsoletions.WebBrowserDiagnosticId,
+       UrlFormat = Obsoletions.SharedUrlFormat)]
     public sealed class HtmlHistory : IDisposable
     {
         private IOmHistory htmlHistory;
