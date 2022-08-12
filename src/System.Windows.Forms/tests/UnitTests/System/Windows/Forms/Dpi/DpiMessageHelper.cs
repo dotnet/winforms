@@ -11,13 +11,13 @@ namespace System.Windows.Forms.Tests.Dpi
         public static void TriggerDpiMessage(User32.WM message, Control control, int newDpi)
         {
             double factor = newDpi / DpiHelper.LogicalDpi;
-            nint wParam = PARAM.FromLowHigh(newDpi, newDpi);
+            WPARAM wParam = WPARAM.MAKEWPARAM(newDpi, newDpi);
 
             _ = message switch
             {
                 User32.WM.DPICHANGED => SendWmDpiChangedMessage(),
-                User32.WM.DPICHANGED_BEFOREPARENT => User32.SendMessageW(control, message, wParam),
-                User32.WM.DPICHANGED_AFTERPARENT => User32.SendMessageW(control, message),
+                User32.WM.DPICHANGED_BEFOREPARENT => PInvoke.SendMessage(control, message, wParam),
+                User32.WM.DPICHANGED_AFTERPARENT => PInvoke.SendMessage(control, message),
                 _ => throw new NotImplementedException()
             };
 
@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Tests.Dpi
                     0,
                     (int)Math.Round(control.Width * factor),
                     (int)Math.Round(control.Height * factor));
-                return User32.SendMessageW(control, message, wParam, ref suggestedRect);
+                return PInvoke.SendMessage(control, message, wParam, ref suggestedRect);
             }
         }
     }

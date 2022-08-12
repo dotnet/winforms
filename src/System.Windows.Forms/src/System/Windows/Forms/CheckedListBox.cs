@@ -5,17 +5,12 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Runtime.InteropServices;
 using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///
-    ///  Displays a list with a checkbox to the left
-    ///
-    ///  of each item.
+    ///  Displays a list with a checkbox to the left of each item.
     /// </summary>
     [LookupBindingProperties]
     [SRDescription(nameof(SR.DescriptionCheckedListBox))]
@@ -55,8 +50,8 @@ namespace System.Windows.Forms
         private CheckedItemCollection? _checkedItemCollection;
         private CheckedIndexCollection? _checkedIndexCollection;
 
-        private static readonly WM LBC_GETCHECKSTATE = RegisterWindowMessageW("LBC_GETCHECKSTATE");
-        private static readonly WM LBC_SETCHECKSTATE = RegisterWindowMessageW("LBC_SETCHECKSTATE");
+        private static readonly User32.WM LBC_GETCHECKSTATE = User32.RegisterWindowMessageW("LBC_GETCHECKSTATE");
+        private static readonly User32.WM LBC_SETCHECKSTATE = User32.RegisterWindowMessageW("LBC_SETCHECKSTATE");
 
         /// <summary>
         ///  Creates a new CheckedListBox for the user.
@@ -130,7 +125,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.Style |= (int)(LBS.OWNERDRAWFIXED | LBS.WANTKEYBOARDINPUT);
+                cp.Style |= (int)(User32.LBS.OWNERDRAWFIXED | User32.LBS.WANTKEYBOARDINPUT);
                 return cp;
             }
         }
@@ -428,8 +423,8 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 var rect = new RECT();
-                SendMessageW(this, (WM)LB.GETITEMRECT, index, ref rect);
-                InvalidateRect(new HandleRef(this, Handle), &rect, false);
+                PInvoke.SendMessage(this, (User32.WM)User32.LB.GETITEMRECT, (WPARAM)index, ref rect);
+                PInvoke.InvalidateRect(this, &rect, bErase: false);
             }
         }
 
@@ -500,7 +495,7 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
+            PInvoke.SendMessage(this, (User32.WM)User32.LB.SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
         }
 
         /// <summary>
@@ -792,7 +787,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                InvalidateRect(new HandleRef(this, Handle), null, true);
+                PInvoke.InvalidateRect(this, null, true);
             }
         }
 
@@ -801,7 +796,7 @@ namespace System.Windows.Forms
             // Update the item height
             if (IsHandleCreated)
             {
-                SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
+                PInvoke.SendMessage(this, (User32.WM)User32.LB.SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
             }
 
             // The base OnFontChanged will adjust the height of the CheckedListBox accordingly
@@ -936,7 +931,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WmReflectCommand(ref Message m)
         {
-            switch ((User32.LBN)PARAM.HIWORD(m.WParamInternal))
+            switch ((User32.LBN)m.WParamInternal.SIGNEDHIWORD)
             {
                 case User32.LBN.SELCHANGE:
                     LbnSelChange();
@@ -961,7 +956,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmReflectVKeyToItem(ref Message m)
         {
-            Keys keycode = (Keys)PARAM.LOWORD(m.WParamInternal);
+            Keys keycode = (Keys)m.WParamInternal.LOWORD;
             switch (keycode)
             {
                 case Keys.Up:
@@ -991,10 +986,10 @@ namespace System.Windows.Forms
         {
             switch (m.MsgInternal)
             {
-                case WM.REFLECT_CHARTOITEM:
+                case User32.WM.REFLECT_CHARTOITEM:
                     m.ResultInternal = (LRESULT)(-1);
                     break;
-                case WM.REFLECT_VKEYTOITEM:
+                case User32.WM.REFLECT_VKEYTOITEM:
                     WmReflectVKeyToItem(ref m);
                     break;
                 default:
@@ -1003,7 +998,7 @@ namespace System.Windows.Forms
                         int item = (int)m.WParamInternal;
                         if (item < 0 || item >= Items.Count)
                         {
-                            m.ResultInternal = (LRESULT)LB_ERR;
+                            m.ResultInternal = (LRESULT)User32.LB_ERR;
                         }
                         else
                         {

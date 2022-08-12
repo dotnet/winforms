@@ -5,7 +5,6 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.Design.Behavior;
@@ -742,7 +741,10 @@ namespace System.ComponentModel.Design
                 {
                     Debug.WriteLineIf(s_designerActionPanelTraceSwitch.TraceVerbose, "Assigning owner to mainParentWindow");
                     Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "Assigning owner to mainParentWindow");
-                    User32.SetWindowLong(designerActionHost, User32.GWL.HWNDPARENT, new HandleRef(_mainParentWindow, _mainParentWindow.Handle));
+                    PInvoke.SetWindowLong(
+                        designerActionHost,
+                        WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT,
+                        new HandleRef<HWND>(_mainParentWindow, (HWND)_mainParentWindow.Handle));
                 }
 
                 _cancelClose = true;
@@ -763,9 +765,9 @@ namespace System.ComponentModel.Design
         {
             _cancelClose = false;
             // force the panel to be the active window - for some reason someone else could have forced VS to become active for real while we were ignoring close. This might be bad cause we'd be in a bad state.
-            if (designerActionHost is not null && designerActionHost.Handle != IntPtr.Zero && designerActionHost.Visible)
+            if (designerActionHost is not null && designerActionHost.Handle != 0 && designerActionHost.Visible)
             {
-                User32.SetActiveWindow(new HandleRef(this, designerActionHost.Handle));
+                PInvoke.SetActiveWindow(designerActionHost);
                 designerActionHost.CheckFocusIsRight();
             }
         }
@@ -877,7 +879,7 @@ namespace System.ComponentModel.Design
                         DesignerActionUI.DropDownVisibilityDebug.TraceVerbose,
                         "[DesignerActionToolStripDropDown.OnClosing] activation hasnt changed, but we've certainly clicked somewhere else.");
                 }
-                else if (WindowOwnsWindow(Handle, hwndActivating))
+                else if (WindowOwnsWindow((HWND)Handle, hwndActivating))
                 {
                     // We're being de-activated for someone owned by the panel.
                     e.Cancel = true;
@@ -885,7 +887,7 @@ namespace System.ComponentModel.Design
                         DesignerActionUI.DropDownVisibilityDebug.TraceVerbose,
                         "[DesignerActionToolStripDropDown.OnClosing] Cancel close - the window activating is owned by this window");
                 }
-                else if (_mainParentWindow is not null && !WindowOwnsWindow(_mainParentWindow.Handle, hwndActivating))
+                else if (_mainParentWindow is not null && !WindowOwnsWindow((HWND)_mainParentWindow.Handle, hwndActivating))
                 {
                     if (IsWindowEnabled(_mainParentWindow.Handle))
                     {
@@ -917,8 +919,11 @@ namespace System.ComponentModel.Design
                         $"[DesignerActionToolStripDropDown.OnClosing] since the designer action panel dropdown doesnt own the activating window {hwndActivating.Value:x)}, calling close. ");
                 }
 
-                // what's the owner of the windows being activated?
-                IntPtr parent = User32.GetWindowLong(new HandleRef(this, hwndActivating), User32.GWL.HWNDPARENT);
+                // What's the owner of the windows being activated?
+                HWND parent = (HWND)PInvoke.GetWindowLong(
+                    new HandleRef<HWND>(this, hwndActivating),
+                    WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
+
                 // is it currently disabled (ie, the activating windows is in modal mode)
                 if (!IsWindowEnabled(parent))
                 {
@@ -1000,15 +1005,17 @@ namespace System.ComponentModel.Design
         ///  General purpose method, based on Control.Contains()...
         ///  Determines whether a given window (specified using native window handle) is a descendant of this control. This catches both contained descendants and 'owned' windows such as modal dialogs. Using window handles rather than Control objects allows it to catch un-managed windows as well.
         /// </summary>
-        private static bool WindowOwnsWindow(IntPtr hWndOwner, IntPtr hWndDescendant)
+        private static bool WindowOwnsWindow(HWND hWndOwner, HWND hWndDescendant)
         {
-            Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[WindowOwnsWindow] Testing if " + hWndOwner.ToString("x") + " is a owned by " + hWndDescendant.ToString("x") + "... ");
+            Debug.WriteLineIf(
+                DesignerActionUI.DropDownVisibilityDebug.TraceVerbose,
+                $"[WindowOwnsWindow] Testing if {hWndOwner.Value.ToString("x")} is a owned by {hWndDescendant.Value.ToString("x")}... ");
 #if DEBUG
             if (DesignerActionUI.DropDownVisibilityDebug.TraceVerbose)
             {
                 Debug.WriteLine("\t\tOWNER: " + GetControlInformation(hWndOwner));
                 Debug.WriteLine("\t\tOWNEE: " + GetControlInformation(hWndDescendant));
-                IntPtr claimedOwnerHwnd = User32.GetWindowLong(hWndDescendant, User32.GWL.HWNDPARENT);
+                IntPtr claimedOwnerHwnd = PInvoke.GetWindowLong(hWndDescendant, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
                 Debug.WriteLine("OWNEE's CLAIMED OWNER: " + GetControlInformation(claimedOwnerHwnd));
             }
 #endif
@@ -1018,9 +1025,9 @@ namespace System.ComponentModel.Design
                 return true;
             }
 
-            while (hWndDescendant != IntPtr.Zero)
+            while (!hWndDescendant.IsNull)
             {
-                hWndDescendant = User32.GetWindowLong(hWndDescendant, User32.GWL.HWNDPARENT);
+                hWndDescendant = (HWND)PInvoke.GetWindowLong(hWndDescendant, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
                 if (hWndDescendant == IntPtr.Zero)
                 {
                     Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "NOPE.");
@@ -1085,7 +1092,7 @@ namespace System.ComponentModel.Design
 
         private bool IsWindowEnabled(IntPtr handle)
         {
-            int style = (int)User32.GetWindowLong(new HandleRef(this, handle), User32.GWL.STYLE);
+            int style = (int)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
             return (style & (int)WINDOW_STYLE.WS_DISABLED) == 0;
         }
 
@@ -1093,8 +1100,8 @@ namespace System.ComponentModel.Design
         {
             if ((User32.WA)(nint)m.WParamInternal == User32.WA.INACTIVE)
             {
-                IntPtr hwndActivating = m.LParamInternal;
-                if (WindowOwnsWindow(Handle, hwndActivating))
+                HWND hwndActivating = (HWND)m.LParamInternal;
+                if (WindowOwnsWindow((HWND)Handle, hwndActivating))
                 {
                     Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI WmActivate] setting cancel close true because WindowsOwnWindow");
                     Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI WmActivate] checking the focus... " + GetControlInformation(PInvoke.GetFocus()));

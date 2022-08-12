@@ -341,12 +341,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Set middle.
@@ -358,12 +358,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Set last.
@@ -375,12 +375,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("5", new string(textBuffer));
 
             // Set same.
@@ -392,12 +392,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("5", new string(textBuffer));
         }
 
@@ -430,12 +430,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Set middle.
@@ -447,12 +447,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Set last.
@@ -464,12 +464,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("5", new string(textBuffer));
 
             // Set same.
@@ -481,12 +481,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("5", new string(textBuffer));
         }
 #endif
@@ -517,12 +517,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Set middle.
@@ -534,12 +534,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Set last.
@@ -551,12 +551,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("5", new string(textBuffer));
 
             // Set same.
@@ -568,12 +568,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("5", new string(textBuffer));
         }
 
@@ -606,12 +606,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Set middle.
@@ -623,12 +623,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Set last.
@@ -640,12 +640,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("5", new string(textBuffer));
 
             // Set same.
@@ -657,12 +657,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("5", new string(textBuffer));
         }
 
@@ -1483,8 +1483,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Add another.
@@ -1496,10 +1496,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Add same.
@@ -1511,12 +1511,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Add another.
@@ -1528,14 +1528,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -1562,8 +1562,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Add another.
@@ -1575,10 +1575,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Add same.
@@ -1590,12 +1590,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Add another.
@@ -1607,14 +1607,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -1644,8 +1644,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Add another.
@@ -1657,10 +1657,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Add same.
@@ -1672,12 +1672,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Add another.
@@ -1689,14 +1689,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -1726,8 +1726,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Add another.
@@ -1739,10 +1739,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Add same.
@@ -1754,12 +1754,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Add another.
@@ -1771,14 +1771,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -2146,7 +2146,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(3);
             char* textBuffer = stackalloc char[256];
 
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -2160,14 +2160,14 @@ namespace System.Windows.Forms.Tests
             collection.Add(3);
             char* textBuffer = stackalloc char[256];
 
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -2331,14 +2331,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Add empty.
@@ -2350,14 +2350,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -2383,14 +2383,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Add empty.
@@ -2402,14 +2402,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -2438,14 +2438,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Add empty.
@@ -2457,14 +2457,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -2493,14 +2493,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Add empty.
@@ -2512,14 +2512,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -2839,7 +2839,7 @@ namespace System.Windows.Forms.Tests
             collection.AddRange(new object[] { 2, 1, 1, 3 });
             char* textBuffer = stackalloc char[256];
 
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -2850,14 +2850,14 @@ namespace System.Windows.Forms.Tests
             collection.AddRange(new object[] { 2, 1, 1, 3 });
             char* textBuffer = stackalloc char[256];
 
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -3008,14 +3008,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Add empty.
@@ -3029,14 +3029,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -3065,14 +3065,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Add empty.
@@ -3086,14 +3086,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -3125,14 +3125,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Add empty.
@@ -3146,14 +3146,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -3185,14 +3185,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Add empty.
@@ -3206,14 +3206,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -3576,7 +3576,7 @@ namespace System.Windows.Forms.Tests
             collection.AddRange(otherCollection);
             char* textBuffer = stackalloc char[256];
 
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -3590,14 +3590,14 @@ namespace System.Windows.Forms.Tests
             collection.AddRange(otherCollection);
             char* textBuffer = stackalloc char[256];
 
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -3794,7 +3794,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
 
             // Call again.
             collection.Clear();
@@ -3806,7 +3806,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -3831,7 +3831,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
 
             // Call again.
             collection.Clear();
@@ -3843,7 +3843,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -3869,7 +3869,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
 
             // Call again.
             collection.Clear();
@@ -3881,7 +3881,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -3907,7 +3907,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
 
             // Call again.
             collection.Clear();
@@ -3919,7 +3919,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -4288,8 +4288,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Insert end.
@@ -4301,10 +4301,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Insert same.
@@ -4316,12 +4316,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Insert end.
@@ -4333,14 +4333,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -4367,8 +4367,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Insert end.
@@ -4380,10 +4380,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Insert same.
@@ -4395,12 +4395,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Insert end.
@@ -4412,14 +4412,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -4449,8 +4449,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Insert end.
@@ -4462,10 +4462,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Insert same.
@@ -4477,12 +4477,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Insert end.
@@ -4494,14 +4494,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -4531,8 +4531,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Insert end.
@@ -4544,10 +4544,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Insert same.
@@ -4559,12 +4559,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Insert end.
@@ -4576,14 +4576,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -4943,7 +4943,7 @@ namespace System.Windows.Forms.Tests
             collection.Insert(3, 3);
             char* textBuffer = stackalloc char[256];
 
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -4957,14 +4957,14 @@ namespace System.Windows.Forms.Tests
             collection.Insert(3, 3);
             char* textBuffer = stackalloc char[256];
 
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -5229,10 +5229,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove again.
@@ -5244,10 +5244,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove last.
@@ -5259,8 +5259,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Remove first.
@@ -5272,7 +5272,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -5304,10 +5304,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove again.
@@ -5320,10 +5320,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove last.
@@ -5336,8 +5336,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Remove first.
@@ -5349,7 +5349,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -5381,10 +5381,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove again.
@@ -5396,10 +5396,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove last.
@@ -5411,8 +5411,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Remove first.
@@ -5424,7 +5424,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -5459,10 +5459,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove again.
@@ -5475,10 +5475,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove last.
@@ -5491,8 +5491,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Remove first.
@@ -5504,7 +5504,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -6142,10 +6142,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove last.
@@ -6157,8 +6157,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Remove first.
@@ -6170,7 +6170,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -6202,10 +6202,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove last.
@@ -6218,8 +6218,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Remove first.
@@ -6231,7 +6231,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -6263,10 +6263,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove last.
@@ -6278,8 +6278,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Remove first.
@@ -6291,7 +6291,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -6326,10 +6326,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove last.
@@ -6342,8 +6342,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Remove first.
@@ -6355,7 +6355,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -7096,12 +7096,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Set middle.
@@ -7113,12 +7113,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Set last.
@@ -7130,12 +7130,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("5", new string(textBuffer));
 
             // Set same.
@@ -7147,12 +7147,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("5", new string(textBuffer));
         }
 
@@ -7187,12 +7187,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Set middle.
@@ -7204,12 +7204,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Set last.
@@ -7221,12 +7221,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("5", new string(textBuffer));
 
             // Set same.
@@ -7238,12 +7238,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("5", new string(textBuffer));
         }
 #endif
@@ -7276,12 +7276,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Set middle.
@@ -7293,12 +7293,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Set last.
@@ -7310,12 +7310,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("5", new string(textBuffer));
 
             // Set same.
@@ -7327,12 +7327,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("5", new string(textBuffer));
         }
 
@@ -7367,12 +7367,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Set middle.
@@ -7384,12 +7384,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Set last.
@@ -7401,12 +7401,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("5", new string(textBuffer));
 
             // Set same.
@@ -7418,12 +7418,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("4", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("5", new string(textBuffer));
         }
 
@@ -8244,8 +8244,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Add another.
@@ -8257,10 +8257,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Add same.
@@ -8272,12 +8272,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Add another.
@@ -8289,14 +8289,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -8323,8 +8323,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Add another.
@@ -8336,10 +8336,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Add same.
@@ -8351,12 +8351,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Add another.
@@ -8368,14 +8368,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -8405,8 +8405,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Add another.
@@ -8418,10 +8418,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Add same.
@@ -8433,12 +8433,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Add another.
@@ -8450,14 +8450,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -8487,8 +8487,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Add another.
@@ -8500,10 +8500,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Add same.
@@ -8515,12 +8515,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Add another.
@@ -8532,14 +8532,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -8907,7 +8907,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(3);
             char* textBuffer = stackalloc char[256];
 
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -8921,14 +8921,14 @@ namespace System.Windows.Forms.Tests
             collection.Add(3);
             char* textBuffer = stackalloc char[256];
 
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -9078,7 +9078,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
 
             // Call again.
             collection.Clear();
@@ -9090,7 +9090,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -9115,7 +9115,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
 
             // Call again.
             collection.Clear();
@@ -9127,7 +9127,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -9153,7 +9153,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
 
             // Call again.
             collection.Clear();
@@ -9165,7 +9165,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -9191,7 +9191,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
 
             // Call again.
             collection.Clear();
@@ -9203,7 +9203,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -9572,8 +9572,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Insert end.
@@ -9585,10 +9585,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Insert same.
@@ -9600,12 +9600,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Insert end.
@@ -9617,14 +9617,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -9651,8 +9651,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Insert end.
@@ -9664,10 +9664,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Insert same.
@@ -9679,12 +9679,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Insert end.
@@ -9696,14 +9696,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -9733,8 +9733,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Insert end.
@@ -9746,10 +9746,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Insert same.
@@ -9761,12 +9761,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Insert end.
@@ -9778,14 +9778,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -9815,8 +9815,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Insert end.
@@ -9828,10 +9828,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Insert same.
@@ -9843,12 +9843,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(3, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Insert end.
@@ -9860,14 +9860,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -10227,7 +10227,7 @@ namespace System.Windows.Forms.Tests
             collection.Insert(3, 3);
             char* textBuffer = stackalloc char[256];
 
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -10241,14 +10241,14 @@ namespace System.Windows.Forms.Tests
             collection.Insert(3, 3);
             char* textBuffer = stackalloc char[256];
 
-            Assert.Equal(4, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
         }
 
@@ -10513,10 +10513,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove again.
@@ -10528,10 +10528,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove last.
@@ -10543,8 +10543,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Remove first.
@@ -10556,7 +10556,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -10588,10 +10588,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove again.
@@ -10604,10 +10604,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove last.
@@ -10620,8 +10620,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Remove first.
@@ -10633,7 +10633,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -10665,10 +10665,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove again.
@@ -10680,10 +10680,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove last.
@@ -10695,8 +10695,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Remove first.
@@ -10708,7 +10708,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -10743,10 +10743,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove again.
@@ -10759,10 +10759,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove last.
@@ -10775,8 +10775,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Remove first.
@@ -10788,7 +10788,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -11426,10 +11426,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove last.
@@ -11441,8 +11441,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Remove first.
@@ -11454,7 +11454,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -11486,10 +11486,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove last.
@@ -11502,8 +11502,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("2", new string(textBuffer));
 
             // Remove first.
@@ -11515,7 +11515,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -11547,10 +11547,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove last.
@@ -11562,8 +11562,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Remove first.
@@ -11575,7 +11575,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]
@@ -11610,10 +11610,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(2, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
-            SendMessageW(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
             Assert.Equal("3", new string(textBuffer));
 
             // Remove last.
@@ -11626,8 +11626,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, SendMessageW(owner, (WM)LB.GETCOUNT));
-            SendMessageW(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+            PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
             Assert.Equal("1", new string(textBuffer));
 
             // Remove first.
@@ -11639,7 +11639,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, SendMessageW(owner, (WM)LB.GETCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
         }
 
         [WinFormsFact]

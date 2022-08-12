@@ -2289,8 +2289,8 @@ namespace System.Windows.Forms.Tests
             nint lParam = 0x00000001 | keyCode << 16;
             for (int i = 0; i < expectedKeyPressesCount; i++)
             {
-                User32.SendMessageW(comboBox, User32.WM.KEYDOWN, keyCode, lParam);
-                User32.SendMessageW(comboBox, User32.WM.KEYUP, keyCode, lParam);
+                PInvoke.SendMessage(comboBox, User32.WM.KEYDOWN, (WPARAM)keyCode, (LPARAM)lParam);
+                PInvoke.SendMessage(comboBox, User32.WM.KEYUP, (WPARAM)keyCode, (LPARAM)lParam);
             }
 
             Assert.Equal(expectedKeyPressesCount, comboBox.EventsCount);

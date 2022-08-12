@@ -757,7 +757,7 @@ namespace System.Windows.Forms
         {
             if (ImeSupported && ImeModeConversion.InputLanguageTable != ImeModeConversion.UnsupportedTable && !IgnoreWmImeNotify)
             {
-                int wparam = PARAM.ToInt(m.WParamInternal);
+                int wparam = (int)m.WParamInternal;
 
                 // The WM_IME_NOTIFY message is not consistent across the different IMEs, particularly the notification type
                 // we care about (IMN_SETCONVERSIONMODE & IMN_SETOPENSTATUS).

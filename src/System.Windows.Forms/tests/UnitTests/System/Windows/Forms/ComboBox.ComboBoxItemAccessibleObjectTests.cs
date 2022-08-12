@@ -266,7 +266,7 @@ namespace System.Windows.Forms.Tests
 
             itemAccessibleObject.ScrollIntoView();
 
-            int actual = (int)User32.SendMessageW(comboBox, (User32.WM)User32.CB.GETTOPINDEX);
+            int actual = (int)PInvoke.SendMessage(comboBox, (User32.WM)User32.CB.GETTOPINDEX);
 
             Assert.Equal(0, actual); // ScrollIntoView didn't scroll to the tested item because the combobox is disabled
         }
@@ -340,7 +340,7 @@ namespace System.Windows.Forms.Tests
             else
             {
                 // Scroll to the bottom and test the method when scrolling up
-                User32.SendMessageW(comboBox, (User32.WM)User32.CB.SETTOPINDEX, (IntPtr)(itemsCount - 1));
+                PInvoke.SendMessage(comboBox, (User32.WM)User32.CB.SETTOPINDEX, (WPARAM)(itemsCount - 1));
 
                 if (dropDownRect.IntersectsWith(itemAccessibleObject.Bounds))
                 {
@@ -356,7 +356,7 @@ namespace System.Windows.Forms.Tests
 
             itemAccessibleObject.ScrollIntoView();
 
-            int actual = (int)User32.SendMessageW(comboBox, (User32.WM)User32.CB.GETTOPINDEX);
+            int actual = (int)PInvoke.SendMessage(comboBox, (User32.WM)User32.CB.GETTOPINDEX);
 
             Assert.Equal(expected, actual);
         }

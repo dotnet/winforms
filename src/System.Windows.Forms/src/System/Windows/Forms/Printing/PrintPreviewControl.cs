@@ -313,7 +313,7 @@ namespace System.Windows.Forms
 
         private static unsafe int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
         {
-            switch ((User32.SBH)PARAM.LOWORD(m.WParamInternal))
+            switch ((User32.SBH)m.WParamInternal.LOWORD)
             {
                 case User32.SBH.THUMBPOSITION:
                 case User32.SBH.THUMBTRACK:
@@ -330,7 +330,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        pos = PARAM.HIWORD(m.WParamInternal);
+                        pos = m.WParamInternal.HIWORD;
                     }
 
                     break;

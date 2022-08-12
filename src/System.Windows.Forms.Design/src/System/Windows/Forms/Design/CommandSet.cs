@@ -782,7 +782,7 @@ namespace System.Windows.Forms.Design
                     HWND hwnd = (HWND)User32.WindowFromPoint(p);
                     if (!hwnd.IsNull)
                     {
-                        User32.SendMessageW(hwnd, User32.WM.SETCURSOR, hwnd, (nint)User32.HT.CLIENT);
+                        PInvoke.SendMessage(hwnd, User32.WM.SETCURSOR, hwnd, (nint)User32.HT.CLIENT);
                     }
                     else
                     {

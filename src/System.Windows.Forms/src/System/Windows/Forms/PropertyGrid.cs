@@ -606,7 +606,7 @@ namespace System.Windows.Forms
                 {
                     if (0 == _paintFrozen++)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)(BOOL)false);
+                        PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
                     }
                 }
 
@@ -619,7 +619,7 @@ namespace System.Windows.Forms
 
                     if (0 == --_paintFrozen)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)(BOOL)true);
+                        PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
                         Invalidate(true);
                     }
                 }
@@ -4365,7 +4365,7 @@ namespace System.Windows.Forms
                     break;
                 case (User32.WM)AutomationMessages.PGM_GETSELECTEDROW:
                 case (User32.WM)AutomationMessages.PGM_GETVISIBLEROWCOUNT:
-                    m.ResultInternal = (LRESULT)User32.SendMessageW(_gridView, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                    m.ResultInternal = (LRESULT)PInvoke.SendMessage(_gridView, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return;
                 case (User32.WM)AutomationMessages.PGM_SETSELECTEDTAB:
                     if (m.LParamInternal != 0)

@@ -1749,7 +1749,7 @@ namespace System.Windows.Forms
                     PInvoke.GetWindowRect(this, out RECT r);
                     if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                     {
-                        User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (nint)User32.HT.CLIENT);
+                        PInvoke.SendMessage(this, User32.WM.SETCURSOR, (WPARAM)HWND, (LPARAM)(int)User32.HT.CLIENT);
                     }
                 }
 
@@ -3673,15 +3673,15 @@ namespace System.Windows.Forms
                     else
                     {
                         // if we're in the hidden state, we need to manufacture an update message so everyone knows it.
-                        int actionMask = (int)User32.UISF.HIDEACCEL << 16;
+                        uint actionMask = (uint)User32.UISF.HIDEACCEL << 16;
                         _uiCuesState |= UICuesStates.KeyboardHidden;
 
                         // The side effect of this initial state is that adding new controls may clear the accelerator
                         // state (has been this way forever)
-                        User32.SendMessageW(
+                        PInvoke.SendMessage(
                             TopMostParent,
                             User32.WM.CHANGEUISTATE,
-                            actionMask | (int)User32.UIS.SET);
+                            (WPARAM)(actionMask | (uint)User32.UIS.SET));
                     }
                 }
 
@@ -3725,9 +3725,9 @@ namespace System.Windows.Forms
 
                         // The side effect of this initial state is that adding new controls may clear the focus cue state
                         // state (has been this way forever)
-                        User32.SendMessageW(TopMostParent,
+                        PInvoke.SendMessage(TopMostParent,
                             User32.WM.CHANGEUISTATE,
-                            actionMask | (int)User32.UIS.SET);
+                            (WPARAM)(actionMask | (int)User32.UIS.SET));
                     }
                 }
 
@@ -3941,8 +3941,8 @@ namespace System.Windows.Forms
         /// </summary>
         private protected WINDOW_EX_STYLE ExtendedWindowStyle
         {
-            get => (WINDOW_EX_STYLE)User32.GetWindowLong(this, User32.GWL.EXSTYLE);
-            set => User32.SetWindowLong(this, User32.GWL.EXSTYLE, (nint)value);
+            get => (WINDOW_EX_STYLE)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+            set => PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, (nint)value);
         }
 
         /// <summary>
@@ -3950,8 +3950,8 @@ namespace System.Windows.Forms
         /// </summary>
         internal WINDOW_STYLE WindowStyle
         {
-            get => (WINDOW_STYLE)User32.GetWindowLong(this, User32.GWL.STYLE);
-            set => User32.SetWindowLong(this, User32.GWL.STYLE, (nint)value);
+            get => (WINDOW_STYLE)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+            set => PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, (nint)value);
         }
 
         /// <summary>
@@ -4714,7 +4714,7 @@ namespace System.Windows.Forms
 
             if (_updateCount == 0)
             {
-                User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)(BOOL)false);
+                PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
             }
 
             _updateCount++;
@@ -5125,7 +5125,8 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (((WINDOW_EX_STYLE)User32.GetWindowLong(_window, User32.GWL.EXSTYLE)).HasFlag(WINDOW_EX_STYLE.WS_EX_MDICHILD))
+            if (((WINDOW_EX_STYLE)PInvoke.GetWindowLong(_window, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE))
+                .HasFlag(WINDOW_EX_STYLE.WS_EX_MDICHILD))
             {
                 User32.DefMDIChildProcW(InternalHandle, User32.WM.CLOSE, IntPtr.Zero, IntPtr.Zero);
             }
@@ -5284,7 +5285,12 @@ namespace System.Windows.Forms
         ///   value.
         ///  </para>
         /// </remarks>
-        public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
+        public DragDropEffects DoDragDrop(
+            object data,
+            DragDropEffects allowedEffects,
+            Bitmap dragImage,
+            Point cursorOffset,
+            bool useDefaultDragImage)
         {
             IComDataObject dataObject = null;
 
@@ -5353,11 +5359,11 @@ namespace System.Windows.Forms
             using var hDc = new DeviceContextHdcScope(g, applyGraphicsState: false);
 
             // Send the WM_PRINT message.
-            User32.SendMessageW(
+            PInvoke.SendMessage(
                 this,
                 User32.WM.PRINT,
-                hDc,
-                (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
+                (WPARAM)hDc,
+                (LPARAM)(int)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
 
             // Now BLT the result to the destination bitmap.
             using Graphics destGraphics = Graphics.FromImage(bitmap);
@@ -5429,7 +5435,7 @@ namespace System.Windows.Forms
                 _updateCount--;
                 if (_updateCount == 0)
                 {
-                    User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)(BOOL)true);
+                    PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
                     if (invalidate)
                     {
                         Invalidate();
@@ -6783,7 +6789,7 @@ namespace System.Windows.Forms
                 mask = (int)(User32.DLGC.WANTCHARS | User32.DLGC.WANTALLKEYS);
             }
 
-            return ((int)User32.SendMessageW(this, User32.WM.GETDLGCODE) & mask) != 0;
+            return ((int)PInvoke.SendMessage(this, User32.WM.GETDLGCODE) & mask) != 0;
         }
 
         /// <summary>
@@ -6823,7 +6829,7 @@ namespace System.Windows.Forms
             }
 
             return IsHandleCreated
-                && ((User32.DLGC)User32.SendMessageW(this, User32.WM.GETDLGCODE) & mask) != 0;
+                && ((User32.DLGC)(int)PInvoke.SendMessage(this, User32.WM.GETDLGCODE) & mask) != 0;
         }
 
         /// <summary>
@@ -7663,10 +7669,10 @@ namespace System.Windows.Forms
             {
                 if (e is not PrintPaintEventArgs ppev)
                 {
-                    IntPtr flags = (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT);
+                    uint flags = (uint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT);
 
                     using var hdc = new DeviceContextHdcScope(e);
-                    Message m = Message.Create(HWND, (uint)User32.WM.PRINTCLIENT, (nint)hdc, flags);
+                    Message m = Message.Create(HWND, (uint)User32.WM.PRINTCLIENT, (WPARAM)hdc, (LPARAM)flags);
                     DefWndProc(ref m);
                 }
                 else
@@ -7976,7 +7982,7 @@ namespace System.Windows.Forms
                 if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si))
                 {
                     si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
-                    User32.SendMessageW(this, User32.WM.HSCROLL, PARAM.FromLowHigh((int)User32.SBH.THUMBPOSITION, si.nPos), 0);
+                    PInvoke.SendMessage(this, User32.WM.HSCROLL, WPARAM.MAKEWPARAM((int)User32.SBH.THUMBPOSITION, si.nPos));
                 }
             }
         }
@@ -9389,12 +9395,12 @@ namespace System.Windows.Forms
             }
         }
 
-        private void PrintToMetaFile_SendPrintMessage(HDC hDC, IntPtr lParam)
+        private void PrintToMetaFile_SendPrintMessage(HDC hDC, nint lParam)
         {
             if (GetStyle(ControlStyles.UserPaint))
             {
                 // We let user paint controls paint directly into the metafile
-                User32.SendMessageW(this, User32.WM.PRINT, hDC, lParam);
+                PInvoke.SendMessage(this, User32.WM.PRINT, (WPARAM)hDC, (LPARAM)lParam);
             }
             else
             {
@@ -9404,14 +9410,14 @@ namespace System.Windows.Forms
                 // good example.
                 if (Controls.Count == 0)
                 {
-                    lParam = (IntPtr)((long)lParam | (long)User32.PRF.CHILDREN);
+                    lParam |= (nint)User32.PRF.CHILDREN;
                 }
 
                 // System controls must be painted into a temporary bitmap
                 // which is then copied into the metafile.  (Old GDI line drawing
                 // is 1px thin, which causes borders to disappear, etc.)
                 using MetafileDCWrapper dcWrapper = new MetafileDCWrapper(hDC, Size);
-                User32.SendMessageW(this, User32.WM.PRINT, dcWrapper.HDC, lParam);
+                PInvoke.SendMessage(this, User32.WM.PRINT, (WPARAM)dcWrapper.HDC, (LPARAM)lParam);
             }
         }
 
@@ -9475,7 +9481,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.ProcessKeyEventArgs {m}");
             KeyEventArgs ke = null;
             KeyPressEventArgs kpe = null;
-            nint newWParam = 0;
+            WPARAM newWParam = 0;
 
             if (m.MsgInternal == User32.WM.CHAR || m.MsgInternal == User32.WM.SYSCHAR)
             {
@@ -9517,7 +9523,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    newWParam = kpe.KeyChar;
+                    newWParam = (WPARAM)kpe.KeyChar;
                 }
             }
             else
@@ -9642,14 +9648,14 @@ namespace System.Windows.Forms
             }
 
             Control topMostParent = null;
-            User32.UISF current = (User32.UISF)User32.SendMessageW(this, User32.WM.QUERYUISTATE);
+            User32.UISF current = (User32.UISF)(uint)PInvoke.SendMessage(this, User32.WM.QUERYUISTATE);
 
             // don't trust when a control says the accelerators are showing.
             // make sure the topmost parent agrees with this as we could be in a mismatched state.
             if (current == 0 /*accelerator and focus cues are showing*/)
             {
                 topMostParent = TopMostParent;
-                current = (User32.UISF)User32.SendMessageW(topMostParent, User32.WM.QUERYUISTATE);
+                current = (User32.UISF)(uint)PInvoke.SendMessage(topMostParent, User32.WM.QUERYUISTATE);
             }
 
             User32.UISF toClear = 0;
@@ -9696,10 +9702,10 @@ namespace System.Windows.Forms
                 //       Then we've got to send a WM_CHANGEUISTATE to the topmost managed control (which will be toplevel)
                 //       According to MSDN, WM_CHANGEUISTATE will generate WM_UPDATEUISTATE messages for all immediate children (via DefWndProc)
                 //           (we're in charge here, we've got to change the state of the root window)
-                User32.SendMessageW(
+                PInvoke.SendMessage(
                     topMostParent,
                     PInvoke.GetParent(topMostParent).IsNull ? User32.WM.CHANGEUISTATE : User32.WM.UPDATEUISTATE,
-                    (int)User32.UIS.CLEAR | ((int)toClear << 16));
+                    (WPARAM)((int)User32.UIS.CLEAR | ((int)toClear << 16)));
             }
         }
 
@@ -10005,7 +10011,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            m.ResultInternal = (LRESULT)User32.SendMessageW(control, User32.WM.REFLECT | m.MsgInternal, m.WParamInternal, m.LParamInternal);
+            m.ResultInternal = (LRESULT)PInvoke.SendMessage(control, User32.WM.REFLECT | m.MsgInternal, m.WParamInternal, m.LParamInternal);
             return true;
         }
 
@@ -11368,13 +11374,13 @@ namespace System.Windows.Forms
 
         private void SetWindowFont()
         {
-            User32.SendMessageW(this, User32.WM.SETFONT, FontHandle, (nint)(BOOL)false);
+            PInvoke.SendMessage(this, User32.WM.SETFONT, (WPARAM)FontHandle, (LPARAM)(BOOL)false);
         }
 
         private void SetWindowStyle(int flag, bool value)
         {
-            int styleFlags = (int)User32.GetWindowLong(this, User32.GWL.STYLE);
-            User32.SetWindowLong(this, User32.GWL.STYLE, value ? styleFlags | flag : styleFlags & ~flag);
+            int styleFlags = (int)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, value ? styleFlags | flag : styleFlags & ~flag);
         }
 
         /// <summary>
@@ -11830,7 +11836,7 @@ namespace System.Windows.Forms
         // These Window* methods allow us to keep access to the "window"
         // property private, which is important for restricting access to the
         // handle.
-        internal void WindowAssignHandle(IntPtr handle, bool value)
+        internal void WindowAssignHandle(HWND handle, bool value)
         {
             _window.AssignHandle(handle, value);
         }
@@ -11852,7 +11858,8 @@ namespace System.Windows.Forms
                     lastParentHandle = parentHandle;
                     parentHandle = PInvoke.GetParent(parentHandle);
 
-                    if (((WINDOW_STYLE)User32.GetWindowLong(lastParentHandle, User32.GWL.STYLE)).HasFlag(WINDOW_STYLE.WS_CHILD))
+                    if (((WINDOW_STYLE)PInvoke.GetWindowLong(lastParentHandle, WINDOW_LONG_PTR_INDEX.GWL_STYLE))
+                        .HasFlag(WINDOW_STYLE.WS_CHILD))
                     {
                         break;
                     }
@@ -11883,7 +11890,7 @@ namespace System.Windows.Forms
         {
             if (m.LParamInternal == 0)
             {
-                if (Command.DispatchID(PARAM.LOWORD(m.WParamInternal)))
+                if (Command.DispatchID(m.WParamInternal.LOWORD))
                 {
                     return;
                 }
@@ -12049,7 +12056,7 @@ namespace System.Windows.Forms
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
                 m.ResultInternal = (LRESULT)UiaCore.UiaReturnRawElementProvider(
                     this,
-                    m.WParamInternal,
+                    (nint)m.WParamInternal,
                     m.LParamInternal,
                     AccessibilityObject);
 
@@ -12075,7 +12082,10 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    m.ResultInternal = (LRESULT)Oleacc.LresultFromObject(in IID.IAccessible, m.WParamInternal, new HandleRef(accessibleObject, pUnknown));
+                    m.ResultInternal = (LRESULT)Oleacc.LresultFromObject(
+                        in IID.IAccessible,
+                        (nint)(nuint)m.WParamInternal,
+                        new HandleRef(accessibleObject, pUnknown));
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"LresultFromObject returned {m.ResultInternal}");
                 }
                 finally
@@ -12303,7 +12313,7 @@ namespace System.Windows.Forms
             _oldDeviceDpi = _deviceDpi;
 
             // In order to support tests, will be querying Dpi from the message first.
-            int newDeviceDpi = PARAM.SignedLOWORD(m.WParamInternal);
+            int newDeviceDpi = (short)m.WParamInternal.LOWORD;
 
             // On certain OS versions, for non-test scenarios, WParam may be empty.
             if (newDeviceDpi == 0)
@@ -12425,7 +12435,7 @@ namespace System.Windows.Forms
                     // we're skipping DefWndProc we have to do it ourselves.
                     if (button == MouseButtons.Right)
                     {
-                        User32.SendMessageW(this, User32.WM.CONTEXTMENU, Handle, PARAM.FromPoint(screenLocation));
+                        PInvoke.SendMessage(this, User32.WM.CONTEXTMENU, (WPARAM)HWND, (LPARAM)screenLocation);
                     }
                 }
 
@@ -12477,10 +12487,10 @@ namespace System.Windows.Forms
                 MouseButtons.None,
                 0,
                 PointToClient(PARAM.ToPoint(m.LParamInternal)),
-                PARAM.SignedHIWORD(m.WParamInternal));
+                (short)m.WParamInternal.HIWORD);
 
             OnMouseWheel(e);
-            m.ResultInternal = (LRESULT)(nint)(BOOL)e.Handled;
+            m.ResultInternal = (LRESULT)(BOOL)e.Handled;
             if (!e.Handled)
             {
                 // Forwarding the message to the parent window.
@@ -12509,14 +12519,14 @@ namespace System.Windows.Forms
                 switch ((ComCtl32.TTN)nmhdr->code)
                 {
                     case ComCtl32.TTN.SHOW:
-                        m.ResultInternal = (LRESULT)User32.SendMessageW(
+                        m.ResultInternal = (LRESULT)PInvoke.SendMessage(
                             nmhdr->hwndFrom,
                             User32.WM.REFLECT | m.MsgInternal,
                             m.WParamInternal,
                             m.LParamInternal);
                         return;
                     case ComCtl32.TTN.POP:
-                        User32.SendMessageW(
+                        PInvoke.SendMessage(
                             nmhdr->hwndFrom,
                             User32.WM.REFLECT | m.MsgInternal,
                             m.WParamInternal,
@@ -12533,7 +12543,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmNotifyFormat(ref Message m)
         {
-            if (!ReflectMessage(m.WParamInternal, ref m))
+            if (!ReflectMessage((nint)m.WParamInternal, ref m))
             {
                 DefWndProc(ref m);
             }
@@ -12560,13 +12570,16 @@ namespace System.Windows.Forms
             if (!ReflectMessage(p, ref m))
             {
                 // Additional Check For Control .... TabControl truncates the Hwnd value...
-                IntPtr handle = NativeWindow.GetHandleFromWindowId((short)PARAM.LOWORD(m.WParamInternal));
+                HWND handle = NativeWindow.GetHandleFromWindowId((short)m.WParamInternal.LOWORD);
                 if (handle != IntPtr.Zero)
                 {
                     Control control = FromHandle(handle);
                     if (control is not null)
                     {
-                        m.ResultInternal = (LRESULT)User32.SendMessageW(control, User32.WM.REFLECT | m.MsgInternal, handle, m.LParamInternal);
+                        m.ResultInternal = (LRESULT)PInvoke.SendMessage(
+                            control,
+                            User32.WM.REFLECT | m.MsgInternal,
+                            (WPARAM)handle, m.LParamInternal);
                         reflectCalled = true;
                     }
                 }
@@ -12744,7 +12757,7 @@ namespace System.Windows.Forms
         private void WmSetCursor(ref Message m)
         {
             // Accessing through the Handle property has side effects that break this logic. You must use InternalHandle.
-            if (m.WParamInternal == InternalHandle && (User32.HT)PARAM.LOWORD(m.LParamInternal) == User32.HT.CLIENT)
+            if ((HWND)m.WParamInternal == InternalHandle && (User32.HT)m.LParamInternal.LOWORD == User32.HT.CLIENT)
             {
                 Cursor.Current = Cursor;
             }
@@ -12793,7 +12806,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmParentNotify(ref Message m)
         {
-            User32.WM msg = (User32.WM)PARAM.LOWORD(m.WParamInternal);
+            User32.WM msg = (User32.WM)m.WParamInternal.LOWORD;
             IntPtr hWnd = IntPtr.Zero;
             switch (msg)
             {
@@ -12803,7 +12816,7 @@ namespace System.Windows.Forms
                 case User32.WM.DESTROY:
                     break;
                 default:
-                    hWnd = User32.GetDlgItem(this, (User32.DialogItemID)PARAM.HIWORD(m.WParamInternal));
+                    hWnd = User32.GetDlgItem(this, (User32.DialogItemID)m.WParamInternal.HIWORD);
                     break;
             }
 
@@ -12938,7 +12951,7 @@ namespace System.Windows.Forms
 
             DefWndProc(ref m);
 
-            User32.UIS cmd = (User32.UIS)PARAM.LOWORD(m.WParamInternal);
+            User32.UIS cmd = (User32.UIS)m.WParamInternal.LOWORD;
 
             // if we're initializing, don't bother updating the uiCuesState/Firing the event.
 
@@ -12956,7 +12969,7 @@ namespace System.Windows.Forms
             // When we're called here with a UIS_CLEAR and the hidden state is set
             // that means we want to show the accelerator.
             UICues UIcues = UICues.None;
-            if (((User32.UISF)PARAM.HIWORD(m.WParamInternal) & User32.UISF.HIDEACCEL) != 0)
+            if (((User32.UISF)m.WParamInternal.HIWORD & User32.UISF.HIDEACCEL) != 0)
             {
                 // yes, clear means show.  nice api, guys.
                 bool showKeyboard = (cmd == User32.UIS.CLEAR);
@@ -12977,7 +12990,7 @@ namespace System.Windows.Forms
             }
 
             // Same deal for the Focus cues as the keyboard cues.
-            if (((User32.UISF)PARAM.HIWORD(m.WParamInternal) & User32.UISF.HIDEFOCUS) != 0)
+            if (((User32.UISF)m.WParamInternal.HIWORD & User32.UISF.HIDEFOCUS) != 0)
             {
                 // Yes, clear means show.
                 bool showFocus = cmd == User32.UIS.CLEAR;
@@ -13261,15 +13274,15 @@ namespace System.Windows.Forms
                     break;
 
                 case User32.WM.XBUTTONDOWN:
-                    WmMouseDown(ref m, GetXButton(PARAM.HIWORD(m.WParamInternal)), 1);
+                    WmMouseDown(ref m, GetXButton(m.WParamInternal.HIWORD), 1);
                     break;
 
                 case User32.WM.XBUTTONUP:
-                    WmMouseUp(ref m, GetXButton(PARAM.HIWORD(m.WParamInternal)), 1);
+                    WmMouseUp(ref m, GetXButton(m.WParamInternal.HIWORD), 1);
                     break;
 
                 case User32.WM.XBUTTONDBLCLK:
-                    WmMouseDown(ref m, GetXButton(PARAM.HIWORD(m.WParamInternal)), 2);
+                    WmMouseDown(ref m, GetXButton(m.WParamInternal.HIWORD), 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick))
                     {
                         SetState(States.DoubleClickFired, true);
@@ -13614,7 +13627,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IOleInPlaceActiveObject.GetWindow(IntPtr* phwnd)
+        unsafe HRESULT Ole32.IOleInPlaceActiveObject.GetWindow(HWND* phwnd)
         {
             return ((Ole32.IOleInPlaceObject)this).GetWindow(phwnd);
         }
@@ -13657,7 +13670,7 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT Ole32.IOleInPlaceObject.GetWindow(IntPtr* phwnd)
+        unsafe HRESULT Ole32.IOleInPlaceObject.GetWindow(HWND* phwnd)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetWindow");
             HRESULT hr = ActiveXInstance.GetWindow(phwnd);
@@ -13695,7 +13708,7 @@ namespace System.Windows.Forms
         {
             if (lprcClipRect is not null)
             {
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetObjectRects(" + lprcClipRect->left + ", " + lprcClipRect->top + ", " + lprcClipRect->right + ", " + lprcClipRect->bottom + ")");
+                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:SetObjectRects({lprcClipRect->left}, {lprcClipRect->top}, {lprcClipRect->right}, {lprcClipRect->bottom})");
             }
 
             Debug.Indent();
@@ -13944,7 +13957,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IOleWindow.GetWindow(IntPtr* phwnd)
+        unsafe HRESULT Ole32.IOleWindow.GetWindow(HWND* phwnd)
         {
             return ((Ole32.IOleInPlaceObject)this).GetWindow(phwnd);
         }

@@ -186,7 +186,7 @@ namespace System.Windows.Forms
 
             // The current id -- this is usually the same as TimerID but we also
             // use it as a flag of when our timer is running.
-            private nint _timerID;
+            private nuint _timerID;
 
             // An arbitrary timer ID.
             private static nint s_timerID = 1;
@@ -259,7 +259,7 @@ namespace System.Windows.Forms
                 {
                     if (EnsureHandle())
                     {
-                        _timerID = User32.SetTimer(this, s_timerID, (uint)interval, 0);
+                        _timerID = (nuint)User32.SetTimer(this, s_timerID, (uint)interval, 0);
                         s_timerID++;
                     }
                 }
@@ -293,16 +293,16 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    if (_timerID != IntPtr.Zero)
+                    if (_timerID != 0)
                     {
                         try
                         {
                             _stoppingTimer = true;
-                            User32.KillTimer(hwnd, _timerID);
+                            User32.KillTimer(hwnd, (nint)_timerID);
                         }
                         finally
                         {
-                            _timerID = IntPtr.Zero;
+                            _timerID = 0;
                             _stoppingTimer = false;
                         }
                     }

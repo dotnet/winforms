@@ -105,7 +105,7 @@ namespace System.Windows.Forms.Design
         {
             if (_designer != null && _designer.IsHandleCreated)
             {
-                User32.SendMessageW(_designer, User32.WM.NCACTIVATE, (nint)(BOOL)focus);
+                PInvoke.SendMessage(_designer, User32.WM.NCACTIVATE, (WPARAM)(BOOL)focus);
                 User32.RedrawWindow(_designer.Handle, flags: User32.RDW.FRAME);
             }
         }
@@ -207,7 +207,7 @@ namespace System.Windows.Forms.Design
                     if (!_designerRegion._messageMouseWheelProcessed)
                     {
                         _designerRegion._messageMouseWheelProcessed = true;
-                        User32.SendMessageW(_designerRegion, User32.WM.MOUSEWHEEL, m.WParamInternal, m.LParamInternal);
+                        PInvoke.SendMessage(_designerRegion, User32.WM.MOUSEWHEEL, m.WParamInternal, m.LParamInternal);
                         return;
                     }
 
@@ -256,13 +256,13 @@ namespace System.Windows.Forms.Design
                     if ((msg == User32.WM.VSCROLL) || (msg == User32.WM.HSCROLL))
                     {
                         // Send a message to ourselves to scroll
-                        User32.SendMessageW(_designerRegion, msg, PARAM.ToInt((int)wScrollNotify, 0));
+                        PInvoke.SendMessage(_designerRegion, msg, (WPARAM)(int)wScrollNotify);
                         return;
                     }
 
                     break;
                 case User32.WM.CONTEXTMENU:
-                    User32.SendMessageW(_designer, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                    PInvoke.SendMessage(_designer, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return;
             }
 
@@ -562,7 +562,7 @@ namespace System.Windows.Forms.Design
             protected override void WndProc(ref Message m)
             {
                 base.WndProc(ref m);
-                if (m.MsgInternal == User32.WM.PARENTNOTIFY && (User32.WM)PARAM.LOWORD(m.WParamInternal) == User32.WM.CREATE)
+                if (m.MsgInternal == User32.WM.PARENTNOTIFY && (User32.WM)m.WParamInternal.LOWORD == User32.WM.CREATE)
                 {
                     if (_overlayList != null)
                     {

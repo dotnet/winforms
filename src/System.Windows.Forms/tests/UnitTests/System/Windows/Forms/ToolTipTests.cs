@@ -857,7 +857,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(User32.PeekMessageW(ref msg, toolTip, User32.WM.MOUSEMOVE, User32.WM.MOUSEMOVE, User32.PM.REMOVE));
 
             // Show the tooltip.
-            User32.SendMessageW(toolTip, (User32.WM)ComCtl32.TTM.POPUP);
+            PInvoke.SendMessage(toolTip, (User32.WM)ComCtl32.TTM.POPUP);
 
             mockAccessibleObject.Verify(a => a.InternalRaiseAutomationNotification(
                 AutomationNotificationKind.ActionCompleted,
@@ -886,7 +886,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(toolTip.GetHandleCreated());
 
             // Only tools for TabPages were added.
-            Assert.Equal(tabControl.TabCount, User32.SendMessageW(toolTip, (User32.WM)ComCtl32.TTM.GETTOOLCOUNT));
+            Assert.Equal(tabControl.TabCount, (int)PInvoke.SendMessage(toolTip, (User32.WM)ComCtl32.TTM.GETTOOLCOUNT));
         }
 
         private class SubToolTip : ToolTip

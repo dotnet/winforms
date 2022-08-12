@@ -1042,7 +1042,7 @@ namespace System.Windows.Forms
 
                 bool fullModal = false;
                 bool localModal = false;
-                IntPtr hwndOwner = IntPtr.Zero;
+                HWND hwndOwner = default;
 
                 if (reason == msoloop.DoEventsModal)
                 {
@@ -1070,8 +1070,8 @@ namespace System.Windows.Forms
                     // If the owner window of the dialog is still enabled, disable it now.
                     // This can happen if the owner window is from a different thread or
                     // process.
-                    hwndOwner = User32.GetWindowLong(_currentForm, User32.GWL.HWNDPARENT);
-                    if (hwndOwner != IntPtr.Zero)
+                    hwndOwner = (HWND)PInvoke.GetWindowLong(_currentForm, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
+                    if (!hwndOwner.IsNull)
                     {
                         if (User32.IsWindowEnabled(hwndOwner))
                         {
@@ -1080,7 +1080,7 @@ namespace System.Windows.Forms
                         else
                         {
                             // Reset hwndOwner so we are not tempted to fiddle with it
-                            hwndOwner = IntPtr.Zero;
+                            hwndOwner = default;
                         }
                     }
 

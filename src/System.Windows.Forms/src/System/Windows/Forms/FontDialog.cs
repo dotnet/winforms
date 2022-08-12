@@ -352,7 +352,7 @@ namespace System.Windows.Forms
                     if (PARAM.ToInt(wparam) == 0x402)
                     {
                         var logFont = new User32.LOGFONTW();
-                        User32.SendMessageW((HWND)hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, 0, ref logFont);
+                        PInvoke.SendMessage((HWND)hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, (WPARAM)0, ref logFont);
                         UpdateFont(ref logFont);
                         int index = PARAM.ToInt(User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETCURSEL));
                         if (index != User32.CB_ERR)
@@ -428,7 +428,8 @@ namespace System.Windows.Forms
         /// </summary>
         protected unsafe override bool RunDialog(IntPtr hWndOwner)
         {
-            var hookProcPtr = new User32.WNDPROCINT(HookProc);
+            WNDPROC hookProc = HookProcInternal;
+            void* hookProcPtr = (void*)Marshal.GetFunctionPointerForDelegate(hookProc);
             using var dc = User32.GetDcScope.ScreenDC;
             using Graphics graphics = Graphics.FromHdcInternal(dc);
             User32.LOGFONTW logFont = User32.LOGFONTW.FromFont(Font, graphics);
@@ -469,6 +470,8 @@ namespace System.Windows.Forms
                 UpdateFont(ref logFont);
                 UpdateColor(cf.rgbColors);
             }
+
+            GC.KeepAlive(hookProc);
 
             return true;
         }

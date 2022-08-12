@@ -196,14 +196,14 @@ namespace System.Windows.Forms
         {
             if (Host.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
             {
-                IntPtr hwnd = IntPtr.Zero;
+                HWND hwnd = HWND.Null;
                 if (Host.AXInPlaceObject.GetWindow(&hwnd).Succeeded())
                 {
                     if (Host.GetHandleNoCreate() != hwnd)
                     {
-                        if (hwnd != IntPtr.Zero)
+                        if (!hwnd.IsNull)
                         {
-                            Host.AttachWindow((HWND)hwnd);
+                            Host.AttachWindow(hwnd);
                             RECT posRect = Host.Bounds;
                             OnActiveXRectChange(&posRect);
                         }

@@ -15,7 +15,7 @@ internal static partial class Interop
         {
             [PreserveSig]
             HRESULT GetWindow(
-                IntPtr* phwnd);
+                HWND* phwnd);
 
             [PreserveSig]
             HRESULT ContextSensitiveHelp(

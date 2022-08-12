@@ -58,13 +58,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
                 set;
             }
 
-            protected override IntPtr WNDPROC(IntPtr hWnd, WM msg, IntPtr wParam, IntPtr lParam)
+            protected override LRESULT WNDPROC(HWND hWnd, WM msg, WPARAM wParam, LPARAM lParam)
             {
                 switch (msg)
                 {
                     case WM.GETTEXTLENGTH:
                         string? text = BeforeGetTextLengthCallback?.Invoke();
-                        if (text != null)
+                        if (text is not null)
                         {
                             SetWindowTextW(hWnd, text);
                         }
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
                         break;
                     case WM.GETTEXT:
                         text = BeforeGetTextCallback?.Invoke();
-                        if (text != null)
+                        if (text is not null)
                         {
                             SetWindowTextW(hWnd, text);
                         }

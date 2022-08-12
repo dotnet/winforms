@@ -29,7 +29,7 @@ namespace System.Windows.Forms
             private IntPtr _defaultWindProc;
 
             // This needs to be a field so the GC doesn't collect the managed callback
-            private User32.WNDPROC? _windProc;
+            private WNDPROC? _windProc;
 
             // There is only ever one AppDomain
             private static readonly string s_currentAppDomainHash = Convert.ToString(AppDomain.CurrentDomain.GetHashCode(), 16);
@@ -43,12 +43,12 @@ namespace System.Windows.Forms
                 RegisterClass();
             }
 
-            public IntPtr Callback(IntPtr hWnd, User32.WM msg, IntPtr wparam, IntPtr lparam)
+            public LRESULT Callback(HWND hWnd, User32.WM msg, WPARAM wparam, LPARAM lparam)
             {
                 Debug.Assert(hWnd != IntPtr.Zero, "Windows called us with an HWND of 0");
 
                 // Set the window procedure to the default window procedure
-                User32.SetWindowLong(hWnd, User32.GWL.WNDPROC, _defaultWindProc);
+                PInvoke.SetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, _defaultWindProc);
                 _targetWindow!.AssignHandle(hWnd);
                 return _targetWindow!.Callback(hWnd, msg, wparam, lparam);
             }
@@ -162,7 +162,7 @@ namespace System.Windows.Forms
                 }
 
                 _windowClassName = GetFullClassName(localClassName!);
-                _windProc = new User32.WNDPROC(Callback);
+                _windProc = new WNDPROC(Callback);
                 nint callback = Marshal.GetFunctionPointerForDelegate(_windProc);
                 windowClass.lpfnWndProc = (delegate* unmanaged[Stdcall]<HWND, uint, WPARAM, LPARAM, LRESULT>)callback;
                 windowClass.hInstance = PInvoke.GetModuleHandle(null);

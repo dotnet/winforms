@@ -22498,7 +22498,7 @@ namespace System.Windows.Forms
                                     // Forward the key message to the editing control if any
                                     if (EditingControl is not null)
                                     {
-                                        User32.SendMessageW(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                                        PInvoke.SendMessage(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                                         _dataGridViewState1[State1_ForwardCharMessage] = true;
                                         return true;
                                     }
@@ -22514,7 +22514,7 @@ namespace System.Windows.Forms
                 _dataGridViewState1[State1_ForwardCharMessage] = false;
                 if (EditingControl is not null)
                 {
-                    User32.SendMessageW(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                    PInvoke.SendMessage(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return true;
                 }
             }
@@ -30357,7 +30357,7 @@ namespace System.Windows.Forms
                 if (!string.IsNullOrEmpty(toolTip))
                 {
                     // Setting the max width has the added benefit of enabling multiline tool tips
-                    User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                    PInvoke.SendMessage(nmhdr->hwndFrom, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
 
                     ComCtl32.NMTTDISPINFOW* ttt = (ComCtl32.NMTTDISPINFOW*)(nint)m.LParamInternal;
                     _toolTipBuffer.SetText(toolTip);
@@ -30411,7 +30411,7 @@ namespace System.Windows.Forms
                     if (EditingControl is not null)
                     {
                         // Make sure that the first character is forwarded to the editing control.
-                        User32.SendMessageW(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                        PInvoke.SendMessage(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     }
 
                     break;

@@ -624,7 +624,7 @@ namespace System.Windows.Forms
 
         private void WmReflectScroll(ref Message m)
         {
-            ScrollEventType type = (ScrollEventType)PARAM.LOWORD(m.WParamInternal);
+            ScrollEventType type = (ScrollEventType)m.WParamInternal.LOWORD;
             DoScroll(type);
         }
 
@@ -737,8 +737,8 @@ namespace System.Windows.Forms
                     if (PInvoke.GetFocus() == HWND)
                     {
                         DefWndProc(ref m);
-                        User32.SendMessageW(this, User32.WM.KILLFOCUS);
-                        User32.SendMessageW(this, User32.WM.SETFOCUS);
+                        PInvoke.SendMessage(this, User32.WM.KILLFOCUS);
+                        PInvoke.SendMessage(this, User32.WM.SETFOCUS);
                     }
 
                     break;

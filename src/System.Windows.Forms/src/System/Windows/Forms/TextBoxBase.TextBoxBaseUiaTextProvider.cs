@@ -35,7 +35,7 @@ namespace System.Windows.Forms
 
                 // Returns info about the selected text range.
                 // If there is no selection, start and end parameters are the position of the caret.
-                SendMessageW(_owningTextBoxBase, (WM)EM.GETSEL, ref start, ref end);
+                PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.GETSEL, ref start, ref end);
 
                 return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start, end) };
             }
@@ -142,7 +142,7 @@ namespace System.Windows.Forms
 
             public override int FirstVisibleLine
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (int)SendMessageW(_owningTextBoxBase, (WM)EM.GETFIRSTVISIBLELINE)
+                    ? (int)PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.GETFIRSTVISIBLELINE)
                     : -1;
 
             public override bool IsMultiline => _owningTextBoxBase.Multiline;
@@ -161,14 +161,14 @@ namespace System.Windows.Forms
                         return false;
                     }
 
-                    ES extendedStyle = (ES)GetWindowLong(_owningTextBoxBase, GWL.STYLE);
+                    ES extendedStyle = (ES)PInvoke.GetWindowLong(_owningTextBoxBase, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
                     return extendedStyle.HasFlag(ES.AUTOHSCROLL) || extendedStyle.HasFlag(ES.AUTOVSCROLL);
                 }
             }
 
             public override int LinesCount
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (int)SendMessageW(_owningTextBoxBase, (WM)EM.GETLINECOUNT)
+                    ? (int)PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.GETLINECOUNT)
                     : -1;
 
             public override int LinesPerPage
@@ -208,7 +208,7 @@ namespace System.Windows.Forms
 
             public override int TextLength
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (int)SendMessageW(_owningTextBoxBase, WM.GETTEXTLENGTH)
+                    ? (int)PInvoke.SendMessage(_owningTextBoxBase, WM.GETTEXTLENGTH)
                     : -1;
 
             public override WINDOW_EX_STYLE WindowExStyle
@@ -233,7 +233,7 @@ namespace System.Windows.Forms
 
             public override int GetLineIndex(int line)
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (int)SendMessageW(_owningTextBoxBase, (WM)EM.LINEINDEX, line)
+                    ? (int)PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.LINEINDEX, (WPARAM)line)
                     : -1;
 
             public override Point GetPositionFromChar(int charIndex)
@@ -318,7 +318,11 @@ namespace System.Windows.Forms
             public override bool LineScroll(int charactersHorizontal, int linesVertical)
                 // Sends an EM_LINESCROLL message to scroll it horizontally and/or vertically.
                 => _owningTextBoxBase.IsHandleCreated
-                    && SendMessageW(_owningTextBoxBase, (WM)EM.LINESCROLL, charactersHorizontal, linesVertical) != 0;
+                    && PInvoke.SendMessage(
+                        _owningTextBoxBase,
+                        (WM)EM.LINESCROLL,
+                        (WPARAM)charactersHorizontal,
+                        (LPARAM)linesVertical) != 0;
 
             public override void SetSelection(int start, int end)
             {
@@ -339,7 +343,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                SendMessageW(_owningTextBoxBase, (WM)EM.SETSEL, start, end);
+                PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.SETSEL, (WPARAM)start, (LPARAM)end);
             }
 
             private RECT GetFormattingRectangle()
@@ -348,7 +352,7 @@ namespace System.Windows.Forms
 
                 // Send an EM_GETRECT message to find out the bounding rectangle.
                 RECT rectangle = new RECT();
-                SendMessageW(_owningTextBoxBase, (WM)EM.GETRECT, 0, ref rectangle);
+                PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.GETRECT, (WPARAM)0, ref rectangle);
                 return rectangle;
             }
 

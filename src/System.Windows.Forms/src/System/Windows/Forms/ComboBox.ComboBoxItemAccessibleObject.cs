@@ -46,10 +46,10 @@ namespace System.Windows.Forms
                     HWND listHandle = (HWND)_owningComboBox.GetListHandle();
                     RECT itemRect = new();
 
-                    int result = (int)User32.SendMessageW(
+                    int result = (int)PInvoke.SendMessage(
                         listHandle,
                         (User32.WM)User32.LB.GETITEMRECT,
-                        currentIndex,
+                        (WPARAM)currentIndex,
                         ref itemRect);
 
                     if (result == User32.LB_ERR)
@@ -238,7 +238,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                User32.SendMessageW(_owningComboBox, (User32.WM)User32.CB.SETTOPINDEX, GetCurrentIndex());
+                PInvoke.SendMessage(_owningComboBox, (User32.WM)User32.CB.SETTOPINDEX, (WPARAM)GetCurrentIndex());
             }
 
             internal override void SetFocus()

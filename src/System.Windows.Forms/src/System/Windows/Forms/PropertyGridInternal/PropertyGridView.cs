@@ -188,7 +188,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return false;
                 }
 
-                return User32.SendMessageW(EditTextBox, (User32.WM)User32.EM.CANUNDO) != 0;
+                return PInvoke.SendMessage(EditTextBox, (User32.WM)User32.EM.CANUNDO) != 0;
             }
         }
 
@@ -349,7 +349,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal bool DrawValuesRightToLeft
             => _editTextBox is not null
                 && _editTextBox.IsHandleCreated
-                && ((WINDOW_EX_STYLE)User32.GetWindowLong(_editTextBox, User32.GWL.EXSTYLE)).HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING);
+                && ((WINDOW_EX_STYLE)PInvoke.GetWindowLong(_editTextBox, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE)).HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING);
 
         internal DropDownHolder DropDownControlHolder => _dropDownHolder;
 
@@ -1120,7 +1120,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (CanUndo && EditTextBox.Visible)
             {
-                User32.SendMessageW(EditTextBox, User32.WM.UNDO);
+                PInvoke.SendMessage(EditTextBox, User32.WM.UNDO);
             }
         }
 
@@ -1504,7 +1504,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // It is unknown why this control was created as a top-level control. Windows does not recommend this way of setting parent.
             // We are not touching this for this release. We may revisit it in next release.
 
-            User32.SetWindowLong(_dropDownHolder, User32.GWL.HWNDPARENT, new HandleRef(this, Handle));
+            PInvoke.SetWindowLong(_dropDownHolder, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, this);
             _dropDownHolder.SetBounds(location.X, location.Y, size.Width, size.Height);
             User32.ShowWindow(_dropDownHolder, User32.SW.SHOWNA);
             EditTextBox.Filter = true;
@@ -1554,7 +1554,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Control control = _dropDownHolder.Component;
                 if (control is not null)
                 {
-                    m.ResultInternal = (LRESULT)User32.SendMessageW(control, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                    m.ResultInternal = PInvoke.SendMessage(control, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return true;
                 }
             }
@@ -2683,7 +2683,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Math.Abs(screenPoint.Y - _rowSelectPos.Y) < SystemInformation.DoubleClickSize.Height)
                 {
                     DoubleClickRow(_selectedRow, toggleExpand: false, RowValue);
-                    User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, 0, PARAM.FromPoint(e.Location));
+                    PInvoke.SendMessage(EditTextBox, User32.WM.LBUTTONUP, (WPARAM)0, (LPARAM)e.Location);
                     EditTextBox.SelectAll();
                 }
 
@@ -3542,8 +3542,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 Point editPoint = PointToScreen(_lastMouseDown);
                 editPoint = EditTextBox.PointToClient(editPoint);
-                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONDOWN, 0, PARAM.FromPoint(editPoint));
-                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, 0, PARAM.FromPoint(editPoint));
+                PInvoke.SendMessage(EditTextBox, User32.WM.LBUTTONDOWN, 0, PARAM.FromPoint(editPoint));
+                PInvoke.SendMessage(EditTextBox, User32.WM.LBUTTONUP, (WPARAM)0, (LPARAM)editPoint);
             }
 
             if (setSelectTime)
@@ -3895,7 +3895,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             RECT rect = itemRect;
 
-            User32.SendMessageW(toolTip, (User32.WM)ComCtl32.TTM.ADJUSTRECT, 1, ref rect);
+            PInvoke.SendMessage(toolTip, (User32.WM)ComCtl32.TTM.ADJUSTRECT, (WPARAM)1, ref rect);
 
             // Now offset it back to screen coords.
             Point location = parent.PointToScreen(new(rect.left, rect.top));
@@ -5487,12 +5487,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 case (int)User32.WM.IME_STARTCOMPOSITION:
                     EditTextBox.Focus();
                     EditTextBox.Clear();
-                    User32.PostMessageW(EditTextBox, User32.WM.IME_STARTCOMPOSITION);
+                    PInvoke.PostMessage(EditTextBox, User32.WM.IME_STARTCOMPOSITION);
                     return;
 
                 case (int)User32.WM.IME_COMPOSITION:
                     EditTextBox.Focus();
-                    User32.PostMessageW(EditTextBox, User32.WM.IME_COMPOSITION, m.WParamInternal, m.LParamInternal);
+                    PInvoke.PostMessage(EditTextBox, User32.WM.IME_COMPOSITION, m.WParamInternal, m.LParamInternal);
                     return;
 
                 case (int)User32.WM.GETDLGCODE:

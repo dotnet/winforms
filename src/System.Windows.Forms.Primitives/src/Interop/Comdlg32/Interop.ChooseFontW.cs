@@ -22,7 +22,7 @@ internal partial class Interop
             public CF Flags;
             public int rgbColors;
             public IntPtr lCustData;
-            public User32.WNDPROCINT lpfnHook;
+            public void* lpfnHook;
             public char* lpTemplateName;
             public IntPtr hInstance;
             public char* lpszStyle;

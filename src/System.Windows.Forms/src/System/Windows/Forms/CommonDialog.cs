@@ -20,10 +20,7 @@ namespace System.Windows.Forms
         private const int CDM_SETDEFAULTFOCUS = (int)User32.WM.USER + 0x51;
         private static User32.WM s_helpMessage;
 
-        private IntPtr _priorWindowProcedure;
-
-        private IntPtr _hookedWndProc;
-
+        private nint _priorWindowProcedure;
         private HWND _defaultControlHwnd;
 
         /// <summary>
@@ -51,6 +48,9 @@ namespace System.Windows.Forms
             add => Events.AddHandler(s_helpRequestEvent, value);
             remove => Events.RemoveHandler(s_helpRequestEvent, value);
         }
+
+        internal LRESULT HookProcInternal(HWND hWnd, User32.WM msg, WPARAM wparam, LPARAM lparam)
+            => (LRESULT)HookProc(hWnd, (int)msg, (nint)wparam, lparam);
 
         /// <summary>
         ///  Defines the common dialog box hook procedure that is overridden to add specific
@@ -109,6 +109,9 @@ namespace System.Windows.Forms
             EventHandler? handler = (EventHandler?)Events[s_helpRequestEvent];
             handler?.Invoke(this, e);
         }
+
+        private LRESULT OwnerWndProcInternal(HWND hWnd, User32.WM msg, WPARAM wparam, LPARAM lparam)
+            => (LRESULT)OwnerWndProc(hWnd, (int)msg, (nint)wparam, lparam);
 
         /// <summary>
         ///  Defines the owner window procedure that is overridden to add specific functionality to a common dialog box.
@@ -196,14 +199,17 @@ namespace System.Windows.Forms
                     s_helpMessage = User32.RegisterWindowMessageW("commdlg_help");
                 }
 
-                User32.WNDPROCINT ownerWindowProcedure = new User32.WNDPROCINT(OwnerWndProc);
-                _hookedWndProc = Marshal.GetFunctionPointerForDelegate(ownerWindowProcedure);
-                Debug.Assert(IntPtr.Zero == _priorWindowProcedure, "The previous subclass wasn't properly cleaned up");
+                WNDPROC ownerWindowProcedure = OwnerWndProcInternal;
+                nint hookedWndProc = Marshal.GetFunctionPointerForDelegate(ownerWindowProcedure);
+                Debug.Assert(_priorWindowProcedure == 0, "The previous subclass wasn't properly cleaned up");
 
-                IntPtr userCookie = IntPtr.Zero;
+                nint userCookie = 0;
                 try
                 {
-                    _priorWindowProcedure = User32.SetWindowLong(ownerHwnd.Handle, User32.GWL.WNDPROC, ownerWindowProcedure);
+                    _priorWindowProcedure = PInvoke.SetWindowLong(
+                        ownerHwnd,
+                        WINDOW_LONG_PTR_INDEX.GWL_WNDPROC,
+                        hookedWndProc);
 
                     if (Application.UseVisualStyles)
                     {
@@ -222,17 +228,16 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    IntPtr currentSubClass = User32.GetWindowLong(ownerHwnd.Handle, User32.GWL.WNDPROC);
-                    if (_priorWindowProcedure != IntPtr.Zero || currentSubClass != _hookedWndProc)
+                    nint currentSubClass = PInvoke.GetWindowLong(ownerHwnd.Handle, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
+                    if (_priorWindowProcedure != 0 || currentSubClass != hookedWndProc)
                     {
-                        User32.SetWindowLong(ownerHwnd.Handle, User32.GWL.WNDPROC, _priorWindowProcedure);
+                        PInvoke.SetWindowLong(ownerHwnd.Handle, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, _priorWindowProcedure);
                     }
 
                     ThemingScope.Deactivate(userCookie);
 
-                    _priorWindowProcedure = IntPtr.Zero;
-                    _hookedWndProc = IntPtr.Zero;
-
+                    _priorWindowProcedure = 0;
+                    
                     // Ensure that the subclass delegate will not be GC collected until after it has been subclassed.
                     GC.KeepAlive(ownerWindowProcedure);
                 }

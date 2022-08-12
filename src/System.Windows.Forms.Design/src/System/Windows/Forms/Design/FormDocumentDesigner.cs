@@ -377,9 +377,9 @@ namespace System.Windows.Forms.Design
         {
             // Paint the form's title bar UI-active
             Control control = Control;
-            if (control != null && control.IsHandleCreated)
+            if (control is not null && control.IsHandleCreated)
             {
-                User32.SendMessageW(control, User32.WM.NCACTIVATE, (nint)(BOOL)true);
+                PInvoke.SendMessage(control, User32.WM.NCACTIVATE, (WPARAM)(BOOL)true);
                 User32.RedrawWindow(control.Handle, flags: User32.RDW.FRAME);
             }
         }
@@ -390,9 +390,9 @@ namespace System.Windows.Forms.Design
         private unsafe void OnDesignerDeactivate(object sender, EventArgs e)
         {
             Control control = Control;
-            if (control != null && control.IsHandleCreated)
+            if (control is not null && control.IsHandleCreated)
             {
-                User32.SendMessageW(control, User32.WM.NCACTIVATE, (nint)(BOOL)false);
+                PInvoke.SendMessage(control, User32.WM.NCACTIVATE, (WPARAM)(BOOL)false);
                 User32.RedrawWindow(control.Handle, flags: User32.RDW.FRAME);
             }
         }
