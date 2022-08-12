@@ -5,6 +5,7 @@
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Windows.Forms;
+using Windows.Win32.UI.Shell;
 
 internal partial class Interop
 {
@@ -34,9 +35,9 @@ internal partial class Interop
                         (_wrappedInstance, hwndEdit, punkACLPtr, pwszRegKeyPath, pwszQuickComplete);
             }
 
-            public HRESULT SetOptions(Shell32.AUTOCOMPLETEOPTIONS dwFlag)
+            public HRESULT SetOptions(AUTOCOMPLETEOPTIONS dwFlag)
             {
-                return ((delegate* unmanaged<IntPtr, Shell32.AUTOCOMPLETEOPTIONS, HRESULT>)(*(*(void***)_wrappedInstance + 5)))
+                return ((delegate* unmanaged<IntPtr, AUTOCOMPLETEOPTIONS, HRESULT>)(*(*(void***)_wrappedInstance + 5)))
                     (_wrappedInstance, dwFlag);
             }
         }

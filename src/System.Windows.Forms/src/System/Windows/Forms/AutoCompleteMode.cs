@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
+using Windows.Win32.UI.Shell;
 
 namespace System.Windows.Forms
 {
@@ -14,19 +14,19 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Disables the AutoComplete Feature for ComboBox and TextBox.
         /// </summary>
-        None = (int)Shell32.AUTOCOMPLETEOPTIONS.NONE,
+        None = AUTOCOMPLETEOPTIONS.ACO_NONE,
 
         /// <summary>
         ///  Displays the auxiliary drop-down list associated with the edit control,
         ///  this drop-down is populated with one or more suggested completed strings.
         /// </summary>
-        Suggest = (int)Shell32.AUTOCOMPLETEOPTIONS.AUTOSUGGEST,
+        Suggest = AUTOCOMPLETEOPTIONS.ACO_AUTOSUGGEST,
 
         /// <summary>
         ///  Appends the remainder of the most likely candidate string to the existing
         ///  characters, highlighting the appended characters.
         /// </summary>
-        Append = (int)Shell32.AUTOCOMPLETEOPTIONS.AUTOAPPEND,
+        Append = AUTOCOMPLETEOPTIONS.ACO_AUTOAPPEND,
 
         /// <summary>
         ///  The AutoSuggest and AutoAppend are applied in conjuction.
