@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Design
                 int backColor,
                 int textColor)
             {
-                Size size = new();
+                SIZE size = new();
                 RECT rc2 = new();
                 RECT rc = rcIn;
                 ImageList imagelist = ImageList;
@@ -120,8 +120,11 @@ namespace System.Windows.Forms.Design
                     Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.CLIPPED | Gdi32.ETO.OPAQUE, ref rc, null, 0, null);
                 }
 
-                // Get the height of the font
-                Gdi32.GetTextExtentPoint32W(dc, itemText, itemText.Length, ref size);
+                fixed (char* pItemText = itemText)
+                {
+                    // Get the height of the font
+                    PInvoke.GetTextExtentPoint32W(dc, pItemText, itemText.Length, &size);
+                }
 
                 // Draw the caption
                 rc2.left = rc.left + SIZE_ICON_X + 2 * PADDING_HORZ;

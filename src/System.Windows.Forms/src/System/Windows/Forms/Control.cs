@@ -6320,7 +6320,7 @@ namespace System.Windows.Forms
                 return BackColorBrush;
             }
 
-            return (HBRUSH)Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH);
+            return (HBRUSH)PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH);
         }
 
         /// <summary>
@@ -9330,9 +9330,9 @@ namespace System.Windows.Forms
             return false;
         }
 
-        private void PrintToMetaFile(HDC hDC, IntPtr lParam)
+        private unsafe void PrintToMetaFile(HDC hDC, IntPtr lParam)
         {
-            Debug.Assert(Gdi32.GetObjectType(hDC) == Gdi32.OBJ.ENHMETADC,
+            Debug.Assert((OBJ_TYPE)PInvoke.GetObjectType(hDC) == OBJ_TYPE.OBJ_ENHMETADC,
                 "PrintToMetaFile() called with a non-Enhanced MetaFile DC.");
             Debug.Assert(((long)lParam & (long)User32.PRF.CHILDREN) != 0,
                 "PrintToMetaFile() called without PRF_CHILDREN.");
@@ -9342,10 +9342,11 @@ namespace System.Windows.Forms
 
             // We're the root control, so we need to set up our clipping region.  Retrieve the
             // x-coordinates and y-coordinates of the viewport origin for the specified device context.
-            bool success = Gdi32.GetViewportOrgEx(hDC, out Point viewportOrg);
+            Point viewportOrg = default;
+            bool success = PInvoke.GetViewportOrgEx(hDC, &viewportOrg);
             Debug.Assert(success, "GetViewportOrgEx() failed.");
 
-            using var hClippingRegion = new PInvoke.RegionScope(
+            using PInvoke.RegionScope hClippingRegion = new(
                 viewportOrg.X,
                 viewportOrg.Y,
                 viewportOrg.X + Width,
@@ -12634,7 +12635,7 @@ namespace System.Windows.Forms
             PaintEventArgs? pevent = null;
 
             using var paletteScope = doubleBuffered || usingBeginPaint
-                ? Gdi32.SelectPaletteScope.HalftonePalette(dc, forceBackground: false, realizePalette: false)
+                ? PInvoke.SelectPaletteScope.HalftonePalette(dc, forceBackground: false, realizePalette: false)
                 : default;
 
             bool paintBackground = (usingBeginPaint && GetStyle(ControlStyles.AllPaintingInWmPaint)) || doubleBuffered;
@@ -12741,7 +12742,7 @@ namespace System.Windows.Forms
             using var dc = new User32.GetDcScope(Handle);
 
             // We don't want to unset the palette in this case so we don't do this in a using
-            var paletteScope = Gdi32.SelectPaletteScope.HalftonePalette(
+            var paletteScope = PInvoke.SelectPaletteScope.HalftonePalette(
                 dc,
                 forceBackground: true,
                 realizePalette: true);

@@ -52,11 +52,11 @@ namespace System.Windows.Forms
             ArgumentValidation.ThrowIfNull(dc);
 
 #if DEBUG
-            Gdi32.OBJ type = Gdi32.GetObjectType(dc);
-            Debug.Assert(type == Gdi32.OBJ.DC
-                || type == Gdi32.OBJ.ENHMETADC
-                || type == Gdi32.OBJ.MEMDC
-                || type == Gdi32.OBJ.METADC);
+            OBJ_TYPE type = (OBJ_TYPE)PInvoke.GetObjectType(dc);
+            Debug.Assert(type == OBJ_TYPE.OBJ_DC
+                || type == OBJ_TYPE.OBJ_ENHMETADC
+                || type == OBJ_TYPE.OBJ_MEMDC
+                || type == OBJ_TYPE.OBJ_METADC);
 #endif
 
             _hdc = dc;
@@ -100,7 +100,7 @@ namespace System.Windows.Forms
                 Debug.Assert(!_hdc.IsNull);
 
                 // We need to manually unset the palette here so this scope shouldn't be disposed
-                var paletteScope = Gdi32.SelectPaletteScope.HalftonePalette(
+                var paletteScope = PInvoke.SelectPaletteScope.HalftonePalette(
                     _hdc,
                     forceBackground: false,
                     realizePalette: false);

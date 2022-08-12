@@ -4,8 +4,11 @@
 
 namespace Windows.Win32.Graphics.Gdi
 {
-    internal readonly partial struct HDC
+    internal readonly partial struct HDC : IHandle<HDC>
     {
+        HDC IHandle<HDC>.Handle => this;
+        object? IHandle<HDC>.Wrapper => null;
+
         public static implicit operator HDC(CreatedHDC hdc) => new(hdc.Value);
         public static implicit operator CreatedHDC(HDC hdc) => new(hdc.Value);
     }

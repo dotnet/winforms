@@ -1564,7 +1564,7 @@ namespace System.Windows.Forms
                     using (var hdc = new DeviceContextHdcScope(g, applyGraphicsState: false))
                     {
                         color = ColorTranslator.FromWin32(
-                            Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(foreBrush.Color)));
+                            (int)PInvoke.GetNearestColor(hdc, (uint)ColorTranslator.ToWin32(foreBrush.Color)));
                     }
 
                     Rectangle clientRectWithPadding = ClientRectWithPadding;

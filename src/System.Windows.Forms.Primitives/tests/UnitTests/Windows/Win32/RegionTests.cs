@@ -81,7 +81,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
         }
 
         [Fact]
-        public void RegionScope_GetRegion()
+        public unsafe void RegionScope_GetRegion()
         {
             // Create a bitmap using the screen's stats
             HDC hdc = PInvoke.CreateCompatibleDC((HDC)default);
@@ -99,7 +99,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
                     SelectClipRgn(hdc, originalRegion);
                     using PInvoke.RegionScope retrievedRegion = new(hdc);
                     RECT rect = default;
-                    RegionType type = GetRgnBox(retrievedRegion, ref rect);
+                    RegionType type = (RegionType)GetRgnBox(retrievedRegion, &rect);
                     Assert.Equal(RegionType.SIMPLEREGION, type);
                     Assert.Equal(rectangle, (Rectangle)rect);
                 }

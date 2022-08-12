@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Metafiles
         public int ySrc;
         public Matrix3x2 xformSrc;     // Source DC transform
         public COLORREF crBkColorSrc;  // Source DC BkColor in RGB
-        public Gdi32.DIB iUsageSrc;    // Source bitmap info color table usage
+        public DIB_USAGE iUsageSrc;    // Source bitmap info color table usage
                                        // (DIB_RGB_COLORS)
         public uint offBmiSrc;         // Offset to the source BITMAPINFO structure
         public uint cbBmiSrc;          // Size of the source BITMAPINFO structure

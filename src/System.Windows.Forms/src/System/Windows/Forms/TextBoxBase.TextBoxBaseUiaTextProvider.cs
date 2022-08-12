@@ -277,7 +277,7 @@ namespace System.Windows.Forms
                 pt = _owningTextBoxBase.GetPositionFromCharIndex(startCharIndex);
 
                 // add the width of the character at that position.
-                if (GetTextExtentPoint32(ch, out Size size))
+                if (GetTextExtentPoint32(ch, out SIZE size))
                 {
                     pt.X += size.Width;
                 }
@@ -356,20 +356,23 @@ namespace System.Windows.Forms
                 return rectangle;
             }
 
-            private bool GetTextExtentPoint32(char item, out Size size)
+            private unsafe bool GetTextExtentPoint32(char item, out SIZE size)
             {
                 Debug.Assert(_owningTextBoxBase.IsHandleCreated);
 
-                size = new Size();
+                size = default;
 
-                using var hdc = new GetDcScope(_owningTextBoxBase.Handle);
+                using GetDcScope hdc = new(_owningTextBoxBase.Handle);
                 if (hdc.IsNull)
                 {
                     return false;
                 }
 
-                // Add the width of the character at that position.
-                return Gdi32.GetTextExtentPoint32W(hdc, item.ToString(), 1, ref size);
+                fixed (SIZE* pSize = &size)
+                {
+                    // Add the width of the character at that position.
+                    return PInvoke.GetTextExtentPoint32W(hdc, &item, 1, pSize);
+                }
             }
         }
     }

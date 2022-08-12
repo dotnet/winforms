@@ -168,7 +168,7 @@ namespace System.Windows.Forms
             using PInvoke.CreateDcScope dc = new(screen);
 
             HPALETTE palette = PInvoke.CreateHalftonePalette(dc);
-            Gdi32.GetObjectW((HGDIOBJ)palette.Value, out uint entryCount);
+            PInvoke.GetObject(palette, out uint entryCount);
 
             byte[] bitmapInfoBuffer = ArrayPool<byte>.Shared
                 .Rent(checked((int)(sizeof(BITMAPINFOHEADER) + (sizeof(RGBQUAD) * entryCount))));
@@ -187,13 +187,13 @@ namespace System.Windows.Forms
                 };
 
                 Span<RGBQUAD> colors = new(bi + sizeof(BITMAPINFOHEADER), (int)entryCount);
-                Span<Gdi32.PALETTEENTRY> entries = stackalloc Gdi32.PALETTEENTRY[(int)entryCount];
-                Gdi32.GetPaletteEntries(palette, entries);
+                Span<PALETTEENTRY> entries = stackalloc PALETTEENTRY[(int)entryCount];
+                PInvoke.GetPaletteEntries(palette, entries);
 
                 // Set up color table
                 for (int i = 0; i < entryCount; i++)
                 {
-                    Gdi32.PALETTEENTRY entry = entries[i];
+                    PALETTEENTRY entry = entries[i];
                     colors[i] = new RGBQUAD
                     {
                         rgbRed = entry.peRed,
@@ -202,7 +202,7 @@ namespace System.Windows.Forms
                     };
                 }
 
-                PInvoke.DeleteObject((HGDIOBJ)palette.Value);
+                PInvoke.DeleteObject(palette);
 
                 void* bitsBuffer;
                 hbitmap = PInvoke.CreateDIBSection(
@@ -1863,7 +1863,7 @@ namespace System.Windows.Forms
             });
 
             using Gdi32.SetRop2Scope rop2Scope = new(desktopDC, rop2);
-            using Gdi32.SelectObjectScope brushSelection = new(desktopDC, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
+            using Gdi32.SelectObjectScope brushSelection = new(desktopDC, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
             using Gdi32.SelectObjectScope penSelection = new(desktopDC, pen);
 
             Gdi32.SetBkColor(desktopDC, ColorTranslator.ToWin32(graphicsColor));
@@ -1884,7 +1884,7 @@ namespace System.Windows.Forms
 
             using PInvoke.ObjectScope pen = new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (uint)ColorTranslator.ToWin32(backColor)));
             using Gdi32.SetRop2Scope ropScope = new(desktopDC, rop2);
-            using Gdi32.SelectObjectScope brushSelection = new(desktopDC, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
+            using Gdi32.SelectObjectScope brushSelection = new(desktopDC, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
             using Gdi32.SelectObjectScope penSelection = new(desktopDC, pen);
 
             Gdi32.MoveToEx(desktopDC, start.X, start.Y, lppt: null);

@@ -96,22 +96,28 @@ namespace System.Windows.Forms
         }
 
         [Conditional("DEBUG")]
-        private static void ValidateHdc(HDC hdc)
+        private unsafe static void ValidateHdc(HDC hdc)
         {
             // A few sanity checks against the HDC to see if it was left in a dirty state
 
             HRGN hrgn = PInvoke.CreateRectRgn(0, 0, 0, 0);
-            Debug.Assert(Gdi32.GetClipRgn(hdc, hrgn) == 0, "Should not have a clipping region");
+            Debug.Assert(PInvoke.GetClipRgn(hdc, hrgn) == 0, "Should not have a clipping region");
             PInvoke.DeleteObject(hrgn);
 
-            Gdi32.GetViewportOrgEx(hdc, out Point point);
+            Point point;
+            PInvoke.GetViewportOrgEx(hdc, &point);
             Debug.Assert(point.IsEmpty, "Viewport origin shouldn't be shifted");
-            Debug.Assert(Gdi32.GetMapMode(hdc) == Gdi32.MM.TEXT);
-            Debug.Assert(Gdi32.GetROP2(hdc) == Gdi32.R2.COPYPEN);
-            Debug.Assert(Gdi32.GetBkMode(hdc) == Gdi32.BKMODE.OPAQUE);
+            Debug.Assert(PInvoke.GetMapMode(hdc) == (int)Gdi32.MM.TEXT);
+            Debug.Assert(PInvoke.GetROP2(hdc) == (int)Gdi32.R2.COPYPEN);
+            Debug.Assert(PInvoke.GetBkMode(hdc) == (int)Gdi32.BKMODE.OPAQUE);
 
-            Matrix3x2 matrix = default;
-            Debug.Assert(Gdi32.GetWorldTransform(hdc, ref matrix));
+            XFORM xform = default;
+            Debug.Assert(PInvoke.GetWorldTransform(hdc, &xform));
+            Matrix3x2 matrix = new(xform.eM11, xform.eM12, xform.eM21, xform.eM22, 0, 0)
+            {
+                Translation = new Vector2(xform.eDx, xform.eDy)
+            };
+
             Debug.Assert(matrix.IsIdentity);
         }
     }

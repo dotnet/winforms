@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Tests
             try
             {
                 Assert.False(hBitmap.IsNull);
-                Assert.Equal(Gdi32.OBJ.BITMAP, Gdi32.GetObjectType(hBitmap));
+                Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
 
                 using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format16bppRgb555, result.PixelFormat);
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Tests
             try
             {
                 Assert.False(hBitmap.IsNull);
-                Assert.Equal(Gdi32.OBJ.BITMAP, Gdi32.GetObjectType(hBitmap));
+                Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
 
                 using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format16bppRgb555, result.PixelFormat);
@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Tests
             try
             {
                 Assert.False(hBitmap.IsNull);
-                Assert.Equal(Gdi32.OBJ.BITMAP, Gdi32.GetObjectType(hBitmap));
+                Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
 
                 using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
@@ -142,7 +142,7 @@ namespace System.Windows.Forms.Tests
                 try
                 {
                     Assert.False(hBitmap.IsNull);
-                    Assert.Equal(Gdi32.OBJ.BITMAP, Gdi32.GetObjectType(hBitmap));
+                    Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
 
                     using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                     Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
@@ -175,7 +175,7 @@ namespace System.Windows.Forms.Tests
             try
             {
                 Assert.False(hBitmap.IsNull);
-                Assert.Equal(Gdi32.OBJ.BITMAP, Gdi32.GetObjectType(hBitmap));
+                Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
 
                 using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
@@ -218,7 +218,7 @@ namespace System.Windows.Forms.Tests
             try
             {
                 Assert.False(hBitmap.IsNull);
-                Assert.Equal(Gdi32.OBJ.BITMAP, Gdi32.GetObjectType(hBitmap));
+                Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
 
                 using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format1bppIndexed, result.PixelFormat);
@@ -243,7 +243,7 @@ namespace System.Windows.Forms.Tests
             try
             {
                 Assert.False(hBitmap.IsNull);
-                Assert.Equal(Gdi32.OBJ.BITMAP, Gdi32.GetObjectType(hBitmap));
+                Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
 
                 using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format1bppIndexed, result.PixelFormat);

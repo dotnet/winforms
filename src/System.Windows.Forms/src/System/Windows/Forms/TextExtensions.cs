@@ -282,17 +282,20 @@ namespace System.Windows.Forms
         ///  which computes the width and height of the text ignoring TAB\CR\LF characters.
         ///  A text extent is the distance between the beginning of the space and a character that will fit in the space.
         /// </summary>
-        public static Size GetTextExtent(this HDC hdc, string? text, HFONT hfont)
+        public static unsafe Size GetTextExtent(this HDC hdc, string? text, HFONT hfont)
         {
             if (string.IsNullOrEmpty(text))
             {
                 return Size.Empty;
             }
 
-            Size size = new Size();
+            SIZE size = default;
             using var selectFont = new Gdi32.SelectObjectScope(hdc, hfont);
 
-            Gdi32.GetTextExtentPoint32W(hdc, text, text.Length, ref size);
+            fixed (char* pText = text)
+            {
+                PInvoke.GetTextExtentPoint32W(hdc, pText, text.Length, &size);
+            }
 
             return new Size(size.Width, size.Height);
         }

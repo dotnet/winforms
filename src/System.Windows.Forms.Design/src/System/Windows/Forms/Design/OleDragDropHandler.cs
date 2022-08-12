@@ -541,7 +541,7 @@ namespace System.Windows.Forms.Design
                 new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 2, (uint)ColorTranslator.ToWin32(backColor)));
 
             using Gdi32.SetRop2Scope rop2Scope = new(dc, rop2);
-            using Gdi32.SelectObjectScope brushSelection = new(dc, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
+            using Gdi32.SelectObjectScope brushSelection = new(dc, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
             using Gdi32.SelectObjectScope penSelection = new(dc, pen);
 
             Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(graphicsColor));

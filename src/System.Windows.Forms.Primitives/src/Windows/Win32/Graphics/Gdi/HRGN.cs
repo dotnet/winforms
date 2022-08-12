@@ -10,7 +10,7 @@ namespace Windows.Win32.Graphics.Gdi
     {
         public unsafe RECT[] GetRegionRects()
         {
-            uint regionDataSize = Interop.Gdi32.GetRegionData(this, 0, IntPtr.Zero);
+            uint regionDataSize = PInvoke.GetRegionData(this, 0, lpRgnData: null);
             if (regionDataSize == 0)
             {
                 return Array.Empty<RECT>();
@@ -20,7 +20,7 @@ namespace Windows.Win32.Graphics.Gdi
 
             fixed (byte* b = buffer)
             {
-                if (Interop.Gdi32.GetRegionData(this, regionDataSize, (IntPtr)b) != regionDataSize)
+                if (PInvoke.GetRegionData(this, regionDataSize, (RGNDATA*)b) != regionDataSize)
                 {
                     return Array.Empty<RECT>();
                 }
