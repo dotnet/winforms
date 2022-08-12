@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Shell = Windows.Win32.UI.Shell;
 
 internal partial class Interop
 {
@@ -105,7 +106,7 @@ internal partial class Interop
                 ((Shell32.IFileDialog)this).GetResult(out ppsi);
             }
 
-            HRESULT Shell32.IFileOpenDialog.AddPlace(Shell32.IShellItem psi, Shell32.FDAP fdap)
+            HRESULT Shell32.IFileOpenDialog.AddPlace(Shell32.IShellItem psi, Shell.FDAP fdap)
             {
                 return ((Shell32.IFileDialog)this).AddPlace(psi, fdap);
             }

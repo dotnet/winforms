@@ -13,7 +13,6 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
-using Windows.Win32.UI.Shell;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 using static Interop.User32;
