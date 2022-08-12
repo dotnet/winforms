@@ -202,7 +202,7 @@ namespace System.Windows.Forms
 
         private void SetFileTypes(IFileDialog dialog)
         {
-            PInvoke.COMDLG_FILTERSPEC[] filterItems = GetFilterItems(_filter);
+            COMDLG_FILTERSPEC[] filterItems = GetFilterItems(_filter);
             try
             {
                 HRESULT hr = dialog.SetFileTypes((uint)filterItems.Length, filterItems);
@@ -224,12 +224,12 @@ namespace System.Windows.Forms
             }
         }
 
-        private static PInvoke.COMDLG_FILTERSPEC[] GetFilterItems(string? filter)
+        private static COMDLG_FILTERSPEC[] GetFilterItems(string? filter)
         {
             // Expected input types
             // "Text files (*.txt)|*.txt|All files (*.*)|*.*"
             // "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*"
-            var extensions = new List<PInvoke.COMDLG_FILTERSPEC>();
+            var extensions = new List<COMDLG_FILTERSPEC>();
             if (!string.IsNullOrEmpty(filter))
             {
                 string[] tokens = filter.Split('|');
@@ -239,7 +239,7 @@ namespace System.Windows.Forms
                     // Odd numbered tokens are the associated extensions
                     for (int i = 1; i < tokens.Length; i += 2)
                     {
-                        PInvoke.COMDLG_FILTERSPEC extension;
+                        COMDLG_FILTERSPEC extension;
                         extension.pszSpec = Marshal.StringToCoTaskMemUni(tokens[i]);        // This may be a semicolon delimited list of extensions (that's ok)
                         extension.pszName = Marshal.StringToCoTaskMemUni(tokens[i - 1]);
                         extensions.Add(extension);

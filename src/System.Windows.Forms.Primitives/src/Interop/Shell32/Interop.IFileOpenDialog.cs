@@ -21,7 +21,7 @@ internal static partial class Interop
             [PreserveSig]
             HRESULT SetFileTypes(
                 uint cFileTypes,
-                [MarshalAs(UnmanagedType.LPArray)] PInvoke.COMDLG_FILTERSPEC[] rgFilterSpec);
+                [MarshalAs(UnmanagedType.LPArray)] Shell32.COMDLG_FILTERSPEC[] rgFilterSpec);
 
             [PreserveSig]
             HRESULT SetFileTypeIndex(

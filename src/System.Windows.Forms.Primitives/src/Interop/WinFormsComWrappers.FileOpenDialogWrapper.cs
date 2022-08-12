@@ -20,7 +20,7 @@ internal partial class Interop
                 return this.Show(parent);
             }
 
-            HRESULT Shell32.IFileOpenDialog.SetFileTypes(uint cFileTypes, PInvoke.COMDLG_FILTERSPEC[] rgFilterSpec)
+            HRESULT Shell32.IFileOpenDialog.SetFileTypes(uint cFileTypes, Shell32.COMDLG_FILTERSPEC[] rgFilterSpec)
             {
                 return ((Shell32.IFileDialog)this).SetFileTypes(cFileTypes, rgFilterSpec);
             }

@@ -473,32 +473,32 @@ namespace System.Windows.Forms
         /// </summary>
         private int FolderBrowserDialog_BrowseCallbackProc(HWND hwnd, int msg, IntPtr lParam, IntPtr lpData)
         {
-            switch ((PInvoke.BFFM)msg)
+            switch ((BFFM)msg)
             {
-                case PInvoke.BFFM.INITIALIZED:
+                case BFFM.INITIALIZED:
                     // Indicates the browse dialog box has finished initializing. The lpData value is zero.
 
                     if (_initialDirectory.Length != 0)
                     {
                         // Try to expand the folder specified by initialDir
-                        User32.SendMessageW(hwnd, (User32.WM)PInvoke.BFFM.SETEXPANDED, (nint)(BOOL)true, _initialDirectory);
+                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETEXPANDED, (nint)(BOOL)true, _initialDirectory);
                     }
 
                     if (_selectedPath.Length != 0)
                     {
                         // Try to select the folder specified by selectedPath
-                        User32.SendMessageW(hwnd, (User32.WM)PInvoke.BFFM.SETSELECTIONW, (nint)(BOOL)true, _selectedPath);
+                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETSELECTIONW, (nint)(BOOL)true, _selectedPath);
                     }
 
                     break;
-                case PInvoke.BFFM.SELCHANGED:
+                case BFFM.SELCHANGED:
                     // Indicates the selection has changed. The lpData parameter points to the item identifier list for the newly selected item.
                     IntPtr selectedPidl = lParam;
                     if (selectedPidl != IntPtr.Zero)
                     {
                         // Try to retrieve the path from the IDList
                         bool isFileSystemFolder = SHGetPathFromIDListLongPath(selectedPidl, out _);
-                        User32.SendMessageW(hwnd, (User32.WM)PInvoke.BFFM.ENABLEOK, 0, (nint)(BOOL)isFileSystemFolder);
+                        User32.SendMessageW(hwnd, (User32.WM)BFFM.ENABLEOK, 0, (nint)(BOOL)isFileSystemFolder);
                     }
 
                     break;
