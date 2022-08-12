@@ -1174,9 +1174,9 @@ namespace System.Windows.Forms
         /// <summary>
         /// Scales container's properties Min and Max size with the scale factor provided.
         /// </summary>
-        /// <param name="xScaleFactor">Scale factor to be applied on width of the property being scaled</param>
-        /// <param name="yScaleFactor">Scale factor to be applied on height of the property being scaled</param>
-        /// <param name="updateContainerSize">Specifies if container size need to be updated along with properties being scaled</param>
+        /// <param name="xScaleFactor">The scale factor to be applied on width of the property being scaled.</param>
+        /// <param name="yScaleFactor">The scale factor to be applied on height of the property being scaled.</param>
+        /// <param name="updateContainerSize"><see langword="true"/> to resize of the container control along with properties being scaled; otherwise, <see langword="false"/>.</param>
         protected virtual void ScaleMinMaxSize(float xScaleFactor, float yScaleFactor, bool updateContainerSize = true)
         { }
 

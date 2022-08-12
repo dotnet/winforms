@@ -11,6 +11,7 @@ namespace System.Windows.Forms.Primitives
     internal static partial class LocalAppContextSwitches
     {
         private const string SwitchScaleTopLevelFormMinMaxSizeForDpi = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
+
         private static int s_scaleTopLevelFormMinMaxSize;
         public static bool ScaleTopLevelFormMinMaxSize
         {
@@ -47,7 +48,7 @@ namespace System.Windows.Forms.Primitives
                 isSwitchEnabled = GetSwitchDefaultValue(switchName);
             }
 
-            // Is caching switches disabled?.
+            // Is caching of the switches disabled?
             AppContext.TryGetSwitch("TestSwitch.LocalAppContext.DisableCaching", out bool disableCaching);
             if (!disableCaching)
             {

@@ -1326,7 +1326,6 @@ namespace System.Windows.Forms
             if (updateFormSize)
             {
                 // Keep form size within new limits
-                //
                 Size size = Size;
                 if (!value.IsEmpty && (size.Width > value.Width || size.Height > value.Height))
                 {
@@ -4885,7 +4884,7 @@ namespace System.Windows.Forms
             SuspendLayout();
             try
             {
-                //Get size values in advance to prevent one change from affecting another.
+                // Get size values in advance to prevent one change from affecting another.
                 Size clientSize = ClientSize;
                 ScaleMinMaxSize(x, y);
                 ScaleDockPadding(x, y);
@@ -4911,9 +4910,9 @@ namespace System.Windows.Forms
         /// <summary>
         /// Scales Form's properties Min and Max size with the scale factor provided.
         /// </summary>
-        /// <param name="xScaleFactor">Scale factor to be applied on width of the property being scaled</param>
-        /// <param name="yScaleFactor">Scale factor to be applied on height of the property being scaled</param>
-        /// <param name="updateContainerSize">Specifies if Form size need to be updated along with properties being scaled</param>
+        /// <param name="xScaleFactor">The scale factor to be applied on width of the property being scaled.</param>
+        /// <param name="yScaleFactor">The scale factor to be applied on height of the property being scaled.</param>
+        /// <param name="updateContainerSize"><see langword="true"/> to resize of the Form along with properties being scaled; otherwise, <see langword="false"/>.</param>
         protected override void ScaleMinMaxSize(float xScaleFactor, float yScaleFactor, bool updateContainerSize = true)
         {
             base.ScaleMinMaxSize(xScaleFactor, yScaleFactor, updateContainerSize);
