@@ -80,7 +80,8 @@ namespace System.Windows.Forms.Tests.Dpi
             }
         }
 
-        [WinFormsTheory]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/7579")]
+        [WinFormsTheory(Skip = "Lab machines seems not setting thread's Dpi context. See https://github.com/dotnet/winforms/issues/7579")]
         [InlineData(3.5 * DpiHelper.LogicalDpi)]
         public void Form_DpiChanged_MinMaxSizeChanged_WithRuntimeSetting(int newDpi)
         {
