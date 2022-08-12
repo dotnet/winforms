@@ -16,7 +16,7 @@ namespace System
             => new(PInvoke.CW_USEDEFAULT, PInvoke.CW_USEDEFAULT, PInvoke.CW_USEDEFAULT, PInvoke.CW_USEDEFAULT);
 
         // Stash the delegate to keep it from being collected
-        private readonly User32.WNDPROC _windowProcedure;
+        private readonly WNDPROC _windowProcedure;
         private WNDCLASSW _wndClass;
         private readonly string _className;
         private readonly string _menuName;
@@ -217,17 +217,20 @@ namespace System
             }
         }
 
-        protected virtual IntPtr WNDPROC(IntPtr hWnd, User32.WM msg, IntPtr wParam, IntPtr lParam)
+        protected virtual LRESULT WNDPROC(HWND hWnd, User32.WM msg, WPARAM wParam, LPARAM lParam)
         {
             switch (msg)
             {
                 case User32.WM.DESTROY:
                     if (hWnd == MainWindow)
+                    {
                         User32.PostQuitMessage(0);
-                    return (IntPtr)0;
+                    }
+
+                    return (LRESULT)0;
             }
 
-            return User32.DefWindowProcW(hWnd, msg, wParam, lParam);
+            return PInvoke.DefWindowProc(hWnd, (uint)msg, wParam, lParam);
         }
     }
 }

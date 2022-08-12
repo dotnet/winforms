@@ -832,7 +832,7 @@ namespace System.Windows.Forms.Design.Behavior
                 return;
             }
 
-            if (m.WParamInternal < text.Length + 1)
+            if ((int)m.WParamInternal < text.Length + 1)
             {
                 m.ResultInternal = (LRESULT)(-1);
                 return;

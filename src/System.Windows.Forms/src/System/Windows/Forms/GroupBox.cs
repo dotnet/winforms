@@ -255,7 +255,7 @@ namespace System.Windows.Forms
                 {
                     if (suspendRedraw && IsHandleCreated)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)(BOOL)false);
+                        PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
                     }
 
                     base.Text = value;
@@ -264,7 +264,7 @@ namespace System.Windows.Forms
                 {
                     if (suspendRedraw && IsHandleCreated)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)(BOOL)true);
+                        PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
                     }
                 }
 
@@ -670,15 +670,14 @@ namespace System.Windows.Forms
 
             if (backColor.HasTransparency())
             {
-                using Graphics graphics = Graphics.FromHdcInternal(m.WParamInternal);
+                using Graphics graphics = Graphics.FromHdcInternal((HDC)m.WParamInternal);
                 using var brush = backColor.GetCachedSolidBrushScope();
                 graphics.FillRectangle(brush, rect);
             }
             else
             {
-                var hdc = (HDC)(nint)m.WParamInternal;
-                using PInvoke.CreateBrushScope hbrush = new(backColor);
-                User32.FillRect(hdc, ref rect, hbrush);
+                using var hbrush = new PInvoke.CreateBrushScope(backColor);
+                User32.FillRect((HDC)m.WParamInternal, ref rect, hbrush);
             }
 
             m.ResultInternal = (LRESULT)1;

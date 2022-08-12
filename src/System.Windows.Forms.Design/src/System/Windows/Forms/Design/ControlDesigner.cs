@@ -426,7 +426,7 @@ namespace System.Windows.Forms.Design
         ///  want to block it from getting to Windows itself because it causes other messages to be generated.
         /// </summary>
         protected void BaseWndProc(ref Message m)
-            => m.ResultInternal = (LRESULT)User32.DefWindowProcW(m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+            => m.ResultInternal = PInvoke.DefWindowProc(m.HWND, (uint)m.MsgInternal, m.WParamInternal, m.LParamInternal);
 
         /// <summary>
         ///  Determines if the this designer can be parented to the specified designer -- generally this means if the
@@ -1849,7 +1849,10 @@ namespace System.Windows.Forms.Design
                             IntPtr punkAcc = Marshal.GetIUnknownForObject(iacc);
                             try
                             {
-                                m.ResultInternal = (LRESULT)Oleacc.LresultFromObject(in IID.IAccessible, m.WParamInternal, punkAcc);
+                                m.ResultInternal = (LRESULT)Oleacc.LresultFromObject(
+                                    in IID.IAccessible,
+                                    (nint)m.WParamInternal,
+                                    punkAcc);
                             }
                             finally
                             {
@@ -1934,7 +1937,7 @@ namespace System.Windows.Forms.Design
 
                     // We don't really want the focus, but we want to focus the designer. Below we handle WM_SETFOCUS
                     // and do the right thing.
-                    User32.SendMessageW(Control, User32.WM.SETFOCUS);
+                    PInvoke.SendMessage(Control, User32.WM.SETFOCUS);
 
                     // We simulate doubleclick for things that don't...
                     if (button == MouseButtons.Left && IsDoubleClick(location.X, location.Y))
@@ -1968,7 +1971,11 @@ namespace System.Windows.Forms.Design
 
                         if (_toolPassThrough)
                         {
-                            User32.SendMessageW(Control.Parent, m.MsgInternal, m.WParamInternal, GetParentPointFromLparam(m.LParamInternal));
+                            PInvoke.SendMessage(
+                                Control.Parent,
+                                m.MsgInternal,
+                                m.WParamInternal,
+                                GetParentPointFromLparam(m.LParamInternal));
                             return;
                         }
 
@@ -2013,7 +2020,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (_toolPassThrough)
                         {
-                            User32.SendMessageW(
+                            PInvoke.SendMessage(
                                 Control.Parent,
                                 m.MsgInternal,
                                 m.WParamInternal,
@@ -2060,7 +2067,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (_toolPassThrough)
                         {
-                            User32.SendMessageW(
+                            PInvoke.SendMessage(
                                 Control.Parent,
                                 m.MsgInternal,
                                 m.WParamInternal,
@@ -2081,7 +2088,7 @@ namespace System.Windows.Forms.Design
                     break;
                 case User32.WM.PRINTCLIENT:
                     {
-                        using Graphics g = Graphics.FromHdc(m.WParamInternal);
+                        using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
                         using PaintEventArgs e = new PaintEventArgs(g, Control.ClientRectangle);
                         DefWndProc(ref m);
                         OnPaintAdornments(e);

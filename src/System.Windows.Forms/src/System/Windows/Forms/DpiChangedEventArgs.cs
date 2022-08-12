@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -20,8 +19,8 @@ namespace System.Windows.Forms
         internal unsafe DpiChangedEventArgs(int old, Message m)
         {
             DeviceDpiOld = old;
-            DeviceDpiNew = PARAM.SignedLOWORD(m.WParamInternal);
-            Debug.Assert(PARAM.SignedHIWORD(m.WParamInternal) == DeviceDpiNew, "Non-square pixels!");
+            DeviceDpiNew = (short)m.WParamInternal.LOWORD;
+            Debug.Assert((short)m.WParamInternal.HIWORD == DeviceDpiNew, "Non-square pixels!");
             RECT suggestedRect = *(RECT*)(nint)m.LParamInternal;
             SuggestedRectangle = Rectangle.FromLTRB(suggestedRect.left, suggestedRect.top, suggestedRect.right, suggestedRect.bottom);
         }

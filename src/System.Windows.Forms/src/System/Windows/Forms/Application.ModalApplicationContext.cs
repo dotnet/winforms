@@ -4,8 +4,6 @@
 
 #nullable disable
 
-using static Interop;
-
 namespace System.Windows.Forms
 {
     public sealed partial class Application
@@ -30,7 +28,7 @@ namespace System.Windows.Forms
                 if (MainForm is not null && MainForm.IsHandleCreated)
                 {
                     // Get ahold of the parenting control
-                    IntPtr parentHandle = Interop.User32.GetWindowLong(MainForm, User32.GWL.HWNDPARENT);
+                    HWND parentHandle = (HWND)PInvoke.GetWindowLong(MainForm, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
 
                     parentControl = Control.FromHandle(parentHandle);
 

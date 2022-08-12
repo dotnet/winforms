@@ -346,7 +346,7 @@ namespace System.Windows.Forms
                     CreateHandle();
                 }
 
-                return (char)SendMessageW(this, (WM)EM.GETPASSWORDCHAR);
+                return (char)PInvoke.SendMessage(this, (WM)EM.GETPASSWORDCHAR);
             }
             set
             {
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
                         if (PasswordChar != value)
                         {
                             // Set the password mode.
-                            SendMessageW(this, (WM)EM.SETPASSWORDCHAR, (nint)value);
+                            PInvoke.SendMessage(this, (WM)EM.SETPASSWORDCHAR, (WPARAM)value);
 
                             // Disable IME if setting the control to password mode.
                             VerifyImeRestrictedModeChanged();
@@ -611,7 +611,7 @@ namespace System.Windows.Forms
             {
                 if (!_useSystemPasswordChar)
                 {
-                    SendMessageW(this, (WM)EM.SETPASSWORDCHAR, (nint)_passwordChar);
+                    PInvoke.SendMessage(this, (WM)EM.SETPASSWORDCHAR, (WPARAM)_passwordChar);
                 }
             }
 
@@ -846,7 +846,7 @@ namespace System.Windows.Forms
             if (((PRF)(nint)m.LParamInternal & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles
                 && BorderStyle == BorderStyle.Fixed3D)
             {
-                using Graphics g = Graphics.FromHdc(m.WParamInternal);
+                using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
                 Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
                 using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
                 g.DrawRectangle(pen, rect);

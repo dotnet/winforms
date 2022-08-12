@@ -565,17 +565,17 @@ namespace System.ComponentModel.Design
                 /// <summary>
                 ///  General purpose method, based on Control.Contains()... Determines whether a given window (specified using native window handle) is a descendant of this control. This catches both contained descendants and 'owned' windows such as modal dialogs. Using window handles rather than Control objects allows it to catch un-managed windows as well.
                 /// </summary>
-                private bool OwnsWindow(IntPtr hWnd)
+                private bool OwnsWindow(HWND hWnd)
                 {
-                    while (hWnd != IntPtr.Zero)
+                    while (!hWnd.IsNull)
                     {
-                        hWnd = User32.GetWindowLong(hWnd, User32.GWL.HWNDPARENT);
-                        if (hWnd == IntPtr.Zero)
+                        hWnd = (HWND)PInvoke.GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
+                        if (hWnd.IsNull)
                         {
                             return false;
                         }
 
-                        if (hWnd == Handle)
+                        if (hWnd == (HWND)Handle)
                         {
                             return true;
                         }
@@ -602,13 +602,13 @@ namespace System.ComponentModel.Design
                 {
                     try
                     {
-                        User32.SetWindowLong(this, User32.GWL.HWNDPARENT, parent.Handle);
+                        PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, parent.Handle);
 
                         // Lifted directly from Form.ShowDialog()...
                         HWND hWndCapture = PInvoke.GetCapture();
                         if (!hWndCapture.IsNull)
                         {
-                            User32.SendMessageW(hWndCapture, User32.WM.CANCELMODE);
+                            PInvoke.SendMessage(hWndCapture, User32.WM.CANCELMODE);
                             User32.ReleaseCapture();
                         }
 
@@ -618,7 +618,7 @@ namespace System.ComponentModel.Design
                     }
                     finally
                     {
-                        User32.SetWindowLong(this, User32.GWL.HWNDPARENT, IntPtr.Zero);
+                        PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, IntPtr.Zero);
 
                         // sometimes activation goes to LALA land - if our parent control is still  around, remind it to take focus.
                         if (parent is not null && parent.Visible)
@@ -632,8 +632,8 @@ namespace System.ComponentModel.Design
                 {
                     if (m.MsgInternal == User32.WM.ACTIVATE
                         && Visible
-                        && (User32.WA)PARAM.LOWORD(m.WParamInternal) == User32.WA.INACTIVE
-                        && !OwnsWindow(m.LParamInternal))
+                        && (User32.WA)m.WParamInternal.LOWORD == User32.WA.INACTIVE
+                        && !OwnsWindow((HWND)m.LParamInternal))
                     {
                         Visible = false;
                         if (m.LParamInternal == 0)

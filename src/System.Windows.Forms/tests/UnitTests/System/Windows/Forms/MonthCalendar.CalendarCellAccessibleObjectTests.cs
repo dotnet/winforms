@@ -145,7 +145,7 @@ namespace System.Windows.Forms.Tests
             control.SelectionStart = new DateTime(2021, 6, 16); // Set a date to have a stable test case
 
             control.CreateControl();
-            User32.SendMessageW(control, (User32.WM)MCM.SETCURRENTVIEW, 0, view);
+            PInvoke.SendMessage(control, (User32.WM)MCM.SETCURRENTVIEW, 0, view);
 
             CalendarCellAccessibleObject cellAccessibleObject = CreateCalendarCellAccessibleObject(control, 0, 2, 2);
 

@@ -25,8 +25,8 @@ internal partial class Interop
             public RECT rtMargin;
             public IntPtr hInstance;
             public IntPtr lCustData;
-            public User32.WNDPROCINT lpfnPageSetupHook;
-            public User32.WNDPROCINT lpfnPagePaintHook;
+            public void* lpfnPageSetupHook;
+            public void* lpfnPagePaintHook;
             public char* lpPageSetupTemplateName;
             public IntPtr hPageSetupTemplate;
         }

@@ -24,7 +24,7 @@ internal static partial class Interop
         }
 
         public struct ToolInfoWrapper<T>
-            where T : IHandle
+            where T : IHandle<HWND>
         {
             public TTOOLINFOW Info;
             public string? Text { get; set; }
@@ -56,7 +56,7 @@ internal static partial class Interop
                 _handle = handle;
             }
 
-            public unsafe nint SendMessage(IHandle sender, User32.WM message, bool state = false)
+            public unsafe LRESULT SendMessage(IHandle<HWND> sender, User32.WM message, bool state = false)
             {
                 Info.cbSize = (uint)sizeof(TTOOLINFOW);
                 fixed (char* c = Text)
@@ -67,7 +67,7 @@ internal static partial class Interop
                         Info.lpszText = c;
                     }
 
-                    nint result = User32.SendMessageW(sender, message, (nint)(BOOL)state, (nint)i);
+                    LRESULT result = PInvoke.SendMessage(sender, message, (WPARAM)(BOOL)state, (LPARAM)i);
                     GC.KeepAlive(_handle);
                     return result;
                 }

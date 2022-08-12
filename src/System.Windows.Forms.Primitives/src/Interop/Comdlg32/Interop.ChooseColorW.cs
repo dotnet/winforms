@@ -14,13 +14,13 @@ internal partial class Interop
         public unsafe struct CHOOSECOLORW
         {
             public uint lStructSize;
-            public IntPtr hwndOwner;
-            public IntPtr hInstance;
+            public HWND hwndOwner;
+            public HINSTANCE hInstance;
             public int rgbResult;
             public IntPtr lpCustColors;
             public CC Flags;
             public IntPtr lCustData;
-            public User32.WNDPROCINT lpfnHook;
+            public void* lpfnHook;
             public char* lpTemplateName;
         }
     }

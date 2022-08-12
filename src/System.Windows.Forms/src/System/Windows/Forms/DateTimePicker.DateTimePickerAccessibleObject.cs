@@ -171,7 +171,7 @@ namespace System.Windows.Forms
             {
                 if (Owner.IsHandleCreated && ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
                 {
-                    SendMessageW(Owner, WM.SYSKEYDOWN, (nint)Keys.Down);
+                    PInvoke.SendMessage(Owner, WM.SYSKEYDOWN, (WPARAM)(int)Keys.Down);
                 }
             }
 
@@ -179,7 +179,7 @@ namespace System.Windows.Forms
             {
                 if (Owner.IsHandleCreated && ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
                 {
-                    SendMessageW(Owner, (WM)DTM.CLOSEMONTHCAL);
+                    PInvoke.SendMessage(Owner, (WM)DTM.CLOSEMONTHCAL);
                 }
             }
 

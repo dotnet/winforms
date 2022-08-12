@@ -624,7 +624,7 @@ namespace System.Windows.Forms
             User32.EnumChildWindows(handle, SendThemeChangedRecursive);
 
             // Then do myself.
-            User32.SendMessageW(handle, User32.WM.THEMECHANGED);
+            PInvoke.SendMessage(handle, User32.WM.THEMECHANGED);
 
             return true;
         }
@@ -1069,7 +1069,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(PInvoke.IsWindow(handle), "Handle being parked is not a valid window handle");
             Debug.Assert(
-                ((WINDOW_STYLE)User32.GetWindowLong(handle.Handle, User32.GWL.STYLE)).HasFlag(WINDOW_STYLE.WS_CHILD),
+                ((WINDOW_STYLE)PInvoke.GetWindowLong(handle.Handle, WINDOW_LONG_PTR_INDEX.GWL_STYLE)).HasFlag(WINDOW_STYLE.WS_CHILD),
                 "Only WS_CHILD windows should be parked.");
 
             GetContextForHandle(handle)?.GetParkingWindow(dpiAwarenessContext).ParkHandle(handle);

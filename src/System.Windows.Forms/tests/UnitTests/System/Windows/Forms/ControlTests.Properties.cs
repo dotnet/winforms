@@ -10537,7 +10537,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            User32.SendMessageW(control, User32.WM.UPDATEUISTATE, wParam);
+            PInvoke.SendMessage(control, User32.WM.UPDATEUISTATE, (WPARAM)wParam);
             Assert.Equal(expected, control.ShowFocusCues);
         }
 
@@ -10596,7 +10596,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            User32.SendMessageW(control, User32.WM.UPDATEUISTATE, wParam);
+            PInvoke.SendMessage(control, User32.WM.UPDATEUISTATE, (WPARAM)wParam);
             Assert.Equal(expected, control.ShowKeyboardCues);
         }
 

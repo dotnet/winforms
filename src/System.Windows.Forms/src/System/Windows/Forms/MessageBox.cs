@@ -401,7 +401,7 @@ namespace System.Windows.Forms
                 // Right after the dialog box is closed, Windows sends WM_SETFOCUS back to the previously active control
                 // but since we have disabled this thread main window the message is lost. So we have to send it again after
                 // we enable the main window.
-                User32.SendMessageW(handle.Handle, User32.WM.SETFOCUS);
+                PInvoke.SendMessage(handle.Handle, User32.WM.SETFOCUS);
                 GC.KeepAlive(handle.Wrapper);
             }
         }

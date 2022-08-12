@@ -125,18 +125,18 @@ namespace System.Windows.Forms.Design
                             {
                                 if (bk.KeyDown.MsgInternal != 0)
                                 {
-                                    User32.SendMessageW(hwnd, User32.WM.KEYDOWN, bk.KeyDown.WParamInternal, bk.KeyDown.LParamInternal);
+                                    PInvoke.SendMessage(hwnd, User32.WM.KEYDOWN, bk.KeyDown.WParamInternal, bk.KeyDown.LParamInternal);
                                 }
 
-                                User32.SendMessageW(hwnd, User32.WM.CHAR, bk.KeyChar.WParamInternal, bk.KeyChar.LParamInternal);
+                                PInvoke.SendMessage(hwnd, User32.WM.CHAR, bk.KeyChar.WParamInternal, bk.KeyChar.LParamInternal);
                                 if (bk.KeyUp.MsgInternal != 0)
                                 {
-                                    User32.SendMessageW(hwnd, User32.WM.KEYUP, bk.KeyUp.WParamInternal, bk.KeyUp.LParamInternal);
+                                    PInvoke.SendMessage(hwnd, User32.WM.KEYUP, bk.KeyUp.WParamInternal, bk.KeyUp.LParamInternal);
                                 }
                             }
                             else
                             {
-                                User32.SendMessageW(hwnd, bk.KeyChar.MsgInternal, bk.KeyChar.WParamInternal, bk.KeyChar.LParamInternal);
+                                PInvoke.SendMessage(hwnd, bk.KeyChar.MsgInternal, bk.KeyChar.WParamInternal, bk.KeyChar.LParamInternal);
                             }
                         }
                     }
