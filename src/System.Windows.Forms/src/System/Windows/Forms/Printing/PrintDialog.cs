@@ -398,8 +398,10 @@ namespace System.Windows.Forms
 
                 if (!PrintDlg(ref data))
                 {
+#if DEBUG
                     var result = PInvoke.CommDlgExtendedError();
                     Debug.Assert(result == 0, $"PrintDlg returned non zero error code: {result}");
+#endif
                     return false;
                 }
 
