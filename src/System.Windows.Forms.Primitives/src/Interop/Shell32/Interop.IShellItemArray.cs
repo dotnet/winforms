@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using Shell = Windows.Win32.UI.Shell.PropertiesSystem;
 
 internal static partial class Interop
 {
@@ -23,7 +22,7 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT GetPropertyStore(
-                Shell.GETPROPERTYSTOREFLAGS flags,
+                GETPROPERTYSTOREFLAGS flags,
                 ref Guid riid,
                 out IntPtr ppv);
 

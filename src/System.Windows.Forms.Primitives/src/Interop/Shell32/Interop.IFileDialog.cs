@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using Shell = Windows.Win32.UI.Shell;
 
 internal static partial class Interop
 {
@@ -79,7 +78,7 @@ internal static partial class Interop
             [PreserveSig]
             HRESULT AddPlace(
                 IShellItem psi,
-                Shell.FDAP fdap);
+                FDAP fdap);
 
             void SetDefaultExtension(
                 [MarshalAs(UnmanagedType.LPWStr)] string pszDefaultExtension);

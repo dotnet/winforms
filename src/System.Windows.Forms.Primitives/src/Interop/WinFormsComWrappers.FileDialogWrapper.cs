@@ -4,7 +4,6 @@
 
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Shell = Windows.Win32.UI.Shell;
 
 internal partial class Interop
 {
@@ -178,10 +177,10 @@ internal partial class Interop
                 ppsi = ppsi_local == IntPtr.Zero ? null : (Shell32.IShellItem)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppsi_local, CreateObjectFlags.Unwrap);
             }
 
-            HRESULT Shell32.IFileDialog.AddPlace(Shell32.IShellItem psi, Shell.FDAP fdap)
+            HRESULT Shell32.IFileDialog.AddPlace(Shell32.IShellItem psi, FDAP fdap)
             {
                 IntPtr psi_local = WinFormsComWrappers.Instance.GetComPointer(psi, IID.IShellItem);
-                return ((delegate* unmanaged<IntPtr, IntPtr, Shell.FDAP, HRESULT>)(*(*(void***)_wrappedInstance + 21)))
+                return ((delegate* unmanaged<IntPtr, IntPtr, FDAP, HRESULT>)(*(*(void***)_wrappedInstance + 21)))
                     (_wrappedInstance, psi_local, fdap);
             }
 

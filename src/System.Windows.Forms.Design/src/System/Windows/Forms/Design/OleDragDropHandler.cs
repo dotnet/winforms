@@ -11,7 +11,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Design.Behavior;
 using static Interop;
-using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms.Design
 {
@@ -539,7 +538,7 @@ namespace System.Windows.Forms.Design
 
             using User32.GetDcScope dc = new(handle);
             using PInvoke.ObjectScope pen =
-                new(PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 2, (uint)ColorTranslator.ToWin32(backColor)));
+                new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 2, (uint)ColorTranslator.ToWin32(backColor)));
 
             using Gdi32.SetRop2Scope rop2Scope = new(dc, rop2);
             using Gdi32.SelectObjectScope brushSelection = new(dc, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));

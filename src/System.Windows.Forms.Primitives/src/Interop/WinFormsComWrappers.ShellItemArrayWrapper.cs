@@ -4,7 +4,6 @@
 
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Shell = Windows.Win32.UI.Shell.PropertiesSystem;
 
 internal partial class Interop
 {
@@ -38,7 +37,7 @@ internal partial class Interop
                 }
             }
 
-            HRESULT Shell32.IShellItemArray.GetPropertyStore(Shell.GETPROPERTYSTOREFLAGS flags, ref Guid riid, out IntPtr ppv)
+            HRESULT Shell32.IShellItemArray.GetPropertyStore(GETPROPERTYSTOREFLAGS flags, ref Guid riid, out IntPtr ppv)
             {
                 fixed (Guid* riid_local = &riid)
                 fixed (IntPtr* ppv_local = &ppv)
