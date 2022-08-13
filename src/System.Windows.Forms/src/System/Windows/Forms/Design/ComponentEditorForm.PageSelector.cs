@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Design
                 int backColor,
                 int textColor)
             {
-                SIZE size = new();
+                Size size = new();
                 RECT rc2 = new();
                 RECT rc = rcIn;
                 ImageList imagelist = ImageList;
@@ -123,7 +123,7 @@ namespace System.Windows.Forms.Design
                 fixed (char* pItemText = itemText)
                 {
                     // Get the height of the font
-                    PInvoke.GetTextExtentPoint32W(dc, pItemText, itemText.Length, &size);
+                    PInvoke.GetTextExtentPoint32W(dc, pItemText, itemText.Length, (SIZE*)(void*)&size);
                 }
 
                 // Draw the caption

@@ -3813,7 +3813,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     if (rgItems is not null && rgItems.Length > 0)
                     {
                         string value;
-                        SIZE textSize = default;
+                        Size textSize = default;
 
                         for (int i = 0; i < rgItems.Length; i++)
                         {

@@ -111,13 +111,8 @@ namespace System.Windows.Forms
             Debug.Assert(PInvoke.GetROP2(hdc) == (int)Gdi32.R2.COPYPEN);
             Debug.Assert(PInvoke.GetBkMode(hdc) == (int)Gdi32.BKMODE.OPAQUE);
 
-            XFORM xform = default;
-            Debug.Assert(PInvoke.GetWorldTransform(hdc, &xform));
-            Matrix3x2 matrix = new(xform.eM11, xform.eM12, xform.eM21, xform.eM22, 0, 0)
-            {
-                Translation = new Vector2(xform.eDx, xform.eDy)
-            };
-
+            Matrix3x2 matrix = default;
+            Debug.Assert(PInvoke.GetWorldTransform(hdc, (XFORM*)(void*)&matrix));
             Debug.Assert(matrix.IsIdentity);
         }
     }

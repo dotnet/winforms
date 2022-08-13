@@ -34,13 +34,9 @@ namespace System
             TextAlign = (Gdi32.TA)PInvoke.GetTextAlign(hdc);
             BackgroundMode = (Gdi32.BKMODE)PInvoke.GetBkMode(hdc);
 
-            XFORM transform = default;
-            PInvoke.GetWorldTransform(hdc, &transform);
-
-            Transform = new Matrix3x2(transform.eM11, transform.eM12, transform.eM21, transform.eM22, 0, 0)
-            {
-                Translation = new Vector2(transform.eDx, transform.eDy)
-            };
+            Matrix3x2 transform = default;
+            PInvoke.GetWorldTransform(hdc, (XFORM*)(void*)&transform);
+            Transform = transform;
 
             Point point = default;
             PInvoke.GetBrushOrgEx(hdc, &point);

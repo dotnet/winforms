@@ -289,15 +289,15 @@ namespace System.Windows.Forms
                 return Size.Empty;
             }
 
-            SIZE size = default;
-            using var selectFont = new Gdi32.SelectObjectScope(hdc, hfont);
+            Size size = default;
+            using Gdi32.SelectObjectScope selectFont = new (hdc, hfont);
 
             fixed (char* pText = text)
             {
-                PInvoke.GetTextExtentPoint32W(hdc, pText, text.Length, &size);
+                PInvoke.GetTextExtentPoint32W(hdc, pText, text.Length, (SIZE*)(void*)&size);
             }
 
-            return new Size(size.Width, size.Height);
+            return size;
         }
     }
 }

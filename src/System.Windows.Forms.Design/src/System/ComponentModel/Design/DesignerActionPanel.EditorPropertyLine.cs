@@ -87,8 +87,8 @@ namespace System.ComponentModel.Design
                             {
                                 fixed (char* ps = s)
                                 {
-                                    SIZE textSize = default;
-                                    PInvoke.GetTextExtentPoint32W(hdc, ps, s.Length, &textSize);
+                                    Size textSize = default;
+                                    PInvoke.GetTextExtentPoint32W(hdc, ps, s.Length, (SIZE*)(void*)&textSize);
                                     maxWidth = Math.Max(textSize.Width, maxWidth);
                                 }
                             }

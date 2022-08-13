@@ -768,10 +768,10 @@ namespace System.Windows.Forms
 
             if ((tm.tmPitchAndFamily & (byte)Gdi32.TMPF.FIXED_PITCH) != 0)
             {
-                SIZE size = default;
+                Size size = default;
                 fixed (char* ps = FontMeasureString)
                 {
-                    PInvoke.GetTextExtentPoint32W(dc, ps, FontMeasureString.Length, &size);
+                    PInvoke.GetTextExtentPoint32W(dc, ps, FontMeasureString.Length, (SIZE*)(void*)&size);
                 }
 
                 // Note: intentional integer round off here for Win32 compat
