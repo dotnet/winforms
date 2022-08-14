@@ -9,6 +9,7 @@ Imports System.Collections.Specialized
 Imports System.ComponentModel
 Imports System.Text
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports System.Windows.Forms.Primitives
 
 Namespace Microsoft.VisualBasic.Logging
 
@@ -163,20 +164,10 @@ Namespace Microsoft.VisualBasic.Logging
                     If _listenerAttributes Is Nothing Then
                         _listenerAttributes = Attributes
                     End If
-                    Return _hasBeenInitializedFromConfigFile
+                    Return LocalAppContextSwitches.AssumeVbLogClassWasConfiguredByConfigFile
                 End Get
             End Property
 
-            ''' <summary>
-            ''' Overriding this function is the trick that tells us whether this trace source was configured
-            ''' from a config file or not.  It only gets called if a config file was found.
-            ''' </summary>
-            Protected Overrides Function GetSupportedAttributes() As String()
-                _hasBeenInitializedFromConfigFile = True
-                Return MyBase.GetSupportedAttributes()
-            End Function
-
-            Private _hasBeenInitializedFromConfigFile As Boolean 'True if we this TraceSource is initialized from a config file.  False if somebody just news one up.
             Private _listenerAttributes As StringDictionary
 
         End Class
