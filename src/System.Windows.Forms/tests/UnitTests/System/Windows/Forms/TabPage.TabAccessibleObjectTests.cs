@@ -33,6 +33,24 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(createControl, tabControl.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void TabAccessibilityObject_IsDisconnected_WhenTabPageReleasesUiaProvider()
+        {
+            using TabPage tabPage = new();
+            EnforceTabAccessibilityObjectCreation(tabPage);
+
+            tabPage.ReleaseUiaProvider(tabPage.Handle);
+
+            Assert.Null(tabPage.TestAccessor().Dynamic._tabAccessibilityObject);
+            Assert.True(tabPage.IsHandleCreated);
+
+            static void EnforceTabAccessibilityObjectCreation(TabPage tabPage)
+            {
+                _ = tabPage.TabAccessibilityObject;
+                Assert.NotNull(tabPage.TestAccessor().Dynamic._tabAccessibilityObject);
+            }
+        }
+
         [WinFormsTheory]
         [InlineData(null, "")]
         [InlineData("", "")]
@@ -1046,10 +1064,10 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotNull(accessibleObject1.RuntimeId);
             Assert.Equal(tabControl.HandleInternal, (IntPtr)accessibleObject1.RuntimeId[1]);
-            Assert.Equal(accessibleObject1.GetChildId(), accessibleObject1.RuntimeId[2]);
+            Assert.Equal(accessibleObject1.GetHashCode(), accessibleObject1.RuntimeId[2]);
             Assert.NotNull(accessibleObject2.RuntimeId);
             Assert.Equal(tabControl.HandleInternal, (IntPtr)accessibleObject2.RuntimeId[1]);
-            Assert.Equal(accessibleObject2.GetChildId(), accessibleObject2.RuntimeId[2]);
+            Assert.Equal(accessibleObject2.GetHashCode(), accessibleObject2.RuntimeId[2]);
             Assert.Equal(createControl, pages[0].IsHandleCreated);
             Assert.Equal(createControl, pages[1].IsHandleCreated);
             Assert.Equal(createControl, tabControl.IsHandleCreated);

@@ -2282,15 +2282,9 @@ namespace System.Windows.Forms.Tests
             comboBox.SelectedIndex = selectedIndex;
             comboBox.ResetEventsCount();
 
-            // https://docs.microsoft.com/windows/win32/inputdev/wm-keyup
-            // The MSDN page tells us what bits of lParam to use for each of the parameters.
-            // All we need to do is some bit shifting to assemble lParam.
-            nint keyCode = (nint)key;
-            nint lParam = 0x00000001 | keyCode << 16;
             for (int i = 0; i < expectedKeyPressesCount; i++)
             {
-                User32.SendMessageW(comboBox, User32.WM.KEYDOWN, keyCode, lParam);
-                User32.SendMessageW(comboBox, User32.WM.KEYUP, keyCode, lParam);
+                KeyboardSimulator.KeyPress(comboBox, key);
             }
 
             Assert.Equal(expectedKeyPressesCount, comboBox.EventsCount);

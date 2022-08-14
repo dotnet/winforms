@@ -6961,7 +6961,7 @@ namespace System.Windows.Forms
             {
                 int pos = -1; // start with -1 to handle double &'s
                 char c2 = char.ToUpper(charCode, CultureInfo.CurrentCulture);
-                for (; ;)
+                for (; ; )
                 {
                     if (pos + 1 >= text.Length)
                     {
@@ -10185,10 +10185,18 @@ namespace System.Windows.Forms
                 UiaCore.UiaReturnRawElementProvider(handle, 0, 0, null);
             }
 
-            if (OsVersion.IsWindows8OrGreater && IsAccessibilityObjectCreated)
+            if (OsVersion.IsWindows8OrGreater && TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
             {
-                UiaCore.UiaDisconnectProvider(AccessibilityObject);
+                UiaCore.UiaDisconnectProvider(accessibleObject);
             }
+
+            Properties.SetObject(s_accessibilityProperty, null);
+        }
+
+        private protected bool TryGetAccessibilityObject([NotNullWhen(true)] out AccessibleObject? accessibleObject)
+        {
+            accessibleObject = Properties.GetObject(s_accessibilityProperty) as AccessibleObject;
+            return accessibleObject is not null;
         }
 
         /// <summary>

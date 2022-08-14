@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Drawing;
 using static Interop;
 
@@ -118,14 +117,16 @@ namespace System.Windows.Forms
                     ? _owningListView.GetSubItemRect(_owningItem.Index, subItemIndex)
                     : Rectangle.Empty;
 
+            /// <devdoc>
+            /// .Caller should ensure that the current OS is Windows 8 or greater.
+            /// </devdoc>
             internal override void ReleaseChildUiaProviders()
             {
                 base.ReleaseChildUiaProviders();
 
                 foreach (AccessibleObject accessibleObject in _listViewSubItemAccessibleObjects.Values)
                 {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(accessibleObject);
-                    Debug.Assert(result == HRESULT.S_OK);
+                    UiaCore.UiaDisconnectProvider(accessibleObject);
                 }
 
                 _listViewSubItemAccessibleObjects.Clear();
