@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
@@ -400,7 +399,7 @@ namespace System.Windows.Forms
                 {
 #if DEBUG
                     var result = PInvoke.CommDlgExtendedError();
-                    Debug.Assert(result == 0, $"PrintDlg returned non zero error code: {result}");
+                    Diagnostics.Debug.Assert(result == 0, $"PrintDlg returned non zero error code: {result}");
 #endif
                     return false;
                 }
