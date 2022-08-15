@@ -82,7 +82,7 @@ namespace System.Windows.Forms
 
                 if (hdc.IsNull)
                 {
-                    screenDC = Gdi32.CreateDC(_deviceName, lpszDeviceName: null, lpszOutput: null, devMode: 0);
+                    screenDC = PInvoke.CreateDCW(info.szDevice, pwszDevice: null, pszPort: null, pdm: null);
                 }
             }
 

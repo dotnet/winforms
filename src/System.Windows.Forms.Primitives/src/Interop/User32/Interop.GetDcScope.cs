@@ -44,7 +44,7 @@ internal static partial class Interop
             ///  Creates a DC scope for the primary monitor (not the entire desktop).
             /// </summary>
             /// <remarks>
-            ///   <see cref="Gdi32.CreateDC(string, string, string, IntPtr)" /> is the API to get the DC for the
+            ///   <see cref="PInvoke.CreateDCW(PCWSTR, PCWSTR, PCWSTR, Windows.Win32.Graphics.Gdi.DEVMODEW*)" /> is the API to get the DC for the
             ///   entire desktop.
             /// </remarks>
             public static GetDcScope ScreenDC => new GetDcScope(IntPtr.Zero);
