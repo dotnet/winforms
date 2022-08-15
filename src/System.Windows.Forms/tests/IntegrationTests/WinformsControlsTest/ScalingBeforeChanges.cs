@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Windows.Win32;
 using Windows.Win32.Graphics.Gdi;
 using static Interop;
 
@@ -35,8 +36,8 @@ namespace WinformsControlsTest
             HDC hDC = User32.GetDC(handleRef);
             if (!hDC.IsNull)
             {
-                x = Gdi32.GetDeviceCaps(hDC, Gdi32.DeviceCapability.LOGPIXELSX);
-                y = Gdi32.GetDeviceCaps(hDC, Gdi32.DeviceCapability.LOGPIXELSY);
+                x = PInvoke.GetDeviceCaps(hDC, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+                y = PInvoke.GetDeviceCaps(hDC, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
 
                 User32.ReleaseDC(handleRef, hDC);
             }

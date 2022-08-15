@@ -31,7 +31,7 @@ namespace System.Windows.Forms
 
             internal unsafe MetafileDCWrapper(HDC hOriginalDC, Size size)
             {
-                Debug.Assert(Gdi32.GetObjectType(hOriginalDC) == Gdi32.OBJ.ENHMETADC,
+                Debug.Assert((OBJ_TYPE)PInvoke.GetObjectType(hOriginalDC) == OBJ_TYPE.OBJ_ENHMETADC,
                     "Why wrap a non-Enhanced MetaFile DC?");
 
                 if (size.Width < 0 || size.Height < 0)
@@ -43,8 +43,8 @@ namespace System.Windows.Forms
                 _destRect = new(size);
                 HDC = PInvoke.CreateCompatibleDC((HDC)default);
 
-                int planes = Gdi32.GetDeviceCaps(HDC, Gdi32.DeviceCapability.PLANES);
-                int bitsPixel = Gdi32.GetDeviceCaps(HDC, Gdi32.DeviceCapability.BITSPIXEL);
+                int planes = PInvoke.GetDeviceCaps(HDC, GET_DEVICE_CAPS_INDEX.PLANES);
+                int bitsPixel = PInvoke.GetDeviceCaps(HDC, GET_DEVICE_CAPS_INDEX.BITSPIXEL);
                 _hBitmap = PInvoke.CreateBitmap(size.Width, size.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
                 _hOriginalBmp = (HBITMAP)Gdi32.SelectObject(HDC, _hBitmap);
             }
@@ -109,112 +109,120 @@ namespace System.Windows.Forms
                     // Restore original bitmap
                     Gdi32.SelectObject(hdcSrc, hBitmap);
 
-                    if (!Gdi32.GetObjectW(hBitmap, out Gdi32.BITMAP bmp))
+                    if (!PInvoke.GetObject(hBitmap, out Gdi32.BITMAP bmp))
                     {
                         return false;
                     }
 
-                    var lpbmi = new Gdi32.BITMAPINFO
-                    {
-                        bmiHeader = new Gdi32.BITMAPINFOHEADER
-                        {
-                            biSize = (uint)sizeof(Gdi32.BITMAPINFOHEADER),
-                            biWidth = bmp.bmWidth,
-                            biHeight = bmp.bmHeight,
-                            biPlanes = 1,
-                            biBitCount = bmp.bmBitsPixel,
-                            biCompression = Gdi32.BI.RGB
-                        },
-                        bmiColors = new byte[Gdi32.BITMAPINFO.MaxColorSize * 4]
-                    };
-
-                    // Include the palette for 256 color bitmaps
-                    long iColors = 1 << (bmp.bmBitsPixel * bmp.bmPlanes);
-                    if (iColors <= 256)
-                    {
-                        byte[] aj = ArrayPool<byte>.Shared.Rent(sizeof(Gdi32.PALETTEENTRY) * 256);
-                        try
-                        {
-                            Gdi32.GetSystemPaletteEntries(hdcSrc, 0, (uint)iColors, aj);
-
-                            fixed (byte* pcolors = lpbmi.bmiColors)
-                            {
-                                fixed (byte* ppal = aj)
-                                {
-                                    Gdi32.RGBQUAD* prgb = (Gdi32.RGBQUAD*)pcolors;
-                                    Gdi32.PALETTEENTRY* lppe = (Gdi32.PALETTEENTRY*)ppal;
-
-                                    // Convert the palette entries to RGB quad entries
-                                    for (i = 0; i < (int)iColors; i++)
-                                    {
-                                        prgb[i].rgbRed = lppe[i].peRed;
-                                        prgb[i].rgbBlue = lppe[i].peBlue;
-                                        prgb[i].rgbGreen = lppe[i].peGreen;
-                                    }
-                                }
-                            }
-                        }
-                        finally
-                        {
-                            ArrayPool<byte>.Shared.Return(aj);
-                        }
-                    }
+                    long colorEntryCount = 1 << (bmp.bmBitsPixel * bmp.bmPlanes);
 
                     // Allocate memory to hold the bitmap bits
                     long bitsPerScanLine = bmp.bmBitsPixel * (long)bmp.bmWidth;
                     long bytesPerScanLine = (bitsPerScanLine + 7) / 8;
                     long totalBytesReqd = bytesPerScanLine * bmp.bmHeight;
-                    byte[] lpBits = new byte[totalBytesReqd];
+                    byte[] imageBuffer = ArrayPool<byte>.Shared.Rent((int)totalBytesReqd);
 
-                    // Get the bitmap bits
-                    int diRet = Gdi32.GetDIBits(
-                        hdcSrc,
-                        hBitmap,
-                        0,
-                        (uint)bmp.bmHeight,
-                        lpBits,
-                        ref lpbmi,
-                        Gdi32.DIB.RGB_COLORS);
-                    if (diRet == 0)
+                    byte[] bitmapInfoBuffer = ArrayPool<byte>.Shared
+                        .Rent((int)checked((sizeof(BITMAPINFOHEADER) + (sizeof(RGBQUAD) * colorEntryCount))));
+                    try
                     {
-                        return false;
-                    }
+                        fixed (byte* bi = bitmapInfoBuffer)
+                        fixed (byte* pib = imageBuffer)
+                        {
+                            *((BITMAPINFOHEADER*)bi) = new BITMAPINFOHEADER
+                            {
+                                biSize = (uint)sizeof(BITMAPINFOHEADER),
+                                biWidth = bmp.bmWidth,
+                                biHeight = bmp.bmHeight,
+                                biPlanes = 1,
+                                biBitCount = bmp.bmBitsPixel,
+                                biCompression = (uint)Gdi32.BI.RGB
+                            };
 
-                    // Set the destination coordinates depending on whether stretch-to-fit was chosen
-                    int xDest, yDest, cxDest, cyDest;
-                    if (bStretch)
-                    {
-                        xDest = rect.left;
-                        yDest = rect.top;
-                        cxDest = rect.right - rect.left;
-                        cyDest = rect.bottom - rect.top;
-                    }
-                    else
-                    {
-                        xDest = rect.left;
-                        yDest = rect.top;
-                        cxDest = bmp.bmWidth;
-                        cyDest = bmp.bmHeight;
-                    }
+                            // Include the palette for 256 color bitmaps
+                            if (colorEntryCount <= 256)
+                            {
+                                byte[] aj = ArrayPool<byte>.Shared.Rent((int)(sizeof(PALETTEENTRY) * colorEntryCount));
+                                try
+                                {
+                                    fixed (byte* ppal = aj)
+                                    {
+                                        PInvoke.GetSystemPaletteEntries(hdcSrc, 0, (uint)colorEntryCount, (PALETTEENTRY*)ppal);
+                                        byte* pcolors = bi + sizeof(BITMAPINFOHEADER);
+                                        RGBQUAD* prgb = (RGBQUAD*)pcolors;
+                                        PALETTEENTRY* lppe = (PALETTEENTRY*)ppal;
 
-                    // Paint the bitmap
-                    int iRet = Gdi32.StretchDIBits(
-                        hdcDest,
-                        xDest,
-                        yDest,
-                        cxDest,
-                        cyDest,
-                        0,
-                        0,
-                        bmp.bmWidth,
-                        bmp.bmHeight,
-                        lpBits,
-                        ref lpbmi,
-                        Gdi32.DIB.RGB_COLORS,
-                        Gdi32.ROP.SRCCOPY);
-                    if (iRet == NativeMethods.GDI_ERROR)
+                                        // Convert the palette entries to RGB quad entries
+                                        for (i = 0; i < (int)colorEntryCount; i++)
+                                        {
+                                            prgb[i].rgbRed = lppe[i].peRed;
+                                            prgb[i].rgbBlue = lppe[i].peBlue;
+                                            prgb[i].rgbGreen = lppe[i].peGreen;
+                                        }
+                                    }
+                                }
+                                finally
+                                {
+                                    ArrayPool<byte>.Shared.Return(aj);
+                                }
+                            }
+
+                            // Get the bitmap bits
+                            int diRet = PInvoke.GetDIBits(
+                                hdcSrc,
+                                hBitmap,
+                                start: 0,
+                                (uint)bmp.bmHeight,
+                                pib,
+                                (BITMAPINFO*)bi,
+                                DIB_USAGE.DIB_RGB_COLORS);
+                            if (diRet == 0)
+                            {
+                                return false;
+                            }
+
+                            // Set the destination coordinates depending on whether stretch-to-fit was chosen
+                            int xDest, yDest, cxDest, cyDest;
+                            if (bStretch)
+                            {
+                                xDest = rect.left;
+                                yDest = rect.top;
+                                cxDest = rect.right - rect.left;
+                                cyDest = rect.bottom - rect.top;
+                            }
+                            else
+                            {
+                                xDest = rect.left;
+                                yDest = rect.top;
+                                cxDest = bmp.bmWidth;
+                                cyDest = bmp.bmHeight;
+                            }
+
+                            // Paint the bitmap
+                            int iRet = PInvoke.StretchDIBits(
+                                hdcDest,
+                                xDest,
+                                yDest,
+                                cxDest,
+                                cyDest,
+                                0,
+                                0,
+                                bmp.bmWidth,
+                                bmp.bmHeight,
+                                pib,
+                                (BITMAPINFO*)bi,
+                                DIB_USAGE.DIB_RGB_COLORS,
+                                ROP_CODE.SRCCOPY);
+                            if (iRet == NativeMethods.GDI_ERROR)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    finally
                     {
-                        return false;
+                        ArrayPool<byte>.Shared.Return(bitmapInfoBuffer);
+                        ArrayPool<byte>.Shared.Return(imageBuffer);
                     }
                 }
                 finally

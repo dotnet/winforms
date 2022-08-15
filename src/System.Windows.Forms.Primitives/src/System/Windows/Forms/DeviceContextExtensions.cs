@@ -33,9 +33,9 @@ namespace System.Windows.Forms
             int bottom,
             HPEN hpen)
         {
-            using var penScope = new Gdi32.SelectObjectScope(hdc, (HGDIOBJ)hpen.Value);
-            using var ropScope = new Gdi32.SetRop2Scope(hdc, Gdi32.R2.COPYPEN);
-            using var brushScope = new Gdi32.SelectObjectScope(hdc, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
+            using Gdi32.SelectObjectScope penScope = new(hdc, hpen);
+            using Gdi32.SetRop2Scope ropScope = new(hdc, Gdi32.R2.COPYPEN);
+            using Gdi32.SelectObjectScope brushScope = new(hdc, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
 
             Gdi32.Rectangle(hdc, left, top, right, bottom);
         }
@@ -105,7 +105,7 @@ namespace System.Windows.Forms
             => FindNearestColor(hdc.HDC, color);
 
         /// <summary>
-        ///  Calls <see cref="Gdi32.GetNearestColor(HDC, int)"/> to get the nearest color for the given
+        ///  Calls <see cref="PInvoke.GetNearestColor(HDC, uint)"/> to get the nearest color for the given
         ///  <paramref name="color"/>. Returns the original color if the color didn't actually change, retaining
         ///  the state of the color.
         /// </summary>
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
         /// </remarks>
         internal static Color FindNearestColor(this HDC hdc, Color color)
         {
-            Color newColor = ColorTranslator.FromWin32(Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(color)));
+            Color newColor = ColorTranslator.FromWin32((int)PInvoke.GetNearestColor(hdc, (uint)ColorTranslator.ToWin32(color)));
             return newColor.ToArgb() == color.ToArgb() ? color : newColor;
         }
 

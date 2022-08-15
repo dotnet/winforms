@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
                     Assert.False(hregion.IsNull);
                     try
                     {
-                        int result = GetClipRgn(hdc, hregion);
+                        int result = PInvoke.GetClipRgn(hdc, hregion);
 
                         // We should have no clipping region
                         Assert.Equal(0, result);
@@ -81,7 +81,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
         }
 
         [Fact]
-        public void RegionScope_GetRegion()
+        public unsafe void RegionScope_GetRegion()
         {
             // Create a bitmap using the screen's stats
             HDC hdc = PInvoke.CreateCompatibleDC((HDC)default);
@@ -99,7 +99,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
                     SelectClipRgn(hdc, originalRegion);
                     using PInvoke.RegionScope retrievedRegion = new(hdc);
                     RECT rect = default;
-                    RegionType type = GetRgnBox(retrievedRegion, ref rect);
+                    RegionType type = (RegionType)PInvoke.GetRgnBox(retrievedRegion, &rect);
                     Assert.Equal(RegionType.SIMPLEREGION, type);
                     Assert.Equal(rectangle, (Rectangle)rect);
                 }

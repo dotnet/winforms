@@ -394,9 +394,9 @@ namespace System.Windows.Forms
                 return;
             }
 
-            using var hdc = new User32.GetDcScope(Handle);
-            screendpi = new Point(Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSX),
-                                  Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSY));
+            using User32.GetDcScope hdc = new(Handle);
+            screendpi = new Point(PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX),
+                                  PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY));
 
             Size pageSize = pageInfo[StartPage].PhysicalSize;
             Size controlPhysicalSize = new Size(PixelsToPhysical(new Point(Size), screendpi));

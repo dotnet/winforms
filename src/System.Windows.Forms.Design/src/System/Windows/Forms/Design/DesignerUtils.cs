@@ -569,7 +569,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Identifies where the text baseline for our control which should be based on bounds, padding, font, and textalignment.
         /// </summary>
-        public static int GetTextBaseline(Control ctrl, ContentAlignment alignment)
+        public unsafe static int GetTextBaseline(Control ctrl, ContentAlignment alignment)
         {
             //determine the actual client area we are working in (w/padding)
             Rectangle face = ctrl.ClientRectangle;
@@ -579,8 +579,8 @@ namespace System.Windows.Forms.Design
             using PInvoke.ObjectScope hFont = new(ctrl.Font.ToHFONT());
             using Gdi32.SelectObjectScope hFontOld = new(dc, hFont);
 
-            var metrics = new Gdi32.TEXTMETRICW();
-            Gdi32.GetTextMetricsW(dc, ref metrics);
+            TEXTMETRICW metrics = default;
+            PInvoke.GetTextMetrics(dc, &metrics);
 
             //get the font metrics via gdi
             // Add the font ascent to the baseline

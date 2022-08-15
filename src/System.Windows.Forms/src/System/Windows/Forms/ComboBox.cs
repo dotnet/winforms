@@ -3801,7 +3801,7 @@ namespace System.Windows.Forms
         ///  to add extra functionality, but should not forget to call
         ///  base.wndProc(m); to ensure the combo continues to function properly.
         /// </summary>
-        protected override void WndProc(ref Message m)
+        protected unsafe override void WndProc(ref Message m)
         {
             switch ((WM)m.Msg)
             {
@@ -3905,7 +3905,9 @@ namespace System.Windows.Forms
                     break;
 
                 case WM.PAINT:
-                    if (GetStyle(ControlStyles.UserPaint) == false && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup) && !(SystemInformation.HighContrast && BackColor == SystemColors.Window))
+                    if (!GetStyle(ControlStyles.UserPaint)
+                        && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)
+                        && !(SystemInformation.HighContrast && BackColor == SystemColors.Window))
                     {
                         using PInvoke.RegionScope dropDownRegion = new(FlatComboBoxAdapter._dropDownRect);
                         using PInvoke.RegionScope windowRegion = new(Bounds);
@@ -3915,7 +3917,7 @@ namespace System.Windows.Forms
 
                         PInvoke.CombineRgn(dropDownRegion, windowRegion, dropDownRegion, RGN_COMBINE_MODE.RGN_DIFF);
                         RECT updateRegionBoundingRect = default;
-                        Gdi32.GetRgnBox(windowRegion, ref updateRegionBoundingRect);
+                        PInvoke.GetRgnBox(windowRegion, &updateRegionBoundingRect);
 
                         // Call the base class to do its painting (with a clipped DC).
                         bool useBeginPaint = m.WParamInternal == 0u;

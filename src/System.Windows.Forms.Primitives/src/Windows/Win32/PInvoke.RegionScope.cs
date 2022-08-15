@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
-using static Interop;
 using Drawing = System.Drawing;
 
 namespace Windows.Win32
@@ -42,13 +41,13 @@ namespace Windows.Win32
             }
 
             /// <summary>
-            ///  Creates a clipping region copy via <see cref="Gdi32.GetClipRgn(HDC, HRGN)"/> for the given device context.
+            ///  Creates a clipping region copy via <see cref="GetClipRgn(HDC, HRGN)"/> for the given device context.
             /// </summary>
             /// <param name="hdc">Handle to a device context to copy the clipping region from.</param>
             public RegionScope(HDC hdc)
             {
                 HRGN region = CreateRectRgn(0, 0, 0, 0);
-                int result = Gdi32.GetClipRgn(hdc, region);
+                int result = GetClipRgn(hdc, region);
                 Debug.Assert(result != -1, "GetClipRgn failed");
 
                 if (result == 1)
