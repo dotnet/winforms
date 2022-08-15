@@ -33,8 +33,7 @@ internal partial class Interop
                 try
                 {
                     Ole32.IDropTarget instance = ComInterfaceDispatch.GetInstance<Ole32.IDropTarget>((ComInterfaceDispatch*)thisPtr);
-                    var dataObject = WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(pDataObj, CreateObjectFlags.Unwrap);
-                    return (int)instance.DragEnter(dataObject, grfKeyState, pt, ref *pdwEffect);
+                    return (int)instance.DragEnter(Marshal.GetObjectForIUnknown(pDataObj), grfKeyState, pt, ref *pdwEffect);
                 }
                 catch (Exception ex)
                 {
@@ -79,8 +78,7 @@ internal partial class Interop
                 try
                 {
                     Ole32.IDropTarget instance = ComInterfaceDispatch.GetInstance<Ole32.IDropTarget>((ComInterfaceDispatch*)thisPtr);
-                    var dataObject = WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(pDataObj, CreateObjectFlags.Unwrap);
-                    return (int)instance.Drop(dataObject, grfKeyState, pt, ref *pdwEffect);
+                    return (int)instance.Drop(Marshal.GetObjectForIUnknown(pDataObj), grfKeyState, pt, ref *pdwEffect);
                 }
                 catch (Exception ex)
                 {
