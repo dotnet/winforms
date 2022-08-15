@@ -165,7 +165,8 @@ Namespace Microsoft.VisualBasic.Logging
                         _listenerAttributes = Attributes
                     End If
 
-                    Return LocalAppContextSwitches.AssumeVbLogClassWasConfiguredByConfigFile
+                    ' TODO: This is a tempory fix, which will break configuring logging via file for the time being. See: https://github.com/dotnet/winforms/pull/7590
+                    Return False
                 End Get
             End Property
 
