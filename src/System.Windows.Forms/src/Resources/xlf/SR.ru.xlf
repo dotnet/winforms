@@ -264,12 +264,12 @@
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
-        <target state="new">Occurs when the binding context has changed.</target>
+        <target state="translated">Происходит при изменении контекста привязки.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingComponentBindingContextDescr">
         <source>Gets or sets the BindingContext for this bindable Component.</source>
-        <target state="new">Gets or sets the BindingContext for this bindable Component.</target>
+        <target state="translated">Возвращает или задает BindingContext для этого привязываемого компонента.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingManagerBadIndex">
@@ -1159,22 +1159,22 @@
       </trans-unit>
       <trans-unit id="CommandCanExecuteChangedEventDescr">
         <source>Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</source>
-        <target state="new">Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</target>
+        <target state="translated">Происходит при изменении состояния ICommand.CanExecute(object?) команды, назначенной свойству Command.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandChangedEventDescr">
         <source>Occurs when the assigned ICommand object of the Command property has changed.</source>
-        <target state="new">Occurs when the assigned ICommand object of the Command property has changed.</target>
+        <target state="translated">Происходит при изменении назначенного объекта ICommand свойства Command.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandComponentCommandDescr">
         <source>Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</source>
-        <target state="new">Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</target>
+        <target state="translated">Возвращает или задает объект ICommand, делегат Execute которого выполняется при каждом вызове события Click этого компонента.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandComponentCommandParameterDescr">
         <source>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</source>
-        <target state="new">Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</target>
+        <target state="translated">Возвращает или задает параметр, передаваемый объекту свойства Command при выполнении или запросе контекста выполнения.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -1184,7 +1184,7 @@
       </trans-unit>
       <trans-unit id="CommandParameterChangedEventDescr">
         <source>Occurs when the value of the CommandParameter property has changed.</source>
-        <target state="new">Occurs when the value of the CommandParameter property has changed.</target>
+        <target state="translated">Происходит при изменении значения свойства CommandParameter.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommonDialogHelpRequested">
@@ -1494,7 +1494,7 @@
       </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
-        <target state="new">Occurs when the value of the DataContext property changes.</target>
+        <target state="translated">Возникает при изменении значения свойства DataContext.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDisplayRectangleDescr">
@@ -4904,7 +4904,7 @@ If you click Continue, the application will ignore this error and attempt to con
       </trans-unit>
       <trans-unit id="ExpandedStateName">
         <source>Expanded</source>
-        <target state="new">Expanded</target>
+        <target state="translated">Развернуто</target>
         <note />
       </trans-unit>
       <trans-unit id="ExternalException">
@@ -9959,7 +9959,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripItemBindingContextDescr">
         <source>Gets or sets the BindingContext for this toolstrip item.</source>
-        <target state="new">Gets or sets the BindingContext for this toolstrip item.</target>
+        <target state="translated">Возвращает или задает параметр BindingContext для этого элемента панели инструментов.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemCircularReference">
@@ -10059,12 +10059,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripItemOnCommandChangedDescr">
         <source>Occurs whenever the bindable command changes.</source>
-        <target state="new">Occurs whenever the bindable command changes.</target>
+        <target state="translated">Происходит при каждом изменении привязываемой команды.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnBindingContextChangedDescr">
         <source>Occurs whenever the binding context changes.</source>
-        <target state="new">Occurs whenever the binding context changes.</target>
+        <target state="translated">Происходит при каждом изменении контекста привязки.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnClickDescr">

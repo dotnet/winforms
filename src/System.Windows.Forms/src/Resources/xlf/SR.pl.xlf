@@ -264,12 +264,12 @@
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
-        <target state="new">Occurs when the binding context has changed.</target>
+        <target state="translated">Występuje, gdy kontekst powiązania zostanie zmieniony.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingComponentBindingContextDescr">
         <source>Gets or sets the BindingContext for this bindable Component.</source>
-        <target state="new">Gets or sets the BindingContext for this bindable Component.</target>
+        <target state="translated">Pobiera lub ustawia element BindingContext dla tego składnika, który można powiązać.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingManagerBadIndex">
@@ -1159,22 +1159,22 @@
       </trans-unit>
       <trans-unit id="CommandCanExecuteChangedEventDescr">
         <source>Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</source>
-        <target state="new">Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</target>
+        <target state="translated">Występuje, gdy stan ICommand.CanExecute(object?) polecenia przypisanego do właściwości polecenia uległ zmianie.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandChangedEventDescr">
         <source>Occurs when the assigned ICommand object of the Command property has changed.</source>
-        <target state="new">Occurs when the assigned ICommand object of the Command property has changed.</target>
+        <target state="translated">Występuje, gdy przypisany obiekt ICommand właściwości polecenia zostanie zmieniony.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandComponentCommandDescr">
         <source>Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</source>
-        <target state="new">Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</target>
+        <target state="translated">Pobiera lub ustawia obiekt ICommand, którego delegat wykonania jest wykonywany za każdym razem, gdy zdarzenie kliknięcia tego składnika zostanie wywołane.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandComponentCommandParameterDescr">
         <source>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</source>
-        <target state="new">Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</target>
+        <target state="translated">Pobiera lub ustawia parametr przekazywany do obiektu właściwości polecenia podczas wykonywania lub żądania kontekstu wykonywania.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -1184,7 +1184,7 @@
       </trans-unit>
       <trans-unit id="CommandParameterChangedEventDescr">
         <source>Occurs when the value of the CommandParameter property has changed.</source>
-        <target state="new">Occurs when the value of the CommandParameter property has changed.</target>
+        <target state="translated">Występuje, gdy wartość właściwości CommandParameter zostanie zmieniona.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommonDialogHelpRequested">
@@ -1494,7 +1494,7 @@
       </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
-        <target state="new">Occurs when the value of the DataContext property changes.</target>
+        <target state="translated">Występuje, gdy wartość właściwości DataContext zostanie zmieniona.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDisplayRectangleDescr">
@@ -4903,7 +4903,7 @@ Jeśli klikniesz pozycję Kontynuuj, aplikacja zignoruje ten błąd i będzie pr
       </trans-unit>
       <trans-unit id="ExpandedStateName">
         <source>Expanded</source>
-        <target state="new">Expanded</target>
+        <target state="translated">Rozwinięte</target>
         <note />
       </trans-unit>
       <trans-unit id="ExternalException">
@@ -9958,7 +9958,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="ToolStripItemBindingContextDescr">
         <source>Gets or sets the BindingContext for this toolstrip item.</source>
-        <target state="new">Gets or sets the BindingContext for this toolstrip item.</target>
+        <target state="translated">Pobiera lub ustawia element BindingContext dla tego elementu toolstrip.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemCircularReference">
@@ -10058,12 +10058,12 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="ToolStripItemOnCommandChangedDescr">
         <source>Occurs whenever the bindable command changes.</source>
-        <target state="new">Occurs whenever the bindable command changes.</target>
+        <target state="translated">Występuje za każdym razem, gdy polecenie, które można powiązać, zmieni się.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnBindingContextChangedDescr">
         <source>Occurs whenever the binding context changes.</source>
-        <target state="new">Occurs whenever the binding context changes.</target>
+        <target state="translated">Występuje za każdym razem, gdy zmienia się kontekst powiązania.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnClickDescr">
