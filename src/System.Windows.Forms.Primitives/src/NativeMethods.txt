@@ -24,6 +24,7 @@ CreateDC
 CreateDIBSection
 CreateEnhMetaFileW
 CreateICW
+CreateFontIndirectW
 CreateHalftonePalette
 CreatePatternBrush
 CreatePen

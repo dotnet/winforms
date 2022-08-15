@@ -8,6 +8,7 @@ using System.Drawing;
 using static Interop;
 using static Interop.UiaCore;
 using static Interop.User32;
+using LOGFONTW = Windows.Win32.Graphics.Gdi.LOGFONTW;
 
 namespace System.Windows.Forms.Automation
 {
@@ -680,7 +681,7 @@ namespace System.Windows.Forms.Automation
 
         private static COLORREF GetBackgroundColor() => GetSysColor(COLOR.WINDOW);
 
-        private static string GetFontName(LOGFONTW logfont) => logfont.FaceName.ToString();
+        private static string GetFontName(LOGFONTW logfont) => logfont.lfFaceName.ToString();
 
         private static double GetFontSize(LOGFONTW logfont)
         {
@@ -691,7 +692,7 @@ namespace System.Windows.Forms.Automation
             return Math.Round((double)(-logfont.lfHeight) * 72 / lpy);
         }
 
-        private static Gdi32.FW GetFontWeight(LOGFONTW logfont) => logfont.lfWeight;
+        private static Gdi32.FW GetFontWeight(LOGFONTW logfont) => (Gdi32.FW)logfont.lfWeight;
 
         private static COLORREF GetForegroundColor() => GetSysColor(COLOR.WINDOWTEXT);
 

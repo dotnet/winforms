@@ -7,6 +7,7 @@ using System.Windows.Forms.Automation;
 using Xunit;
 using static Interop;
 using static Interop.User32;
+using LOGFONTW = Windows.Win32.Graphics.Gdi.LOGFONTW;
 
 namespace System.Windows.Forms.Tests
 {
@@ -385,7 +386,7 @@ namespace System.Windows.Forms.Tests
 
                 LOGFONTW expected = LOGFONTW.FromFont(comboBox.Font);
                 LOGFONTW actual = provider.Logfont;
-                Assert.False(string.IsNullOrEmpty(actual.FaceName.ToString()));
+                Assert.False(string.IsNullOrEmpty(actual.lfFaceName.ToString()));
                 Assert.Equal(expected, actual);
                 Assert.True(comboBox.IsHandleCreated);
                 Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
@@ -401,11 +402,11 @@ namespace System.Windows.Forms.Tests
             {
                 using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
                 ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
-                LOGFONTW expected = new LOGFONTW();
+                LOGFONTW expected = default;
 
                 LOGFONTW actual = provider.Logfont;
 
-                Assert.True(string.IsNullOrEmpty(actual.FaceName.ToString()));
+                Assert.True(string.IsNullOrEmpty(actual.lfFaceName.ToString()));
                 Assert.Equal(expected, actual);
                 Assert.False(comboBox.IsHandleCreated);
                 Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
@@ -1058,7 +1059,7 @@ namespace System.Windows.Forms.Tests
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
             LOGFONTW logFont = provider.Logfont;
 
-            string actual = logFont.FaceName.ToString();
+            string actual = logFont.lfFaceName.ToString();
 
             Assert.Equal("Segoe UI", actual);
             Assert.True(comboBox.IsHandleCreated);

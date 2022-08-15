@@ -8,6 +8,7 @@ using Xunit;
 using static System.Windows.Forms.TextBoxBase;
 using static Interop;
 using static Interop.User32;
+using LOGFONTW = Windows.Win32.Graphics.Gdi.LOGFONTW;
 
 namespace System.Windows.Forms.Tests
 {
@@ -361,7 +362,7 @@ namespace System.Windows.Forms.Tests
 
                 LOGFONTW expected = LOGFONTW.FromFont(textBoxBase.Font);
                 LOGFONTW actual = provider.Logfont;
-                Assert.False(string.IsNullOrEmpty(actual.FaceName.ToString()));
+                Assert.False(string.IsNullOrEmpty(actual.lfFaceName.ToString()));
                 Assert.Equal(expected, actual);
                 Assert.True(textBoxBase.IsHandleCreated);
             }
@@ -373,9 +374,9 @@ namespace System.Windows.Forms.Tests
             using TextBoxBase textBoxBase = new SubTextBoxBase();
             TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
 
-            LOGFONTW expected = new LOGFONTW();
+            LOGFONTW expected = default;
             LOGFONTW actual = provider.Logfont;
-            Assert.True(string.IsNullOrEmpty(actual.FaceName.ToString()));
+            Assert.True(string.IsNullOrEmpty(actual.lfFaceName.ToString()));
             Assert.Equal(expected, actual);
             Assert.False(textBoxBase.IsHandleCreated);
         }
@@ -920,7 +921,7 @@ namespace System.Windows.Forms.Tests
 
             TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
             LOGFONTW logFont = provider.Logfont;
-            string actual = logFont.FaceName.ToString();
+            string actual = logFont.lfFaceName.ToString();
             Assert.Equal("Segoe UI", actual);
             Assert.True(textBoxBase.IsHandleCreated);
         }
