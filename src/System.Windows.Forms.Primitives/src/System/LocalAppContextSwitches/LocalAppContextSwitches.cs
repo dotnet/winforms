@@ -11,45 +11,38 @@ namespace System.Windows.Forms.Primitives
     internal static partial class LocalAppContextSwitches
     {
         private const string ScaleTopLevelFormMinMaxSizeForDpiSwitchName = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
-        private const string AssumeVbLogClassWasConfiguredByConfigFileName = "System.Windows.Forms.AssumeVbLogClassWasConfiguredByConfigFile";
-
-        private static readonly FrameworkName? s_targetFrameworkName = GetTargetFrameworkName();
 
         private static int s_scaleTopLevelFormMinMaxSizeForDpi;
-        private static int s_assumeVbLogClassWasConfiguredByConfigFile;
-        
-        private static readonly bool s_isNetCoreApp = (s_targetFrameworkName?.Identifier) == ".NETCoreApp";
-
-        private static FrameworkName? GetTargetFrameworkName()
-        {
-            string? targetFrameworkName = AppContext.TargetFrameworkName;
-
-            return targetFrameworkName is null ? null : new FrameworkName(targetFrameworkName);
-        }
-
         public static bool ScaleTopLevelFormMinMaxSizeForDpi
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => GetCachedSwitchValue(ScaleTopLevelFormMinMaxSizeForDpiSwitchName, ref s_scaleTopLevelFormMinMaxSizeForDpi);
         }
 
-        public static bool AssumeVbLogClassWasConfiguredByConfigFile
-            => GetSwitchValue(AssumeVbLogClassWasConfiguredByConfigFileName, ref s_assumeVbLogClassWasConfiguredByConfigFile);
+        private static readonly FrameworkName? s_targetFrameworkName = GetTargetFrameworkName();
+
+        private static readonly bool s_isNetCoreApp = (s_targetFrameworkName?.Identifier) == ".NETCoreApp";
+
+        private static FrameworkName? GetTargetFrameworkName()
+        {
+            string? targetFrameworkName = AppContext.TargetFrameworkName;
+            return targetFrameworkName is null ? null : new FrameworkName(targetFrameworkName);
+        }
 
         private static bool GetCachedSwitchValue(string switchName, ref int cachedSwitchValue)
-            => cachedSwitchValue switch
-            {
-                // The cached switch value has 3 states: 0 - unknown, 1 - true, -1 - false
+        {
+            // The cached switch value has 3 states: 0 - unknown, 1 - true, -1 - false
+            if (cachedSwitchValue < 0)
+                return false;
+            if (cachedSwitchValue > 0)
+                return true;
 
-                < 0 => false,
-                > 0 => true,
-                _ => GetSwitchValue(switchName, ref cachedSwitchValue)
-            };
+            return GetSwitchValue(switchName, ref cachedSwitchValue);
+        }
 
         private static bool GetSwitchValue(string switchName, ref int cachedSwitchValue)
         {
             bool hasSwitch = AppContext.TryGetSwitch(switchName, out bool isSwitchEnabled);
-            
             if (!hasSwitch)
             {
                 isSwitchEnabled = GetSwitchDefaultValue(switchName);
@@ -57,7 +50,6 @@ namespace System.Windows.Forms.Primitives
 
             // Is caching of the switches disabled?
             AppContext.TryGetSwitch("TestSwitch.LocalAppContext.DisableCaching", out bool disableCaching);
-            
             if (!disableCaching)
             {
                 cachedSwitchValue = isSwitchEnabled ? 1 /*true*/ : -1 /*false*/;
@@ -72,11 +64,15 @@ namespace System.Windows.Forms.Primitives
                     return false;
                 }
 
-                if (OsVersion.IsWindows10_1703OrGreater &&
-                    s_targetFrameworkName!.Version.CompareTo(new Version("8.0")) >= 0 &&
-                    switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
+                if (OsVersion.IsWindows10_1703OrGreater)
                 {
-                    return true;
+                    if (s_targetFrameworkName!.Version.CompareTo(new Version("8.0")) >= 0)
+                    {
+                        if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
+                        {
+                            return true;
+                        }
+                    }
                 }
 
                 return false;

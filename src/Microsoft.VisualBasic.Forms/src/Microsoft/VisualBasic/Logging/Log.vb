@@ -164,6 +164,7 @@ Namespace Microsoft.VisualBasic.Logging
                     If _listenerAttributes Is Nothing Then
                         _listenerAttributes = Attributes
                     End If
+
                     Return LocalAppContextSwitches.AssumeVbLogClassWasConfiguredByConfigFile
                 End Get
             End Property
