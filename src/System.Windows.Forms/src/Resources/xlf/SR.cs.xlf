@@ -264,12 +264,12 @@
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
-        <target state="new">Occurs when the binding context has changed.</target>
+        <target state="translated">Vyvolá se při změně kontextu vazby.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingComponentBindingContextDescr">
         <source>Gets or sets the BindingContext for this bindable Component.</source>
-        <target state="new">Gets or sets the BindingContext for this bindable Component.</target>
+        <target state="translated">Získá nebo nastaví bindingContext pro tuto vazbu komponenty.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingManagerBadIndex">
@@ -1159,22 +1159,22 @@
       </trans-unit>
       <trans-unit id="CommandCanExecuteChangedEventDescr">
         <source>Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</source>
-        <target state="new">Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</target>
+        <target state="translated">Vyvolá se v případě, že se změnil stav ICommand.CanExecute(object?) příkazu, který je přiřazen vlastnosti Command.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandChangedEventDescr">
         <source>Occurs when the assigned ICommand object of the Command property has changed.</source>
-        <target state="new">Occurs when the assigned ICommand object of the Command property has changed.</target>
+        <target state="translated">Vyvolá se v případě, že se změnil přiřazený objekt ICommand vlastnosti Command.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandComponentCommandDescr">
         <source>Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</source>
-        <target state="new">Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</target>
+        <target state="translated">Získá nebo nastaví objekt ICommand, jehož delegát Execute se spustí pokaždé, když se vyvolá událost Click této komponenty.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandComponentCommandParameterDescr">
         <source>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</source>
-        <target state="new">Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</target>
+        <target state="translated">Získá nebo nastaví parametr, který je předán objektu vlastnosti Command při spuštění nebo v požadavku kontextu spuštění.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -1184,7 +1184,7 @@
       </trans-unit>
       <trans-unit id="CommandParameterChangedEventDescr">
         <source>Occurs when the value of the CommandParameter property has changed.</source>
-        <target state="new">Occurs when the value of the CommandParameter property has changed.</target>
+        <target state="translated">Vyvolá se při změně hodnoty vlastnosti CommandParameter.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommonDialogHelpRequested">
@@ -1494,7 +1494,7 @@
       </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
-        <target state="new">Occurs when the value of the DataContext property changes.</target>
+        <target state="translated">Vyvolá se při změně hodnoty vlastnosti DataContext.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDisplayRectangleDescr">
@@ -4903,7 +4903,7 @@ Pokud kliknete na Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se p
       </trans-unit>
       <trans-unit id="ExpandedStateName">
         <source>Expanded</source>
-        <target state="new">Expanded</target>
+        <target state="translated">Rozbalené</target>
         <note />
       </trans-unit>
       <trans-unit id="ExternalException">
@@ -9958,7 +9958,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="ToolStripItemBindingContextDescr">
         <source>Gets or sets the BindingContext for this toolstrip item.</source>
-        <target state="new">Gets or sets the BindingContext for this toolstrip item.</target>
+        <target state="translated">Získá nebo nastaví bindingContext pro tuto položku toolstrip.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemCircularReference">
@@ -10058,12 +10058,12 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="ToolStripItemOnCommandChangedDescr">
         <source>Occurs whenever the bindable command changes.</source>
-        <target state="new">Occurs whenever the bindable command changes.</target>
+        <target state="translated">Vyvolá se při každé změně příkazu s možností vazby.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnBindingContextChangedDescr">
         <source>Occurs whenever the binding context changes.</source>
-        <target state="new">Occurs whenever the binding context changes.</target>
+        <target state="translated">Vyvolá se při každé změně kontextu vazby.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnClickDescr">

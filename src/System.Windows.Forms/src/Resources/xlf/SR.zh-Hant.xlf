@@ -264,12 +264,12 @@
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
-        <target state="new">Occurs when the binding context has changed.</target>
+        <target state="translated">在繫結內容變更時發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingComponentBindingContextDescr">
         <source>Gets or sets the BindingContext for this bindable Component.</source>
-        <target state="new">Gets or sets the BindingContext for this bindable Component.</target>
+        <target state="translated">取得或設定此可繫結元件的 BindingCoNtext。</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingManagerBadIndex">
@@ -1159,22 +1159,22 @@
       </trans-unit>
       <trans-unit id="CommandCanExecuteChangedEventDescr">
         <source>Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</source>
-        <target state="new">Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</target>
+        <target state="translated">在 ICommand.CanExecute(object?) 指派給 Command 屬性之命令的狀態變更時發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandChangedEventDescr">
         <source>Occurs when the assigned ICommand object of the Command property has changed.</source>
-        <target state="new">Occurs when the assigned ICommand object of the Command property has changed.</target>
+        <target state="translated">在 Command 屬性的指派 ICommand 物件變更時發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandComponentCommandDescr">
         <source>Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</source>
-        <target state="new">Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</target>
+        <target state="translated">取得或設定每當叫用此元件的 Click 事件時，其 Execute 委派會執行的 ICommand 物件。</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandComponentCommandParameterDescr">
         <source>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</source>
-        <target state="new">Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</target>
+        <target state="translated">取得或設定在執行或執行內容要求時傳遞到 Command 屬性物件的參數。</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -1184,7 +1184,7 @@
       </trans-unit>
       <trans-unit id="CommandParameterChangedEventDescr">
         <source>Occurs when the value of the CommandParameter property has changed.</source>
-        <target state="new">Occurs when the value of the CommandParameter property has changed.</target>
+        <target state="translated">CommandParameter 屬性的值變更時發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="CommonDialogHelpRequested">
@@ -1494,7 +1494,7 @@
       </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
-        <target state="new">Occurs when the value of the DataContext property changes.</target>
+        <target state="translated">DataCoNtext 屬性的值變更時發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDisplayRectangleDescr">
@@ -4903,7 +4903,7 @@ If you click Continue, the application will ignore this error and attempt to con
       </trans-unit>
       <trans-unit id="ExpandedStateName">
         <source>Expanded</source>
-        <target state="new">Expanded</target>
+        <target state="translated">展開的</target>
         <note />
       </trans-unit>
       <trans-unit id="ExternalException">
@@ -9958,7 +9958,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripItemBindingContextDescr">
         <source>Gets or sets the BindingContext for this toolstrip item.</source>
-        <target state="new">Gets or sets the BindingContext for this toolstrip item.</target>
+        <target state="translated">取得或設定此 toolstrip 專案的 BindingCoNtext。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemCircularReference">
@@ -10058,12 +10058,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripItemOnCommandChangedDescr">
         <source>Occurs whenever the bindable command changes.</source>
-        <target state="new">Occurs whenever the bindable command changes.</target>
+        <target state="translated">每當可系結的命令變更時發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnBindingContextChangedDescr">
         <source>Occurs whenever the binding context changes.</source>
-        <target state="new">Occurs whenever the binding context changes.</target>
+        <target state="translated">每當繫結內容變更時發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnClickDescr">
