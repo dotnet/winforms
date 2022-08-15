@@ -9,7 +9,6 @@ Imports System.Collections.Specialized
 Imports System.ComponentModel
 Imports System.Text
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
-Imports System.Windows.Forms.Primitives
 
 Namespace Microsoft.VisualBasic.Logging
 
