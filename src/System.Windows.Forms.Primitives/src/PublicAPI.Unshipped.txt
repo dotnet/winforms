@@ -1,5 +1,0 @@
-System.Windows.Forms.Message.HWnd.get -> nint
-System.Windows.Forms.Message.LParam.get -> nint
-System.Windows.Forms.Message.Result.get -> nint
-System.Windows.Forms.Message.WParam.get -> nint
-static System.Windows.Forms.Message.Create(nint hWnd, int msg, nint wparam, nint lparam) -> System.Windows.Forms.Message
