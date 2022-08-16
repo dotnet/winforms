@@ -1342,7 +1342,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                             if (result == 0)
                             {
-                                errorInfo = string.Format(CultureInfo.CurrentCulture, string.Format(SR.DispInvokeFailed, "SetValue", hr));
+                                errorInfo = string.Format(CultureInfo.CurrentCulture, SR.DispInvokeFailed, "SetValue", hr);
                             }
                             else
                             {
