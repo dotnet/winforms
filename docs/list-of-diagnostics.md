@@ -39,3 +39,16 @@ The acceptance criteria for adding an obsoletion includes:
 |  __`WFDEV002`__ | `DomainUpDown.DomainUpDownAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` controls. |
 |  __`WFDEV003`__ | `DomainUpDown.DomainItemAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` items. |
 
+
+## Analyzer Warnings
+
+The diagnostic id values reserved for Windows Forms .NET analyzer warnings are WF??001 through WF??999. 
+
+### Analyzer Diagnostics (`WF??001` - `WF??999`)
+
+| Diagnostic ID     | Description |
+| :---------------- | :---------- |
+|  __`WFAC001`__ | Unsupported project type. |
+|  __`WFAC002`__ | Unsupported property value. |
+|  __`WFAC010`__ | Unsupported high DPI configuration. |
+
