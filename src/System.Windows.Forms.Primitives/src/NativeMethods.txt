@@ -69,7 +69,7 @@ GetKeyboardLayoutList
 GetKeyState
 GetLocaleInfoEx
 GetMapMode
-GetModuleHandleEx
+GetModuleHandle
 GetNearestColor
 GetObjectType
 GetObjectW
