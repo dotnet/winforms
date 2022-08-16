@@ -43,13 +43,13 @@ namespace System.Windows.Forms
             internal override int GetChildIndex(AccessibleObject? child)
                 => child is TreeNodeAccessibleObject node ? node.Index : -1;
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TreeControlTypeId,
-                    UiaCore.UIA.IsEnabledPropertyId => _owningTreeView.Enabled,
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                    UiaCore.UIA.HasKeyboardFocusPropertyId => _owningTreeView.Enabled && _owningTreeView.Nodes.Count == 0,
+                    UIA.ControlTypePropertyId => UIA.TreeControlTypeId,
+                    UIA.HasKeyboardFocusPropertyId => _owningTreeView.Enabled && _owningTreeView.Nodes.Count == 0,
+                    UIA.IsEnabledPropertyId => _owningTreeView.Enabled,
+                    UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     _ => base.GetPropertyValue(propertyID)
                 };
 

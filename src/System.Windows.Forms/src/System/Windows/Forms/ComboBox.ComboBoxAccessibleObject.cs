@@ -197,23 +197,19 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
-                    case UiaCore.UIA.ControlTypePropertyId:
+                    UiaCore.UIA.ControlTypePropertyId =>
                         // If we don't set a default role for the accessible object
                         // it will be retrieved from Windows.
                         // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                        return _owningComboBox.AccessibleRole == AccessibleRole.Default
-                               ? UiaCore.UIA.ComboBoxControlTypeId
-                               : base.GetPropertyValue(propertyID);
-                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return _owningComboBox.Focused;
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
+                        _owningComboBox.AccessibleRole == AccessibleRole.Default
+                            ? UiaCore.UIA.ComboBoxControlTypeId
+                            : base.GetPropertyValue(propertyID),
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => _owningComboBox.Focused,
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             internal void RemoveListItemAccessibleObjectAt(int index)
             {

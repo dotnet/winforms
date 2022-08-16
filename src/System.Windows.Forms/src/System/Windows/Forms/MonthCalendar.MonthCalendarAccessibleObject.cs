@@ -431,9 +431,9 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.ControlTypePropertyId => _owningMonthCalendar.AccessibleRole == AccessibleRole.Default
-                        ? UiaCore.UIA.CalendarControlTypeId
-                        : base.GetPropertyValue(propertyID),
+                    UiaCore.UIA.ControlTypePropertyId when
+                        _owningMonthCalendar.AccessibleRole == AccessibleRole.Default
+                        => UiaCore.UIA.CalendarControlTypeId,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => IsEnabled,
                     _ => base.GetPropertyValue(propertyID)
                 };

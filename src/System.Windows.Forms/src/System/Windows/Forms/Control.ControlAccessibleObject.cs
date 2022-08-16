@@ -483,33 +483,23 @@ namespace System.Windows.Forms
             internal override bool IsIAccessibleExSupported()
                 => Owner is IAutomationLiveRegion ? true : base.IsIAccessibleExSupported();
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
-                    case UiaCore.UIA.LiveSettingPropertyId:
-                        return Owner is IAutomationLiveRegion owner ? owner.LiveSetting : base.GetPropertyValue(propertyID);
-                    case UiaCore.UIA.ControlTypePropertyId:
+                    UiaCore.UIA.ControlTypePropertyId =>
                         // "ControlType" value depends on owner's AccessibleRole value.
                         // See: docs/accessibility/accessible-role-controltype.md
-                        return AccessibleRoleControlTypeMap.GetControlType(Role);
-                    case UiaCore.UIA.NativeWindowHandlePropertyId:
-                        return Owner.InternalHandle;
-                    case UiaCore.UIA.IsEnabledPropertyId:
-                        return Owner.Enabled;
-                }
-
-                if (Owner.SupportsUiaProviders)
-                {
-                    switch (propertyID)
-                    {
-                        case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                            return Owner.CanSelect;
-                    }
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                        AccessibleRoleControlTypeMap.GetControlType(Role),
+                    UiaCore.UIA.IsEnabledPropertyId => Owner.Enabled,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId when
+                        Owner.SupportsUiaProviders
+                        => Owner.CanSelect,
+                    UiaCore.UIA.LiveSettingPropertyId => Owner is IAutomationLiveRegion owner
+                        ? owner.LiveSetting
+                        : base.GetPropertyValue(propertyID),
+                    UiaCore.UIA.NativeWindowHandlePropertyId => Owner.InternalHandle,
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             internal override bool RaiseAutomationEvent(UiaCore.UIA eventId)
             {

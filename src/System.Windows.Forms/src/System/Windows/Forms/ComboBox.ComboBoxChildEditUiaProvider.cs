@@ -78,26 +78,17 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.EditControlTypeId;
-                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return _owningComboBox.Focused;
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case UiaCore.UIA.IsEnabledPropertyId:
-                        return _owningComboBox.Enabled;
-                    case UiaCore.UIA.NativeWindowHandlePropertyId:
-                        return _handle;
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return false;
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.EditControlTypeId,
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => _owningComboBox.Focused,
+                    UiaCore.UIA.IsEnabledPropertyId => _owningComboBox.Enabled,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                    UiaCore.UIA.IsOffscreenPropertyId => false,
+                    UiaCore.UIA.NativeWindowHandlePropertyId => _handle,
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
             {

@@ -26,16 +26,12 @@ namespace System.Windows.Forms
                 return RaiseAutomationEvent(UiaCore.UIA.LiveRegionChangedEventId);
             }
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
-                    case UiaCore.UIA.LiveSettingPropertyId:
-                        return _owningToolStripStatusLabel.LiveSetting;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                    UiaCore.UIA.LiveSettingPropertyId => _owningToolStripStatusLabel.LiveSetting,
+                    _ => base.GetPropertyValue(propertyID)
+                };
         }
     }
 }
