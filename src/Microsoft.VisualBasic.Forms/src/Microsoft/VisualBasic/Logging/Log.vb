@@ -163,20 +163,12 @@ Namespace Microsoft.VisualBasic.Logging
                     If _listenerAttributes Is Nothing Then
                         _listenerAttributes = Attributes
                     End If
-                    Return _hasBeenInitializedFromConfigFile
+
+                    ' TODO: This is a tempory fix, which will break configuring logging via file for the time being. See: https://github.com/dotnet/winforms/pull/7590
+                    Return False
                 End Get
             End Property
 
-            ''' <summary>
-            ''' Overriding this function is the trick that tells us whether this trace source was configured
-            ''' from a config file or not.  It only gets called if a config file was found.
-            ''' </summary>
-            Protected Overrides Function GetSupportedAttributes() As String()
-                _hasBeenInitializedFromConfigFile = True
-                Return MyBase.GetSupportedAttributes()
-            End Function
-
-            Private _hasBeenInitializedFromConfigFile As Boolean 'True if we this TraceSource is initialized from a config file.  False if somebody just news one up.
             Private _listenerAttributes As StringDictionary
 
         End Class

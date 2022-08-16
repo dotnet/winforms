@@ -54,7 +54,7 @@ namespace System.Windows.Forms
             internal void DisconnectChildren()
             {
                 Debug.Assert(OsVersion.IsWindows8OrGreater);
-                if (_rowsAccessibleObjects == null)
+                if (_rowsAccessibleObjects is null)
                 {
                     return;
                 }
@@ -62,9 +62,11 @@ namespace System.Windows.Forms
                 foreach (CalendarRowAccessibleObject row in _rowsAccessibleObjects)
                 {
                     row.DisconnectChildren();
-                    HRESULT result = UiaCore.UiaDisconnectProvider(row);
-                    Debug.Assert(result == 0);
+                    UiaCore.UiaDisconnectProvider(row);
                 }
+
+                _rowsAccessibleObjects.Clear();
+                _rowsAccessibleObjects = null;
             }
 
             internal void ClearChildCollection()

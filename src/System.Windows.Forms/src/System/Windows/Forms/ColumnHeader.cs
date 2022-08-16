@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using static Interop;
@@ -488,8 +487,7 @@ namespace System.Windows.Forms
         {
             if (OsVersion.IsWindows8OrGreater && _accessibilityObject is not null)
             {
-                HRESULT result = UiaCore.UiaDisconnectProvider(AccessibilityObject);
-                Debug.Assert(result == HRESULT.S_OK);
+                UiaCore.UiaDisconnectProvider(_accessibilityObject);
                 _accessibilityObject = null;
             }
         }

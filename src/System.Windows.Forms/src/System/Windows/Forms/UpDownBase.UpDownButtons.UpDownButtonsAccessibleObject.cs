@@ -115,6 +115,15 @@ namespace System.Windows.Forms
 
                 public override AccessibleObject Parent => _owner.AccessibilityObject;
 
+                internal void ReleaseChildUiaProviders()
+                {
+                    UiaCore.UiaDisconnectProvider(_upButton);
+                    _upButton = null;
+
+                    UiaCore.UiaDisconnectProvider(_downButton);
+                    _downButton = null;
+                }
+
                 public override AccessibleRole Role
                 {
                     get

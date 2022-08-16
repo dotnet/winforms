@@ -385,11 +385,6 @@ namespace System.Windows.Forms
             return value;
         }
 
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new NumericUpDownAccessibleObject(this);
-        }
-
         /// <summary>
         ///  Decrements the value of the up-down control.
         /// </summary>

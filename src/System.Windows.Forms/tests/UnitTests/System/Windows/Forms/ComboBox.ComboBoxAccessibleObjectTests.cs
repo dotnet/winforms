@@ -407,5 +407,109 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(expectedDroppedDown, comboBox.DroppedDown);
         }
+
+        [WinFormsFact]
+        public void ComboBox_ReleaseUiaProvider_ClearsItemsAccessibleObjects()
+        {
+            using ComboBox comboBox = CreateComboBoxWithItems();
+            comboBox.CreateControl();
+            InitComboBoxItemsAccessibleObjects(comboBox);
+            var accessibleObject = (ComboBox.ComboBoxAccessibleObject)comboBox.AccessibilityObject;
+
+            Assert.Equal(comboBox.Items.Count, accessibleObject.ItemAccessibleObjects.Count);
+
+            comboBox.ReleaseUiaProvider(comboBox.Handle);
+
+            Assert.Equal(0, accessibleObject.ItemAccessibleObjects.Count);
+            Assert.True(comboBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ComboBoxItems_Clear_ClearsItemsAccessibleObjects()
+        {
+            using ComboBox comboBox = CreateComboBoxWithItems();
+            comboBox.CreateControl();
+            InitComboBoxItemsAccessibleObjects(comboBox);
+            var accessibleObject = (ComboBox.ComboBoxAccessibleObject)comboBox.AccessibilityObject;
+
+            Assert.Equal(comboBox.Items.Count, accessibleObject.ItemAccessibleObjects.Count);
+
+            comboBox.Items.Clear();
+
+            Assert.Equal(0, accessibleObject.ItemAccessibleObjects.Count);
+            Assert.True(comboBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ComboBoxItems_Remove_RemovesItemAccessibleObject()
+        {
+            using ComboBox comboBox = CreateComboBoxWithItems();
+            comboBox.CreateControl();
+            InitComboBoxItemsAccessibleObjects(comboBox);
+            var accessibleObject = (ComboBox.ComboBoxAccessibleObject)comboBox.AccessibilityObject;
+            ComboBox.ObjectCollection.Entry item = comboBox.Items.InnerList[0];
+
+            Assert.True(accessibleObject.ItemAccessibleObjects.ContainsKey(item));
+            Assert.Equal(comboBox.Items.Count, accessibleObject.ItemAccessibleObjects.Count);
+
+            comboBox.Items.Remove(item);
+
+            Assert.False(accessibleObject.ItemAccessibleObjects.ContainsKey(item));
+            Assert.True(comboBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ComboBoxItems_Remove_RemovesItemAccessibleObjectCorrectly_IfOneIsNotCreated()
+        {
+            using ComboBox comboBox = CreateComboBoxWithItems();
+            comboBox.CreateControl();
+            InitComboBoxItemsAccessibleObjects(comboBox);
+
+            // Add a new item, but don't create an accessible object for it.
+            comboBox.Items.Insert(0, "h");
+
+            var accessibleObject = (ComboBox.ComboBoxAccessibleObject)comboBox.AccessibilityObject;
+            ComboBox.ObjectCollection.Entry item = comboBox.Items.InnerList[0];
+
+            Assert.False(accessibleObject.ItemAccessibleObjects.ContainsKey(item));
+            // One item's accessible object is not created.
+            Assert.Equal(comboBox.Items.Count - 1, accessibleObject.ItemAccessibleObjects.Count);
+
+            // It shouldn't throw an exception when trying to remove the item's accessible object,
+            // that is not created for the tested item, from the ItemAccessibleObjects collection.
+            comboBox.Items.Remove(item);
+
+            Assert.Equal(comboBox.Items.Count, accessibleObject.ItemAccessibleObjects.Count);
+            Assert.True(comboBox.IsHandleCreated);
+        }
+
+        private ComboBox CreateComboBoxWithItems()
+        {
+            ComboBox comboBox = new();
+            comboBox.Items.AddRange(new object[]
+            {
+                "a",
+                "b",
+                "c",
+                "d",
+                "e",
+                "f",
+                "g"
+            });
+
+            return comboBox;
+        }
+
+        private void InitComboBoxItemsAccessibleObjects(ComboBox comboBox)
+        {
+            var listAccessibleObject = (ComboBox.ComboBoxChildListUiaProvider)comboBox.ChildListAccessibleObject;
+            int childCount = listAccessibleObject.GetChildFragmentCount();
+
+            // Force items accessiblity objects creation
+            for (int i = 0; i < childCount; i++)
+            {
+                listAccessibleObject.GetChildFragment(i);
+            }
+        }
     }
 }
