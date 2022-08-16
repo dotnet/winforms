@@ -1327,9 +1327,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                     else if (errorInfo is null)
                     {
-                        char[] IpBuffer = ArrayPool<char>.Shared.Rent(256 + 1);
+                        char[] buffer = ArrayPool<char>.Shared.Rent(256 + 1);
 
-                        fixed (char* b = IpBuffer)
+                        fixed (char* b = buffer)
                         {
                             uint result = PInvoke.FormatMessage(
                                 FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -1346,9 +1346,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             }
                             else
                             {
-                                errorInfo = TrimNewline(IpBuffer);
+                                ReadOnlySpan<char> buff = new(buffer);
+                                buff.TrimEnd('\n');
+                                buff.TrimEnd('\r');
+                                errorInfo = buff.ToString();
+                                //errorInfo = TrimNewline(buffer);
                             }
                         }
+
+                        ArrayPool<char>.Shared.Return(buffer);
                     }
 
                     throw new ExternalException(errorInfo, (int)hr);
