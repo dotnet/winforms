@@ -1350,7 +1350,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 buff.TrimEnd('\n');
                                 buff.TrimEnd('\r');
                                 errorInfo = buff.ToString();
-                                //errorInfo = TrimNewline(buffer);
                             }
                         }
 
@@ -1359,21 +1358,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     throw new ExternalException(errorInfo, (int)hr);
             }
-        }
-
-        private static string TrimNewline(char[] errorInfo)
-        {
-            int index = errorInfo.Length - 1;
-
-            while (index >= 0 && (errorInfo[index] == '\n' || errorInfo[index] == '\r'))
-            {
-                index--;
-            }
-
-            char[] temp = new char[index + 1];
-            Array.Copy(errorInfo, 0, temp, 0, index + 1);
-
-            return string.Join("", temp).ToString();
         }
 
         /// <summary>
