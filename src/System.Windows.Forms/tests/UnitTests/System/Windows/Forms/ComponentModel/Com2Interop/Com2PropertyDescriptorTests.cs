@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Reflection;
-using System.Text;
 using Xunit;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop.Tests
