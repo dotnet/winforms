@@ -977,7 +977,7 @@ This is the line 3";
         {
             LOGFONTW logfont = new()
             {
-                lfFaceName = faceName
+                FaceName = faceName
             };
 
             string actual = StaticNullTextRange.TestAccessor().GetFontName(logfont);

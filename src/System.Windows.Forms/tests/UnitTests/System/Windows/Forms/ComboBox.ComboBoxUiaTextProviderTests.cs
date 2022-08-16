@@ -386,7 +386,7 @@ namespace System.Windows.Forms.Tests
 
                 LOGFONTW expected = LOGFONTW.FromFont(comboBox.Font);
                 LOGFONTW actual = provider.Logfont;
-                Assert.False(string.IsNullOrEmpty(actual.lfFaceName.ToString()));
+                Assert.False(string.IsNullOrEmpty(actual.FaceName.ToString()));
                 Assert.Equal(expected, actual);
                 Assert.True(comboBox.IsHandleCreated);
                 Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
@@ -406,7 +406,7 @@ namespace System.Windows.Forms.Tests
 
                 LOGFONTW actual = provider.Logfont;
 
-                Assert.True(string.IsNullOrEmpty(actual.lfFaceName.ToString()));
+                Assert.True(string.IsNullOrEmpty(actual.FaceName.ToString()));
                 Assert.Equal(expected, actual);
                 Assert.False(comboBox.IsHandleCreated);
                 Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
@@ -1059,7 +1059,7 @@ namespace System.Windows.Forms.Tests
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
             LOGFONTW logFont = provider.Logfont;
 
-            string actual = logFont.lfFaceName.ToString();
+            string actual = logFont.FaceName.ToString();
 
             Assert.Equal("Segoe UI", actual);
             Assert.True(comboBox.IsHandleCreated);

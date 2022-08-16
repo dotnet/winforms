@@ -99,12 +99,12 @@ namespace System.Windows.Forms
                     lfItalic = (font.Style & FontStyle.Italic) == FontStyle.Italic ? True : False,
                     lfUnderline = (font.Style & FontStyle.Underline) == FontStyle.Underline ? True : False,
                     lfStrikeOut = (font.Style & FontStyle.Strikeout) == FontStyle.Strikeout ? True : False,
-                    lfFaceName = familyName
+                    FaceName = familyName
                 };
 
-                if (logFont.lfFaceName.AsSpan().IsEmpty)
+                if (logFont.FaceName.IsEmpty)
                 {
-                    logFont.lfFaceName = DefaultFaceName;
+                    logFont.FaceName = DefaultFaceName;
                 }
 
                 HFONT hfont = PInvoke.CreateFontIndirect(&logFont);
@@ -112,7 +112,7 @@ namespace System.Windows.Forms
                 if (hfont.IsNull)
                 {
                     // Get the default font if we couldn't get what we requested.
-                    logFont.lfFaceName = DefaultFaceName;
+                    logFont.FaceName = DefaultFaceName;
                     logFont.lfOutPrecision = (byte)Gdi32.OUT_PRECIS.TT_ONLY;
                     hfont = PInvoke.CreateFontIndirect(&logFont);
 

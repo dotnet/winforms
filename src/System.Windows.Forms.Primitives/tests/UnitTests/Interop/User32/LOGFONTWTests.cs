@@ -18,19 +18,19 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
         public unsafe void LogFont_FaceName()
         {
             LOGFONTW logFont = default;
-            logFont.lfFaceName = "TwoFace";
-            Assert.Equal("TwoFace", logFont.lfFaceName.ToString());
+            logFont.FaceName = "TwoFace";
+            Assert.Equal("TwoFace", logFont.FaceName.ToString());
 
             // Set a smaller name to make sure it gets terminated properly.
-            logFont.lfFaceName = "Face";
-            Assert.Equal("Face", logFont.lfFaceName.ToString());
+            logFont.FaceName = "Face";
+            Assert.Equal("Face", logFont.FaceName.ToString());
 
             // LOGFONT has space for 32 characters, we want to see it gets
             // cut to 31 to make room for the null.
             string bigString = new('*', 32);
 
-            logFont.lfFaceName = bigString;
-            Assert.True(logFont.lfFaceName.AsSpan().SequenceEqual(bigString.AsSpan().Slice(1)));
+            logFont.FaceName = bigString;
+            Assert.True(logFont.FaceName.SequenceEqual(bigString.AsSpan().Slice(1)));
         }
 
         [Fact]

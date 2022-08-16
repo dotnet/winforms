@@ -681,7 +681,7 @@ namespace System.Windows.Forms.Automation
 
         private static COLORREF GetBackgroundColor() => GetSysColor(COLOR.WINDOW);
 
-        private static string GetFontName(LOGFONTW logfont) => logfont.lfFaceName.ToString();
+        private static string GetFontName(LOGFONTW logfont) => logfont.FaceName.ToString();
 
         private static double GetFontSize(LOGFONTW logfont)
         {
