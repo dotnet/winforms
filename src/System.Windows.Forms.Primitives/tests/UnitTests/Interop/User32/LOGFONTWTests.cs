@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
-using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.User32
 {
@@ -29,7 +27,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
 
             // LOGFONT has space for 32 characters, we want to see it gets
             // cut to 31 to make room for the null.
-            string bigString = new string('*', 32);
+            string bigString = new('*', 32);
 
             logFont.FaceName = bigString;
             Assert.True(logFont.FaceName.SequenceEqual(bigString.AsSpan().Slice(1)));
@@ -39,7 +37,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
         public unsafe void CreateFontIndirect()
         {
             LOGFONTW logFont = default;
-            HFONT handle = Gdi32.CreateFontIndirectW(ref logFont);
+            HFONT handle = PInvoke.CreateFontIndirect(&logFont);
             Assert.False(handle.IsNull);
             Assert.True(PInvoke.DeleteObject(handle));
         }

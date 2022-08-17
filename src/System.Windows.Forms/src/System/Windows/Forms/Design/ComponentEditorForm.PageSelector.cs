@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Design
 
                 if (!hbitmapTemp.IsNull)
                 {
-                    _hbrushDither = Gdi32.CreatePatternBrush(hbitmapTemp);
+                    _hbrushDither = PInvoke.CreatePatternBrush(hbitmapTemp);
 
                     Debug.Assert(
                         !_hbrushDither.IsNull,

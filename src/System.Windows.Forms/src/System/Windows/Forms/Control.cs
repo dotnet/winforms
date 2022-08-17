@@ -883,7 +883,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    backBrush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(color));
+                    backBrush = PInvoke.CreateSolidBrush((uint)ColorTranslator.ToWin32(color));
                     SetState(States.OwnCtlBrush, true);
                 }
 
