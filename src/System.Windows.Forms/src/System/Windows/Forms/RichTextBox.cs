@@ -2862,8 +2862,8 @@ namespace System.Windows.Forms
                 dwEffects |= CFE.UNDERLINE;
             }
 
-            User32.LOGFONTW logFont = User32.LOGFONTW.FromFont(value);
-            var charFormat = new CHARFORMAT2W
+            LOGFONTW logFont = LOGFONTW.FromFont(value);
+            CHARFORMAT2W charFormat = new()
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W),
                 dwMask = dwMask,

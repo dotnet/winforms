@@ -2148,7 +2148,7 @@ namespace System.Windows.Forms
                 changed = true;
             }
 
-            User32.LOGFONTW logfont = User32.LOGFONTW.FromFont(source);
+            LOGFONTW logfont = LOGFONTW.FromFont(source);
 
             short fontWeight = target.Weight;
             if (fontWeight != (short)logfont.lfWeight)
@@ -2158,7 +2158,7 @@ namespace System.Windows.Forms
             }
 
             bool fontBold = target.Bold;
-            bool isBold = logfont.lfWeight >= Gdi32.FW.BOLD;
+            bool isBold = logfont.lfWeight >= (int)Gdi32.FW.BOLD;
             if (fontBold != isBold)
             {
                 target.Bold = isBold;

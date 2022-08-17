@@ -5,7 +5,6 @@
 using System.Drawing;
 using static Interop.UiaCore;
 using static Interop.User32;
-using LOGFONTW = Windows.Win32.Graphics.Gdi.LOGFONTW;
 
 namespace System.Windows.Forms.Automation
 {
