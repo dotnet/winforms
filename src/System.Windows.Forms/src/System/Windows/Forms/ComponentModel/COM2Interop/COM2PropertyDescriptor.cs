@@ -1346,10 +1346,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             }
                             else
                             {
-                                ReadOnlySpan<char> buff = new(buffer);
-                                buff.TrimEnd('\n');
-                                buff.TrimEnd('\r');
-                                errorInfo = buff.ToString();
+                                ReadOnlySpan<char> ipBuffer = new(buffer);
+                                ipBuffer.TrimEnd('\n');
+                                ipBuffer.TrimEnd('\r');
+                                errorInfo = ipBuffer.ToString();
                             }
                         }
 
