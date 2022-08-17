@@ -298,7 +298,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the Win32 instance handle for the application.
         /// </summary>
-        protected virtual nint Instance => PInvoke.GetModuleHandle(null);
+        protected virtual nint Instance => PInvoke.GetModuleHandle((PCWSTR)null);
 
         /// <summary>
         ///  Gets the Win32 common Open File Dialog OFN_* and FOS_* option flags.

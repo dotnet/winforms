@@ -442,7 +442,7 @@ namespace System.Windows.Forms
                 lpLogFont = &logFont,
                 Flags = (Comdlg32.CF)Options | Comdlg32.CF.INITTOLOGFONTSTRUCT | Comdlg32.CF.ENABLEHOOK,
                 lpfnHook = hookProcPtr,
-                hInstance = PInvoke.GetModuleHandle(null),
+                hInstance = PInvoke.GetModuleHandle((PCWSTR)null),
                 nSizeMin = minSize,
                 nSizeMax = maxSize == 0 ? int.MaxValue : maxSize,
                 rgbColors = ShowColor || ShowEffects

@@ -228,7 +228,7 @@ namespace System.Windows.Forms
                 s_hhook = PInvoke.SetWindowsHookEx(
                     WINDOWS_HOOK_ID.WH_JOURNALPLAYBACK,
                     &SendKeysHookProc.Callback,
-                    PInvoke.GetModuleHandle(null),
+                    PInvoke.GetModuleHandle((PCWSTR)null),
                     0);
 
                 if (s_hhook.IsNull)
@@ -246,7 +246,7 @@ namespace System.Windows.Forms
                 HHOOK hookHandle = PInvoke.SetWindowsHookEx(
                     WINDOWS_HOOK_ID.WH_JOURNALPLAYBACK,
                     &EmptyHookCallback,
-                    PInvoke.GetModuleHandle(null),
+                    PInvoke.GetModuleHandle((PCWSTR)null),
                     0);
 
                 s_hookSupported = !hookHandle.IsNull;
