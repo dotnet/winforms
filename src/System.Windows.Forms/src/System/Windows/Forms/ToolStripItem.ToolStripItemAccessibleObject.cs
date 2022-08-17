@@ -103,26 +103,18 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
                     // "ControlType" value depends on owner's AccessibleRole value.
                     // See: docs/accessibility/accessible-role-controltype.md
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return AccessibleRoleControlTypeMap.GetControlType(Role);
-                    case UiaCore.UIA.IsEnabledPropertyId:
-                        return _ownerItem.Enabled;
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return GetIsOffscreenPropertyValue(_ownerItem.Placement, Bounds);
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        return _ownerItem.CanSelect;
-                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return _ownerItem.Selected;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                    UiaCore.UIA.ControlTypePropertyId => AccessibleRoleControlTypeMap.GetControlType(Role),
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => _ownerItem.Selected,
+                    UiaCore.UIA.IsEnabledPropertyId => _ownerItem.Enabled,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => _ownerItem.CanSelect,
+                    UiaCore.UIA.IsOffscreenPropertyId => GetIsOffscreenPropertyValue(_ownerItem.Placement, Bounds),
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             public override string? Name
             {

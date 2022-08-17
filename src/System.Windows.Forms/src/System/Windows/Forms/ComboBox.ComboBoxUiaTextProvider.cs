@@ -335,6 +335,8 @@ namespace System.Windows.Forms
                 return new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start, start);
             }
 
+            public override Rectangle RectangleToScreen(Rectangle rect) => _owningComboBox.RectangleToScreen(rect);
+
             public override void SetSelection(int start, int end)
             {
                 if (!_owningComboBox.IsHandleCreated)

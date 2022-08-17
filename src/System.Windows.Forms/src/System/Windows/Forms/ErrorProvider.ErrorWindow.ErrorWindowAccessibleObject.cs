@@ -76,18 +76,13 @@ namespace System.Windows.Forms
                 /// </summary>
                 /// <param name="propertyID">The accessible property ID.</param>
                 /// <returns>The accessible property value.</returns>
-                internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-                {
-                    switch (propertyID)
+                internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                    propertyID switch
                     {
-                        case UiaCore.UIA.ControlTypePropertyId:
-                            return UiaCore.UIA.GroupControlTypeId;
-                        case UiaCore.UIA.NativeWindowHandlePropertyId:
-                            return _owner.Handle;
-                        default:
-                            return base.GetPropertyValue(propertyID);
-                    }
-                }
+                        UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.GroupControlTypeId,
+                        UiaCore.UIA.NativeWindowHandlePropertyId => _owner.Handle,
+                        _ => base.GetPropertyValue(propertyID)
+                    };
 
                 public override AccessibleObject? HitTest(int x, int y)
                 {

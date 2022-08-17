@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Primitives;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -1171,6 +1172,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// Scales container's properties Min and Max size with the scale factor provided.
+        /// </summary>
+        /// <param name="xScaleFactor">The scale factor to be applied on width of the property being scaled.</param>
+        /// <param name="yScaleFactor">The scale factor to be applied on height of the property being scaled.</param>
+        /// <param name="updateContainerSize"><see langword="true"/> to resize of the container control along with properties being scaled; otherwise, <see langword="false"/>.</param>
+        protected virtual void ScaleMinMaxSize(float xScaleFactor, float yScaleFactor, bool updateContainerSize = true)
+        { }
+
+        /// <summary>
         ///  Process an arrowKey press by selecting the next control in the group that the activeControl
         ///  belongs to.
         /// </summary>
@@ -1423,6 +1433,15 @@ namespace System.Windows.Forms
             SuspendAllLayout(this);
             try
             {
+                if (LocalAppContextSwitches.ScaleTopLevelFormMinMaxSizeForDpi)
+                {
+                    // The suggested rectangle comes from Windows, and it does not match with our calculations for scaling controls by AutoscaleFactor.
+                    // Hence, we cannot use AutoscaleFactor here for scaling the control properties. See the below description for more details.
+                    float xScaleFactor = (float)suggestedRectangle.Width / Width;
+                    float yScaleFactor = (float)suggestedRectangle.Height / Height;
+                    ScaleMinMaxSize(xScaleFactor, yScaleFactor, updateContainerSize: false);
+                }
+
                 // If this container is a top-level window, we would receive WM_DPICHANGED message that
                 // has SuggestedRectangle for the control. We are forced to use this in such cases to
                 // make the control placed in right location with respect to the new monitor that triggered

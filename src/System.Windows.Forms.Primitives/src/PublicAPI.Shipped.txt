@@ -15,6 +15,7 @@ override System.Windows.Forms.PaddingConverter.GetCreateInstanceSupported(System
 override System.Windows.Forms.PaddingConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext? context, object! value, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection!
 override System.Windows.Forms.PaddingConverter.GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
 static readonly System.Windows.Forms.Padding.Empty -> System.Windows.Forms.Padding
+static System.Windows.Forms.Message.Create(nint hWnd, int msg, nint wparam, nint lparam) -> System.Windows.Forms.Message
 static System.Windows.Forms.Message.operator !=(System.Windows.Forms.Message a, System.Windows.Forms.Message b) -> bool
 static System.Windows.Forms.Message.operator ==(System.Windows.Forms.Message a, System.Windows.Forms.Message b) -> bool
 static System.Windows.Forms.Padding.Add(System.Windows.Forms.Padding p1, System.Windows.Forms.Padding p2) -> System.Windows.Forms.Padding
@@ -62,12 +63,16 @@ System.Windows.Forms.HighDpiMode.SystemAware = 1 -> System.Windows.Forms.HighDpi
 System.Windows.Forms.Message
 System.Windows.Forms.Message.Equals(System.Windows.Forms.Message other) -> bool
 System.Windows.Forms.Message.GetLParam(System.Type! cls) -> object?
+System.Windows.Forms.Message.HWnd.get -> nint
 System.Windows.Forms.Message.HWnd.set -> void
+System.Windows.Forms.Message.LParam.get -> nint
 System.Windows.Forms.Message.LParam.set -> void
 System.Windows.Forms.Message.Message() -> void
 System.Windows.Forms.Message.Msg.get -> int
 System.Windows.Forms.Message.Msg.set -> void
+System.Windows.Forms.Message.Result.get -> nint
 System.Windows.Forms.Message.Result.set -> void
+System.Windows.Forms.Message.WParam.get -> nint
 System.Windows.Forms.Message.WParam.set -> void
 System.Windows.Forms.Padding
 System.Windows.Forms.Padding.All.get -> int

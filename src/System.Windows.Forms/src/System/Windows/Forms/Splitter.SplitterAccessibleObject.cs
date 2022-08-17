@@ -17,13 +17,12 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.ControlTypePropertyId
+                    UiaCore.UIA.ControlTypePropertyId when
                         // If we don't set a default role for the accessible object
                         // it will be retrieved from Windows.
                         // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                        => Owner.AccessibleRole == AccessibleRole.Default
-                           ? UiaCore.UIA.PaneControlTypeId
-                           : base.GetPropertyValue(propertyID),
+                        Owner.AccessibleRole == AccessibleRole.Default
+                        => UiaCore.UIA.PaneControlTypeId,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
                         // This is necessary for compatibility with MSAA proxy:
                         // IsKeyboardFocusable = true regardless the control is enabled/disabled.

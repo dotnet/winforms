@@ -253,8 +253,7 @@ namespace System.Windows.Forms
                 }
 
                 InnerList.Clear();
-
-                OwnerComboBoxAccessibleObject?.ItemAccessibleObjects.Clear();
+                OwnerComboBoxAccessibleObject?.ResetListItemAccessibleObjects();
 
                 _owner._selectedIndex = -1;
                 if (_owner.AutoCompleteSource == AutoCompleteSource.ListItems)
@@ -360,7 +359,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                OwnerComboBoxAccessibleObject?.ItemAccessibleObjects.Remove(InnerList[index]);
+                                OwnerComboBoxAccessibleObject?.RemoveListItemAccessibleObjectAt(index);
                                 InnerList.RemoveAt(index);
                             }
                         }
@@ -385,7 +384,7 @@ namespace System.Windows.Forms
                     _owner.NativeRemoveAt(index);
                 }
 
-                OwnerComboBoxAccessibleObject?.ItemAccessibleObjects.Remove(InnerList[index]);
+                OwnerComboBoxAccessibleObject?.RemoveListItemAccessibleObjectAt(index);
                 InnerList.RemoveAt(index);
 
                 if (!_owner.IsHandleCreated)

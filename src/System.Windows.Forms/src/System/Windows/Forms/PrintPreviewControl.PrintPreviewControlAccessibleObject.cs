@@ -20,12 +20,9 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.AutomationIdPropertyId
-                        => Owner.Name,
-                    UiaCore.UIA.HasKeyboardFocusPropertyId
-                        => _owningPrintPreviewControl.Focused,
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId
-                        => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                    UiaCore.UIA.AutomationIdPropertyId => Owner.Name,
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => _owningPrintPreviewControl.Focused,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     _ => base.GetPropertyValue(propertyID)
                 };
         }

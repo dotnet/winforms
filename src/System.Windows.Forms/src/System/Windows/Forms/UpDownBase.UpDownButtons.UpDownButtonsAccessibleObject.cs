@@ -61,13 +61,6 @@ namespace System.Windows.Forms
 
                 public override int GetChildCount() => 2;
 
-                internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
-                {
-                    UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
-                    UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
-                    _ => base.GetPropertyValue(propertyID),
-                };
-
                 public override AccessibleObject? HitTest(int x, int y)
                 {
                     if (UpButton.Bounds.Contains(x, y))
@@ -114,6 +107,15 @@ namespace System.Windows.Forms
                 }
 
                 public override AccessibleObject Parent => _owner.AccessibilityObject;
+
+                internal void ReleaseChildUiaProviders()
+                {
+                    UiaCore.UiaDisconnectProvider(_upButton);
+                    _upButton = null;
+
+                    UiaCore.UiaDisconnectProvider(_downButton);
+                    _downButton = null;
+                }
 
                 public override AccessibleRole Role
                 {

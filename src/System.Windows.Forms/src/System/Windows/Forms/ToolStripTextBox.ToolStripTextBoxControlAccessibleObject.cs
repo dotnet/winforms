@@ -20,13 +20,11 @@ namespace System.Windows.Forms
                     // If we don't set a default role for the accessible object
                     // it will be retrieved from Windows.
                     // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                    UiaCore.UIA.ControlTypePropertyId => Owner.AccessibleRole == AccessibleRole.Default
-                                                         ? UiaCore.UIA.EditControlTypeId
-                                                         : base.GetPropertyValue(propertyID),
-                    UiaCore.UIA.HasKeyboardFocusPropertyId
-                        => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
-                    UiaCore.UIA.IsOffscreenPropertyId
-                        => GetIsOffscreenPropertyValue(Owner.ToolStripControlHost?.Placement, Bounds),
+                    UiaCore.UIA.ControlTypePropertyId when
+                        Owner.AccessibleRole == AccessibleRole.Default
+                        => UiaCore.UIA.EditControlTypeId,
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
+                    UiaCore.UIA.IsOffscreenPropertyId => GetIsOffscreenPropertyValue(Owner.ToolStripControlHost?.Placement, Bounds),
                     _ => base.GetPropertyValue(propertyID)
                 };
 

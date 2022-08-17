@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -56,6 +57,7 @@ namespace System.Windows.Forms
             Size = new Size(100, 100);
             SetStyle(ControlStyles.ResizeRedraw, false);
             SetStyle(ControlStyles.Opaque | ControlStyles.OptimizedDoubleBuffer, true);
+            TabStop = false;
         }
 
         [SRCategory(nameof(SR.CatBehavior))]
@@ -269,6 +271,24 @@ namespace System.Windows.Forms
         {
             add => Events.AddHandler(EVENT_STARTPAGECHANGED, value);
             remove => Events.RemoveHandler(EVENT_STARTPAGECHANGED, value);
+        }
+
+        [DefaultValue(false)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DispId((int)Ole32.DispatchID.TABSTOP)]
+        public new bool TabStop
+        {
+            get => base.TabStop;
+            set => base.TabStop = value;
+        }
+
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new event EventHandler? TabStopChanged
+        {
+            add => base.TabStopChanged += value;
+            remove => base.TabStopChanged -= value;
         }
 
         /// <summary>

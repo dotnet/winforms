@@ -79,8 +79,8 @@ namespace System.Windows.Forms
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
-                    UiaCore.UIA.IsEnabledPropertyId => OwningScrollBar.Enabled,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => false,
+                    UiaCore.UIA.IsEnabledPropertyId => OwningScrollBar.Enabled,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => false,
                     _ => base.GetPropertyValue(propertyID)
                 };

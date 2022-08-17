@@ -217,8 +217,8 @@ namespace System.Windows.Forms
                  {
                      UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ListItemControlTypeId,
                      UiaCore.UIA.HasKeyboardFocusPropertyId => _owningListBox.Focused && _owningListBox.FocusedIndex == CurrentIndex,
-                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                      UiaCore.UIA.IsEnabledPropertyId => _owningListBox.Enabled,
+                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                      UiaCore.UIA.NativeWindowHandlePropertyId => _owningListBox.IsHandleCreated ? _owningListBox.Handle : IntPtr.Zero,
                      _ => base.GetPropertyValue(propertyID)
                  };

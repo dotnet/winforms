@@ -87,10 +87,10 @@ namespace System.Windows.Forms
                 internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                     => propertyID switch
                     {
-                        UiaCore.UIA.IsEnabledPropertyId => _owningLinkLabel.Enabled,
                         UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.HyperlinkControlTypeId,
-                        UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                         UiaCore.UIA.HasKeyboardFocusPropertyId => _owningLinkLabel.FocusLink == _owningLink,
+                        UiaCore.UIA.IsEnabledPropertyId => _owningLinkLabel.Enabled,
+                        UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                         _ => base.GetPropertyValue(propertyID)
                     };
 
