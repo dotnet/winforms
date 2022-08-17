@@ -19,22 +19,5 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop.Tests
             s_miVersionInfo = s_typeCom2PropertyDescriptor.GetMethod("TrimNewline", BindingFlags.Static | BindingFlags.NonPublic);
             Assert.NotNull(s_miVersionInfo);
         }
-
-        [Theory]
-        [InlineData("", "")]
-        [InlineData("\r", "")]
-        [InlineData("\n", "")]
-        [InlineData("\r\r\r\r", "")]
-        [InlineData("\n\n\n\n", "")]
-        [InlineData("\r\r\n\n\r\n\r\n", "")]
-        [InlineData("bla bla bla", "bla bla bla")]
-        [InlineData("bla bla bla\r\r\r\r\r\n\n\r\n\r\n\r\n", "bla bla bla")]
-        [InlineData("bla bla bla\r\n\nr\n\r\n\r\n", "bla bla bla\r\n\nr")]
-        public void TrimNewline_should_remove_all_trailing_CR_LF(string message, string expected)
-        {
-            string result = (string)s_miVersionInfo.Invoke(null, new[] { message.ToArray() });
-
-            Assert.Equal(expected, result);
-        }
     }
 }
