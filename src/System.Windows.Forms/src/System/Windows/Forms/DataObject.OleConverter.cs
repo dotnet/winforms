@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Buffers;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -136,7 +137,7 @@ namespace System.Windows.Forms
                     }
                     else if (format.Equals(DataFormats.FileDrop))
                     {
-                        data = ReadFileListFromHandle(hglobal);
+                        data = ReadFileListFromHandle((HDROP)hglobal);
                     }
                     else if (format.Equals(CF_DEPRECATED_FILENAME))
                     {
@@ -390,28 +391,33 @@ namespace System.Windows.Forms
             ///  Parses the HDROP format and returns a list of strings using
             ///  the DragQueryFile function.
             /// </summary>
-            private static string[]? ReadFileListFromHandle(IntPtr hdrop)
+            private unsafe static string[]? ReadFileListFromHandle(HDROP hdrop)
             {
-                uint count = Shell32.DragQueryFileW(hdrop, 0xFFFFFFFF, null);
+                uint count = PInvoke.DragQueryFile(hdrop, 0xFFFFFFFF, null, 0);
                 if (count == 0)
                 {
                     return null;
                 }
 
-                var sb = new StringBuilder(PInvoke.MAX_PATH);
+                Span<char> fileName = stackalloc char[PInvoke.MAX_PATH + 1];
                 var files = new string[count];
-                for (uint i = 0; i < count; i++)
-                {
-                    uint charlen = Shell32.DragQueryFileW(hdrop, i, sb);
-                    if (charlen == 0)
-                    {
-                        continue;
-                    }
 
-                    string s = sb.ToString(0, (int)charlen);
-                    files[i] = s;
+                fixed (char* buffer = fileName)
+                {
+                    for (uint i = 0; i < count; i++)
+                    {
+                        uint charlen = PInvoke.DragQueryFile(hdrop, i, buffer, (uint)fileName.Length);
+                        if (charlen == 0)
+                        {
+                            continue;
+                        }
+
+                        string s = fileName[..(int)charlen].ToString();
+                        files[i] = s;
+                    }
                 }
 
+                //ArrayPool<char>.Shared.Return(fileName);
                 return files;
             }
 

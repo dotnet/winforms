@@ -12,7 +12,6 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using static Interop;
-using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
@@ -590,7 +589,7 @@ namespace System.Windows.Forms
             {
                 medium.tymed = TYMED.TYMED_HGLOBAL;
                 medium.unionmember = PInvoke.GlobalAlloc(
-                    GMEM_MOVEABLE | GMEM_ZEROINIT,
+                    GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
                     1);
                 if (medium.unionmember == IntPtr.Zero)
                 {
@@ -815,7 +814,7 @@ namespace System.Windows.Forms
             }
 
             int size = (int)stream.Length;
-            handle = PInvoke.GlobalAlloc(GMEM_MOVEABLE, (uint)size);
+            handle = PInvoke.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, (uint)size);
             if (handle == 0)
             {
                 return HRESULT.E_OUTOFMEMORY;
@@ -863,7 +862,7 @@ namespace System.Windows.Forms
             // the character array is: "c:\temp1.txt\0c:\temp2.txt\0\0"
 
             // Determine the size of the data structure.
-            uint sizeInBytes = (uint)sizeof(Shell32.DROPFILES);
+            uint sizeInBytes = (uint)sizeof(DROPFILES);
             for (int i = 0; i < files.Length; i++)
             {
                 sizeInBytes += ((uint)files[i].Length + 1) * 2;
@@ -875,7 +874,7 @@ namespace System.Windows.Forms
             nint newHandle = PInvoke.GlobalReAlloc(
                 handle,
                 sizeInBytes,
-                (uint)GMEM_MOVEABLE);
+                (uint)GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE);
             if (newHandle == 0)
             {
                 return HRESULT.E_OUTOFMEMORY;
@@ -888,8 +887,8 @@ namespace System.Windows.Forms
             }
 
             // Write out the DROPFILES struct.
-            Shell32.DROPFILES* pDropFiles = (Shell32.DROPFILES*)basePtr;
-            pDropFiles->pFiles = (uint)sizeof(Shell32.DROPFILES);
+            DROPFILES* pDropFiles = (DROPFILES*)basePtr;
+            pDropFiles->pFiles = (uint)sizeof(DROPFILES);
             pDropFiles->pt = Point.Empty;
             pDropFiles->fNC = false;
             pDropFiles->fWide = true;
@@ -935,7 +934,7 @@ namespace System.Windows.Forms
                 newHandle = PInvoke.GlobalReAlloc(
                     handle,
                     byteSize,
-                    (uint)(GMEM_MOVEABLE | GMEM_ZEROINIT));
+                    (uint)(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT));
                 if (newHandle == 0)
                 {
                     return HRESULT.E_OUTOFMEMORY;
@@ -959,7 +958,7 @@ namespace System.Windows.Forms
                     newHandle = PInvoke.GlobalReAlloc(
                         handle,
                         (uint)pinvokeSize + 1,
-                        (uint)GMEM_MOVEABLE | (uint)GMEM_ZEROINIT);
+                        (uint)GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | (uint)GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT);
                     if (newHandle == 0)
                     {
                         return HRESULT.E_OUTOFMEMORY;
@@ -991,7 +990,7 @@ namespace System.Windows.Forms
             nint newHandle = PInvoke.GlobalReAlloc(
                 handle,
                 (uint)byteLength + 1,
-                (uint)(GMEM_MOVEABLE | GMEM_ZEROINIT));
+                (uint)(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT));
             if (newHandle == 0)
             {
                 return HRESULT.E_OUTOFMEMORY;
