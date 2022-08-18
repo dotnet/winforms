@@ -96,6 +96,7 @@ GetTextAlign
 GetTextColor
 GetTextExtentPoint32W
 GetTextMetrics
+GetThemeFont
 GetThreadLocale
 GetTickCount
 GetUpdateRect

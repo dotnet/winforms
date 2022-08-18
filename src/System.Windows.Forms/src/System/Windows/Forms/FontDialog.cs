@@ -351,7 +351,7 @@ namespace System.Windows.Forms
                 case User32.WM.COMMAND:
                     if (PARAM.ToInt(wparam) == 0x402)
                     {
-                        var logFont = new User32.LOGFONTW();
+                        LOGFONTW logFont = default;
                         PInvoke.SendMessage((HWND)hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, (WPARAM)0, ref logFont);
                         UpdateFont(ref logFont);
                         int index = PARAM.ToInt(User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETCURSEL));
@@ -432,7 +432,7 @@ namespace System.Windows.Forms
             void* hookProcPtr = (void*)Marshal.GetFunctionPointerForDelegate(hookProc);
             using var dc = User32.GetDcScope.ScreenDC;
             using Graphics graphics = Graphics.FromHdcInternal(dc);
-            User32.LOGFONTW logFont = User32.LOGFONTW.FromFont(Font, graphics);
+            LOGFONTW logFont = LOGFONTW.FromFont(Font, graphics);
 
             var cf = new Comdlg32.CHOOSEFONTW
             {
@@ -519,7 +519,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void UpdateFont(ref User32.LOGFONTW lf)
+        private void UpdateFont(ref LOGFONTW lf)
         {
             using var dc = User32.GetDcScope.ScreenDC;
             using Font fontInWorldUnits = Font.FromLogFont(lf, dc);
