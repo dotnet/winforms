@@ -503,7 +503,7 @@ namespace System.Windows.Forms
                 data.Flags &= ~(PD.SHOWHELP | PD.NONETWORKBUTTON);
 
                 HRESULT hr = UnsafeNativeMethods.PrintDlgEx(data);
-                if (hr.Failed() || data.dwResultAction == PD_RESULT.CANCEL)
+                if (hr.Failed || data.dwResultAction == PD_RESULT.CANCEL)
                 {
                     return false;
                 }

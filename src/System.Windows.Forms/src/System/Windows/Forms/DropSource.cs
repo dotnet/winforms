@@ -48,11 +48,11 @@ namespace System.Windows.Forms
             switch (qcdevent.Action)
             {
                 case DragAction.Drop:
-                    return HRESULT.DRAGDROP_S_DROP;
+                    return HRESULT.Values.DRAGDROP_S_DROP;
                 case DragAction.Cancel:
-                    return HRESULT.DRAGDROP_S_CANCEL;
+                    return HRESULT.Values.DRAGDROP_S_CANCEL;
                 default:
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
             }
         }
 
@@ -77,10 +77,10 @@ namespace System.Windows.Forms
 
             if (gfbevent.UseDefaultCursors)
             {
-                return HRESULT.DRAGDROP_S_USEDEFAULTCURSORS;
+                return HRESULT.Values.DRAGDROP_S_USEDEFAULTCURSORS;
             }
 
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
 
             void UpdateDragImage(GiveFeedbackEventArgs e, IComDataObject? dataObject, IntPtr lastHwndTarget)
             {
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
         public HRESULT DragEnterTarget(IntPtr hwndTarget)
         {
             _lastHwndTarget = hwndTarget;
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         public HRESULT DragLeaveTarget()
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
                 DragDropHelper.DragLeave();
             }
 
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
     }
 }

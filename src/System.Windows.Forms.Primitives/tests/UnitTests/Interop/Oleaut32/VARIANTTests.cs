@@ -862,7 +862,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             var dt = new DateTime(2020, 05, 13, 13, 3, 12);
             var ft = new PInvoke.FILETIME(dt);
             HRESULT hr = InitPropVariantFromFileTime(&ft, &variant);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.Equal(VARENUM.FILETIME, variant.Type);
 
             AssertToObjectEqualExtension<ArgumentException>(new DateTime(2020, 05, 13, 13, 3, 12), variant);
@@ -890,7 +890,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             var dt = new DateTime(2020, 05, 13, 13, 3, 12, DateTimeKind.Utc).ToLocalTime();
             var ft = new PInvoke.FILETIME(dt);
             HRESULT hr = InitVariantFromFileTime(&ft, &variant);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.Equal(VARENUM.DATE, variant.Type);
 
             AssertToObjectEqual(new DateTime(2020, 05, 13, 13, 3, 12, DateTimeKind.Utc).ToUniversalTime(), variant);
@@ -1392,7 +1392,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             var guid = Guid.NewGuid();
             using var variant = new VARIANT();
             HRESULT hr = InitPropVariantFromCLSID(&guid, &variant);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.Equal(VARENUM.CLSID, variant.Type);
 
             AssertToObjectEqualExtension<ArgumentException>(guid, variant);
@@ -1505,7 +1505,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 fixed (sbyte* pResult = result)
                 {
                     HRESULT hr = InitPropVariantFromBuffer(pResult, (uint)result.Length, &variant);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(VARENUM.VECTOR | VARENUM.UI1, variant.vt);
                 }
 
@@ -1543,7 +1543,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             fixed (byte* pResult = result)
             {
                 HRESULT hr = InitPropVariantFromBuffer(pResult, (uint)result.Length, &variant);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.UI1, variant.vt);
             }
 
@@ -1574,7 +1574,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             fixed (short* pResult = result)
             {
                 HRESULT hr = InitPropVariantFromInt16Vector(pResult, (uint)result.Length, &variant);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.I2, variant.vt);
             }
 
@@ -1605,7 +1605,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             fixed (ushort* pResult = result)
             {
                 HRESULT hr = InitPropVariantFromUInt16Vector(pResult, (uint)result.Length, &variant);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.UI2, variant.vt);
             }
 
@@ -1637,7 +1637,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             fixed (BOOL* pResult = boolResult)
             {
                 HRESULT hr = InitPropVariantFromBooleanVector(pResult, (uint)boolResult.Length, &variant);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.BOOL, variant.vt);
             }
 
@@ -1668,7 +1668,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             fixed (int* pResult = result)
             {
                 HRESULT hr = InitPropVariantFromInt32Vector(pResult, (uint)result.Length, &variant);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.I4, variant.vt);
             }
 
@@ -1699,7 +1699,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             fixed (uint* pResult = result)
             {
                 HRESULT hr = InitPropVariantFromUInt32Vector(pResult, (uint)result.Length, &variant);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.UI4, variant.vt);
             }
 
@@ -1732,7 +1732,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 fixed (int* pResult = result)
                 {
                     HRESULT hr = InitPropVariantFromInt32Vector(pResult, (uint)result.Length, &variant);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(VARENUM.VECTOR | VARENUM.I4, variant.vt);
                 }
 
@@ -1772,7 +1772,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 fixed (uint* pResult = result)
                 {
                     HRESULT hr = InitPropVariantFromUInt32Vector(pResult, (uint)result.Length, &variant);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(VARENUM.VECTOR | VARENUM.UI4, variant.vt);
                 }
 
@@ -1810,7 +1810,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             fixed (long* pResult = result)
             {
                 HRESULT hr = InitPropVariantFromInt64Vector(pResult, (uint)result.Length, &variant);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.I8, variant.vt);
             }
 
@@ -1841,7 +1841,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             fixed (ulong* pResult = result)
             {
                 HRESULT hr = InitPropVariantFromUInt64Vector(pResult, (uint)result.Length, &variant);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.UI8, variant.vt);
             }
 
@@ -1874,7 +1874,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 fixed (float* pResult = result)
                 {
                     HRESULT hr = InitPropVariantFromInt32Vector(pResult, (uint)result.Length, &variant);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(VARENUM.VECTOR | VARENUM.I4, variant.vt);
                 }
 
@@ -1912,7 +1912,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             fixed (double* pResult = result)
             {
                 HRESULT hr = InitPropVariantFromDoubleVector(pResult, (uint)result.Length, &variant);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.R8, variant.vt);
             }
 
@@ -1945,7 +1945,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 fixed (uint* pResult = result)
                 {
                     HRESULT hr = InitPropVariantFromUInt32Vector(pResult, (uint)result.Length, &variant);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(VARENUM.VECTOR | VARENUM.UI4, variant.vt);
                 }
 
@@ -1985,7 +1985,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 fixed (long* pResult = result)
                 {
                     HRESULT hr = InitPropVariantFromInt64Vector(pResult, (uint)result.Length, &variant);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(VARENUM.VECTOR | VARENUM.I8, variant.vt);
                 }
 
@@ -2029,7 +2029,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 fixed (double* pResult = result)
                 {
                     HRESULT hr = InitPropVariantFromDoubleVector(pResult, (uint)result.Length, &variant);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(VARENUM.VECTOR | VARENUM.R8, variant.vt);
                 }
 
@@ -2072,7 +2072,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             fixed (PInvoke.FILETIME* pResult = fileTimeResult)
             {
                 HRESULT hr = InitPropVariantFromFileTimeVector(pResult, (uint)fileTimeResult.Length, &variant);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.FILETIME, variant.vt);
             }
 
@@ -2105,7 +2105,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 fixed (Guid* pResult = result)
                 {
                     HRESULT hr = InitPropVariantFromBuffer(pResult, (uint)(result.Length * sizeof(Guid)), &variant);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(VARENUM.VECTOR | VARENUM.UI1, variant.vt);
                 }
 
@@ -2143,13 +2143,13 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                     if (IntPtr.Size == 4)
                     {
                         HRESULT hr = InitPropVariantFromInt32Vector(pResult, (uint)result.Length, &variant);
-                        Assert.Equal(HRESULT.S_OK, hr);
+                        Assert.Equal(HRESULT.Values.S_OK, hr);
                         Assert.Equal(VARENUM.VECTOR | VARENUM.I4, variant.vt);
                     }
                     else
                     {
                         HRESULT hr = InitPropVariantFromInt64Vector(pResult, (uint)result.Length, &variant);
-                        Assert.Equal(HRESULT.S_OK, hr);
+                        Assert.Equal(HRESULT.Values.S_OK, hr);
                         Assert.Equal(VARENUM.VECTOR | VARENUM.I8, variant.vt);
                     }
                 }
@@ -2188,13 +2188,13 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                     if (IntPtr.Size == 4)
                     {
                         HRESULT hr = InitPropVariantFromInt32Vector(pResult, (uint)result.Length, &variant);
-                        Assert.Equal(HRESULT.S_OK, hr);
+                        Assert.Equal(HRESULT.Values.S_OK, hr);
                         Assert.Equal(VARENUM.VECTOR | VARENUM.I4, variant.vt);
                     }
                     else
                     {
                         HRESULT hr = InitPropVariantFromInt64Vector(pResult, (uint)result.Length, &variant);
-                        Assert.Equal(HRESULT.S_OK, hr);
+                        Assert.Equal(HRESULT.Values.S_OK, hr);
                         Assert.Equal(VARENUM.VECTOR | VARENUM.I8, variant.vt);
                     }
                 }
@@ -2233,13 +2233,13 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                     if (IntPtr.Size == 4)
                     {
                         HRESULT hr = InitPropVariantFromInt32Vector(pResult, (uint)result.Length, &variant);
-                        Assert.Equal(HRESULT.S_OK, hr);
+                        Assert.Equal(HRESULT.Values.S_OK, hr);
                         Assert.Equal(VARENUM.VECTOR | VARENUM.I4, variant.vt);
                     }
                     else
                     {
                         HRESULT hr = InitPropVariantFromInt64Vector(pResult, (uint)result.Length, &variant);
-                        Assert.Equal(HRESULT.S_OK, hr);
+                        Assert.Equal(HRESULT.Values.S_OK, hr);
                         Assert.Equal(VARENUM.VECTOR | VARENUM.I8, variant.vt);
                     }
                 }
@@ -2290,7 +2290,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 fixed (VARIANT* pResult = result)
                 {
                     HRESULT hr = InitPropVariantFromBuffer(pResult, (uint)(result.Length * sizeof(VARIANT)), &variant);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(VARENUM.VECTOR | VARENUM.UI1, variant.vt);
                 }
 
@@ -5806,7 +5806,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
             VARENUM arrayVt = VARENUM.EMPTY;
             HRESULT hr = SafeArrayGetVartype(psa, &arrayVt);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.Equal(vt, arrayVt);
 
             for (int i = 0; i < result.Length; i++)
@@ -5823,7 +5823,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                     hr = SafeArrayPutElement(psa, &index, &value);
                 }
 
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
             }
 
             return psa;
@@ -5847,7 +5847,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
             VARENUM arrayVt = VARENUM.EMPTY;
             HRESULT hr = SafeArrayGetVartype(psa, &arrayVt);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.Equal(vt, arrayVt);
 
             for (int i = 0; i < multiDimArray.GetLength(0); i++)
@@ -5866,7 +5866,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                         hr = SafeArrayPutElement(psa, indices, &value);
                     }
 
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                 }
             }
 
@@ -5881,7 +5881,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             (*(int*)mem) = record;
             var recordInfo = new CustomRecordInfo
             {
-                GetGuidAction = () => (typeof(int).GUID, HRESULT.S_OK)
+                GetGuidAction = () => (typeof(int).GUID, HRESULT.Values.S_OK)
             };
             IntPtr pRecordInfo = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(recordInfo);
 
@@ -5955,7 +5955,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
             var recordInfo = new CustomRecordInfo
             {
-                GetGuidAction = () => (Guid.Empty, HRESULT.DISP_E_DIVBYZERO)
+                GetGuidAction = () => (Guid.Empty, HRESULT.Values.DISP_E_DIVBYZERO)
             };
             IntPtr pRecordInfo = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(recordInfo);
             using var variant = new VARIANT
@@ -5981,7 +5981,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         {
             var record = new CustomRecordInfo
             {
-                GetGuidAction = () => (Guid.Empty, HRESULT.DISP_E_DIVBYZERO)
+                GetGuidAction = () => (Guid.Empty, HRESULT.Values.DISP_E_DIVBYZERO)
             };
             IntPtr pRecordInfo = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(record);
             using var variant = new VARIANT
@@ -6014,7 +6014,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
             var recordInfo = new CustomRecordInfo
             {
-                GetGuidAction = () => (guid, HRESULT.S_OK)
+                GetGuidAction = () => (guid, HRESULT.Values.S_OK)
             };
             IntPtr pRecordInfo = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(recordInfo);
             using var variant = new VARIANT
@@ -6038,7 +6038,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         {
             var record = new CustomRecordInfo
             {
-                GetGuidAction = () => (guid, HRESULT.S_OK)
+                GetGuidAction = () => (guid, HRESULT.Values.S_OK)
             };
             IntPtr pRecordInfo = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(record);
             using var variant = new VARIANT
@@ -6061,7 +6061,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             var result = new int[] { 1, 2 };
             var recordInfo = new CustomRecordInfo
             {
-                GetGuidAction = () => (typeof(int).GUID, HRESULT.S_OK)
+                GetGuidAction = () => (typeof(int).GUID, HRESULT.Values.S_OK)
             };
             IntPtr pRecordInfo = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(recordInfo);
             try
@@ -6126,7 +6126,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             var result = new int[] { 1, 2 };
             var record = new CustomRecordInfo
             {
-                GetGuidAction = () => (Guid.Empty, HRESULT.DISP_E_DIVBYZERO)
+                GetGuidAction = () => (Guid.Empty, HRESULT.Values.DISP_E_DIVBYZERO)
             };
             IntPtr pRecordInfo = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(record);
             try
@@ -6166,7 +6166,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             var result = new int[] { 1, 2 };
             var record = new CustomRecordInfo
             {
-                GetGuidAction = () => (guid, HRESULT.S_OK)
+                GetGuidAction = () => (guid, HRESULT.Values.S_OK)
             };
             IntPtr pRecordInfo = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(record);
             try
@@ -6210,7 +6210,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             HRESULT IRecordInfo.GetSize(uint* pcbSize)
             {
                 *pcbSize = (uint)sizeof(int);
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT IRecordInfo.GetTypeInfo(out ITypeInfo ppTypeInfo) => throw new NotImplementedException();
@@ -6246,7 +6246,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
             VARENUM arrayVt = VARENUM.EMPTY;
             HRESULT hr = SafeArrayGetVartype(psa, &arrayVt);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.Equal(VARENUM.RECORD, arrayVt);
 
             return psa;

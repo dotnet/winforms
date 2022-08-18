@@ -25,13 +25,13 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in Format");
                 if (rcb is null)
                 {
-                    return HRESULT.E_INVALIDARG;
+                    return HRESULT.Values.E_INVALIDARG;
                 }
 
                 *rcb = 0;
                 if (lpBuffer == IntPtr.Zero || cb < 2)
                 {
-                    return HRESULT.E_INVALIDARG;
+                    return HRESULT.Values.E_INVALIDARG;
                 }
 
                 IntPtr pbstr = IntPtr.Zero;
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
                     Oleaut32.SysFreeString(pbstr);
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
         }
     }

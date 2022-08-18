@@ -206,13 +206,13 @@ internal static partial class Interop
             public HRESULT LockRegion(ulong libOffset, ulong cb, uint dwLockType)
             {
                 // Documented way to say we don't support locking
-                return HRESULT.STG_E_INVALIDFUNCTION;
+                return HRESULT.Values.STG_E_INVALIDFUNCTION;
             }
 
             public HRESULT UnlockRegion(ulong libOffset, ulong cb, uint dwLockType)
             {
                 // Documented way to say we don't support locking
-                return HRESULT.STG_E_INVALIDFUNCTION;
+                return HRESULT.Values.STG_E_INVALIDFUNCTION;
             }
 
             public Stream GetDataStream() => _dataStream;

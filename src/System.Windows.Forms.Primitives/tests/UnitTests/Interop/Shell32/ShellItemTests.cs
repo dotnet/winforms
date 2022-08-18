@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests.Interop.Shell32Tests
             Foundation.HRESULT result = PInvoke.SHParseDisplayName(path, pbc: null, out ITEMIDLIST* ppidl, 0, &rgflnOut);
             try
             {
-                Assert.Equal((int)HRESULT.S_OK, result.Value);
+                Assert.Equal(HRESULT.S_OK, result);
                 Assert.NotEqual(0, (nint)ppidl);
             }
             finally

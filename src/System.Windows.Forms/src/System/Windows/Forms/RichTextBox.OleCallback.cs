@@ -36,7 +36,7 @@ namespace System.Windows.Forms
                 if (!owner.AllowOleObjects)
                 {
                     storage = null;
-                    return HRESULT.E_FAIL;
+                    return HRESULT.Values.E_FAIL;
                 }
 
                 WinFormsComWrappers.LockBytesWrapper pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, true);
@@ -45,7 +45,7 @@ namespace System.Windows.Forms
                     Ole32.STGM.SHARE_EXCLUSIVE | Ole32.STGM.CREATE | Ole32.STGM.READWRITE);
                 Debug.Assert(storage is not null, "storage is NULL!");
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             public HRESULT GetInPlaceContext(IntPtr lplpFrame,
@@ -53,27 +53,27 @@ namespace System.Windows.Forms
                                          IntPtr lpFrameInfo)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetInPlaceContext");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             public HRESULT ShowContainerUI(BOOL fShow)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::ShowContainerUI");
                 // Do nothing
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             public HRESULT QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::QueryInsertObject(" + lpclsid.ToString() + ")");
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             public HRESULT DeleteObject(IntPtr lpoleobj)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::DeleteObject");
                 // Do nothing
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             public HRESULT QueryAcceptData(IComDataObject lpdataobj, IntPtr lpcfFormat, RECO reco, BOOL fReally, IntPtr hMetaPict)
@@ -184,44 +184,44 @@ namespace System.Windows.Forms
                         if (e.Effect == DragDropEffects.None)
                         {
                             Debug.WriteLineIf(RichTextDbg.TraceVerbose, "\tCancel data");
-                            return HRESULT.E_FAIL;
+                            return HRESULT.Values.E_FAIL;
                         }
                         else
                         {
                             Debug.WriteLineIf(RichTextDbg.TraceVerbose, "\tAccept data");
-                            return HRESULT.S_OK;
+                            return HRESULT.Values.S_OK;
                         }
                     }
                     else
                     {
                         Debug.WriteLineIf(RichTextDbg.TraceVerbose, "\tCancel data, allowdrop == false");
                         lastDataObject = null;
-                        return HRESULT.E_FAIL;
+                        return HRESULT.Values.E_FAIL;
                     }
                 }
                 else
                 {
-                    return HRESULT.E_NOTIMPL;
+                    return HRESULT.Values.E_NOTIMPL;
                 }
             }
 
             public HRESULT ContextSensitiveHelp(BOOL fEnterMode)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::ContextSensitiveHelp");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             public HRESULT GetClipboardData(ref Richedit.CHARRANGE lpchrg, RECO reco, IntPtr lplpdataobj)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetClipboardData");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             public unsafe HRESULT GetDragDropEffect(BOOL fDrag, User32.MK grfKeyState, Ole32.DROPEFFECT* pdwEffect)
             {
                 if (pdwEffect is null)
                 {
-                    return HRESULT.E_POINTER;
+                    return HRESULT.Values.E_POINTER;
                 }
 
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetDragDropEffect");
@@ -301,7 +301,7 @@ namespace System.Windows.Forms
                     *pdwEffect = Ole32.DROPEFFECT.NONE;
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             public HRESULT GetContextMenu(short seltype, IntPtr lpoleobj, ref Richedit.CHARRANGE lpchrg, out IntPtr hmenu)
@@ -310,7 +310,7 @@ namespace System.Windows.Forms
 
                 // do nothing, we don't have ContextMenu any longer
                 hmenu = IntPtr.Zero;
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             private void UpdateDropDescription(DragEventArgs e)

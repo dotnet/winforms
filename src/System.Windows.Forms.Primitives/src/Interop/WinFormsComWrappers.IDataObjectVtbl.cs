@@ -42,7 +42,7 @@ internal partial class Interop
                     pMedium->pUnkForRelease = medium.pUnkForRelease == null ? IntPtr.Zero : Marshal.GetIUnknownForObject(medium.pUnkForRelease);
                     pMedium->tymed = medium.tymed;
                     pMedium->unionmember = medium.unionmember;
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
                 catch (Exception ex)
                 {
@@ -68,7 +68,7 @@ internal partial class Interop
                     pMedium->pUnkForRelease = medium.pUnkForRelease == null ? IntPtr.Zero : Marshal.GetIUnknownForObject(medium.pUnkForRelease);
                     pMedium->tymed = medium.tymed;
                     pMedium->unionmember = medium.unionmember;
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
                 catch (Exception ex)
                 {
@@ -105,7 +105,7 @@ internal partial class Interop
                     };
 
                     instance.SetData(ref *format, ref medium, release != 0);
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
                 catch (Exception ex)
                 {
@@ -122,13 +122,13 @@ internal partial class Interop
                 {
                     var formatEtc = instance.EnumFormatEtc(direction);
                     var result = WinFormsComWrappers.Instance.TryGetComPointer(formatEtc, IID.IEnumFORMATETC, out var formatEtcPtr);
-                    if (result.Failed())
+                    if (result.Failed)
                     {
                         return result;
                     }
 
                     *pEnumFormatC = formatEtcPtr;
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
                 catch (Exception ex)
                 {
@@ -152,7 +152,7 @@ internal partial class Interop
                 try
                 {
                     instance.DUnadvise(connection);
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
                 catch (Exception ex)
                 {
@@ -166,7 +166,7 @@ internal partial class Interop
             {
                 var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
                 var result = (HRESULT)instance.EnumDAdvise(out var enumAdvice);
-                if (result.Failed())
+                if (result.Failed)
                 {
                     return result;
                 }

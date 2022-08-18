@@ -270,7 +270,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         HRESULT hr = ComNativeDescriptor.GetPropertyValue(target, dispid, new object[1]);
 
                         // if not, go ahead and make this a browsable item
-                        if (hr.Succeeded())
+                        if (hr.Succeeded)
                         {
                             // make it browsable
                             if (newAttributes is null)
@@ -891,10 +891,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 &pExcepInfo,
                 null);
 
-            switch (hr)
+            switch (hr.Value)
             {
-                case HRESULT.S_OK:
-                case HRESULT.S_FALSE:
+                case (int)HRESULT.Values.S_OK:
+                case (int)HRESULT.Values.S_FALSE:
 
                     if (pVarResult[0] is null || Convert.IsDBNull(pVarResult[0]))
                     {
@@ -906,7 +906,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
 
                     return lastValue;
-                case HRESULT.DISP_E_EXCEPTION:
+                case (int)HRESULT.Values.DISP_E_EXCEPTION:
                     return null;
                 default:
                     throw new ExternalException(string.Format(SR.DispInvokeFailed, "GetValue", hr), (int)hr);
@@ -1284,7 +1284,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 null);
 
             string errorInfo = null;
-            if (hr == HRESULT.DISP_E_EXCEPTION && excepInfo.scode != 0)
+            if (hr == HRESULT.Values.DISP_E_EXCEPTION && excepInfo.scode != 0)
             {
                 hr = excepInfo.scode;
                 if (excepInfo.bstrDescription != IntPtr.Zero)
@@ -1293,14 +1293,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            switch (hr)
+            switch (hr.Value)
             {
-                case HRESULT.E_ABORT:
-                case HRESULT.OLE_E_PROMPTSAVECANCELLED:
+                case (int)HRESULT.Values.E_ABORT:
+                case (int)HRESULT.Values.OLE_E_PROMPTSAVECANCELLED:
                     // cancelled checkout, etc.
                     return;
-                case HRESULT.S_OK:
-                case HRESULT.S_FALSE:
+                case (int)HRESULT.Values.S_OK:
+                case (int)HRESULT.Values.S_FALSE:
                     OnValueChanged(component, EventArgs.Empty);
                     lastValue = value;
                     return;
@@ -1308,7 +1308,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     if (pDisp is Oleaut32.ISupportErrorInfo iSupportErrorInfo)
                     {
                         g = typeof(Oleaut32.IDispatch).GUID;
-                        if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.S_OK)
+                        if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.Values.S_OK)
                         {
                             WinFormsComWrappers.ErrorInfoWrapper pErrorInfo;
                             Oleaut32.GetErrorInfo(out pErrorInfo);

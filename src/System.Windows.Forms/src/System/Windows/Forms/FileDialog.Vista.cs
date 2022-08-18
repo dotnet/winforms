@@ -206,12 +206,12 @@ namespace System.Windows.Forms
             try
             {
                 HRESULT hr = dialog.SetFileTypes((uint)filterItems.Length, filterItems);
-                hr.ThrowIfFailed();
+                hr.ThrowOnFailure();
 
                 if (filterItems.Length > 0)
                 {
                     hr = dialog.SetFileTypeIndex(unchecked((uint)FilterIndex));
-                    hr.ThrowIfFailed();
+                    hr.ThrowOnFailure();
                 }
             }
             finally
@@ -253,7 +253,7 @@ namespace System.Windows.Forms
         private protected static string GetFilePathFromShellItem(IShellItem item)
         {
             HRESULT hr = item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING, out string? filename);
-            hr.ThrowIfFailed();
+            hr.ThrowOnFailure();
             return filename!;
         }
 

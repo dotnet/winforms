@@ -59,7 +59,7 @@ namespace System.Windows.Forms
                 formatetc.tymed = TYMED.TYMED_ISTREAM;
 
                 // Limit the # of exceptions we may throw below.
-                if ((int)HRESULT.S_OK != QueryGetDataUnsafe(ref formatetc))
+                if ((int)HRESULT.Values.S_OK != QueryGetDataUnsafe(ref formatetc))
                 {
                     return null;
                 }
@@ -174,7 +174,7 @@ namespace System.Windows.Forms
 
                 object? data = null;
 
-                if ((int)HRESULT.S_OK == QueryGetDataUnsafe(ref formatetc))
+                if ((int)HRESULT.Values.S_OK == QueryGetDataUnsafe(ref formatetc))
                 {
                     try
                     {
@@ -231,7 +231,7 @@ namespace System.Windows.Forms
                 formatetc.tymed = tymed;
 
                 object? data = null;
-                if ((int)HRESULT.S_OK == QueryGetDataUnsafe(ref formatetc))
+                if ((int)HRESULT.Values.S_OK == QueryGetDataUnsafe(ref formatetc))
                 {
                     try
                     {
@@ -311,7 +311,7 @@ namespace System.Windows.Forms
                 void* ptr = PInvoke.GlobalLock(handle);
                 if (ptr is null)
                 {
-                    throw new ExternalException(SR.ExternalException, (int)HRESULT.E_OUTOFMEMORY);
+                    throw new ExternalException(SR.ExternalException, (int)HRESULT.Values.E_OUTOFMEMORY);
                 }
 
                 try
@@ -563,7 +563,7 @@ namespace System.Windows.Forms
                 }
 
                 int hr = QueryGetDataUnsafe(ref formatetc);
-                return hr == (int)HRESULT.S_OK;
+                return hr == (int)HRESULT.Values.S_OK;
             }
 
             public virtual bool GetDataPresent(string format, bool autoConvert)

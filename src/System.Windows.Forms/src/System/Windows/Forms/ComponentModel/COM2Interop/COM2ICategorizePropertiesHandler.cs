@@ -19,7 +19,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             VSSDK.PROPCAT categoryID = 0;
-            if (catObj.MapPropertyToCategory(dispid, &categoryID) != HRESULT.S_OK)
+            if (catObj.MapPropertyToCategory(dispid, &categoryID) != HRESULT.Values.S_OK)
             {
                 return null;
             }
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     return SR.PropertyCategoryDDE;
             }
 
-            if (catObj.GetCategoryName(categoryID, PInvoke.GetThreadLocale(), out string categoryName) == HRESULT.S_OK)
+            if (catObj.GetCategoryName(categoryID, PInvoke.GetThreadLocale(), out string categoryName) == HRESULT.Values.S_OK)
             {
                 return categoryName;
             }

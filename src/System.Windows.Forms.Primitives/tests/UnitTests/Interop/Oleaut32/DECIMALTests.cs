@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public void DECIMAL_ToDecimal_InvokeCustom_ReturnsExpected(double value)
         {
             HRESULT hr = VarDecFromR8(value, out DECIMAL dec);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.Equal((decimal)value, dec.ToDecimal());
         }
 

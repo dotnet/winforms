@@ -13,7 +13,7 @@ internal partial class Interop
 
         public static WinFormsComWrappers.LockBytesWrapper CreateILockBytesOnHGlobal(IntPtr hGlobal, BOOL fDeleteOnRelease)
         {
-            CreateILockBytesOnHGlobal(hGlobal, fDeleteOnRelease, out var ptr).ThrowIfFailed();
+            CreateILockBytesOnHGlobal(hGlobal, fDeleteOnRelease, out var ptr).ThrowOnFailure();
             return (WinFormsComWrappers.LockBytesWrapper)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ptr, CreateObjectFlags.None);
         }
     }

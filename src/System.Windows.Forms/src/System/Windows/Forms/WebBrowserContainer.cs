@@ -37,7 +37,7 @@ namespace System.Windows.Forms
                 *ppmkOut = IntPtr.Zero;
             }
 
-            return HRESULT.E_NOTIMPL;
+            return HRESULT.Values.E_NOTIMPL;
         }
 
         HRESULT Ole32.IOleContainer.EnumObjects(Ole32.OLECONTF grfFlags, out Ole32.IEnumUnknown ppenum)
@@ -53,17 +53,17 @@ namespace System.Windows.Forms
                     object[] temp = new object[list.Count];
                     list.CopyTo(temp, 0);
                     ppenum = new AxHost.EnumUnknown(temp);
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
             }
 
             ppenum = new AxHost.EnumUnknown(null);
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         HRESULT Ole32.IOleContainer.LockContainer(BOOL fLock)
         {
-            return HRESULT.E_NOTIMPL;
+            return HRESULT.Values.E_NOTIMPL;
         }
 
         // IOleInPlaceFrame methods:
@@ -71,31 +71,31 @@ namespace System.Windows.Forms
         {
             if (phwnd is null)
             {
-                return HRESULT.E_POINTER;
+                return HRESULT.Values.E_POINTER;
             }
 
             *phwnd = parent.Handle;
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         HRESULT Ole32.IOleInPlaceFrame.ContextSensitiveHelp(BOOL fEnterMode)
         {
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         unsafe HRESULT Ole32.IOleInPlaceFrame.GetBorder(RECT* lprectBorder)
         {
-            return HRESULT.E_NOTIMPL;
+            return HRESULT.Values.E_NOTIMPL;
         }
 
         unsafe HRESULT Ole32.IOleInPlaceFrame.RequestBorderSpace(RECT* pborderwidths)
         {
-            return HRESULT.E_NOTIMPL;
+            return HRESULT.Values.E_NOTIMPL;
         }
 
         unsafe HRESULT Ole32.IOleInPlaceFrame.SetBorderSpace(RECT* pborderwidths)
         {
-            return HRESULT.E_NOTIMPL;
+            return HRESULT.Values.E_NOTIMPL;
         }
 
         HRESULT Ole32.IOleInPlaceFrame.SetActiveObject(Ole32.IOleInPlaceActiveObject pActiveObject, string pszObjName)
@@ -108,7 +108,7 @@ namespace System.Windows.Forms
                     ctlInEditMode = null;
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             WebBrowserBase ctl = null;
@@ -143,37 +143,37 @@ namespace System.Windows.Forms
                 }
             }
 
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         unsafe HRESULT Ole32.IOleInPlaceFrame.InsertMenus(IntPtr hmenuShared, Ole32.OLEMENUGROUPWIDTHS* lpMenuWidths)
         {
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         HRESULT Ole32.IOleInPlaceFrame.SetMenu(IntPtr hmenuShared, IntPtr holemenu, IntPtr hwndActiveObject)
         {
-            return HRESULT.E_NOTIMPL;
+            return HRESULT.Values.E_NOTIMPL;
         }
 
         HRESULT Ole32.IOleInPlaceFrame.RemoveMenus(IntPtr hmenuShared)
         {
-            return HRESULT.E_NOTIMPL;
+            return HRESULT.Values.E_NOTIMPL;
         }
 
         HRESULT Ole32.IOleInPlaceFrame.SetStatusText(string pszStatusText)
         {
-            return HRESULT.E_NOTIMPL;
+            return HRESULT.Values.E_NOTIMPL;
         }
 
         HRESULT Ole32.IOleInPlaceFrame.EnableModeless(BOOL fEnable)
         {
-            return HRESULT.E_NOTIMPL;
+            return HRESULT.Values.E_NOTIMPL;
         }
 
         unsafe HRESULT Ole32.IOleInPlaceFrame.TranslateAccelerator(MSG* lpmsg, ushort wID)
         {
-            return HRESULT.S_FALSE;
+            return HRESULT.Values.S_FALSE;
         }
 
         //

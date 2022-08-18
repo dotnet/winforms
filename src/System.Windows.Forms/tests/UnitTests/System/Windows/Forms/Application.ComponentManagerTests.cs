@@ -29,11 +29,11 @@ namespace System.Windows.Forms.Tests.Interop_Mso
             var manager = CreateComponentManager();
 
             // Shouldn't try and deref a null
-            Assert.Equal(HRESULT.E_NOINTERFACE, manager.QueryService(null, null, null));
+            Assert.Equal(HRESULT.Values.E_NOINTERFACE, manager.QueryService(null, null, null));
 
             // Should null out obj pointer
             void* obj = (void*)0xDEADBEEF;
-            Assert.Equal(HRESULT.E_NOINTERFACE, manager.QueryService(null, null, &obj));
+            Assert.Equal(HRESULT.Values.E_NOINTERFACE, manager.QueryService(null, null, &obj));
             Assert.True(obj is null);
         }
 

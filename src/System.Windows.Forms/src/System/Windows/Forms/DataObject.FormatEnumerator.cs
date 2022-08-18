@@ -101,10 +101,10 @@ namespace System.Windows.Forms
                         pceltFetched[0] = 0;
                     }
 
-                    return (int)HRESULT.S_FALSE;
+                    return (int)HRESULT.Values.S_FALSE;
                 }
 
-                return (int)HRESULT.S_OK;
+                return (int)HRESULT.Values.S_OK;
             }
 
             public int Skip(int celt)
@@ -112,18 +112,18 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Skip");
                 if (_current + celt >= _formats.Count)
                 {
-                    return (int)HRESULT.S_FALSE;
+                    return (int)HRESULT.Values.S_FALSE;
                 }
 
                 _current += celt;
-                return (int)HRESULT.S_OK;
+                return (int)HRESULT.Values.S_OK;
             }
 
             public int Reset()
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Reset");
                 _current = 0;
-                return (int)HRESULT.S_OK;
+                return (int)HRESULT.Values.S_OK;
             }
 
             public void Clone(out IEnumFORMATETC ppenum)

@@ -93,12 +93,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (obj is IProvideMultipleClassInfo pCI)
             {
                 uint n = 0;
-                if (pCI.GetMultiTypeInfoCount(&n).Succeeded() && n > 0)
+                if (pCI.GetMultiTypeInfoCount(&n).Succeeded && n > 0)
                 {
                     var typeInfos = new ITypeInfo[n];
                     for (uint i = 0; i < n; i++)
                     {
-                        if (pCI.GetInfoOfIndex(i, MULTICLASSINFO.GETTYPEINFO, out ITypeInfo result, null, null, null, null).Failed())
+                        if (pCI.GetInfoOfIndex(i, MULTICLASSINFO.GETTYPEINFO, out ITypeInfo result, null, null, null, null).Failed)
                         {
                             continue;
                         }
@@ -162,7 +162,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 DispatchID pDispid = DispatchID.UNKNOWN;
                 Guid g = Guid.Empty;
                 HRESULT hr = obj.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &pDispid);
-                if (hr.Succeeded())
+                if (hr.Succeeded)
                 {
                     dispid = pDispid;
                 }
@@ -272,7 +272,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             TYPEATTR* pTypeAttr = null;
             HRESULT hr = typeInfo.GetTypeAttr(&pTypeAttr);
-            if (!hr.Succeeded())
+            if (!hr.Succeeded)
             {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
             }
@@ -301,7 +301,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private unsafe static Type GetValueTypeFromTypeDesc(in TYPEDESC typeDesc, ITypeInfo typeInfo, object[] typeData)
         {
             uint hreftype;
-            HRESULT hr = HRESULT.S_OK;
+            HRESULT hr = HRESULT.Values.S_OK;
 
             switch (typeDesc.vt)
             {
@@ -336,7 +336,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             // get the reference type info
             hr = typeInfo.GetRefTypeInfo(hreftype, out ITypeInfo refTypeInfo);
-            if (!hr.Succeeded())
+            if (!hr.Succeeded)
             {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetRefTypeInfoFailed, hr), (int)hr);
             }
@@ -350,7 +350,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     TYPEATTR* pTypeAttr = null;
                     hr = refTypeInfo.GetTypeAttr(&pTypeAttr);
-                    if (!hr.Succeeded())
+                    if (!hr.Succeeded)
                     {
                         throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
                     }
@@ -443,7 +443,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             PropertyDescriptor[] props = new PropertyDescriptor[cProps];
             int defaultProp = -1;
 
-            HRESULT hr = HRESULT.S_OK;
+            HRESULT hr = HRESULT.Values.S_OK;
             object[] pvar = new object[1];
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
 
@@ -466,7 +466,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "IDispatch::Invoke(PROPGET, " + pi.Name + ") threw an exception :" + ex.ToString());
                     }
 
-                    if (!hr.Succeeded())
+                    if (!hr.Succeeded)
                     {
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Adding Browsable(false) to property '" + pi.Name + "' because Invoke(dispid=0x{0:X} ,DISPATCH_PROPERTYGET) returned hr=0x{1:X}.  Properties that do not return S_OK are hidden by default.", pi.DispId, hr));
                         pi.Attributes.Add(new BrowsableAttribute(false));
@@ -475,12 +475,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
                 else
                 {
-                    hr = HRESULT.S_OK;
+                    hr = HRESULT.Values.S_OK;
                 }
 
                 Attribute[] temp = new Attribute[pi.Attributes.Count];
                 pi.Attributes.CopyTo(temp, 0);
-                props[pi.Index] = new Com2PropertyDescriptor(pi.DispId, pi.Name, temp, pi.ReadOnly != PropInfo.ReadOnlyFalse, pi.ValueType, pi.TypeData, !hr.Succeeded());
+                props[pi.Index] = new Com2PropertyDescriptor(pi.DispId, pi.Name, temp, pi.ReadOnly != PropInfo.ReadOnlyFalse, pi.ValueType, pi.TypeData, !hr.Succeeded);
                 if (pi.IsDefault)
                 {
                     defaultProp = pi.Index;
@@ -502,7 +502,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             using var helpStringBstr = new BSTR();
             HRESULT hr = typeInfo.GetDocumentation(dispid, &nameBstr, &helpStringBstr, null, null);
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
-            if (!hr.Succeeded())
+            if (!hr.Succeeded)
             {
                 throw new COMException(string.Format(SR.TYPEINFOPROCESSORGetDocumentationFailed, dispid, hr, ComNativeDescriptor.GetClassName(typeInfo)), (int)hr);
             }
@@ -609,7 +609,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             TYPEATTR* pTypeAttr = null;
             HRESULT hr = typeInfo.GetTypeAttr(&pTypeAttr);
-            if (!hr.Succeeded() || pTypeAttr is null)
+            if (!hr.Succeeded || pTypeAttr is null)
             {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
             }
@@ -623,7 +623,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     FUNCDESC* pFuncDesc = null;
                     hr = typeInfo.GetFuncDesc(i, &pFuncDesc);
-                    if (!hr.Succeeded() || pFuncDesc is null)
+                    if (!hr.Succeeded || pFuncDesc is null)
                     {
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring function item 0x{0:X} because ITypeInfo::GetFuncDesc returned hr=0x{1:X} or NULL", i, hr));
                         continue;
@@ -711,7 +711,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 TYPEATTR* pTypeAttr = null;
                 HRESULT hr = enumTypeInfo.GetTypeAttr(&pTypeAttr);
-                if (!hr.Succeeded() || pTypeAttr is null)
+                if (!hr.Succeeded || pTypeAttr is null)
                 {
                     throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
                 }
@@ -737,7 +737,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         VARDESC* pVarDesc = null;
                         hr = enumTypeInfo.GetVarDesc(i, &pVarDesc);
-                        if (!hr.Succeeded() || pVarDesc is null)
+                        if (!hr.Succeeded || pVarDesc is null)
                         {
                             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetVarDesc returned hr=0x{1:X} or NULL", i, hr));
                             continue;
@@ -756,7 +756,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             using var nameBstr = new BSTR();
                             using var helpBstr = new BSTR();
                             hr = enumTypeInfo.GetDocumentation(pVarDesc->memid, &nameBstr, &helpBstr, null, null);
-                            if (!hr.Succeeded())
+                            if (!hr.Succeeded)
                             {
                                 Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetDocumentation returned hr=0x{1:X} or NULL", i, hr));
                                 continue;
@@ -863,7 +863,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             TYPEATTR* pTypeAttr = null;
             HRESULT hr = typeInfo.GetTypeAttr(&pTypeAttr);
-            if (!hr.Succeeded() || pTypeAttr is null)
+            if (!hr.Succeeded || pTypeAttr is null)
             {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
             }
@@ -874,7 +874,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     VARDESC* pVarDesc = null;
                     hr = typeInfo.GetVarDesc(i, &pVarDesc);
-                    if (!hr.Succeeded() || pVarDesc is null)
+                    if (!hr.Succeeded || pVarDesc is null)
                     {
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring variable item 0x{0:X} because ITypeInfo::GetFuncDesc returned hr=0x{1:X} or NULL", i, hr));
                         continue;

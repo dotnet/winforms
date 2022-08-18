@@ -71,13 +71,13 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
                 VARENUM arrayVt = VARENUM.EMPTY;
                 HRESULT hr = SafeArrayGetVartype(psa, &arrayVt);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal((VARENUM)vt, arrayVt);
             }
             finally
             {
                 HRESULT hr = SafeArrayDestroy(psa);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
             }
         }
 
@@ -108,13 +108,13 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
                     VARENUM arrayVt = VARENUM.EMPTY;
                     HRESULT hr = SafeArrayGetVartype(psa, &arrayVt);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(VARENUM.RECORD, arrayVt);
                 }
                 finally
                 {
                     HRESULT hr = SafeArrayDestroy(psa);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                 }
             }
             finally
@@ -145,7 +145,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             HRESULT IRecordInfo.GetSize(uint* pcbSize)
             {
                 *pcbSize = (uint)sizeof(int);
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT IRecordInfo.GetTypeInfo(out ITypeInfo ppTypeInfo) => throw new NotImplementedException();
@@ -201,13 +201,13 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
                 VARENUM arrayVt = VARENUM.EMPTY;
                 HRESULT hr = SafeArrayGetVartype(psa, &arrayVt);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal((VARENUM)vt, arrayVt);
             }
             finally
             {
                 HRESULT hr = SafeArrayDestroy(psa);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
             }
         }
 
@@ -232,19 +232,19 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 {
                     int value1 = 1;
                     HRESULT hr = SafeArrayPutElement(psa, pIndices1, &value1);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
 
                     int value2 = 2;
                     hr = SafeArrayPutElement(psa, pIndices2, &value2);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
 
                     int result = -1;
                     hr = SafeArrayGetElement(psa, pIndices1, &result);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(1, result);
 
                     hr = SafeArrayGetElement(psa, pIndices2, &result);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(2, result);
                 }
 
@@ -278,19 +278,19 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 {
                     int value1 = 1;
                     HRESULT hr = SafeArrayPutElement(psa, pIndices1, &value1);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
 
                     int value2 = 2;
                     hr = SafeArrayPutElement(psa, pIndices2, &value2);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
 
                     int result = -1;
                     hr = SafeArrayGetElement(psa, pIndices1, &result);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(1, result);
 
                     hr = SafeArrayGetElement(psa, pIndices2, &result);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(2, result);
                 }
 
@@ -330,19 +330,19 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 {
                     int value1 = 1;
                     HRESULT hr = SafeArrayPutElement(psa, pIndices1, &value1);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
 
                     int value2 = 2;
                     hr = SafeArrayPutElement(psa, pIndices2, &value2);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
 
                     int result = -1;
                     hr = SafeArrayGetElement(psa, pIndices1, &result);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(1, result);
 
                     hr = SafeArrayGetElement(psa, pIndices2, &result);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(2, result);
                 }
 
@@ -382,19 +382,19 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 {
                     int value1 = 1;
                     HRESULT hr = SafeArrayPutElement(psa, pIndices1, &value1);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
 
                     int value2 = 2;
                     hr = SafeArrayPutElement(psa, pIndices2, &value2);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
 
                     int result = -1;
                     hr = SafeArrayGetElement(psa, pIndices1, &result);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(1, result);
 
                     hr = SafeArrayGetElement(psa, pIndices2, &result);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(HRESULT.Values.S_OK, hr);
                     Assert.Equal(2, result);
                 }
 

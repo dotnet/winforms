@@ -440,12 +440,12 @@ namespace System.Windows.Forms.InteropTests
             ComboBox.ComboBoxAccessibleObject accessibleObject = new ComboBox.ComboBoxAccessibleObject(control);
 
             var enumVariant = (IEnumVariant)accessibleObject;
-            Assert.Equal(HRESULT.S_OK, enumVariant.Reset());
+            Assert.Equal(HRESULT.Values.S_OK, enumVariant.Reset());
 
             VARIANT variantObject;
             uint retreivedCount;
             var result = enumVariant.Next(1, (IntPtr)(void*)&variantObject, &retreivedCount);
-            Assert.Equal(HRESULT.S_OK, result);
+            Assert.Equal(HRESULT.Values.S_OK, result);
 
             var retreivedItem = variantObject.ToObject();
 
@@ -458,7 +458,7 @@ namespace System.Windows.Forms.InteropTests
         public void AccessibleObject_IOleWindowContextSensitiveHelp_Invoke_ReturnsExpected(bool fEnterMode)
         {
             var o = new AccessibleObject();
-            AssertSuccess(Test_IOleWindowContextSensitiveHelp(o, (BOOL)fEnterMode, HRESULT.S_OK));
+            AssertSuccess(Test_IOleWindowContextSensitiveHelp(o, (BOOL)fEnterMode, HRESULT.Values.S_OK));
         }
 
         [WinFormsTheory]
@@ -470,7 +470,7 @@ namespace System.Windows.Forms.InteropTests
             {
                 ParentResult = new AccessibleObject()
             };
-            AssertSuccess(Test_IOleWindowContextSensitiveHelp(o, (BOOL)fEnterMode, HRESULT.S_OK));
+            AssertSuccess(Test_IOleWindowContextSensitiveHelp(o, (BOOL)fEnterMode, HRESULT.Values.S_OK));
         }
 
         [WinFormsTheory]
@@ -483,14 +483,14 @@ namespace System.Windows.Forms.InteropTests
             {
                 ParentResult = new Control.ControlAccessibleObject(control)
             };
-            AssertSuccess(Test_IOleWindowContextSensitiveHelp(o, (BOOL)fEnterMode, HRESULT.S_OK));
+            AssertSuccess(Test_IOleWindowContextSensitiveHelp(o, (BOOL)fEnterMode, HRESULT.Values.S_OK));
         }
 
         [WinFormsFact]
         public void AccessibleObject_IOleWindowGetWindow_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
-            AssertSuccess(Test_IOleWindowGetWindow(o, IntPtr.Zero, HRESULT.E_FAIL));
+            AssertSuccess(Test_IOleWindowGetWindow(o, IntPtr.Zero, HRESULT.Values.E_FAIL));
         }
 
         [WinFormsFact]
@@ -500,7 +500,7 @@ namespace System.Windows.Forms.InteropTests
             {
                 ParentResult = new AccessibleObject()
             };
-            AssertSuccess(Test_IOleWindowGetWindow(o, IntPtr.Zero, HRESULT.E_FAIL));
+            AssertSuccess(Test_IOleWindowGetWindow(o, IntPtr.Zero, HRESULT.Values.E_FAIL));
         }
 
         // Crashes with Attempted to read or write protected memory. This is often an indication that other memory is corrupt..
@@ -513,7 +513,7 @@ namespace System.Windows.Forms.InteropTests
             {
                 ParentResult = new Control.ControlAccessibleObject(control)
             };
-            AssertSuccess(Test_IOleWindowGetWindow(o, control.Handle, HRESULT.S_OK));
+            AssertSuccess(Test_IOleWindowGetWindow(o, control.Handle, HRESULT.Values.S_OK));
         }
 #endif
 

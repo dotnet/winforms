@@ -2176,7 +2176,7 @@ namespace System.Windows.Forms
             {
                 Ole32.IDropSource dropSource = CreateDropSource(dataObject, dragImage, cursorOffset, useDefaultDragImage);
                 HRESULT hr = Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out finalEffect);
-                if (!hr.Succeeded())
+                if (!hr.Succeeded)
                 {
                     return DragDropEffects.None;
                 }

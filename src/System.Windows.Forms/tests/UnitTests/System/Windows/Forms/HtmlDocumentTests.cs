@@ -1378,7 +1378,7 @@ namespace System.Windows.Forms.Tests
             int callCount = 0;
             void handler(object sender, EventArgs e) => callCount++;
             COMException ex = Assert.Throws<COMException>(() => document.AttachEventHandler(string.Empty, handler));
-            Assert.Equal(HRESULT.DISP_E_UNKNOWNNAME, (HRESULT)ex.HResult);
+            Assert.Equal(HRESULT.Values.DISP_E_UNKNOWNNAME, (HRESULT)ex.HResult);
             Assert.Equal(0, callCount);
         }
 

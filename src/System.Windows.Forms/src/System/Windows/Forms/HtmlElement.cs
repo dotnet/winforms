@@ -452,7 +452,7 @@ namespace System.Windows.Forms
                     var names = new string[] { methodName };
                     Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
                     HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
-                    if (!hr.Succeeded() || dispid == Ole32.DispatchID.UNKNOWN)
+                    if (!hr.Succeeded || dispid == Ole32.DispatchID.UNKNOWN)
                     {
                         return null;
                     }
@@ -483,7 +483,7 @@ namespace System.Windows.Forms
                             retVals,
                             &excepInfo,
                             null);
-                        if (hr == HRESULT.S_OK)
+                        if (hr == HRESULT.Values.S_OK)
                         {
                             return retVals[0];
                         }

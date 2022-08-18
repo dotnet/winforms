@@ -1142,14 +1142,14 @@ namespace System.Windows.Forms
                     if (SubItems[i].IsAccessibilityObjectCreated)
                     {
                         HRESULT result = UiaCore.UiaDisconnectProvider(SubItems[i].AccessibilityObject);
-                        Debug.Assert(result == HRESULT.S_OK);
+                        Debug.Assert(result == HRESULT.Values.S_OK);
                     }
                 }
 
                 if (IsAccessibilityObjectCreated)
                 {
                     HRESULT result = UiaCore.UiaDisconnectProvider(AccessibilityObject);
-                    Debug.Assert(result == HRESULT.S_OK);
+                    Debug.Assert(result == HRESULT.Values.S_OK);
                 }
             }
 

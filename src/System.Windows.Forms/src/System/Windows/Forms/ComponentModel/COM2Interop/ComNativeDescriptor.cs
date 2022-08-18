@@ -87,7 +87,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (component is VSSDK.IVsPerPropertyBrowsing)
             {
                 HRESULT hr = ((VSSDK.IVsPerPropertyBrowsing)component).GetClassName(ref name);
-                if (hr.Succeeded() && name is not null)
+                if (hr.Succeeded && name is not null)
                 {
                     return name;
                 }
@@ -152,7 +152,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             try
             {
                 HRESULT hr = iDispatch.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
-                if (dispid == DispatchID.UNKNOWN || !hr.Succeeded())
+                if (dispid == DispatchID.UNKNOWN || !hr.Succeeded)
                 {
                     return null;
                 }
@@ -173,7 +173,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             object[] pVarResult = new object[1];
-            if (GetPropertyValue(component, dispid, pVarResult) == HRESULT.S_OK)
+            if (GetPropertyValue(component, dispid, pVarResult) == HRESULT.Values.S_OK)
             {
                 succeeded = true;
                 return pVarResult[0];
@@ -189,7 +189,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             if (!(component is Oleaut32.IDispatch iDispatch))
             {
-                return HRESULT.E_NOINTERFACE;
+                return HRESULT.Values.E_NOINTERFACE;
             }
 
             try
@@ -208,7 +208,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         retval,
                         &pExcepInfo,
                         null);
-                    if (hr == HRESULT.DISP_E_EXCEPTION)
+                    if (hr == HRESULT.Values.DISP_E_EXCEPTION)
                     {
                         return pExcepInfo.scode;
                     }
@@ -224,7 +224,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
             }
 
-            return HRESULT.E_FAIL;
+            return HRESULT.Values.E_FAIL;
         }
 
         /// <summary>

@@ -3154,7 +3154,7 @@ namespace System.Windows.Forms
 
             GETTEXTLENGTHEX* pGtl = &gtl;
             int expectedLength = (int)PInvoke.SendMessage(this, (User32.WM)User32.EM.GETTEXTLENGTHEX, (WPARAM)pGtl);
-            if (expectedLength == (int)HRESULT.E_INVALIDARG)
+            if (expectedLength == (int)HRESULT.Values.E_INVALIDARG)
                 throw new Win32Exception(expectedLength);
 
             // buffer has to have enough space for final \0. Without this, the last character is missing!

@@ -78,30 +78,30 @@ namespace System.Windows.Forms
         // IOleControlSite methods:
         HRESULT IOleControlSite.OnControlInfoChanged()
         {
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         HRESULT IOleControlSite.LockInPlaceActive(BOOL fLock)
         {
-            return HRESULT.E_NOTIMPL;
+            return HRESULT.Values.E_NOTIMPL;
         }
 
         unsafe HRESULT IOleControlSite.GetExtendedControl(IntPtr* ppDisp)
         {
             if (ppDisp is null)
             {
-                return HRESULT.E_POINTER;
+                return HRESULT.Values.E_POINTER;
             }
 
             *ppDisp = IntPtr.Zero;
-            return HRESULT.E_NOTIMPL;
+            return HRESULT.Values.E_NOTIMPL;
         }
 
         unsafe HRESULT IOleControlSite.TransformCoords(Point* pPtlHimetric, PointF* pPtfContainer, XFORMCOORDS dwFlags)
         {
             if (pPtlHimetric is null || pPtfContainer is null)
             {
-                return HRESULT.E_POINTER;
+                return HRESULT.Values.E_POINTER;
             }
 
             if ((dwFlags & XFORMCOORDS.HIMETRICTOCONTAINER) != 0)
@@ -118,7 +118,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return HRESULT.E_INVALIDARG;
+                    return HRESULT.Values.E_INVALIDARG;
                 }
             }
             else if ((dwFlags & XFORMCOORDS.CONTAINERTOHIMETRIC) != 0)
@@ -135,22 +135,22 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return HRESULT.E_INVALIDARG;
+                    return HRESULT.Values.E_INVALIDARG;
                 }
             }
             else
             {
-                return HRESULT.E_INVALIDARG;
+                return HRESULT.Values.E_INVALIDARG;
             }
 
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         unsafe HRESULT IOleControlSite.TranslateAccelerator(MSG* pMsg, KEYMODIFIERS grfModifiers)
         {
             if (pMsg is null)
             {
-                return HRESULT.E_POINTER;
+                return HRESULT.Values.E_POINTER;
             }
 
             Debug.Assert(!Host.GetAXHostState(WebBrowserHelper.siteProcessedInputKey), "Re-entering IOleControlSite.TranslateAccelerator!!!");
@@ -160,7 +160,7 @@ namespace System.Windows.Forms
             try
             {
                 bool f = ((Control)Host).PreProcessControlMessage(ref msg) == PreProcessControlState.MessageProcessed;
-                return f ? HRESULT.S_OK : HRESULT.S_FALSE;
+                return f ? HRESULT.Values.S_OK : HRESULT.Values.S_FALSE;
             }
             finally
             {
@@ -168,22 +168,22 @@ namespace System.Windows.Forms
             }
         }
 
-        HRESULT IOleControlSite.OnFocus(BOOL fGotFocus) => HRESULT.S_OK;
+        HRESULT IOleControlSite.OnFocus(BOOL fGotFocus) => HRESULT.Values.S_OK;
 
-        HRESULT IOleControlSite.ShowPropertyFrame() => HRESULT.E_NOTIMPL;
+        HRESULT IOleControlSite.ShowPropertyFrame() => HRESULT.Values.E_NOTIMPL;
 
         // IOleClientSite methods:
-        HRESULT IOleClientSite.SaveObject() => HRESULT.E_NOTIMPL;
+        HRESULT IOleClientSite.SaveObject() => HRESULT.Values.E_NOTIMPL;
 
         unsafe HRESULT IOleClientSite.GetMoniker(OLEGETMONIKER dwAssign, OLEWHICHMK dwWhichMoniker, IntPtr* ppmk)
         {
             if (ppmk is null)
             {
-                return HRESULT.E_POINTER;
+                return HRESULT.Values.E_POINTER;
             }
 
             *ppmk = IntPtr.Zero;
-            return HRESULT.E_NOTIMPL;
+            return HRESULT.Values.E_NOTIMPL;
         }
 
         IOleContainer IOleClientSite.GetContainer()
@@ -196,7 +196,7 @@ namespace System.Windows.Forms
             if (Host.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
             {
                 HWND hwnd = HWND.Null;
-                if (Host.AXInPlaceObject.GetWindow(&hwnd).Succeeded())
+                if (Host.AXInPlaceObject.GetWindow(&hwnd).Succeeded)
                 {
                     if (Host.GetHandleNoCreate() != hwnd)
                     {
@@ -214,42 +214,42 @@ namespace System.Windows.Forms
                 }
             }
 
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
-        HRESULT IOleClientSite.OnShowWindow(BOOL fShow) => HRESULT.S_OK;
+        HRESULT IOleClientSite.OnShowWindow(BOOL fShow) => HRESULT.Values.S_OK;
 
-        HRESULT IOleClientSite.RequestNewObjectLayout() => HRESULT.E_NOTIMPL;
+        HRESULT IOleClientSite.RequestNewObjectLayout() => HRESULT.Values.E_NOTIMPL;
 
         // IOleInPlaceSite methods:
         unsafe HRESULT IOleInPlaceSite.GetWindow(IntPtr* phwnd)
         {
             if (phwnd is null)
             {
-                return HRESULT.E_POINTER;
+                return HRESULT.Values.E_POINTER;
             }
 
             *phwnd = PInvoke.GetParent(Host);
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
-        HRESULT IOleInPlaceSite.ContextSensitiveHelp(BOOL fEnterMode) => HRESULT.E_NOTIMPL;
+        HRESULT IOleInPlaceSite.ContextSensitiveHelp(BOOL fEnterMode) => HRESULT.Values.E_NOTIMPL;
 
-        HRESULT IOleInPlaceSite.CanInPlaceActivate() => HRESULT.S_OK;
+        HRESULT IOleInPlaceSite.CanInPlaceActivate() => HRESULT.Values.S_OK;
 
         unsafe HRESULT IOleInPlaceSite.OnInPlaceActivate()
         {
             Host.ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
             RECT posRect = Host.Bounds;
             OnActiveXRectChange(&posRect);
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         HRESULT IOleInPlaceSite.OnUIActivate()
         {
             Host.ActiveXState = WebBrowserHelper.AXState.UIActive;
             Host.GetParentContainer().OnUIActivate(Host);
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         unsafe HRESULT IOleInPlaceSite.GetWindowContext(
@@ -264,7 +264,7 @@ namespace System.Windows.Forms
 
             if (lprcPosRect is null || lprcClipRect is null)
             {
-                return HRESULT.E_POINTER;
+                return HRESULT.Values.E_POINTER;
             }
 
             *lprcPosRect = Host.Bounds;
@@ -278,10 +278,10 @@ namespace System.Windows.Forms
                 lpFrameInfo->hwndFrame = Host.ParentInternal?.Handle ?? IntPtr.Zero;
             }
 
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
-        HRESULT IOleInPlaceSite.Scroll(Size scrollExtant) => HRESULT.S_FALSE;
+        HRESULT IOleInPlaceSite.Scroll(Size scrollExtant) => HRESULT.Values.S_FALSE;
 
         HRESULT IOleInPlaceSite.OnUIDeactivate(BOOL fUndoable)
         {
@@ -291,7 +291,7 @@ namespace System.Windows.Forms
                 Host.ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
             }
 
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         HRESULT IOleInPlaceSite.OnInPlaceDeactivate()
@@ -303,10 +303,10 @@ namespace System.Windows.Forms
 
             Host.GetParentContainer().OnInPlaceDeactivate(Host);
             Host.ActiveXState = WebBrowserHelper.AXState.Running;
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
-        HRESULT IOleInPlaceSite.DiscardUndoState() => HRESULT.S_OK;
+        HRESULT IOleInPlaceSite.DiscardUndoState() => HRESULT.Values.S_OK;
 
         HRESULT IOleInPlaceSite.DeactivateAndUndo() => Host.AXInPlaceObject.UIDeactivate();
 
@@ -315,12 +315,12 @@ namespace System.Windows.Forms
         // ISimpleFrameSite methods:
         unsafe HRESULT ISimpleFrameSite.PreMessageFilter(IntPtr hWnd, uint msg, IntPtr wp, IntPtr lp, IntPtr* plResult, uint* pdwCookie)
         {
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         unsafe HRESULT ISimpleFrameSite.PostMessageFilter(IntPtr hWnd, uint msg, IntPtr wp, IntPtr lp, IntPtr* plResult, uint dwCookie)
         {
-            return HRESULT.S_FALSE;
+            return HRESULT.Values.S_FALSE;
         }
 
         // IPropertyNotifySink methods:
@@ -330,7 +330,7 @@ namespace System.Windows.Forms
             // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
             if (Host.NoComponentChangeEvents != 0)
             {
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             Host.NoComponentChangeEvents++;
@@ -348,12 +348,12 @@ namespace System.Windows.Forms
                 Host.NoComponentChangeEvents--;
             }
 
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         HRESULT IPropertyNotifySink.OnRequestEdit(DispatchID dispid)
         {
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         internal virtual void OnPropertyChanged(DispatchID dispid)
@@ -409,14 +409,14 @@ namespace System.Windows.Forms
         {
             if (lprcPosRect is null)
             {
-                return HRESULT.E_INVALIDARG;
+                return HRESULT.Values.E_INVALIDARG;
             }
 
             var posRect = new RECT(0, 0, lprcPosRect->right - lprcPosRect->left, lprcPosRect->bottom - lprcPosRect->top);
             var clipRect = WebBrowserHelper.GetClipRect();
             Host.AXInPlaceObject.SetObjectRects(&posRect, &clipRect);
             Host.MakeDirty();
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
     }
 }

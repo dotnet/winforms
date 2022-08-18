@@ -314,7 +314,7 @@ namespace System.Windows.Forms.Tests
 
             var dropTarget = new CustomDropTarget();
             Assert.Equal(ApartmentState.STA, Application.OleRequired());
-            Assert.Equal(HRESULT.DRAGDROP_E_ALREADYREGISTERED, Ole32.RegisterDragDrop(control.Handle, dropTarget));
+            Assert.Equal(HRESULT.Values.DRAGDROP_E_ALREADYREGISTERED, Ole32.RegisterDragDrop(control.Handle, dropTarget));
 
             control.AllowDrop = value;
             Assert.Equal(value, control.AllowDrop);
@@ -1289,7 +1289,7 @@ namespace System.Windows.Forms.Tests
 
             var dropTarget = new CustomDropTarget();
             Assert.Equal(ApartmentState.STA, Application.OleRequired());
-            Assert.Equal(HRESULT.DRAGDROP_E_ALREADYREGISTERED, Ole32.RegisterDragDrop(control.Handle, dropTarget));
+            Assert.Equal(HRESULT.Values.DRAGDROP_E_ALREADYREGISTERED, Ole32.RegisterDragDrop(control.Handle, dropTarget));
 
             control.EnableAutoDragDrop = value;
             Assert.Equal(value, control.EnableAutoDragDrop);

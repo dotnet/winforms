@@ -33,11 +33,11 @@ namespace System.Windows.Forms
             {
                 if (ppEnum is null)
                 {
-                    return HRESULT.E_POINTER;
+                    return HRESULT.Values.E_POINTER;
                 }
 
                 ppEnum[0] = new EnumVariantObject(_owner, _currentChild);
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             /// <summary>
@@ -47,7 +47,7 @@ namespace System.Windows.Forms
             {
                 _currentChild = 0;
                 _owner._systemIEnumVariant?.Reset();
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             /// <summary>
@@ -57,7 +57,7 @@ namespace System.Windows.Forms
             {
                 _currentChild += celt;
                 _owner._systemIEnumVariant?.Skip(celt);
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             /// <summary>
@@ -101,12 +101,12 @@ namespace System.Windows.Forms
 
                 if (pCeltFetched is null)
                 {
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
 
                 // Tell caller whether requested number of items was returned. Once list of items has
                 // been exhausted, we return S_FALSE so that caller knows to stop calling this method.
-                return *pCeltFetched == celt ? HRESULT.S_OK : HRESULT.S_FALSE;
+                return *pCeltFetched == celt ? HRESULT.Values.S_OK : HRESULT.Values.S_FALSE;
             }
 
             /// <summary>

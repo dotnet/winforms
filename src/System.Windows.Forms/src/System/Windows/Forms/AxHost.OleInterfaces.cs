@@ -124,17 +124,17 @@ namespace System.Windows.Forms
 
                 if (rval is null || riid is null)
                 {
-                    return HRESULT.E_INVALIDARG;
+                    return HRESULT.Values.E_INVALIDARG;
                 }
 
                 if (!riid->Equals(s_ivbformat_Guid))
                 {
                     rval[0] = null;
-                    return HRESULT.E_NOINTERFACE;
+                    return HRESULT.Values.E_NOINTERFACE;
                 }
 
                 rval[0] = new VBFormat();
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             // IVBGetControl methods:
@@ -143,18 +143,18 @@ namespace System.Windows.Forms
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in EnumControls");
                 ppenum = _host.GetParentContainer().EnumControls(_host, dwOleContF, dwWhich);
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             // ISimpleFrameSite methods:
             unsafe HRESULT ISimpleFrameSite.PreMessageFilter(IntPtr hwnd, uint msg, IntPtr wp, IntPtr lp, IntPtr* plResult, uint* pdwCookie)
             {
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             unsafe HRESULT ISimpleFrameSite.PostMessageFilter(IntPtr hwnd, uint msg, IntPtr wp, IntPtr lp, IntPtr* plResult, uint dwCookie)
             {
-                return HRESULT.S_FALSE;
+                return HRESULT.Values.S_FALSE;
             }
 
             // IReflect methods:
@@ -251,13 +251,13 @@ namespace System.Windows.Forms
             HRESULT IOleControlSite.OnControlInfoChanged()
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in OnControlInfoChanged");
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT IOleControlSite.LockInPlaceActive(BOOL fLock)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in LockInPlaceActive");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             unsafe HRESULT IOleControlSite.GetExtendedControl(IntPtr* ppDisp)
@@ -265,24 +265,24 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in GetExtendedControl {_host}");
                 if (ppDisp is null)
                 {
-                    return HRESULT.E_POINTER;
+                    return HRESULT.Values.E_POINTER;
                 }
 
                 object proxy = _host.GetParentContainer().GetProxyForControl(_host);
                 if (proxy is null)
                 {
-                    return HRESULT.E_NOTIMPL;
+                    return HRESULT.Values.E_NOTIMPL;
                 }
 
                 *ppDisp = Marshal.GetIDispatchForObject(proxy);
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             unsafe HRESULT IOleControlSite.TransformCoords(Point* pPtlHimetric, PointF* pPtfContainer, XFORMCOORDS dwFlags)
             {
                 if (pPtlHimetric is null || pPtfContainer is null)
                 {
-                    return HRESULT.E_INVALIDARG;
+                    return HRESULT.Values.E_INVALIDARG;
                 }
 
                 HRESULT hr = SetupLogPixels(false);
@@ -306,7 +306,7 @@ namespace System.Windows.Forms
                     else
                     {
                         Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t dwFlags not supported: {dwFlags}");
-                        return HRESULT.E_INVALIDARG;
+                        return HRESULT.Values.E_INVALIDARG;
                     }
                 }
                 else if ((dwFlags & XFORMCOORDS.CONTAINERTOHIMETRIC) != 0)
@@ -324,23 +324,23 @@ namespace System.Windows.Forms
                     else
                     {
                         Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t dwFlags not supported: {dwFlags}");
-                        return HRESULT.E_INVALIDARG;
+                        return HRESULT.Values.E_INVALIDARG;
                     }
                 }
                 else
                 {
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t dwFlags not supported: {dwFlags}");
-                    return HRESULT.E_INVALIDARG;
+                    return HRESULT.Values.E_INVALIDARG;
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             unsafe HRESULT IOleControlSite.TranslateAccelerator(MSG* pMsg, KEYMODIFIERS grfModifiers)
             {
                 if (pMsg is null)
                 {
-                    return HRESULT.E_POINTER;
+                    return HRESULT.Values.E_POINTER;
                 }
 
                 Debug.Assert(!_host.GetAxState(s_siteProcessedInputKey), "Re-entering IOleControlSite.TranslateAccelerator!!!");
@@ -350,7 +350,7 @@ namespace System.Windows.Forms
                 try
                 {
                     bool f = _host.PreProcessMessage(ref msg);
-                    return f ? HRESULT.S_OK : HRESULT.S_FALSE;
+                    return f ? HRESULT.Values.S_OK : HRESULT.Values.S_FALSE;
                 }
                 finally
                 {
@@ -358,36 +358,36 @@ namespace System.Windows.Forms
                 }
             }
 
-            HRESULT IOleControlSite.OnFocus(BOOL fGotFocus) => HRESULT.S_OK;
+            HRESULT IOleControlSite.OnFocus(BOOL fGotFocus) => HRESULT.Values.S_OK;
 
             HRESULT IOleControlSite.ShowPropertyFrame()
             {
                 if (_host.CanShowPropertyPages())
                 {
                     _host.ShowPropertyPages();
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
 
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             // IOleClientSite methods:
             HRESULT IOleClientSite.SaveObject()
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in SaveObject");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             unsafe HRESULT IOleClientSite.GetMoniker(OLEGETMONIKER dwAssign, OLEWHICHMK dwWhichMoniker, IntPtr* ppmk)
             {
                 if (ppmk is null)
                 {
-                    return HRESULT.E_POINTER;
+                    return HRESULT.Values.E_POINTER;
                 }
 
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetMoniker");
                 *ppmk = IntPtr.Zero;
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             IOleContainer IOleClientSite.GetContainer()
@@ -402,7 +402,7 @@ namespace System.Windows.Forms
                 if (_host.GetAxState(s_fOwnWindow))
                 {
                     Debug.Fail("we can't be in showobject if we own our window...");
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
 
                 if (_host.GetAxState(s_fFakingWindow))
@@ -420,11 +420,11 @@ namespace System.Windows.Forms
 
                 if (_host.GetOcState() < OC_INPLACE)
                 {
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
 
                 HWND hwnd = HWND.Null;
-                if (_host.GetInPlaceObject().GetWindow(&hwnd).Succeeded())
+                if (_host.GetInPlaceObject().GetWindow(&hwnd).Succeeded)
                 {
                     if (_host.GetHandleNoCreate() != hwnd)
                     {
@@ -441,19 +441,19 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.AXWindowlessControl);
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT IOleClientSite.OnShowWindow(BOOL fShow)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in OnShowWindow");
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT IOleClientSite.RequestNewObjectLayout()
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in RequestNewObjectLayout");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             // IOleInPlaceSite methods:
@@ -462,24 +462,24 @@ namespace System.Windows.Forms
             {
                 if (phwnd is null)
                 {
-                    return HRESULT.E_POINTER;
+                    return HRESULT.Values.E_POINTER;
                 }
 
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in GetWindow");
                 *phwnd = _host.ParentInternal?.Handle ?? IntPtr.Zero;
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT IOleInPlaceSite.ContextSensitiveHelp(BOOL fEnterMode)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in ContextSensitiveHelp");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             HRESULT IOleInPlaceSite.CanInPlaceActivate()
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in CanInPlaceActivate");
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT IOleInPlaceSite.OnInPlaceActivate()
@@ -488,7 +488,7 @@ namespace System.Windows.Forms
                 _host.SetAxState(s_ownDisposing, false);
                 _host.SetAxState(s_rejectSelection, false);
                 _host.SetOcState(OC_INPLACE);
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT IOleInPlaceSite.OnUIActivate()
@@ -496,7 +496,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in OnUIActivate for {_host}");
                 _host.SetOcState(OC_UIACTIVE);
                 _host.GetParentContainer().OnUIActivate(_host);
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             unsafe HRESULT IOleInPlaceSite.GetWindowContext(
@@ -511,7 +511,7 @@ namespace System.Windows.Forms
 
                 if (lprcPosRect is null || lprcClipRect is null)
                 {
-                    return HRESULT.E_POINTER;
+                    return HRESULT.Values.E_POINTER;
                 }
 
                 *lprcPosRect = _host.Bounds;
@@ -525,10 +525,10 @@ namespace System.Windows.Forms
                     lpFrameInfo->hwndFrame = _host.ParentInternal?.Handle ?? IntPtr.Zero;
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
-            HRESULT IOleInPlaceSite.Scroll(Size scrollExtant) => HRESULT.S_FALSE;
+            HRESULT IOleInPlaceSite.Scroll(Size scrollExtant) => HRESULT.Values.S_FALSE;
 
             HRESULT IOleInPlaceSite.OnUIDeactivate(BOOL fUndoable)
             {
@@ -539,7 +539,7 @@ namespace System.Windows.Forms
                     _host.SetOcState(OC_INPLACE);
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT IOleInPlaceSite.OnInPlaceDeactivate()
@@ -553,13 +553,13 @@ namespace System.Windows.Forms
                 _host.GetParentContainer().OnInPlaceDeactivate(_host);
                 _host.DetachWindow();
                 _host.SetOcState(OC_RUNNING);
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT IOleInPlaceSite.DiscardUndoState()
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in DiscardUndoState");
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT IOleInPlaceSite.DeactivateAndUndo()
@@ -572,7 +572,7 @@ namespace System.Windows.Forms
             {
                 if (lprcPosRect is null)
                 {
-                    return HRESULT.E_INVALIDARG;
+                    return HRESULT.Values.E_INVALIDARG;
                 }
 
                 // The MediaPlayer control has a AllowChangeDisplaySize property that users
@@ -597,7 +597,7 @@ namespace System.Windows.Forms
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Control directly called OnPosRectChange... ignoring the new size");
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             // IPropertyNotifySink methods
@@ -608,7 +608,7 @@ namespace System.Windows.Forms
                 // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
                 if (_host.NoComponentChangeEvents != 0)
                 {
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
 
                 _host.NoComponentChangeEvents++;
@@ -652,7 +652,7 @@ namespace System.Windows.Forms
                         }
                         catch (CheckoutException e) when (e == CheckoutException.Canceled)
                         {
-                            return HRESULT.S_OK;
+                            return HRESULT.Values.S_OK;
                         }
 
                         // Now notify the change service that the change was successful.
@@ -669,13 +669,13 @@ namespace System.Windows.Forms
                     _host.NoComponentChangeEvents--;
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT IPropertyNotifySink.OnRequestEdit(DispatchID dispid)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in OnRequestEdit for {_host}");
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
         }
     }

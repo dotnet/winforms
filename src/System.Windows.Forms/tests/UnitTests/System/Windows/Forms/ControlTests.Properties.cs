@@ -239,7 +239,7 @@ namespace System.Windows.Forms.Tests
 
             var dropTarget = new CustomDropTarget();
             Assert.Equal(ApartmentState.STA, Application.OleRequired());
-            Assert.Equal(HRESULT.S_OK, Ole32.RegisterDragDrop(control.Handle, dropTarget));
+            Assert.Equal(HRESULT.Values.S_OK, Ole32.RegisterDragDrop(control.Handle, dropTarget));
 
             control.AllowDrop = value;
             Assert.Equal(value, control.AllowDrop);

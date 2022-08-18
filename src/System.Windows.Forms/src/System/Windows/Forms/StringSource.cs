@@ -37,7 +37,7 @@ namespace System.Windows.Forms
                 IntPtr.Zero,
                 Ole32.CLSCTX.INPROC_SERVER,
                 in autoCompleteIID,
-                out IntPtr autoComplete2Ptr).ThrowIfFailed();
+                out IntPtr autoComplete2Ptr).ThrowOnFailure();
 
             var obj = WinFormsComWrappers.Instance
                 .GetOrCreateObjectForComInstance(autoComplete2Ptr, CreateObjectFlags.UniqueInstance);
@@ -55,14 +55,14 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            if (!_autoCompleteObject2.SetOptions(options).Succeeded())
+            if (!_autoCompleteObject2.SetOptions(options).Succeeded)
             {
                 return false;
             }
 
             HRESULT hr = _autoCompleteObject2.Init(edit.Handle, this, IntPtr.Zero, IntPtr.Zero);
             GC.KeepAlive(edit.Wrapper);
-            return hr.Succeeded();
+            return hr.Succeeded;
         }
 
         public void ReleaseAutoComplete()
@@ -93,7 +93,7 @@ namespace System.Windows.Forms
         {
             if (celt < 0)
             {
-                return (int)HRESULT.E_INVALIDARG;
+                return (int)HRESULT.Values.E_INVALIDARG;
             }
 
             int fetched = 0;
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
                 Marshal.WriteInt32(pceltFetched, fetched);
             }
 
-            return celt == 0 ? (int)HRESULT.S_OK : (int)HRESULT.S_FALSE;
+            return celt == 0 ? (int)HRESULT.Values.S_OK : (int)HRESULT.Values.S_FALSE;
         }
 
         void IEnumString.Reset()
@@ -124,10 +124,10 @@ namespace System.Windows.Forms
             current += celt;
             if (current >= size)
             {
-                return (int)HRESULT.S_FALSE;
+                return (int)HRESULT.Values.S_FALSE;
             }
 
-            return (int)HRESULT.S_OK;
+            return (int)HRESULT.Values.S_OK;
         }
 
         #endregion

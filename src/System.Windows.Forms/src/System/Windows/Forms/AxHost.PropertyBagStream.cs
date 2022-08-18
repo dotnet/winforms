@@ -40,7 +40,7 @@ namespace System.Windows.Forms
                 if (!_bag.Contains(pszPropName))
                 {
                     pVar = null;
-                    return HRESULT.E_INVALIDARG;
+                    return HRESULT.Values.E_INVALIDARG;
                 }
 
                 pVar = _bag[pszPropName];
@@ -51,7 +51,7 @@ namespace System.Windows.Forms
                 // out the BSTR field of the variant. Since, the EE or us cannot do anything about this, we will return
                 // a E_INVALIDARG rather than let visual basic6 crash.
 
-                return (pVar is null) ? HRESULT.E_INVALIDARG : HRESULT.S_OK;
+                return (pVar is null) ? HRESULT.Values.E_INVALIDARG : HRESULT.Values.S_OK;
             }
 
             HRESULT Oleaut32.IPropertyBag.Write(string pszPropName, ref object pVar)
@@ -60,11 +60,11 @@ namespace System.Windows.Forms
                 if (pVar is not null && !pVar.GetType().IsSerializable)
                 {
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t {pVar.GetType().FullName} is not serializable.");
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
 
                 _bag[pszPropName] = pVar;
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             internal void Write(Stream stream)

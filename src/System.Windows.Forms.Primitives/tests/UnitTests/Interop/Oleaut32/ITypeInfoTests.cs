@@ -24,11 +24,11 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
 
             nint pv = (nint)int.MaxValue;
             hr = typeInfo.AddressOfMember((DispatchID)6, INVOKEKIND.FUNC, &pv);
-            Assert.Equal(HRESULT.TYPE_E_BADMODULEKIND, hr);
+            Assert.Equal(HRESULT.Values.TYPE_E_BADMODULEKIND, hr);
             Assert.Equal(0, pv);
         }
 
@@ -41,12 +41,12 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
 
             Guid riid = typeof(IPictureDisp).GUID;
             IntPtr pvObj = (IntPtr)int.MaxValue;
             hr = typeInfo.CreateInstance(IntPtr.Zero, &riid, &pvObj);
-            Assert.Equal(HRESULT.TYPE_E_BADMODULEKIND, hr);
+            Assert.Equal(HRESULT.Values.TYPE_E_BADMODULEKIND, hr);
             Assert.Equal(IntPtr.Zero, pvObj);
         }
 
@@ -59,14 +59,14 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
 
             nint typeLib = (nint)int.MaxValue;
             uint index = uint.MaxValue;
             hr = typeInfo.GetContainingTypeLib(&typeLib, &index);
             try
             {
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.NotEqual(0, typeLib);
                 Assert.NotEqual(0u, index);
             }
@@ -85,13 +85,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
 
             var dllName = new BSTR("DllName");
             var name = new BSTR("Name");
             ushort wOrdinal = ushort.MaxValue;
             hr = typeInfo.GetDllEntry((DispatchID)6, INVOKEKIND.FUNC, &dllName, &name, &wOrdinal);
-            Assert.Equal(HRESULT.TYPE_E_BADMODULEKIND, hr);
+            Assert.Equal(HRESULT.Values.TYPE_E_BADMODULEKIND, hr);
             Assert.Empty(dllName.String.ToString());
             Assert.Empty(name.String.ToString());
             Assert.Equal(0u, wOrdinal);
@@ -106,14 +106,14 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
 
             using var name = new BSTR("Name");
             using var docString = new BSTR("DocString");
             uint dwHelpContext = uint.MaxValue;
             using var helpFile = new BSTR("HelpFile");
             hr = typeInfo.GetDocumentation((DispatchID)4, &name, &docString, &dwHelpContext, &helpFile);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.Equal("Width", name.String.ToString());
             Assert.Empty(docString.String.ToString());
             Assert.Equal(0u, dwHelpContext);
@@ -129,13 +129,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
 
             FUNCDESC* pFuncDesc = null;
             try
             {
                 hr = typeInfo.GetFuncDesc(0, &pFuncDesc);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal((DispatchID)6, pFuncDesc->memid);
                 Assert.Equal(IntPtr.Zero, pFuncDesc->lprgscode);
                 Assert.NotEqual(IntPtr.Zero, (IntPtr)pFuncDesc->lprgelemdescParam);
@@ -166,14 +166,14 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
 
             var rgszNames = new string[] { "Width", "Other" };
             var rgDispId = new DispatchID[rgszNames.Length];
             fixed (DispatchID* pRgDispId = rgDispId)
             {
                 hr = typeInfo.GetIDsOfNames(rgszNames, (uint)rgszNames.Length, pRgDispId);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal(new string[] { "Width", "Other" }, rgszNames);
                 Assert.Equal(new DispatchID[] { (DispatchID)4, DispatchID.UNKNOWN }, rgDispId);
             }
@@ -188,11 +188,11 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
 
             IMPLTYPEFLAG implTypeFlags = (IMPLTYPEFLAG)(-1);
             hr = typeInfo.GetImplTypeFlags(0, &implTypeFlags);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.NotEqual(IMPLTYPEFLAG.FDEFAULT, implTypeFlags);
         }
 
@@ -205,11 +205,11 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
 
             var mops = new BSTR("Mops");
             hr = typeInfo.GetMops((DispatchID)4, &mops);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.Empty(mops.String.ToString());
         }
 
@@ -222,14 +222,14 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
 
             BSTR* rgszNames = stackalloc BSTR[2];
             rgszNames[0] = new BSTR("Name1");
             rgszNames[1] = new BSTR("Name2");
             uint cNames = 0;
             hr = typeInfo.GetNames((DispatchID)4, rgszNames, 2u, &cNames);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.Equal("Width", rgszNames[0].String.ToString());
             Assert.Equal("Name2", rgszNames[1].String.ToString());
             Assert.Equal(1u, cNames);
@@ -247,17 +247,17 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
 
             uint refType = uint.MaxValue;
             hr = typeInfo.GetRefTypeOfImplType(0, &refType);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.NotEqual(0u, refType);
 
             ITypeInfo refTypeInfo;
             hr = typeInfo.GetRefTypeInfo(refType, out refTypeInfo);
             using var refTypeInfoReleaser = new ComRefReleaser(refTypeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.NotNull(refTypeInfo);
         }
 
@@ -270,11 +270,11 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
 
             uint refType = uint.MaxValue;
             hr = typeInfo.GetRefTypeOfImplType(0, &refType);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.NotEqual(0u, refType);
         }
 
@@ -287,13 +287,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
 
             TYPEATTR* pTypeAttr = null;
             try
             {
                 hr = typeInfo.GetTypeAttr(&pTypeAttr);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal(typeof(IPictureDisp).GUID, pTypeAttr->guid);
                 Assert.Equal(0u, pTypeAttr->lcid);
                 Assert.Equal(0u, pTypeAttr->dwReserved);
@@ -329,13 +329,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
 
             IntPtr typeComp = IntPtr.Zero;
             hr = typeInfo.GetTypeComp(&typeComp);
             try
             {
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.NotEqual(IntPtr.Zero, typeComp);
             }
             finally
@@ -353,13 +353,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
 
             VARDESC* pVarDesc = null;
             try
             {
                 hr = typeInfo.GetVarDesc(3, &pVarDesc);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal((DispatchID)4, pVarDesc->memid);
                 Assert.Equal(IntPtr.Zero, pVarDesc->lpstrSchema);
                 Assert.Equal(IntPtr.Zero, pVarDesc->unionMember);
@@ -385,7 +385,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
 
             var dispParams = new DISPPARAMS();
             var varResult = new object[1];
@@ -399,7 +399,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
                 varResult,
                 &excepInfo,
                 &argErr);
-            Assert.Equal(HRESULT.DISP_E_MEMBERNOTFOUND, hr);
+            Assert.Equal(HRESULT.Values.DISP_E_MEMBERNOTFOUND, hr);
             Assert.Null(varResult[0]);
             Assert.Equal(0u, argErr);
         }

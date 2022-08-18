@@ -2369,7 +2369,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         /// <summary>
@@ -2813,7 +2813,7 @@ namespace System.Windows.Forms
         HRESULT Ole32.IPropertyNotifySink.OnRequestEdit(Ole32.DispatchID dispID)
         {
             // Don't do anything here.
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         protected override void OnResize(EventArgs e)

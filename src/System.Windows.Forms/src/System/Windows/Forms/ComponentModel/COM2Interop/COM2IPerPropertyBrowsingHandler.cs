@@ -41,7 +41,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             // check for a property page
             Guid guid = Guid.Empty;
             HRESULT hr = target.MapPropertyToPage(dispid, &guid);
-            if (hr == HRESULT.S_OK)
+            if (hr == HRESULT.Values.S_OK)
             {
                 return guid;
             }
@@ -52,7 +52,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         internal static string? GetDisplayString(Oleaut32.IPerPropertyBrowsing ppb, Ole32.DispatchID dispid, ref bool success)
         {
             HRESULT hr = ppb.GetDisplayString(dispid, out string strVal);
-            if (hr != HRESULT.S_OK)
+            if (hr != HRESULT.Values.S_OK)
             {
                 success = false;
                 return null;
@@ -142,7 +142,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 gveevent.TypeConverter = null;
             }
 
-            if (hr == HRESULT.S_OK)
+            if (hr == HRESULT.Values.S_OK)
             {
                 string?[] names = caStrings.ConvertAndFree();
                 uint[] cookies = caCookies.ConvertAndFree();

@@ -1546,7 +1546,7 @@ namespace System.Windows.Forms.Tests
             int callCount = 0;
             void handler(object sender, EventArgs e) => callCount++;
             COMException ex = Assert.Throws<COMException>(() => element.AttachEventHandler(string.Empty, handler));
-            Assert.Equal(HRESULT.DISP_E_UNKNOWNNAME, (HRESULT)ex.HResult);
+            Assert.Equal(HRESULT.Values.DISP_E_UNKNOWNNAME, (HRESULT)ex.HResult);
             Assert.Equal(0, callCount);
         }
 
@@ -2316,7 +2316,7 @@ namespace System.Windows.Forms.Tests
             HtmlDocument document = await GetDocument(control, Html);
             HtmlElement element = document.GetElementById("id");
             COMException ex = Assert.Throws<COMException>(() => element.SetAttribute(string.Empty, "value"));
-            Assert.Equal(HRESULT.DISP_E_UNKNOWNNAME, (HRESULT)ex.HResult);
+            Assert.Equal(HRESULT.Values.DISP_E_UNKNOWNNAME, (HRESULT)ex.HResult);
         }
 
 #pragma warning disable CS1718 // Disable "Comparison made to same variable" warning.

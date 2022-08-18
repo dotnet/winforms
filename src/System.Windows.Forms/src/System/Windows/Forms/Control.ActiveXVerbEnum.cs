@@ -65,7 +65,7 @@ namespace System.Windows.Forms
                     Debug.Unindent();
                 }
 #endif
-                return (celt == 0 ? HRESULT.S_OK : HRESULT.S_FALSE);
+                return (celt == 0 ? HRESULT.Values.S_OK : HRESULT.Values.S_FALSE);
             }
 
             public HRESULT Skip(uint celt)
@@ -73,23 +73,23 @@ namespace System.Windows.Forms
                 if (_current + celt < _verbs.Length)
                 {
                     _current += celt;
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
 
                 _current = (uint)_verbs.Length;
-                return HRESULT.S_FALSE;
+                return HRESULT.Values.S_FALSE;
             }
 
             public HRESULT Reset()
             {
                 _current = 0;
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             public HRESULT Clone(out Ole32.IEnumOLEVERB ppenum)
             {
                 ppenum = new ActiveXVerbEnum(_verbs);
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
         }
     }

@@ -113,7 +113,7 @@ namespace System.Windows.Forms
                 pdwEffect = (uint)DragDropEffects.None;
             }
 
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         HRESULT Ole32.IDropTarget.DragOver(uint grfKeyState, Point pt, ref uint pdwEffect)
@@ -138,7 +138,7 @@ namespace System.Windows.Forms
                 pdwEffect = (uint)DragDropEffects.None;
             }
 
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         HRESULT Ole32.IDropTarget.DragLeave()
@@ -152,7 +152,7 @@ namespace System.Windows.Forms
                 DragDropHelper.DragLeave();
             }
 
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         HRESULT Ole32.IDropTarget.Drop(object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
@@ -179,7 +179,7 @@ namespace System.Windows.Forms
 
             _lastEffect = DragDropEffects.None;
             _lastDataObject = null;
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         private void UpdateDropDescription(DragEventArgs e)

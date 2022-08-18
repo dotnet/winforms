@@ -53,7 +53,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             Oleaut32.VARIANT* pvars = null;
 
             HRESULT hr = target.GetPropertyAttributes(dispid, &cItems, &pbstrs, &pvars);
-            if (hr != HRESULT.S_OK || cItems == 0 || pvars is null)
+            if (hr != HRESULT.Values.S_OK || cItems == 0 || pvars is null)
             {
                 return Array.Empty<Attribute>();
             }

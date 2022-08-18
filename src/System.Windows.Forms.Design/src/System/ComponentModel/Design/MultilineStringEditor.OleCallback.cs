@@ -35,19 +35,19 @@ namespace System.ComponentModel.Design
 
                 Debug.Assert(storage is not null, "storage is NULL!");
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             public HRESULT GetInPlaceContext(IntPtr lplpFrame, IntPtr lplpDoc, IntPtr lpFrameInfo)
             {
                 Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::GetInPlaceContext");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             public HRESULT ShowContainerUI(BOOL fShow)
             {
                 Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::ShowContainerUI");
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             public HRESULT QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp)
@@ -57,9 +57,9 @@ namespace System.ComponentModel.Design
                 HRESULT hr = Ole32.ReadClassStg(lpstg, out Guid realClsid);
                 Debug.WriteLineIf(RichTextDebug.TraceVerbose, $"real clsid:{realClsid} (hr={hr:X})");
 
-                if (!hr.Succeeded())
+                if (!hr.Succeeded)
                 {
-                    return HRESULT.S_FALSE;
+                    return HRESULT.Values.S_FALSE;
                 }
 
                 if (realClsid == Guid.Empty)
@@ -73,19 +73,19 @@ namespace System.ComponentModel.Design
                     case "00000316-0000-0000-C000-000000000046": // DIB
                     case "00000319-0000-0000-C000-000000000046": // EMF
                     case "0003000A-0000-0000-C000-000000000046": // BMP
-                        return HRESULT.S_OK;
+                        return HRESULT.Values.S_OK;
                     default:
                         Debug.WriteLineIf(
                             RichTextDebug.TraceVerbose,
                             $"   denying '{lpclsid}' from being inserted due to security restrictions");
-                        return HRESULT.S_FALSE;
+                        return HRESULT.Values.S_FALSE;
                 }
             }
 
             public HRESULT DeleteObject(IntPtr lpoleobj)
             {
                 Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::DeleteObject");
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             public HRESULT QueryAcceptData(IComDataObject lpdataobj, IntPtr lpcfFormat, Richedit.RECO reco, BOOL fReally, IntPtr hMetaPict)
@@ -96,36 +96,36 @@ namespace System.ComponentModel.Design
                     DataObject dataObj = new DataObject(lpdataobj);
                     if (dataObj.GetDataPresent(DataFormats.Text) || dataObj.GetDataPresent(DataFormats.UnicodeText))
                     {
-                        return HRESULT.S_OK;
+                        return HRESULT.Values.S_OK;
                     }
 
-                    return HRESULT.E_FAIL;
+                    return HRESULT.Values.E_FAIL;
                 }
 
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             public HRESULT ContextSensitiveHelp(BOOL fEnterMode)
             {
                 Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::ContextSensitiveHelp");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             public HRESULT GetClipboardData(ref Richedit.CHARRANGE lpchrg, Richedit.RECO reco, IntPtr lplpdataobj)
             {
                 Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::GetClipboardData");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             public unsafe HRESULT GetDragDropEffect(BOOL fDrag, User32.MK grfKeyState, Ole32.DROPEFFECT* pdwEffect)
             {
                 if (pdwEffect is null)
                 {
-                    return HRESULT.E_POINTER;
+                    return HRESULT.Values.E_POINTER;
                 }
 
                 *pdwEffect = Ole32.DROPEFFECT.NONE;
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             public HRESULT GetContextMenu(short seltype, IntPtr lpoleobj, ref Richedit.CHARRANGE lpchrg, out IntPtr hmenu)
@@ -134,7 +134,7 @@ namespace System.ComponentModel.Design
 
                 // Do nothing, we don't have ContextMenu any longer.
                 hmenu = IntPtr.Zero;
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
         }
     }

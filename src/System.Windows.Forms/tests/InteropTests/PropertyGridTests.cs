@@ -36,7 +36,7 @@ public class PropertyGridTests
                     // implementation consults IErrorInfo object and populates EXCEPINFO structure.
                     // From EXCEPINFO grid entry reads error code and message.
                     // IErrorInfo consulted too, but it does not hold error message anymore.
-                    Assert.Equal((int)HRESULT.DISP_E_MEMBERNOTFOUND, ex.HResult);
+                    Assert.Equal((int)HRESULT.Values.DISP_E_MEMBERNOTFOUND, ex.HResult);
                     Assert.Equal("Error From StandardErrorInfoUsageTest", ex.Message);
                 }
                 finally

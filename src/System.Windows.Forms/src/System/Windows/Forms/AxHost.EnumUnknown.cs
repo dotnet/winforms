@@ -36,7 +36,7 @@ namespace System.Windows.Forms
 
                 if (celt < 0)
                 {
-                    return HRESULT.E_INVALIDARG;
+                    return HRESULT.Values.E_INVALIDARG;
                 }
 
                 uint fetched = 0;
@@ -64,10 +64,10 @@ namespace System.Windows.Forms
 
                 if (fetched != celt)
                 {
-                    return HRESULT.S_FALSE;
+                    return HRESULT.Values.S_FALSE;
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT Ole32.IEnumUnknown.Skip(uint celt)
@@ -75,22 +75,22 @@ namespace System.Windows.Forms
                 _location += (int)celt;
                 if (_location >= _size)
                 {
-                    return HRESULT.S_FALSE;
+                    return HRESULT.Values.S_FALSE;
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT Ole32.IEnumUnknown.Reset()
             {
                 _location = 0;
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT Ole32.IEnumUnknown.Clone(out Ole32.IEnumUnknown ppenum)
             {
                 ppenum = new EnumUnknown(_array, _location);
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
         }
     }

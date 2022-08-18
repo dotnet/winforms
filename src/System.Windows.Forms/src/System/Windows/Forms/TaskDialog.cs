@@ -109,7 +109,7 @@ namespace System.Windows.Forms
         /// <remarks>
         /// <para>
         ///   When the dialog navigates within a ButtonClicked handler, the handler should
-        ///   always return <see cref="HRESULT.S_FALSE"/> to prevent the dialog from applying the
+        ///   always return <see cref="HRESULT.Values.S_FALSE"/> to prevent the dialog from applying the
         ///   button that raised the handler as dialog result. Otherwise, this can lead to memory
         ///   access problems like <see cref="AccessViolationException"/>s, especially if the
         ///   previous dialog page had radio buttons (but the new ones do not).
@@ -139,14 +139,14 @@ namespace System.Windows.Forms
         /// <para>
         ///   This will be set the first time the
         ///   <see cref="ComCtl32.TDN.BUTTON_CLICKED"/> handler returns
-        ///   <see cref="HRESULT.S_OK"/> to cache the button instance,
+        ///   <see cref="HRESULT.Values.S_OK"/> to cache the button instance,
         ///   so that <see cref="ShowDialog(IntPtr, TaskDialogPage, TaskDialogStartupLocation)"/> can then return it.
         /// </para>
         /// <para>
         ///   Additionally, this is used to check if there was already a
         ///   <see cref="ComCtl32.TDN.BUTTON_CLICKED"/> handler that
-        ///   returned <see cref="HRESULT.S_OK"/>, so that further
-        ///   handles will return <see cref="HRESULT.S_FALSE"/> to
+        ///   returned <see cref="HRESULT.Values.S_OK"/>, so that further
+        ///   handles will return <see cref="HRESULT.Values.S_FALSE"/> to
         ///   not override the previously set result.
         /// </para>
         /// </remarks>
@@ -489,10 +489,7 @@ namespace System.Windows.Forms
 
                     // Marshal.ThrowExceptionForHR will use the IErrorInfo on the
                     // current thread if it exists.
-                    if (returnValue.Failed())
-                    {
-                        Marshal.ThrowExceptionForHR((int)returnValue);
-                    }
+                    returnValue.ThrowOnFailure();
 
                     // Normally, the returned button ID should always equal the cached
                     // result button ID. However, in some cases when the dialog is closed
@@ -916,7 +913,7 @@ namespace System.Windows.Forms
                             // "ContinueButtonClickHandlingMessage" for more information.
                             if (_ignoreButtonClickedNotifications)
                             {
-                                return HRESULT.S_FALSE;
+                                return HRESULT.Values.S_FALSE;
                             }
 
                             // Post the message, and then set the flag to ignore further
@@ -1015,7 +1012,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        return applyButtonResult ? HRESULT.S_OK : HRESULT.S_FALSE;
+                        return applyButtonResult ? HRESULT.Values.S_OK : HRESULT.Values.S_FALSE;
 
                     case ComCtl32.TDN.RADIO_BUTTON_CLICKED:
                         int radioButtonID = PARAM.ToInt(wParam);
@@ -1062,7 +1059,7 @@ namespace System.Windows.Forms
                 HandleCallbackException(ex);
             }
 
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         /// <summary>

@@ -373,11 +373,11 @@ namespace System.Windows.Forms
                     // All other verbs are notimpl.
                     default:
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "DoVerb:Other");
-                        ThrowHr(HRESULT.E_NOTIMPL);
+                        ThrowHr(HRESULT.Values.E_NOTIMPL);
                         break;
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             /// <summary>
@@ -403,7 +403,7 @@ namespace System.Windows.Forms
                     case DVASPECT.TRANSPARENT:
                         break;
                     default:
-                        return HRESULT.DV_E_DVASPECT;
+                        return HRESULT.Values.DV_E_DVASPECT;
                 }
 
                 // We can paint to an enhanced metafile, but not all GDI / GDI+ is
@@ -414,7 +414,7 @@ namespace System.Windows.Forms
                 OBJ_TYPE hdcType = (OBJ_TYPE)PInvoke.GetObjectType(hdc);
                 if (hdcType == OBJ_TYPE.OBJ_METADC)
                 {
-                    return HRESULT.VIEW_E_DRAW;
+                    return HRESULT.Values.VIEW_E_DRAW;
                 }
 
                 Point pVp = default;
@@ -473,7 +473,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             /// <summary>
@@ -510,7 +510,7 @@ namespace System.Windows.Forms
                 }
 
                 ppEnumOleVerb = new ActiveXVerbEnum(s_axVerbs);
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             /// <summary>
@@ -573,7 +573,7 @@ namespace System.Windows.Forms
                     ppAdvSink[0] = _viewAdviseSink;
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             /// <summary>
@@ -601,7 +601,7 @@ namespace System.Windows.Forms
                         pvt,
                         null,
                         null);
-                    if (hr.Succeeded())
+                    if (hr.Succeeded)
                     {
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke succeeded. VT=" + pvt[0].GetType().FullName);
                         obj = pvt[0];
@@ -706,7 +706,7 @@ namespace System.Windows.Forms
 
                 pCI->cAccel = (ushort)_accelCount;
                 pCI->hAccel = _accelTable;
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             /// <summary>
@@ -724,7 +724,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    ThrowHr(HRESULT.DV_E_DVASPECT);
+                    ThrowHr(HRESULT.Values.DV_E_DVASPECT);
                 }
             }
 
@@ -776,17 +776,17 @@ namespace System.Windows.Forms
             {
                 if (phwnd is null)
                 {
-                    return HRESULT.E_POINTER;
+                    return HRESULT.Values.E_POINTER;
                 }
 
                 if (!_activeXState[s_inPlaceActive])
                 {
                     *phwnd = HWND.Null;
-                    return HRESULT.E_FAIL;
+                    return HRESULT.Values.E_FAIL;
                 }
 
                 *phwnd = (HWND)_control.Handle;
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             /// <summary>
@@ -821,11 +821,11 @@ namespace System.Windows.Forms
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> inplaceactive");
 
                     HRESULT hr = inPlaceSite.CanInPlaceActivate();
-                    if (hr != HRESULT.S_OK)
+                    if (hr != HRESULT.Values.S_OK)
                     {
-                        if (hr.Succeeded())
+                        if (hr.Succeeded)
                         {
-                            hr = HRESULT.E_FAIL;
+                            hr = HRESULT.Values.E_FAIL;
                         }
 
                         ThrowHr(hr);
@@ -848,7 +848,7 @@ namespace System.Windows.Forms
                     // We are entering a secure context here.
                     HWND hwndParent = default;
                     HRESULT hr = inPlaceSite.GetWindow((nint*)&hwndParent);
-                    if (!hr.Succeeded())
+                    if (!hr.Succeeded)
                     {
                         ThrowHr(hr);
                     }
@@ -933,8 +933,8 @@ namespace System.Windows.Forms
 
                     // we have to explicitly say we don't wany any border space.
                     HRESULT hr = _inPlaceFrame.SetBorderSpace(null);
-                    if (!hr.Succeeded() && hr != HRESULT.OLE_E_INVALIDRECT &&
-                        hr != HRESULT.INPLACE_E_NOTOOLSPACE && hr != HRESULT.E_NOTIMPL)
+                    if (!hr.Succeeded && hr != HRESULT.Values.OLE_E_INVALIDRECT &&
+                        hr != HRESULT.Values.INPLACE_E_NOTOOLSPACE && hr != HRESULT.Values.E_NOTIMPL)
                     {
                         Marshal.ThrowExceptionForHR((int)hr);
                     }
@@ -942,8 +942,8 @@ namespace System.Windows.Forms
                     if (_inPlaceUiWindow is not null)
                     {
                         hr = _inPlaceFrame.SetBorderSpace(null);
-                        if (!hr.Succeeded() && hr != HRESULT.OLE_E_INVALIDRECT &&
-                            hr != HRESULT.INPLACE_E_NOTOOLSPACE && hr != HRESULT.E_NOTIMPL)
+                        if (!hr.Succeeded && hr != HRESULT.Values.OLE_E_INVALIDRECT &&
+                            hr != HRESULT.Values.INPLACE_E_NOTOOLSPACE && hr != HRESULT.Values.E_NOTIMPL)
                         {
                             Marshal.ThrowExceptionForHR((int)hr);
                         }
@@ -963,7 +963,7 @@ namespace System.Windows.Forms
                 // Only do this if we're already in place active.
                 if (!_activeXState[s_inPlaceActive])
                 {
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
 
                 // Deactivate us if we're UI active
@@ -999,7 +999,7 @@ namespace System.Windows.Forms
                     _inPlaceFrame = null;
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             /// <summary>
@@ -1009,10 +1009,10 @@ namespace System.Windows.Forms
             {
                 if (_activeXState[s_isDirty])
                 {
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
 
-                return HRESULT.S_FALSE;
+                return HRESULT.Values.S_FALSE;
             }
 
             /// <summary>
@@ -1054,7 +1054,7 @@ namespace System.Windows.Forms
                         STGM.READ | STGM.SHARE_EXCLUSIVE,
                         0);
                 }
-                catch (COMException e) when (e.ErrorCode == (int)HRESULT.STG_E_FILENOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.Values.STG_E_FILENOTFOUND)
                 {
                     // For backward compatibility: We were earlier using GetType().FullName
                     // as the stream name in v1. Lets see if a stream by that name exists.
@@ -1104,13 +1104,13 @@ namespace System.Windows.Forms
                     try
                     {
                         HRESULT hr = pPropBag.Read(props[i].Name, out object? obj, pErrorLog);
-                        if (hr.Succeeded() && obj is not null)
+                        if (hr.Succeeded && obj is not null)
                         {
                             Debug.Indent();
                             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Property was in bag");
 
                             string? errorString = null;
-                            HRESULT errorCode = HRESULT.S_OK;
+                            HRESULT errorCode = HRESULT.Values.S_OK;
 
                             try
                             {
@@ -1172,7 +1172,7 @@ namespace System.Windows.Forms
                                 }
                                 else
                                 {
-                                    errorCode = HRESULT.E_FAIL;
+                                    errorCode = HRESULT.Values.E_FAIL;
                                 }
                             }
 
@@ -1347,7 +1347,7 @@ namespace System.Windows.Forms
                 {
                     // we have to explicitly say we don't wany any border space.
                     HRESULT hr = _inPlaceFrame.SetBorderSpace(null);
-                    if (!hr.Succeeded() && hr != HRESULT.INPLACE_E_NOTOOLSPACE && hr != HRESULT.E_NOTIMPL)
+                    if (!hr.Succeeded && hr != HRESULT.Values.INPLACE_E_NOTOOLSPACE && hr != HRESULT.Values.E_NOTIMPL)
                     {
                         Marshal.ThrowExceptionForHR((int)hr);
                     }
@@ -1391,7 +1391,7 @@ namespace System.Windows.Forms
             {
                 if (pQaControl is null)
                 {
-                    return HRESULT.E_FAIL;
+                    return HRESULT.Values.E_FAIL;
                 }
 
                 // Hookup our ambient colors
@@ -1469,7 +1469,7 @@ namespace System.Windows.Forms
                     Marshal.ReleaseComObject(pQaContainer.pUnkEventSink);
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             /// <summary>
@@ -1884,7 +1884,7 @@ namespace System.Windows.Forms
                 // if it's not a content aspect, we don't support it.
                 if ((aspects & DVASPECT.CONTENT) == 0)
                 {
-                    return HRESULT.DV_E_DVASPECT;
+                    return HRESULT.Values.DV_E_DVASPECT;
                 }
 
                 // Set up some flags to return from GetAdvise.
@@ -1904,7 +1904,7 @@ namespace System.Windows.Forms
                     ViewChanged();
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             /// <summary>
@@ -2023,7 +2023,7 @@ namespace System.Windows.Forms
                 else
                 {
                     // We don't support any other aspects
-                    ThrowHr(HRESULT.DV_E_DVASPECT);
+                    ThrowHr(HRESULT.Values.DV_E_DVASPECT);
                 }
             }
 
@@ -2043,7 +2043,7 @@ namespace System.Windows.Forms
             {
                 if (lprcPosRect is null || lprcClipRect is null)
                 {
-                    return HRESULT.E_INVALIDARG;
+                    return HRESULT.Values.E_INVALIDARG;
                 }
 
 #if DEBUG
@@ -2160,7 +2160,7 @@ namespace System.Windows.Forms
                 // painting artifacts.  Flicker like a banshee.
                 _control.Invalidate();
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             /// <summary>
@@ -2178,7 +2178,7 @@ namespace System.Windows.Forms
             {
                 if (lpmsg is null)
                 {
-                    return HRESULT.E_POINTER;
+                    return HRESULT.Values.E_POINTER;
                 }
 
 #if DEBUG
@@ -2222,7 +2222,7 @@ namespace System.Windows.Forms
                                 lpmsg->message = (uint)msg.MsgInternal;
                                 lpmsg->wParam = msg.WParamInternal;
                                 lpmsg->lParam = msg.LParamInternal;
-                                return HRESULT.S_OK;
+                                return HRESULT.Values.S_OK;
                             case PreProcessControlState.MessageNeeded:
                                 // Here we need to dispatch the message ourselves
                                 // otherwise the host may never send the key to our wndproc.
@@ -2238,7 +2238,7 @@ namespace System.Windows.Forms
                                     User32.DispatchMessageA(ref *lpmsg);
                                 }
 
-                                return HRESULT.S_OK;
+                                return HRESULT.Values.S_OK;
                             case PreProcessControlState.MessageNotNeeded:
                                 // in this case we'll check the site to see if it wants the message.
                                 break;
@@ -2269,7 +2269,7 @@ namespace System.Windows.Forms
                     return ioleClientSite.TranslateAccelerator(lpmsg, keyState);
                 }
 
-                return HRESULT.S_FALSE;
+                return HRESULT.Values.S_FALSE;
             }
 
             /// <summary>
@@ -2280,7 +2280,7 @@ namespace System.Windows.Forms
                 // Only do this if we're UI active
                 if (!_activeXState[s_uiActive])
                 {
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
 
                 _activeXState[s_uiActive] = false;
@@ -2297,7 +2297,7 @@ namespace System.Windows.Forms
                     ioleClientSite.OnUIDeactivate(false);
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             /// <summary>
@@ -2307,7 +2307,7 @@ namespace System.Windows.Forms
             {
                 if (dwConnection > _adviseList.Count || _adviseList[(int)dwConnection - 1] is null)
                 {
-                    return HRESULT.OLE_E_NOCONNECTION;
+                    return HRESULT.Values.OLE_E_NOCONNECTION;
                 }
 
                 IAdviseSink sink = _adviseList[(int)dwConnection - 1];
@@ -2317,7 +2317,7 @@ namespace System.Windows.Forms
                     Marshal.ReleaseComObject(sink);
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             /// <summary>
@@ -2521,17 +2521,17 @@ namespace System.Windows.Forms
                     if (!_bag.Contains(pszPropName))
                     {
                         pVar = null;
-                        return HRESULT.E_INVALIDARG;
+                        return HRESULT.Values.E_INVALIDARG;
                     }
 
                     pVar = _bag[pszPropName];
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
 
                 HRESULT Oleaut32.IPropertyBag.Write(string pszPropName, ref object pVar)
                 {
                     _bag[pszPropName] = pVar;
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
 
                 internal void Write(IStream istream)

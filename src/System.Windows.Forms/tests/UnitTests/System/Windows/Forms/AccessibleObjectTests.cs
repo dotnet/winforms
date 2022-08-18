@@ -2521,7 +2521,7 @@ namespace System.Windows.Forms.Tests
                 out object ppacc,
                 out object varItem);
 
-            Assert.Equal(HRESULT.S_OK, result);
+            Assert.Equal(HRESULT.Values.S_OK, result);
             Assert.NotNull(ppacc);
             Assert.True(varItem is int);
 
@@ -2552,7 +2552,7 @@ namespace System.Windows.Forms.Tests
                 out object ppacc,
                 out object varItem);
 
-            Assert.Equal(HRESULT.S_OK, result);
+            Assert.Equal(HRESULT.Values.S_OK, result);
             Assert.NotNull(ppacc);
             Assert.True(varItem is int);
 
@@ -2620,7 +2620,7 @@ namespace System.Windows.Forms.Tests
 
             HRESULT result = ((UiaCore.IAccessibleEx)accessibleObject).GetIAccessiblePair(out object pAcc, &idChild);
 
-            Assert.Equal(HRESULT.S_OK, result);
+            Assert.Equal(HRESULT.Values.S_OK, result);
             Assert.Equal(accessibleObject, pAcc);
             Assert.Equal(expectedIdChild, idChild);
         }
@@ -2632,7 +2632,7 @@ namespace System.Windows.Forms.Tests
 
             HRESULT result = ((UiaCore.IAccessibleEx)accessibleObject).GetIAccessiblePair(out object pAcc, null);
 
-            Assert.Equal(HRESULT.E_INVALIDARG, result);
+            Assert.Equal(HRESULT.Values.E_INVALIDARG, result);
             Assert.Null(pAcc);
         }
 

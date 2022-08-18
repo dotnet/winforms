@@ -206,7 +206,7 @@ internal static partial class Interop
             {
                 Guid guid;
                 HRESULT hr = record.GetGuid(&guid);
-                hr.ThrowIfFailed();
+                hr.ThrowOnFailure();
 
                 Type? t = System.Type.GetTypeFromCLSID(guid);
                 if (t is null || !t.IsValueType)
@@ -228,7 +228,7 @@ internal static partial class Interop
                 Array array = CreateArrayFromSafeArray(psa, arrayType);
 
                 HRESULT hr = SafeArrayLock(psa);
-                Debug.Assert(hr == HRESULT.S_OK);
+                Debug.Assert(hr == HRESULT.Values.S_OK);
 
                 try
                 {
@@ -390,7 +390,7 @@ internal static partial class Interop
                 finally
                 {
                     hr = SafeArrayUnlock(psa);
-                    Debug.Assert(hr == HRESULT.S_OK);
+                    Debug.Assert(hr == HRESULT.Values.S_OK);
                 }
 
                 return array;
@@ -591,7 +591,7 @@ internal static partial class Interop
                 if (vt == VARENUM.RECORD)
                 {
                     HRESULT hr = SafeArrayGetRecordInfo(psa, out IRecordInfo record);
-                    hr.ThrowIfFailed();
+                    hr.ThrowOnFailure();
 
                     elementType = GetRecordElementType(record);
                 }

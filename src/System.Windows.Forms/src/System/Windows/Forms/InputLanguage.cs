@@ -285,7 +285,7 @@ namespace System.Windows.Forms
             {
                 var sb = new StringBuilder(512);
                 HRESULT res = Shlwapi.SHLoadIndirectString(layoutDisplayName, sb, (uint)sb.Capacity, IntPtr.Zero);
-                if (res == HRESULT.S_OK)
+                if (res == HRESULT.Values.S_OK)
                 {
                     return sb.ToString();
                 }

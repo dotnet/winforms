@@ -73,7 +73,7 @@ namespace System.Windows.Forms
                     hr = Ole32.OleSetClipboard(dataObject);
                 }
 
-                if (hr != HRESULT.S_OK)
+                if (hr != HRESULT.Values.S_OK)
                 {
                     if (retry == 0)
                     {
@@ -92,7 +92,7 @@ namespace System.Windows.Forms
                 do
                 {
                     hr = Ole32.OleFlushClipboard();
-                    if (hr != HRESULT.S_OK)
+                    if (hr != HRESULT.Values.S_OK)
                     {
                         if (retry == 0)
                         {
@@ -144,7 +144,7 @@ namespace System.Windows.Forms
             do
             {
                 hr = Ole32.OleGetClipboard(ref dataObject);
-                if (hr != HRESULT.S_OK)
+                if (hr != HRESULT.Values.S_OK)
                 {
                     if (retry == 0)
                     {

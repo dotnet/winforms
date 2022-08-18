@@ -148,7 +148,7 @@ namespace System.Windows.Forms
                     }
 
                     Guid rval = Guid.Empty;
-                    if (ippb.MapPropertyToPage(dispid, &rval).Succeeded())
+                    if (ippb.MapPropertyToPage(dispid, &rval).Succeeded)
                     {
                         return rval;
                     }
@@ -318,7 +318,7 @@ namespace System.Windows.Forms
                         Ole32.CALPOLESTR caStrings = default;
                         Ole32.CADWORD caCookies = default;
 
-                        HRESULT hr = HRESULT.S_OK;
+                        HRESULT hr = HRESULT.Values.S_OK;
                         try
                         {
                             hr = ppb.GetPredefinedStrings(dispid, &caStrings, &caCookies);
@@ -329,7 +329,7 @@ namespace System.Windows.Forms
                             Debug.Fail($"An exception occurred inside IPerPropertyBrowsing::GetPredefinedStrings(dispid={dispid}), object type={ComNativeDescriptor.GetClassName(ppb)}");
                         }
 
-                        if (hr == HRESULT.S_OK)
+                        if (hr == HRESULT.Values.S_OK)
                         {
                             string[] names = caStrings.ConvertAndFree();
                             uint[] cookies = caCookies.ConvertAndFree();

@@ -33,7 +33,7 @@ namespace System.Windows.Forms
                     try
                     {
                         Guid tmp = eventInterface.GUID;
-                        if (cpc.FindConnectionPoint(&tmp, out _connectionPoint) != HRESULT.S_OK)
+                        if (cpc.FindConnectionPoint(&tmp, out _connectionPoint) != HRESULT.Values.S_OK)
                         {
                             _connectionPoint = null;
                         }
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
                     {
                         uint tempCookie = 0;
                         HRESULT hr = _connectionPoint.Advise(sink, &tempCookie);
-                        if (hr == HRESULT.S_OK)
+                        if (hr == HRESULT.Values.S_OK)
                         {
                             _cookie = tempCookie;
                             _threadId = Environment.CurrentManagedThreadId;

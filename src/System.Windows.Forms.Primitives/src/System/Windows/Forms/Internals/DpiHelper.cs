@@ -68,10 +68,10 @@ namespace System.Windows.Forms
                 IntPtr.Zero,
                 out SHCore.PROCESS_DPI_AWARENESS processDpiAwareness);
 
-            Debug.Assert(result.Succeeded(), $"Failed to get ProcessDpi HRESULT: {result}");
+            Debug.Assert(result.Succeeded, $"Failed to get ProcessDpi HRESULT: {result}");
             Debug.Assert(Enum.IsDefined(typeof(SHCore.PROCESS_DPI_AWARENESS), processDpiAwareness));
 
-            return result.Succeeded() && processDpiAwareness switch
+            return result.Succeeded && processDpiAwareness switch
             {
                 SHCore.PROCESS_DPI_AWARENESS.UNAWARE => false,
                 SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE => false,
@@ -483,7 +483,7 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                success = SHCore.SetProcessDpiAwareness(dpiFlag) == HRESULT.S_OK;
+                success = SHCore.SetProcessDpiAwareness(dpiFlag) == HRESULT.Values.S_OK;
             }
             else
             {

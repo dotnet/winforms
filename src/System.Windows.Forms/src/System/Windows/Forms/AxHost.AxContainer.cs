@@ -704,7 +704,7 @@ namespace System.Windows.Forms
                     *ppmkOut = IntPtr.Zero;
                 }
 
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             HRESULT IOleContainer.EnumObjects(OLECONTF grfFlags, out IEnumUnknown ppenum)
@@ -720,18 +720,18 @@ namespace System.Windows.Forms
                         object[] temp = new object[list.Count];
                         list.CopyTo(temp, 0);
                         ppenum = new EnumUnknown(temp);
-                        return HRESULT.S_OK;
+                        return HRESULT.Values.S_OK;
                     }
                 }
 
                 ppenum = new EnumUnknown(null);
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT IOleContainer.LockContainer(BOOL fLock)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in LockContainer");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             // IOleInPlaceFrame methods:
@@ -739,36 +739,36 @@ namespace System.Windows.Forms
             {
                 if (phwnd is null)
                 {
-                    return HRESULT.E_POINTER;
+                    return HRESULT.Values.E_POINTER;
                 }
 
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in GetWindow");
                 *phwnd = _parent.Handle;
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT IOleInPlaceFrame.ContextSensitiveHelp(BOOL fEnterMode)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in ContextSensitiveHelp");
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             unsafe HRESULT IOleInPlaceFrame.GetBorder(RECT* lprectBorder)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in GetBorder");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             unsafe HRESULT IOleInPlaceFrame.RequestBorderSpace(RECT* pborderwidths)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in RequestBorderSpace");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             unsafe HRESULT IOleInPlaceFrame.SetBorderSpace(RECT* pborderwidths)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in SetBorderSpace");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             internal void OnExitEditMode(AxHost ctl)
@@ -806,14 +806,14 @@ namespace System.Windows.Forms
                         _controlInEditMode = null;
                     }
 
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
 
                 AxHost ctl = null;
                 if (pActiveObject is IOleObject oleObject)
                 {
                     HRESULT hr = oleObject.GetClientSite(out IOleClientSite clientSite);
-                    Debug.Assert(hr.Succeeded());
+                    Debug.Assert(hr.Succeeded);
                     if (clientSite is OleInterfaces interfaces)
                     {
                         ctl = interfaces.GetAxHost();
@@ -844,43 +844,43 @@ namespace System.Windows.Forms
                     }
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             unsafe HRESULT IOleInPlaceFrame.InsertMenus(IntPtr hmenuShared, OLEMENUGROUPWIDTHS* lpMenuWidths)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in InsertMenus");
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT IOleInPlaceFrame.SetMenu(IntPtr hmenuShared, IntPtr holemenu, IntPtr hwndActiveObject)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in SetMenu");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             HRESULT IOleInPlaceFrame.RemoveMenus(IntPtr hmenuShared)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in RemoveMenus");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             HRESULT IOleInPlaceFrame.SetStatusText(string pszStatusText)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in SetStatusText");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             HRESULT IOleInPlaceFrame.EnableModeless(BOOL fEnable)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in EnableModeless");
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             unsafe HRESULT IOleInPlaceFrame.TranslateAccelerator(MSG* lpmsg, ushort wID)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in IOleInPlaceFrame.TranslateAccelerator");
-                return HRESULT.S_FALSE;
+                return HRESULT.Values.S_FALSE;
             }
 
             // EXPOSED
@@ -909,7 +909,7 @@ namespace System.Windows.Forms
                 {
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in EnumControls for proxy");
                     ppenum = GetC().EnumControls(GetP(), dwOleContF, dwWhich);
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
 
                 unsafe HRESULT IGetOleObject.GetOleObject(Guid* riid, out object ppvObj)
@@ -918,16 +918,16 @@ namespace System.Windows.Forms
                     ppvObj = null;
                     if (riid is null || !riid->Equals(s_ioleobject_Guid))
                     {
-                        return HRESULT.E_INVALIDARG;
+                        return HRESULT.Values.E_INVALIDARG;
                     }
 
                     if (GetP() is AxHost ctl)
                     {
                         ppvObj = ctl.GetOcx();
-                        return HRESULT.S_OK;
+                        return HRESULT.Values.S_OK;
                     }
 
-                    return HRESULT.E_FAIL;
+                    return HRESULT.Values.E_FAIL;
                 }
 
                 unsafe HRESULT IGetVBAObject.GetObject(Guid* riid, IVBFormat[] rval, uint dwReserved)
@@ -935,17 +935,17 @@ namespace System.Windows.Forms
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in GetObject for proxy");
                     if (rval is null || riid is null)
                     {
-                        return HRESULT.E_INVALIDARG;
+                        return HRESULT.Values.E_INVALIDARG;
                     }
 
                     if (!riid->Equals(s_ivbformat_Guid))
                     {
                         rval[0] = null;
-                        return HRESULT.E_NOINTERFACE;
+                        return HRESULT.Values.E_NOINTERFACE;
                     }
 
                     rval[0] = new VBFormat();
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
 
                 public int Align

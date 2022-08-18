@@ -198,7 +198,7 @@ internal partial class Interop
             {
                 if (ppstm is null)
                 {
-                    return (int)Interop.HRESULT.STG_E_INVALIDPOINTER;
+                    return (int)HRESULT.Values.STG_E_INVALIDPOINTER;
                 }
 
                 try

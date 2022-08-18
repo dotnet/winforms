@@ -708,12 +708,12 @@ namespace System.Windows.Forms
         {
             if (service is null || riid is null)
             {
-                return HRESULT.E_NOINTERFACE;
+                return HRESULT.Values.E_NOINTERFACE;
             }
 
             if (ppvObject is null)
             {
-                return HRESULT.E_POINTER;
+                return HRESULT.Values.E_POINTER;
             }
 
             if (IsIAccessibleExSupported())
@@ -724,11 +724,11 @@ namespace System.Windows.Forms
                     // We want to return the internal, secure, object, which we don't have access here
                     // Return non-null, which will be interpreted in internal method, to mean returning casted object to IAccessibleEx
                     *ppvObject = Marshal.GetComInterfaceForObject(this, typeof(UiaCore.IAccessibleEx));
-                    return HRESULT.S_OK;
+                    return HRESULT.Values.S_OK;
                 }
             }
 
-            return HRESULT.E_NOINTERFACE;
+            return HRESULT.Values.E_NOINTERFACE;
         }
 
         UiaCore.IAccessibleEx? UiaCore.IAccessibleEx.GetObjectForChild(int idChild) => null;
@@ -738,12 +738,12 @@ namespace System.Windows.Forms
             if (pidChild is null)
             {
                 ppAcc = null;
-                return HRESULT.E_INVALIDARG;
+                return HRESULT.Values.E_INVALIDARG;
             }
 
             ppAcc = this;
             *pidChild = NativeMethods.CHILDID_SELF;
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         int[]? UiaCore.IAccessibleEx.GetRuntimeId() => RuntimeId;
@@ -752,12 +752,12 @@ namespace System.Windows.Forms
         {
             if (ppRetValOut == null)
             {
-                return HRESULT.E_POINTER;
+                return HRESULT.Values.E_POINTER;
             }
 
             // No need to implement this for patterns and properties
             *ppRetValOut = IntPtr.Zero;
-            return HRESULT.E_NOTIMPL;
+            return HRESULT.Values.E_NOTIMPL;
         }
 
         UiaCore.ProviderOptions UiaCore.IRawElementProviderSimple.ProviderOptions => (UiaCore.ProviderOptions)ProviderOptions;
@@ -1625,11 +1625,11 @@ namespace System.Windows.Forms
             // Or fail if there is no parent
             if (phwnd is null)
             {
-                return HRESULT.E_POINTER;
+                return HRESULT.Values.E_POINTER;
             }
 
             *phwnd = HWND.Null;
-            return HRESULT.E_FAIL;
+            return HRESULT.Values.E_FAIL;
         }
 
         /// <summary>
@@ -1651,7 +1651,7 @@ namespace System.Windows.Forms
             }
 
             // Or do nothing if there is no parent
-            return HRESULT.S_OK;
+            return HRESULT.Values.S_OK;
         }
 
         /// <summary>
@@ -1861,7 +1861,7 @@ namespace System.Windows.Forms
             {
                 childID = NativeMethods.CHILDID_SELF;
             }
-            else if (childID.Equals((int)HRESULT.DISP_E_PARAMNOTFOUND))
+            else if (childID.Equals((int)HRESULT.Values.DISP_E_PARAMNOTFOUND))
             {
                 childID = 0;
             }
@@ -2120,7 +2120,7 @@ namespace System.Windows.Forms
                     notificationProcessing,
                     notificationText,
                     string.Empty);
-                return result == HRESULT.S_OK;
+                return result == HRESULT.Values.S_OK;
             }
             catch (EntryPointNotFoundException)
             {
@@ -2145,7 +2145,7 @@ namespace System.Windows.Forms
             if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
             {
                 HRESULT result = UiaCore.UiaRaiseAutomationEvent(this, eventId);
-                return result == HRESULT.S_OK;
+                return result == HRESULT.Values.S_OK;
             }
 
             return false;
@@ -2156,7 +2156,7 @@ namespace System.Windows.Forms
             if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
             {
                 HRESULT result = UiaCore.UiaRaiseAutomationPropertyChangedEvent(this, propertyId, oldValue, newValue);
-                return result == HRESULT.S_OK;
+                return result == HRESULT.Values.S_OK;
             }
 
             return false;
@@ -2180,7 +2180,7 @@ namespace System.Windows.Forms
             if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
             {
                 HRESULT result = UiaCore.UiaRaiseStructureChangedEvent(this, structureChangeType, runtimeId, runtimeId is null ? 0 : runtimeId.Length);
-                return result == HRESULT.S_OK;
+                return result == HRESULT.Values.S_OK;
             }
 
             return false;

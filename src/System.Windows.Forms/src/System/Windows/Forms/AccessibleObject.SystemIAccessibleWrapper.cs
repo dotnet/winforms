@@ -156,7 +156,7 @@ namespace System.Windows.Forms
                 {
                     return getFunction(_systemIAccessible);
                 }
-                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.Values.DISP_E_MEMBERNOTFOUND)
                 {
                     // System IAccessible is not found.
                 }
@@ -182,7 +182,7 @@ namespace System.Windows.Forms
                 {
                     return func(_systemIAccessible);
                 }
-                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.Values.DISP_E_MEMBERNOTFOUND)
                 {
                     // System IAccessible is not found.
                 }
@@ -206,7 +206,7 @@ namespace System.Windows.Forms
                 {
                     action(_systemIAccessible);
                 }
-                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.Values.DISP_E_MEMBERNOTFOUND)
                 {
                     // System IAccessible is not found.
                 }

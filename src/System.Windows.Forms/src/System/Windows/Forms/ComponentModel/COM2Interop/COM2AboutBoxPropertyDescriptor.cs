@@ -176,7 +176,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         null,
                         &pExcepInfo,
                         null);
-                    Debug.Assert(hr.Succeeded(), "Failed to launch about box.");
+                    Debug.Assert(hr.Succeeded, "Failed to launch about box.");
                 }
 
                 return value;

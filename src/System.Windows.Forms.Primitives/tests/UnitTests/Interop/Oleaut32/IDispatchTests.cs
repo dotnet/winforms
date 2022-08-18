@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             fixed (DispatchID* pRgDispId = rgDispId)
             {
                 HRESULT hr = dispatch.GetIDsOfNames(&riid, rgszNames, (uint)rgszNames.Length, PInvoke.GetThreadLocale(), pRgDispId);
-                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(HRESULT.Values.S_OK, hr);
                 Assert.Equal(new string[] { "Width", "Other" }, rgszNames);
                 Assert.Equal(new DispatchID[] { (DispatchID)4, DispatchID.UNKNOWN }, rgDispId);
             }
@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
 
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.NotNull(typeInfo);
             System.Runtime.InteropServices.Marshal.ReleaseComObject(typeInfo);
         }
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
 
             uint ctInfo = uint.MaxValue;
             HRESULT hr = dispatch.GetTypeInfoCount(&ctInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.Equal(1u, ctInfo);
         }
 
@@ -80,7 +80,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
                 varResult,
                 &excepInfo,
                 &argErr);
-            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(HRESULT.Values.S_OK, hr);
             Assert.Equal(16, GdiHelper.HimetricToPixelY((int)varResult[0]));
             Assert.Equal(0u, argErr);
         }

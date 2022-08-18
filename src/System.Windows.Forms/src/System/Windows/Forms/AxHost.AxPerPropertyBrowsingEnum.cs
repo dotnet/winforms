@@ -100,7 +100,7 @@ namespace System.Windows.Forms
 
                             using var var = new Oleaut32.VARIANT();
                             HRESULT hr = ppb.GetPredefinedValue(_target.Dispid, cookie, &var);
-                            if (hr == HRESULT.S_OK && var.vt != Ole32.VARENUM.EMPTY)
+                            if (hr == HRESULT.Values.S_OK && var.vt != Ole32.VARENUM.EMPTY)
                             {
                                 values[i] = var.ToObject();
                             }

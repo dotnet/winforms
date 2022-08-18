@@ -276,7 +276,7 @@ namespace System.Windows.Forms
                     Ole32.CLSCTX.INPROC_SERVER | Ole32.CLSCTX.LOCAL_SERVER | Ole32.CLSCTX.REMOTE_SERVER,
                     in NativeMethods.ActiveX.IID_IUnknown,
                     out IntPtr lpDialogUnknownPtr);
-                if (!hr.Succeeded())
+                if (!hr.Succeeded)
                 {
                     Marshal.ThrowExceptionForHR((int)hr);
                 }
@@ -295,9 +295,9 @@ namespace System.Windows.Forms
             {
                 SetDialogProperties(dialog);
                 HRESULT hr = dialog.Show(owner);
-                if (!hr.Succeeded())
+                if (!hr.Succeeded)
                 {
-                    if (hr == HRESULT.ERROR_CANCELLED)
+                    if (hr == HRESULT.Values.ERROR_CANCELLED)
                     {
                         returnValue = false;
                         return true;
@@ -394,7 +394,7 @@ namespace System.Windows.Forms
             if (item is not null)
             {
                 HRESULT hr = item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath!);
-                hr.ThrowIfFailed();
+                hr.ThrowOnFailure();
             }
         }
 

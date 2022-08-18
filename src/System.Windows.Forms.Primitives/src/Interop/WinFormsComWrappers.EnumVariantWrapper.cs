@@ -59,13 +59,13 @@ internal partial class Interop
             {
                 if (ppEnum == null || ppEnum.Length == 0)
                 {
-                    return HRESULT.E_POINTER;
+                    return HRESULT.Values.E_POINTER;
                 }
 
                 IntPtr resultPtr;
                 var result = ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 6)))
                     (_wrappedInstance, &resultPtr);
-                if (result.Failed())
+                if (result.Failed)
                 {
                     ppEnum = null;
                     return result;

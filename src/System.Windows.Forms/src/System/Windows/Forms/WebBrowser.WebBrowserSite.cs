@@ -34,12 +34,12 @@ namespace System.Windows.Forms
                 if (wb.IsWebBrowserContextMenuEnabled)
                 {
                     // let MSHTML display its UI
-                    return HRESULT.S_FALSE;
+                    return HRESULT.Values.S_FALSE;
                 }
 
                 if (pt is null)
                 {
-                    return HRESULT.E_INVALIDARG;
+                    return HRESULT.Values.E_INVALIDARG;
                 }
 
                 if (pt->X == 0 && pt->Y == 0)
@@ -53,14 +53,14 @@ namespace System.Windows.Forms
                 wb.ShowContextMenu(*pt);
 
                 // MSHTML should not display its context menu because we displayed ours
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             unsafe HRESULT IDocHostUIHandler.GetHostInfo(DOCHOSTUIINFO* pInfo)
             {
                 if (pInfo is null)
                 {
-                    return HRESULT.E_POINTER;
+                    return HRESULT.Values.E_POINTER;
                 }
 
                 WebBrowser wb = (WebBrowser)Host;
@@ -87,12 +87,12 @@ namespace System.Windows.Forms
                     pInfo->dwFlags |= DOCHOSTUIFLAG.NOTHEME;
                 }
 
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             HRESULT IDocHostUIHandler.EnableModeless(BOOL fEnable)
             {
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             HRESULT IDocHostUIHandler.ShowUI(
@@ -102,37 +102,37 @@ namespace System.Windows.Forms
                 Ole32.IOleInPlaceFrame frame,
                 Ole32.IOleInPlaceUIWindow doc)
             {
-                return HRESULT.S_FALSE;
+                return HRESULT.Values.S_FALSE;
             }
 
             HRESULT IDocHostUIHandler.HideUI()
             {
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             HRESULT IDocHostUIHandler.UpdateUI()
             {
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             HRESULT IDocHostUIHandler.OnDocWindowActivate(BOOL fActivate)
             {
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             HRESULT IDocHostUIHandler.OnFrameWindowActivate(BOOL fActivate)
             {
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             unsafe HRESULT IDocHostUIHandler.ResizeBorder(RECT* rect, Ole32.IOleInPlaceUIWindow doc, BOOL fFrameWindow)
             {
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             HRESULT IDocHostUIHandler.GetOptionKeyPath(string[] pbstrKey, uint dw)
             {
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             HRESULT IDocHostUIHandler.GetDropTarget(Ole32.IDropTarget pDropTarget, out Ole32.IDropTarget ppDropTarget)
@@ -140,21 +140,21 @@ namespace System.Windows.Forms
                 // Set to null no matter what we return, to prevent the marshaller
                 // from having issues if the pointer points to random stuff.
                 ppDropTarget = null;
-                return HRESULT.E_NOTIMPL;
+                return HRESULT.Values.E_NOTIMPL;
             }
 
             HRESULT IDocHostUIHandler.GetExternal(out object ppDispatch)
             {
                 WebBrowser wb = (WebBrowser)Host;
                 ppDispatch = wb.ObjectForScripting;
-                return HRESULT.S_OK;
+                return HRESULT.Values.S_OK;
             }
 
             unsafe HRESULT IDocHostUIHandler.TranslateAccelerator(MSG* lpMsg, Guid* pguidCmdGroup, uint nCmdID)
             {
                 if (lpMsg is null || pguidCmdGroup is null)
                 {
-                    return HRESULT.E_POINTER;
+                    return HRESULT.Values.E_POINTER;
                 }
 
                 // Returning S_FALSE will allow the native control to do default processing,
@@ -165,11 +165,11 @@ namespace System.Windows.Forms
                     int keyCode = (int)(uint)lpMsg->wParam | (int)ModifierKeys;
                     if (lpMsg->message != (uint)User32.WM.CHAR && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
                     {
-                        return HRESULT.S_OK;
+                        return HRESULT.Values.S_OK;
                     }
                 }
 
-                return HRESULT.S_FALSE;
+                return HRESULT.Values.S_FALSE;
             }
 
             HRESULT IDocHostUIHandler.TranslateUrl(uint dwTranslate, string strUrlIn, out string pstrUrlOut)
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
                 // Set to null no matter what we return, to prevent the marshaller
                 // from having issues if the pointer points to random stuff.
                 pstrUrlOut = null;
-                return HRESULT.S_FALSE;
+                return HRESULT.Values.S_FALSE;
             }
 
             HRESULT IDocHostUIHandler.FilterDataObject(IComDataObject pDO, out IComDataObject ppDORet)
@@ -185,7 +185,7 @@ namespace System.Windows.Forms
                 // Set to null no matter what we return, to prevent the marshaller
                 // from having issues if the pointer points to random stuff.
                 ppDORet = null;
-                return HRESULT.S_FALSE;
+                return HRESULT.Values.S_FALSE;
             }
 
             //
