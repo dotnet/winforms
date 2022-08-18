@@ -73,7 +73,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="System.Security.Cryptography.Xml" Version="6.0.1">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>b114055b16ac8213ce47891aae7de2f7ccda93ab</Sha>
+      <Sha>55fb7ef977e7d120dc12f0960edcff0739d7ee0e</Sha>
     </Dependency>
     <Dependency Name="System.IO.Packaging" Version="6.0.0">
       <Uri>https://github.com/dotnet/runtime</Uri>
