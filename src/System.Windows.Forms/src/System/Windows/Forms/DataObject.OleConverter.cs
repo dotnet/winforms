@@ -417,7 +417,6 @@ namespace System.Windows.Forms
                     }
                 }
 
-                //ArrayPool<char>.Shared.Return(fileName);
                 return files;
             }
 

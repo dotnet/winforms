@@ -3387,7 +3387,7 @@ namespace System.Windows.Forms
                         EnLinkMsgHandler(ref m);
                         break;
                     case EN.DROPFILES:
-                        HDROP endropfiles = (HDROP)(nint)m.LParamInternal;
+                        HDROP endropfiles = (HDROP)((ENDROPFILES*)m.LParamInternal)->hDrop;
 
                         // Only look at the first file.
                         char[] path = ArrayPool<char>.Shared.Rent(PInvoke.MAX_PATH + 1);
