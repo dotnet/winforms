@@ -17,7 +17,7 @@ internal partial class Interop
     /// </summary>
     internal unsafe partial class WinFormsComWrappers : ComWrappers
     {
-        private const int S_OK = (int)HRESULT.Values.S_OK;
+        private const int S_OK = 0;
         private static readonly ComInterfaceEntry* s_streamEntry = InitializeIStreamEntry();
         private static readonly ComInterfaceEntry* s_fileDialogEventsEntry = InitializeIFileDialogEventsEntry();
         private static readonly ComInterfaceEntry* s_enumStringEntry = InitializeIEnumStringEntry();
@@ -267,7 +267,7 @@ internal partial class Interop
             if (obj is null)
             {
                 comPtr = IntPtr.Zero;
-                return HRESULT.Values.S_OK;
+                return HRESULT.S_OK;
             }
 
             IntPtr pobj_local;

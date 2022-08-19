@@ -42,7 +42,7 @@ internal partial class Interop
                     pMedium->pUnkForRelease = medium.pUnkForRelease == null ? IntPtr.Zero : Marshal.GetIUnknownForObject(medium.pUnkForRelease);
                     pMedium->tymed = medium.tymed;
                     pMedium->unionmember = medium.unionmember;
-                    return HRESULT.Values.S_OK;
+                    return HRESULT.S_OK;
                 }
                 catch (Exception ex)
                 {
@@ -68,7 +68,7 @@ internal partial class Interop
                     pMedium->pUnkForRelease = medium.pUnkForRelease == null ? IntPtr.Zero : Marshal.GetIUnknownForObject(medium.pUnkForRelease);
                     pMedium->tymed = medium.tymed;
                     pMedium->unionmember = medium.unionmember;
-                    return HRESULT.Values.S_OK;
+                    return HRESULT.S_OK;
                 }
                 catch (Exception ex)
                 {
@@ -105,7 +105,7 @@ internal partial class Interop
                     };
 
                     instance.SetData(ref *format, ref medium, release != 0);
-                    return HRESULT.Values.S_OK;
+                    return HRESULT.S_OK;
                 }
                 catch (Exception ex)
                 {
@@ -128,7 +128,7 @@ internal partial class Interop
                     }
 
                     *pEnumFormatC = formatEtcPtr;
-                    return HRESULT.Values.S_OK;
+                    return HRESULT.S_OK;
                 }
                 catch (Exception ex)
                 {
@@ -152,7 +152,7 @@ internal partial class Interop
                 try
                 {
                     instance.DUnadvise(connection);
-                    return HRESULT.Values.S_OK;
+                    return HRESULT.S_OK;
                 }
                 catch (Exception ex)
                 {

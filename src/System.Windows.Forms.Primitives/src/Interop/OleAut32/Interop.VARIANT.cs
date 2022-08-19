@@ -228,7 +228,7 @@ internal static partial class Interop
                 Array array = CreateArrayFromSafeArray(psa, arrayType);
 
                 HRESULT hr = SafeArrayLock(psa);
-                Debug.Assert(hr == HRESULT.Values.S_OK);
+                Debug.Assert(hr == HRESULT.S_OK);
 
                 try
                 {
@@ -390,7 +390,7 @@ internal static partial class Interop
                 finally
                 {
                     hr = SafeArrayUnlock(psa);
-                    Debug.Assert(hr == HRESULT.Values.S_OK);
+                    Debug.Assert(hr == HRESULT.S_OK);
                 }
 
                 return array;

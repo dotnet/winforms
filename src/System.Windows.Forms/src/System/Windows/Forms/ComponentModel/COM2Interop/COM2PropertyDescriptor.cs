@@ -891,25 +891,26 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 &pExcepInfo,
                 null);
 
-            switch (hr.Value)
+            if (hr == HRESULT.S_OK || hr == HRESULT.S_FALSE)
             {
-                case (int)HRESULT.Values.S_OK:
-                case (int)HRESULT.Values.S_FALSE:
-
-                    if (pVarResult[0] is null || Convert.IsDBNull(pVarResult[0]))
-                    {
-                        lastValue = null;
-                    }
-                    else
-                    {
-                        lastValue = pVarResult[0];
-                    }
-
-                    return lastValue;
-                case (int)HRESULT.Values.DISP_E_EXCEPTION:
-                    return null;
-                default:
-                    throw new ExternalException(string.Format(SR.DispInvokeFailed, "GetValue", hr), (int)hr);
+                if (pVarResult[0] is null || Convert.IsDBNull(pVarResult[0]))
+                {
+                    lastValue = null;
+                }
+                else
+                {
+                    lastValue = pVarResult[0];
+                }
+                
+                return lastValue;
+            }
+            else if (hr == HRESULT.DISP_E_EXCEPTION)
+            {
+                return null;
+            }
+            else
+            {
+                throw new ExternalException(string.Format(SR.DispInvokeFailed, "GetValue", hr), (int)hr);
             }
         }
 
@@ -1284,7 +1285,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 null);
 
             string errorInfo = null;
-            if (hr == HRESULT.Values.DISP_E_EXCEPTION && excepInfo.scode != 0)
+            if (hr == HRESULT.DISP_E_EXCEPTION && excepInfo.scode != 0)
             {
                 hr = excepInfo.scode;
                 if (excepInfo.bstrDescription != IntPtr.Zero)
@@ -1293,70 +1294,69 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            switch (hr.Value)
+            if (hr == HRESULT.E_ABORT || hr == HRESULT.OLE_E_PROMPTSAVECANCELLED)
             {
-                case (int)HRESULT.Values.E_ABORT:
-                case (int)HRESULT.Values.OLE_E_PROMPTSAVECANCELLED:
-                    // cancelled checkout, etc.
-                    return;
-                case (int)HRESULT.Values.S_OK:
-                case (int)HRESULT.Values.S_FALSE:
-                    OnValueChanged(component, EventArgs.Empty);
-                    lastValue = value;
-                    return;
-                default:
-                    if (pDisp is Oleaut32.ISupportErrorInfo iSupportErrorInfo)
+                return;
+            }
+            else if (hr == HRESULT.S_OK || hr == HRESULT.S_FALSE)
+            {
+                OnValueChanged(component, EventArgs.Empty);
+                lastValue = value;
+            }
+            else
+            {
+                if (pDisp is Oleaut32.ISupportErrorInfo iSupportErrorInfo)
+                {
+                    g = typeof(Oleaut32.IDispatch).GUID;
+                    if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.S_OK)
                     {
-                        g = typeof(Oleaut32.IDispatch).GUID;
-                        if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.Values.S_OK)
+                        WinFormsComWrappers.ErrorInfoWrapper pErrorInfo;
+                        Oleaut32.GetErrorInfo(out pErrorInfo);
+
+                        if (pErrorInfo is not null)
                         {
-                            WinFormsComWrappers.ErrorInfoWrapper pErrorInfo;
-                            Oleaut32.GetErrorInfo(out pErrorInfo);
-
-                            if (pErrorInfo is not null)
+                            string info;
+                            if (pErrorInfo.GetDescription(out info))
                             {
-                                string info;
-                                if (pErrorInfo.GetDescription(out info))
-                                {
-                                    errorInfo = info;
-                                }
-
-                                pErrorInfo.Dispose();
+                                errorInfo = info;
                             }
+
+                            pErrorInfo.Dispose();
                         }
                     }
-                    else if (errorInfo is null)
+                }
+                else if (errorInfo is null)
+                {
+                    char[] buffer = ArrayPool<char>.Shared.Rent(256 + 1);
+
+                    fixed (char* b = buffer)
                     {
-                        char[] buffer = ArrayPool<char>.Shared.Rent(256 + 1);
+                        uint result = PInvoke.FormatMessage(
+                            FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_IGNORE_INSERTS,
+                            null,
+                            (uint)hr,
+                            PInvoke.GetThreadLocale(),
+                            b,
+                            255,
+                            null);
 
-                        fixed (char* b = buffer)
+                        if (result == 0)
                         {
-                            uint result = PInvoke.FormatMessage(
-                                FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_IGNORE_INSERTS,
-                                null,
-                                (uint)hr,
-                                PInvoke.GetThreadLocale(),
-                                b,
-                                255,
-                                null);
-
-                            if (result == 0)
-                            {
-                                errorInfo = string.Format(CultureInfo.CurrentCulture, SR.DispInvokeFailed, "SetValue", hr);
-                            }
-                            else
-                            {
-                                ReadOnlySpan<char> ipBuffer = new(buffer);
-                                ipBuffer.TrimEnd('\n');
-                                ipBuffer.TrimEnd('\r');
-                                errorInfo = ipBuffer.ToString();
-                            }
+                            errorInfo = string.Format(CultureInfo.CurrentCulture, SR.DispInvokeFailed, "SetValue", hr);
                         }
-
-                        ArrayPool<char>.Shared.Return(buffer);
+                        else
+                        {
+                            ReadOnlySpan<char> ipBuffer = new(buffer);
+                            ipBuffer.TrimEnd('\n');
+                            ipBuffer.TrimEnd('\r');
+                            errorInfo = ipBuffer.ToString();
+                        }
                     }
 
-                    throw new ExternalException(errorInfo, (int)hr);
+                    ArrayPool<char>.Shared.Return(buffer);
+                }
+
+                throw new ExternalException(errorInfo, (int)hr);
             }
         }
 

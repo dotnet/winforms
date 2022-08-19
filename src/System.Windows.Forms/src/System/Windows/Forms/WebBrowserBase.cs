@@ -264,7 +264,7 @@ namespace System.Windows.Forms
                 // Give the ActiveX control a chance to process this key by calling
                 // IOleInPlaceActiveObject::TranslateAccelerator.
                 HRESULT hr = axOleInPlaceActiveObject.TranslateAccelerator(&win32Message);
-                if (hr == HRESULT.Values.S_OK)
+                if (hr == HRESULT.S_OK)
                 {
                     Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"\t Message translated to {win32Message}");
                     return true;
@@ -277,7 +277,7 @@ namespace System.Windows.Forms
                     msg.LParamInternal = win32Message.lParam;
                     msg.HWnd = win32Message.hwnd;
 
-                    if (hr == HRESULT.Values.S_FALSE)
+                    if (hr == HRESULT.S_FALSE)
                     {
                         // Same code as in AxHost (ignore dialog keys here).
                         // We have the same problem here.
@@ -720,8 +720,8 @@ namespace System.Windows.Forms
         {
             RECT posRect = Bounds;
             HRESULT hr = axOleObject.DoVerb(verb, null, ActiveXSite, 0, Handle, &posRect);
-            Debug.Assert(hr == HRESULT.Values.S_OK, string.Format(CultureInfo.CurrentCulture, "DoVerb call failed for verb 0x{0:X}", verb));
-            return hr == HRESULT.Values.S_OK;
+            Debug.Assert(hr == HRESULT.S_OK, string.Format(CultureInfo.CurrentCulture, "DoVerb call failed for verb 0x{0:X}", verb));
+            return hr == HRESULT.S_OK;
         }
 
         //
@@ -1186,7 +1186,7 @@ namespace System.Windows.Forms
             bool resetExtents = DesignMode;
             Pixel2hiMetric(ref sz);
             HRESULT hr = axOleObject.SetExtent(Ole32.DVASPECT.CONTENT, &sz);
-            if (hr != HRESULT.Values.S_OK)
+            if (hr != HRESULT.S_OK)
             {
                 resetExtents = true;
             }

@@ -163,7 +163,7 @@ namespace System.Windows.Forms
                     tymed = TYMED.TYMED_HGLOBAL
                 };
 
-                if (dataObject.QueryGetData(ref formatEtc) != (int)HRESULT.Values.S_OK)
+                if (dataObject.QueryGetData(ref formatEtc) != (int)HRESULT.S_OK)
                 {
                     return false;
                 }

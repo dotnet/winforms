@@ -464,7 +464,7 @@ namespace System.Windows.Forms
                             retVals,
                             &excepInfo,
                             null);
-                        if (hr == HRESULT.Values.S_OK)
+                        if (hr == HRESULT.S_OK)
                         {
                             return retVals[0];
                         }

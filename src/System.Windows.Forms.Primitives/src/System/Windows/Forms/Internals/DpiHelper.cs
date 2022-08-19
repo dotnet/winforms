@@ -483,7 +483,7 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                success = SHCore.SetProcessDpiAwareness(dpiFlag) == HRESULT.Values.S_OK;
+                success = SHCore.SetProcessDpiAwareness(dpiFlag) == HRESULT.S_OK;
             }
             else
             {

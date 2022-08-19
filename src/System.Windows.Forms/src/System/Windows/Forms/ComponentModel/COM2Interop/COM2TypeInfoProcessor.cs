@@ -301,7 +301,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private unsafe static Type GetValueTypeFromTypeDesc(in TYPEDESC typeDesc, ITypeInfo typeInfo, object[] typeData)
         {
             uint hreftype;
-            HRESULT hr = HRESULT.Values.S_OK;
+            HRESULT hr = HRESULT.S_OK;
 
             switch (typeDesc.vt)
             {
@@ -443,7 +443,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             PropertyDescriptor[] props = new PropertyDescriptor[cProps];
             int defaultProp = -1;
 
-            HRESULT hr = HRESULT.Values.S_OK;
+            HRESULT hr = HRESULT.S_OK;
             object[] pvar = new object[1];
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
 
@@ -475,7 +475,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
                 else
                 {
-                    hr = HRESULT.Values.S_OK;
+                    hr = HRESULT.S_OK;
                 }
 
                 Attribute[] temp = new Attribute[pi.Attributes.Count];

@@ -1168,7 +1168,7 @@ namespace System.Windows.Forms
                 using var dc = User32.GetDcScope.ScreenDC;
                 if (dc == IntPtr.Zero)
                 {
-                    return HRESULT.Values.E_FAIL;
+                    return HRESULT.E_FAIL;
                 }
 
                 s_logPixelsX = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
@@ -1176,7 +1176,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"log pixels are: {s_logPixelsX} {s_logPixelsY}");
             }
 
-            return HRESULT.Values.S_OK;
+            return HRESULT.S_OK;
         }
 
         private unsafe void HiMetric2Pixel(ref Size sz)
@@ -1225,7 +1225,7 @@ namespace System.Windows.Forms
             bool resetExtents = !IsUserMode();
             Pixel2hiMetric(ref sz);
             HRESULT hr = GetOleObject().SetExtent(Ole32.DVASPECT.CONTENT, &sz);
-            if (hr != HRESULT.Values.S_OK)
+            if (hr != HRESULT.S_OK)
             {
                 resetExtents = true;
             }
@@ -1833,14 +1833,14 @@ namespace System.Windows.Forms
                         msg.LParamInternal = win32Message.lParam;
                         msg.HWnd = win32Message.hwnd;
 
-                        if (hr == HRESULT.Values.S_OK)
+                        if (hr == HRESULT.S_OK)
                         {
                             Debug.WriteLineIf(
                                 s_controlKeyboardRouting.TraceVerbose,
                                 $"\t Message translated by control to {msg}");
                             return true;
                         }
-                        else if (hr == HRESULT.Values.S_FALSE)
+                        else if (hr == HRESULT.S_FALSE)
                         {
                             bool ret = false;
 
@@ -2198,7 +2198,7 @@ namespace System.Windows.Forms
                 return true;
             }
 #endif
-            HRESULT hr = HRESULT.Values.E_FAIL;
+            HRESULT hr = HRESULT.E_FAIL;
             switch (_storageType)
             {
                 case STG_STREAM:
@@ -2223,7 +2223,7 @@ namespace System.Windows.Forms
             // Sadly, some controls lie and never say that they are dirty...
             // SO, we don't believe them unless they told us that they were
             // dirty at least once...
-            return hr != HRESULT.Values.S_FALSE;
+            return hr != HRESULT.S_FALSE;
         }
 
         internal bool IsUserMode()
@@ -2395,7 +2395,7 @@ namespace System.Windows.Forms
 
             if (!hr.Succeeded)
             {
-                if (hr == HRESULT.Values.E_NOINTERFACE)
+                if (hr == HRESULT.E_NOINTERFACE)
                 {
                     return null;
                 }
@@ -2510,7 +2510,7 @@ namespace System.Windows.Forms
 
             VSSDK.PROPCAT propcat = 0;
             HRESULT hr = icp.MapPropertyToCategory(dispid, &propcat);
-            if (hr != HRESULT.Values.S_OK || propcat == 0)
+            if (hr != HRESULT.S_OK || propcat == 0)
             {
                 return null;
             }
@@ -2531,7 +2531,7 @@ namespace System.Windows.Forms
             }
 
             hr = icp.GetCategoryName(propcat, PInvoke.GetThreadLocale(), out string name);
-            if (hr == HRESULT.Values.S_OK && name is not null)
+            if (hr == HRESULT.S_OK && name is not null)
             {
                 var rval = new CategoryAttribute(name);
                 _objectDefinedCategoryNames ??= new Hashtable();
@@ -2956,7 +2956,7 @@ namespace System.Windows.Forms
             if (storage is not null)
             {
                 HRESULT hr = _iPersistStorage.Load(storage);
-                if (hr != HRESULT.Values.S_OK)
+                if (hr != HRESULT.S_OK)
                 {
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Error trying load depersist from IStorage: {hr}");
                 }

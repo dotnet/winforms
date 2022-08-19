@@ -851,7 +851,7 @@ namespace System.Windows.Forms
                     HRESULT ret = Ole32.OleInitialize(IntPtr.Zero);
 
                     SetState(STATE_OLEINITIALIZED, true);
-                    if (ret == HRESULT.Values.RPC_E_CHANGED_MODE)
+                    if (ret == HRESULT.RPC_E_CHANGED_MODE)
                     {
                         // This could happen if the thread was already initialized for MTA
                         // and then we call OleInitialize which tries to initialized it for STA

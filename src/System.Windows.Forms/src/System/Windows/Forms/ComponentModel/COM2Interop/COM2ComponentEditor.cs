@@ -19,7 +19,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // check for a property page
                 Guid guid = Guid.Empty;
                 HRESULT hr = perPropertyBrowsing.MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
-                if ((hr == HRESULT.Values.S_OK) && !guid.Equals(Guid.Empty))
+                if ((hr == HRESULT.S_OK) && !guid.Equals(Guid.Empty))
                 {
                     return true;
                 }
@@ -60,7 +60,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // check for a property page
                 Guid guid = Guid.Empty;
                 HRESULT hr = perPropertyBrowsing.MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
-                if (hr == HRESULT.Values.S_OK & !guid.Equals(Guid.Empty))
+                if (hr == HRESULT.S_OK & !guid.Equals(Guid.Empty))
                 {
                     IntPtr pUnk = Marshal.GetIUnknownForObject(obj);
                     try

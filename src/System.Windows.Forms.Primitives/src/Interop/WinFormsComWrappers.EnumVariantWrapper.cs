@@ -59,7 +59,7 @@ internal partial class Interop
             {
                 if (ppEnum == null || ppEnum.Length == 0)
                 {
-                    return HRESULT.Values.E_POINTER;
+                    return HRESULT.E_POINTER;
                 }
 
                 IntPtr resultPtr;
