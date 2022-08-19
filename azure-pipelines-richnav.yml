@@ -17,7 +17,7 @@ stages:
         richCodeNavigationEnvironment: 'production'
         pool:
           name: NetCore-Svc-Public
-          demands: ImageOverride -equals Build.Windows.10.Amd64.VS2019.Open
+          demands: ImageOverride -equals windows.vs2022.amd64.open
 
         steps:
         - checkout: self
