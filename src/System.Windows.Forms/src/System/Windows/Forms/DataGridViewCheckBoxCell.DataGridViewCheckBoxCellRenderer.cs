@@ -21,9 +21,9 @@ namespace System.Windows.Forms
                 CheckBoxRenderer.DrawBackground(g, bounds, Rectangle.Truncate(g.ClipBounds));
 
                 // It uses because the checked style of the checkbox in a selected cell has a low contrast ratio with the background. Only for Windows 11.
-                // State 5 is selected, unfocused.
-                // State 6 is selected, focused.
-                if (OsVersion.IsWindows11_OrGreater && (state == 5 || state == 6))
+                const int StateSelectedUnfocused = 5;
+                const int StateSelectedFocused = 6;
+                if (OsVersion.IsWindows11_OrGreater && (state == StateSelectedUnfocused  || state ==StateSelectedFocused))
                 {
                     DrawContrastBorder(g, bounds);
                 }
