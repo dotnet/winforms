@@ -46,7 +46,7 @@ internal partial class Interop
                         (_wrappedInstance, (int)flags, riid_local, ppv_local);
                 }
             }
-            
+
             HRESULT Shell32.IShellItemArray.GetPropertyDescriptionList(ref PROPERTYKEY keyType, ref Guid riid, out IntPtr ppv)
             {
                 fixed (PROPERTYKEY* keyType_local = &keyType)

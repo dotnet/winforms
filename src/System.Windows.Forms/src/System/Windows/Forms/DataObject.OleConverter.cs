@@ -393,7 +393,7 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe static string[]? ReadFileListFromHandle(HDROP hdrop)
             {
-                uint count = PInvoke.DragQueryFile(hdrop, 0xFFFFFFFF, null, 0);
+                uint count = PInvoke.DragQueryFile(hdrop, iFile: 0xFFFFFFFF, lpszFile: null, cch: 0);
                 if (count == 0)
                 {
                     return null;
@@ -406,13 +406,13 @@ namespace System.Windows.Forms
                 {
                     for (uint i = 0; i < count; i++)
                     {
-                        uint charlen = PInvoke.DragQueryFile(hdrop, i, buffer, (uint)fileName.Length);
-                        if (charlen == 0)
+                        uint charsToCopy = PInvoke.DragQueryFile(hdrop, i, buffer, (uint)fileName.Length);
+                        if (charsToCopy == 0)
                         {
                             continue;
                         }
 
-                        string s = fileName[..(int)charlen].ToString();
+                        string s = fileName[..(int)charsToCopy].ToString();
                         files[i] = s;
                     }
                 }

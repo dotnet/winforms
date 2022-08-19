@@ -3393,7 +3393,7 @@ namespace System.Windows.Forms
                         char[] path = ArrayPool<char>.Shared.Rent(PInvoke.MAX_PATH + 1);
                         fixed (char* p = path)
                         {
-                            if (PInvoke.DragQueryFile(endropfiles, 0, p, 0) != 0)
+                            if (PInvoke.DragQueryFile(endropfiles, iFile: 0, p, cch: 0) != 0)
                             {
                                 // Try to load the file as an RTF
                                 try
