@@ -406,13 +406,13 @@ namespace System.Windows.Forms
                 {
                     for (uint i = 0; i < count; i++)
                     {
-                        uint charsToCopy = PInvoke.DragQueryFile(hdrop, i, buffer, (uint)fileName.Length);
-                        if (charsToCopy == 0)
+                        uint charactersCopied = PInvoke.DragQueryFile(hdrop, i, buffer, (uint)fileName.Length);
+                        if (charactersCopied == 0)
                         {
                             continue;
                         }
 
-                        string s = fileName[..(int)charsToCopy].ToString();
+                        string s = fileName[..(int)charactersCopied].ToString();
                         files[i] = s;
                     }
                 }
