@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Shell.Common;
 
 internal static partial class Interop
 {
@@ -11,12 +12,12 @@ internal static partial class Interop
         [DllImport(Libraries.Shell32, ExactSpelling = true)]
         public static extern HRESULT SHCreateShellItem(IntPtr pidlParent, IntPtr psfParent, IntPtr pidl, out IntPtr ppsi);
 
-        public static IShellItem GetShellItemForPath(string path)
+        public unsafe static IShellItem GetShellItemForPath(string path)
         {
-            if (SHParseDisplayName(path, IntPtr.Zero, out IntPtr pidl, 0, out uint _).Succeeded())
+            if (PInvoke.SHParseDisplayName(path, null, out ITEMIDLIST* ppidl, 0, (uint*)0).Succeeded)
             {
                 // No parent specified
-                if (SHCreateShellItem(IntPtr.Zero, IntPtr.Zero, pidl, out IntPtr ret).Succeeded())
+                if (SHCreateShellItem(IntPtr.Zero, IntPtr.Zero, (nint)ppidl, out IntPtr ret).Succeeded())
                 {
                     var obj = WinFormsComWrappers.Instance
                         .GetOrCreateObjectForComInstance(ret, CreateObjectFlags.None);

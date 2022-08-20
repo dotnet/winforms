@@ -12,6 +12,7 @@ using static Interop.Shell32;
 using static Interop.User32;
 using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using Shell = Windows.Win32.UI.Shell;
 
 namespace System.Windows.Forms
 {
@@ -345,12 +346,12 @@ namespace System.Windows.Forms
                 // The Windows drag image manager will own this bitmap object and free the memory when its finished. Only
                 // call DeleteObject if an exception occurs while initializing.
                 hbmpDragImage = dragImage is not null ? dragImage.GetHBITMAP() : hbmpDragImage;
-                SHDRAGIMAGE shDragImage = new()
+                Shell.SHDRAGIMAGE shDragImage = new()
                 {
                     hbmpDragImage = hbmpDragImage,
                     sizeDragImage = dragImage is not null ? dragImage.Size : default,
                     ptOffset = cursorOffset,
-                    crColorKey = GetSysColor(COLOR.WINDOW)
+                    crColorKey = GetSysColor(COLOR.WINDOW).Value
                 };
 
                 // Allow text specified in DROPDESCRIPTION to be displayed on the drag image. If you pass a drag image into an IDragSourceHelper
