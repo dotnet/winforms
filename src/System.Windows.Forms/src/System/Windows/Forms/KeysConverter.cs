@@ -177,9 +177,12 @@ namespace System.Windows.Forms
 
                     for (int i = 0; i < tokens.Length; i++)
                     {
-                        Keys obj = KeyNames[tokens[i]];
-
-                        Keys currentKey = (Keys)obj;
+                        if (!KeyNames.TryGetValue(tokens[i], out Keys currentKey))
+                        {
+                            // Key was not found in our dictionary.  See if it is a valid value in
+                            // the Keys enum.
+                            currentKey = (Keys)Enum.Parse(typeof(Keys), tokens[i]);
+                        }
 
                         if ((currentKey & Keys.KeyCode) != 0)
                         {
