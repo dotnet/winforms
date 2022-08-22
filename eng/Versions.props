@@ -49,7 +49,7 @@
   </PropertyGroup>
   <!-- Docs / Intellisense -->
   <PropertyGroup>
-    <MicrosoftPrivateIntellisenseVersion>7.0.0-preview-20220721.1</MicrosoftPrivateIntellisenseVersion>
+    <MicrosoftPrivateIntellisenseVersion>7.0.0-preview-20220822.1</MicrosoftPrivateIntellisenseVersion>
   </PropertyGroup>
   <!-- Arcade -->
   <PropertyGroup>
