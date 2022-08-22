@@ -16,11 +16,11 @@ namespace System.Windows.Forms.Tests.Interop.Shell32Tests
         {
             string path = Path.GetTempPath();
             uint rgflnOut = default;
-            Foundation.HRESULT result = PInvoke.SHParseDisplayName(path, null, out ITEMIDLIST* ppidl, 0, &rgflnOut);
+            Foundation.HRESULT result = PInvoke.SHParseDisplayName(path, pbc: null, out ITEMIDLIST* ppidl, 0, &rgflnOut);
             try
             {
-                Assert.Equal((double)HRESULT.S_OK, result.Value);
-                Assert.NotEqual(IntPtr.Zero, (nint)ppidl);
+                Assert.Equal((int)HRESULT.S_OK, result.Value);
+                Assert.NotEqual(0, (nint)ppidl);
             }
             finally
             {

@@ -14,7 +14,7 @@ internal static partial class Interop
 
         public unsafe static IShellItem GetShellItemForPath(string path)
         {
-            if (PInvoke.SHParseDisplayName(path, null, out ITEMIDLIST* ppidl, 0, (uint*)0).Succeeded)
+            if (PInvoke.SHParseDisplayName(path, null, out ITEMIDLIST* ppidl, 0, null).Succeeded)
             {
                 // No parent specified
                 if (SHCreateShellItem(IntPtr.Zero, IntPtr.Zero, (nint)ppidl, out IntPtr ret).Succeeded())

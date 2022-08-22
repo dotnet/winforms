@@ -261,7 +261,7 @@ namespace System.Windows.Forms
             }
 
             Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, $"\tExecuting '{file}'");
-            PInvoke.ShellExecute(handle.Handle, null, file.ToString(), null, null, (int)User32.SW.NORMAL);
+            PInvoke.ShellExecute(handle.Handle, lpOperation: null, file.ToString(), lpParameters: null, lpDirectory: null, (int)User32.SW.NORMAL);
             GC.KeepAlive(handle.Wrapper);
         }
 
