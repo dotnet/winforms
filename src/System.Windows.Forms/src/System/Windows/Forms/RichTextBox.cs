@@ -3387,31 +3387,35 @@ namespace System.Windows.Forms
                         EnLinkMsgHandler(ref m);
                         break;
                     case EN.DROPFILES:
-                        ENDROPFILES* endropfiles = (ENDROPFILES*)(nint)m.LParamInternal;
+                        HDROP endropfiles = (HDROP)((ENDROPFILES*)m.LParamInternal)->hDrop;
 
                         // Only look at the first file.
-                        var path = new StringBuilder(PInvoke.MAX_PATH);
-                        if (Shell32.DragQueryFileW(endropfiles->hDrop, 0, path) != 0)
+                        char[] path = ArrayPool<char>.Shared.Rent(PInvoke.MAX_PATH + 1);
+                        fixed (char* p = path)
                         {
-                            // Try to load the file as an RTF
-                            try
+                            if (PInvoke.DragQueryFile(endropfiles, iFile: 0, p, cch: 0) != 0)
                             {
-                                LoadFile(path.ToString(), RichTextBoxStreamType.RichText);
-                            }
-                            catch
-                            {
-                                // we failed to load as rich text so try it as plain text
+                                // Try to load the file as an RTF
                                 try
                                 {
-                                    LoadFile(path.ToString(), RichTextBoxStreamType.PlainText);
+                                    LoadFile(path.ToString(), RichTextBoxStreamType.RichText);
                                 }
                                 catch
                                 {
-                                    // ignore any problems we have
+                                    // we failed to load as rich text so try it as plain text
+                                    try
+                                    {
+                                        LoadFile(path.ToString(), RichTextBoxStreamType.PlainText);
+                                    }
+                                    catch
+                                    {
+                                        // ignore any problems we have
+                                    }
                                 }
                             }
                         }
 
+                        ArrayPool<char>.Shared.Return(path);
                         m.ResultInternal = (LRESULT)1;   // tell them we did the drop
                         break;
 
