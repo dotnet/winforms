@@ -6,7 +6,7 @@ This roadmap communicates priorities for evolving and extending the scope of Win
 * [Present](#present)
 
 This repository is a community effort and we welcome community feedback on our plans. The best way to give your feedback is to open an issue in this repo.
-We also invite contributions. The [up-for-grabs issues](https://github.com/dotnet/winforms/issues?q=is%3Aopen+is%3Aissue+label%3Aup-for-grabs) on GitHub are a good place to start.
+We also invite contributions. The [help wanted issues](https://github.com/dotnet/winforms/issues?q=is%3Aopen+is%3Aissue+label%3A"help%20wanted") on GitHub are a good place to start.
 
 ## Future
 
