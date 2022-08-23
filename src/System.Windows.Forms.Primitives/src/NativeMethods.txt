@@ -133,6 +133,7 @@ MapWindowPoints
 MOUSEHOOKSTRUCT
 MultiByteToWideChar
 NMHDR
+NTSTATUS
 PeekMessage
 PostMessage
 PROPERTYKEY
@@ -144,6 +145,8 @@ SetParent
 SetSuspendState
 SetWindowsHookEx
 ShowCursor
+STATUS_PENDING
+STATUS_SUCCESS
 StretchDIBits
 WideCharToMultiByte
 WINDOW_LONG_PTR_INDEX
