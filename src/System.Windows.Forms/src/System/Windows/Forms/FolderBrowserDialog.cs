@@ -297,7 +297,7 @@ namespace System.Windows.Forms
                 HRESULT hr = dialog.Show(owner);
                 if (!hr.Succeeded)
                 {
-                    if (hr == HRESULT.ERROR_CANCELLED)
+                    if (hr == HRESULT.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_CANCELLED))
                     {
                         returnValue = false;
                         return true;
