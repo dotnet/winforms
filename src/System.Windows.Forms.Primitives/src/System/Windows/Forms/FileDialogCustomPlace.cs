@@ -60,7 +60,7 @@ namespace System.Windows.Forms
         ///  to an actual filesystem directory.
         ///  The caller is responsible for handling these situations.
         /// </remarks>
-        internal IShellItem? GetNativePath()
+        internal unsafe IShellItem? GetNativePath()
         {
             string filePathString;
             if (!string.IsNullOrEmpty(_path))
@@ -69,10 +69,14 @@ namespace System.Windows.Forms
             }
             else
             {
-                int result = SHGetKnownFolderPath(ref _knownFolderGuid, 0, IntPtr.Zero, out filePathString);
-                if (result == 0)
+                fixed (char* path = filePathString)
+                fixed (Guid* reference = &_knownFolderGuid)
                 {
-                    return null;
+                    int result = PInvoke.SHGetKnownFolderPath(reference, 0, HANDLE.Null, (PWSTR*)path);
+                    if (result == 0)
+                    {
+                        return null;
+                    }
                 }
             }
 
