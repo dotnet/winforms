@@ -1131,6 +1131,39 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
     }
 
+    public Task<Graphics> GetGraphicsForItemAsync(ToolStripItem toolStripItem)
+    {
+        ArgumentNullException.ThrowIfNull(toolStripItem);
+
+        TaskCompletionSource<Graphics> tcs = new();
+
+        var asyncResult = BeginInvoke(() =>
+        {
+            try
+            {
+                Graphics itemGraphics;
+
+                using Graphics toolStripGraphics = Graphics.FromHdc(Handle);
+                using (DeviceContextHdcScope toolStripHDC = new(toolStripGraphics, ApplyGraphicsProperties.Clipping))
+                {
+                    var itemHDC = ItemHdcInfo.GetCachedItemDC(toolStripHDC, toolStripItem.Size);
+
+                    // allocate a new graphics.
+                    itemGraphics = itemHDC.CreateGraphics();
+                }
+
+                tcs.TrySetResult(itemGraphics);
+            }
+            catch (Exception ex)
+            {
+                tcs.TrySetException(ex);
+            }
+        });
+
+        EndInvoke(asyncResult);
+        return tcs.Task;
+    }
+
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.ToolStripItemRemovedDescr))]
     public event ToolStripItemEventHandler? ItemRemoved

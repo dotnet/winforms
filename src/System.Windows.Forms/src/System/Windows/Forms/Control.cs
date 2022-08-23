@@ -10764,9 +10764,9 @@ public unsafe partial class Control :
                 CreateControl();
             }
 
-            UpdateRoot();
+                UpdateRoot();
+            }
         }
-    }
 
     protected virtual void SetVisibleCore(bool value)
     {
