@@ -2135,7 +2135,7 @@ namespace System.Windows.Forms
 
                     if (_defaultCellStyle.ForeColor == Color.Empty)
                     {
-                        defaultCellStyleTmp.ForeColor = base.ForeColor;
+                        defaultCellStyleTmp.ForeColor = SystemInformation.HighContrast ? DefaultForeBrush.Color : base.ForeColor;
                         _dataGridViewState1[State1_AmbientForeColor] = true;
                     }
 
@@ -2202,7 +2202,7 @@ namespace System.Windows.Forms
                 DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle
                 {
                     BackColor = s_defaultBackColor,
-                    ForeColor = base.ForeColor,
+                    ForeColor = SystemInformation.HighContrast ? DefaultForeBrush.Color : base.ForeColor,
                     SelectionBackColor = DefaultSelectionBackBrush.Color,
                     SelectionForeColor = DefaultSelectionForeBrush.Color,
                     Font = base.Font,
