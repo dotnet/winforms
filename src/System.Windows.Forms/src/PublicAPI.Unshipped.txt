@@ -1,4 +1,9 @@
 override System.Windows.Forms.ProgressBar.OnCreateControl() -> void
+static System.Windows.Forms.MessageBox.ShowAsync(string! text, string! caption = "", System.Windows.Forms.MessageBoxButtons buttons = System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon icon = System.Windows.Forms.MessageBoxIcon.None) -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
+System.Windows.Forms.Control.InvokeAsync(System.Delegate! method, params object![]! args) -> System.Threading.Tasks.Task<object?>!
+System.Windows.Forms.Control.InvokeAsync(System.Func<object![]!, System.Threading.Tasks.Task<object!>!>! asyncAction, params object![]! args) -> System.Threading.Tasks.Task<object!>!
+System.Windows.Forms.Form.ShowDialogAsync() -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
+System.Windows.Forms.Form.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner) -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
 static System.Windows.Forms.Application.DefaultDarkMode.get -> System.Windows.Forms.DarkMode
 static System.Windows.Forms.Application.EnvironmentDarkMode.get -> System.Windows.Forms.DarkMode
 static System.Windows.Forms.Application.IsDarkModeEnabled.get -> bool

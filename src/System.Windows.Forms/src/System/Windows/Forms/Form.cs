@@ -5497,6 +5497,48 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
+    ///  Shows the form as a modal dialog box asynchronously.
+    /// </summary>
+    /// <returns>A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.</returns>
+    public Task<DialogResult> ShowDialogAsync()
+    {
+        return ShowDialogAsyncInternal(null);
+    }
+
+    /// <summary>
+    ///  Shows the form as a modal dialog box with the specified owner asynchronously.
+    /// </summary>
+    /// <param name="owner">Any object that implements <see cref="IWin32Window"/> that represents the top-level window that will own the modal dialog box.</param>
+    /// <returns>A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.</returns>
+    public Task<DialogResult> ShowDialogAsync(IWin32Window owner)
+    {
+        return ShowDialogAsyncInternal(owner);
+    }
+
+    private Task<DialogResult> ShowDialogAsyncInternal(IWin32Window? owner)
+    {
+        var tcs = new TaskCompletionSource<DialogResult>();
+
+        BeginInvoke(new Action(() =>
+        {
+            try
+            {
+                DialogResult result = owner is null
+                    ? ShowDialog()
+                    : ShowDialog(owner);
+
+                tcs.SetResult(result);
+            }
+            catch (Exception ex)
+            {
+                tcs.SetException(ex);
+            }
+        }), null);
+
+        return tcs.Task;
+    }
+
+    /// <summary>
     ///  Indicates whether the <see cref="AutoScaleBaseSize"/> property should be
     ///  persisted.
     /// </summary>

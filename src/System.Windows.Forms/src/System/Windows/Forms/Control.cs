@@ -221,6 +221,8 @@ public unsafe partial class Control :
     private static bool s_needToLoadComCtl = true;
     private static readonly int s_darkModeProperty = PropertyStore.CreateKey();
 
+        private static bool s_needToLoadComCtl = true;
+
     // This switch determines the default text rendering engine to use by some controls that support switching rendering engine.
     // CheckedListBox, PropertyGrid, GroupBox, Label and LinkLabel, and ButtonBase controls.
     // True means use GDI+, false means use GDI (TextRenderer).
@@ -10853,9 +10855,9 @@ public unsafe partial class Control :
                 CreateControl();
             }
 
-            UpdateRoot();
+                UpdateRoot();
+            }
         }
-    }
 
     private static unsafe void PrepareDarkMode(HWND hwnd, bool darkModeEnabled)
     {
