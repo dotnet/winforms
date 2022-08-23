@@ -2328,18 +2328,23 @@ public partial class Form : ContainerControl
         }
     }
 
-    /// <summary>
-    ///  Gets or sets the form's window state.
-    /// </summary>
-    [SRCategory(nameof(SR.CatLayout))]
-    [DefaultValue(FormWindowState.Normal)]
-    [SRDescription(nameof(SR.FormWindowStateDescr))]
-    public FormWindowState WindowState
-    {
-        get => (FormWindowState)_formState[s_formStateWindowState];
-        set
+        public Color WindowBorderColor { get; set; }
+        public int WindowBorderThickness { get; set; }
+        public Color WindowCaptionColor { get; set; }
+        public Color WindowCaptionTextColor { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the form's window state.
+        /// </summary>
+        [SRCategory(nameof(SR.CatLayout))]
+        [DefaultValue(FormWindowState.Normal)]
+        [SRDescription(nameof(SR.FormWindowStateDescr))]
+        public FormWindowState WindowState
         {
-            SourceGenerated.EnumValidator.Validate(value);
+            get => (FormWindowState)_formState[FormStateWindowState];
+            set
+            {
+                SourceGenerated.EnumValidator.Validate(value);
 
             switch (value)
             {
