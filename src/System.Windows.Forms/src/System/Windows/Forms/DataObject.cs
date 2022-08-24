@@ -452,10 +452,7 @@ namespace System.Windows.Forms
             if ((formatetc.tymed & TYMED.TYMED_HGLOBAL) != 0)
             {
                 HRESULT hr = SaveDataToHandle(data!, format, ref medium);
-                if (hr.Failed())
-                {
-                    Marshal.ThrowExceptionForHR((int)hr);
-                }
+                hr.ThrowOnFailure();
             }
             else if ((formatetc.tymed & TYMED.TYMED_GDI) != 0)
             {

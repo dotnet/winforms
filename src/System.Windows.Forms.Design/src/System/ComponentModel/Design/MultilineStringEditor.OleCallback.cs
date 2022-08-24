@@ -57,7 +57,7 @@ namespace System.ComponentModel.Design
                 HRESULT hr = Ole32.ReadClassStg(lpstg, out Guid realClsid);
                 Debug.WriteLineIf(RichTextDebug.TraceVerbose, $"real clsid:{realClsid} (hr={hr:X})");
 
-                if (!hr.Succeeded())
+                if (!hr.Succeeded)
                 {
                     return HRESULT.S_FALSE;
                 }

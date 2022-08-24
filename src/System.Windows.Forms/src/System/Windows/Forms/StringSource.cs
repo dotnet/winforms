@@ -37,7 +37,7 @@ namespace System.Windows.Forms
                 IntPtr.Zero,
                 Ole32.CLSCTX.INPROC_SERVER,
                 in autoCompleteIID,
-                out IntPtr autoComplete2Ptr).ThrowIfFailed();
+                out IntPtr autoComplete2Ptr).ThrowOnFailure();
 
             var obj = WinFormsComWrappers.Instance
                 .GetOrCreateObjectForComInstance(autoComplete2Ptr, CreateObjectFlags.UniqueInstance);
@@ -55,14 +55,14 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            if (!_autoCompleteObject2.SetOptions(options).Succeeded())
+            if (!_autoCompleteObject2.SetOptions(options).Succeeded)
             {
                 return false;
             }
 
             HRESULT hr = _autoCompleteObject2.Init(edit.Handle, this, IntPtr.Zero, IntPtr.Zero);
             GC.KeepAlive(edit.Wrapper);
-            return hr.Succeeded();
+            return hr.Succeeded;
         }
 
         public void ReleaseAutoComplete()

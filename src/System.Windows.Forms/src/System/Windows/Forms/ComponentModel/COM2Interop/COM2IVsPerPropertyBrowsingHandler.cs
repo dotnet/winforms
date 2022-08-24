@@ -131,7 +131,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 BOOL canReset = boolEvent.Value ? true : false;
                 HRESULT hr = target.CanResetPropertyValue(sender.DISPID, &canReset);
-                if (hr.Succeeded())
+                if (hr.Succeeded)
                 {
                     boolEvent.Value = canReset;
                 }
@@ -212,7 +212,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 Ole32.DispatchID dispid = sender.DISPID;
                 BOOL canReset = false;
                 HRESULT hr = target.CanResetPropertyValue(dispid, &canReset);
-                if (hr.Succeeded())
+                if (hr.Succeeded)
                 {
                     target.ResetPropertyValue(dispid);
                 }

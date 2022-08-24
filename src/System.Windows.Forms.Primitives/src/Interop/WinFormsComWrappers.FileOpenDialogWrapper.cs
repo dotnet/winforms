@@ -145,7 +145,7 @@ internal partial class Interop
             {
                 IntPtr ppenum_local;
                 ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 27)))
-                    (_wrappedInstance, &ppenum_local).ThrowIfFailed();
+                    (_wrappedInstance, &ppenum_local).ThrowOnFailure();
                 ppenum = ppenum_local == IntPtr.Zero ? null : (Interop.WinFormsComWrappers.ShellItemArrayWrapper)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppenum_local, CreateObjectFlags.UniqueInstance);
             }
 
@@ -172,7 +172,7 @@ internal partial class Interop
                 {
                     pszText_local = Marshal.StringToCoTaskMemUni(pszText);
                     ((delegate* unmanaged<IntPtr, uint, IntPtr, HRESULT>)(*(*(void***)thisPtr + 11 /* IFileDialogCustomize.AddText */)))
-                        (thisPtr, dwIDCtl, pszText_local).ThrowIfFailed();
+                        (thisPtr, dwIDCtl, pszText_local).ThrowOnFailure();
                 }
                 finally
                 {

@@ -196,7 +196,7 @@ namespace System.Windows.Forms
             if (Host.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
             {
                 HWND hwnd = HWND.Null;
-                if (Host.AXInPlaceObject.GetWindow(&hwnd).Succeeded())
+                if (Host.AXInPlaceObject.GetWindow(&hwnd).Succeeded)
                 {
                     if (Host.GetHandleNoCreate() != hwnd)
                     {

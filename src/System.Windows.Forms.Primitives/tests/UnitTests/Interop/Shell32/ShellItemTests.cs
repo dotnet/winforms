@@ -5,7 +5,6 @@
 using System.Runtime.InteropServices;
 using Windows.Win32.UI.Shell.Common;
 using Xunit;
-using Foundation = Windows.Win32.Foundation;
 
 namespace System.Windows.Forms.Tests.Interop.Shell32Tests
 {
@@ -16,10 +15,10 @@ namespace System.Windows.Forms.Tests.Interop.Shell32Tests
         {
             string path = Path.GetTempPath();
             uint rgflnOut = default;
-            Foundation.HRESULT result = PInvoke.SHParseDisplayName(path, pbc: null, out ITEMIDLIST* ppidl, 0, &rgflnOut);
+            HRESULT result = PInvoke.SHParseDisplayName(path, pbc: null, out ITEMIDLIST* ppidl, 0, &rgflnOut);
             try
             {
-                Assert.Equal((int)HRESULT.S_OK, result.Value);
+                Assert.Equal(HRESULT.S_OK, result);
                 Assert.NotEqual(0, (nint)ppidl);
             }
             finally

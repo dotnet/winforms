@@ -550,7 +550,7 @@ namespace System.Windows.Forms.VisualStyles
             _lastHResult = PInvoke.GetThemeFont(this, hdc, Part, State, (int)prop, out LOGFONTW logfont);
 
             // Check for a failed HR.
-            if (!_lastHResult.Succeeded())
+            if (!_lastHResult.Succeeded)
             {
                 return null;
             }

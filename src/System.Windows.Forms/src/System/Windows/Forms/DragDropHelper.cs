@@ -356,8 +356,8 @@ namespace System.Windows.Forms
 
                 // Allow text specified in DROPDESCRIPTION to be displayed on the drag image. If you pass a drag image into an IDragSourceHelper
                 // object, then by default, the extra text description of the drag-and-drop operation is not displayed.
-                dragSourceHelper.SetFlags(DSH_ALLOWDROPDESCRIPTIONTEXT).ThrowIfFailed();
-                dragSourceHelper.InitializeFromBitmap(shDragImage, dataObject).ThrowIfFailed();
+                dragSourceHelper.SetFlags(DSH_ALLOWDROPDESCRIPTIONTEXT).ThrowOnFailure();
+                dragSourceHelper.InitializeFromBitmap(shDragImage, dataObject).ThrowOnFailure();
             }
             catch
             {
@@ -533,7 +533,7 @@ namespace System.Windows.Forms
                     Ole32.CLSCTX.INPROC_SERVER,
                     ref NativeMethods.ActiveX.IID_IUnknown,
                     out object obj);
-                if (hr.Succeeded())
+                if (hr.Succeeded)
                 {
                     dragDropHelper = (TDragDropHelper)obj;
                     return true;

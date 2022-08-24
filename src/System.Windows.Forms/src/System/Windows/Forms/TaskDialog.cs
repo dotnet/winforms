@@ -489,10 +489,7 @@ namespace System.Windows.Forms
 
                     // Marshal.ThrowExceptionForHR will use the IErrorInfo on the
                     // current thread if it exists.
-                    if (returnValue.Failed())
-                    {
-                        Marshal.ThrowExceptionForHR((int)returnValue);
-                    }
+                    returnValue.ThrowOnFailure();
 
                     // Normally, the returned button ID should always equal the cached
                     // result button ID. However, in some cases when the dialog is closed

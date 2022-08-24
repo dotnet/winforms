@@ -338,7 +338,7 @@ namespace System.Windows.Forms
                     };
 
                     HRESULT hr = axOleControl.GetControlInfo(&ctlInfo);
-                    if (hr.Succeeded())
+                    if (hr.Succeeded)
                     {
                         // Sadly, we don't have a message so we must fake one ourselves.
                         // The message we are faking is a WM_SYSKEYDOWN with the right
@@ -456,7 +456,7 @@ namespace System.Windows.Forms
                     if (ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
                     {
                         HWND hwndInPlaceObject = HWND.Null;
-                        if (AXInPlaceObject.GetWindow(&hwndInPlaceObject).Succeeded())
+                        if (AXInPlaceObject.GetWindow(&hwndInPlaceObject).Succeeded)
                         {
                             Application.ParkHandle(new HandleRef<HWND>(AXInPlaceObject, hwndInPlaceObject), DpiAwarenessContext);
                         }
@@ -905,7 +905,7 @@ namespace System.Windows.Forms
                     Ole32.CLSCTX.INPROC_SERVER,
                     ref NativeMethods.ActiveX.IID_IUnknown,
                     out activeXInstance);
-                hr.ThrowIfFailed();
+                hr.ThrowOnFailure();
 
                 Debug.Assert(activeXInstance is not null, "w/o an exception being thrown we must have an object...");
 
@@ -959,7 +959,7 @@ namespace System.Windows.Forms
                 // See if the ActiveX control returns OLEMISC_SETCLIENTSITEFIRST
                 Ole32.OLEMISC bits = 0;
                 HRESULT hr = axOleObject.GetMiscStatus(Ole32.DVASPECT.CONTENT, &bits);
-                if (hr.Succeeded() && ((bits & Ole32.OLEMISC.SETCLIENTSITEFIRST) != 0))
+                if (hr.Succeeded && ((bits & Ole32.OLEMISC.SETCLIENTSITEFIRST) != 0))
                 {
                     //
                     // Simply setting the site to the ActiveX control should activate it.
@@ -1078,7 +1078,7 @@ namespace System.Windows.Forms
             if (ActiveXState == WebBrowserHelper.AXState.UIActive)
             {
                 HRESULT hr = AXInPlaceObject.UIDeactivate();
-                Debug.Assert(hr.Succeeded(), "Failed to UIDeactivate");
+                Debug.Assert(hr.Succeeded, "Failed to UIDeactivate");
 
                 // We are now InPlaceActive
                 ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
@@ -1185,8 +1185,8 @@ namespace System.Windows.Forms
             var sz = new Size(width, height);
             bool resetExtents = DesignMode;
             Pixel2hiMetric(ref sz);
-            Interop.HRESULT hr = axOleObject.SetExtent(Ole32.DVASPECT.CONTENT, &sz);
-            if (hr != Interop.HRESULT.S_OK)
+            HRESULT hr = axOleObject.SetExtent(Ole32.DVASPECT.CONTENT, &sz);
+            if (hr != HRESULT.S_OK)
             {
                 resetExtents = true;
             }
