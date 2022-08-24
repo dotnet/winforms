@@ -10169,11 +10169,11 @@ namespace System.Windows.Forms
 
                     if (accept)
                     {
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Registering as drop target: " + Handle.ToString());
+                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Registering as drop target: " + Handle);
 
                         // Register
                         HRESULT n = Ole32.RegisterDragDrop(this, new DropTarget(this));
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.Value.ToString(CultureInfo.CurrentCulture));
+                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n);
                         if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
                         {
                             throw Marshal.GetExceptionForHR((int)n)!;
@@ -10181,11 +10181,11 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Revoking drop target: " + Handle.ToString());
+                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Revoking drop target: " + Handle);
 
                         // Revoke
                         HRESULT n = Ole32.RevokeDragDrop(new HandleRef(this, Handle));
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.Value.ToString(CultureInfo.InvariantCulture));
+                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n);
                         if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_NOTREGISTERED)
                         {
                             throw Marshal.GetExceptionForHR((int)n)!;
