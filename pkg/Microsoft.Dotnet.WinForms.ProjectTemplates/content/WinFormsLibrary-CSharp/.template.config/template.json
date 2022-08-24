@@ -85,7 +85,7 @@
       "generator": "regexMatch",
       "datatype": "bool",
       "parameters": {
-        "pattern": "^(|10\\.0|10|preview|latest|default|latestMajor)$",
+        "pattern": "^(|10\\.0|10|11.\\0|11|preview|latest|default|latestMajor)$",
         "source": "langVersion"
       }
     },
