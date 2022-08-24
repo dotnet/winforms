@@ -41,7 +41,7 @@ namespace System.Windows.Forms
                         using var screenDC = GdiCache.GetScreenHdc();
                         HDC hdc = screenDC.HDC;
                         using var fontSelection = new Gdi32.SelectObjectScope(hdc, HFONT);
-                        Debug.Assert(PInvoke.GetMapMode(hdc) == (int)Gdi32.MM.TEXT);
+                        Debug.Assert(PInvoke.GetMapMode(hdc) == (int)HDC_MAP_MODE.MM_TEXT);
 
                         TEXTMETRICW tm = default;
                         PInvoke.GetTextMetrics(hdc, &tm);

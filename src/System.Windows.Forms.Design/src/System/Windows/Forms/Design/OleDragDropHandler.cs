@@ -522,17 +522,17 @@ namespace System.Windows.Forms.Design
             // ControlPaint.DrawReversibleFrame(handle, rectangle, backColor, FrameStyle.Thick);
 
             // ------ Duplicate code----------------------------------------------------------
-            Gdi32.R2 rop2;
+            R2_MODE rop2;
             Color graphicsColor;
 
             if (backColor.GetBrightness() < .5)
             {
-                rop2 = Gdi32.R2.NOTXORPEN;
+                rop2 = R2_MODE.R2_NOTXORPEN;
                 graphicsColor = Color.White;
             }
             else
             {
-                rop2 = Gdi32.R2.XORPEN;
+                rop2 = R2_MODE.R2_XORPEN;
                 graphicsColor = Color.Black;
             }
 
@@ -540,11 +540,11 @@ namespace System.Windows.Forms.Design
             using PInvoke.ObjectScope pen =
                 new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 2, (uint)ColorTranslator.ToWin32(backColor)));
 
-            using Gdi32.SetRop2Scope rop2Scope = new(dc, rop2);
+            using PInvoke.SetRop2Scope rop2Scope = new(dc, rop2);
             using Gdi32.SelectObjectScope brushSelection = new(dc, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
             using Gdi32.SelectObjectScope penSelection = new(dc, pen);
 
-            Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(graphicsColor));
+            PInvoke.SetBkColor(dc, (uint)ColorTranslator.ToWin32(graphicsColor));
             Gdi32.Rectangle(dc, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
             // ------ Duplicate code----------------------------------------------------------
         }

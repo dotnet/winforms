@@ -27,12 +27,12 @@ namespace System
         /// </summary>
         public DeviceContextState(HDC hdc)
         {
-            MapMode = (Gdi32.MM)PInvoke.GetMapMode(hdc);
+            MapMode = (HDC_MAP_MODE)PInvoke.GetMapMode(hdc);
             BackColor = PInvoke.GetBkColor(hdc);
             TextColor = PInvoke.GetTextColor(hdc);
-            Rop2Mode = (Gdi32.R2)PInvoke.GetROP2(hdc);
-            TextAlign = (Gdi32.TA)PInvoke.GetTextAlign(hdc);
-            BackgroundMode = (Gdi32.BKMODE)PInvoke.GetBkMode(hdc);
+            Rop2Mode = (R2_MODE)PInvoke.GetROP2(hdc);
+            TextAlign = (TEXT_ALIGN_OPTIONS)PInvoke.GetTextAlign(hdc);
+            BackgroundMode = (BACKGROUND_MODE)PInvoke.GetBkMode(hdc);
 
             Matrix3x2 transform = default;
             PInvoke.GetWorldTransform(hdc, (XFORM*)(void*)&transform);
@@ -55,13 +55,13 @@ namespace System
             SelectedBrush = logbrush;
         }
 
-        public Gdi32.MM MapMode { get => _currentState.MapMode; set => _currentState.MapMode = value; }
-        public Gdi32.R2 Rop2Mode { get => _currentState.Rop2Mode; set => _currentState.Rop2Mode = value; }
+        public HDC_MAP_MODE MapMode { get => _currentState.MapMode; set => _currentState.MapMode = value; }
+        public R2_MODE Rop2Mode { get => _currentState.Rop2Mode; set => _currentState.Rop2Mode = value; }
         public COLORREF BackColor { get => _currentState.BackColor; set => _currentState.BackColor = value; }
         public COLORREF TextColor { get => _currentState.TextColor; set => _currentState.TextColor = value; }
         public Point BrushOrigin { get => _currentState.BrushOrigin; set => _currentState.BrushOrigin = value; }
-        public Gdi32.TA TextAlign { get => _currentState.TextAlign; set => _currentState.TextAlign = value; }
-        public Gdi32.BKMODE BackgroundMode { get => _currentState.BackgroundMode; set => _currentState.BackgroundMode = value; }
+        public TEXT_ALIGN_OPTIONS TextAlign { get => _currentState.TextAlign; set => _currentState.TextAlign = value; }
+        public BACKGROUND_MODE BackgroundMode { get => _currentState.BackgroundMode; set => _currentState.BackgroundMode = value; }
         public LOGFONTW SelectedFont { get => _currentState.SelectedFont; set => _currentState.SelectedFont = value; }
         public Gdi32.LOGBRUSH SelectedBrush { get => _currentState.SelectedBrush; set => _currentState.SelectedBrush = value; }
         public EXTLOGPEN32 SelectedPen { get => _currentState.SelectedPen; set => _currentState.SelectedPen = value; }
@@ -72,13 +72,13 @@ namespace System
 
         private struct State
         {
-            public Gdi32.MM MapMode { get; set; }
-            public Gdi32.R2 Rop2Mode { get; set; }
+            public HDC_MAP_MODE MapMode { get; set; }
+            public R2_MODE Rop2Mode { get; set; }
             public COLORREF BackColor { get; set; }
             public COLORREF TextColor { get; set; }
             public Point BrushOrigin { get; set; }
-            public Gdi32.TA TextAlign { get; set; }
-            public Gdi32.BKMODE BackgroundMode { get; set; }
+            public TEXT_ALIGN_OPTIONS TextAlign { get; set; }
+            public BACKGROUND_MODE BackgroundMode { get; set; }
             public LOGFONTW SelectedFont { get; set; }
             public Gdi32.LOGBRUSH SelectedBrush { get; set; }
             public EXTLOGPEN32 SelectedPen { get; set; }

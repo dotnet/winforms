@@ -92,8 +92,8 @@ namespace System.Windows.Forms.Design
                 HDC dc,
                 RECT rcIn,
                 int state,
-                int backColor,
-                int textColor)
+                uint backColor,
+                uint textColor)
             {
                 Size size = new();
                 RECT rc2 = new();
@@ -112,11 +112,11 @@ namespace System.Windows.Forms.Design
                 if (((state & STATE_SELECTED) != 0) && !_hbrushDither.IsNull)
                 {
                     FillRectDither(dc, rcIn);
-                    Gdi32.SetBkMode(dc, Gdi32.BKMODE.TRANSPARENT);
+                    PInvoke.SetBkMode(dc, BACKGROUND_MODE.TRANSPARENT);
                 }
                 else
                 {
-                    Gdi32.SetBkColor(dc, backColor);
+                    PInvoke.SetBkColor(dc, backColor);
                     Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.CLIPPED | Gdi32.ETO.OPAQUE, ref rc, null, 0, null);
                 }
 
@@ -131,7 +131,7 @@ namespace System.Windows.Forms.Design
                 rc2.top = rc.top + (((rc.bottom - rc.top) - size.Height) >> 1);
                 rc2.bottom = rc2.top + size.Height;
                 rc2.right = rc.right;
-                Gdi32.SetTextColor(dc, textColor);
+                PInvoke.SetTextColor(dc, textColor);
                 User32.DrawTextW(
                     dc,
                     itemText,
@@ -150,10 +150,10 @@ namespace System.Windows.Forms.Design
                 // Draw the hot-tracking border if needed
                 if ((state & STATE_HOT) != 0)
                 {
-                    int savedColor;
+                    uint savedColor;
 
                     // top left
-                    savedColor = Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(SystemColors.ControlLightLight));
+                    savedColor = PInvoke.SetBkColor(dc, (uint)ColorTranslator.ToWin32(SystemColors.ControlLightLight));
                     rc2.left = rc.left;
                     rc2.top = rc.top;
                     rc2.bottom = rc.top + 1;
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Design
                     Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.OPAQUE, ref rc2, null, 0, null);
 
                     // bottom right
-                    Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(SystemColors.ControlDark));
+                    PInvoke.SetBkColor(dc, (uint)ColorTranslator.ToWin32(SystemColors.ControlDark));
                     rc2.left = rc.left;
                     rc2.right = rc.right;
                     rc2.top = rc.bottom - 1;
@@ -174,7 +174,7 @@ namespace System.Windows.Forms.Design
                     rc2.top = rc.top;
                     Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.OPAQUE, ref rc2, null, 0, null);
 
-                    Gdi32.SetBkColor(dc, savedColor);
+                    PInvoke.SetBkColor(dc, savedColor);
                 }
             }
 
@@ -223,8 +223,8 @@ namespace System.Windows.Forms.Design
                                     nmtvcd->nmcd.hdc,
                                     nmtvcd->nmcd.rc,
                                     state,
-                                    ColorTranslator.ToWin32(SystemColors.Control),
-                                    ColorTranslator.ToWin32(SystemColors.ControlText));
+                                    (uint)ColorTranslator.ToWin32(SystemColors.Control),
+                                    (uint)ColorTranslator.ToWin32(SystemColors.ControlText));
                             }
 
                             m.ResultInternal = (LRESULT)(nint)ComCtl32.CDRF.SKIPDEFAULT;
@@ -257,12 +257,12 @@ namespace System.Windows.Forms.Design
 
                 if (!hbrushOld.IsNull)
                 {
-                    int oldTextColor = Gdi32.SetTextColor(dc, ColorTranslator.ToWin32(SystemColors.ControlLightLight));
-                    int oldBackColor = Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(SystemColors.Control));
+                    uint oldTextColor = PInvoke.SetTextColor(dc, (uint)ColorTranslator.ToWin32(SystemColors.ControlLightLight));
+                    uint oldBackColor = PInvoke.SetBkColor(dc, (uint)ColorTranslator.ToWin32(SystemColors.Control));
 
                     Gdi32.PatBlt(dc, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, Gdi32.ROP.PATCOPY);
-                    Gdi32.SetTextColor(dc, oldTextColor);
-                    Gdi32.SetBkColor(dc, oldBackColor);
+                    PInvoke.SetTextColor(dc, oldTextColor);
+                    PInvoke.SetBkColor(dc, oldBackColor);
                 }
             }
 

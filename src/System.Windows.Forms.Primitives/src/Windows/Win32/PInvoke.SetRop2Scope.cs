@@ -5,17 +5,19 @@
 #if DEBUG
 #endif
 
-internal static partial class Interop
+namespace Windows.Win32
 {
-    internal static partial class Gdi32
+    internal static partial class PInvoke
     {
         /// <summary>
         ///  Helper to scope selecting a given foreground mix mode into a HDC. Restores the original mix mode into the
         ///  HDC when disposed.
         /// </summary>
         /// <remarks>
+        ///  <para>
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
         ///  <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
+        ///  </para>
         /// </remarks>
 #if DEBUG
         internal class SetRop2Scope : DisposalTracking.Tracker, IDisposable
@@ -23,15 +25,15 @@ internal static partial class Interop
         internal readonly ref struct SetRop2Scope
 #endif
         {
-            private readonly R2 _previousRop;
+            private readonly R2_MODE _previousRop;
             private readonly HDC _hdc;
 
             /// <summary>
-            ///  Selects <paramref name="rop2"/> into the given <paramref name="hdc"/> using <see cref="SetROP2(HDC, R2)"/>.
+            ///  Selects <paramref name="rop2"/> into the given <paramref name="hdc"/> using <see cref="SetROP2(HDC, R2_MODE)"/>.
             /// </summary>
-            public SetRop2Scope(HDC hdc, R2 rop2)
+            public SetRop2Scope(HDC hdc, R2_MODE rop2)
             {
-                _previousRop = SetROP2(hdc, rop2);
+                _previousRop = (R2_MODE)SetROP2(hdc, rop2);
 
                 // If we didn't actually change the ROP, don't keep the HDC so we skip putting back the same state.
                 _hdc = _previousRop == rop2 ? default : hdc;

@@ -5,17 +5,19 @@
 #if DEBUG
 #endif
 
-internal static partial class Interop
+namespace Windows.Win32
 {
-    internal static partial class Gdi32
+    internal static partial class PInvoke
     {
         /// <summary>
         ///  Helper to scope selecting a given text alignment mode into a HDC. Restores the original text alignment
         ///  mode into the HDC when disposed.
         /// </summary>
         /// <remarks>
+        ///  <para>
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
         ///  <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
+        ///  </para>
         /// </remarks>
 #if DEBUG
         internal class SetTextAlignmentScope : DisposalTracking.Tracker, IDisposable
@@ -23,15 +25,15 @@ internal static partial class Interop
         internal readonly ref struct SetTextAlignmentScope
 #endif
         {
-            private readonly TA _previousTa;
+            private readonly TEXT_ALIGN_OPTIONS _previousTa;
             private readonly HDC _hdc;
 
             /// <summary>
-            ///  Sets <paramref name="ta"/> in the given <paramref name="hdc"/> using <see cref="SetTextAlign(HDC, TA)"/>.
+            ///  Sets <paramref name="ta"/> in the given <paramref name="hdc"/> using <see cref="SetTextAlign(HDC, TEXT_ALIGN_OPTIONS)"/>.
             /// </summary>
-            public SetTextAlignmentScope(HDC hdc, TA ta)
+            public SetTextAlignmentScope(HDC hdc, TEXT_ALIGN_OPTIONS ta)
             {
-                _previousTa = SetTextAlign(hdc, ta);
+                _previousTa = (TEXT_ALIGN_OPTIONS)SetTextAlign(hdc, ta);
 
                 // If we didn't actually change the TA, don't keep the HDC so we skip putting back the same state.
                 _hdc = _previousTa == ta ? default : hdc;
