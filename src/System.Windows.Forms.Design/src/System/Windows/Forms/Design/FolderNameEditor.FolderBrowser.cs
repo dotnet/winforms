@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Design
 
                 // Get the IDL for the specific start location.
                 PInvoke.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, out ITEMIDLIST* listHandle);
-                if (listHandle is not null)
+                if (listHandle is null)
                 {
                     return DialogResult.Cancel;
                 }
@@ -89,7 +89,7 @@ namespace System.Windows.Forms.Design
 
                         // Show the dialog.
                         ITEMIDLIST* browseHandle = PInvoke.SHBrowseForFolder(in bi);
-                        if (browseHandle is not null)
+                        if (browseHandle is null)
                         {
                             return DialogResult.Cancel;
                         }

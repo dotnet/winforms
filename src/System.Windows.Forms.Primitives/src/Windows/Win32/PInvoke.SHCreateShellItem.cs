@@ -10,7 +10,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public unsafe static IShellItem GetShellItemForPath(string path)
+        public unsafe static IShellItem SHCreateShellItem(string path)
         {
             if (SHParseDisplayName(path, pbc: null, out ITEMIDLIST* ppidl, 0, psfgaoOut: null).Succeeded)
             {

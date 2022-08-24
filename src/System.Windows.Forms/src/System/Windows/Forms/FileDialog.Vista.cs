@@ -79,7 +79,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    IShellItem initialDirectory = PInvoke.GetShellItemForPath(InitialDirectory);
+                    IShellItem initialDirectory = PInvoke.SHCreateShellItem(InitialDirectory);
 
                     dialog.SetDefaultFolder(initialDirectory);
                     dialog.SetFolder(initialDirectory);
