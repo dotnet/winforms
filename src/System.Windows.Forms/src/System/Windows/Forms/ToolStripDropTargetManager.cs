@@ -242,7 +242,7 @@ namespace System.Windows.Forms
 
                     // Register
                     HRESULT n = Ole32.RegisterDragDrop(owner, new DropTarget(this));
-                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n);
+                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{n}");
                     if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
                     {
                         throw Marshal.GetExceptionForHR((int)n);
